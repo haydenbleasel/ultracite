@@ -74,6 +74,8 @@ import {
   stylelintConfigNames,
   updatePackageJson,
 } from "./utils";
+import { parseWorkspaceFrameworks } from "./workspace-frameworks";
+import type { WorkspaceFrameworks } from "./workspace-frameworks";
 
 const ultraciteVersion = packageJson.version;
 
@@ -99,6 +101,7 @@ interface InitializeFlags {
   quiet?: boolean;
   skipInstall?: boolean;
   "type-aware"?: boolean;
+  "workspace-framework"?: string[];
 }
 
 // @clack/core 1.5 narrowed isCancel's predicate from `symbol` to
@@ -171,6 +174,8 @@ export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
 const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
   "@shadcn/lint": "design-system rules for Tailwind v4 components",
   "anti-slop": "vendored opinionated preset, nothing to install",
+  "eslint-plugin-jsdoc": "require docs for public TypeScript APIs",
+  "eslint-plugin-tsdoc": "validate TSDoc syntax in TypeScript comments",
 };
 
 const buildNoInstallDevDependencies = (
@@ -687,6 +692,50 @@ export const upsertPrettierConfig = async (
   }
 };
 
+const workspaceConfigWriters = { biome, eslint, oxlint } satisfies Record<
+  Linter,
+  {
+    createWorkspace: (workspace: WorkspaceFrameworks) => Promise<string>;
+    findWorkspaceConfig: (dir: string) => string | null;
+  }
+>;
+
+// Nested configs for workspaces with frameworks of their own. Each extends
+// the root config and adds the workspace's presets, so the editor extensions
+// and the linters run directly see the same rules as `ultracite check`.
+export const upsertWorkspaceConfigs = async (
+  linter: Linter,
+  workspaces: WorkspaceFrameworks[],
+  quiet = false
+) => {
+  const writer = workspaceConfigWriters[linter];
+
+  await Promise.all(
+    workspaces.map(async (workspace) => {
+      const existing = writer.findWorkspaceConfig(workspace.dir);
+
+      if (existing) {
+        const presets = workspace.frameworks.map(
+          (framework) => `ultracite/${linter}/${framework}`
+        );
+        log.warn(
+          `${existing} already exists, so it was left unchanged. Add ${presets.join(", ")} to it yourself.`
+        );
+        return;
+      }
+
+      const s = spinner();
+      if (!quiet) {
+        s.start(`Creating the ${workspace.dir} configuration...`);
+      }
+      const configPath = await writer.createWorkspace(workspace);
+      if (!quiet) {
+        s.stop(`${configPath} created.`);
+      }
+    })
+  );
+};
+
 export const upsertStylelintConfig = async (quiet = false) => {
   const s = spinner();
 
@@ -1071,7 +1120,8 @@ const selectLinter = async (
     opts.agents ||
     opts.hooks ||
     opts.integrations !== undefined ||
-    opts.frameworks !== undefined;
+    opts.frameworks !== undefined ||
+    opts["workspace-framework"] !== undefined;
 
   if (hasOtherCliOptions) {
     return defaultLinter;
@@ -1110,7 +1160,8 @@ const selectFrameworks = async (
     opts.editors ||
     opts.agents ||
     opts.hooks ||
-    opts.integrations !== undefined;
+    opts.integrations !== undefined ||
+    opts["workspace-framework"] !== undefined;
 
   if (hasOtherCliOptions) {
     return [];
@@ -1165,7 +1216,8 @@ const selectJsPlugins = async (
     opts.agents ||
     opts.hooks ||
     opts.integrations !== undefined ||
-    opts.frameworks !== undefined;
+    opts.frameworks !== undefined ||
+    opts["workspace-framework"] !== undefined;
   if (hasOtherCliOptions) {
     return jsPlugins;
   }
@@ -1404,6 +1456,7 @@ interface InitializeContext {
   pmInfo: PackageManager;
   quiet: boolean;
   selections: InitializeSelections;
+  workspaces: WorkspaceFrameworks[];
 }
 
 const setupLinting = async ({
@@ -1411,8 +1464,15 @@ const setupLinting = async ({
   pmInfo,
   quiet,
   selections,
+  workspaces,
 }: InitializeContext): Promise<void> => {
   const { frameworks, jsPlugins, linter } = selections;
+  const allFrameworks = [
+    ...new Set([
+      ...frameworks,
+      ...workspaces.flatMap((workspace) => workspace.frameworks),
+    ]),
+  ];
 
   // These steps read-modify-write the shared package.json and emit ordered
   // installer progress, so they must run sequentially; parallelizing would
@@ -1423,7 +1483,7 @@ const setupLinting = async ({
     !opts.skipInstall,
     quiet,
     opts["type-aware"],
-    frameworks,
+    allFrameworks,
     jsPlugins
   );
 
@@ -1449,6 +1509,8 @@ const setupLinting = async ({
     // Oxlint is only a linter, so we need oxfmt for formatting
     await upsertOxfmtConfig(quiet);
   }
+
+  await upsertWorkspaceConfigs(linter, workspaces, quiet);
 };
 
 const setupSelectedFiles = async ({
@@ -1560,13 +1622,14 @@ export const initialize = async (flags?: InitializeFlags) => {
 
   try {
     validateInitializeFlags(opts);
+    const workspaces = parseWorkspaceFrameworks(opts["workspace-framework"]);
     const pmInfo = await resolvePackageManager(opts, quiet);
     const selections = await selectInitializeOptions(opts, quiet);
     if (!selections) {
       return;
     }
 
-    const context = { opts, pmInfo, quiet, selections };
+    const context = { opts, pmInfo, quiet, selections, workspaces };
     await setupProject(context);
     await completeInitialization(pmInfo.name, opts, quiet);
   } catch (error) {

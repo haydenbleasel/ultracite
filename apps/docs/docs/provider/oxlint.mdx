@@ -53,7 +53,7 @@ export default defineConfig({
 
 ## ESLint Parity (Optional)
 
-The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support.
+The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support. TSDoc syntax and public API documentation checks are available as separate, explicitly selected plugins below; they are not added to the full preset, so existing users do not gain new dependencies when upgrading.
 
 This is **off by default** because it adds dependencies and runs a slower JavaScript lint pass instead of the native Rust one. You can enable it during setup: interactive `ultracite init` lets you choose individual JS plugins when you choose Oxlint, and non-interactive setup accepts package names via `--js-plugins`.
 
@@ -111,6 +111,43 @@ export default defineConfig({
   ignorePatterns: core.ignorePatterns,
   jsPlugins: jsPlugins.jsPlugins,
   settings: jsPluginSettings,
+});
+```
+
+### TSDoc and Public API Documentation (Optional)
+
+Two more JS plugins check the documentation in TypeScript files (`.ts`, `.tsx`, `.mts`, and `.cts`). They aren't part of the full `js-plugins` preset, so they only run when you select them:
+
+- `eslint-plugin-tsdoc`, registered as `tsdoc`, validates [TSDoc](https://tsdoc.org) syntax.
+- `eslint-plugin-jsdoc`, registered as `jsdoc-js` because Oxlint reserves `jsdoc` for its native plugin, requires a doc comment on every exported function, class, interface, type alias, and enum. It also covers the public methods and getters of exported classes, and exports that wrap a function, such as `export const Button = forwardRef(...)`.
+
+Selecting `eslint-plugin-jsdoc` also turns on Oxlint's native `jsdoc/require-param` and `jsdoc/require-returns`, so every JSDoc comment on a function, exported or not, must describe its parameters and return value. Parameter and return types stay off, so TypeScript types aren't repeated in comments.
+
+Selecting `eslint-plugin-tsdoc` adjusts core's native `jsdoc/*` rules to fit TSDoc: tags such as `@remarks` and `@typeParam` are allowed, and generators don't need `@yields`. With both plugins selected, a destructured parameter is documented by its own name (`@param props - ...`) rather than property by property. TSDoc has no `{Type}` syntax, so write the type on a `@throws` tag as a link: `@throws {@link RangeError} When the input is empty.`
+
+```package-install
+npx ultracite init --linter oxlint --js-plugins eslint-plugin-tsdoc eslint-plugin-jsdoc
+```
+
+`--js-plugins` sets the whole selection, so list any plugins you already use, such as `eslint-plugin-github`. A config that extends the full `js-plugins` preset keeps its plugins.
+
+If you're configuring Oxlint manually, install the plugins and select them:
+
+```package-install
+npm install -D eslint-plugin-tsdoc eslint-plugin-jsdoc
+```
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+const jsPlugins = selectJsPlugins(["tsdoc", "jsdoc-js"]);
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
 });
 ```
 
@@ -253,7 +290,7 @@ Oxlint includes built-in support equivalent to these ESLint plugins:
 - **promise** — Promise and async/await best practices
 - **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
 
-For extra ESLint parity, the optional **js-plugins** preset adds **github** (`eslint-plugin-github`), **sonarjs** (`eslint-plugin-sonarjs`), and **react-doctor** (`oxlint-plugin-react-doctor`) via Oxlint's JS plugin support. See [ESLint Parity](#eslint-parity-optional) — it is not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional).
+For extra ESLint parity, the optional **js-plugins** preset adds **github**, **sonarjs**, and **react-doctor** via Oxlint's JS plugin support. It also offers opt-in TSDoc syntax and public API documentation checks through **tsdoc** and **jsdoc-js**. See [ESLint Parity](#eslint-parity-optional) and [TSDoc and Public API Documentation](#tsdoc-and-public-api-documentation-optional) — these JS plugins are not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional).
 
 ## Adding Third-Party Plugins
 
