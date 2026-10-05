@@ -5,13 +5,14 @@ import {
   ROUTE_FILE_GLOB,
 } from "../../shared/route-filenames.mjs";
 
-// eslint-plugin-github, eslint-plugin-sonarjs, and oxlint-plugin-react-doctor
-// run through oxlint's JS plugin support to close the gap with the ESLint
-// preset and to add React Doctor's extra checks. This preset is opt-in: extend
-// it alongside core (and any framework preset) only when you want those rules
-// and accept the extra dependencies plus the slower JS-plugin lint pass. Rules
-// that require type information are not supported by the JS plugin bridge and
-// are excluded. The react-doctor rules were previously bundled into the
+// eslint-plugin-github, eslint-plugin-jsdoc, eslint-plugin-sonarjs,
+// eslint-plugin-tsdoc, and oxlint-plugin-react-doctor run through oxlint's JS
+// plugin support to close the gap with the ESLint preset and to add opt-in
+// TSDoc/public API checks and React Doctor's extra checks. This preset is
+// opt-in: extend it alongside core (and any framework preset) only when you
+// want those rules and accept the extra dependencies plus the slower JS-plugin
+// lint pass. Rules that require type information are not supported by the JS
+// plugin bridge and are excluded. React Doctor's rules once lived in the
 // react/next/tanstack presets; they live here now so those framework presets
 // run entirely on oxlint's native Rust rules. Framework-specific react-doctor
 // rules (Next.js, TanStack) are NOT included here — they fire on generic JSX
@@ -19,7 +20,7 @@ import {
 // ultracite/oxlint/next/js-plugins or ultracite/oxlint/tanstack/js-plugins
 // alongside this preset when using those frameworks.
 //
-// Install the plugins in your project, then extend the preset:
+// Install the base plugins in your project, then extend the preset:
 //
 //   npm install -D eslint-plugin-github eslint-plugin-sonarjs oxlint-plugin-react-doctor
 //
@@ -46,6 +47,92 @@ const jsPluginEntries = [
   { name: "sonarjs", specifier: "eslint-plugin-sonarjs" },
   { name: "react-doctor", specifier: "oxlint-plugin-react-doctor" },
 ];
+
+// These documentation plugins are selected separately so upgrading a project
+// that already extends the full js-plugins preset does not add dependencies
+// without an explicit opt-in.
+const documentationPluginEntries = [
+  { name: "jsdoc-js", specifier: "eslint-plugin-jsdoc" },
+  { name: "tsdoc", specifier: "eslint-plugin-tsdoc" },
+];
+
+const exportDeclaration =
+  ":matches(ExportNamedDeclaration, ExportDefaultDeclaration)";
+const publicMember =
+  ':not([accessibility="private"], [accessibility="protected"], [key.type="PrivateIdentifier"], [kind="set"])';
+
+// The exported declarations that make up a module's public API, as explicit
+// selectors rather than require-jsdoc's publicOnly option: Oxlint's AST gives
+// a class member without an access modifier `accessibility: null`, which
+// publicOnly reads as private, so it would only check members marked
+// `public`. Setters are skipped because TSDoc documents an accessor pair on
+// its getter.
+const publicApiContexts = [
+  `${exportDeclaration} > :matches(ClassDeclaration, FunctionDeclaration)`,
+  "ExportNamedDeclaration > :matches(TSDeclareFunction, TSEnumDeclaration, TSInterfaceDeclaration, TSTypeAliasDeclaration)",
+  "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > :matches(ArrowFunctionExpression, ClassExpression, FunctionExpression)",
+  "ExportDefaultDeclaration > :matches(ArrowFunctionExpression, ClassExpression, FunctionExpression)",
+  // A function passed to a wrapper, e.g. forwardRef(...), memo(...) or
+  // createServerFn().handler(...).
+  'ExportNamedDeclaration[declaration.declarations.0.init.type="CallExpression"][declaration.declarations.0.init.arguments.0.type=/FunctionExpression$/]',
+  'ExportDefaultDeclaration[declaration.type="CallExpression"][declaration.arguments.0.type=/FunctionExpression$/]',
+  `${exportDeclaration} > ClassDeclaration > ClassBody > :matches(MethodDefinition, TSAbstractMethodDefinition)${publicMember}`,
+];
+
+// TSDoc's standard tags that JSDoc doesn't define, which core's
+// jsdoc/check-tag-names would otherwise reject.
+const tsdocOnlyTags = [
+  "alpha",
+  "beta",
+  "decorator",
+  "defaultValue",
+  "eventProperty",
+  "experimental",
+  "packageDocumentation",
+  "privateRemarks",
+  "remarks",
+  "sealed",
+  "typeParam",
+  "virtual",
+];
+
+// The TypeScript override for the selected documentation plugins. Core's
+// native jsdoc/* rules keep checking comment content; this adds the selected
+// plugins' rules and adjusts the native ones so every combination can be
+// satisfied.
+const buildDocumentationOverride = (names) => {
+  const rules = {};
+
+  if (names.has("jsdoc-js")) {
+    // Only the missing-docs check is bridged; it has no native equivalent.
+    // FunctionDeclaration is required by default, exported or not.
+    rules["jsdoc-js/require-jsdoc"] = [
+      "error",
+      { contexts: publicApiContexts, require: { FunctionDeclaration: false } },
+    ];
+    // Core leaves these off. Every JSDoc block on a function, exported or
+    // not, must describe its parameters and return value; core keeps the
+    // *-type rules off, so TypeScript types aren't repeated. TSDoc has no
+    // dotted names for destructured properties (`@param options.a`), so with
+    // it selected only the parameter itself is documented.
+    rules["jsdoc/require-param"] = names.has("tsdoc")
+      ? ["error", { checkDestructured: false }]
+      : "error";
+    rules["jsdoc/require-returns"] = "error";
+  }
+
+  if (names.has("tsdoc")) {
+    rules["jsdoc/check-tag-names"] = ["error", { definedTags: tsdocOnlyTags }];
+    // TSDoc has no @yields tag, so a generator's docs can't satisfy both.
+    // require-yields-type would also want a `{Type}`, which TSDoc rejects
+    // even when tsdoc.json defines @yields.
+    rules["jsdoc/require-yields"] = "off";
+    rules["jsdoc/require-yields-type"] = "off";
+    rules["tsdoc/syntax"] = "error";
+  }
+
+  return { files: ["**/*.{ts,tsx,mts,cts}"], rules };
+};
 
 // react-doctor 0.9.x rewrote its ported oxc/react-refresh rules (notably
 // only-export-components) with a stripped-down default mode: no framework
@@ -539,11 +626,15 @@ const config = defineConfig({
 export default config;
 
 // Returns a copy of this preset narrowed to the given plugin names ("github",
-// "sonarjs", "react-doctor"): only the selected jsPlugins entries are loaded
-// and only their rules (top-level and per-override) are kept. `ultracite init`
-// wires this into generated configs when a subset of the plugins is chosen,
-// so the generated file stays a one-line extend instead of inlining the
-// filtering logic:
+// "jsdoc-js", "sonarjs", "tsdoc", "react-doctor"): only the selected
+// jsPlugins entries are loaded and only their rules (top-level and
+// per-override) are kept. The documentation plugins are included only when
+// explicitly selected, so existing full-preset consumers gain no new
+// dependencies on upgrade; selecting either adds a TypeScript override that
+// also adjusts core's native jsdoc/* rules (see buildDocumentationOverride).
+// `ultracite init` wires this into generated configs when a subset of the
+// plugins is chosen, so the generated file stays a one-line extend instead
+// of inlining the filtering logic:
 //
 //   import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
 //
@@ -557,16 +648,25 @@ export default config;
 export const selectJsPlugins = (pluginNames) => {
   const names = new Set(pluginNames);
   const isSelectedRule = ([ruleName]) => names.has(ruleName.split("/")[0]);
+  const documentationOverrides =
+    names.has("jsdoc-js") || names.has("tsdoc")
+      ? [buildDocumentationOverride(names)]
+      : [];
 
   return defineConfig({
     ...config,
-    jsPlugins: jsPluginEntries.filter((plugin) => names.has(plugin.name)),
-    overrides: config.overrides?.map((override) => ({
-      ...override,
-      rules: Object.fromEntries(
-        Object.entries(override.rules ?? {}).filter(isSelectedRule)
-      ),
-    })),
+    jsPlugins: [...jsPluginEntries, ...documentationPluginEntries].filter(
+      (plugin) => names.has(plugin.name)
+    ),
+    overrides: [
+      ...(config.overrides ?? []).map((override) => ({
+        ...override,
+        rules: Object.fromEntries(
+          Object.entries(override.rules ?? {}).filter(isSelectedRule)
+        ),
+      })),
+      ...documentationOverrides,
+    ],
     rules: Object.fromEntries(
       Object.entries(config.rules ?? {}).filter(isSelectedRule)
     ),

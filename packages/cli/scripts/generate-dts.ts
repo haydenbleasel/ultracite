@@ -7,21 +7,39 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import { applyEdits, modify } from "jsonc-parser";
+import type { OxlintConfig } from "oxlint";
 
 const configDir = path.join(import.meta.dirname, "../config");
 
-const oxlintDeclaration = `import type { OxlintConfig } from "oxlint";
+const renderOxlintDeclaration = (
+  configType: string
+) => `import type { OxlintConfig } from "oxlint";
 
-declare const config: OxlintConfig;
+declare const config: ${configType};
 
 export default config;
 `;
 
+// Presets that always ship plugins (js-plugins, shadcn, anti-slop and the
+// framework js-plugins add-ons) declare jsPlugins as non-null, so generated
+// configs can spread several of them onto the root config (#834).
+const oxlintConfigWithJsPluginsType = `OxlintConfig & {
+  jsPlugins: NonNullable<OxlintConfig["jsPlugins"]>;
+}`;
+
 // js-plugins additionally exports the jsPluginSettings object and the
 // selectJsPlugins helper that generated configs use to apply react-doctor's
 // settings and enable a subset of the plugins.
-const oxlintJsPluginsDeclaration = `${oxlintDeclaration}
-export type OxlintJsPluginName = "github" | "sonarjs" | "react-doctor";
+const oxlintJsPluginsDeclaration = `${renderOxlintDeclaration("OxlintConfigWithJsPlugins")}
+/** An Oxlint config whose \`jsPlugins\` is always set. */
+export type OxlintConfigWithJsPlugins = ${oxlintConfigWithJsPluginsType};
+
+export type OxlintJsPluginName =
+  | "github"
+  | "jsdoc-js"
+  | "sonarjs"
+  | "tsdoc"
+  | "react-doctor";
 
 /**
  * react-doctor settings (the "curated" ported-rule mode). Oxlint does not
@@ -37,7 +55,7 @@ export declare const jsPluginSettings: NonNullable<OxlintConfig["settings"]>;
  */
 export declare const selectJsPlugins: (
   pluginNames: readonly OxlintJsPluginName[]
-) => OxlintConfig;
+) => OxlintConfigWithJsPlugins;
 `;
 
 const oxfmtDeclaration = `import type { OxfmtConfig } from "oxfmt";
@@ -61,13 +79,26 @@ const configs = readdirSync(oxlintDir, { withFileTypes: true })
     return [entry.name, ...nested];
   });
 
-for (const config of configs) {
+const getOxlintDeclaration = async (config: string): Promise<string> => {
+  if (config === "js-plugins") {
+    return oxlintJsPluginsDeclaration;
+  }
+  const preset: { default: OxlintConfig } = await import(
+    path.join(oxlintDir, config, "index.mjs")
+  );
+  return renderOxlintDeclaration(
+    Array.isArray(preset.default.jsPlugins)
+      ? oxlintConfigWithJsPluginsType
+      : "OxlintConfig"
+  );
+};
+
+const oxlintDeclarations = await Promise.all(configs.map(getOxlintDeclaration));
+
+for (const [index, config] of configs.entries()) {
   const dir = path.join(oxlintDir, config);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(
-    path.join(dir, "index.d.mts"),
-    config === "js-plugins" ? oxlintJsPluginsDeclaration : oxlintDeclaration
-  );
+  writeFileSync(path.join(dir, "index.d.mts"), oxlintDeclarations[index]);
 }
 
 // Generate oxfmt declaration

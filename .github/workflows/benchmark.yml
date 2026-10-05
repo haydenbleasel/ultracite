@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   benchmark:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout (full history for the base ref)
@@ -36,7 +36,7 @@ jobs:
       # Build + pack the PR (head) build under test.
       - name: Build and pack head
         run: |
-          bun install
+          bun install --frozen-lockfile
           bun run build --filter ultracite
           cd packages/cli
           npm pack --loglevel=error

@@ -74,13 +74,17 @@ program
     `Frameworks being used (${options.frameworks.join(", ")})`
   )
   .option(
+    "--workspace-framework <path=framework...>",
+    "Frameworks for one workspace only, as <path>=<framework> (e.g. apps/web=react)"
+  )
+  .option(
     "--integrations <integrations...>",
     `Integrations to enable (${options.integrations.join(", ")})`
   )
   .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
     "--js-plugins <plugins...>",
-    "Oxlint JS plugins to enable (@shadcn/lint, anti-slop, eslint-plugin-github, eslint-plugin-sonarjs, oxlint-plugin-react-doctor)"
+    "Oxlint JS plugins to enable (@shadcn/lint, anti-slop, eslint-plugin-github, eslint-plugin-jsdoc, eslint-plugin-sonarjs, eslint-plugin-tsdoc, oxlint-plugin-react-doctor)"
   )
   .option(
     "--type-aware",
@@ -103,6 +107,7 @@ program
         opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
       skipInstall: opts.skipInstall,
       "type-aware": opts.typeAware,
+      "workspace-framework": opts.workspaceFramework,
     });
   });
 

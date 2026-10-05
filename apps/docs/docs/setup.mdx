@@ -20,17 +20,18 @@ You can optionally pass the following flags to the `init` command:
 | `--linter` | The linting toolchain to use. When omitted and prompts are skipped, init keeps the linter the project already uses, or picks `oxlint` for a project without one. | `oxlint`, `biome`, `eslint` |
 | `--pm` | The package manager to use. | `pnpm`, `bun`, `yarn`, `npm`, `deno`, `nub`, `aube` |
 | `--frameworks` | The frameworks to configure. | Space-separated: `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest` |
+| `--workspace-framework` | Frameworks for one workspace of a monorepo, as `<path>=<framework>`. Writes a config in that workspace that extends the root config. See [Monorepos](/docs/monorepos#different-frameworks-per-workspace). | Space-separated: `apps/web=react`, `apps/docs=astro` |
 | `--editors` | The editors to configure. | Space-separated: `universal`, `vscode`, `cursor`, `windsurf`, `antigravity`, `kiro`, `trae`, `void`, `bob`, `codebuddy`, `zed`. Use `universal` to write `.vscode/settings.json` for every VS Code-based editor. |
 | `--agents` | The AI agents to configure. | Space-separated: `universal`, `claude`, `codex`, `jules`, `replit`, `devin`, `lovable`, `zencoder`, `ona`, `openclaw`, `continue`, `snowflake-cortex`, `deepagents`, `qoder`, `kimi-cli`, `mcpjam`, `mux`, `pi`, `adal`, `copilot`, `cline`, `amp`, `aider`, `firebase-studio`, `open-hands`, `gemini`, `junie`, `augmentcode`, `bob`, `kilo-code`, `goose`, `roo-code`, `warp`, `droid`, `opencode`, `crush`, `qwen`, `amazon-q-cli`, `firebender`, `cursor-cli`, `mistral-vibe`, `vercel` |
 | `--hooks` | The agent hooks to configure. | Space-separated: `cursor`, `windsurf`, `codebuddy`, `claude`, `copilot` |
 | `--integrations` | Additional integrations to set up. | Space-separated: `husky`, `lefthook`, `lint-staged`, `pre-commit` |
 | `--install-skill` | Install the reusable Ultracite skill after setup. | (no value needed) |
-| `--js-plugins` | Optional Oxlint JS plugins to enable. | Space-separated: `@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-sonarjs`, `oxlint-plugin-react-doctor` |
+| `--js-plugins` | Optional Oxlint JS plugins to enable. | Space-separated: `@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc`, `oxlint-plugin-react-doctor` |
 | `--type-aware` | Enable type-aware linting. Adds project/scanner rules for Biome, installs `oxlint-tsgolint` for Oxlint. | (no value needed) |
 | `--skip-install` | Skip installing dependencies. | (no value needed) |
 | `--quiet` | Suppress interactive prompts and progress output. | (no value needed, automatically enabled in CI) |
 
-Prompts are skipped when you pass `--quiet` or any of `--pm`, `--editors`, `--agents`, `--hooks`, `--integrations`, or `--frameworks`, so you can re-run `init` with just `--hooks` or `--agents` to add those to a project without changing its linter. In the interactive prompt, the linter the project already uses is preselected.
+Prompts are skipped when you pass `--quiet` or any of `--pm`, `--editors`, `--agents`, `--hooks`, `--integrations`, `--frameworks`, or `--workspace-framework`, so you can re-run `init` with just `--hooks` or `--agents` to add those to a project without changing its linter. In the interactive prompt, the linter the project already uses is preselected.
 
 `init` checks every flag value before it changes anything. An unknown value (for example, `--linter eslnt`) stops it with a list of the valid values.
 
