@@ -25,28 +25,15 @@ describe("spawnSync", () => {
     expect(result.status).toBe(3);
   });
 
-  test("maps a missing command according to the host platform", () => {
+  // On Windows execa would run an unresolvable command through cmd.exe, which
+  // exits 1 instead of failing to spawn; spawnSync resolves it first so every
+  // platform reports the same spawn failure.
+  test("reports a missing command as ENOENT on every platform", () => {
     const result = spawnSync("definitely-not-a-real-command", []);
-
-    if (process.platform === "win32") {
-      // execa can't resolve the command, so it runs it through cmd.exe, which
-      // exits non-zero with "is not recognized" — the process did spawn.
-      expect(result.error).toBeUndefined();
-      expect(result.status).not.toBe(0);
-      expect(result.status).not.toBeNull();
-      return;
-    }
 
     expect(result.error).toBeInstanceOf(Error);
+    expect(result.errorCode).toBe("ENOENT");
     expect(result.status).toBeNull();
-  });
-
-  test("reports ENOENT for a missing command on POSIX", () => {
-    const result = spawnSync("definitely-not-a-real-command", []);
-
-    expect(result.errorCode).toBe(
-      process.platform === "win32" ? undefined : "ENOENT"
-    );
   });
 
   // Running `./node_modules/.bin/ultracite check` directly (or from a global
@@ -64,6 +51,21 @@ describe("spawnSync", () => {
       expect(result.status).toBe(0);
     } finally {
       process.env.PATH = originalPath;
+    }
+  });
+
+  // cmd.exe skips the current directory when this is set, but the
+  // node_modules/.bin directories execa prepends to PATH still count.
+  test("finds project binaries when NODEFAULTCURRENTDIRECTORYINEXEPATH is set", () => {
+    process.env.NODEFAULTCURRENTDIRECTORYINEXEPATH = "1";
+
+    try {
+      const result = spawnSync("oxlint", ["--version"]);
+
+      expect(result.error).toBeUndefined();
+      expect(result.status).toBe(0);
+    } finally {
+      delete process.env.NODEFAULTCURRENTDIRECTORYINEXEPATH;
     }
   });
 

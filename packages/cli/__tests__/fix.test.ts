@@ -1,10 +1,21 @@
-import { afterAll, afterEach, describe, expect, mock, test } from "bun:test";
+import {
+  afterAll,
+  afterEach,
+  describe,
+  expect,
+  mock,
+  spyOn,
+  test,
+} from "bun:test";
 import path from "node:path";
 import process from "node:process";
+
+import { log } from "@clack/prompts";
 
 import type { AgentAdapter } from "../src/agent-fix/agents";
 import * as runAgentModule from "../src/agent-fix/run-agent";
 import { fix } from "../src/commands/fix";
+import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -421,6 +432,46 @@ describe("fix", () => {
     expect(() => fix([])).toThrow(
       "Failed to run Stylelint: stylelint spawn failed"
     );
+  });
+
+  test("skips Stylelint with a warning when it isn't installed", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
+        cmd === "stylelint"
+          ? {
+              error: new Error("Command failed with ENOENT: stylelint"),
+              errorCode: "ENOENT",
+              status: null,
+            }
+          : { status: 0 }
+    );
+    const warn = spyOn(log, "warn").mockImplementation(() => {});
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+
+    expect(() => fix([])).not.toThrow();
+    expect(warn).toHaveBeenCalledWith(STYLELINT_MISSING_MESSAGE);
+  });
+
+  test("fails when Stylelint exits non-zero", () => {
+    const mockSpawn = mock(
+      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
+        cmd === "stylelint" ? { status: 2 } : { status: 0 }
+    );
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "eslint"),
+    }));
+
+    expect(() => fix([])).toThrow("Stylelint exited with code 2");
   });
 
   test("runs oxlint fix when linter is oxlint (runs oxlint, oxfmt)", () => {

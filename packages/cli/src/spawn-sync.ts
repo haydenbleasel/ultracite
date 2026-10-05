@@ -1,4 +1,9 @@
+import path from "node:path";
+import process from "node:process";
+
 import { execaSync } from "execa";
+import { npmRunPathEnv } from "npm-run-path";
+import { whichCommandSync } from "which-command";
 
 export interface SpawnSyncOptions {
   maxBuffer?: number;
@@ -20,6 +25,77 @@ export interface SpawnSyncResult {
   stdout?: string;
 }
 
+const WINDOWS_PATH_SEPARATOR_RE = /[/\\:]/u;
+
+// Node sorts Windows environment keys and spawns with the first
+// case-insensitive match, so execa reads them the same way.
+const getWindowsEnvValue = (
+  env: NodeJS.ProcessEnv,
+  name: string
+): string | undefined => {
+  const key = Object.keys(env)
+    .toSorted()
+    .find((candidate) => candidate.toUpperCase() === name);
+  return key === undefined ? undefined : env[key];
+};
+
+/**
+ * Resolve a command the way execa does on Windows before it spawns: the
+ * project's node_modules/.bin directories are prepended to PATH
+ * (`preferLocal`), the current directory is searched first unless
+ * NODEFAULTCURRENTDIRECTORYINEXEPATH is set, and PATHEXT supplies the
+ * extension. Mirrors execa's lib/arguments/command-file.js.
+ */
+const resolveWindowsCommand = (command: string): string | undefined => {
+  const cwd = process.cwd();
+  const env = npmRunPathEnv({
+    addExecPath: false,
+    cwd,
+    env: process.env,
+    preferLocal: true,
+  });
+  const envPathExt = getWindowsEnvValue(env, "PATHEXT");
+  const extension = path.extname(command);
+  const pathExt =
+    extension === "" ? envPathExt : `${extension};${envPathExt ?? ""}`;
+
+  if (WINDOWS_PATH_SEPARATOR_RE.test(command)) {
+    return whichCommandSync(path.resolve(cwd, command), { cwd, pathExt });
+  }
+
+  const searchPath = getWindowsEnvValue(env, "PATH") ?? "";
+
+  if (
+    getWindowsEnvValue(env, "NODEFAULTCURRENTDIRECTORYINEXEPATH") === undefined
+  ) {
+    return whichCommandSync(command, { cwd, path: searchPath, pathExt });
+  }
+
+  for (const directory of searchPath.split(path.delimiter)) {
+    const unquoted =
+      directory.length > 1 &&
+      directory.startsWith('"') &&
+      directory.endsWith('"')
+        ? directory.slice(1, -1)
+        : directory;
+
+    if (unquoted === "") {
+      continue;
+    }
+
+    const resolved = whichCommandSync(path.resolve(cwd, unquoted, command), {
+      cwd,
+      pathExt,
+    });
+
+    if (resolved !== undefined) {
+      return resolved;
+    }
+  }
+
+  return undefined;
+};
+
 /**
  * Run a command synchronously through execa (which owns Windows spawn
  * semantics), adapted to the spawnSync result shape. Output is always decoded
@@ -33,6 +109,20 @@ export const spawnSync = (
   args: string[],
   options: SpawnSyncOptions = {}
 ): SpawnSyncResult => {
+  // On Windows execa runs a command it can't resolve through cmd.exe, which
+  // prints "is not recognized" and exits 1 instead of failing with ENOENT.
+  // Resolve it first so a missing tool is reported as missing, as on POSIX.
+  if (
+    process.platform === "win32" &&
+    resolveWindowsCommand(command) === undefined
+  ) {
+    return {
+      error: new Error(`Command failed with ENOENT: ${command}`),
+      errorCode: "ENOENT",
+      status: null,
+    };
+  }
+
   const result = execaSync(command, args, {
     ...options,
     preferLocal: true,
