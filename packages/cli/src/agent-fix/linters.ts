@@ -18,10 +18,19 @@ const STDERR_TAIL_LENGTH = 500;
 // output buffer and abort the run with ENOBUFS, so raise it explicitly.
 const PIPED_MAX_BUFFER = 512 * 1024 * 1024;
 
-const runPiped = (command: string, args: string[]): string => {
+const runPiped = (
+  command: string,
+  args: string[],
+  { optional = false } = {}
+): string => {
   const result = spawnSync(command, args, {
     maxBuffer: PIPED_MAX_BUFFER,
   });
+
+  // An optional tool that isn't installed is skipped, as in the plain fix flow.
+  if (optional && result.errorCode === "ENOENT") {
+    return "";
+  }
 
   if (result.error) {
     throw new Error(`Failed to run ${command}: ${result.error.message}`);
@@ -276,11 +285,11 @@ const runEslintPass = (
   const stylelintTargets = toStylelintTargets(files);
 
   if (stylelintTargets.length > 0) {
-    runPiped("stylelint", [
-      "--fix",
-      "--allow-empty-input",
-      ...stylelintTargets,
-    ]);
+    runPiped(
+      "stylelint",
+      ["--fix", "--allow-empty-input", ...stylelintTargets],
+      { optional: true }
+    );
   }
 
   runPiped("prettier", ["--write", ...targets]);

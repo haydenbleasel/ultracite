@@ -238,4 +238,39 @@ describe("agent-fix linter adapters", () => {
     const commands = mockSpawn.mock.calls.map((call) => call[0]);
     expect(commands).toEqual(["eslint", "prettier", "eslint"]);
   });
+
+  test("eslint adapter skips Stylelint when it isn't installed", () => {
+    const mockSpawn = mock((cmd: string) =>
+      cmd === "stylelint"
+        ? {
+            error: new Error("Command failed with ENOENT: stylelint"),
+            errorCode: "ENOENT",
+            status: null,
+          }
+        : { status: 0, stdout: cmd === "eslint" ? "[]" : "" }
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    expect(getLinterAdapter("eslint").fixAndCollect([], [])).toEqual([]);
+
+    const commands = mockSpawn.mock.calls.map((call) => call[0]);
+    expect(commands).toEqual(["eslint", "stylelint", "prettier", "eslint"]);
+  });
+
+  test("eslint adapter still fails when a required tool isn't installed", () => {
+    const mockSpawn = mock((cmd: string) =>
+      cmd === "prettier"
+        ? {
+            error: new Error("Command failed with ENOENT: prettier"),
+            errorCode: "ENOENT",
+            status: null,
+          }
+        : { status: 0, stdout: cmd === "eslint" ? "[]" : "" }
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    expect(() => getLinterAdapter("eslint").fixAndCollect([], [])).toThrow(
+      "Failed to run prettier"
+    );
+  });
 });

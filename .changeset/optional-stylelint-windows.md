@@ -2,4 +2,4 @@
 "ultracite": patch
 ---
 
-`ultracite check` and `ultracite fix` no longer fail on Windows when the optional Stylelint binary is missing. Both commands warn and skip CSS linting instead; a Stylelint run that actually executes and reports errors still fails.
+On Windows, a linter or formatter that isn't installed is now reported as missing instead of as "exited with code 1". `ultracite check` and `ultracite fix` warn and skip CSS linting when the optional Stylelint is missing, as they already did on macOS and Linux, and `ultracite fix --agent` now skips a missing Stylelint on every platform instead of failing.

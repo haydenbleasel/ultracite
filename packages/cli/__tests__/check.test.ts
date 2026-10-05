@@ -1,9 +1,12 @@
-import { afterEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, describe, expect, mock, spyOn, test } from "bun:test";
 import path from "node:path";
 import process from "node:process";
 
+import { log } from "@clack/prompts";
+
 import { check } from "../src/commands/check";
 import { UltraciteSetupError } from "../src/config-resolution";
+import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -221,7 +224,7 @@ describe("check", () => {
     expect(mockSpawn.mock.calls.map(([command]) => command)).toEqual(["oxfmt"]);
   });
 
-  test("skips Stylelint when it isn't installed", () => {
+  test("skips Stylelint with a warning when it isn't installed", () => {
     const mockSpawn = mock(
       (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
         cmd === "stylelint"
@@ -232,15 +235,17 @@ describe("check", () => {
             }
           : { status: 0 }
     );
+    const warn = spyOn(log, "warn").mockImplementation(() => {});
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
     }));
 
     expect(() => check()).not.toThrow();
+    expect(warn).toHaveBeenCalledWith(STYLELINT_MISSING_MESSAGE);
   });
 
-  test("skips Stylelint on a Windows-shaped missing result", () => {
+  test("fails when Stylelint exits non-zero", () => {
     const mockSpawn = mock(
       (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
         cmd === "stylelint" ? { status: 1 } : { status: 0 }
@@ -249,38 +254,8 @@ describe("check", () => {
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
     }));
-    mockFileSystem({});
 
-    try {
-      expect(() => check()).not.toThrow();
-    } finally {
-      restoreFileSystemMock();
-    }
-  });
-
-  test("fails when an installed Stylelint exits non-zero", () => {
-    const mockSpawn = mock(
-      (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
-        cmd === "stylelint" ? { status: 1 } : { status: 0 }
-    );
-    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
-    mock.module("../src/utils", () => ({
-      detectLinter: mock(() => "eslint"),
-    }));
-    mockFileSystem({
-      [path.join(
-        process.cwd(),
-        "node_modules",
-        ".bin",
-        process.platform === "win32" ? "stylelint.CMD" : "stylelint"
-      )]: "",
-    });
-
-    try {
-      expect(() => check()).toThrow("Stylelint exited with code 1");
-    } finally {
-      restoreFileSystemMock();
-    }
+    expect(() => check()).toThrow("Stylelint exited with code 1");
   });
 
   test("reports a missing tool after running the others", () => {
