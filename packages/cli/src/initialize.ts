@@ -1497,7 +1497,7 @@ const setupLinting = async ({
   if (linter === "eslint") {
     await upsertEslintConfig(frameworks, quiet);
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
-    await upsertPrettierConfig(frameworks, quiet);
+    await upsertPrettierConfig(allFrameworks, quiet);
     await upsertStylelintConfig(quiet);
   }
   if (linter === "oxlint") {
