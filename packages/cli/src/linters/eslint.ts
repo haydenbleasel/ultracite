@@ -33,6 +33,7 @@ const getEslintConfigPath = (): string | null => {
 
 interface EslintOptions {
   frameworks?: (typeof options.frameworks)[number][];
+  gdp?: boolean;
 }
 
 // Everything in an existing Ultracite config besides the presets: carried
@@ -49,9 +50,14 @@ interface EslintExtras {
 
 const generateEslintConfig = (
   frameworks: string[],
-  extras?: EslintExtras
+  extras?: EslintExtras,
+  gdp = false
 ): string => {
-  const presets = ["core", ...frameworks.map(validateFrameworkName)];
+  const presets = [
+    "core",
+    ...frameworks.map(validateFrameworkName),
+    ...(gdp ? ["gdp"] : []),
+  ];
   const imports = [
     ...presets.map(
       (preset) => `import ${preset} from "ultracite/eslint/${preset}";`
@@ -185,7 +191,11 @@ ${entries}
 
 export const eslint = {
   create: async (opts?: EslintOptions) => {
-    const config = generateEslintConfig(opts?.frameworks ?? []);
+    const config = generateEslintConfig(
+      opts?.frameworks ?? [],
+      undefined,
+      opts?.gdp
+    );
     await writeProjectFile(defaultConfigPath, config);
   },
   // ESLint uses the config nearest each file instead of merging it with the
@@ -240,8 +250,13 @@ export const eslint = {
     // Keep the presets the config already had; init adds the selected ones.
     const frameworks = [
       ...new Set([...(existing?.presets ?? []), ...(opts?.frameworks ?? [])]),
+      ...(opts?.gdp ? ["gdp"] : []),
     ].filter((preset) => preset !== "core");
-    const config = generateEslintConfig(frameworks, existing ?? undefined);
+    const config = generateEslintConfig(
+      frameworks.filter((preset) => preset !== "gdp"),
+      existing ?? undefined,
+      frameworks.includes("gdp")
+    );
 
     // Only overwrite a config file that can hold the generated ESM module;
     // CJS configs (eslint.config.cjs/.cts) get the default .mjs file instead,

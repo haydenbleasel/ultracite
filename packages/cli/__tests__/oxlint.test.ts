@@ -107,6 +107,23 @@ describe("oxlint linter", () => {
       expect(content).toContain(getOxlintConfigPath("next"));
     });
 
+    test("adds the gdp preset when requested", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("")),
+        writeFile: mockWriteFile,
+      }));
+
+      await oxlint.create({ gdp: true });
+
+      const [, content] = mockWriteFile.mock.calls[0] ?? [];
+      expect(content).toContain('import gdp from "ultracite/oxlint/gdp";');
+      expect(content).toContain("extends: [core, gdp]");
+    });
+
     test("adds framework js-plugins add-ons when react-doctor is selected", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

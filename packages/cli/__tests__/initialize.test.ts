@@ -172,6 +172,44 @@ describe("initialize", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
 
+  test("adds the gdp preset without installing @gdp-ts/core", async () => {
+    const writtenFiles: { path: string; content: string }[] = [];
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name":"test"}')),
+      rm: mock(() => Promise.resolve()),
+      writeFile: mock((path: string, content: string) => {
+        writtenFiles.push({ content, path });
+        return Promise.resolve();
+      }),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: [],
+      gdp: true,
+      hooks: [],
+      integrations: [],
+      linter: "oxlint",
+      pm: "npm",
+      quiet: true,
+      skipInstall: true,
+    });
+
+    const oxlintConfig = writtenFiles.find(({ content }) =>
+      content.includes("ultracite/oxlint/core")
+    );
+    const manifest = writtenFiles.find(({ content }) =>
+      content.includes('"devDependencies"')
+    );
+    expect(oxlintConfig?.content).toContain(
+      'import gdp from "ultracite/oxlint/gdp";'
+    );
+    expect(manifest?.content).not.toContain("@gdp-ts/core");
+  });
+
   test("shows editor config prompt when editors not specified", async () => {
     const mockMultiselect = mock(() => Promise.resolve([]));
 
@@ -3869,6 +3907,7 @@ describe("init flag validation", () => {
         agents: ["universal", "claude"],
         editors: ["universal", "zed"],
         frameworks: ["react", "next"],
+        gdp: true,
         hooks: ["cursor"],
         integrations: ["husky", "lint-staged"],
         "js-plugins": ["anti-slop"],

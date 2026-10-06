@@ -2,6 +2,7 @@ import process from "node:process";
 
 import {
   cancel,
+  confirm,
   intro,
   isCancel,
   log,
@@ -94,6 +95,7 @@ interface InitializeFlags {
   hooks?: (typeof options.hooks)[number][];
   integrations?: (typeof options.integrations)[number][];
   installSkill?: boolean;
+  gdp?: boolean;
   "js-plugins"?: OxlintJsPlugin[];
   linter?: Linter;
   pm?: string;
@@ -146,6 +148,7 @@ interface RawInitializeFlags {
   frameworks?: readonly string[];
   hooks?: readonly string[];
   integrations?: readonly string[];
+  gdp?: boolean;
   "js-plugins"?: readonly string[];
   linter?: string;
   pm?: string;
@@ -618,7 +621,8 @@ export const upsertBiomeConfig = async (
 
 export const upsertEslintConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
-  quiet = false
+  quiet = false,
+  gdp = false
 ) => {
   const s = spinner();
 
@@ -630,7 +634,7 @@ export const upsertEslintConfig = async (
     if (!quiet) {
       s.message("ESLint configuration found, updating...");
     }
-    await eslint.update({ frameworks });
+    await eslint.update({ frameworks, gdp });
     if (!quiet) {
       s.stop("ESLint configuration updated.");
     }
@@ -640,7 +644,7 @@ export const upsertEslintConfig = async (
   if (!quiet) {
     s.message("ESLint configuration not found, creating...");
   }
-  await eslint.create({ frameworks });
+  await eslint.create({ frameworks, gdp });
   if (!quiet) {
     s.stop("ESLint configuration created.");
   }
@@ -649,7 +653,8 @@ export const upsertEslintConfig = async (
 export const upsertOxlintConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
   quiet = false,
-  jsPlugins: OxlintJsPlugin[] = []
+  jsPlugins: OxlintJsPlugin[] = [],
+  gdp = false
 ) => {
   const s = spinner();
 
@@ -661,7 +666,7 @@ export const upsertOxlintConfig = async (
     if (!quiet) {
       s.message("Oxlint configuration found, updating...");
     }
-    await oxlint.update({ frameworks, jsPlugins });
+    await oxlint.update({ frameworks, gdp, jsPlugins });
     if (!quiet) {
       s.stop("Oxlint configuration updated.");
     }
@@ -671,7 +676,7 @@ export const upsertOxlintConfig = async (
   if (!quiet) {
     s.message("Oxlint configuration not found, creating...");
   }
-  await oxlint.create({ frameworks, jsPlugins });
+  await oxlint.create({ frameworks, gdp, jsPlugins });
   if (!quiet) {
     s.stop("Oxlint configuration created.");
   }
@@ -1084,6 +1089,7 @@ interface InitializeSelections extends EditorSelections, AgentSelections {
   frameworks: Frameworks[];
   hooks: (typeof options.hooks)[number][];
   integrations: (typeof options.integrations)[number][];
+  gdp: boolean;
   jsPlugins: OxlintJsPlugin[];
   linter: Linter;
 }
@@ -1107,6 +1113,7 @@ const nonInteractiveFlags = [
   "agents",
   "editors",
   "frameworks",
+  "gdp",
   "hooks",
   "integrations",
   "pm",
@@ -1249,6 +1256,34 @@ const selectJsPlugins = async (
     throw cancelInitialize();
   }
   return jsPlugins;
+};
+
+const selectGdpPreset = async (
+  opts: InitializeFlags,
+  linter: Linter,
+  interactive: boolean
+): Promise<boolean> => {
+  if (opts.gdp !== undefined) {
+    if (opts.gdp && linter === "biome") {
+      throw new UltraciteSetupError(
+        "The gdp preset is only available with Oxlint and ESLint."
+      );
+    }
+    return opts.gdp;
+  }
+
+  if (!interactive || (linter !== "oxlint" && linter !== "eslint")) {
+    return false;
+  }
+
+  const gdp = await confirm({
+    initialValue: false,
+    message: "Are you using gdp-ts authorization proofs?",
+  });
+  if (isCancelled(gdp)) {
+    throw cancelInitialize();
+  }
+  return gdp;
 };
 
 // The universal target writes one file that several editors or agents read,
@@ -1413,6 +1448,7 @@ const selectInitializeOptions = async (
   const linter = await selectLinter(opts, interactive);
   const frameworks = await selectFrameworks(opts, interactive);
   const jsPlugins = await selectJsPlugins(opts, linter, interactive);
+  const gdp = await selectGdpPreset(opts, linter, interactive);
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
   const hooks = await selectHooks(opts, interactive);
@@ -1422,6 +1458,7 @@ const selectInitializeOptions = async (
     ...editorSelections,
     ...agentSelections,
     frameworks,
+    gdp,
     hooks,
     integrations,
     jsPlugins,
@@ -1448,7 +1485,7 @@ const setupLinting = async ({
   typeAware,
   workspaces,
 }: InitializeContext): Promise<void> => {
-  const { frameworks, jsPlugins, linter } = selections;
+  const { frameworks, gdp, jsPlugins, linter } = selections;
 
   // Workspace frameworks need their plugins installed (and, for Prettier,
   // configured) at the root, though their rules only apply in the
@@ -1481,7 +1518,7 @@ const setupLinting = async ({
     await upsertBiomeConfig(frameworks, quiet, typeAware);
   }
   if (linter === "eslint") {
-    await upsertEslintConfig(frameworks, quiet);
+    await upsertEslintConfig(frameworks, quiet, gdp);
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
     await upsertPrettierConfig(allFrameworks, quiet);
     await upsertStylelintConfig(quiet);
@@ -1491,7 +1528,7 @@ const setupLinting = async ({
     // package.json's "type" to make them load, since that changes how
     // every .js file is loaded; outside an ES module package the configs
     // are written as .mts instead (see resolveEsmConfigPath).
-    await upsertOxlintConfig(frameworks, quiet, jsPlugins);
+    await upsertOxlintConfig(frameworks, quiet, jsPlugins, gdp);
     // Oxlint is only a linter, so we need oxfmt for formatting
     await upsertOxfmtConfig(quiet);
   }

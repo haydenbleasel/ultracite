@@ -83,6 +83,10 @@ program
   )
   .option("--install-skill", "Install the reusable Ultracite skill after setup")
   .option(
+    "--gdp",
+    "Enable gdp-ts authorization-proof lint rules (Oxlint/ESLint)"
+  )
+  .option(
     "--js-plugins <plugins...>",
     "Oxlint JS plugins to enable (@shadcn/lint, anti-slop, eslint-plugin-github, eslint-plugin-jsdoc, eslint-plugin-sonarjs, eslint-plugin-tsdoc, oxlint-plugin-react-doctor)"
   )
@@ -97,6 +101,7 @@ program
       agents: opts.agents,
       editors: opts.editors,
       frameworks: opts.frameworks,
+      gdp: opts.gdp,
       hooks: opts.hooks,
       installSkill: opts.installSkill,
       integrations: opts.integrations,

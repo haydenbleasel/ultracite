@@ -60,6 +60,7 @@ bunx ultracite init \
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
 - `--hooks` — Enable auto-fix hooks: `claude` | `copilot` | `cursor` | `windsurf` | `codebuddy`
 - `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-sonarjs` | `oxlint-plugin-react-doctor`
+- `--gdp` — Enable gdp-ts authorization-proof lint rules with Oxlint or ESLint; `@gdp-ts/core` must already be in the project.
 - `--type-aware` — Enable type-aware linting (Biome: extends the `type-aware` preset; Oxlint: installs `oxlint-tsgolint`)
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation
@@ -89,7 +90,7 @@ export default defineConfig({
 });
 ```
 
-Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
+Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`. Oxlint and ESLint also have the opt-in `gdp` preset for gdp-ts authorization proofs; init adds it when selected in the prompt or passed with `--gdp`. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc` and `oxlint-plugin-react-doctor` run through Oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`.
 
 ## Code Standards
 

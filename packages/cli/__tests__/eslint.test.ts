@@ -105,6 +105,23 @@ describe("eslint linter", () => {
       expect(writeCall[1]).toContain("...next");
       expect(writeCall[1]).toContain("...tanstack");
     });
+
+    test("creates eslint config with the gdp preset", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        readFile: mock(() => Promise.resolve("{}")),
+        writeFile: mockWriteFile,
+      }));
+
+      await eslint.create({ gdp: true });
+
+      const [, content] = mockWriteFile.mock.calls[0] ?? [];
+      expect(content).toContain('import gdp from "ultracite/eslint/gdp";');
+      expect(content).toContain("...gdp");
+    });
   });
 
   describe("update", () => {
@@ -201,6 +218,21 @@ export default [
 ];
 `);
     expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("adds the gdp preset to an existing config", async () => {
+    const project = mockProject({
+      "./eslint.config.mjs": `import core from "ultracite/eslint/core";
+
+export default [...core];
+`,
+    });
+
+    await eslint.update({ gdp: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('import gdp from "ultracite/eslint/gdp";');
+    expect(content).toContain("...gdp");
   });
 
   test("keeps a defineConfig wrapper", async () => {

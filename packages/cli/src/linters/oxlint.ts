@@ -82,6 +82,7 @@ const fullPresetJsPlugins = [
 
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
+  gdp?: boolean;
   jsPlugins?: OxlintJsPlugin[];
 }
 
@@ -758,6 +759,9 @@ export const oxlint = {
         extendsList.push(getOxlintConfigPath(name));
       }
     }
+    if (opts?.gdp) {
+      extendsList.push(getOxlintConfigPath("gdp"));
+    }
 
     return await writeProjectFile(
       resolveOxlintConfigPath().target,
@@ -870,6 +874,9 @@ export const oxlint = {
       if (!hasConfig(name)) {
         newExtends.push(getOxlintConfigPath(name));
       }
+    }
+    if (opts?.gdp && !hasConfig("gdp")) {
+      newExtends.push(getOxlintConfigPath("gdp"));
     }
 
     // Without an explicit new selection, keep the plugins the existing
