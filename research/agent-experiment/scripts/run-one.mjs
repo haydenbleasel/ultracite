@@ -78,7 +78,7 @@ const EXPECTED_ARGS = {
 function adapterFromSource(id) {
   const src = readFileSync(join(AGENT_FIX, "agents.ts"), "utf8");
   const re = new RegExp(
-    `\\n  ${id}: \\{[\\s\\S]*?args: \\[([\\s\\S]*?)\\],\\s*command: "([^"]+)"`
+    `\\n  ${lib.escapeRegExp(id)}: \\{[\\s\\S]*?args: \\[([\\s\\S]*?)\\],\\s*command: "([^"]+)"`
   );
   const m = re.exec(src);
   if (!m) throw new Error(`could not find the ${id} adapter in agents.ts`);

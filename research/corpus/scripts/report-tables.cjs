@@ -14,7 +14,9 @@ const ext = r.aggregate.external8;
 const fmt = (n) =>
   typeof n === "number" ? n.toLocaleString("en-US") : String(n);
 const p = (x) => `${x.toFixed(2)}%`;
-const cell = (v) => String(v).replace(/\|/g, "\\|");
+// Escapes backslashes as well as pipes, so a value ending in a backslash can't
+// escape the pipe that closes its cell.
+const cell = (v) => String(v).replace(/[\\|]/g, "\\$&");
 const table = (head, rows) =>
   [
     `| ${head.map(cell).join(" | ")} |`,

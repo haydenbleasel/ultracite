@@ -355,7 +355,7 @@ async function measure(runId) {
     );
     const exposurePatterns = {
       otherRunDirs: new RegExp(
-        `(runs|run-root>)/(${otherRuns.map((d) => d.replace(/[-]/g, "\\-")).join("|") || "$^"})\\b`,
+        `(runs|run-root>)/(${otherRuns.map(lib.escapeRegExp).join("|") || "$^"})\\b`,
         "g"
       ),
       pristineSubjects: /agent-experiment\/subjects|\.\.\/\.\.\/subjects/g,

@@ -371,6 +371,10 @@ function sizeOf(file) {
 
 const sha256 = (s) => createHash("sha256").update(s).digest("hex");
 
+// Escapes every regex metacharacter, so a value (an agent id, a run directory
+// name) matches only itself when built into a RegExp.
+const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 module.exports = {
   AGENT_LIMIT,
   CONFIG_FILE,
@@ -383,6 +387,7 @@ module.exports = {
   TOPIC,
   attachBiome,
   biomeScores,
+  escapeRegExp,
   lintCognitive,
   redact,
   scoreFunctions,
