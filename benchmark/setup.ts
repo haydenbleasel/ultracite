@@ -14,6 +14,21 @@ import type { Provider } from "./config";
 
 const FIXTURES_SRC = path.join(import.meta.dirname, "fixtures", "src");
 
+// A plain strict tsconfig for the fixture tree, which includes a React
+// component.
+const TSCONFIG = {
+  compilerOptions: {
+    jsx: "react-jsx",
+    module: "esnext",
+    moduleResolution: "bundler",
+    noEmit: true,
+    skipLibCheck: true,
+    strict: true,
+    target: "es2022",
+  },
+  include: ["src"],
+};
+
 const CLI_PACKAGE_JSON = path.join(
   import.meta.dirname,
   "..",
@@ -239,6 +254,15 @@ export const prepareProject = (options: {
   );
 
   // 4. Lay down the fixtures and snapshot a pristine copy for `fix` resets.
+  //    The .gitignore and tsconfig.json are ones every real project has:
+  //    Biome's preset reads ignores from the .gitignore and refuses to run
+  //    without one, and ESLint's typed rules can't parse a TypeScript file no
+  //    tsconfig.json includes.
+  writeFileSync(path.join(dir, ".gitignore"), "node_modules\n");
+  writeFileSync(
+    path.join(dir, "tsconfig.json"),
+    `${JSON.stringify(TSCONFIG, null, 2)}\n`
+  );
   copyFixtures(dir);
   const pristineDir = path.join(workRoot, buildLabel, `${provider}-pristine`);
   rmSync(pristineDir, { force: true, recursive: true });

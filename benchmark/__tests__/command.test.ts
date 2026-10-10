@@ -36,6 +36,16 @@ describe("assertRunnable", () => {
     ["unresolved binary", "Cannot find module 'oxlint'", "stderr"],
     ["unresolved path", "Could not find oxlint binary", "stderr"],
     [
+      "Biome config error",
+      "Biome exited because the configuration resulted in errors. Please fix them.",
+      "stderr",
+    ],
+    [
+      "ESLint project service parse error",
+      "Parsing error: src/api.ts was not found by the project service.",
+      "stdout",
+    ],
+    [
       "Oxlint no-files output",
       "No files found to lint. Please check your paths and ignore patterns.",
       "stdout",

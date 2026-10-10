@@ -20,7 +20,14 @@ const SETUP_FAILURE_PATTERNS = [
   "command not found",
   "Could not find",
   "Cannot find",
+  // Biome: a config it can't load, such as `vcs.useIgnoreFile` with no
+  // .gitignore in the project.
+  "the configuration resulted in errors",
 ];
+
+// The linter started but couldn't parse the files, so no rule ran on them:
+// ESLint's typed rules reject a TypeScript file outside every tsconfig.json.
+const PARSE_FAILURE_PATTERNS = ["was not found by the project service"];
 
 // The linter started but had nothing to lint. Oxlint and Oxfmt print these on
 // either stream, and such a run would time as a meaningless fast result.
@@ -56,7 +63,7 @@ const findUnrunnableReason = (outcome: RunOutcome): string | undefined => {
     SETUP_FAILURE_PATTERNS.find((pattern) =>
       outcome.stderr.includes(pattern)
     ) ??
-    NO_INPUT_PATTERNS.find(
+    [...PARSE_FAILURE_PATTERNS, ...NO_INPUT_PATTERNS].find(
       (pattern) =>
         outcome.stdout.includes(pattern) || outcome.stderr.includes(pattern)
     )
