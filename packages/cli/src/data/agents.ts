@@ -190,14 +190,6 @@ export const agents: Agent[] = [
       appendMode: true,
       path: "AGENTS.md",
     },
-    id: "continue",
-    name: "Continue",
-  },
-  {
-    config: {
-      appendMode: true,
-      path: "AGENTS.md",
-    },
     id: "snowflake-cortex",
     name: "Snowflake Cortex",
   },
@@ -223,23 +215,15 @@ export const agents: Agent[] = [
       path: "AGENTS.md",
     },
     id: "kimi-cli",
-    name: "Kimi CLI",
+    name: "Kimi Code CLI",
   },
   {
     config: {
       appendMode: true,
       path: "AGENTS.md",
     },
-    id: "mcpjam",
-    name: "MCPJam",
-  },
-  {
-    config: {
-      appendMode: true,
-      path: "AGENTS.md",
-    },
-    id: "mux",
-    name: "Mux",
+    id: "xum",
+    name: "Xum",
   },
   {
     config: {
@@ -307,7 +291,7 @@ export const agents: Agent[] = [
       path: "AGENTS.md",
     },
     id: "amp",
-    name: "AMP",
+    name: "Amp",
   },
   {
     config: {
@@ -315,14 +299,6 @@ export const agents: Agent[] = [
     },
     id: "aider",
     name: "Aider",
-  },
-  {
-    config: {
-      appendMode: true,
-      path: "AGENTS.md",
-    },
-    id: "firebase-studio",
-    name: "Firebase Studio",
   },
   {
     config: {
@@ -383,14 +359,6 @@ export const agents: Agent[] = [
   {
     config: {
       appendMode: true,
-      path: ".roo/rules/ultracite.md",
-    },
-    id: "roo-code",
-    name: "Roo Code",
-  },
-  {
-    config: {
-      appendMode: true,
       path: "AGENTS.md",
     },
     id: "warp",
@@ -429,12 +397,14 @@ export const agents: Agent[] = [
     name: "Qwen Code",
   },
   {
+    // Formerly Amazon Q Developer CLI. Kiro reads AGENTS.md in the CLI and the
+    // IDE, and ignores the old .amazonq/rules once a project has .kiro/.
     config: {
       appendMode: true,
-      path: ".amazonq/rules/ultracite.md",
+      path: "AGENTS.md",
     },
-    id: "amazon-q-cli",
-    name: "Amazon Q CLI",
+    id: "kiro-cli",
+    name: "Kiro CLI",
   },
   {
     // Firebender reads project rules from `.firebender/rules/*.mdc`; the

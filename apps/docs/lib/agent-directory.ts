@@ -1,16 +1,9 @@
 // What the /agents index says about each agent `ultracite init` supports.
 // The CLI's table (packages/cli/src/data/agents.ts) decides which agents
 // exist and which files they get; this adds who makes each one and what it
-// is, checked against each product's own docs on 2026-10-10. Names follow the
-// products' current branding, which runs ahead of a few CLI labels (Kiro CLI
-// is `amazon-q-cli`, Xum is `mux`).
+// is, checked against each product's own docs on 2026-10-10.
 
-export type AgentGroup =
-  | "cloud"
-  | "editor"
-  | "framework"
-  | "other"
-  | "terminal";
+export type AgentGroup = "cloud" | "editor" | "framework" | "terminal";
 
 export interface AgentEntry {
   group: AgentGroup;
@@ -36,14 +29,6 @@ export const agentDirectory = {
     name: "Aider",
     tagline:
       "Terminal pair programmer that commits each change. Add `ultracite.md` to `read:` in `.aider.conf.yml` so it loads the rules.",
-  },
-  "amazon-q-cli": {
-    group: "terminal",
-    logo: "kiro",
-    maker: "Amazon Web Services",
-    name: "Kiro CLI",
-    tagline:
-      "AWS’s terminal coding agent, formerly Amazon Q Developer CLI, with custom agents, steering and hooks.",
   },
   amp: {
     group: "terminal",
@@ -87,13 +72,6 @@ export const agentDirectory = {
     tagline:
       "OpenAI’s coding agent for the terminal, IDEs, the ChatGPT desktop app and cloud tasks.",
   },
-  continue: {
-    group: "other",
-    maker: "Continue",
-    name: "Continue",
-    tagline:
-      "Open-source agent for VS Code, JetBrains and the terminal. No longer maintained since Cursor acquired it in June 2026.",
-  },
   copilot: {
     group: "editor",
     maker: "GitHub",
@@ -135,13 +113,6 @@ export const agentDirectory = {
     maker: "Factory",
     name: "Droid",
     tagline: "Factory’s coding agent CLI, run interactively or headless in CI.",
-  },
-  "firebase-studio": {
-    group: "other",
-    maker: "Google",
-    name: "Firebase Studio",
-    tagline:
-      "Google’s browser workspace for building apps with Gemini. It shuts down in March 2027.",
   },
   firebender: {
     group: "editor",
@@ -192,19 +163,20 @@ export const agentDirectory = {
     tagline:
       "Moonshot AI’s terminal agent that edits code and runs shell commands.",
   },
+  "kiro-cli": {
+    group: "terminal",
+    logo: "kiro",
+    maker: "Amazon Web Services",
+    name: "Kiro CLI",
+    tagline:
+      "AWS’s terminal coding agent, formerly Amazon Q Developer CLI, with custom agents, steering and hooks.",
+  },
   lovable: {
     group: "cloud",
     maker: "Lovable",
     name: "Lovable",
     tagline:
       "Browser-based app builder where an agent writes full-stack web apps from chat.",
-  },
-  mcpjam: {
-    group: "other",
-    maker: "MCPJam",
-    name: "MCPJam",
-    tagline:
-      "Open-source platform for testing and debugging MCP servers, rather than a coding agent.",
   },
   "mistral-vibe": {
     group: "terminal",
@@ -213,14 +185,6 @@ export const agentDirectory = {
     name: "Mistral Vibe",
     tagline:
       "Mistral AI’s open-source terminal coding agent, also usable in editors over ACP.",
-  },
-  mux: {
-    group: "editor",
-    logo: "coder",
-    maker: "Coder",
-    name: "Xum",
-    tagline:
-      "Coder’s desktop app, formerly Mux, for running agents in parallel, isolated workspaces.",
   },
   ona: {
     group: "cloud",
@@ -278,13 +242,6 @@ export const agentDirectory = {
     tagline:
       "Replit’s in-browser agent that builds, runs and deploys apps from prompts.",
   },
-  "roo-code": {
-    group: "other",
-    maker: "Roo Code",
-    name: "Roo Code",
-    tagline:
-      "Open-source VS Code agent with role-based modes. It shut down in May 2026.",
-  },
   "snowflake-cortex": {
     group: "terminal",
     logo: "snowflake",
@@ -306,6 +263,14 @@ export const agentDirectory = {
     name: "Warp",
     tagline:
       "Terminal-based development environment with a built-in coding agent and cloud agents.",
+  },
+  xum: {
+    group: "editor",
+    logo: "coder",
+    maker: "Coder",
+    name: "Xum",
+    tagline:
+      "Coder’s desktop app, formerly Mux, for running agents in parallel, isolated workspaces.",
   },
   zencoder: {
     group: "editor",
@@ -343,11 +308,5 @@ export const agentGroups: {
     description: "Toolkits for building your own coding agent.",
     id: "framework",
     title: "Frameworks",
-  },
-  {
-    description:
-      "Products that have shut down or are closing, and a tool that isn’t a coding agent. `init` still writes their files.",
-    id: "other",
-    title: "Also supported",
   },
 ];

@@ -19,19 +19,17 @@ interface MaybeInstallUltraciteSkillOptions {
 // skills agents that read skills from their own project directory rather
 // than the shared `.agents/skills`, keyed by that directory. init has written
 // some of these by the time the skill is installed (`.claude`, `.windsurf`,
-// `.codebuddy`, `.roo`), so the list follows the user's choices.
+// `.codebuddy`), so the list follows the user's choices.
 const projectAgentDirectories = new Map([
   [".augment", "augment"],
   [".claude", "claude-code"],
   [".codebuddy", "codebuddy"],
-  [".continue", "continue"],
   [".crush", "crush"],
   [".goose", "goose"],
   [".junie", "junie"],
   [".kiro", "kiro-cli"],
   [".openhands", "openhands"],
   [".qwen", "qwen-code"],
-  [".roo", "roo"],
   [".trae", "trae"],
   [".windsurf", "windsurf"],
 ]);
