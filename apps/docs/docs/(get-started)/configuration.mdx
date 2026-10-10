@@ -179,6 +179,25 @@ export default defineConfig({
 });
 ```
 
+:::note
+`sortTailwindcss` is an **Oxfmt-only** setting. Configuring it in `oxlint.config.ts` causes Oxlint to throw an `unknown field sortTailwindcss` error.
+:::
+
+In monorepos or workspaces with a root `oxfmt.config.ts`, configure `sortTailwindcss` in the root configuration file and point `stylesheet` at your app stylesheet relative to the repository root:
+
+```ts title="oxfmt.config.ts"
+import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+  sortTailwindcss: {
+    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+    stylesheet: "./apps/web/src/styles.css",
+  },
+});
+```
+
 ### Adding Third-Party Plugins (Oxlint)
 
 Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
