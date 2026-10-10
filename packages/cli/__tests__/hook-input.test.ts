@@ -121,6 +121,50 @@ describe("editedFilesFromHookPayload (Deep Agents)", () => {
   });
 });
 
+// Codex edits files only through apply_patch, and sends the patch in
+// tool_input.command with absolute paths (captured from codex-cli 0.155.1).
+const codexPayload = (patch: string) =>
+  JSON.stringify({
+    cwd: "/repo",
+    hook_event_name: "PostToolUse",
+    model: "gpt-5.5",
+    permission_mode: "default",
+    session_id: "abc",
+    tool_input: { command: `*** Begin Patch\n${patch}\n*** End Patch` },
+    tool_name: "apply_patch",
+    tool_response:
+      "Exit code: 0\nWall time: 0.1 seconds\nOutput:\nSuccess. Updated the following files:\nA /repo/src/total.ts\n",
+    tool_use_id: "call_1",
+    transcript_path: "/tmp/rollout.jsonl",
+    turn_id: "turn_1",
+  });
+
+describe("editedFilesFromHookPayload (Codex)", () => {
+  test("reads every file a patch adds, updates or moves to", () => {
+    expect(
+      editedFilesFromHookPayload(
+        codexPayload(
+          "*** Add File: /repo/src/total.ts\n+export const a = 1;\n*** Update File: /repo/src/b.ts\n*** Move to: /repo/src/c.ts\n@@\n-x\n+y"
+        )
+      )
+    ).toEqual(["/repo/src/total.ts", "/repo/src/b.ts", "/repo/src/c.ts"]);
+  });
+
+  test("names nothing to fix for a patch that only deletes files", () => {
+    expect(
+      editedFilesFromHookPayload(
+        codexPayload("*** Delete File: /repo/src/total.ts")
+      )
+    ).toEqual([]);
+  });
+
+  test("hands the problems back to the model", () => {
+    expect(
+      hookFeedsAgent(codexPayload("*** Add File: /repo/src/total.ts\n+x"))
+    ).toBe(true);
+  });
+});
+
 describe("editedFilesFromHookPayload (Copilot and VS Code)", () => {
   test("reads toolArgs.path from the Copilot CLI, as a JSON string or object", () => {
     expect(

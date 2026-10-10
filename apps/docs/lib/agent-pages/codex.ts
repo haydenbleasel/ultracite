@@ -15,7 +15,7 @@ export const codex: AgentPageContent = {
     },
     {
       answer:
-        "Yes. Codex runs `PostToolUse` hooks after `apply_patch` edits, from `.codex/hooks.json` or `.codex/config.toml`, once you’ve trusted them in `/hooks`. Ultracite doesn’t configure a Codex hook yet, so Codex lints because the rules in `AGENTS.md` tell it to.",
+        "Yes. `init --hooks codex` writes a `PostToolUse` hook to `.codex/hooks.json` that runs `ultracite fix --hook` after each `apply_patch` edit. Codex loads it once you trust the project and review the hook in `/hooks`. Hooks you haven’t reviewed don’t run, in `codex exec` either, unless you pass `--dangerously-bypass-hook-trust`.",
       question: "Does Codex support hooks?",
     },
     {
@@ -29,15 +29,15 @@ export const codex: AgentPageContent = {
       question: "Do I have to approve every ultracite command in Codex?",
     },
   ],
-  headline: "Codex runs your lint checks in its sandbox",
+  headline: "Codex gets lint feedback on every patch",
   highlights: [
     {
       body: "Codex code review on GitHub follows `## Code Review Rules` sections in the root `AGENTS.md` and in any nested one that covers a changed file. OpenAI’s advice is to leave formatting and lint checks out of those rules and in CI, which is where `ultracite check` belongs.",
       title: "Code review reads AGENTS.md too",
     },
     {
-      body: "Codex runs `PostToolUse` hooks from `.codex/hooks.json` or a `[hooks]` table in `.codex/config.toml`, and a matcher of `Edit` or `Write` catches `apply_patch` edits. Project hooks load only in a trusted project, and each one waits until you review it in `/hooks`. Ultracite doesn’t set one up for Codex yet.",
-      title: "Hooks exist, but need trust",
+      body: "Codex loads `.codex/hooks.json` only in a project you’ve trusted, and runs each hook only after you review it in `/hooks`. Trust is tied to the hook’s content, so when re-running `init` changes the command, Codex asks again.",
+      title: "Hooks wait for your review",
     },
     {
       body: "`codex exec` runs in a read-only sandbox unless you pass `--sandbox workspace-write`. That’s the flag `ultracite fix --codex` passes, along with `--skip-git-repo-check`, so Codex can edit the files it’s handed in any project.",
@@ -45,20 +45,20 @@ export const codex: AgentPageContent = {
     },
   ],
   intro:
-    "Codex reads `AGENTS.md` from your project root down to the directory you start it in, so Ultracite’s rules are in its instructions from the first message. It runs `ultracite fix` and `ultracite check` because the rules tell it to, inside the same `workspace-write` sandbox it edits in, and `ultracite fix --codex` hands whatever’s left back to `codex exec`.",
+    "Codex reads `AGENTS.md` from your project root down to the directory you start it in, so Ultracite’s rules are in its instructions from the first message. With `init --hooks codex`, a hook runs `ultracite fix` on every file Codex patches and hands back what’s left in the same turn, and `ultracite fix --codex` hands whatever’s left outside a session to `codex exec`.",
   loop: {
-    body: "There’s no Codex hook in Ultracite yet. In the `Auto` preset (`workspace-write` with `on-request` approvals), Codex can run commands in your working directory without asking, so it runs the commands in `AGENTS.md` as it works. Network access is off in that sandbox by default, which is fine: `init` installs `ultracite` into the project.",
+    body: "`init --hooks codex` adds a `PostToolUse` hook to `.codex/hooks.json`, matched on `apply_patch`, the tool Codex edits files with. Once you’ve reviewed it, Codex runs it from the session’s working directory after every patch. When problems remain, the hook exits with code 2, and Codex hands them to the model in place of the patch’s own result.",
     steps: [
-      "Codex edits files with its `apply_patch` tool.",
-      "Following `AGENTS.md`, it runs `npx ultracite fix` and `npx ultracite check` in the sandbox, with no approval prompt.",
-      "It reads the linter’s output like any other command result and works on what’s left.",
-      "Outside a session, `npx ultracite fix --codex` hands each file with problems left to `codex exec`, then lints it again.",
+      "Codex edits files with `apply_patch`, and the hook gets the patch in `tool_input.command`.",
+      "The hook runs `ultracite fix` on just the files the patch adds, updates or moves. A patch that only deletes files fixes nothing.",
+      "If nothing is left, it exits 0 and Codex carries on.",
+      "If problems remain, it prints them and exits 2. The edit stays applied, and the model reads the problems as the tool’s result and fixes them next.",
     ],
-    title: "Codex runs the checks in its sandbox",
+    title: "A hook on every apply_patch",
   },
   metaDescription:
-    "Set up Ultracite for Codex: rules in AGENTS.md, lint runs inside the workspace-write sandbox, and fix --codex to hand leftovers to codex exec.",
-  metaTitle: "Ultracite for Codex — AGENTS.md, sandbox and code review",
+    "Set up Ultracite for Codex: rules in AGENTS.md, a hook that fixes every apply_patch edit, and fix --codex to hand leftovers to codex exec.",
+  metaTitle: "Ultracite for Codex — AGENTS.md, hooks and code review",
   related: ["claude", "opencode", "cursor-cli"],
   rules: {
     facts: [

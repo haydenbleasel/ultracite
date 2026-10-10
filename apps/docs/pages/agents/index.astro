@@ -60,8 +60,8 @@ const entries = cliAgents.map((agent) => {
 const byName = (a: { name: string }, b: { name: string }): number =>
   a.name.localeCompare(b.name, "en", { sensitivity: "base" });
 
-// The frontier agents lead the page. Beyond the rules file (and Claude Code's
-// hook), `ultracite fix --claude` and `--codex` hand whatever autofix can't
+// The frontier agents lead the page. Beyond the rules file and the hook,
+// `ultracite fix --claude` and `--codex` hand whatever autofix can't
 // settle to that agent's CLI (docs/usage.mdx).
 const featuredFixFlags = new Map([
   ["claude", "--claude"],

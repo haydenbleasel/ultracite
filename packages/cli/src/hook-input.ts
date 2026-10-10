@@ -81,6 +81,9 @@ const LOWER_CASE_TOOL_RE = /^[a-z]/u;
 const PATCH_FILE_RE =
   /^\*\*\* (?:Add File|Update File|Move to): (?<file>.+)$/gmu;
 
+// `*** Delete File: ...`: a patch made only of these leaves nothing to fix.
+const PATCH_DELETE_RE = /^\*\*\* Delete File: /mu;
+
 // Strict: a lenient parser would recover a file path from a truncated payload
 // and lint one file where the whole-project run is the safe fallback.
 const parseJson = (text: string): JsonValue | null => {
@@ -135,14 +138,19 @@ const patchPathsIn = (input: JsonValue | null): string[] =>
     )
   );
 
+const deletesFiles = (input: JsonValue | null): boolean =>
+  stringsIn(input).some((text) => PATCH_DELETE_RE.test(text));
+
 /**
  * The files an agent's post-edit hook payload names:
  * - a list of paths when the payload names the edited file(s): Claude Code
  *   and CodeBuddy send `tool_input.file_path`, Cursor's `afterFileEdit` sends
  *   `file_path`, Windsurf sends `tool_info.file_path`, VS Code sends
- *   `tool_input.filePath` and the Copilot CLI `toolArgs.path`;
+ *   `tool_input.filePath`, the Copilot CLI `toolArgs.path`, and Codex an
+ *   `apply_patch` patch in `tool_input.command`;
  * - `[]` when a host without matchers ran the hook for a tool that edits
- *   nothing (e.g. VS Code's `read_file`), so there is nothing to fix;
+ *   nothing (e.g. VS Code's `read_file`), or a patch only deletes files, so
+ *   there is nothing to fix;
  * - `null` when no file can be read from the payload (another shape, text
  *   that is not JSON, or an edit tool without a single path), which keeps
  *   the whole-project run.
@@ -184,15 +192,19 @@ export const editedFilesFromHookPayload = (
     input = parseJson(rawArgs) ?? rawArgs;
   }
 
-  const files =
-    toolName === "apply_patch" ? patchPathsIn(input) : pathsIn(input);
+  const isPatch = toolName === "apply_patch";
+  const files = isPatch ? patchPathsIn(input) : pathsIn(input);
   const unique = [...new Set(files.filter((file) => file !== ""))];
 
-  return unique.length > 0 ? unique : null;
+  if (unique.length > 0) {
+    return unique;
+  }
+
+  return isPatch && deletesFiles(input) ? [] : null;
 };
 
 // The hosts that hand a post-edit hook's stderr to the agent when the hook
-// exits with 2: Claude Code, CodeBuddy, VS Code, Deep Agents and Grok Build send a
+// exits with 2: Claude Code, CodeBuddy, Codex, VS Code, Deep Agents and Grok Build send a
 // `PostToolUse` payload, and Windsurf (Devin Desktop) a `post_write_code` one. Cursor's `afterFileEdit` has
 // no way to reach the agent (and reads 2 as "block"), and the Copilot CLI only
 // shows a hook's stderr to the user, so neither is listed.

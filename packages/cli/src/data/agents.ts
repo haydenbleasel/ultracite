@@ -69,6 +69,30 @@ export const agents: Agent[] = [
     name: "Claude Code",
   },
   {
+    hooks: {
+      // Codex reads a trusted project's .codex/hooks.json in Claude Code's
+      // format and runs each hook once it's reviewed in `/hooks`. File edits
+      // go through `apply_patch`, which hook payloads name as such (`Write`
+      // and `Edit` are only matcher aliases), with the patch text in
+      // `tool_input.command`. A PostToolUse hook that exits 2 replaces the
+      // tool result the model reads with its stderr.
+      getContent: (command) => ({
+        hooks: {
+          PostToolUse: [
+            {
+              hooks: [
+                {
+                  command,
+                  type: "command",
+                },
+              ],
+              matcher: "apply_patch",
+            },
+          ],
+        },
+      }),
+      path: ".codex/hooks.json",
+    },
     id: "codex",
     name: "Codex",
   },

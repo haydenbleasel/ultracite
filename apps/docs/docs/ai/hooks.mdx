@@ -13,7 +13,7 @@ Hooks are separate from AI coding rules. The `--agents` flag configures AI codin
 
 ## Setup
 
-Some tools like Cursor, Devin Desktop (formerly Windsurf), CodeBuddy, Claude Code, Deep Agents, GitHub Copilot, and Grok Build support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
+Some tools like Cursor, Devin Desktop (formerly Windsurf), CodeBuddy, Claude Code, Codex, Deep Agents, GitHub Copilot, and Grok Build support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
 
 ### Automatic Setup
 
@@ -25,6 +25,7 @@ When you run `npx ultracite init`, you'll be prompted to select which agent hook
   ◯ Devin Desktop
   ◯ CodeBuddy
   ◯ Claude Code
+  ◯ Codex
   ◯ Deep Agents
   ◯ GitHub Copilot
   ◯ Grok Build
@@ -38,6 +39,7 @@ Ultracite writes the following files:
 - Devin Desktop: `.devin/hooks.json`
 - CodeBuddy: `.codebuddy/settings.json`
 - Claude Code: `.claude/settings.json`
+- Codex: `.codex/hooks.json`
 - Deep Agents: `.deepagents/hooks.json`
 - GitHub Copilot: `.github/hooks/ultracite.json`
 - Grok Build: `.grok/hooks/ultracite.json`
@@ -45,6 +47,8 @@ Ultracite writes the following files:
 Devin Desktop, formerly Windsurf, reads `.devin/hooks.json` and falls back to `.windsurf/hooks.json` only while the new file has no hooks. Earlier versions wrote the hook to `.windsurf/hooks.json` under the `windsurf` ID, which `--hooks` still accepts; re-running `init` moves it, copies your own hooks from the old file into the new one so they keep running, and leaves the old file with just your hooks (or removes it when nothing else is in it).
 
 Grok Build uses Claude Code's format and maps its `Write|Edit` matcher onto its own file tools. It runs project hooks once you trust them with `/hooks-trust`.
+
+Codex uses Claude Code's format too, with a matcher on `apply_patch`, the tool it edits files with; the hook reads every file the patch adds, updates or moves. Codex loads a project's `.codex/hooks.json` only once you trust the project, and runs the hook only after you review it in `/hooks`. Trust is tied to the hook's content, so when re-running `init` changes the command, Codex asks again.
 
 Deep Agents Code (`dcode`) also uses Claude Code's format, and names its file tools `Write` and `Edit` in hook payloads. It runs a project's hooks once you trust the workspace; a headless run needs `--trust-project-hooks`.
 
@@ -76,7 +80,7 @@ The GitHub Copilot file uses the format the Copilot CLI and cloud agent read (a 
 If you want to manually set things up or add hooks after initialization, run:
 
 ```bash
-npx ultracite init --hooks cursor devin codebuddy claude deepagents copilot grok
+npx ultracite init --hooks cursor devin codebuddy claude codex deepagents copilot grok
 ```
 
 This keeps the project's current linter and your changes to its configs. Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
@@ -84,10 +88,10 @@ This keeps the project's current linter and your changes to its configs. Alterna
 ## How It Works
 
 1. **Automatic Execution**: After the AI agent edits a file, the hook runs `ultracite fix --hook` from the project's own dependencies, through the package manager's local runner (`npx`, `pnpm exec`, `bunx` and so on). It doesn't go through the `fix` script, which may run another tool in a project that already had one. On Biome projects, the hook also passes `--skip=correctness/noUnusedImports` to avoid removing imports mid-edit.
-2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor, Devin Desktop, Deep Agents, GitHub Copilot in VS Code, the Copilot CLI, and Grok Build all send the path; multi-file edits (VS Code's multi-replace and `apply_patch`) fix each file they name. VS Code and the Copilot CLI run the hook after every tool, so a tool that doesn't edit files (like reading one) fixes nothing. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
+2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor, Devin Desktop, Deep Agents, GitHub Copilot in VS Code, the Copilot CLI, and Grok Build all send the path, and Codex sends the patch it applied; multi-file edits (VS Code's multi-replace and `apply_patch`) fix each file they name, and a patch that only deletes files fixes nothing. VS Code and the Copilot CLI run the hook after every tool, so a tool that doesn't edit files (like reading one) fixes nothing. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
 3. **Code Formatting**: Ultracite formats the edited code according to your linter configuration
 4. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
-5. **Remaining Problems Go Back to the Agent**: When issues remain that need a manual fix, the hook prints them to stderr and exits with code 2. Claude Code, CodeBuddy, Devin Desktop, Deep Agents, Grok Build, and VS Code's Local agent show a hook's stderr to the agent on that exit code, so the agent sees what's left and fixes it in its next step. Cursor's `afterFileEdit` hook doesn't pass a hook's output to the agent, and the Copilot CLI, the Copilot cloud agent and Copilot sessions on VS Code's Agent Host show it only to you. There the hook keeps the linter's own output and exit code.
+5. **Remaining Problems Go Back to the Agent**: When issues remain that need a manual fix, the hook prints them to stderr and exits with code 2. Claude Code, CodeBuddy, Codex, Devin Desktop, Deep Agents, Grok Build, and VS Code's Local agent show a hook's stderr to the agent on that exit code, so the agent sees what's left and fixes it in its next step. Codex shows it in place of the patch's own result, though the edit has already been applied. Cursor's `afterFileEdit` hook doesn't pass a hook's output to the agent, and the Copilot CLI, the Copilot cloud agent and Copilot sessions on VS Code's Agent Host show it only to you. There the hook keeps the linter's own output and exit code.
 6. **Seamless Integration**: The process happens transparently without interrupting your workflow
 
 ## Benefits

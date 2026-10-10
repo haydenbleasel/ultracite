@@ -773,7 +773,7 @@ describe("writing outside the project", () => {
 // A project whose files start as `initial` and change as they're written and
 // removed. Returns the files afterwards and the paths removed.
 const runInProject = async (
-  hook: "deepagents" | "devin" | "grok",
+  hook: "codex" | "deepagents" | "devin" | "grok",
   initial: Record<string, string>
 ) => {
   const files = { ...initial };
@@ -907,5 +907,44 @@ describe("deep agents hooks", () => {
         ],
       },
     });
+  });
+});
+
+describe("codex hooks", () => {
+  test("go in .codex/hooks.json, matching Codex's apply_patch tool", async () => {
+    const { files } = await runInProject("codex", {});
+
+    expect(JSON.parse(files[".codex/hooks.json"] ?? "{}")).toEqual({
+      hooks: {
+        PostToolUse: [
+          {
+            hooks: [{ command: "npx ultracite fix --hook", type: "command" }],
+            matcher: "apply_patch",
+          },
+        ],
+      },
+    });
+  });
+
+  test("keep the project's own Codex hooks", async () => {
+    const ownHook = {
+      hooks: [{ command: "./check-bash.sh", type: "command" }],
+      matcher: "Bash",
+    };
+    const { files } = await runInProject("codex", {
+      ".codex/hooks.json": JSON.stringify({
+        hooks: { PostToolUse: [ownHook], PreToolUse: [ownHook] },
+      }),
+    });
+
+    const codex = JSON.parse(files[".codex/hooks.json"] ?? "{}");
+    expect(codex.hooks.PreToolUse).toEqual([ownHook]);
+    expect(codex.hooks.PostToolUse).toEqual([
+      ownHook,
+      {
+        hooks: [{ command: "npx ultracite fix --hook", type: "command" }],
+        matcher: "apply_patch",
+      },
+    ]);
   });
 });
