@@ -13,10 +13,8 @@ import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager, PackageManagerName } from "nypm";
 
 import packageJson from "../package.json" with { type: "json" };
-import { createAgents, getAgentFileTargets } from "./agents";
-import type { AgentFileTarget } from "./agents";
+import { AGENTS_FILE, getAgentChoices, writeAgentFiles } from "./agents";
 import { UltraciteSetupError } from "./config-resolution";
-import { agents as agentsData } from "./data/agents";
 import { editors } from "./data/editors";
 import { hooks as hookIntegrations } from "./data/hooks";
 import { options } from "./data/options";
@@ -974,8 +972,7 @@ export const initializePreCommit = async (
 };
 
 export const upsertAgents = async (
-  name: (typeof options.agents)[number],
-  displayName: string,
+  selection: readonly AgentSelection[],
   packageManager: PackageManagerName,
   linter: (typeof options.linters)[number],
   quiet = false
@@ -983,46 +980,19 @@ export const upsertAgents = async (
   const s = spinner();
 
   if (!quiet) {
-    s.start(`Checking for ${displayName}...`);
+    s.start(`Writing ${AGENTS_FILE}...`);
   }
 
-  const agents = createAgents(name, packageManager, linter);
-
-  if (await agents.exists()) {
-    if (!quiet) {
-      s.message(`${displayName} found, updating...`);
-    }
-    await agents.update();
-    if (!quiet) {
-      s.stop(`${displayName} updated.`);
-    }
-    return;
-  }
-
-  if (!quiet) {
-    s.message(`${displayName} not found, creating...`);
-  }
-  await agents.create();
-  if (!quiet) {
-    s.stop(`${displayName} created.`);
-  }
-};
-
-export const upsertAgentFile = async (
-  target: AgentFileTarget,
-  packageManager: PackageManagerName,
-  linter: (typeof options.linters)[number],
-  quiet = false
-) => {
-  const agentLabel = `${target.displayName} (${target.path})`;
-
-  await upsertAgents(
-    target.representativeAgentId,
-    agentLabel,
+  const { created, files } = await writeAgentFiles(
+    selection,
     packageManager,
-    linter,
-    quiet
+    linter
   );
+
+  if (!quiet) {
+    const also = files.length > 0 ? `, and updated ${files.join(", ")}` : "";
+    s.stop(`${AGENTS_FILE} ${created ? "created" : "updated"}${also}.`);
+  }
 };
 
 export const upsertEditorFile = async (
@@ -1076,8 +1046,7 @@ interface EditorSelections {
 }
 
 interface AgentSelections {
-  agents: (typeof options.agents)[number][];
-  selectedAgentFiles: AgentFileTarget[];
+  agents: AgentSelection[];
 }
 
 interface InitializeSelections extends EditorSelections, AgentSelections {
@@ -1330,26 +1299,19 @@ const selectAgents = async (
   opts: InitializeFlags,
   interactive: boolean
 ): Promise<AgentSelections> => {
-  const targets = getAgentFileTargets();
-
   if (opts.agents !== undefined) {
-    const universal = resolveUniversalTarget(
-      opts.agents,
-      targets,
-      (target) => target.agentIds
-    );
-    return { agents: universal.ids, selectedAgentFiles: universal.targets };
+    return { agents: opts.agents };
   }
 
-  return {
-    agents: [],
-    selectedAgentFiles: interactive
-      ? await promptForTargets(
-          "Which agent files do you want to add (optional)?",
-          targets
-        )
-      : [],
-  };
+  if (!interactive) {
+    return { agents: [] };
+  }
+
+  const selected = await promptForTargets(
+    "Which agents do you use (optional)?",
+    getAgentChoices()
+  );
+  return { agents: selected.map((choice) => choice.id) };
 };
 
 const selectHooks = async (
@@ -1504,17 +1466,8 @@ const setupSelectedFiles = async ({
   quiet,
   selections,
 }: InitializeContext): Promise<void> => {
-  const {
-    agents,
-    editorConfig,
-    hooks,
-    linter,
-    selectedAgentFiles,
-    selectedEditorFiles,
-  } = selections;
-  const agentNames = Object.fromEntries(
-    agentsData.map((agent) => [agent.id, agent.name])
-  );
+  const { agents, editorConfig, hooks, linter, selectedEditorFiles } =
+    selections;
 
   await Promise.all(
     selectedEditorFiles.map((target) => upsertEditorFile(target, linter, quiet))
@@ -1524,17 +1477,9 @@ const setupSelectedFiles = async ({
     editorConfig.map((editorId) => upsertEditorConfig(editorId, linter, quiet))
   );
 
-  await Promise.all(
-    selectedAgentFiles.map((target) =>
-      upsertAgentFile(target, pmInfo.name, linter, quiet)
-    )
-  );
-
-  await Promise.all(
-    agents.map((agentId) =>
-      upsertAgents(agentId, agentNames[agentId], pmInfo.name, linter, quiet)
-    )
-  );
+  if (agents.length > 0) {
+    await upsertAgents(agents, pmInfo.name, linter, quiet);
+  }
 
   await Promise.all(
     hooks.map((hookName) => upsertHooks(hookName, pmInfo.name, linter, quiet))

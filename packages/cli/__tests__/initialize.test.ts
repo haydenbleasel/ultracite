@@ -2,8 +2,6 @@ import { afterAll, describe, expect, mock, test } from "bun:test";
 
 import type { PackageManager } from "nypm";
 
-import type { AgentFileTarget } from "../src/agents";
-import { getAgentFileTargets } from "../src/agents";
 import { UltraciteSetupError } from "../src/config-resolution";
 import {
   initialize,
@@ -13,7 +11,6 @@ import {
   initializePrecommitHook,
   installDependencies,
   migrateLinterConfig,
-  upsertAgentFile,
   upsertAgents,
   upsertBiomeConfig,
   upsertEditorConfig,
@@ -253,7 +250,7 @@ describe("initialize", () => {
 
     expect(mockMultiselect).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: "Which agent files do you want to add (optional)?",
+        message: "Which agents do you use (optional)?",
         options: expect.arrayContaining([
           expect.objectContaining({
             label:
@@ -261,7 +258,8 @@ describe("initialize", () => {
             value: "universal",
           }),
           expect.objectContaining({
-            label: "Claude (creates .claude/CLAUDE.md)",
+            label:
+              "Claude Code (creates AGENTS.md, imported from your CLAUDE.md)",
             value: "claude",
           }),
         ]),
@@ -320,7 +318,7 @@ describe("initialize", () => {
 
   test("cancels when user cancels agents prompt", async () => {
     expectStoppedBeforeSetup(
-      await runCancelledInit("agent files", {
+      await runCancelledInit("agents do you use", {
         linter: "biome",
         skipInstall: true,
       })
@@ -3549,7 +3547,7 @@ describe("helper functions", () => {
   });
 
   describe("upsertAgents", () => {
-    test("creates agent config when not exists", async () => {
+    test("writes AGENTS.md for the selected agents", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -3569,72 +3567,11 @@ describe("helper functions", () => {
         })),
       }));
 
-      await upsertAgents("claude", "Claude Code", "npm", "biome");
-      expect(mockWriteFile).toHaveBeenCalled();
-    });
+      await upsertAgents(["claude", "codex"], "npm", "biome");
 
-    test("updates existing agent config", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock((path: string) => {
-          if (path === ".claude/CLAUDE.md") {
-            return Promise.resolve();
-          }
-          return Promise.reject(new Error("ENOENT"));
-        }),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("# existing rules")),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("@clack/prompts", () => ({
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
-
-      await upsertAgents("claude", "Claude Code", "npm", "biome");
-      expect(mockWriteFile).toHaveBeenCalled();
-    });
-  });
-
-  describe("upsertAgentFile", () => {
-    test("creates the universal AGENTS.md target once", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("{}")),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("@clack/prompts", () => ({
-        spinner: mock(() => ({
-          message: mock(noop),
-          start: mock(noop),
-          stop: mock(noop),
-        })),
-      }));
-
-      const universalTarget = getAgentFileTargets().find(
-        (target) => target.id === "universal"
-      );
-
-      expect(universalTarget).toBeDefined();
-
-      // SAFETY: the expect above guarantees the universal target was found.
-      await upsertAgentFile(universalTarget as AgentFileTarget, "npm", "biome");
-
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("AGENTS.md");
+      expect(mockWriteFile.mock.calls.map((call) => call[0])).toEqual([
+        "AGENTS.md",
+      ]);
     });
   });
 

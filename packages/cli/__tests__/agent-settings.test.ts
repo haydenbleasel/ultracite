@@ -2,7 +2,18 @@ import { describe, expect, test } from "bun:test";
 
 import { mergeAgentSettings } from "../src/agent-settings";
 
-const aider = { lintKey: "lint-cmd", path: ".aider.conf.yml", readKey: "read" };
+const aider = {
+  lintKey: ["lint-cmd"],
+  path: ".aider.conf.yml",
+  readKey: ["read"],
+};
+const gemini = {
+  defaultRead: ["GEMINI.md"],
+  path: ".gemini/settings.json",
+  readKey: ["context", "fileName"],
+};
+const mergeJson = (existing: string) =>
+  mergeAgentSettings(existing, gemini, "AGENTS.md", "npx ultracite fix");
 const merge = (existing: string, fixCommand = "npx ultracite fix") =>
   mergeAgentSettings(existing, aider, "AGENTS.md", fixCommand);
 
@@ -68,6 +79,39 @@ describe("mergeAgentSettings", () => {
   test("refuses a file it can't parse", () => {
     expect(() => merge("read: [unclosed\n")).toThrow(
       "Couldn't parse .aider.conf.yml"
+    );
+  });
+});
+
+describe("mergeAgentSettings with JSON", () => {
+  test("keeps the agent's default file when it sets the key", () => {
+    expect(JSON.parse(mergeJson(""))).toEqual({
+      context: { fileName: ["GEMINI.md", "AGENTS.md"] },
+    });
+  });
+
+  test("adds AGENTS.md to a file name the user set", () => {
+    expect(
+      JSON.parse(mergeJson('{ "context": { "fileName": "CONTEXT.md" } }'))
+    ).toEqual({ context: { fileName: ["CONTEXT.md", "AGENTS.md"] } });
+  });
+
+  test("leaves settings that already list AGENTS.md unchanged", () => {
+    const existing =
+      '{\n  // ours\n  "context": { "fileName": ["AGENTS.md"] }\n}\n';
+    expect(mergeJson(existing)).toBe(existing);
+  });
+
+  test("keeps comments and other keys", () => {
+    const output = mergeJson('{\n  // ours\n  "theme": "Dracula"\n}\n');
+    expect(output).toContain("// ours");
+    expect(output).toContain('"theme": "Dracula"');
+    expect(output).toContain('"AGENTS.md"');
+  });
+
+  test("refuses invalid JSON", () => {
+    expect(() => mergeJson("{ nope")).toThrow(
+      "Couldn't parse .gemini/settings.json"
     );
   });
 });

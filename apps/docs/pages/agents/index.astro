@@ -25,18 +25,34 @@ const hasLandingPage = (id: string): boolean =>
 // the directory adds who makes them and what they are. An agent the CLI adds
 // before the directory catches up still shows, under its CLI name.
 const directory = new Map<string, AgentEntry>(Object.entries(agentDirectory));
+
+// Every agent gets AGENTS.md; these are the files `init` adds for one agent:
+// the import, copy or settings file it needs to read the rules, and its hook.
+const extrasFor = (agent: (typeof cliAgents)[number]) => [
+  ...(agent.imports
+    ? [{ path: agent.imports[0] ?? "CLAUDE.md", tag: "Import" }]
+    : []),
+  ...(agent.rulesCopy ? [{ path: agent.rulesCopy, tag: "Copy" }] : []),
+  ...(agent.settings ? [{ path: agent.settings.path, tag: "Config" }] : []),
+  ...(agent.hooks ? [{ path: agent.hooks.path, tag: "Hook" }] : []),
+];
+
 const entries = cliAgents.map((agent) => {
   const details = directory.get(agent.id);
   return {
-    file: agent.config.path,
+    extras: extrasFor(agent),
     group: details?.group ?? "terminal",
     hook: agent.hooks?.path,
     id: agent.id,
+    imports: Boolean(agent.imports),
     landing: hasLandingPage(agent.id),
     logo: `/logos/${details?.logo ?? agent.id}.svg`,
     maker: details?.maker,
     name: details?.name ?? agent.name,
-    settings: agent.settings?.path,
+    // Replit Agent reads only replit.md, which gets its own copy.
+    readsAgentsFile: !agent.rulesCopy,
+    // Reads AGENTS.md with no extra step.
+    readsOnItsOwn: !(agent.imports || agent.rulesCopy || agent.settings),
     tagline: details?.tagline,
   };
 });
@@ -67,19 +83,15 @@ const groups = agentGroups
   }))
   .filter((group) => group.entries.length > 0);
 
-// Every file `init` writes for an agent, most-shared first, then the hooks.
-const files = [...Map.groupBy(entries, (entry) => entry.file)]
-  .map(([path, readers]) => ({ path, readers: readers.toSorted(byName) }))
-  .toSorted((a, b) => b.readers.length - a.readers.length || a.path.localeCompare(b.path));
-// The files beyond the rules: post-edit hooks, and the settings file that
-// makes Aider load its rules and lint each edit.
-const extraFiles = entries.flatMap((entry) => [
-  ...(entry.hook ? [{ path: entry.hook, reader: entry, tag: "Hook" }] : []),
-  ...(entry.settings
-    ? [{ path: entry.settings, reader: entry, tag: "Config" }]
-    : []),
-]);
-const [sharedFile] = files;
+// What `init` writes: AGENTS.md for every agent that reads it, then each
+// agent's extras.
+const agentsFileReaders = entries
+  .filter((entry) => entry.readsAgentsFile)
+  .toSorted(byName);
+const extraFiles = entries.flatMap((entry) =>
+  entry.extras.map((extra) => ({ ...extra, reader: entry }))
+);
+const onItsOwn = entries.filter((entry) => entry.readsOnItsOwn).length;
 const STACK_SIZE = 9;
 
 const hookNames = new Intl.ListFormat("en", {
@@ -89,7 +101,7 @@ const hookNames = new Intl.ListFormat("en", {
 
 const faqs: FaqItem[] = [
   {
-    answer: `Most agents read \`AGENTS.md\`, so \`npx ultracite init --agents universal\` writes it once for ${sharedFile?.readers.length ?? 0} of them. The rest get their own file: \`.claude/CLAUDE.md\` for Claude Code, \`GEMINI.md\` for Gemini CLI, \`replit.md\` for Replit Agent, and \`.firebender/rules/ultracite.mdc\` for Firebender. Aider reads \`AGENTS.md\` too, through the \`.aider.conf.yml\` that \`init\` writes for it.`,
+    answer: `\`AGENTS.md\`, for every agent. ${onItsOwn} of them read it on their own. Claude Code reads it through an \`@AGENTS.md\` import when your project has its own \`CLAUDE.md\`, Gemini CLI once \`.gemini/settings.json\` lists it, and Aider once \`.aider.conf.yml\` does; \`init\` sets each of those up. Replit Agent reads only \`replit.md\`, so it gets a copy of the rules there.`,
     question: "Which file does Ultracite write for my agent?",
   },
   {
@@ -103,20 +115,25 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "If it reads `AGENTS.md`, yes: run `npx ultracite init --agents universal`. Most new agents do. Otherwise, copy the Ultracite block from `AGENTS.md` into the file your agent reads.",
+      "Most likely. Nearly every coding agent reads `AGENTS.md` now, so `npx ultracite init --agents universal` covers it. If yours reads another file, copy the Ultracite block from `AGENTS.md` into it.",
     question: "My agent isn’t listed. Will Ultracite work with it?",
   },
   {
     answer:
-      "`init` asks which agent files to add. Pass `--agents` with one or more IDs, separated by spaces, to skip the prompts: `npx ultracite init --agents claude opencode`.",
+      "`init` asks which agents you use. Pass `--agents` with one or more IDs, separated by spaces, to skip the prompts: `npx ultracite init --agents claude opencode`.",
     question: "How do I pick agents without the prompt?",
+  },
+  {
+    answer:
+      "Run `init` again and the rules move to `AGENTS.md`. `init` takes Ultracite’s block out of the files earlier versions wrote (`.claude/CLAUDE.md`, `GEMINI.md`, Firebender’s rule file and Aider’s `ultracite.md`), removes any file left with nothing else in it, and sets up the import or settings that agent needs to read `AGENTS.md`. Your own content in those files stays.",
+    question: "I set Ultracite up before. What happens to CLAUDE.md and GEMINI.md?",
   },
 ];
 ---
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description={`Ultracite writes its rules into the files ${entries.length} coding agents read, from Claude Code and Codex to OpenCode and Copilot, and can lint every edit they make.`}
+  description={`Ultracite writes its rules to AGENTS.md, which ${entries.length} coding agents from Claude Code and Codex to OpenCode and Copilot read, and can lint every edit they make.`}
   faqs={faqs}
   lastModified={lastModified}
   title={`Ultracite for Coding Agents — ${entries.length} Agents, One Standard`}
@@ -137,8 +154,10 @@ const faqs: FaqItem[] = [
             class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
           >
             <code class="font-mono text-base text-foreground">ultracite init</code>{" "}
-            writes the rules into the file each agent reads before it writes a
-            line, and for some, adds a hook that checks every edit. {entries.length}{" "}
+            writes the rules into{" "}
+            <code class="font-mono text-base text-foreground">AGENTS.md</code>,
+            which coding agents read before they write a line, and for some
+            adds a hook that checks every edit. {entries.length}{" "}
             agents, one command.
           </p>
           <div class="flex flex-col gap-3 lg:col-span-6 lg:items-end">
@@ -154,36 +173,30 @@ const faqs: FaqItem[] = [
             class="flex h-11 items-center justify-between gap-4 border-border border-b px-4 font-medium text-muted-foreground text-xs"
           >
             <span>What init writes</span>
-            <span class="font-mono text-accent">{files.length + extraFiles.length} files</span>
+            <span class="font-mono text-accent">{1 + extraFiles.length} files</span>
           </figcaption>
           <ul class="divide-y divide-border" role="list">
-            {
-              files.map((file) => (
-                <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
-                  <code class="font-mono text-[13px]/6">{file.path}</code>
-                  <span class="flex items-center gap-3">
-                    <span class="flex items-center">
-                      {file.readers.slice(0, STACK_SIZE).map((reader) => (
-                        <img
-                          alt=""
-                          class="-mr-1.5 size-6 rounded-md ring-2 ring-code"
-                          height="24"
-                          loading="lazy"
-                          src={reader.logo}
-                          title={reader.name}
-                          width="24"
-                        />
-                      ))}
-                    </span>
-                    <span class="ml-1.5 text-muted-foreground text-sm/6">
-                      {file.readers.length === 1
-                        ? file.readers[0]?.name
-                        : `${file.readers.length} agents`}
-                    </span>
-                  </span>
-                </li>
-              ))
-            }
+            <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
+              <code class="font-mono text-[13px]/6">AGENTS.md</code>
+              <span class="flex items-center gap-3">
+                <span class="flex items-center">
+                  {agentsFileReaders.slice(0, STACK_SIZE).map((reader) => (
+                    <img
+                      alt=""
+                      class="-mr-1.5 size-6 rounded-md ring-2 ring-code"
+                      height="24"
+                      loading="lazy"
+                      src={reader.logo}
+                      title={reader.name}
+                      width="24"
+                    />
+                  ))}
+                </span>
+                <span class="ml-1.5 text-muted-foreground text-sm/6">
+                  {agentsFileReaders.length} agents
+                </span>
+              </span>
+            </li>
             {
               extraFiles.map((file) => (
                 <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 bg-signal/7 px-4 py-3 sm:px-6">
@@ -227,7 +240,13 @@ const faqs: FaqItem[] = [
         {
           featured.map((entry) => {
             const details = [
-              { label: "Rules", note: "read before every task", value: entry.file },
+              {
+                label: "Rules",
+                note: entry.imports
+                  ? "read on its own, or through an `@AGENTS.md` import in your CLAUDE.md"
+                  : "read before every task",
+                value: "AGENTS.md",
+              },
               ...(entry.hook
                 ? [
                     {
@@ -333,15 +352,14 @@ const faqs: FaqItem[] = [
                     </span>
                   )}
                   <span class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 font-mono text-muted-foreground text-xs/5">
-                    <span class="text-foreground">{entry.file}</span>
-                    {entry.settings && (
-                      <span class="text-foreground">{entry.settings}</span>
-                    )}
-                    {entry.hook && (
-                      <span class="rounded-sm bg-foreground px-1.5 text-[11px]/5 text-background uppercase tracking-wider">
-                        Hook
+                    {entry.extras.map((extra) => (
+                      <span class="flex items-center gap-1.5">
+                        <span class="text-foreground">{extra.path}</span>
+                        <span class="rounded-sm bg-foreground px-1.5 text-[11px]/5 text-background uppercase tracking-wider">
+                          {extra.tag}
+                        </span>
                       </span>
-                    )}
+                    ))}
                     <span class="ml-auto">--agents {entry.id}</span>
                   </span>
                 </>

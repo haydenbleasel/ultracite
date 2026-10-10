@@ -15,49 +15,56 @@ This dual approach ensures both automated code quality (through linting) and int
 
 ### Automatic Setup
 
-When you run `npx ultracite init`, you'll be prompted to select which agent files you want to add:
+When you run `npx ultracite init`, you'll be asked which agents you use:
 
 ```text
-? Which agent files do you want to add (optional)?
+? Which agents do you use (optional)?
   ◯ Universal (creates AGENTS.md for Codex, Jules, Devin, and more)
-  ◯ Claude (creates .claude/CLAUDE.md)
-  ◯ Replit (creates replit.md)
-  # ... and more
+  ◯ Claude Code (creates AGENTS.md, imported from your CLAUDE.md)
+  ◯ Replit Agent (creates AGENTS.md and replit.md)
+  ◯ Aider (creates AGENTS.md and .aider.conf.yml)
+  ◯ Gemini CLI (creates AGENTS.md and .gemini/settings.json)
 ```
 
-This will create the relevant rule file(s) in your project directory.
+Every choice writes the rules to `AGENTS.md`, the file nearly every coding agent reads. The other options are for the agents that need one more file to see it (see [below](#agents-that-need-one-more-step)).
 
-Files that other tools also write to, like `AGENTS.md` and `.claude/CLAUDE.md`, get an Ultracite block (starting at `# Ultracite Code Standards`) added below your own content. Re-running `init` replaces that block in place, removes any duplicate blocks earlier versions appended, and keeps the file's line endings. The rules tell agents to run your project's installed CLI, such as `npx ultracite fix` or `pnpm exec ultracite fix`.
-
-Firebender's rules go in `.firebender/rules/ultracite.mdc` with `alwaysApply: true`. Earlier versions wrote them into `firebender.json` by mistake; if that file still holds only those rules, `init` resets it to `{}`.
+If `AGENTS.md` already exists, the rules go in an Ultracite block (starting at `# Ultracite Code Standards`) below your own content. Re-running `init` replaces that block in place, removes any duplicate blocks earlier versions appended, and keeps the file's line endings. The rules tell agents to run your project's installed CLI, such as `npx ultracite fix` or `pnpm exec ultracite fix`.
 
 ### Manual Setup
 
-If you want to manually set things up, create the rule file for your agent (see [Supported Agents](#supported-agents) below) in your project directory. Then, copy and paste [this content](https://github.com/haydenbleasel/ultracite/blob/main/packages/cli/src/data/rules.ts) into the file.
+To set things up by hand, copy [the rules](https://github.com/haydenbleasel/ultracite/blob/main/packages/cli/src/data/rules.ts) into `AGENTS.md` at your project root, then follow the step below for your agent if it has one.
 
 ## Supported Agents
 
-Each agent reads its rules from one file. Pass the ID to `--agents` to write that file:
+Every agent reads the rules from `AGENTS.md`. Pass its ID to `--agents`, or `universal` to write `AGENTS.md` alone:
 
-| File | Agents (`--agents` ID) |
+Codex (`codex`), Jules (`jules`), Devin (`devin`), Lovable (`lovable`), Zencoder (`zencoder`), Ona (`ona`), OpenClaw (`openclaw`), Snowflake CoCo (`snowflake-cortex`), Deep Agents (`deepagents`), Qoder (`qoder`), Kimi Code CLI (`kimi-cli`), Xum (`xum`), Pi (`pi`), AdaL (`adal`), GitHub Copilot (`copilot`), Cline (`cline`), Amp (`amp`), OpenHands (`open-hands`), Junie (`junie`), Augment Code (`augmentcode`), IBM Bob (`bob`), Kilo Code (`kilo-code`), goose (`goose`), Warp (`warp`), Droid (`droid`), OpenCode (`opencode`), Crush (`crush`), Qwen Code (`qwen`), Kiro CLI (`kiro-cli`), Firebender (`firebender`), Cursor CLI (`cursor-cli`), Mistral Vibe (`mistral-vibe`), Vercel Agent (`vercel`), Claude Code (`claude`), Gemini CLI (`gemini`), Aider (`aider`) and Replit Agent (`replit`).
+
+### Agents That Need One More Step
+
+| Agent | What `init` adds |
 | --- | --- |
-| `AGENTS.md` | Codex (`codex`), Jules (`jules`), Devin (`devin`), Lovable (`lovable`), Zencoder (`zencoder`), Ona (`ona`), OpenClaw (`openclaw`), Snowflake CoCo (`snowflake-cortex`), Deep Agents (`deepagents`), Qoder (`qoder`), Kimi Code CLI (`kimi-cli`), Xum (`xum`), Pi (`pi`), AdaL (`adal`), GitHub Copilot (`copilot`), Cline (`cline`), Amp (`amp`), OpenHands (`open-hands`), Junie (`junie`), Augment Code (`augmentcode`), IBM Bob (`bob`), Kilo Code (`kilo-code`), goose (`goose`), Warp (`warp`), Droid (`droid`), OpenCode (`opencode`), Crush (`crush`), Qwen Code (`qwen`), Kiro CLI (`kiro-cli`), Cursor CLI (`cursor-cli`), Mistral Vibe (`mistral-vibe`), Vercel Agent (`vercel`). Use `universal` to write it once for all of them. |
-| `.claude/CLAUDE.md` | Claude Code (`claude`) |
-| `GEMINI.md` | Gemini CLI (`gemini`) |
-| `replit.md` | Replit Agent (`replit`) |
-| `.firebender/rules/ultracite.mdc` | Firebender (`firebender`) |
-| `AGENTS.md` and `.aider.conf.yml` | Aider (`aider`) |
+| Claude Code (`claude`) | Claude Code reads `AGENTS.md` only when the project has no `CLAUDE.md`. If yours has one, `init` adds an `@AGENTS.md` import to it. |
+| Gemini CLI (`gemini`) | Gemini CLI reads `GEMINI.md` unless told otherwise, so `init` adds `AGENTS.md` to `context.fileName` in `.gemini/settings.json`, keeping `GEMINI.md`. |
+| Aider (`aider`) | Aider loads no instructions file on its own, so `init` points `.aider.conf.yml` at `AGENTS.md` and has it lint each edit (see [Aider](#aider)). |
+| Replit Agent (`replit`) | Replit Agent reads only `replit.md`, which it also writes itself, so `init` adds a copy of the rules there. |
+
+Settings files are merged, not replaced: only the keys above change, and your own settings and comments stay.
 
 ### Aider
 
-Aider doesn't load an instructions file on its own, only the files `.aider.conf.yml` lists under `read`. So for Aider, `init` writes the rules to `AGENTS.md` and merges two keys into `.aider.conf.yml`, leaving the rest of the file as it was:
+Aider loads only the files `.aider.conf.yml` lists under `read`. So for Aider, `init` merges two keys into `.aider.conf.yml`:
 
 ```yaml title=".aider.conf.yml"
 read: AGENTS.md
 lint-cmd: npx ultracite fix
 ```
 
-Aider lints every file it edits, so `lint-cmd` makes it run `ultracite fix` on each one. When problems are left, Aider shows them to the model and asks it to fix them before moving on. If your config already sets `lint-cmd` to another linter, `init` leaves it alone: a `lint-cmd` without a language replaces Aider's per-language linters. Earlier versions wrote the rules to `ultracite.md`, which Aider never loaded; `init` removes it if it holds nothing but the rules.
+Aider lints every file it edits, so `lint-cmd` makes it run `ultracite fix` on each one. When problems are left, Aider shows them to the model and asks it to fix them before moving on. If your config already sets `lint-cmd` to another linter, `init` leaves it alone: a `lint-cmd` without a language replaces Aider's per-language linters.
+
+### Upgrading From Per-Agent Files
+
+Earlier versions wrote the rules into each agent's own file: `.claude/CLAUDE.md`, `GEMINI.md`, `.firebender/rules/ultracite.mdc` and Aider's `ultracite.md`. Run `init` again and the rules move to `AGENTS.md`: `init` takes Ultracite's block out of those files, removes any file left with nothing else in it, and adds the import or settings the agent needs. That happens whenever one of those files still holds the rules, whichever agents you pick, because a leftover `.claude/CLAUDE.md` would stop Claude Code from reading `AGENTS.md`.
 
 ## Reusable Skills
 

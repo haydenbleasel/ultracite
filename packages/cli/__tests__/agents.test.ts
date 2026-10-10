@@ -1,26 +1,20 @@
 import { describe, expect, mock, test } from "bun:test";
-import type { MakeDirectoryOptions } from "node:fs";
 
 import {
-  createAgents,
-  getAgentFileTargets,
+  getAgentChoices,
   replaceRulesBlock,
+  writeAgentFiles,
 } from "../src/agents";
 import { getRules } from "../src/data/rules";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
-mock.module("node:fs/promises", () => ({
-  access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
-  mkdir: mock((_path: string) => Promise.resolve()),
-  readFile: mock((_path: string) => Promise.resolve("")),
-  writeFile: mock((_path: string, _content: string) => Promise.resolve()),
-}));
-
 // Paths the last mockProject run removed.
 const removed = new Set<string>();
 
-// A project whose files are exactly `files`; returns what gets written.
-const mockProject = (files: Record<string, string>) => {
+// A project whose files start as exactly `files` and change as they're
+// written and removed; returns what gets written.
+const mockProject = (initial: Record<string, string>) => {
+  const files = { ...initial };
   const written = new Map<string, string>();
   removed.clear();
 
@@ -36,10 +30,12 @@ const mockProject = (files: Record<string, string>) => {
     ),
     rm: mock((path: string) => {
       removed.add(path);
+      Reflect.deleteProperty(files, path);
       return Promise.resolve();
     }),
     writeFile: mock((path: string, content: string) => {
       written.set(path, content);
+      files[path] = content;
       return Promise.resolve();
     }),
   }));
@@ -48,304 +44,86 @@ const mockProject = (files: Record<string, string>) => {
   return written;
 };
 
+// Runs writeAgentFiles in a mocked project and returns what it wrote.
+const setUp = async (
+  files: Record<string, string>,
+  selection: Parameters<typeof writeAgentFiles>[0],
+  packageManager: Parameters<typeof writeAgentFiles>[1] = "npm",
+  linter: Parameters<typeof writeAgentFiles>[2] = "biome"
+) => {
+  const written = mockProject(files);
+
+  try {
+    const result = await writeAgentFiles(selection, packageManager, linter);
+    return { result, written };
+  } finally {
+    restoreFileSystemMock();
+  }
+};
+
+const rules = getRules("npx ultracite", "Biome");
+
 const countHeaders = (text: string | undefined): number =>
   (text ?? "")
     .split(/\r?\n/u)
     .filter((line) => line === "# Ultracite Code Standards").length;
 
-describe("createAgents", () => {
-  // Note: We don't call mock.restore() here because it causes issues
-  // with module re-loading when the tests transition between each other
+describe("writeAgentFiles", () => {
+  test("writes the rules to AGENTS.md for an agent that needs nothing else", async () => {
+    const { result, written } = await setUp({}, ["codex"]);
 
-  describe("invalid agent", () => {
-    test("throws error for invalid agent name", () => {
-      expect(() => {
-        // @ts-expect-error - Testing invalid agent name
-        createAgents("invalid-agent-name", "npm");
-      }).toThrow('Agent "invalid-agent-name" not found');
-    });
-
-    test("throws error for invalid linter name", () => {
-      expect(() => {
-        // @ts-expect-error - Testing invalid linter name
-        createAgents("claude", "npm", "invalid-linter");
-      }).toThrow('Provider "invalid-linter" not found');
-    });
+    expect(result).toEqual({ created: true, files: [] });
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
+    expect(written.get("AGENTS.md")).toBe(rules);
   });
 
-  describe("copilot agent", () => {
-    test("create creates AGENTS.md instructions", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
+  test("writes AGENTS.md once for several agents", async () => {
+    const { written } = await setUp({}, ["universal", "codex", "copilot"]);
 
-      mock.module("node:fs/promises", () => ({
-        access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock((_path: string) => Promise.resolve()),
-        readFile: mock((_path: string) => Promise.resolve("")),
-        writeFile: mockWriteFile,
-      }));
-
-      const agents = createAgents("copilot", "npm", "biome");
-      await agents.create();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("AGENTS.md");
-      expect(writeCall[1]).not.toContain("applyTo:");
-    });
-
-    test("update uses append mode", async () => {
-      const existingContent = "Existing instructions";
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve(existingContent)),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
-        existsSync: mock(() => false),
-        readFileSync: mock(() => "{}"),
-      }));
-
-      const agents = createAgents("copilot", "npm", "biome");
-      await agents.update();
-
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[1]).toContain("Existing instructions");
-    });
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
   });
 
-  describe("cline agent", () => {
-    test("create creates AGENTS.md file", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mockWriteFile,
-      }));
-
-      const agents = createAgents("cline", "npm", "biome");
-      await agents.create();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("AGENTS.md");
-    });
-
-    test("update appends to AGENTS.md file", async () => {
-      const existingContent = "Existing AGENTS rules";
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve(existingContent)),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock(() => {}),
-        existsSync: mock(() => false),
-        readFileSync: mock(() => "{}"),
-      }));
-
-      const agents = createAgents("cline", "npm", "biome");
-      await agents.update();
-
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[1]).toContain("Existing AGENTS rules");
-    });
-
-    test("update creates file when it does not exist in append mode", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock((_path: string) => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mockWriteFile,
-      }));
-
-      const agents = createAgents("cline", "npm", "biome");
-      await agents.update();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      // Should write the content since file doesn't exist
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("AGENTS.md");
-    });
-  });
-
-  describe("replit agent", () => {
-    test("create creates replit.md file", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mockWriteFile,
-      }));
-
-      const agents = createAgents("replit", "npm", "biome");
-      await agents.create();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe("replit.md");
-    });
-  });
-
-  describe("claude agent", () => {
-    test("create creates CLAUDE.md file", async () => {
-      const mockWriteFile = mock((_path: string, _content: string) =>
-        Promise.resolve()
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mockWriteFile,
-      }));
-
-      const agents = createAgents("claude", "npm", "biome");
-      await agents.create();
-
-      expect(mockWriteFile).toHaveBeenCalled();
-      const [writeCall] = mockWriteFile.mock.calls;
-      expect(writeCall[0]).toBe(".claude/CLAUDE.md");
-    });
-  });
-
-  describe("directory creation", () => {
-    test("creates parent directory when needed", async () => {
-      const mockMkdirSync = mock(
-        (_path: string, _opts?: MakeDirectoryOptions) => {}
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mock(() => Promise.resolve()),
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock(() => {
-          throw new Error("ENOENT");
-        }),
-        existsSync: mock(() => false),
-        mkdirSync: mockMkdirSync,
-        readFileSync: mock(() => "{}"),
-      }));
-
-      const agents = createAgents("claude", "npm", "biome");
-      await agents.create();
-
-      expect(mockMkdirSync).toHaveBeenCalled();
-      const [mkdirCall] = mockMkdirSync.mock.calls;
-      expect(mkdirCall[0]).toBe(".claude");
-    });
-
-    test("does not create directory for root-level files", async () => {
-      const mockMkdirSync = mock(
-        (_path: string, _opts?: MakeDirectoryOptions) => {}
-      );
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.reject(new Error("ENOENT"))),
-        mkdir: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve("")),
-        writeFile: mock(() => Promise.resolve()),
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock(() => {
-          throw new Error("ENOENT");
-        }),
-        existsSync: mock(() => false),
-        mkdirSync: mockMkdirSync,
-        readFileSync: mock(() => "{}"),
-      }));
-
-      const agents = createAgents("codex", "npm", "biome");
-      await agents.create();
-
-      // Should not be called for root-level AGENTS.md
-      expect(mockMkdirSync).not.toHaveBeenCalled();
-    });
-  });
-});
-
-describe("getAgentFileTargets", () => {
-  test("groups AGENTS.md integrations into a universal option", () => {
-    const targets = getAgentFileTargets();
-    const universalTarget = targets.find((target) => target.id === "universal");
-
-    expect(universalTarget).toEqual(
-      expect.objectContaining({
-        displayName: "Universal",
-        path: "AGENTS.md",
-        representativeAgentId: "codex",
-      })
+  test("adds the rules below an existing AGENTS.md", async () => {
+    const { result, written } = await setUp(
+      { "AGENTS.md": "Existing instructions" },
+      ["cline"]
     );
-    expect(universalTarget?.agentIds).toEqual(
-      expect.arrayContaining(["codex", "jules", "devin", "copilot", "cline"])
-    );
-    expect(universalTarget?.promptLabel).toContain("creates AGENTS.md");
+
+    expect(result.created).toBe(false);
+    expect(written.get("AGENTS.md")).toBe(`Existing instructions\n\n${rules}`);
   });
 
-  test("sorts AGENTS.md target to the front", () => {
-    const targets = getAgentFileTargets();
-    // AGENTS.md (universal) should always be first
-    expect(targets[0].path).toBe("AGENTS.md");
-    // Non-AGENTS.md targets should come after
-    for (let i = 1; i < targets.length; i += 1) {
-      expect(targets[i].path).not.toBe("AGENTS.md");
+  test("throws for an unknown linter", async () => {
+    await expect(
+      // @ts-expect-error - testing an invalid linter name
+      setUp({}, ["codex"], "npm", "invalid-linter")
+    ).rejects.toThrow('Provider "invalid-linter" not found');
+  });
+
+  test.each([
+    ["deno", "`deno run -A npm:ultracite fix`"],
+    ["yarn", "`yarn ultracite fix`"],
+    ["pnpm", "`pnpm exec ultracite fix`"],
+  ] as const)(
+    "tells agents how to run the installed CLI with %s",
+    async (packageManager, expected) => {
+      const { written } = await setUp({}, ["codex"], packageManager);
+
+      expect(written.get("AGENTS.md")).toContain(expected);
     }
-  });
-
-  test("keeps agent-specific files as dedicated options", () => {
-    const targets = getAgentFileTargets();
-    const claudeTarget = targets.find((target) => target.id === "claude");
-
-    expect(claudeTarget).toEqual(
-      expect.objectContaining({
-        displayName: "Claude",
-        path: ".claude/CLAUDE.md",
-        promptLabel: "Claude (creates .claude/CLAUDE.md)",
-        representativeAgentId: "claude",
-      })
-    );
-  });
+  );
 });
 
 describe("rule file re-runs", () => {
   test("replaces the block when the linter changes instead of adding one", async () => {
-    const written = mockProject({
-      "AGENTS.md": `# Team notes\n\n${getRules("npx ultracite", "Biome")}\n## Our own section\n\nKeep me.\n`,
-    });
-
-    await createAgents("codex", "npm", "oxlint").update();
-    restoreFileSystemMock();
+    const { written } = await setUp(
+      {
+        "AGENTS.md": `# Team notes\n\n${rules}\n## Our own section\n\nKeep me.\n`,
+      },
+      ["codex"],
+      "npm",
+      "oxlint"
+    );
 
     const output = written.get("AGENTS.md");
     expect(countHeaders(output)).toBe(1);
@@ -356,17 +134,19 @@ describe("rule file re-runs", () => {
   });
 
   test("collapses duplicate blocks written by earlier versions", async () => {
-    const written = mockProject({
-      "AGENTS.md": [
-        "Intro",
-        getRules("npm exec -- ultracite", "Biome"),
-        getRules("npm exec -- ultracite", "Oxlint + Oxfmt"),
-        getRules("bun x ultracite", "Oxlint + Oxfmt"),
-      ].join("\n\n"),
-    });
-
-    await createAgents("codex", "bun", "oxlint").update();
-    restoreFileSystemMock();
+    const { written } = await setUp(
+      {
+        "AGENTS.md": [
+          "Intro",
+          getRules("npm exec -- ultracite", "Biome"),
+          getRules("npm exec -- ultracite", "Oxlint + Oxfmt"),
+          getRules("bun x ultracite", "Oxlint + Oxfmt"),
+        ].join("\n\n"),
+      },
+      ["codex"],
+      "bun",
+      "oxlint"
+    );
 
     const output = written.get("AGENTS.md") ?? "";
     expect(countHeaders(output)).toBe(1);
@@ -375,11 +155,12 @@ describe("rule file re-runs", () => {
   });
 
   test("replaces the block of a CRLF file and keeps its line endings", async () => {
-    const rules = getRules("npx ultracite", "Biome").replaceAll("\n", "\r\n");
-    const written = mockProject({ "AGENTS.md": `Intro\r\n\r\n${rules}` });
-
-    await createAgents("codex", "yarn", "biome").update();
-    restoreFileSystemMock();
+    const crlf = rules.replaceAll("\n", "\r\n");
+    const { written } = await setUp(
+      { "AGENTS.md": `Intro\r\n\r\n${crlf}` },
+      ["codex"],
+      "yarn"
+    );
 
     const output = written.get("AGENTS.md") ?? "";
     expect(countHeaders(output)).toBe(1);
@@ -388,12 +169,9 @@ describe("rule file re-runs", () => {
   });
 
   test("leaves the file alone when the block is already current", async () => {
-    const written = mockProject({
-      "AGENTS.md": `Intro\n\n${getRules("npx ultracite", "Biome")}`,
-    });
-
-    await createAgents("codex", "npm", "biome").update();
-    restoreFileSystemMock();
+    const { written } = await setUp({ "AGENTS.md": `Intro\n\n${rules}` }, [
+      "codex",
+    ]);
 
     expect(written.size).toBe(0);
   });
@@ -408,120 +186,208 @@ describe("rule file re-runs", () => {
       "# Ultracite Code Standards\n\nNew rules\n\n# Mine\n\nKeep\n"
     );
   });
-
-  test.each([
-    ["deno", "`deno run -A npm:ultracite fix`"],
-    ["yarn", "`yarn ultracite fix`"],
-    ["pnpm", "`pnpm exec ultracite fix`"],
-  ] as const)(
-    "tells agents how to run the installed CLI with %s",
-    async (packageManager, expected) => {
-      const written = mockProject({});
-
-      await createAgents("codex", packageManager, "biome").create();
-      restoreFileSystemMock();
-
-      expect(written.get("AGENTS.md")).toContain(expected);
-    }
-  );
 });
 
-describe("firebender rules", () => {
-  test("writes an always-applied .mdc rule instead of Markdown in firebender.json", async () => {
-    const written = mockProject({});
+describe("claude code", () => {
+  test("needs only AGENTS.md in a project without a CLAUDE.md", async () => {
+    const { written } = await setUp({}, ["claude"]);
 
-    await createAgents("firebender", "npm", "biome").create();
-    restoreFileSystemMock();
-
-    const rule = written.get(".firebender/rules/ultracite.mdc") ?? "";
-    expect(rule.startsWith("---\n")).toBe(true);
-    expect(rule).toContain("alwaysApply: true");
-    expect(rule).toContain("# Ultracite Code Standards");
-    expect(written.has("firebender.json")).toBe(false);
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
   });
 
-  test("resets a firebender.json that an earlier version filled with Markdown", async () => {
-    const written = mockProject({
-      "firebender.json": getRules("npx ultracite", "Biome"),
+  test("imports AGENTS.md from the project's CLAUDE.md", async () => {
+    const { result, written } = await setUp(
+      { "CLAUDE.md": "# Our project\n\nUse pnpm.\n" },
+      ["claude"]
+    );
+
+    expect(written.get("CLAUDE.md")).toBe(
+      "# Our project\n\nUse pnpm.\n\n@AGENTS.md\n"
+    );
+    expect(result.files).toEqual(["CLAUDE.md"]);
+  });
+
+  test("imports it with a relative path from .claude/CLAUDE.md", async () => {
+    const { written } = await setUp({ ".claude/CLAUDE.md": "Use pnpm.\n" }, [
+      "claude",
+    ]);
+
+    expect(written.get(".claude/CLAUDE.md")).toBe(
+      "Use pnpm.\n\n@../AGENTS.md\n"
+    );
+  });
+
+  test("leaves a CLAUDE.md that already imports AGENTS.md alone", async () => {
+    const { written } = await setUp(
+      { "CLAUDE.md": "@AGENTS.md\n\nUse pnpm.\n" },
+      ["claude"]
+    );
+
+    expect(written.has("CLAUDE.md")).toBe(false);
+  });
+
+  test("removes the .claude/CLAUDE.md earlier versions wrote, which would hide AGENTS.md", async () => {
+    const { result } = await setUp({ ".claude/CLAUDE.md": rules }, [
+      "universal",
+    ]);
+
+    expect(removed.has(".claude/CLAUDE.md")).toBe(true);
+    expect(result.files).toEqual([".claude/CLAUDE.md"]);
+  });
+
+  test("keeps the user's part of an old .claude/CLAUDE.md and imports AGENTS.md there", async () => {
+    const { written } = await setUp(
+      { ".claude/CLAUDE.md": `# Ours\n\nUse pnpm.\n\n${rules}` },
+      ["universal"]
+    );
+
+    expect(removed.has(".claude/CLAUDE.md")).toBe(false);
+    expect(written.get(".claude/CLAUDE.md")).toBe(
+      "# Ours\n\nUse pnpm.\n\n@../AGENTS.md\n"
+    );
+  });
+});
+
+describe("replit", () => {
+  test("gets a copy of the rules in replit.md", async () => {
+    const { result, written } = await setUp(
+      { "replit.md": "# Overview\n\nA todo app.\n" },
+      ["replit"]
+    );
+
+    expect(written.get("AGENTS.md")).toBe(rules);
+    expect(written.get("replit.md")).toBe(
+      `# Overview\n\nA todo app.\n\n${rules}`
+    );
+    expect(result.files).toEqual(["replit.md"]);
+  });
+});
+
+describe("gemini cli", () => {
+  test("lists AGENTS.md in .gemini/settings.json, keeping GEMINI.md", async () => {
+    const { written } = await setUp({}, ["gemini"]);
+
+    expect(JSON.parse(written.get(".gemini/settings.json") ?? "{}")).toEqual({
+      context: { fileName: ["GEMINI.md", "AGENTS.md"] },
     });
+  });
 
-    await createAgents("firebender", "npm", "biome").create();
-    restoreFileSystemMock();
+  test("merges into existing settings", async () => {
+    const { written } = await setUp(
+      {
+        ".gemini/settings.json":
+          '{\n  // Ours\n  "theme": "Dracula",\n  "context": { "fileName": "CONTEXT.md" }\n}\n',
+      },
+      ["gemini"]
+    );
 
-    expect(written.get("firebender.json")).toBe("{}\n");
+    const output = written.get(".gemini/settings.json") ?? "";
+    expect(output).toContain("// Ours");
+    expect(output).toContain('"theme": "Dracula"');
+    expect(output).toContain('"CONTEXT.md"');
+    expect(output).toContain('"AGENTS.md"');
+  });
+
+  test("takes the rules out of the GEMINI.md earlier versions wrote", async () => {
+    const { written } = await setUp({ "GEMINI.md": `Our notes.\n\n${rules}` }, [
+      "universal",
+    ]);
+
+    expect(written.get("GEMINI.md")).toBe("Our notes.\n");
+    expect(written.has(".gemini/settings.json")).toBe(true);
+  });
+});
+
+describe("firebender", () => {
+  test("needs only AGENTS.md", async () => {
+    const { written } = await setUp({}, ["firebender"]);
+
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
+  });
+
+  test("removes the rule file earlier versions wrote, frontmatter and all", async () => {
+    await setUp(
+      {
+        ".firebender/rules/ultracite.mdc": `---\ndescription: Ultracite code standards for JavaScript and TypeScript\nalwaysApply: true\n---\n\n${rules}`,
+        "firebender.json": rules,
+      },
+      ["universal"]
+    );
+
+    expect(removed.has(".firebender/rules/ultracite.mdc")).toBe(true);
+    expect(removed.has("firebender.json")).toBe(true);
   });
 
   test("leaves a real firebender.json alone", async () => {
-    const written = mockProject({
-      "firebender.json": '{"rules":["Use Kotlin"]}',
-    });
-
-    await createAgents("firebender", "npm", "biome").create();
-    restoreFileSystemMock();
+    const { written } = await setUp(
+      { "firebender.json": '{"rules":["Use Kotlin"]}' },
+      ["firebender"]
+    );
 
     expect(written.has("firebender.json")).toBe(false);
+    expect(removed.has("firebender.json")).toBe(false);
   });
 });
 
 describe("aider", () => {
-  test("writes the rules to AGENTS.md and points .aider.conf.yml at them", async () => {
-    const written = mockProject({});
-
-    await createAgents("aider", "pnpm", "oxlint").create();
-    restoreFileSystemMock();
+  test("points .aider.conf.yml at AGENTS.md and lints each edit", async () => {
+    const { written } = await setUp({}, ["aider"], "pnpm", "oxlint");
 
     expect(written.get("AGENTS.md")).toContain("# Ultracite Code Standards");
     expect(written.get(".aider.conf.yml")).toBe(
       "read: AGENTS.md\nlint-cmd: pnpm exec ultracite fix\n"
     );
-    expect(written.has("ultracite.md")).toBe(false);
   });
 
   test("merges into an existing .aider.conf.yml", async () => {
-    const written = mockProject({
-      ".aider.conf.yml":
-        "# Team settings\nmodel: sonnet\nauto-commits: false\n",
-    });
-
-    await createAgents("aider", "npm", "biome").create();
-    restoreFileSystemMock();
+    const { written } = await setUp(
+      { ".aider.conf.yml": "# Team settings\nmodel: sonnet\n" },
+      ["aider"]
+    );
 
     expect(written.get(".aider.conf.yml")).toBe(
-      "# Team settings\nmodel: sonnet\nauto-commits: false\nread: AGENTS.md\nlint-cmd: npx ultracite fix\n"
+      "# Team settings\nmodel: sonnet\nread: AGENTS.md\nlint-cmd: npx ultracite fix\n"
     );
   });
 
   test("removes the ultracite.md earlier versions wrote", async () => {
-    mockProject({
-      ".aider.conf.yml": "read: ultracite.md\n",
-      "ultracite.md": getRules("npx ultracite", "Biome"),
-    });
-
-    await createAgents("aider", "npm", "biome").create();
-    restoreFileSystemMock();
+    await setUp(
+      { ".aider.conf.yml": "read: ultracite.md\n", "ultracite.md": rules },
+      ["aider"]
+    );
 
     expect(removed.has("ultracite.md")).toBe(true);
   });
 
   test("keeps an ultracite.md that holds more than the rules", async () => {
-    mockProject({
-      "ultracite.md": `${getRules("npx ultracite", "Biome")}\n# Our notes\n\nKeep these.\n`,
-    });
-
-    await createAgents("aider", "npm", "biome").create();
-    restoreFileSystemMock();
+    const { written } = await setUp(
+      { "ultracite.md": `${rules}\n# Our notes\n\nKeep these.\n` },
+      ["aider"]
+    );
 
     expect(removed.has("ultracite.md")).toBe(false);
+    expect(written.get("ultracite.md")).toBe("# Our notes\n\nKeep these.\n");
   });
+});
 
-  test("gets its own setup option rather than riding on universal", () => {
-    const targets = getAgentFileTargets();
-    const universal = targets.find((target) => target.id === "universal");
-    const aiderTarget = targets.find((target) => target.id === "aider");
+describe("getAgentChoices", () => {
+  test("offers AGENTS.md first, then the agents that need one more file", () => {
+    const choices = getAgentChoices();
 
-    expect(universal?.agentIds).not.toContain("aider");
-    expect(aiderTarget?.promptLabel).toBe(
-      "Aider (creates .aider.conf.yml and AGENTS.md)"
+    expect(choices[0]).toEqual({
+      id: "universal",
+      promptLabel:
+        "Universal (creates AGENTS.md for Codex, Jules, Devin, and more)",
+    });
+    expect(choices.map((choice) => choice.id)).toEqual([
+      "universal",
+      "claude",
+      "replit",
+      "aider",
+      "gemini",
+    ]);
+    expect(choices.find((choice) => choice.id === "aider")?.promptLabel).toBe(
+      "Aider (creates AGENTS.md and .aider.conf.yml)"
     );
   });
 });
@@ -553,12 +419,12 @@ const mockEscapingDirectory = (dir: string) => {
 
 describe("writing outside the project", () => {
   test("refuses before creating the agent's directory", async () => {
-    const mkdirSync = mockEscapingDirectory(".claude");
+    const mkdirSync = mockEscapingDirectory(".gemini");
 
     try {
-      await expect(
-        createAgents("claude", "npm", "biome").create()
-      ).rejects.toThrow("Refusing to write");
+      await expect(writeAgentFiles(["gemini"], "npm", "biome")).rejects.toThrow(
+        "Refusing to write"
+      );
       expect(mkdirSync).not.toHaveBeenCalled();
     } finally {
       restoreFileSystemMock();
