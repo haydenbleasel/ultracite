@@ -1,0 +1,119 @@
+{
+  "generated": "2026-10-10",
+  "subjects": [
+    {
+      "exampleFile": "examples/floating-promises/fp1-hono-create-pool.ts",
+      "file": "src/utils/concurrent.ts",
+      "function": "createPool",
+      "github": "honojs/hono",
+      "id": "fp1-hono-create-pool",
+      "inPlace": [
+        {
+          "line": 36,
+          "messageId": "voidReturnArgument",
+          "rule": "no-misused-promises"
+        }
+      ],
+      "license": "honojs/hono/LICENSE",
+      "lines": [
+        1,
+        55
+      ],
+      "notes": [
+        "The whole module is copied (it has no imports).",
+        "Violation: `setTimeout(() => run(fn, promise, resolve))` hands a promise-returning callback to a slot typed to return void (no-misused-promises, checksVoidReturn). The diagnostic needs Node's setTimeout signature; hono's tsconfig includes @types/node. The stub reproduces that signature, so the file lints the same way without @types/node.",
+        "Why it matters: when the pool is full, a task is re-queued through setTimeout. If that task's fn throws, the re-run rejects, setTimeout drops the rejection (an unhandled rejection), `resolve` is never called, and the caller's promise never settles. The pool slot (`marker`) is also never released when fn throws, a separate leak the lint rule doesn't see.",
+        "A fix that only silences the rule (`setTimeout(() => void run(...))`) keeps the hang. A real fix propagates the rejection to the queued caller (keep `reject` alongside `resolve`, and `.catch(reject)` the re-run) and releases the slot in a `finally`."
+      ],
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/concurrent.ts#L1-L55",
+      "repo": "hono",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "standalone": {
+        "eslint": [
+          {
+            "line": 77,
+            "messageId": "voidReturnArgument",
+            "rule": "no-misused-promises",
+            "sourceLine": 36
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 77,
+            "rule": "no-misused-promises",
+            "sourceLine": 36
+          }
+        ],
+        "tsc": []
+      }
+    },
+    {
+      "exampleFile": "examples/floating-promises/fp2-astro-compose-logger.ts",
+      "file": "packages/astro/src/core/logger/impls/compose.ts",
+      "function": "compose",
+      "github": "withastro/astro",
+      "id": "fp2-astro-compose-logger",
+      "inPlace": [
+        {
+          "line": 13,
+          "messageId": "floatingVoid",
+          "rule": "no-floating-promises"
+        },
+        {
+          "line": 20,
+          "messageId": "floatingVoid",
+          "rule": "no-floating-promises"
+        }
+      ],
+      "license": "withastro/astro/LICENSE",
+      "lines": [
+        3,
+        26
+      ],
+      "notes": [
+        "Line 1 (a type-only import of AstroLoggerDestination) is replaced by a stub: the interface copied verbatim from packages/astro/src/core/logger/core.ts lines 4-19 at the same commit, with AstroLoggerMessage stubbed.",
+        "Violation: `logger.flush()` and `logger.close()` are called as bare statements, and each destination may return `Promise<void>` (no-floating-promises, twice).",
+        "Why it matters: the composite's flush() and close() return before the destinations finish, so a caller that awaits the composite (the interface allows `Promise<void> | void`) is told the logs are flushed when they may not be, and a destination whose flush or close rejects becomes an unhandled rejection.",
+        "A fix that only silences the rule (`void logger.flush()`) keeps both problems. A real fix collects the destinations' results and returns `Promise.all(...)` (or awaits them), so failures reach the caller."
+      ],
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/logger/impls/compose.ts#L3-L26",
+      "repo": "astro",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "standalone": {
+        "eslint": [
+          {
+            "line": 107,
+            "messageId": "floatingVoid",
+            "rule": "no-floating-promises",
+            "sourceLine": 13
+          },
+          {
+            "line": 114,
+            "messageId": "floatingVoid",
+            "rule": "no-floating-promises",
+            "sourceLine": 20
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 107,
+            "rule": "no-floating-promises",
+            "sourceLine": 13
+          },
+          {
+            "line": 114,
+            "rule": "no-floating-promises",
+            "sourceLine": 20
+          }
+        ],
+        "tsc": []
+      }
+    }
+  ],
+  "tools": {
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "typescript": "6.0.3"
+  }
+}

@@ -1,0 +1,921 @@
+{
+  "generated": "2026-10-10",
+  "note": "Async and promise rules only: the promise plugin plus rule names matching ASYNC_NAME, minus NOT_ASYNC. 'typeAware' needs a TypeScript program (Oxlint: --type-aware via tsgolint; ESLint: the type-aware preset).",
+  "biome": {
+    "available": [
+      {
+        "enabledByUltracite": true,
+        "group": "suspicious",
+        "rule": "noAsyncPromiseExecutor"
+      },
+      {
+        "enabledByUltracite": true,
+        "group": "performance",
+        "rule": "noAwaitInLoops"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "noFloatingPromises"
+      },
+      {
+        "enabledByUltracite": true,
+        "group": "complexity",
+        "rule": "noForEach"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "noMisusedPromises"
+      },
+      {
+        "enabledByUltracite": true,
+        "group": "suspicious",
+        "rule": "noNestedPromises"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "correctness",
+        "rule": "noNextAsyncClientComponent"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "noPlaywrightMissingAwait"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "noPlaywrightUselessAwait"
+      },
+      {
+        "enabledByUltracite": true,
+        "group": "suspicious",
+        "rule": "noThenProperty"
+      },
+      {
+        "enabledByUltracite": true,
+        "group": "complexity",
+        "rule": "noVoid"
+      },
+      {
+        "enabledByUltracite": true,
+        "group": "suspicious",
+        "rule": "useAwait"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "useAwaitThenable"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "usePromiseRejectErrors"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "useReactAsyncServerFunction"
+      },
+      {
+        "enabledByUltracite": false,
+        "group": "nursery",
+        "rule": "useVueNextTickPromise"
+      }
+    ],
+    "inferenceBased": [
+      "noFloatingPromises",
+      "noMisusedPromises",
+      "useAwaitThenable"
+    ],
+    "presets": {
+      "core": [
+        {
+          "group": "suspicious",
+          "on": true,
+          "rule": "noAsyncPromiseExecutor"
+        },
+        {
+          "group": "performance",
+          "on": true,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "group": "complexity",
+          "on": true,
+          "rule": "noForEach"
+        },
+        {
+          "group": "suspicious",
+          "on": true,
+          "rule": "noNestedPromises"
+        },
+        {
+          "group": "suspicious",
+          "on": true,
+          "rule": "noThenProperty"
+        },
+        {
+          "group": "complexity",
+          "on": true,
+          "rule": "noVoid"
+        },
+        {
+          "group": "suspicious",
+          "on": true,
+          "rule": "useAwait"
+        }
+      ],
+      "type-aware": []
+    },
+    "version": "2.5.15"
+  },
+  "eslint": {
+    "version": "10.12.0",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "eslint-plugin-promise": "7.3.0",
+    "rules": [
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/await-thenable",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/no-floating-promises",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/no-misused-promises",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/prefer-promise-reject-errors",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/promise-function-async",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/require-await",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "options": [],
+        "rule": "@typescript-eslint/return-await",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/strict-void-return",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "@typescript-eslint/use-unknown-in-catch-callback-variable",
+        "typeAware": true
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "github/array-foreach",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "github/no-then",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "n/callback-return",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "n/handle-callback-err",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": false,
+        "rule": "n/no-top-level-await",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "n/prefer-promises/dns",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "n/prefer-promises/fs",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "no-async-promise-executor",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "no-await-in-loop",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "options": [
+          {
+            "allowVoid": false
+          }
+        ],
+        "rule": "no-promise-executor-return",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": false,
+        "rule": "no-return-await",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "options": [
+          {
+            "allowAsStatement": true
+          }
+        ],
+        "rule": "no-void",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": false,
+        "options": [
+          {
+            "allowEmptyReject": false
+          }
+        ],
+        "rule": "prefer-promise-reject-errors",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": false,
+        "rule": "promise/always-return",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/avoid-new",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": false,
+        "rule": "promise/catch-or-return",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-callback-in-promise",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-multiple-resolved",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": false,
+        "rule": "promise/no-native",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-nesting",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-new-statics",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-promise-in-callback",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-return-in-finally",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/no-return-wrap",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/param-names",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/prefer-await-to-callbacks",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/prefer-await-to-then",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/prefer-catch",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/spec-only",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "promise/valid-params",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": false,
+        "rule": "require-await",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "sonarjs/no-async-constructor",
+        "typeAware": true
+      },
+      {
+        "inCore": false,
+        "on": true,
+        "rule": "sonarjs/no-try-promise",
+        "typeAware": true
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "sonarjs/prefer-promise-shorthand",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-async-iterator-callback",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-async-promise-finally",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-await-expression-member",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-await-in-promise-methods",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-for-each",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-multiple-promise-resolver-calls",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-single-promise-in-promise-methods",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-thenable",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-unnecessary-await",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-unsafe-promise-all-settled-values",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/no-useless-promise-resolve-reject",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/prefer-array-from-async",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/prefer-await",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/prefer-promise-static-methods",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/prefer-promise-try",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/prefer-promise-with-resolvers",
+        "typeAware": false
+      },
+      {
+        "inCore": true,
+        "on": true,
+        "rule": "unicorn/prefer-then-catch",
+        "typeAware": false
+      },
+      {
+        "inCore": false,
+        "on": false,
+        "rule": "unicorn/prefer-top-level-await",
+        "typeAware": false
+      }
+    ]
+  },
+  "oxlint": {
+    "version": "1.86.0",
+    "presets": {
+      "core": {
+        "overrides": [
+          {
+            "files": [
+              "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+              "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+            ],
+            "rule": "promise/prefer-await-to-then",
+            "value": "off"
+          }
+        ],
+        "rules": [
+          {
+            "on": true,
+            "options": null,
+            "rule": "no-async-promise-executor",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "no-await-in-loop",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "no-promise-executor-return",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": [
+              {
+                "allowAsStatement": true
+              }
+            ],
+            "rule": "no-void",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "node/callback-return",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "node/handle-callback-err",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": false,
+            "options": null,
+            "rule": "node/no-top-level-await",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": false,
+            "options": null,
+            "rule": "oxc/no-async-await",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "oxc/no-async-endpoint-handlers",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "prefer-promise-reject-errors",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": false,
+            "options": null,
+            "rule": "promise/always-return",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/avoid-new",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": false,
+            "options": null,
+            "rule": "promise/catch-or-return",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/no-callback-in-promise",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/no-multiple-resolved",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/no-nesting",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/no-new-statics",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/no-promise-in-callback",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/no-return-wrap",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/param-names",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/prefer-await-to-callbacks",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/prefer-await-to-then",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/prefer-catch",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/spec-only",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "promise/valid-params",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "require-await",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/await-thenable",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/no-floating-promises",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/no-misused-promises",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/prefer-promise-reject-errors",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/promise-function-async",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": false,
+            "options": null,
+            "rule": "typescript/require-await",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": [
+              "always"
+            ],
+            "rule": "typescript/return-await",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/strict-void-return",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "typescript/use-unknown-in-catch-callback-variable",
+            "typeAware": true,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-array-for-each",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-await-expression-member",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-await-in-promise-methods",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-single-promise-in-promise-methods",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-thenable",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-unnecessary-await",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "unicorn/no-useless-promise-resolve-reject",
+            "typeAware": false,
+            "native": true
+          },
+          {
+            "on": false,
+            "options": null,
+            "rule": "unicorn/prefer-top-level-await",
+            "typeAware": false,
+            "native": true
+          }
+        ]
+      },
+      "react": {
+        "overrides": [],
+        "rules": []
+      },
+      "js-plugins": {
+        "overrides": [],
+        "rules": [
+          {
+            "on": true,
+            "options": null,
+            "rule": "github/array-foreach",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "github/no-then",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "react-doctor/async-await-in-loop",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "react-doctor/async-defer-await",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "react-doctor/async-parallel",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "react-doctor/js-async-reduce-without-awaited-acc",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "react-doctor/no-async-effect-callback",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "react-doctor/server-sequential-independent-await",
+            "typeAware": false,
+            "native": false
+          },
+          {
+            "on": true,
+            "options": null,
+            "rule": "sonarjs/prefer-promise-shorthand",
+            "typeAware": false,
+            "native": false
+          }
+        ]
+      }
+    }
+  }
+}

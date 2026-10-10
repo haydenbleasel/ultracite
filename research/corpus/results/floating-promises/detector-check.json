@@ -1,0 +1,971 @@
+{
+  "generated": "2026-10-10",
+  "note": "Sites are matched by file and start line. 'confirmed' adds detector-only hits that a hand review found to be real floating promises the type-aware rule missed (usually because types didn't resolve), from detector-review.json.",
+  "repos": {
+    "zod": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 1,
+          "both": 1,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 1
+        },
+        "noMisusedPromises": {
+          "biome": 0,
+          "both": 0,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 0
+        }
+      },
+      "callbacks": {
+        "both": 0,
+        "detector": 6,
+        "detectorOnly": 6,
+        "typed": 0,
+        "typedOnly": 0,
+        "typedOnlySamples": []
+      },
+      "floating": {
+        "both": 0,
+        "detector": 0,
+        "detectorOnly": [],
+        "missReasons": {
+          "a method on another object": 1
+        },
+        "precisionAgainstTyped": null,
+        "precisionWithReview": null,
+        "recall": 0,
+        "reviewedFalse": 0,
+        "reviewedTrue": 0,
+        "typed": 1,
+        "typedOnly": 1
+      },
+      "importResolution": 100,
+      "bareCallsUntyped": 2
+    },
+    "hono": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 10,
+          "both": 10,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 17
+        },
+        "noMisusedPromises": {
+          "biome": 2,
+          "both": 1,
+          "biomeOnlySamples": [
+            "src/jsx/base.ts:463 | Array.isArray(children) ? children : children ? [children] : []"
+          ],
+          "typescriptEslint": 5
+        }
+      },
+      "callbacks": {
+        "both": 3,
+        "detector": 13,
+        "detectorOnly": 10,
+        "typed": 5,
+        "typedOnly": 2,
+        "typedOnlySamples": [
+          {
+            "code": "setTimeout(() => run(fn, promise, resolve))",
+            "file": "src/utils/concurrent.ts",
+            "line": 36
+          },
+          {
+            "code": "callbacks.forEach((c) => c({ phase: HtmlEscapedCallbackPhase.Stringify, buffer, context }))",
+            "file": "src/utils/html.ts",
+            "line": 137
+          }
+        ]
+      },
+      "floating": {
+        "both": 8,
+        "detector": 8,
+        "detectorOnly": [],
+        "missReasons": {
+          "a method on another object": 6,
+          "a promise chain the detector treats as handled": 1,
+          "a call to an imported function": 2
+        },
+        "precisionAgainstTyped": 100,
+        "precisionWithReview": 100,
+        "recall": 47.1,
+        "reviewedFalse": 0,
+        "reviewedTrue": 0,
+        "typed": 17,
+        "typedOnly": 9
+      },
+      "importResolution": 100,
+      "bareCallsUntyped": 1.3
+    },
+    "trpc": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 0,
+          "both": 0,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 0
+        },
+        "noMisusedPromises": {
+          "biome": 3,
+          "both": 0,
+          "biomeOnlySamples": [
+            "packages/client/src/links/wsLink/wsClient/wsClient.ts:263 | if (this.reconnecting) return;",
+            "packages/client/src/links/wsLink/wsClient/wsConnection.ts:165 | if (this.openPromise) return this.openPromise;",
+            "packages/next/src/app-dir/client.ts:44 | if (cached?.promise) {"
+          ],
+          "typescriptEslint": 1
+        }
+      },
+      "callbacks": {
+        "both": 1,
+        "detector": 34,
+        "detectorOnly": 33,
+        "typed": 1,
+        "typedOnly": 0,
+        "typedOnlySamples": []
+      },
+      "floating": {
+        "both": 0,
+        "detector": 0,
+        "detectorOnly": [],
+        "missReasons": {},
+        "precisionAgainstTyped": null,
+        "precisionWithReview": null,
+        "recall": null,
+        "reviewedFalse": 0,
+        "reviewedTrue": 0,
+        "typed": 0,
+        "typedOnly": 0
+      },
+      "importResolution": 90.6,
+      "bareCallsUntyped": 18.7
+    },
+    "vite": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 24,
+          "both": 24,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 27
+        },
+        "noMisusedPromises": {
+          "biome": 6,
+          "both": 1,
+          "biomeOnlySamples": [
+            "packages/vite/src/module-runner/runner.ts:183 | if (mod.promise) {",
+            "packages/vite/src/node/server/index.ts:1119 | if (initingServer) return initingServer",
+            "packages/vite/src/node/server/index.ts:858 | if (restartState.promise) {",
+            "packages/vite/src/node/server/moduleGraph.ts:129 | if (mod) {"
+          ],
+          "typescriptEslint": 17
+        }
+      },
+      "callbacks": {
+        "both": 4,
+        "detector": 21,
+        "detectorOnly": 17,
+        "typed": 12,
+        "typedOnly": 8,
+        "typedOnlySamples": [
+          {
+            "code": "transport.connect!(createHMRHandler(handleMessage))",
+            "file": "packages/vite/src/client/client.ts",
+            "line": 187
+          },
+          {
+            "code": "this.transport.connect(createHMRHandlerForRunner(this))",
+            "file": "packages/vite/src/module-runner/runner.ts",
+            "line": 78
+          },
+          {
+            "code": "() => cleanupDepsCacheStaleDirs(environment.getTopLevelConfig()),",
+            "file": "packages/vite/src/node/optimizer/index.ts",
+            "line": 395
+          },
+          {
+            "code": "server._shortcutsState!.rl.on('line', onInput)",
+            "file": "packages/vite/src/node/shortcuts.ts",
+            "line": 125
+          },
+          {
+            "code": "process.once('SIGTERM', parentSigtermCallback)",
+            "file": "packages/vite/src/node/utils.ts",
+            "line": 1936
+          }
+        ]
+      },
+      "floating": {
+        "both": 12,
+        "detector": 14,
+        "detectorOnly": [
+          {
+            "code": "this.devEngine.ensureLatestBuildOutput().then(() => {",
+            "file": "packages/vite/src/node/server/bundledDev.ts",
+            "id": "vite:packages/vite/src/node/server/bundledDev.ts:321",
+            "kind": "floating-chain",
+            "line": 321,
+            "verdict": {
+              "real": true,
+              "whyTypedMissed": "`DevEngine` is imported from 'rolldown/experimental', which doesn't resolve here, so `ensureLatestBuildOutput()` is typed as an error type, not a Promise."
+            }
+          },
+          {
+            "code": "this.devEngine.ensureLatestBuildOutput().then(() => {",
+            "file": "packages/vite/src/node/server/bundledDev.ts",
+            "id": "vite:packages/vite/src/node/server/bundledDev.ts:332",
+            "kind": "floating-chain",
+            "line": 332,
+            "verdict": {
+              "real": true,
+              "whyTypedMissed": "Same as line 321: `DevEngine` comes from the unresolved 'rolldown/experimental'."
+            }
+          }
+        ],
+        "missReasons": {
+          "a method on an imported object": 3,
+          "a call to a parameter, variable or other local": 2,
+          "a method on another object": 10
+        },
+        "precisionAgainstTyped": 85.7,
+        "precisionWithReview": 100,
+        "recall": 44.4,
+        "reviewedFalse": 0,
+        "reviewedTrue": 2,
+        "typed": 27,
+        "typedOnly": 15
+      },
+      "importResolution": 80.2,
+      "bareCallsUntyped": 18.5
+    },
+    "astro": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 32,
+          "both": 32,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 37
+        },
+        "noMisusedPromises": {
+          "biome": 12,
+          "both": 4,
+          "biomeOnlySamples": [
+            "packages/astro/src/content/config-prewarm.ts:32 | if (inFlight) {",
+            "packages/astro/src/content/types-generator.ts:146 | if (prewarm) {",
+            "packages/astro/src/core/hono/index.ts:70 | if (response) return response;",
+            "packages/astro/src/core/hono/index.ts:78 | if (result) {"
+          ],
+          "typescriptEslint": 35
+        }
+      },
+      "callbacks": {
+        "both": 20,
+        "detector": 51,
+        "detectorOnly": 31,
+        "typed": 29,
+        "typedOnly": 9,
+        "typedOnlySamples": [
+          {
+            "code": "const server = createServer((req, res) => {",
+            "file": "packages/astro/src/assets/fonts/vite-plugin-fonts.ts",
+            "line": 217
+          },
+          {
+            "code": "debounceTimeout = setTimeout(runEventsSafe, 50 /* debounce to batch chokidar events */);",
+            "file": "packages/astro/src/content/types-generator.ts",
+            "line": 315
+          },
+          {
+            "code": "eventTarget.addEventListener('toggle-app', onToggleApp);",
+            "file": "packages/astro/src/runtime/client/dev-toolbar/entrypoint.ts",
+            "line": 109
+          },
+          {
+            "code": "setTimeout(cb, idleOptions.timeout || 200);",
+            "file": "packages/astro/src/runtime/client/idle.ts",
+            "line": 19
+          },
+          {
+            "code": "mql.addEventListener('change', cb, { once: true });",
+            "file": "packages/astro/src/runtime/client/media.ts",
+            "line": 17
+          }
+        ]
+      },
+      "floating": {
+        "both": 23,
+        "detector": 23,
+        "detectorOnly": [],
+        "missReasons": {
+          "a method on another object": 10,
+          "a call to a parameter, variable or other local": 1,
+          "an array of promises from .map": 2,
+          "a call to an imported function": 1
+        },
+        "precisionAgainstTyped": 100,
+        "precisionWithReview": 100,
+        "recall": 62.2,
+        "reviewedFalse": 0,
+        "reviewedTrue": 0,
+        "typed": 37,
+        "typedOnly": 14
+      },
+      "importResolution": 88.2,
+      "bareCallsUntyped": 9.7
+    },
+    "excalidraw": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 32,
+          "both": 32,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 40
+        },
+        "noMisusedPromises": {
+          "biome": 6,
+          "both": 6,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 19
+        }
+      },
+      "callbacks": {
+        "both": 10,
+        "detector": 30,
+        "detectorOnly": 20,
+        "typed": 11,
+        "typedOnly": 1,
+        "typedOnlySamples": [
+          {
+            "code": "this.updateDOMRect(this.initializeScene);",
+            "file": "packages/excalidraw/components/App.tsx",
+            "line": 3874
+          }
+        ]
+      },
+      "floating": {
+        "both": 31,
+        "detector": 32,
+        "detectorOnly": [
+          {
+            "code": "bindings({ wasmBinary: binary }).then(",
+            "file": "packages/excalidraw/subset/woff2/woff2-loader.ts",
+            "id": "excalidraw:packages/excalidraw/subset/woff2/woff2-loader.ts:39",
+            "kind": "floating-chain",
+            "line": 39,
+            "verdict": {
+              "real": true,
+              "note": "A thenable from emscripten bindings, not a Promise; the code comment says its `then` isn't Promises/A+ compliant. A failure in it would not reach the surrounding `new Promise`'s reject.",
+              "whyTypedMissed": "`bindings` is the default export of a `// @ts-nocheck` emscripten file (excluded from the corpus as vendored), so its call result isn't a Promise type. With types, no-floating-promises would still ignore a non-Promise thenable unless `checkThenables` is set."
+            }
+          }
+        ],
+        "missReasons": {
+          "a method on another object": 5,
+          "a call to an imported function": 3,
+          "a call to a parameter, variable or other local": 1
+        },
+        "precisionAgainstTyped": 96.9,
+        "precisionWithReview": 100,
+        "recall": 77.5,
+        "reviewedFalse": 0,
+        "reviewedTrue": 1,
+        "typed": 40,
+        "typedOnly": 9
+      },
+      "importResolution": 89.4,
+      "bareCallsUntyped": 21.8
+    },
+    "next.js": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 88,
+          "both": 87,
+          "biomeOnlySamples": [
+            "packages/next/src/server/lib/router-utils/instrumentation-globals.external.ts:32 | getTracer().trace("
+          ],
+          "typescriptEslint": 132
+        },
+        "noMisusedPromises": {
+          "biome": 50,
+          "both": 6,
+          "biomeOnlySamples": [
+            "packages/next/src/build/jest/jest.ts:102 | if (lockfilePatchPromise.cur) {",
+            "packages/next/src/build/turbopack-analyze/index.ts:131 | if (shutdownPromise) {",
+            "packages/next/src/cli/next-build.ts:259 | if (!context || !dir || menu) {",
+            "packages/next/src/client/app-index.tsx:228 | if (instantTestStaticFetch) {"
+          ],
+          "typescriptEslint": 50
+        }
+      },
+      "callbacks": {
+        "both": 12,
+        "detector": 201,
+        "detectorOnly": 189,
+        "typed": 33,
+        "typedOnly": 21,
+        "typedOnlySamples": [
+          {
+            "code": "return new Promise<string>((res) =>",
+            "file": "packages/next/src/build/webpack/loaders/next-barrel-loader.ts",
+            "line": 129
+          },
+          {
+            "code": "state.timeoutHandle = setTimeout(() => checkConnectivity(state), delay)",
+            "file": "packages/next/src/client/components/offline.ts",
+            "line": 166
+          },
+          {
+            "code": "refreshRequestPromises.forEach((refreshRequestPromise) =>",
+            "file": "packages/next/src/client/components/render-tree.ts",
+            "line": 1622
+          },
+          {
+            "code": "requestIdleCallback(() => this.loadRoute(route, true).catch(() => {}))",
+            "file": "packages/next/src/client/route-loader.ts",
+            "line": 418
+          },
+          {
+            "code": "setTimeout(cb, 0)",
+            "file": "packages/next/src/lib/scheduler.ts",
+            "line": 19
+          }
+        ]
+      },
+      "floating": {
+        "both": 39,
+        "detector": 43,
+        "detectorOnly": [
+          {
+            "code": "worker.end().then(() => {",
+            "file": "packages/next/src/lib/worker.ts",
+            "id": "next.js:packages/next/src/lib/worker.ts:238",
+            "kind": "floating-chain",
+            "line": 238,
+            "verdict": {
+              "real": true,
+              "whyTypedMissed": "`JestWorker` is imported from 'next/dist/compiled/jest-worker', a self-import of the published package that doesn't resolve in the sparse clone."
+            }
+          },
+          {
+            "code": "onCompletedProcessingRouteTree()",
+            "file": "packages/next/src/server/app-render/collect-segment-data.tsx",
+            "id": "next.js:packages/next/src/server/app-render/collect-segment-data.tsx:986",
+            "kind": "floating-call",
+            "line": 986,
+            "verdict": {
+              "real": true,
+              "note": "The detector matched the name to the async arrow at line 256, but at line 986 the name is a parameter typed `() => void` (line 867). At runtime it is that async arrow (passed in at line 284), so the promise does float. The type annotation erases it: no-floating-promises can't see it, and passing an async function to a `() => void` slot is what no-misused-promises (checksVoidReturn) exists to catch.",
+              "whyTypedMissed": "The parameter's declared type is `() => void`."
+            }
+          },
+          {
+            "code": "wait.value.then(() => {",
+            "file": "packages/next/src/server/dev/dev-validation-worker.ts",
+            "id": "next.js:packages/next/src/server/dev/dev-validation-worker.ts:147",
+            "kind": "floating-chain",
+            "line": 147,
+            "verdict": {
+              "real": true,
+              "note": "`Atomics.waitAsync(...).value` resolves to 'ok' or 'timed-out' and doesn't reject, so this one is harmless in practice.",
+              "whyTypedMissed": "next.js's tsconfig targets ES2018 with no `lib`, so `Atomics.waitAsync` (ES2024) isn't declared and the call is an error type."
+            }
+          },
+          {
+            "code": "stream.cancel('Response object has been garbage collected').then(noop)",
+            "file": "packages/next/src/server/lib/clone-response.ts",
+            "id": "next.js:packages/next/src/server/lib/clone-response.ts:9",
+            "kind": "floating-chain",
+            "line": 9,
+            "verdict": {
+              "real": true,
+              "note": "`.then(noop)` adds a fulfilment handler only; a rejected `cancel()` would be unhandled. Inside a FinalizationRegistry callback.",
+              "whyTypedMissed": "`WeakRef` (ES2021) isn't in the ES2018 default lib, so `weakRef.deref()` and the stream are error types."
+            }
+          }
+        ],
+        "missReasons": {
+          "a method on another object": 73,
+          "a call to an imported function": 8,
+          "a call to a parameter, variable or other local": 11,
+          "a method on this, defined elsewhere (inherited or not async)": 1
+        },
+        "precisionAgainstTyped": 90.7,
+        "precisionWithReview": 100,
+        "recall": 29.5,
+        "reviewedFalse": 0,
+        "reviewedTrue": 4,
+        "typed": 132,
+        "typedOnly": 93
+      },
+      "importResolution": 91,
+      "bareCallsUntyped": 13.6
+    },
+    "vscode": {
+      "biome": {
+        "noFloatingPromises": {
+          "biome": 5,
+          "both": 5,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 6
+        },
+        "noMisusedPromises": {
+          "biome": 0,
+          "both": 0,
+          "biomeOnlySamples": [],
+          "typescriptEslint": 0
+        }
+      },
+      "callbacks": {
+        "both": 0,
+        "detector": 1,
+        "detectorOnly": 1,
+        "typed": 0,
+        "typedOnly": 0,
+        "typedOnlySamples": []
+      },
+      "floating": {
+        "both": 1,
+        "detector": 1,
+        "detectorOnly": [],
+        "missReasons": {
+          "a method on this, defined elsewhere (inherited or not async)": 4,
+          "a method on an imported object": 1
+        },
+        "precisionAgainstTyped": 100,
+        "precisionWithReview": 100,
+        "recall": 16.7,
+        "reviewedFalse": 0,
+        "reviewedTrue": 0,
+        "typed": 6,
+        "typedOnly": 5
+      },
+      "importResolution": 69.3,
+      "bareCallsUntyped": 13.6
+    }
+  },
+  "pooled": {
+    "biome": {
+      "noFloatingPromises": {
+        "biome": 192,
+        "both": 191,
+        "typescriptEslint": 260
+      },
+      "noMisusedPromises": {
+        "biome": 79,
+        "both": 18,
+        "typescriptEslint": 127
+      }
+    },
+    "callbacks": {
+      "both": 50,
+      "detectorOnly": 307,
+      "typedOnly": 41
+    },
+    "floating": {
+      "both": 114,
+      "detectorOnly": 7,
+      "reviewedTrue": 7,
+      "reviewedFalse": 0,
+      "typedOnly": 146,
+      "precisionAgainstTyped": 94.2,
+      "precisionWithReview": 100,
+      "recall": 43.8
+    },
+    "byCallee": {
+      "traceAsyncFn": {
+        "flagged": 0,
+        "total": 46
+      },
+      "then": {
+        "flagged": 0,
+        "total": 36
+      },
+      "run": {
+        "flagged": 0,
+        "total": 25
+      },
+      "trace": {
+        "flagged": 0,
+        "total": 18
+      },
+      "on": {
+        "flagged": 8,
+        "total": 17
+      },
+      "new Promise": {
+        "flagged": 16,
+        "total": 16
+      },
+      "useCallback": {
+        "flagged": 1,
+        "total": 10
+      },
+      "addEventListener": {
+        "flagged": 8,
+        "total": 10
+      },
+      "registerTool": {
+        "flagged": 0,
+        "total": 9
+      },
+      "subscribe": {
+        "flagged": 1,
+        "total": 8
+      },
+      "setTimeout": {
+        "flagged": 7,
+        "total": 8
+      },
+      "action": {
+        "flagged": 0,
+        "total": 6
+      },
+      "tapPromise": {
+        "flagged": 0,
+        "total": 6
+      },
+      "createMemoizedPromise": {
+        "flagged": 0,
+        "total": 6
+      },
+      "createAsyncManifestMemo": {
+        "flagged": 0,
+        "total": 5
+      },
+      "promiseTry": {
+        "flagged": 0,
+        "total": 5
+      },
+      "asyncReplace": {
+        "flagged": 0,
+        "total": 4
+      },
+      "cache": {
+        "flagged": 0,
+        "total": 4
+      },
+      "tapAsync": {
+        "flagged": 0,
+        "total": 4
+      },
+      "runInSequentialTasks": {
+        "flagged": 0,
+        "total": 4
+      },
+      "createLazyDevValidationInputs": {
+        "flagged": 0,
+        "total": 4
+      },
+      "catch": {
+        "flagged": 0,
+        "total": 3
+      },
+      "memo": {
+        "flagged": 0,
+        "total": 3
+      },
+      "limit": {
+        "flagged": 0,
+        "total": 3
+      },
+      "use": {
+        "flagged": 0,
+        "total": 3
+      },
+      "step": {
+        "flagged": 0,
+        "total": 3
+      },
+      "registerCustomCacheHandlers": {
+        "flagged": 0,
+        "total": 3
+      },
+      "createLazyResult": {
+        "flagged": 0,
+        "total": 3
+      },
+      "onDevServerCleanup": {
+        "flagged": 0,
+        "total": 3
+      },
+      "defineWebSocketHelper": {
+        "flagged": 0,
+        "total": 2
+      },
+      "MemberExpression": {
+        "flagged": 0,
+        "total": 2
+      },
+      "createRecursiveProxy": {
+        "flagged": 0,
+        "total": 2
+      },
+      "registerAsync": {
+        "flagged": 0,
+        "total": 2
+      },
+      "makeAsyncResource": {
+        "flagged": 0,
+        "total": 2
+      },
+      "processSrcSet": {
+        "flagged": 0,
+        "total": 2
+      },
+      "requestIdleCallback": {
+        "flagged": 2,
+        "total": 2
+      },
+      "forEach": {
+        "flagged": 2,
+        "total": 2
+      },
+      "scheduleOnNextTick": {
+        "flagged": 0,
+        "total": 2
+      },
+      "curry": {
+        "flagged": 0,
+        "total": 2
+      },
+      "createServer": {
+        "flagged": 2,
+        "total": 2
+      },
+      "runSpan": {
+        "flagged": 0,
+        "total": 2
+      },
+      "cacheScopedToWorkStore": {
+        "flagged": 0,
+        "total": 2
+      },
+      "setStackFrameResolver": {
+        "flagged": 0,
+        "total": 2
+      },
+      "get": {
+        "flagged": 0,
+        "total": 2
+      },
+      "OK": {
+        "flagged": 0,
+        "total": 1
+      },
+      "defineProperty": {
+        "flagged": 0,
+        "total": 1
+      },
+      "streamifyResponse": {
+        "flagged": 0,
+        "total": 1
+      },
+      "middleware": {
+        "flagged": 0,
+        "total": 1
+      },
+      "CallExpression": {
+        "flagged": 0,
+        "total": 1
+      },
+      "push": {
+        "flagged": 0,
+        "total": 1
+      },
+      "makeResource": {
+        "flagged": 1,
+        "total": 1
+      },
+      "all": {
+        "flagged": 0,
+        "total": 1
+      },
+      "once": {
+        "flagged": 0,
+        "total": 1
+      },
+      "Super": {
+        "flagged": 0,
+        "total": 1
+      },
+      "new HMRClient": {
+        "flagged": 0,
+        "total": 1
+      },
+      "createHMRHandler": {
+        "flagged": 0,
+        "total": 1
+      },
+      "perEnvironmentPlugin": {
+        "flagged": 0,
+        "total": 1
+      },
+      "new WorkerWithFallback": {
+        "flagged": 0,
+        "total": 1
+      },
+      "defineFontProvider": {
+        "flagged": 0,
+        "total": 1
+      },
+      "transform": {
+        "flagged": 0,
+        "total": 1
+      },
+      "collectPrerenderMetadata": {
+        "flagged": 0,
+        "total": 1
+      },
+      "onRequest": {
+        "flagged": 0,
+        "total": 1
+      },
+      "fetchMiddleware": {
+        "flagged": 0,
+        "total": 1
+      },
+      "fetchCache": {
+        "flagged": 0,
+        "total": 1
+      },
+      "emitDestination": {
+        "flagged": 0,
+        "total": 1
+      },
+      "handleMiddleware": {
+        "flagged": 0,
+        "total": 1
+      },
+      "handle": {
+        "flagged": 0,
+        "total": 1
+      },
+      "startViewTransition": {
+        "flagged": 0,
+        "total": 1
+      },
+      "finally": {
+        "flagged": 0,
+        "total": 1
+      },
+      "withBatchedUpdates": {
+        "flagged": 0,
+        "total": 1
+      },
+      "setConsumer": {
+        "flagged": 0,
+        "total": 1
+      },
+      "toBlob": {
+        "flagged": 1,
+        "total": 1
+      },
+      "withPromiseCache": {
+        "flagged": 0,
+        "total": 1
+      },
+      "reduce": {
+        "flagged": 0,
+        "total": 1
+      },
+      "resolve": {
+        "flagged": 0,
+        "total": 1
+      },
+      "onFetch": {
+        "flagged": 0,
+        "total": 1
+      },
+      "reportFetch": {
+        "flagged": 0,
+        "total": 1
+      },
+      "schedulerFn": {
+        "flagged": 0,
+        "total": 1
+      },
+      "useActionState": {
+        "flagged": 0,
+        "total": 1
+      },
+      "bindSnapshot": {
+        "flagged": 0,
+        "total": 1
+      },
+      "withSpan": {
+        "flagged": 0,
+        "total": 1
+      },
+      "runInstantInsightsWithTracing": {
+        "flagged": 0,
+        "total": 1
+      },
+      "runWithDevValidationLogging": {
+        "flagged": 0,
+        "total": 1
+      },
+      "exit": {
+        "flagged": 0,
+        "total": 1
+      },
+      "loadOrGenerateKey": {
+        "flagged": 0,
+        "total": 1
+      },
+      "pipe": {
+        "flagged": 0,
+        "total": 1
+      },
+      "batch": {
+        "flagged": 0,
+        "total": 1
+      },
+      "subscribeToChanges": {
+        "flagged": 0,
+        "total": 1
+      },
+      "setUseCacheProbe": {
+        "flagged": 0,
+        "total": 1
+      },
+      "ensureCallback": {
+        "flagged": 0,
+        "total": 1
+      },
+      "addListener": {
+        "flagged": 1,
+        "total": 1
+      },
+      "withLocalSpan": {
+        "flagged": 0,
+        "total": 1
+      },
+      "scheduleImmediate": {
+        "flagged": 0,
+        "total": 1
+      },
+      "withTaggedErrors": {
+        "flagged": 0,
+        "total": 1
+      },
+      "_getData": {
+        "flagged": 0,
+        "total": 1
+      },
+      "schedule": {
+        "flagged": 0,
+        "total": 1
+      }
+    },
+    "missReasons": {
+      "a method on another object": 105,
+      "a call to a parameter, variable or other local": 15,
+      "a call to an imported function": 14,
+      "a method on this, defined elsewhere (inherited or not async)": 5,
+      "a method on an imported object": 4,
+      "an array of promises from .map": 2,
+      "a promise chain the detector treats as handled": 1
+    }
+  }
+}

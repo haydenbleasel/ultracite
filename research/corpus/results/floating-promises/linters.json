@@ -1,0 +1,2269 @@
+{
+  "generated": "2026-10-10",
+  "tools": {
+    "@biomejs/biome": "2.5.15",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "eslint": "10.12.0",
+    "eslint-plugin-promise": "7.3.0",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "typescript": "6.0.3"
+  },
+  "calibration": {
+    "cases": [
+      {
+        "description": "a bare call to an async function",
+        "id": "F01",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "ts/no-floating-promises"
+        ],
+        "oxlint": [
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`void` marks it as deliberately not awaited",
+        "id": "F02",
+        "biome": [
+          "noVoid"
+        ],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "an empty rejection handler swallows the error",
+        "id": "F03",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "github/no-then",
+          "promise/prefer-await-to-then",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/prefer-await-to-then"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "a rejection handler that only logs",
+        "id": "F04",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "github/no-then",
+          "promise/prefer-await-to-then",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/prefer-await-to-then"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`.then` with only a fulfilment handler",
+        "id": "F05",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "github/no-then",
+          "promise/no-callback-in-promise",
+          "promise/prefer-await-to-then",
+          "ts/no-floating-promises",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/no-callback-in-promise",
+          "promise/prefer-await-to-then",
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`.then` with both handlers",
+        "id": "F06",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "github/no-then",
+          "promise/no-callback-in-promise",
+          "promise/prefer-await-to-then",
+          "promise/prefer-catch",
+          "unicorn/prefer-await",
+          "unicorn/prefer-then-catch"
+        ],
+        "oxlint": [
+          "promise/no-callback-in-promise",
+          "promise/prefer-await-to-then",
+          "promise/prefer-catch"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`.finally` alone passes the rejection on, unhandled",
+        "id": "F07",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "promise/prefer-await-to-then",
+          "ts/no-floating-promises",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/prefer-await-to-then",
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`.catch` then `.finally`",
+        "id": "F08",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "github/no-then",
+          "promise/prefer-await-to-then",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/prefer-await-to-then"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "a promise stored in a variable and never awaited",
+        "id": "F09",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "a promise assigned to a field and never observed",
+        "id": "F10",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "`.map(async …)` as a statement: an array of promises, dropped",
+        "id": "F11",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "ts/no-floating-promises"
+        ],
+        "oxlint": [
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`.map(async …)` inside Promise.all",
+        "id": "F12",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "an async callback passed to forEach",
+        "id": "F13",
+        "biome": [
+          "noForEach"
+        ],
+        "biome nursery (not enabled)": [
+          "noMisusedPromises"
+        ],
+        "eslint": [
+          "github/array-foreach",
+          "ts/no-misused-promises",
+          "ts/strict-void-return",
+          "unicorn/no-for-each"
+        ],
+        "oxlint": [
+          "ts/no-misused-promises",
+          "ts/strict-void-return",
+          "unicorn/no-array-for-each"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async event listener",
+        "id": "F14",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "ts/no-misused-promises",
+          "ts/strict-void-return"
+        ],
+        "oxlint": [
+          "ts/no-misused-promises",
+          "ts/strict-void-return"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async setTimeout callback (DOM's TimerHandler is `string | Function`)",
+        "id": "F15",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "an async listener where the parameter type says `() => void`",
+        "id": "F16",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noMisusedPromises"
+        ],
+        "eslint": [
+          "ts/no-misused-promises",
+          "ts/strict-void-return"
+        ],
+        "oxlint": [
+          "ts/no-misused-promises",
+          "ts/strict-void-return"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async effect callback (`() => void | (() => void)`)",
+        "id": "F17",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": [
+          "TS2345"
+        ]
+      },
+      {
+        "description": "a promise used as a condition is always truthy",
+        "id": "F18",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noMisusedPromises"
+        ],
+        "eslint": [
+          "ts/no-misused-promises"
+        ],
+        "oxlint": [
+          "ts/no-misused-promises"
+        ],
+        "tsc": [
+          "TS2801"
+        ]
+      },
+      {
+        "description": "an async function assigned to a `() => void` variable",
+        "id": "F19",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "promise/prefer-await-to-callbacks",
+          "ts/no-misused-promises",
+          "ts/strict-void-return"
+        ],
+        "oxlint": [
+          "promise/prefer-await-to-callbacks",
+          "ts/no-misused-promises",
+          "ts/strict-void-return"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async Promise executor",
+        "id": "F20",
+        "biome": [
+          "noAsyncPromiseExecutor"
+        ],
+        "biome nursery (not enabled)": [
+          "noMisusedPromises"
+        ],
+        "eslint": [
+          "no-async-promise-executor",
+          "promise/avoid-new",
+          "ts/no-misused-promises",
+          "ts/promise-function-async",
+          "ts/strict-void-return"
+        ],
+        "oxlint": [
+          "no-async-promise-executor",
+          "promise/avoid-new",
+          "ts/no-misused-promises",
+          "ts/promise-function-async",
+          "ts/strict-void-return"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an executor arrow that returns a value (setTimeout's id)",
+        "id": "F21",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "no-promise-executor-return",
+          "promise/avoid-new",
+          "ts/promise-function-async",
+          "ts/strict-void-return"
+        ],
+        "oxlint": [
+          "no-promise-executor-return",
+          "promise/avoid-new",
+          "ts/promise-function-async",
+          "ts/strict-void-return"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async IIFE as a statement",
+        "id": "F22",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "ts/no-floating-promises"
+        ],
+        "oxlint": [
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async IIFE marked with `void`",
+        "id": "F23",
+        "biome": [
+          "noVoid"
+        ],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "an async function that returns a value and never awaits",
+        "id": "F24",
+        "biome": [
+          "useAwait"
+        ],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "ts/require-await"
+        ],
+        "oxlint": [
+          "require-await"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async function that returns another promise without awaiting it",
+        "id": "F25",
+        "biome": [
+          "useAwait"
+        ],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "ts/return-await"
+        ],
+        "oxlint": [
+          "require-await",
+          "ts/return-await"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "a non-async function that returns a promise",
+        "id": "F26",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "ts/promise-function-async"
+        ],
+        "oxlint": [
+          "ts/promise-function-async"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`await` inside a for…of loop",
+        "id": "F27",
+        "biome": [
+          "noAwaitInLoops"
+        ],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "no-await-in-loop"
+        ],
+        "oxlint": [
+          "no-await-in-loop"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "`for await` over an async iterable",
+        "id": "F28",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "a PromiseLike (thenable), not a Promise, left floating",
+        "id": "F29",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "github/no-then",
+          "promise/no-callback-in-promise",
+          "promise/prefer-await-to-then",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/no-callback-in-promise",
+          "promise/prefer-await-to-then"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async `.then` callback in a handled chain",
+        "id": "F30",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "github/no-then",
+          "promise/prefer-await-to-then",
+          "unicorn/prefer-await"
+        ],
+        "oxlint": [
+          "promise/prefer-await-to-then"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "returning a promise from inside try without awaiting it",
+        "id": "F31",
+        "biome": [
+          "useAwait"
+        ],
+        "biome nursery (not enabled)": [],
+        "eslint": [
+          "sonarjs/no-try-promise",
+          "ts/return-await"
+        ],
+        "oxlint": [
+          "require-await",
+          "ts/return-await"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "awaiting a value that isn't a promise",
+        "id": "F32",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "useAwaitThenable"
+        ],
+        "eslint": [
+          "ts/await-thenable",
+          "unicorn/no-unnecessary-await"
+        ],
+        "oxlint": [
+          "ts/await-thenable",
+          "unicorn/no-unnecessary-await"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async method called from a sync method",
+        "id": "F33",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "ts/no-floating-promises"
+        ],
+        "oxlint": [
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "a bare Promise.reject",
+        "id": "F34",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "noFloatingPromises"
+        ],
+        "eslint": [
+          "ts/no-floating-promises"
+        ],
+        "oxlint": [
+          "ts/no-floating-promises"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "awaiting the array from `.map(async …)` instead of Promise.all",
+        "id": "F35",
+        "biome": [],
+        "biome nursery (not enabled)": [
+          "useAwaitThenable"
+        ],
+        "eslint": [
+          "ts/await-thenable"
+        ],
+        "oxlint": [
+          "ts/await-thenable"
+        ],
+        "tsc": []
+      },
+      {
+        "description": "an async function passed where a Promise-returning callback is expected",
+        "id": "F36",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      },
+      {
+        "description": "a promise returned from a sync callback slot that is typed to return unknown",
+        "id": "F37",
+        "biome": [],
+        "biome nursery (not enabled)": [],
+        "eslint": [],
+        "oxlint": [],
+        "tsc": []
+      }
+    ],
+    "outsideCases": {
+      "biome": [],
+      "biome nursery (not enabled)": [],
+      "eslint": [],
+      "oxlint": [],
+      "tsc": []
+    }
+  },
+  "corpus": {
+    "zod": {
+      "biome": {
+        "unused": 3,
+        "noAwaitInLoops": 3,
+        "useAwait": 5,
+        "noFloatingPromises": 1
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "const value = await pair.value;",
+          "file": "packages/zod/src/v3/helpers/parseUtil.ts",
+          "line": 119,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const value = await pair.value;",
+          "file": "packages/zod/src/v3/types.ts",
+          "line": 2553,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const value = await pair.value;",
+          "file": "packages/zod/src/v3/types.ts",
+          "line": 3631,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "no-await-in-loop": 6,
+        "require-await": 5
+      },
+      "files": 125
+    },
+    "hono": {
+      "biome": {
+        "noAwaitInLoops": 16,
+        "useAwait": 14,
+        "noAsyncPromiseExecutor": 2,
+        "noMisusedPromises": 2,
+        "noFloatingPromises": 10
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "await wrappedNext()",
+          "file": "src/middleware/combine/index.ts",
+          "line": 52,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await options.onAuthSuccess(ctx, requestUser.username)",
+          "file": "src/middleware/basic-auth/index.ts",
+          "line": 124,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await next()",
+          "file": "src/middleware/basic-auth/index.ts",
+          "line": 126,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await digest(chunk)",
+          "file": "src/middleware/etag/digest.ts",
+          "line": 78,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "run: async (fn) => fn(),",
+          "file": "src/utils/concurrent.ts",
+          "line": 24,
+          "oxlint": 1,
+          "rule": "useAwait"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "no-await-in-loop": 20,
+        "require-await": 15,
+        "no-async-promise-executor": 2
+      },
+      "files": 187
+    },
+    "trpc": {
+      "biome": {
+        "noAwaitInLoops": 13,
+        "useAwait": 10,
+        "noMisusedPromises": 3
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "await iterator.return?.();",
+          "file": "packages/server/src/adapters/ws.ts",
+          "line": 351,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await using iterator = iteratorResource(result);",
+          "file": "packages/client/src/links/localLink.ts",
+          "line": 200,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await run(transform, committedFiles, {",
+          "file": "packages/upgrade/src/bin/index.ts",
+          "line": 82,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => input,",
+          "file": "packages/tanstack-react-query/src/internals/createOptionsProxy.ts",
+          "line": 356,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => input,",
+          "file": "packages/server/src/adapters/next-app-dir/nextAppDirCaller.ts",
+          "line": 96,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => input,",
+          "file": "packages/server/src/adapters/next-app-dir/nextAppDirCaller.ts",
+          "line": 114,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => args[0],",
+          "file": "packages/server/src/unstable-core-do-not-import/router.ts",
+          "line": 475,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => input,",
+          "file": "packages/server/src/adapters/ws.ts",
+          "line": 270,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => input,",
+          "file": "packages/next/src/app-dir/links/nextCache.ts",
+          "line": 55,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => queryOpts.input,",
+          "file": "packages/react-query/src/server/ssgProxy.ts",
+          "line": 102,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => newInput,",
+          "file": "packages/client/src/links/localLink.ts",
+          "line": 81,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "getRawInput: async () => rawInput,",
+          "file": "packages/next/src/app-dir/server.ts",
+          "line": 151,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 1,
+          "code": "return run(async function* () {",
+          "file": "packages/server/src/unstable-core-do-not-import/http/resolveResponse.ts",
+          "line": 33,
+          "oxlint": 0,
+          "rule": "useAwait"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "require-await": 18,
+        "no-await-in-loop": 16
+      },
+      "files": 176
+    },
+    "vite": {
+      "biome": {
+        "noFloatingPromises": 24,
+        "useAwait": 38,
+        "noAwaitInLoops": 43,
+        "noMisusedPromises": 6
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "await wait(ms)",
+          "file": "packages/vite/src/client/client.ts",
+          "line": 527,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await waitForWindowShow(visibilityManager)",
+          "file": "packages/vite/src/client/client.ts",
+          "line": 529,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const appliedPlugins = (await asyncFlatten(arraify(applied))).filter(",
+          "file": "packages/vite/src/node/plugin.ts",
+          "line": 422,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "file = await workerResolver(this.environment, urlWithoutPostfix, id)",
+          "file": "packages/vite/src/node/plugins/workerImportMetaUrl.ts",
+          "line": 250,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const result = await workerFileToUrl(config, file)",
+          "file": "packages/vite/src/node/plugins/workerImportMetaUrl.ts",
+          "line": 272,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "builtUrlExpr = await fileToUrl(this, cleanUrl(file), 'string')",
+          "file": "packages/vite/src/node/plugins/workerImportMetaUrl.ts",
+          "line": 288,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "builtUrlExpr = await fileToUrl(this, publicPath, 'js')",
+          "file": "packages/vite/src/node/plugins/assetImportMetaUrl.ts",
+          "line": 147,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "builtUrlExpr = await fileToUrl(this, file, 'js')",
+          "file": "packages/vite/src/node/plugins/assetImportMetaUrl.ts",
+          "line": 149,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const filteredModules = await getHookHandler(",
+          "file": "packages/vite/src/node/server/hmr.ts",
+          "line": 555,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "const filteredModules = await getHookHandler(plugin.hotUpdate).call(",
+          "file": "packages/vite/src/node/server/hmr.ts",
+          "line": 608,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const newMtime = (await fsp.stat(file)).mtimeMs",
+          "file": "packages/vite/src/node/server/hmr.ts",
+          "line": 1145,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "const res = await handler.call(context, name, environments[name], {",
+          "file": "packages/vite/src/node/config.ts",
+          "line": 2875,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "const availablePort = await tryListen(port, host).catch(() => port)",
+          "file": "packages/vite/src/node/http.ts",
+          "line": 180,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const result = await tryBindServer(httpServer, port, host)",
+          "file": "packages/vite/src/node/http.ts",
+          "line": 285,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const result = await tryBindServer(httpServer, port, host)",
+          "file": "packages/vite/src/node/http.ts",
+          "line": 304,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await this.devEngine.ensureCurrentBuildFinish()",
+          "file": "packages/vite/src/node/server/bundledDev.ts",
+          "line": 295,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "state = await this.devEngine.getBundleState()",
+          "file": "packages/vite/src/node/server/bundledDev.ts",
+          "line": 297,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await handler.call(pluginContext, builder)",
+          "file": "packages/vite/src/node/build.ts",
+          "line": 1888,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fsp.rm(tempDirPath, { recursive: true, force: true })",
+          "file": "packages/vite/src/node/optimizer/index.ts",
+          "line": 1472,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await urlEmitQueue.run(async () =>",
+          "file": "packages/vite/src/node/plugins/css.ts",
+          "line": 843,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "handleInvoke: async () => ({",
+          "file": "packages/vite/src/node/server/ws.ts",
+          "line": 135,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "cancel: async () => cleanUp(),",
+          "file": "packages/vite/src/node/optimizer/index.ts",
+          "line": 646,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "commit: async () => cleanUp(),",
+          "file": "packages/vite/src/node/optimizer/index.ts",
+          "line": 653,
+          "oxlint": 1,
+          "rule": "useAwait"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "require-await": 42,
+        "no-await-in-loop": 56
+      },
+      "files": 124
+    },
+    "astro": {
+      "biome": {
+        "unused": 3,
+        "useAwait": 100,
+        "noFloatingPromises": 32,
+        "noAwaitInLoops": 81,
+        "noMisusedPromises": 12,
+        "noAsyncPromiseExecutor": 1
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "const availableFamilies = await fontResolver.listFonts({ provider: family.provider });",
+          "file": "packages/astro/src/assets/fonts/core/compute-font-families-assets.ts",
+          "line": 78,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "parser.add(await fs.readFile(new URL(`./${fileName}`, dirPath), 'utf-8'));",
+          "file": "packages/astro/src/content/mutable-data-store.ts",
+          "line": 620,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const dimensions = await imageMetadata(accumulatedChunks, url);",
+          "file": "packages/astro/src/assets/utils/remoteProbe.ts",
+          "line": 118,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await reader.cancel(); // stop stream as we have size now",
+          "file": "packages/astro/src/assets/utils/remoteProbe.ts",
+          "line": 121,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await writeChunk();",
+          "file": "packages/astro/src/content/data-store-writer.ts",
+          "line": 230,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await new Promise((resolve) => setTimeout(resolve, 50 * 2 ** attempt));",
+          "file": "packages/astro/src/assets/utils/node.ts",
+          "line": 92,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await drainPendingSlots();",
+          "file": "packages/astro/src/core/head-propagation/buffer.ts",
+          "line": 66,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "const resolvedId = await this.resolve(c.specifier, id);",
+          "file": "packages/astro/src/core/build/plugins/plugin-analyzer.ts",
+          "line": 68,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "clientStyleHashes.push(await generateCspDigest(style.sheet.content, algorithm));",
+          "file": "packages/astro/src/core/csp/common.ts",
+          "line": 104,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await Promise.all(promises);",
+          "file": "packages/astro/src/core/build/generate.ts",
+          "line": 210,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await generatePathWithPrerenderer(",
+          "file": "packages/astro/src/core/build/generate.ts",
+          "line": 216,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fs.promises.writeFile(fileURL, mutation.code, 'utf-8');",
+          "file": "packages/astro/src/core/build/static-build.ts",
+          "line": 409,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fs.promises.mkdir(path.dirname(fileURLToPath(url)), { recursive: true });",
+          "file": "packages/astro/src/content/types-generator.ts",
+          "line": 513,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fs.promises.writeFile(url, injectedType.content, 'utf-8');",
+          "file": "packages/astro/src/content/types-generator.ts",
+          "line": 514,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "(collectionConfig.schema || (await getContentLayerSchema(collectionConfig, collectionKey)))",
+          "file": "packages/astro/src/content/types-generator.ts",
+          "line": 524,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await generateJSONSchema(fs, collectionConfig, collectionKey, collectionSchemasDir, logger);",
+          "file": "packages/astro/src/content/types-generator.ts",
+          "line": 526,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "image = await getImage({ ...decodedImagePath, src: imported });",
+          "file": "packages/astro/src/content/runtime.ts",
+          "line": 504,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 3,
+          "code": "if (await rule.match(element)) {",
+          "file": "packages/astro/src/runtime/client/dev-toolbar/apps/audit/index.ts",
+          "line": 161,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "updatedConfig = await validateConfigRefined(updatedConfig);",
+          "file": "packages/astro/src/integrations/hooks.ts",
+          "line": 353,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await loadLoggerDestination(updatedConfig.logger!, updatedConfig.root),",
+          "file": "packages/astro/src/integrations/hooks.ts",
+          "line": 356,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await environment.runner.import(importedModule.id);",
+          "file": "packages/astro/src/vite-plugin-astro-server/vite.ts",
+          "line": 89,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "const paths = await this.#getPathsForRoute(currentRoute);",
+          "file": "packages/astro/src/runtime/prerender/static-paths.ts",
+          "line": 77,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await ensureModulesLoaded(env, imp, seen);",
+          "file": "packages/astro/src/vite-plugin-css/index.ts",
+          "line": 93,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const slot = async () =>",
+          "file": "packages/astro/src/core/render/slots.ts",
+          "line": 72,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "res.on('close', async () =>",
+          "file": "packages/astro/src/vite-plugin-astro-server/response.ts",
+          "line": 15,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "createRunnableEnvironment({ loader, settings, getDebugInfo: async () => debugInfo }),",
+          "file": "packages/astro/src/vite-plugin-app/createAstroServerApp.ts",
+          "line": 60,
+          "oxlint": 1,
+          "rule": "useAwait"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "require-await": 103,
+        "no-await-in-loop": 85,
+        "no-async-promise-executor": 1
+      },
+      "files": 635
+    },
+    "excalidraw": {
+      "biome": {
+        "useAwait": 21,
+        "noFloatingPromises": 32,
+        "noAsyncPromiseExecutor": 9,
+        "noMisusedPromises": 6,
+        "noAwaitInLoops": 6
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "const base64 = await subsetWoff2GlyphsByCodepoints(",
+          "file": "packages/excalidraw/fonts/ExcalidrawFontFace.ts",
+          "line": 67,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const imageBlob = await item.getType(type);",
+          "file": "packages/excalidraw/clipboard.ts",
+          "line": 304,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "require-await": 21,
+        "no-async-promise-executor": 9,
+        "no-await-in-loop": 8
+      },
+      "files": 444
+    },
+    "next.js": {
+      "biome": {
+        "useAwait": 214,
+        "noFloatingPromises": 88,
+        "noAwaitInLoops": 143,
+        "noMisusedPromises": 50,
+        "noAsyncPromiseExecutor": 4,
+        "noTypeOnlyImportAttributes": 6
+      },
+      "biomeLineMismatches": [
+        {
+          "biome": 0,
+          "code": "browserResponse = await fetchPromise",
+          "file": "packages/next/src/client/components/router-reducer/fetch-server-response.ts",
+          "line": 838,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "rawBindings = await importedRawBindings.default!()",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 1358,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "isUpgradeableISRFallback = await fetchAndWritePerSegmentPrefetchResponse(",
+          "file": "packages/next/src/client/components/segment-cache/cache.ts",
+          "line": 2483,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const filePathEntries = await Promise.all(",
+          "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+          "line": 462,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const resolvedGlobalErrorPath = await resolver(",
+          "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+          "line": 483,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const resolvedGlobalNotFoundPath = await resolver(",
+          "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+          "line": 493,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "} = await createSubtreePropsFromSegmentPath(",
+          "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+          "line": 689,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "const result = await callGenerateStaticParams(",
+          "file": "packages/next/src/build/static-paths/app.ts",
+          "line": 780,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const result = await callGenerateStaticParams(",
+          "file": "packages/next/src/build/static-paths/app.ts",
+          "line": 803,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await pushAsset(",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 1187,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const meta = await getAppRouteMeta(route, isAppPage)",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 1568,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "!(await cachedFilePathCheck(dataFilePath))",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 1711,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await handleAppMeta(route, initialOutput, meta, {",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 1756,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await handleAppMeta(dynamicRoute, initialOutput, meta, {",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 2001,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "if (await cachedFilePathCheck(currentFilePath)) {",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 2143,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "for (const item of await fs.readdir(contextDir)) {",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 2601,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await pushAsset(",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 2611,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await pushAsset(",
+          "file": "packages/next/src/build/adapter/build-complete.ts",
+          "line": 2620,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await worker.end()",
+          "file": "packages/next/src/build/webpack-build/index.ts",
+          "line": 81,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": ";[baseRes, baseIsEsm] = await baseResolve(dir, request)",
+          "file": "packages/next/src/build/handle-externals.ts",
+          "line": 112,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await job.emitFile(",
+          "file": "packages/next/src/build/webpack/plugins/next-trace-entrypoints-plugin.ts",
+          "line": 732,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await job.realpath(curPackageJsonPath),",
+          "file": "packages/next/src/build/webpack/plugins/next-trace-entrypoints-plugin.ts",
+          "line": 733,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fs.copyFile(filePath, outputPath)",
+          "file": "packages/next/src/build/index.ts",
+          "line": 906,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await deleteNotFoundPagesRouterFiles(localePage, page)",
+          "file": "packages/next/src/build/index.ts",
+          "line": 4359,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await deleteNotFoundPagesRouterFiles(page, page)",
+          "file": "packages/next/src/build/index.ts",
+          "line": 4388,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await cp(",
+          "file": "packages/next/src/cli/next-upgrade.ts",
+          "line": 481,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await prepareUpgradeDocument({",
+          "file": "packages/next/src/cli/next-upgrade.ts",
+          "line": 548,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const fd = await fs.open(filePath, 'r')",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 131,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fd.read(headerBuf, 0, 16, 0)",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 133,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fd.close()",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 134,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const content = await fs.readFile(filePath)",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 142,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const tokenRes = await fetch(uploadUrl, {",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 144,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const tokenBody = (await tokenRes.json()) as {",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 160,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await put(tokenBody.pathname, stream, {",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 184,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await put(tokenBody.pathname, content, {",
+          "file": "packages/next/src/cli/internal/upload-trace.ts",
+          "line": 191,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "for (const item of await fs.readdir(contextDir)) {",
+          "file": "packages/next/src/build/collect-build-traces.ts",
+          "line": 519,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "let code = await procPromise",
+          "file": "packages/next/src/cli/next-info.ts",
+          "line": 241,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const nextId = await fetch('/__nextjs_server_status')",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-toolbar/use-restart-server.ts",
+          "line": 57,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const resolved = await Promise.all(",
+          "file": "packages/next/src/lib/recursive-readdir.ts",
+          "line": 144,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "resolvedMetadata = await mergeMetadata(route, pathname, {",
+          "file": "packages/next/src/lib/metadata/resolve-metadata.ts",
+          "line": 540,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await fs.promises.writeFile(file, newContent)",
+          "file": "packages/next/src/lib/inline-static-env.ts",
+          "line": 117,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await resolveOpenGraph(",
+          "file": "packages/next/src/lib/metadata/metadata-resolution-primitives.ts",
+          "line": 272,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "newResolvedMetadata[key] = await resolveItunes(",
+          "file": "packages/next/src/lib/metadata/metadata-resolution-primitives.ts",
+          "line": 336,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "newResolvedMetadata.pagination = await resolvePagination(",
+          "file": "packages/next/src/lib/metadata/metadata-resolution-primitives.ts",
+          "line": 345,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const pathnameForUrl = await pathname",
+          "file": "packages/next/src/lib/metadata/resolvers/resolve-basics.ts",
+          "line": 91,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await extractBinary(outputDirectory, pkgName, tarFileName)",
+          "file": "packages/next/src/lib/download-swc.ts",
+          "line": 125,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await new Promise((r) => setTimeout(r, delay + jitter))",
+          "file": "packages/next/src/export/worker.ts",
+          "line": 552,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "await access(",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 153,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "if ((await stat(file)).isFile()) {",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 158,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const models = await modelCatalogs.get(harness!.name)!",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 372,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const modelId = await chooseOption(",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 386,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const selectedEffort = await chooseOption(",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 420,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const permissionChoice = await chooseOption(",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 467,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const choice = await chooseWorktree()",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 483,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await stopDiscovery()",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 497,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "process.exitCode = await launchHarness(",
+          "file": "packages/next/src/lib/upgrade/harness.ts",
+          "line": 500,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await atLeastOneTask()",
+          "file": "packages/next/src/server/stream-utils/node-web-streams-helper.ts",
+          "line": 693,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await propagateServerField(",
+          "file": "packages/next/src/server/lib/router-utils/setup-dev-bundler.ts",
+          "line": 670,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await propagateServerField(",
+          "file": "packages/next/src/server/lib/router-utils/setup-dev-bundler.ts",
+          "line": 682,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const staticInfo = await getPageStaticInfo({",
+          "file": "packages/next/src/server/lib/router-utils/setup-dev-bundler.ts",
+          "line": 720,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const handled = await this.runEdgeFunction({",
+          "file": "packages/next/src/server/next-server.ts",
+          "line": 1230,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await this.instrumentationOnRequestError(",
+          "file": "packages/next/src/server/next-server.ts",
+          "line": 1242,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "found = await fileExists(fsPath, FileType.File)",
+          "file": "packages/next/src/server/lib/router-utils/filesystem.ts",
+          "line": 925,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await ensureFn({",
+          "file": "packages/next/src/server/lib/router-utils/filesystem.ts",
+          "line": 953,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await atLeastOneTask()",
+          "file": "packages/next/src/server/app-render/stream-ops.node.ts",
+          "line": 168,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const narrowedResult = await validateOrRetryAtDepth(",
+          "file": "packages/next/src/server/app-render/app-render.tsx",
+          "line": 7783,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 2,
+          "code": "!(await yieldToForegroundRequest(validationAbortSignal))",
+          "file": "packages/next/src/server/app-render/app-render.tsx",
+          "line": 8046,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const result = await validateAtDepth(depth, currentGroupDepth)",
+          "file": "packages/next/src/server/app-render/app-render.tsx",
+          "line": 8051,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await handleTrace(entry, browserPrefix, ctx, distDir)",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 554,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await handleDir(entry, browserPrefix, ctx, distDir)",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 558,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await handleDefaultConsole(",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 580,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const { terminal, fileLog } = await prepareConsoleErrorArgs(",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 597,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const mapped = await getSourceMappedStackFrames(",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 617,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const { terminal } = await prepareConsoleErrorArgs(",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 665,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const consoleArgs = await prepareConsoleArgs(entry, ctx, distDir)",
+          "file": "packages/next/src/server/dev/browser-logs/receive-logs.ts",
+          "line": 676,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await loadClientReferenceManifestForPage(distDir, page, 1)",
+          "file": "packages/next/src/server/dev/hot-reloader-turbopack.ts",
+          "line": 2366,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const metadata = await sharedCacheResult.entry.pendingCompletion",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3136,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await lazyRefreshTags",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3257,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "entry = await cacheHandler.get(cacheHandlerKey, implicitTags)",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3269,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "entry = await cacheHandler.get(cacheHandlerKey, implicitTags)",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3288,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": ": await lazyExpiration",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3303,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await makeDevtoolsIOAwarePromise(",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3404,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "await makeDevtoolsIOAwarePromise(",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3466,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": "const result = await generateCacheEntry(",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 3550,
+          "oxlint": 1,
+          "rule": "noAwaitInLoops"
+        },
+        {
+          "biome": 0,
+          "code": ">(false, async (callback) =>",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 758,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return subscribe(true, async (callback) =>",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 792,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (callback) =>",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 801,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return subscribe<UpdateMessage>(true, async (callback) =>",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 833,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (callback) =>",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 883,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (callback) =>",
+          "file": "packages/next/src/build/swc/index.ts",
+          "line": 895,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (filename: string, content: string) =>",
+          "file": "packages/next/src/build/analysis/parse-module.ts",
+          "line": 12,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async () =>",
+          "file": "packages/next/src/build/index.ts",
+          "line": 2387,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "responseGenerator: async () =>",
+          "file": "packages/next/src/build/templates/app-page-runtime.ts",
+          "line": 1326,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "const invokeRouteModule = async (span?: Span) =>",
+          "file": "packages/next/src/build/templates/pages-api.ts",
+          "line": 93,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "createLazyResult(async () => exportForResult(promise))",
+          "file": "packages/next/src/lib/metadata/resolve-metadata.ts",
+          "line": 435,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async () => undefined",
+          "file": "packages/next/src/experimental/testmode/playwright/report.ts",
+          "line": 109,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "batches.map(async (batch) =>",
+          "file": "packages/next/src/export/index.ts",
+          "line": 726,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (rootTree: LoaderTree): Promise<boolean> =>",
+          "file": "packages/next/src/server/app-render/instant-validation/instant-config.tsx",
+          "line": 228,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (rootTree: LoaderTree): Promise<boolean> =>",
+          "file": "packages/next/src/server/app-render/instant-validation/instant-config.tsx",
+          "line": 233,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "createLazyResult(async () => cacheHandler.getExpiration(tags))",
+          "file": "packages/next/src/server/lib/implicit-tags.ts",
+          "line": 74,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "createLazyResult(async () => cacheHandler.refreshTags())",
+          "file": "packages/next/src/server/async-storage/work-store.ts",
+          "line": 182,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return getTracer().trace(AppRenderSpan.renderToReadableStream, async () =>",
+          "file": "packages/next/src/server/stream-utils/node-web-streams-helper.ts",
+          "line": 357,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (f) => f()",
+          "file": "packages/next/src/server/lib/async-callback-set.ts",
+          "line": 17,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async (span) =>",
+          "file": "packages/next/src/server/base-server.ts",
+          "line": 906,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return getTracer().trace(BaseServerSpan.run, async () =>",
+          "file": "packages/next/src/server/base-server.ts",
+          "line": 2108,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return getTracer().trace(BaseServerSpan.pipe, async () =>",
+          "file": "packages/next/src/server/base-server.ts",
+          "line": 2130,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return getTracer().trace(BaseServerSpan.render, async () =>",
+          "file": "packages/next/src/server/base-server.ts",
+          "line": 2226,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async () =>",
+          "file": "packages/next/src/server/base-server.ts",
+          "line": 2342,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "postProcessHTML = async (html: string) => html",
+          "file": "packages/next/src/server/render.tsx",
+          "line": 128,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async () =>",
+          "file": "packages/next/src/server/render.tsx",
+          "line": 1105,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async () => renderDocument()",
+          "file": "packages/next/src/server/render.tsx",
+          "line": 1456,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "async () => renderToString(document)",
+          "file": "packages/next/src/server/render.tsx",
+          "line": 1565,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return getTracer().trace(NextNodeServerSpan.renderHTML, async () =>",
+          "file": "packages/next/src/server/next-server.ts",
+          "line": 658,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "success = await workAsyncStorage.exit(async () =>",
+          "file": "packages/next/src/server/app-render/app-render.tsx",
+          "line": 8379,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "return versionInfoSpan.traceAsyncFn<VersionInfo>(async () =>",
+          "file": "packages/next/src/server/dev/hot-reloader-webpack.ts",
+          "line": 867,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "[name]: async (_: UseCachePageInnerProps, ...otherInnerArgs: unknown[]) =>",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 2200,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 0,
+          "code": "[name]: async (",
+          "file": "packages/next/src/server/use-cache/use-cache-wrapper.ts",
+          "line": 2238,
+          "oxlint": 1,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 1,
+          "code": "async *[Symbol.asyncIterator]() {",
+          "file": "packages/next/src/server/app-render/collect-segment-data.tsx",
+          "line": 1440,
+          "oxlint": 0,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 1,
+          "code": "async *[Symbol.asyncIterator]() {",
+          "file": "packages/next/src/server/dev/use-cache-probe-worker.ts",
+          "line": 140,
+          "oxlint": 0,
+          "rule": "useAwait"
+        },
+        {
+          "biome": 1,
+          "code": "const generator = async function* generate() {",
+          "file": "packages/next/src/server/web/web-on-close.ts",
+          "line": 9,
+          "oxlint": 0,
+          "rule": "useAwait"
+        }
+      ],
+      "biomeParseErrorFiles": [],
+      "eslint": {
+        "require-await": 244,
+        "no-await-in-loop": 211,
+        "no-async-promise-executor": 4
+      },
+      "files": 1416
+    },
+    "vscode": {
+      "biome": {
+        "parse": 37,
+        "noFloatingPromises": 5,
+        "noAwaitInLoops": 2,
+        "useAwait": 11
+      },
+      "biomeLineMismatches": [],
+      "biomeParseErrorFiles": [
+        "src/vs/editor/common/commands/shiftCommand.ts",
+        "src/vs/editor/common/languages/languageConfigurationRegistry.ts",
+        "src/vs/editor/common/model/textModel.ts",
+        "src/vs/editor/common/model/tokens/tokenizationTextModelPart.ts",
+        "src/vs/editor/common/model/tokens/treeSitter/treeSitterSyntaxTokenBackend.ts",
+        "src/vs/editor/common/model/tokens/treeSitter/treeSitterTokenizationImpl.ts",
+        "src/vs/editor/common/model/tokens/treeSitter/treeSitterTree.ts",
+        "src/vs/editor/common/services/inMemoryTextModelService.ts",
+        "src/vs/editor/common/services/languageFeatureDebounce.ts",
+        "src/vs/editor/common/services/markerDecorationsService.ts",
+        "src/vs/editor/common/services/modelService.ts",
+        "src/vs/editor/common/services/modelUndoRedoParticipant.ts",
+        "src/vs/editor/common/services/semanticTokensProviderStyling.ts",
+        "src/vs/editor/common/services/semanticTokensStylingService.ts",
+        "src/vs/editor/common/services/textResourceConfigurationService.ts"
+      ],
+      "eslint": {
+        "no-await-in-loop": 2,
+        "require-await": 11
+      },
+      "files": 226
+    },
+    "ultracite": {
+      "biome": {
+        "unused": 1
+      },
+      "biomeLineMismatches": [],
+      "biomeParseErrorFiles": [],
+      "eslint": {},
+      "files": 53
+    }
+  }
+}

@@ -1,4 +1,6 @@
-// Builds the two subject files from the extracted examples.
+// Builds the two subject files from the extracted examples. This is the cognitive-complexity
+// topic's code; a topic module with a `prepareSubjects` hook (scripts/topics.cjs) builds its
+// own, e.g. RESEARCH_TOPIC=floating-promises writes subjects/floating-promises/.
 //
 // The extracted example headers contain experiment metadata (the example's role and the
 // complexity scores we measured). That would prime the agent, so it is removed; the source
@@ -18,6 +20,7 @@ const {
 } = require("node:fs");
 const { createHash } = require("node:crypto");
 const { join, relative, resolve } = require("node:path");
+const { loadTopic } = require("./topics.cjs");
 
 const HERE = resolve(__dirname, "..");
 const EXAMPLES = resolve(HERE, "../corpus/examples");
@@ -63,20 +66,33 @@ function cleanHeader(text) {
 
 const sha256 = (s) => createHash("sha256").update(s).digest("hex");
 
-const manifest = [];
-for (const s of SUBJECTS) {
-  const dir = join(HERE, "subjects", s.id);
-  mkdirSync(dir, { recursive: true });
-  const original = readFileSync(join(EXAMPLES, s.example), "utf8");
-  const cleaned = cleanHeader(original);
-  const dest = join(dir, s.basename);
-  if (existsSync(dest)) chmodSync(dest, 0o644);
-  writeFileSync(dest, cleaned);
-  chmodSync(dest, 0o444);
-  manifest.push({ ...s, path: relative(HERE, dest), sha256: sha256(cleaned) });
+function prepareCognitiveComplexity() {
+  const manifest = [];
+  for (const s of SUBJECTS) {
+    const dir = join(HERE, "subjects", s.id);
+    mkdirSync(dir, { recursive: true });
+    const original = readFileSync(join(EXAMPLES, s.example), "utf8");
+    const cleaned = cleanHeader(original);
+    const dest = join(dir, s.basename);
+    if (existsSync(dest)) chmodSync(dest, 0o644);
+    writeFileSync(dest, cleaned);
+    chmodSync(dest, 0o444);
+    manifest.push({
+      ...s,
+      path: relative(HERE, dest),
+      sha256: sha256(cleaned),
+    });
+  }
+  writeFileSync(
+    join(HERE, "subjects", "subjects.json"),
+    `${JSON.stringify(manifest, null, 2)}\n`
+  );
+  return manifest;
 }
-writeFileSync(
-  join(HERE, "subjects", "subjects.json"),
-  `${JSON.stringify(manifest, null, 2)}\n`
-);
+
+// Other topics build their subjects with their own hook (RESEARCH_TOPIC, scripts/topics.cjs).
+const topic = loadTopic();
+const manifest = topic.prepareSubjects
+  ? topic.prepareSubjects()
+  : prepareCognitiveComplexity();
 console.log(JSON.stringify(manifest, null, 2));

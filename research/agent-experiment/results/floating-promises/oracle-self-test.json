@@ -1,0 +1,194 @@
+{
+  "cases": [
+    {
+      "name": "fp1 original (itself)",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "caller hangs, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp2 original (itself)",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": false,
+      "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp1-original-restyled.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "caller hangs, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp1-void.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "caller hangs, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp1-catch-empty.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "caller hangs, error swallowed",
+      "pass": true
+    },
+    {
+      "name": "fp1-catch-log.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "caller hangs, error only logged",
+      "pass": true
+    },
+    {
+      "name": "fp1-propagate.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "rejects caller, slot still leaks",
+      "pass": true
+    },
+    {
+      "name": "fp1-fixed.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "fixed: rejects caller, frees the slot",
+      "pass": true
+    },
+    {
+      "name": "fp1-reference-retry-helper.ts",
+      "subject": "fp1",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": null,
+      "verdict": "fixed: rejects caller, frees the slot",
+      "pass": true
+    },
+    {
+      "name": "fp1-broken-no-limit.ts",
+      "subject": "fp1",
+      "happyPathOk": false,
+      "strictOk": false,
+      "awaitWaitsForDestinations": null,
+      "verdict": "fixed: rejects caller, frees the slot",
+      "pass": true
+    },
+    {
+      "name": "fp1-broken-queued-value.ts",
+      "subject": "fp1",
+      "happyPathOk": false,
+      "strictOk": false,
+      "awaitWaitsForDestinations": null,
+      "verdict": "caller hangs, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp2-original-restyled.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": false,
+      "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp2-void.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": false,
+      "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "pass": true
+    },
+    {
+      "name": "fp2-catch-empty.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": false,
+      "verdict": "caller can't see the failure, error swallowed",
+      "pass": true
+    },
+    {
+      "name": "fp2-catch-log.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": false,
+      "verdict": "caller can't see the failure, error only logged",
+      "pass": true
+    },
+    {
+      "name": "fp2-promise-all.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": true,
+      "verdict": "fixed: caller sees the failure, every destination called",
+      "pass": true
+    },
+    {
+      "name": "fp2-async-await-all.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": true,
+      "verdict": "fixed: caller sees the failure, every destination called",
+      "pass": true
+    },
+    {
+      "name": "fp2-allsettled.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": true,
+      "verdict": "fixed: caller sees the failure, every destination called",
+      "pass": true
+    },
+    {
+      "name": "fp2-reference-async-each.ts",
+      "subject": "fp2",
+      "happyPathOk": true,
+      "strictOk": true,
+      "awaitWaitsForDestinations": true,
+      "verdict": "fixed: caller sees the failure, every destination called",
+      "pass": true
+    },
+    {
+      "name": "fp2-sequential-await.ts",
+      "subject": "fp2",
+      "happyPathOk": false,
+      "strictOk": false,
+      "awaitWaitsForDestinations": true,
+      "verdict": "caller sees the failure, later destinations skipped",
+      "pass": true
+    },
+    {
+      "name": "fp2-broken-first-only.ts",
+      "subject": "fp2",
+      "happyPathOk": false,
+      "strictOk": false,
+      "awaitWaitsForDestinations": false,
+      "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "pass": true
+    }
+  ],
+  "failures": 0
+}

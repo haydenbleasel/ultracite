@@ -1,11 +1,14 @@
 // One experiment run: fresh run dir, real ESLint diagnostic, Ultracite's own prompt and
 // diagnostics-file functions, then the agent CLI exactly as Ultracite invokes it.
 //
-// Usage: node scripts/run-one.mjs <s1|s2> <claude|codex> <n>
+// Usage: node scripts/run-one.mjs <subject> <claude|codex> <n>
+//   (RESEARCH_TOPIC picks the topic; its module in scripts/topics/ supplies the subjects, the
+//   lint and any extra files, such as a tsconfig.json, the subject needs next to it)
 //
 // The agent runs in <RUN_ROOT>/<id>/, a temp directory outside the repo (see lib.cjs), so it
 // can't load the repo's CLAUDE.md or AGENTS.md from a parent directory. During the run that
-// directory holds only the subject file and the diagnostics JSON. Logs stream to
+// directory holds only the subject file, the topic's run files and the diagnostics JSON. Logs
+// stream to
 // <RUN_ROOT>/.staging/<id>/ so the agent never sees its own logs, the prompt file or the
 // pristine copy. Afterwards everything except the edited subject (kept as after.ts) is copied,
 // with paths and session ids redacted, into results/<topic>/runs/<id>/.
@@ -19,6 +22,7 @@ import {
   mkdirSync,
   readdirSync,
   readFileSync,
+  realpathSync,
   renameSync,
   statSync,
   writeFileSync,
@@ -29,27 +33,25 @@ import { basename, dirname, join, relative } from "node:path";
 
 const require = createRequire(import.meta.url);
 const lib = require("./lib.cjs");
+const topic = require("./topics.cjs").loadTopic();
 
 const ULTRACITE = lib.REPO_ROOT;
 const AGENT_FIX = join(ULTRACITE, "packages/cli/src/agent-fix");
 const TIMEOUT_MS = 10 * 60 * 1000;
 const KILL_GRACE_MS = 10 * 1000; // Ultracite's KILL_GRACE_MS (run-agent.ts)
 
-const [subjectId, agent, n] = process.argv.slice(2);
-if (
-  !["s1", "s2"].includes(subjectId) ||
-  !["claude", "codex"].includes(agent) ||
-  !n
-) {
-  console.error("usage: node scripts/run-one.mjs <s1|s2> <claude|codex> <n>");
-  process.exit(2);
-}
-
 const HERE = lib.HERE;
 const subjects = JSON.parse(
-  readFileSync(join(HERE, "subjects/subjects.json"), "utf8")
+  readFileSync(join(topic.subjectsDir, "subjects.json"), "utf8")
 );
+const [subjectId, agent, n] = process.argv.slice(2);
 const subject = subjects.find((s) => s.id === subjectId);
+if (!subject || !["claude", "codex"].includes(agent) || !n) {
+  console.error(
+    `usage: node scripts/run-one.mjs <${subjects.map((s) => s.id).join("|")}> <claude|codex> <n>`
+  );
+  process.exit(2);
+}
 const runId = `${subjectId}-${agent}-${n}`;
 const runDir = join(lib.RUN_ROOT, runId);
 const stagingDir = join(lib.RUN_ROOT, ".staging", runId);
@@ -110,6 +112,12 @@ const topLevel = (dir) => (existsSync(dir) ? readdirSync(dir).sort() : []);
 
 // ---------------------------------------------------------------- transcripts
 
+// The CLIs record the run dir's real path. On macOS, $TMPDIR (/var/folders/...) resolves
+// through /private, so a session log can name either form.
+const runDirForms = () => [
+  ...new Set([runDir, existsSync(runDir) ? realpathSync(runDir) : runDir]),
+];
+
 function findClaudeTranscript(startMs) {
   const root = join(homedir(), ".claude/projects");
   const hits = [];
@@ -124,7 +132,9 @@ function findClaudeTranscript(startMs) {
       if (!f.endsWith(".jsonl")) continue;
       const p = join(pd, f);
       if (statSync(p).mtimeMs < startMs) continue;
-      if (readFileSync(p, "utf8").includes(`"cwd":"${runDir}"`)) hits.push(p);
+      const text = readFileSync(p, "utf8");
+      if (runDirForms().some((d) => text.includes(`"cwd":"${d}"`)))
+        hits.push(p);
     }
   }
   return hits;
@@ -152,7 +162,8 @@ function findCodexTranscript(startMs) {
       if (!f.endsWith(".jsonl") || statSync(p).mtimeMs < startMs) continue;
       const first = readFileSync(p, "utf8").split("\n", 1)[0];
       try {
-        if (JSON.parse(first)?.payload?.cwd === runDir) hits.push(p);
+        if (runDirForms().includes(JSON.parse(first)?.payload?.cwd))
+          hits.push(p);
       } catch {
         // not a session file
       }
@@ -173,12 +184,23 @@ mkdirSync(stagingDir, { recursive: true });
 const file = join(runDir, subject.basename);
 copyFileSync(lib.subjectPath(subject), file);
 chmodSync(file, 0o644);
+// Files the subject needs next to it, e.g. the tsconfig.json a type-aware lint reads.
+const runFiles = topic.runFiles(subject);
+for (const extra of runFiles) {
+  copyFileSync(extra.from, join(runDir, extra.name));
+  chmodSync(join(runDir, extra.name), 0o644);
+}
+const runFileNames = new Set(runFiles.map((f) => f.name));
 
-// The diagnostic the agent sees: sonarjs/cognitive-complexity at 15, nothing else.
-const lintResult = await lib.lintCognitive(file);
+// The diagnostics the agent sees: the topic's lint (cognitive-complexity: sonarjs at 15,
+// nothing else).
+const lintResult = await topic.lint(file);
 const diagnostics = lib.toUltraciteDiagnostics(lintResult);
-if (diagnostics.length !== 1)
-  throw new Error(`expected exactly 1 diagnostic, got ${diagnostics.length}`);
+const expected = topic.expectedDiagnostics(subject);
+if (diagnostics.length !== expected)
+  throw new Error(
+    `expected exactly ${expected} diagnostic(s), got ${diagnostics.length}`
+  );
 // Ultracite groups by diagnostic.file and passes that path to both functions.
 const group = { file: diagnostics[0].file, issues: diagnostics };
 const jsonPath = writeDiagnosticsFile(runDir, group.file, group.issues);
@@ -222,9 +244,17 @@ const locked = [];
 const lockAll = () => {
   const targets = [
     ...LOCK_NAMES.map((n) => join(HERE, n)),
+    // Topic-specific files outside this folder, e.g. corpus notes that name the expected fix.
+    ...topic.lockPaths,
     ...readdirSync(lib.RUN_ROOT)
       .filter((d) => d !== runId && d !== ".staging")
       .map((d) => join(lib.RUN_ROOT, d)),
+    // Other runs' staging dirs (their locks.json). This run's own stays open: its logs stream
+    // there. Added after the floating-promises runs, where one agent globbed the run root and
+    // saw these file names (it read none of them).
+    ...readdirSync(join(lib.RUN_ROOT, ".staging"))
+      .filter((d) => d !== runId)
+      .map((d) => join(lib.RUN_ROOT, ".staging", d)),
   ].filter((p) => existsSync(p));
   for (const p of targets) {
     locked.push({ path: p, mode: statSync(p).mode & 0o7777 });
@@ -252,7 +282,11 @@ for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
   });
 }
 lockAll();
-const lockedPaths = locked.map((l) => relative(HERE, l.path));
+const lockedPaths = locked.map((l) =>
+  l.path.startsWith(`${lib.RUN_ROOT}/`)
+    ? `<run-root>/${relative(lib.RUN_ROOT, l.path)}`
+    : relative(HERE, l.path)
+);
 
 const startedAt = new Date();
 const startMs = Date.now();
@@ -306,11 +340,15 @@ const postSubjects = snapshot(join(HERE, "subjects"));
 const postRoot = topLevel(HERE);
 
 // Lint or tool config anywhere from the run dir up to the run root, which an agent could
-// have written to silence the rule rather than fix it.
+// have written to silence the rule rather than fix it. A run file the harness put there (a
+// subject's tsconfig.json) counts only if the agent changed it.
+const unchangedRunFile = (dir, name) =>
+  dir === runDir && runFileNames.has(name) && preRun[name] === postRun[name];
 const configFilesNearRun = [];
 for (let d = runDir; d.startsWith(lib.RUN_ROOT); d = dirname(d)) {
   for (const name of readdirSync(d)) {
-    if (lib.CONFIG_FILE.test(name)) configFilesNearRun.push(join(d, name));
+    if (lib.CONFIG_FILE.test(name) && !unchangedRunFile(d, name))
+      configFilesNearRun.push(join(d, name));
   }
   if (d === lib.RUN_ROOT) break;
 }
@@ -364,6 +402,7 @@ if (transcripts[0])
 
 const meta = {
   runId,
+  topic: lib.TOPIC,
   subject: subjectId,
   agent,
   command: adapter.command,
@@ -378,6 +417,7 @@ const meta = {
   isolation: { lockedDuringRun: lockedPaths },
   promptSha256: sha256(prompt),
   diagnosticsFile: basename(jsonPath),
+  runFiles: [...runFileNames],
   ultracite: {
     head: execFileSync("git", ["rev-parse", "HEAD"], {
       cwd: ULTRACITE,
@@ -399,7 +439,12 @@ const meta = {
       JSON.stringify(preSubjects) === JSON.stringify(postSubjects),
     configFilesNearRun,
   },
-  transcriptSource: transcripts,
+  // The session log's folder name encodes this machine's temp path, so only its kind is kept.
+  transcriptSource: transcripts.map((p) =>
+    p.startsWith(join(homedir(), ".codex"))
+      ? "~/.codex/sessions/<session-log>.jsonl"
+      : "~/.claude/projects/<session-log>.jsonl"
+  ),
 };
 
 // Copy the run into the repo. Text artifacts are redacted (paths, home dir, session ids);
@@ -408,7 +453,7 @@ const meta = {
 mkdirSync(resultDir, { recursive: true });
 const TEXT = /\.(txt|json|ts|patch|jsonl)$/;
 for (const name of readdirSync(runDir)) {
-  if (name === subject.basename) continue;
+  if (name === subject.basename || unchangedRunFile(runDir, name)) continue;
   const from = join(runDir, name);
   const to = join(resultDir, name);
   const keepRaw = ["transcript.jsonl", "stdout.txt", "stderr.txt"].includes(

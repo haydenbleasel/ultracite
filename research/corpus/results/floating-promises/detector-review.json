@@ -1,0 +1,38 @@
+{
+  "note": "Hand review of every site the syntactic detector flagged as a floating promise that typescript-eslint's no-floating-promises did not flag (after the detector learned to treat `.catch(h).finally(f)` as handled, as typescript-eslint does; that change removed 6 detector-only sites, all `.catch(h).finally(f)` or `.then(a).catch(h).finally(f)` chains). 'real' means the statement leaves a promise (or thenable) with no rejection handler, unawaited and unreturned, at runtime. 'whyTypedMissed' is checked against the file's imports and the repo's tsconfig.",
+  "reviewer": "lead agent (Claude), 2026-10-10, reading each file at the pinned SHA",
+  "verdicts": {
+    "vite:packages/vite/src/node/server/bundledDev.ts:321": {
+      "real": true,
+      "whyTypedMissed": "`DevEngine` is imported from 'rolldown/experimental', which doesn't resolve here, so `ensureLatestBuildOutput()` is typed as an error type, not a Promise."
+    },
+    "vite:packages/vite/src/node/server/bundledDev.ts:332": {
+      "real": true,
+      "whyTypedMissed": "Same as line 321: `DevEngine` comes from the unresolved 'rolldown/experimental'."
+    },
+    "excalidraw:packages/excalidraw/subset/woff2/woff2-loader.ts:39": {
+      "real": true,
+      "note": "A thenable from emscripten bindings, not a Promise; the code comment says its `then` isn't Promises/A+ compliant. A failure in it would not reach the surrounding `new Promise`'s reject.",
+      "whyTypedMissed": "`bindings` is the default export of a `// @ts-nocheck` emscripten file (excluded from the corpus as vendored), so its call result isn't a Promise type. With types, no-floating-promises would still ignore a non-Promise thenable unless `checkThenables` is set."
+    },
+    "next.js:packages/next/src/lib/worker.ts:238": {
+      "real": true,
+      "whyTypedMissed": "`JestWorker` is imported from 'next/dist/compiled/jest-worker', a self-import of the published package that doesn't resolve in the sparse clone."
+    },
+    "next.js:packages/next/src/server/app-render/collect-segment-data.tsx:986": {
+      "real": true,
+      "note": "The detector matched the name to the async arrow at line 256, but at line 986 the name is a parameter typed `() => void` (line 867). At runtime it is that async arrow (passed in at line 284), so the promise does float. The type annotation erases it: no-floating-promises can't see it, and passing an async function to a `() => void` slot is what no-misused-promises (checksVoidReturn) exists to catch.",
+      "whyTypedMissed": "The parameter's declared type is `() => void`."
+    },
+    "next.js:packages/next/src/server/dev/dev-validation-worker.ts:147": {
+      "real": true,
+      "note": "`Atomics.waitAsync(...).value` resolves to 'ok' or 'timed-out' and doesn't reject, so this one is harmless in practice.",
+      "whyTypedMissed": "next.js's tsconfig targets ES2018 with no `lib`, so `Atomics.waitAsync` (ES2024) isn't declared and the call is an error type."
+    },
+    "next.js:packages/next/src/server/lib/clone-response.ts:9": {
+      "real": true,
+      "note": "`.then(noop)` adds a fulfilment handler only; a rejected `cancel()` would be unhandled. Inside a FinalizationRegistry callback.",
+      "whyTypedMissed": "`WeakRef` (ES2021) isn't in the ES2018 default lib, so `weakRef.deref()` and the stream are error types."
+    }
+  }
+}

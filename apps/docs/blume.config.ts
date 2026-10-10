@@ -227,6 +227,8 @@ export default defineConfig({
       titles: {
         "/research/cognitive-complexity":
           "Cognitive complexity: the rule that measures the reader",
+        "/research/floating-promises":
+          "Floating promises: the errors with nowhere to go",
         "/research/type-escape-hatches":
           "Type escape hatches: when the compiler becomes the target",
       },

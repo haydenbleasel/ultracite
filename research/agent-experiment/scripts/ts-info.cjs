@@ -7,17 +7,21 @@ const { tools } = require("./lib.cjs");
 
 const ts = require(join(tools.dirs.typescript, "lib/typescript.js"));
 
-function tsInfo(file) {
-  const program = ts.createProgram([file], {
-    strict: true,
-    noEmit: true,
-    skipLibCheck: true,
-    target: ts.ScriptTarget.ES2022,
-    module: ts.ModuleKind.ESNext,
-    moduleResolution: ts.ModuleResolutionKind.Bundler,
-    lib: ["lib.es2023.d.ts", "lib.dom.d.ts"],
-    types: [],
-  });
+// `options` replaces the default compiler options, e.g. with a subject's own tsconfig.
+function tsInfo(file, options = null) {
+  const program = ts.createProgram(
+    [file],
+    options ?? {
+      strict: true,
+      noEmit: true,
+      skipLibCheck: true,
+      target: ts.ScriptTarget.ES2022,
+      module: ts.ModuleKind.ESNext,
+      moduleResolution: ts.ModuleResolutionKind.Bundler,
+      lib: ["lib.es2023.d.ts", "lib.dom.d.ts"],
+      types: [],
+    }
+  );
   const checker = program.getTypeChecker();
   const source = program.getSourceFile(file);
   const diagnostics = [

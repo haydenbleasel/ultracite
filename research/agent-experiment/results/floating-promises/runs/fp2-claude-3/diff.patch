@@ -1,0 +1,26 @@
+--- a/compose.ts
++++ b/compose.ts
+@@ -96,19 +96,11 @@
+ 				logger.write(chunk);
+ 			}
+ 		},
+-		flush() {
+-			for (const logger of destinations) {
+-				if (logger.flush) {
+-					logger.flush();
+-				}
+-			}
++		async flush() {
++			await Promise.all(destinations.map((logger) => logger.flush?.()));
+ 		},
+-		close() {
+-			for (const logger of destinations) {
+-				if (logger.close) {
+-					logger.close();
+-				}
+-			}
++		async close() {
++			await Promise.all(destinations.map((logger) => logger.close?.()));
+ 		},
+ 	};
+ }

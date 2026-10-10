@@ -1,0 +1,19 @@
+--- a/compose.ts
++++ b/compose.ts
+@@ -99,14 +99,14 @@
+ 		flush() {
+ 			for (const logger of destinations) {
+ 				if (logger.flush) {
+-					logger.flush();
++					void logger.flush();
+ 				}
+ 			}
+ 		},
+ 		close() {
+ 			for (const logger of destinations) {
+ 				if (logger.close) {
+-					logger.close();
++					void logger.close();
+ 				}
+ 			}
+ 		},

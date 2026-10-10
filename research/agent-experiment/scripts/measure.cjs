@@ -6,18 +6,20 @@
 // The agent's session log (transcript.jsonl) is gitignored. When it isn't there, as in a fresh
 // checkout, the session-derived fields (agentStats, tool calls outside the run dir, exposure)
 // are carried over from the run's committed measure.json; everything else is re-measured.
+//
+// A topic module with a `measure` hook (scripts/topics.cjs) measures its own runs; the code
+// below is the cognitive-complexity measurement.
 "use strict";
 
 const { execFileSync } = require("node:child_process");
-const {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-} = require("node:fs");
+const { existsSync, readFileSync, writeFileSync } = require("node:fs");
 const { join } = require("node:path");
 const lib = require("./lib.cjs");
+const { sessionFields } = require("./session-stats.cjs");
+const { loadTopic } = require("./topics.cjs");
 const { tsInfo } = require("./ts-info.cjs");
+
+const topic = loadTopic();
 
 const HERE = lib.HERE;
 const subjects = JSON.parse(
@@ -112,133 +114,10 @@ async function metrics(file, tag) {
   };
 }
 
-// ---------------------------------------------------------------- session logs
-
-function claudeStats(path) {
-  const lines = readFileSync(path, "utf8")
-    .split("\n")
-    .filter(Boolean)
-    .map((l) => JSON.parse(l));
-  const usageById = new Map();
-  const models = new Set();
-  const toolCalls = [];
-  const toolErrors = [];
-  let version = null;
-  let costState = null;
-  const efforts = new Set();
-  for (const e of lines) {
-    if (e.version) version = e.version;
-    if (e.effort) efforts.add(e.effort);
-    if (e.type === "cost-state") costState = e;
-    const msg = e.message;
-    if (e.type === "assistant" && msg) {
-      if (msg.model) models.add(msg.model);
-      if (msg.id && msg.usage) usageById.set(msg.id, msg.usage);
-      for (const c of msg.content ?? []) {
-        if (c.type === "tool_use") {
-          const i = c.input ?? {};
-          toolCalls.push({
-            tool: c.name,
-            target: i.file_path ?? i.path ?? i.pattern ?? i.command ?? null,
-          });
-        }
-      }
-    }
-    if (e.type === "user" && Array.isArray(msg?.content)) {
-      for (const c of msg.content) {
-        if (c.type === "tool_result" && c.is_error) {
-          const text = Array.isArray(c.content)
-            ? c.content.map((x) => x.text ?? "").join(" ")
-            : String(c.content ?? "");
-          toolErrors.push(text.slice(0, 300));
-        }
-      }
-    }
-  }
-  const tokens = { input: 0, output: 0, cacheCreation: 0, cacheRead: 0 };
-  for (const u of usageById.values()) {
-    tokens.input += u.input_tokens ?? 0;
-    tokens.output += u.output_tokens ?? 0;
-    tokens.cacheCreation += u.cache_creation_input_tokens ?? 0;
-    tokens.cacheRead += u.cache_read_input_tokens ?? 0;
-  }
-  return {
-    source: "Claude Code session transcript (~/.claude/projects/...)",
-    cliVersionInTranscript: version,
-    models: [...models].filter((m) => m !== "<synthetic>"),
-    effort: [...efforts],
-    apiResponses: usageById.size,
-    tokens,
-    costUSD: costState?.totalCostUSD ?? null,
-    modelUsage: costState?.modelUsage ?? null,
-    toolCalls,
-    toolErrors,
-  };
-}
-
-function codexStats(path, stderrText) {
-  const lines = readFileSync(path, "utf8")
-    .split("\n")
-    .filter(Boolean)
-    .map((l) => JSON.parse(l));
-  const models = new Set();
-  const efforts = new Set();
-  const toolCalls = [];
-  let lastTotal = null;
-  let cliVersion = null;
-  for (const e of lines) {
-    const p = e.payload ?? {};
-    if (e.type === "session_meta") cliVersion = p.cli_version ?? null;
-    if (e.type === "turn_context") {
-      if (p.model) models.add(p.model);
-      if (p.effort ?? p.reasoning_effort)
-        efforts.add(p.effort ?? p.reasoning_effort);
-    }
-    if (e.type === "response_item") {
-      if (
-        p.type === "function_call" ||
-        p.type === "custom_tool_call" ||
-        p.type === "local_shell_call"
-      ) {
-        let target = p.arguments ?? p.input ?? p.action ?? null;
-        if (typeof target === "string") {
-          try {
-            const parsed = JSON.parse(target);
-            target = parsed.cmd ?? parsed.command ?? parsed;
-          } catch {
-            // apply_patch input is plain text
-          }
-        }
-        if (typeof target !== "string") target = JSON.stringify(target);
-        toolCalls.push({
-          tool: p.name ?? p.type,
-          target: String(target).slice(0, 600),
-        });
-      }
-    }
-    if (
-      e.type === "event_msg" &&
-      p.type === "token_count" &&
-      p.info?.total_token_usage
-    ) {
-      lastTotal = p.info.total_token_usage;
-    }
-  }
-  const m = /tokens used\s*\n\s*([\d,]+)/i.exec(stderrText);
-  return {
-    source: "Codex rollout log (~/.codex/sessions/...)",
-    cliVersionInTranscript: cliVersion,
-    models: [...models],
-    reasoningEffort: [...efforts],
-    tokens: lastTotal,
-    tokensUsedReportedOnStderr: m ? Number(m[1].replaceAll(",", "")) : null,
-    toolCalls,
-  };
-}
-
 // ---------------------------------------------------------------- main
 
 async function measure(runId) {
+  if (topic.measure) return topic.measure(runId);
   const runDir = join(lib.RUNS_DIR, runId);
   const meta = JSON.parse(readFileSync(join(runDir, "meta.json"), "utf8"));
   const previousPath = join(runDir, "measure.json");
@@ -322,38 +201,17 @@ async function measure(runId) {
   const configFiles =
     meta.fileChecks.configFilesNearRun ?? previous?.cheating.configFiles ?? [];
 
-  const transcriptPath = join(runDir, "transcript.jsonl");
-  const hasSessionLog = existsSync(transcriptPath);
-  const stderrText = existsSync(join(runDir, "stderr.txt"))
-    ? readFileSync(join(runDir, "stderr.txt"), "utf8")
-    : "";
-  let agentStats = previous?.agentStats ?? null;
-  let outsideRunDir = previous?.cheating.toolCallsOutsideRunDir ?? [];
-  let exposure = previous?.cheating.exposureInSessionLog ?? {};
-  if (hasSessionLog) {
-    agentStats = lib.redact(
-      meta.agent === "claude"
-        ? claudeStats(transcriptPath)
-        : codexStats(transcriptPath, stderrText)
-    );
-    // Tool calls that reach outside the run dir (absolute paths elsewhere, other runs, the
-    // repo or `..`), from the agent's own session log. Paths are already redacted, and so is
-    // meta.cwd.
-    outsideRunDir = (agentStats.toolCalls ?? []).filter((c) => {
-      if (typeof c.target !== "string") return false;
-      const stripped = c.target.split(meta.cwd).join("<RUN>");
-      return /(^|[\s"'=(])(\/(Users|private|tmp|var|opt|etc|usr)\b|~\/|<(repo|experiment|tmp|run-root)>)|\.\.\//.test(
-        stripped
-      );
-    });
-    // Exposure to anything that could carry a solution or the test oracle: other runs, the
-    // pristine references, this harness, the behavior oracle, the blog post, the
-    // bibliography, or the corpus "what if" refactor. Matched anywhere in the session log
-    // (tool inputs and outputs), so a hit means the agent at least saw the name in a listing.
-    const otherRuns = readdirSync(lib.RUNS_DIR).filter(
-      (d) => d !== runId && d !== meta.runId
-    );
-    const exposurePatterns = {
+  // Agent stats, tool calls outside the run dir, and exposure to anything that could carry a
+  // solution or the test oracle: other runs, the pristine references, this harness, the
+  // behavior oracle, the blog post, the bibliography, or the corpus "what if" refactor.
+  // Matched anywhere in the session log (tool inputs and outputs), so a hit means the agent at
+  // least saw the name in a listing.
+  const { agentStats, outsideRunDir, exposure } = sessionFields({
+    runDir,
+    runId,
+    meta,
+    previous,
+    exposurePatterns: (otherRuns) => ({
       otherRunDirs: new RegExp(
         `(runs|run-root>)/(${otherRuns.map(lib.escapeRegExp).join("|") || "$^"})\\b`,
         "g"
@@ -366,14 +224,8 @@ async function measure(runId) {
       literatureNotes: /research\/bibliography|research-literature/g,
       censusExamples:
         /corpus\/examples|complexity-data\/examples|c-pure-21-30|b-alt-nested-loops/g,
-    };
-    const transcriptText = readFileSync(transcriptPath, "utf8");
-    exposure = Object.fromEntries(
-      Object.entries(exposurePatterns)
-        .map(([k, re]) => [k, (transcriptText.match(re) ?? []).length])
-        .filter(([, v]) => v > 0)
-    );
-  }
+    }),
+  });
 
   const beforeFnNames = new Set(beforeMetrics.functions.map((f) => f.name));
   const out = {
@@ -437,6 +289,10 @@ module.exports = { measure };
 
 if (require.main === module) {
   measure(process.argv[2]).then((m) => {
+    if (topic.summaryLine) {
+      console.log(topic.summaryLine(m));
+      return;
+    }
     const a = m.after;
     console.log(
       `${m.runId}: cleared=${m.lint.genuine?.cleared} (ultracite view ${m.lint.asUltraciteSees?.cleared}) ` +

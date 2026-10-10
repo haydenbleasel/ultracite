@@ -1,0 +1,690 @@
+{
+  "generated": "2026-10-10",
+  "method": "Searched each upstream repo with gh search commits/prs/issues for: missing await, add missing await, forgot await, floating promise, no-floating-promises, unhandled rejection, unhandled promise, not awaited, forEach async, misused promise (see `searched`). Each candidate fix diff was read; only merged fixes of a behavioural bug caused by an un-awaited or unhandled promise were kept. flaggedBy is a judgment from the pre-fix code and the callee types at the parent commit, for typescript-eslint default options. Gathered by a Claude subagent; the lead agent then re-fetched each PR or commit and confirmed it is merged (commits: an ancestor of main) and that its patch contains the quoted change (`verifiedDiff`).",
+  "searched": [
+    {
+      "repo": "colinhacks/zod",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "await (commits, prs)",
+        "Promise (commits)",
+        "async (commits, prs)",
+        "unhandled promise rejection (issues)",
+        "async refine promise (issues)"
+      ],
+      "candidatesRead": 3
+    },
+    {
+      "repo": "honojs/hono",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "await (commits)",
+        "forEach (prs)"
+      ],
+      "candidatesRead": 6
+    },
+    {
+      "repo": "trpc/trpc",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "await (commits, prs)",
+        "unhandled (prs)",
+        "unhandled promise rejection (issues)"
+      ],
+      "candidatesRead": 5
+    },
+    {
+      "repo": "vitejs/vite",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "forEach (prs)"
+      ],
+      "candidatesRead": 7
+    },
+    {
+      "repo": "withastro/astro",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "forEach (prs)"
+      ],
+      "candidatesRead": 5
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "await (commits, prs)",
+        "promise (prs)",
+        "async (prs)",
+        "Uncaught in promise (issues)"
+      ],
+      "candidatesRead": 3
+    },
+    {
+      "repo": "vercel/next.js",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "forEach (prs)",
+        "no-floating-promises (prs)"
+      ],
+      "candidatesRead": 10
+    },
+    {
+      "repo": "microsoft/vscode",
+      "terms": [
+        "missing await (prs, commits)",
+        "unhandled rejection (prs)",
+        "floating promise (prs)",
+        "forEach async (commits)",
+        "no-floating-promises (prs)"
+      ],
+      "candidatesRead": 11
+    }
+  ],
+  "confirmed": [
+    {
+      "repo": "vitejs/vite",
+      "fixUrl": "https://github.com/vitejs/vite/pull/18886",
+      "issueUrl": "https://github.com/vitejs/vite/issues/18882",
+      "date": "2024-12-05",
+      "title": "fix: handle postcss load unhandled rejections",
+      "description": "A broken postcss.config.js made `vite build` emit two extra unhandled rejections on top of the real error, because a cache-warming call and a cache-update `.then` were left floating.",
+      "buggyCode": "resolvePostcssConfig(config)\n...\nresult.then((resolved) => { postcssConfigCache.set(config, resolved) })",
+      "fixedCode": "resolvePostcssConfig(config).catch(() => { /* will be handled later */ })\n...\nresult.then((resolved) => {...}, () => { /* keep as rejected promise */ })",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "resolvePostcssConfig is `async` and called as a bare statement, and `result.then(onFulfilled)` with no rejection handler is also a floating Promise statement.",
+      "id": "vitejs/vite#18886",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "vitejs/vite",
+      "fixUrl": "https://github.com/vitejs/vite/pull/22188",
+      "issueUrl": null,
+      "date": "2026-04-17",
+      "title": "fix(dev): handle errors in `watchChange` hook",
+      "description": "The chokidar 'add'/'unlink' listeners dropped the promise from async onFileAddUnlink, so a plugin's rejecting watchChange hook became an unhandled rejection that can kill the dev server (the new regression test reproduces it).",
+      "buggyCode": "watcher.on('change', async (file) => { ... })\nwatcher.on('add', (file) => {\n  onFileAddUnlink(file, false)\n})",
+      "fixedCode": "watcher.on('change', (file) => {\n  onFileChange(file).catch((e) => server.config.logger.error(e))\n})\nwatcher.on('add', (file) => {\n  onFileAddUnlink(file, false).catch((e) => server.config.logger.error(e))\n})",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "yes",
+        "other": null
+      },
+      "flaggedReason": "`onFileAddUnlink(file, false)` is a bare Promise statement in a block-bodied listener (no-floating-promises), and the `async` 'change' listener goes into EventEmitter.on's void-returning slot (no-misused-promises checksVoidReturn). Note: vite had both rules set to 'off' (see vite #22278).",
+      "id": "vitejs/vite#22188",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "withastro/astro",
+      "fixUrl": "https://github.com/withastro/astro/pull/8773",
+      "issueUrl": null,
+      "date": "2023-10-07",
+      "title": "fix(assets): add the missing `await` to getHTMLAttributes",
+      "description": "If an image service's getHTMLAttributes returned a Promise, getImage() stored the Promise as `attributes`, so the custom HTML attributes never rendered (StackBlitz repro linked in the PR).",
+      "buggyCode": "attributes: service.getHTMLAttributes !== undefined\n  ? service.getHTMLAttributes(validatedOptions, imageConfig)\n  : {},",
+      "fixedCode": "? await service.getHTMLAttributes(validatedOptions, imageConfig)",
+      "pattern": "missing-await",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The promise is assigned into an object-literal property, not used as a statement, and a Promise is structurally assignable to Record<string, any>, so neither tsc nor either rule objects.",
+      "id": "withastro/astro#8773",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "withastro/astro",
+      "fixUrl": "https://github.com/withastro/astro/pull/17405",
+      "issueUrl": null,
+      "date": "2026-07-17",
+      "title": "fix(prefetch): swallow fetch-fallback rejection to avoid unhandled 'Load failed' on WebKit",
+      "description": "Safari always takes prefetch's fetch() fallback; on flaky connections the un-awaited, uncaught fetch rejected with `TypeError: Load failed` and reached sites' window.onunhandledrejection error monitoring.",
+      "buggyCode": "fetch(url, { priority: 'low', headers });",
+      "fixedCode": "fetch(url, { priority: 'low', headers }).catch(() => {});",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "`fetch()` returns Promise<Response> and is used as a bare statement. The PR says it 'slipped past no-floating-promises', but astro had the rule 'off' and only turned it on for tests in May 2026 (#16687); whether src/prefetch was covered by July is unverified.",
+      "id": "withastro/astro#17405",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "withastro/astro",
+      "fixUrl": "https://github.com/withastro/astro/pull/17971",
+      "issueUrl": "https://github.com/withastro/astro/issues/17966",
+      "date": "2026-09-15",
+      "title": "Stop aborted request bodies from logging duplicate unhandled rejections in @astrojs/node",
+      "description": "In @astrojs/node standalone mode, a client that disconnected mid-body made the async app handler reject with ECONNRESET. Nothing awaited that handler, so the error was logged as an unhandled rejection, often twice.",
+      "buggyCode": "staticHandler(req, res, () => appHandler(req, res));\n// serve-static.ts: (req, res, ssr: () => unknown) => { ... ssr(); }",
+      "fixedCode": "return async (req, res, next, locals) => {\n  try { ... await app.render(...) ... } catch (err) { /* ignore aborted, else log + 500 */ }\n}",
+      "pattern": "async-callback-void-slot",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The promise-returning handler goes through a parameter typed `() => unknown` and is invoked as `ssr();`. checksVoidReturn only fires on void-returning slots, and no-floating-promises sees an `unknown` call result, not a Promise.",
+      "id": "withastro/astro#17971",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "withastro/astro",
+      "fixUrl": "https://github.com/withastro/astro/pull/16624",
+      "issueUrl": null,
+      "date": "2026-05-06",
+      "title": "fix(test): ensure removeDir is properly awaited",
+      "description": "core-image tests flaked in CI because cache-directory cleanup (async removeDir) raced the following fixture.build(). Two failing CI runs are linked in the PR.",
+      "buggyCode": "removeDir(new URL('./fixtures/core-image-ssg/node_modules/.astro', import.meta.url));\nawait fixture.build();",
+      "fixedCode": "await removeDir(new URL('./fixtures/core-image-ssg/node_modules/.astro', import.meta.url));",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "removeDir is `export async function removeDir(dir)`, called as a bare statement. Astro enabled no-floating-promises for tests one week later (#16687).",
+      "id": "withastro/astro#16624",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "vercel/next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/85418",
+      "issueUrl": "https://github.com/vercel/next.js/issues/85416",
+      "date": "2025-11-14",
+      "title": "fix(nodejs-middleware): await for body cloning to be properly finalized",
+      "description": "With Node.js middleware, the server action could run before the request body finished cloning, so large payloads failed with `SyntaxError: Unexpected end of JSON input`.",
+      "buggyCode": "} finally {\n  if (hasRequestBody) {\n    requestData.body.finalize()\n  }\n}",
+      "fixedCode": "await requestData.body.finalize()",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": "no-unsafe-call / no-unsafe-member-access (the receiver is `any`)"
+      },
+      "flaggedReason": "finalize() is declared `Promise<void>`, but requestData.body is built from `getRequestMeta(...,'clonableBody') as any`, so the call's type is `any` and no-floating-promises stays silent. The `as any` hid the bug from the rule.",
+      "id": "vercel/next.js#85418",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "vercel/next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/72530",
+      "issueUrl": "https://github.com/vercel/next.js/issues/72522",
+      "date": "2024-11-18",
+      "title": "Fix unhandled rejection in proxy-request",
+      "description": "Rewrites to an unreachable host logged `unhandledRejection: getaddrinfo ENOTFOUND`, because the `.finally()` chain creates a new promise that re-rejects and nobody observed it.",
+      "buggyCode": "detached.promise.finally(() => {\n  proxy.close()\n})\n...\nreturn detached.promise",
+      "fixedCode": "return detached.promise.finally(() => {\n  proxy.close()\n})",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "A `.finally()` statement counts as handled only if its receiver is handled, and here the receiver is the bare Promise<boolean> `detached.promise`, so the statement is reported as floating.",
+      "id": "vercel/next.js#72530",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "vercel/next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/95985",
+      "issueUrl": null,
+      "date": "2026-07-21",
+      "title": "Prevent unhandled rejections when a \"use cache\" cache handler errors",
+      "description": "When a custom 'use cache' handler's get() threw, the deferred promise kept in the dedup maps had no consumer, so one error was logged up to four times, mostly through unhandledRejection handlers.",
+      "buggyCode": "reject(error: unknown): void {\n  this.deferred.reject(error)\n  this.cleanup()\n}",
+      "fixedCode": "this.deferred.promise.catch(ignoreReject)\nthis.deferred.reject(error)",
+      "pattern": "unhandled-rejection",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The promise is created and stored in a Map. It is never an expression statement, so no lint rule can see that nothing consumes it.",
+      "id": "vercel/next.js#95985",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "vercel/next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/74196",
+      "issueUrl": "https://github.com/vercel/next.js/issues/73992",
+      "date": "2024-12-20",
+      "title": "Fix accessing headers in progressively enhanced form actions",
+      "description": "The PR states that progressively enhanced form actions 'did not work at all before in the Edge runtime due to a missing await of decodeFormState': formState held a Promise. The linked issue is about headers, and this missing await was a secondary fix in the same PR.",
+      "buggyCode": "formState = decodeFormState(\n  actionReturnedState,\n  formData,\n  serverModuleMap\n)",
+      "fixedCode": "formState = await decodeFormState(\n  actionReturnedState,\n  formData,\n  serverModuleMap\n)",
+      "pattern": "missing-await",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The promise is assigned to a variable rather than discarded, so no-floating-promises does not apply. Nothing flags a Promise stored in a loosely typed variable.",
+      "id": "vercel/next.js#74196",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "vercel/next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/27676",
+      "issueUrl": null,
+      "date": "2021-08-02",
+      "title": "Add missing await for API request",
+      "description": "In the cms-datocms example, getAllPostsWithSlug never awaited fetchAPI, so `data?.allPosts` was always undefined and SSG generated no paths.",
+      "buggyCode": "const data = fetchAPI(`{ allPosts { slug } }`)",
+      "fixedCode": "const data = await fetchAPI(`{ allPosts { slug } }`)",
+      "pattern": "missing-await",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The file is plain JS (examples/cms-datocms/lib/api.js) and the promise is assigned to a const. In TS, tsc itself would reject `data?.allPosts` on a Promise.",
+      "id": "vercel/next.js#27676",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/195004",
+      "issueUrl": null,
+      "date": "2023-10-06",
+      "title": "Fix missing awaits in comment thread widget",
+      "description": "Ctrl+Enter stopped submitting comments: the action runner fired updateCommentThreadTemplate (Promise<void>) and then ran the submit action without waiting for it.",
+      "buggyCode": "actionRunner: () => {\n  ...\n  this.commentService.updateCommentThreadTemplate(this.owner, this._commentThread.commentThreadHandle, range);\n}\n...\nthis._actionRunDelegate?.();\naction.run({ ... })",
+      "fixedCode": "actionRunner: async () => {\n  ...\n  await this.commentService.updateCommentThreadTemplate(...);\n}\n...\nawait this._actionRunDelegate?.();\nawait action.run({ ... })",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": "await-thenable on the fix"
+      },
+      "flaggedReason": "ICommentService.updateCommentThreadTemplate returns Promise<void> and was a bare statement. IAction.run returns `unknown`, so that call would not be flagged. The fix itself passes an `async` function into a slot typed `(() => void) | null` and awaits a `void`-typed call, so no-misused-promises and await-thenable would flag the fixed code: the types still claim void.",
+      "id": "microsoft/vscode#195004",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/commit/c78a872340eb0e128d4fbb511598189c63cb8110",
+      "issueUrl": null,
+      "date": "2018-04-19",
+      "title": "Fix issue with entering review mode on load by adding missing await",
+      "description": "In the git-extended (GitHub PR) extension, connectGitHub used forEach(async ...), so githubRepositories was assigned an empty array before any remote resolved, and review mode failed to enter on load.",
+      "buggyCode": "this.remotes.forEach(async remote => {\n  let octo = await credentialStore.getOctokit(remote);\n  if (octo) { ret.push(new GitHubRepository(remote, octo)); }\n});\nthis.githubRepositories = ret;",
+      "fixedCode": "await Promise.all(this.remotes.map(async remote => { ... }));\nthis.githubRepositories = ret;",
+      "pattern": "async-forEach",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "yes",
+        "other": null
+      },
+      "flaggedReason": "This is the canonical checksVoidReturn case: an async arrow passed to Array.prototype.forEach, whose callback type returns void. forEach itself returns void, so no-floating-promises has nothing to flag.",
+      "id": "microsoft/vscode#c78a872",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/112222",
+      "issueUrl": null,
+      "date": "2020-12-11",
+      "title": "add missing await for git.clone and git.cloneRecursive command",
+      "description": "Because cloneRepository was not awaited, the `git.clone` / `git.cloneRecursive` commands resolved immediately, so callers of executeCommand('git.clone') could not wait for the clone or see its errors.",
+      "buggyCode": "async clone(url?: string, parentPath?: string): Promise<void> {\n  this.cloneRepository(url, parentPath);\n}",
+      "fixedCode": "await this.cloneRepository(url, parentPath);",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": "require-await (the async method had no await)"
+      },
+      "flaggedReason": "cloneRepository is `async ... Promise<void>`, called as a bare statement. The enclosing async method also had no `await`, which require-await would report.",
+      "id": "microsoft/vscode#112222",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/203904",
+      "issueUrl": null,
+      "date": "2024-02-07",
+      "title": "Fix inoperative try/catch",
+      "description": "navigator.keyboard.getLayoutMap() rejects in nested browsing contexts. It was returned from inside try/catch without await, so the catch never ran and the error escaped as uncaught.",
+      "buggyCode": "try {\n  return (navigator as any).keyboard.getLayoutMap().then((e: any) => { ... });\n} catch { ... }",
+      "fixedCode": "return await (navigator as any).keyboard.getLayoutMap().then((e: any) => { ... });",
+      "pattern": "missing-await",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": "return-await (in-try-catch) would apply, but only on a typed Promise"
+      },
+      "flaggedReason": "The promise is returned, not floating, so no-floating-promises is silent. return-await's in-try-catch check targets exactly this bug but needs a thenable type, and `navigator as any` makes it `any`, so in practice nothing fires.",
+      "id": "microsoft/vscode#203904",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/323154",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/323149",
+      "date": "2026-07-07",
+      "title": "fix: handle failed terminal quick fix model request to avoid unhandled rejection (fixes #323149)",
+      "description": "When the Copilot terminal quick-fix model request failed, the `.then()` with no rejection handler produced an unhandled rejection in telemetry, and `r(picks)` never ran, so the quick pick stayed on 'Generating...' forever.",
+      "buggyCode": "new Promise(r => {\n  instantiationService.createInstance(TerminalQuickFixGenerator).generateTerminalQuickFix(commandMatchResult, CancellationToken.None).then(fixes => {\n    ...\n    r(picks);\n  });\n});",
+      "fixedCode": ".then(fixes => { ...; r(picks); }, err => {\n  ...error(err);\n  r([]);\n});",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "generateTerminalQuickFix is `async ... Promise<...>`, and `.then(onFulfilled)` with no onRejected is a bare statement inside the executor's block body. The neighbouring `picksPromise.then(...)` statement would be flagged too.",
+      "id": "microsoft/vscode#323154",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/322114",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/322110",
+      "date": "2026-06-19",
+      "title": "fix: prevent unhandled rejection of language model result promise (fixes #322110)",
+      "description": "sendChatRequest returns {stream, result} and rejects both on error. Consumers' `for await` over the stream threw before they reached `await response.result`, leaving result's rejection unobserved: about 1.78M unhandled ChatQuotaExceeded hits across about 105K users.",
+      "buggyCode": "const defer = new DeferredPromise<unknown>();\n... return { result: defer.p, stream: ... }",
+      "fixedCode": "const defer = new DeferredPromise<unknown>();\ndefer.p.catch(() => { });",
+      "pattern": "unhandled-rejection",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The promise is returned inside an object and only skipped on an error path in consumer code. It is never a discarded expression statement.",
+      "id": "microsoft/vscode#322114",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/319625",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/319622",
+      "date": "2026-06-03",
+      "title": "fix: prevent unhandled promise rejection from CopilotCLIQuotaExceededError (fixes #319622)",
+      "description": "A serialization chain (`previousRequest = previousRequest.then(() => handled)`) kept a rejected promise with no handler, so a quota error the caller had already handled was still reported as an unhandled rejection (944 hits / 555 users on one version).",
+      "buggyCode": "this.previousRequest = this.previousRequest.then(() => handled);\nreturn handled;",
+      "fixedCode": "this.previousRequest = this.previousRequest.then(() => handled).catch(() => { /* prevent unhandled rejection on the serialisation chain */ });",
+      "pattern": "unhandled-rejection",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The derived promise is assigned to a field, and no-floating-promises does not report assignment expressions, so the rejecting chain is invisible to it.",
+      "id": "microsoft/vscode#319625",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "microsoft/vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/commit/27c636ad3c7693c5dc6e4ada15313e87576e67e6",
+      "issueUrl": null,
+      "date": "2019-06-04",
+      "title": "Fix missing await in problemCollector",
+      "description": "tryBegin was made async that day (c5410560cf, 'Problem matcher file location auto detection'). The Promise in `if (this.tryBegin(line) || ...)` is always truthy, so WatchingProblemCollector.processLine returned early for every line. Caught and fixed the same day; no user report.",
+      "buggyCode": "if (this.tryBegin(line) || this.tryFinish(line)) {\n  return;\n}",
+      "fixedCode": "if (await this.tryBegin(line) || this.tryFinish(line)) {",
+      "pattern": "other",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "yes",
+        "other": null
+      },
+      "flaggedReason": "`private async tryBegin(line): Promise<boolean>` is used as the left operand of `||` in an if test, which is exactly what checksConditionals reports.",
+      "id": "microsoft/vscode#27c636a",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "honojs/hono",
+      "fixUrl": "https://github.com/honojs/hono/pull/5274",
+      "issueUrl": null,
+      "date": "2026-08-23",
+      "title": "fix(utils/stream): do not let abort listeners crash abort()",
+      "description": "StreamingApi.abort() called each `() => void | Promise<void>` subscriber inside forEach. On client disconnect, a rejecting async onAbort listener became an unhandled rejection that crashes Node; the new tests failed before the fix.",
+      "buggyCode": "this.abortSubscribers.forEach((subscriber) => subscriber())",
+      "fixedCode": "per-listener try/catch; a returned thenable gets a no-op `.catch`",
+      "pattern": "async-forEach",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "yes",
+        "other": null
+      },
+      "flaggedReason": "The forEach callback returns `void | Promise<void>`, which has a thenable union member, so checksVoidReturn reports it in forEach's void-returning slot. The promise is the arrow's return value, not a statement, so no-floating-promises is silent.",
+      "id": "honojs/hono#5274",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "honojs/hono",
+      "fixUrl": "https://github.com/honojs/hono/pull/2430",
+      "issueUrl": "https://github.com/honojs/hono/issues/2163",
+      "date": "2024-03-27",
+      "title": "fix(validator): `await` cached contents",
+      "description": "If an earlier middleware had already read the body, validator('json'|'form') received the cached Promise instead of the parsed body.",
+      "buggyCode": "if (c.req.bodyCache.json) {\n  value = c.req.bodyCache.json\n  break\n}",
+      "fixedCode": "value = await c.req.bodyCache.json",
+      "pattern": "missing-await",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The type lied: BodyCache was declared `Partial<{ json: any; formData: FormData; ... }>` although it stored promises, and the value is assigned rather than discarded, so no type-aware rule could see it.",
+      "id": "honojs/hono#2430",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "honojs/hono",
+      "fixUrl": "https://github.com/honojs/hono/pull/3274",
+      "issueUrl": "https://github.com/honojs/hono/issues/3252",
+      "date": "2024-08-15",
+      "title": "fix(jsx): handle async component error explicitly and throw the error in the response",
+      "description": "With several async JSX components, a later component's promise could reject while an earlier one was still being awaited in a loop. No handler was attached yet, so it surfaced as `Uncaught (in promise)` and crashed the server.",
+      "buggyCode": "for (let i = buffer.length - 1; ; i--) {\n  ...\n  let r = await buffer[i]",
+      "fixedCode": "const resolvedBuffer = await Promise.all(buffer)\nfor (let i = resolvedBuffer.length - 1; ; i--) {\n  ...\n  let r = resolvedBuffer[i]",
+      "pattern": "unhandled-rejection",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": "no-await-in-loop"
+      },
+      "flaggedReason": "The promises sit in an array and are awaited one at a time, so neither rule fires. Core ESLint's no-await-in-loop flags the `await buffer[i]`, and its suggested Promise.all is exactly the fix.",
+      "id": "honojs/hono#3274",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "honojs/hono",
+      "fixUrl": "https://github.com/honojs/hono/pull/2074",
+      "issueUrl": null,
+      "date": "2024-01-24",
+      "title": "fix: await generate hook",
+      "description": "toSSG() returned before an async afterGenerateHook finished, making a test fail intermittently (ref #2054); user hooks could still be running after toSSG resolved.",
+      "buggyCode": "options?.afterGenerateHook?.(result)\nreturn result",
+      "fixedCode": "await options?.afterGenerateHook?.(result)",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "AfterGenerateHook is typed `(result) => void | Promise<void>`, and no-floating-promises treats a call whose type has a Promise union member (through the optional chain) as a floating promise.",
+      "id": "honojs/hono#2074",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "colinhacks/zod",
+      "fixUrl": "https://github.com/colinhacks/zod/pull/3457",
+      "issueUrl": null,
+      "date": "2024-05-02",
+      "title": "Fixed freezing async ZodReadonly results",
+      "description": "`.readonly()` schemas returned unfrozen objects from parseAsync(): _parse got back a Promise, `isValid(promise)` was false, and Object.freeze was skipped.",
+      "buggyCode": "const result = this._def.innerType._parse(input);\nif (isValid(result)) {\n  result.value = Object.freeze(result.value);\n}\nreturn result;",
+      "fixedCode": "return isAsync(result)\n  ? result.then((data) => freeze(data))\n  : freeze(result);",
+      "pattern": "missing-await",
+      "flaggedBy": {
+        "no-floating-promises": "no",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "ParseReturnType is a sync|Promise union that is passed to a type guard and then returned. Nothing is discarded, and the guard accepts the union.",
+      "id": "colinhacks/zod#3457",
+      "verifiedDiff": true
+    },
+    {
+      "repo": "trpc/trpc",
+      "fixUrl": "https://github.com/trpc/trpc/pull/1578",
+      "issueUrl": "https://github.com/trpc/trpc/issues/1575",
+      "date": "2022-03-01",
+      "title": "fix WebSockets request parsing",
+      "description": "A WebSocket message with `id: null` made async handleRequest throw. The resulting promise array was discarded, so the rejection was unhandled and crashed the Node process: a remote DoS. Issue #1577 ('Add no-floating-promises... Would've prevented #1575') led trpc to enable the rule (#1671).",
+      "buggyCode": "msgs.map((raw) => parseMessage(raw, transformer)).map(handleRequest);",
+      "fixedCode": "const promises = msgs\n  .map((raw) => parseMessage(raw, transformer))\n  .map(handleRequest);\nawait Promise.all(promises);",
+      "pattern": "floating-call",
+      "flaggedBy": {
+        "no-floating-promises": "yes",
+        "no-misused-promises": "no",
+        "other": null
+      },
+      "flaggedReason": "The statement's type is Promise<void>[] (handleRequest is `async`). Current typescript-eslint reports discarded arrays of promises (floatingPromiseArray). That check was added after this 2022 fix, so the v5-era rule trpc adopted would not have caught this exact line.",
+      "id": "trpc/trpc#1578",
+      "verifiedDiff": true
+    }
+  ],
+  "rejected": [
+    {
+      "url": "https://github.com/vitejs/vite/pull/18713",
+      "reason": "Adds try/catch around an already-awaited runner.import in the full-reload handler (flaky test); not a floating/un-awaited promise fix."
+    },
+    {
+      "url": "https://github.com/vitejs/vite/pull/9507",
+      "reason": "Asset-URL resolution fix; unrelated to promises."
+    },
+    {
+      "url": "https://github.com/vitejs/vite/pull/19143",
+      "reason": "CSS ordering / cache fix; unrelated to promises."
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/75041",
+      "reason": "Memory leak from storing promise.then(...) instead of promise in a Set (identity bug), not a floating promise."
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/70698",
+      "reason": "Generated metadata-image loader read props.params synchronously after params became a Promise; the symptom was a dev sync-access warning, and the code is template-string generated."
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/73088",
+      "reason": "Docs-only change (params typed as Promise in examples)."
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/1099",
+      "reason": "2017 Hapi example: request handler changed to return a promise. Feature/integration change, not a clean missing-await fix."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/115338",
+      "reason": "Real ordering bug (event fired before deletePassword resolved), but the author says it fixes no known issue; found by reading code."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/commit/1268ac8aca309e744f090edfc49b2ab9d9dc2708",
+      "reason": "canMove/canCopy/canDelete results not awaited, so `instanceof Error` validation was silently skipped. Real logic bug, but no reported symptom."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/commit/84abfc2e32eb3a43f01febdf3cf244433f9a88de",
+      "reason": "Missing await on viewsService.openView before setEditable; no documented symptom."
+    },
+    {
+      "url": "https://github.com/trpc/trpc/pull/6547",
+      "reason": "wsLink connectionParams race fixed by restructuring handshake; not a simple missing-await/floating fix in the diff."
+    },
+    {
+      "url": "https://github.com/trpc/trpc/pull/7401",
+      "reason": "Adds clientSubscriptions.delete in an existing .catch; resource cleanup, not an unhandled/floating promise."
+    },
+    {
+      "url": "https://github.com/excalidraw/excalidraw/pull/7649",
+      "reason": "The opposite fix: deliberately passes an un-awaited Promise<Blob> to the File System API to stay within the user-activation window."
+    },
+    {
+      "url": "https://github.com/excalidraw/excalidraw/pull/5101",
+      "reason": "Library import race fixed by queueing; introduces `new Promise(async ...)`; not a floating-promise fix."
+    },
+    {
+      "url": "https://github.com/excalidraw/excalidraw/pull/5205",
+      "reason": "Library load button fix via API change; unrelated."
+    },
+    {
+      "url": "https://github.com/honojs/hono/pull/2471",
+      "reason": "Crash on rapid refresh in streaming JSX; fix wraps ReadableStream start() in try/catch plus onError, entangled with closed-controller enqueue; not a clean single floating-promise diff."
+    },
+    {
+      "url": "https://github.com/honojs/hono/pull/2273",
+      "reason": "SSE writer hang on abort, fixed by cancelling the reader; not a floating promise."
+    },
+    {
+      "url": "https://github.com/colinhacks/zod/commit/2123ac1db00ed41b50730234a74a6bdb4d8eb698",
+      "reason": "Test-only change addressing an uncaught rejection warning, bundled with setErrorMap feature; no product bug."
+    },
+    {
+      "url": "https://github.com/colinhacks/zod/commit/932cc472d2e66430d368a409b8d251909d7d8d21",
+      "reason": "z.function() `this` binding fix; unrelated to awaiting."
+    }
+  ],
+  "lintDrivenCleanups": [
+    {
+      "url": "https://github.com/vitejs/vite/pull/20697",
+      "note": "'fix: add missing awaits', with no reported symptom: server.close()/buildStart in tests, `stopProfiler` before process.exit(1) in cli.ts, scss compiler dispose. The cli.ts case could lose the profile on error exit, but nobody reported it."
+    },
+    {
+      "url": "https://github.com/vitejs/vite/pull/22278",
+      "note": "Enabled some type-checked rules, but kept no-floating-promises, no-misused-promises and require-await 'off' because they 'require a lot of change'. await-thenable was kept off because it 'does not handle `void | Promise<void>` well'."
+    },
+    {
+      "url": "https://github.com/withastro/astro/pull/16687",
+      "note": "Turned on no-floating-promises (ignoreIIFE, allowForKnownSafeCalls for node:test) for tests only, one week after the #16624 removeDir flake. Before this it was 'off', and no-misused-promises stays 'off'."
+    },
+    {
+      "url": "https://github.com/trpc/trpc/pull/1671",
+      "note": "Enabled no-floating-promises in packages (off for examples/tests). Closes issue #1577, which says the rule 'would've prevented #1575' (the WebSocket crash above)."
+    },
+    {
+      "url": "https://github.com/trpc/trpc/pull/3897",
+      "note": "Extended no-floating-promises to examples/**; fixes are `main()` -> `void main()` / `.catch(console.error)`."
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/67689",
+      "note": "Added a type-aware .eslintrc.cli.json with the stated goal of enabling no-floating-promises 'so that we don't need to rely on authors or reviewers catching unintentional missing awaits', but left it 'off' as a TODO. The follow-up WIP PR #67690 to enable it was closed unmerged on 2024-09-25."
+    }
+  ],
+  "notes": [
+    "withastro/astro#17405 says the bug slipped past no-floating-promises \"(enabled in #11089)\". At the pinned SHA, astro/eslint.config.js turns the rule off for packages/**/src/**/*.ts \"until we have the bandwidth to address all the errors\", and prefetch/index.ts is under that glob.",
+    "trpc/trpc#1578 discarded an array of promises; current typescript-eslint reports that (calibration F11). Whether the 2022 version did was not checked."
+  ]
+}

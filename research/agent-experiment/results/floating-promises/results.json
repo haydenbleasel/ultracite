@@ -1,0 +1,5698 @@
+{
+  "generatedAt": "2026-10-10T22:45:04.026Z",
+  "topic": "floating-promises",
+  "tools": {
+    "node": "v24.14.1",
+    "eslint": "10.12.0",
+    "@typescript-eslint/parser": "8.71.0",
+    "typescript": "6.0.3",
+    "eslint-plugin-sonarjs": "4.2.2",
+    "@biomejs/biome": "2.5.15",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "bun": "1.4.2"
+  },
+  "rules": {
+    "agentLint": [
+      "@typescript-eslint/no-floating-promises: \"error\" (default options, as Ultracite's type-aware preset sets it)",
+      "@typescript-eslint/no-misused-promises: \"error\" (default options, as Ultracite's type-aware preset sets it)"
+    ],
+    "typeInformation": "parserOptions.projectService with the subject's own tsconfig.json",
+    "oxlintCrossCheck": [
+      "typescript/no-floating-promises",
+      "typescript/no-misused-promises"
+    ]
+  },
+  "subjects": [
+    {
+      "id": "fp1",
+      "example": "fp1-hono-create-pool.ts",
+      "basename": "concurrent.ts",
+      "exportName": "createPool",
+      "source": "honojs/hono src/utils/concurrent.ts",
+      "corpusId": "fp1-hono-create-pool",
+      "expectedDiagnostics": 1,
+      "tsconfig": "subjects/floating-promises/fp1/tsconfig.json",
+      "sha256": "c4d82ee5057d1baafbfbd95a4dcf20324d1cb274446714890378a00a77a6623c",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/concurrent.ts#L1-L55",
+      "license": "honojs/hono/LICENSE"
+    },
+    {
+      "id": "fp2",
+      "example": "fp2-astro-compose-logger.ts",
+      "basename": "compose.ts",
+      "exportName": "default (compose)",
+      "source": "withastro/astro packages/astro/src/core/logger/impls/compose.ts",
+      "corpusId": "fp2-astro-compose-logger",
+      "expectedDiagnostics": 2,
+      "tsconfig": "subjects/floating-promises/fp2/tsconfig.json",
+      "sha256": "2c94c34f6eb35c4a18dc2f8d721958bf27c70040a7bb1cc3f321ca5b5669e847",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/logger/impls/compose.ts#L3-L26",
+      "license": "withastro/astro/LICENSE"
+    }
+  ],
+  "reference": {
+    "fp1": {
+      "happyPathScenarios": 414,
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null
+    },
+    "fp2": {
+      "happyPathScenarios": 404,
+      "errorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": false,
+        "callerObservesSomeFailures": 0,
+        "scenarios": 6,
+        "unhandledRejections": 7,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "throws synchronously; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed",
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "non-error \"d0.flush#1 failed (not an Error)\""
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "throws synchronously",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": false,
+        "close": false
+      }
+    }
+  },
+  "oracleSelfTest": {
+    "cases": [
+      {
+        "name": "fp1 original (itself)",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "caller hangs, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp2 original (itself)",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": false,
+        "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp1-original-restyled.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "caller hangs, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp1-void.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "caller hangs, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp1-catch-empty.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "caller hangs, error swallowed",
+        "pass": true
+      },
+      {
+        "name": "fp1-catch-log.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "caller hangs, error only logged",
+        "pass": true
+      },
+      {
+        "name": "fp1-propagate.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "rejects caller, slot still leaks",
+        "pass": true
+      },
+      {
+        "name": "fp1-fixed.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "fixed: rejects caller, frees the slot",
+        "pass": true
+      },
+      {
+        "name": "fp1-reference-retry-helper.ts",
+        "subject": "fp1",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": null,
+        "verdict": "fixed: rejects caller, frees the slot",
+        "pass": true
+      },
+      {
+        "name": "fp1-broken-no-limit.ts",
+        "subject": "fp1",
+        "happyPathOk": false,
+        "strictOk": false,
+        "awaitWaitsForDestinations": null,
+        "verdict": "fixed: rejects caller, frees the slot",
+        "pass": true
+      },
+      {
+        "name": "fp1-broken-queued-value.ts",
+        "subject": "fp1",
+        "happyPathOk": false,
+        "strictOk": false,
+        "awaitWaitsForDestinations": null,
+        "verdict": "caller hangs, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp2-original-restyled.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": false,
+        "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp2-void.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": false,
+        "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+        "pass": true
+      },
+      {
+        "name": "fp2-catch-empty.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": false,
+        "verdict": "caller can't see the failure, error swallowed",
+        "pass": true
+      },
+      {
+        "name": "fp2-catch-log.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": false,
+        "verdict": "caller can't see the failure, error only logged",
+        "pass": true
+      },
+      {
+        "name": "fp2-promise-all.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": true,
+        "verdict": "fixed: caller sees the failure, every destination called",
+        "pass": true
+      },
+      {
+        "name": "fp2-async-await-all.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": true,
+        "verdict": "fixed: caller sees the failure, every destination called",
+        "pass": true
+      },
+      {
+        "name": "fp2-allsettled.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": true,
+        "verdict": "fixed: caller sees the failure, every destination called",
+        "pass": true
+      },
+      {
+        "name": "fp2-reference-async-each.ts",
+        "subject": "fp2",
+        "happyPathOk": true,
+        "strictOk": true,
+        "awaitWaitsForDestinations": true,
+        "verdict": "fixed: caller sees the failure, every destination called",
+        "pass": true
+      },
+      {
+        "name": "fp2-sequential-await.ts",
+        "subject": "fp2",
+        "happyPathOk": false,
+        "strictOk": false,
+        "awaitWaitsForDestinations": true,
+        "verdict": "caller sees the failure, later destinations skipped",
+        "pass": true
+      },
+      {
+        "name": "fp2-broken-first-only.ts",
+        "subject": "fp2",
+        "happyPathOk": false,
+        "strictOk": false,
+        "awaitWaitsForDestinations": false,
+        "verdict": "caller can't see the failure, unhandled rejection (original behavior)",
+        "pass": true
+      }
+    ],
+    "failures": 0
+  },
+  "handMadeReferences": {
+    "fp1: forward the rejection to the queued caller and free the slot in finally": {
+      "subject": "fp1",
+      "file": "harness-tests/floating-promises/fp1-reference-retry-helper.ts",
+      "promiseRulesCleared": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "errorVerdict": "fixed: rejects caller, frees the slot",
+      "ultraciteEslintNewRules": {
+        "no-param-reassign": 1,
+        "promise/param-names": 1,
+        "unicorn/name-replacements": 1,
+        "unicorn/prefer-promise-with-resolvers": 1
+      },
+      "ultraciteOxlintNewRules": {
+        "eslint(no-param-reassign)": 1,
+        "promise(param-names)": 1
+      }
+    },
+    "fp2: the agents' fix, async + await Promise.all(map(l => l.flush?.()))": {
+      "subject": "fp2",
+      "file": "harness-tests/floating-promises/fp2-async-await-all.ts",
+      "promiseRulesCleared": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "errorVerdict": "fixed: caller sees the failure, every destination called",
+      "ultraciteEslintNewRules": {
+        "@typescript-eslint/await-thenable": 2,
+        "@typescript-eslint/promise-function-async": 2
+      },
+      "ultraciteOxlintNewRules": {
+        "typescript(await-thenable)": 2,
+        "typescript(promise-function-async)": 2
+      }
+    },
+    "fp2: async + await Promise.all with one async arrow per destination": {
+      "subject": "fp2",
+      "file": "harness-tests/floating-promises/fp2-reference-async-each.ts",
+      "promiseRulesCleared": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "errorVerdict": "fixed: caller sees the failure, every destination called",
+      "ultraciteEslintNewRules": {},
+      "ultraciteOxlintNewRules": {}
+    }
+  },
+  "runs": [
+    {
+      "runId": "fp1-claude-1",
+      "subject": "fp1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 36,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×1 (statement)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 48,
+      "diffLines": {
+        "added": 3,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "cat <run-root>/fp1-claude-1/tsconfig.json; ls <tmp>/ultracite-agent-experiment/ <run-root>"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 12,
+        "output": 2571,
+        "cacheCreation": 29610,
+        "cacheRead": 202912
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.32893040000000007,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Bash",
+        "Bash",
+        "Edit"
+      ],
+      "toolCallCount": 6,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "named and left: says a failed retried run leaves the rejection unhandled and the caller's promise never settles, and that it left this alone because fixing it 'would change behavior'",
+        "note": "Gave the setTimeout callback a block body containing `void run(fn, promise, resolve)`. The returned promise is still dropped, so a queued task that throws still hangs its caller and raises an unhandled rejection."
+      }
+    },
+    {
+      "runId": "fp1-claude-2",
+      "subject": "fp1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 17.5,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×1 (statement)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 48,
+      "diffLines": {
+        "added": 3,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 8,
+        "output": 1338,
+        "cacheCreation": 27649,
+        "cacheRead": 126785
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.273341,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Edit"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "described, not called a bug: says a throwing retry's rejection 'goes unhandled, exactly as before'",
+        "note": "Same edit as fp1-claude-1, byte for byte: block-bodied callback with `void run(...)` as a statement."
+      }
+    },
+    {
+      "runId": "fp1-claude-3",
+      "subject": "fp1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 69.2,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "github/no-then": 1,
+        "promise/prefer-await-to-callbacks": 1,
+        "promise/prefer-await-to-then": 1,
+        "unicorn/prefer-await": 1
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "unicorn/prefer-await",
+          "line": 73,
+          "message": "Prefer `await` over promise chaining with `.catch()`."
+        },
+        {
+          "rule": "github/no-then",
+          "line": 73,
+          "message": "Prefer async/await to Promise.catch()"
+        },
+        {
+          "rule": "promise/prefer-await-to-then",
+          "line": 73,
+          "message": "Prefer await to then()/catch()/finally()."
+        },
+        {
+          "rule": "promise/prefer-await-to-callbacks",
+          "line": 73,
+          "message": "Avoid callbacks. Prefer Async/Await."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "promise(prefer-await-to-callbacks)": 1,
+        "promise(prefer-await-to-then)": 1
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "promise(prefer-await-to-callbacks)",
+          "line": 73,
+          "message": "Prefer `async`/`await` to the callback pattern"
+        },
+        {
+          "rule": "promise(prefer-await-to-then)",
+          "line": 73,
+          "message": "Prefer await to then()/catch()/finally()"
+        }
+      ],
+      "silencingSignals": [
+        ".catch that only rethrows, result dropped"
+      ],
+      "voidAdded": 0,
+      "handlersAdded": [
+        {
+          "line": 73,
+          "method": ".catch",
+          "kind": "rethrows",
+          "floating": true,
+          "text": "run(fn, promise, resolve).catch((error: unknown) => { throw error })"
+        }
+      ],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {
+        "unknown": 1
+      },
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 50,
+      "diffLines": {
+        "added": 5,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "cd <tmp>/ultracite-agent-experiment && ls -la; cat floating-promises/fp1-claude-3/tsconfig.json; ls floating-promises | head -50"
+        },
+        {
+          "tool": "Glob",
+          "target": "<tmp>/ultracite-agent-experiment"
+        },
+        {
+          "tool": "Bash",
+          "target": "which oxlint eslint biome ultracite 2>&1; ls ~/.npm/_npx 2>/dev/null | head"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 22,
+        "output": 6460,
+        "cacheCreation": 33172,
+        "cacheRead": 424826
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.4796291999999999,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Bash",
+        "Bash",
+        "Glob",
+        "Bash",
+        "Bash",
+        "Edit",
+        "Bash",
+        "Bash"
+      ],
+      "toolCallCount": 11,
+      "approach": {
+        "categories": [
+          "rethrowing catch"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "named and left: 'Existing bug, not fixed' (the caller's promise never settles), left because passing `reject` through 'would change behavior'",
+        "note": "Block-bodied callback with `run(...).catch((error: unknown) => { throw error })`. The rule counts any .catch as handling, but the handler rethrows into a promise nobody holds, so it is a no-op: same hang, same unhandled rejection. It said it avoided `void` because it expected Ultracite to ban the void operator."
+      }
+    },
+    {
+      "runId": "fp1-claude-4",
+      "subject": "fp1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 20.4,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×1 (statement)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 48,
+      "diffLines": {
+        "added": 3,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 10,
+        "output": 1617,
+        "cacheCreation": 27990,
+        "cacheRead": 166461
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.2895922,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Bash",
+        "Edit"
+      ],
+      "toolCallCount": 5,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "alluded: says using void keeps 'a failure in fn' behaving 'exactly as before, rather than being silently swallowed', without naming the hang",
+        "note": "Same edit as fp1-claude-1 and -2."
+      }
+    },
+    {
+      "runId": "fp1-codex-1",
+      "subject": "fp1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 22.3,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "no-void": 1
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "no-void",
+          "line": 72,
+          "message": "Expected 'undefined' and instead saw 'void'."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "eslint(no-void)": 1
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "eslint(no-void)",
+          "line": 72,
+          "message": "Unexpected `void` operator"
+        }
+      ],
+      "silencingSignals": [
+        "void ×1 (arrow body)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 46,
+      "diffLines": {
+        "added": 1,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/fp1-codex-1; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/fp1-codex-1/concurrent.ts\\n@@\\n-      setTimeout(() => run(fn, promise, resolve))\\n+      setTimeout(() => void run(fn, promise, resolve))\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"tsc --project tsconfig.json; ls -d ~/GitHub/ultracite/node_modules/eslint ~/GitHub/ultracite/node_modules/typescript-eslint ~/GitHub/ultracite/node_modules/@typescript-eslint/parser /private/tmp/node_modu"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 140619,
+        "cached_input_tokens": 123776,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1025,
+        "reasoning_output_tokens": 242,
+        "total_tokens": 141644
+      },
+      "tokensUsedReportedOnStderr": 17868,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no",
+        "note": "`setTimeout(() => void run(fn, promise, resolve))`: void as the arrow's body. Same hang and unhandled rejection. Ultracite's full ESLint and Oxlint presets flag this form with no-void."
+      }
+    },
+    {
+      "runId": "fp1-codex-2",
+      "subject": "fp1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 20.8,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "no-void": 1
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "no-void",
+          "line": 72,
+          "message": "Expected 'undefined' and instead saw 'void'."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "eslint(no-void)": 1
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "eslint(no-void)",
+          "line": 72,
+          "message": "Unexpected `void` operator"
+        }
+      ],
+      "silencingSignals": [
+        "void ×1 (arrow body)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 46,
+      "diffLines": {
+        "added": 1,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> \\\"$PWD\\\"; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":4000}),\n  tools.exec_command({cmd:\"ls -la && cat t"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 130829,
+        "cached_input_tokens": 115840,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1006,
+        "reasoning_output_tokens": 264,
+        "total_tokens": 131835
+      },
+      "tokensUsedReportedOnStderr": 15995,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no",
+        "note": "Tried a block body with `void` first, then rewrote it to the arrow-body form `() => void run(...)`, identical to fp1-codex-1."
+      }
+    },
+    {
+      "runId": "fp1-codex-3",
+      "subject": "fp1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 27,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×1 (statement)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 48,
+      "diffLines": {
+        "added": 3,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/fp1-codex-3; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/fp1-codex-3/concurrent.ts\\n@@\\n-      setTimeout(() => run(fn, promise, resolve))\\n+      setTimeout(() => {\\n+        void run(fn, promise, resolve)\\n+      })\\n*** End Patch\"));\ntext((await tools.exec_command({cmd:\"ls -a .. && ls -a ../.. && ls /tmp/node_modules/.bin ~/GitHub/ultracite/node_modules/.bin 2>/dev/null\",\"max_output_tokens\":3000})).output);\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help\",\"max_output_tokens\":4500}),\n  tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/tsc --project tsconfig.json --noEmit\",\"max_output_tokens\":2000})\n]); for (let i=0;i<results.length;i++) text({i,...results[i]});\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --type-aware --deny typescript/no-misused-promises --deny typescript/no-floating-promises concurrent.ts\",\"max_output_tokens\":2000}));\n"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 171119,
+        "cached_input_tokens": 153088,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1274,
+        "reasoning_output_tokens": 390,
+        "total_tokens": 172393
+      },
+      "tokensUsedReportedOnStderr": 19305,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 5,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no",
+        "note": "Block-bodied callback with `void run(...)`, the same bytes as Claude's three void runs. It ran tsc and tried oxlint from the Ultracite checkout it found under the home directory (the type-aware run failed for lack of tsgolint)."
+      }
+    },
+    {
+      "runId": "fp1-codex-4",
+      "subject": "fp1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 16.8,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-misused-promises L72"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "no-void": 1
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "no-void",
+          "line": 72,
+          "message": "Expected 'undefined' and instead saw 'void'."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "eslint(no-void)": 1
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "eslint(no-void)",
+          "line": 72,
+          "message": "Unexpected `void` operator"
+        }
+      ],
+      "silencingSignals": [
+        "void ×1 (arrow body)"
+      ],
+      "voidAdded": 1,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "scenarios": 414,
+        "outcomesMatch": 414,
+        "strictTraceMatch": 414,
+        "strictOk": true,
+        "concurrencyViolations": 0,
+        "scenariosWithExtraUnhandledOrLogs": 0,
+        "firstMismatch": null,
+        "firstStrictMismatch": null
+      },
+      "errorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller hangs, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "queuedFailureRejectsCaller": false,
+        "queuedFailureLeavesCallerPending": true,
+        "unqueuedFailureRejectsCaller": true,
+        "unhandledRejections": 4,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "otherTasksAllFulfilled": false,
+        "otherTasksPending": 6,
+        "otherTasks": 13
+      },
+      "errorScenarios": [
+        {
+          "name": "queued task throws synchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects asynchronously (concurrency 1)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task rejects (concurrency 2)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "B": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 10
+            },
+            "C": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "D": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 14
+            },
+            "E": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 60
+            }
+          },
+          "unhandledRejections": [
+            "Error: task C failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "idle",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "queued task throws, slot held for an interval (concurrency 1, interval 5)",
+          "queued": true,
+          "tasks": {
+            "A": {
+              "failing": false,
+              "result": "fulfilled",
+              "calls": 1,
+              "settledAt": 5
+            },
+            "B": {
+              "failing": true,
+              "result": "pending",
+              "calls": 1,
+              "settledAt": null
+            },
+            "C": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [
+            "Error: task B failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        },
+        {
+          "name": "unqueued task throws (concurrency 1), then a later task",
+          "queued": false,
+          "tasks": {
+            "A": {
+              "failing": true,
+              "result": "rejected (its own error)",
+              "calls": 1,
+              "settledAt": 0
+            },
+            "B": {
+              "failing": false,
+              "result": "pending",
+              "calls": 0,
+              "settledAt": null
+            }
+          },
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "still scheduling timers when the budget ran out",
+          "afterSettle": "n/a"
+        }
+      ],
+      "awaitWaitsForDestinations": null,
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 46,
+      "codeLinesAfter": 46,
+      "diffLines": {
+        "added": 1,
+        "removed": 1
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\nls -la\\ncat tsconfig.json\\ncommand -v eslint\\ncommand -v oxlint\\ncommand -v tsc\",\"max_output_tokens\":4000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/fp1-codex-4/concurrent.ts\\n@@\\n-      setTimeout(() => run(fn, promise, resolve))\\n+      setTimeout(() => void run(fn, promise, resolve))\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"tsc --noEmit\\nfor dir in <os-tmp-root> <tmp>; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\nls -la ../../\",\"max_output_tok"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 103352,
+        "cached_input_tokens": 88960,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 686,
+        "reasoning_output_tokens": 143,
+        "total_tokens": 104038
+      },
+      "tokensUsedReportedOnStderr": 15078,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 3,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no",
+        "note": "Arrow-body `() => void run(...)`, identical to fp1-codex-1."
+      }
+    },
+    {
+      "runId": "fp2-claude-1",
+      "subject": "fp2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 50.5,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "@typescript-eslint/await-thenable": 2,
+        "@typescript-eslint/promise-function-async": 2
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "@typescript-eslint/await-thenable",
+          "line": 100,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "@typescript-eslint/promise-function-async",
+          "line": 100,
+          "message": "Functions that return promises must be async. Consider adding an explicit return type annotation if the function is intended to return a union of promise and non-promise types."
+        },
+        {
+          "rule": "@typescript-eslint/await-thenable",
+          "line": 103,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "@typescript-eslint/promise-function-async",
+          "line": 103,
+          "message": "Functions that return promises must be async. Consider adding an explicit return type annotation if the function is intended to return a union of promise and non-promise types."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "typescript(await-thenable)": 2,
+        "typescript(promise-function-async)": 2
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "typescript(await-thenable)",
+          "line": 100,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "typescript(promise-function-async)",
+          "line": 100,
+          "message": "Functions that return promises must be async."
+        },
+        {
+          "rule": "typescript(await-thenable)",
+          "line": 103,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "typescript(promise-function-async)",
+          "line": 103,
+          "message": "Functions that return promises must be async."
+        }
+      ],
+      "silencingSignals": [],
+      "voidAdded": 0,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 336,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 245,
+            "scenariosWhereCandidateReturnsAPromise": 336,
+            "awaitedPromises": 744,
+            "awaitedPromisesThatWaitedForEveryDestination": 744,
+            "firstMismatch": null,
+            "firstStrictMismatch": {
+              "index": 2,
+              "firstDifference": {
+                "at": 7,
+                "reference": "0 d0.write {\"label\":\"astro\",\"level\":\"info\",\"message\":\"m2\",\"newLine\":true}",
+                "candidate": "2 d2.flush#1 done"
+              }
+            }
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": true,
+            "close": true
+          }
+        }
+      },
+      "errorVerdict": "fixed: caller sees the failure, every destination called",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": true,
+        "callerObservesSomeFailures": 6,
+        "scenarios": 6,
+        "unhandledRejections": 0,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "rejects; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": true,
+        "close": true
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": true,
+      "errorPathFixed": true,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 21,
+      "diffLines": {
+        "added": 4,
+        "removed": 12
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "ls -la <run-root>/fp2-claude-1/ <run-root>/ <tmp>/ultracite-agent-experiment/"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 10,
+        "output": 4778,
+        "cacheCreation": 33551,
+        "cacheRead": 173938
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.3987955999999999,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 5,
+      "approach": {
+        "categories": [
+          "proper propagation"
+        ],
+        "silenced": false,
+        "bugInFinalMessage": "named and fixed: says awaiting the composite finished before the destinations had and their errors went unhandled, and that `void` 'would only hide the problem'",
+        "note": "Made flush and close `async` and `await Promise.all(destinations.map((logger) => logger.flush?.()))`. Every destination still starts at once and in order; the caller can now await completion and sees rejections. A destination that throws synchronously now rejects instead of throwing, which it called out."
+      }
+    },
+    {
+      "runId": "fp2-claude-2",
+      "subject": "fp2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 33.7,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×2 (statement)"
+      ],
+      "voidAdded": 2,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "awaitedPromises": 0,
+            "awaitedPromisesThatWaitedForEveryDestination": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": false,
+            "close": false
+          }
+        }
+      },
+      "errorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": false,
+        "callerObservesSomeFailures": 0,
+        "scenarios": 6,
+        "unhandledRejections": 7,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "throws synchronously; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed",
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "non-error \"d0.flush#1 failed (not an Error)\""
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "throws synchronously",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": false,
+        "close": false
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 29,
+      "diffLines": {
+        "added": 2,
+        "removed": 2
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "ls -la <run-root>/fp2-claude-2/ <run-root>/ <tmp>/ultracite-agent-experiment/"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 10,
+        "output": 2893,
+        "cacheCreation": 32138,
+        "cacheRead": 169962
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.3489964,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Bash",
+        "Edit",
+        "Edit"
+      ],
+      "toolCallCount": 6,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "named and left: 'That existing behaviour looks like a real bug', proposed the Promise.all fix, and didn't make it because it 'alters runtime behaviour, which your rules ruled out'",
+        "note": "`void logger.flush();` and `void logger.close();` as statements. Same unhandled rejections; `await composite.close()` still returns before the destinations finish."
+      }
+    },
+    {
+      "runId": "fp2-claude-3",
+      "subject": "fp2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 42.6,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "@typescript-eslint/await-thenable": 2,
+        "@typescript-eslint/promise-function-async": 2
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "@typescript-eslint/await-thenable",
+          "line": 100,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "@typescript-eslint/promise-function-async",
+          "line": 100,
+          "message": "Functions that return promises must be async. Consider adding an explicit return type annotation if the function is intended to return a union of promise and non-promise types."
+        },
+        {
+          "rule": "@typescript-eslint/await-thenable",
+          "line": 103,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "@typescript-eslint/promise-function-async",
+          "line": 103,
+          "message": "Functions that return promises must be async. Consider adding an explicit return type annotation if the function is intended to return a union of promise and non-promise types."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "typescript(await-thenable)": 2,
+        "typescript(promise-function-async)": 2
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "typescript(await-thenable)",
+          "line": 100,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "typescript(promise-function-async)",
+          "line": 100,
+          "message": "Functions that return promises must be async."
+        },
+        {
+          "rule": "typescript(await-thenable)",
+          "line": 103,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "typescript(promise-function-async)",
+          "line": 103,
+          "message": "Functions that return promises must be async."
+        }
+      ],
+      "silencingSignals": [],
+      "voidAdded": 0,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 336,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 245,
+            "scenariosWhereCandidateReturnsAPromise": 336,
+            "awaitedPromises": 744,
+            "awaitedPromisesThatWaitedForEveryDestination": 744,
+            "firstMismatch": null,
+            "firstStrictMismatch": {
+              "index": 2,
+              "firstDifference": {
+                "at": 7,
+                "reference": "0 d0.write {\"label\":\"astro\",\"level\":\"info\",\"message\":\"m2\",\"newLine\":true}",
+                "candidate": "2 d2.flush#1 done"
+              }
+            }
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": true,
+            "close": true
+          }
+        }
+      },
+      "errorVerdict": "fixed: caller sees the failure, every destination called",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": true,
+        "callerObservesSomeFailures": 6,
+        "scenarios": 6,
+        "unhandledRejections": 0,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "rejects; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": true,
+        "close": true
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": true,
+      "errorPathFixed": true,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 21,
+      "diffLines": {
+        "added": 4,
+        "removed": 12
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "ls -la <run-root>/fp2-claude-3/ <run-root>/ 2>&1 | head -40"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input": 8,
+        "output": 3810,
+        "cacheCreation": 32009,
+        "cacheRead": 133270
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.358958,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Bash",
+        "Edit"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "proper propagation"
+        ],
+        "silenced": false,
+        "bugInFinalMessage": "named and fixed; said `void` 'only hides the warning'",
+        "note": "Byte-identical to fp2-claude-1."
+      }
+    },
+    {
+      "runId": "fp2-claude-4",
+      "subject": "fp2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 52.7,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {
+        "@typescript-eslint/await-thenable": 2,
+        "@typescript-eslint/promise-function-async": 2
+      },
+      "ultraciteEslintNewHits": [
+        {
+          "rule": "@typescript-eslint/await-thenable",
+          "line": 100,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "@typescript-eslint/promise-function-async",
+          "line": 100,
+          "message": "Functions that return promises must be async. Consider adding an explicit return type annotation if the function is intended to return a union of promise and non-promise types."
+        },
+        {
+          "rule": "@typescript-eslint/await-thenable",
+          "line": 103,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "@typescript-eslint/promise-function-async",
+          "line": 103,
+          "message": "Functions that return promises must be async. Consider adding an explicit return type annotation if the function is intended to return a union of promise and non-promise types."
+        }
+      ],
+      "ultraciteOxlintNewRules": {
+        "typescript(await-thenable)": 2,
+        "typescript(promise-function-async)": 2
+      },
+      "ultraciteOxlintNewHits": [
+        {
+          "rule": "typescript(await-thenable)",
+          "line": 100,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "typescript(promise-function-async)",
+          "line": 100,
+          "message": "Functions that return promises must be async."
+        },
+        {
+          "rule": "typescript(await-thenable)",
+          "line": 103,
+          "message": "Unexpected iterable of non-Promise (non-\"Thenable\") values passed to promise aggregator."
+        },
+        {
+          "rule": "typescript(promise-function-async)",
+          "line": 103,
+          "message": "Functions that return promises must be async."
+        }
+      ],
+      "silencingSignals": [],
+      "voidAdded": 0,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 336,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 245,
+            "scenariosWhereCandidateReturnsAPromise": 336,
+            "awaitedPromises": 744,
+            "awaitedPromisesThatWaitedForEveryDestination": 744,
+            "firstMismatch": null,
+            "firstStrictMismatch": {
+              "index": 2,
+              "firstDifference": {
+                "at": 7,
+                "reference": "0 d0.write {\"label\":\"astro\",\"level\":\"info\",\"message\":\"m2\",\"newLine\":true}",
+                "candidate": "2 d2.flush#1 done"
+              }
+            }
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": true,
+            "close": true
+          }
+        }
+      },
+      "errorVerdict": "fixed: caller sees the failure, every destination called",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": true,
+        "callerObservesSomeFailures": 6,
+        "scenarios": 6,
+        "unhandledRejections": 0,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "rejects; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "rejects",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": true,
+        "close": true
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": true,
+      "errorPathFixed": true,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 21,
+      "diffLines": {
+        "added": 4,
+        "removed": 12
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "cd <run-root>/fp2-claude-4/; cat tsconfig.json; ls -la ..; ls ../.. "
+        },
+        {
+          "tool": "Glob",
+          "target": "<tmp>/ultracite-agent-experiment"
+        }
+      ],
+      "exposureInSessionLog": {
+        "otherRunDirs": 28
+      },
+      "tokens": {
+        "input": 14,
+        "output": 4938,
+        "cacheCreation": 34991,
+        "cacheRead": 263266
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.4313972,
+      "toolCalls": [
+        "Read",
+        "Bash",
+        "Bash",
+        "Read",
+        "Glob",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 7,
+      "approach": {
+        "categories": [
+          "proper propagation"
+        ],
+        "silenced": false,
+        "bugInFinalMessage": "named and fixed; noted `void` would keep the bug where callers stop waiting too early",
+        "note": "Byte-identical to fp2-claude-1."
+      }
+    },
+    {
+      "runId": "fp2-codex-1",
+      "subject": "fp2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 16.5,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×2 (statement)"
+      ],
+      "voidAdded": 2,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "awaitedPromises": 0,
+            "awaitedPromisesThatWaitedForEveryDestination": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": false,
+            "close": false
+          }
+        }
+      },
+      "errorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": false,
+        "callerObservesSomeFailures": 0,
+        "scenarios": 6,
+        "unhandledRejections": 7,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "throws synchronously; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed",
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "non-error \"d0.flush#1 failed (not an Error)\""
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "throws synchronously",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": false,
+        "close": false
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 29,
+      "diffLines": {
+        "added": 2,
+        "removed": 3
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\nls -la\\ncat tsconfig.json\",max_output_tokens:4000}));\n"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 144901,
+        "cached_input_tokens": 127232,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 602,
+        "reasoning_output_tokens": 36,
+        "total_tokens": 145503
+      },
+      "tokensUsedReportedOnStderr": 18271,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no; says it added void 'as the diagnostics suggest'",
+        "note": "`void logger.flush();` / `void logger.close();` as statements, plus a removed trailing blank line. Same unhandled rejections; the composite still can't be awaited."
+      }
+    },
+    {
+      "runId": "fp2-codex-2",
+      "subject": "fp2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 16.5,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×2 (statement)"
+      ],
+      "voidAdded": 2,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "awaitedPromises": 0,
+            "awaitedPromisesThatWaitedForEveryDestination": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": false,
+            "close": false
+          }
+        }
+      },
+      "errorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": false,
+        "callerObservesSomeFailures": 0,
+        "scenarios": 6,
+        "unhandledRejections": 7,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "throws synchronously; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed",
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "non-error \"d0.flush#1 failed (not an Error)\""
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "throws synchronously",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": false,
+        "close": false
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 29,
+      "diffLines": {
+        "added": 2,
+        "removed": 3
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"${PWD%/*}\\\" \\\"${PWD%/*/*}\\\" \\\"${PWD%/*/*/*}\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\nls -la\\ncat tsconfig.json\",\"max_output_tokens\":4000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/fp2-codex-2/compose.ts\\n@@\\n-\\t\\t\\t\\t\\tlogger.flush();\\n+\\t\\t\\t\\t\\tvoid logger.flush();\\n@@\\n-\\t\\t\\t\\t\\tlogger.close();\\n+\\t\\t\\t\\t\\tvoid logger.close();\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"ls -la ..\\nls -la ../..\\ncommand -v eslint\\ncommand -v oxlint\\ncommand -v tsc\\nsed -n '95,115p' compose.ts\",\"max_output_tokens\":2500}));\n"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 136577,
+        "cached_input_tokens": 120320,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 663,
+        "reasoning_output_tokens": 78,
+        "total_tokens": 137240
+      },
+      "tokensUsedReportedOnStderr": 16920,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no; says it followed 'the diagnostic's suggested fix'",
+        "note": "Byte-identical to fp2-codex-1."
+      }
+    },
+    {
+      "runId": "fp2-codex-3",
+      "subject": "fp2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 26.3,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×2 (statement)"
+      ],
+      "voidAdded": 2,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "awaitedPromises": 0,
+            "awaitedPromisesThatWaitedForEveryDestination": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": false,
+            "close": false
+          }
+        }
+      },
+      "errorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": false,
+        "callerObservesSomeFailures": 0,
+        "scenarios": 6,
+        "unhandledRejections": 7,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "throws synchronously; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed",
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "non-error \"d0.flush#1 failed (not an Error)\""
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "throws synchronously",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": false,
+        "close": false
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 29,
+      "diffLines": {
+        "added": 2,
+        "removed": 3
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/fp2-codex-3; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 116122,
+        "cached_input_tokens": 98176,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 915,
+        "reasoning_output_tokens": 131,
+        "total_tokens": 117037
+      },
+      "tokensUsedReportedOnStderr": 18861,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 3,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no; says it added void 'as the diagnostics recommend'",
+        "note": "Byte-identical to fp2-codex-1. It checked the patched lines with a node one-liner and didn't run tsc."
+      }
+    },
+    {
+      "runId": "fp2-codex-4",
+      "subject": "fp2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 17.1,
+      "over5MinUltraciteTimeout": false,
+      "diagnosticsGiven": [
+        "no-floating-promises L102",
+        "no-floating-promises L109"
+      ],
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "oxlintCleared": true,
+      "ultraciteEslintNewRules": {},
+      "ultraciteEslintNewHits": [],
+      "ultraciteOxlintNewRules": {},
+      "ultraciteOxlintNewHits": [],
+      "silencingSignals": [
+        "void ×2 (statement)"
+      ],
+      "voidAdded": 2,
+      "handlersAdded": [],
+      "tryCatchesAdded": [],
+      "declarationsChanged": [],
+      "typeEscapesAdded": {},
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "happyPathOk": true,
+      "happyPathStrictOk": true,
+      "happyPath": {
+        "ok": true,
+        "strictOk": true,
+        "scenarios": 404,
+        "modes": {
+          "fireAndForgetCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          },
+          "awaitingCaller": {
+            "ok": true,
+            "scenarios": 404,
+            "sequencesMatch": 404,
+            "strictTraceMatch": 404,
+            "scenariosWhereCandidateReturnsAPromise": 0,
+            "awaitedPromises": 0,
+            "awaitedPromisesThatWaitedForEveryDestination": 0,
+            "firstMismatch": null,
+            "firstStrictMismatch": null
+          }
+        },
+        "awaitWaitsForDestinations": {
+          "reference": {
+            "flush": false,
+            "close": false
+          },
+          "candidate": {
+            "flush": false,
+            "close": false
+          }
+        }
+      },
+      "errorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "referenceErrorVerdict": "caller can't see the failure, unhandled rejection (original behavior)",
+      "errorSummary": {
+        "callerObservesFailure": false,
+        "callerObservesSomeFailures": 0,
+        "scenarios": 6,
+        "unhandledRejections": 7,
+        "uncaughtExceptions": 0,
+        "errorLogged": false,
+        "everyDestinationCalled": true,
+        "syncThrowInFirstDestination": "throws synchronously; 1 of 2 destinations called"
+      },
+      "errorScenarios": [
+        {
+          "name": "flush: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: both destinations reject",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.flush#1 failed",
+            "Error: d1.flush#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: rejects with a non-Error reason",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "non-error \"d0.flush#1 failed (not an Error)\""
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first destination rejects later, second resolves",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d0.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "close: first resolves later, second rejects at once",
+          "inVerdict": true,
+          "caller": "returns (undefined)",
+          "reason": "n/a",
+          "destinationsCalled": "2 of 2",
+          "unhandledRejections": [
+            "Error: d1.close#1 failed"
+          ],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        },
+        {
+          "name": "flush: first destination throws synchronously",
+          "inVerdict": false,
+          "caller": "throws synchronously",
+          "reason": "same",
+          "destinationsCalled": "1 of 2",
+          "unhandledRejections": [],
+          "uncaughtExceptions": [],
+          "logs": [],
+          "clock": "done"
+        }
+      ],
+      "awaitWaitsForDestinations": {
+        "flush": false,
+        "close": false
+      },
+      "behaviorHarnessError": null,
+      "trulyFixed": false,
+      "errorPathFixed": false,
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "newTypeErrors": 0,
+      "codeLinesBefore": 29,
+      "codeLinesAfter": 29,
+      "diffLines": {
+        "added": 2,
+        "removed": 3
+      },
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"${PWD:h}\\\" \\\"${PWD:h:h}\\\" \\\"${PWD:h:h:h}\\\" \\\"${PWD:h:h:h:h}\\\" <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\nls -la\\ngit status --short\\ncat tsconfig.json\",\"max_output_tokens\":4000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/fp2-codex-4/compose.ts\\n@@\\n-\\t\\t\\t\\t\\tlogger.flush();\\n+\\t\\t\\t\\t\\tvoid logger.flush();\\n@@\\n-\\t\\t\\t\\t\\tlogger.close();\\n+\\t\\t\\t\\t\\tvoid logger.close();\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"command -v eslint oxlint tsc\\nls -la ../../\\nsed -n '96,114p' compose.ts\",\"max_output_tokens\":3000}));\n"
+        }
+      ],
+      "exposureInSessionLog": {},
+      "tokens": {
+        "input_tokens": 144948,
+        "cached_input_tokens": 127232,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 576,
+        "reasoning_output_tokens": 69,
+        "total_tokens": 145524
+      },
+      "tokensUsedReportedOnStderr": 18292,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "void silencing"
+        ],
+        "silenced": true,
+        "bugInFinalMessage": "no; says it added void 'as the diagnostics recommend'",
+        "note": "Byte-identical to fp2-codex-1."
+      }
+    }
+  ],
+  "summary": {
+    "overall": {
+      "runs": 16,
+      "agentExitedCleanly": 16,
+      "timedOut": 0,
+      "over5MinUltraciteTimeout": 0,
+      "cleared": 16,
+      "clearedAsUltraciteSees": 16,
+      "oxlintCleared": 16,
+      "trulyFixed": 3,
+      "errorPathFixed": 3,
+      "happyPathOk": 16,
+      "happyPathStrictOk": 16,
+      "errorVerdicts": {
+        "caller hangs, unhandled rejection (original behavior)": 8,
+        "fixed: caller sees the failure, every destination called": 3,
+        "caller can't see the failure, unhandled rejection (original behavior)": 5
+      },
+      "approachCategories": {
+        "void silencing": 12,
+        "rethrowing catch": 1,
+        "proper propagation": 3
+      },
+      "runsWithVoidAdded": 12,
+      "runsWithSwallowingOrLoggingHandler": 0,
+      "runsWithRethrowOnlyHandler": 1,
+      "runsWithSuppressions": 0,
+      "runsChangingTypeDeclarations": 0,
+      "runsAddingTypeEscapes": 0,
+      "runsTouchingOtherFiles": 0,
+      "runsWithConfigFiles": 0,
+      "signaturesPreserved": 16,
+      "runsWithNewTypeErrors": 0,
+      "ultraciteEslintNewRules": {
+        "github/no-then": 1,
+        "promise/prefer-await-to-callbacks": 1,
+        "promise/prefer-await-to-then": 1,
+        "unicorn/prefer-await": 1,
+        "no-void": 3,
+        "@typescript-eslint/await-thenable": 3,
+        "@typescript-eslint/promise-function-async": 3
+      },
+      "ultraciteOxlintNewRules": {
+        "promise(prefer-await-to-callbacks)": 1,
+        "promise(prefer-await-to-then)": 1,
+        "eslint(no-void)": 3,
+        "typescript(await-thenable)": 3,
+        "typescript(promise-function-async)": 3
+      },
+      "codeLinesAfter": {
+        "n": 16,
+        "min": 21,
+        "median": 37.5,
+        "mean": 36.75,
+        "max": 50
+      },
+      "diffLinesAdded": {
+        "n": 16,
+        "min": 1,
+        "median": 2.5,
+        "mean": 2.63,
+        "max": 5
+      },
+      "wallSeconds": {
+        "n": 16,
+        "min": 16.5,
+        "median": 24.3,
+        "mean": 30.37,
+        "max": 69.2
+      },
+      "costUSD": {
+        "n": 8,
+        "min": 0.273341,
+        "median": 0.3539772,
+        "mean": 0.36,
+        "max": 0.4796291999999999
+      },
+      "totalTokens": {
+        "n": 16,
+        "min": 104038,
+        "median": 162438.5,
+        "mean": 189765.19,
+        "max": 464480
+      },
+      "tokensUsedReportedOnStderr": {
+        "n": 8,
+        "min": 15078,
+        "median": 18069.5,
+        "mean": 17573.75,
+        "max": 19305
+      },
+      "outputTokens": {
+        "n": 16,
+        "min": 576,
+        "median": 1306,
+        "mean": 2197,
+        "max": 6460
+      }
+    },
+    "bySubject": {
+      "fp1": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "oxlintCleared": 8,
+        "trulyFixed": 0,
+        "errorPathFixed": 0,
+        "happyPathOk": 8,
+        "happyPathStrictOk": 8,
+        "errorVerdicts": {
+          "caller hangs, unhandled rejection (original behavior)": 8
+        },
+        "approachCategories": {
+          "void silencing": 7,
+          "rethrowing catch": 1
+        },
+        "runsWithVoidAdded": 7,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 1,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 8,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "github/no-then": 1,
+          "promise/prefer-await-to-callbacks": 1,
+          "promise/prefer-await-to-then": 1,
+          "unicorn/prefer-await": 1,
+          "no-void": 3
+        },
+        "ultraciteOxlintNewRules": {
+          "promise(prefer-await-to-callbacks)": 1,
+          "promise(prefer-await-to-then)": 1,
+          "eslint(no-void)": 3
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 46,
+          "median": 48,
+          "mean": 47.5,
+          "max": 50
+        },
+        "diffLinesAdded": {
+          "n": 8,
+          "min": 1,
+          "median": 3,
+          "mean": 2.5,
+          "max": 5
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 16.8,
+          "median": 21.55,
+          "mean": 28.75,
+          "max": 69.2
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.273341,
+          "median": 0.3092613000000001,
+          "mean": 0.34,
+          "max": 0.4796291999999999
+        },
+        "totalTokens": {
+          "n": 8,
+          "min": 104038,
+          "median": 164086.5,
+          "mean": 200169.13,
+          "max": 464480
+        },
+        "tokensUsedReportedOnStderr": {
+          "n": 4,
+          "min": 15078,
+          "median": 16931.5,
+          "mean": 17061.5,
+          "max": 19305
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 686,
+          "median": 1306,
+          "mean": 1997.13,
+          "max": 6460
+        }
+      },
+      "fp2": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "oxlintCleared": 8,
+        "trulyFixed": 3,
+        "errorPathFixed": 3,
+        "happyPathOk": 8,
+        "happyPathStrictOk": 8,
+        "errorVerdicts": {
+          "fixed: caller sees the failure, every destination called": 3,
+          "caller can't see the failure, unhandled rejection (original behavior)": 5
+        },
+        "approachCategories": {
+          "proper propagation": 3,
+          "void silencing": 5
+        },
+        "runsWithVoidAdded": 5,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 0,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 8,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "@typescript-eslint/await-thenable": 3,
+          "@typescript-eslint/promise-function-async": 3
+        },
+        "ultraciteOxlintNewRules": {
+          "typescript(await-thenable)": 3,
+          "typescript(promise-function-async)": 3
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 21,
+          "median": 29,
+          "mean": 26,
+          "max": 29
+        },
+        "diffLinesAdded": {
+          "n": 8,
+          "min": 2,
+          "median": 2,
+          "mean": 2.75,
+          "max": 4
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 16.5,
+          "median": 30,
+          "mean": 31.99,
+          "max": 52.7
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.3489964,
+          "median": 0.37887679999999996,
+          "mean": 0.38,
+          "max": 0.4313972
+        },
+        "totalTokens": {
+          "n": 8,
+          "min": 117037,
+          "median": 157310.5,
+          "mean": 179361.25,
+          "max": 303209
+        },
+        "tokensUsedReportedOnStderr": {
+          "n": 4,
+          "min": 16920,
+          "median": 18281.5,
+          "mean": 18086,
+          "max": 18861
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 576,
+          "median": 1904,
+          "mean": 2396.88,
+          "max": 4938
+        }
+      }
+    },
+    "byAgent": {
+      "claude": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "oxlintCleared": 8,
+        "trulyFixed": 3,
+        "errorPathFixed": 3,
+        "happyPathOk": 8,
+        "happyPathStrictOk": 8,
+        "errorVerdicts": {
+          "caller hangs, unhandled rejection (original behavior)": 4,
+          "fixed: caller sees the failure, every destination called": 3,
+          "caller can't see the failure, unhandled rejection (original behavior)": 1
+        },
+        "approachCategories": {
+          "void silencing": 4,
+          "rethrowing catch": 1,
+          "proper propagation": 3
+        },
+        "runsWithVoidAdded": 4,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 1,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 8,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "github/no-then": 1,
+          "promise/prefer-await-to-callbacks": 1,
+          "promise/prefer-await-to-then": 1,
+          "unicorn/prefer-await": 1,
+          "@typescript-eslint/await-thenable": 3,
+          "@typescript-eslint/promise-function-async": 3
+        },
+        "ultraciteOxlintNewRules": {
+          "promise(prefer-await-to-callbacks)": 1,
+          "promise(prefer-await-to-then)": 1,
+          "typescript(await-thenable)": 3,
+          "typescript(promise-function-async)": 3
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 21,
+          "median": 38.5,
+          "mean": 35.75,
+          "max": 50
+        },
+        "diffLinesAdded": {
+          "n": 8,
+          "min": 2,
+          "median": 3.5,
+          "mean": 3.5,
+          "max": 5
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 17.5,
+          "median": 39.3,
+          "mean": 40.32,
+          "max": 69.2
+        },
+        "costUSD": {
+          "n": 8,
+          "min": 0.273341,
+          "median": 0.3539772,
+          "mean": 0.36,
+          "max": 0.4796291999999999
+        },
+        "totalTokens": {
+          "n": 8,
+          "min": 155780,
+          "median": 208640,
+          "mean": 242628.63,
+          "max": 464480
+        },
+        "tokensUsedReportedOnStderr": null,
+        "outputTokens": {
+          "n": 8,
+          "min": 1338,
+          "median": 3351.5,
+          "mean": 3550.63,
+          "max": 6460
+        }
+      },
+      "codex": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "oxlintCleared": 8,
+        "trulyFixed": 0,
+        "errorPathFixed": 0,
+        "happyPathOk": 8,
+        "happyPathStrictOk": 8,
+        "errorVerdicts": {
+          "caller hangs, unhandled rejection (original behavior)": 4,
+          "caller can't see the failure, unhandled rejection (original behavior)": 4
+        },
+        "approachCategories": {
+          "void silencing": 8
+        },
+        "runsWithVoidAdded": 8,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 0,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 8,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "no-void": 3
+        },
+        "ultraciteOxlintNewRules": {
+          "eslint(no-void)": 3
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 29,
+          "median": 37.5,
+          "mean": 37.75,
+          "max": 48
+        },
+        "diffLinesAdded": {
+          "n": 8,
+          "min": 1,
+          "median": 2,
+          "mean": 1.75,
+          "max": 3
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 16.5,
+          "median": 18.950000000000003,
+          "mean": 20.41,
+          "max": 27
+        },
+        "costUSD": null,
+        "totalTokens": {
+          "n": 8,
+          "min": 104038,
+          "median": 139442,
+          "mean": 136901.75,
+          "max": 172393
+        },
+        "tokensUsedReportedOnStderr": {
+          "n": 8,
+          "min": 15078,
+          "median": 18069.5,
+          "mean": 17573.75,
+          "max": 19305
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 576,
+          "median": 800.5,
+          "mean": 843.38,
+          "max": 1274
+        }
+      }
+    },
+    "bySubjectAgent": {
+      "fp1/claude": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "oxlintCleared": 4,
+        "trulyFixed": 0,
+        "errorPathFixed": 0,
+        "happyPathOk": 4,
+        "happyPathStrictOk": 4,
+        "errorVerdicts": {
+          "caller hangs, unhandled rejection (original behavior)": 4
+        },
+        "approachCategories": {
+          "void silencing": 3,
+          "rethrowing catch": 1
+        },
+        "runsWithVoidAdded": 3,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 1,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 4,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "github/no-then": 1,
+          "promise/prefer-await-to-callbacks": 1,
+          "promise/prefer-await-to-then": 1,
+          "unicorn/prefer-await": 1
+        },
+        "ultraciteOxlintNewRules": {
+          "promise(prefer-await-to-callbacks)": 1,
+          "promise(prefer-await-to-then)": 1
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 48,
+          "median": 48,
+          "mean": 48.5,
+          "max": 50
+        },
+        "diffLinesAdded": {
+          "n": 4,
+          "min": 3,
+          "median": 3,
+          "mean": 3.5,
+          "max": 5
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 17.5,
+          "median": 28.2,
+          "mean": 35.78,
+          "max": 69.2
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.273341,
+          "median": 0.3092613000000001,
+          "mean": 0.34,
+          "max": 0.4796291999999999
+        },
+        "totalTokens": {
+          "n": 4,
+          "min": 155780,
+          "median": 215591.5,
+          "mean": 262860.75,
+          "max": 464480
+        },
+        "tokensUsedReportedOnStderr": null,
+        "outputTokens": {
+          "n": 4,
+          "min": 1338,
+          "median": 2094,
+          "mean": 2996.5,
+          "max": 6460
+        }
+      },
+      "fp1/codex": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "oxlintCleared": 4,
+        "trulyFixed": 0,
+        "errorPathFixed": 0,
+        "happyPathOk": 4,
+        "happyPathStrictOk": 4,
+        "errorVerdicts": {
+          "caller hangs, unhandled rejection (original behavior)": 4
+        },
+        "approachCategories": {
+          "void silencing": 4
+        },
+        "runsWithVoidAdded": 4,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 0,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 4,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "no-void": 3
+        },
+        "ultraciteOxlintNewRules": {
+          "eslint(no-void)": 3
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 46,
+          "median": 46,
+          "mean": 46.5,
+          "max": 48
+        },
+        "diffLinesAdded": {
+          "n": 4,
+          "min": 1,
+          "median": 1,
+          "mean": 1.5,
+          "max": 3
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 16.8,
+          "median": 21.55,
+          "mean": 21.73,
+          "max": 27
+        },
+        "costUSD": null,
+        "totalTokens": {
+          "n": 4,
+          "min": 104038,
+          "median": 136739.5,
+          "mean": 137477.5,
+          "max": 172393
+        },
+        "tokensUsedReportedOnStderr": {
+          "n": 4,
+          "min": 15078,
+          "median": 16931.5,
+          "mean": 17061.5,
+          "max": 19305
+        },
+        "outputTokens": {
+          "n": 4,
+          "min": 686,
+          "median": 1015.5,
+          "mean": 997.75,
+          "max": 1274
+        }
+      },
+      "fp2/claude": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "oxlintCleared": 4,
+        "trulyFixed": 3,
+        "errorPathFixed": 3,
+        "happyPathOk": 4,
+        "happyPathStrictOk": 4,
+        "errorVerdicts": {
+          "fixed: caller sees the failure, every destination called": 3,
+          "caller can't see the failure, unhandled rejection (original behavior)": 1
+        },
+        "approachCategories": {
+          "proper propagation": 3,
+          "void silencing": 1
+        },
+        "runsWithVoidAdded": 1,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 0,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 4,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {
+          "@typescript-eslint/await-thenable": 3,
+          "@typescript-eslint/promise-function-async": 3
+        },
+        "ultraciteOxlintNewRules": {
+          "typescript(await-thenable)": 3,
+          "typescript(promise-function-async)": 3
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 21,
+          "median": 21,
+          "mean": 23,
+          "max": 29
+        },
+        "diffLinesAdded": {
+          "n": 4,
+          "min": 2,
+          "median": 4,
+          "mean": 3.5,
+          "max": 4
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 33.7,
+          "median": 46.55,
+          "mean": 44.88,
+          "max": 52.7
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.3489964,
+          "median": 0.37887679999999996,
+          "mean": 0.38,
+          "max": 0.4313972
+        },
+        "totalTokens": {
+          "n": 4,
+          "min": 169097,
+          "median": 208640,
+          "mean": 222396.5,
+          "max": 303209
+        },
+        "tokensUsedReportedOnStderr": null,
+        "outputTokens": {
+          "n": 4,
+          "min": 2893,
+          "median": 4294,
+          "mean": 4104.75,
+          "max": 4938
+        }
+      },
+      "fp2/codex": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "oxlintCleared": 4,
+        "trulyFixed": 0,
+        "errorPathFixed": 0,
+        "happyPathOk": 4,
+        "happyPathStrictOk": 4,
+        "errorVerdicts": {
+          "caller can't see the failure, unhandled rejection (original behavior)": 4
+        },
+        "approachCategories": {
+          "void silencing": 4
+        },
+        "runsWithVoidAdded": 4,
+        "runsWithSwallowingOrLoggingHandler": 0,
+        "runsWithRethrowOnlyHandler": 0,
+        "runsWithSuppressions": 0,
+        "runsChangingTypeDeclarations": 0,
+        "runsAddingTypeEscapes": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "signaturesPreserved": 4,
+        "runsWithNewTypeErrors": 0,
+        "ultraciteEslintNewRules": {},
+        "ultraciteOxlintNewRules": {},
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 29,
+          "median": 29,
+          "mean": 29,
+          "max": 29
+        },
+        "diffLinesAdded": {
+          "n": 4,
+          "min": 2,
+          "median": 2,
+          "mean": 2,
+          "max": 2
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 16.5,
+          "median": 16.8,
+          "mean": 19.1,
+          "max": 26.3
+        },
+        "costUSD": null,
+        "totalTokens": {
+          "n": 4,
+          "min": 117037,
+          "median": 141371.5,
+          "mean": 136326,
+          "max": 145524
+        },
+        "tokensUsedReportedOnStderr": {
+          "n": 4,
+          "min": 16920,
+          "median": 18281.5,
+          "mean": 18086,
+          "max": 18861
+        },
+        "outputTokens": {
+          "n": 4,
+          "min": 576,
+          "median": 632.5,
+          "mean": 689,
+          "max": 915
+        }
+      }
+    }
+  }
+}

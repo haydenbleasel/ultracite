@@ -1,0 +1,1094 @@
+{
+  "generated": "2026-10-10",
+  "note": "Syntax only. Pooled numbers exclude the dogfood repo. Sites are in out/floating-promises/<repo>.sites.json.",
+  "pooled": {
+    "lines": 694309,
+    "tally": {
+      "asyncCallback": {
+        "byCallee": {
+          "then": 36,
+          "OK": 1,
+          "defineProperty": 1,
+          "streamifyResponse": 1,
+          "middleware": 1,
+          "defineWebSocketHelper": 2,
+          "new Promise": 16,
+          "MemberExpression": 2,
+          "CallExpression": 1,
+          "useCallback": 10,
+          "push": 1,
+          "run": 25,
+          "makeResource": 1,
+          "catch": 3,
+          "createRecursiveProxy": 2,
+          "all": 1,
+          "memo": 3,
+          "once": 1,
+          "registerAsync": 2,
+          "makeAsyncResource": 2,
+          "Super": 1,
+          "new HMRClient": 1,
+          "createHMRHandler": 1,
+          "perEnvironmentPlugin": 1,
+          "action": 6,
+          "asyncReplace": 4,
+          "processSrcSet": 2,
+          "new WorkerWithFallback": 1,
+          "on": 17,
+          "addEventListener": 10,
+          "createAsyncManifestMemo": 5,
+          "cache": 4,
+          "defineFontProvider": 1,
+          "subscribe": 8,
+          "limit": 3,
+          "setTimeout": 8,
+          "transform": 1,
+          "collectPrerenderMetadata": 1,
+          "onRequest": 1,
+          "fetchMiddleware": 1,
+          "fetchCache": 1,
+          "emitDestination": 1,
+          "handleMiddleware": 1,
+          "handle": 1,
+          "requestIdleCallback": 2,
+          "forEach": 2,
+          "startViewTransition": 1,
+          "finally": 1,
+          "use": 3,
+          "withBatchedUpdates": 1,
+          "setConsumer": 1,
+          "promiseTry": 5,
+          "toBlob": 1,
+          "traceAsyncFn": 46,
+          "withPromiseCache": 1,
+          "scheduleOnNextTick": 2,
+          "curry": 2,
+          "reduce": 1,
+          "tapPromise": 6,
+          "tapAsync": 4,
+          "resolve": 1,
+          "createServer": 2,
+          "onFetch": 1,
+          "reportFetch": 1,
+          "step": 3,
+          "registerCustomCacheHandlers": 3,
+          "schedulerFn": 1,
+          "createLazyResult": 3,
+          "useActionState": 1,
+          "createMemoizedPromise": 6,
+          "bindSnapshot": 1,
+          "runInSequentialTasks": 4,
+          "withSpan": 1,
+          "runInstantInsightsWithTracing": 1,
+          "runSpan": 2,
+          "runWithDevValidationLogging": 1,
+          "createLazyDevValidationInputs": 4,
+          "exit": 1,
+          "loadOrGenerateKey": 1,
+          "cacheScopedToWorkStore": 2,
+          "trace": 18,
+          "pipe": 1,
+          "onDevServerCleanup": 3,
+          "setStackFrameResolver": 2,
+          "batch": 1,
+          "subscribeToChanges": 1,
+          "setUseCacheProbe": 1,
+          "ensureCallback": 1,
+          "addListener": 1,
+          "withLocalSpan": 1,
+          "registerTool": 9,
+          "get": 2,
+          "scheduleImmediate": 1,
+          "withTaggedErrors": 1,
+          "_getData": 1,
+          "schedule": 1
+        },
+        "total": 357
+      },
+      "asyncFunctions": 2847,
+      "asyncNoAwait": {
+        "byContext": {
+          "object property": 83,
+          "other function": 94,
+          "exported function": 93,
+          "callback argument": 84,
+          "class method": 100,
+          "class property": 5
+        },
+        "byReturn": {
+          "returns a call": 260,
+          "returns a value": 115,
+          "returns nothing": 84
+        },
+        "total": 459
+      },
+      "awaitExpressions": 4873,
+      "awaitInLoop": {
+        "byLoop": {
+          "for…of": 237,
+          "While": 99,
+          "For": 35,
+          "await using": 1,
+          "DoWhile": 3,
+          "ForIn": 29
+        },
+        "total": 404
+      },
+      "catchCalls": {
+        "byHandler": {
+          "handles": 139,
+          "handler-ref": 22,
+          "empty": 63,
+          "log-only": 51,
+          "empty (commented)": 14,
+          "other": 4,
+          "noop-ref": 2
+        },
+        "total": 295
+      },
+      "disables": {
+        "byRule": {
+          "eslint: no-async-promise-executor": 2
+        },
+        "total": 2
+      },
+      "floatingCall": {
+        "byTarget": {
+          "function (async)": 32,
+          "async IIFE": 13,
+          "method (annotated)": 1,
+          "method (async)": 24,
+          "function (annotated)": 5
+        },
+        "total": 75
+      },
+      "floatingChain": {
+        "byEnd": {
+          ".finally(f)": 8,
+          ".then(a)": 38
+        },
+        "total": 46
+      },
+      "mapAsync": {
+        "byFate": {
+          "Promise combinator": 69,
+          "stored, not combined": 1,
+          "Promise combinator (via variable)": 6,
+          "other": 1
+        },
+        "total": 77
+      },
+      "thenCalls": 470,
+      "thenRejectionHandlers": {
+        "byHandler": {
+          "handler-ref": 28,
+          "handles": 32,
+          "empty (commented)": 2,
+          "log-only": 5,
+          "empty": 2,
+          "noop-ref": 4
+        },
+        "total": 73
+      },
+      "voidStatements": {
+        "byOperand": {
+          "a variable or property": 10,
+          "a promise chain": 19,
+          "a same-file async call": 10,
+          "another call": 12
+        },
+        "total": 51
+      }
+    }
+  },
+  "repos": {
+    "zod": {
+      "dogfood": false,
+      "failures": [],
+      "files": 125,
+      "lines": 37903,
+      "per10k": {
+        "asyncCallback": 1.6,
+        "awaitInLoop": 1.6,
+        "floatingCall": 0,
+        "floatingChain": 0
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "then": 4,
+            "OK": 1,
+            "defineProperty": 1
+          },
+          "total": 6
+        },
+        "asyncFunctions": 25,
+        "asyncNoAwait": {
+          "byContext": {
+            "object property": 3,
+            "other function": 2
+          },
+          "byReturn": {
+            "returns a call": 5
+          },
+          "total": 5
+        },
+        "awaitExpressions": 27,
+        "awaitInLoop": {
+          "byLoop": {
+            "for…of": 6
+          },
+          "total": 6
+        },
+        "catchCalls": {
+          "byHandler": {
+            "handles": 2
+          },
+          "total": 2
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {},
+          "total": 0
+        },
+        "floatingChain": {
+          "byEnd": {},
+          "total": 0
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 1
+          },
+          "total": 1
+        },
+        "thenCalls": 64,
+        "thenRejectionHandlers": {
+          "byHandler": {},
+          "total": 0
+        },
+        "voidStatements": {
+          "byOperand": {
+            "a variable or property": 5
+          },
+          "total": 5
+        }
+      }
+    },
+    "hono": {
+      "dogfood": false,
+      "failures": [],
+      "files": 187,
+      "lines": 25540,
+      "per10k": {
+        "asyncCallback": 5.1,
+        "awaitInLoop": 7.8,
+        "floatingCall": 0.8,
+        "floatingChain": 2.3
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "streamifyResponse": 1,
+            "middleware": 1,
+            "defineWebSocketHelper": 2,
+            "new Promise": 2,
+            "MemberExpression": 1,
+            "CallExpression": 1,
+            "then": 3,
+            "useCallback": 1,
+            "push": 1
+          },
+          "total": 13
+        },
+        "asyncFunctions": 149,
+        "asyncNoAwait": {
+          "byContext": {
+            "other function": 6,
+            "exported function": 4,
+            "callback argument": 2,
+            "object property": 2,
+            "class method": 1
+          },
+          "byReturn": {
+            "returns a call": 13,
+            "returns a value": 1,
+            "returns nothing": 1
+          },
+          "total": 15
+        },
+        "awaitExpressions": 244,
+        "awaitInLoop": {
+          "byLoop": {
+            "While": 4,
+            "for…of": 12,
+            "For": 4
+          },
+          "total": 20
+        },
+        "catchCalls": {
+          "byHandler": {
+            "handles": 8,
+            "handler-ref": 1,
+            "empty": 3
+          },
+          "total": 12
+        },
+        "disables": {
+          "byRule": {
+            "eslint: no-async-promise-executor": 2
+          },
+          "total": 2
+        },
+        "floatingCall": {
+          "byTarget": {
+            "function (async)": 1,
+            "async IIFE": 1
+          },
+          "total": 2
+        },
+        "floatingChain": {
+          "byEnd": {
+            ".finally(f)": 3,
+            ".then(a)": 3
+          },
+          "total": 6
+        },
+        "mapAsync": {
+          "byFate": {},
+          "total": 0
+        },
+        "thenCalls": 25,
+        "thenRejectionHandlers": {
+          "byHandler": {
+            "handler-ref": 1,
+            "handles": 1
+          },
+          "total": 2
+        },
+        "voidStatements": {
+          "byOperand": {
+            "a promise chain": 2
+          },
+          "total": 2
+        }
+      }
+    },
+    "trpc": {
+      "dogfood": false,
+      "failures": [],
+      "files": 176,
+      "lines": 25948,
+      "per10k": {
+        "asyncCallback": 13.1,
+        "awaitInLoop": 6.2,
+        "floatingCall": 0,
+        "floatingChain": 0
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "then": 4,
+            "run": 17,
+            "makeResource": 1,
+            "catch": 1,
+            "createRecursiveProxy": 2,
+            "all": 1,
+            "memo": 3,
+            "once": 1,
+            "registerAsync": 2,
+            "makeAsyncResource": 2
+          },
+          "total": 34
+        },
+        "asyncFunctions": 151,
+        "asyncNoAwait": {
+          "byContext": {
+            "object property": 10,
+            "callback argument": 5,
+            "other function": 2,
+            "exported function": 1
+          },
+          "byReturn": {
+            "returns a value": 12,
+            "returns nothing": 2,
+            "returns a call": 4
+          },
+          "total": 18
+        },
+        "awaitExpressions": 168,
+        "awaitInLoop": {
+          "byLoop": {
+            "While": 13,
+            "await using": 1,
+            "for…of": 2
+          },
+          "total": 16
+        },
+        "catchCalls": {
+          "byHandler": {
+            "handles": 16,
+            "log-only": 4,
+            "empty (commented)": 2,
+            "empty": 4,
+            "other": 4,
+            "handler-ref": 3
+          },
+          "total": 33
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {},
+          "total": 0
+        },
+        "floatingChain": {
+          "byEnd": {},
+          "total": 0
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 3,
+            "stored, not combined": 1,
+            "Promise combinator (via variable)": 1,
+            "other": 1
+          },
+          "total": 6
+        },
+        "thenCalls": 14,
+        "thenRejectionHandlers": {
+          "byHandler": {},
+          "total": 0
+        },
+        "voidStatements": {
+          "byOperand": {
+            "a promise chain": 1,
+            "a same-file async call": 1,
+            "another call": 3
+          },
+          "total": 5
+        }
+      }
+    },
+    "vite": {
+      "dogfood": false,
+      "failures": [],
+      "files": 124,
+      "lines": 45885,
+      "per10k": {
+        "asyncCallback": 4.6,
+        "awaitInLoop": 12.2,
+        "floatingCall": 1.7,
+        "floatingChain": 1.3
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "Super": 1,
+            "new HMRClient": 1,
+            "createHMRHandler": 1,
+            "perEnvironmentPlugin": 1,
+            "action": 4,
+            "run": 2,
+            "asyncReplace": 4,
+            "processSrcSet": 2,
+            "new WorkerWithFallback": 1,
+            "on": 2,
+            "addEventListener": 2
+          },
+          "total": 21
+        },
+        "asyncFunctions": 345,
+        "asyncNoAwait": {
+          "byContext": {
+            "callback argument": 6,
+            "class method": 8,
+            "other function": 11,
+            "object property": 11,
+            "exported function": 6
+          },
+          "byReturn": {
+            "returns nothing": 10,
+            "returns a call": 21,
+            "returns a value": 11
+          },
+          "total": 42
+        },
+        "awaitExpressions": 579,
+        "awaitInLoop": {
+          "byLoop": {
+            "While": 15,
+            "for…of": 31,
+            "For": 6,
+            "DoWhile": 2,
+            "ForIn": 2
+          },
+          "total": 56
+        },
+        "catchCalls": {
+          "byHandler": {
+            "handles": 13,
+            "empty": 5,
+            "empty (commented)": 1,
+            "handler-ref": 2,
+            "log-only": 4
+          },
+          "total": 25
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {
+            "function (async)": 7,
+            "async IIFE": 1
+          },
+          "total": 8
+        },
+        "floatingChain": {
+          "byEnd": {
+            ".then(a)": 6
+          },
+          "total": 6
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 14,
+            "Promise combinator (via variable)": 1
+          },
+          "total": 15
+        },
+        "thenCalls": 34,
+        "thenRejectionHandlers": {
+          "byHandler": {
+            "handles": 3,
+            "empty (commented)": 1,
+            "log-only": 1,
+            "empty": 1
+          },
+          "total": 6
+        },
+        "voidStatements": {
+          "byOperand": {},
+          "total": 0
+        }
+      }
+    },
+    "astro": {
+      "dogfood": false,
+      "failures": [],
+      "files": 635,
+      "lines": 82969,
+      "per10k": {
+        "asyncCallback": 6.1,
+        "awaitInLoop": 10.2,
+        "floatingCall": 1.9,
+        "floatingChain": 0.8
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "createAsyncManifestMemo": 5,
+            "cache": 1,
+            "defineFontProvider": 1,
+            "subscribe": 1,
+            "on": 6,
+            "limit": 2,
+            "setTimeout": 7,
+            "transform": 1,
+            "collectPrerenderMetadata": 1,
+            "onRequest": 1,
+            "then": 3,
+            "fetchMiddleware": 1,
+            "fetchCache": 1,
+            "emitDestination": 1,
+            "handleMiddleware": 1,
+            "handle": 1,
+            "addEventListener": 6,
+            "requestIdleCallback": 2,
+            "forEach": 2,
+            "MemberExpression": 1,
+            "startViewTransition": 1,
+            "finally": 1,
+            "new Promise": 1,
+            "use": 3
+          },
+          "total": 51
+        },
+        "asyncFunctions": 654,
+        "asyncNoAwait": {
+          "byContext": {
+            "object property": 42,
+            "other function": 16,
+            "exported function": 14,
+            "class method": 19,
+            "callback argument": 12
+          },
+          "byReturn": {
+            "returns nothing": 32,
+            "returns a call": 35,
+            "returns a value": 36
+          },
+          "total": 103
+        },
+        "awaitExpressions": 1123,
+        "awaitInLoop": {
+          "byLoop": {
+            "for…of": 61,
+            "For": 7,
+            "While": 12,
+            "ForIn": 5
+          },
+          "total": 85
+        },
+        "catchCalls": {
+          "byHandler": {
+            "empty": 7,
+            "handles": 8,
+            "log-only": 8,
+            "empty (commented)": 2,
+            "handler-ref": 3,
+            "noop-ref": 1
+          },
+          "total": 29
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {
+            "function (async)": 8,
+            "method (annotated)": 1,
+            "method (async)": 6,
+            "async IIFE": 1
+          },
+          "total": 16
+        },
+        "floatingChain": {
+          "byEnd": {
+            ".then(a)": 4,
+            ".finally(f)": 3
+          },
+          "total": 7
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 8
+          },
+          "total": 8
+        },
+        "thenCalls": 43,
+        "thenRejectionHandlers": {
+          "byHandler": {
+            "handles": 2
+          },
+          "total": 2
+        },
+        "voidStatements": {
+          "byOperand": {},
+          "total": 0
+        }
+      }
+    },
+    "excalidraw": {
+      "dogfood": false,
+      "failures": [],
+      "files": 444,
+      "lines": 128127,
+      "per10k": {
+        "asyncCallback": 2.3,
+        "awaitInLoop": 0.6,
+        "floatingCall": 2,
+        "floatingChain": 0.5
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "new Promise": 9,
+            "withBatchedUpdates": 1,
+            "setConsumer": 1,
+            "then": 2,
+            "setTimeout": 1,
+            "useCallback": 8,
+            "run": 1,
+            "on": 1,
+            "promiseTry": 5,
+            "toBlob": 1
+          },
+          "total": 30
+        },
+        "asyncFunctions": 159,
+        "asyncNoAwait": {
+          "byContext": {
+            "exported function": 8,
+            "other function": 5,
+            "class method": 4,
+            "class property": 4
+          },
+          "byReturn": {
+            "returns nothing": 4,
+            "returns a call": 11,
+            "returns a value": 6
+          },
+          "total": 21
+        },
+        "awaitExpressions": 211,
+        "awaitInLoop": {
+          "byLoop": {
+            "for…of": 4,
+            "While": 4
+          },
+          "total": 8
+        },
+        "catchCalls": {
+          "byHandler": {
+            "handles": 12,
+            "handler-ref": 2,
+            "log-only": 2
+          },
+          "total": 16
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {
+            "method (async)": 13,
+            "function (async)": 8,
+            "async IIFE": 5
+          },
+          "total": 26
+        },
+        "floatingChain": {
+          "byEnd": {
+            ".then(a)": 5,
+            ".finally(f)": 1
+          },
+          "total": 6
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 3
+          },
+          "total": 3
+        },
+        "thenCalls": 25,
+        "thenRejectionHandlers": {
+          "byHandler": {
+            "handles": 1
+          },
+          "total": 1
+        },
+        "voidStatements": {
+          "byOperand": {
+            "a variable or property": 1
+          },
+          "total": 1
+        }
+      }
+    },
+    "next.js": {
+      "dogfood": false,
+      "failures": [],
+      "files": 1416,
+      "lines": 276128,
+      "per10k": {
+        "asyncCallback": 7.3,
+        "awaitInLoop": 7.6,
+        "floatingCall": 0.8,
+        "floatingChain": 0.7
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "then": 20,
+            "action": 2,
+            "traceAsyncFn": 46,
+            "withPromiseCache": 1,
+            "run": 5,
+            "new Promise": 4,
+            "subscribe": 7,
+            "scheduleOnNextTick": 2,
+            "curry": 2,
+            "reduce": 1,
+            "tapPromise": 6,
+            "limit": 1,
+            "tapAsync": 4,
+            "resolve": 1,
+            "createServer": 2,
+            "catch": 2,
+            "on": 8,
+            "onFetch": 1,
+            "reportFetch": 1,
+            "step": 3,
+            "registerCustomCacheHandlers": 3,
+            "schedulerFn": 1,
+            "cache": 3,
+            "createLazyResult": 3,
+            "useActionState": 1,
+            "useCallback": 1,
+            "createMemoizedPromise": 6,
+            "bindSnapshot": 1,
+            "runInSequentialTasks": 4,
+            "withSpan": 1,
+            "runInstantInsightsWithTracing": 1,
+            "runSpan": 2,
+            "runWithDevValidationLogging": 1,
+            "createLazyDevValidationInputs": 4,
+            "exit": 1,
+            "loadOrGenerateKey": 1,
+            "cacheScopedToWorkStore": 2,
+            "trace": 18,
+            "pipe": 1,
+            "onDevServerCleanup": 3,
+            "setStackFrameResolver": 2,
+            "addEventListener": 2,
+            "batch": 1,
+            "subscribeToChanges": 1,
+            "setUseCacheProbe": 1,
+            "ensureCallback": 1,
+            "addListener": 1,
+            "withLocalSpan": 1,
+            "registerTool": 9,
+            "get": 2,
+            "scheduleImmediate": 1,
+            "withTaggedErrors": 1,
+            "_getData": 1
+          },
+          "total": 201
+        },
+        "asyncFunctions": 1338,
+        "asyncNoAwait": {
+          "byContext": {
+            "callback argument": 59,
+            "other function": 52,
+            "exported function": 60,
+            "class method": 57,
+            "object property": 15,
+            "class property": 1
+          },
+          "byReturn": {
+            "returns nothing": 35,
+            "returns a call": 166,
+            "returns a value": 43
+          },
+          "total": 244
+        },
+        "awaitExpressions": 2507,
+        "awaitInLoop": {
+          "byLoop": {
+            "for…of": 121,
+            "ForIn": 22,
+            "While": 51,
+            "For": 17
+          },
+          "total": 211
+        },
+        "catchCalls": {
+          "byHandler": {
+            "handles": 80,
+            "empty": 44,
+            "log-only": 33,
+            "empty (commented)": 9,
+            "handler-ref": 11,
+            "noop-ref": 1
+          },
+          "total": 178
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {
+            "function (async)": 8,
+            "function (annotated)": 5,
+            "async IIFE": 5,
+            "method (async)": 5
+          },
+          "total": 23
+        },
+        "floatingChain": {
+          "byEnd": {
+            ".then(a)": 19,
+            ".finally(f)": 1
+          },
+          "total": 20
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 40,
+            "Promise combinator (via variable)": 3
+          },
+          "total": 43
+        },
+        "thenCalls": 260,
+        "thenRejectionHandlers": {
+          "byHandler": {
+            "handles": 25,
+            "handler-ref": 27,
+            "noop-ref": 4,
+            "log-only": 4,
+            "empty (commented)": 1,
+            "empty": 1
+          },
+          "total": 62
+        },
+        "voidStatements": {
+          "byOperand": {
+            "a promise chain": 16,
+            "a same-file async call": 9,
+            "a variable or property": 4,
+            "another call": 9
+          },
+          "total": 38
+        }
+      }
+    },
+    "vscode": {
+      "dogfood": false,
+      "failures": [],
+      "files": 226,
+      "lines": 71809,
+      "per10k": {
+        "asyncCallback": 0.1,
+        "awaitInLoop": 0.3,
+        "floatingCall": 0,
+        "floatingChain": 0.1
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "schedule": 1
+          },
+          "total": 1
+        },
+        "asyncFunctions": 26,
+        "asyncNoAwait": {
+          "byContext": {
+            "class method": 11
+          },
+          "byReturn": {
+            "returns a value": 6,
+            "returns a call": 5
+          },
+          "total": 11
+        },
+        "awaitExpressions": 14,
+        "awaitInLoop": {
+          "byLoop": {
+            "For": 1,
+            "DoWhile": 1
+          },
+          "total": 2
+        },
+        "catchCalls": {
+          "byHandler": {},
+          "total": 0
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {},
+          "total": 0
+        },
+        "floatingChain": {
+          "byEnd": {
+            ".then(a)": 1
+          },
+          "total": 1
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator (via variable)": 1
+          },
+          "total": 1
+        },
+        "thenCalls": 5,
+        "thenRejectionHandlers": {
+          "byHandler": {},
+          "total": 0
+        },
+        "voidStatements": {
+          "byOperand": {},
+          "total": 0
+        }
+      }
+    },
+    "ultracite": {
+      "dogfood": true,
+      "failures": [],
+      "files": 53,
+      "lines": 14568,
+      "per10k": {
+        "asyncCallback": 3.4,
+        "awaitInLoop": 0,
+        "floatingCall": 0,
+        "floatingChain": 0
+      },
+      "tally": {
+        "asyncCallback": {
+          "byCallee": {
+            "action": 5
+          },
+          "total": 5
+        },
+        "asyncFunctions": 140,
+        "asyncNoAwait": {
+          "byContext": {},
+          "byReturn": {},
+          "total": 0
+        },
+        "awaitExpressions": 298,
+        "awaitInLoop": {
+          "byLoop": {},
+          "total": 0
+        },
+        "catchCalls": {
+          "byHandler": {},
+          "total": 0
+        },
+        "disables": {
+          "byRule": {},
+          "total": 0
+        },
+        "floatingCall": {
+          "byTarget": {},
+          "total": 0
+        },
+        "floatingChain": {
+          "byEnd": {},
+          "total": 0
+        },
+        "mapAsync": {
+          "byFate": {
+            "Promise combinator": 3
+          },
+          "total": 3
+        },
+        "thenCalls": 0,
+        "thenRejectionHandlers": {
+          "byHandler": {},
+          "total": 0
+        },
+        "voidStatements": {
+          "byOperand": {},
+          "total": 0
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "@typescript-eslint/typescript-estree": "8.71.0"
+  }
+}

@@ -1,5 +1,6 @@
 // Runs experiment runs strictly one after another (concurrency 1), measuring each.
 // Usage: node scripts/run-batch.mjs s1:claude:2 s1:codex:1 ...
+//        RESEARCH_TOPIC=floating-promises node scripts/run-batch.mjs fp1:claude:1 ...
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 

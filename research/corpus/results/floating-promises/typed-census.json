@@ -1,0 +1,959 @@
+{
+  "repos": {
+    "zod": {
+      "files": 125,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "promise-function-async:missingAsync": 8,
+          "promise-function-async:missingAsyncHybridReturn": 54,
+          "await-thenable:invalidPromiseAggregatorInput": 4,
+          "return-await:requiredPromiseAwait": 5,
+          "strict-void-return:nonVoidReturn": 2,
+          "require-await:missingAwait": 1,
+          "await-thenable:await": 1,
+          "no-floating-promises:floatingVoid": 1
+        },
+        "counts": {
+          "await-thenable": 5,
+          "no-floating-promises": 1,
+          "promise-function-async": 62,
+          "require-await": 1,
+          "return-await": 5,
+          "strict-void-return": 2
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 1,
+          "no-misused-promises": 0
+        },
+        "seconds": 4,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 28,
+          "error": 0,
+          "other": 1363,
+          "thenable": 1
+        },
+        "diagnostics": {},
+        "files": 125,
+        "imports": {
+          "bare": 0,
+          "bareUnresolved": 0,
+          "relative": 485,
+          "relativeUnresolved": 0,
+          "resolvedOutsideClone": 0
+        },
+        "topOutside": {},
+        "topUnresolved": {},
+        "importResolution": 100,
+        "bareCallsUntyped": 2,
+        "unresolvedDiagnostics": 0,
+        "programDiagnostics": {
+          "packages/zod/tsconfig.json": {
+            "2688": 2
+          }
+        }
+      },
+      "oxlint": {
+        "counts": {},
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [
+          "packages/zod/tsconfig.json: Cannot find type definition file for 'recheck'.",
+          "packages/zod/tsconfig.json: Cannot find type definition file for 'vitest'."
+        ],
+        "linted": 125,
+        "seconds": 0
+      }
+    },
+    "hono": {
+      "files": 187,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "promise-function-async:missingAsync": 34,
+          "return-await:requiredPromiseAwait": 43,
+          "promise-function-async:missingAsyncHybridReturn": 43,
+          "require-await:missingAwait": 4,
+          "no-floating-promises:floatingVoid": 13,
+          "no-misused-promises:voidReturnArgument": 5,
+          "strict-void-return:asyncFunc": 3,
+          "await-thenable:await": 3,
+          "await-thenable:invalidPromiseAggregatorInput": 4,
+          "strict-void-return:nonVoidReturn": 13,
+          "strict-void-return:nonVoidFunc": 1,
+          "no-floating-promises:floatingPromiseArrayVoid": 3,
+          "no-floating-promises:floatingUselessRejectionHandlerVoid": 1
+        },
+        "counts": {
+          "await-thenable": 7,
+          "no-floating-promises": 17,
+          "no-misused-promises": 5,
+          "promise-function-async": 77,
+          "require-await": 4,
+          "return-await": 43,
+          "strict-void-return": 17
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 8,
+          "no-misused-promises": 4
+        },
+        "seconds": 3,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 8,
+          "error": 1,
+          "other": 665,
+          "thenable": 16
+        },
+        "diagnostics": {},
+        "files": 187,
+        "imports": {
+          "bare": 6,
+          "bareUnresolved": 0,
+          "relative": 580,
+          "relativeUnresolved": 0,
+          "resolvedOutsideClone": 6
+        },
+        "topOutside": {
+          "node:path": 2,
+          "node:async_hooks": 1,
+          "node:crypto": 1,
+          "node:fs": 1,
+          "node:stream": 1
+        },
+        "topUnresolved": {},
+        "importResolution": 100,
+        "bareCallsUntyped": 1.3,
+        "unresolvedDiagnostics": 0,
+        "programDiagnostics": {
+          "tsconfig.build.json": {}
+        }
+      },
+      "oxlint": {
+        "counts": {
+          "await-thenable": 7,
+          "no-floating-promises": 17,
+          "no-misused-promises": 5,
+          "promise-function-async": 77,
+          "require-await": 5,
+          "return-await": 43,
+          "strict-void-return": 17
+        },
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [],
+        "linted": 187,
+        "seconds": 0
+      }
+    },
+    "trpc": {
+      "files": 176,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "promise-function-async:missingAsync": 42,
+          "promise-function-async:missingAsyncHybridReturn": 10,
+          "return-await:requiredPromiseAwait": 14,
+          "require-await:missingAwait": 14,
+          "no-misused-promises:voidReturnArgument": 1,
+          "strict-void-return:asyncFunc": 1,
+          "strict-void-return:nonVoidReturn": 4
+        },
+        "counts": {
+          "no-misused-promises": 1,
+          "promise-function-async": 52,
+          "require-await": 14,
+          "return-await": 14,
+          "strict-void-return": 5
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 0,
+          "no-misused-promises": 1
+        },
+        "seconds": 4,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 9,
+          "error": 129,
+          "other": 579,
+          "thenable": 21
+        },
+        "diagnostics": {
+          "1360": 1,
+          "2304": 2,
+          "2307": 76,
+          "2322": 1,
+          "2339": 4,
+          "2345": 5,
+          "2503": 1,
+          "2584": 5,
+          "2591": 21,
+          "2688": 3,
+          "2741": 1,
+          "2769": 1,
+          "4111": 14,
+          "7006": 72,
+          "7019": 2,
+          "7031": 4,
+          "7053": 2
+        },
+        "files": 176,
+        "imports": {
+          "bare": 278,
+          "bareUnresolved": 80,
+          "relative": 576,
+          "relativeUnresolved": 0,
+          "resolvedOutsideClone": 18
+        },
+        "topOutside": {
+          "http": 4,
+          "typescript": 3,
+          "http2": 2,
+          "node:fs": 2,
+          "node:path": 2,
+          "node:stream": 2,
+          "node:http": 1,
+          "node:url": 1,
+          "node:util": 1
+        },
+        "topUnresolved": {
+          "@tanstack/react-query": 32,
+          "react": 13,
+          "next": 11,
+          "jscodeshift": 5,
+          "@clack/prompts": 4,
+          "aws-lambda": 2,
+          "fastify": 2,
+          "@bomb.sh/args": 1,
+          "@hey-api/openapi-ts": 1,
+          "express": 1,
+          "node:child_process": 1,
+          "node:path": 1,
+          "node:util": 1,
+          "openapi-types": 1,
+          "path": 1
+        },
+        "importResolution": 90.6,
+        "bareCallsUntyped": 18.7,
+        "unresolvedDiagnostics": 79,
+        "programDiagnostics": {
+          "packages/client/tsconfig.json": {
+            "2688": 1,
+            "5096": 1
+          },
+          "packages/next/tsconfig.json": {
+            "2688": 1,
+            "5096": 1
+          },
+          "packages/openapi/tsconfig.json": {
+            "2688": 1,
+            "5096": 1
+          },
+          "packages/react-query/tsconfig.json": {
+            "2688": 2,
+            "5096": 1
+          },
+          "packages/server/tsconfig.json": {
+            "2688": 1,
+            "5096": 1
+          },
+          "packages/tanstack-react-query/tsconfig.json": {
+            "2688": 1,
+            "5096": 1
+          },
+          "packages/upgrade/tsconfig.json": {
+            "2688": 1,
+            "5096": 1
+          }
+        }
+      },
+      "oxlint": {
+        "counts": {},
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [
+          "packages/client/tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "packages/client/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.",
+          "packages/next/tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "packages/next/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.",
+          "packages/openapi/tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "packages/openapi/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.",
+          "packages/react-query/tsconfig.json: Cannot find type definition file for '@testing-library/jest-dom'.",
+          "packages/react-query/tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "packages/react-query/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.",
+          "packages/server/tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "packages/server/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.",
+          "packages/tanstack-react-query/tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "packages/tanstack-react-query/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.",
+          "packages/upgrade/tsconfig.json: Cannot find type definition file for '@testing-library/jest-dom'.",
+          "packages/upgrade/tsconfig.json: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set."
+        ],
+        "linted": 176,
+        "seconds": 0
+      }
+    },
+    "vite": {
+      "files": 124,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "no-floating-promises:floatingVoid": 27,
+          "require-await:missingAwait": 19,
+          "promise-function-async:missingAsync": 64,
+          "no-misused-promises:voidReturnArgument": 12,
+          "strict-void-return:nonVoidFunc": 9,
+          "return-await:requiredPromiseAwait": 42,
+          "strict-void-return:nonVoidReturn": 17,
+          "promise-function-async:missingAsyncHybridReturn": 15,
+          "strict-void-return:asyncFunc": 9,
+          "no-misused-promises:voidReturnVariable": 1,
+          "no-misused-promises:voidReturnReturnValue": 4,
+          "await-thenable:invalidPromiseAggregatorInput": 4
+        },
+        "counts": {
+          "await-thenable": 4,
+          "no-floating-promises": 27,
+          "no-misused-promises": 17,
+          "promise-function-async": 79,
+          "require-await": 19,
+          "return-await": 42,
+          "strict-void-return": 35
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 15,
+          "no-misused-promises": 12
+        },
+        "seconds": 6,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 55,
+          "error": 281,
+          "other": 1443,
+          "thenable": 38
+        },
+        "diagnostics": {
+          "1360": 2,
+          "2307": 264,
+          "2322": 12,
+          "2339": 156,
+          "2345": 5,
+          "2353": 34,
+          "2367": 4,
+          "2454": 1,
+          "2551": 2,
+          "2554": 1,
+          "2578": 12,
+          "2664": 1,
+          "2683": 4,
+          "2698": 1,
+          "2769": 2,
+          "4112": 4,
+          "7006": 287,
+          "7019": 2,
+          "7031": 11,
+          "7053": 5,
+          "18046": 22,
+          "18047": 2,
+          "18048": 2,
+          "18049": 1
+        },
+        "files": 124,
+        "imports": {
+          "bare": 511,
+          "bareUnresolved": 261,
+          "relative": 804,
+          "relativeUnresolved": 0,
+          "resolvedOutsideClone": 161
+        },
+        "topOutside": {
+          "node:path": 58,
+          "node:fs": 39,
+          "node:http": 9,
+          "node:perf_hooks": 9,
+          "node:url": 9,
+          "node:https": 5,
+          "node:net": 5,
+          "node:util": 5,
+          "node:crypto": 4,
+          "node:module": 4,
+          "node:child_process": 2,
+          "node:events": 2,
+          "node:http2": 2,
+          "node:readline": 2,
+          "node:buffer": 1
+        },
+        "topUnresolved": {
+          "rolldown": 91,
+          "picocolors": 39,
+          "magic-string": 17,
+          "es-module-lexer": 11,
+          "tinyglobby": 7,
+          "@jridgewell/remapping": 6,
+          "@voidzero-dev/vite-task-client": 6,
+          "picomatch": 5,
+          "strip-literal": 5,
+          "@jridgewell/trace-mapping": 4,
+          "parse5": 4,
+          "@rollup/pluginutils": 3,
+          "@vitejs/devtools": 3,
+          "convert-source-map": 3,
+          "esbuild": 3
+        },
+        "importResolution": 80.2,
+        "bareCallsUntyped": 18.5,
+        "unresolvedDiagnostics": 264,
+        "programDiagnostics": {
+          "packages/vite/src/client/tsconfig.json": {},
+          "packages/vite/src/module-runner/tsconfig.json": {},
+          "packages/vite/src/node/tsconfig.json": {},
+          "packages/vite/src/shared/tsconfig.json": {}
+        }
+      },
+      "oxlint": {
+        "counts": {
+          "await-thenable": 4,
+          "no-floating-promises": 27,
+          "no-misused-promises": 17,
+          "promise-function-async": 79,
+          "require-await": 19,
+          "return-await": 42,
+          "strict-void-return": 35
+        },
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [],
+        "linted": 124,
+        "seconds": 0
+      }
+    },
+    "astro": {
+      "files": 635,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "require-await:missingAwait": 73,
+          "promise-function-async:missingAsync": 88,
+          "return-await:requiredPromiseAwait": 83,
+          "no-floating-promises:floatingVoid": 35,
+          "strict-void-return:nonVoidReturn": 22,
+          "no-misused-promises:voidReturnArgument": 29,
+          "promise-function-async:missingAsyncHybridReturn": 22,
+          "strict-void-return:asyncFunc": 23,
+          "strict-void-return:nonVoidFunc": 15,
+          "no-misused-promises:voidReturnVariable": 5,
+          "await-thenable:await": 4,
+          "await-thenable:forAwaitOfNonAsyncIterable": 2,
+          "await-thenable:invalidPromiseAggregatorInput": 2,
+          "no-floating-promises:floatingPromiseArrayVoid": 2,
+          "no-misused-promises:voidReturnReturnValue": 1
+        },
+        "counts": {
+          "await-thenable": 8,
+          "no-floating-promises": 37,
+          "no-misused-promises": 35,
+          "promise-function-async": 110,
+          "require-await": 73,
+          "return-await": 83,
+          "strict-void-return": 60
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 18,
+          "no-misused-promises": 18
+        },
+        "seconds": 6,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 79,
+          "error": 172,
+          "other": 2285,
+          "thenable": 46
+        },
+        "diagnostics": {
+          "2305": 80,
+          "2307": 391,
+          "2322": 6,
+          "2339": 682,
+          "2344": 8,
+          "2345": 36,
+          "2366": 4,
+          "2538": 1,
+          "2559": 2,
+          "2578": 2,
+          "2677": 1,
+          "2688": 1,
+          "2698": 1,
+          "2731": 2,
+          "2739": 3,
+          "7006": 427,
+          "7019": 3,
+          "7022": 5,
+          "7023": 6,
+          "7031": 13,
+          "18046": 121,
+          "18047": 4
+        },
+        "files": 635,
+        "imports": {
+          "bare": 652,
+          "bareUnresolved": 393,
+          "relative": 2743,
+          "relativeUnresolved": 9,
+          "resolvedOutsideClone": 235
+        },
+        "topOutside": {
+          "node:fs": 70,
+          "node:url": 68,
+          "node:path": 39,
+          "node:http": 18,
+          "node:module": 8,
+          "node:net": 7,
+          "node:perf_hooks": 4,
+          "node:os": 3,
+          "node:util": 3,
+          "node:async_hooks": 2,
+          "node:child_process": 2,
+          "node:crypto": 2,
+          "node:events": 2,
+          "node:http2": 2,
+          "node:stream": 2
+        },
+        "topUnresolved": {
+          "vite": 133,
+          "@astrojs/internal-helpers": 67,
+          "zod": 33,
+          "piccolore": 29,
+          "unifont": 11,
+          "(relative)": 9,
+          "devalue": 7,
+          "html-escaper": 7,
+          "unstorage": 6,
+          "astro:assets": 4,
+          "magic-string": 4,
+          "shiki": 4,
+          "xxhash-wasm": 4,
+          "@astrojs/compiler-rs": 3,
+          "@clack/prompts": 3
+        },
+        "importResolution": 88.2,
+        "bareCallsUntyped": 9.7,
+        "unresolvedDiagnostics": 392,
+        "programDiagnostics": {
+          "packages/astro/tsconfig.build.json": {}
+        }
+      },
+      "oxlint": {
+        "counts": {
+          "await-thenable": 8,
+          "no-floating-promises": 37,
+          "no-misused-promises": 36,
+          "promise-function-async": 110,
+          "require-await": 73,
+          "return-await": 83,
+          "strict-void-return": 59
+        },
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [],
+        "linted": 635,
+        "seconds": 0
+      }
+    },
+    "excalidraw": {
+      "files": 444,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "promise-function-async:missingAsync": 32,
+          "require-await:missingAwait": 9,
+          "strict-void-return:nonVoidReturn": 70,
+          "strict-void-return:nonVoidFunc": 11,
+          "return-await:requiredPromiseAwait": 27,
+          "promise-function-async:missingAsyncHybridReturn": 2,
+          "no-floating-promises:floatingVoid": 40,
+          "no-misused-promises:voidReturnArgument": 11,
+          "strict-void-return:asyncFunc": 12,
+          "no-misused-promises:voidReturnAttribute": 7,
+          "no-misused-promises:conditional": 1,
+          "await-thenable:await": 1
+        },
+        "counts": {
+          "await-thenable": 1,
+          "no-floating-promises": 40,
+          "no-misused-promises": 19,
+          "promise-function-async": 34,
+          "require-await": 9,
+          "return-await": 27,
+          "strict-void-return": 93
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 18,
+          "no-misused-promises": 9
+        },
+        "seconds": 62,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 66,
+          "error": 993,
+          "other": 3748,
+          "thenable": 47
+        },
+        "diagnostics": {
+          "2304": 3,
+          "2305": 1,
+          "2307": 350,
+          "2322": 19,
+          "2339": 1351,
+          "2345": 40,
+          "2347": 2,
+          "2353": 1,
+          "2503": 144,
+          "2591": 8,
+          "2875": 185,
+          "2882": 1,
+          "7006": 326,
+          "7026": 2422,
+          "7031": 249,
+          "7053": 3,
+          "18046": 8,
+          "18047": 2
+        },
+        "files": 444,
+        "imports": {
+          "bare": 1318,
+          "bareUnresolved": 341,
+          "relative": 2014,
+          "relativeUnresolved": 11,
+          "resolvedOutsideClone": 0
+        },
+        "topOutside": {},
+        "topUnresolved": {
+          "react": 170,
+          "clsx": 75,
+          "radix-ui": 25,
+          "roughjs": 19,
+          "(relative)": 11,
+          "react-dom": 11,
+          "points-on-curve": 8,
+          "@excalidraw/mermaid-to-excalidraw": 5,
+          "lodash.throttle": 5,
+          "nanoid": 3,
+          "@codemirror/language": 2,
+          "jotai-scope": 2,
+          "@braintree/sanitize-url": 1,
+          "@codemirror/commands": 1,
+          "@codemirror/state": 1
+        },
+        "importResolution": 89.4,
+        "bareCallsUntyped": 21.8,
+        "unresolvedDiagnostics": 535,
+        "programDiagnostics": {
+          "packages/common/tsconfig.json": {},
+          "packages/element/tsconfig.json": {},
+          "packages/excalidraw/tsconfig.json": {},
+          "tsconfig.json": {
+            "2688": 2,
+            "5101": 1
+          },
+          "packages/math/tsconfig.json": {},
+          "packages/utils/tsconfig.json": {}
+        }
+      },
+      "oxlint": {
+        "counts": {
+          "await-thenable": 1,
+          "no-floating-promises": 40,
+          "no-misused-promises": 19,
+          "promise-function-async": 34,
+          "require-await": 8,
+          "return-await": 27,
+          "strict-void-return": 93
+        },
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [
+          "tsconfig.json: Cannot find type definition file for '@testing-library/jest-dom'.",
+          "tsconfig.json: Cannot find type definition file for 'vitest/globals'.",
+          "tsconfig.json: Option 'baseUrl' has been removed. Please remove it from your configuration.\nSee https://github.com/oxc-project/tsgolint/issues/351 for more information."
+        ],
+        "linted": 444,
+        "seconds": 1
+      }
+    },
+    "next.js": {
+      "files": 1403,
+      "jsFilesSkipped": 13,
+      "eslint": {
+        "byMessageId": {
+          "promise-function-async:missingAsync": 488,
+          "await-thenable:await": 40,
+          "require-await:missingAwait": 97,
+          "no-floating-promises:floatingVoid": 132,
+          "return-await:requiredPromiseAwait": 330,
+          "strict-void-return:nonVoidReturn": 79,
+          "strict-void-return:asyncFunc": 14,
+          "await-thenable:invalidPromiseAggregatorInput": 13,
+          "promise-function-async:missingAsyncHybridReturn": 40,
+          "no-misused-promises:voidReturnArgument": 33,
+          "strict-void-return:nonVoidFunc": 38,
+          "no-misused-promises:conditional": 7,
+          "no-misused-promises:voidReturnProperty": 5,
+          "no-misused-promises:voidReturnAttribute": 3,
+          "no-misused-promises:voidReturnInheritedMethod": 2
+        },
+        "counts": {
+          "await-thenable": 53,
+          "no-floating-promises": 132,
+          "no-misused-promises": 50,
+          "promise-function-async": 528,
+          "require-await": 97,
+          "return-await": 330,
+          "strict-void-return": 131
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 67,
+          "no-misused-promises": 27
+        },
+        "seconds": 16,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 240,
+          "error": 1002,
+          "other": 7653,
+          "thenable": 226
+        },
+        "diagnostics": {
+          "1360": 2,
+          "2304": 47,
+          "2307": 723,
+          "2322": 45,
+          "2339": 172,
+          "2345": 19,
+          "2353": 2,
+          "2367": 2,
+          "2503": 143,
+          "2532": 1,
+          "2550": 38,
+          "2554": 45,
+          "2578": 21,
+          "2664": 1,
+          "2683": 35,
+          "2688": 6,
+          "2720": 3,
+          "2739": 2,
+          "2741": 1,
+          "2769": 4,
+          "2875": 142,
+          "2882": 16,
+          "7006": 304,
+          "7017": 2,
+          "7019": 6,
+          "7026": 1548,
+          "7031": 72,
+          "7053": 1,
+          "18046": 9,
+          "18047": 1
+        },
+        "files": 1403,
+        "imports": {
+          "bare": 1243,
+          "bareUnresolved": 622,
+          "relative": 5966,
+          "relativeUnresolved": 24,
+          "resolvedOutsideClone": 617
+        },
+        "topOutside": {
+          "path": 149,
+          "fs": 113,
+          "http": 68,
+          "querystring": 32,
+          "url": 23,
+          "node:path": 20,
+          "crypto": 19,
+          "node:http": 19,
+          "os": 18,
+          "node:fs": 16,
+          "child_process": 15,
+          "stream": 14,
+          "node:stream": 13,
+          "async_hooks": 11,
+          "typescript": 10
+        },
+        "topUnresolved": {
+          "next": 307,
+          "react": 186,
+          "(relative)": 24,
+          "react-dom": 24,
+          "react-server-dom-webpack": 24,
+          "webpack": 20,
+          "@next/env": 13,
+          "@playwright/test": 9,
+          "VAR_USERLAND": 7,
+          "postcss": 4,
+          "server-only": 4,
+          "@base-ui-components/react": 3,
+          "@swc/core": 3,
+          "@opentelemetry/api": 2,
+          "@vercel/turbopack-ecmascript-runtime": 2
+        },
+        "importResolution": 91,
+        "bareCallsUntyped": 13.6,
+        "unresolvedDiagnostics": 871,
+        "programDiagnostics": {
+          "packages/next/tsconfig.json": {
+            "2688": 2
+          }
+        }
+      },
+      "oxlint": {
+        "counts": {},
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [
+          "packages/next/tsconfig.json: Cannot find type definition file for 'jest'.",
+          "packages/next/tsconfig.json: Cannot find type definition file for 'trusted-types'."
+        ],
+        "linted": 1403,
+        "seconds": 1
+      }
+    },
+    "vscode": {
+      "files": 226,
+      "jsFilesSkipped": 0,
+      "eslint": {
+        "byMessageId": {
+          "promise-function-async:missingAsync": 14,
+          "strict-void-return:nonVoidReturn": 6,
+          "no-floating-promises:floatingVoid": 6,
+          "require-await:missingAwait": 10,
+          "return-await:requiredPromiseAwait": 1
+        },
+        "counts": {
+          "no-floating-promises": 6,
+          "promise-function-async": 14,
+          "require-await": 10,
+          "return-await": 1,
+          "strict-void-return": 6
+        },
+        "fatal": 0,
+        "fatalSamples": [],
+        "filesWithHits": {
+          "no-floating-promises": 3,
+          "no-misused-promises": 0
+        },
+        "seconds": 4,
+        "suppressed": {}
+      },
+      "probe": {
+        "bareCalls": {
+          "any": 10,
+          "error": 328,
+          "other": 2146,
+          "thenable": 6
+        },
+        "diagnostics": {
+          "2304": 1,
+          "2307": 447,
+          "2322": 6,
+          "2339": 98,
+          "2345": 4,
+          "2366": 1,
+          "2551": 12,
+          "2769": 1,
+          "4112": 11,
+          "7006": 144,
+          "7031": 6,
+          "18047": 20,
+          "18048": 8
+        },
+        "files": 226,
+        "imports": {
+          "bare": 5,
+          "bareUnresolved": 5,
+          "relative": 1450,
+          "relativeUnresolved": 442,
+          "resolvedOutsideClone": 0
+        },
+        "topOutside": {},
+        "topUnresolved": {
+          "(relative)": 442,
+          "@vscode/tree-sitter-wasm": 4,
+          "@vscode/diff": 1
+        },
+        "importResolution": 69.3,
+        "bareCallsUntyped": 13.6,
+        "unresolvedDiagnostics": 447,
+        "programDiagnostics": {
+          "src/tsconfig.json": {
+            "2688": 7
+          }
+        }
+      },
+      "oxlint": {
+        "counts": {},
+        "errors": 0,
+        "errorSamples": [],
+        "tsconfigErrors": [
+          "src/tsconfig.json: Cannot find type definition file for '@webgpu/types'.",
+          "src/tsconfig.json: Cannot find type definition file for 'mocha'.",
+          "src/tsconfig.json: Cannot find type definition file for 'semver'.",
+          "src/tsconfig.json: Cannot find type definition file for 'sinon'.",
+          "src/tsconfig.json: Cannot find type definition file for 'trusted-types'.",
+          "src/tsconfig.json: Cannot find type definition file for 'wicg-file-system-access'.",
+          "src/tsconfig.json: Cannot find type definition file for 'winreg'."
+        ],
+        "linted": 226,
+        "seconds": 0
+      }
+    }
+  },
+  "generated": "2026-10-10",
+  "note": "Hits count every occurrence (noInlineConfig). 'suppressed' = an in-file eslint/oxlint disable comment naming the rule (or blanket) on the line, the line above, or file-wide. probe.importResolution is the share of import specifiers TypeScript resolves; probe.bareCallsUntyped is the share of bare call statements typed any/error, which these rules cannot judge. A repo with unresolved imports is a lower bound.",
+  "rules": {
+    "await-thenable": "error",
+    "no-floating-promises": "error",
+    "no-misused-promises": "error",
+    "promise-function-async": "error",
+    "require-await": "error",
+    "return-await": [
+      "error",
+      "always"
+    ],
+    "strict-void-return": "error"
+  },
+  "tools": {
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "eslint": "10.12.0",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "typescript": "6.0.3"
+  }
+}

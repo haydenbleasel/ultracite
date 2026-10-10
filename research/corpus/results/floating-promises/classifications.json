@@ -1,0 +1,1527 @@
+{
+  "annotations": {
+    "duplicateRejection": {
+      "ids": [
+        "f006",
+        "f007",
+        "f008",
+        "f048",
+        "f058",
+        "f063"
+      ],
+      "note": "Labelled latent-bug under the codebook (an unhandled rejection), but the same error is also handled, rethrown or reported elsewhere, so the cost is a duplicate 'Uncaught (in promise)' or unhandledRejection, not a lost error. f063 rests on Monaco's factory API, which is outside the sparse clone."
+    },
+    "notAPromiseAtRuntime": {
+      "ids": [
+        "f001",
+        "f009",
+        "f012",
+        "f013",
+        "f025",
+        "f060"
+      ],
+      "note": "The rule fires on the declared type, but no promise is dropped at runtime: a MaybeAsync check that is always sync here (f001), Array splice/pop on an array whose element type includes Promise (f009, f012, f013), removing a listener (f025), and Object.defineProperties returning the promise the function returns two lines later (f060)."
+    }
+  },
+  "codebook": {
+    "await-loop": {
+      "categories": {
+        "already-concurrent": "The awaited promises were created before or outside the loop, so the work already runs in parallel and the loop only collects results in order. (A later promise that rejects while an earlier one is awaited is briefly unhandled.)",
+        "parallelizable": "Iterations are independent; Promise.all (or a bounded pool) would give the same result, apart from error timing and load. Only when the reviewer would propose the change.",
+        "sequential-dependency": "An iteration needs the previous one's result or state: an accumulator, a cursor or page token, a loop condition on the awaited value, retry/poll/backoff, the next chunk of a stream or queue.",
+        "sequential-ordering": "No data passes between iterations, but they must run in order or stop early: first-match search with break/return, ordered side effects (writes, output, hooks or middleware in sequence), shared state that would race.",
+        "sequential-throttle": "Could run in parallel but is deliberately serialized to limit load (rate limits, processes, memory, open files), stated or evident.",
+        "unclear": "Can't tell from the file and a reasonable lookup."
+      },
+      "fields": {
+        "documented": "A comment at or near the loop says why it is sequential.",
+        "earlyExit": "The loop can break, return or throw on an awaited result.",
+        "evidence": "One or two concrete sentences."
+      }
+    },
+    "floating": {
+      "categories": {
+        "intentional-documented": "Fire-and-forget on purpose, and the code says so at or next to the site (a comment, an explicit marker or suppression).",
+        "intentional-undocumented": "Fire-and-forget by design: nothing downstream needs the result or timing, and a rejection is impossible or already handled (the callee catches its own errors, or no promise exists at runtime), but nothing at the site says so.",
+        "latent-bug": "Something can be lost: (a) lost error, a possible rejection that nothing handles (an unhandled rejection: fatal in Node by default since v15, 'Uncaught (in promise)' in browsers); or (b) ordering, later code or the caller depends on the work having finished.",
+        "unclear": "Can't tell from the file and a reasonable lookup."
+      },
+      "fields": {
+        "bugKind": "For latent-bug: lost-error, ordering or both.",
+        "canReject": "yes, no or unknown.",
+        "evidence": "One or two concrete sentences.",
+        "fix": "What a careful maintainer would do: none, void, await, catch, return or restructure."
+      }
+    }
+  },
+  "labels": [
+    {
+      "kind": "floating",
+      "id": "f001",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "util.sizeCaps only collects checks whose def.check matches _(length|size)$ or _equals$ (max_length, size_equals, ...), all built-in synchronous checks that push issues; check() is typed MaybeAsync<void> but never returns a promise here. Type-driven flag, nothing dropped."
+    },
+    {
+      "kind": "floating",
+      "id": "f002",
+      "category": "intentional-documented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Async Promise executor whose whole body is in try/catch that calls rejectGetInfo(error), so the executor's own promise can never reject; the line above carries an explicit '// eslint-disable-next-line no-async-promise-executor' marker."
+    },
+    {
+      "kind": "floating",
+      "id": "f003",
+      "category": "intentional-documented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Same pattern as f002: nested async executor wrapped in try { ... } catch (error) { rejectReq(error) }, with an explicit eslint-disable no-async-promise-executor marker on the preceding line."
+    },
+    {
+      "kind": "floating",
+      "id": "f004",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "The detached streaming IIFE catches cb errors, but 'await onError(e, stream)' runs inside the catch block with nothing around it, so a user onError that rejects makes the IIFE reject with no handler (crashes Node >=15). Only fires when the user's own error handler throws; low likelihood."
+    },
+    {
+      "kind": "floating",
+      "id": "f005",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "StreamingApi.close() sets closed and wraps writer.close() in try/catch ('Do nothing'), so it never rejects; it is the last statement of the detached IIFE and nothing waits on it."
+    },
+    {
+      "kind": "floating",
+      "id": "f006",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "err.finally(retry) creates a derived promise that rejects whenever the suspended promise rejects; use() already records the rejection and retry routes it to the error boundary, so every rejected use() promise under Suspense also emits a spurious 'Uncaught (in promise)'. Low impact; err.then(retry, retry) fixes it."
+    },
+    {
+      "kind": "floating",
+      "id": "f007",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "registerAction is called from the form onSubmit with the user's action promise; action.finally(...) yields a derived promise that rejects with no handler whenever the action rejects (onSubmit's own await is also unhandled), so each failing form action adds an extra unhandled rejection. Low impact."
+    },
+    {
+      "kind": "floating",
+      "id": "f008",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "Promise.all(actions).finally(...) rejects if any registered form action rejects, and runs on every render of a useOptimistic component while actions are pending, producing more unhandled rejections. Low impact (duplicates of the action error)."
+    },
+    {
+      "kind": "floating",
+      "id": "f009",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Array.prototype.splice flattening a nested children array in place; the returned 'promise array' is just the removed element (an array), typed loosely because Child includes Promise<string>. Linter false positive, no promise involved."
+    },
+    {
+      "kind": "floating",
+      "id": "f010",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "both",
+      "fix": "catch",
+      "evidence": "context[2] is an updateHook (viewTransitionHook or useDeferredValue's async hook) that calls updateSync, which catches build() errors but not apply() DOM errors; if it throws, the .then-derived promise rejects unhandled and resolve(node) never runs, so update() never settles and useState's Promise.all([update(...), pending]) transition bookkeeping hangs. Rare."
+    },
+    {
+      "kind": "floating",
+      "id": "f011",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "res.then(resolve, resolve) handles both outcomes with a plain Promise resolver that cannot throw, so the derived promise always fulfills; it only signals the pending-transition promise."
+    },
+    {
+      "kind": "floating",
+      "id": "f012",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "pendingStack.pop() on an array of [type, Promise] tuples just discards a reference; the stored promise is resolved via res.then(resolve, resolve) and never rejects. Linter false positive (floatingPromiseArray on a sync pop)."
+    },
+    {
+      "kind": "floating",
+      "id": "f013",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "pendingStack.pop() removes the [3, Promise.resolve()] tuple pushed a few lines earlier; nothing is pending or can reject. Linter false positive."
+    },
+    {
+      "kind": "floating",
+      "id": "f014",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "makeResource expects a sync dispose; the async arrow contains no await, so connectionState.next(...) and connectionSub.unsubscribe() run synchronously at scope exit. Only a throw from those sync calls would become an unhandled rejection; dropping the needless async is cosmetic."
+    },
+    {
+      "kind": "floating",
+      "id": "f015",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "The normalized transport.connect() is async and rejects when the underlying connect fails (the WebSocket runner transport rejects with 'WebSocket closed without opened.'); the ModuleRunner constructor drops it, so a failed connect is an unhandled rejection that crashes Node even though later send() calls would also see it. In-process server runners connect synchronously, so it bites WS/custom transports; moderate-low."
+    },
+    {
+      "kind": "floating",
+      "id": "f016",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "runOptimizer wraps everything after its synchronous setup in try/catch that logs 'error while updating dependencies' and resets state, so it cannot reject; it is a background rerun and nothing after the call waits on it."
+    },
+    {
+      "kind": "floating",
+      "id": "f017",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Debounced rerun() kicks off runOptimizer(), which catches and logs all errors internally; the function returns immediately by design."
+    },
+    {
+      "kind": "floating",
+      "id": "f018",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Same runOptimizer (self-catching) committing an empty-deps result, followed by return; nothing downstream needs completion."
+    },
+    {
+      "kind": "floating",
+      "id": "f019",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "devEngine.ensureLatestBuildOutput() can reject: the sibling ensureOutputAndFlushReloadNeeded (L302) passes an explicit '() => {}' rejection handler, but this call (and L321) only has a fulfilment handler, so a failed rebuild after a stale-bundle access becomes an unhandled rejection in the dev server. Moderate likelihood in full-bundle mode."
+    },
+    {
+      "kind": "floating",
+      "id": "f020",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "Connect ignores the async middleware's promise; in the default branch decodeURIComponent(url) (L521/L524) is outside any try (only the fullBundle branch guards its decode) and transform/htmlFallback pass malformed URIs on via next(), so a request like /%E0.html appears to reject with URIError unhandled, leaving the request without a response (vite installs no unhandledRejection handler). The fullBundle branch's awaits are also unguarded; low-moderate."
+    },
+    {
+      "kind": "floating",
+      "id": "f021",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "environment.warmupRequest wraps transformRequest in try/catch, ignores outdated-dep/closed-server codes and logs the rest ('avoid an unhandled exception'); pre-transform warmup is background work by design."
+    },
+    {
+      "kind": "floating",
+      "id": "f022",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "warmupFile catches HTML transform errors itself and delegates other files to warmupRequest, which catches everything; warmupFiles returns void and nothing waits on warmup."
+    },
+    {
+      "kind": "floating",
+      "id": "f023",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "onInput awaits shortcut.action(server) with no try/finally; a rejecting action (customShortcuts are public API via bindCLIShortcuts) becomes an unhandled rejection in the dev server and leaves actionRunning = true, so every later shortcut is ignored. Low-moderate."
+    },
+    {
+      "kind": "floating",
+      "id": "f024",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "parentSigtermCallback awaits the registered closeServerAndExit callbacks, each of which does try { await server.close() } finally { process.exit() }, so the process exits before any rejection could surface; a signal handler is fire-and-forget by nature."
+    },
+    {
+      "kind": "floating",
+      "id": "f025",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "process.off/process.stdin.off only remove the async listener; nothing is invoked and no promise is created. Linter false positive (voidReturnArgument on a removal call)."
+    },
+    {
+      "kind": "floating",
+      "id": "f026",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "sendLog wraps transport.send in try/catch and falls back to sendError inside a second try/catch that logs via originalConsoleError, so it never rejects; console forwarding must not block the patched console method."
+    },
+    {
+      "kind": "floating",
+      "id": "f027",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "ContentLayer.sync() rejects on loader errors: restart.ts L238-245 wraps the same call in try/catch with a comment that a loader error must not reject. The 's' shortcut action neither awaits nor returns it, so a failing sync (e.g. a remote loader) becomes an unhandled rejection that can crash the dev server. Moderate."
+    },
+    {
+      "kind": "floating",
+      "id": "f028",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "both",
+      "fix": "return",
+      "evidence": "AstroIntegrationLogger.close() calls destination.close(), whose public type is () => Promise<void> | void, and returns void, so an async custom destination's close can neither be awaited (logs may not flush before exit) nor have its rejection handled. No built-in destination implements close and nothing in core calls it, so low likelihood."
+    },
+    {
+      "kind": "floating",
+      "id": "f029",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "getViteErrorPayload is async and can reject (err.message.trim() on a message-less error; shiki codeToHtml throws on an unbundled language taken from the file extension); this .then has no rejection handler, so a failure while enhancing a Vite HMR error is an unhandled rejection and the hmr-error event never fires. Low."
+    },
+    {
+      "kind": "floating",
+      "id": "f030",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "The async 'app-toggled' listener has no await; resetDebugButton and the fetchIntegrationData() kick-off are synchronous, so the listener's own promise cannot reject (fetchIntegrationData's internal fetch chain lacks a catch, but that is a separate statement)."
+    },
+    {
+      "kind": "floating",
+      "id": "f031",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "createAuditsUI is declared async but contains no await; it builds cards/highlights synchronously and nothing after the call depends on it."
+    },
+    {
+      "kind": "floating",
+      "id": "f032",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Same as f031 in the setTimeout fallback branch: createAuditsUI is synchronous DOM work behind an async keyword."
+    },
+    {
+      "kind": "floating",
+      "id": "f033",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "The async 'astro:page-load' listener only calls refreshLintPositions() and schedules setupObserver via setTimeout; no await, nothing can reject."
+    },
+    {
+      "kind": "floating",
+      "id": "f034",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "onToggleApp awaits overlay.setAppStatus, which is synchronous DOM toggling after an optional await on app.beforeTogglingOff; no built-in app defines that hook, so it only rejects if a third-party app's hook throws, which surfaces the same way a sync listener throw would."
+    },
+    {
+      "kind": "floating",
+      "id": "f035",
+      "category": "intentional-documented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Comment right above says 'Init app lazily, so that the page can load faster'; initApp wraps app.init in try/catch, logs and marks status 'error', so the dropped promises cannot reject."
+    },
+    {
+      "kind": "floating",
+      "id": "f036",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "forEach(async) calls setAppStatus(app, app.active); with newStatus === app.active the beforeTogglingOff branch is unreachable, so it is pure synchronous DOM toggling and nothing later in connectedCallback depends on it."
+    },
+    {
+      "kind": "floating",
+      "id": "f037",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Click handler awaits toggleAppStatus -> setAppStatus; as in f034, the only rejection path is a throwing third-party beforeTogglingOff hook, which no built-in app implements."
+    },
+    {
+      "kind": "floating",
+      "id": "f038",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "restructure",
+      "evidence": "The idle directive hands its async cb to setTimeout/requestIdleCallback; astro-island's load() swallows import errors, but hydrate() rethrows props-parse errors and lets renderer errors reject. client:load returns its promise to start(), which catches and dispatches astro:hydration-error; client:idle drops it, so hydration errors in idle islands become 'Uncaught (in promise)' and never reach handleHydrationError. Moderate."
+    },
+    {
+      "kind": "floating",
+      "id": "f039",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "await",
+      "evidence": "copyTextToSystemClipboard is async and throws 'Error copying to clipboard.' when the execCommand fallback fails; the surrounding sync try/catch cannot catch the rejection, so the intended errors.copyToSystemClipboardFailed message never shows. Sibling callers (actionElementLink, ShareableLinkDialog) await it; moderate."
+    },
+    {
+      "kind": "floating",
+      "id": "f040",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "both",
+      "fix": "catch",
+      "evidence": "iframe.requestFullscreen() returns a promise that rejects when fullscreen is not permitted (e.g. host iframe without allow='fullscreen'); the try/catch only sees sync throws, so 'Couldn't enter fullscreen' never appears, the rejection is unhandled, and activeEmbeddable is set to active regardless. Moderate."
+    },
+    {
+      "kind": "floating",
+      "id": "f041",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "addNewImagesToImageCache -> updateImageCache records per-file failures in erroredFiles instead of rejecting, then triggers a scene update; rendering shows placeholders until the cache fills, so syncActionResult does not need to wait."
+    },
+    {
+      "kind": "floating",
+      "id": "f042",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "loadFileToCanvas wraps scene/library loading in try/catch and reports via setState({ errorMessage }); only the initial normalizeFile (a 15-byte blob read) sits outside the try. Nothing in the launchQueue consumer follows the call."
+    },
+    {
+      "kind": "floating",
+      "id": "f043",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "restoreFileFromShare wraps the whole Cache API read and load in try/catch -> setState({ errorMessage }); componentDidMount does not depend on it finishing."
+    },
+    {
+      "kind": "floating",
+      "id": "f044",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "The floating call warms the cache for all uncached images; the very next line awaits its own updateImageCache([initializedImageElement]) for the element it needs, and updateImageCache never rejects (errors go to erroredFiles)."
+    },
+    {
+      "kind": "floating",
+      "id": "f045",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "addToLibrary is an async closure with no await; its only async work, library.setLibrary(...), already has a .catch that sets errorMessage."
+    },
+    {
+      "kind": "floating",
+      "id": "f046",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "nextAnimationFrame is declared async but only calls requestAnimationFrame twice; it cannot reject and the focus effect needs no completion signal."
+    },
+    {
+      "kind": "floating",
+      "id": "f047",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "canvasToBlob's async executor wraps the await and toBlob call in try/catch -> reject(error), and the toBlob callback resolves/rejects explicitly, so the executor's own promise never rejects."
+    },
+    {
+      "kind": "floating",
+      "id": "f048",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "importLibraryFromURL catches updateLibrary failures, shows errorMessage via updateScene, then rethrows; both callers (init at L802 and onHashChange) drop the promise, so every failed library import (bad URL, network error, invalid file) also produces an unhandled rejection. User-facing handling is intact; low impact."
+    },
+    {
+      "kind": "floating",
+      "id": "f049",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "return",
+      "evidence": "updateLibrary's promise is not returned from the .then callback, so the trailing .catch (meant to log 'getInitialLibraryItems failed') cannot see it; updateLibrary rejects if restoreLibraryItems/setLibrary throw on malformed items. Deprecated path; low."
+    },
+    {
+      "kind": "floating",
+      "id": "f050",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "both",
+      "fix": "catch",
+      "evidence": "The async toBlob callback awaits encodePngMetadata(serializeAsJSON(...)) outside any try; if that throws, the callback's promise rejects unhandled and the outer Promise is never settled, so exportToBlob() hangs. Only the embedScene PNG path; low."
+    },
+    {
+      "kind": "floating",
+      "id": "f051",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Telemetry.record turns submitRecord into a settled {isFulfilled/isRejected} object via .then/.catch and tracks it in this.queue, so flush() awaits it later; it never rejects."
+    },
+    {
+      "kind": "floating",
+      "id": "f052",
+      "category": "intentional-undocumented",
+      "canReject": "yes",
+      "bugKind": null,
+      "fix": "void",
+      "evidence": "hydrate() is async (awaits initialServerResponse) and can reject if the inlined RSC payload fails, but this is the top-level client bootstrap with no caller to report to; the dev overlay's global unhandledrejection listener (use-error-handler.ts) is how such errors surface, so catching here would not change the outcome. The try/finally only ensures the dev overlay renders."
+    },
+    {
+      "kind": "floating",
+      "id": "f053",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "checkConnectivity wraps the HEAD fetch in try/catch, treats aborts as online and reschedules itself with backoff on network errors; it is a self-rescheduling polling loop that never rejects."
+    },
+    {
+      "kind": "floating",
+      "id": "f054",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "pingOfflineState is an 'online' event listener that kicks off the same self-catching checkConnectivity; waiters use state.promise instead."
+    },
+    {
+      "kind": "floating",
+      "id": "f055",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "When cacheKey is null there is no shared promise to resolve, so the resolve callback is a no-op; returning Promise.resolve(value) where (value) => void is expected drops nothing that can reject."
+    },
+    {
+      "kind": "floating",
+      "id": "f056",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "fetch('/__nextjs_disable_dev_indicator', { method: 'POST' }) has no catch; if the dev server is unreachable it rejects unhandled, and Next's own dev overlay listens for unhandled rejections, so it would report its internal fetch as a runtime error. Low."
+    },
+    {
+      "kind": "floating",
+      "id": "f057",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "onHTMLRenderRSCError returns the onRequestError promise to an error callback typed (err) => void; reporting is fire-and-forget by design, and on Node instrumentationOnRequestError wraps the user hook in try/catch ('Log the soft error and continue'). Only the edge path awaits the user hook without a catch."
+    },
+    {
+      "kind": "floating",
+      "id": "f058",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "The abort listener is never removed; if the stream errored (read rejects, rethrown because cancelled is false) and the signal aborts afterwards, cancel() calls reader.cancel() on an errored stream, which returns a promise rejected with the stored error, unhandled. Duplicate of an already-thrown error; low."
+    },
+    {
+      "kind": "floating",
+      "id": "f059",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "subscribeToClientChanges is a long-lived for-await subscription loop that catches errors (deletes the subscription and sends the onError payload, here a plain object); awaiting it would block forever, so it is detached by design."
+    },
+    {
+      "kind": "floating",
+      "id": "f060",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Object.defineProperties returns its first argument, the same promise the function returns two lines later; nothing is dropped. Linter false positive."
+    },
+    {
+      "kind": "floating",
+      "id": "f061",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "startOrContinuePulling memoizes startPulling, which catches read errors and calls controller.error(err); flush() returns the same memoized promise, so the transform stream does wait for it before closing."
+    },
+    {
+      "kind": "floating",
+      "id": "f062",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Same Telemetry.record as f051: it settles into a result object and is tracked in the queue for flush(), so it never rejects."
+    },
+    {
+      "kind": "floating",
+      "id": "f063",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "dispose() chains .then on the cached createSupport() promise with no rejection handler; createSupport is an external async factory (e.g. Monaco's registerTokensProviderFactory awaits user create() / dynamic imports), so if it failed, disposing adds another unhandled rejection. Duplicate of the original failure; low."
+    },
+    {
+      "kind": "floating",
+      "id": "f064",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "_firstTreeUpdate -> _setViewPortTokens -> _handleTreeUpdate, which returns _updateTreeForRanges(...).then(...) under in-method comments 'Do not await in this method, it will cause a race' and '// Don't block'; the work is synchronous tokenization with setTimeout0 yields and only rejects on a programming error."
+    },
+    {
+      "kind": "floating",
+      "id": "f065",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Same _firstTreeUpdate background tokenization as f064, called from an observable callback that cannot be async."
+    },
+    {
+      "kind": "floating",
+      "id": "f066",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "Direct call to _handleTreeUpdate, which is documented at its definition (not at the call site) as non-blocking; synchronous token work plus setTimeout0 yields, no I/O."
+    },
+    {
+      "kind": "floating",
+      "id": "f067",
+      "category": "intentional-undocumented",
+      "canReject": "no",
+      "bugKind": null,
+      "fix": "none",
+      "evidence": "_refreshNeedsRefresh re-enters _handleTreeUpdate from inside its own completion callback; same self-contained background tokenization as f064-f066."
+    },
+    {
+      "kind": "floating",
+      "id": "f068",
+      "category": "latent-bug",
+      "canReject": "yes",
+      "bugKind": "lost-error",
+      "fix": "catch",
+      "evidence": "getOrCreate -> factory.resolve() -> _create awaits the lazy factory's createSupport with no catch, and requestRichLanguageFeatures drops it, so a failing lazy tokenizer (e.g. a failed dynamic import or invalid Monarch grammar in Monaco) becomes an unhandled rejection. Kicking it off eagerly is intended (`.then(undefined, onUnexpectedError)` would keep that); low."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w001",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "mergeObjectAsync receives pairs whose key/value are ParseReturnTypes already produced by calling _parse on every entry before it runs (e.g. ZodRecord builds all pairs first), so the child parses are in flight together; the loop only awaits them in order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w002",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Same loop as w001: pair.value is a promise created by _parse before mergeObjectAsync is called; awaiting it in order just collects results."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w003",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "ZodObject pushes value: keyValidator._parse(...) for every shape/catchall key before the async branch, so all child parses already run concurrently; the loop collects them into syncPairs in order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w004",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Same loop as w003: pair.value was created by _parse before the loop."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w005",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "ZodMap builds pairs with .map() calling keyType._parse and valueType._parse for every entry before the loop; the loop awaits the in-flight results in order and returns INVALID on the first aborted pair."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w006",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Same loop as w005: pair.value is a pre-created parse promise; the loop collects it and may return INVALID."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w007",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads the next chunk from a ReadableStreamDefaultReader; the while condition is the previous read's done flag."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w008",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Each beforeRequest hook receives currentReq as returned by the previous hook (a chained accumulator), and a false result returns immediately."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w009",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Each afterResponse hook receives currentRes as returned by the previous hook, and a false result returns immediately."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w010",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Runs the combined afterGenerate hooks one after another on the same result and fs module; nothing passes between them, but they are plugin side effects composed in registration order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w011",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "savePromises were all created earlier (saveContentToFile(...).catch(e => e) pushed during route generation), so the saves already run concurrently; the loop collects file names in order and throws the first error. The .catch means no unhandled rejection."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w012",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Re-awaits Promise.all(callbacks) until resolvedCount equals callbacks.length, because resolving callbacks pushes new promises into the same array. The loop condition depends on state produced by the awaited work, and each pass already uses Promise.all."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w013",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "First-match search over configured users: returns on the first user whose username and password match. The two comparisons per user are already Promise.all'd."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w014",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "onAuthSuccess runs at most once, for the matching user, then next() and return. It is an ordered side effect on the exit path of a first-match loop."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w015",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads request body chunks from a reader; a running size total is checked against maxSize (returns onError) and the loop breaks on done."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w016",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads the next stream chunk with reader.read() until done; the partially filled chunk buffer carries over between reads."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w017",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "digest() sets result = generator(mergeBuffers(result, body)), so each call folds the previous digest into the next. The reused chunk buffer is also overwritten after each await."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w018",
+      "category": "unclear",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Walks the string buffer in reverse, awaiting each HtmlEscapedString.toString() (which can start async JSX rendering) and appending to a str accumulator. The values don't feed each other, but it isn't evident whether starting every child render up front is safe for hono's rendering and context semantics."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w019",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Pulls iterator.next() raced against an abort signal; each next() depends on the iterator having advanced, and done returns."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w020",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Reconnect loop: each runProcedure call resubscribes with lastEventId, which comes from the previous connection's last tracked event. A comment in the loop says it handles errors and reconnects."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w021",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "await using disposes the previous connection's iterator at the end of each reconnect iteration, before the next runProcedure(lastEventId) call."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w022",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Reads the next event from the subscription iterator. lastEventId is updated from each chunk, and retryable errors break out to the outer reconnect loop ('Use a while loop to handle errors and reconnects')."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w023",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads subscription results one at a time via iterator.next() raced against abortPromise; breaks on abort, error or done."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w024",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "One-shot cleanup: iterator.return() runs only when the awaited race resolved to 'abort', immediately before break."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w025",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Drains an async iterator with iterator.next() until done, yielding each encoded value in order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w026",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads the next JSONL chunk from a stream reader and dispatches on its status; throws if the stream closes."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w027",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads the next SSE message from the stream, with an inactivity timeout that recreates the reader; returns when done."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w028",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Pulls iterator.next() raced against a timer: returns on done, throws on timeout, and stops after count items."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w029",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Waits for flushSignal, drains the shared buffer the source iterators fill, then waits again until no iterators remain. Each wait depends on the buffer and iterator state left by the previous flush."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w030",
+      "category": "sequential-ordering",
+      "documented": true,
+      "earlyExit": false,
+      "evidence": "jscodeshift transforms rewrite the same committedFiles in place, and the list is sorted so the provider transform runs first ('Make sure provider transform runs first'). Running them concurrently would race on file writes."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w031",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reconnect poll: pings the server, waits, or waits for the tab to become visible, and loops until ping() succeeds."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w032",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Re-executes the cleared entrypoints one at a time after a full reload. It checks runner.isClosed() before each import and breaks if the runner closed during a failed import; entrypoint evaluation has side effects."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w033",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each this.resolve(ref.specifier, id) is independent and only feeds classifyImportRef for that ref. Resolving all refs with Promise.all and then classifying in order would push the same findings in the same order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w034",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each stale _temp_ cache directory is stat'ed and removed independently. Iterations share no state, and errors are swallowed per stat or caught for the whole function."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w035",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Same loop as w034: the rm of one stale temp dir doesn't depend on any other dir."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w036",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "resolveId handler chain: returns the first handler's truthy result, so later handlers must not run once one matches."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w037",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each new URL(..., import.meta.url) match resolves its asset (assetResolver/fileToUrl) independently and then updates a disjoint MagicString range. Collecting the matches first and resolving them with Promise.all gives the same output, apart from emitFile order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w038",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "configurePreviewServer hooks run in sorted plugin order by contract. Each can add middleware to the shared server, and the returned post hooks are collected in order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w039",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Polling loop waiting for the initial build: sleep, wait for the current build, then re-read the bundle state that drives the loop condition. Returns if the server closes."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w040",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Same poll as w039: the re-read getBundleState() result (lastBuildErrored) decides whether the loop continues."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w041",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Polls the file's mtime every 10 ms, up to 10 times, and breaks once it changes. The comment above the function cites vitejs/vite#610 (reading too early yields an empty buffer)."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w042",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Each pass awaits Promise.all over the previous pass's flattened output and repeats while any element is still thenable. Work within a pass is already concurrent."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w043",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Accumulates stream chunks and re-probes imageMetadata on the growing buffer after each read, returning as soon as dimensions are known (commented: 'Attempt to determine the size with each new chunk')."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w044",
+      "category": "sequential-ordering",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "One-shot cleanup: reader.cancel() runs once dimensions are found, right before returning ('stop stream as we have size now')."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w045",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each collection's work (typeForCollection, its own injected .ts file, getContentLayerSchema, its JSON schema) is independent, with per-collection filenames. The only cross-iteration state is dataTypesStr and contentCollectionsMap, built in sorted key order, which could be assembled in order after Promise.all; the mid-loop return is a synchronous type check."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w046",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each symlinked content entry's realpath is resolved independently and stored under its own Map key, so Promise.all over the symlink entries builds the same map."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w047",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Pipes a web stream into the Node response: each reader.read() follows the previous write, and the loop ends on done."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w048",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "generateCspDigest is a pure crypto.subtle.digest of each client directive. Promise.all over the directives would push the same hashes in the same order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w049",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Same pure digest for each inline or before-hydration script; Promise.all(map) keeps the order of clientScriptHashes."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w050",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each nested logger's emitDestination gets nameOffset + imports.length, which counts the imports earlier siblings emitted, so generated variable names depend on previous iterations."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w051",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "astro:build:setup runs once per integration in config order by contract, and updateConfig calls merge into updatedConfig in that order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w052",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each named slot renders independently into renderedSlots[name], and Astro's own renderSlots() already renders slots for the same result with Promise.all."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w053",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Pipes reader chunks to res.write in order until done."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w054",
+      "category": "unclear",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Inside a module-graph crawl, SSR-imports each not-yet-evaluated imported module so that its importedModules get populated. The iterations look independent, but they evaluate user modules with side effects and swallow errors, so it isn't evident that concurrent evaluation is safe."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w055",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each allowed MIME type of each ClipboardItem is read independently with getType() and .text() into types[type], with a try/catch per type. Promise.all, assigning in the original order, gives the same map."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w056",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Same line as w055 (the outer await on .text()): reading one type's blob text doesn't depend on any other type."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w057",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Image blobs are fetched per type with getType() independently and wrapped with createFile; there is no cross-iteration dependency."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w058",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each library item is rendered with exportToCanvas on its own and drawn at an offset computed from its index. The small 128px canvases could all be produced with Promise.all and then drawn in order."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w059",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "BFS over auto-fix candidates: a failed parse's error message generates new candidates for the queue, the first successful parse returns, and the search is capped at AUTO_FIX_MAX_CANDIDATES."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w060",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Reads streamed response chunks into a line buffer that carries partial lines over to the next read; breaks on done."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w061",
+      "category": "sequential-ordering",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "URL fallback chain: tries each font URL in order and returns the first one that fetches and subsets successfully (JSDoc: 'from first to last, treated as fallbacks')."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w062",
+      "category": "sequential-ordering",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Subsetting uses the arrayBuffer fetched in the same iteration and returns on success; it is part of the w061 first-success fallback chain."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w063",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "handleAppMeta is async only in name (it contains no await) and pushes segment prerender outputs onto the shared outputs.prerenders array. The enclosing loop also increments a shared prerenderGroupId, so the order of output records matters and parallelizing would gain nothing."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w064",
+      "category": "parallelizable",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each exported page's server bundle is unlinked independently and no iteration reads another's result, so Promise.all (or a bounded pool for very many pages) is equivalent."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w065",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Compilers run in ORDERED_COMPILER_NAMES order, and each worker's returned pluginState is deep-merged into prunedBuildContext.pluginState, which the next compiler's worker receives. The worker is also ended before the next one starts, to save memory."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w066",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "The first upload's token response sets sessionId and sessionToken, which every later token request sends, so all uploads join one session. The loop calls process.exit on a failed token response."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w067",
+      "category": "already-concurrent",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "resolveItunes, like the other async resolvers in this switch, only awaits the pathname promise passed into the function from outside the loop. Each key writes its own field, so there is no real async work to parallelize."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w068",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "Interactive wizard state machine (each stage depends on the previous user choice). stopDiscovery() runs once, on the final stage, immediately before launching the harness and returning."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w069",
+      "category": "unclear",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Renders the partial segment stages one at a time into a shared segment cache (each into its own per-stage entries), then the Dynamic stage. The stages look independent, but it isn't evident whether the Flight re-renders and their stage controllers can safely run concurrently."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w070",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Lock acquisition: awaits the current holder's promise, re-checks the locks map, and loops until no lock exists (comment: 'simple queue-based locking mechanism')."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w071",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "First-match search across item types in precedence order (static folders, public, app, pages). ensureFn compiles only the candidate route, the loop continues on PageNotFoundError, and the function returns the first match."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w072",
+      "category": "sequential-ordering",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Sequential scan over the sorted known files that mutates shared serverFields and route state. propagateServerField pushes the instrumentation hook file to the render server once, when that file is reached."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w073",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Retry loop: waits 100 ms after a failed loadManifest and retries until attempts run out (JSDoc: 'Load manifest file with retries')."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w074",
+      "category": "sequential-dependency",
+      "documented": false,
+      "earlyExit": false,
+      "evidence": "Each post-processor receives the content returned by the previous one (content = await postProcessor(content))."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w075",
+      "category": "sequential-throttle",
+      "documented": false,
+      "earlyExit": true,
+      "evidence": "The awaited setTimeout0 is a deliberate yield between ranges so background tokenization doesn't block the UI thread. After each yield the loop breaks if the text model version changed."
+    },
+    {
+      "kind": "await-loop",
+      "id": "w076",
+      "category": "sequential-dependency",
+      "documented": true,
+      "earlyExit": true,
+      "evidence": "Time-sliced incremental parse: each pass resumes from the previous pass's parser state after yielding, until a tree is produced or the model version changes. A comment explains why the await is safe."
+    }
+  ],
+  "raters": {
+    "first": "first pass (Claude subagent) (floating); first pass (Claude subagent) (await-loop). Each read the worksheet (code context and permalink) and the repo file, read-only.",
+    "second": "second pass, blind (lead agent, Claude): labelled from async-agreement.cjs --print and the repo files, before reading the first pass"
+  },
+  "secondRater": {
+    "f001": {
+      "category": "intentional-undocumented",
+      "note": "Only length/size/equals checks reach here (util.sizeCaps); they're sync, so no promise exists at runtime. The check type is MaybeAsync<void>."
+    },
+    "f003": {
+      "category": "intentional-documented",
+      "note": "Async executor fully wrapped in try/catch that calls rejectReq; an eslint-disable for no-async-promise-executor marks it deliberate."
+    },
+    "f006": {
+      "category": "latent-bug",
+      "bugKind": "lost-error",
+      "note": "err.finally(retry) derives a new promise that rejects when the suspended promise rejects, and nothing handles it."
+    },
+    "f007": {
+      "category": "latent-bug",
+      "bugKind": "lost-error",
+      "note": "action.finally(cleanup) derives a promise that re-rejects unhandled when the action rejects."
+    },
+    "f009": {
+      "category": "intentional-undocumented",
+      "note": "splice returns the removed arrays; the rule sees Child[] (which includes Promise). No promise at runtime."
+    },
+    "f011": {
+      "category": "intentional-undocumented",
+      "note": "res.then(resolve, resolve) handles rejection; the rule calls the handler useless because resolve is typed as possibly undefined."
+    },
+    "f020": {
+      "category": "latent-bug",
+      "bugKind": "lost-error",
+      "note": "Async Connect middleware; awaits at the fallback-HTML path are outside try/catch, so a throw there is an unhandled rejection and the request hangs."
+    },
+    "f022": {
+      "category": "intentional-undocumented",
+      "note": "Warmup is background work; warmupFile catches errors on both branches (warmupRequest has its own try/catch)."
+    },
+    "f025": {
+      "category": "intentional-undocumented",
+      "note": "The flagged call is process.off, which only removes the listener; nothing runs here."
+    },
+    "f031": {
+      "category": "intentional-undocumented",
+      "note": "createAuditsUI is async with no await (sync DOM work); dev toolbar idle callback."
+    },
+    "f032": {
+      "category": "intentional-undocumented",
+      "note": "Same as f031, setTimeout fallback."
+    },
+    "f033": {
+      "category": "intentional-undocumented",
+      "note": "Async listener with a sync body; nothing awaited."
+    },
+    "f035": {
+      "category": "intentional-documented",
+      "note": "\"Init app lazily, so that the page can load faster\"; initApp catches its own errors."
+    },
+    "f038": {
+      "category": "latent-bug",
+      "bugKind": "lost-error",
+      "note": "load() (dynamic import of the island) can fail on the network; the rejection is unhandled and the island silently never hydrates."
+    },
+    "f042": {
+      "category": "intentional-undocumented",
+      "note": "loadFileToCanvas handles its own errors in try/catch (normalizeFile runs before the try, a small gap)."
+    },
+    "f045": {
+      "category": "intentional-undocumented",
+      "note": "addToLibrary handles setLibrary's rejection with .catch; the async wrapper has nothing else that can reject."
+    },
+    "f049": {
+      "category": "latent-bug",
+      "bugKind": "lost-error",
+      "note": "updateLibrary isn't returned from the .then callback, so the .catch below doesn't cover it. Fix: return it."
+    },
+    "f053": {
+      "category": "intentional-undocumented",
+      "note": "Backoff poll; checkConnectivity catches every error."
+    },
+    "f055": {
+      "category": "intentional-undocumented",
+      "note": "A no-op resolve stand-in returning Promise.resolve(value); it can only reject if handed a rejecting thenable."
+    },
+    "f067": {
+      "category": "intentional-undocumented",
+      "note": "_handleTreeUpdate deliberately doesn't block (comment in the callee, not at this site)."
+    },
+    "w004": {
+      "category": "already-concurrent",
+      "note": "pair.key/pair.value are promises created before the loop."
+    },
+    "w014": {
+      "category": "sequential-ordering",
+      "note": "First matching user wins; the loop returns after next()."
+    },
+    "w016": {
+      "category": "sequential-dependency",
+      "note": "reader.read() stream loop."
+    },
+    "w017": {
+      "category": "sequential-dependency",
+      "note": "digest(chunk) on a reused buffer; the next fill overwrites it."
+    },
+    "w019": {
+      "category": "sequential-dependency",
+      "note": "Async iterator next() raced with abort signal."
+    },
+    "w020": {
+      "category": "sequential-dependency",
+      "note": "Reconnect loop resuming from lastEventId."
+    },
+    "w026": {
+      "category": "sequential-dependency",
+      "note": "reader.read() stream loop."
+    },
+    "w029": {
+      "category": "sequential-dependency",
+      "note": "Waits on a flush signal before draining the buffer."
+    },
+    "w040": {
+      "category": "sequential-dependency",
+      "note": "Poll loop until build output exists."
+    },
+    "w045": {
+      "category": "sequential-ordering",
+      "note": "Builds dataTypesStr in collection order, pushes to shared settings, returns early on error."
+    },
+    "w047": {
+      "category": "sequential-dependency",
+      "note": "reader.read() stream loop."
+    },
+    "w052": {
+      "category": "parallelizable",
+      "note": "Each slot renders to its own temporary destination; results keyed by name."
+    },
+    "w053": {
+      "category": "sequential-dependency",
+      "note": "reader.read() stream loop."
+    },
+    "w056": {
+      "category": "parallelizable",
+      "note": "Independent clipboard getType reads; keep assignment order after Promise.all."
+    },
+    "w060": {
+      "category": "sequential-dependency",
+      "note": "reader.read() stream loop, decoding into a shared buffer."
+    },
+    "w066": {
+      "category": "sequential-dependency",
+      "note": "Later uploads reuse the sessionId/sessionToken from earlier responses."
+    },
+    "w067": {
+      "category": "parallelizable",
+      "note": "Each metadata key resolves into its own field; only a few keys are async."
+    },
+    "w071": {
+      "category": "sequential-ordering",
+      "note": "Route matching: first match wins, continue on miss."
+    },
+    "w072": {
+      "category": "sequential-ordering",
+      "note": "Updates shared serverFields and propagates them in file order."
+    },
+    "w074": {
+      "category": "sequential-dependency",
+      "note": "Post-processor pipeline: each step takes the previous content."
+    }
+  },
+  "agreement": {
+    "floating": {
+      "coarse": {
+        "kappa": 1,
+        "same": 20
+      },
+      "disagreements": [],
+      "ids": [
+        "f001",
+        "f003",
+        "f006",
+        "f007",
+        "f009",
+        "f011",
+        "f020",
+        "f022",
+        "f025",
+        "f031",
+        "f032",
+        "f033",
+        "f035",
+        "f038",
+        "f042",
+        "f045",
+        "f049",
+        "f053",
+        "f055",
+        "f067"
+      ],
+      "kappa": 1,
+      "n": 20,
+      "same": 20
+    },
+    "await-loop": {
+      "coarse": {
+        "kappa": 0.73,
+        "same": 18
+      },
+      "disagreements": [
+        {
+          "first": "parallelizable",
+          "id": "w045",
+          "second": "sequential-ordering"
+        },
+        {
+          "first": "already-concurrent",
+          "id": "w067",
+          "second": "parallelizable"
+        }
+      ],
+      "ids": [
+        "w004",
+        "w014",
+        "w016",
+        "w017",
+        "w019",
+        "w020",
+        "w026",
+        "w029",
+        "w040",
+        "w045",
+        "w047",
+        "w052",
+        "w053",
+        "w056",
+        "w060",
+        "w066",
+        "w067",
+        "w071",
+        "w072",
+        "w074"
+      ],
+      "kappa": 0.83,
+      "n": 20,
+      "same": 18
+    }
+  }
+}

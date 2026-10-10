@@ -39,10 +39,12 @@ const CONFIG_FILE =
   /^(eslint\.config\.|\.eslintrc|biome\.jsonc?$|\.oxlintrc|oxlint\.config\.|package\.json$|tsconfig.*\.json$|\.prettierrc|\.sonarlint|sonar-project\.properties$)/;
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g;
+const EMAIL = /\b[\w.%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}\b/gi;
 
 /**
- * Replaces machine-specific paths and session ids in anything written to a committed file,
- * so run artifacts never carry a home directory, temp path or session id.
+ * Replaces machine-specific paths, session ids and email addresses in anything written to a
+ * committed file, so run artifacts never carry a home directory, temp path, session id or an
+ * account's email (an agent can print one, e.g. from `git log`).
  */
 const redact = (value) => {
   // macOS resolves /tmp and /var through /private, and agents report either form.
@@ -55,11 +57,30 @@ const redact = (value) => {
     [tmpdir(), "<tmp>"],
     [homedir(), "~"],
   ];
-  const text = replacements.reduce(
-    (acc, [from, to]) => acc.split(from).join(to),
-    JSON.stringify(value)
-  );
-  return JSON.parse(text.replace(UUID, "<uuid>"));
+  const text = replacements
+    .reduce(
+      (acc, [from, to]) => acc.split(from).join(to),
+      JSON.stringify(value)
+    )
+    // macOS's per-user temp root above $TMPDIR (/var/folders/<xx>/<id>), which an agent
+    // exploring parent directories can print.
+    .replace(
+      /(\/private)?\/var\/folders\/[^/"\s\\]+(\/[^/"\s\\]+)?/g,
+      "<os-tmp-root>"
+    );
+  // Emails are replaced in the parsed strings, not the JSON text, so an escape such as `\n`
+  // right before an address can't be mangled.
+  const scrub = (v) => {
+    if (typeof v === "string") return v.replace(EMAIL, "<email>");
+    if (Array.isArray(v)) return v.map(scrub);
+    if (v && typeof v === "object") {
+      return Object.fromEntries(
+        Object.entries(v).map(([k, x]) => [k, scrub(x)])
+      );
+    }
+    return v;
+  };
+  return scrub(JSON.parse(text.replace(UUID, "<uuid>")));
 };
 
 const parserOptions = {
