@@ -55,10 +55,10 @@ bunx ultracite init \
 - `--pm` — `npm` | `yarn` | `pnpm` | `bun` | `deno` | `nub` | `aube`
 - `--linter` — `oxlint` (recommended) | `biome` | `eslint`
 - `--editors` — `universal` (writes `.vscode/settings.json` for every VS Code-based editor) | `vscode` | `cursor` | `windsurf` | `codebuddy` | `antigravity` | `bob` | `kiro` | `trae` | `void` | `zed`
-- `--agents` — every choice writes the rules to `AGENTS.md`. `universal` writes only that; `claude`, `gemini`, `aider` and `replit` also add the import, settings or copy that agent needs to read them; IDs like `codex`, `copilot`, `cline`, `amp` and `cursor-cli` (37 agents supported) need nothing more
+- `--agents` — every choice writes the rules to `AGENTS.md`. `universal` writes only that; `claude`, `gemini`, `aider` and `replit` also add the import, settings or copy that agent needs to read them; IDs like `codex`, `copilot`, `cline`, `amp` and `cursor-cli` (40 agents supported) need nothing more
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
-- `--hooks` — Enable auto-fix hooks: `claude` | `copilot` | `cursor` | `windsurf` | `codebuddy`
+- `--hooks` — Enable auto-fix hooks: `claude` | `copilot` | `cursor` | `windsurf` | `codebuddy` | `grok`
 - `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-sonarjs` | `oxlint-plugin-react-doctor`
 - `--type-aware` — Enable type-aware linting (Biome: extends the `type-aware` preset; Oxlint: installs `oxlint-tsgolint`)
 - `--install-skill` — Install the reusable Ultracite skill after setup

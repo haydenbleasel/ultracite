@@ -37,6 +37,13 @@ export const agentDirectory = {
     tagline:
       "Coding agent that runs in your terminal or on per-thread cloud machines.",
   },
+  antigravity: {
+    group: "terminal",
+    maker: "Google",
+    name: "Antigravity CLI",
+    tagline:
+      "Google’s terminal coding agent, which took over from Gemini CLI for consumer accounts in June 2026.",
+  },
   augmentcode: {
     group: "editor",
     maker: "Augment Code",
@@ -121,6 +128,13 @@ export const agentDirectory = {
     tagline:
       "Coding agent for Android Studio and other JetBrains IDEs, focused on Android.",
   },
+  fx: {
+    group: "terminal",
+    maker: "Vercel Labs",
+    name: "fx",
+    tagline:
+      "Vercel Labs’ small, model-agnostic coding agent CLI written in Zig, still marked experimental.",
+  },
   gemini: {
     group: "terminal",
     maker: "Google",
@@ -134,6 +148,13 @@ export const agentDirectory = {
     name: "goose",
     tagline:
       "Open-source local agent with a desktop app and a CLI, created by Block.",
+  },
+  grok: {
+    group: "terminal",
+    maker: "xAI",
+    name: "Grok Build",
+    tagline:
+      "xAI’s open-source terminal coding agent, with Claude Code-compatible rules and hooks.",
   },
   jules: {
     group: "cloud",

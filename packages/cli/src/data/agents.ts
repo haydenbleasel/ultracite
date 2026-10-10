@@ -258,4 +258,39 @@ export const agents: Agent[] = [
     id: "vercel",
     name: "Vercel Agent",
   },
+  {
+    id: "fx",
+    name: "fx",
+  },
+  {
+    id: "antigravity",
+    name: "Antigravity CLI",
+  },
+  {
+    hooks: {
+      // Grok Build reads project hooks from .grok/hooks/*.json in Claude
+      // Code's format, maps `Write|Edit` onto its own file tools, and hands a
+      // PostToolUse hook's stderr to the model when it exits with code 2.
+      // Project hooks run once the user trusts them with /hooks-trust.
+      getContent: (command) => ({
+        hooks: {
+          PostToolUse: [
+            {
+              hooks: [
+                {
+                  command,
+                  timeout: 30,
+                  type: "command",
+                },
+              ],
+              matcher: "Write|Edit",
+            },
+          ],
+        },
+      }),
+      path: ".grok/hooks/ultracite.json",
+    },
+    id: "grok",
+    name: "Grok Build",
+  },
 ];

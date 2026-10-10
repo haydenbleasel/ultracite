@@ -53,6 +53,43 @@ describe("editedFilesFromHookPayload", () => {
   });
 });
 
+// Grok sends its own camelCase keys plus Claude Code's snake_case ones, and
+// its own tool names.
+const grokPayload = (toolName: string) =>
+  JSON.stringify({
+    cwd: "/repo",
+    hookEventName: "post_tool_use",
+    hook_event_name: "PostToolUse",
+    sessionId: "abc",
+    toolInput: {
+      file_path: "/repo/src/e.ts",
+      new_string: "b",
+      old_string: "a",
+    },
+    toolName,
+    tool_input: {
+      file_path: "/repo/src/e.ts",
+      new_string: "b",
+      old_string: "a",
+    },
+    tool_name: toolName,
+  });
+
+describe("editedFilesFromHookPayload (Grok Build)", () => {
+  test.each(["search_replace", "hashline_edit", "write"])(
+    "reads the edited file from %s",
+    (toolName) => {
+      expect(editedFilesFromHookPayload(grokPayload(toolName))).toEqual([
+        "/repo/src/e.ts",
+      ]);
+    }
+  );
+
+  test("hands the problems back to the model", () => {
+    expect(hookFeedsAgent(grokPayload("search_replace"))).toBe(true);
+  });
+});
+
 describe("editedFilesFromHookPayload (Copilot and VS Code)", () => {
   test("reads toolArgs.path from the Copilot CLI, as a JSON string or object", () => {
     expect(

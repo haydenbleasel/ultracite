@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
 import { createHooks } from "../src/hooks";
-import { restoreFileSystemMock } from "./mock-fs";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -763,5 +763,128 @@ describe("writing outside the project", () => {
     } finally {
       restoreFileSystemMock();
     }
+  });
+});
+
+// A project whose files start as `initial` and change as they're written and
+// removed. Returns the files afterwards and the paths removed.
+const runInProject = async (
+  hook: "grok" | "windsurf",
+  initial: Record<string, string>
+) => {
+  const files = { ...initial };
+  const removed = new Set<string>();
+
+  mock.module("node:fs/promises", () => ({
+    access: mock((path: string) =>
+      path in files ? Promise.resolve() : Promise.reject(new Error("ENOENT"))
+    ),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock((path: string) =>
+      path in files
+        ? Promise.resolve(files[path])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    rm: mock((path: string) => {
+      removed.add(path);
+      Reflect.deleteProperty(files, path);
+      return Promise.resolve();
+    }),
+    writeFile: mock((path: string, content: string) => {
+      files[path] = content;
+      return Promise.resolve();
+    }),
+  }));
+  mockFileSystem(files);
+
+  try {
+    const hooks = createHooks(hook, "npm", "oxlint");
+    await (hooks.exists() ? hooks.update() : hooks.create());
+  } finally {
+    restoreFileSystemMock();
+  }
+
+  return { files, removed };
+};
+
+const windsurfHook = (command: string) =>
+  JSON.stringify({
+    hooks: { post_write_code: [{ command, show_output: true }] },
+  });
+
+describe("windsurf (Devin Desktop) hooks", () => {
+  test("go in .devin/hooks.json", async () => {
+    const { files } = await runInProject("windsurf", {});
+
+    expect(JSON.parse(files[".devin/hooks.json"] ?? "{}")).toEqual({
+      hooks: {
+        post_write_code: [
+          { command: "npm run fix -- --hook", show_output: true },
+        ],
+      },
+    });
+    expect(files[".windsurf/hooks.json"]).toBeUndefined();
+  });
+
+  test("move from .windsurf/hooks.json, which is removed once empty", async () => {
+    const { files, removed } = await runInProject("windsurf", {
+      ".windsurf/hooks.json": windsurfHook("npm run fix -- --hook"),
+    });
+
+    expect(removed.has(".windsurf/hooks.json")).toBe(true);
+    expect(files[".devin/hooks.json"]).toContain("npm run fix -- --hook");
+  });
+
+  test("bring the user's own hooks along, since Devin Desktop stops reading the old file", async () => {
+    const { files, removed } = await runInProject("windsurf", {
+      ".windsurf/hooks.json": JSON.stringify({
+        hooks: {
+          post_write_code: [
+            { command: "./notify.sh" },
+            { command: "npm run fix -- --hook", show_output: true },
+          ],
+          pre_user_prompt: [{ command: "./audit.sh" }],
+        },
+      }),
+    });
+
+    const devin = JSON.parse(files[".devin/hooks.json"] ?? "{}");
+    expect(devin.hooks.pre_user_prompt).toEqual([{ command: "./audit.sh" }]);
+    expect(devin.hooks.post_write_code).toEqual([
+      { command: "./notify.sh" },
+      { command: "npm run fix -- --hook", show_output: true },
+    ]);
+
+    // The old file keeps only the user's hooks.
+    expect(removed.has(".windsurf/hooks.json")).toBe(false);
+    expect(JSON.parse(files[".windsurf/hooks.json"] ?? "{}")).toEqual({
+      hooks: {
+        post_write_code: [{ command: "./notify.sh" }],
+        pre_user_prompt: [{ command: "./audit.sh" }],
+      },
+    });
+  });
+});
+
+describe("grok build hooks", () => {
+  test("go in .grok/hooks/ultracite.json in Claude Code's format", async () => {
+    const { files } = await runInProject("grok", {});
+
+    expect(JSON.parse(files[".grok/hooks/ultracite.json"] ?? "{}")).toEqual({
+      hooks: {
+        PostToolUse: [
+          {
+            hooks: [
+              {
+                command: "npm run fix -- --hook",
+                timeout: 30,
+                type: "command",
+              },
+            ],
+            matcher: "Write|Edit",
+          },
+        ],
+      },
+    });
   });
 });

@@ -332,7 +332,10 @@ export const editors: Editor[] = [
           post_write_code: [{ command, show_output: true }],
         },
       }),
-      path: ".windsurf/hooks.json",
+      // Devin Desktop (formerly Windsurf) reads .devin/hooks.json, and the
+      // old .windsurf/hooks.json only while that file has no hooks.
+      legacyPath: ".windsurf/hooks.json",
+      path: ".devin/hooks.json",
     },
     id: "windsurf",
     name: "Windsurf",

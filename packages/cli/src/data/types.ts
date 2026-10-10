@@ -18,5 +18,12 @@ export interface HooksConfig {
    * re-run removes generated hooks in that shape so they don't run twice.
    */
   getLegacyContent?: (command: string) => JsonObject;
+  /**
+   * Where earlier versions wrote this hook, when the host has since moved its
+   * hooks file. Ultracite's hook comes out of it; the user's own hooks are
+   * copied to `path` first, since a host that reads `path` stops reading the
+   * old file.
+   */
+  legacyPath?: string;
   path: string;
 }

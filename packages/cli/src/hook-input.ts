@@ -43,8 +43,9 @@ const toolInfoPayloadSchema = z.looseObject({
 });
 
 // Tools that edit files in hosts whose hook runs after every tool (VS Code
-// ignores matchers; the Copilot CLI hook is written without one). Claude Code
-// and CodeBuddy hooks only fire for Write/Edit through their matcher.
+// ignores matchers; the Copilot CLI hook is written without one), and in Grok
+// Build, which names its tools in lower case. Claude Code and CodeBuddy hooks
+// only fire for Write/Edit through their matcher.
 const editToolNames = new Set([
   // Copilot CLI and cloud agent
   "apply_patch",
@@ -52,6 +53,10 @@ const editToolNames = new Set([
   "edit",
   "str_replace_editor",
   "write",
+  // Grok Build, which sends its own names (and `write`) even though its
+  // matcher is spelled with Claude Code's `Write|Edit`
+  "hashline_edit",
+  "search_replace",
   // VS Code
   "copilot_applyPatch",
   "copilot_createFile",
@@ -187,8 +192,8 @@ export const editedFilesFromHookPayload = (
 };
 
 // The hosts that hand a post-edit hook's stderr to the agent when the hook
-// exits with 2: Claude Code, CodeBuddy and VS Code send a `PostToolUse`
-// payload, and Windsurf a `post_write_code` one. Cursor's `afterFileEdit` has
+// exits with 2: Claude Code, CodeBuddy, VS Code and Grok Build send a
+// `PostToolUse` payload, and Windsurf (Devin Desktop) a `post_write_code` one. Cursor's `afterFileEdit` has
 // no way to reach the agent (and reads 2 as "block"), and the Copilot CLI only
 // shows a hook's stderr to the user, so neither is listed.
 const feedbackPayloadSchema = z.union([

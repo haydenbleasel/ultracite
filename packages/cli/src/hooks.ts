@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
 
 import deepmerge from "deepmerge";
 import { parse } from "jsonc-parser";
@@ -181,6 +181,15 @@ const generatedFixCommands = (): Set<string> =>
     )
   );
 
+const readJson = async (filePath: string): Promise<JsonObject> => {
+  // jsonc-parser's output is untyped; a JSONC document parses to a JSON
+  // value, or undefined when unparseable.
+  const parsed: JsonValue | undefined = parse(
+    await readFile(filePath, "utf-8")
+  );
+  return isJsonObject(parsed) ? parsed : {};
+};
+
 export const createHooks = (
   name: (typeof options.hooks)[number],
   packageManager: PackageManagerName,
@@ -230,22 +239,46 @@ export const createHooks = (
     return isJsonObject(pruned) ? pruned : existing;
   };
 
-  const updateConfig = async (): Promise<void> => {
-    const doesExist = exists(hookIntegration.hooks.path);
+  // Takes Ultracite's hook out of the file the host used to read, and removes
+  // the file when that leaves it empty.
+  const retireLegacyPath = async (): Promise<void> => {
+    const { legacyPath } = hookIntegration.hooks;
 
-    if (!doesExist) {
-      await writeProjectFile(
-        hookIntegration.hooks.path,
-        `${JSON.stringify(content, null, 2)}\n`
-      );
+    if (!(legacyPath && exists(legacyPath))) {
       return;
     }
 
-    const existingContent = await readFile(hookIntegration.hooks.path, "utf-8");
-    // jsonc-parser's output is untyped; a JSONC document parses to a JSON
-    // value, or undefined when unparseable.
-    const parsed: JsonValue | undefined = parse(existingContent);
-    const existingJson: JsonObject = isJsonObject(parsed) ? parsed : {};
+    const legacy = await readJson(legacyPath);
+    const pruned = removeGeneratedEntries(
+      legacy,
+      content,
+      command,
+      isGeneratedCommand
+    );
+
+    if (JSON.stringify(pruned) === JSON.stringify(legacy)) {
+      return;
+    }
+
+    await (isJsonObject(pruned) && Object.keys(pruned).length === 0
+      ? rm(legacyPath, { force: true })
+      : writeProjectFile(legacyPath, `${JSON.stringify(pruned, null, 2)}\n`));
+  };
+
+  const updateConfig = async (): Promise<void> => {
+    const { legacyPath, path } = hookIntegration.hooks;
+    const doesExist = exists(path);
+    // A new hooks file starts from the old one, so the user's own hooks keep
+    // running once the host switches to it.
+    const seedPath = doesExist ? path : legacyPath;
+
+    if (!(seedPath && exists(seedPath))) {
+      await writeProjectFile(path, `${JSON.stringify(content, null, 2)}\n`);
+      await retireLegacyPath();
+      return;
+    }
+
+    const existingJson = await readJson(seedPath);
     const current = retireLegacyFormat(existingJson);
 
     const upgraded = upgradeCommand(
@@ -263,20 +296,15 @@ export const createHooks = (
       ? upgraded
       : deepmerge(upgraded, content);
 
-    if (JSON.stringify(next) !== JSON.stringify(existingJson)) {
-      await writeProjectFile(
-        hookIntegration.hooks.path,
-        `${JSON.stringify(next, null, 2)}\n`
-      );
+    if (!doesExist || JSON.stringify(next) !== JSON.stringify(existingJson)) {
+      await writeProjectFile(path, `${JSON.stringify(next, null, 2)}\n`);
     }
+    await retireLegacyPath();
   };
 
   return {
     create: async () => {
-      await writeProjectFile(
-        hookIntegration.hooks.path,
-        `${JSON.stringify(content, null, 2)}\n`
-      );
+      await updateConfig();
     },
     exists: () => exists(hookIntegration.hooks.path),
     update: async () => {
