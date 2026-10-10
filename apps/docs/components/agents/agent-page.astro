@@ -1,0 +1,371 @@
+---
+// One agent's landing page. What `ultracite init --agents <id>` writes comes
+// from the CLI's own table, so it can't drift from the CLI; who the agent is
+// comes from lib/agent-directory.ts; everything else is the page's researched
+// content (lib/agent-pages/<id>.ts).
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
+import { mergeAgentSettings } from "../../../../packages/cli/src/agent-settings";
+import { agents as cliAgents } from "../../../../packages/cli/src/data/agents";
+import { getRules } from "../../../../packages/cli/src/data/rules";
+import { agentDirectory } from "../../lib/agent-directory";
+import type { AgentEntry } from "../../lib/agent-directory";
+import type { AgentPageContent } from "../../lib/agent-pages/types";
+import Cta from "../home/cta.astro";
+import Icon from "../home/icon.astro";
+import SectionHeading from "../home/section-heading.astro";
+import AnnotatedCode from "../landing/annotated-code.astro";
+import Faq from "../landing/faq.astro";
+import LandingHero from "../landing/landing-hero.astro";
+import LandingLayout from "../landing/landing-layout.astro";
+import type { Crumb } from "../landing/landing-layout.astro";
+import NextSteps from "../landing/next-steps.astro";
+import type { NextStep } from "../landing/next-steps.astro";
+import RichText from "../landing/rich-text.astro";
+
+interface Props {
+  content: AgentPageContent;
+  id: string;
+}
+
+const { content, id } = Astro.props;
+
+const agent = cliAgents.find((candidate) => candidate.id === id);
+if (!agent) {
+  throw new Error(`No agent "${id}" in the CLI's table`);
+}
+
+const directory = new Map<string, AgentEntry>(Object.entries(agentDirectory));
+const details = directory.get(id);
+const name = details?.name ?? agent.name;
+const logo = `/logos/${details?.logo ?? id}.svg`;
+const command = `npx ultracite@latest init --agents ${id}`;
+const slug = (text: string): string =>
+  text.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-").replaceAll(/^-|-$/gu, "");
+
+const breadcrumbs: Crumb[] = [
+  { href: "/agents", name: "Agents" },
+  { href: `/agents/${id}`, name },
+];
+
+// What init writes for a new npm project on the default linter.
+const ultracite = "npx ultracite";
+const rules = getRules(ultracite, "Oxlint + Oxfmt");
+// The rules up to their first divider: the heading, the quick reference
+// and the engine line.
+const rulesLines = rules.split("\n");
+const rulesExcerpt = `${rulesLines
+  .slice(0, rulesLines.indexOf("---"))
+  .join("\n")
+  .trimEnd()}\n\n…`;
+const hookCommand = "npm run fix -- --hook";
+
+const files: { code: string; lang: string; meta?: string; title: string }[] = [
+  { code: rulesExcerpt, lang: "md", meta: "Ultracite’s rules", title: "AGENTS.md" },
+];
+if (agent.imports) {
+  files.push({
+    code: "# Your project notes\n\n@AGENTS.md",
+    lang: "md",
+    meta: "Only if you have one",
+    title: agent.imports[0] ?? "CLAUDE.md",
+  });
+}
+if (agent.rulesCopy) {
+  files.push({
+    code: rulesExcerpt,
+    lang: "md",
+    meta: "A copy",
+    title: agent.rulesCopy,
+  });
+}
+if (agent.settings) {
+  files.push({
+    code: mergeAgentSettings("", agent.settings, "AGENTS.md", `${ultracite} fix`),
+    lang: agent.settings.path.endsWith(".json") ? "json" : "yaml",
+    meta: "Merged",
+    title: agent.settings.path,
+  });
+}
+
+const hookFile = agent.hooks
+  ? {
+      code: JSON.stringify(agent.hooks.getContent(hookCommand), null, 2),
+      lang: "json",
+      title: agent.hooks.path,
+    }
+  : null;
+
+const quickReference = rules
+  .split("\n")
+  .filter((line) => line.startsWith("- **"))
+  .join("\n");
+
+// A lookup step names a file `init` writes: the project's AGENTS.md (a path
+// such as "AGENTS.md, root to working folder" included), or the copy of the
+// rules an agent reads instead. A nested or global AGENTS.md isn't one.
+const isWrittenByInit = (path: string): boolean =>
+  path.startsWith("AGENTS.md") || path === agent.rulesCopy;
+
+const nextSteps: NextStep[] = [
+  ...content.related.slice(0, 3).flatMap((relatedId) => {
+    const relatedAgent = cliAgents.find((candidate) => candidate.id === relatedId);
+    const relatedDetails = directory.get(relatedId);
+    return relatedAgent
+      ? [
+          {
+            description: relatedDetails?.tagline ?? "",
+            href: `/agents/${relatedId}`,
+            label: "Agent",
+            title: relatedDetails?.name ?? relatedAgent.name,
+          },
+        ]
+      : [];
+  }),
+  {
+    description: "What `init` writes for every agent, and how to keep it current.",
+    href: "/docs/ai/rules",
+    label: "Docs",
+    title: "Agent rules",
+  },
+];
+
+const checkedAgainst = content.checked.version
+  ? `${content.checked.product ?? name} ${content.checked.version}`
+  : new Date(content.checked.date).toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description={content.metaDescription}
+  faqs={content.faqs}
+  lastModified={content.checked.date}
+  title={content.metaTitle}
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={logo}
+    name={name}
+    title={content.headline}
+  >
+    <RichText text={content.intro} />
+    <Fragment slot="note">
+      {details?.maker && <span>{name} by {details.maker}</span>}
+      <span aria-hidden="true">·</span>
+      <span>Checked against {checkedAgainst}</span>
+    </Fragment>
+    <div class="grid gap-2 sm:gap-4 lg:grid-cols-12" slot="visual">
+      <div class="flex min-w-0 flex-col gap-2 sm:gap-4 lg:col-span-7">
+        {
+          files.map((file) => (
+            <AnnotatedCode
+              code={file.code}
+              lang={file.lang}
+              meta={file.meta}
+              title={file.title}
+            />
+          ))
+        }
+      </div>
+      <figure
+        class="m-0 flex min-w-0 flex-col overflow-hidden rounded-blume border border-border bg-code lg:col-span-5"
+      >
+        <figcaption
+          class="flex h-11 shrink-0 items-center gap-2.5 border-border border-b px-4 font-medium text-muted-foreground text-xs"
+        >
+          <Icon class="size-3.5" name="folder" />
+          Where {name} looks for instructions
+        </figcaption>
+        <ol class="flex flex-col divide-y divide-border" role="list">
+          {
+            content.rules.lookup.map((step, index) => (
+              <li class="flex gap-3 px-4 py-3">
+                <span class="w-4 shrink-0 font-mono text-muted-foreground text-xs/6 tabular-nums">
+                  {index + 1}
+                </span>
+                <span class="flex min-w-0 flex-col gap-0.5">
+                  <span class="flex flex-wrap items-center gap-2">
+                    <code class="font-mono text-[13px]/6">{step.path}</code>
+                    {isWrittenByInit(step.path) && (
+                      <span class="rounded-sm bg-signal px-1.5 font-mono text-[11px]/5 text-ink uppercase tracking-wider">
+                        Ultracite
+                      </span>
+                    )}
+                  </span>
+                  <span class="text-pretty text-muted-foreground text-sm/5">
+                    <RichText text={step.note} />
+                  </span>
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+      </figure>
+    </div>
+  </LandingHero>
+
+  <section aria-labelledby="ag-rules" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ag-rules" title={`How ${name} reads the rules`}>
+        <RichText text={content.rules.summary} />
+      </SectionHeading>
+      <dl
+        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {
+          content.rules.facts.map((fact) => (
+            <div class="flex flex-col gap-2 bg-background px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+              <dt class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+                {fact.label}
+              </dt>
+              <dd class="text-pretty text-[15px]/6">
+                <RichText text={fact.value} />
+              </dd>
+            </div>
+          ))
+        }
+        {
+          content.rules.facts.length % 3 !== 0 && (
+            <div
+              aria-hidden="true"
+              class="hatch bg-background max-lg:hidden"
+              style={{ gridColumn: `span ${3 - (content.rules.facts.length % 3)}` }}
+            />
+          )
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section aria-labelledby="ag-loop" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ag-loop" title={content.loop.title}>
+        <RichText text={content.loop.body} />
+      </SectionHeading>
+      <div class="border-border border-t bg-muted/60 p-2 sm:p-6 lg:p-10">
+        <div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
+          <div class="flex min-w-0 flex-col gap-2 sm:gap-4 lg:col-span-7">
+          {
+            hookFile && (
+              <AnnotatedCode
+                code={hookFile.code}
+                lang={hookFile.lang}
+                meta={`init --hooks ${id}`}
+                title={hookFile.title}
+              />
+            )
+          }
+          {
+            (content.loop.snippets ?? []).map((snippet) => (
+              <AnnotatedCode
+                code={snippet.code}
+                lang={snippet.lang}
+                title={snippet.title}
+              />
+            ))
+          }
+          {
+            !hookFile && !content.loop.snippets?.length && (
+              <AnnotatedCode
+                code={quickReference}
+                lang="md"
+                meta="What the rules tell it to run"
+                title="AGENTS.md"
+              />
+            )
+          }
+          </div>
+          <ol
+            class="flex min-w-0 flex-col self-start overflow-hidden rounded-blume border border-border bg-code lg:col-span-5"
+            role="list"
+          >
+            {
+              content.loop.steps.map((step, index) => (
+                <li class="flex gap-4 border-border px-5 py-4 [&+&]:border-t">
+                  <span class="font-mono text-accent text-xs/6 tabular-nums">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span class="text-pretty text-[15px]/6">
+                    <RichText text={step} />
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="ag-notes" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ag-notes" title={`Worth knowing about ${name}`} />
+      <ul
+        class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+        role="list"
+      >
+        {
+          content.highlights.map((highlight) => (
+            <li class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
+                {highlight.title}
+              </h3>
+              <p class="max-w-[60ch] text-pretty text-base/7 text-muted-foreground">
+                <RichText text={highlight.body} />
+              </p>
+            </li>
+          ))
+        }
+        <li class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
+            The Ultracite skill
+          </h3>
+          <p class="max-w-[60ch] text-pretty text-base/7 text-muted-foreground">
+            <RichText text={content.skills} />
+          </p>
+        </li>
+        {
+          (content.highlights.length + 1) % 2 === 1 && (
+            <li aria-hidden="true" class="hatch bg-background max-md:hidden" />
+          )
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Faq id={`ag-faq-${slug(id)}`} items={content.faqs} title={`${name} questions, answered`} />
+
+  <section aria-labelledby="ag-sources" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <div class="flex flex-col gap-4 px-4 py-10 sm:px-6 lg:flex-row lg:gap-10 lg:px-10">
+        <h2 class="shrink-0 font-medium text-lg/7 lg:w-56" id="ag-sources">
+          Sources
+        </h2>
+        <ul class="flex flex-col gap-1.5 text-[15px]/6" role="list">
+          {
+            content.sources.map((source) => (
+              <li>
+                <a
+                  aria-describedby={NEW_TAB_HINT_ID}
+                  class="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                  href={source.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {source.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <NextSteps id="ag-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>

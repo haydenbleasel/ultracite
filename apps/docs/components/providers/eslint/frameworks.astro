@@ -1,0 +1,127 @@
+---
+import SectionHeading from "../../home/section-heading.astro";
+import AnnotatedCode from "../../landing/annotated-code.astro";
+import Terminal from "../../landing/terminal.astro";
+
+// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 7.12.4,
+// counted by importing each preset). Vue, Svelte and Astro register their
+// plugin's template parser, so ESLint reads the markup as well as the script.
+const presets = [
+  { count: 549, name: "react", plugins: "React, hooks, jsx-a11y, React Doctor" },
+  { count: 208, name: "vue", plugins: "eslint-plugin-vue", templates: true },
+  { count: 71, name: "vitest", plugins: "@vitest/eslint-plugin" },
+  { count: 69, name: "svelte", plugins: "eslint-plugin-svelte", templates: true },
+  { count: 67, name: "jest", plugins: "eslint-plugin-jest" },
+  { count: 53, name: "astro", plugins: "eslint-plugin-astro", templates: true },
+  { count: 51, name: "angular", plugins: "@angular-eslint" },
+  { count: 47, name: "next", plugins: "@next/eslint-plugin-next, React Doctor" },
+  { count: 34, name: "solid", plugins: "eslint-plugin-solid" },
+  { count: 34, name: "tanstack", plugins: "Query, Router, React Doctor" },
+  { count: 25, name: "nestjs", plugins: "eslint-plugin-nestjs-typed" },
+  { count: 11, name: "qwik", plugins: "eslint-plugin-qwik" },
+  { count: 2, name: "remix", plugins: "eslint-plugin-remix" },
+];
+
+const scale = Math.max(...presets.map((preset) => preset.count));
+const width = (count: number): string => `${(count / scale) * 100}%`;
+
+// A component written for the example, and what `ultracite check` printed
+// for it under ultracite/eslint/core and ultracite/eslint/vue with ESLint
+// 10.12.0 (run for real; ESLint's file header line left out).
+const component = `<script setup lang="ts">
+defineProps<{ tasks: { id: string; title: string; notes: string }[] }>();
+</script>
+
+<template>
+  <ul>
+    <li v-for="task in tasks">
+      <span v-html="task.notes"></span>
+      {{ task.title }}
+    </li>
+  </ul>
+</template>`;
+
+const problems = [
+  {
+    location: "2:15",
+    message: "The \"tasks\" property should have a JSDoc comment",
+    rule: "vue/require-prop-comment",
+  },
+  {
+    location: "7:5",
+    message: "Elements in iteration expect to have 'v-bind:key' directives",
+    rule: "vue/require-v-for-key",
+  },
+  {
+    location: "8:13",
+    message: "'v-html' directive can lead to XSS attack",
+    rule: "vue/no-v-html",
+  },
+];
+---
+
+<section aria-labelledby="es-frameworks" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="es-frameworks"
+      title="Thirteen framework presets, templates included"
+    >
+      Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte
+      and Astro that includes its parser, so ESLint checks the markup, not just
+      the script block.
+    </SectionHeading>
+    <div
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
+    >
+      <div class="flex flex-col bg-background">
+        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">Rules per preset</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider"
+            >Add the ones you use</span
+          >
+        </div>
+        <ul class="flex flex-col gap-4 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {
+            presets.map((preset) => (
+              <li class="flex flex-col gap-1.5">
+                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
+                  <span class="min-w-0">
+                    <code class="font-mono text-sm">{preset.name}</code>
+                    <span class="text-muted-foreground"> · {preset.plugins}</span>
+                    {preset.templates && (
+                      <span class="ml-1.5 rounded-sm bg-foreground px-1 py-px font-mono text-[11px]/4 text-background">
+                        templates
+                      </span>
+                    )}
+                  </span>
+                  <span class="font-mono text-sm tabular-nums">{preset.count}</span>
+                </p>
+                <span class="h-2 rounded-r-[2px] bg-signal" style={{ width: width(preset.count) }} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex min-w-0 flex-col gap-2 bg-muted/60 p-4 sm:gap-4 sm:p-6 lg:p-10">
+        <AnnotatedCode code={component} lang="vue" title="components/TaskList.vue" />
+        <Terminal>
+          <p class="mb-1 truncate text-panel-foreground">
+            <span class="text-signal">$</span> npx ultracite check components/TaskList.vue
+          </p>
+          <p class="truncate">All matched files use Prettier code style!</p>
+          {
+            problems.map((problem) => (
+              <p class="flex min-w-0 gap-3">
+                <span class="w-10 shrink-0 tabular-nums">{problem.location}</span>
+                <span class="min-w-0 text-pretty">
+                  <span class="text-signal">error</span> {problem.message}{" "}
+                  <span class="text-panel-foreground">{problem.rule}</span>
+                </span>
+              </p>
+            ))
+          }
+        </Terminal>
+      </div>
+    </div>
+  </div>
+</section>

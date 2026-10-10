@@ -1,0 +1,133 @@
+---
+import Cta from "../../components/home/cta.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingHero from "../../components/landing/landing-hero.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import NextSteps from "../../components/landing/next-steps.astro";
+import type { NextStep } from "../../components/landing/next-steps.astro";
+import ConfigFiles from "../../components/providers/eslint/config-files.astro";
+import Coverage from "../../components/providers/eslint/coverage.astro";
+import Everywhere from "../../components/providers/eslint/everywhere.astro";
+import Formatter from "../../components/providers/eslint/formatter.astro";
+import Frameworks from "../../components/providers/eslint/frameworks.astro";
+import Speed from "../../components/providers/eslint/speed.astro";
+import { hooks } from "../../../../packages/cli/src/data/hooks";
+import { formatMs, runFor } from "../../lib/benchmarks";
+import { providerLogos } from "../../lib/logos";
+
+// Facts on this page were checked against ESLint 10.12.0, Prettier 3.9.10,
+// Stylelint 17.16.0 and Ultracite 7.12.4 on this date.
+const lastModified = "2026-10-10";
+const command = "npx ultracite@latest init --linter eslint";
+const small = runFor(42);
+const large = runFor(420);
+
+const breadcrumbs: Crumb[] = [
+  { href: "/providers", name: "Providers" },
+  { href: "/providers/eslint", name: "ESLint" },
+];
+
+const faqs: FaqItem[] = [
+  {
+    answer:
+      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 1,042 across ESLint and thirteen plugins, among them typescript-eslint, Unicorn, SonarJS and import-x, with typed linting on. Framework presets add more: 549 rules for React, 47 for Next.js and 208 for Vue. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
+    question: "What does Ultracite add on top of ESLint?",
+  },
+  {
+    answer:
+      "Add a config object after the presets in `eslint.config.mjs`, such as `{ rules: { \"no-console\": \"off\" } }`. In a flat config, later objects win. For one line, use `// eslint-disable-next-line no-console`.",
+    question: "How do I turn off a rule?",
+  },
+  {
+    answer: `ESLint runs in Node, and its 132 typed rules ask TypeScript’s type checker about your code; Prettier and Stylelint then run as their own steps. In our benchmark the toolchain checked 42 files in ${formatMs(small.ms.eslint)} and 420 files in ${formatMs(large.ms.eslint)}, where Oxlint took ${formatMs(small.ms.oxlint)} and ${formatMs(large.ms.oxlint)}. Checking the single file an agent edited took 2.8 s.`,
+    question: "Why is it slower than Oxlint and Biome?",
+  },
+  {
+    answer:
+      "When you depend on something only ESLint has: a plugin with no native port, a Prettier plugin, or template linting for Vue, Svelte and Astro through each framework’s own parser. Otherwise start with Oxlint, which keeps ESLint’s rule names and runs ESLint plugins through its JS plugin API.",
+    question: "When should I pick ESLint over Oxlint or Biome?",
+  },
+  {
+    answer:
+      "For TypeScript files, yes. The typed rules use `projectService`, which finds the `tsconfig.json` that includes each file. A `.ts` or `.tsx` file that no `tsconfig.json` includes fails with a parsing error, so add it to `include`.",
+    question: "Do I need a tsconfig.json?",
+  },
+  {
+    answer:
+      "Yes, with Stylelint. Ultracite’s config extends `stylelint-config-standard` and `stylelint-config-idiomatic-order` for property order, allows Tailwind’s at-rules and functions, and reads SCSS and Less through their own syntaxes.",
+    question: "Does it lint CSS?",
+  },
+  {
+    answer:
+      "Yes. `prettier.config.mjs` is an ordinary Prettier config that spreads Ultracite’s settings, so add plugins to its `plugins` array. `init` puts `prettier-plugin-tailwindcss` there, and `prettier-plugin-svelte` or `prettier-plugin-astro` when you pick those frameworks.",
+    question: "Can I use Prettier plugins?",
+  },
+];
+
+const nextSteps: NextStep[] = [
+  {
+    description:
+      "Every ESLint preset and how Prettier and Stylelint fit around them.",
+    href: "/docs/provider/eslint",
+    label: "Reference",
+    title: "ESLint provider docs",
+  },
+  {
+    description: "The same standard on a native engine, with ESLint’s rule names.",
+    href: "/providers/oxlint",
+    label: "Provider",
+    title: "Ultracite for Oxlint",
+  },
+  {
+    description:
+      `Run \`ultracite fix\` on just the file your agent edited, in ${hooks.length} agents and editors.`,
+    href: "/docs/ai/hooks",
+    label: "Guide",
+    title: "Agent hooks",
+  },
+  {
+    description: "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    href: "/providers",
+    label: "Providers",
+    title: "Compare the engines",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description="Ultracite turns on 1,042 rules across ESLint and thirteen plugins with typed linting, sets up Prettier and Stylelint, and adds presets for 13 frameworks."
+  faqs={faqs}
+  lastModified={lastModified}
+  title="Ultracite for ESLint — Strict ESLint, Prettier and Stylelint"
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={providerLogos.eslint}
+    name="ESLint"
+    title="ESLint, Prettier and Stylelint, set up as one"
+  >
+    Ultracite turns on 1,042 rules from ESLint and thirteen plugins, with
+    typed linting, then sets up Prettier and Stylelint to match. Three short
+    config files extend Ultracite’s, so the only rules you maintain are your
+    own.
+    <Fragment slot="note">
+      <span>Also on</span>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/biome">Biome</a>
+      <span aria-hidden="true">·</span>
+      <span>Checked against ESLint 10.12</span>
+    </Fragment>
+    <ConfigFiles slot="visual" />
+  </LandingHero>
+  <Coverage />
+  <Frameworks />
+  <Formatter />
+  <Speed />
+  <Everywhere />
+  <Faq id="es-faq" items={faqs} title="ESLint questions, answered" />
+  <NextSteps id="es-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>

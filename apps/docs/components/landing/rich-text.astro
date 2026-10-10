@@ -7,12 +7,23 @@ interface Props {
 }
 
 const { text } = Astro.props;
+
+// Short code (a flag, a command) stays on one line rather than breaking at a
+// hyphen or space; longer code can still wrap on a narrow screen.
+const NOWRAP_MAX = 24;
 ---
 
 {
   segments(text).map((segment) =>
     segment.code ? (
-      <code class="font-mono text-[0.875em] text-foreground">{segment.text}</code>
+      <code
+        class:list={[
+          "font-mono text-[0.875em] text-foreground",
+          segment.text.length <= NOWRAP_MAX && "whitespace-nowrap",
+        ]}
+      >
+        {segment.text}
+      </code>
     ) : (
       segment.text
     )

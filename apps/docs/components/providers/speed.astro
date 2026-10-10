@@ -1,0 +1,156 @@
+---
+// `ultracite check` times from lib/benchmarks, one group of bars per fixture
+// size and one bar per toolchain, drawn to one scale, with three figures
+// below. The intro goes in the default slot and anything after the standard
+// caption in the "caption" slot.
+import {
+  benchmarkMachine,
+  benchmarkRuns,
+  formatMs,
+  MS_PER_SECOND,
+  toolchainNames,
+  toolchainVersions,
+} from "../../lib/benchmarks";
+import type { ProviderId } from "../../lib/providers";
+import SectionHeading from "../home/section-heading.astro";
+
+export interface SpeedStat {
+  label: string;
+  /** Shown smaller beside the value, such as "ms". */
+  unit?: string;
+  value: string;
+}
+
+interface Props {
+  /** The toolchain drawn in signal orange. */
+  highlight: ProviderId;
+  id: string;
+  stats: SpeedStat[];
+  title: string;
+  /** Bars in each group, top to bottom. */
+  toolchains: ProviderId[];
+}
+
+const { highlight, id, stats, title, toolchains } = Astro.props;
+
+// An axis in whole steps of 1, 2 or 5 times a power of ten, about six ticks
+// long, that the longest bar fits on.
+const TARGET_TICKS = 6;
+const longest = Math.max(
+  ...benchmarkRuns.flatMap((run) => toolchains.map((key) => run.ms[key]))
+);
+const magnitude = 10 ** Math.floor(Math.log10(longest / TARGET_TICKS));
+const step =
+  [1, 2, 5, 10]
+    .map((multiple) => multiple * magnitude)
+    .find((candidate) => longest / candidate <= TARGET_TICKS) ?? magnitude * 10;
+const axisMax = Math.ceil(longest / step) * step;
+const ticks = Array.from(
+  { length: axisMax / step + 1 },
+  (_, index) => index * step
+);
+const tickLabel = (ms: number): string =>
+  axisMax >= MS_PER_SECOND ? `${ms / MS_PER_SECOND}s` : `${ms}ms`;
+const width = (ms: number): string => `${(ms / axisMax) * 100}%`;
+
+// "A against B", or "A; B; and C" for three toolchains.
+const versions = toolchains.map((key) => toolchainVersions[key]);
+const PAIR = 2;
+const versionList =
+  versions.length === PAIR
+    ? versions.join(" against ")
+    : `${versions.slice(0, -1).join("; ")}; and ${versions.at(-1) ?? ""}`;
+---
+
+<section aria-labelledby={id} class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id={id} title={title}>
+      <slot />
+    </SectionHeading>
+    <figure class="m-0 border-border border-t">
+      <div class="px-4 pt-10 pb-8 sm:px-6 lg:px-10 lg:pt-14">
+        <div class="flex flex-col gap-8">
+          {
+            benchmarkRuns.map((run) => (
+              <div class="flex flex-col gap-3">
+                <p class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+                  {run.files} files
+                </p>
+                {toolchains.map((key) => (
+                  <div class="grid items-center gap-x-6 gap-y-1.5 md:grid-cols-[15rem_1fr]">
+                    <p class="text-[15px]/6">{toolchainNames[key]}</p>
+                    <div class="flex items-center gap-3">
+                      <div class="relative h-8 flex-1">
+                        <span
+                          class:list={[
+                            "absolute inset-y-0 left-0 rounded-r-[3px]",
+                            key === highlight ? "bg-signal" : "bg-foreground/35",
+                          ]}
+                          style={{ width: width(run.ms[key]) }}
+                        />
+                      </div>
+                      <span class="w-16 shrink-0 text-right font-mono text-sm/6 tabular-nums">
+                        {formatMs(run.ms[key])}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))
+          }
+          <div
+            aria-hidden="true"
+            class="grid gap-x-6 md:grid-cols-[15rem_1fr] max-md:hidden"
+          >
+            <span></span>
+            <div class="flex items-center gap-3">
+              <div class="relative h-5 flex-1 border-foreground/20 border-t">
+                {
+                  ticks.map((tick) => (
+                    <span
+                      class="absolute top-1.5 -translate-x-1/2 font-mono text-[11px]/4 text-muted-foreground tabular-nums first:translate-x-0"
+                      style={{ left: width(tick) }}
+                    >
+                      {tickLabel(tick)}
+                    </span>
+                  ))
+                }
+              </div>
+              <span class="w-16 shrink-0"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <dl
+        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-3"
+      >
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <dt class="text-pretty text-[15px]/6 text-muted-foreground">
+                {stat.label}
+              </dt>
+              <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+                {stat.value}
+                {stat.unit && (
+                  <span class="ml-1 text-2xl text-muted-foreground tracking-normal">
+                    {stat.unit}
+                  </span>
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      <figcaption
+        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
+      >
+        Medians of five runs of <code class="font-mono text-[13px]">ultracite check</code>{" "}
+        on {benchmarkMachine}, through each toolchain’s core preset: {versionList},
+        on the repo’s benchmark fixture copied to 42 and 420 files. Times
+        include starting Node and the CLI.{" "}
+        <slot name="caption" />
+      </figcaption>
+    </figure>
+  </div>
+</section>

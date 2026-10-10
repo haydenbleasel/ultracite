@@ -1,0 +1,119 @@
+---
+import Coverage from "../coverage.astro";
+import type { CoverageRow } from "../coverage.astro";
+
+// Biome 2.5.15's catalog (its configuration schema, with `biome explain` for
+// each rule's fix) against the rules on in Ultracite 7.12.4, counted with
+// `biome rage --linter`: once with an empty config in a project with no
+// framework dependencies, once with ultracite/biome/core. `defaults` counts
+// the default rules core keeps; it turns off two, a11y/noAutofocus and
+// complexity/noImportantStyles. Re-derive when either version moves.
+const catalogSize = 565;
+const defaultCount = 215;
+const coreCount = 329;
+const typeAwareCount = 8;
+
+const groups: CoverageRow[] = [
+  {
+    available: 121,
+    defaults: 75,
+    description: "Code that’s likely wrong or useless",
+    enabled: 100,
+    name: "Suspicious",
+  },
+  {
+    available: 100,
+    defaults: 52,
+    description: "Code that’s guaranteed to be wrong or useless",
+    enabled: 58,
+    name: "Correctness",
+  },
+  {
+    available: 100,
+    defaults: 12,
+    description: "One consistent, idiomatic way to write it",
+    enabled: 72,
+    name: "Style",
+  },
+  {
+    available: 51,
+    defaults: 33,
+    description: "Code that could be simpler",
+    enabled: 45,
+    name: "Complexity",
+  },
+  {
+    available: 39,
+    defaults: 36,
+    description: "Accessibility problems in JSX and HTML",
+    enabled: 37,
+    name: "A11y",
+  },
+  {
+    available: 16,
+    defaults: 2,
+    description: "Code that could run faster",
+    enabled: 11,
+    name: "Performance",
+  },
+  {
+    available: 7,
+    defaults: 3,
+    description: "Potential security flaws",
+    enabled: 5,
+    name: "Security",
+  },
+  {
+    available: 131,
+    defaults: 0,
+    description: "Rules still in development",
+    enabled: 1,
+    name: "Nursery",
+  },
+];
+
+// What `ultracite fix` can do about each of the 329, by the fix kind Biome
+// gives it. Ultracite makes three unsafe fixes safe: noUnusedImports,
+// useBlockStatements and useSortedClasses.
+const fixes = [
+  { label: "safe fix, applied by fix", value: "72" },
+  { label: "unsafe fix, with --unsafe", value: "73" },
+  { label: "no fix, for the agent", value: "184" },
+  { label: "type-aware, opt-in", value: String(typeAwareCount) },
+];
+---
+
+<Coverage
+  caption="Biome 2.5.15 and Ultracite 7.12.4, counted with `biome rage --linter`. Groups are drawn to one scale. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
+  id="bi-rules"
+  notes={[
+    {
+      body: "Every rule Ultracite sets is an `error`, because an agent takes a zero exit code as done and a warning doesn’t change it. The one warning left is Biome’s own `noSuspiciousSemicolonInJsx`, which the React preset raises to `error`.",
+      title: "Errors, never warnings",
+    },
+    {
+      body: "The `type-aware` preset adds rules like `noImportCycles`, `noUnresolvedImports` and `noUndeclaredDependencies`. They need Biome to scan your whole project first, so they’re opt-in: `init --type-aware` adds the preset.",
+      title: `${typeAwareCount} rules that read your project`,
+    },
+  ]}
+  rows={groups}
+  stats={[
+    { label: "Rules in Biome 2.5", value: String(catalogSize) },
+    {
+      label: "On by default, from Biome’s recommended set",
+      value: String(defaultCount),
+    },
+    {
+      accent: true,
+      label: "On in Ultracite’s core preset, before any framework rules",
+      value: String(coreCount),
+    },
+  ]}
+  tiles={fixes}
+  title={`${defaultCount} rules by default. ${coreCount} with Ultracite.`}
+>
+  Ultracite keeps all but two of Biome’s recommended rules, then turns on
+  most of the style, complexity and performance rules Biome leaves off. They
+  catch what agents get wrong: barrel files, nested ternaries, awaits inside
+  loops and forEach where for…of would do.
+</Coverage>

@@ -299,8 +299,22 @@ const faqs: FaqItem[] = [
                     </div>
                   ))}
                 </dl>
-                <p class="mt-auto font-mono text-muted-foreground text-xs/5">
-                  --agents {entry.id}
+                <p class="mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                  {entry.landing && (
+                    <a
+                      class="group flex items-center gap-2 font-medium text-[15px]/6"
+                      href={`/agents/${entry.id}`}
+                    >
+                      Ultracite for {entry.name}
+                      <Icon
+                        class="size-4 transition-transform group-hover:translate-x-0.5"
+                        name="arrow-right"
+                      />
+                    </a>
+                  )}
+                  <span class="font-mono text-muted-foreground text-xs/5">
+                    --agents {entry.id}
+                  </span>
                 </p>
               </li>
             );

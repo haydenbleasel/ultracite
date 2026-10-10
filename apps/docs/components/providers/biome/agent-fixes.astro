@@ -1,0 +1,101 @@
+---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
+import SectionHeading from "../../home/section-heading.astro";
+
+// The three rules ultracite/biome/core gives a "safe" fix that Biome marks
+// unsafe (packages/cli/config/biome/core), and the Biome flag the agent hook
+// adds (biomeHookArgs in packages/cli/src/hooks.ts, since 7.3.0).
+const promoted = [
+  {
+    description: "Deletes imports nothing in the file uses",
+    name: "noUnusedImports",
+  },
+  {
+    description: "Adds braces to a one-line if, else, for or while body",
+    name: "useBlockStatements",
+  },
+  {
+    description: "Sorts Tailwind classes in class names and cn() calls",
+    name: "useSortedClasses",
+  },
+];
+---
+
+<section aria-labelledby="bi-agents" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="bi-agents"
+      title="Safe fixes, tuned for agents that edit in steps"
+    >
+      Biome applies only its safe fixes unless you pass <code
+        class="whitespace-nowrap font-mono text-base">--unsafe</code
+      >. Ultracite makes three more safe so they run on save, and its agent
+      hook holds one of them back.
+    </SectionHeading>
+    <div
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
+    >
+      <div class="flex flex-col bg-background">
+        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">Unsafe in Biome, safe in Ultracite</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider"
+            >Applied by fix</span
+          >
+        </div>
+        <ul class="flex flex-col divide-y divide-border" role="list">
+          {
+            promoted.map((rule) => (
+              <li class="flex flex-col gap-1 px-4 py-5 sm:px-6 lg:px-10">
+                <code class="font-mono text-sm/6">{rule.name}</code>
+                <span class="text-pretty text-[15px]/6 text-muted-foreground">
+                  {rule.description}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-col bg-background">
+        <div class="hatch flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">Skipped by the agent hook</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider"
+            >Since 7.3.0</span
+          >
+        </div>
+        <div class="flex flex-1 flex-col gap-4 px-4 py-8 sm:px-6 lg:px-10">
+          <p class="max-w-[52ch] text-pretty text-base/7 text-muted-foreground">
+            An agent adds an import in one edit and the code that uses it in
+            the next. A hook that ran <code class="font-mono text-sm text-foreground"
+              >fix</code
+            > between them deleted the import as unused, and the next edit
+            broke. On Biome, the hook <code class="font-mono text-sm text-foreground"
+              >init</code
+            > writes now runs:
+          </p>
+        </div>
+        <div class="mt-auto border-border border-t px-4 py-5 sm:px-6 lg:px-10">
+          <code class="block overflow-x-auto whitespace-nowrap font-mono text-[13px]/6 text-muted-foreground">
+            <span class="text-accent">$</span> npm run fix -- --skip=correctness/noUnusedImports --hook
+          </code>
+        </div>
+      </div>
+    </div>
+    <div class="border-border border-t px-4 py-8 sm:px-6 lg:px-10">
+      <p class="max-w-[80ch] text-pretty text-base/7 text-muted-foreground">
+        <span class="font-medium text-foreground">Where it came from.</span>{" "}
+        A Claude Code user reported the race in January 2026{" "}
+        (<a
+          aria-describedby={NEW_TAB_HINT_ID}
+          class="underline underline-offset-2 hover:text-foreground"
+          href="https://github.com/haydenbleasel/ultracite/issues/483"
+          rel="noopener noreferrer"
+          target="_blank">#483</a
+        >). Unused imports are still removed when you save or run <code
+          class="font-mono text-sm text-foreground">ultracite fix</code
+        > yourself, and <code class="font-mono text-sm text-foreground">check</code
+        > still fails on them.
+      </p>
+    </div>
+  </div>
+</section>

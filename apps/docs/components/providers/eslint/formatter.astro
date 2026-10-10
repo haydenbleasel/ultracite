@@ -1,0 +1,109 @@
+---
+import Terminal from "../../landing/terminal.astro";
+import BeforeAfter from "../before-after.astro";
+
+// The component from the Oxlint and Biome pages, and what `ultracite fix`
+// made of it with ESLint 10.12.0 and Prettier 3.9.10 under Ultracite's
+// configs, in a project with React, Radix and a tsconfig.json (run for real;
+// regenerate when the configs change). `problems` is what fix left.
+const before = `import { cn } from '@/lib/utils'
+import { Slot } from '@radix-ui/react-slot'
+import type { ReactNode } from 'react'
+
+export function Button({ asChild, children }: { asChild?: boolean, children: ReactNode }) {
+  const Comp = asChild ? Slot : 'button'
+  return <Comp className={cn('text-sm px-4 bg-primary hover:bg-primary/90 rounded-md h-10 font-medium')}>{children}</Comp>
+}`;
+
+const after = `import { Slot } from "@radix-ui/react-slot";
+import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
+
+export function Button({
+  asChild,
+  children,
+}: {
+  asChild?: boolean;
+  children: ReactNode;
+}) {
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={cn(
+        "bg-primary hover:bg-primary/90 h-10 rounded-md px-4 text-sm font-medium"
+      )}
+    >
+      {children}
+    </Comp>
+  );
+}`;
+
+const problems = [
+  { location: "5:8", message: "Expected a function expression", rule: "func-style" },
+  {
+    location: "5:24",
+    message: "Mark the props of the component as read-only",
+    rule: "sonarjs/prefer-read-only-props",
+  },
+  {
+    location: "12:16",
+    message:
+      "Unexpected nullable boolean value in conditional. Please handle the nullish case explicitly",
+    rule: "@typescript-eslint/strict-boolean-expressions",
+  },
+];
+
+const items = [
+  {
+    description:
+      "Tailwind classes in the plugin’s order, in `className` and in `cn`, `clsx`, `cva`, `tw`, `twMerge`, `twJoin` and `tv` calls.",
+    name: "prettier-plugin-tailwindcss",
+  },
+  {
+    description:
+      "Imports grouped by ESLint’s autofix: built-ins, packages, your own modules, then type-only imports.",
+    name: "import-x/order",
+  },
+  {
+    description:
+      "Turns off the ESLint rules that would fight Prettier, so the two never disagree about a line.",
+    name: "eslint-config-prettier",
+  },
+  {
+    description:
+      "Prettier also runs as an ESLint rule, so a misformatted line shows up in ESLint’s output with its fix.",
+    name: "prettier/prettier",
+  },
+];
+---
+
+<BeforeAfter
+  after={after}
+  before={before}
+  id="es-format"
+  items={items}
+  lang="tsx"
+  path="components/button.tsx"
+  title="Prettier formats it. ESLint finds three more."
+>
+  The same component as on the other engines’ pages. Prettier and ESLint’s
+  autofix settle the formatting, class order and imports. Three rules find
+  problems no autofix can settle, and those go back to the agent.
+  <Terminal class="mt-2 sm:mt-4" slot="below">
+    <p class="mb-1 truncate text-panel-foreground">
+      <span class="text-signal">$</span> npx ultracite fix components/button.tsx
+    </p>
+    {
+      problems.map((problem) => (
+        <p class="flex min-w-0 gap-3">
+          <span class="w-12 shrink-0 tabular-nums">{problem.location}</span>
+          <span class="min-w-0 text-pretty">
+            <span class="text-signal">error</span> {problem.message}{" "}
+            <span class="text-panel-foreground">{problem.rule}</span>
+          </span>
+        </p>
+      ))
+    }
+    <p class="mt-1">✖ 3 problems (3 errors, 0 warnings)</p>
+  </Terminal>
+</BeforeAfter>

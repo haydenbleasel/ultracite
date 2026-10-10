@@ -12,11 +12,14 @@ import Everywhere from "../../components/providers/oxlint/everywhere.astro";
 import Formatter from "../../components/providers/oxlint/formatter.astro";
 import Plugins from "../../components/providers/oxlint/plugins.astro";
 import Speed from "../../components/providers/oxlint/speed.astro";
+import { formatMs, runFor } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
 // Facts on this page were checked against Oxlint 1.87.0, Oxfmt 0.72.0 and
 // Ultracite 7.12.4 on this date.
 const lastModified = "2026-10-10";
+const small = runFor(42);
+const large = runFor(420);
 const command = "npx ultracite@latest init --linter oxlint";
 
 const breadcrumbs: Crumb[] = [
@@ -47,7 +50,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Both are native and fast. In our benchmark, Biome’s single binary checked 420 files in 226 ms and Oxlint with Oxfmt took 353 ms. Pick Oxlint for the larger rule set (474 core rules to Biome’s 326), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.",
+      `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and Oxlint was slightly ahead at 420 files, ${formatMs(large.ms.oxlint)} to ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (474 core rules to Biome’s 329), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
     question: "Should I use Oxlint or Biome?",
   },
   {
@@ -99,7 +102,7 @@ const nextSteps: NextStep[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description="Ultracite turns on 474 of Oxlint’s 871 rules (the default is 111), sets up Oxfmt, VS Code, Zed and your coding agents, and checks 420 files in 353 ms."
+  description={`Ultracite turns on 474 of Oxlint’s 871 rules (the default is 111), sets up Oxfmt, VS Code, Zed and your coding agents, and checks 420 files in ${formatMs(large.ms.oxlint)}.`}
   faqs={faqs}
   lastModified={lastModified}
   title="Ultracite for Oxlint — Strict Oxlint and Oxfmt Config"

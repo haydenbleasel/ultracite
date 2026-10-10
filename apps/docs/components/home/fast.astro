@@ -1,13 +1,15 @@
 ---
+import { runFor } from "../../lib/benchmarks";
 import SectionHeading from "./section-heading.astro";
 
 // Medians on an Apple M1 Pro, end to end through the ultracite CLI. The single
 // file is the component from the hero's session; the project is the repo's
-// benchmark fixture (`bun ./benchmark/index.ts`, 42 files).
+// benchmark fixture at 42 files (lib/benchmarks).
+const project = runFor(42);
 const stats = [
   { label: "Check the file your agent just edited", ms: 330 },
-  { label: "Check a whole 42-file project", ms: 333 },
-  { label: "The same project on Biome", ms: 249 },
+  { label: "Check a whole 42-file project", ms: Math.round(project.ms.oxlint) },
+  { label: "The same project on Biome", ms: Math.round(project.ms.biome) },
 ];
 ---
 

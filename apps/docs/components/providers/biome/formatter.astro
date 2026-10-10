@@ -1,0 +1,76 @@
+---
+import BeforeAfter from "../before-after.astro";
+
+// The component from the Oxlint page, and what `ultracite fix` made of it
+// with Biome 2.5.15 under ultracite/biome/core (run for real; regenerate when
+// the config changes). Note Biome's Tailwind order puts variants last.
+const before = `import { cn } from '@/lib/utils'
+import { Slot } from '@radix-ui/react-slot'
+import type { ReactNode } from 'react'
+
+export function Button({ asChild, children }: { asChild?: boolean, children: ReactNode }) {
+  const Comp = asChild ? Slot : 'button'
+  return <Comp className={cn('text-sm px-4 bg-primary hover:bg-primary/90 rounded-md h-10 font-medium')}>{children}</Comp>
+}`;
+
+const after = `import { Slot } from "@radix-ui/react-slot";
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+
+export function Button({
+  asChild,
+  children,
+}: {
+  asChild?: boolean;
+  children: ReactNode;
+}) {
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={cn(
+        "h-10 rounded-md bg-primary px-4 font-medium text-sm hover:bg-primary/90"
+      )}
+    >
+      {children}
+    </Comp>
+  );
+}`;
+
+const items = [
+  {
+    description:
+      "Imports by distance: packages first, then your `@/` aliases, then relative paths, A–Z within each.",
+    name: "organizeImports",
+  },
+  {
+    description:
+      "Tailwind classes sorted in `class`, `className` and `cn`, `clsx`, `cva`, `tw`, `twMerge`, `twJoin` and `tv` calls. Biome’s order puts variants like `hover:` last.",
+    name: "useSortedClasses",
+  },
+  {
+    description:
+      "Object keys, JSX attributes, interface members, CSS properties and package.json fields, in order. `check` fails on any that aren’t.",
+    name: "useSortedKeys",
+  },
+  {
+    description:
+      "On, so a file with a syntax error still gets formatted. Biome leaves it off by default.",
+    name: "formatWithErrors",
+  },
+];
+---
+
+<BeforeAfter
+  after={after}
+  before={before}
+  id="bi-format"
+  items={items}
+  lang="tsx"
+  path="components/button.tsx"
+  title="Formatting and sorting from the same binary"
+>
+  Biome’s formatter is built to match Prettier’s output, and its assist actions
+  sort code instead of just reporting it. Ultracite turns on nine of them, so
+  the import order, class order and key order an agent writes never come up
+  in review.
+</BeforeAfter>

@@ -7,6 +7,12 @@ import Faq from "../../components/landing/faq.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
 import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
 import RichText from "../../components/landing/rich-text.astro";
+import {
+  benchmarkMachine,
+  formatMs,
+  runFor,
+  toolchainVersions,
+} from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 import type { ProviderId } from "../../lib/providers";
 
@@ -20,13 +26,16 @@ const landingPages = import.meta.glob("./*.astro");
 const hrefFor = (id: ProviderId): string =>
   `./${id}.astro` in landingPages ? `/providers/${id}` : `/docs/provider/${id}`;
 
-// Rules set to "error" in each core preset (Ultracite 7.12.4), and medians of
-// `ultracite check` from the benchmark harness on an Apple M1 Pro: Oxlint
-// 1.87.0 + Oxfmt 0.72.0, Biome 2.5.15, ESLint 10.12.0 + Prettier 3.9.10 +
-// Stylelint 17.16.0, over the fixture copied to 42 and 420 files.
+// Rules on in each core preset (Ultracite 7.12.4): Oxlint's set to "error",
+// Biome's from `biome rage --linter`, and ESLint's from `eslint
+// --print-config` across TypeScript, story and Cypress files. Times are from
+// lib/benchmarks.
+const small = runFor(42);
+const large = runFor(420);
+
 const engines = [
   {
-    check420: "353 ms",
+    check420: formatMs(large.ms.oxlint),
     coreRules: 474,
     id: "oxlint",
     name: "Oxlint + Oxfmt",
@@ -35,8 +44,8 @@ const engines = [
       "The Oxc project’s Rust linter and formatter, with ESLint’s rule names and an API for ESLint plugins.",
   },
   {
-    check420: "226 ms",
-    coreRules: 326,
+    check420: formatMs(large.ms.biome),
+    coreRules: 329,
     id: "biome",
     name: "Biome",
     recommended: false,
@@ -44,8 +53,8 @@ const engines = [
       "One Rust binary that lints and formats from a single config file, with its own rule set.",
   },
   {
-    check420: "11.6 s",
-    coreRules: 1041,
+    check420: formatMs(large.ms.eslint),
+    coreRules: 1042,
     id: "eslint",
     name: "ESLint + Prettier + Stylelint",
     recommended: false,
@@ -63,15 +72,21 @@ const engines = [
 
 const rows: { label: string; values: [string, string, string] }[] = [
   { label: "Runs on", values: ["Native Rust binaries", "One native Rust binary", "Node.js"] },
-  { label: "Rules on in the core preset", values: ["474", "326", "1,041"] },
-  { label: "`ultracite check`, 42 files", values: ["340 ms", "231 ms", "3.18 s"] },
-  { label: "`ultracite check`, 420 files", values: ["353 ms", "226 ms", "11.6 s"] },
+  { label: "Rules on in the core preset", values: ["474", "329", "1,042"] },
+  {
+    label: "`ultracite check`, 42 files",
+    values: [formatMs(small.ms.oxlint), formatMs(small.ms.biome), formatMs(small.ms.eslint)],
+  },
+  {
+    label: "`ultracite check`, 420 files",
+    values: [formatMs(large.ms.oxlint), formatMs(large.ms.biome), formatMs(large.ms.eslint)],
+  },
   {
     label: "Rules that read types",
     values: [
       "56, with `--type-aware`",
       "8 project-wide rules, opt-in at setup",
-      "62, always on",
+      "132, always on",
     ],
   },
   {
@@ -91,7 +106,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
     label: "Pick it for",
     values: [
       "Speed and breadth together: the default for new projects",
-      "The fastest check, from one tool and one config file",
+      "One tool and one config file that lints, formats and sorts",
       "Template linting in Vue and Svelte, Prettier plugins, niche ESLint plugins",
     ],
   },
@@ -100,7 +115,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "Start with Oxlint. It’s what `init` recommends: native speed, 474 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want the fastest check from a single tool and config file. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted.",
+      "Start with Oxlint. It’s what `init` recommends: native speed, 474 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want one tool and one config file that lints, formats and sorts. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted.",
     question: "Which engine should I pick?",
   },
   {
@@ -115,8 +130,8 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Biome checks and formats in one process, while `ultracite check` on Oxlint runs Oxlint and then Oxfmt. Both stay near a third of a second from 42 files to 420; the ESLint toolchain goes from 3.2 to 11.6 seconds.",
-    question: "Why is Biome faster than Oxlint here?",
+      `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
+    question: "Is Biome faster than Oxlint?",
   },
 ];
 ---
@@ -263,9 +278,9 @@ const faqs: FaqItem[] = [
       >
         Ultracite 7.12.4. Times are medians of five runs of <code
           class="font-mono text-[13px]">ultracite check</code
-        > on an Apple M1 Pro over the repo’s benchmark fixture, with Oxlint 1.87.0
-        and Oxfmt 0.72.0, Biome 2.5.15, and ESLint 10.12.0 with Prettier 3.9.10
-        and Stylelint 17.16.0. They include starting Node and the CLI.
+        > on {benchmarkMachine} over the repo’s benchmark fixture, with
+        {toolchainVersions.oxlint}; {toolchainVersions.biome}; and
+        {toolchainVersions.eslint}. They include starting Node and the CLI.
       </p>
     </div>
   </section>

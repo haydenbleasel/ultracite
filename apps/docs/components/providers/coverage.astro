@@ -1,0 +1,189 @@
+---
+// How much of an engine's catalog Ultracite turns on: three headline figures,
+// a bar per category or plugin (on by default, turned on by Ultracite, left
+// off, drawn to one scale), optional tiles, two notes and a caption. The
+// intro goes in the default slot.
+import SectionHeading from "../home/section-heading.astro";
+import RichText from "../landing/rich-text.astro";
+
+export interface CoverageRow {
+  available: number;
+  /** On by default (or recommended) and still on with Ultracite. */
+  defaults: number;
+  description: string;
+  enabled: number;
+  /** Set the name in monospace, for a plugin name. */
+  mono?: boolean;
+  name: string;
+}
+
+export interface CoverageStat {
+  accent?: boolean;
+  label: string;
+  value: string;
+}
+
+interface Props {
+  /** Copy with `backticks` for inline code. */
+  caption: string;
+  /** The legend for the `defaults` segment. */
+  defaultsLabel?: string;
+  id: string;
+  /** Two short notes under the bars. Copy with `backticks`. */
+  notes: { body: string; title: string }[];
+  rows: CoverageRow[];
+  stats: CoverageStat[];
+  /** Small figures between the bars and the notes, such as per plugin. */
+  tiles?: { label: string; value: string }[];
+  title: string;
+}
+
+const {
+  caption,
+  defaultsLabel = "On by default",
+  id,
+  notes,
+  rows,
+  stats,
+  tiles = [],
+  title,
+} = Astro.props;
+
+const showDefaults = rows.some((row) => row.defaults > 0);
+const scale = Math.max(...rows.map((row) => row.available));
+const percent = (count: number, of: number): string => `${(count / of) * 100}%`;
+// Four tiles a row from small screens, eight at most on large ones.
+const LARGE_TILE_COLUMNS = 8;
+const tileColumns =
+  tiles.length >= LARGE_TILE_COLUMNS ? "lg:grid-cols-8" : "lg:grid-cols-4";
+---
+
+<section aria-labelledby={id} class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id={id} title={title}>
+      <slot />
+    </SectionHeading>
+    <figure class="m-0 border-border border-t">
+      <dl class="grid gap-px bg-border bg-clip-padding sm:grid-cols-3">
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <dt class="text-pretty text-[15px]/6 text-muted-foreground">
+                {stat.label}
+              </dt>
+              <dd
+                class:list={[
+                  "order-first font-medium text-5xl tracking-[-0.04em] tabular-nums",
+                  stat.accent && "text-accent",
+                ]}
+              >
+                {stat.value}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="border-border border-t px-4 py-10 sm:px-6 lg:px-10 lg:py-12">
+        <div
+          class="flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground text-sm/6"
+        >
+          {
+            showDefaults && (
+              <span class="flex items-center gap-2">
+                <span aria-hidden="true" class="size-3 rounded-[2px] bg-foreground" />
+                {defaultsLabel}
+              </span>
+            )
+          }
+          <span class="flex items-center gap-2">
+            <span aria-hidden="true" class="size-3 rounded-[2px] bg-signal"></span>
+            Turned on by Ultracite
+          </span>
+          <span class="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              class="hatch size-3 rounded-[2px] ring-1 ring-foreground/15 ring-inset"
+            ></span>
+            Left off
+          </span>
+        </div>
+        <ul class="mt-8 flex flex-col gap-6 sm:gap-5" role="list">
+          {
+            rows.map((row) => (
+              <li class="grid items-center gap-x-6 gap-y-2 sm:grid-cols-[13rem_1fr_6rem] lg:grid-cols-[16rem_1fr_6rem]">
+                <p class="flex flex-col">
+                  <span class:list={["font-medium", row.mono ? "font-mono text-sm/6" : "text-base/6"]}>
+                    {row.name}
+                  </span>
+                  <span class="text-pretty text-muted-foreground text-sm/5">
+                    {row.description}
+                  </span>
+                </p>
+                <div class="h-7">
+                  <div
+                    class="flex h-full overflow-hidden rounded-[3px] ring-1 ring-foreground/15 ring-inset"
+                    style={{ width: percent(row.available, scale) }}
+                  >
+                    {row.defaults > 0 && (
+                      <span
+                        class="h-full bg-foreground"
+                        style={{ width: percent(row.defaults, row.available) }}
+                      />
+                    )}
+                    <span
+                      class="h-full bg-signal"
+                      style={{
+                        width: percent(row.enabled - row.defaults, row.available),
+                      }}
+                    />
+                    <span class="hatch h-full flex-1" />
+                  </div>
+                </div>
+                <p class="font-mono text-sm/6 tabular-nums sm:text-right">
+                  {row.enabled}
+                  <span class="text-muted-foreground"> / {row.available}</span>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      {
+        tiles.length > 0 && (
+          <dl
+            class:list={[
+              "grid grid-cols-2 gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-4",
+              tileColumns,
+            ]}
+          >
+            {tiles.map((tile) => (
+              <div class="flex flex-col gap-1 bg-background px-4 py-6 sm:px-6">
+                <dt class="font-mono text-muted-foreground text-xs/5">{tile.label}</dt>
+                <dd class="order-first font-medium text-2xl tracking-[-0.02em] tabular-nums">
+                  {tile.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+      <div class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2">
+        {
+          notes.map((note) => (
+            <div class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{note.title}</h3>
+              <p class="max-w-[52ch] text-pretty text-base/7 text-muted-foreground">
+                <RichText text={note.body} />
+              </p>
+            </div>
+          ))
+        }
+      </div>
+      <figcaption
+        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
+      >
+        <RichText text={caption} />
+      </figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+---
+import { runFor, shownSeconds } from "../../../lib/benchmarks";
+import Speed from "../speed.astro";
+
+// Biome against the ESLint toolchain; Oxlint is compared on /providers.
+const small = runFor(42);
+const large = runFor(420);
+const speedup = Math.round(large.ms.eslint / large.ms.biome);
+// Differences of the rounded times shown, so the figures add up on the page.
+const biomeGrowth = Math.round(large.ms.biome) - Math.round(small.ms.biome);
+const eslintGrowth = (
+  shownSeconds(large.ms.eslint) - shownSeconds(small.ms.eslint)
+).toFixed(1);
+---
+
+<Speed
+  highlight="biome"
+  id="bi-speed"
+  stats={[
+    {
+      label: "Faster than the ESLint toolchain on 420 files",
+      value: `${speedup}×`,
+    },
+    {
+      label: "Added on Biome going from 42 to 420 files",
+      unit: "ms",
+      value: `+${biomeGrowth}`,
+    },
+    {
+      label: "Added on ESLint for the same growth",
+      unit: "s",
+      value: `+${eslintGrowth}`,
+    },
+  ]}
+  title="Lint, format and sort in one process"
+  toolchains={["biome", "eslint"]}
+>
+  On Biome, <code class="font-mono text-base">ultracite check</code> is one
+  command that lints, checks formatting and checks sorting, spread across
+  every core. The ESLint toolchain runs ESLint,
+  Prettier and Stylelint one after another, in Node.
+  <Fragment slot="caption">
+    <a class="underline underline-offset-2 hover:text-foreground" href="/providers"
+      >How Oxlint compares</a
+    >.
+  </Fragment>
+</Speed>

@@ -1,0 +1,83 @@
+---
+import { agents } from "../../../lib/agents";
+import Everywhere from "../everywhere.astro";
+
+// Excerpts of what `ultracite init` writes for Biome
+// (packages/cli/src/data/editors.ts), and the diagnostic headers Biome 2.5.15
+// printed for `ultracite check` on the repo's benchmark fixture, without
+// their code frames.
+const vscodeSettings = `{
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "editor.formatOnSave": true
+}`;
+
+const zedSettings = `"TSX": {
+  "code_actions_on_format": {
+    "source.fixAll.biome": true,
+    "source.organizeImports.biome": true
+  },
+  "formatter": {
+    "language_server": { "name": "biome" }
+  }
+}`;
+
+const diagnostics = [
+  { fixable: true, location: "src/api.ts:1:1", rule: "assist/source/organizeImports" },
+  {
+    fixable: false,
+    location: "src/component.tsx:42:27",
+    rule: "lint/performance/noJsxPropsBind",
+  },
+  { fixable: true, location: "src/utils.ts:5:56", rule: "assist/source/useSortedKeys" },
+];
+---
+
+<Everywhere
+  cards={[
+    {
+      body: "`init` makes Biome the formatter for 14 languages, from TypeScript and CSS to GraphQL and Vue, and applies its safe fixes and import sorting when you save.",
+      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      eyebrow: "VS Code, Cursor, Windsurf",
+      title: "Fix and format on save",
+    },
+    {
+      body: "Zed formats JavaScript, TypeScript and TSX through Biome’s language server, applying fixes and sorting imports as it goes.",
+      code: { lang: "jsonc", path: ".zed/settings.json", text: zedSettings },
+      eyebrow: "Zed",
+      title: "Fix as you format",
+    },
+    {
+      body: `Biome marks what it can fix \`FIXABLE\`, so an agent can tell what \`ultracite fix\` will settle from what’s left for it. \`init\` writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      eyebrow: "Coding agents",
+      title: "Every problem names its fix",
+    },
+  ]}
+  id="bi-everywhere"
+  title="The same rules in your editor, your agent and CI"
+>
+  <code class="font-mono text-base">init</code> points your editor at Biome
+  and tells your agents how to run it, so a file passes or fails the same way
+  wherever it’s checked.
+  <Fragment slot="terminal">
+    <p class="mb-1 truncate text-panel-foreground">
+      <span class="text-signal">$</span> npx ultracite check
+    </p>
+    {
+      diagnostics.map((line) => (
+        <p class="text-pretty">
+          {line.location}{" "}
+          <span class="text-panel-foreground">{line.rule}</span>
+          {line.fixable && <span class="text-signal"> FIXABLE</span>}
+        </p>
+      ))
+    }
+    <p>…</p>
+    <p>Found 10 errors.</p>
+  </Fragment>
+</Everywhere>

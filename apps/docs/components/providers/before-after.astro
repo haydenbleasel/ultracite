@@ -1,0 +1,76 @@
+---
+// A file as an agent might write it beside what `ultracite fix` made of it,
+// then a row of the settings behind the difference. The intro goes in the
+// default slot; anything in the "below" slot sits under the two code blocks.
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+
+import SectionHeading from "../home/section-heading.astro";
+import RichText from "../landing/rich-text.astro";
+
+interface Props {
+  after: string;
+  /** Label above the second block. */
+  afterLabel?: string;
+  before: string;
+  id: string;
+  /** The settings behind the difference. Descriptions take `backticks`. */
+  items: { description: string; name: string }[];
+  lang: string;
+  title: string;
+  /** The file name shown on both blocks. */
+  path: string;
+}
+
+const {
+  after,
+  afterLabel = "After ultracite fix",
+  before,
+  id,
+  items,
+  lang,
+  path,
+  title,
+} = Astro.props;
+---
+
+<section aria-labelledby={id} class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id={id} title={title}>
+      <slot />
+    </SectionHeading>
+    <div class="border-border border-t bg-muted/60 p-2 sm:p-6 lg:p-10">
+      <div class="lp-code grid gap-2 sm:gap-4 lg:grid-cols-2">
+        <div class="flex min-w-0 flex-col gap-2">
+          <p class="px-1 font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+            As written
+          </p>
+          <CodeBlock code={before} lang={lang} title={path} />
+        </div>
+        <div class="flex min-w-0 flex-col gap-2">
+          <p class="px-1 font-mono text-accent text-xs/5 uppercase tracking-wider">
+            {afterLabel}
+          </p>
+          <CodeBlock code={after} lang={lang} title={path} />
+        </div>
+      </div>
+      <slot name="below" />
+    </div>
+    <dl
+      class:list={[
+        "grid gap-px border-border border-t bg-border bg-clip-padding",
+        items.length % 2 === 0 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3",
+      ]}
+    >
+      {
+        items.map((item) => (
+          <div class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+            <dt class="font-mono text-[15px]/6">{item.name}</dt>
+            <dd class="text-pretty text-[15px]/6 text-muted-foreground">
+              <RichText text={item.description} />
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

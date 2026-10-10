@@ -1,0 +1,102 @@
+---
+import { agents } from "../../../lib/agents";
+import Everywhere from "../everywhere.astro";
+
+// Excerpts of what `ultracite init` writes for ESLint
+// (packages/cli/src/data/editors.ts), and lines ESLint 10.12.0 printed for
+// `ultracite check` on the repo's benchmark fixture (paths shortened from
+// src/copy-0/, and the Prettier diff cut short).
+const vscodeSettings = `{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}`;
+
+const zedSettings = `"TSX": {
+  "code_actions_on_format": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports.eslint": true
+  },
+  "formatter": {
+    "language_server": { "name": "eslint" }
+  }
+}`;
+
+const files = [
+  {
+    path: "src/api.ts",
+    problems: [
+      {
+        location: "37:55",
+        message: "Functions that return promises must be async",
+        rule: "@typescript-eslint/promise-function-async",
+      },
+    ],
+  },
+  {
+    path: "src/data.ts",
+    problems: [
+      {
+        location: "20:14",
+        message: "Use `Array#toSorted()` instead of `Array#sort()`",
+        rule: "unicorn/no-array-sort",
+      },
+      {
+        location: "28:33",
+        message: "Replace `tasks:·readonly·Task[]):·Record<Priority,·Task[]>·=>⏎·` with …",
+        rule: "prettier/prettier",
+      },
+    ],
+  },
+];
+---
+
+<Everywhere
+  cards={[
+    {
+      body: "ESLint applies its fixes and sorts imports when you save, and Prettier formats the file, through the editors’ own ESLint and Prettier extensions.",
+      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      eyebrow: "VS Code, Cursor, Windsurf",
+      title: "Fix and format on save",
+    },
+    {
+      body: "Zed runs ESLint’s language server as the formatter for JavaScript, TypeScript and TSX, applying fixes and sorting imports as it goes.",
+      code: { lang: "jsonc", path: ".zed/settings.json", text: zedSettings },
+      eyebrow: "Zed",
+      title: "Fix as you format",
+    },
+    {
+      body: `The typed rules catch what syntax can’t, like a promise-returning function that isn’t \`async\`. \`init\` writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      eyebrow: "Coding agents",
+      title: "Problems only types reveal",
+    },
+  ]}
+  id="es-everywhere"
+  title="The same rules in your editor, your agent and CI"
+>
+  <code class="font-mono text-base">init</code> points your editor at ESLint
+  and Prettier and tells your agents how to run them, so a file passes or
+  fails the same way wherever it’s checked.
+  <Fragment slot="terminal">
+    <p class="mb-1 truncate text-panel-foreground">
+      <span class="text-signal">$</span> npx ultracite check
+    </p>
+    {
+      files.map((file) => (
+        <>
+          <p class="mt-1 truncate text-panel-foreground">{file.path}</p>
+          {file.problems.map((problem) => (
+            <p class="text-pretty">
+              {problem.location} <span class="text-signal">error</span>{" "}
+              {problem.message}{" "}
+              <span class="text-panel-foreground">{problem.rule}</span>
+            </p>
+          ))}
+        </>
+      ))
+    }
+  </Fragment>
+</Everywhere>

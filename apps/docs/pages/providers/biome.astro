@@ -1,0 +1,133 @@
+---
+import Cta from "../../components/home/cta.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingHero from "../../components/landing/landing-hero.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import NextSteps from "../../components/landing/next-steps.astro";
+import type { NextStep } from "../../components/landing/next-steps.astro";
+import AgentFixes from "../../components/providers/biome/agent-fixes.astro";
+import ConfigFiles from "../../components/providers/biome/config-files.astro";
+import Coverage from "../../components/providers/biome/coverage.astro";
+import Everywhere from "../../components/providers/biome/everywhere.astro";
+import Formatter from "../../components/providers/biome/formatter.astro";
+import Speed from "../../components/providers/biome/speed.astro";
+import { hooks } from "../../../../packages/cli/src/data/hooks";
+import { formatMs, runFor } from "../../lib/benchmarks";
+import { providerLogos } from "../../lib/logos";
+
+// Facts on this page were checked against Biome 2.5.15 and Ultracite 7.12.4
+// on this date.
+const lastModified = "2026-10-10";
+const command = "npx ultracite@latest init --linter biome";
+const small = runFor(42);
+const large = runFor(420);
+
+const breadcrumbs: Crumb[] = [
+  { href: "/providers", name: "Providers" },
+  { href: "/providers/biome", name: "Biome" },
+];
+
+const faqs: FaqItem[] = [
+  {
+    answer:
+      "Biome turns on 215 rules from its recommended set. Ultracite’s core preset turns on 329: it keeps every default except `noAutofocus` and `noImportantStyles`, sets each rule it touches to `error`, and turns on nine assist actions that sort imports, object keys, JSX attributes and more. The React preset adds 12 rules and Next.js 7. `init` also writes editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
+    question: "What does Ultracite add on top of Biome’s defaults?",
+  },
+  {
+    answer:
+      "Set it in `linter.rules` in your `biome.jsonc`, under its group: `\"style\": { \"noNestedTernary\": \"off\" }`. Your own settings apply after the presets in `extends`, so they win. For one line, add `// biome-ignore lint/style/noNestedTernary: <reason>` above it; Biome requires the reason.",
+    question: "How do I turn off a rule?",
+  },
+  {
+    answer:
+      "No. Biome formats JavaScript, TypeScript, JSX, JSON, CSS and GraphQL itself, and Ultracite sets it to Prettier’s style: 80 columns, double quotes, semicolons and ES5 trailing commas. Biome doesn’t run Prettier plugins, so if you depend on one, pick Ultracite’s ESLint provider, which uses Prettier.",
+    question: "Do I still need Prettier?",
+  },
+  {
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to ${formatMs(large.ms.biome)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (474 in its core preset to Biome’s 329), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
+    question: "Should I use Biome or Oxlint?",
+  },
+  {
+    answer:
+      "Yes. The Vue, Svelte and Astro presets turn on Biome’s `html.experimentalFullSupportEnabled`, which Biome describes as full support for those files, and adjust rules for how each framework works: Svelte and Astro imports used only in markup aren’t reported as unused, for instance. Biome marks that support experimental; for mature template linting, the ESLint provider uses each framework’s own ESLint plugin.",
+    question: "Does it lint Vue, Svelte and Astro files?",
+  },
+  {
+    answer:
+      "Run `npx ultracite init --linter biome`. It removes the ESLint, Prettier and Stylelint packages and config files it would have installed for those tools, writes `biome.jsonc`, and merges into your `.vscode/settings.json` rather than replacing it. To carry custom ESLint rules across, Biome’s own `biome migrate eslint --write` maps them to Biome’s names.",
+    question: "How do I switch from ESLint and Prettier?",
+  },
+  {
+    answer:
+      "Biome reads types itself, without the TypeScript compiler. Install with `npx ultracite init --linter biome --type-aware` to add the `type-aware` preset: 8 rules, such as `noImportCycles`, `noUnresolvedImports` and `noUndeclaredDependencies`, that need Biome to scan the whole project first.",
+    question: "Does it support type-aware rules?",
+  },
+];
+
+const nextSteps: NextStep[] = [
+  {
+    description:
+      "Every Biome preset, the type-aware rules and how to configure them.",
+    href: "/docs/provider/biome",
+    label: "Reference",
+    title: "Biome provider docs",
+  },
+  {
+    description:
+      "What `init` removes, keeps and rewrites when you leave ESLint.",
+    href: "/docs/migrate/eslint",
+    label: "Guide",
+    title: "Migrate from ESLint",
+  },
+  {
+    description:
+      `Run \`ultracite fix\` after every edit your agent makes, in ${hooks.length} agents and editors.`,
+    href: "/docs/ai/hooks",
+    label: "Guide",
+    title: "Agent hooks",
+  },
+  {
+    description: "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    href: "/providers",
+    label: "Providers",
+    title: "Compare the engines",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description={`Ultracite turns on 329 of Biome’s 565 rules (the default is 215), sorts imports, keys and Tailwind classes, sets up VS Code, Zed and your agents, and checks 420 files in ${formatMs(large.ms.biome)}.`}
+  faqs={faqs}
+  lastModified={lastModified}
+  title="Ultracite for Biome — Strict biome.jsonc Config"
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={providerLogos.biome}
+    name="Biome"
+    title="The strict Biome config, in one line of extends"
+  >
+    Biome ships 565 rules and turns on 215. Ultracite turns on 329 and adds
+    the sorting, formatting and editor settings to match, all from one{" "}
+    <code class="font-mono text-base text-foreground">biome.jsonc</code>.
+    <Fragment slot="note">
+      <span>Also on</span>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/docs/provider/eslint">ESLint</a>
+      <span aria-hidden="true">·</span>
+      <span>Checked against Biome 2.5</span>
+    </Fragment>
+    <ConfigFiles slot="visual" />
+  </LandingHero>
+  <Coverage />
+  <Speed />
+  <Formatter />
+  <AgentFixes />
+  <Everywhere />
+  <Faq id="bi-faq" items={faqs} title="Biome questions, answered" />
+  <NextSteps id="bi-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>

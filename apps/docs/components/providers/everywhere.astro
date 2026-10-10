@@ -1,0 +1,68 @@
+---
+// Three cards, each a visual over a short description: editor settings `init`
+// writes as code blocks, and a terminal whose lines go in the "terminal"
+// slot. The intro goes in the default slot.
+import SectionHeading from "../home/section-heading.astro";
+import AnnotatedCode from "../landing/annotated-code.astro";
+import RichText from "../landing/rich-text.astro";
+import Terminal from "../landing/terminal.astro";
+
+export interface EverywhereCard {
+  /** Copy with `backticks` for inline code. */
+  body: string;
+  /** A settings file to show; the terminal slot when absent. */
+  code?: { lang: string; path: string; text: string };
+  eyebrow: string;
+  title: string;
+}
+
+interface Props {
+  cards: EverywhereCard[];
+  id: string;
+  title: string;
+}
+
+const { cards, id, title } = Astro.props;
+---
+
+<section aria-labelledby={id} class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id={id} title={title}>
+      <slot />
+    </SectionHeading>
+    <ol
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-3"
+      role="list"
+    >
+      {
+        cards.map((card) => (
+          <li class="flex min-w-0 flex-col bg-background">
+            <div class="flex h-80 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-6">
+              {card.code ? (
+                <AnnotatedCode
+                  class="lp-code-fill"
+                  code={card.code.text}
+                  lang={card.code.lang}
+                  title={card.code.path}
+                />
+              ) : (
+                <Terminal class="flex-1">
+                  <slot name="terminal" />
+                </Terminal>
+              )}
+            </div>
+            <div class="flex flex-col gap-2 p-6 sm:p-8">
+              <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+                {card.eyebrow}
+              </p>
+              <h3 class="font-medium text-xl/7 tracking-[-0.015em]">{card.title}</h3>
+              <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
+                <RichText text={card.body} />
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

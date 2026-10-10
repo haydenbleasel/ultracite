@@ -1,0 +1,144 @@
+---
+import Coverage from "../coverage.astro";
+import type { CoverageRow } from "../coverage.astro";
+
+// ESLint 10.12.0 and the plugins ultracite/eslint/core loads, against
+// Ultracite 7.12.4. `available` counts each one's rules that aren't
+// deprecated; `defaults` counts the rules in its own recommended config
+// (typescript-eslint's `recommended`) that core keeps on; `enabled` counts the
+// rules `eslint --print-config` reports on for TypeScript, story and Cypress
+// files together. Not drawn: prettier, unused-imports and compat, one rule
+// each. Re-derive when a version moves.
+const catalogSize = 1218;
+const recommendedCount = 741;
+const coreCount = 1042;
+
+const plugins: CoverageRow[] = [
+  {
+    available: 374,
+    defaults: 321,
+    description: "Modern, idiomatic JavaScript",
+    enabled: 347,
+    mono: true,
+    name: "unicorn",
+  },
+  {
+    available: 282,
+    defaults: 230,
+    description: "Bugs and code smells, from SonarQube",
+    enabled: 271,
+    mono: true,
+    name: "sonarjs",
+  },
+  {
+    available: 199,
+    defaults: 59,
+    description: "ESLint’s own rules",
+    enabled: 159,
+    mono: true,
+    name: "eslint",
+  },
+  {
+    available: 127,
+    defaults: 19,
+    description: "TypeScript, 62 rules type-checked",
+    enabled: 119,
+    mono: true,
+    name: "@typescript-eslint",
+  },
+  {
+    available: 78,
+    defaults: 16,
+    description: "JSDoc comments",
+    enabled: 19,
+    mono: true,
+    name: "jsdoc",
+  },
+  {
+    available: 46,
+    defaults: 7,
+    description: "Imports and exports",
+    enabled: 28,
+    mono: true,
+    name: "import-x",
+  },
+  {
+    available: 43,
+    defaults: 8,
+    description: "Node.js modules and APIs",
+    enabled: 33,
+    mono: true,
+    name: "n",
+  },
+  {
+    available: 24,
+    defaults: 4,
+    description: "GitHub’s own conventions",
+    enabled: 21,
+    mono: true,
+    name: "github",
+  },
+  {
+    available: 17,
+    defaults: 8,
+    description: "Promises",
+    enabled: 14,
+    mono: true,
+    name: "promise",
+  },
+  {
+    available: 16,
+    defaults: 11,
+    description: "Storybook stories",
+    enabled: 16,
+    mono: true,
+    name: "storybook",
+  },
+  {
+    available: 12,
+    defaults: 4,
+    description: "Cypress tests",
+    enabled: 12,
+    mono: true,
+    name: "cypress",
+  },
+];
+---
+
+<Coverage
+  caption="ESLint 10.12.0 and Ultracite 7.12.4, counted with `eslint --print-config` across TypeScript, story and Cypress files. Plugins are drawn to one scale. Not drawn: `prettier/prettier`, `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
+  defaultsLabel="In the plugin’s recommended config"
+  id="es-rules"
+  notes={[
+    {
+      body: "1,041 of the 1,042 are errors, because an agent takes a zero exit code as done. The one warning is `compat/compat`, which flags browser APIs your browserslist targets don’t support.",
+      title: "Errors, never warnings",
+    },
+    {
+      body: "62 typescript-eslint rules and 69 SonarJS rules ask TypeScript’s type checker, through `projectService`, which finds each file’s `tsconfig.json` itself. A TypeScript file no `tsconfig.json` includes can’t be parsed, so include them all.",
+      title: "132 rules that read your types",
+    },
+  ]}
+  rows={plugins}
+  stats={[
+    {
+      label: "Rules in ESLint 10 and the ten plugins drawn here",
+      value: catalogSize.toLocaleString("en-US"),
+    },
+    {
+      label: "In their recommended configs, if you set each one up yourself",
+      value: String(recommendedCount),
+    },
+    {
+      accent: true,
+      label: "On in Ultracite’s core preset, before any framework rules",
+      value: coreCount.toLocaleString("en-US"),
+    },
+  ]}
+  title={`${recommendedCount} rules recommended. ${coreCount.toLocaleString("en-US")} with Ultracite.`}
+>
+  ESLint runs nothing until you configure it, and every plugin’s recommended
+  config is a separate thing to install and keep up. Ultracite’s core preset
+  turns on most of the rules in thirteen plugins, including the TypeScript
+  rules that need your types.
+</Coverage>
