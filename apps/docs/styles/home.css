@@ -99,3 +99,19 @@
 .hp-codeblocks :is(.prose, figure) {
   margin: 0;
 }
+
+/* The frame's side borders mark the 1280px column against the margin around
+   it. When the page is no wider than the column (a narrow window, or the
+   docked assistant panel taking 30rem of a desktop window), they'd sit on the
+   window's edge and double the panel's own border, so they go. Plain CSS
+   outranks Tailwind's layered utilities, so the color wins. */
+@media (max-width: 1295.98px) {
+  .hp-frame {
+    border-inline-color: transparent;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1775.98px) {
+  body[data-blume-assistant="open"] .hp-frame {
+    border-inline-color: transparent;
+  }
+}

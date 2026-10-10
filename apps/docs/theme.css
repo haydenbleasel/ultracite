@@ -98,3 +98,13 @@ html {
   background-color: currentColor;
   mask: var(--logo-src) center / contain no-repeat;
 }
+
+/* From 1024px Blume docks the assistant beside the page instead of over it,
+   so its drop shadow only smudges the page next to the panel's border. The
+   overlay on smaller screens keeps it. Unlayered, so it beats the panel's
+   shadow utility. */
+@media (min-width: 1024px) {
+  [data-blume-assistant-panel] {
+    box-shadow: none;
+  }
+}
