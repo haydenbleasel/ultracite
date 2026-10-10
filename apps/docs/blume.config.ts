@@ -176,9 +176,14 @@ export default defineConfig({
     { from: "/migrate/oxlint", to: "/docs/migrate/oxlint" },
     { from: "/migrate/prettier", to: "/docs/migrate/prettier" },
     { from: "/migrate/stylelint", to: "/docs/migrate/stylelint" },
-    { from: "/upgrade/v5", to: "/docs/upgrade/v5" },
-    { from: "/upgrade/v6", to: "/docs/upgrade/v6" },
-    { from: "/upgrade/v7", to: "/docs/upgrade/v7" },
+    { from: "/upgrade/v5", to: "/docs/upgrade" },
+    { from: "/upgrade/v6", to: "/docs/upgrade" },
+    { from: "/upgrade/v7", to: "/docs/upgrade" },
+    // The per-release upgrade guides became `ultracite upgrade`, documented
+    // on one page; the guides themselves ship with the CLI and the skill.
+    { from: "/docs/upgrade/v5", to: "/docs/upgrade" },
+    { from: "/docs/upgrade/v6", to: "/docs/upgrade" },
+    { from: "/docs/upgrade/v7", to: "/docs/upgrade" },
     // AI integrations moved under /docs/ai
     { from: "/rules", to: "/docs/ai/rules" },
     { from: "/skills", to: "/docs/ai/skills" },

@@ -10,6 +10,9 @@ import * as configResolution from "../src/config-resolution";
 import type { InstalledPackage } from "../src/config-resolution";
 import { biomeVersion } from "../src/dependencies";
 import * as schemas from "../src/schemas";
+import * as upgradeAgent from "../src/upgrade-agent";
+import * as upgradeGuides from "../src/upgrade-guides";
+import type { UpgradeGuide } from "../src/upgrade-guides";
 import * as utils from "../src/utils";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -22,10 +25,16 @@ const realDoctor = { ...doctorModule };
 const realConfigResolution = { ...configResolution };
 const realSchemas = { ...schemas };
 const realUtils = { ...utils };
+const realUpgradeAgent = { ...upgradeAgent };
+const realUpgradeGuides = { ...upgradeGuides };
 
 const noop = () => {
   // intentionally empty mock
 };
+
+const warn = mock((_message: string) => {
+  // intentionally empty mock
+});
 
 mock.module("@clack/prompts", () => ({
   intro: mock(noop),
@@ -33,7 +42,7 @@ mock.module("@clack/prompts", () => ({
     error: mock(noop),
     info: mock(noop),
     success: mock(noop),
-    warn: mock(noop),
+    warn,
   },
   outro: mock(noop),
   spinner: mock(() => ({
@@ -80,17 +89,30 @@ afterAll(() => {
   mock.module("../src/config-resolution", () => realConfigResolution);
   mock.module("../src/schemas", () => realSchemas);
   mock.module("../src/commands/doctor", () => realDoctor);
+  mock.module("../src/upgrade-agent", () => realUpgradeAgent);
+  mock.module("../src/upgrade-guides", () => realUpgradeGuides);
 });
+
+const v7Guide: UpgradeGuide = {
+  content: "# Upgrading to Ultracite v7",
+  path: "skills/ultracite/references/upgrades/v7.md",
+  version: 7,
+};
 
 interface Harness {
   addDevDependency: ReturnType<typeof mock>;
   findInstalledPackage: ReturnType<typeof mock>;
+  migrateWithAgent: ReturnType<typeof mock>;
   spawnSync: ReturnType<typeof mock>;
 }
 
 interface SetupOptions {
   checks?: DiagnosticCheck[];
   linter?: string | null;
+  /** Guides the agent leaves undone. */
+  leftAfterAgent?: UpgradeGuide[];
+  /** Guides the project needs before the configuration step. */
+  pending?: UpgradeGuide[];
   projectDependencies?: Record<string, string>;
   versions?: (InstalledPackage | null)[];
 }
@@ -98,10 +120,24 @@ interface SetupOptions {
 const setup = (options: SetupOptions = {}): Harness => {
   const {
     checks = [passingCheck],
+    leftAfterAgent = [],
     linter = "biome",
+    pending = [],
     projectDependencies = {},
     versions = [],
   } = options;
+  warn.mockClear();
+  const migrateWithAgent = mock(() =>
+    Promise.resolve({ failure: null, remaining: leftAfterAgent })
+  );
+  mock.module("../src/upgrade-guides", () => ({
+    ...realUpgradeGuides,
+    findPendingGuides: mock(() => pending),
+  }));
+  mock.module("../src/upgrade-agent", () => ({
+    ...realUpgradeAgent,
+    migrateWithAgent,
+  }));
   const addDevDependency = mock(() => Promise.resolve());
   const spawnSync = mock(() => ({ status: 0 }));
   const findInstalledPackage = mock((): InstalledPackage | null => null);
@@ -141,7 +177,12 @@ const setup = (options: SetupOptions = {}): Harness => {
     runDiagnostics: mock(() => checks),
   }));
 
-  return { addDevDependency, findInstalledPackage, spawnSync };
+  return {
+    addDevDependency,
+    findInstalledPackage,
+    migrateWithAgent,
+    spawnSync,
+  };
 };
 
 const loadUpgrade = async () => {
@@ -369,5 +410,85 @@ describe("upgrade", () => {
     await expect(upgrade({ pm: "npm" })).rejects.toThrow(
       "Doctor checks failed"
     );
+  });
+
+  test("--version installs that release", async () => {
+    const harness = setup({
+      versions: [installed("7.4.2"), installed(runningVersion)],
+    });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ pm: "npm", version: "7" })).resolves.toBe(0);
+
+    const [[selfPackages]] = harness.addDevDependency.mock.calls;
+    expect(selfPackages).toEqual(["ultracite@7"]);
+  });
+
+  test("rejects a --version that isn't a release", async () => {
+    const harness = setup();
+    const { upgrade } = await loadUpgrade();
+
+    await expect(
+      upgrade({ pm: "npm", version: "7 --registry=https://example.com" })
+    ).rejects.toThrow("isn't a version");
+    expect(harness.addDevDependency).not.toHaveBeenCalled();
+  });
+
+  test("hands the agent to the installed CLI", async () => {
+    const harness = setup({
+      versions: [installed("7.4.2"), installed("99.0.0")],
+    });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ agent: "codex", pm: "npm" })).resolves.toBe(0);
+
+    const handOff = harness.spawnSync.mock.calls.find(
+      ([command]) => command === process.execPath
+    );
+    expect(handOff?.[1]).toEqual([
+      path.join("/project/node_modules/ultracite", "dist/index.js"),
+      "upgrade",
+      "--skip-self",
+      "--pm",
+      "npm",
+      "--codex",
+    ]);
+  });
+
+  test("points at the guides when the configuration is out of date", async () => {
+    const harness = setup({ pending: [v7Guide] });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ pm: "npm", skipSelf: true })).resolves.toBe(0);
+
+    expect(harness.migrateWithAgent).not.toHaveBeenCalled();
+    expect(String(warn.mock.calls[0]?.[0])).toContain("--claude");
+    expect(String(warn.mock.calls[0]?.[0])).toContain(
+      "skills/ultracite/references/upgrades/v7.md"
+    );
+  });
+
+  test("has the agent apply the guides", async () => {
+    const harness = setup({ pending: [v7Guide] });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(
+      upgrade({ agent: "claude", pm: "npm", skipSelf: true })
+    ).resolves.toBe(0);
+
+    expect(harness.migrateWithAgent).toHaveBeenCalledWith("claude", {
+      guides: [v7Guide],
+      linter: "biome",
+      version: runningVersion,
+    });
+  });
+
+  test("fails when the agent leaves changes undone", async () => {
+    setup({ leftAfterAgent: [v7Guide], pending: [v7Guide] });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(
+      upgrade({ agent: "claude", pm: "npm", skipSelf: true })
+    ).rejects.toThrow(realDoctor.DOCTOR_FAILED);
   });
 });

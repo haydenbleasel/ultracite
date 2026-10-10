@@ -1,6 +1,6 @@
 ---
 name: ultracite
-description: "Ultracite is a zero-config linting and formatting preset for JavaScript/TypeScript projects. Use when: (1) Setting up or initializing Ultracite in a project (ultracite init), (2) Running linting or formatting commands (check, fix, doctor), (3) Writing or reviewing JS/TS code in a project that uses Ultracite — to follow its code standards, (4) Troubleshooting linting/formatting issues, (5) User mentions 'ultracite', 'lint', 'format', 'code quality', or 'biome/eslint/oxlint' in a project with Ultracite installed."
+description: "Ultracite is a zero-config linting and formatting preset for JavaScript/TypeScript projects. Use when: (1) Setting up or initializing Ultracite in a project (ultracite init), (2) Running linting or formatting commands (check, fix, doctor), (3) Writing or reviewing JS/TS code in a project that uses Ultracite — to follow its code standards, (4) Troubleshooting linting/formatting issues, (5) Upgrading Ultracite or bringing its configuration up to a newer release (ultracite upgrade), (6) User mentions 'ultracite', 'lint', 'format', 'code quality', or 'biome/eslint/oxlint' in a project with Ultracite installed."
 ---
 
 # Ultracite
@@ -90,6 +90,20 @@ export default defineConfig({
 ```
 
 Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
+
+## Upgrading
+
+```bash
+npx ultracite@latest upgrade
+```
+
+`upgrade` installs the latest Ultracite (or the release `--version 7` names), reinstalls the linter at the versions that release supports, and runs `doctor`. Major releases also change how the configuration looks; `upgrade` lists the guides the project still needs, and with `--claude` or `--codex` it has that agent CLI apply them.
+
+To apply them yourself, follow each guide that applies, oldest first. Each one says how to tell whether the project needs it:
+
+- [references/upgrades/v5.md](references/upgrades/v5.md): Biome 1's config format to Biome 2's
+- [references/upgrades/v6.md](references/upgrades/v6.md): the single `ultracite` preset to `ultracite/core` plus framework presets
+- [references/upgrades/v7.md](references/upgrades/v7.md): `ultracite/<preset>` to `ultracite/biome/<preset>`, and the `lint` and `format` commands to `check` and `fix`
 
 ## Code Standards
 

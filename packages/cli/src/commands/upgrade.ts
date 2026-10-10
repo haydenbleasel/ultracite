@@ -7,6 +7,7 @@ import { addDevDependency, detectPackageManager } from "nypm";
 import type { PackageManager } from "nypm";
 
 import packageJson from "../../package.json" with { type: "json" };
+import { agentAdapters, assertAgentAvailable } from "../agent-fix/agents";
 import {
   findInstalledPackage,
   UltraciteSetupError,
@@ -18,6 +19,7 @@ import {
   eslintFrameworkDevDependencies,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
 } from "../dependencies";
+import type { FixAgent } from "../linter-args";
 import {
   getRootInstallOptions,
   normalizePackageManager,
@@ -25,6 +27,9 @@ import {
 } from "../package-manager";
 import { readPackageJson } from "../schemas";
 import { spawnSync } from "../spawn-sync";
+import { migrateWithAgent } from "../upgrade-agent";
+import { findPendingGuides } from "../upgrade-guides";
+import type { UpgradeGuide } from "../upgrade-guides";
 import {
   detectLinter,
   eslintConfigNames,
@@ -40,6 +45,8 @@ const RELEASES_URL = `${REPOSITORY_URL}/releases`;
 const UPGRADE_COMPLETE = "Upgrade complete";
 
 export interface UpgradeOptions {
+  /** The coding agent to apply the upgrade guides with, if any. */
+  agent?: FixAgent;
   pm?: string;
   /**
    * Sync the toolchain against this CLI's pins without touching the
@@ -47,7 +54,25 @@ export interface UpgradeOptions {
    * installed CLI is re-invoked to finish the upgrade with its own pins.
    */
   skipSelf?: boolean;
+  /**
+   * The release to upgrade to: `latest` (the default), a dist-tag, or a
+   * version or major such as `7` or `7.13.0`.
+   */
+  version?: string;
 }
+
+// A dist-tag or a (partial) version, which is all `ultracite@<spec>` takes
+// here; anything else could reach the package manager as another argument.
+const VERSION_SPEC_RE =
+  /^(?:[a-z][a-z0-9-]*|\d+(?:\.\d+){0,2}(?:-[0-9a-z.-]+)?)$/iu;
+
+const assertVersionSpec = (version: string): void => {
+  if (!VERSION_SPEC_RE.test(version)) {
+    throw new UltraciteSetupError(
+      `\`${version}\` isn't a version. Pass a release such as \`--version 7\` or \`--version 7.13.0\`, or a dist-tag such as \`latest\`.`
+    );
+  }
+};
 
 type InstallOptions = Parameters<typeof addDevDependency>[1];
 
@@ -184,17 +209,23 @@ const compareUrl = (previous: string, current: string): string =>
   `${REPOSITORY_URL}/compare/${PACKAGE_NAME}@${previous}...${PACKAGE_NAME}@${current}`;
 
 /**
- * Install the latest Ultracite. Returns the installed package when a newer
- * CLI than the running one landed, so the caller can hand off to it.
+ * Install the requested Ultracite release. Returns the installed package when
+ * a different CLI than the running one landed, so the caller can hand off to
+ * it.
  */
 const updateSelf = async (
-  installOptions: InstallOptions
+  installOptions: InstallOptions,
+  version: string
 ): Promise<InstalledPackage | null> => {
   const previous = findInstalledPackage(PACKAGE_NAME)?.manifest.version;
 
   const s = spinner();
-  s.start("Updating Ultracite to the latest release...");
-  await addDevDependency([`${PACKAGE_NAME}@latest`], installOptions);
+  s.start(
+    version === "latest"
+      ? "Updating Ultracite to the latest release..."
+      : `Updating Ultracite to ${version}...`
+  );
+  await addDevDependency([`${PACKAGE_NAME}@${version}`], installOptions);
 
   const installed = findInstalledPackage(PACKAGE_NAME);
   const current = installed?.manifest.version;
@@ -205,7 +236,7 @@ const updateSelf = async (
   }
 
   if (previous === current) {
-    s.stop(`Ultracite is already on the latest release (${current}).`);
+    s.stop(`Ultracite is already on ${current}.`);
   } else {
     s.stop(`Ultracite ${previous ?? "(not installed)"} → ${current}`);
     log.info(
@@ -225,7 +256,8 @@ const updateSelf = async (
  */
 const handOffToInstalled = (
   installed: InstalledPackage,
-  requestedPackageManager: string | undefined
+  requestedPackageManager: string | undefined,
+  agent: FixAgent | undefined
 ): number | null => {
   const bin = resolveInstalledBin(installed);
 
@@ -247,6 +279,7 @@ const handOffToInstalled = (
       "upgrade",
       "--skip-self",
       ...(requestedPackageManager ? ["--pm", requestedPackageManager] : []),
+      ...(agent ? [`--${agent}`] : []),
     ],
     { stdio: "inherit" }
   );
@@ -278,11 +311,70 @@ const syncToolchain = async (
   s.stop(`Installed ${packages.join(", ")}`);
 };
 
+/** Where to read a guide: the copy the installed package ships, or GitHub. */
+const guideLocation = (guide: UpgradeGuide): string => {
+  const installed = findInstalledPackage(PACKAGE_NAME);
+  const local = installed ? path.join(installed.dir, guide.path) : null;
+
+  return local && exists(local)
+    ? path.relative(process.cwd(), local)
+    : `${REPOSITORY_URL}/blob/main/${guide.path}`;
+};
+
+const listGuides = (guides: UpgradeGuide[]): string =>
+  guides
+    .map((guide) => `v${guide.version}: ${guideLocation(guide)}`)
+    .join("\n");
+
+/**
+ * Brings the project's configuration up to this release's format with the
+ * upgrade guides it still needs, through the coding agent when one was
+ * passed. Resolves false when an agent was asked to and changes remain.
+ */
+const updateConfiguration = async (
+  linter: Linter,
+  agent: FixAgent | undefined
+): Promise<boolean> => {
+  const pending = findPendingGuides();
+
+  if (pending.length === 0) {
+    log.info(
+      "Configuration files are already in this release's format. If the release notes mention preset changes, re-run `ultracite init` to regenerate them."
+    );
+    return true;
+  }
+
+  if (!agent) {
+    log.warn(
+      `This project's configuration predates Ultracite v${pending.at(-1)?.version}. Run \`ultracite upgrade --claude\` or \`--codex\` to have that agent update it, or follow the guides:\n${listGuides(pending)}`
+    );
+    return true;
+  }
+
+  const { failure, remaining } = await migrateWithAgent(agent, {
+    guides: pending,
+    linter,
+    version: packageJson.version,
+  });
+
+  if (remaining.length > 0) {
+    log.warn(
+      `${failure ?? "Some changes are still missing."} Finish them by following:\n${listGuides(remaining)}`
+    );
+    return false;
+  }
+
+  return true;
+};
+
 /** Runs the upgrade and resolves with the process exit code to use. */
 export const upgrade = async (
   options: UpgradeOptions = {}
 ): Promise<number> => {
   intro(`Ultracite v${packageJson.version} Upgrade`);
+
+  const version = options.version ?? "latest";
+  assertVersionSpec(version);
 
   const linter = detectLinter();
 
@@ -294,6 +386,11 @@ export const upgrade = async (
 
   log.info(`Detected linter: ${linter}`);
 
+  // Fail before installing anything rather than after.
+  if (options.agent) {
+    assertAgentAvailable(agentAdapters[options.agent]);
+  }
+
   const packageManager = await resolvePackageManager(options.pm);
   const installOptions: InstallOptions = {
     corepack: false,
@@ -302,8 +399,10 @@ export const upgrade = async (
   };
 
   if (!options.skipSelf) {
-    const newer = await updateSelf(installOptions);
-    const handOffStatus = newer ? handOffToInstalled(newer, options.pm) : null;
+    const newer = await updateSelf(installOptions, version);
+    const handOffStatus = newer
+      ? handOffToInstalled(newer, options.pm, options.agent)
+      : null;
 
     if (handOffStatus !== null) {
       return handOffStatus;
@@ -318,14 +417,16 @@ export const upgrade = async (
 
   await syncToolchain(linter, installOptions);
 
-  log.info(
-    "Configuration files were left untouched. If the release notes mention preset changes, re-run `ultracite init` to regenerate them."
-  );
+  const configurationUpdated = await updateConfiguration(linter, options.agent);
 
   const { failCount } = reportDiagnostics(runDiagnostics(linter));
 
   if (failCount > 0) {
     log.error("Some checks still fail. Run `ultracite doctor` for details.");
+  }
+
+  // Either way the process exits non-zero, with the reason already logged.
+  if (failCount > 0 || !configurationUpdated) {
     outro(UPGRADE_COMPLETE);
     throw new Error(DOCTOR_FAILED);
   }

@@ -17,6 +17,7 @@ import {
   extractHookFlag,
   splitLinterArgs,
 } from "./linter-args";
+import type { FixAgent } from "./linter-args";
 import { supportedPackageManagers } from "./package-manager";
 import { LinterExitError } from "./run-command";
 
@@ -33,8 +34,11 @@ interface FixCommandOptions {
 }
 
 interface UpgradeCommandOptions {
+  claude?: boolean;
+  codex?: boolean;
   pm?: string;
   skipSelf?: boolean;
+  version?: string;
 }
 
 const program = new Command();
@@ -47,7 +51,10 @@ const getRawArgs = (command: Command): string[] | undefined =>
 program
   .name("ultracite")
   .version(packageJson.version, "-v, --version")
-  .description(packageJson.description);
+  .description(packageJson.description)
+  // Program options only before a subcommand, so `upgrade --version 7` is
+  // the upgrade's own option rather than the CLI printing its version.
+  .enablePositionalOptions();
 
 program
   .command("init")
@@ -187,6 +194,17 @@ program
   .description(
     "Update Ultracite and sync your linter toolchain to the versions it supports"
   )
+  .option(
+    "--version <version>",
+    "Release to upgrade to, such as 7 or 7.13.0 (default: latest)"
+  )
+  .addOption(
+    new Option(
+      "--claude",
+      "Apply the upgrade guides with the Claude Code CLI"
+    ).conflicts("codex")
+  )
+  .option("--codex", "Apply the upgrade guides with the Codex CLI")
   .option("--pm <pm>", "Package manager to use")
   .addOption(
     // Internal: set when a newly installed CLI is re-invoked to finish the
@@ -194,7 +212,18 @@ program
     new Option("--skip-self", "Skip updating the ultracite package").hideHelp()
   )
   .action(async (opts: UpgradeCommandOptions) => {
-    process.exitCode = await upgrade({ pm: opts.pm, skipSelf: opts.skipSelf });
+    let agent: FixAgent | undefined;
+    if (opts.claude) {
+      agent = "claude";
+    } else if (opts.codex) {
+      agent = "codex";
+    }
+    process.exitCode = await upgrade({
+      agent,
+      pm: opts.pm,
+      skipSelf: opts.skipSelf,
+      version: opts.version,
+    });
   });
 
 if (!process.env.ULTRACITE_TEST) {

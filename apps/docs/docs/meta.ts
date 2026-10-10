@@ -12,5 +12,6 @@ export default defineMeta({
     "git-hooks",
     "faq",
     "troubleshooting",
+    "upgrade",
   ],
 });

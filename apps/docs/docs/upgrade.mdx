@@ -1,0 +1,66 @@
+---
+title: Upgrade
+description: Upgrade Ultracite and your linter together with one command, and have Claude Code or Codex bring your configuration up to date with the release.
+---
+
+Ultracite's presets are pinned to specific linter releases, so bumping `ultracite` on its own can leave the linter behind, and a major release can change how your configuration should look. The `upgrade` command handles both:
+
+```bash title="Terminal"
+npx ultracite@latest upgrade
+```
+
+Use `@latest` the first time. `npx ultracite` runs the copy installed in your project, and releases before 7.13 don't have the options on this page.
+
+## What It Does
+
+1. Installs the latest `ultracite` release, or the one `--version` names, and prints a link to the release notes between your previous and new versions.
+2. Hands off to the freshly installed CLI, so the rest of the upgrade uses the versions that release was verified with rather than the ones baked into the older copy.
+3. Reinstalls your toolchain at those versions: Biome; ESLint, Prettier, Stylelint, and the plugins for every Ultracite preset your `eslint.config.*` imports (installing any that are missing); or Oxlint and Oxfmt. Optional extras you've already opted into (other framework plugins, Oxlint JS plugins, `oxlint-tsgolint`) are bumped too; ones you never installed are left alone.
+4. Checks your configuration for the changes each major release made, and has your coding agent make the ones it still needs when you pass `--claude` or `--codex`.
+5. Runs the same diagnostics as `doctor`, and exits non-zero if anything still fails or a change the agent was asked to make is missing.
+
+## Let Your Coding Agent Update the Configuration
+
+Major releases change what your configuration looks like: v7 moved the Biome presets under `ultracite/biome/` and removed the `lint` and `format` commands, and v6 split the single preset into one per framework. Pass `--claude` or `--codex`, and Ultracite hands the changes your project still needs to that agent's CLI:
+
+```bash title="Terminal"
+npx ultracite@latest upgrade --claude
+npx ultracite@latest upgrade --codex
+```
+
+The agent gets the upgrade guide for each release your configuration predates, oldest first, and changes only what they describe: linter configs, `package.json` scripts, Git hook and lint-staged configs, and CI workflows. It doesn't install packages or move you to another linter. It runs the way it does for [`fix --claude`](/docs/usage#ai-powered-fixing): Claude Code limited to reading and editing files, Codex in its workspace-write sandbox, with a 5-minute budget. Afterwards, Ultracite checks your project again, so what counts as done is what the files now say.
+
+`--claude` needs the [Claude Code CLI](https://claude.com/claude-code) and `--codex` the [Codex CLI](https://github.com/openai/codex), installed and signed in. Ultracite checks for the CLI before it installs anything.
+
+Ultracite decides which guides apply from your project rather than from the version you came from, so a project that skipped a major release, or had `ultracite` bumped by hand, still gets every change it's missing.
+
+### Without an Agent
+
+Without `--claude` or `--codex`, `upgrade` lists the guides your project still needs. They ship with Ultracite in `node_modules/ultracite/skills/ultracite/references/upgrades/`, and with the [Ultracite skill](/docs/ai/skills), so an agent that has the skill can follow them when you ask it to upgrade.
+
+| Release | What changes |
+| --- | --- |
+| v7 | Biome presets move from `ultracite/<preset>` to `ultracite/biome/<preset>`, and `ultracite lint` and `ultracite format` become `ultracite check` and `ultracite fix`. |
+| v6 | The single `ultracite` Biome preset splits into `ultracite/core` plus a preset for each framework. |
+| v5 | Biome 2's configuration format replaces Biome 1's. |
+
+Between major releases your configuration keeps working as it is. When the release notes call out preset changes, re-run `npx ultracite init` to regenerate Ultracite's parts of your configuration; it keeps your own additions.
+
+## Upgrading to a Specific Release
+
+`--version` takes a major version, a full version or a dist-tag:
+
+```bash title="Terminal"
+npx ultracite@latest upgrade --version 7
+```
+
+`--version 7` installs the newest 7.x release, so you can stay on one major after the next is out.
+
+## Options
+
+| Option | Description |
+| --- | --- |
+| `--version <version>` | The release to upgrade to, such as `7` or `7.13.0`. Defaults to `latest`. |
+| `--claude` | Have the Claude Code CLI make the configuration changes the release needs. |
+| `--codex` | Have the Codex CLI make the configuration changes the release needs. |
+| `--pm <pm>` | The package manager to use, when it can't be detected from a lockfile. |
