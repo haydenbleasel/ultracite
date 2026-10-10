@@ -38,102 +38,130 @@ import typescriptRules from "./rules/typescript.mjs";
 import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
+export const scriptConfig = {
+  // Every JavaScript and TypeScript module extension, plus inline scripts
+  // in HTML. JSON is deliberately absent: espree cannot parse it, and the
+  // oxlint benchmark does not lint JSON either.
+  files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "**/*.html"],
+  languageOptions: {
+    globals: {
+      ...globals.browser,
+      ...globals.node,
+    },
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+      ecmaVersion: "latest",
+      sourceType: "module",
+    },
+    sourceType: "module",
+  },
+  plugins: {
+    compat,
+    github,
+    "import-x": importX,
+    jsdoc: jsdocPlugin,
+    n,
+    prettier,
+    promise,
+    sonarjs,
+    unicorn,
+    "unused-imports": unusedImports,
+  },
+  rules: {
+    ...eslintRules,
+    ...importRules,
+    ...jsdocRules,
+    ...promiseRules,
+    ...nRules,
+    ...prettierRules,
+    ...unusedImportsRules,
+    ...sonarjsRules,
+    ...compatRules,
+    ...unicornRules,
+    ...githubRules,
+    // eslint-config-prettier goes after every plugin spread: the all-on
+    // plugin rule sets would otherwise re-enable the formatting rules it
+    // turns off. unicorn/number-literal-case was the visible casualty —
+    // it demands `0xABCD` while Prettier prints `0xabcd`, so no hex
+    // literal could satisfy both.
+    ...eslintPrettier.rules,
+    // eslint-config-prettier disables these defensively, but they don't
+    // conflict with our Prettier settings and the oxlint config enforces
+    // them alongside oxfmt.
+    curly: "error",
+    "no-unexpected-multiline": "error",
+    // Prettier prints empty braces as `{}` too, so this cannot fight it.
+    "unicorn/empty-brace-spaces": "error",
+  },
+
+  settings: {
+    // TypeScript extensions are mapped to @typescript-eslint/parser by
+    // importX.flatConfigs.typescript above.
+    "import-x/parsers": {
+      espree: [".js", ".jsx", ".cjs", ".mjs"],
+    },
+    "import-x/resolver": {
+      node: true,
+      typescript: true,
+    },
+  },
+};
+
+export const typescriptConfig = {
+  files: ["**/*.{ts,tsx,mts,cts}"],
+  languageOptions: {
+    parser: typescriptParser,
+    parserOptions: {
+      // The project service finds the nearest tsconfig for each file, so
+      // solution-style configs (`"files": []` plus `references`, as in the
+      // Vite templates) and monorepo packages get type information. A
+      // fixed `project: "./tsconfig.json"` failed every file in those
+      // layouts.
+      projectService: true,
+    },
+  },
+  plugins: {
+    "@typescript-eslint": typescript,
+  },
+  rules: {
+    ...eslintTypescriptRules,
+    ...typescriptRules,
+  },
+};
+
+// Route and page filenames the kebab-case regex can't express. Exported so
+// the component presets can re-apply them after their own rules.
+export const routeFileConfigs = [
+  {
+    // File-based routers encode the URL in route filenames (`__root.tsx`,
+    // `$.tsx`, `posts.$postId.tsx`, `+page.ts`, `+page.svelte`), which the
+    // kebab-case regex cannot express. Mirrors the oxlint js-plugins preset
+    // (#799).
+    files: [ROUTE_FILE_GLOB],
+    rules: {
+      "github/filenames-match-regex": "off",
+    },
+  },
+  {
+    // Page routes (`[slug].ts`, `[...slug].astro`, `[id].vue`, `_app.tsx`)
+    // get a route-aware regex instead, so other names in `pages/` are still
+    // checked. Mirrors the oxlint js-plugins preset (#804).
+    files: ["**/pages/**/*.{astro,js,jsx,mjs,cjs,ts,tsx,mts,cts,vue}"],
+    rules: {
+      "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
+    },
+  },
+];
+
 const core = [
   importX.flatConfigs.typescript,
   {
     ignores: ignorePatterns,
   },
-  {
-    // Every JavaScript and TypeScript module extension, plus inline scripts
-    // in HTML. JSON is deliberately absent: espree cannot parse it, and the
-    // oxlint benchmark does not lint JSON either.
-    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}", "**/*.html"],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-        ecmaVersion: "latest",
-        sourceType: "module",
-      },
-      sourceType: "module",
-    },
-    plugins: {
-      compat,
-      github,
-      "import-x": importX,
-      jsdoc: jsdocPlugin,
-      n,
-      prettier,
-      promise,
-      sonarjs,
-      unicorn,
-      "unused-imports": unusedImports,
-    },
-    rules: {
-      ...eslintRules,
-      ...importRules,
-      ...jsdocRules,
-      ...promiseRules,
-      ...nRules,
-      ...prettierRules,
-      ...unusedImportsRules,
-      ...sonarjsRules,
-      ...compatRules,
-      ...unicornRules,
-      ...githubRules,
-      // eslint-config-prettier goes after every plugin spread: the all-on
-      // plugin rule sets would otherwise re-enable the formatting rules it
-      // turns off. unicorn/number-literal-case was the visible casualty —
-      // it demands `0xABCD` while Prettier prints `0xabcd`, so no hex
-      // literal could satisfy both.
-      ...eslintPrettier.rules,
-      // eslint-config-prettier disables these defensively, but they don't
-      // conflict with our Prettier settings and the oxlint config enforces
-      // them alongside oxfmt.
-      curly: "error",
-      "no-unexpected-multiline": "error",
-      // Prettier prints empty braces as `{}` too, so this cannot fight it.
-      "unicorn/empty-brace-spaces": "error",
-    },
-
-    settings: {
-      // TypeScript extensions are mapped to @typescript-eslint/parser by
-      // importX.flatConfigs.typescript above.
-      "import-x/parsers": {
-        espree: [".js", ".jsx", ".cjs", ".mjs"],
-      },
-      "import-x/resolver": {
-        node: true,
-        typescript: true,
-      },
-    },
-  },
-  {
-    files: ["**/*.{ts,tsx,mts,cts}"],
-    languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        // The project service finds the nearest tsconfig for each file, so
-        // solution-style configs (`"files": []` plus `references`, as in the
-        // Vite templates) and monorepo packages get type information. A
-        // fixed `project: "./tsconfig.json"` failed every file in those
-        // layouts.
-        projectService: true,
-      },
-    },
-    plugins: {
-      "@typescript-eslint": typescript,
-    },
-    rules: {
-      ...eslintTypescriptRules,
-      ...typescriptRules,
-    },
-  },
+  scriptConfig,
+  typescriptConfig,
   {
     // Registers the plugin plus the cy, Cypress, Mocha and Chai globals that
     // specs and support files use without importing them.
@@ -175,24 +203,7 @@ const core = [
       "sonarjs/no-duplicate-string": "off",
     },
   },
-  {
-    // File-based routers encode the URL in route filenames (`__root.tsx`,
-    // `$.tsx`, `posts.$postId.tsx`, `+page.ts`), which the kebab-case regex
-    // cannot express. Mirrors the oxlint js-plugins preset (#799).
-    files: [ROUTE_FILE_GLOB],
-    rules: {
-      "github/filenames-match-regex": "off",
-    },
-  },
-  {
-    // Page routes (`[slug].ts`, `[...slug].ts`, `_app.tsx`) get a
-    // route-aware regex instead, so other names in `pages/` are still
-    // checked. Mirrors the oxlint js-plugins preset (#804).
-    files: ["**/pages/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
-    rules: {
-      "github/filenames-match-regex": ["error", PAGE_ROUTE_FILENAME_PATTERN],
-    },
-  },
+  ...routeFileConfigs,
 ];
 
 export default core;

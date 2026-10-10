@@ -581,7 +581,7 @@ describe("oxlint tanstack config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
+        override.files?.includes("**/routes/**/*.{js,jsx,svelte,ts,tsx}")
     );
 
     expect(routeOverride).toBeDefined();
@@ -593,7 +593,7 @@ describe("oxlint tanstack config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
+        override.files?.includes("**/routes/**/*.{js,jsx,svelte,ts,tsx}")
     );
 
     expect(routeOverride?.rules?.["no-use-before-define"]).toBe("off");
@@ -762,7 +762,7 @@ describe("oxlint js-plugins config", () => {
 
     const routeOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/routes/**/*.{js,jsx,ts,tsx}")
+        override.files?.includes("**/routes/**/*.{js,jsx,svelte,ts,tsx}")
     );
 
     expect(routeOverride).toBeDefined();
@@ -792,7 +792,9 @@ describe("oxlint js-plugins config", () => {
 
     const pagesOverride = config.overrides?.find(
       (override: { files?: string[] }) =>
-        override.files?.includes("**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx}")
+        override.files?.includes(
+          "**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx,vue}"
+        )
     );
 
     expect(pagesOverride).toBeDefined();

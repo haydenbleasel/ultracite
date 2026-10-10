@@ -7,8 +7,9 @@
 
 // Route directories of file-based routers: TanStack Router (`__root.tsx`,
 // `$.tsx`, `posts.$postId.tsx`, `{-$slug}.tsx`), React Router and Remix
-// (`_index.tsx`, `posts.$postId.tsx`) and SvelteKit (`+page.ts`).
-export const ROUTE_FILE_GLOB = "**/routes/**/*.{js,jsx,ts,tsx}";
+// (`_index.tsx`, `posts.$postId.tsx`) and SvelteKit (`+page.ts`,
+// `+page.svelte`).
+export const ROUTE_FILE_GLOB = "**/routes/**/*.{js,jsx,svelte,ts,tsx}";
 
 // Filename grammar for page routes (Astro, Next.js pages router): an optional
 // leading underscore for special and private pages (`_app`, `_document`,

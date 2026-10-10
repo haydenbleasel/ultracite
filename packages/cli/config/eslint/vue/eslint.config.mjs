@@ -5,9 +5,11 @@ import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable
 import eslintPrettier from "eslint-config-prettier";
 import vuePlugin from "eslint-plugin-vue";
 
+import componentScripts from "../core/component-scripts.mjs";
 import vueRules from "./rules/vue.mjs";
 
 // Only the vue/ entries — the all-on vue rules would otherwise re-enable
+
 // the template formatting rules that eslint-config-prettier turns off.
 // Prettier owns formatting for .vue files.
 const vuePrettierOverrides = Object.fromEntries(
@@ -18,6 +20,8 @@ const vue = [
   // The plugin's base config registers vue-eslint-parser (from the plugin's
   // own dependencies) and the SFC processor for .vue files.
   ...vuePlugin.configs["flat/base"],
+  // Core's rules for the <script> blocks, before the Vue rules so those win.
+  ...componentScripts(["**/*.vue"]),
   {
     files: ["**/*.vue"],
     languageOptions: {

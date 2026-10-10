@@ -191,7 +191,7 @@ const config = defineConfig({
       },
     },
     {
-      files: ["**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx}"],
+      files: ["**/pages/**/*.{astro,js,jsx,mjs,mts,ts,tsx,vue}"],
       rules: {
         // Astro and Next.js (pages router) encode dynamic, rest and optional
         // route parameters in bracketed page filenames: `[slug].astro`,
