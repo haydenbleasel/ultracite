@@ -43,10 +43,26 @@ const entries = cliAgents.map((agent) => {
 const byName = (a: { name: string }, b: { name: string }): number =>
   a.name.localeCompare(b.name, "en", { sensitivity: "base" });
 
+// The frontier agents lead the page. Beyond the rules file (and Claude Code's
+// hook), `ultracite fix --claude` and `--codex` hand whatever autofix can't
+// settle to that agent's CLI (docs/usage.mdx).
+const featuredFixFlags = new Map([
+  ["claude", "--claude"],
+  ["codex", "--codex"],
+]);
+const featured = entries.flatMap((entry) => {
+  const fixFlag = featuredFixFlags.get(entry.id);
+  return fixFlag ? [{ ...entry, fixFlag }] : [];
+});
+
 const groups = agentGroups
   .map((group) => ({
     ...group,
-    entries: entries.filter((entry) => entry.group === group.id).toSorted(byName),
+    entries: entries
+      .filter(
+        (entry) => entry.group === group.id && !featuredFixFlags.has(entry.id)
+      )
+      .toSorted(byName),
   }))
   .filter((group) => group.entries.length > 0);
 
@@ -67,7 +83,7 @@ const hookNames = new Intl.ListFormat("en", {
 
 const faqs: FaqItem[] = [
   {
-    answer: `Most agents read \`AGENTS.md\`, so \`npx ultracite init --agents universal\` writes it once for ${sharedFile?.readers.length ?? 0} of them. The rest get their own file: \`.claude/CLAUDE.md\` for Claude Code, \`GEMINI.md\` for Gemini CLI, \`replit.md\` for Replit Agent, and a rules file in their own folder for Roo Code, Kiro CLI and Firebender.`,
+    answer: `Most agents read \`AGENTS.md\`, so \`npx ultracite init --agents universal\` writes it once for ${sharedFile?.readers.length ?? 0} of them. The rest get their own file: \`.claude/CLAUDE.md\` for Claude Code, \`GEMINI.md\` for Gemini CLI, \`replit.md\` for Replit Agent, \`.firebender/rules/ultracite.mdc\` for Firebender, and \`ultracite.md\` for Aider.`,
     question: "Which file does Ultracite write for my agent?",
   },
   {
@@ -188,6 +204,84 @@ const faqs: FaqItem[] = [
           </ul>
         </figure>
       </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="ag-featured" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ag-featured" title="The frontier agents">
+        Claude Code and Codex get the deepest setup: the rules before they
+        write, and an <code class="font-mono text-base">ultracite fix</code>{" "}
+        flag that hands them whatever autofix can’t settle.
+      </SectionHeading>
+      <ul
+        class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+        role="list"
+      >
+        {
+          featured.map((entry) => {
+            const details = [
+              { label: "Rules", note: "read before every task", value: entry.file },
+              ...(entry.hook
+                ? [
+                    {
+                      label: "Hook",
+                      note: "runs `ultracite fix --hook` after every edit and reports what’s left",
+                      value: entry.hook,
+                    },
+                  ]
+                : []),
+              {
+                label: "Fix",
+                note: `hands what autofix can’t settle to ${entry.name}`,
+                value: `npx ultracite fix ${entry.fixFlag}`,
+              },
+            ];
+            return (
+              <li class="flex flex-col gap-8 bg-background px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
+                <div class="flex items-center gap-4">
+                  <img
+                    alt=""
+                    class="size-14 shrink-0 rounded-xl ring-1 ring-foreground/10"
+                    height="56"
+                    src={entry.logo}
+                    width="56"
+                  />
+                  <p class="flex flex-col">
+                    <span class="font-medium text-3xl tracking-[-0.03em]">{entry.name}</span>
+                    {entry.maker && (
+                      <span class="text-muted-foreground text-sm/6">{entry.maker}</span>
+                    )}
+                  </p>
+                </div>
+                {entry.tagline && (
+                  <p class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground">
+                    <RichText text={entry.tagline} />
+                  </p>
+                )}
+                <dl class="flex flex-col divide-y divide-border border-border border-y">
+                  {details.map((detail) => (
+                    <div class="grid gap-x-6 gap-y-1 py-3.5 sm:grid-cols-[4rem_1fr]">
+                      <dt class="font-mono text-accent text-xs/6 uppercase tracking-wider">
+                        {detail.label}
+                      </dt>
+                      <dd class="flex min-w-0 flex-col">
+                        <code class="truncate font-mono text-[13px]/6">{detail.value}</code>
+                        <span class="text-pretty text-muted-foreground text-sm/6">
+                          <RichText text={detail.note} />
+                        </span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <p class="mt-auto font-mono text-muted-foreground text-xs/5">
+                  --agents {entry.id}
+                </p>
+              </li>
+            );
+          })
+        }
+      </ul>
     </div>
   </section>
 
