@@ -2,78 +2,59 @@
 import Icon from "./icon.astro";
 
 interface Props {
-  human?: string;
-  agent?: string;
   class?: string;
+  command?: string;
+  /** `inverse` is the dark field that sits on the signal-orange slab. */
+  tone?: "default" | "inverse";
 }
 
 const {
-  human = "npx ultracite@latest init",
-  agent = "npx skills add haydenbleasel/ultracite",
   class: className,
+  command = "npx ultracite@latest init",
+  tone = "default",
 } = Astro.props;
+const inverse = tone === "inverse";
 ---
 
 <div
   class:list={[
-    "hp-installer flex h-10 w-full items-center gap-1 rounded-full border bg-background px-1 font-mono text-sm",
+    "hp-installer flex h-14 w-full max-w-[520px] items-center gap-3 rounded-md pr-1.5 pl-4 font-mono text-[15px]",
+    inverse
+      ? "bg-panel text-panel-foreground"
+      : "border border-foreground/90 bg-code text-foreground",
     className,
   ]}
-  data-human={human}
-  data-agent={agent}
 >
-  <div class="flex items-center gap-1 pl-px">
-    <div class="flex gap-0.5 rounded-full bg-muted p-0.5">
-      <button
-        aria-label="Human command"
-        aria-pressed="true"
-        class="hp-mode flex size-6 items-center justify-center rounded-full transition-colors"
-        data-mode="human"
-        title="Human"
-        type="button"
-      >
-        <Icon class="size-3.5" name="user" />
-      </button>
-      <button
-        aria-label="Agent command"
-        aria-pressed="false"
-        class="hp-mode flex size-6 items-center justify-center rounded-full transition-colors"
-        data-mode="agent"
-        title="Agent"
-        type="button"
-      >
-        <Icon class="size-3.5" name="bot" />
-      </button>
-    </div>
-    <span class="px-1 text-muted-foreground">$</span>
-  </div>
-
+  <span aria-hidden="true" class:list={[inverse ? "text-signal" : "text-accent"]}
+    >$</span
+  >
   {/*
     No outline-none here: Blume's base :focus-visible ring is the only focus
     indicator this read-only field has.
   */}
   <input
     aria-label="Install command"
-    class="hp-cmd min-w-0 flex-1 rounded-sm bg-transparent text-foreground"
+    class="hp-cmd min-w-0 flex-1 truncate rounded-sm bg-transparent"
     readonly
-    value={human}
+    value={command}
   />
-
   <button
-    aria-label="Copy command"
-    class="hp-copy mr-1 flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-    title="Copy command"
+    class:list={[
+      "hp-copy flex h-11 shrink-0 items-center gap-2 rounded-[5px] px-3.5 font-sans font-semibold text-sm sm:pr-4 sm:pl-3",
+      inverse
+        ? "bg-panel-foreground text-ink hover:bg-white"
+        : "bg-signal text-ink hover:brightness-95",
+    ]}
     type="button"
   >
-    <Icon class="hp-copy-icon size-3.5" name="copy" />
-    <Icon class="hp-check-icon hidden size-3.5" name="check" />
+    <Icon class="hp-copy-icon size-4 shrink-0" name="copy" />
+    <Icon class="hp-check-icon hidden size-4 shrink-0" name="check" />
+    <span class="max-sm:sr-only">Copy</span>
   </button>
   <span aria-live="polite" class="hp-copy-status sr-only"></span>
 </div>
 
 <script>
-  const ACTIVE = ["bg-background", "text-foreground", "shadow-sm"];
-
   // Blume's layouts use Astro's client router, which runs this module once per
   // session and never again after a navigation swaps the homepage back in. So
   // setup runs now (interactive before `load`) and again on every
@@ -83,7 +64,6 @@ const {
       return;
     }
     const input = el.querySelector<HTMLInputElement>(".hp-cmd");
-    const modes = el.querySelectorAll<HTMLButtonElement>(".hp-mode");
     const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
     const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
     const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
@@ -93,36 +73,11 @@ const {
     }
     el.dataset.hpBound = "true";
 
-    const commands = {
-      agent: el.dataset.agent ?? "",
-      human: el.dataset.human ?? "",
-    };
-    let mode: keyof typeof commands = "human";
-
-    const setMode = (next: keyof typeof commands) => {
-      mode = next;
-      input.value = commands[next];
-      for (const button of modes) {
-        const active = button.dataset.mode === next;
-        button.setAttribute("aria-pressed", String(active));
-        button.classList.toggle("text-muted-foreground", !active);
-        for (const cls of ACTIVE) {
-          button.classList.toggle(cls, active);
-        }
-      }
-    };
-
-    for (const button of modes) {
-      button.addEventListener("click", () =>
-        setMode(button.dataset.mode === "agent" ? "agent" : "human")
-      );
-    }
-
     let timer: ReturnType<typeof setTimeout>;
     copyBtn.addEventListener("click", async () => {
       clearTimeout(timer);
       try {
-        await navigator.clipboard.writeText(commands[mode]);
+        await navigator.clipboard.writeText(input.value);
       } catch {
         // Clipboard access can be blocked (permissions, insecure context).
         // Select the command so it can be copied by hand instead of flashing
@@ -140,8 +95,6 @@ const {
         status.textContent = "";
       }, 2000);
     });
-
-    setMode("human");
   };
 
   const init = () => {

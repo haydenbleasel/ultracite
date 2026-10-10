@@ -114,8 +114,14 @@ export default defineConfig({
     x: { handle: "haydenbleasel" },
   },
 
+  // Paper and ink with signal orange. The accent is the text-safe orange (it
+  // colors links and active states); the full-strength signal orange for
+  // large fills, and the warm neutrals, are tokens in theme.css.
   theme: {
-    accent: "purple",
+    accent: { dark: "#ff7a4d", light: "#c43a0b" },
+    action: "#ff4f1a",
+    background: { dark: "#131311", light: "#f4f3ef" },
+    fonts: { mono: "geist-mono" },
   },
 
   title: "Ultracite",

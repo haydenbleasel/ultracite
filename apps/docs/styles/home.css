@@ -1,14 +1,14 @@
 /* Homepage-only presentational CSS (imported by pages/index.astro). Plain CSS
-   only — no @theme/@apply here; the token utilities come from Blume's theme. */
+   only — no @theme/@apply here: Tailwind compiles each imported stylesheet as
+   its own root, so tokens and utilities live in theme.css instead. */
 
 /* Tailwind v4 makes the bare `border`/`divide-*` utilities fall back to
    currentColor (black in light mode). Restore a token default — inside
-   @layer base so Tailwind's own utilities layer (border-accent on the active
-   tab, border-white/10, …) still wins. The `:root` prefix outweighs
-   preflight's zero-specificity `border: 0 solid` reset, which is required:
-   Astro inlines this sheet into the page BEFORE the linked Tailwind
-   stylesheet, so with equal specificity preflight would win on source order.
-   Scoped to the homepage (this file only loads there). */
+   @layer base so Tailwind's own utilities layer still wins. The `:root`
+   prefix outweighs preflight's zero-specificity `border: 0 solid` reset,
+   which is required: Astro inlines this sheet into the page BEFORE the linked
+   Tailwind stylesheet, so with equal specificity preflight would win on
+   source order. Scoped to the homepage (this file only loads there). */
 @layer base {
   :root *,
   :root ::before,
@@ -17,102 +17,85 @@
   }
 }
 
-/* --- CSS-only hover/focus tooltip (replaces the React Tooltip) --- */
-.hp-tt {
-  position: relative;
+/* --- Agent session replay (components/home/agent-session.astro) --- */
+[data-hp-loop] [data-hp-step],
+[data-hp-loop] [data-hp-problem] {
+  transition:
+    opacity 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    translate 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.hp-tt > [data-tt] {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  z-index: 40;
-  translate: -50% 0;
-  white-space: nowrap;
-  border-radius: 0.5rem;
-  background-color: var(--blume-foreground);
-  color: var(--blume-background);
-  padding: 0.25rem 0.5rem;
-  /* Reset typography so the tooltip doesn't inherit a host's tracking/weight
-     (e.g. the hero <h1>'s tracking-tight resolves to -3px and crams text). */
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: normal;
-  line-height: 1rem;
+[data-hp-loop] .hp-pending {
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.12s ease;
+  translate: 0 6px;
 }
-.hp-tt:hover > [data-tt],
-.hp-tt:focus-within > [data-tt] {
-  opacity: 1;
-}
-
-/* --- ZeroConfig provider panels toggled by vanilla JS --- */
-[data-hp-panel][hidden] {
+[data-hp-problem] .hp-fixed-only {
   display: none;
 }
-
-.hp-provider {
-  border-color: var(--blume-border);
-  color: var(--blume-muted-foreground);
+[data-hp-problem].hp-fixed .hp-fixed-only {
+  display: inline;
 }
-.hp-provider[aria-pressed="true"] {
-  border-color: var(--blume-accent);
-  color: var(--blume-foreground);
-  background-color: color-mix(in oklch, var(--blume-accent) 8%, transparent);
+[data-hp-problem].hp-fixed .hp-open-only {
+  display: none;
+}
+[data-hp-problem].hp-fixed {
+  color: var(--uc-panel-muted);
+}
+[data-hp-loop][data-hp-clean="false"] .hp-clean-only,
+[data-hp-loop][data-hp-clean="true"] .hp-dirty-only {
+  display: none;
+}
+[data-hp-hook]:not(.hp-running) .hp-spinner {
+  display: none;
+}
+[data-hp-hook].hp-running .hp-hook-result {
+  visibility: hidden;
 }
 
-/* --- AgentFix terminal: CSS-only braille spinner. `content` animates
-   discretely in modern browsers; older ones just show the first frame. --- */
-.hp-agent-spinner::before {
+/* A braille spinner while a hook runs. `content` animates discretely in
+   modern browsers; older ones just show the first frame. */
+.hp-spinner::before {
   content: "⠋";
-  animation: hp-agent-spin 0.8s step-end infinite;
+  animation: hp-spin 0.8s step-end infinite;
 }
-@keyframes hp-agent-spin {
+@keyframes hp-spin {
   0% {
     content: "⠋";
   }
-  10% {
+  12% {
     content: "⠙";
   }
-  20% {
+  25% {
     content: "⠹";
   }
-  30% {
+  37% {
     content: "⠸";
   }
-  40% {
+  50% {
     content: "⠼";
   }
-  50% {
+  62% {
     content: "⠴";
   }
-  60% {
+  75% {
     content: "⠦";
   }
-  70% {
+  87% {
     content: "⠧";
   }
-  80% {
-    content: "⠇";
-  }
-  90% {
-    content: "⠏";
-  }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .hp-agent-spinner::before {
+  [data-hp-loop] [data-hp-step],
+  [data-hp-loop] [data-hp-problem] {
+    transition: none;
+  }
+  .hp-spinner::before {
     animation: none;
   }
 }
 
-/* Blume's header-less CodeBlock inside a Blume Tab: strip its own
-   margin/border/radius so it sits flush in the tab panel. */
-.hp-code :is(.prose, figure, pre) {
+/* Blume's CodeBlock carries prose margins for docs pages; in the engine tabs
+   the grid gap does the spacing. */
+.hp-codeblocks :is(.prose, figure) {
   margin: 0;
-  border: 0;
-  border-radius: 0;
-}
-.hp-code pre {
-  background: transparent;
 }

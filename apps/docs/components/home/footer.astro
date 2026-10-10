@@ -5,7 +5,7 @@ import Icon from "./icon.astro";
 import Logo from "./logo.astro";
 
 // Rendered into PageLayout's `footer` slot, after <main>, so it is the page's
-// contentinfo landmark. Its top margin matches the homepage grid's gap.
+// contentinfo landmark. It stays dark in both themes, like the agent panels.
 
 const footerNav = [
   {
@@ -56,60 +56,67 @@ const footerNav = [
 ];
 ---
 
-<footer
-  class="mx-auto mt-16 mb-24 flex w-full max-w-7xl flex-col gap-6 px-4 sm:mt-24 md:mt-32"
->
-  <div class="flex items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <Logo class="size-5" />
-      <span class="font-semibold text-lg tracking-tight">Ultracite</span>
-    </div>
-    <div class="flex items-center gap-4">
-      <a
-        aria-describedby={NEW_TAB_HINT_ID}
-        aria-label="Follow on X"
-        class="text-muted-foreground transition-colors hover:text-accent"
-        href="https://x.com/haydenbleasel"
-        rel="noreferrer"
-        target="_blank"
+<footer class="bg-panel text-panel-foreground">
+  <div class="mx-auto max-w-7xl border-panel-border border-x">
+    <div class="grid gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
+      <div class="flex flex-col gap-5 lg:col-span-3">
+        <a aria-label="Homepage" class="flex w-fit items-center gap-2.5" href="/">
+          <Logo class="size-6 shrink-0" />
+          <span class="font-semibold text-lg tracking-[-0.02em]">Ultracite</span>
+        </a>
+        <p class="max-w-[32ch] text-panel-muted text-sm/6">
+          The linter and formatter for agentic development. Open source under
+          the MIT license.
+        </p>
+        <div class="flex items-center gap-4">
+          <a
+            aria-describedby={NEW_TAB_HINT_ID}
+            aria-label="Follow on X"
+            class="text-panel-muted hover:text-panel-foreground"
+            href="https://x.com/haydenbleasel"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <Icon class="size-4" name="x" />
+          </a>
+          <a
+            aria-describedby={NEW_TAB_HINT_ID}
+            aria-label="View on GitHub"
+            class="text-panel-muted hover:text-panel-foreground"
+            href="https://github.com/haydenbleasel/ultracite"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <Icon class="size-4" name="github" />
+          </a>
+        </div>
+      </div>
+      <nav
+        aria-label="Footer"
+        class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-9 lg:grid-cols-5"
       >
-        <Icon class="size-4" name="x" />
-      </a>
-      <a
-        aria-describedby={NEW_TAB_HINT_ID}
-        aria-label="View on GitHub"
-        class="text-muted-foreground transition-colors hover:text-accent"
-        href="https://github.com/haydenbleasel/ultracite"
-        rel="noreferrer"
-        target="_blank"
-      >
-        <Icon class="size-4" name="github" />
-      </a>
+        {
+          footerNav.map((section) => (
+            <div class="flex flex-col gap-3">
+              <p class="font-mono text-panel-muted text-xs/5 uppercase tracking-wider">
+                {section.title}
+              </p>
+              <ul class="flex flex-col gap-2 text-sm/6" role="list">
+                {section.links.map((link) => (
+                  <li>
+                    <a
+                      class="text-panel-foreground/85 hover:text-panel-foreground"
+                      href={link.href}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
     </div>
   </div>
-
-  <nav
-    aria-label="Footer"
-    class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5"
-  >
-    {
-      footerNav.map((section) => (
-        <div class="flex flex-col gap-3">
-          <p class="font-medium text-sm">{section.title}</p>
-          <ul class="flex flex-col gap-2">
-            {section.links.map((link) => (
-              <li>
-                <a
-                  class="text-muted-foreground text-sm transition-colors hover:text-accent"
-                  href={link.href}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))
-    }
-  </nav>
 </footer>

@@ -40,6 +40,3 @@ export const providerLogos = {
   eslint: logo("eslint"),
   oxlint: logo("oxlint"),
 } satisfies Record<ProviderId, string>;
-
-export const prettierLogo = logo("prettier");
-export const stylelintLogo = logo("stylelint");

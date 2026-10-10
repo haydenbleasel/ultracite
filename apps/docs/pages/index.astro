@@ -3,24 +3,21 @@ import PageLayout from "blume/components/layout/PageLayout.astro";
 import data from "blume:data";
 import "../styles/home.css";
 
-import AgentFix from "../components/home/agent-fix.astro";
-import Agents from "../components/home/agents.astro";
+import AgentLoop from "../components/home/agent-loop.astro";
+import Community from "../components/home/community.astro";
 import Cta from "../components/home/cta.astro";
-import Demo from "../components/home/demo.astro";
-import Editors from "../components/home/editors.astro";
+import Fast from "../components/home/fast.astro";
 import Footer from "../components/home/footer.astro";
 import Hero from "../components/home/hero.astro";
-import Ide from "../components/home/ide.astro";
 import Logos from "../components/home/logos.astro";
-import Social from "../components/home/social.astro";
-import Sponsors from "../components/home/sponsors.astro";
-import Videos from "../components/home/videos.astro";
-import ZeroConfig from "../components/home/zero-config.astro";
+import Setup from "../components/home/setup.astro";
+import Strict from "../components/home/strict.astro";
 import { latestVersion } from "../lib/latest-version";
 
 const { config } = data;
 // blume.config.ts `description` is the single source for the homepage's meta
-// description and hero subtitle, llms.txt, and the docs pages' fallback.
+// description, llms.txt, and the docs pages' fallback. The hero writes its own
+// subtitle for the agentic story.
 const siteDescription = config.description ?? "";
 ---
 
@@ -46,22 +43,13 @@ const siteDescription = config.description ?? "";
   themeMode={config.theme.mode}
   x={config.x}
 >
-  <div
-    class="mx-auto mt-16 grid max-w-7xl gap-16 px-4 sm:mt-24 sm:gap-24 md:gap-32"
-  >
-    <Hero description={siteDescription} version={latestVersion}>
-      <Demo version={latestVersion} />
-    </Hero>
-    <Logos />
-    <ZeroConfig />
-    <Ide />
-    <AgentFix />
-    <Videos />
-    <Agents />
-    <Editors />
-    <Sponsors />
-    <Social />
-    <Cta />
-  </div>
+  <Hero version={latestVersion} />
+  <Logos />
+  <Strict />
+  <Fast />
+  <AgentLoop />
+  <Setup />
+  <Community />
+  <Cta />
   <Footer slot="footer" />
 </PageLayout>

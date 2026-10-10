@@ -1,0 +1,28 @@
+---
+// The left-aligned heading group at the top of each homepage section. The
+// description goes in the default slot so it can hold inline code.
+interface Props {
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+---
+
+<div
+  class="flex flex-col gap-5 px-4 pt-20 pb-12 sm:px-6 lg:px-10 lg:pt-28 lg:pb-16"
+>
+  <h2
+    class="max-w-[20ch] text-balance font-medium text-4xl tracking-[-0.04em] sm:text-5xl lg:text-6xl"
+    id={id}
+  >
+    {title}
+  </h2>
+  {
+    Astro.slots.has("default") && (
+      <p class="max-w-[54ch] text-pretty text-lg/8 text-muted-foreground">
+        <slot />
+      </p>
+    )
+  }
+</div>

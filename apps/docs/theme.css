@@ -1,0 +1,100 @@
+/* Ultracite's brand palette, layered on Blume's tokens. Blume inlines this
+   file last into its Tailwind entry, so it applies to every page and its
+   `:root` rules win over the defaults at equal specificity. Accent,
+   background and fonts are set in blume.config.ts; the warm neutrals and the
+   brand-only colors have no config key, so they live here. */
+
+:root {
+  --blume-foreground: #131311;
+  --blume-muted: #ebeae4;
+  --blume-muted-foreground: #63625b;
+  --blume-border: rgb(19 19 17 / 0.11);
+  --blume-code-background: #fbfbf9;
+  --blume-action-foreground: #131311;
+
+  /* Signal orange: large fills only. Text in orange uses the accent. */
+  --uc-signal: #ff4f1a;
+  /* Ink stays ink in both themes: text on signal orange. */
+  --uc-ink: #131311;
+  --uc-ok: #3dbb83;
+  /* Panels that stay dark in both themes: terminals and agent sessions. */
+  --uc-panel: #131311;
+  --uc-panel-raised: #1c1c19;
+  --uc-panel-hover: #2a2a26;
+  --uc-panel-foreground: #f4f3ef;
+  --uc-panel-muted: #a3a299;
+  --uc-panel-border: rgb(244 243 239 / 0.1);
+  /* Syntax colors for hand-annotated code, where Shiki doesn't run. */
+  --uc-syntax-keyword: #7a3ad6;
+  --uc-syntax-string: #1f7a4d;
+  --uc-syntax-type: #0b6bcb;
+  --uc-syntax-tag: #b4262f;
+}
+
+:root[data-theme="dark"] {
+  --blume-foreground: #f4f3ef;
+  --blume-muted: #1c1c19;
+  --blume-muted-foreground: #a3a299;
+  --blume-border: rgb(244 243 239 / 0.1);
+  --blume-code-background: #181816;
+  --blume-accent-foreground: #131311;
+  --blume-action-foreground: #131311;
+
+  --uc-panel: #0b0b0a;
+  --uc-panel-raised: #161614;
+  --uc-panel-hover: #22221f;
+  --uc-syntax-keyword: #b893ff;
+  --uc-syntax-string: #7fd3a8;
+  --uc-syntax-type: #7cb8ff;
+  --uc-syntax-tag: #ff8f8f;
+}
+
+html {
+  font-feature-settings: "cv11", "ss01", "ss03";
+}
+
+@theme inline {
+  --color-signal: var(--uc-signal);
+  --color-ink: var(--uc-ink);
+  --color-ok: var(--uc-ok);
+  --color-panel: var(--uc-panel);
+  --color-panel-raised: var(--uc-panel-raised);
+  --color-panel-hover: var(--uc-panel-hover);
+  --color-panel-foreground: var(--uc-panel-foreground);
+  --color-panel-muted: var(--uc-panel-muted);
+  --color-panel-border: var(--uc-panel-border);
+  --color-syntax-keyword: var(--uc-syntax-keyword);
+  --color-syntax-string: var(--uc-syntax-string);
+  --color-syntax-type: var(--uc-syntax-type);
+  --color-syntax-tag: var(--uc-syntax-tag);
+}
+
+/* A lint squiggle under the code a diagnostic points at. */
+@utility squiggle {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--uc-signal);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  text-decoration-skip-ink: none;
+}
+
+/* Diagonal hatching for opt-in or out-of-scale regions. */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--blume-border) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* A one-color logo drawn from an SVG file in currentColor. Set --logo-src,
+   --logo-width and --logo-height on the element. */
+@utility logo-mask {
+  display: block;
+  width: var(--logo-width);
+  height: var(--logo-height);
+  max-width: 100%;
+  background-color: currentColor;
+  mask: var(--logo-src) center / contain no-repeat;
+}

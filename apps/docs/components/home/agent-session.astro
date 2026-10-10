@@ -1,0 +1,342 @@
+---
+// A replay of a real agent session: the agent writes a component, Claude
+// Code's PostToolUse hook runs `ultracite fix --hook`, the 11 problems it
+// can't fix go back to the agent, and the next run is clean. The diagnostics
+// and timings are what Ultracite's Oxlint core + React presets report for this
+// component (checked with oxlint 1.86 on an M1 Pro). The markup is the
+// finished session, so the page reads complete without JavaScript; the script
+// replays it from the top.
+const hookCommand = "bun run fix --hook";
+
+const problems = [
+  { at: "3:8", rule: "func-style" },
+  { at: "3:8", rule: "function-component-definition" },
+  { at: "4:38", rule: "no-explicit-any" },
+  { at: "7:25", rule: "exhaustive-deps" },
+  { at: "8:8", rule: "prefer-await-to-then" },
+  { at: "9:8", rule: "prefer-await-to-then" },
+  { at: "10:6", rule: "exhaustive-effect-dependencies" },
+  { at: "16:11", rule: "jsx-a11y/alt-text" },
+  { at: "17:12", rule: "no-nested-ternary" },
+  { at: "17:22", rule: "eqeqeq" },
+  { at: "17:55", rule: "eqeqeq" },
+];
+
+const diff = [
+  { line: "const [users, setUsers] = useState<any[]>([]);", sign: "-" },
+  { line: "const [users, setUsers] = useState<User[]>([]);", sign: "+" },
+  { line: "…", sign: " " },
+  { line: "  }, []);", sign: "-" },
+  { line: "  }, [teamId]);", sign: "+" },
+  { line: "…", sign: " " },
+  { line: "  <img src={user.avatar} />", sign: "-" },
+  { line: "  <img alt={user.name} src={user.avatar} />", sign: "+" },
+  {
+    line: '  {user.role == "admin" ? "Admin" : user.role == "owner" ? …}',
+    sign: "-",
+  },
+  { line: "  {roleLabels[user.role]}", sign: "+" },
+];
+---
+
+<figure class="m-0">
+  <div
+    class="overflow-hidden rounded-lg bg-panel text-panel-foreground shadow-[0_40px_80px_-32px_rgb(80_20_0/0.55)] ring-1 ring-black/25 sm:rounded-xl"
+    data-hp-clean="true"
+    data-hp-loop
+  >
+    <div
+      class="flex h-11 items-center justify-between gap-4 border-panel-border border-b px-4 font-mono text-panel-muted text-xs/5"
+    >
+      <div class="flex min-w-0 items-center gap-2">
+        <span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-signal"
+        ></span>
+        <span class="truncate">agent session — ~/acme/web</span>
+      </div>
+      <button
+        class="flex shrink-0 items-center gap-1.5 rounded-sm px-2 py-1 hover:bg-panel-hover hover:text-panel-foreground"
+        data-hp-replay
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="size-3.5 shrink-0 fill-current"
+          viewBox="0 0 16 16"
+          ><path
+            clip-rule="evenodd"
+            d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.025-.273Z"
+            fill-rule="evenodd"></path></svg
+        >
+        Replay
+      </button>
+    </div>
+
+    <div class="grid lg:grid-cols-[minmax(0,1fr)_400px]">
+      <ol
+        class="flex min-w-0 flex-col gap-5 p-4 font-mono text-[13px]/6 sm:p-6"
+        role="list"
+      >
+        <li class="flex gap-3" data-hp-step="1">
+          <span aria-hidden="true" class="shrink-0 text-panel-muted">&gt;</span>
+          <p class="font-medium font-sans text-[15px]/6">
+            Add a members list to the team settings page
+          </p>
+        </li>
+        <li class="flex min-w-0 gap-3" data-hp-step="2">
+          <span aria-hidden="true" class="shrink-0">●</span>
+          <div class="min-w-0">
+            <p>
+              <span class="font-semibold">Write</span><span
+                class="text-panel-muted">(</span
+              >src/components/user-list.tsx<span class="text-panel-muted"
+                >)</span
+              >
+            </p>
+            <p class="text-panel-muted">⎿&nbsp; Wrote 22 lines</p>
+          </div>
+        </li>
+        <li class="flex min-w-0 gap-3" data-hp-hook data-hp-step="3">
+          <span aria-hidden="true" class="shrink-0 text-signal">●</span>
+          <div class="min-w-0">
+            <p>
+              <span class="font-semibold">PostToolUse hook</span>{" "}
+              <span class="text-panel-muted">{hookCommand}</span>
+            </p>
+            <p class="flex items-center gap-2">
+              <span class="text-panel-muted">⎿&nbsp;</span><span
+                aria-hidden="true"
+                class="hp-spinner text-panel-muted"></span><span
+                class="hp-hook-result text-signal"
+                >✕ 11 problems in user-list.tsx <span
+                  class="whitespace-nowrap text-panel-muted">· 333 ms</span
+                ></span
+              >
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-3" data-hp-step="4">
+          <span aria-hidden="true" class="shrink-0">●</span>
+          <p class="text-pretty font-sans text-[15px]/6 text-panel-foreground/90">
+            Fixing all 11: typing the users, adding <code
+              class="font-mono text-[13px]">teamId</code
+            > to the effect dependencies, adding alt text, and replacing the loose
+            comparisons and nested ternary with a lookup.
+          </p>
+        </li>
+        <li class="flex min-w-0 gap-3" data-hp-step="5">
+          <span aria-hidden="true" class="shrink-0">●</span>
+          <div class="flex min-w-0 flex-1 flex-col gap-2">
+            <p>
+              <span class="font-semibold">Update</span><span
+                class="text-panel-muted">(</span
+              >src/components/user-list.tsx<span class="text-panel-muted"
+                >)</span
+              >
+            </p>
+            <div
+              class="overflow-x-auto rounded-md bg-panel-raised py-2 text-[12.5px]/[1.7] ring-1 ring-panel-border"
+            >
+              <pre class="min-w-max px-3">{
+                diff.map((row) => (
+                  <span
+                    class:list={[
+                      "block",
+                      row.sign === "-" && "bg-signal/12 text-[#ffb79f]",
+                      row.sign === "+" && "bg-ok/12 text-[#9be3c1]",
+                      row.sign === " " && "text-panel-muted",
+                    ]}
+                  >{`${row.sign} ${row.line}`}</span>
+                ))
+              }</pre>
+            </div>
+          </div>
+        </li>
+        <li class="flex min-w-0 gap-3" data-hp-hook data-hp-step="6">
+          <span aria-hidden="true" class="shrink-0 text-ok">●</span>
+          <div class="min-w-0">
+            <p>
+              <span class="font-semibold">PostToolUse hook</span>{" "}
+              <span class="text-panel-muted">{hookCommand}</span>
+            </p>
+            <p class="flex items-center gap-2">
+              <span class="text-panel-muted">⎿&nbsp;</span><span
+                aria-hidden="true"
+                class="hp-spinner text-panel-muted"></span><span
+                class="hp-hook-result text-ok"
+                >✓ No problems <span class="whitespace-nowrap text-panel-muted"
+                  >· 334 ms</span
+                ></span
+              >
+            </p>
+          </div>
+        </li>
+        <li class="flex gap-3" data-hp-step="7">
+          <span aria-hidden="true" class="shrink-0">●</span>
+          <p class="text-pretty font-sans text-[15px]/6 text-panel-foreground/90">
+            Done. <code class="font-mono text-[13px]">UserList</code> is typed, accessible
+            and passes the project’s lint rules.
+          </p>
+        </li>
+      </ol>
+
+      <aside
+        aria-label="Problems"
+        class="flex min-w-0 flex-col border-panel-border border-t bg-panel-raised/60 lg:border-t-0 lg:border-l"
+      >
+        <div
+          class="flex h-12 items-center justify-between gap-3 border-panel-border border-b px-4"
+        >
+          <div class="flex items-center gap-2.5">
+            <p class="font-mono text-panel-muted text-xs/5 uppercase tracking-wider">
+              Problems
+            </p>
+            <span
+              class="hp-dirty-only min-w-6 rounded-full bg-signal px-1.5 text-center font-mono font-semibold text-ink text-xs/5 tabular-nums"
+              data-hp-count>{problems.length}</span
+            >
+            <span
+              class="hp-clean-only min-w-6 rounded-full bg-ok px-1.5 text-center font-mono font-semibold text-ink text-xs/5 tabular-nums"
+              >0</span
+            >
+          </div>
+          <p class="truncate font-mono text-panel-muted text-xs/5">
+            user-list.tsx
+          </p>
+        </div>
+        <ul class="flex flex-col py-2 font-mono text-[12.5px]/5" role="list">
+          {
+            problems.map((problem) => (
+              <li
+                class="hp-fixed flex items-baseline gap-3 px-4 py-1.5"
+                data-hp-problem
+              >
+                <span class="hp-open-only shrink-0 text-signal">✕</span>
+                <span class="hp-fixed-only shrink-0 text-ok">✓</span>
+                <span class="w-11 shrink-0 text-panel-muted tabular-nums">
+                  {problem.at}
+                </span>
+                <span class="min-w-0 truncate">{problem.rule}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p
+          class="mt-auto border-panel-border border-t px-4 py-3 font-mono text-panel-muted text-xs/5"
+        >
+          Oxlint · core + react presets
+        </p>
+      </aside>
+    </div>
+  </div>
+  <figcaption class="mt-3 px-1 text-ink/80 text-sm/6 sm:mt-4">
+    Real diagnostics and timings from Ultracite’s Oxlint preset, replayed. In
+    Claude Code, a PostToolUse hook runs <code class="font-mono text-[13px]"
+      >ultracite fix</code
+    > on every file the agent writes and hands what’s left back to the agent.
+  </figcaption>
+</figure>
+
+<script>
+  // The markup is the finished session; this replays it from the top. Timers
+  // are cleared before the client router swaps the page out, so a replay
+  // never runs against a page that's gone.
+  let timers: ReturnType<typeof setTimeout>[] = [];
+
+  const clearTimers = () => {
+    for (const timer of timers) {
+      clearTimeout(timer);
+    }
+    timers = [];
+  };
+
+  const at = (ms: number, run: () => void) => {
+    timers.push(setTimeout(run, ms));
+  };
+
+  const play = (loop: HTMLElement) => {
+    clearTimers();
+    const step = (n: number) =>
+      loop.querySelector<HTMLElement>(`[data-hp-step="${n}"]`);
+    const steps = [...loop.querySelectorAll<HTMLElement>("[data-hp-step]")];
+    const problems = [
+      ...loop.querySelectorAll<HTMLElement>("[data-hp-problem]"),
+    ];
+    const count = loop.querySelector<HTMLElement>("[data-hp-count]");
+    const show = (n: number) => step(n)?.classList.remove("hp-pending");
+    const setRunning = (n: number, running: boolean) =>
+      step(n)?.classList.toggle("hp-running", running);
+
+    for (const element of [...steps, ...problems]) {
+      element.classList.add("hp-pending");
+    }
+    for (const problem of problems) {
+      problem.classList.remove("hp-fixed");
+    }
+    if (count) {
+      count.textContent = "0";
+    }
+    loop.dataset.hpClean = "false";
+
+    let t = 300;
+    at(t, () => show(1));
+    t += 900;
+    at(t, () => show(2));
+    t += 800;
+    at(t, () => {
+      show(3);
+      setRunning(3, true);
+    });
+    t += 700;
+    at(t, () => setRunning(3, false));
+    for (const [index, problem] of problems.entries()) {
+      at(t + index * 70, () => {
+        problem.classList.remove("hp-pending");
+        if (count) {
+          count.textContent = String(index + 1);
+        }
+      });
+    }
+    t += problems.length * 70 + 900;
+    at(t, () => show(4));
+    t += 1300;
+    at(t, () => show(5));
+    t += 1100;
+    at(t, () => {
+      show(6);
+      setRunning(6, true);
+    });
+    t += 700;
+    at(t, () => setRunning(6, false));
+    for (const [index, problem] of problems.entries()) {
+      at(t + index * 60, () => {
+        problem.classList.add("hp-fixed");
+        if (count) {
+          count.textContent = String(problems.length - index - 1);
+        }
+        if (index === problems.length - 1) {
+          loop.dataset.hpClean = "true";
+        }
+      });
+    }
+    t += problems.length * 60 + 700;
+    at(t, () => show(7));
+  };
+
+  const init = () => {
+    const loop = document.querySelector<HTMLElement>("[data-hp-loop]");
+    if (!loop || loop.dataset.hpBound) {
+      return;
+    }
+    loop.dataset.hpBound = "true";
+    loop
+      .querySelector("[data-hp-replay]")
+      ?.addEventListener("click", () => play(loop));
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      play(loop);
+    }
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
+  document.addEventListener("astro:before-swap", clearTimers);
+</script>

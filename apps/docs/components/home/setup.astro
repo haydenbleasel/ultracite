@@ -1,0 +1,235 @@
+---
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+
+import {
+  frameworks,
+  integrations,
+} from "../../../../packages/cli/src/data/options";
+import type {
+  Framework,
+  Integration,
+} from "../../../../packages/cli/src/data/options";
+import { editors } from "../../lib/editors";
+import { editorLogos, providerLogos } from "../../lib/logos";
+import { providers } from "../../lib/providers";
+import SectionHeading from "./section-heading.astro";
+
+// A representative preset set, written exactly as `ultracite init` writes it
+// after picking React and Next.js. Highlighted at build time, so the page ships
+// no client-side highlighter.
+const PRESETS = ["core", "react", "next"];
+
+// oxlint first: it's the recommended engine and the default tab.
+const rank = (id: string): number => (id === "oxlint" ? 0 : 1);
+const ordered = providers.toSorted((a, b) => rank(a.id) - rank(b.id));
+const defaultProvider = ordered[0]?.id;
+
+const frameworkNames = {
+  angular: "Angular",
+  astro: "Astro",
+  jest: "Jest",
+  nestjs: "NestJS",
+  next: "Next.js",
+  qwik: "Qwik",
+  react: "React",
+  remix: "Remix",
+  solid: "Solid",
+  svelte: "Svelte",
+  tanstack: "TanStack",
+  vitest: "Vitest",
+  vue: "Vue",
+} satisfies Record<Framework, string>;
+
+const integrationNames = {
+  husky: "Husky",
+  lefthook: "Lefthook",
+  "lint-staged": "lint-staged",
+  "pre-commit": "pre-commit",
+} satisfies Record<Integration, string>;
+
+// The list comes from the CLI, so an editor can appear before its logo lands
+// in public/logos; that one renders its initial instead of a broken image.
+const editorTiles = editors.map((editor) => ({
+  ...editor,
+  logo: editorLogos[editor.id],
+}));
+---
+
+<section aria-labelledby="hp-setup" class="border-border border-b">
+  <div class="mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="hp-setup" title="One command, your choice of engine">
+      <code class="font-mono text-base">ultracite init</code> detects your stack,
+      writes the config for the engine you pick, and sets up your editor, agents and
+      git hooks. Every rule stays yours to override.
+    </SectionHeading>
+    <div class="grid border-border border-t lg:grid-cols-12">
+      <div
+        class="hp-tabs min-w-0 border-border p-2 sm:p-6 lg:col-span-8 lg:border-r lg:p-10"
+      >
+        <div
+          aria-label="Engine"
+          class="flex flex-wrap gap-1 pb-3"
+          role="tablist"
+        >
+          {
+            ordered.map((provider) => (
+              <button
+                aria-controls={`hp-panel-${provider.id}`}
+                aria-selected={String(provider.id === defaultProvider)}
+                class="flex items-center gap-2 rounded-md px-3 py-2 font-medium text-muted-foreground text-sm/5 hover:text-foreground aria-selected:bg-foreground aria-selected:text-background"
+                data-hp-tab={provider.id}
+                id={`hp-tab-${provider.id}`}
+                role="tab"
+                tabindex={provider.id === defaultProvider ? "0" : "-1"}
+                type="button"
+              >
+                <img
+                  alt=""
+                  class="size-4 rounded-[3px]"
+                  height="16"
+                  src={providerLogos[provider.id]}
+                  width="16"
+                />
+                {provider.name}
+              </button>
+            ))
+          }
+        </div>
+        {
+          ordered.map((provider) => (
+            <div
+              aria-labelledby={`hp-tab-${provider.id}`}
+              class="hp-codeblocks grid gap-3 xl:grid-cols-2"
+              data-hp-panel={provider.id}
+              hidden={provider.id !== defaultProvider}
+              id={`hp-panel-${provider.id}`}
+              role="tabpanel"
+            >
+              {provider.configFiles.map((file) => (
+                <div class="min-w-0 xl:[&:last-child:nth-child(odd)]:col-span-2">
+                  <CodeBlock
+                    code={file.code(PRESETS)}
+                    lang={file.lang === "json" ? "jsonc" : file.lang}
+                    title={file.name}
+                  />
+                </div>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+      <div
+        class="flex flex-col divide-y divide-border border-border border-t lg:col-span-4 lg:border-t-0"
+      >
+        <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+          <p class="font-medium text-base/7">
+            {frameworks.length} framework presets
+          </p>
+          <ul class="flex flex-wrap gap-1.5 text-sm/5" role="list">
+            {
+              frameworks.map((framework) => (
+                <li class="rounded-sm border border-border bg-code px-2 py-1">
+                  {frameworkNames[framework]}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+          <p class="font-medium text-base/7">
+            Format on save in {editors.length} editors
+          </p>
+          <ul class="grid w-fit grid-cols-5 gap-2" role="list">
+            {
+              editorTiles.map((editor) =>
+                editor.logo ? (
+                  <li>
+                    <img
+                      alt={editor.name}
+                      class="size-8 rounded-md"
+                      height="32"
+                      src={editor.logo}
+                      title={editor.name}
+                      width="32"
+                    />
+                  </li>
+                ) : (
+                  <li>
+                    <span
+                      aria-label={editor.name}
+                      class="flex size-8 items-center justify-center rounded-md border border-border bg-muted font-medium text-muted-foreground text-xs"
+                      role="img"
+                    >
+                      {editor.name.charAt(0)}
+                    </span>
+                  </li>
+                )
+              )
+            }
+          </ul>
+        </div>
+        <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
+          <p class="font-medium text-base/7">Pre-commit, your way</p>
+          <p class="font-mono text-[13px]/6 text-muted-foreground">
+            {
+              integrations
+                .map((integration) => integrationNames[integration])
+                .join(" · ")
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Tabs for the engine picker. Bound on every `astro:page-load` (the client
+  // router runs this module once), with `hpBound` preventing double binding.
+  const ARROW_STEPS = new Map([
+    ["ArrowLeft", -1],
+    ["ArrowRight", 1],
+  ]);
+
+  const init = () => {
+    for (const tabs of document.querySelectorAll<HTMLElement>(".hp-tabs")) {
+      if (tabs.dataset.hpBound) {
+        continue;
+      }
+      tabs.dataset.hpBound = "true";
+      const buttons = [
+        ...tabs.querySelectorAll<HTMLButtonElement>("[data-hp-tab]"),
+      ];
+      const select = (button: HTMLButtonElement) => {
+        for (const other of buttons) {
+          const selected = other === button;
+          other.setAttribute("aria-selected", String(selected));
+          other.tabIndex = selected ? 0 : -1;
+        }
+        for (const panel of tabs.querySelectorAll<HTMLElement>(
+          "[data-hp-panel]"
+        )) {
+          panel.hidden = panel.dataset.hpPanel !== button.dataset.hpTab;
+        }
+      };
+      for (const [index, button] of buttons.entries()) {
+        button.addEventListener("click", () => select(button));
+        button.addEventListener("keydown", (event) => {
+          const step = ARROW_STEPS.get(event.key);
+          if (step === undefined) {
+            return;
+          }
+          event.preventDefault();
+          const next = buttons.at((index + step) % buttons.length);
+          if (next) {
+            next.focus();
+            select(next);
+          }
+        });
+      }
+    }
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
+</script>

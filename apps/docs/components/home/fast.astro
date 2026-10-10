@@ -1,0 +1,86 @@
+---
+import SectionHeading from "./section-heading.astro";
+
+// Medians on an Apple M1 Pro, end to end through the ultracite CLI. The single
+// file is the component from the hero's session; the project is the repo's
+// benchmark fixture (`bun ./benchmark/index.ts`, 42 files).
+const stats = [
+  { label: "Check the file your agent just edited", ms: 330 },
+  { label: "Check a whole 42-file project", ms: 333 },
+  { label: "The same project on Biome", ms: 249 },
+];
+---
+
+<section aria-labelledby="hp-fast" class="border-border border-b">
+  <div class="mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="hp-fast" title="Fast enough to run after every edit">
+      Agents check their work after nearly every change. Ultracite answers in
+      about a third of a second, so the check never becomes the slow part of
+      the loop.
+    </SectionHeading>
+    <figure class="m-0 border-border border-t">
+      <div class="flex flex-col gap-4 px-4 pt-10 pb-8 sm:px-6 lg:px-10 lg:pt-14">
+        <p class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+          One agent turn
+        </p>
+        <div class="flex h-20 items-stretch gap-1 sm:h-24">
+          <div
+            class="hatch relative flex min-w-0 flex-1 items-center bg-muted/70 py-2 pr-16 pl-4 ring-1 ring-foreground/10 ring-inset sm:pr-28 sm:pl-6"
+          >
+            <p class="min-w-0 text-pretty text-[15px]/6 sm:text-base/7">
+              <span class="font-medium">Your agent reads, thinks and writes the edit</span>
+              <span class="text-muted-foreground max-sm:hidden"
+                >{" "}· seconds to minutes, depending on the model and task</span
+              >
+            </p>
+            <span
+              aria-hidden="true"
+              class="absolute inset-y-0 right-10 w-3 -skew-x-12 border-foreground/25 border-x bg-background sm:right-16"
+            ></span>
+          </div>
+          <div class="w-2.5 shrink-0 bg-signal sm:w-3"></div>
+        </div>
+        <div class="flex items-start justify-end gap-3">
+          <p class="text-right text-[15px]/6">
+            <span class="font-medium">ultracite check</span>{" "}
+            <span class="text-muted-foreground">· 330 ms</span>
+          </p>
+          <span
+            aria-hidden="true"
+            class="mr-[3px] h-6 w-px -translate-y-4 bg-foreground sm:mr-[5px]"
+          ></span>
+        </div>
+      </div>
+      <dl
+        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-3"
+      >
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <dt class="text-pretty text-[15px]/6 text-muted-foreground">
+                {stat.label}
+              </dt>
+              <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+                {stat.ms}
+                <span class="ml-1 text-2xl text-muted-foreground tracking-normal">
+                  ms
+                </span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      <figcaption
+        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
+      >
+        Agent time isn’t drawn to scale. Check times are medians on an Apple M1
+        Pro, end to end through the <code class="font-mono text-[13px]"
+          >ultracite</code
+        > CLI on Oxlint unless noted: the single file is the component in the session
+        above, and the project is the repo’s benchmark fixture (<code
+          class="font-mono text-[13px]">bun ./benchmark/index.ts</code
+        >).
+      </figcaption>
+    </figure>
+  </div>
+</section>

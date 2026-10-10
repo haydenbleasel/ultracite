@@ -1,65 +1,61 @@
 ---
 import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
 
-import SectionIntro from "./section-intro.astro";
-
-// Logos render at a fixed 32px height; `width` is each file's aspect ratio at
-// that height so the browser reserves the right box before it loads. VA's
-// seal is a 665 kB vector of gradients and clip paths, so it ships as a 3x
-// WebP instead.
-const LOGO_HEIGHT = 32;
-
+// Each logo is drawn in the text color from its SVG (a CSS mask), at a size
+// that gives every mark about the same visual weight: wide wordmarks get
+// shorter, compact ones taller (width × height ≈ 2,600px²).
 const logos = [
-  { name: "OpenAI", src: "/customers/openai.svg", width: 118 },
-  { name: "Vercel", src: "/customers/vercel.svg", width: 161 },
-  { name: "Profound", src: "/customers/profound.svg", width: 190 },
-  { name: "Adobe", src: "/customers/adobe.svg", width: 121 },
-  { name: "Clerk", src: "/customers/clerk.svg", width: 110 },
-  { name: "Alan Turing Institute", src: "/customers/ati.svg", width: 77 },
-  { name: "Prisma", src: "/customers/prisma.svg", width: 103 },
+  { height: 27, name: "OpenAI", src: "/customers/openai.svg", width: 98 },
+  { height: 23, name: "Vercel", src: "/customers/vercel.svg", width: 114 },
+  { height: 26, name: "Adobe", src: "/customers/adobe.svg", width: 99 },
+  { height: 19, name: "Tencent", src: "/customers/tencent.svg", width: 139 },
+  { height: 27, name: "Clerk", src: "/customers/clerk.svg", width: 95 },
+  { height: 28, name: "Prisma", src: "/customers/prisma.svg", width: 91 },
+  { height: 21, name: "PostHog", src: "/customers/posthog.svg", width: 122 },
+  { height: 24, name: "Sentry", src: "/customers/sentry.svg", width: 108 },
+  { height: 26, name: "Raycast", src: "/customers/raycast.svg", width: 100 },
+  { height: 23, name: "Resend", src: "/customers/resend.svg", width: 111 },
   {
-    name: "U.S. Department of Veterans Affairs",
-    src: "/customers/va.webp",
-    width: 144,
+    height: 18,
+    name: "ElevenLabs",
+    src: "/customers/elevenlabs.svg",
+    width: 142,
   },
-  { name: "French Government", src: "/customers/french-government.svg", width: 54 },
-  { name: "Tencent", src: "/customers/tencent.svg", width: 239 },
-  { name: "PostHog", src: "/customers/posthog.svg", width: 183 },
-  { name: "Axiom", src: "/customers/axiom.svg", width: 177 },
-  { name: "Resend", src: "/customers/resend.svg", width: 151 },
-  { name: "Neon", src: "/customers/neon.svg", width: 114 },
-  { name: "ElevenLabs", src: "/customers/elevenlabs.svg", width: 247 },
-  { name: "Mintlify", src: "/customers/mintlify.svg", width: 147 },
-  { name: "Sentry", src: "/customers/sentry.svg", width: 145 },
-  { name: "Raycast", src: "/customers/raycast.svg", width: 123 },
-  { name: "Moonshot", src: "/customers/moonshot.svg", width: 196 },
-  { name: "Augment Code", src: "/customers/augment.svg", width: 256 },
+  { height: 21, name: "Profound", src: "/customers/profound.svg", width: 124 },
 ];
 ---
 
-<div class="grid gap-8">
-  <SectionIntro
-    description={`And used by <a aria-describedby="${NEW_TAB_HINT_ID}" class="underline" href="https://github.com/haydenbleasel/ultracite/network/dependents" rel="noreferrer" target="_blank">thousands</a> of open source projects.`}
-    maxWidth="max-w-xl"
-    title="Trusted by top companies"
-  />
-  <div
-    class="grid grid-cols-2 divide-x divide-y border-t border-l sm:grid-cols-3 lg:grid-cols-5"
-  >
-    {
-      logos.map((logo) => (
-        <div class="flex aspect-video w-full items-center justify-center p-8 last:border-r last:border-b sm:p-8 md:p-12 lg:p-8 xl:p-12">
-          <img
-            alt={logo.name}
-            class="max-h-8 w-auto object-contain dark:brightness-0 dark:invert"
-            decoding="async"
-            height={LOGO_HEIGHT}
-            loading="lazy"
-            src={logo.src}
-            width={logo.width}
-          />
-        </div>
-      ))
-    }
+<section aria-labelledby="hp-trusted" class="border-border border-b">
+  <div class="mx-auto max-w-7xl border-border border-x">
+    <div
+      class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-border border-b px-4 py-5 sm:px-6 lg:px-10"
+    >
+      <h2 class="font-medium font-sans text-sm/6 tracking-normal" id="hp-trusted">
+        Trusted by engineering teams at
+      </h2>
+      <a
+        aria-describedby={NEW_TAB_HINT_ID}
+        class="text-muted-foreground text-sm/6 hover:text-foreground"
+        href="https://github.com/haydenbleasel/ultracite/network/dependents"
+        rel="noreferrer"
+        target="_blank"
+      >
+        …and thousands of open source projects →
+      </a>
+    </div>
+    <ul class="grid grid-cols-2 gap-px bg-border sm:grid-cols-3 lg:grid-cols-6" role="list">
+      {
+        logos.map((logo) => (
+          <li class="flex h-20 items-center justify-center bg-background px-5 sm:h-28 sm:px-6">
+            <span
+              aria-label={logo.name}
+              class="logo-mask"
+              role="img"
+              style={`--logo-src: url(${logo.src}); --logo-width: ${logo.width}px; --logo-height: ${logo.height}px`}
+            />
+          </li>
+        ))
+      }
+    </ul>
   </div>
-</div>
+</section>
