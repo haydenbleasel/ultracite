@@ -99,14 +99,14 @@ const editorTiles = editors.map((editor) => ({
           ordered.map((provider) => (
             <div
               aria-labelledby={`hp-tab-${provider.id}`}
-              class="hp-codeblocks grid gap-3 xl:grid-cols-2"
+              class="hp-codeblocks grid gap-3"
               data-hp-panel={provider.id}
               hidden={provider.id !== defaultProvider}
               id={`hp-panel-${provider.id}`}
               role="tabpanel"
             >
               {provider.configFiles.map((file) => (
-                <div class="min-w-0 xl:[&:last-child:nth-child(odd)]:col-span-2">
+                <div class="min-w-0">
                   <CodeBlock
                     code={file.code(PRESETS)}
                     lang={file.lang === "json" ? "jsonc" : file.lang}
