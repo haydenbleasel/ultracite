@@ -1,6 +1,6 @@
 ---
 name: ultracite
-description: "Ultracite is a zero-config linting and formatting preset for JavaScript/TypeScript projects. Use when: (1) Setting up or initializing Ultracite in a project (ultracite init), (2) Running linting or formatting commands (check, fix, doctor), (3) Writing or reviewing JS/TS code in a project that uses Ultracite — to follow its code standards, (4) Troubleshooting linting/formatting issues, (5) Upgrading Ultracite or bringing its configuration up to a newer release (ultracite upgrade), (6) User mentions 'ultracite', 'lint', 'format', 'code quality', or 'biome/eslint/oxlint' in a project with Ultracite installed."
+description: "Ultracite is a zero-config linting and formatting preset for JavaScript/TypeScript projects. Use when: (1) Setting up or initializing Ultracite in a project, or migrating its existing lint and format config onto Ultracite (ultracite init), (2) Running linting or formatting commands (check, fix, doctor), (3) Writing or reviewing JS/TS code in a project that uses Ultracite — to follow its code standards, (4) Troubleshooting linting/formatting issues, (5) Upgrading Ultracite or bringing its configuration up to a newer release (ultracite upgrade), (6) User mentions 'ultracite', 'lint', 'format', 'code quality', or 'biome/eslint/oxlint' in a project with Ultracite installed."
 ---
 
 # Ultracite
@@ -90,6 +90,15 @@ export default defineConfig({
 ```
 
 Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
+
+## Migrating an Existing Project
+
+Migrating means moving the project's own ESLint, Prettier, Stylelint, Biome or Oxlint configuration onto Ultracite's presets; the project can keep its linter. Run `init` (it preselects the linter it finds), carry over rules the presets don't cover after Ultracite's presets, and run `ultracite fix` to format everything in one commit. Then fix what `check` still reports, or migrate progressively:
+
+- Turn off each failing rule after Ultracite's presets: in `rules` for Oxlint (`ultracite check -f json` lists them as `plugin(rule)`, written `plugin/rule`), or `linter.rules` and `assist.actions.source` for Biome (`ultracite check --reporter=summary`). On ESLint, `ultracite check --suppress-all` records today's errors in `eslint-suppressions.json` instead.
+- Turn them back on a few at a time: remove an override (or prune with `ultracite check --prune-suppressions`), run `ultracite fix`, fix the rest, one rule per change.
+
+Full steps: https://www.ultracite.ai/docs/migrate.md
 
 ## Upgrading
 

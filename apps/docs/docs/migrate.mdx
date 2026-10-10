@@ -1,0 +1,146 @@
+---
+title: Migrate
+description: Move a project's own lint and format configuration onto Ultracite's presets, with your coding agent, all at once or progressively over a few weeks.
+---
+
+Migrating to Ultracite means replacing your own lint and format configuration (the rules you picked for ESLint, Prettier, Stylelint, Biome or Oxlint) with Ultracite's presets. It doesn't mean giving up those tools: a project on ESLint can stay on ESLint, and one on Biome can stay on Biome. If you'd also like to change engines, see [Providers](/providers) to choose one, and pick it when `init` asks.
+
+## Have Your Agent Do It
+
+Paste this into Claude Code, Codex or another coding agent at the root of the project:
+
+```text title="Prompt"
+Migrate this project to Ultracite by following
+https://www.ultracite.ai/docs/migrate.md. Keep the linter we use,
+carry over our own rules that Ultracite's presets don't cover, and
+migrate progressively, so the existing code passes today.
+```
+
+Every docs page is also served as Markdown at the same path with `.md` on the end, so the agent reads this page as plain text. The rest of it is written so an agent can follow it step by step.
+
+## 1. Run Init
+
+```package-install
+npx ultracite@latest init
+```
+
+`init` preselects the linter it finds your config for. What it does with your existing configuration:
+
+- **ESLint**: writes a flat config that spreads Ultracite's presets. An ES module config is updated in place, a CommonJS one is replaced by `eslint.config.mjs`, and legacy `.eslintrc*` files are removed. A config that doesn't use Ultracite's presets yet is replaced, with a warning naming the file, so its rules have to be carried over (step 2). Once it spreads an `ultracite/eslint/*` preset, re-running `init` keeps your additions.
+- **Prettier** (with ESLint): writes a `prettier.config.mjs` that spreads Ultracite's settings. An ES module config is updated in place; a JSON, YAML, TOML or CommonJS config, or a `"prettier"` key in `package.json`, is replaced, with a warning.
+- **Stylelint** (with ESLint): writes a `stylelint.config.mjs` that re-exports Ultracite's config. A config that doesn't reference `ultracite/stylelint` is replaced, with a warning; one that extends it and adds rules is left as it is.
+- **Biome**: adds Ultracite's presets to the `extends` list of your `biome.json` or `biome.jsonc`, editing it in place, so your rules, settings and comments stay.
+- **Oxlint**: adds Ultracite's presets to your `oxlint.config.ts`, keeping your own imports, `rules`, `overrides`, `ignorePatterns`, `jsPlugins` and `settings`. An `.oxlintrc.json` or `.oxfmtrc.json` is moved into the TypeScript configs and deleted, since Oxlint and Oxfmt refuse to run with two configs in one folder.
+
+Moving to another engine removes the ESLint, Prettier and Stylelint packages Ultracite would have installed, and their config files, including legacy `.eslintrc*` files and the `"prettier"` and `"stylelint"` keys in `package.json`. Packages in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, stay. Oxlint doesn't lint CSS (Oxfmt only formats it), so pick Biome or ESLint if you rely on Stylelint.
+
+`init` also merges your `.vscode/settings.json` rather than replacing it, adds `check` and `fix` scripts, turns on `strictNullChecks` unless your `tsconfig.json` sets it to `false`, and writes Ultracite's rules to `AGENTS.md`, so your agents write code that passes from the start. A config `init` can't parse is left unchanged, with a warning.
+
+## 2. Carry Over Your Own Rules
+
+Ultracite's presets cover most of what a typical config sets, so most of your old rules can go. Compare the old config (in Git, for example `git show HEAD:.eslintrc.json`) with the new one, and keep only what the presets don't do:
+
+- Rules from plugins Ultracite doesn't include, and project-specific ones such as `no-restricted-imports` paths or naming conventions.
+- Rules you turned off on purpose, with the reason in a comment.
+
+Put them after Ultracite's presets, so they win. Leave out formatting rules: the formatter owns formatting now.
+
+## 3. Format Everything in One Commit
+
+```bash title="Terminal"
+npx ultracite fix
+```
+
+This formats every file and applies the safe fixes. Commit it on its own, then add the commit's hash to a `.git-blame-ignore-revs` file, so `git blame` skips it. GitHub reads that file too.
+
+## 4. Fix What's Left, or Migrate Progressively
+
+`npx ultracite check` now reports what's left. On a small project, fix it in one go, with your agent doing the work:
+
+```bash title="Terminal"
+npx ultracite fix --claude
+npx ultracite fix --codex
+```
+
+On a large codebase, it can be thousands of problems. Migrate progressively instead.
+
+## Progressive Migration
+
+Rather than fixing everything in one pull request, turn off the rules that fail today, then turn them back on a few at a time over the following weeks, fixing each batch as you go. The project passes from day one, new code follows every rule that's on, and the list of overrides is the migration's to-do list.
+
+### Turn Off What Fails
+
+List the rules that fail, then turn each one off after Ultracite's presets. Each engine shows them differently.
+
+**Oxlint.** `npx ultracite check -f json` prints each problem with its rule as `plugin(rule)`. In `oxlint.config.ts` that's `plugin/rule`, except Oxlint's core rules, `eslint(rule)`, which are just `rule`:
+
+```ts title="oxlint.config.ts"
+export default defineConfig({
+  extends: [core, react],
+  ignorePatterns: core.ignorePatterns,
+  // Progressive migration: remove a rule as its problems are fixed.
+  rules: {
+    "no-await-in-loop": "off",
+    "typescript/no-explicit-any": "off",
+    "unicorn/no-array-sort": "off",
+  },
+});
+```
+
+**Biome.** `npx ultracite check --reporter=summary` lists every rule with problems and how many. `lint/<group>/<rule>` goes under `linter.rules`, and `assist/source/<action>` under `assist.actions.source`:
+
+```jsonc title="biome.jsonc"
+{
+  "extends": ["ultracite/biome/core", "ultracite/biome/react"],
+  // Progressive migration: remove a rule as its problems are fixed.
+  "linter": {
+    "rules": {
+      "performance": { "noAwaitInLoops": "off" },
+      "suspicious": { "noExplicitAny": "off" },
+    },
+  },
+  "assist": { "actions": { "source": { "useSortedKeys": "off" } } },
+}
+```
+
+**ESLint.** ESLint can record every problem the code has today instead, so you don't need overrides:
+
+```bash title="Terminal"
+npx ultracite check --suppress-all
+```
+
+That writes `eslint-suppressions.json`, which you commit. The recorded errors stop failing `check`, but any new one fails, even in a file that already has some: the file records how many problems each rule has in each file, and when a file goes over, ESLint shows all of that rule's problems there. ESLint only suppresses errors, so warnings still show. Stylelint has no suppressions, so turn its failing rules off in `stylelint.config.mjs`, with `null`:
+
+```js title="stylelint.config.mjs"
+export default {
+  extends: ["ultracite/stylelint"],
+  rules: {
+    // Progressive migration: remove a rule as its problems are fixed.
+    "selector-class-pattern": null,
+  },
+};
+```
+
+To keep a rule on for new files, turn it off only for the files that fail it today: in an Oxlint `overrides` entry with those `files`, or a Biome `overrides` entry with those `includes`.
+
+### Turn Them Back On in Batches
+
+Every week or two, pick a few overrides and remove them, one pull request each:
+
+1. Remove the override, or for ESLint, start with one rule's suppressions: fix that rule's problems, then run `npx ultracite check --prune-suppressions` to drop the entries that no longer match anything.
+2. Run `npx ultracite fix` to apply that rule's safe fixes, then `npx ultracite fix --claude` (or `--codex`) to have your agent fix the rest, one file at a time, each fix checked by re-running the linter.
+3. Review and merge.
+
+Start with the rules that have autofixes, which clear in one run, and with the ones that catch bugs, such as floating promises and unsafe `any`, before style rules. Your agent can run a whole batch from a prompt like:
+
+```text title="Prompt"
+Remove the "noAwaitInLoops" override from biome.jsonc, run
+`npx ultracite fix`, then fix the problems that are left. Keep the
+change to that one rule.
+```
+
+When the overrides are gone, or `eslint-suppressions.json` is empty, the migration is done.
+
+## Without Init
+
+To set Ultracite up by hand, install `ultracite` and your engine, then extend the `core` preset and the presets for your frameworks. Each [provider page](/providers) shows the config files `init` writes. Restart your editor afterwards, so it picks up the new configuration.
