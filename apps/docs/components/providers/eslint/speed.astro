@@ -1,12 +1,15 @@
 ---
-import { runFor, shownSeconds } from "../../../lib/benchmarks";
+import {
+  eslintSingleFileMs,
+  eslintTypeAwareMs,
+  formatMs,
+  runFor,
+  shownSeconds,
+} from "../../../lib/benchmarks";
 import Speed from "../speed.astro";
 
-// The ESLint toolchain against both native engines. The single-file time is
-// the median of six runs of `ultracite check components/button.tsx` (the
-// component on this page) in a project like the benchmark's, on the same
-// machine and versions.
-const SINGLE_FILE_SECONDS = 2.8;
+// The ESLint toolchain against both native engines, plus the single-file and
+// type-aware timings from lib/benchmarks.
 const small = runFor(42);
 const large = runFor(420);
 ---
@@ -18,7 +21,7 @@ const large = runFor(420);
     {
       label: "To check the one file an agent just edited",
       unit: "s",
-      value: String(SINGLE_FILE_SECONDS),
+      value: String(shownSeconds(eslintSingleFileMs)),
     },
     {
       label: "To check 42 files",
@@ -34,8 +37,9 @@ const large = runFor(420);
   title="The trade-off is time"
   toolchains={["eslint", "oxlint", "biome"]}
 >
-  ESLint runs in Node and asks TypeScript’s type checker for the rules that
-  read types, then Prettier and Stylelint run after it. That’s seconds where
-  the native engines take a third of one. In an agent’s loop it’s less,
-  because the hook only fixes the file that changed.
+  ESLint and its plugins run in Node, and Prettier and Stylelint each run as
+  a step of their own. That’s seconds where the native engines take a third
+  of one. In an agent’s loop it’s less, because the hook only fixes the file
+  that changed. The type-aware preset adds TypeScript’s type checker, which
+  took the 420 files to {formatMs(eslintTypeAwareMs)}.
 </Speed>

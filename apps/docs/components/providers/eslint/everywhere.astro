@@ -3,9 +3,10 @@ import { agents } from "../../../lib/agents";
 import Everywhere from "../everywhere.astro";
 
 // Excerpts of what `ultracite init` writes for ESLint
-// (packages/cli/src/data/editors.ts), and lines ESLint 10.12.0 printed for
-// `ultracite check` on the repo's benchmark fixture (paths shortened from
-// src/copy-0/, and the Prettier diff cut short).
+// (packages/cli/src/data/editors.ts), and lines `ultracite check` printed on
+// the repo's benchmark fixture with Prettier 3.9.10, ESLint 10.12.0 and
+// Ultracite 8.0.0 (paths shortened from src/copy-0/; Prettier's step comes
+// first and lists the files it would reformat).
 const vscodeSettings = `{
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
@@ -25,14 +26,17 @@ const zedSettings = `"TSX": {
   }
 }`;
 
+const unformatted = "src/data.ts";
+
 const files = [
   {
     path: "src/api.ts",
     problems: [
       {
-        location: "37:55",
-        message: "Functions that return promises must be async",
-        rule: "@typescript-eslint/promise-function-async",
+        location: "13:9",
+        message:
+          "Prefer `AbortSignal.timeout()` over manually aborting an `AbortController` with `setTimeout()`",
+        rule: "unicorn/prefer-abort-signal-timeout",
       },
     ],
   },
@@ -44,11 +48,6 @@ const files = [
         message: "Use `Array#toSorted()` instead of `Array#sort()`",
         rule: "unicorn/no-array-sort",
       },
-      {
-        location: "28:33",
-        message: "Replace `tasks:·readonly·Task[]):·Record<Priority,·Task[]>·=>⏎·` with …",
-        rule: "prettier/prettier",
-      },
     ],
   },
 ];
@@ -59,7 +58,7 @@ const files = [
     {
       body: "ESLint applies its fixes and sorts imports when you save, and Prettier formats the file, through the editors’ own ESLint and Prettier extensions.",
       code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
-      eyebrow: "VS Code, Cursor, Windsurf",
+      eyebrow: "VS Code, Cursor, Devin Desktop",
       title: "Fix and format on save",
     },
     {
@@ -69,9 +68,9 @@ const files = [
       title: "Fix as you format",
     },
     {
-      body: `The typed rules catch what syntax can’t, like a promise-returning function that isn’t \`async\`. \`init\` writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      body: `ESLint ends its report with how many of the problems \`--fix\` can settle, so an agent knows to run \`ultracite fix\` before working through the rest. \`init\` writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
       eyebrow: "Coding agents",
-      title: "Problems only types reveal",
+      title: "A count of what fix will settle",
     },
   ]}
   id="es-everywhere"
@@ -84,6 +83,7 @@ const files = [
     <p class="mb-1 truncate text-panel-foreground">
       <span class="text-signal">$</span> npx ultracite check
     </p>
+    <p class="truncate">[warn] {unformatted}</p>
     {
       files.map((file) => (
         <>

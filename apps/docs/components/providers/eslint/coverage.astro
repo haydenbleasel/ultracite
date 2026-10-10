@@ -3,15 +3,22 @@ import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
 // ESLint 10.12.0 and the plugins ultracite/eslint/core loads, against
-// Ultracite 7.12.4. `available` counts each one's rules that aren't
+// Ultracite 8.0.0. `available` counts each one's rules that aren't
 // deprecated; `defaults` counts the rules in its own recommended config
 // (typescript-eslint's `recommended`) that core keeps on; `enabled` counts the
-// rules `eslint --print-config` reports on for TypeScript, story and Cypress
-// files together. Not drawn: prettier, unused-imports and compat, one rule
-// each. Re-derive when a version moves.
-const catalogSize = 1218;
-const recommendedCount = 741;
-const coreCount = 1042;
+// rules `eslint --print-config` reports on for a TypeScript file. Not drawn:
+// unused-imports and compat, one rule each. Re-derive when a version moves.
+//
+// Type information: ultracite/eslint/type-aware turns on 62 typescript-eslint
+// rules (replacing five of ESLint's), and gives a TypeScript program to the
+// 70 SonarJS and Unicorn rules in core that their plugins mark
+// `requiresTypeChecking`. 38 of those 70 register no listeners without one.
+const catalogSize = 1190;
+const recommendedCount = 726;
+const coreCount = 956;
+const typedPresetCount = 62;
+const typedCoreCount = 70;
+const typedCoreInertCount = 38;
 
 const plugins: CoverageRow[] = [
   {
@@ -34,15 +41,15 @@ const plugins: CoverageRow[] = [
     available: 199,
     defaults: 59,
     description: "ESLint’s own rules",
-    enabled: 159,
+    enabled: 164,
     mono: true,
     name: "eslint",
   },
   {
     available: 127,
     defaults: 19,
-    description: "TypeScript, 62 rules type-checked",
-    enabled: 119,
+    description: "TypeScript, with 62 more in type-aware",
+    enabled: 57,
     mono: true,
     name: "@typescript-eslint",
   },
@@ -86,43 +93,27 @@ const plugins: CoverageRow[] = [
     mono: true,
     name: "promise",
   },
-  {
-    available: 16,
-    defaults: 11,
-    description: "Storybook stories",
-    enabled: 16,
-    mono: true,
-    name: "storybook",
-  },
-  {
-    available: 12,
-    defaults: 4,
-    description: "Cypress tests",
-    enabled: 12,
-    mono: true,
-    name: "cypress",
-  },
 ];
 ---
 
 <Coverage
-  caption="ESLint 10.12.0 and Ultracite 7.12.4, counted with `eslint --print-config` across TypeScript, story and Cypress files. Plugins are drawn to one scale. Not drawn: `prettier/prettier`, `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
+  caption="ESLint 10.12.0 and Ultracite 8.0.0, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
   defaultsLabel="In the plugin’s recommended config"
   id="es-rules"
   notes={[
     {
-      body: "1,041 of the 1,042 are errors, because an agent takes a zero exit code as done. The one warning is `compat/compat`, which flags browser APIs your browserslist targets don’t support.",
+      body: `All ${coreCount} are errors, because an agent takes a zero exit code as done, and a warning doesn’t change it. That includes \`compat/compat\`, which flags browser APIs your browserslist targets don’t support.`,
       title: "Errors, never warnings",
     },
     {
-      body: "62 typescript-eslint rules and 69 SonarJS rules ask TypeScript’s type checker, through `projectService`, which finds each file’s `tsconfig.json` itself. A TypeScript file no `tsconfig.json` includes can’t be parsed, so include them all.",
-      title: "132 rules that read your types",
+      body: `Core works from the syntax alone, without a \`tsconfig.json\`. The \`type-aware\` preset adds ${typedPresetCount} typescript-eslint rules, such as \`no-floating-promises\`, and hands TypeScript’s type checker to ${typedCoreCount} SonarJS and Unicorn rules in core, ${typedCoreInertCount} of which do nothing without it. It’s opt-in, with \`init --type-aware\`.`,
+      title: `${typedPresetCount + typedCoreCount} rules that read your types`,
     },
   ]}
   rows={plugins}
   stats={[
     {
-      label: "Rules in ESLint 10 and the ten plugins drawn here",
+      label: "Rules in ESLint 10 and the eight plugins drawn here",
       value: catalogSize.toLocaleString("en-US"),
     },
     {
@@ -139,6 +130,6 @@ const plugins: CoverageRow[] = [
 >
   ESLint runs nothing until you configure it, and every plugin’s recommended
   config is a separate thing to install and keep up. Ultracite’s core preset
-  turns on most of the rules in thirteen plugins, including the TypeScript
-  rules that need your types.
+  turns on most of the rules in ten plugins, and an opt-in preset adds the
+  TypeScript rules that need your types.
 </Coverage>

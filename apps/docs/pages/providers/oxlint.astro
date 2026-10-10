@@ -16,7 +16,9 @@ import { formatMs, runFor } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
 // Facts on this page were checked against Oxlint 1.87.0, Oxfmt 0.72.0 and
-// Ultracite 7.12.4 on this date.
+// Ultracite 7.12.4 on this date. Rechecked for Ultracite 8.0.0: the rule
+// counts, the Oxfmt example (with Oxfmt 0.71.0, which 8.0.0 installs) and the
+// timings.
 const lastModified = "2026-10-10";
 const small = runFor(42);
 const large = runFor(420);

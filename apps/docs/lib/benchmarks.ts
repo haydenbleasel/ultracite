@@ -1,8 +1,9 @@
 // Medians of `ultracite check` from the repo's benchmark harness
 // (`BENCH_FIXTURE_COPIES=6|60 BENCH_SAMPLES=5 BENCH_WARMUP=1
-// bun ./benchmark/index.ts`) on an Apple M1 Pro with Ultracite 7.12.4, every
-// engine measured in the same session. Re-run them all when a version below
-// moves, so the engines stay comparable.
+// bun ./benchmark/index.ts`) on an Apple M1 Pro with Ultracite 8.0.0 (packed
+// from main at ed5ed04d, before it was published), every engine measured in
+// the same session. Re-run them all when a version below moves, so the
+// engines stay comparable.
 import type { ProviderId } from "./providers";
 
 export interface BenchmarkRun {
@@ -11,16 +12,24 @@ export interface BenchmarkRun {
 }
 
 export const benchmarkRuns: BenchmarkRun[] = [
-  { files: 42, ms: { biome: 270.5, eslint: 6398.3, oxlint: 353.4 } },
-  { files: 420, ms: { biome: 379.1, eslint: 29_318.6, oxlint: 368.1 } },
+  { files: 42, ms: { biome: 257, eslint: 3910.9, oxlint: 339.6 } },
+  { files: 420, ms: { biome: 378.8, eslint: 15_496.9, oxlint: 344 } },
 ];
+
+// Two more ESLint timings from the same session, invoked as the harness does
+// (`node node_modules/ultracite/dist/index.js check ...`): the median of ten
+// checks of the ESLint page's components/button.tsx on its own, and the
+// median of five checks of the 420-file project with ultracite/eslint/
+// type-aware added (interleaved with five without it).
+export const eslintSingleFileMs = 2204.8;
+export const eslintTypeAwareMs = 19_697.3;
 
 export const benchmarkMachine = "an Apple M1 Pro";
 
 export const toolchainVersions: Record<ProviderId, string> = {
   biome: "Biome 2.5.15",
   eslint: "ESLint 10.12.0, Prettier 3.9.10 and Stylelint 17.16.0",
-  oxlint: "Oxlint 1.87.0 and Oxfmt 0.72.0",
+  oxlint: "Oxlint 1.87.0 and Oxfmt 0.71.0",
 };
 
 export const toolchainNames: Record<ProviderId, string> = {

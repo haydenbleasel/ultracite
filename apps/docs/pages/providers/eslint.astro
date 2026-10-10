@@ -13,11 +13,17 @@ import Formatter from "../../components/providers/eslint/formatter.astro";
 import Frameworks from "../../components/providers/eslint/frameworks.astro";
 import Speed from "../../components/providers/eslint/speed.astro";
 import { hooks } from "../../../../packages/cli/src/data/hooks";
-import { formatMs, runFor } from "../../lib/benchmarks";
+import {
+  eslintSingleFileMs,
+  eslintTypeAwareMs,
+  formatMs,
+  runFor,
+} from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
 // Facts on this page were checked against ESLint 10.12.0, Prettier 3.9.10,
-// Stylelint 17.16.0 and Ultracite 7.12.4 on this date.
+// Stylelint 17.16.0 and Ultracite 8.0.0 (packed from main at ed5ed04d, before
+// it was published) on this date.
 const lastModified = "2026-10-10";
 const command = "npx ultracite@latest init --linter eslint";
 const small = runFor(42);
@@ -31,7 +37,7 @@ const breadcrumbs: Crumb[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 1,042 across ESLint and thirteen plugins, among them typescript-eslint, Unicorn, SonarJS and import-x, with typed linting on. Framework presets add more: 549 rules for React, 47 for Next.js and 208 for Vue. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
+      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 956 across ESLint and ten plugins, among them typescript-eslint, Unicorn, SonarJS and import-x. Framework presets add more: 549 rules for React, 47 for Next.js and 208 for Vue. The opt-in type-aware preset adds 62 rules that read your types. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
     question: "What does Ultracite add on top of ESLint?",
   },
   {
@@ -40,7 +46,7 @@ const faqs: FaqItem[] = [
     question: "How do I turn off a rule?",
   },
   {
-    answer: `ESLint runs in Node, and its 132 typed rules ask TypeScript’s type checker about your code; Prettier and Stylelint then run as their own steps. In our benchmark the toolchain checked 42 files in ${formatMs(small.ms.eslint)} and 420 files in ${formatMs(large.ms.eslint)}, where Oxlint took ${formatMs(small.ms.oxlint)} and ${formatMs(large.ms.oxlint)}. Checking the single file an agent edited took 2.8 s.`,
+    answer: `ESLint and its plugins run in Node, and Prettier and Stylelint run as steps of their own. In our benchmark the toolchain checked 42 files in ${formatMs(small.ms.eslint)} and 420 files in ${formatMs(large.ms.eslint)}, where Oxlint took ${formatMs(small.ms.oxlint)} and ${formatMs(large.ms.oxlint)}. Checking the single file an agent edited took ${formatMs(eslintSingleFileMs)}. The type-aware preset adds TypeScript’s type checker, which took the 420 files to ${formatMs(eslintTypeAwareMs)}.`,
     question: "Why is it slower than Oxlint and Biome?",
   },
   {
@@ -50,7 +56,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "For TypeScript files, yes. The typed rules use `projectService`, which finds the `tsconfig.json` that includes each file. A `.ts` or `.tsx` file that no `tsconfig.json` includes fails with a parsing error, so add it to `include`.",
+      "Not for the core preset, which lints TypeScript from its syntax alone. The type-aware preset does: its rules use `projectService`, which finds the `tsconfig.json` that includes each file, and a `.ts` or `.tsx` file that no `tsconfig.json` includes fails with a parsing error. `init --type-aware` adds the preset and offers to turn on `strictNullChecks`, which some of its rules need.",
     question: "Do I need a tsconfig.json?",
   },
   {
@@ -97,7 +103,7 @@ const nextSteps: NextStep[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description="Ultracite turns on 1,042 rules across ESLint and thirteen plugins with typed linting, sets up Prettier and Stylelint, and adds presets for 13 frameworks."
+  description="Ultracite turns on 956 rules across ESLint and ten plugins, sets up Prettier and Stylelint, and adds presets for 15 frameworks."
   faqs={faqs}
   lastModified={lastModified}
   title="Ultracite for ESLint — Strict ESLint, Prettier and Stylelint"
@@ -109,10 +115,9 @@ const nextSteps: NextStep[] = [
     name="ESLint"
     title="ESLint, Prettier and Stylelint, set up as one"
   >
-    Ultracite turns on 1,042 rules from ESLint and thirteen plugins, with
-    typed linting, then sets up Prettier and Stylelint to match. Three short
-    config files extend Ultracite’s, so the only rules you maintain are your
-    own.
+    Ultracite turns on 956 rules from ESLint and ten plugins, then sets up
+    Prettier and Stylelint to match. Three short config files extend
+    Ultracite’s, so the only rules you maintain are your own.
     <Fragment slot="note">
       <span>Also on</span>
       <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>

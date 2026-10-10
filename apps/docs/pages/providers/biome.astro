@@ -18,7 +18,8 @@ import { formatMs, runFor } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
 // Facts on this page were checked against Biome 2.5.15 and Ultracite 7.12.4
-// on this date.
+// on this date. Rechecked for Ultracite 8.0.0: the rule counts, the
+// type-aware preset and the timings.
 const lastModified = "2026-10-10";
 const command = "npx ultracite@latest init --linter biome";
 const small = runFor(42);
@@ -61,7 +62,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Biome reads types itself, without the TypeScript compiler. Install with `npx ultracite init --linter biome --type-aware` to add the `type-aware` preset, whose 8 rules need Biome to scan the whole project first: `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes` and `useArraySortCompare`. `useImportExtensions` requires relative imports to include their file extension.",
+      "Biome reads types itself, without the TypeScript compiler. Install with `npx ultracite init --linter biome --type-aware` to add the `type-aware` preset, whose 7 rules need Biome to scan the whole project first: `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes` and `useArraySortCompare`.",
     question: "Does it support type-aware rules?",
   },
   {

@@ -3,22 +3,34 @@ import SectionHeading from "../../home/section-heading.astro";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
 
-// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 7.12.4,
-// counted by importing each preset). Vue, Svelte and Astro register their
-// plugin's template parser, so ESLint reads the markup as well as the script.
-const presets = [
+// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.0.0,
+// counted by importing each preset; for Vue, Svelte and Astro, only their
+// plugin's rules, as those presets also run core's rules on component
+// scripts). `typeAware` counts the rules in the preset's
+// ultracite/eslint/<framework>/type-aware add-on. Vue, Svelte and Astro
+// register their plugin's template parser, so ESLint reads the markup as well
+// as the script.
+const presets: {
+  count: number;
+  name: string;
+  plugins: string;
+  templates?: boolean;
+  typeAware?: number;
+}[] = [
   { count: 549, name: "react", plugins: "React, hooks, jsx-a11y, React Doctor" },
   { count: 208, name: "vue", plugins: "eslint-plugin-vue", templates: true },
-  { count: 71, name: "vitest", plugins: "@vitest/eslint-plugin" },
+  { count: 70, name: "vitest", plugins: "@vitest/eslint-plugin", typeAware: 1 },
   { count: 69, name: "svelte", plugins: "eslint-plugin-svelte", templates: true },
-  { count: 67, name: "jest", plugins: "eslint-plugin-jest" },
+  { count: 63, name: "jest", plugins: "eslint-plugin-jest", typeAware: 4 },
   { count: 53, name: "astro", plugins: "eslint-plugin-astro", templates: true },
-  { count: 51, name: "angular", plugins: "@angular-eslint" },
   { count: 47, name: "next", plugins: "@next/eslint-plugin-next, React Doctor" },
+  { count: 45, name: "angular", plugins: "@angular-eslint", typeAware: 6 },
   { count: 34, name: "solid", plugins: "eslint-plugin-solid" },
-  { count: 34, name: "tanstack", plugins: "Query, Router, React Doctor" },
-  { count: 25, name: "nestjs", plugins: "eslint-plugin-nestjs-typed" },
-  { count: 11, name: "qwik", plugins: "eslint-plugin-qwik" },
+  { count: 34, name: "tanstack", plugins: "Query, Router, React Doctor", typeAware: 2 },
+  { count: 22, name: "nestjs", plugins: "eslint-plugin-nestjs-typed", typeAware: 3 },
+  { count: 16, name: "storybook", plugins: "eslint-plugin-storybook" },
+  { count: 12, name: "cypress", plugins: "eslint-plugin-cypress" },
+  { count: 11, name: "qwik", plugins: "eslint-plugin-qwik", typeAware: 1 },
   { count: 2, name: "remix", plugins: "eslint-plugin-remix" },
 ];
 
@@ -27,7 +39,8 @@ const width = (count: number): string => `${(count / scale) * 100}%`;
 
 // A component written for the example, and what `ultracite check` printed
 // for it under ultracite/eslint/core and ultracite/eslint/vue with ESLint
-// 10.12.0 (run for real; ESLint's file header line left out).
+// 10.12.0 and Ultracite 8.0.0 (run for real; Prettier's "Checking
+// formatting..." line and ESLint's file header line left out).
 const component = `<script setup lang="ts">
 defineProps<{ tasks: { id: string; title: string; notes: string }[] }>();
 </script>
@@ -64,11 +77,12 @@ const problems = [
   <div class="hp-frame mx-auto max-w-7xl border-border border-x">
     <SectionHeading
       id="es-frameworks"
-      title="Thirteen framework presets, templates included"
+      title="Fifteen framework presets, templates included"
     >
       Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte
       and Astro that includes its parser, so ESLint checks the markup, not just
-      the script block.
+      the script block. Six also have a type-aware add-on for their plugin’s
+      rules that read types.
     </SectionHeading>
     <div
       class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
@@ -94,19 +108,29 @@ const problems = [
                       </span>
                     )}
                   </span>
-                  <span class="font-mono text-sm tabular-nums">{preset.count}</span>
+                  <span class="shrink-0 font-mono text-sm tabular-nums">
+                    {preset.count}
+                    {preset.typeAware && (
+                      <span class="ml-1 text-muted-foreground">+{preset.typeAware}</span>
+                    )}
+                  </span>
                 </p>
                 <span class="h-2 rounded-r-[2px] bg-signal" style={{ width: width(preset.count) }} />
               </li>
             ))
           }
         </ul>
+        <p class="mt-auto border-border border-t px-4 py-4 text-muted-foreground text-sm/6 sm:px-6 lg:px-10">
+          <span class="font-mono">+n</span> rules in the preset’s type-aware
+          add-on, which <code class="font-mono text-[13px]">init --type-aware</code> adds
+          after it.
+        </p>
       </div>
       <div class="flex min-w-0 flex-col gap-2 bg-muted/60 p-4 sm:gap-4 sm:p-6 lg:p-10">
-        <AnnotatedCode code={component} lang="vue" title="components/TaskList.vue" />
+        <AnnotatedCode code={component} lang="vue" title="components/task-list.vue" />
         <Terminal>
           <p class="mb-1 truncate text-panel-foreground">
-            <span class="text-signal">$</span> npx ultracite check components/TaskList.vue
+            <span class="text-signal">$</span> npx ultracite check components/task-list.vue
           </p>
           <p class="truncate">All matched files use Prettier code style!</p>
           {

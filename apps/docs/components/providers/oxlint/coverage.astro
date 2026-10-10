@@ -3,7 +3,7 @@ import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
 // A snapshot of Oxlint 1.87.0's catalog (`oxlint --rules --format=json`) and
-// the rules ultracite/oxlint/core sets to "error" in Ultracite 7.12.4. The
+// the rules ultracite/oxlint/core sets to "error" in Ultracite 8.0.0. The
 // categories count rules in the eight plugins core enables (546 of the 871);
 // the other plugins (react, jsx-a11y, nextjs, vue, jest, vitest) belong to the
 // framework presets. Re-derive both when either version moves.
@@ -77,7 +77,7 @@ const plugins = [
 ---
 
 <Coverage
-  caption="Oxlint 1.87.0 and Ultracite 7.12.4. Categories count the 546 rules in the eight plugins the core preset enables, drawn to one scale; the React, Next.js, Vue, Jest and Vitest presets turn on rules from the other plugins."
+  caption="Oxlint 1.87.0 and Ultracite 8.0.0. Categories count the 546 rules in the eight plugins the core preset enables, drawn to one scale; the React, Next.js, Vue, Jest and Vitest presets turn on rules from the other plugins."
   id="ox-rules"
   notes={[
     {
@@ -85,7 +85,7 @@ const plugins = [
       title: "Errors, never warnings",
     },
     {
-      body: "Rules like `no-floating-promises` and `no-misused-promises` need type information. They run with `--type-aware`, on Oxlint’s typescript‑go backend.",
+      body: "Rules like `no-floating-promises` and `no-misused-promises` need type information. They run once `init --type-aware` turns on Oxlint’s type-aware mode, on its typescript‑go backend.",
       title: `${typeAwareCount} rules that read your types`,
     },
   ]}

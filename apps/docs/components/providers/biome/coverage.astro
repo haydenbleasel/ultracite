@@ -3,7 +3,7 @@ import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
 // Biome 2.5.15's catalog (its configuration schema, with `biome explain` for
-// each rule's fix) against the rules on in Ultracite 7.12.4, counted with
+// each rule's fix) against the rules on in Ultracite 8.0.0, counted with
 // `biome rage --linter`: once with an empty config in a project with no
 // framework dependencies, once with ultracite/biome/core. `defaults` counts
 // the default rules core keeps; it turns off two, a11y/noAutofocus and
@@ -11,7 +11,7 @@ import type { CoverageRow } from "../coverage.astro";
 const catalogSize = 565;
 const defaultCount = 215;
 const coreCount = 329;
-const typeAwareCount = 8;
+const typeAwareCount = 7;
 
 const groups: CoverageRow[] = [
   {
@@ -84,7 +84,7 @@ const fixes = [
 ---
 
 <Coverage
-  caption="Biome 2.5.15 and Ultracite 7.12.4, counted with `biome rage --linter`. Groups are drawn to one scale. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
+  caption="Biome 2.5.15 and Ultracite 8.0.0, counted with `biome rage --linter`. Groups are drawn to one scale. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
   id="bi-rules"
   notes={[
     {
