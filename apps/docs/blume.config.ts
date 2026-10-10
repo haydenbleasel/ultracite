@@ -1,13 +1,62 @@
 import { defineConfig } from "blume";
+import { openai } from "blume/ai";
 import { cloudflare } from "blume/deploy";
 import { filesystem, githubReleases } from "blume/sources";
 
 export default defineConfig({
   agents: {
+    // Representative queries for the ultracite skill's entry in the AI
+    // Catalog (/.well-known/ai-catalog.json), so agent registries match it to
+    // the tasks it covers.
+    catalog: {
+      queries: {
+        "skill:ultracite": [
+          "set up linting and formatting for a TypeScript project",
+          "configure Oxlint, Biome, or ESLint with zero config",
+          "fix the lint errors in this codebase",
+          "make my coding agent follow the project's lint rules",
+        ],
+      },
+    },
+    // Guidance at the top of llms.txt: when an agent should reach for
+    // Ultracite, and how to set it up and run it.
+    llmsTxt: {
+      details: [
+        "Reach for Ultracite when a JavaScript or TypeScript project needs strict, consistent linting and formatting without writing config, especially when coding agents write much of the code. It's a zero-config preset for Oxlint and Oxfmt (recommended), Biome, or ESLint with Prettier and Stylelint, with framework presets for React, Next.js, Vue, Svelte, Astro, and more.",
+        "",
+        "Set it up with `npx ultracite@latest init` (package: https://www.npmjs.com/package/ultracite), which installs the toolchain and writes the linter config, editor settings, agent rules files (AGENTS.md, CLAUDE.md, and others), and optional post-edit hooks. Then `npx ultracite check` reports problems and `npx ultracite fix` applies safe fixes; `ultracite fix --claude` or `--codex` hands what autofix can't settle to that agent CLI. The `ultracite` agent skill below covers setup, commands, and troubleshooting.",
+      ].join("\n"),
+    },
     // Publish the repo's agent skills under /.well-known/agent-skills/ with a
     // discovery index. Skills with supporting files (like ultracite's
     // references/) ship as .tar.gz archives so their relative links resolve.
     skills: "../../skills",
+  },
+
+  // The docs assistant. Reads OPENAI_API_KEY at runtime; set it in the
+  // Worker's environment.
+  ai: {
+    assistant: {
+      enabled: true,
+      provider: openai({ model: "gpt-6-luna" }),
+      suggestions: [
+        {
+          icon: "terminal",
+          label: "How do I set up Ultracite in an existing project?",
+        },
+        { icon: "scale", label: "Should I use Oxlint, Biome, or ESLint?" },
+        {
+          icon: "bot",
+          label: "How do I get my coding agent to fix lint errors?",
+        },
+      ],
+      support: "https://github.com/haydenbleasel/ultracite/issues",
+    },
+  },
+
+  changelog: {
+    description:
+      "Every Ultracite release, newest first: new presets, rule changes, and fixes, straight from the release notes on GitHub.",
   },
 
   content: {
@@ -34,13 +83,22 @@ export default defineConfig({
   // the sitemap and OG images.
   deployment: cloudflare({ site: "https://www.ultracite.ai" }),
 
-  // Also the homepage's meta description and hero subtitle (pages/index.astro).
+  // Also the homepage's meta description (pages/index.astro) and llms.txt.
   description:
     "Ultracite is a zero-config preset for Oxlint, Biome, and ESLint that helps humans and agents write consistent, type-safe code.",
 
   // The site footer on docs pages (the homepage renders its own). The GitHub
   // icon comes from `github` below; X sits beside it.
   footer: {
+    copyright: `© ${new Date().getFullYear()} Ultracite. MIT licensed.`,
+    links: [
+      { href: "https://www.npmjs.com/package/ultracite", label: "npm" },
+      { href: "https://github.com/sponsors/haydenbleasel", label: "Sponsor" },
+      {
+        href: "https://github.com/haydenbleasel/ultracite/issues",
+        label: "Report an issue",
+      },
+    ],
     socials: { x: "https://x.com/haydenbleasel" },
   },
 
@@ -49,6 +107,9 @@ export default defineConfig({
     owner: "haydenbleasel",
     repo: "ultracite",
   },
+
+  // "Last updated" on each docs page, from the file's last commit.
+  lastModified: "git",
 
   logo: {
     image: "/logo.svg",
@@ -116,8 +177,28 @@ export default defineConfig({
   ],
 
   seo: {
-    // twitter:site on every page; the footer's "Follow on X" account.
-    x: { handle: "haydenbleasel" },
+    // JSON-LD: the organization behind the site, and Ultracite as a
+    // SoftwareApplication on the homepage.
+    organization: {
+      logo: "/logo.svg",
+      name: "Ultracite",
+      sameAs: [
+        "https://github.com/haydenbleasel/ultracite",
+        "https://www.npmjs.com/package/ultracite",
+        "https://x.com/haydenbleasel",
+      ],
+    },
+    software: {
+      license: "https://opensource.org/license/mit",
+      operatingSystem: "Node.js 20.19+",
+      price: 0,
+      sameAs: [
+        "https://www.npmjs.com/package/ultracite",
+        "https://github.com/haydenbleasel/ultracite",
+      ],
+    },
+    // twitter:site and twitter:creator on every page.
+    x: { creator: "haydenbleasel", handle: "haydenbleasel" },
   },
 
   // Paper and ink with signal orange. The accent is the text-safe orange (it
