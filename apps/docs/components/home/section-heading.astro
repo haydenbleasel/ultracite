@@ -1,6 +1,8 @@
 ---
 // The left-aligned heading group at the top of each homepage section. The
-// description goes in the default slot so it can hold inline code.
+// description goes in the default slot so it can hold inline code. It's
+// balanced rather than `pretty`: Chrome's `pretty` only avoids a one-word last
+// line, and these three- or four-line paragraphs still ended on two.
 interface Props {
   id: string;
   title: string;
@@ -20,7 +22,7 @@ const { id, title } = Astro.props;
   </h2>
   {
     Astro.slots.has("default") && (
-      <p class="max-w-[54ch] text-pretty text-lg/8 text-muted-foreground">
+      <p class="max-w-[54ch] text-balance text-lg/8 text-muted-foreground">
         <slot />
       </p>
     )
