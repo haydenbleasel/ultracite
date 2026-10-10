@@ -58,7 +58,7 @@ const rulesExcerpt = `${rulesLines
   .slice(0, rulesLines.indexOf("---"))
   .join("\n")
   .trimEnd()}\n\n…`;
-const hookCommand = "npm run fix -- --hook";
+const hookCommand = `${ultracite} fix --hook`;
 
 const files: { code: string; lang: string; meta?: string; title: string }[] = [
   { code: rulesExcerpt, lang: "md", meta: "Ultracite’s rules", title: "AGENTS.md" },
