@@ -2110,6 +2110,46 @@ describe("helper functions", () => {
       ).toBe(true);
     });
 
+    test("overrides the eslint peer of plugins behind ESLint 10, on npm only", async () => {
+      const written: string[] = [];
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        writeFile: mock((_path: string, content: string) => {
+          written.push(content);
+          return Promise.resolve();
+        }),
+      }));
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await installDependencies(npmPm, "eslint", false, true, false, ["react"]);
+
+      const withOverrides = written.find((content) =>
+        content.includes('"overrides"')
+      );
+      expect(JSON.parse(withOverrides ?? "{}").overrides).toEqual({
+        "eslint-plugin-jsx-a11y": { eslint: "$eslint" },
+        "eslint-plugin-react": { eslint: "$eslint" },
+      });
+
+      written.length = 0;
+      const pnpmPm: PackageManager = { command: "pnpm", name: "pnpm" };
+      await installDependencies(pnpmPm, "eslint", false, true, false, [
+        "react",
+      ]);
+
+      expect(written.some((content) => content.includes('"overrides"'))).toBe(
+        false
+      );
+    });
+
     test("updates package.json with oxlint deps when install is false", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

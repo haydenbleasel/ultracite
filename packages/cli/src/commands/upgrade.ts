@@ -17,6 +17,7 @@ import {
   biomeVersion,
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
+  eslintPeerOverridesFor,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
   OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../dependencies";
@@ -32,6 +33,7 @@ import { migrateWithAgent } from "../upgrade-agent";
 import { findPendingGuides } from "../upgrade-guides";
 import type { UpgradeGuide } from "../upgrade-guides";
 import {
+  addEslintPeerOverrides,
   detectLinter,
   eslintConfigNames,
   exists,
@@ -296,15 +298,29 @@ const handOffToInstalled = (
   return result.status ?? 1;
 };
 
+// npm rejects ESLint plugins whose peer range hasn't caught up with ESLint
+// 10, and it checks the whole tree on every install, so the project
+// overrides their peer before anything is installed.
+const overrideEslintPeers = async (
+  packageManager: PackageManager,
+  specs: Iterable<string>
+): Promise<void> => {
+  if (packageManager.name === "npm") {
+    await addEslintPeerOverrides(eslintPeerOverridesFor([...specs]));
+  }
+};
+
 const syncToolchain = async (
   linter: Linter,
-  installOptions: InstallOptions
+  installOptions: InstallOptions,
+  packageManager: PackageManager
 ): Promise<void> => {
   const packages = getToolchainPackages(
     linter,
     await collectProjectDependencyNames(),
     linter === "eslint" ? getConfiguredEslintFrameworks() : new Set()
   );
+  await overrideEslintPeers(packageManager, packages);
 
   const s = spinner();
   s.start(
@@ -401,6 +417,13 @@ export const upgrade = async (
     ...getRootInstallOptions(packageManager),
   };
 
+  if (linter === "eslint") {
+    await overrideEslintPeers(
+      packageManager,
+      await collectProjectDependencyNames()
+    );
+  }
+
   if (!options.skipSelf) {
     const newer = await updateSelf(installOptions, version);
     const handOffStatus = newer
@@ -418,7 +441,7 @@ export const upgrade = async (
     }
   }
 
-  await syncToolchain(linter, installOptions);
+  await syncToolchain(linter, installOptions, packageManager);
 
   const configurationUpdated = await updateConfiguration(linter, options.agent);
 

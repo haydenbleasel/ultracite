@@ -104,9 +104,11 @@ const v7Guide: UpgradeGuide = {
 
 interface Harness {
   addDevDependency: ReturnType<typeof mock>;
+  addEslintPeerOverrides: ReturnType<typeof mock>;
   findInstalledPackage: ReturnType<typeof mock>;
   migrateWithAgent: ReturnType<typeof mock>;
   spawnSync: ReturnType<typeof mock>;
+  steps: string[];
 }
 
 interface SetupOptions {
@@ -141,7 +143,16 @@ const setup = (options: SetupOptions = {}): Harness => {
     ...realUpgradeAgent,
     migrateWithAgent,
   }));
-  const addDevDependency = mock(() => Promise.resolve());
+  // Records the order of installs and package.json override edits.
+  const steps: string[] = [];
+  const addDevDependency = mock((packages: string[]) => {
+    steps.push(`install ${packages.join(" ")}`);
+    return Promise.resolve();
+  });
+  const addEslintPeerOverrides = mock((names: readonly string[]) => {
+    steps.push(`overrides ${names.join(" ")}`);
+    return Promise.resolve();
+  });
   const spawnSync = mock(() => ({ status: 0 }));
   const findInstalledPackage = mock((): InstalledPackage | null => null);
   for (const version of versions) {
@@ -157,6 +168,7 @@ const setup = (options: SetupOptions = {}): Harness => {
   mock.module("../src/spawn-sync", () => ({ spawnSync }));
   mock.module("../src/utils", () => ({
     ...realUtils,
+    addEslintPeerOverrides,
     detectLinter: mock(() => linter),
     exists: mock(() => true),
   }));
@@ -182,9 +194,11 @@ const setup = (options: SetupOptions = {}): Harness => {
 
   return {
     addDevDependency,
+    addEslintPeerOverrides,
     findInstalledPackage,
     migrateWithAgent,
     spawnSync,
+    steps,
   };
 };
 
@@ -331,6 +345,38 @@ describe("upgrade", () => {
     expect(selfPackages).toEqual(["ultracite@latest"]);
     expect(toolchainPackages).toEqual([`@biomejs/biome@${biomeVersion}`]);
     expect(harness.spawnSync).not.toHaveBeenCalled();
+  });
+
+  test("overrides the eslint peer of plugins behind ESLint 10 before installing on npm", async () => {
+    const harness = setup({
+      linter: "eslint",
+      projectDependencies: {
+        eslint: "^10.0.0",
+        "eslint-plugin-react": "^7.0.0",
+      },
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
+
+    expect(harness.steps[0]).toBe("overrides eslint-plugin-react");
+    expect(harness.steps[1]).toBe("install ultracite@latest");
+    expect(harness.steps[2]).toBe("overrides eslint-plugin-react");
+    expect(harness.steps[3]).toStartWith("install ");
+  });
+
+  test("leaves overrides alone on package managers that only warn about peers", async () => {
+    const harness = setup({
+      linter: "eslint",
+      projectDependencies: { "eslint-plugin-react": "^7.0.0" },
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+    const { upgrade } = await loadUpgrade();
+
+    await expect(upgrade({ pm: "pnpm" })).resolves.toBe(0);
+
+    expect(harness.addEslintPeerOverrides).not.toHaveBeenCalled();
   });
 
   test("hands off to a newer installed CLI so it syncs with its own pins", async () => {

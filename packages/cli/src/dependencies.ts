@@ -208,6 +208,32 @@ export const buildEslintDevDependencies = (frameworks: Frameworks[]) => {
   return devDependencies;
 };
 
+/**
+ * ESLint plugins whose `eslint` peer range stops before ESLint 10, though they
+ * run on it. npm refuses to install them next to ESLint 10 (ERESOLVE), and
+ * `--legacy-peer-deps` would only get that one install through, so for npm
+ * projects init and upgrade add an `overrides` entry pointing their `eslint`
+ * peer at the project's own. A test checks this list against the installed
+ * plugins' peer ranges.
+ */
+export const eslintPeerOverridePackages: readonly string[] = [
+  "@tanstack/eslint-plugin-start",
+  "eslint-plugin-jsx-a11y",
+  "eslint-plugin-react",
+];
+
+/** The package name of a `name@version` spec. */
+const specName = (spec: string): string => {
+  const versionAt = spec.lastIndexOf("@");
+  return versionAt > 0 ? spec.slice(0, versionAt) : spec;
+};
+
+/** The packages among `name@version` specs whose ESLint peer npm rejects. */
+export const eslintPeerOverridesFor = (specs: readonly string[]): string[] =>
+  eslintPeerOverridePackages.filter((name) =>
+    specs.some((spec) => specName(spec) === name)
+  );
+
 const eslintDevDependencyNames = new Set([
   ...Object.keys(eslintCoreDevDependencies),
   ...Object.values(eslintFrameworkDevDependencies).flatMap((dependencies) =>

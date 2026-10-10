@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import type { readdirSync as nodeReaddirSync } from "node:fs";
 
+import type { JsonValue } from "../src/data/types";
 import {
+  addEslintPeerOverrides,
   detectFrameworks,
   ensureDirectory,
   exists,
@@ -392,6 +394,79 @@ describe("isMonorepo error handling", () => {
 
     const result = await isMonorepo();
     expect(result).toBe(false);
+  });
+});
+
+const mockPackageJson = (content: string) => {
+  const writeFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.resolve()),
+    readFile: mock(() => Promise.resolve(content)),
+    writeFile,
+  }));
+  return writeFile;
+};
+
+const writtenOverrides = (
+  writeFile: ReturnType<typeof mockPackageJson>
+): JsonValue | undefined => {
+  const [[, written]] = writeFile.mock.calls;
+  const packageJson: { overrides?: JsonValue } = JSON.parse(written);
+  return packageJson.overrides;
+};
+
+describe("addEslintPeerOverrides", () => {
+  test("points each package's eslint peer at the project's ESLint", async () => {
+    const writeFile = mockPackageJson('{"name": "app"}');
+
+    await addEslintPeerOverrides([
+      "eslint-plugin-react",
+      "eslint-plugin-jsx-a11y",
+    ]);
+
+    expect(writtenOverrides(writeFile)).toEqual({
+      "eslint-plugin-jsx-a11y": { eslint: "$eslint" },
+      "eslint-plugin-react": { eslint: "$eslint" },
+    });
+  });
+
+  test("keeps the project's own overrides", async () => {
+    const writeFile = mockPackageJson(
+      JSON.stringify({
+        name: "app",
+        overrides: {
+          "eslint-plugin-jsx-a11y": "6.10.1",
+          "eslint-plugin-react": { "object.assign": "4.1.5" },
+          semver: "7.7.0",
+        },
+      })
+    );
+
+    await addEslintPeerOverrides([
+      "eslint-plugin-react",
+      "eslint-plugin-jsx-a11y",
+    ]);
+
+    expect(writtenOverrides(writeFile)).toEqual({
+      "eslint-plugin-jsx-a11y": { ".": "6.10.1", eslint: "$eslint" },
+      "eslint-plugin-react": { eslint: "$eslint", "object.assign": "4.1.5" },
+      semver: "7.7.0",
+    });
+  });
+
+  test("leaves package.json alone when every override is there", async () => {
+    const writeFile = mockPackageJson(
+      JSON.stringify({
+        overrides: { "eslint-plugin-react": { eslint: "^10.0.0" } },
+      })
+    );
+
+    await addEslintPeerOverrides(["eslint-plugin-react"]);
+    await addEslintPeerOverrides([]);
+
+    expect(writeFile).not.toHaveBeenCalled();
   });
 });
 

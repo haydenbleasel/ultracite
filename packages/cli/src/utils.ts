@@ -246,6 +246,56 @@ export const updatePackageJson = async ({
   });
 };
 
+const ESLINT_PEER_OVERRIDE = "$eslint";
+
+// One package's npm override with its `eslint` peer pointed at the project's
+// own ESLint, keeping what the project already overrides for it. A version
+// override moves under ".", npm's key for the package itself once the entry
+// also overrides a dependency.
+const withEslintPeer = (existing: JsonValue | undefined): JsonObject => {
+  if (isJsonObject(existing)) {
+    return { ...existing, eslint: ESLINT_PEER_OVERRIDE };
+  }
+  const version = z.string().safeParse(existing);
+  return version.success
+    ? { ".": version.data, eslint: ESLINT_PEER_OVERRIDE }
+    : { eslint: ESLINT_PEER_OVERRIDE };
+};
+
+/**
+ * Add an npm `overrides` entry for each package that points its `eslint` peer
+ * at the project's own ESLint (`"$eslint"`), so npm installs plugins whose
+ * peer range hasn't caught up with the ESLint release. An `eslint` override
+ * the project already has for a package is left as it is.
+ */
+export const addEslintPeerOverrides = async (
+  packageNames: readonly string[]
+): Promise<void> => {
+  if (packageNames.length === 0) {
+    return;
+  }
+
+  await editPackageJson((packageJson) => {
+    const overrides: JsonObject = isJsonObject(packageJson.overrides)
+      ? { ...packageJson.overrides }
+      : {};
+    const missing = packageNames.filter((name) => {
+      const existing = overrides[name];
+      return !(isJsonObject(existing) && "eslint" in existing);
+    });
+
+    if (missing.length === 0) {
+      return false;
+    }
+
+    for (const name of missing) {
+      overrides[name] = withEslintPeer(overrides[name]);
+    }
+    packageJson.overrides = overrides;
+    return true;
+  });
+};
+
 /**
  * The config writers generate ESM modules. Writing one into a JSON/YAML/TOML
  * rc file or a CommonJS module corrupts the config, so updates must check the

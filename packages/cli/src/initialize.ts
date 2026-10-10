@@ -27,6 +27,7 @@ import {
   biomeVersion,
   buildEslintDevDependencies,
   dependencyNamesByLinter,
+  eslintPeerOverridesFor,
   isOxlintNpmJsPlugin,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
   OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
@@ -62,6 +63,7 @@ import {
 import { tsconfig } from "./tsconfig";
 import type { TsConfigUpdate } from "./tsconfig";
 import {
+  addEslintPeerOverrides,
   biomeConfigNames,
   detectFrameworks,
   detectLinter,
@@ -530,6 +532,12 @@ export const installDependencies = async (
   }
 
   const scripts = await getScriptsToAdd();
+
+  // npm rejects plugins whose peer range hasn't caught up with ESLint 10,
+  // now and on every later install, so the project overrides their peer.
+  if (packageManager.name === "npm") {
+    await addEslintPeerOverrides(eslintPeerOverridesFor(packages));
+  }
 
   if (install) {
     await addDevDependency(packages, {

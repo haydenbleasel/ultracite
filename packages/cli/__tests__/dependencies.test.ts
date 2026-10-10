@@ -1,12 +1,16 @@
 import { describe, expect, test } from "bun:test";
 import path from "node:path";
 
+import { z } from "zod";
+
 import { options } from "../src/data/options";
 import {
   buildEslintDevDependencies,
   dependencyNamesByLinter,
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
+  eslintPeerOverridePackages,
+  eslintPeerOverridesFor,
 } from "../src/dependencies";
 
 // The preload mocks node:fs; the real readers are stashed on globalThis.
@@ -137,5 +141,54 @@ describe("ESLint dependencies", () => {
     expect(Object.keys(eslintFrameworkDevDependencies.nestjs)).toContain(
       "@darraghor/eslint-plugin-nestjs-typed"
     );
+  });
+});
+
+const manifestSchema = z.looseObject({
+  peerDependencies: z.record(z.string(), z.string()).optional(),
+  version: z.string(),
+});
+
+// The manifest of a package installed for this workspace.
+const installedManifest = (name: string) =>
+  manifestSchema.parse(
+    JSON.parse(
+      readFile(
+        path.join(import.meta.dir, "..", "node_modules", name, "package.json")
+      )
+    )
+  );
+
+describe("eslintPeerOverridePackages", () => {
+  test("lists every ESLint plugin whose eslint peer range excludes the ESLint init installs", () => {
+    const eslintVersion = installedManifest("eslint").version;
+    const names = new Set([
+      ...Object.keys(eslintCoreDevDependencies),
+      ...Object.values(eslintFrameworkDevDependencies).flatMap((deps) =>
+        Object.keys(deps)
+      ),
+    ]);
+    const behind = [...names].filter((name) => {
+      const range = installedManifest(name).peerDependencies?.eslint;
+      return range !== undefined && !Bun.semver.satisfies(eslintVersion, range);
+    });
+
+    expect(behind.toSorted()).toEqual(
+      [...eslintPeerOverridePackages].toSorted()
+    );
+  });
+
+  test("picks the listed packages out of name@version specs", () => {
+    expect(
+      eslintPeerOverridesFor([
+        "eslint@^10.12.0",
+        "@tanstack/eslint-plugin-start@^0.1.0",
+        "eslint-plugin-react@^7.37.5",
+        "eslint-plugin-react-hooks@^7.1.1",
+      ])
+    ).toEqual(["@tanstack/eslint-plugin-start", "eslint-plugin-react"]);
+    expect(eslintPeerOverridesFor(["eslint-plugin-jsx-a11y"])).toEqual([
+      "eslint-plugin-jsx-a11y",
+    ]);
   });
 });
