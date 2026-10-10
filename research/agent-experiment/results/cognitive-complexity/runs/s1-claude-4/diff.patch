@@ -1,0 +1,69 @@
+--- a/cache-life-type-utils.ts
++++ b/cache-life-type-utils.ts
+@@ -41,41 +41,35 @@
+ const MONTH_30_DAYS_IN_SECONDS = DAY_IN_SECONDS * 30
+ // --- end ---
+ 
++const EXACT_TIMESPANS: ReadonlyArray<readonly [number, string]> = [
++  [MONTH_30_DAYS_IN_SECONDS, '1 month'],
++  [WEEK_IN_SECONDS, '1 week'],
++  [DAY_IN_SECONDS, '1 day'],
++  [HOUR_IN_SECONDS, '1 hour'],
++  [MINUTE_IN_SECONDS, '1 minute'],
++]
++
++const TIMESPAN_UNITS: ReadonlyArray<readonly [number, string]> = [
++  [MONTH_30_DAYS_IN_SECONDS, ' months'],
++  [18144000, ' months'],
++  [WEEK_IN_SECONDS, ' weeks'],
++  [DAY_IN_SECONDS, ' days'],
++  [HOUR_IN_SECONDS, ' hours'],
++  [MINUTE_IN_SECONDS, ' minutes'],
++]
++
+ function formatTimespan(seconds: number): string {
+   if (seconds > 0) {
+-    if (seconds === MONTH_30_DAYS_IN_SECONDS) {
+-      return '1 month'
++    for (const [unit, label] of EXACT_TIMESPANS) {
++      if (seconds === unit) {
++        return label
++      }
+     }
+-    if (seconds === WEEK_IN_SECONDS) {
+-      return '1 week'
++    for (const [unit, suffix] of TIMESPAN_UNITS) {
++      if (seconds % unit === 0) {
++        return seconds / unit + suffix
++      }
+     }
+-    if (seconds === DAY_IN_SECONDS) {
+-      return '1 day'
+-    }
+-    if (seconds === HOUR_IN_SECONDS) {
+-      return '1 hour'
+-    }
+-    if (seconds === MINUTE_IN_SECONDS) {
+-      return '1 minute'
+-    }
+-    if (seconds % MONTH_30_DAYS_IN_SECONDS === 0) {
+-      return seconds / MONTH_30_DAYS_IN_SECONDS + ' months'
+-    }
+-    if (seconds % 18144000 === 0) {
+-      return seconds / 18144000 + ' months'
+-    }
+-    if (seconds % WEEK_IN_SECONDS === 0) {
+-      return seconds / WEEK_IN_SECONDS + ' weeks'
+-    }
+-    if (seconds % DAY_IN_SECONDS === 0) {
+-      return seconds / DAY_IN_SECONDS + ' days'
+-    }
+-    if (seconds % HOUR_IN_SECONDS === 0) {
+-      return seconds / HOUR_IN_SECONDS + ' hours'
+-    }
+-    if (seconds % MINUTE_IN_SECONDS === 0) {
+-      return seconds / MINUTE_IN_SECONDS + ' minutes'
+-    }
+   }
+   return seconds + ' seconds'
+ }

@@ -1,0 +1,79 @@
+--- a/cache-life-type-utils.ts
++++ b/cache-life-type-utils.ts
+@@ -42,41 +42,42 @@
+ // --- end ---
+ 
+ function formatTimespan(seconds: number): string {
+-  if (seconds > 0) {
+-    if (seconds === MONTH_30_DAYS_IN_SECONDS) {
+-      return '1 month'
+-    }
+-    if (seconds === WEEK_IN_SECONDS) {
+-      return '1 week'
+-    }
+-    if (seconds === DAY_IN_SECONDS) {
+-      return '1 day'
+-    }
+-    if (seconds === HOUR_IN_SECONDS) {
+-      return '1 hour'
+-    }
+-    if (seconds === MINUTE_IN_SECONDS) {
+-      return '1 minute'
+-    }
+-    if (seconds % MONTH_30_DAYS_IN_SECONDS === 0) {
+-      return seconds / MONTH_30_DAYS_IN_SECONDS + ' months'
+-    }
+-    if (seconds % 18144000 === 0) {
+-      return seconds / 18144000 + ' months'
+-    }
+-    if (seconds % WEEK_IN_SECONDS === 0) {
+-      return seconds / WEEK_IN_SECONDS + ' weeks'
+-    }
+-    if (seconds % DAY_IN_SECONDS === 0) {
+-      return seconds / DAY_IN_SECONDS + ' days'
+-    }
+-    if (seconds % HOUR_IN_SECONDS === 0) {
+-      return seconds / HOUR_IN_SECONDS + ' hours'
+-    }
+-    if (seconds % MINUTE_IN_SECONDS === 0) {
+-      return seconds / MINUTE_IN_SECONDS + ' minutes'
+-    }
++  if (!(seconds > 0)) {
++    return seconds + ' seconds'
+   }
++  if (seconds === MONTH_30_DAYS_IN_SECONDS) {
++    return '1 month'
++  }
++  if (seconds === WEEK_IN_SECONDS) {
++    return '1 week'
++  }
++  if (seconds === DAY_IN_SECONDS) {
++    return '1 day'
++  }
++  if (seconds === HOUR_IN_SECONDS) {
++    return '1 hour'
++  }
++  if (seconds === MINUTE_IN_SECONDS) {
++    return '1 minute'
++  }
++  if (seconds % MONTH_30_DAYS_IN_SECONDS === 0) {
++    return seconds / MONTH_30_DAYS_IN_SECONDS + ' months'
++  }
++  if (seconds % 18144000 === 0) {
++    return seconds / 18144000 + ' months'
++  }
++  if (seconds % WEEK_IN_SECONDS === 0) {
++    return seconds / WEEK_IN_SECONDS + ' weeks'
++  }
++  if (seconds % DAY_IN_SECONDS === 0) {
++    return seconds / DAY_IN_SECONDS + ' days'
++  }
++  if (seconds % HOUR_IN_SECONDS === 0) {
++    return seconds / HOUR_IN_SECONDS + ' hours'
++  }
++  if (seconds % MINUTE_IN_SECONDS === 0) {
++    return seconds / MINUTE_IN_SECONDS + ' minutes'
++  }
+   return seconds + ' seconds'
+ }
+ 

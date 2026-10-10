@@ -1,0 +1,116 @@
+{
+  "_comment": "Each repo: GitHub slug, local folder under repos/ (or an absolute path), included directories (relative to the repo root), and repo-specific excluded paths (relative to the repo root; a directory excludes everything under it). Global exclusion rules (test/fixture/vendor/compiled dirs, *.d.ts, *.test.*, third-party license headers) live in collect-files.cjs. Repo-specific exclusions are files/dirs whose header states the whole file is vendored, generated, or derived from another project (reviewed by hand with show-flag-context.cjs).",
+  "repos": [
+    {
+      "name": "zod",
+      "github": "colinhacks/zod",
+      "license": "LICENSE",
+      "dir": "repos/zod",
+      "include": ["packages/zod/src"],
+      "exclude": []
+    },
+    {
+      "name": "hono",
+      "github": "honojs/hono",
+      "license": "LICENSE",
+      "dir": "repos/hono",
+      "include": ["src"],
+      "exclude": []
+    },
+    {
+      "name": "trpc",
+      "github": "trpc/trpc",
+      "license": "LICENSE",
+      "dir": "repos/trpc",
+      "include": [
+        "packages/client/src",
+        "packages/next/src",
+        "packages/openapi/src",
+        "packages/react-query/src",
+        "packages/server/src",
+        "packages/tanstack-react-query/src",
+        "packages/upgrade/src"
+      ],
+      "exclude": []
+    },
+    {
+      "name": "vite",
+      "github": "vitejs/vite",
+      "license": "LICENSE",
+      "dir": "repos/vite",
+      "include": ["packages/vite/src"],
+      "exclude": ["packages/vite/src/types"]
+    },
+    {
+      "name": "astro",
+      "github": "withastro/astro",
+      "license": "LICENSE",
+      "dir": "repos/astro",
+      "include": ["packages/astro/src"],
+      "exclude": [
+        "packages/astro/src/assets/utils/deterministic-string.ts",
+        "packages/astro/src/assets/utils/etag.ts",
+        "packages/astro/src/transitions/cssesc.ts"
+      ]
+    },
+    {
+      "name": "excalidraw",
+      "github": "excalidraw/excalidraw",
+      "license": "LICENSE",
+      "dir": "repos/excalidraw",
+      "include": [
+        "packages/excalidraw",
+        "packages/element/src",
+        "packages/common/src",
+        "packages/math/src",
+        "packages/utils/src"
+      ],
+      "exclude": [
+        "packages/excalidraw/subset/harfbuzz/harfbuzz-bindings.ts",
+        "packages/excalidraw/subset/harfbuzz/harfbuzz-wasm.ts",
+        "packages/excalidraw/subset/woff2/woff2-bindings.ts",
+        "packages/excalidraw/subset/woff2/woff2-wasm.ts",
+        "packages/excalidraw/fonts/Xiaolai/index.ts",
+        "packages/excalidraw/fonts/ComicShanns/index.ts",
+        "packages/excalidraw/fonts/Excalifont/index.ts",
+        "packages/excalidraw/deburr.ts",
+        "packages/excalidraw/env.cjs"
+      ]
+    },
+    {
+      "name": "next.js",
+      "github": "vercel/next.js",
+      "license": "license.md",
+      "dir": "repos/next.js",
+      "include": ["packages/next/src"],
+      "exclude": [
+        "packages/next/src/build/webpack/loaders/css-loader",
+        "packages/next/src/build/webpack/loaders/postcss-loader",
+        "packages/next/src/build/webpack/loaders/resolve-url-loader",
+        "packages/next/src/build/webpack/loaders/next-style-loader/runtime",
+        "packages/next/src/build/browser-variant-modules.ts",
+        "packages/next/src/server/dev/hot-middleware.ts",
+        "packages/next/src/server/lib/dedupe-fetch.ts",
+        "packages/next/src/server/lib/etag.ts",
+        "packages/next/src/shared/lib/htmlescape.ts"
+      ]
+    },
+    {
+      "name": "vscode",
+      "github": "microsoft/vscode",
+      "license": "LICENSE.txt",
+      "dir": "repos/vscode",
+      "ownCopyright": "Copyright \\(c\\) Microsoft Corporation",
+      "include": ["src/vs/editor/common"],
+      "exclude": ["src/vs/editor/common/standalone/standaloneEnums.ts"]
+    },
+    {
+      "name": "ultracite",
+      "github": "haydenbleasel/ultracite",
+      "license": "license.md",
+      "dir": "../..",
+      "include": ["packages/cli/src"],
+      "exclude": []
+    }
+  ]
+}

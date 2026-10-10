@@ -1,0 +1,33 @@
+--- a/utils.ts
++++ b/utils.ts
+@@ -77,6 +77,11 @@
+ declare function normalizeTheLocale(locale: string): string;
+ // --- end stubs ---
+ 
++function getMatchingLocaleCodes(loopLocale: Locales[number], browserLocale: string): string[] {
++	const codes = typeof loopLocale === 'string' ? [loopLocale] : loopLocale.codes;
++	return codes.filter((code) => normalizeTheLocale(code) === normalizeTheLocale(browserLocale));
++}
++
+ export function computePreferredLocaleList(request: Request, locales: Locales): string[] {
+ 	const acceptHeader = request.headers.get('Accept-Language');
+ 	let result: string[] = [];
+@@ -89,17 +94,7 @@
+ 		} else if (browserLocaleList.length > 0) {
+ 			for (const browserLocale of browserLocaleList) {
+ 				for (const loopLocale of locales) {
+-					if (typeof loopLocale === 'string') {
+-						if (normalizeTheLocale(loopLocale) === normalizeTheLocale(browserLocale.locale)) {
+-							result.push(loopLocale);
+-						}
+-					} else {
+-						for (const code of loopLocale.codes) {
+-							if (normalizeTheLocale(code) === normalizeTheLocale(browserLocale.locale)) {
+-								result.push(code);
+-							}
+-						}
+-					}
++					result.push(...getMatchingLocaleCodes(loopLocale, browserLocale.locale));
+ 				}
+ 			}
+ 		}

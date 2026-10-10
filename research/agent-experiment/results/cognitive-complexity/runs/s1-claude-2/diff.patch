@@ -1,0 +1,69 @@
+--- a/cache-life-type-utils.ts
++++ b/cache-life-type-utils.ts
+@@ -41,41 +41,35 @@
+ const MONTH_30_DAYS_IN_SECONDS = DAY_IN_SECONDS * 30
+ // --- end ---
+ 
++// Checked in order; the first matching entry wins.
++const EXACT_TIMESPANS: [number, string][] = [
++  [MONTH_30_DAYS_IN_SECONDS, '1 month'],
++  [WEEK_IN_SECONDS, '1 week'],
++  [DAY_IN_SECONDS, '1 day'],
++  [HOUR_IN_SECONDS, '1 hour'],
++  [MINUTE_IN_SECONDS, '1 minute'],
++]
++
++// Checked in order; the first unit that evenly divides the value wins.
++const PLURAL_TIMESPANS: [number, string][] = [
++  [MONTH_30_DAYS_IN_SECONDS, ' months'],
++  [18144000, ' months'],
++  [WEEK_IN_SECONDS, ' weeks'],
++  [DAY_IN_SECONDS, ' days'],
++  [HOUR_IN_SECONDS, ' hours'],
++  [MINUTE_IN_SECONDS, ' minutes'],
++]
++
+ function formatTimespan(seconds: number): string {
+   if (seconds > 0) {
+-    if (seconds === MONTH_30_DAYS_IN_SECONDS) {
+-      return '1 month'
++    const exact = EXACT_TIMESPANS.find(([unit]) => seconds === unit)
++    if (exact) {
++      return exact[1]
+     }
+-    if (seconds === WEEK_IN_SECONDS) {
+-      return '1 week'
++    const plural = PLURAL_TIMESPANS.find(([unit]) => seconds % unit === 0)
++    if (plural) {
++      return seconds / plural[0] + plural[1]
+     }
+-    if (seconds === DAY_IN_SECONDS) {
+-      return '1 day'
+-    }
+-    if (seconds === HOUR_IN_SECONDS) {
+-      return '1 hour'
+-    }
+-    if (seconds === MINUTE_IN_SECONDS) {
+-      return '1 minute'
+-    }
+-    if (seconds % MONTH_30_DAYS_IN_SECONDS === 0) {
+-      return seconds / MONTH_30_DAYS_IN_SECONDS + ' months'
+-    }
+-    if (seconds % 18144000 === 0) {
+-      return seconds / 18144000 + ' months'
+-    }
+-    if (seconds % WEEK_IN_SECONDS === 0) {
+-      return seconds / WEEK_IN_SECONDS + ' weeks'
+-    }
+-    if (seconds % DAY_IN_SECONDS === 0) {
+-      return seconds / DAY_IN_SECONDS + ' days'
+-    }
+-    if (seconds % HOUR_IN_SECONDS === 0) {
+-      return seconds / HOUR_IN_SECONDS + ' hours'
+-    }
+-    if (seconds % MINUTE_IN_SECONDS === 0) {
+-      return seconds / MINUTE_IN_SECONDS + ' minutes'
+-    }
+   }
+   return seconds + ' seconds'
+ }

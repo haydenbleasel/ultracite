@@ -1,0 +1,3065 @@
+{
+  "generatedAt": "2026-10-10T18:30:10.631Z",
+  "tools": {
+    "node": "v24.14.1",
+    "eslint": "10.12.0",
+    "@typescript-eslint/parser": "8.71.0",
+    "typescript": "6.0.3",
+    "eslint-plugin-sonarjs": "4.2.2",
+    "@biomejs/biome": "2.5.15"
+  },
+  "subjects": [
+    {
+      "id": "s1",
+      "example": "c-pure-21-30.ts",
+      "basename": "cache-life-type-utils.ts",
+      "exportName": "formatTimespan",
+      "source": "vercel/next.js packages/next/src/server/lib/router-utils/cache-life-type-utils.ts",
+      "sha256": "12aed0db290ca337e1e0ee0e29130b5160455a7966e39ef0e31b08c5d3721b0a"
+    },
+    {
+      "id": "s2",
+      "example": "b-alt-nested-loops.ts",
+      "basename": "utils.ts",
+      "exportName": "computePreferredLocaleList",
+      "source": "withastro/astro packages/astro/src/i18n/utils.ts",
+      "sha256": "47e62fea79b87987aa1cb33cc829ae249556313028b81f274446f401ffd972f4"
+    }
+  ],
+  "agentLimit": 15,
+  "runs": [
+    {
+      "runId": "s1-claude-1",
+      "subject": "s1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 24.4,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 12,
+      "cognitiveRemovedNet": 11,
+      "originalFunctionCognitiveAfter": 12,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 12,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 12,
+          "biome": 12,
+          "cyclomatic": 13,
+          "maxDepth": 1
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 12,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 13,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 12,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 1,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 45,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 81,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 6,
+        "output": 2404,
+        "cacheCreation": 29370,
+        "cacheRead": 81304
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.29932479999999995,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit"
+      ],
+      "toolCallCount": 3,
+      "approach": {
+        "categories": [
+          "guard clause / early return"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "12 (by hand; did not lint)",
+        "note": "Inverted `if (seconds > 0) { … }` into `if (seconds <= 0) return seconds + ' seconds'`; the 11 checks are unchanged, just un-nested (NaN still falls through to the same final return)."
+      }
+    },
+    {
+      "runId": "s1-claude-2",
+      "subject": "s1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 30.1,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 5,
+      "cognitiveRemovedNet": 18,
+      "originalFunctionCognitiveAfter": 5,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 5,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 5,
+          "biome": 5,
+          "cyclomatic": 4,
+          "maxDepth": 2
+        },
+        {
+          "name": "<callback to EXACT_TIMESPANS.find>",
+          "nestedIn": "formatTimespan",
+          "cognitive": 0,
+          "biome": "<=1",
+          "cyclomatic": 1,
+          "maxDepth": 0
+        },
+        {
+          "name": "<callback to PLURAL_TIMESPANS.find>",
+          "nestedIn": "formatTimespan",
+          "cognitive": 0,
+          "biome": "<=1",
+          "cyclomatic": 1,
+          "maxDepth": 0
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 5,
+      "biomeFunctionsAtMost1After": 2,
+      "functionsBefore": 1,
+      "functionsAfter": 3,
+      "newFunctions": [
+        "<callback to EXACT_TIMESPANS.find>",
+        "<callback to PLURAL_TIMESPANS.find>"
+      ],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 6,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 3,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 2,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 34,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 72,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 6,
+        "output": 3244,
+        "cacheCreation": 29625,
+        "cacheRead": 87966
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.31949720000000004,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit"
+      ],
+      "toolCallCount": 3,
+      "approach": {
+        "categories": [
+          "lookup table / data-driven"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "about 5 (by hand; did not lint)",
+        "note": "Replaced the 11 ifs with two ordered tables (EXACT_TIMESPANS, PLURAL_TIMESPANS) searched with Array.prototype.find; outer guard kept. The two new 'functions' are anonymous .find callbacks scoring 0, not named helpers."
+      }
+    },
+    {
+      "runId": "s1-claude-3",
+      "subject": "s1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 29.5,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 11,
+      "cognitiveRemovedNet": 12,
+      "originalFunctionCognitiveAfter": 11,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 11,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 11,
+          "biome": 11,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 11,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 6,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 5,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 3,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 36,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 73,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 8,
+        "output": 3038,
+        "cacheCreation": 29535,
+        "cacheRead": 129285
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.32292899999999997,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "lookup table / data-driven"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "11 (by hand; its eslint attempt via Bash was denied)",
+        "note": "Two ordered tables (EXACT_TIMESPANS, DIVISIBLE_TIMESPANS) walked with for…of loops inside the kept guard; 18144000 row kept. Nesting depth goes up (2→3) because the loops nest."
+      }
+    },
+    {
+      "runId": "s1-claude-4",
+      "subject": "s1",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 32,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 11,
+      "cognitiveRemovedNet": 12,
+      "originalFunctionCognitiveAfter": 11,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 11,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 11,
+          "biome": 11,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 11,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 6,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 5,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 3,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 36,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 72,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "Bash",
+          "target": "ls -a && ls -a .. ../.. 2>/dev/null | head -50"
+        }
+      ],
+      "tokens": {
+        "input": 8,
+        "output": 2921,
+        "cacheCreation": 29484,
+        "cacheRead": 129278
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.3201796,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "lookup table / data-driven"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "11 (by hand; its Bash `ls` was denied)",
+        "note": "Same shape as s1-claude-3 (EXACT_TIMESPANS, TIMESPAN_UNITS + for…of); noted the 18144000 branch is unreachable but kept it."
+      }
+    },
+    {
+      "runId": "s1-codex-1",
+      "subject": "s1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 50.9,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 12,
+      "cognitiveRemovedNet": 11,
+      "originalFunctionCognitiveAfter": 12,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 12,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 12,
+          "biome": 12,
+          "cyclomatic": 13,
+          "maxDepth": 1
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 12,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 13,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 12,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 1,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 45,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 81,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "const code = `\nconst fs = require('node:fs');\nconst { createRequire } = require('node:module');\nconst sonarRequire = createRequire(fs.realpathSync('<repo>/node_modules/eslint-plugin-sonarjs/package.json'));\nconst { Linter } = sonarRequire('eslint');\nconst sonar = sonarRequire('./cjs/plugin.js');\nconst parser = sonarRequire('@typescript-eslint/parser');\nconst linter = new Linter();\nconst original = ${JSON.stringify(load(\"original\"))};\nconst updated = fs.readFileSync('cache-life-type-utils.ts', 'utf8');\nfunction lint(source, maximum) {\n  return linter.verify(source, [{\n  "
+        }
+      ],
+      "tokens": {
+        "input_tokens": 178027,
+        "cached_input_tokens": 157952,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2547,
+        "reasoning_output_tokens": 394,
+        "total_tokens": 180574
+      },
+      "tokensUsedReportedOnStderr": 22622,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 5,
+      "approach": {
+        "categories": [
+          "guard clause / early return"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "12 (linted it itself)",
+        "note": "`if (!(seconds > 0)) return seconds + ' seconds'`, a NaN-exact inversion of the guard; checks unchanged. Byte-identical to s1-codex-2/3/4 and the pilot."
+      }
+    },
+    {
+      "runId": "s1-codex-2",
+      "subject": "s1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 52.5,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 12,
+      "cognitiveRemovedNet": 11,
+      "originalFunctionCognitiveAfter": 12,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 12,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 12,
+          "biome": 12,
+          "cyclomatic": 13,
+          "maxDepth": 1
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 12,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 13,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 12,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 1,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 45,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 81,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"node <<'NODE'\\nconst { createRequire } = require('node:module');\\nconst localRequire = createRequire('<repo>/node_modules/eslint-plugin-sonarjs/package.json');\\nfor (const name of ['eslint', 'eslint-plugin-sonarjs', '@typescript-eslint/parser']) {\\n  try { console.log(name + ': ' + localRequire.resolve(name)); }\\n  catch { console.log(name + ': unavailable'); }\\n}\\nNODE\",\"max_output_tokens\":1500}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const code = `const fs = require('node:fs');\nconst { Linter } = require('<repo>/node_modules/.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst parser = require('<repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser');\nconst sonarjs = require('<repo>/node_modules/eslint-plugin-sonarjs');\nconst linter = new Linter();\nconst config = [{ files: ['**/*.ts'], languageOptions: { parser }, plugins: { sonarjs }, rules: { 'sonarjs/cognitive-complexity': ['err"
+        },
+        {
+          "tool": "exec",
+          "target": "const code = `const fs = require('node:fs');\nconst { stripTypeScriptTypes } = require('node:module');\nconst { Linter } = require('<repo>/node_modules/.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst sonarjs = require('<repo>/node_modules/eslint-plugin-sonarjs');\nconst linter = new Linter();\nconst config = [{ plugins: { sonarjs }, rules: { 'sonarjs/cognitive-complexity': ['error', 15] } }];\nconst original = ${JSON.stringify(load(\"originalSource\"))};\nconst current = fs.readFileSync('cache-life-type-utils.ts', 'utf8');\nconst before "
+        }
+      ],
+      "tokens": {
+        "input_tokens": 221779,
+        "cached_input_tokens": 190336,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2784,
+        "reasoning_output_tokens": 300,
+        "total_tokens": 224563
+      },
+      "tokensUsedReportedOnStderr": 34227,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 7,
+      "approach": {
+        "categories": [
+          "guard clause / early return"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "12 (linted it itself)",
+        "note": "Identical to s1-codex-1: `if (!(seconds > 0)) return …`."
+      }
+    },
+    {
+      "runId": "s1-codex-3",
+      "subject": "s1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 47.1,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 12,
+      "cognitiveRemovedNet": 11,
+      "originalFunctionCognitiveAfter": 12,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 12,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 12,
+          "biome": 12,
+          "cyclomatic": 13,
+          "maxDepth": 1
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 12,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 13,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 12,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 1,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 45,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 81,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in / /private <tmp> <tmp> <tmp>/<project> <tmp> <scratch> <experiment> <run-root> /private/t"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"node <<'NODE'\\nconst fs = require('node:fs');\\nconst { createRequire, stripTypeScriptTypes } = require('node:module');\\nconst vm = require('node:vm');\\nconst root = '<repo>/node_modules';\\nconst req = createRequire(fs.realpathSync(root + '/eslint-plugin-sonarjs/package.json'));\\nfor (const name of ['eslint', '@typescript-eslint/parser']) {\\n  try { console.log(name, req.resolve(name)); }\\n  catch { console.log(name, 'unavailable'); }\\n}\\nconst source = fs.readFileSync('cache-life-type-utils.ts', 'utf8');\\nconst original = source.repla"
+        }
+      ],
+      "tokens": {
+        "input_tokens": 144177,
+        "cached_input_tokens": 125440,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2507,
+        "reasoning_output_tokens": 148,
+        "total_tokens": 146684
+      },
+      "tokensUsedReportedOnStderr": 21244,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "guard clause / early return"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "12 (linted it itself)",
+        "note": "Identical to s1-codex-1: `if (!(seconds > 0)) return …`."
+      }
+    },
+    {
+      "runId": "s1-codex-4",
+      "subject": "s1",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 40.9,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 23,
+      "cognitiveSumAfter": 12,
+      "cognitiveRemovedNet": 11,
+      "originalFunctionCognitiveAfter": 12,
+      "helperCognitiveSum": 0,
+      "cognitiveMaxAfter": 12,
+      "perFunctionAfter": [
+        {
+          "name": "formatTimespan",
+          "nestedIn": null,
+          "cognitive": 12,
+          "biome": 12,
+          "cyclomatic": 13,
+          "maxDepth": 1
+        }
+      ],
+      "biomeSumOfReportedBefore": 23,
+      "biomeSumOfReportedAfter": 12,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 1,
+      "newFunctions": [],
+      "cyclomaticSumBefore": 13,
+      "cyclomaticSumAfter": 13,
+      "decisionPointsBefore": 12,
+      "decisionPointsAfter": 12,
+      "maxDepthBefore": 2,
+      "maxDepthAfter": 1,
+      "codeLinesBefore": 44,
+      "codeLinesAfter": 45,
+      "nonBlankLinesBefore": 80,
+      "nonBlankLinesAfter": 81,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 5841
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input_tokens": 143534,
+        "cached_input_tokens": 125184,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2315,
+        "reasoning_output_tokens": 296,
+        "total_tokens": 145849
+      },
+      "tokensUsedReportedOnStderr": 20665,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "guard clause / early return"
+        ],
+        "helpers": [],
+        "movedVerbatim": false,
+        "selfReportedScore": "12 (linted it itself)",
+        "note": "Identical to s1-codex-1: `if (!(seconds > 0)) return …`."
+      }
+    },
+    {
+      "runId": "s2-claude-1",
+      "subject": "s2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 26.4,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 16,
+      "cognitiveRemovedNet": 21,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 8,
+      "cognitiveMaxAfter": 8,
+      "perFunctionAfter": [
+        {
+          "name": "getMatchingCodes",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 8,
+          "cyclomatic": 5,
+          "maxDepth": 3
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 17,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "getMatchingCodes"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 11,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 9,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 3,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 32,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 105,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 8,
+        "output": 2587,
+        "cacheCreation": 30780,
+        "cacheRead": 125717
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.3231554,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 5,
+      "approach": {
+        "categories": [
+          "extracted helper(s)",
+          "other restructuring"
+        ],
+        "helpers": [
+          "getMatchingCodes"
+        ],
+        "movedVerbatim": false,
+        "selfReportedScore": "about 8 + 8 (by hand; its Bash was denied)",
+        "note": "Moved the two inner loops into getMatchingCodes and merged the string/object branches (`typeof l === 'string' ? [l] : l.codes`), removing one branch and one loop; outer if/else-if/for kept in place."
+      }
+    },
+    {
+      "runId": "s2-claude-2",
+      "subject": "s2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 26.3,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 22,
+      "cognitiveRemovedNet": 15,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 14,
+      "cognitiveMaxAfter": 14,
+      "perFunctionAfter": [
+        {
+          "name": "findMatchingLocaleCodes",
+          "nestedIn": null,
+          "cognitive": 14,
+          "biome": 14,
+          "cyclomatic": 6,
+          "maxDepth": 4
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 23,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "findMatchingLocaleCodes"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 12,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 10,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 37,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 110,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 6,
+        "output": 2667,
+        "cacheCreation": 30726,
+        "cacheRead": 88806
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.31693319999999997,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit"
+      ],
+      "toolCallCount": 3,
+      "approach": {
+        "categories": [
+          "extracted helper(s)"
+        ],
+        "helpers": [
+          "findMatchingLocaleCodes"
+        ],
+        "movedVerbatim": true,
+        "selfReportedScore": "8 + 14, 'only one point under' (by hand)",
+        "note": "Moved the inner `for (loopLocale)` block verbatim (renames only) into findMatchingLocaleCodes, which returns an array the caller spreads. Helper scores 14 against a limit of 15."
+      }
+    },
+    {
+      "runId": "s2-claude-3",
+      "subject": "s2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 26,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 13,
+      "cognitiveRemovedNet": 24,
+      "originalFunctionCognitiveAfter": 12,
+      "helperCognitiveSum": 1,
+      "cognitiveMaxAfter": 12,
+      "perFunctionAfter": [
+        {
+          "name": "getMatchingLocaleCodes",
+          "nestedIn": null,
+          "cognitive": 1,
+          "biome": "<=1",
+          "cyclomatic": 2,
+          "maxDepth": 0
+        },
+        {
+          "name": "<callback to codes.filter>",
+          "nestedIn": "getMatchingLocaleCodes",
+          "cognitive": 0,
+          "biome": "<=1",
+          "cyclomatic": 1,
+          "maxDepth": 0
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 12,
+          "biome": 13,
+          "cyclomatic": 7,
+          "maxDepth": 4
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 13,
+      "biomeFunctionsAtMost1After": 2,
+      "functionsBefore": 1,
+      "functionsAfter": 3,
+      "newFunctions": [
+        "getMatchingLocaleCodes",
+        "<callback to codes.filter>"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 10,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 7,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 26,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 99,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 10,
+        "output": 2543,
+        "cacheCreation": 30683,
+        "cacheRead": 173391
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.3310422,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 5,
+      "approach": {
+        "categories": [
+          "extracted helper(s)",
+          "other restructuring"
+        ],
+        "helpers": [
+          "getMatchingLocaleCodes"
+        ],
+        "movedVerbatim": false,
+        "selfReportedScore": "about 12 (by hand; its Bash was denied)",
+        "note": "Replaced the string/object branch and innermost loop with a small helper (ternary normalisation + .filter, cognitive 1); both outer loops stay in the main function, which now scores 12."
+      }
+    },
+    {
+      "runId": "s2-claude-4",
+      "subject": "s2",
+      "agent": "claude",
+      "cliVersion": "2.1.296 (Claude Code)",
+      "model": "claude-opus-5-5",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 27.1,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 22,
+      "cognitiveRemovedNet": 15,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 14,
+      "cognitiveMaxAfter": 14,
+      "perFunctionAfter": [
+        {
+          "name": "getMatchingLocales",
+          "nestedIn": null,
+          "cognitive": 14,
+          "biome": 14,
+          "cyclomatic": 6,
+          "maxDepth": 4
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 23,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "getMatchingLocales"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 12,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 10,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 37,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 110,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [],
+      "tokens": {
+        "input": 8,
+        "output": 2686,
+        "cacheCreation": 30833,
+        "cacheRead": 125774
+      },
+      "tokensUsedReportedOnStderr": null,
+      "costUSD": 0.3255708,
+      "toolCalls": [
+        "Read",
+        "Read",
+        "Edit",
+        "Bash"
+      ],
+      "toolCallCount": 4,
+      "approach": {
+        "categories": [
+          "extracted helper(s)"
+        ],
+        "helpers": [
+          "getMatchingLocales"
+        ],
+        "movedVerbatim": true,
+        "selfReportedScore": "8 + 14, 'only just' (by hand)",
+        "note": "Same as s2-claude-2: verbatim move of the inner loop into getMatchingLocales (returns array; caller spreads). Helper scores 14."
+      }
+    },
+    {
+      "runId": "s2-codex-1",
+      "subject": "s2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 72,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 22,
+      "cognitiveRemovedNet": 15,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 14,
+      "cognitiveMaxAfter": 14,
+      "perFunctionAfter": [
+        {
+          "name": "appendMatchingLocales",
+          "nestedIn": null,
+          "cognitive": 14,
+          "biome": 14,
+          "cyclomatic": 6,
+          "maxDepth": 4
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 23,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "appendMatchingLocales"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 12,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 10,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 35,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 108,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'utils.ts*' -g '*config*' -g '!node_modules' -g '!vendor'\",\"max_output_tokens\":3000}));\ntext(await tools.exec_command({cmd:\"cat utils.ts; cat utils.ts.e26aed56.json\",\"max_output_tokens\":9000}));\ntext(await tools.exec_command({cmd:\"rg -n 'Ultracite|ultracite|cognitive' ~/.codex/memories/MEMORY.md\",\"max_output_tokens\":2000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor parent in (p,*p.parents):\\n    f=parent/'AGENTS.md'\\n    if f.exists():\\n        print(str(f))\\n        print(f.read_text())\\n    for name in ('package.json','node_modules'):\\n        f=parent/name\\n        if f.exists():\\n            print(str(f))\\nPY\",\"max_output_tokens\":5000}));\ntext(await tools.exec_command({cmd:\"ls -la; command -v node; command -v bun; command -v eslint; ls <repo>/node_modules/.bin\",\"max_output_tokens\":3000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"rg --files <repo> -g '*eslint*' -g 'package.json' -g '*cognitive*' -g '!bun.lock' -g '!node_modules'; rg --files <experiment> -g '*.mjs' -g '*.json' -g '!runs/**'\",\"max_output_tokens\":2500}));\ntext(await tools.exec_command({cmd:\"ls <repo>/node_modules/.bun | rg 'eslint|sonar|typescript'\",\"max_output_tokens\":1500}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"node <<'NODE'\\nconst { createRequire } = require('node:module');\\nconst req = createRequire('<repo>/packages/cli/package.json');\\nfor (const name of ['eslint', '@typescript-eslint/parser', 'eslint-plugin-sonarjs', 'typescript']) {\\n  try { console.log(name, req.resolve(name)); } catch (error) { console.log(error.message); }\\n}\\nNODE\",\"max_output_tokens\":1500}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const script = `\nconst fs = require('node:fs');\nconst assert = require('node:assert/strict');\nconst vm = require('node:vm');\nconst { createRequire } = require('node:module');\nconst req = createRequire('<repo>/packages/cli/package.json');\nconst { Linter } = req('eslint');\nconst parser = req('@typescript-eslint/parser');\nconst sonarjs = req('eslint-plugin-sonarjs');\nconst ts = req('typescript');\nconst original = ${JSON.stringify(load(\"originalUtils\"))};\nconst updated = fs.readFileSync('utils.ts', 'utf8');\nconst linter = new Linter();\nconst lint = (source, threshold) => li"
+        }
+      ],
+      "tokens": {
+        "input_tokens": 220184,
+        "cached_input_tokens": 195840,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3427,
+        "reasoning_output_tokens": 1123,
+        "total_tokens": 223611
+      },
+      "tokensUsedReportedOnStderr": 27771,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 6,
+      "approach": {
+        "categories": [
+          "extracted helper(s)"
+        ],
+        "helpers": [
+          "appendMatchingLocales"
+        ],
+        "movedVerbatim": true,
+        "selfReportedScore": "8 + 14 (linted it itself)",
+        "note": "Verbatim move of the inner loop into appendMatchingLocales(browserLocale, locales, result), which pushes into the caller's array (out-parameter). Byte-identical to s2-codex-3/4."
+      }
+    },
+    {
+      "runId": "s2-codex-2",
+      "subject": "s2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 81.9,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 22,
+      "cognitiveRemovedNet": 15,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 14,
+      "cognitiveMaxAfter": 14,
+      "perFunctionAfter": [
+        {
+          "name": "appendMatchingLocaleCodes",
+          "nestedIn": null,
+          "cognitive": 14,
+          "biome": 14,
+          "cyclomatic": 6,
+          "maxDepth": 4
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 23,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "appendMatchingLocaleCodes"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 12,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 10,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 35,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 108,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'utils.ts*' -g '*lint*' -g 'tsconfig*' -g '!node_modules' -g '!.git'\",\"max_output_tokens\":4000}),\n  tools.exec_command({cmd:\"cat utils.ts; cat utils.ts.16fd85da.json\",\"max_output_tokens\":12000}),\n  tools.exec_command({cmd:\"rg -n 'Ultracite|ultracite|cognitive' ~/.codex/memories/MEMORY.md\",\"max_output_tokens\":2500})\n]); results.forEach((r,i)=>text({i,...r}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"ls -d <repo>/node_modules/{eslint,eslint-plugin-sonarjs,typescript,typescript-eslint,@typescript-eslint/parser} <tmp>/node_modules/{eslint,eslint-plugin-sonarjs,typescript,typescript-eslint,@typescript-eslint/parser} 2>/dev/null\",\"max_output_tokens\":2000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const original = await tools.exec_command({cmd:\"cat utils.ts\",\"max_output_tokens\":5000});\nstore(\"originalUtils\", original.output);\ntext(await tools.exec_command({cmd:\"node - <<'JS'\\nconst {createRequire} = require('node:module');\\nconst req = createRequire('<repo>/node_modules/eslint-plugin-sonarjs/package.json');\\nfor (const name of ['eslint', 'eslint-plugin-sonarjs', '@typescript-eslint/parser', 'typescript']) {\\n  try { console.log(name, req.resolve(name)); } catch { console.log(name, 'unavailable'); }\\n}\\nJS\",\"max_output_tokens\":2000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const original = load(\"originalUtils\");\nconst script = `\nconst fs = require('node:fs');\nconst vm = require('node:vm');\nconst assert = require('node:assert/strict');\nconst { createRequire } = require('node:module');\nconst base = '<repo>/node_modules/.bun/';\nconst { Linter } = require(base + 'eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst parser = require(base + '@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser');\nconst sonarjs = require('<repo>/node_modules/eslint-plugin-sonarjs');\nconst ts = r"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"ls <repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser\\ncat <repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser/package.json\",\"max_output_tokens\":3000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const script = `\nconst fs = require('node:fs');\nconst vm = require('node:vm');\nconst assert = require('node:assert/strict');\nconst base = '<repo>/node_modules/';\nconst { Linter } = require(base + '.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst parser = require(base + '.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser/dist/index.js');\nconst sonarjs = require(base + 'eslint-plugin-sonarjs');\nconst ts = require(base + 'typescript');\nconst original = ${JSON.stringify(load(\"originalUtils\"))};\nconst edited = fs.re"
+        }
+      ],
+      "tokens": {
+        "input_tokens": 284204,
+        "cached_input_tokens": 259712,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4453,
+        "reasoning_output_tokens": 1090,
+        "total_tokens": 288657
+      },
+      "tokensUsedReportedOnStderr": 28945,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 8,
+      "approach": {
+        "categories": [
+          "extracted helper(s)"
+        ],
+        "helpers": [
+          "appendMatchingLocaleCodes"
+        ],
+        "movedVerbatim": true,
+        "selfReportedScore": "8 + 14 (linted it itself)",
+        "note": "Same as s2-codex-1 except the helper is named appendMatchingLocaleCodes."
+      }
+    },
+    {
+      "runId": "s2-codex-3",
+      "subject": "s2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 83.2,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 22,
+      "cognitiveRemovedNet": 15,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 14,
+      "cognitiveMaxAfter": 14,
+      "perFunctionAfter": [
+        {
+          "name": "appendMatchingLocales",
+          "nestedIn": null,
+          "cognitive": 14,
+          "biome": 14,
+          "cyclomatic": 6,
+          "maxDepth": 4
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 23,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "appendMatchingLocales"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 12,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 10,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 35,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 108,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in . .. ../.. ../../.. ../../../.. ../../../../.. ../../../../../.. <tmp> /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then printf '%s\\\\n' \\\"$dir/AGENTS.md\\\"; cat \\\"$dir/AGENTS.md\\\"; fi; done\\nls -la\\ncommand -v node\\ncommand -v eslint\\ncommand -v oxlint\\ncommand -v bun\",\"max_output_tokens\":6000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for dir in <repo>/node_modules <experiment>/node_modules; do if [ -d \\\"$dir\\\" ]; then printf '%s\\\\n' \\\"$dir\\\"; ls \\\"$dir\\\"; fi; done\",\"max_output_tokens\":3500}),\n  tools.exec_command({cmd:\"ls -la ..\\nls -la ../../..\\nls -la <tmp>\",\"max_output_tokens\":3500})\n]);results.forEach((r,i)=>text({i,...r}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "store(\"originalUtils\", (await tools.exec_command({cmd:\"cat utils.ts\",\"max_output_tokens\":8000})).output);\ntext(await tools.exec_command({cmd:\"node <<'NODE'\\nconst { createRequire } = require('node:module');\\nconst req = createRequire('<repo>/node_modules/eslint-plugin-sonarjs/package.json');\\nfor (const name of ['eslint', '@typescript-eslint/parser', 'eslint-plugin-sonarjs', 'typescript']) {\\n  try { console.log(name, req.resolve(name)); } catch { console.log(name, 'not found'); }\\n}\\nNODE\",\"max_output_tokens\":2000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"ls <repo>/node_modules/.bun | rg '^(eslint|@typescript-eslint|oxc-parser)'\\ncat <repo>/node_modules/eslint-plugin-sonarjs/package.json\\nrg -n 'jsPlugins|cognitive-complexity' <repo>/packages -g '*.json' -g '*.ts'\",\"max_output_tokens\":4000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const original = load(\"originalUtils\");\ntext(await tools.exec_command({cmd: \"node <<'NODE'\\n\" +\n\"const fs = require('node:fs');\\nconst assert = require('node:assert/strict');\\nconst vm = require('node:vm');\\nconst base = '<repo>/node_modules';\\nconst { Linter } = require(base + '/.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\\nconst parser = require(base + '/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser');\\nconst sonarjs = require(base + '/eslint-plugin-sonarjs');\\nconst ts = require(base + '/typescript');\\nco"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"ls -la <repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser\\ncat <repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser/package.json\",\"max_output_tokens\":2000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const original = load(\"originalUtils\");\nconst script = `\nconst fs = require('node:fs');\nconst assert = require('node:assert/strict');\nconst vm = require('node:vm');\nconst base = '<repo>/node_modules';\nconst { Linter } = require(base + '/.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst parser = require(base + '/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser/dist/index.js');\nconst sonarjs = require(base + '/eslint-plugin-sonarjs');\nconst ts = require(base + '/typescript');\nconst original = ${JSON.stringify(or"
+        }
+      ],
+      "tokens": {
+        "input_tokens": 328787,
+        "cached_input_tokens": 298496,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4355,
+        "reasoning_output_tokens": 1163,
+        "total_tokens": 333142
+      },
+      "tokensUsedReportedOnStderr": 34646,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 9,
+      "approach": {
+        "categories": [
+          "extracted helper(s)"
+        ],
+        "helpers": [
+          "appendMatchingLocales"
+        ],
+        "movedVerbatim": true,
+        "selfReportedScore": "8 + 14 (linted it itself)",
+        "note": "Byte-identical to s2-codex-1."
+      }
+    },
+    {
+      "runId": "s2-codex-4",
+      "subject": "s2",
+      "agent": "codex",
+      "cliVersion": "codex-cli 0.155.1",
+      "model": "gpt-6-astra",
+      "effort": "xhigh",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 73.1,
+      "over5MinUltraciteTimeout": false,
+      "cleared": true,
+      "clearedAsUltraciteSees": true,
+      "remainingDiagnostics": [],
+      "cognitiveSumBefore": 37,
+      "cognitiveSumAfter": 22,
+      "cognitiveRemovedNet": 15,
+      "originalFunctionCognitiveAfter": 8,
+      "helperCognitiveSum": 14,
+      "cognitiveMaxAfter": 14,
+      "perFunctionAfter": [
+        {
+          "name": "appendMatchingLocales",
+          "nestedIn": null,
+          "cognitive": 14,
+          "biome": 14,
+          "cyclomatic": 6,
+          "maxDepth": 4
+        },
+        {
+          "name": "computePreferredLocaleList",
+          "nestedIn": null,
+          "cognitive": 8,
+          "biome": 9,
+          "cyclomatic": 6,
+          "maxDepth": 3
+        }
+      ],
+      "biomeSumOfReportedBefore": 38,
+      "biomeSumOfReportedAfter": 23,
+      "biomeFunctionsAtMost1After": 0,
+      "functionsBefore": 1,
+      "functionsAfter": 2,
+      "newFunctions": [
+        "appendMatchingLocales"
+      ],
+      "cyclomaticSumBefore": 11,
+      "cyclomaticSumAfter": 12,
+      "decisionPointsBefore": 10,
+      "decisionPointsAfter": 10,
+      "maxDepthBefore": 7,
+      "maxDepthAfter": 4,
+      "codeLinesBefore": 32,
+      "codeLinesAfter": 35,
+      "nonBlankLinesBefore": 105,
+      "nonBlankLinesAfter": 108,
+      "behaviorPreserved": true,
+      "behavior": {
+        "seed": 20261010,
+        "ok": true,
+        "cases": 6023,
+        "modes": {
+          "realHelpers": {
+            "ok": true,
+            "cases": 3016
+          },
+          "arbitraryHelperOutput": {
+            "ok": true,
+            "cases": 3007
+          },
+          "helperCallTrace": {
+            "ok": true,
+            "cases": 3016
+          }
+        }
+      },
+      "exportsPreserved": true,
+      "signaturesPreserved": true,
+      "addedExports": [],
+      "typeErrorsAfter": [],
+      "suppressionsAdded": {},
+      "configFilesFound": [],
+      "otherFileChanges": [],
+      "diagnosticsJsonUnchanged": true,
+      "toolCallsOutsideRunDir": [
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"for dir in / /private <tmp> <tmp> <tmp>/<project> <tmp> <scratch> <experiment> <run-root> \\\"$PWD\\\"; "
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"node <<'NODE'\\nconst { createRequire } = require('node:module');\\nconst r = createRequire('<repo>/node_modules/eslint-plugin-sonarjs/package.json');\\nfor (const name of ['eslint', '@typescript-eslint/parser', 'typescript']) {\\n  try { console.log(name + ': ' + r.resolve(name)); }\\n  catch { console.log(name + ': unavailable'); }\\n}\\nNODE\",\"max_output_tokens\":2000}));\nconst result = await tools.exec_command({cmd:\"cat utils.ts\",\"max_output_tokens\":5000});\nstore(\"originalUtils\",result.output);\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const original = load(\"originalUtils\");\nconst script = `\nconst fs = require('node:fs');\nconst assert = require('node:assert/strict');\nconst vm = require('node:vm');\nconst { Linter } = require('<repo>/node_modules/.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst parser = require('<repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser');\nconst sonarjs = require('<repo>/node_modules/eslint-plugin-sonarjs');\nconst ts = require('~/GitHub/ult"
+        },
+        {
+          "tool": "exec",
+          "target": "text(await tools.exec_command({cmd:\"ls <repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser\\ncat <repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser/package.json\",\"max_output_tokens\":2000}));\n"
+        },
+        {
+          "tool": "exec",
+          "target": "const script = `\nconst fs = require('node:fs');\nconst assert = require('node:assert/strict');\nconst vm = require('node:vm');\nconst { Linter } = require('<repo>/node_modules/.bun/eslint@10.12.0+a06c583137309ecc/node_modules/eslint');\nconst parser = require('<repo>/node_modules/.bun/@typescript-eslint+parser@8.71.0+5b5d036f16e06750/node_modules/@typescript-eslint/parser/dist/index.js');\nconst sonarjs = require('<repo>/node_modules/eslint-plugin-sonarjs');\nconst ts = require('<repo>/node_modules/typesc"
+        }
+      ],
+      "tokens": {
+        "input_tokens": 249059,
+        "cached_input_tokens": 223616,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4531,
+        "reasoning_output_tokens": 1158,
+        "total_tokens": 253590
+      },
+      "tokensUsedReportedOnStderr": 29974,
+      "costUSD": null,
+      "toolCalls": [
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec",
+        "exec"
+      ],
+      "toolCallCount": 7,
+      "approach": {
+        "categories": [
+          "extracted helper(s)"
+        ],
+        "helpers": [
+          "appendMatchingLocales"
+        ],
+        "movedVerbatim": true,
+        "selfReportedScore": "8 + 14 (linted it itself)",
+        "note": "Byte-identical to s2-codex-1."
+      }
+    }
+  ],
+  "summary": {
+    "overall": {
+      "runs": 16,
+      "agentExitedCleanly": 16,
+      "timedOut": 0,
+      "over5MinUltraciteTimeout": 0,
+      "cleared": 16,
+      "clearedAsUltraciteSees": 16,
+      "behaviorPreserved": 16,
+      "behaviorPreservedRealHelpersOnly": 16,
+      "signaturesPreserved": 16,
+      "runsWithSuppressions": 0,
+      "runsTouchingOtherFiles": 0,
+      "runsWithConfigFiles": 0,
+      "runsWithTypeErrors": 0,
+      "cognitiveSumBefore": {
+        "n": 16,
+        "min": 23,
+        "median": 30,
+        "mean": 30,
+        "max": 37
+      },
+      "cognitiveSumAfter": {
+        "n": 16,
+        "min": 5,
+        "median": 12.5,
+        "mean": 15.5,
+        "max": 22
+      },
+      "cognitiveRemovedNet": {
+        "n": 16,
+        "min": 11,
+        "median": 15,
+        "mean": 14.5,
+        "max": 24
+      },
+      "originalFunctionCognitiveAfter": {
+        "n": 16,
+        "min": 5,
+        "median": 9.5,
+        "mean": 9.69,
+        "max": 12
+      },
+      "helperCognitiveSum": {
+        "n": 16,
+        "min": 0,
+        "median": 0.5,
+        "mean": 5.81,
+        "max": 14
+      },
+      "cognitiveMaxAfter": {
+        "n": 16,
+        "min": 5,
+        "median": 12,
+        "mean": 11.94,
+        "max": 14
+      },
+      "functionsAfter": {
+        "n": 16,
+        "min": 1,
+        "median": 2,
+        "mean": 1.69,
+        "max": 3
+      },
+      "cyclomaticSumAfter": {
+        "n": 16,
+        "min": 6,
+        "median": 12,
+        "mean": 11,
+        "max": 13
+      },
+      "decisionPointsBefore": {
+        "n": 16,
+        "min": 10,
+        "median": 11,
+        "mean": 11,
+        "max": 12
+      },
+      "decisionPointsAfter": {
+        "n": 16,
+        "min": 3,
+        "median": 10,
+        "mean": 9.31,
+        "max": 12
+      },
+      "runsMovingCodeVerbatimIntoHelper": 6,
+      "runsWithAHelperWithin2OfLimit": 6,
+      "maxDepthAfter": {
+        "n": 16,
+        "min": 1,
+        "median": 3,
+        "mean": 2.75,
+        "max": 4
+      },
+      "codeLinesAfter": {
+        "n": 16,
+        "min": 26,
+        "median": 36,
+        "mean": 37.69,
+        "max": 45
+      },
+      "wallSeconds": {
+        "n": 16,
+        "min": 24.4,
+        "median": 36.45,
+        "mean": 45.21,
+        "max": 83.2
+      },
+      "costUSD": {
+        "n": 8,
+        "min": 0.29932479999999995,
+        "median": 0.32155429999999996,
+        "mean": 0.32,
+        "max": 0.3310422
+      },
+      "totalTokens": {
+        "n": 16,
+        "min": 113084,
+        "median": 161778.5,
+        "mean": 187586.06,
+        "max": 333142
+      },
+      "outputTokens": {
+        "n": 16,
+        "min": 2315,
+        "median": 2735,
+        "mean": 3063.06,
+        "max": 4531
+      },
+      "approachCategories": {
+        "guard clause / early return": 5,
+        "lookup table / data-driven": 3,
+        "extracted helper(s)": 8,
+        "other restructuring": 2
+      }
+    },
+    "bySubject": {
+      "s1": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "behaviorPreserved": 8,
+        "signaturesPreserved": 8,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 8,
+          "min": 23,
+          "median": 23,
+          "mean": 23,
+          "max": 23
+        },
+        "cognitiveSumAfter": {
+          "n": 8,
+          "min": 5,
+          "median": 12,
+          "mean": 10.88,
+          "max": 12
+        },
+        "cognitiveRemovedNet": {
+          "n": 8,
+          "min": 11,
+          "median": 11,
+          "mean": 12.13,
+          "max": 18
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 8,
+          "min": 5,
+          "median": 12,
+          "mean": 10.88,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 8,
+          "min": 0,
+          "median": 0,
+          "mean": 0,
+          "max": 0
+        },
+        "cognitiveMaxAfter": {
+          "n": 8,
+          "min": 5,
+          "median": 12,
+          "mean": 10.88,
+          "max": 12
+        },
+        "functionsAfter": {
+          "n": 8,
+          "min": 1,
+          "median": 1,
+          "mean": 1.25,
+          "max": 3
+        },
+        "cyclomaticSumAfter": {
+          "n": 8,
+          "min": 6,
+          "median": 13,
+          "mean": 10.38,
+          "max": 13
+        },
+        "decisionPointsBefore": {
+          "n": 8,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "decisionPointsAfter": {
+          "n": 8,
+          "min": 3,
+          "median": 12,
+          "mean": 9.13,
+          "max": 12
+        },
+        "runsMovingCodeVerbatimIntoHelper": 0,
+        "runsWithAHelperWithin2OfLimit": 0,
+        "maxDepthAfter": {
+          "n": 8,
+          "min": 1,
+          "median": 1,
+          "mean": 1.63,
+          "max": 3
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 34,
+          "median": 45,
+          "mean": 41.38,
+          "max": 45
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 24.4,
+          "median": 36.45,
+          "mean": 38.42,
+          "max": 52.5
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.29932479999999995,
+          "median": 0.3198384,
+          "mean": 0.32,
+          "max": 0.32292899999999997
+        },
+        "totalTokens": {
+          "n": 8,
+          "min": 113084,
+          "median": 154187.5,
+          "mean": 156894,
+          "max": 224563
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 2315,
+          "median": 2665.5,
+          "mean": 2720,
+          "max": 3244
+        },
+        "approachCategories": {
+          "guard clause / early return": 5,
+          "lookup table / data-driven": 3
+        }
+      },
+      "s2": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "behaviorPreserved": 8,
+        "behaviorPreservedRealHelpersOnly": 8,
+        "signaturesPreserved": 8,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 8,
+          "min": 37,
+          "median": 37,
+          "mean": 37,
+          "max": 37
+        },
+        "cognitiveSumAfter": {
+          "n": 8,
+          "min": 13,
+          "median": 22,
+          "mean": 20.13,
+          "max": 22
+        },
+        "cognitiveRemovedNet": {
+          "n": 8,
+          "min": 15,
+          "median": 15,
+          "mean": 16.88,
+          "max": 24
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 8,
+          "min": 8,
+          "median": 8,
+          "mean": 8.5,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 8,
+          "min": 1,
+          "median": 14,
+          "mean": 11.63,
+          "max": 14
+        },
+        "cognitiveMaxAfter": {
+          "n": 8,
+          "min": 8,
+          "median": 14,
+          "mean": 13,
+          "max": 14
+        },
+        "functionsAfter": {
+          "n": 8,
+          "min": 2,
+          "median": 2,
+          "mean": 2.13,
+          "max": 3
+        },
+        "cyclomaticSumAfter": {
+          "n": 8,
+          "min": 10,
+          "median": 12,
+          "mean": 11.63,
+          "max": 12
+        },
+        "decisionPointsBefore": {
+          "n": 8,
+          "min": 10,
+          "median": 10,
+          "mean": 10,
+          "max": 10
+        },
+        "decisionPointsAfter": {
+          "n": 8,
+          "min": 7,
+          "median": 10,
+          "mean": 9.5,
+          "max": 10
+        },
+        "runsMovingCodeVerbatimIntoHelper": 6,
+        "runsWithAHelperWithin2OfLimit": 6,
+        "maxDepthAfter": {
+          "n": 8,
+          "min": 3,
+          "median": 4,
+          "mean": 3.88,
+          "max": 4
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 26,
+          "median": 35,
+          "mean": 34,
+          "max": 37
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 26,
+          "median": 49.55,
+          "mean": 52,
+          "max": 83.2
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.31693319999999997,
+          "median": 0.3243631,
+          "mean": 0.32,
+          "max": 0.3310422
+        },
+        "totalTokens": {
+          "n": 8,
+          "min": 122205,
+          "median": 215119,
+          "mean": 218278.13,
+          "max": 333142
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 2543,
+          "median": 3056.5,
+          "mean": 3406.13,
+          "max": 4531
+        },
+        "approachCategories": {
+          "extracted helper(s)": 8,
+          "other restructuring": 2
+        }
+      }
+    },
+    "byAgent": {
+      "claude": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "behaviorPreserved": 8,
+        "behaviorPreservedRealHelpersOnly": 8,
+        "signaturesPreserved": 8,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 8,
+          "min": 23,
+          "median": 30,
+          "mean": 30,
+          "max": 37
+        },
+        "cognitiveSumAfter": {
+          "n": 8,
+          "min": 5,
+          "median": 12.5,
+          "mean": 14,
+          "max": 22
+        },
+        "cognitiveRemovedNet": {
+          "n": 8,
+          "min": 11,
+          "median": 15,
+          "mean": 16,
+          "max": 24
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 8,
+          "min": 5,
+          "median": 9.5,
+          "mean": 9.38,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 8,
+          "min": 0,
+          "median": 0.5,
+          "mean": 4.63,
+          "max": 14
+        },
+        "cognitiveMaxAfter": {
+          "n": 8,
+          "min": 5,
+          "median": 11.5,
+          "mean": 10.88,
+          "max": 14
+        },
+        "functionsAfter": {
+          "n": 8,
+          "min": 1,
+          "median": 2,
+          "mean": 1.88,
+          "max": 3
+        },
+        "cyclomaticSumAfter": {
+          "n": 8,
+          "min": 6,
+          "median": 10.5,
+          "mean": 9.5,
+          "max": 13
+        },
+        "decisionPointsBefore": {
+          "n": 8,
+          "min": 10,
+          "median": 11,
+          "mean": 11,
+          "max": 12
+        },
+        "decisionPointsAfter": {
+          "n": 8,
+          "min": 3,
+          "median": 8,
+          "mean": 7.63,
+          "max": 12
+        },
+        "runsMovingCodeVerbatimIntoHelper": 2,
+        "runsWithAHelperWithin2OfLimit": 2,
+        "maxDepthAfter": {
+          "n": 8,
+          "min": 1,
+          "median": 3,
+          "mean": 3,
+          "max": 4
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 26,
+          "median": 36,
+          "mean": 35.38,
+          "max": 45
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 24.4,
+          "median": 26.75,
+          "mean": 27.73,
+          "max": 32
+        },
+        "costUSD": {
+          "n": 8,
+          "min": 0.29932479999999995,
+          "median": 0.32155429999999996,
+          "mean": 0.32,
+          "max": 0.3310422
+        },
+        "totalTokens": {
+          "n": 8,
+          "min": 113084,
+          "median": 159196.5,
+          "mean": 150588.38,
+          "max": 206627
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 2404,
+          "median": 2676.5,
+          "mean": 2761.25,
+          "max": 3244
+        },
+        "approachCategories": {
+          "guard clause / early return": 1,
+          "lookup table / data-driven": 3,
+          "extracted helper(s)": 4,
+          "other restructuring": 2
+        }
+      },
+      "codex": {
+        "runs": 8,
+        "agentExitedCleanly": 8,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 8,
+        "clearedAsUltraciteSees": 8,
+        "behaviorPreserved": 8,
+        "behaviorPreservedRealHelpersOnly": 8,
+        "signaturesPreserved": 8,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 8,
+          "min": 23,
+          "median": 30,
+          "mean": 30,
+          "max": 37
+        },
+        "cognitiveSumAfter": {
+          "n": 8,
+          "min": 12,
+          "median": 17,
+          "mean": 17,
+          "max": 22
+        },
+        "cognitiveRemovedNet": {
+          "n": 8,
+          "min": 11,
+          "median": 13,
+          "mean": 13,
+          "max": 15
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 8,
+          "min": 8,
+          "median": 10,
+          "mean": 10,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 8,
+          "min": 0,
+          "median": 7,
+          "mean": 7,
+          "max": 14
+        },
+        "cognitiveMaxAfter": {
+          "n": 8,
+          "min": 12,
+          "median": 13,
+          "mean": 13,
+          "max": 14
+        },
+        "functionsAfter": {
+          "n": 8,
+          "min": 1,
+          "median": 1.5,
+          "mean": 1.5,
+          "max": 2
+        },
+        "cyclomaticSumAfter": {
+          "n": 8,
+          "min": 12,
+          "median": 12.5,
+          "mean": 12.5,
+          "max": 13
+        },
+        "decisionPointsBefore": {
+          "n": 8,
+          "min": 10,
+          "median": 11,
+          "mean": 11,
+          "max": 12
+        },
+        "decisionPointsAfter": {
+          "n": 8,
+          "min": 10,
+          "median": 11,
+          "mean": 11,
+          "max": 12
+        },
+        "runsMovingCodeVerbatimIntoHelper": 4,
+        "runsWithAHelperWithin2OfLimit": 4,
+        "maxDepthAfter": {
+          "n": 8,
+          "min": 1,
+          "median": 2.5,
+          "mean": 2.5,
+          "max": 4
+        },
+        "codeLinesAfter": {
+          "n": 8,
+          "min": 35,
+          "median": 40,
+          "mean": 40,
+          "max": 45
+        },
+        "wallSeconds": {
+          "n": 8,
+          "min": 40.9,
+          "median": 62.25,
+          "mean": 62.7,
+          "max": 83.2
+        },
+        "costUSD": null,
+        "totalTokens": {
+          "n": 8,
+          "min": 145849,
+          "median": 224087,
+          "mean": 224583.75,
+          "max": 333142
+        },
+        "outputTokens": {
+          "n": 8,
+          "min": 2315,
+          "median": 3105.5,
+          "mean": 3364.88,
+          "max": 4531
+        },
+        "approachCategories": {
+          "guard clause / early return": 4,
+          "extracted helper(s)": 4
+        }
+      }
+    },
+    "bySubjectAgent": {
+      "s1/claude": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "behaviorPreserved": 4,
+        "signaturesPreserved": 4,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 4,
+          "min": 23,
+          "median": 23,
+          "mean": 23,
+          "max": 23
+        },
+        "cognitiveSumAfter": {
+          "n": 4,
+          "min": 5,
+          "median": 11,
+          "mean": 9.75,
+          "max": 12
+        },
+        "cognitiveRemovedNet": {
+          "n": 4,
+          "min": 11,
+          "median": 12,
+          "mean": 13.25,
+          "max": 18
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 4,
+          "min": 5,
+          "median": 11,
+          "mean": 9.75,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 4,
+          "min": 0,
+          "median": 0,
+          "mean": 0,
+          "max": 0
+        },
+        "cognitiveMaxAfter": {
+          "n": 4,
+          "min": 5,
+          "median": 11,
+          "mean": 9.75,
+          "max": 12
+        },
+        "functionsAfter": {
+          "n": 4,
+          "min": 1,
+          "median": 1,
+          "mean": 1.5,
+          "max": 3
+        },
+        "cyclomaticSumAfter": {
+          "n": 4,
+          "min": 6,
+          "median": 6,
+          "mean": 7.75,
+          "max": 13
+        },
+        "decisionPointsBefore": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "decisionPointsAfter": {
+          "n": 4,
+          "min": 3,
+          "median": 5,
+          "mean": 6.25,
+          "max": 12
+        },
+        "runsMovingCodeVerbatimIntoHelper": 0,
+        "runsWithAHelperWithin2OfLimit": 0,
+        "maxDepthAfter": {
+          "n": 4,
+          "min": 1,
+          "median": 2.5,
+          "mean": 2.25,
+          "max": 3
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 34,
+          "median": 36,
+          "mean": 37.75,
+          "max": 45
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 24.4,
+          "median": 29.8,
+          "mean": 29,
+          "max": 32
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.29932479999999995,
+          "median": 0.3198384,
+          "mean": 0.32,
+          "max": 0.32292899999999997
+        },
+        "totalTokens": {
+          "n": 4,
+          "min": 113084,
+          "median": 141266,
+          "mean": 139370.5,
+          "max": 161866
+        },
+        "outputTokens": {
+          "n": 4,
+          "min": 2404,
+          "median": 2979.5,
+          "mean": 2901.75,
+          "max": 3244
+        },
+        "approachCategories": {
+          "guard clause / early return": 1,
+          "lookup table / data-driven": 3
+        }
+      },
+      "s1/codex": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "behaviorPreserved": 4,
+        "signaturesPreserved": 4,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 4,
+          "min": 23,
+          "median": 23,
+          "mean": 23,
+          "max": 23
+        },
+        "cognitiveSumAfter": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "cognitiveRemovedNet": {
+          "n": 4,
+          "min": 11,
+          "median": 11,
+          "mean": 11,
+          "max": 11
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 4,
+          "min": 0,
+          "median": 0,
+          "mean": 0,
+          "max": 0
+        },
+        "cognitiveMaxAfter": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "functionsAfter": {
+          "n": 4,
+          "min": 1,
+          "median": 1,
+          "mean": 1,
+          "max": 1
+        },
+        "cyclomaticSumAfter": {
+          "n": 4,
+          "min": 13,
+          "median": 13,
+          "mean": 13,
+          "max": 13
+        },
+        "decisionPointsBefore": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "decisionPointsAfter": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "runsMovingCodeVerbatimIntoHelper": 0,
+        "runsWithAHelperWithin2OfLimit": 0,
+        "maxDepthAfter": {
+          "n": 4,
+          "min": 1,
+          "median": 1,
+          "mean": 1,
+          "max": 1
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 45,
+          "median": 45,
+          "mean": 45,
+          "max": 45
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 40.9,
+          "median": 49,
+          "mean": 47.85,
+          "max": 52.5
+        },
+        "costUSD": null,
+        "totalTokens": {
+          "n": 4,
+          "min": 145849,
+          "median": 163629,
+          "mean": 174417.5,
+          "max": 224563
+        },
+        "outputTokens": {
+          "n": 4,
+          "min": 2315,
+          "median": 2527,
+          "mean": 2538.25,
+          "max": 2784
+        },
+        "approachCategories": {
+          "guard clause / early return": 4
+        }
+      },
+      "s2/claude": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "behaviorPreserved": 4,
+        "behaviorPreservedRealHelpersOnly": 4,
+        "signaturesPreserved": 4,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 4,
+          "min": 37,
+          "median": 37,
+          "mean": 37,
+          "max": 37
+        },
+        "cognitiveSumAfter": {
+          "n": 4,
+          "min": 13,
+          "median": 19,
+          "mean": 18.25,
+          "max": 22
+        },
+        "cognitiveRemovedNet": {
+          "n": 4,
+          "min": 15,
+          "median": 18,
+          "mean": 18.75,
+          "max": 24
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 4,
+          "min": 8,
+          "median": 8,
+          "mean": 9,
+          "max": 12
+        },
+        "helperCognitiveSum": {
+          "n": 4,
+          "min": 1,
+          "median": 11,
+          "mean": 9.25,
+          "max": 14
+        },
+        "cognitiveMaxAfter": {
+          "n": 4,
+          "min": 8,
+          "median": 13,
+          "mean": 12,
+          "max": 14
+        },
+        "functionsAfter": {
+          "n": 4,
+          "min": 2,
+          "median": 2,
+          "mean": 2.25,
+          "max": 3
+        },
+        "cyclomaticSumAfter": {
+          "n": 4,
+          "min": 10,
+          "median": 11.5,
+          "mean": 11.25,
+          "max": 12
+        },
+        "decisionPointsBefore": {
+          "n": 4,
+          "min": 10,
+          "median": 10,
+          "mean": 10,
+          "max": 10
+        },
+        "decisionPointsAfter": {
+          "n": 4,
+          "min": 7,
+          "median": 9.5,
+          "mean": 9,
+          "max": 10
+        },
+        "runsMovingCodeVerbatimIntoHelper": 2,
+        "runsWithAHelperWithin2OfLimit": 2,
+        "maxDepthAfter": {
+          "n": 4,
+          "min": 3,
+          "median": 4,
+          "mean": 3.75,
+          "max": 4
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 26,
+          "median": 34.5,
+          "mean": 33,
+          "max": 37
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 26,
+          "median": 26.35,
+          "mean": 26.45,
+          "max": 27.1
+        },
+        "costUSD": {
+          "n": 4,
+          "min": 0.31693319999999997,
+          "median": 0.3243631,
+          "mean": 0.32,
+          "max": 0.3310422
+        },
+        "totalTokens": {
+          "n": 4,
+          "min": 122205,
+          "median": 159196.5,
+          "mean": 161806.25,
+          "max": 206627
+        },
+        "outputTokens": {
+          "n": 4,
+          "min": 2543,
+          "median": 2627,
+          "mean": 2620.75,
+          "max": 2686
+        },
+        "approachCategories": {
+          "extracted helper(s)": 4,
+          "other restructuring": 2
+        }
+      },
+      "s2/codex": {
+        "runs": 4,
+        "agentExitedCleanly": 4,
+        "timedOut": 0,
+        "over5MinUltraciteTimeout": 0,
+        "cleared": 4,
+        "clearedAsUltraciteSees": 4,
+        "behaviorPreserved": 4,
+        "behaviorPreservedRealHelpersOnly": 4,
+        "signaturesPreserved": 4,
+        "runsWithSuppressions": 0,
+        "runsTouchingOtherFiles": 0,
+        "runsWithConfigFiles": 0,
+        "runsWithTypeErrors": 0,
+        "cognitiveSumBefore": {
+          "n": 4,
+          "min": 37,
+          "median": 37,
+          "mean": 37,
+          "max": 37
+        },
+        "cognitiveSumAfter": {
+          "n": 4,
+          "min": 22,
+          "median": 22,
+          "mean": 22,
+          "max": 22
+        },
+        "cognitiveRemovedNet": {
+          "n": 4,
+          "min": 15,
+          "median": 15,
+          "mean": 15,
+          "max": 15
+        },
+        "originalFunctionCognitiveAfter": {
+          "n": 4,
+          "min": 8,
+          "median": 8,
+          "mean": 8,
+          "max": 8
+        },
+        "helperCognitiveSum": {
+          "n": 4,
+          "min": 14,
+          "median": 14,
+          "mean": 14,
+          "max": 14
+        },
+        "cognitiveMaxAfter": {
+          "n": 4,
+          "min": 14,
+          "median": 14,
+          "mean": 14,
+          "max": 14
+        },
+        "functionsAfter": {
+          "n": 4,
+          "min": 2,
+          "median": 2,
+          "mean": 2,
+          "max": 2
+        },
+        "cyclomaticSumAfter": {
+          "n": 4,
+          "min": 12,
+          "median": 12,
+          "mean": 12,
+          "max": 12
+        },
+        "decisionPointsBefore": {
+          "n": 4,
+          "min": 10,
+          "median": 10,
+          "mean": 10,
+          "max": 10
+        },
+        "decisionPointsAfter": {
+          "n": 4,
+          "min": 10,
+          "median": 10,
+          "mean": 10,
+          "max": 10
+        },
+        "runsMovingCodeVerbatimIntoHelper": 4,
+        "runsWithAHelperWithin2OfLimit": 4,
+        "maxDepthAfter": {
+          "n": 4,
+          "min": 4,
+          "median": 4,
+          "mean": 4,
+          "max": 4
+        },
+        "codeLinesAfter": {
+          "n": 4,
+          "min": 35,
+          "median": 35,
+          "mean": 35,
+          "max": 35
+        },
+        "wallSeconds": {
+          "n": 4,
+          "min": 72,
+          "median": 77.5,
+          "mean": 77.55,
+          "max": 83.2
+        },
+        "costUSD": null,
+        "totalTokens": {
+          "n": 4,
+          "min": 223611,
+          "median": 271123.5,
+          "mean": 274750,
+          "max": 333142
+        },
+        "outputTokens": {
+          "n": 4,
+          "min": 3427,
+          "median": 4404,
+          "mean": 4191.5,
+          "max": 4531
+        },
+        "approachCategories": {
+          "extracted helper(s)": 4
+        }
+      }
+    }
+  },
+  "handMadeReferences": {
+    "s1 guard clause only (same shape as the agents' early return)": {
+      "subject": "s1",
+      "file": "harness-tests/s1-guard.ts",
+      "functions": [
+        {
+          "name": "formatTimespan",
+          "cognitive": 12,
+          "cyclomatic": 13,
+          "maxDepth": 1
+        }
+      ],
+      "cognitiveSum": 12,
+      "passesAt15": true,
+      "passesAt20": true,
+      "behavior": "equivalent in all three behavior modes (scripts/test-behavior-harness.cjs)"
+    },
+    "s2 guard clauses only": {
+      "subject": "s2",
+      "file": "harness-tests/s2-ref-guards.ts",
+      "functions": [
+        {
+          "name": "computePreferredLocaleList",
+          "cognitive": 23,
+          "cyclomatic": 10,
+          "maxDepth": 5
+        }
+      ],
+      "cognitiveSum": 23,
+      "passesAt15": false,
+      "passesAt20": false,
+      "behavior": "equivalent in all three behavior modes (scripts/test-behavior-harness.cjs)"
+    },
+    "s2 guard clauses + string/object branch unified": {
+      "subject": "s2",
+      "file": "harness-tests/s2-ref-guards-unified.ts",
+      "functions": [
+        {
+          "name": "computePreferredLocaleList",
+          "cognitive": 16,
+          "cyclomatic": 9,
+          "maxDepth": 4
+        }
+      ],
+      "cognitiveSum": 16,
+      "passesAt15": false,
+      "passesAt20": true,
+      "behavior": "equivalent in all three behavior modes (scripts/test-behavior-harness.cjs)"
+    },
+    "s2 guard clauses + unified branch + .filter (no named helper)": {
+      "subject": "s2",
+      "file": "harness-tests/s2-ref-guards-filter.ts",
+      "functions": [
+        {
+          "name": "computePreferredLocaleList",
+          "cognitive": 9,
+          "cyclomatic": 7,
+          "maxDepth": 2
+        },
+        {
+          "name": "<callback to codes.filter>",
+          "cognitive": 0,
+          "cyclomatic": 1,
+          "maxDepth": 0
+        }
+      ],
+      "cognitiveSum": 9,
+      "passesAt15": true,
+      "passesAt20": true,
+      "behavior": "equivalent in all three behavior modes (scripts/test-behavior-harness.cjs)"
+    }
+  }
+}

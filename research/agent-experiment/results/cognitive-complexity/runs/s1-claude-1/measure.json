@@ -1,0 +1,224 @@
+{
+  "runId": "s1-claude-1",
+  "subject": "s1",
+  "agent": "claude",
+  "cliVersion": "2.1.296 (Claude Code)",
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "spawnError": null,
+  "wallSeconds": 24.4,
+  "wouldHaveTimedOutAtUltracite5Min": false,
+  "lint": {
+    "asUltraciteSees": {
+      "parseError": false,
+      "remaining": [],
+      "cleared": true
+    },
+    "genuine": {
+      "parseError": false,
+      "remaining": [],
+      "cleared": true
+    }
+  },
+  "before": {
+    "parseError": null,
+    "functions": [
+      {
+        "name": "formatTimespan",
+        "kind": "declaration",
+        "startLine": 44,
+        "endLine": 81,
+        "lines": 38,
+        "nestedIn": null,
+        "cognitive": 23,
+        "cyclomatic": 13,
+        "maxDepth": 2,
+        "biome": 23
+      }
+    ],
+    "functionCount": 1,
+    "cognitiveSum": 23,
+    "cognitiveMax": 23,
+    "cyclomaticSum": 13,
+    "biomeSumOfReported": 23,
+    "biomeFunctionsAtMost1": 0,
+    "maxDepth": 2,
+    "nonBlankLines": 80,
+    "codeLines": 44,
+    "unmatchedReports": 0,
+    "biomeOtherDiagnostics": [],
+    "topLevel": [
+      {
+        "name": "MINUTE_IN_SECONDS",
+        "kind": "const",
+        "init": "Literal"
+      },
+      {
+        "name": "HOUR_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "DAY_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "WEEK_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "MONTH_30_DAYS_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "formatTimespan",
+        "kind": "function"
+      }
+    ]
+  },
+  "after": {
+    "parseError": null,
+    "functions": [
+      {
+        "name": "formatTimespan",
+        "kind": "declaration",
+        "startLine": 44,
+        "endLine": 82,
+        "lines": 39,
+        "nestedIn": null,
+        "cognitive": 12,
+        "cyclomatic": 13,
+        "maxDepth": 1,
+        "biome": 12
+      }
+    ],
+    "functionCount": 1,
+    "cognitiveSum": 12,
+    "cognitiveMax": 12,
+    "cyclomaticSum": 13,
+    "biomeSumOfReported": 12,
+    "biomeFunctionsAtMost1": 0,
+    "maxDepth": 1,
+    "nonBlankLines": 81,
+    "codeLines": 45,
+    "unmatchedReports": 0,
+    "biomeOtherDiagnostics": [],
+    "topLevel": [
+      {
+        "name": "MINUTE_IN_SECONDS",
+        "kind": "const",
+        "init": "Literal"
+      },
+      {
+        "name": "HOUR_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "DAY_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "WEEK_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "MONTH_30_DAYS_IN_SECONDS",
+        "kind": "const",
+        "init": "BinaryExpression"
+      },
+      {
+        "name": "formatTimespan",
+        "kind": "function"
+      }
+    ]
+  },
+  "delta": {
+    "cognitiveSum": -11,
+    "cognitiveMax": -11,
+    "cyclomaticSum": 0,
+    "functionCount": 0,
+    "codeLines": 1,
+    "maxDepth": -1
+  },
+  "newFunctions": [],
+  "exports": {
+    "before": {
+      "formatTimespan": "(seconds: number) => string"
+    },
+    "after": {
+      "formatTimespan": "(seconds: number) => string"
+    },
+    "exportsPreserved": true,
+    "signaturesPreserved": true,
+    "addedExports": []
+  },
+  "typeErrorsAfter": [],
+  "behavior": {
+    "seed": 20261010,
+    "ok": true,
+    "cases": 5841
+  },
+  "cheating": {
+    "suppressionsAdded": {},
+    "configFiles": [],
+    "otherFileChanges": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "toolCallsOutsideRunDir": [],
+    "exposureInSessionLog": {},
+    "lockedDuringRun": null
+  },
+  "agentStats": {
+    "source": "Claude Code session transcript (~/.claude/projects/...)",
+    "cliVersionInTranscript": "2.1.296",
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "effort": [
+      "xhigh"
+    ],
+    "apiResponses": 3,
+    "tokens": {
+      "input": 6,
+      "output": 2404,
+      "cacheCreation": 29370,
+      "cacheRead": 81304
+    },
+    "costUSD": 0.29932479999999995,
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 2404,
+        "thinkingTokens": 431,
+        "cacheReadInputTokens": 81304,
+        "cacheCreationInputTokens": 29370,
+        "webSearchRequests": 0,
+        "costUSD": 0.29932479999999995
+      }
+    },
+    "toolCalls": [
+      {
+        "tool": "Read",
+        "target": "<run-root>/s1-claude-1/cache-life-type-utils.ts"
+      },
+      {
+        "tool": "Read",
+        "target": "<run-root>/s1-claude-1/cache-life-type-utils.ts.5446907a.json"
+      },
+      {
+        "tool": "Edit",
+        "target": "<run-root>/s1-claude-1/cache-life-type-utils.ts"
+      }
+    ],
+    "toolErrors": []
+  }
+}

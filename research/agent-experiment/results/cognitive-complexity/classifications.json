@@ -1,0 +1,114 @@
+{
+  "s1-claude-1": {
+    "categories": ["guard clause / early return"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "12 (by hand; did not lint)",
+    "note": "Inverted `if (seconds > 0) { … }` into `if (seconds <= 0) return seconds + ' seconds'`; the 11 checks are unchanged, just un-nested (NaN still falls through to the same final return)."
+  },
+  "s1-claude-2": {
+    "categories": ["lookup table / data-driven"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "about 5 (by hand; did not lint)",
+    "note": "Replaced the 11 ifs with two ordered tables (EXACT_TIMESPANS, PLURAL_TIMESPANS) searched with Array.prototype.find; outer guard kept. The two new 'functions' are anonymous .find callbacks scoring 0, not named helpers."
+  },
+  "s1-claude-3": {
+    "categories": ["lookup table / data-driven"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "11 (by hand; its eslint attempt via Bash was denied)",
+    "note": "Two ordered tables (EXACT_TIMESPANS, DIVISIBLE_TIMESPANS) walked with for…of loops inside the kept guard; 18144000 row kept. Nesting depth goes up (2→3) because the loops nest."
+  },
+  "s1-claude-4": {
+    "categories": ["lookup table / data-driven"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "11 (by hand; its Bash `ls` was denied)",
+    "note": "Same shape as s1-claude-3 (EXACT_TIMESPANS, TIMESPAN_UNITS + for…of); noted the 18144000 branch is unreachable but kept it."
+  },
+  "s1-codex-1": {
+    "categories": ["guard clause / early return"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "12 (linted it itself)",
+    "note": "`if (!(seconds > 0)) return seconds + ' seconds'`, a NaN-exact inversion of the guard; checks unchanged. Byte-identical to s1-codex-2/3/4 and the pilot."
+  },
+  "s1-codex-2": {
+    "categories": ["guard clause / early return"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "12 (linted it itself)",
+    "note": "Identical to s1-codex-1: `if (!(seconds > 0)) return …`."
+  },
+  "s1-codex-3": {
+    "categories": ["guard clause / early return"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "12 (linted it itself)",
+    "note": "Identical to s1-codex-1: `if (!(seconds > 0)) return …`."
+  },
+  "s1-codex-4": {
+    "categories": ["guard clause / early return"],
+    "helpers": [],
+    "movedVerbatim": false,
+    "selfReportedScore": "12 (linted it itself)",
+    "note": "Identical to s1-codex-1: `if (!(seconds > 0)) return …`."
+  },
+  "s2-claude-1": {
+    "categories": ["extracted helper(s)", "other restructuring"],
+    "helpers": ["getMatchingCodes"],
+    "movedVerbatim": false,
+    "selfReportedScore": "about 8 + 8 (by hand; its Bash was denied)",
+    "note": "Moved the two inner loops into getMatchingCodes and merged the string/object branches (`typeof l === 'string' ? [l] : l.codes`), removing one branch and one loop; outer if/else-if/for kept in place."
+  },
+  "s2-claude-2": {
+    "categories": ["extracted helper(s)"],
+    "helpers": ["findMatchingLocaleCodes"],
+    "movedVerbatim": true,
+    "selfReportedScore": "8 + 14, 'only one point under' (by hand)",
+    "note": "Moved the inner `for (loopLocale)` block verbatim (renames only) into findMatchingLocaleCodes, which returns an array the caller spreads. Helper scores 14 against a limit of 15."
+  },
+  "s2-claude-3": {
+    "categories": ["extracted helper(s)", "other restructuring"],
+    "helpers": ["getMatchingLocaleCodes"],
+    "movedVerbatim": false,
+    "selfReportedScore": "about 12 (by hand; its Bash was denied)",
+    "note": "Replaced the string/object branch and innermost loop with a small helper (ternary normalisation + .filter, cognitive 1); both outer loops stay in the main function, which now scores 12."
+  },
+  "s2-claude-4": {
+    "categories": ["extracted helper(s)"],
+    "helpers": ["getMatchingLocales"],
+    "movedVerbatim": true,
+    "selfReportedScore": "8 + 14, 'only just' (by hand)",
+    "note": "Same as s2-claude-2: verbatim move of the inner loop into getMatchingLocales (returns array; caller spreads). Helper scores 14."
+  },
+  "s2-codex-1": {
+    "categories": ["extracted helper(s)"],
+    "helpers": ["appendMatchingLocales"],
+    "movedVerbatim": true,
+    "selfReportedScore": "8 + 14 (linted it itself)",
+    "note": "Verbatim move of the inner loop into appendMatchingLocales(browserLocale, locales, result), which pushes into the caller's array (out-parameter). Byte-identical to s2-codex-3/4."
+  },
+  "s2-codex-2": {
+    "categories": ["extracted helper(s)"],
+    "helpers": ["appendMatchingLocaleCodes"],
+    "movedVerbatim": true,
+    "selfReportedScore": "8 + 14 (linted it itself)",
+    "note": "Same as s2-codex-1 except the helper is named appendMatchingLocaleCodes."
+  },
+  "s2-codex-3": {
+    "categories": ["extracted helper(s)"],
+    "helpers": ["appendMatchingLocales"],
+    "movedVerbatim": true,
+    "selfReportedScore": "8 + 14 (linted it itself)",
+    "note": "Byte-identical to s2-codex-1."
+  },
+  "s2-codex-4": {
+    "categories": ["extracted helper(s)"],
+    "helpers": ["appendMatchingLocales"],
+    "movedVerbatim": true,
+    "selfReportedScore": "8 + 14 (linted it itself)",
+    "note": "Byte-identical to s2-codex-1."
+  }
+}

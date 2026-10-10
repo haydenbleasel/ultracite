@@ -1,0 +1,19 @@
+{
+  "root": true,
+  "vcs": { "enabled": false },
+  "files": { "ignoreUnknown": true, "maxSize": 10000000 },
+  "formatter": { "enabled": false },
+  "assist": { "enabled": false },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": false,
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": { "maxAllowedComplexity": 1 }
+        }
+      }
+    }
+  }
+}

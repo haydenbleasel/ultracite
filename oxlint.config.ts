@@ -48,6 +48,12 @@ export default defineConfig({
     // Deliberately uses CommonJS in Astro frontmatter so the astro override
     // test can assert the backfilled rules still fire.
     "packages/cli/__tests__/fixtures/astro-prefer-module",
+    // Blog research harnesses (see research/README.md). The fixtures are
+    // third-party code, deliberately complex cases and agent output, and the
+    // results are generated. The scripts aren't shipped, and lint autofixes
+    // (sorted keys, rewritten regexes) would change their output, which has to
+    // stay byte-for-byte reproducible.
+    "research",
   ],
   overrides: [
     {

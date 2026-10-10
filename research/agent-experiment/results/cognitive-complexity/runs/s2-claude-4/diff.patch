@@ -1,0 +1,48 @@
+--- a/utils.ts
++++ b/utils.ts
+@@ -77,6 +77,24 @@
+ declare function normalizeTheLocale(locale: string): string;
+ // --- end stubs ---
+ 
++function getMatchingLocales(browserLocale: string, locales: Locales): string[] {
++	const matches: string[] = [];
++	for (const loopLocale of locales) {
++		if (typeof loopLocale === 'string') {
++			if (normalizeTheLocale(loopLocale) === normalizeTheLocale(browserLocale)) {
++				matches.push(loopLocale);
++			}
++		} else {
++			for (const code of loopLocale.codes) {
++				if (normalizeTheLocale(code) === normalizeTheLocale(browserLocale)) {
++					matches.push(code);
++				}
++			}
++		}
++	}
++	return matches;
++}
++
+ export function computePreferredLocaleList(request: Request, locales: Locales): string[] {
+ 	const acceptHeader = request.headers.get('Accept-Language');
+ 	let result: string[] = [];
+@@ -88,19 +106,7 @@
+ 			return getAllCodes(locales);
+ 		} else if (browserLocaleList.length > 0) {
+ 			for (const browserLocale of browserLocaleList) {
+-				for (const loopLocale of locales) {
+-					if (typeof loopLocale === 'string') {
+-						if (normalizeTheLocale(loopLocale) === normalizeTheLocale(browserLocale.locale)) {
+-							result.push(loopLocale);
+-						}
+-					} else {
+-						for (const code of loopLocale.codes) {
+-							if (normalizeTheLocale(code) === normalizeTheLocale(browserLocale.locale)) {
+-								result.push(code);
+-							}
+-						}
+-					}
+-				}
++				result.push(...getMatchingLocales(browserLocale.locale, locales));
+ 			}
+ 		}
+ 	}
