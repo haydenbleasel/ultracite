@@ -15,7 +15,7 @@ describe("getEditorFileTargets", () => {
       })
     );
     expect(universalTarget?.editorIds).toEqual(
-      expect.arrayContaining(["vscode", "cursor", "codebuddy", "windsurf"])
+      expect.arrayContaining(["vscode", "cursor", "codebuddy", "devin"])
     );
     expect(universalTarget?.promptLabel).toContain(
       "creates .vscode/settings.json"

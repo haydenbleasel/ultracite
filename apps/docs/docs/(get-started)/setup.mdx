@@ -3,7 +3,7 @@ title: Setup
 description: Install Ultracite with your preferred package manager, choose the right presets, and generate editor and agent config for your project.
 ---
 
-Ultracite can be installed with all major package managers. You'll need Node.js 20.19+ (or 22.13+ on Node 22) and a project with a `package.json` file. If you're new to Ultracite, the [introduction](/docs) covers what it is and which toolchains it supports.
+Ultracite can be installed with all major package managers. You'll need Node.js 22.18 or later (or Bun) and a project with a `package.json` file. If you're new to Ultracite, the [introduction](/docs) covers what it is and which toolchains it supports.
 
 ## Installation
 
@@ -19,53 +19,58 @@ You can optionally pass the following flags to the `init` command:
 | --- | --- | --- |
 | `--linter` | The linting toolchain to use. When omitted and prompts are skipped, init keeps the linter the project already uses, or picks `oxlint` for a project without one. | `oxlint`, `biome`, `eslint` |
 | `--pm` | The package manager to use. | `pnpm`, `bun`, `yarn`, `npm`, `deno`, `nub`, `aube` |
-| `--frameworks` | The frameworks to configure. | Space-separated: `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest` |
+| `--frameworks` | The frameworks to configure. | Space-separated: `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`, `cypress`, `storybook` |
 | `--workspace-framework` | Frameworks for one workspace of a monorepo, as `<path>=<framework>`. Writes a config in that workspace that extends the root config. See [Monorepos](/docs/monorepos#different-frameworks-per-workspace). | Space-separated: `apps/web=react`, `apps/docs=astro` |
-| `--editors` | The editors to configure. | Space-separated: `universal`, `vscode`, `cursor`, `windsurf`, `antigravity`, `kiro`, `trae`, `void`, `bob`, `codebuddy`, `zed`. Use `universal` to write `.vscode/settings.json` for every VS Code-based editor. |
-| `--agents` | The AI agents to configure. | Space-separated: `universal`, `claude`, `codex`, `jules`, `replit`, `devin`, `lovable`, `zencoder`, `ona`, `openclaw`, `snowflake-cortex`, `deepagents`, `qoder`, `kimi-cli`, `xum`, `pi`, `adal`, `copilot`, `cline`, `amp`, `aider`, `open-hands`, `gemini`, `junie`, `augmentcode`, `bob`, `kilo-code`, `goose`, `warp`, `droid`, `opencode`, `crush`, `qwen`, `kiro-cli`, `firebender`, `cursor-cli`, `mistral-vibe`, `vercel`, `fx`, `antigravity`, `grok` |
-| `--hooks` | The agent hooks to configure. | Space-separated: `cursor`, `windsurf`, `codebuddy`, `claude`, `deepagents`, `copilot`, `grok` |
+| `--editors` | The editors to configure. | Space-separated: `universal`, `vscode`, `cursor`, `devin`, `antigravity`, `kiro`, `trae`, `void`, `bob`, `codebuddy`, `zed`. Use `universal` to write `.vscode/settings.json` for every VS Code-based editor. |
+| `--agents` | The AI agents to configure. | Space-separated: `universal`, `claude`, `codex`, `jules`, `replit`, `devin`, `lovable`, `zencoder`, `ona`, `openclaw`, `snowflake-coco`, `deepagents`, `qoder`, `kimi-code`, `xum`, `pi`, `adal`, `copilot`, `cline`, `amp`, `aider`, `open-hands`, `gemini`, `junie`, `augmentcode`, `bob`, `kilo-code`, `goose`, `warp`, `droid`, `opencode`, `crush`, `qwen`, `kiro-cli`, `firebender`, `cursor-cli`, `mistral-vibe`, `vercel`, `fx`, `antigravity`, `grok` |
+| `--hooks` | The agent hooks to configure. | Space-separated: `cursor`, `devin`, `codebuddy`, `claude`, `deepagents`, `copilot`, `grok` |
 | `--integrations` | Additional integrations to set up. | Space-separated: `husky`, `lefthook`, `lint-staged`, `pre-commit` |
 | `--install-skill` | Install the reusable Ultracite skill after setup. | (no value needed) |
 | `--js-plugins` | Optional Oxlint JS plugins to enable. Only Oxlint runs them, so without `--linter`, init skips the linter prompt and keeps the project's linter (or picks `oxlint`), and stops if that linter isn't Oxlint. | Space-separated: `@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc`, `oxlint-plugin-react-doctor` |
-| `--type-aware` | Enable type-aware linting. Adds project/scanner rules for Biome, installs `oxlint-tsgolint` for Oxlint. | (no value needed) |
+| `--type-aware` | Turn on type-aware linting: the rules that need type information or a scan of the whole project. Adds `ultracite/eslint/type-aware` for ESLint and `ultracite/biome/type-aware` for Biome; for Oxlint, installs `oxlint-tsgolint` and sets `typeAware` in the config. Also turns on `strictNullChecks` in your tsconfig files, which those rules need. Without the flag, an interactive run asks. | (no value needed) |
 | `--skip-install` | Skip installing dependencies. | (no value needed) |
-| `--quiet` | Suppress interactive prompts and progress output. | (no value needed, automatically enabled in CI) |
+| `--yes`, `-y` | Take the default for every question no flag answers, without prompting. | (no value needed, on automatically in CI and when there's no terminal) |
+| `--quiet` | Only print warnings and errors. | (no value needed) |
 
-Every prompt, including the skill one, is skipped when you pass `--quiet` or any of `--pm`, `--editors`, `--agents`, `--hooks`, `--integrations`, `--frameworks`, or `--workspace-framework`. Whatever those flags leave out takes its default: no editors, agents, hooks, or integrations, and no skill unless you pass `--install-skill`. So you can re-run `init` with just `--hooks` or `--agents` to add those to a project without changing its linter. In the interactive prompt, the linter the project already uses is preselected.
+Every prompt, including the skill one, is skipped when you pass `--yes` or any of `--pm`, `--editors`, `--agents`, `--hooks`, `--integrations`, `--frameworks`, or `--workspace-framework`. Whatever those flags leave out takes its default: no editors, agents, hooks, or integrations, and no skill unless you pass `--install-skill`. So you can re-run `init` with just `--hooks` or `--agents` to add those to a project without changing its linter. In the interactive prompt, the linter the project already uses is preselected.
 
-`init` checks every flag value before it changes anything. An unknown value (for example, `--linter eslnt`) stops it with a list of the valid values, and `--js-plugins` with `--linter biome` or `--linter eslint` stops it too.
+`init` asks every question before it changes anything. When you pick a different linter, an interactive run lists the other linters' config files and packages and asks before removing them; if you keep them, `ultracite check` may still find and run the old linter. When type-aware linting is on, it also lists the tsconfig files that don't have `strictNullChecks` yet and asks before turning it on. `--yes` does both without asking. An ESLint setup keeps legacy `.eslintrc` files, which ESLint 10 doesn't read.
+
+`init` checks every flag value before it changes anything. An unknown value (for example, `--linter eslnt`) stops it with a list of the valid values, and `--js-plugins` with `--linter biome` or `--linter eslint` stops it too. `--agents` is the exception: an agent ID `init` doesn't know gets `AGENTS.md`, which most agents read, and a warning. The old IDs of renamed agents and editors (`amazon-q-cli`, `mux`, `kimi-cli`, `snowflake-cortex` and `windsurf`) still work, with a note to switch to the new one.
 
 ### Programmatic Usage
 
-For tools that need to call Ultracite programmatically (like scaffolding CLIs), you can use the `--quiet` flag to suppress interactive prompts and progress output:
+For tools that need to call Ultracite programmatically (like scaffolding CLIs), pass `--yes` to skip the prompts and `--quiet` to drop the progress output:
 
 ```bash title="Terminal"
-npx ultracite init --quiet --pm npm
+npx ultracite init --yes --quiet --pm npm
 ```
 
-The `--quiet` flag is automatically enabled when the `CI` environment variable is set to `true` or `1`, making it suitable for CI/CD pipelines:
+`init` takes the defaults on its own when the `CI` environment variable is `true` or `1`, or when there's no terminal to answer prompts in, so it never waits for input in a pipeline:
 
 ```bash title="Terminal"
 CI=true npx ultracite init --pm npm
 ```
 
-In quiet mode, Ultracite will:
+With `--yes`, Ultracite will:
 
 - Skip all interactive prompts
 - Keep the project's current linter, or use Oxlint + Oxfmt for a project without one
-- Suppress the intro banner, spinners, and progress messages (warnings, such as a config file it couldn't update, and errors still print)
+- Remove other linters' configs and packages, and turn on `strictNullChecks` when type-aware linting is on, without asking
 - Only set up editors, agents, hooks, Git hooks, and the skill when you pass their flags
 - Exit with code 0 on success or 1 on failure
 
-You can combine `--quiet` with `--linter` to specify a toolchain:
+With `--quiet`, it leaves out the intro banner, spinners, and progress messages. Warnings, such as a config file it couldn't update, and errors still print.
+
+You can combine `--yes` with `--linter` to specify a toolchain:
 
 ```bash title="Terminal"
-npx ultracite init --quiet --linter eslint --pm npm
+npx ultracite init --yes --linter eslint --pm npm
 ```
 
 ### Editor Extensions
 
-When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. If the settings file already existed, or the install failed, install them yourself. The Stylelint extension is never installed for you:
+When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. It installs them with your editor's own command-line launcher (`code`, `cursor`, `devin-desktop` or `windsurf`, `kiro` or `void`), so they land in the editor you picked. It doesn't install them into Antigravity, CodeBuddy, IBM Bob or Trae, so install them from the editor's Extensions view. Also install them yourself if the settings file already existed, the launcher isn't on your `PATH`, or the install failed. The Stylelint extension is never installed for you. For VS Code (use your editor's launcher in place of `code`):
 
 ```bash title="Terminal"
 # Oxlint + Oxfmt

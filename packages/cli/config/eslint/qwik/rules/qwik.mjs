@@ -1,5 +1,7 @@
 import plugin from "eslint-plugin-qwik";
 
+import { splitTypeChecked } from "../../core/type-checked.mjs";
+
 const { rules } = plugin;
 
 const availableKeys = Object.keys(rules).filter(
@@ -12,6 +14,15 @@ const baseRules = Object.fromEntries(
 
 const overrideRules = {};
 
-const config = Object.assign(baseRules, overrideRules);
+// The type-checked rules run in the type-aware add-on. These call the type
+// checker without marking themselves `requiresTypeChecking`.
+const { syntactic, typeChecked } = splitTypeChecked(
+  "qwik",
+  plugin,
+  Object.assign(baseRules, overrideRules),
+  ["valid-lexical-scope"]
+);
 
-export default config;
+export const typeCheckedRules = typeChecked;
+
+export default syntactic;

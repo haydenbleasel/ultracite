@@ -38,7 +38,26 @@ All these defaults aim to enforce consistent style and prevent common errors wit
 
 ## Type-Aware Rules
 
-Ultracite ships an optional `type-aware` preset for Biome that enables project-graph and type-aware rules — `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes`, and `useArraySortCompare`. Note that `useImportExtensions` requires relative imports to include their file extension. These rules require Biome's scanner, so they're slower and shipped as a separate layer:
+Rules that read type information, or scan the whole project, are slower than the rest and need more setup, so every linter keeps them out of `core`. Turn them on at setup time with `npx ultracite init --type-aware`, which also turns on `strictNullChecks` in your tsconfig files.
+
+### ESLint
+
+The `type-aware` preset adds the `@typescript-eslint` rules that need a TypeScript program, such as `no-floating-promises`, `no-unsafe-return` and `strict-boolean-expressions`, and points the parser at your tsconfig files with the project service. `core` lints TypeScript without them, so it needs no tsconfig. Add `type-aware` straight after `core`:
+
+```js title="eslint.config.mjs"
+import core from "ultracite/eslint/core";
+import typeAware from "ultracite/eslint/type-aware";
+import vitest from "ultracite/eslint/vitest";
+import vitestTypeAware from "ultracite/eslint/vitest/type-aware";
+
+export default [...core, ...typeAware, ...vitest, ...vitestTypeAware];
+```
+
+Some framework plugins have type-aware rules of their own, which live in an add-on after the framework preset: `ultracite/eslint/<framework>/type-aware` for Angular, Jest, NestJS, Qwik, TanStack and Vitest. `init --type-aware` adds the add-ons for the frameworks you pick.
+
+### Biome
+
+The `type-aware` preset enables project-graph and type-aware rules: `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`. These rules require Biome's scanner, so they're slower and shipped as a separate layer:
 
 ```jsonc title="biome.jsonc"
 {
@@ -46,7 +65,9 @@ Ultracite ships an optional `type-aware` preset for Biome that enables project-g
 }
 ```
 
-You can also enable this at setup time with `npx ultracite init --type-aware`. For Oxlint, the same flag installs `oxlint-tsgolint` for type-aware linting instead.
+### Oxlint
+
+Oxlint runs the type-aware rules `core` lists, such as `typescript/no-floating-promises`, through `oxlint-tsgolint`. `init --type-aware` installs it and sets `typeAware` in the config's `options`.
 
 ## Safe Fixes (Biome)
 

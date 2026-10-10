@@ -575,6 +575,21 @@ describe("detectFrameworks", () => {
     expect(new Set(result)).toEqual(new Set(["next", "react", "vitest"]));
   });
 
+  test("detects Cypress and Storybook", async () => {
+    mockDetectFrameworkFs({
+      "package.json": JSON.stringify({
+        devDependencies: {
+          "@storybook/react-vite": "^10.0.0",
+          cypress: "^15.0.0",
+          storybook: "^10.0.0",
+        },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(new Set(["cypress", "storybook"]));
+  });
+
   test("expands meta-framework deps to implied frameworks", async () => {
     mockDetectFrameworkFs({
       "package.json": JSON.stringify({

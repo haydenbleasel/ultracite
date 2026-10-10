@@ -21,6 +21,8 @@ export interface AgentSettings {
  * and a name.
  */
 export interface Agent {
+  /** IDs the agent had before a rename, which `--agents` still accepts. */
+  aliases?: string[];
   hooks?: HooksConfig;
   id: string;
   /**
@@ -102,7 +104,8 @@ export const agents: Agent[] = [
     name: "OpenClaw",
   },
   {
-    id: "snowflake-cortex",
+    aliases: ["snowflake-cortex"],
+    id: "snowflake-coco",
     name: "Snowflake CoCo",
   },
   {
@@ -136,10 +139,12 @@ export const agents: Agent[] = [
     name: "Qoder",
   },
   {
-    id: "kimi-cli",
+    aliases: ["kimi-cli"],
+    id: "kimi-code",
     name: "Kimi Code CLI",
   },
   {
+    aliases: ["mux"],
     id: "xum",
     name: "Xum",
   },
@@ -260,6 +265,7 @@ export const agents: Agent[] = [
     name: "Qwen Code",
   },
   {
+    aliases: ["amazon-q-cli"],
     id: "kiro-cli",
     name: "Kiro CLI",
   },

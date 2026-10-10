@@ -20,7 +20,57 @@ const eslintConfigPaths = eslintConfigNames.map((name) => `./${name}`);
 
 const defaultConfigPath = "./eslint.config.mjs";
 
-const ULTRACITE_PRESET_RE = /^ultracite\/eslint\/(?<preset>[a-z0-9-]+)$/u;
+const ULTRACITE_PRESET_RE =
+  /^ultracite\/eslint\/(?<preset>[a-z0-9-]+(?:\/[a-z0-9-]+)?)$/u;
+const PRESET_WORD_BREAK_RE = /[-/](?<letter>[a-z0-9])/gu;
+
+const TYPE_AWARE_PRESET = "type-aware";
+const TYPE_AWARE_ADD_ON_SUFFIX = `/${TYPE_AWARE_PRESET}`;
+
+// Frameworks whose plugins have rules that read type information. Those
+// rules live in an add-on preset (ultracite/eslint/<framework>/type-aware)
+// that goes with the type-aware preset.
+const frameworksWithTypeAwareAddOn = new Set([
+  "angular",
+  "jest",
+  "nestjs",
+  "qwik",
+  "tanstack",
+  "vitest",
+]);
+
+const isTypeAwarePreset = (preset: string): boolean =>
+  preset === TYPE_AWARE_PRESET || preset.endsWith(TYPE_AWARE_ADD_ON_SUFFIX);
+
+// The name a preset is imported as: `type-aware` becomes `typeAware` and
+// `jest/type-aware` becomes `jestTypeAware`.
+const presetIdentifier = (preset: string): string =>
+  preset.replaceAll(PRESET_WORD_BREAK_RE, (_match, letter: string) =>
+    letter.toUpperCase()
+  );
+
+// The framework presets in order, each followed by its type-aware add-on
+// when the config is type-aware.
+const withTypeAwareAddOns = (
+  frameworks: string[],
+  typeAware: boolean
+): string[] =>
+  frameworks.flatMap((framework) =>
+    typeAware && frameworksWithTypeAwareAddOn.has(framework)
+      ? [framework, `${framework}${TYPE_AWARE_ADD_ON_SUFFIX}`]
+      : [framework]
+  );
+
+// Whether the root config already uses the type-aware preset, which a
+// workspace config's framework add-ons then go with.
+const configIsTypeAware = async (configPath: string): Promise<boolean> => {
+  try {
+    const content = await readFile(configPath, "utf-8");
+    return content.includes(`"ultracite/eslint/${TYPE_AWARE_PRESET}"`);
+  } catch {
+    return false;
+  }
+};
 
 const getEslintConfigPath = (): string | null => {
   for (const path of eslintConfigPaths) {
@@ -33,6 +83,11 @@ const getEslintConfigPath = (): string | null => {
 
 interface EslintOptions {
   frameworks?: (typeof options.frameworks)[number][];
+  /**
+   * Adds the type-aware preset. It is never removed, so re-running init
+   * without --type-aware keeps a project's type-aware setup.
+   */
+  typeAware?: boolean;
 }
 
 // Everything in an existing Ultracite config besides the presets: carried
@@ -49,19 +104,30 @@ interface EslintExtras {
 
 const generateEslintConfig = (
   frameworks: string[],
+  typeAware: boolean,
   extras?: EslintExtras
 ): string => {
-  const presets = ["core", ...frameworks.map(validateFrameworkName)];
+  // The type-aware preset goes straight after core, which it extends, so
+  // framework presets that switch its rules off for component scripts win.
+  const presets = [
+    "core",
+    ...(typeAware ? [TYPE_AWARE_PRESET] : []),
+    ...withTypeAwareAddOns(frameworks.map(validateFrameworkName), typeAware),
+  ];
   const imports = [
     ...presets.map(
-      (preset) => `import ${preset} from "ultracite/eslint/${preset}";`
+      (preset) =>
+        `import ${presetIdentifier(preset)} from "ultracite/eslint/${preset}";`
     ),
     ...(extras?.imports ?? []),
   ].join("\n");
   const statements = extras?.statements.join("\n\n") ?? "";
   const entries = renderEntries(
     [
-      ...presets.map((preset) => ({ comment: null, text: `...${preset}` })),
+      ...presets.map((preset) => ({
+        comment: null,
+        text: `...${presetIdentifier(preset)}`,
+      })),
       ...(extras?.entries ?? []),
     ],
     extras?.danglingComments
@@ -158,14 +224,21 @@ const getWorkspaceDirective = (
 const generateWorkspaceConfig = (
   rootConfigImport: string,
   frameworks: string[],
+  typeAware: boolean,
   workspacePackage: PackageJson | undefined
 ): string => {
-  const presets = frameworks.map(validateFrameworkName);
+  const presets = withTypeAwareAddOns(
+    frameworks.map(validateFrameworkName),
+    typeAware
+  );
   const imports = presets
-    .map((preset) => `import ${preset} from "ultracite/eslint/${preset}";`)
+    .map(
+      (preset) =>
+        `import ${presetIdentifier(preset)} from "ultracite/eslint/${preset}";`
+    )
     .join("\n");
   const entries = renderEntries(
-    [rootConfigIdentifier, ...presets].map((name) => ({
+    [rootConfigIdentifier, ...presets.map(presetIdentifier)].map((name) => ({
       comment: null,
       text: `...${name}`,
     }))
@@ -185,7 +258,10 @@ ${entries}
 
 export const eslint = {
   create: async (opts?: EslintOptions) => {
-    const config = generateEslintConfig(opts?.frameworks ?? []);
+    const config = generateEslintConfig(
+      opts?.frameworks ?? [],
+      opts?.typeAware ?? false
+    );
     await writeProjectFile(defaultConfigPath, config);
   },
   // ESLint uses the config nearest each file instead of merging it with the
@@ -203,6 +279,7 @@ export const eslint = {
       generateWorkspaceConfig(
         `${pathToRoot(dir)}/${rootConfigPath.slice(2)}`,
         frameworks,
+        await configIsTypeAware(rootConfigPath),
         readWorkspacePackageJson(dir)
       )
     );
@@ -238,10 +315,18 @@ export const eslint = {
     }
 
     // Keep the presets the config already had; init adds the selected ones.
+    // The type-aware presets are regenerated from whether any was there.
+    const existingPresets = existing?.presets ?? [];
     const frameworks = [
-      ...new Set([...(existing?.presets ?? []), ...(opts?.frameworks ?? [])]),
-    ].filter((preset) => preset !== "core");
-    const config = generateEslintConfig(frameworks, existing ?? undefined);
+      ...new Set([...existingPresets, ...(opts?.frameworks ?? [])]),
+    ].filter((preset) => preset !== "core" && !isTypeAwarePreset(preset));
+    const typeAware =
+      opts?.typeAware === true || existingPresets.some(isTypeAwarePreset);
+    const config = generateEslintConfig(
+      frameworks,
+      typeAware,
+      existing ?? undefined
+    );
 
     // Only overwrite a config file that can hold the generated ESM module;
     // CJS configs (eslint.config.cjs/.cts) get the default .mjs file instead,

@@ -40,10 +40,11 @@ const CLI_PACKAGE_JSON = path.join(
 /**
  * The ESLint toolchain needs a few packages the generated config uses: the
  * stylelint config packages its stylelint config extends (`stylelint` alone
- * can't resolve them) and `storybook`, a required peer of the unconditionally
- * imported `eslint-plugin-storybook`. Newer `ultracite init --linter eslint`
- * installs these, but a `base` build predating that fix does not, so we install
- * them here to keep both builds runnable. Versions come from the CLI's own
+ * can't resolve them) and `storybook`, a required peer of
+ * `eslint-plugin-storybook`, which the core preset imported before v8. Newer
+ * `ultracite init --linter eslint` installs these, but a `base` build
+ * predating that fix does not, so we install them here to keep both builds
+ * runnable; a name missing from the CLI's devDependencies is skipped. Versions come from the CLI's own
  * package.json so they never drift. Benchmark-only setup — it does not change
  * what ultracite ships, and it is harmless when init already added them.
  */

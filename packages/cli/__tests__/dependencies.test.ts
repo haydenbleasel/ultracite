@@ -4,6 +4,7 @@ import path from "node:path";
 import { options } from "../src/data/options";
 import {
   buildEslintDevDependencies,
+  dependencyNamesByLinter,
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
 } from "../src/dependencies";
@@ -31,13 +32,18 @@ const packageName = (specifier: string): string => {
     : (segments[0] ?? specifier);
 };
 
-// Every package a preset's config (and its rule files) imports.
+const modulesIn = (dir: string): string[] =>
+  readDir(dir)
+    .filter((file) => file.endsWith(".mjs"))
+    .map((file) => path.join(dir, file));
+
+// Every package a preset's modules, rule files and type-aware add-on import.
 const presetImports = (preset: string): string[] => {
   const presetDir = path.join(eslintConfigDir, preset);
-  const rulesDir = path.join(presetDir, "rules");
   const files = [
-    path.join(presetDir, "eslint.config.mjs"),
-    ...readDir(rulesDir).map((file) => path.join(rulesDir, file)),
+    ...modulesIn(presetDir),
+    ...modulesIn(path.join(presetDir, "rules")),
+    ...modulesIn(path.join(presetDir, "type-aware")),
   ];
   const packages = new Set<string>();
 
@@ -78,6 +84,53 @@ describe("ESLint dependencies", () => {
         });
       }
     }
+  });
+
+  test("installs every package the type-aware preset imports", () => {
+    const installed = Object.keys(eslintCoreDevDependencies);
+
+    for (const dependency of presetImports("type-aware")) {
+      expect(installed).toContain(dependency);
+    }
+  });
+
+  test("installs Cypress and Storybook support only with their presets", () => {
+    const core = Object.keys(eslintCoreDevDependencies);
+
+    for (const name of [
+      "eslint-plugin-cypress",
+      "eslint-plugin-storybook",
+      "storybook",
+    ]) {
+      expect(core).not.toContain(name);
+    }
+    expect(Object.keys(eslintFrameworkDevDependencies.cypress)).toEqual([
+      "eslint-plugin-cypress",
+    ]);
+    expect(Object.keys(eslintFrameworkDevDependencies.storybook)).toEqual([
+      "eslint-plugin-storybook",
+      "storybook",
+    ]);
+  });
+
+  test("no longer installs the Prettier plugins but still prunes them", () => {
+    const core = Object.keys(eslintCoreDevDependencies);
+
+    for (const name of ["eslint-plugin-prettier", "stylelint-prettier"]) {
+      expect(core).not.toContain(name);
+      expect(dependencyNamesByLinter.eslint.has(name)).toBe(true);
+    }
+  });
+
+  test("pins every package instead of installing latest", () => {
+    const versions = [
+      ...Object.values(eslintCoreDevDependencies),
+      ...Object.values(eslintFrameworkDevDependencies).flatMap((dependencies) =>
+        Object.values(dependencies)
+      ),
+    ];
+
+    expect(versions).not.toContain("latest");
   });
 
   test("installs the NestJS plugin with the nestjs preset", () => {

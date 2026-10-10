@@ -18,6 +18,8 @@ export const frameworks = [
   "nestjs",
   "jest",
   "vitest",
+  "cypress",
+  "storybook",
 ] as const;
 
 export type Framework = (typeof frameworks)[number];

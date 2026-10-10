@@ -181,9 +181,11 @@ $sizes: (
 `,
     expect: [],
   },
+  // Formatting is Prettier's job, run as its own step by `ultracite check`
+  // and `fix`, so the preset must not report it.
   "src/unformatted.css": {
     content: "a{color:red}\n",
-    expect: ["prettier/prettier"],
+    expect: [],
   },
 } satisfies Record<string, FixtureFile>;
 

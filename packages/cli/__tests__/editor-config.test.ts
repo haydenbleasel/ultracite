@@ -1,6 +1,8 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterEach, describe, expect, mock, test } from "bun:test";
 
+import { editors } from "../src/data/editors";
 import { createEditorConfig } from "../src/editor-config";
+import type { SpawnSyncOptions, SpawnSyncResult } from "../src/spawn-sync";
 
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
@@ -173,8 +175,8 @@ describe("createEditorConfig", () => {
     });
   });
 
-  describe("windsurf hooks", () => {
-    test("creates windsurf hooks config", async () => {
+  describe("devin desktop hooks", () => {
+    test("creates devin desktop hooks config", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -187,7 +189,7 @@ describe("createEditorConfig", () => {
       }));
 
       const m = await import("../src/hooks");
-      const hooks = m.createHooks("windsurf", "npm");
+      const hooks = m.createHooks("devin", "npm");
       await hooks.create();
 
       expect(mockWriteFile).toHaveBeenCalled();
@@ -270,5 +272,100 @@ describe("updating existing settings", () => {
       "Refusing to write"
     );
     expect(settings.mkdirSync).not.toHaveBeenCalled();
+  });
+});
+
+// Records each spawn and answers with `results[command]`, or a successful
+// install for a command without an entry.
+const mockSpawn = (results: Record<string, SpawnSyncResult> = {}) => {
+  const spawn = mock(
+    (
+      command: string,
+      _args: string[],
+      _options: SpawnSyncOptions
+    ): SpawnSyncResult => results[command] ?? { status: 0 }
+  );
+  mock.module("../src/spawn-sync", () => ({ spawnSync: spawn }));
+  return spawn;
+};
+
+const missing: SpawnSyncResult = { errorCode: "ENOENT", status: null };
+
+describe("installing editor extensions", () => {
+  afterEach(() => {
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: globalThis.__realSpawnSync,
+    }));
+  });
+
+  test.each([
+    ["vscode", "code"],
+    ["cursor", "cursor"],
+    ["devin", "devin-desktop"],
+    ["kiro", "kiro"],
+    ["void", "void"],
+  ])("installs into %s with %s", (editorId, cli) => {
+    const spawn = mockSpawn();
+
+    const result = createEditorConfig(editorId).extension?.("biomejs.biome");
+
+    expect(result?.status).toBe(0);
+    expect(spawn.mock.calls).toEqual([
+      [cli, ["--install-extension", "biomejs.biome"], { stdio: "pipe" }],
+    ]);
+  });
+
+  test("only VS Code installs extensions with the code launcher", () => {
+    const usingCode = editors
+      .filter((editor) => editor.config.extensionClis?.includes("code"))
+      .map((editor) => editor.id);
+
+    expect(usingCode).toEqual(["vscode"]);
+  });
+
+  test("falls back to the windsurf launcher from before the rename", () => {
+    const spawn = mockSpawn({ "devin-desktop": missing });
+
+    const result = createEditorConfig("devin").extension?.("oxc.oxc-vscode");
+
+    expect(result?.status).toBe(0);
+    expect(spawn.mock.calls.map(([command]) => command)).toEqual([
+      "devin-desktop",
+      "windsurf",
+    ]);
+  });
+
+  test("reports a failed install when the launcher isn't on PATH", () => {
+    const spawn = mockSpawn({ cursor: missing });
+
+    const result = createEditorConfig("cursor").extension?.("biomejs.biome");
+
+    expect(result).toEqual(missing);
+    expect(spawn).toHaveBeenCalledTimes(1);
+  });
+
+  test("stops at the first launcher that runs, even when it fails", () => {
+    const spawn = mockSpawn({ "devin-desktop": { status: 1 } });
+
+    const result = createEditorConfig("devin").extension?.("biomejs.biome");
+
+    expect(result?.status).toBe(1);
+    expect(spawn).toHaveBeenCalledTimes(1);
+  });
+
+  test.each(["antigravity", "bob", "codebuddy", "trae"])(
+    "leaves %s's extensions to be installed by hand",
+    (editorId) => {
+      const spawn = mockSpawn();
+
+      const result = createEditorConfig(editorId).extension?.("biomejs.biome");
+
+      expect(result).toEqual(missing);
+      expect(spawn).not.toHaveBeenCalled();
+    }
+  );
+
+  test("has nothing to install for Zed", () => {
+    expect(createEditorConfig("zed").extension).toBeUndefined();
   });
 });

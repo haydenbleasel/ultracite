@@ -11,6 +11,9 @@ mock.module("node:fs/promises", () => ({
 }));
 
 const npmBiomeCommand =
+  "npx ultracite fix --skip=correctness/noUnusedImports --hook";
+// The `fix` script command 7.x wrote, before hooks ran ultracite directly.
+const npmScriptBiomeCommand =
   "npm run fix -- --skip=correctness/noUnusedImports --hook";
 const npmBiomeCommandWithoutHook =
   "npm run fix -- --skip=correctness/noUnusedImports";
@@ -416,6 +419,7 @@ describe("createHooks", () => {
     // different linter or package manager, are all rewritten to the current
     // command rather than kept or joined by a second hook.
     const outdatedCommands = [
+      npmScriptBiomeCommand,
       npmBiomeCommandWithoutHook,
       "npm run fix",
       "npm run fix -- --hook",
@@ -528,7 +532,7 @@ describe("createHooks", () => {
   });
 
   describe("claude hooks", () => {
-    test("create uses the nub run script for nub projects", async () => {
+    test("create runs nub exec for nub projects", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -546,11 +550,11 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
-        "nub run fix --skip=correctness/noUnusedImports --hook"
+        "nub exec ultracite fix --skip=correctness/noUnusedImports --hook"
       );
     });
 
-    test("create uses the aube run script for aube projects", async () => {
+    test("create runs aube exec for aube projects", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -568,7 +572,7 @@ describe("createHooks", () => {
       const [writeCall] = mockWriteFile.mock.calls;
       const content = JSON.parse(writeCall[1]);
       expect(content.hooks.PostToolUse[0].hooks[0].command).toBe(
-        "aube run fix --skip=correctness/noUnusedImports --hook"
+        "aube exec ultracite fix --skip=correctness/noUnusedImports --hook"
       );
     });
 
@@ -671,12 +675,12 @@ describe("createHooks", () => {
       [
         "pnpm",
         "pnpm fix --skip=correctness/noUnusedImports",
-        "pnpm run fix --skip=correctness/noUnusedImports --hook",
+        "pnpm exec ultracite fix --skip=correctness/noUnusedImports --hook",
       ],
       [
         "bun",
         "bun fix --skip=correctness/noUnusedImports",
-        "bun run fix --skip=correctness/noUnusedImports --hook",
+        "bunx ultracite fix --skip=correctness/noUnusedImports --hook",
       ],
       [
         "npm",
@@ -769,7 +773,7 @@ describe("writing outside the project", () => {
 // A project whose files start as `initial` and change as they're written and
 // removed. Returns the files afterwards and the paths removed.
 const runInProject = async (
-  hook: "deepagents" | "grok" | "windsurf",
+  hook: "deepagents" | "devin" | "grok",
   initial: Record<string, string>
 ) => {
   const files = { ...initial };
@@ -812,14 +816,14 @@ const windsurfHook = (command: string) =>
     hooks: { post_write_code: [{ command, show_output: true }] },
   });
 
-describe("windsurf (Devin Desktop) hooks", () => {
+describe("devin desktop (formerly Windsurf) hooks", () => {
   test("go in .devin/hooks.json", async () => {
-    const { files } = await runInProject("windsurf", {});
+    const { files } = await runInProject("devin", {});
 
     expect(JSON.parse(files[".devin/hooks.json"] ?? "{}")).toEqual({
       hooks: {
         post_write_code: [
-          { command: "npm run fix -- --hook", show_output: true },
+          { command: "npx ultracite fix --hook", show_output: true },
         ],
       },
     });
@@ -827,16 +831,16 @@ describe("windsurf (Devin Desktop) hooks", () => {
   });
 
   test("move from .windsurf/hooks.json, which is removed once empty", async () => {
-    const { files, removed } = await runInProject("windsurf", {
+    const { files, removed } = await runInProject("devin", {
       ".windsurf/hooks.json": windsurfHook("npm run fix -- --hook"),
     });
 
     expect(removed.has(".windsurf/hooks.json")).toBe(true);
-    expect(files[".devin/hooks.json"]).toContain("npm run fix -- --hook");
+    expect(files[".devin/hooks.json"]).toContain("npx ultracite fix --hook");
   });
 
   test("bring the user's own hooks along, since Devin Desktop stops reading the old file", async () => {
-    const { files, removed } = await runInProject("windsurf", {
+    const { files, removed } = await runInProject("devin", {
       ".windsurf/hooks.json": JSON.stringify({
         hooks: {
           post_write_code: [
@@ -852,7 +856,7 @@ describe("windsurf (Devin Desktop) hooks", () => {
     expect(devin.hooks.pre_user_prompt).toEqual([{ command: "./audit.sh" }]);
     expect(devin.hooks.post_write_code).toEqual([
       { command: "./notify.sh" },
-      { command: "npm run fix -- --hook", show_output: true },
+      { command: "npx ultracite fix --hook", show_output: true },
     ]);
 
     // The old file keeps only the user's hooks.
@@ -876,7 +880,7 @@ describe("grok build hooks", () => {
           {
             hooks: [
               {
-                command: "npm run fix -- --hook",
+                command: "npx ultracite fix --hook",
                 timeout: 30,
                 type: "command",
               },
@@ -897,7 +901,7 @@ describe("deep agents hooks", () => {
       hooks: {
         PostToolUse: [
           {
-            hooks: [{ command: "npm run fix -- --hook", type: "command" }],
+            hooks: [{ command: "npx ultracite fix --hook", type: "command" }],
             matcher: "Write|Edit",
           },
         ],

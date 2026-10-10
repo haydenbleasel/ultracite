@@ -7,6 +7,7 @@ import {
   UltraciteSetupError,
 } from "../config-resolution";
 import {
+  eslintIgnoredFileArgs,
   normalizeFileArgs,
   toOxlintTargets,
   toStylelintTargets,
@@ -79,7 +80,12 @@ const runEslintFix = (
   passthrough: string[],
   stdio: FixStdio
 ): void => {
-  const args = ["--fix", ...passthrough, ...(files.length > 0 ? files : ["."])];
+  const args = [
+    "--fix",
+    ...eslintIgnoredFileArgs(files, passthrough),
+    ...passthrough,
+    ...(files.length > 0 ? files : ["."]),
+  ];
 
   const result = spawnSync("eslint", args, { stdio });
   exitOnCommandFailure("ESLint", result);

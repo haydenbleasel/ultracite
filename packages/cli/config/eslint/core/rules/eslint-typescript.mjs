@@ -1,12 +1,19 @@
+// ESLint core rules disabled on TypeScript files because either:
+//  - @typescript-eslint provides an extension rule that understands
+//    TypeScript syntax and is enabled in rules/typescript.mjs
+//    (class-methods-use-this, no-shadow, no-unused-vars, etc.), so the base
+//    rule would report the same problem twice and ignore the extension's
+//    TypeScript-aware options, OR
+//  - the TypeScript compiler already performs the check (no-undef), OR
+//  - Prettier/Oxfmt owns formatting (brace-style, indent, semi, quotes, etc.)
+//
+// Base rules whose extension needs type information stay on here, as they
+// do in oxlint without type-aware linting, and the type-aware preset swaps
+// them for the extensions (see typeAwareBaseRules below). The exceptions are
+// consistent-return and dot-notation: the base rules misread TypeScript
+// (`void` returns, index signatures), so they stay off until the type-aware
+// preset enables the extensions.
 const config = {
-  // ESLint core rules disabled on TypeScript files because either:
-  //  - @typescript-eslint provides an extension rule that understands
-  //    TypeScript syntax and is enabled in rules/typescript.mjs
-  //    (class-methods-use-this, no-shadow, no-unused-vars, etc.), so the base
-  //    rule would report the same problem twice and ignore the extension's
-  //    TypeScript-aware options, OR
-  //  - the TypeScript compiler already performs the check (no-undef), OR
-  //  - Prettier/Oxfmt owns formatting (brace-style, indent, semi, quotes, etc.)
   "brace-style": "off",
   camelcase: "off",
   "class-methods-use-this": "off",
@@ -25,13 +32,11 @@ const config = {
   "no-empty-function": "off",
   "no-extra-parens": "off",
   "no-extra-semi": "off",
-  "no-implied-eval": "off",
   "no-invalid-this": "off",
   "no-magic-numbers": "off",
   "no-redeclare": "off",
   "no-return-await": "off",
   "no-shadow": "off",
-  "no-throw-literal": "off",
   // TypeScript reports unresolved identifiers itself, and this rule does not
   // know about ambient type-only globals such as the `NodeJS` namespace
   // (https://typescript-eslint.io/troubleshooting/faqs/eslint#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors).
@@ -43,16 +48,25 @@ const config = {
   "no-useless-constructor": "off",
   "object-curly-spacing": "off",
   "padding-line-between-statements": "off",
-  "prefer-destructuring": "off",
-  "prefer-promise-reject-errors": "off",
   quotes: "off",
-  "require-await": "off",
   semi: "off",
   // The sonarjs equivalent of no-undef, with the same false positives on
   // ambient type-only globals; the TypeScript compiler covers it.
   "sonarjs/no-reference-error": "off",
   "space-before-function-paren": "off",
   "space-infix-ops": "off",
+};
+
+// The base rules the type-aware preset turns off on TypeScript files, since
+// their @typescript-eslint extensions need type information and report the
+// same problems with it.
+// https://typescript-eslint.io/rules/only-throw-error (no-throw-literal)
+export const typeAwareBaseRules = {
+  "no-implied-eval": "off",
+  "no-throw-literal": "off",
+  "prefer-destructuring": "off",
+  "prefer-promise-reject-errors": "off",
+  "require-await": "off",
 };
 
 export default config;

@@ -79,15 +79,15 @@ Requirements and behavior:
 - `--claude` requires the [Claude Code CLI](https://claude.com/claude-code) (`npm install -g @anthropic-ai/claude-code`); `--codex` requires the [Codex CLI](https://github.com/openai/codex) (`npm install -g @openai/codex`). Both must be authenticated.
 - Agents run non-interactively with scoped permissions: Claude Code uses `claude -p --permission-mode acceptEdits` limited to read/edit tools (no shell access), and Codex runs in its workspace-write sandbox via `codex exec --sandbox workspace-write --skip-git-repo-check`, so it also works in a project that isn't a Git repository. The prompt is sent on stdin.
 - Each agent attempt gets a 5-minute budget, and the re-lint decides the outcome either way — even a failed or timed-out run gets credit for diagnostics it managed to clear. Whatever remains unfixed after the attempts is marked ✗ and the run continues with the next file.
-- Other flags combine as usual, e.g. `npx ultracite fix --claude --type-aware --unsafe` on an Oxlint project.
+- Other flags combine as usual, e.g. `npx ultracite fix --claude --unsafe`.
 
 ### Type-Aware Linting
 
-Type-aware linting enables deeper analysis rules that leverage TypeScript's type system and project structure. The `--type-aware` flag is passed during `ultracite init` and configures your project accordingly.
+Type-aware linting adds rules that use TypeScript's type system or a scan of the whole project. It's off unless you ask for it, since it makes linting slower. Pass `--type-aware` to `ultracite init` (an interactive run asks in a TypeScript project), and init sets it up for your linter and turns on `strictNullChecks` in your tsconfig files, which these rules need. It lists the tsconfig files and asks first, unless you pass `--yes`.
 
 #### Biome
 
-For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes`, and `useArraySortCompare`.
+For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`.
 
 ```bash title="Terminal"
 npx ultracite init --linter biome --type-aware
@@ -95,32 +95,31 @@ npx ultracite init --linter biome --type-aware
 
 Since the rules are baked into your Biome config, they work in both the CLI and your IDE automatically — no runtime flags needed.
 
-#### Oxlint
+#### ESLint
 
-For Oxlint, `--type-aware` installs the required `oxlint-tsgolint` dependency. You then pass the flag at runtime when checking or fixing:
+For ESLint, `--type-aware` adds `ultracite/eslint/type-aware` to `eslint.config.mjs`, plus the type-aware add-on of each framework preset that has one. It turns on typescript-eslint's type-checked rules, such as `no-floating-promises` and `no-misused-promises`, through `projectService`, which finds the `tsconfig.json` that includes each file. Without it, ESLint lints TypeScript without type information and needs no tsconfig.
 
 ```bash title="Terminal"
-npx ultracite check --type-aware
-npx ultracite fix --type-aware
+npx ultracite init --linter eslint --type-aware
 ```
 
-This enables rules like `no-floating-promises`, `no-misused-promises`, and `await-thenable` that catch bugs by analyzing types.
+#### Oxlint
 
-You can also enable TypeScript compiler diagnostics (experimental):
+For Oxlint, `--type-aware` installs `oxlint-tsgolint` and sets `options: { typeAware: true }` in `oxlint.config.ts`, so `ultracite check`, `ultracite fix` and the editor extension all run rules like `no-floating-promises`, `no-misused-promises`, and `await-thenable` that catch bugs by analyzing types.
+
+```bash title="Terminal"
+npx ultracite init --linter oxlint --type-aware
+```
+
+You can also enable TypeScript compiler diagnostics (experimental) at runtime:
 
 ```bash title="Terminal"
 npx ultracite check --type-check
 npx ultracite fix --type-check
 ```
 
-Both flags can be combined:
-
-```bash title="Terminal"
-npx ultracite fix --type-aware --type-check
-```
-
 :::note
-The `--type-aware` and `--type-check` runtime flags only apply to Oxlint. For Biome, type-aware rules are configured at init time and require no runtime flags.
+`--type-check` is an Oxlint flag, passed through to Oxlint. Type-aware rules are set up in the config at init time on every linter and need no runtime flag.
 :::
 
 ### Validating Setup

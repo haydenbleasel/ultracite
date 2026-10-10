@@ -8,7 +8,10 @@ import * as doctorModule from "../src/commands/doctor";
 import type { DiagnosticCheck } from "../src/commands/doctor";
 import * as configResolution from "../src/config-resolution";
 import type { InstalledPackage } from "../src/config-resolution";
-import { biomeVersion } from "../src/dependencies";
+import {
+  biomeVersion,
+  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
+} from "../src/dependencies";
 import * as schemas from "../src/schemas";
 import * as upgradeAgent from "../src/upgrade-agent";
 import * as upgradeGuides from "../src/upgrade-guides";
@@ -208,7 +211,7 @@ describe("getToolchainPackages", () => {
     );
 
     expect(packages).toContain("eslint@^10.9.0");
-    expect(packages).toContain("prettier@^3.0.0");
+    expect(packages).toContain("prettier@^3.5.3");
     expect(packages).toContain("stylelint@^17.0.0");
     // Newer presets can require plugins an older setup never installed.
     expect(packages.some((pkg) => pkg.startsWith("eslint-plugin-jsdoc@"))).toBe(
@@ -273,9 +276,15 @@ describe("getToolchainPackages", () => {
       ])
     );
 
-    expect(packages).toContain("oxlint@latest");
-    expect(packages).toContain("oxfmt@latest");
-    expect(packages).toContain("oxlint-tsgolint@latest");
+    expect(packages).toContain(
+      `oxlint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint}`
+    );
+    expect(packages).toContain(
+      `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`
+    );
+    expect(packages).toContain(
+      `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+    );
     expect(
       packages.some((pkg) => pkg.startsWith("eslint-plugin-sonarjs@"))
     ).toBe(true);

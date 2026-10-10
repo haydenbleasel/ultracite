@@ -1,6 +1,6 @@
 import type { AgentPageContent } from "./types";
 
-export const snowflakeCortex: AgentPageContent = {
+export const snowflakeCoco: AgentPageContent = {
   checked: { date: "2026-10-10" },
   faqs: [
     {
@@ -10,7 +10,7 @@ export const snowflakeCortex: AgentPageContent = {
     },
     {
       answer:
-        "Yes. Snowflake’s docs now call Cortex Code “Snowflake CoCo”, and the CLI command is still `cortex`. `ultracite init --agents snowflake-cortex` sets it up.",
+        "Yes. Snowflake’s docs now call Cortex Code “Snowflake CoCo”, and the CLI command is still `cortex`. `ultracite init --agents snowflake-coco` sets it up (`snowflake-cortex`, its old id, still works).",
       question: "Is Snowflake CoCo the same as Cortex Code?",
     },
     {

@@ -7,6 +7,8 @@ import type { HooksConfig } from "./types";
 export type { HooksConfig } from "./types";
 
 export interface HookIntegration {
+  /** IDs the host had before a rename, which `--hooks` still accepts. */
+  aliases?: string[];
   hooks: HooksConfig;
   id: string;
   name: string;
@@ -23,14 +25,28 @@ const isAgentWithHooks = (
 const getEditorHookIntegrations = (): HookIntegration[] =>
   editors.flatMap((editor) =>
     isEditorWithHooks(editor)
-      ? [{ hooks: editor.hooks, id: editor.id, name: editor.name }]
+      ? [
+          {
+            aliases: editor.aliases,
+            hooks: editor.hooks,
+            id: editor.id,
+            name: editor.name,
+          },
+        ]
       : []
   );
 
 const getAgentHookIntegrations = (): HookIntegration[] =>
   agents.flatMap((agent) =>
     isAgentWithHooks(agent)
-      ? [{ hooks: agent.hooks, id: agent.id, name: agent.name }]
+      ? [
+          {
+            aliases: agent.aliases,
+            hooks: agent.hooks,
+            id: agent.id,
+            name: agent.name,
+          },
+        ]
       : []
   );
 

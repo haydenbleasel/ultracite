@@ -47,23 +47,24 @@ bunx ultracite init \
   --agents claude copilot \
   --frameworks react next \
   --integrations husky lint-staged \
-  --quiet
+  --yes
 ```
 
 **Flags:**
 
 - `--pm` — `npm` | `yarn` | `pnpm` | `bun` | `deno` | `nub` | `aube`
 - `--linter` — `oxlint` (recommended) | `biome` | `eslint`
-- `--editors` — `universal` (writes `.vscode/settings.json` for every VS Code-based editor) | `vscode` | `cursor` | `windsurf` | `codebuddy` | `antigravity` | `bob` | `kiro` | `trae` | `void` | `zed`
+- `--editors` — `universal` (writes `.vscode/settings.json` for every VS Code-based editor) | `vscode` | `cursor` | `devin` | `codebuddy` | `antigravity` | `bob` | `kiro` | `trae` | `void` | `zed`
 - `--agents` — every choice writes the rules to `AGENTS.md`. `universal` writes only that; `claude`, `gemini`, `aider` and `replit` also add the import, settings or copy that agent needs to read them; IDs like `codex`, `copilot`, `cline`, `amp` and `cursor-cli` (40 agents supported) need nothing more
-- `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest`
+- `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest` | `cypress` | `storybook`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
-- `--hooks` — Enable auto-fix hooks: `claude` | `copilot` | `cursor` | `windsurf` | `codebuddy` | `deepagents` | `grok`
+- `--hooks` — Enable auto-fix hooks: `claude` | `copilot` | `cursor` | `devin` | `codebuddy` | `deepagents` | `grok`
 - `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-sonarjs` | `oxlint-plugin-react-doctor`
-- `--type-aware` — Enable type-aware linting (Biome: extends the `type-aware` preset; Oxlint: installs `oxlint-tsgolint`)
+- `--type-aware` — Enable type-aware linting (ESLint and Biome: extend their `type-aware` preset; Oxlint: installs `oxlint-tsgolint` and sets `typeAware`), and turn on `strictNullChecks` in tsconfig files
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation
-- `--quiet` — Suppress prompts (auto-detected when `CI=true`); defaults to `oxlint` when `--linter` is omitted
+- `--yes`, `-y` — Take the defaults without prompting (automatic when `CI=true` or there's no terminal); defaults to `oxlint` when `--linter` is omitted
+- `--quiet` — Only print warnings and errors
 
 Init creates config that extends Ultracite presets:
 

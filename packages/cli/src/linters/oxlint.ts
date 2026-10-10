@@ -83,7 +83,15 @@ const fullPresetJsPlugins = [
 interface OxlintOptions {
   frameworks?: (typeof options.frameworks)[number][];
   jsPlugins?: OxlintJsPlugin[];
+  /** Run the type-aware rules (needs oxlint-tsgolint installed). */
+  typeAware?: boolean;
 }
+
+// Equivalent to passing --type-aware on every run, so `ultracite check` and
+// the editor extension run core's typed rules once oxlint-tsgolint is there.
+const typeAwareOptions = "{ typeAware: true }";
+const TYPE_AWARE_RE = /\btypeAware\s*:\s*true\b/u;
+const OPTIONS_PROPERTY_RE = /^["']?options["']?\s*:/u;
 
 const oxlintJsPluginConfig = {
   "eslint-plugin-github": { name: "github" },
@@ -167,7 +175,8 @@ const renderOverride = (
 const generateConfigContent = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[] = [],
-  extras: OxlintExtras = emptyExtras()
+  extras: OxlintExtras = emptyExtras(),
+  typeAware = false
 ) => {
   // anti-slop and @shadcn/lint have their own presets, so they become plain
   // extends below instead of selectJsPlugins entries.
@@ -310,6 +319,7 @@ const generateConfigContent = (
   const properties = [
     generatedProperty("ignorePatterns", "core.ignorePatterns"),
     generatedProperty("jsPlugins", jsPluginsValue),
+    typeAware ? { comment: null, text: `options: ${typeAwareOptions}` } : null,
     generatedProperty(
       "settings",
       hasJsPluginSettings ? "jsPluginSettings" : null
@@ -761,7 +771,12 @@ export const oxlint = {
 
     return await writeProjectFile(
       resolveOxlintConfigPath().target,
-      generateConfigContent(extendsList, opts?.jsPlugins)
+      generateConfigContent(
+        extendsList,
+        opts?.jsPlugins,
+        emptyExtras(),
+        opts?.typeAware
+      )
     );
   },
   // Oxlint doesn't merge a nested config with the root one, so a workspace
@@ -889,10 +904,32 @@ export const oxlint = {
           : requestedJsPlugins;
     }
 
+    // An `options` object of the project's own is kept as written, so
+    // type-aware linting is only added to a config that has none.
+    const existingOptions = existing.extras.properties.find((property) =>
+      OPTIONS_PROPERTY_RE.test(property.text)
+    );
+    const addTypeAware = Boolean(opts?.typeAware) && !existingOptions;
+
     await writeProjectFile(
       paths.target,
-      generateConfigContent(newExtends, jsPlugins, existing.extras)
+      generateConfigContent(
+        newExtends,
+        jsPlugins,
+        existing.extras,
+        addTypeAware
+      )
     );
+
+    if (
+      opts?.typeAware &&
+      existingOptions &&
+      !TYPE_AWARE_RE.test(existingOptions.text)
+    ) {
+      log.warn(
+        `${configFile} already sets \`options\`, so type-aware linting wasn't turned on. Add \`typeAware: true\` to its \`options\` to run the type-aware rules.`
+      );
+    }
 
     // A .ts config in a "commonjs" package can't load, so it moved to .mts.
     if (paths.existing && paths.existing !== paths.target) {

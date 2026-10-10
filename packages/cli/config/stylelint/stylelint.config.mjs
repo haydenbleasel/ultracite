@@ -135,7 +135,6 @@ const config = {
       },
     },
   ],
-  plugins: ["stylelint-prettier"],
   rules: {
     "at-rule-no-unknown": [
       true,
@@ -205,8 +204,6 @@ const config = {
       },
     ],
     "no-descending-specificity": null,
-    // Prettier owns formatting, as in the ESLint preset's prettier/prettier.
-    "prettier/prettier": true,
     // The *-layout-mappings rules (property, unit, value-keyword) are left
     // off: they reject every physical property, unit and keyword (margin-left,
     // vw, float: left) and can only autofix with a per-project

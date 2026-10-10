@@ -170,28 +170,30 @@ interface Surface {
 
 // The github/sonarjs/react-doctor rules live in the opt-in `js-plugins` oxlint
 // preset, so parity is measured against core + js-plugins (the full-parity
-// opt-in set).
+// opt-in set). Oxlint core lists its type-aware rules, which run only with
+// type-aware linting on, so the ESLint side adds its opt-in type-aware preset
+// to match.
 const surfaces: Surface[] = [
   {
-    eslintConfigs: ["core"],
+    eslintConfigs: ["core", "type-aware"],
     file: "src/example.ts",
     name: "core (TypeScript)",
     oxlintConfigs: ["core", "js-plugins"],
   },
   {
-    eslintConfigs: ["core", "react"],
+    eslintConfigs: ["core", "type-aware", "react"],
     file: "src/component.tsx",
     name: "react (TSX)",
     oxlintConfigs: ["core", "js-plugins", "react"],
   },
   {
-    eslintConfigs: ["core", "react", "next"],
+    eslintConfigs: ["core", "type-aware", "react", "next"],
     file: "app/page.tsx",
     name: "next (TSX)",
     oxlintConfigs: ["core", "js-plugins", "react", "next", "next/js-plugins"],
   },
   {
-    eslintConfigs: ["core", "gdp"],
+    eslintConfigs: ["core", "type-aware", "gdp"],
     file: "src/example.ts",
     name: "gdp (TypeScript)",
     oxlintConfigs: ["core", "js-plugins", "gdp"],

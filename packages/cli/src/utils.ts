@@ -434,12 +434,16 @@ const FRAMEWORK_DEPENDENCIES = new Map<string, readonly Framework[]>([
   ["@tanstack/react-router", ["react", "tanstack"]],
   ["@tanstack/react-start", ["react", "tanstack"]],
   ["astro", ["astro"]],
+  ["cypress", ["cypress"]],
   ["jest", ["jest"]],
   ["next", ["react", "next"]],
   ["nuxt", ["vue"]],
   ["react", ["react"]],
   ["react-router", ["react", "remix"]],
   ["solid-js", ["solid"]],
+  // Storybook 7 and later install the `storybook` CLI package alongside the
+  // framework packages (@storybook/react-vite and so on).
+  ["storybook", ["storybook"]],
   ["svelte", ["svelte"]],
   ["vitest", ["vitest"]],
   ["vue", ["vue"]],

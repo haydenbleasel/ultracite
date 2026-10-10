@@ -1,5 +1,5 @@
 ---
-"ultracite": minor
+"ultracite": major
 ---
 
 Every agent now reads Ultracite's rules from `AGENTS.md`. `init` writes the rules there once, whichever agents you pick, and only adds a file for the four agents that need one more step to see them:

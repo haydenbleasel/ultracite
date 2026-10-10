@@ -31,6 +31,13 @@ interface Preset {
   files: Record<string, FixtureFile>;
   /** ESLint presets combined with core, in order. */
   presets: string[];
+  /**
+   * Also lint the preset with the type-aware preset and its own type-aware
+   * add-on (ultracite/eslint/<name>/type-aware), adding these files.
+   */
+  typeAware?: Record<string, FixtureFile>;
+  /** Lint without a tsconfig.json, as core must work without type information. */
+  withoutTsconfig?: boolean;
 }
 
 const here = import.meta.dirname;
@@ -78,6 +85,7 @@ export class App {
       },
     },
     presets: ["angular"],
+    typeAware: {},
   },
   astro: {
     files: {
@@ -110,15 +118,6 @@ const markup = "<b>x</b>";
     // Distinct basenames: TypeScript drops `a.tsx` from a program that
     // also contains `a.ts`, which would hide the file from type-aware rules.
     files: {
-      "src/button.stories.tsx": {
-        content: `const meta = { title: "Button" };
-
-export default meta;
-
-export const Primary = {};
-`,
-        expect: ["storybook/"],
-      },
       "src/cjs-legacy.cjs": {
         content: `${legacyVar}module.exports = legacy;\n`,
         expect: ["no-var"],
@@ -149,27 +148,6 @@ export const Primary = {};
       "src/legacy.js": {
         content: `${legacyVar}export default legacy;\n`,
         expect: ["no-var"],
-      },
-      "src/login.cy.ts": {
-        content: `describe("login", () => {
-  it("waits", () => {
-    cy.visit("/");
-    cy.wait(1000);
-  });
-});
-`,
-        expect: ["cypress/no-unnecessary-waiting"],
-      },
-      "src/logout.cy.js": {
-        content: `describe("logout", () => {
-  it("waits", () => {
-    cy.visit("/");
-    cy.wait(1000);
-  });
-});
-`,
-        expect: ["cypress/no-unnecessary-waiting"],
-        forbid: ["no-undef"],
       },
       "src/pages/BadPage.ts": {
         content: "export const page = 1;\n",
@@ -207,12 +185,13 @@ export const third = "repeated label";
         forbid: ["no-undef", "sonarjs/no-reference-error"],
       },
       "src/typed-module.ts": {
-        // Type-aware rule: proves the project service supplies type
-        // information.
+        // Core has no tsconfig here and must not run rules that need type
+        // information; the type-aware preset adds them.
         content: `${typedModule}
 export const unsafe = (input: string): string => JSON.parse(input);
 `,
-        expect: ["no-var", "@typescript-eslint/no-unsafe-return"],
+        expect: ["no-var"],
+        forbid: ["@typescript-eslint/no-unsafe-return"],
       },
       "src/view.tsx": {
         content: `${typedModule}
@@ -222,6 +201,33 @@ export const View = ({ name }: { readonly name: string }) => <p>{name}</p>;
       },
     },
     presets: [],
+    withoutTsconfig: true,
+  },
+  cypress: {
+    files: {
+      "src/login.cy.ts": {
+        content: `describe("login", () => {
+  it("waits", () => {
+    cy.visit("/");
+    cy.wait(1000);
+  });
+});
+`,
+        expect: ["cypress/no-unnecessary-waiting"],
+      },
+      "src/logout.cy.js": {
+        content: `describe("logout", () => {
+  it("waits", () => {
+    cy.visit("/");
+    cy.wait(1000);
+  });
+});
+`,
+        expect: ["cypress/no-unnecessary-waiting"],
+        forbid: ["no-undef"],
+      },
+    },
+    presets: ["cypress"],
   },
   gdp: {
     files: {
@@ -296,6 +302,27 @@ export { prover };
       },
     },
     presets: ["jest"],
+    typeAware: {
+      "src/counter.test.ts": {
+        // Type-aware rule: proves the add-on runs with type information.
+        content: `class Counter {
+  count = 0;
+
+  increment(): void {
+    this.count += 1;
+  }
+}
+
+test("counts", () => {
+  const counter = new Counter();
+  const increment = counter.increment;
+  increment();
+  expect(counter.count).toBe(1);
+});
+`,
+        expect: ["jest/unbound-method"],
+      },
+    },
   },
   nestjs: {
     files: {
@@ -314,6 +341,7 @@ export class AppController {
       },
     },
     presets: ["nestjs"],
+    typeAware: {},
   },
   next: {
     files: {
@@ -354,6 +382,7 @@ export const Legacy = component$(() => {
       },
     },
     presets: ["qwik"],
+    typeAware: {},
   },
   react: {
     files: {
@@ -403,6 +432,20 @@ export const Legacy = component$(() => {
       },
     },
     presets: ["solid"],
+  },
+  storybook: {
+    files: {
+      "src/button.stories.tsx": {
+        content: `const meta = { title: "Button" };
+
+export default meta;
+
+export const Primary = {};
+`,
+        expect: ["storybook/"],
+      },
+    },
+    presets: ["storybook"],
   },
   svelte: {
     files: {
@@ -474,6 +517,47 @@ function PostPage() {
       },
     },
     presets: ["react", "tanstack"],
+    typeAware: {},
+  },
+  "type-aware": {
+    files: {
+      "src/typed-module.ts": {
+        // Type-aware rule: proves the project service supplies type
+        // information.
+        content: `${typedModule}
+export const unsafe = (input: string): string => JSON.parse(input);
+`,
+        expect: ["no-var", "@typescript-eslint/no-unsafe-return"],
+      },
+      "src/view.tsx": {
+        content: `${typedModule}
+export const View = ({ name }: { readonly name: string }) => <p>{name}</p>;
+`,
+        expect: ["no-var"],
+      },
+    },
+    presets: ["type-aware"],
+  },
+  "type-aware-astro": {
+    files: {
+      "src/pages/index.astro": {
+        // The client-side <script> is linted as a virtual TypeScript file
+        // no tsconfig holds, so the Astro preset must switch the type-aware
+        // rules off for it again.
+        content: `---
+const title = "Home";
+---
+
+<h1>{title}</h1>
+<script>
+  const button = document.querySelector("button");
+  console.log(button);
+</script>
+`,
+        expect: [],
+      },
+    },
+    presets: ["type-aware", "astro"],
   },
   vitest: {
     files: {
@@ -497,6 +581,29 @@ test.only("adds", () => {
       },
     },
     presets: ["vitest"],
+    typeAware: {
+      "src/counter.test.ts": {
+        // Type-aware rule: proves the add-on runs with type information.
+        content: `import { expect, test } from "vitest";
+
+class Counter {
+  count = 0;
+
+  increment(): void {
+    this.count += 1;
+  }
+}
+
+test("counts", () => {
+  const counter = new Counter();
+  const increment = counter.increment;
+  increment();
+  expect(counter.count).toBe(1);
+});
+`,
+        expect: ["vitest/unbound-method"],
+      },
+    },
   },
   vue: {
     files: {
@@ -530,6 +637,29 @@ const title: string = "Home";
   },
 } satisfies Record<string, Preset>;
 
+// A framework preset run again with the type-aware preset and the
+// framework's own type-aware add-on, as `init --type-aware` writes them.
+const runsOf = (name: string, preset: Preset): [string, Preset][] => {
+  if (!preset.typeAware) {
+    return [[name, preset]];
+  }
+
+  const typeAwareRun: Preset = {
+    files: { ...preset.files, ...preset.typeAware },
+    presets: [
+      "type-aware",
+      ...preset.presets.flatMap((presetName) =>
+        presetName === name ? [presetName, `${name}/type-aware`] : [presetName]
+      ),
+    ],
+  };
+
+  return [
+    [name, preset],
+    [`${name}-type-aware`, typeAwareRun],
+  ];
+};
+
 const loadPreset = async (name: string): Promise<Linter.Config[]> => {
   const mod = await import(
     path.join(here, `../config/eslint/${name}/eslint.config.mjs`)
@@ -543,10 +673,12 @@ const matches = (ruleId: string | null, expected: string): boolean =>
 
 const writeFixture = async (
   root: string,
-  files: Record<string, FixtureFile>
+  { files, withoutTsconfig = false }: Preset
 ): Promise<void> => {
   await writeFile(path.join(root, "package.json"), packageJson);
-  await writeFile(path.join(root, "tsconfig.json"), tsconfig);
+  if (!withoutTsconfig) {
+    await writeFile(path.join(root, "tsconfig.json"), tsconfig);
+  }
   await Promise.all(
     Object.entries(files).map(async ([relative, file]) => {
       const target = path.join(root, relative);
@@ -563,7 +695,7 @@ const checkPreset = async (
 ): Promise<string[]> => {
   const root = path.join(tempRoot, name);
   await mkdir(root, { recursive: true });
-  await writeFixture(root, preset.files);
+  await writeFixture(root, preset);
 
   const loaded = await Promise.all(["core", ...preset.presets].map(loadPreset));
   const configs = loaded.flat();
@@ -649,7 +781,10 @@ const main = async () => {
 
     // Sequential: every preset shares one TypeScript project service per
     // process, and running them in parallel only adds memory pressure.
-    for (const [name, preset] of Object.entries(presets)) {
+    const runs = Object.entries(presets).flatMap(([name, preset]) =>
+      runsOf(name, preset)
+    );
+    for (const [name, preset] of runs) {
       // oxlint-disable-next-line no-await-in-loop -- see comment above
       const presetFailures = await checkPreset(tempRoot, name, preset);
       console.log(`${presetFailures.length === 0 ? "✓" : "✗"} eslint/${name}`);
@@ -668,9 +803,7 @@ const main = async () => {
     process.exit(1);
   }
 
-  console.log(
-    `\nAll ${Object.keys(presets).length} ESLint presets lint real files`
-  );
+  console.log("\nEvery ESLint preset lints real files");
 };
 
 await main();

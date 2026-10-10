@@ -66,7 +66,7 @@ export const qwen: AgentPageContent = {
   metaDescription:
     "Set up Ultracite for Qwen Code: it loads AGENTS.md after QWEN.md from the project root to your folder, and finds the Ultracite skill in .agents/skills.",
   metaTitle: "Ultracite for Qwen Code — AGENTS.md beside QWEN.md",
-  related: ["gemini", "kimi-cli", "mistral-vibe"],
+  related: ["gemini", "kimi-code", "mistral-vibe"],
   rules: {
     facts: [
       {

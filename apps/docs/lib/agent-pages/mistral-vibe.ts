@@ -54,7 +54,7 @@ export const mistralVibe: AgentPageContent = {
   metaDescription:
     "Set up Ultracite for Mistral Vibe: rules in AGENTS.md, loaded from your folder up to the one you trusted, with deeper AGENTS.md files added as Vibe reads.",
   metaTitle: "Ultracite for Mistral Vibe — Rules that load in trusted folders",
-  related: ["kimi-cli", "qwen", "crush"],
+  related: ["kimi-code", "qwen", "crush"],
   rules: {
     facts: [
       {

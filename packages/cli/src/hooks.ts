@@ -8,6 +8,7 @@ import type { PackageManagerName } from "nypm";
 import { hooks } from "./data/hooks";
 import type { options } from "./data/options";
 import type { JsonObject, JsonValue } from "./data/types";
+import { localBinCommand } from "./integrations/project-command";
 import {
   assertSupportedPackageManagerName,
   supportedPackageManagers,
@@ -142,7 +143,22 @@ const removeGeneratedEntries = (
 
 const biomeHookArgs = ["--skip=correctness/noUnusedImports"];
 
-const createFixCommand = (
+// The hook runs the project's installed ultracite directly, not its `fix`
+// script, which init leaves alone when the project already has one that runs
+// another tool.
+const createHookCommand = (
+  packageManager: PackageManagerName,
+  args: string[]
+): string =>
+  localBinCommand(
+    assertSupportedPackageManagerName(packageManager),
+    "ultracite",
+    ["fix", ...args]
+  );
+
+// The `fix` script commands of ultracite 7.8.3 to 7.x: `<pm> run fix`, with
+// npm passing the arguments after `--`.
+const scriptFixCommand = (
   packageManager: PackageManagerName,
   args: string[] = []
 ): string => {
@@ -166,15 +182,17 @@ const legacyFixCommand = (
     : [packageManager, "fix", ...args].join(" ");
 
 // Every hook command an earlier `init` may have generated: each package
-// manager, with and without the Biome skip, with and without `--hook`, plus
-// the bare `<pm> fix` scripts of 7.8.0 and earlier and the `npm run fix
-// --skip=...` (flag swallowed by npm) of 7.8.1 and 7.8.2.
+// manager, with and without the Biome skip, with and without `--hook`: the
+// local-bin commands of v8, the `fix` scripts of 7.x, the bare `<pm> fix`
+// scripts of 7.8.0 and earlier, and the `npm run fix --skip=...` (flag
+// swallowed by npm) of 7.8.1 and 7.8.2.
 const generatedFixCommands = (): Set<string> =>
   new Set(
     supportedPackageManagers.flatMap((packageManager) =>
       [[], biomeHookArgs].flatMap((linterArgs) => [
-        createFixCommand(packageManager, linterArgs),
-        createFixCommand(packageManager, [...linterArgs, "--hook"]),
+        createHookCommand(packageManager, [...linterArgs, "--hook"]),
+        scriptFixCommand(packageManager, linterArgs),
+        scriptFixCommand(packageManager, [...linterArgs, "--hook"]),
         legacyFixCommand(packageManager, linterArgs),
         runScriptCommand(packageManager, "fix", { args: linterArgs }),
       ])
@@ -203,7 +221,7 @@ export const createHooks = (
 
   const linterArgs = linter === "biome" ? biomeHookArgs : [];
 
-  const command = createFixCommand(packageManager, [...linterArgs, "--hook"]);
+  const command = createHookCommand(packageManager, [...linterArgs, "--hook"]);
   // A re-run rewrites a command from an earlier `init` in place, so an
   // existing install picks up the single-file hook, and a changed package
   // manager or linter, instead of keeping the old command or gaining a

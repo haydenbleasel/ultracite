@@ -138,6 +138,23 @@ export const toOxlintTargets = (files: string[]): string[] => {
   );
 };
 
+/**
+ * ESLint warns about every explicit file no config covers (a README, a
+ * package.json), which a pre-commit hook passing all staged files hits on
+ * every commit. Those warnings are dropped for explicit targets, unless the
+ * user chose either way.
+ */
+export const eslintIgnoredFileArgs = (
+  files: string[],
+  passthrough: string[]
+): string[] =>
+  files.length > 0 &&
+  !passthrough.some(
+    (arg) => arg === "--warn-ignored" || arg === "--no-warn-ignored"
+  )
+    ? ["--no-warn-ignored"]
+    : [];
+
 export type FixAgent = "claude" | "codex";
 
 // A Map, not a plain object: passthrough can contain arbitrary user tokens
@@ -263,6 +280,7 @@ const booleanFlags = new Set([
   "--fix-dangerously",
   "--fix-suggestions",
   "--hook",
+  "--no-warn-ignored",
   "--quiet",
   "--report-unused-disable-directives",
   "--silent",

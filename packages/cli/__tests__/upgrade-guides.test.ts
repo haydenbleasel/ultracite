@@ -91,6 +91,85 @@ describe("findPendingGuides", () => {
     ).toEqual([5, 6]);
   });
 
+  test("needs v8 for a prettier/prettier rule in the ESLint or Stylelint config", () => {
+    expect(
+      versionsFor({
+        eslintConfig:
+          'import core from "ultracite/eslint/core";\nexport default [...core, { rules: { "prettier/prettier": "off" } }];',
+      })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        stylelintConfig:
+          'export default { extends: ["ultracite/stylelint"], rules: { "prettier/prettier": null } };',
+      })
+    ).toEqual([8]);
+  });
+
+  test("needs v8 for an ESLint project that uses Cypress or Storybook without their presets", () => {
+    const eslintConfig =
+      'import core from "ultracite/eslint/core";\nexport default [...core];';
+
+    expect(versionsFor({ dependencies: ["cypress"], eslintConfig })).toEqual([
+      8,
+    ]);
+    expect(
+      versionsFor({ dependencies: ["@storybook/react"], eslintConfig })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        dependencies: ["cypress", "storybook"],
+        eslintConfig: `import cypress from "ultracite/eslint/cypress";\nimport storybook from "ultracite/eslint/storybook";\n${eslintConfig}`,
+      })
+    ).toEqual([]);
+  });
+
+  test("leaves an ESLint config that doesn't use Ultracite alone", () => {
+    expect(
+      versionsFor({
+        dependencies: ["cypress"],
+        eslintConfig: "export default [];",
+      })
+    ).toEqual([]);
+  });
+
+  test("needs v8 for oxlint-tsgolint without Oxlint's type-aware option", () => {
+    const oxlintConfig =
+      "export default defineConfig({ extends: [core], ignorePatterns: core.ignorePatterns });";
+
+    expect(
+      versionsFor({ dependencies: ["oxlint-tsgolint"], oxlintConfig })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        dependencies: ["oxlint-tsgolint"],
+        oxlintConfig: oxlintConfig.replace(
+          "extends",
+          "options: { typeAware: true }, extends"
+        ),
+      })
+    ).toEqual([]);
+    expect(versionsFor({ oxlintConfig })).toEqual([]);
+  });
+
+  test("needs v8 for an init that relied on --quiet to skip the prompts", () => {
+    expect(
+      versionsFor({
+        commandSources: [
+          "run: npx ultracite@latest init --quiet --linter oxlint --pm npm",
+        ],
+      })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        commandSources: ["run: npx ultracite init --quiet -y --pm npm"],
+      })
+    ).toEqual([]);
+    expect(
+      versionsFor({ commandSources: ["npx ultracite check --quiet"] })
+    ).toEqual([]);
+  });
+
   test("names each guide's path in the skill", () => {
     const [guide] = findPendingGuides(
       project({ biomeConfig: { extends: ["ultracite/core"] } })
@@ -118,6 +197,21 @@ describe("readProjectState", () => {
     expect(state.commandSources).toEqual([
       '{"scripts":{"format":"ultracite format"}}',
     ]);
+  });
+
+  test("reads the ESLint config and the dependencies", () => {
+    mockFileSystem({
+      "/repo/eslint.config.mjs":
+        'import core from "ultracite/eslint/core";\nexport default [...core];',
+      "/repo/package.json":
+        '{"dependencies":{"react":"19"},"devDependencies":{"cypress":"15"}}',
+    });
+
+    const state = readProjectState("/repo");
+
+    expect(state.eslintConfig).toContain("ultracite/eslint/core");
+    expect(state.dependencies).toEqual(["react", "cypress"]);
+    expect(findPendingGuides(state).map((guide) => guide.version)).toEqual([8]);
   });
 });
 

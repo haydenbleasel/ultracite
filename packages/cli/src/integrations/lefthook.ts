@@ -40,20 +40,61 @@ const findConfigPath = (): string | undefined =>
 const isYamlPath = (file: string): boolean =>
   file.endsWith(".yml") || file.endsWith(".yaml");
 
-const fileExtensions = ["js", "jsx", "ts", "tsx", "json", "jsonc", "css"];
+// Every file type Biome, Oxlint + Oxfmt or ESLint + Prettier + Stylelint
+// lints or formats. The job only gets the staged files that match, so a type
+// missing here is never fixed on commit.
+const fileExtensions = [
+  "js",
+  "jsx",
+  "mjs",
+  "cjs",
+  "ts",
+  "tsx",
+  "mts",
+  "cts",
+  "json",
+  "jsonc",
+  "css",
+  "scss",
+  "less",
+  "vue",
+  "svelte",
+  "astro",
+  "html",
+  "md",
+  "mdx",
+  "yaml",
+  "yml",
+  "graphql",
+  "gql",
+];
+
+// The narrower list init wrote before v8, when the job fixed the whole
+// project and the globs only decided whether it ran.
+const legacyFileExtensions = ["js", "jsx", "ts", "tsx", "json", "jsonc", "css"];
 
 // With lefthook's default (gobwas) matcher `*` crosses directories, so
 // `*.js` matches every .js file, while `**/*.js` needs at least one directory
 // and skips root files like `index.ts` or `package.json`. The doublestar
 // matcher behaves like a shell glob, where `**/*.js` is the one that matches
 // everywhere.
-const createGlobs = (doublestar: boolean): string[] =>
-  fileExtensions.map((extension) =>
+const globsFor = (extensions: string[], doublestar: boolean): string[] =>
+  extensions.map((extension) =>
     doublestar ? `**/*.${extension}` : `*.${extension}`
   );
 
-// The glob list earlier versions wrote, which missed root-level files.
-const legacyGlobs = createGlobs(true);
+const createGlobs = (doublestar: boolean): string[] =>
+  globsFor(fileExtensions, doublestar);
+
+// Every glob list an init has written, for either matcher: the current
+// extensions, and the narrower legacy ones (whose `**` form also missed
+// root-level files under the default matcher).
+const generatedGlobLists = new Set(
+  [fileExtensions, legacyFileExtensions].flatMap((extensions) => [
+    JSON.stringify(globsFor(extensions, false)),
+    JSON.stringify(globsFor(extensions, true)),
+  ])
+);
 
 const renderJob = (command: string, doublestar: boolean): string =>
   [
@@ -63,10 +104,31 @@ const renderJob = (command: string, doublestar: boolean): string =>
     "      stage_fixed: true",
   ].join("\n");
 
+// lefthook substitutes the staged files that match the job's globs, so only
+// those are fixed, and stage_fixed re-stages just them.
+const STAGED_FILES = "{staged_files}";
+
+const stagedFixCommand = (packageManager: PackageManagerName): string =>
+  `${ultraciteFixCommand(packageManager)} ${STAGED_FILES}`;
+
+/**
+ * Whether a job's `run` is one an `init` wrote: a generated `ultracite fix`
+ * command followed by `{staged_files}`, or on its own as before v8, when the
+ * job fixed the whole project.
+ */
+const isGeneratedJobCommand = (command: string): boolean => {
+  const trimmed = command.trim();
+  const withoutFiles = trimmed.endsWith(` ${STAGED_FILES}`)
+    ? trimmed.slice(0, -STAGED_FILES.length)
+    : trimmed;
+
+  return isGeneratedUltraciteFixCommand(withoutFiles);
+};
+
 const createLefthookConfig = (packageManager: PackageManagerName) =>
   `pre-commit:
   jobs:
-${renderJob(ultraciteFixCommand(packageManager), false)}
+${renderJob(stagedFixCommand(packageManager), false)}
 `;
 
 const createJobNode = (
@@ -107,8 +169,10 @@ const findUltraciteJob = (hook: YAML.YAMLMap): YAML.YAMLMap | undefined => {
 /**
  * Brings an ultracite job written by an earlier init up to date: a dlx
  * command (which Yarn 1 can't run, and which ignores the pinned version)
- * becomes the installed binary, and the old `**` globs that skipped
- * root-level files are replaced. Returns whether anything changed.
+ * becomes the installed binary, a command without `{staged_files}` (which
+ * fixed the whole project) gets it, and a glob list an init wrote (the
+ * narrower pre-v8 one, or one for the other matcher) becomes the current
+ * list. Hand-edited globs are left alone. Returns whether anything changed.
  */
 const upgradeUltraciteJob = (
   doc: YAML.Document,
@@ -118,19 +182,20 @@ const upgradeUltraciteJob = (
 ): boolean => {
   const commandChanged = replaceYamlStrings(
     job,
-    (value) =>
-      value === job.get("run") && isGeneratedUltraciteFixCommand(value),
+    (value) => value === job.get("run") && isGeneratedJobCommand(value),
     command
   );
 
   const glob = job.get("glob", true);
+  const globList = YAML.isSeq(glob) ? JSON.stringify(glob.toJSON()) : null;
+  const currentGlobs = createGlobs(doublestar);
   const hasLegacyGlobs =
-    !doublestar &&
-    YAML.isSeq(glob) &&
-    JSON.stringify(glob.toJSON()) === JSON.stringify(legacyGlobs);
+    globList !== null &&
+    globList !== JSON.stringify(currentGlobs) &&
+    generatedGlobLists.has(globList);
 
   if (hasLegacyGlobs) {
-    job.set("glob", doc.createNode(createGlobs(doublestar)));
+    job.set("glob", doc.createNode(currentGlobs));
   }
 
   return commandChanged || hasLegacyGlobs;
@@ -242,7 +307,7 @@ export const lefthook = {
   },
   update: async (packageManager: PackageManagerName) => {
     const file = findConfigPath() ?? defaultPath;
-    const command = ultraciteFixCommand(packageManager);
+    const command = stagedFixCommand(packageManager);
 
     if (!isYamlPath(file)) {
       warnManualEdit(file, command);

@@ -246,14 +246,18 @@ describe("lefthook", () => {
       expect(writeCall[0]).toBe("./lefthook.yml");
       expect(writeCall[1]).toContain("pre-commit:");
       expect(writeCall[1]).toContain("jobs:");
-      expect(writeCall[1]).toContain("npx ultracite fix");
+      // Only the staged files, which stage_fixed then re-stages
+      expect(writeCall[1]).toContain(
+        "    - run: npx ultracite fix {staged_files}\n"
+      );
+      expect(writeCall[1]).toContain("stage_fixed: true");
     });
   });
 
   describe("update", () => {
     test("skips update if ultracite command already present", async () => {
       const existingContent =
-        "pre-commit:\n  jobs:\n    - run: npx ultracite fix";
+        "pre-commit:\n  jobs:\n    - run: npx ultracite fix {staged_files}";
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -414,7 +418,7 @@ describe("lefthook", () => {
 
       expect(written.has("./lefthook.yml")).toBe(false);
       expect(preCommitJobs(written.get("./.lefthook.yml"))[0].run).toBe(
-        "npx ultracite fix"
+        "npx ultracite fix {staged_files}"
       );
     });
 
@@ -457,7 +461,7 @@ describe("lefthook", () => {
 
       const jobs = preCommitJobs(written.get("./lefthook.yml"));
       expect(jobs.map((job: { run: string }) => job.run)).toEqual([
-        "npx ultracite fix",
+        "npx ultracite fix {staged_files}",
         "npm test",
       ]);
     });
@@ -487,7 +491,9 @@ describe("lefthook", () => {
 
       const config = YAML.parse(written.get("./lefthook.yml") ?? "");
       expect(config["pre-commit"].commands.lint.run).toBe("npm run lint");
-      expect(config["pre-commit"].jobs[0].run).toBe("npx ultracite fix");
+      expect(config["pre-commit"].jobs[0].run).toBe(
+        "npx ultracite fix {staged_files}"
+      );
     });
 
     test("uses globs that match root-level files", async () => {
@@ -499,6 +505,112 @@ describe("lefthook", () => {
       const [job] = preCommitJobs(written.get("./lefthook.yml"));
       expect(job.glob).toContain("*.ts");
       expect(job.glob).not.toContain("**/*.ts");
+    });
+
+    test("globs every file type the toolchains handle", async () => {
+      const written = mockProject({});
+
+      await lefthook.create("npm");
+      restoreFileSystemMock();
+
+      const [job] = preCommitJobs(written.get("./lefthook.yml"));
+      expect(job.glob).toEqual([
+        "*.js",
+        "*.jsx",
+        "*.mjs",
+        "*.cjs",
+        "*.ts",
+        "*.tsx",
+        "*.mts",
+        "*.cts",
+        "*.json",
+        "*.jsonc",
+        "*.css",
+        "*.scss",
+        "*.less",
+        "*.vue",
+        "*.svelte",
+        "*.astro",
+        "*.html",
+        "*.md",
+        "*.mdx",
+        "*.yaml",
+        "*.yml",
+        "*.graphql",
+        "*.gql",
+      ]);
+    });
+
+    test("widens the glob list a pre-v8 init wrote", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "*.js"
+        - "*.jsx"
+        - "*.ts"
+        - "*.tsx"
+        - "*.json"
+        - "*.jsonc"
+        - "*.css"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      const [job] = preCommitJobs(written.get("./lefthook.yml"));
+      expect(job.glob).toHaveLength(23);
+      expect(job.glob).toContain("*.vue");
+      expect(job.glob).toContain("*.mts");
+      expect(job.glob).not.toContain("**/*.vue");
+    });
+
+    test("widens a pre-v8 doublestar glob list under the doublestar matcher", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `glob_matcher: doublestar
+pre-commit:
+  jobs:
+    - run: npx ultracite fix {staged_files}
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      const [job] = preCommitJobs(written.get("./lefthook.yml"));
+      expect(job.glob).toHaveLength(23);
+      expect(job.glob).toContain("**/*.astro");
+      expect(job.glob).not.toContain("*.astro");
+    });
+
+    test("leaves a glob list a user edited alone", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: npx ultracite fix {staged_files}
+      glob:
+        - "*.ts"
+        - "*.tsx"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
     });
 
     test("uses ** globs when the config opts into the doublestar matcher", async () => {
@@ -535,7 +647,7 @@ describe("lefthook", () => {
 
       const jobs = preCommitJobs(written.get("./lefthook.yml"));
       expect(jobs).toHaveLength(1);
-      expect(jobs[0].run).toBe("yarn ultracite fix");
+      expect(jobs[0].run).toBe("yarn ultracite fix {staged_files}");
       expect(jobs[0].glob).toContain("*.js");
     });
 
@@ -550,13 +662,51 @@ describe("lefthook", () => {
 
       const jobs = preCommitJobs(written.get("./lefthook.yml"));
       expect(jobs).toHaveLength(1);
-      expect(jobs[0].run).toBe("bunx ultracite fix");
+      expect(jobs[0].run).toBe("bunx ultracite fix {staged_files}");
+    });
+
+    test("passes the staged files to a job from before v8", async () => {
+      const written = mockProject({
+        "./lefthook.yml": `pre-commit:
+  jobs:
+    - run: pnpm exec ultracite fix
+      glob:
+        - "*.js"
+        - "*.ts"
+      stage_fixed: true
+`,
+      });
+
+      await lefthook.update("pnpm");
+      restoreFileSystemMock();
+
+      const jobs = preCommitJobs(written.get("./lefthook.yml"));
+      expect(jobs).toHaveLength(1);
+      expect(jobs[0]).toEqual({
+        glob: ["*.js", "*.ts"],
+        run: "pnpm exec ultracite fix {staged_files}",
+        stage_fixed: true,
+      });
+    });
+
+    test("moves a staged-files job onto a new package manager", async () => {
+      const written = mockProject({
+        "./lefthook.yml":
+          "pre-commit:\n  jobs:\n    - run: npx ultracite fix {staged_files}\n",
+      });
+
+      await lefthook.update("pnpm");
+      restoreFileSystemMock();
+
+      const jobs = preCommitJobs(written.get("./lefthook.yml"));
+      expect(jobs).toHaveLength(1);
+      expect(jobs[0].run).toBe("pnpm exec ultracite fix {staged_files}");
     });
 
     test("leaves a hand-written ultracite job alone", async () => {
       const written = mockProject({
         "./lefthook.yml":
-          "pre-commit:\n  jobs:\n    - run: npx ultracite fix {staged_files}\n",
+          "pre-commit:\n  jobs:\n    - run: npx ultracite fix --unsafe {staged_files}\n",
       });
 
       await lefthook.update("npm");

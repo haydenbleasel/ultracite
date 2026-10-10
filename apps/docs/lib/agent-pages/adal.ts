@@ -54,7 +54,7 @@ export const adal: AgentPageContent = {
   metaDescription:
     "Set up Ultracite for AdaL: rules in the AGENTS.md it reads every turn, approvals for running npx ultracite, and what its user-level hooks can do.",
   metaTitle: "Ultracite for AdaL — AGENTS.md on every turn",
-  related: ["droid", "qwen", "kimi-cli"],
+  related: ["droid", "qwen", "kimi-code"],
   rules: {
     facts: [
       {

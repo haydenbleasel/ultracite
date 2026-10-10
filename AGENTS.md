@@ -50,7 +50,7 @@ tmp/                          Gitignored scratch area for hand-testing the CLI a
 - **Turbo** fans out `build`, `test`, `types`, `dev` across workspaces.
 - **TypeScript** type checks run through `tsgo` (`@typescript/native-preview`), not `tsc`. `bun run types` at the root.
 - **The repo lints itself with Oxlint + Oxfmt** via `oxlint.config.ts` and `oxfmt.config.ts` at the root, which extend the shipped core, react, astro and anti-slop presets. Do not run Biome, ESLint or Prettier on repo source; those tools are dev dependencies only so the presets can be validated.
-- The published CLI must run on **Node 20, 22, 24 and Bun**, on Linux and Windows. It spawns the linters rather than bundling them, so keep new runtime dependencies to a minimum and avoid Bun-only APIs in `src/`. (Scripts, tests and `build.ts` may use Bun APIs.)
+- The published CLI must run on **Node 22.18+, Node 24 and Bun**, on Linux and Windows (`engines` in `packages/cli/package.json`; 22.18 is the first Node 22 that loads the `oxlint.config.ts` init writes). Check a new runtime dependency's `engines` against that floor; CI starts the built CLI on each runtime. It spawns the linters rather than bundling them, so keep new runtime dependencies to a minimum and avoid Bun-only APIs in `src/`. (Scripts, tests and `build.ts` may use Bun APIs.)
 
 ## Commands
 
@@ -96,14 +96,14 @@ config/stylelint/stylelint.config.mjs ->  "ultracite/stylelint"
 config/shared/ignores.mjs             ->  canonical ignore list for every tool
 ```
 
-Presets: `core` plus framework variants (`angular`, `astro`, `jest`, `nestjs`, `next`, `qwik`, `react`, `remix`, `solid`, `svelte`, `tanstack`, `vitest`, `vue`), for oxlint and eslint also `gdp` (opt-in, never added by init), for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for biome `type-aware`.
+Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `jest`, `nestjs`, `next`, `qwik`, `react`, `remix`, `solid`, `storybook`, `svelte`, `tanstack`, `vitest`, `vue`; `cypress` and `storybook` only have rules on ESLint), for oxlint and eslint also `gdp` (opt-in, never added by init), for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for eslint and biome `type-aware`, plus `<framework>/type-aware` add-ons on eslint for frameworks whose plugins have type-aware rules.
 
 ### Rules for changing rules
 
 - **Oxlint is the benchmark.** Decide a rule's severity in `config/oxlint/<preset>/index.mjs` first, then mirror it in ESLint and Biome. `packages/cli/scripts/compare-rule-parity.ts` fails CI on any ESLint/oxlint divergence that is not in its `allowlist` with a reason.
 - **Prefer maximum strictness over parity with a tool's defaults.** Every non-nursery rule a plugin implements is listed explicitly in the oxlint presets; ESLint presets enable every non-deprecated plugin rule and then override to match oxlint. Turn a rule off only with a comment saying why (false positives, upstream bug with a link, conflicts with another rule).
 - Framework presets must only contain rules from the plugins they enable. `__tests__/oxlint-config.test.ts` asserts this and also that mutually exclusive rules are never both on.
-- Rules that need type information are Biome-only today and live in `biome/type-aware` (enabled by `init --type-aware`), never in `core`.
+- Rules that need type information are opt-in and never run from `core`. ESLint keeps them in `eslint/type-aware` and the `eslint/<framework>/type-aware` add-ons (split out with `config/eslint/core/type-checked.mjs`; the ESLint smoke test lints every framework preset without type information to catch new ones), Biome in `biome/type-aware`, and Oxlint lists them in core but runs them only with `options.typeAware` and `oxlint-tsgolint`. `init --type-aware` turns them on for each linter.
 - Ignore patterns go in `config/shared/ignores.mjs` only. The prebuild step syncs them into `biome/core/biome.jsonc` `files.includes`; the other tools import the module directly. `**/node_modules` must stay in that list (oxlint only skips node_modules via .gitignore; issue #737).
 - Rule maps are grouped by plugin (`// ── eslint ──` style section comments) and alphabetised within each group. The `sort-keys` lint rule is off for preset files, so keep that order by hand.
 

@@ -41,16 +41,6 @@ const tanstack = [
     },
   },
   {
-    // These rules read TypeScript type information, which only the core
-    // preset's TypeScript block provides. On JavaScript files they throw and
-    // abort the whole ESLint run.
-    files: ["**/*.{js,jsx,mjs,cjs}"],
-    rules: {
-      "@tanstack/start/no-async-client-component": "off",
-      "@tanstack/start/no-client-code-in-server-component": "off",
-    },
-  },
-  {
     files: [ROUTE_FILE_GLOB],
     rules: {
       // File routes are mutually recursive: `Route` references the component

@@ -108,7 +108,6 @@
     "eslint-plugin-jsdoc": "^65.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^18.4.1",
-    "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-promise": "^7.3.0",
     "eslint-plugin-qwik": "^1.20.1",
     "eslint-plugin-react": "^7.37.5",
@@ -124,8 +123,10 @@
     "eslint-plugin-unused-imports": "^4.4.1",
     "eslint-plugin-vue": "^10.11.1",
     "globals": "^17.13.0",
+    "oxfmt": "^0.71.0",
     "oxlint": "^1.86.0",
     "oxlint-plugin-react-doctor": "^0.9.16",
+    "oxlint-tsgolint": "^7.0.2004",
     "postcss-less": "^6.0.0",
     "postcss-scss": "^4.0.9",
     "prettier-plugin-astro": "^1.1.0",
@@ -133,15 +134,14 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "storybook": "^10.6.1",
     "stylelint-config-idiomatic-order": "^10.0.0",
-    "stylelint-config-standard": "^40.0.0",
-    "stylelint-prettier": "^5.0.3"
+    "stylelint-config-standard": "^40.0.0"
   },
   "peerDependencies": {
     "@biomejs/biome": "^2.5.0",
     "eslint": "^10.9.0",
-    "oxfmt": ">=0.59.0",
+    "oxfmt": ">=0.71.0 <1",
     "oxlint": "^1.86.0",
-    "prettier": "^3.0.0",
+    "prettier": "^3.5.3",
     "stylelint": "^17.0.0"
   },
   "peerDependenciesMeta": {
@@ -163,6 +163,9 @@
     "stylelint": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "packageManager": "bun@1.4.2"
 }

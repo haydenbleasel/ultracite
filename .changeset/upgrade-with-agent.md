@@ -1,5 +1,5 @@
 ---
-"ultracite": minor
+"ultracite": major
 ---
 
 `ultracite upgrade` now brings your configuration up to date, not just your packages, and replaces the manual upgrade guides.

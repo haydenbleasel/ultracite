@@ -1411,3 +1411,74 @@ export default defineConfig({
     expect(project.warn).toHaveBeenCalled();
   });
 });
+
+describe("oxlint type-aware option", () => {
+  const plainConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+  test("create turns type-aware linting on in the config", async () => {
+    const project = mockProject({});
+
+    await oxlint.create({ typeAware: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("  options: { typeAware: true },");
+  });
+
+  test("create leaves it off by default", async () => {
+    const project = mockProject({});
+
+    await oxlint.create();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).not.toContain("typeAware");
+  });
+
+  test("update adds it to a config without options", async () => {
+    const project = mockProject({ "./oxlint.config.ts": plainConfig });
+
+    await oxlint.update({ typeAware: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("  options: { typeAware: true },");
+    expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("update keeps it when re-run without the flag", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": plainConfig.replace(
+        "  ignorePatterns",
+        "  options: { typeAware: true },\n  ignorePatterns"
+      ),
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("options: { typeAware: true }");
+  });
+
+  test("update leaves a project's own options as written and says so", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": plainConfig.replace(
+        "  ignorePatterns",
+        "  options: { reportUnusedDisableDirectives: true },\n  ignorePatterns"
+      ),
+    });
+
+    await oxlint.update({ typeAware: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      "options: { reportUnusedDisableDirectives: true }"
+    );
+    expect(content).not.toContain("typeAware");
+    expect(project.warn).toHaveBeenCalled();
+  });
+});

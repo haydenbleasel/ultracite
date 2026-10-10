@@ -3,6 +3,7 @@ import { afterAll, describe, expect, mock, test } from "bun:test";
 import type { PackageManager } from "nypm";
 
 import { UltraciteSetupError } from "../src/config-resolution";
+import { OXLINT_TOOLCHAIN_DEV_DEPENDENCIES } from "../src/dependencies";
 import {
   initialize,
   initializeLefthook,
@@ -11,6 +12,7 @@ import {
   initializePrecommitHook,
   installDependencies,
   migrateLinterConfig,
+  normalizeInitializeFlags,
   upsertAgents,
   upsertBiomeConfig,
   upsertEditorConfig,
@@ -705,7 +707,9 @@ describe("initialize", () => {
       "type-aware": true,
     });
 
-    expect(installedPackages).toContain("oxlint-tsgolint@latest");
+    expect(installedPackages).toContain(
+      `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+    );
   });
 
   test("completes successfully with minimal options", async () => {
@@ -1467,7 +1471,7 @@ describe("initialize", () => {
     );
   });
 
-  test("skips the skill prompt in quiet mode", async () => {
+  test("skips the skill prompt when every question is answered by a flag", async () => {
     const mockSelect = mock(() => Promise.resolve("install"));
     const mockSpawn = mock(() => ({ status: 0 }));
 
@@ -2154,7 +2158,9 @@ describe("helper functions", () => {
       }));
 
       await installDependencies(npmPm, "oxlint", true, true, true);
-      expect(installedPackages).toContain("oxlint-tsgolint@latest");
+      expect(installedPackages).toContain(
+        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+      );
     });
 
     test("does not install oxlint-tsgolint when type-aware is false", async () => {
@@ -2182,7 +2188,9 @@ describe("helper functions", () => {
       }));
 
       await installDependencies(npmPm, "oxlint", true, true, false);
-      expect(installedPackages).not.toContain("oxlint-tsgolint@latest");
+      expect(installedPackages).not.toContain(
+        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+      );
     });
 
     test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
@@ -3608,7 +3616,7 @@ describe("helper functions", () => {
       );
     });
 
-    test("defaults options in quiet mode without prompting", async () => {
+    test("takes the defaults with --yes without prompting", async () => {
       const mockMultiselect = mock(() => Promise.resolve([]));
 
       mock.module("@clack/prompts", () => ({
@@ -3641,18 +3649,16 @@ describe("helper functions", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
-      // Quiet mode with only pm should default all options without prompting
       await initialize({
-        pm: "npm",
-        quiet: true,
         skipInstall: true,
+        yes: true,
       });
 
-      // In quiet mode, multiselect should not be called for linter/frameworks/editors/agents/hooks/integrations
+      // No prompt for linter/frameworks/editors/agents/hooks/integrations
       expect(mockMultiselect).not.toHaveBeenCalled();
     });
 
-    test("defaults to oxlint in quiet mode when no linter is given", async () => {
+    test("defaults to oxlint with --yes when no linter is given", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -3697,8 +3703,8 @@ describe("helper functions", () => {
       restoreFileSystemMock();
       await initialize({
         pm: "npm",
-        quiet: true,
         skipInstall: true,
+        yes: true,
       });
 
       const writtenPaths = mockWriteFile.mock.calls.map(([path]) =>
@@ -4056,5 +4062,322 @@ describe("package.json module type", () => {
 
     expect(paths).toContain("./oxlint.config.ts");
     expect(paths).toContain("./oxfmt.config.ts");
+  });
+});
+
+// Prompts that answer every question with nothing, recording the calls.
+const recordingPrompts = (confirmAnswer = false) => {
+  const calls = {
+    confirm: mock((_prompt: { message: string }) =>
+      Promise.resolve(confirmAnswer)
+    ),
+    multiselect: mock(() => Promise.resolve([])),
+    select: mock(() => Promise.resolve("oxlint")),
+    warn: mock((_message: string) => {}),
+  };
+
+  mock.module("@clack/prompts", () => ({
+    cancel: mock(noop),
+    confirm: calls.confirm,
+    intro: mock(noop),
+    isCancel: mock(() => false),
+    log: {
+      error: mock(noop),
+      info: mock(noop),
+      success: mock(noop),
+      warn: calls.warn,
+    },
+    multiselect: calls.multiselect,
+    outro: mock(noop),
+    select: calls.select,
+    spinner: mock(() => ({
+      message: mock(noop),
+      start: mock(noop),
+      stop: mock(noop),
+    })),
+  }));
+
+  return calls;
+};
+
+// A project with these files, as both node:fs and node:fs/promises see it.
+// Returns the paths written and removed.
+const mockProject = (files: Record<string, string>) => {
+  const written = new Map<string, string>();
+  const removed: string[] = [];
+
+  mockFileSystem(
+    Object.fromEntries(
+      Object.entries(files).flatMap(([filePath, content]) => [
+        [filePath, content],
+        [`./${filePath}`, content],
+      ])
+    )
+  );
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.reject(new Error("ENOENT"))),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock((filePath: string) => {
+      const content = files[String(filePath).replace(/^\.\//u, "")];
+      return content === undefined
+        ? Promise.reject(new Error("ENOENT"))
+        : Promise.resolve(content);
+    }),
+    rm: mock((filePath: string) => {
+      removed.push(String(filePath));
+      return Promise.resolve();
+    }),
+    writeFile: mock((filePath: string, content: string) => {
+      written.set(String(filePath), content);
+      return Promise.resolve();
+    }),
+  }));
+  mock.module("fast-glob", () => ({
+    default: mock(() =>
+      Promise.resolve(
+        Object.keys(files).filter((filePath) => filePath.startsWith("tsconfig"))
+      )
+    ),
+  }));
+
+  return { removed, written };
+};
+
+const restoreProject = () => {
+  restoreFileSystemMock();
+  mock.module("fast-glob", () => ({
+    default: mock(() => Promise.resolve([])),
+  }));
+};
+
+describe("init questions", () => {
+  test("--quiet alone still asks the questions", async () => {
+    const prompts = recordingPrompts();
+    mockProject({ "package.json": '{"name": "app"}' });
+
+    try {
+      await initialize({ quiet: true, skipInstall: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(prompts.select).toHaveBeenCalled();
+  });
+
+  test("--quiet still prints warnings", async () => {
+    const prompts = recordingPrompts();
+    mockProject({
+      "package.json": '{"name": "app", "scripts": {"check": "tsc --noEmit"}}',
+    });
+
+    try {
+      await initialize({
+        linter: "oxlint",
+        quiet: true,
+        skipInstall: true,
+        yes: true,
+      });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.warn.mock.calls.some(([message]) =>
+        message.includes('already has a "check" script')
+      )
+    ).toBe(true);
+  });
+
+  test("asks before removing another linter's setup, and keeps it on no", async () => {
+    const prompts = recordingPrompts(false);
+    const { removed } = mockProject({
+      "biome.jsonc": "{}",
+      "package.json": '{"name": "app"}',
+    });
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.confirm.mock.calls.some(([prompt]) =>
+        prompt.message.includes("Remove it")
+      )
+    ).toBe(true);
+    expect(removed).not.toContain("./biome.jsonc");
+  });
+
+  test("removes another linter's setup without asking with --yes", async () => {
+    const prompts = recordingPrompts();
+    const { removed } = mockProject({
+      "biome.jsonc": "{}",
+      "package.json": '{"name": "app"}',
+    });
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true, yes: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(prompts.confirm).not.toHaveBeenCalled();
+    expect(removed).toContain("./biome.jsonc");
+  });
+
+  test("keeps a legacy .eslintrc on an ESLint setup, which ESLint 10 ignores", async () => {
+    recordingPrompts();
+    const { removed } = mockProject({
+      ".eslintrc.json": "{}",
+      "package.json": '{"name": "app"}',
+    });
+
+    try {
+      await migrateLinterConfig("eslint", true);
+    } finally {
+      restoreProject();
+    }
+
+    expect(removed).not.toContain("./.eslintrc.json");
+  });
+
+  test("still removes a legacy .eslintrc when moving off ESLint", async () => {
+    recordingPrompts();
+    const { removed } = mockProject({
+      ".eslintrc.json": "{}",
+      "package.json": '{"name": "app"}',
+    });
+
+    try {
+      await migrateLinterConfig("oxlint", true);
+    } finally {
+      restoreProject();
+    }
+
+    expect(removed).toContain("./.eslintrc.json");
+  });
+
+  test("leaves tsconfig files alone without type-aware linting", async () => {
+    recordingPrompts();
+    const { written } = mockProject({
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true, yes: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(written.has("tsconfig.json")).toBe(false);
+  });
+
+  test("turns on strictNullChecks with --type-aware", async () => {
+    recordingPrompts();
+    const { written } = mockProject({
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({
+        linter: "oxlint",
+        skipInstall: true,
+        "type-aware": true,
+        yes: true,
+      });
+    } finally {
+      restoreProject();
+    }
+
+    expect(written.get("tsconfig.json")).toContain('"strictNullChecks": true');
+    expect(written.get("./oxlint.config.mts")).toContain(
+      "options: { typeAware: true }"
+    );
+  });
+
+  test("asks before changing tsconfig files, and leaves them on no", async () => {
+    const prompts = recordingPrompts(false);
+    const { written } = mockProject({
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({
+        linter: "oxlint",
+        skipInstall: true,
+        "type-aware": true,
+      });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.confirm.mock.calls.some(([prompt]) =>
+        prompt.message.includes("strictNullChecks")
+      )
+    ).toBe(true);
+    expect(written.has("tsconfig.json")).toBe(false);
+  });
+
+  test("asks about type-aware linting in a TypeScript project", async () => {
+    const prompts = recordingPrompts(false);
+    mockProject({
+      "package.json": '{"name": "app"}',
+      "tsconfig.json": '{"compilerOptions": {}}',
+    });
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(
+      prompts.confirm.mock.calls.some(([prompt]) =>
+        prompt.message.includes("type-aware")
+      )
+    ).toBe(true);
+  });
+});
+
+describe("normalizeInitializeFlags", () => {
+  test("maps renamed agent, editor and hook IDs to the current ones", () => {
+    const prompts = recordingPrompts();
+
+    expect(
+      normalizeInitializeFlags({
+        agents: ["mux", "amazon-q-cli", "kimi-cli", "snowflake-cortex"],
+        editors: ["windsurf"],
+        hooks: ["windsurf"],
+      })
+    ).toMatchObject({
+      agents: ["xum", "kiro-cli", "kimi-code", "snowflake-coco"],
+      editors: ["devin"],
+      hooks: ["devin"],
+    });
+    expect(prompts.warn).toHaveBeenCalledTimes(6);
+  });
+
+  test("writes AGENTS.md for an agent it doesn't know, instead of stopping", () => {
+    const prompts = recordingPrompts();
+
+    expect(
+      normalizeInitializeFlags({ agents: ["roo-code", "claude"] }).agents
+    ).toEqual(["universal", "claude"]);
+    expect(prompts.warn).toHaveBeenCalledTimes(1);
+  });
+
+  test("still rejects an unknown editor", () => {
+    recordingPrompts();
+
+    expect(() =>
+      validateInitializeFlags(
+        normalizeInitializeFlags({ editors: ["notepad"] })
+      )
+    ).toThrow(UltraciteSetupError);
   });
 });

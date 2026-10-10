@@ -45,4 +45,23 @@ const overrideRules = {
 
 const config = Object.assign(baseRules, overrideRules);
 
+// The rules that need type information, as typescript-eslint lists them in
+// the config that turns them off.
+const typeCheckedRuleNames = new Set(
+  Object.keys(typescript.configs["flat/disable-type-checked"].rules)
+);
+
+const pickRules = (typeChecked) =>
+  Object.fromEntries(
+    Object.entries(config).filter(
+      ([key]) => typeCheckedRuleNames.has(key) === typeChecked
+    )
+  );
+
+/** The rules core runs, which work from the syntax tree alone. */
+export const syntacticRules = pickRules(false);
+
+/** The rules the type-aware preset adds, which need a TypeScript program. */
+export const typeCheckedRules = pickRules(true);
+
 export default config;

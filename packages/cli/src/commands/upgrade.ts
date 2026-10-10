@@ -18,6 +18,7 @@ import {
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
+  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../dependencies";
 import type { FixAgent } from "../linter-args";
 import {
@@ -170,12 +171,14 @@ export const getToolchainPackages = (
       break;
     }
     case "oxlint": {
-      // Mirrors init: oxlint and oxfmt track their latest release, while the
-      // peer ranges guard against a preset/tool mismatch.
-      packages.set("oxlint", "latest");
-      packages.set("oxfmt", "latest");
+      // Mirrors init: the ranges this release was verified against.
+      packages.set("oxlint", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint);
+      packages.set("oxfmt", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt);
       if (projectDependencies.has("oxlint-tsgolint")) {
-        packages.set("oxlint-tsgolint", "latest");
+        packages.set(
+          "oxlint-tsgolint",
+          OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]
+        );
       }
       for (const [name, version] of Object.entries(
         OXLINT_JS_PLUGIN_DEV_DEPENDENCIES

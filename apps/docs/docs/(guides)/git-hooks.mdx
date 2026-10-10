@@ -19,30 +19,48 @@ Or select them interactively when prompted. In a project that's already set up, 
 
 Every hook runs the `ultracite` installed in your project rather than downloading the latest release, so commits use the version your lockfile pins. The command depends on your package manager: `npx ultracite fix` (npm), `yarn ultracite fix`, `pnpm exec ultracite fix`, `bunx ultracite fix`, `deno run -A npm:ultracite fix`, `nub exec ultracite fix`, or `aube exec ultracite fix`. The examples below use npm.
 
-Re-running `ultracite init` updates a hook it wrote earlier (for example, one that used `pnpm dlx` or `yarn dlx`) instead of adding a second one, and leaves commands you wrote yourself alone.
+Re-running `ultracite init` updates a hook it wrote earlier instead of adding a second one, and leaves commands you wrote yourself alone. That includes hooks from before v8, which ran `ultracite fix` on the whole project and matched fewer file types, and ones that used `pnpm dlx` or `yarn dlx`.
 
 ### Husky
 
-[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite adds a marker-wrapped section to your `.husky/pre-commit` file. When files are staged, it runs `ultracite fix` on the whole project, re-stages the files that were already staged, and fails the commit if any issues couldn't be auto-fixed:
+[Husky](https://typicode.github.io/husky/) is a popular tool for managing Git hooks. Ultracite adds a marker-wrapped section to your `.husky/pre-commit` file. When files are staged, it runs `ultracite fix` on just those files, re-stages them, and fails the commit if any issues couldn't be auto-fixed:
 
 ```bash title=".husky/pre-commit"
 # ultracite
 #!/bin/sh
-# Check if there are any staged files
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+# Fix only the staged files
+STAGED_FILES=$(git -c core.quotePath=false diff --cached --name-only --diff-filter=ACMR)
 if [ -z "$STAGED_FILES" ]; then
   echo "No staged files to format"
 else
-  # Run formatter, capturing the exit code so we can still re-stage and report
-  FORMAT_EXIT_CODE=0
-  npx ultracite fix || FORMAT_EXIT_CODE=$?
+  # Staged files that also have unstaged changes, found before fixing
+  UNSTAGED_FILES=$(git -c core.quotePath=false diff --name-only)
+  PARTIALLY_STAGED=""
+  FULLY_STAGED=$STAGED_FILES
+  if [ -n "$UNSTAGED_FILES" ]; then
+    PARTIALLY_STAGED=$(printf '%s\n' "$STAGED_FILES" | grep -Fx -- "$UNSTAGED_FILES")
+  fi
+  if [ -n "$PARTIALLY_STAGED" ]; then
+    FULLY_STAGED=$(printf '%s\n' "$STAGED_FILES" | grep -Fxv -- "$PARTIALLY_STAGED")
+  fi
 
-  # Re-stage files that were already staged
-  echo "$STAGED_FILES" | while IFS= read -r file; do
+  # Run the fixer on the staged files, capturing the exit code so we can
+  # still re-stage and report
+  FORMAT_EXIT_CODE=0
+  git diff --cached --name-only -z --diff-filter=ACMR | xargs -0 npx ultracite fix || FORMAT_EXIT_CODE=$?
+
+  # Re-stage the fully staged files; staging the others would add their
+  # unstaged changes to the commit
+  printf '%s\n' "$FULLY_STAGED" | while IFS= read -r file; do
     if [ -f "$file" ]; then
       git add -- "$file"
     fi
   done
+
+  if [ -n "$PARTIALLY_STAGED" ]; then
+    echo "These files also have unstaged changes, so Ultracite's fixes to them were left unstaged. Review and stage them:"
+    printf '%s\n' "$PARTIALLY_STAGED" | sed 's/^/  /'
+  fi
 
   if [ $FORMAT_EXIT_CODE -ne 0 ]; then
     echo "Ultracite found issues that could not be auto-fixed."
@@ -53,6 +71,8 @@ else
 fi
 # ultracite end
 ```
+
+A file you staged only part of is fixed but not re-staged, since `git add` would also stage the changes you left out. The hook lists those files so you can review the fixes and stage them yourself; until you do, the commit takes the version you staged.
 
 Anything you've added to the hook outside the `# ultracite` markers is preserved when Ultracite updates it, and still runs when nothing is staged. If you also select lint-staged, the section runs lint-staged (`npx lint-staged`) instead of the script above.
 
@@ -65,19 +85,35 @@ Ultracite also adds `husky` to your `prepare` script so hooks are installed on `
 ```yaml title="lefthook.yml"
 pre-commit:
   jobs:
-    - run: npx ultracite fix
+    - run: npx ultracite fix {staged_files}
       glob:
         - "*.js"
         - "*.jsx"
+        - "*.mjs"
+        - "*.cjs"
         - "*.ts"
         - "*.tsx"
+        - "*.mts"
+        - "*.cts"
         - "*.json"
         - "*.jsonc"
         - "*.css"
+        - "*.scss"
+        - "*.less"
+        - "*.vue"
+        - "*.svelte"
+        - "*.astro"
+        - "*.html"
+        - "*.md"
+        - "*.mdx"
+        - "*.yaml"
+        - "*.yml"
+        - "*.graphql"
+        - "*.gql"
       stage_fixed: true
 ```
 
-With Lefthook's default glob matcher, `*.js` matches files in every directory, including the project root. If your config sets `glob_matcher: doublestar`, Ultracite writes `**/*.js`-style globs instead.
+Lefthook replaces `{staged_files}` with the staged files that match the globs, so only those are fixed, and `stage_fixed` re-stages them. The globs cover every file type Biome, Oxlint and Oxfmt, or ESLint, Prettier and Stylelint lint or format. With Lefthook's default glob matcher, `*.js` matches files in every directory, including the project root. If your config sets `glob_matcher: doublestar`, Ultracite writes `**/*.js`-style globs instead.
 
 If you already have a Lefthook config, Ultracite edits the one Lefthook actually loads (`lefthook.yml`, `.lefthook.yml`, `.config/lefthook.yml`, or their `.yaml` variants) and adds the job first in `pre-commit`, keeping your comments and formatting. JSON and TOML configs aren't edited: Ultracite prints the job to add instead. Ultracite also appends `lefthook install` to your `prepare` script, keeping any existing command.
 
@@ -107,18 +143,18 @@ repos:
         name: ultracite
         entry: npx ultracite fix
         language: system
-        types_or: [javascript, jsx, ts, tsx, json, css]
-        pass_filenames: false
+        files: \.(js|jsx|mjs|cjs|ts|tsx|mts|cts|json|jsonc|css|scss|less|vue|svelte|astro|html|md|mdx|yaml|yml|graphql|gql)$
+        require_serial: true
 ```
 
-After setup, run `pre-commit install` to activate the hooks.
+The `files` pattern covers the same file types as the Lefthook globs. It's a pattern rather than `types_or` because pre-commit has no file type tags for `.jsonc`, `.mts`, `.cts`, or `.gql`. pre-commit passes the staged files that match it to `ultracite fix`, and sets your unstaged changes aside while the hook runs. `require_serial` keeps it to a single `ultracite fix` run instead of one per CPU. If the fixes change any files, pre-commit stops the commit so you can stage them. After setup, run `pre-commit install` to activate the hooks.
 
 ## How It Works
 
 1. You make changes and stage files with `git add`
 2. You run `git commit`
-3. The pre-commit hook runs `ultracite fix`: on the files you staged with lint-staged, or on the whole project with Husky, Lefthook, and pre-commit
-4. Code is formatted, auto-fixable issues are resolved, and the fixed files are re-staged (Husky, Lefthook, and lint-staged)
+3. The pre-commit hook runs `ultracite fix` on the files you staged
+4. Code is formatted, auto-fixable issues are resolved, and the fixed files are re-staged (Husky, Lefthook, and lint-staged; pre-commit asks you to stage them)
 5. The commit proceeds, or stops if issues remain that couldn't be auto-fixed
 
 ## Benefits

@@ -1,5 +1,7 @@
 import plugin from "eslint-plugin-jest";
 
+import { splitTypeChecked } from "../../core/type-checked.mjs";
+
 const { rules } = plugin;
 
 const availableKeys = Object.keys(rules).filter(
@@ -21,6 +23,14 @@ const overrideRules = {
   "jest/require-hook": "off",
 };
 
-const config = Object.assign(baseRules, overrideRules);
+// The type-checked rules (marked `requiresTypeChecking`) run in the
+// type-aware add-on.
+const { syntactic, typeChecked } = splitTypeChecked(
+  "jest",
+  plugin,
+  Object.assign(baseRules, overrideRules)
+);
 
-export default config;
+export const typeCheckedRules = typeChecked;
+
+export default syntactic;

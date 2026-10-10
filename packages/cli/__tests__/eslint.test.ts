@@ -264,3 +264,134 @@ describe("eslint config precedence", () => {
     expect(project.writeFile.mock.calls[0]?.[0]).toBe("./eslint.config.js");
   });
 });
+
+describe("eslint type-aware presets", () => {
+  test("adds the type-aware preset after core and add-ons after their frameworks", async () => {
+    const project = mockProject({});
+
+    await eslint.create({ frameworks: ["react", "jest"], typeAware: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(`import core from "ultracite/eslint/core";
+import typeAware from "ultracite/eslint/type-aware";
+import react from "ultracite/eslint/react";
+import jest from "ultracite/eslint/jest";
+import jestTypeAware from "ultracite/eslint/jest/type-aware";
+
+export default [
+  ...core,
+  ...typeAware,
+  ...react,
+  ...jest,
+  ...jestTypeAware,
+];
+`);
+  });
+
+  test("leaves type-aware presets out by default", async () => {
+    const project = mockProject({});
+
+    await eslint.create({ frameworks: ["vitest"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).not.toContain("type-aware");
+  });
+
+  test("keeps a type-aware config type-aware without the option", async () => {
+    const project = mockProject({
+      "./eslint.config.mjs": `import core from "ultracite/eslint/core";
+import typeAware from "ultracite/eslint/type-aware";
+import vitest from "ultracite/eslint/vitest";
+import vitestTypeAware from "ultracite/eslint/vitest/type-aware";
+
+export default [
+  ...core,
+  ...typeAware,
+  ...vitest,
+  ...vitestTypeAware,
+];
+`,
+      "package.json": '{"type": "module"}',
+    });
+
+    await eslint.update({ frameworks: ["nestjs"], typeAware: false });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(`import core from "ultracite/eslint/core";
+import typeAware from "ultracite/eslint/type-aware";
+import vitest from "ultracite/eslint/vitest";
+import vitestTypeAware from "ultracite/eslint/vitest/type-aware";
+import nestjs from "ultracite/eslint/nestjs";
+import nestjsTypeAware from "ultracite/eslint/nestjs/type-aware";
+
+export default [
+  ...core,
+  ...typeAware,
+  ...vitest,
+  ...vitestTypeAware,
+  ...nestjs,
+  ...nestjsTypeAware,
+];
+`);
+  });
+
+  test("makes an existing config type-aware when asked", async () => {
+    const project = mockProject({
+      "./eslint.config.mjs": `import core from "ultracite/eslint/core";
+import angular from "ultracite/eslint/angular";
+
+export default [
+  ...core,
+  ...angular,
+  { rules: { eqeqeq: "off" } },
+];
+`,
+      "package.json": '{"type": "module"}',
+    });
+
+    await eslint.update({ typeAware: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(`import core from "ultracite/eslint/core";
+import typeAware from "ultracite/eslint/type-aware";
+import angular from "ultracite/eslint/angular";
+import angularTypeAware from "ultracite/eslint/angular/type-aware";
+
+export default [
+  ...core,
+  ...typeAware,
+  ...angular,
+  ...angularTypeAware,
+  { rules: { eqeqeq: "off" } },
+];
+`);
+  });
+
+  test("gives a workspace config the add-ons of a type-aware root config", async () => {
+    const project = mockProject({
+      "./eslint.config.mjs": `import core from "ultracite/eslint/core";
+import typeAware from "ultracite/eslint/type-aware";
+
+export default [
+  ...core,
+  ...typeAware,
+];
+`,
+    });
+
+    await eslint.createWorkspace({
+      dir: "apps/api",
+      frameworks: ["nestjs", "react"],
+    });
+
+    const [[writtenPath, content]] = project.writeFile.mock.calls;
+    expect(writtenPath).toBe("./apps/api/eslint.config.mjs");
+    expect(content).toContain(
+      'import nestjsTypeAware from "ultracite/eslint/nestjs/type-aware";'
+    );
+    expect(content).toContain(
+      "  ...nestjs,\n  ...nestjsTypeAware,\n  ...react,"
+    );
+    expect(content).not.toContain("react/type-aware");
+  });
+});

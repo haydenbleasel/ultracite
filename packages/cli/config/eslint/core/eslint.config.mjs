@@ -3,16 +3,13 @@ import typescript from "@typescript-eslint/eslint-plugin";
 import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
 import eslintPrettier from "eslint-config-prettier";
 import compat from "eslint-plugin-compat";
-import cypress from "eslint-plugin-cypress";
 import github from "eslint-plugin-github";
 import html from "eslint-plugin-html";
 import { importX } from "eslint-plugin-import-x";
 import jsdocPlugin from "eslint-plugin-jsdoc";
 import n from "eslint-plugin-n";
-import prettier from "eslint-plugin-prettier";
 import promise from "eslint-plugin-promise";
 import sonarjs from "eslint-plugin-sonarjs";
-import storybook from "eslint-plugin-storybook";
 import unicorn from "eslint-plugin-unicorn";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
@@ -23,18 +20,15 @@ import {
   ROUTE_FILE_GLOB,
 } from "../../shared/route-filenames.mjs";
 import compatRules from "./rules/compat.mjs";
-import cypressRules from "./rules/cypress.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
 import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
 import importRules from "./rules/import.mjs";
 import jsdocRules from "./rules/jsdoc.mjs";
 import nRules from "./rules/n.mjs";
-import prettierRules from "./rules/prettier.mjs";
 import promiseRules from "./rules/promise.mjs";
 import sonarjsRules from "./rules/sonarjs.mjs";
-import storybookRules from "./rules/storybook.mjs";
-import typescriptRules from "./rules/typescript.mjs";
+import { syntacticRules as typescriptRules } from "./rules/typescript.mjs";
 import unicornRules from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
@@ -63,7 +57,6 @@ export const scriptConfig = {
     "import-x": importX,
     jsdoc: jsdocPlugin,
     n,
-    prettier,
     promise,
     sonarjs,
     unicorn,
@@ -75,7 +68,6 @@ export const scriptConfig = {
     ...jsdocRules,
     ...promiseRules,
     ...nRules,
-    ...prettierRules,
     ...unusedImportsRules,
     ...sonarjsRules,
     ...compatRules,
@@ -111,16 +103,11 @@ export const scriptConfig = {
 
 export const typescriptConfig = {
   files: ["**/*.{ts,tsx,mts,cts}"],
+  // Rules that need type information, and the project service that supplies
+  // it, are in the opt-in type-aware preset, so core lints TypeScript
+  // without a tsconfig.
   languageOptions: {
     parser: typescriptParser,
-    parserOptions: {
-      // The project service finds the nearest tsconfig for each file, so
-      // solution-style configs (`"files": []` plus `references`, as in the
-      // Vite templates) and monorepo packages get type information. A
-      // fixed `project: "./tsconfig.json"` failed every file in those
-      // layouts.
-      projectService: true,
-    },
   },
   plugins: {
     "@typescript-eslint": typescript,
@@ -162,27 +149,6 @@ const core = [
   },
   scriptConfig,
   typescriptConfig,
-  {
-    // Registers the plugin plus the cy, Cypress, Mocha and Chai globals that
-    // specs and support files use without importing them.
-    ...cypress.configs.globals,
-    files: [
-      "**/*.cy.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
-      "**/cypress/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
-    ],
-    rules: {
-      ...cypressRules,
-    },
-  },
-  {
-    files: ["**/*.{stories,story}.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
-    plugins: {
-      storybook,
-    },
-    rules: {
-      ...storybookRules,
-    },
-  },
   {
     files: ["**/*.html"],
     plugins: {

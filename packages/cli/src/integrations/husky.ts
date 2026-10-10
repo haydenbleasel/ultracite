@@ -17,25 +17,49 @@ const createLintStagedHookScript = (lintStagedCommand: string) => `#!/bin/sh
 ${lintStagedCommand}
 `;
 
-// No early `exit 0`: commands a user keeps after the ultracite section must
-// still run when nothing is staged (e.g. `git commit --amend` or an empty
-// commit). A fix failure still exits non-zero to block the commit.
+// Fixes only the staged files, and re-stages only the ones with no unstaged
+// changes: `git add` on a partially staged file would commit the hunks the
+// user left out. The fix itself gets its file list from `git diff -z` through
+// `xargs -0`, so names with spaces or non-ASCII characters stay intact; the
+// empty check comes first because GNU xargs runs the command once with no
+// arguments on empty input, which would fix the whole project. No early
+// `exit 0`: commands a user keeps after the ultracite section must still run
+// when nothing is staged (e.g. `git commit --amend` or an empty commit). A
+// fix failure still exits non-zero to block the commit.
 const createStandaloneHookScript = (command: string) => `#!/bin/sh
-# Check if there are any staged files
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+# Fix only the staged files
+STAGED_FILES=$(git -c core.quotePath=false diff --cached --name-only --diff-filter=ACMR)
 if [ -z "$STAGED_FILES" ]; then
   echo "No staged files to format"
 else
-  # Run formatter, capturing the exit code so we can still re-stage and report
-  FORMAT_EXIT_CODE=0
-  ${command} || FORMAT_EXIT_CODE=$?
+  # Staged files that also have unstaged changes, found before fixing
+  UNSTAGED_FILES=$(git -c core.quotePath=false diff --name-only)
+  PARTIALLY_STAGED=""
+  FULLY_STAGED=$STAGED_FILES
+  if [ -n "$UNSTAGED_FILES" ]; then
+    PARTIALLY_STAGED=$(printf '%s\\n' "$STAGED_FILES" | grep -Fx -- "$UNSTAGED_FILES")
+  fi
+  if [ -n "$PARTIALLY_STAGED" ]; then
+    FULLY_STAGED=$(printf '%s\\n' "$STAGED_FILES" | grep -Fxv -- "$PARTIALLY_STAGED")
+  fi
 
-  # Re-stage files that were already staged
-  echo "$STAGED_FILES" | while IFS= read -r file; do
+  # Run the fixer on the staged files, capturing the exit code so we can
+  # still re-stage and report
+  FORMAT_EXIT_CODE=0
+  git diff --cached --name-only -z --diff-filter=ACMR | xargs -0 ${command} || FORMAT_EXIT_CODE=$?
+
+  # Re-stage the fully staged files; staging the others would add their
+  # unstaged changes to the commit
+  printf '%s\\n' "$FULLY_STAGED" | while IFS= read -r file; do
     if [ -f "$file" ]; then
       git add -- "$file"
     fi
   done
+
+  if [ -n "$PARTIALLY_STAGED" ]; then
+    echo "These files also have unstaged changes, so Ultracite's fixes to them were left unstaged. Review and stage them:"
+    printf '%s\\n' "$PARTIALLY_STAGED" | sed 's/^/  /'
+  fi
 
   if [ $FORMAT_EXIT_CODE -ne 0 ]; then
     echo "Ultracite found issues that could not be auto-fixed."

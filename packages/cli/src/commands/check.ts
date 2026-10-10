@@ -6,6 +6,7 @@ import {
   UltraciteSetupError,
 } from "../config-resolution";
 import {
+  eslintIgnoredFileArgs,
   normalizeFileArgs,
   toOxlintTargets,
   toStylelintTargets,
@@ -43,7 +44,11 @@ const runBiomeCheck = (files: string[], passthrough: string[]): void => {
 };
 
 const runEslintCheck = (files: string[], passthrough: string[]): void => {
-  const args = [...passthrough, ...(files.length > 0 ? files : ["."])];
+  const args = [
+    ...eslintIgnoredFileArgs(files, passthrough),
+    ...passthrough,
+    ...(files.length > 0 ? files : ["."]),
+  ];
 
   const result = spawnSync("eslint", args, {
     stdio: "inherit",

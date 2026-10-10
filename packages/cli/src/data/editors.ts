@@ -7,12 +7,21 @@ import type { HooksConfig, JsonObject } from "./types";
 
 /* e.g. .vscode/settings.json */
 export interface EditorSettingsConfig {
-  extensionCommand?: string;
+  /**
+   * The command-line launchers that install an extension into this editor
+   * (`<cli> --install-extension <id>`), tried in order until one is on PATH.
+   * Empty for an editor that takes VS Code extensions but has no launcher
+   * that can install them, so they're installed by hand. Undefined for an
+   * editor that doesn't use VS Code extensions at all.
+   */
+  extensionClis?: readonly string[];
   getContent: (linter?: ProviderId) => JsonObject;
   path: string;
 }
 
 export interface Editor {
+  /** IDs the editor had before a rename, which init still accepts. */
+  aliases?: string[];
   config: EditorSettingsConfig;
   hooks?: HooksConfig;
   id: string;
@@ -33,7 +42,6 @@ const vscodeBaseConfig = {
 const ASTRO_FORMATTER = "astro-build.astro-vscode";
 const BIOME_FORMATTER = "biomejs.biome";
 const OXC_FORMATTER = "oxc.oxc-vscode";
-const VSCODE_INSTALL_COMMAND = "code --install-extension";
 const VSCODE_SETTINGS_PATH = ".vscode/settings.json";
 
 // VS Code Biome configuration
@@ -295,7 +303,7 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
 export const editors: Editor[] = [
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: ["code"],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -304,7 +312,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: ["cursor"],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -321,8 +329,11 @@ export const editors: Editor[] = [
     name: "Cursor",
   },
   {
+    aliases: ["windsurf"],
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      // Devin Desktop (formerly Windsurf) installs a `devin-desktop`
+      // launcher; installs from before the rename have `windsurf`.
+      extensionClis: ["devin-desktop", "windsurf"],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -337,12 +348,14 @@ export const editors: Editor[] = [
       legacyPath: ".windsurf/hooks.json",
       path: ".devin/hooks.json",
     },
-    id: "windsurf",
-    name: "Windsurf",
+    id: "devin",
+    name: "Devin Desktop",
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      // `codebuddy` on PATH is CodeBuddy Code, the agent CLI, not a
+      // launcher for the IDE.
+      extensionClis: [],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -370,7 +383,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: [],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -379,7 +392,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: [],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -388,7 +401,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: ["kiro"],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -397,7 +410,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: [],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -406,7 +419,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionCommand: VSCODE_INSTALL_COMMAND,
+      extensionClis: ["void"],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },

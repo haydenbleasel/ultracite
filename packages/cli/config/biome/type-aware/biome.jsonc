@@ -7,7 +7,9 @@
 				"noPrivateImports": "error",
 				"noUndeclaredDependencies": "error",
 				"noUnresolvedImports": "error",
-				"useImportExtensions": "error",
+				// Off, as in core: the Oxlint and ESLint presets leave import
+				// extensions to the bundler and TypeScript (import/extensions off).
+				"useImportExtensions": "off",
 				"useJsonImportAttributes": "error"
 			},
 			"suspicious": {

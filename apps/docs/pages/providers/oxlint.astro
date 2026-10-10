@@ -60,12 +60,12 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Oxlint has native plugins for React, Next.js, Vue, Jest and Vitest, so those presets add rules. Svelte, Astro, Angular, Solid, Qwik, Remix, NestJS and TanStack have no native plugin yet: their presets keep the config the same shape as on Biome and ESLint, and core’s rules still check their TypeScript and JavaScript.",
+      "Oxlint has native plugins for React, Next.js, Vue, Jest and Vitest, so those presets add rules. Svelte, Astro, Angular, Solid, Qwik, Remix, NestJS, TanStack, Cypress and Storybook have no native plugin yet: their presets keep the config the same shape as on Biome and ESLint, and core’s rules still check their TypeScript and JavaScript.",
     question: "Which frameworks does the Oxlint config cover?",
   },
   {
     answer:
-      "Yes. Install with `npx ultracite init --linter oxlint --type-aware`, which adds `oxlint-tsgolint`, then run `npx ultracite check --type-aware`. That turns on the 56 core rules that need type information, such as `no-floating-promises` and `no-misused-promises`, on Oxlint’s typescript-go backend.",
+      "Yes. Install with `npx ultracite init --linter oxlint --type-aware`, which adds `oxlint-tsgolint` and sets `typeAware` in `oxlint.config.ts`, so `ultracite check`, `fix` and the editor extension all run them. That turns on the 56 core rules that need type information, such as `no-floating-promises` and `no-misused-promises`, on Oxlint’s typescript-go backend.",
     question: "Does it support type-aware rules?",
   },
 ];

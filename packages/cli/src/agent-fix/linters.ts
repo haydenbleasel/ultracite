@@ -3,7 +3,7 @@ import {
   findUnresolvableBiomeConfig,
   UltraciteSetupError,
 } from "../config-resolution";
-import { toStylelintTargets } from "../linter-args";
+import { eslintIgnoredFileArgs, toStylelintTargets } from "../linter-args";
 import { spawnSync } from "../spawn-sync";
 import type { Linter } from "../utils";
 import type { Diagnostic, LinterAdapter } from "./types";
@@ -279,8 +279,9 @@ const runEslintPass = (
   passthrough: string[]
 ): Diagnostic[] => {
   const targets = toTargets(files, ".");
+  const ignoredFileArgs = eslintIgnoredFileArgs(files, passthrough);
 
-  runPiped("eslint", ["--fix", ...passthrough, ...targets]);
+  runPiped("eslint", ["--fix", ...ignoredFileArgs, ...passthrough, ...targets]);
 
   const stylelintTargets = toStylelintTargets(files);
 
@@ -296,7 +297,13 @@ const runEslintPass = (
 
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
-  const stdout = runPiped("eslint", [...passthrough, "-f", "json", ...targets]);
+  const stdout = runPiped("eslint", [
+    ...ignoredFileArgs,
+    ...passthrough,
+    "-f",
+    "json",
+    ...targets,
+  ]);
 
   return parseEslintDiagnostics(stdout);
 };

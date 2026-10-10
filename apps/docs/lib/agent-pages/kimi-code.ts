@@ -1,6 +1,6 @@
 import type { AgentPageContent } from "./types";
 
-export const kimiCli: AgentPageContent = {
+export const kimiCode: AgentPageContent = {
   checked: { date: "2026-10-10", version: "2.1.1" },
   faqs: [
     {
@@ -15,7 +15,7 @@ export const kimiCli: AgentPageContent = {
     },
     {
       answer:
-        "It’s the successor. Kimi Code CLI (command `kimi`) replaces the legacy Python `kimi-cli`, and `kimi migrate` brings your configuration and session history across. Ultracite still calls the agent `kimi-cli`, so that’s the id to pass to `init`.",
+        "It’s the successor. Kimi Code CLI (command `kimi`) replaces the legacy Python `kimi-cli`, and `kimi migrate` brings your configuration and session history across. Ultracite calls the agent `kimi-code`, the id to pass to `init`; `kimi-cli`, its old id, still works.",
       question: "Is Kimi Code CLI the same as kimi-cli?",
     },
     {

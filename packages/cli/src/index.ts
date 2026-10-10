@@ -41,6 +41,8 @@ interface UpgradeCommandOptions {
   version?: string;
 }
 
+const isCI = (): boolean => process.env.CI === "true" || process.env.CI === "1";
+
 const program = new Command();
 
 // SAFETY: commander doesn't type `rawArgs`, but it stores the argv it parsed
@@ -95,10 +97,14 @@ program
   )
   .option(
     "--type-aware",
-    "Enable type-aware linting (Biome: adds the type-aware preset; Oxlint: installs oxlint-tsgolint)"
+    "Enable type-aware linting and the strictNullChecks it needs (ESLint and Biome: add the type-aware preset; Oxlint: install oxlint-tsgolint and turn it on)"
   )
   .option("--skip-install", "Skip installing dependencies")
-  .option("--quiet", "Suppress interactive prompts")
+  .option(
+    "-y, --yes",
+    "Use the defaults for every question no flag answers, without prompting"
+  )
+  .option("--quiet", "Only print warnings and errors")
   .action(async (opts) => {
     await initialize({
       agents: opts.agents,
@@ -110,11 +116,13 @@ program
       "js-plugins": opts.jsPlugins,
       linter: opts.linter,
       pm: opts.pm,
-      quiet:
-        opts.quiet ?? (process.env.CI === "true" || process.env.CI === "1"),
+      quiet: opts.quiet,
       skipInstall: opts.skipInstall,
       "type-aware": opts.typeAware,
       "workspace-framework": opts.workspaceFramework,
+      // Nobody can answer a prompt in CI or without a terminal, so init
+      // takes the defaults there instead of waiting for input.
+      yes: opts.yes ?? (isCI() || !process.stdin.isTTY),
     });
   });
 

@@ -130,11 +130,19 @@ const inheritedStrictFlags = async (
   return Object.assign({}, ...bases);
 };
 
+export interface TsConfigUpdate {
+  contents: string;
+  filePath: string;
+}
+
 /**
- * Update a single tsconfig.json file with strictNullChecks
- * Preserves comments and only modifies if necessary
+ * The strictNullChecks edit for one tsconfig, or null when it needs none.
+ * Comments are preserved, and only a config that doesn't get the flag from
+ * itself or a config it extends is changed.
  */
-const updateTsConfigFile = async (filePath: string): Promise<void> => {
+const planTsConfigUpdate = async (
+  filePath: string
+): Promise<TsConfigUpdate | null> => {
   try {
     const existingContents = await readFile(filePath, "utf-8");
     const existingConfig = parseJsonc(existingContents, tsConfigSchema);
@@ -145,7 +153,7 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
       log.warn(
         `Could not parse ${filePath}; skipping the strictNullChecks update for it.`
       );
-      return;
+      return null;
     }
 
     // What TypeScript would use: the config's own flags over the ones it
@@ -158,15 +166,15 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
     // An explicit `strictNullChecks: false` is the project's choice.
     if (flags.strictNullChecks === false) {
       log.warn(
-        `${filePath} turns strictNullChecks off, so it was left as is. Some of Ultracite's rules work best with it on.`
+        `${filePath} turns strictNullChecks off, so it was left as is. Some of Ultracite's type-aware rules need it on.`
       );
-      return;
+      return null;
     }
 
     // Skip if strictNullChecks is already enabled (directly, via strict: true,
     // or through a config it extends)
     if (flags.strictNullChecks === true || flags.strict === true) {
-      return;
+      return null;
     }
 
     // Use jsonc-parser's modify to preserve comments
@@ -184,10 +192,23 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
       modifyOptions
     );
 
-    const newContents = applyEdits(existingContents, edits);
-    await writeProjectFile(filePath, newContents);
+    return { contents: applyEdits(existingContents, edits), filePath };
   } catch (error) {
     // Log error but don't fail the entire operation
+    log.warn(
+      `Failed to update ${filePath}: ${error instanceof Error ? error.message : error}`
+    );
+    return null;
+  }
+};
+
+const applyTsConfigUpdate = async ({
+  contents,
+  filePath,
+}: TsConfigUpdate): Promise<void> => {
+  try {
+    await writeProjectFile(filePath, contents);
+  } catch (error) {
     log.warn(
       `Failed to update ${filePath}: ${error instanceof Error ? error.message : error}`
     );
@@ -195,6 +216,10 @@ const updateTsConfigFile = async (filePath: string): Promise<void> => {
 };
 
 export const tsconfig = {
+  /** Apply updates from `plan`. */
+  apply: async (updates: readonly TsConfigUpdate[]): Promise<void> => {
+    await Promise.all(updates.map((update) => applyTsConfigUpdate(update)));
+  },
   /**
    * Check if any tsconfig.json files exist in the project
    */
@@ -203,15 +228,20 @@ export const tsconfig = {
     return files.length > 0;
   },
   /**
+   * The tsconfig.json files that would get strictNullChecks, with their new
+   * contents, without writing anything.
+   */
+  plan: async (): Promise<TsConfigUpdate[]> => {
+    const files = await findTsConfigFiles();
+    const updates = await Promise.all(
+      files.map((file) => planTsConfigUpdate(file))
+    );
+    return updates.filter((update) => update !== null);
+  },
+  /**
    * Find and update all tsconfig.json files in the project
    */
   update: async (): Promise<void> => {
-    const files = await findTsConfigFiles();
-
-    if (files.length === 0) {
-      return;
-    }
-
-    await Promise.all(files.map((file) => updateTsConfigFile(file)));
+    await tsconfig.apply(await tsconfig.plan());
   },
 };

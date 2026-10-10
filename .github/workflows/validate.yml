@@ -14,19 +14,13 @@ jobs:
 
     strategy:
       matrix:
-        runtime: [node-20, node-22, node-24, bun]
+        runtime: [node-22, node-24, bun]
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - name: Use Node.js 20.x
-        if: matrix.runtime == 'node-20'
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 20.x
 
       - name: Use Node.js 22.x
         if: matrix.runtime == 'node-22'
@@ -51,25 +45,24 @@ jobs:
       - name: Build CLI
         run: bun run build --filter ultracite
 
+      # The tests run on Bun whatever the runtime, so start the built CLI on
+      # the runtime itself to catch a dependency it can't load.
+      - name: Run the built CLI
+        run: ${{ matrix.runtime == 'bun' && 'bun' || 'node' }} packages/cli/dist/index.js --version
+
   test:
     needs: build
     runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        runtime: [node-20, node-22, node-24, bun]
+        runtime: [node-22, node-24, bun]
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
-      - name: Use Node.js 20.x
-        if: matrix.runtime == 'node-20'
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 20.x
 
       - name: Use Node.js 22.x
         if: matrix.runtime == 'node-22'

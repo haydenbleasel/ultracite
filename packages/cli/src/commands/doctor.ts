@@ -504,8 +504,11 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
     conflicts.push("Prettier");
   }
 
-  // Check for old ESLint config files (legacy .eslintrc format)
+  // Check for old ESLint config files (legacy .eslintrc format). ESLint 10
+  // doesn't read them, so they're inert on an ESLint setup and only flagged
+  // as leftovers when the project has moved to another linter.
   if (
+    linter !== "eslint" &&
     legacyEslintConfigNames.some((file) =>
       existsSync(path.join(process.cwd(), file))
     )

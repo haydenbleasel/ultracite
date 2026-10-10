@@ -41,10 +41,11 @@ Common `init` flags for non-interactive / CI use:
 | `--frameworks <frameworks...>` | Frameworks in use, for framework-aware rules. |
 | `--workspace-framework <path=framework...>` | Frameworks for one workspace of a monorepo (e.g. `apps/web=react`). |
 | `--js-plugins <plugins...>` | Optional Oxlint JS plugins to enable (`@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-sonarjs`, `oxlint-plugin-react-doctor`). |
-| `--type-aware` | Enable type-aware linting. |
+| `--type-aware` | Enable type-aware linting, and the `strictNullChecks` it needs. |
 | `--install-skill` | Install the reusable Ultracite skill after setup. |
 | `--skip-install` | Configure without installing dependencies. |
-| `--quiet` | Suppress interactive prompts (auto-enabled in CI). |
+| `--yes`, `-y` | Take the defaults without prompting (automatic in CI and without a terminal). |
+| `--quiet` | Only print warnings and errors. |
 
 See the [CLI reference](https://ultracite.ai/) for the full, current list of options.
 

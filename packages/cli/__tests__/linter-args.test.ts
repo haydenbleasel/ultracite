@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  eslintIgnoredFileArgs,
   extractAgentFlags,
   extractHookFlag,
   normalizeFileArgs,
@@ -243,5 +244,22 @@ describe("linter args", () => {
       agent: null,
       passthrough: ["constructor", "toString", "hasOwnProperty"],
     });
+  });
+});
+
+describe("eslintIgnoredFileArgs", () => {
+  test("silences ignored-file warnings for explicit targets", () => {
+    expect(eslintIgnoredFileArgs(["README.md", "src/a.ts"], [])).toEqual([
+      "--no-warn-ignored",
+    ]);
+  });
+
+  test("adds nothing when linting the whole project", () => {
+    expect(eslintIgnoredFileArgs([], [])).toEqual([]);
+  });
+
+  test("leaves the choice to a user who passes either flag", () => {
+    expect(eslintIgnoredFileArgs(["a.ts"], ["--warn-ignored"])).toEqual([]);
+    expect(eslintIgnoredFileArgs(["a.ts"], ["--no-warn-ignored"])).toEqual([]);
   });
 });

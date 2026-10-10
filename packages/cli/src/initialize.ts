@@ -1,7 +1,9 @@
+import { readFileSync } from "node:fs";
 import process from "node:process";
 
 import {
   cancel,
+  confirm,
   intro,
   isCancel,
   log,
@@ -15,6 +17,7 @@ import type { PackageManager, PackageManagerName } from "nypm";
 import packageJson from "../package.json" with { type: "json" };
 import { AGENTS_FILE, getAgentChoices, writeAgentFiles } from "./agents";
 import { UltraciteSetupError } from "./config-resolution";
+import { agents as agentTable } from "./data/agents";
 import { editors } from "./data/editors";
 import { hooks as hookIntegrations } from "./data/hooks";
 import { options } from "./data/options";
@@ -26,6 +29,7 @@ import {
   dependencyNamesByLinter,
   isOxlintNpmJsPlugin,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
+  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
   oxlintJsPlugins,
 } from "./dependencies";
 import type { OxlintJsPlugin } from "./dependencies";
@@ -56,6 +60,7 @@ import {
   maybeInstallUltraciteSkill,
 } from "./skill";
 import { tsconfig } from "./tsconfig";
+import type { TsConfigUpdate } from "./tsconfig";
 import {
   biomeConfigNames,
   detectFrameworks,
@@ -99,6 +104,8 @@ interface InitializeFlags {
   skipInstall?: boolean;
   "type-aware"?: boolean;
   "workspace-framework"?: string[];
+  /** Take the default for every question no flag answers, without asking. */
+  yes?: boolean;
 }
 
 // @clack/core 1.5 narrowed isCancel's predicate from `symbol` to
@@ -164,6 +171,61 @@ const assertJsPluginsMatchLinter = (
   );
 };
 
+interface RenamableTarget {
+  aliases?: readonly string[];
+  id: string;
+}
+
+// An ID from before a rename becomes the current one, with a note so the
+// script that passed it can be updated.
+const resolveRenamedIds = (
+  flag: string,
+  values: readonly string[] | undefined,
+  targets: readonly RenamableTarget[]
+): string[] | undefined =>
+  values?.map((value) => {
+    const renamed = targets.find((target) => target.aliases?.includes(value));
+
+    if (!renamed) {
+      return value;
+    }
+
+    log.warn(
+      `${flag} "${value}" is now "${renamed.id}". Pass the new ID; the old one stops working in a future major.`
+    );
+    return renamed.id;
+  });
+
+const knownAgentIds = new Set<string>(options.agents);
+
+// Every agent reads the rules from AGENTS.md, so an agent init doesn't know
+// (retired, renamed or misspelled) gets that file instead of stopping init.
+const resolveAgentIds = (
+  values: readonly string[] | undefined
+): string[] | undefined => {
+  const resolved = resolveRenamedIds("--agents", values, agentTable);
+
+  return resolved?.map((value) => {
+    if (value === UNIVERSAL || knownAgentIds.has(value)) {
+      return value;
+    }
+
+    log.warn(
+      `Unknown --agents value "${value}", so the rules go in AGENTS.md, which most agents read. Valid values: ${[UNIVERSAL, ...options.agents].join(", ")}.`
+    );
+    return UNIVERSAL;
+  });
+};
+
+export const normalizeInitializeFlags = (
+  flags: InitializeFlags
+): InitializeFlags => ({
+  ...flags,
+  agents: resolveAgentIds(flags.agents),
+  editors: resolveRenamedIds("--editors", flags.editors, editors),
+  hooks: resolveRenamedIds("--hooks", flags.hooks, hookIntegrations),
+});
+
 export const validateInitializeFlags = (flags: RawInitializeFlags): void => {
   assertAllowedValues("--linter", flags.linter, options.linters);
   assertAllowedValues("--pm", flags.pm, supportedPackageManagers);
@@ -208,10 +270,11 @@ const buildNoInstallDevDependencies = (
     Object.assign(devDependencies, buildEslintDevDependencies(frameworks));
   }
   if (linter === "oxlint") {
-    devDependencies.oxlint = "latest";
-    devDependencies.oxfmt = "latest";
+    devDependencies.oxlint = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint;
+    devDependencies.oxfmt = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt;
     if (typeAware) {
-      devDependencies["oxlint-tsgolint"] = "latest";
+      devDependencies["oxlint-tsgolint"] =
+        OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"];
     }
     for (const jsPlugin of jsPlugins) {
       if (isOxlintNpmJsPlugin(jsPlugin)) {
@@ -234,12 +297,9 @@ const removeProjectFile = async (filePath: string): Promise<boolean> => {
   return true;
 };
 
-const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
-  const packageJsonObject = await readPackageJson();
-  if (!packageJsonObject) {
-    return false;
-  }
-
+// The devDependencies of the linters other than `linter`, minus any the
+// selected linter also needs.
+const otherLinterDependencyNames = (linter: Linter): Set<string> => {
   const dependencyNamesToRemove = new Set<string>();
   for (const [tool, dependencyNames] of Object.entries(
     dependencyNamesByLinter
@@ -259,6 +319,21 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   // eslint-plugin-storybook, but it's a user-facing tool the project may use
   // independently of linting — never prune it.
   dependencyNamesToRemove.delete("storybook");
+  return dependencyNamesToRemove;
+};
+
+// The package.json config keys moving off ESLint + Prettier + Stylelint
+// removes.
+const otherLinterPackageJsonKeys = (linter: Linter): string[] =>
+  linter === "eslint" ? [] : ["prettier", "stylelint"];
+
+const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
+  const packageJsonObject = await readPackageJson();
+  if (!packageJsonObject) {
+    return false;
+  }
+
+  const dependencyNamesToRemove = otherLinterDependencyNames(linter);
 
   return await editPackageJson((manifest) => {
     let changed = false;
@@ -278,7 +353,8 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
     }
 
     // Moving off ESLint + Prettier + Stylelint drops their package.json
-    // configs too; staying on it, their writers update them instead.
+    // configs too (otherLinterPackageJsonKeys lists them); staying on it,
+    // their writers update them instead.
     if (linter !== "eslint" && "prettier" in manifest) {
       delete manifest.prettier;
       changed = true;
@@ -292,6 +368,56 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   });
 };
 
+/** The other linters' config files in the project root. */
+const staleLinterConfigFiles = (linter: Linter): string[] => {
+  const candidates: string[] = [];
+
+  if (linter !== "biome") {
+    candidates.push(...biomeConfigNames);
+  }
+
+  // ESLint 10 doesn't read legacy .eslintrc files, so they can't conflict
+  // with an ESLint setup and are only removed when moving off ESLint.
+  if (linter !== "eslint") {
+    candidates.push(
+      ...eslintConfigNames,
+      ...legacyEslintConfigNames,
+      ...prettierConfigNames,
+      ...stylelintConfigNames
+    );
+  }
+
+  if (linter !== "oxlint") {
+    candidates.push(...oxlintConfigNames, ...oxfmtConfigNames);
+  }
+
+  return candidates.filter((file) => exists(`./${file}`));
+};
+
+/**
+ * Everything migrateLinterConfig would remove: the other linters' config
+ * files, their devDependencies, and their package.json config keys.
+ */
+export const findStaleLinterSetup = async (
+  linter: Linter
+): Promise<string[]> => {
+  const packageJsonObject = await readPackageJson();
+  const devDependencies = Object.keys(packageJsonObject?.devDependencies ?? {});
+  const dependencyNamesToRemove = otherLinterDependencyNames(linter);
+
+  return [
+    ...staleLinterConfigFiles(linter),
+    ...devDependencies
+      .filter((name) => dependencyNamesToRemove.has(name))
+      .map((name) => `${name} (devDependencies)`),
+    ...otherLinterPackageJsonKeys(linter)
+      .filter(
+        (key) => packageJsonObject !== undefined && key in packageJsonObject
+      )
+      .map((key) => `"${key}" in package.json`),
+  ];
+};
+
 export const migrateLinterConfig = async (
   linter: Linter,
   quiet = false
@@ -302,46 +428,12 @@ export const migrateLinterConfig = async (
     s.start("Checking for stale linter configuration...");
   }
 
-  const filesToRemove = new Set<string>();
-
-  if (linter !== "biome") {
-    for (const file of biomeConfigNames) {
-      filesToRemove.add(file);
-    }
-  }
-
-  if (linter !== "eslint") {
-    for (const file of eslintConfigNames) {
-      filesToRemove.add(file);
-    }
-    for (const file of prettierConfigNames) {
-      filesToRemove.add(file);
-    }
-    for (const file of stylelintConfigNames) {
-      filesToRemove.add(file);
-    }
-  }
-
-  // Legacy (pre-flat) ESLint configs are always removed: Ultracite's ESLint
-  // setup writes a flat config, and a leftover .eslintrc would conflict with it
-  // even when ESLint remains the selected linter.
-  for (const file of legacyEslintConfigNames) {
-    filesToRemove.add(file);
-  }
-
-  if (linter !== "oxlint") {
-    for (const file of oxlintConfigNames) {
-      filesToRemove.add(file);
-    }
-    for (const file of oxfmtConfigNames) {
-      filesToRemove.add(file);
-    }
-  }
-
   // Removing stale config files and pruning package.json touch different
   // files, so run them together instead of one after the other.
   const [removedFiles, prunedPackageJson] = await Promise.all([
-    Promise.all([...filesToRemove].map((file) => removeProjectFile(file))),
+    Promise.all(
+      staleLinterConfigFiles(linter).map((file) => removeProjectFile(file))
+    ),
     prunePackageJsonForLinter(linter),
   ]);
   const changed = removedFiles.some(Boolean) || prunedPackageJson;
@@ -365,9 +457,9 @@ const ultraciteScripts = {
  * name (e.g. `"check": "tsc --noEmit"`) is left alone, and so is one that
  * already runs Ultracite with extra flags.
  */
-const getScriptsToAdd = async (
-  quiet: boolean
-): Promise<Record<string, string> | undefined> => {
+const getScriptsToAdd = async (): Promise<
+  Record<string, string> | undefined
+> => {
   const existingPackageJson = await readPackageJson();
   const existingScripts = existingPackageJson?.scripts ?? {};
   const scripts: Record<string, string> = {};
@@ -377,7 +469,7 @@ const getScriptsToAdd = async (
 
     if (existing === undefined) {
       scripts[name] = command;
-    } else if (!existing.includes("ultracite") && !quiet) {
+    } else if (!existing.includes("ultracite")) {
       log.warn(
         `package.json already has a "${name}" script (\`${existing}\`), so it was left unchanged. Run \`${command}\` directly or add it to that script.`
       );
@@ -417,13 +509,15 @@ export const installDependencies = async (
   }
   if (linter === "oxlint") {
     packages.push(
-      "oxlint@latest",
+      `oxlint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint}`,
       // Oxlint is only a linter, so we need oxfmt for formatting
-      "oxfmt@latest"
+      `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`
     );
     // Type-aware linting requires oxlint-tsgolint
     if (typeAware) {
-      packages.push("oxlint-tsgolint@latest");
+      packages.push(
+        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
+      );
     }
     packages.push(
       ...jsPlugins
@@ -435,7 +529,7 @@ export const installDependencies = async (
     );
   }
 
-  const scripts = await getScriptsToAdd(quiet);
+  const scripts = await getScriptsToAdd();
 
   if (install) {
     await addDevDependency(packages, {
@@ -467,26 +561,32 @@ export const installDependencies = async (
   }
 };
 
-export const upsertTsConfig = async (quiet = false) => {
-  const s = spinner();
+/**
+ * Turn on strictNullChecks in the tsconfig files `tsconfig.plan()` found
+ * without it. Only type-aware setups get here: the type-aware rules need it.
+ */
+export const upsertTsConfig = async (
+  updates?: readonly TsConfigUpdate[],
+  quiet = false
+) => {
+  const planned = updates ?? (await tsconfig.plan());
 
-  if (!quiet) {
-    s.start("Checking for tsconfig.json files...");
-  }
-
-  if (await tsconfig.exists()) {
-    if (!quiet) {
-      s.message("Found tsconfig.json files, updating with strictNullChecks...");
-    }
-    await tsconfig.update();
-    if (!quiet) {
-      s.stop("tsconfig.json files updated.");
-    }
+  if (planned.length === 0) {
     return;
   }
 
+  const s = spinner();
+
   if (!quiet) {
-    s.stop("No tsconfig.json files found, skipping.");
+    s.start("Turning on strictNullChecks for type-aware linting...");
+  }
+
+  await tsconfig.apply(planned);
+
+  if (!quiet) {
+    s.stop(
+      `strictNullChecks turned on in ${planned.map((update) => update.filePath).join(", ")}.`
+    );
   }
 };
 
@@ -565,7 +665,7 @@ export const upsertEditorConfig = async (
       s.stop(
         installed
           ? `${editor.config.path} created and ${extensionList} installed.`
-          : `${editor.config.path} created. Install ${extensionList} manually.`
+          : `${editor.config.path} created. Install ${extensionList} in ${editor.name} manually.`
       );
     }
     return;
@@ -616,7 +716,8 @@ export const upsertBiomeConfig = async (
 
 export const upsertEslintConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
-  quiet = false
+  quiet = false,
+  typeAware = false
 ) => {
   const s = spinner();
 
@@ -628,7 +729,7 @@ export const upsertEslintConfig = async (
     if (!quiet) {
       s.message("ESLint configuration found, updating...");
     }
-    await eslint.update({ frameworks });
+    await eslint.update({ frameworks, typeAware });
     if (!quiet) {
       s.stop("ESLint configuration updated.");
     }
@@ -638,7 +739,7 @@ export const upsertEslintConfig = async (
   if (!quiet) {
     s.message("ESLint configuration not found, creating...");
   }
-  await eslint.create({ frameworks });
+  await eslint.create({ frameworks, typeAware });
   if (!quiet) {
     s.stop("ESLint configuration created.");
   }
@@ -647,7 +748,8 @@ export const upsertEslintConfig = async (
 export const upsertOxlintConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
   quiet = false,
-  jsPlugins: OxlintJsPlugin[] = []
+  jsPlugins: OxlintJsPlugin[] = [],
+  typeAware = false
 ) => {
   const s = spinner();
 
@@ -659,7 +761,7 @@ export const upsertOxlintConfig = async (
     if (!quiet) {
       s.message("Oxlint configuration found, updating...");
     }
-    await oxlint.update({ frameworks, jsPlugins });
+    await oxlint.update({ frameworks, jsPlugins, typeAware });
     if (!quiet) {
       s.stop("Oxlint configuration updated.");
     }
@@ -669,7 +771,7 @@ export const upsertOxlintConfig = async (
   if (!quiet) {
     s.message("Oxlint configuration not found, creating...");
   }
-  await oxlint.create({ frameworks, jsPlugins });
+  await oxlint.create({ frameworks, jsPlugins, typeAware });
   if (!quiet) {
     s.stop("Oxlint configuration created.");
   }
@@ -1055,6 +1157,15 @@ interface InitializeSelections extends EditorSelections, AgentSelections {
   integrations: (typeof options.integrations)[number][];
   jsPlugins: OxlintJsPlugin[];
   linter: Linter;
+  typeAware: boolean;
+}
+
+// Changes to files init doesn't own, settled before anything is written.
+interface ProjectChanges {
+  /** Remove the other linters' configs and packages. */
+  removeStaleSetup: boolean;
+  /** The tsconfig files to turn strictNullChecks on in. */
+  tsconfigUpdates: TsConfigUpdate[];
 }
 
 // Thrown when the user cancels a prompt, so initialize() stops before it
@@ -1097,7 +1208,7 @@ const resolvePackageManager = async (
     );
   }
 
-  if (!quiet && detected.warnings) {
+  if (detected.warnings) {
     for (const warning of detected.warnings) {
       log.warn(warning);
     }
@@ -1181,6 +1292,8 @@ const selectFrameworks = async (
       { label: "NestJS", value: "nestjs" },
       { label: "Jest", value: "jest" },
       { label: "Vitest / Bun", value: "vitest" },
+      { label: "Cypress", value: "cypress" },
+      { label: "Storybook", value: "storybook" },
     ],
     required: false,
   });
@@ -1218,6 +1331,71 @@ const selectJsPlugins = async (
     throw cancelInitialize();
   }
   return jsPlugins;
+};
+
+const TYPE_AWARE_OPTION_RE = /typeAware["']?\s*:\s*true/u;
+
+const readFirstConfig = (names: readonly string[]): string => {
+  const found = names.find((name) => exists(`./${name}`));
+
+  if (!found) {
+    return "";
+  }
+
+  try {
+    return readFileSync(found, "utf-8");
+  } catch {
+    return "";
+  }
+};
+
+// Whether the project already runs the type-aware rules, so re-running init
+// keeps them without --type-aware.
+const hasTypeAwareSetup = async (linter: Linter): Promise<boolean> => {
+  if (linter === "biome") {
+    return readFirstConfig(biomeConfigNames).includes(
+      "ultracite/biome/type-aware"
+    );
+  }
+
+  if (linter === "eslint") {
+    return readFirstConfig(eslintConfigNames).includes(
+      "ultracite/eslint/type-aware"
+    );
+  }
+
+  const packageJsonObject = await readPackageJson();
+  return (
+    "oxlint-tsgolint" in (packageJsonObject?.devDependencies ?? {}) ||
+    TYPE_AWARE_OPTION_RE.test(readFirstConfig(oxlintConfigNames))
+  );
+};
+
+const selectTypeAware = async (
+  opts: InitializeFlags,
+  linter: Linter,
+  interactive: boolean
+): Promise<boolean> => {
+  if (opts["type-aware"] !== undefined) {
+    return opts["type-aware"];
+  }
+
+  const existing = await hasTypeAwareSetup(linter);
+
+  // Only a TypeScript project has types to check.
+  if (!interactive || !(await tsconfig.exists())) {
+    return existing;
+  }
+
+  const typeAware = await confirm({
+    initialValue: existing,
+    message:
+      "Turn on type-aware linting? It adds rules that need type information, such as no-floating-promises, and makes linting slower.",
+  });
+  if (isCancelled(typeAware)) {
+    throw cancelInitialize();
+  }
+  return typeAware;
 };
 
 // The universal target writes one file that several editors or agents read,
@@ -1375,6 +1553,7 @@ const selectInitializeOptions = async (
   const linter = await selectLinter(opts, interactive);
   const frameworks = await selectFrameworks(opts, interactive);
   const jsPlugins = await selectJsPlugins(opts, linter, interactive);
+  const typeAware = await selectTypeAware(opts, linter, interactive);
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
   const hooks = await selectHooks(opts, interactive);
@@ -1388,29 +1567,103 @@ const selectInitializeOptions = async (
     integrations,
     jsPlugins,
     linter,
+    typeAware,
   };
 };
 
+// Moving to another linter removes the old one's configs and packages, which
+// an interactive run lists and asks about first.
+const confirmStaleSetupRemoval = async (
+  linter: Linter,
+  interactive: boolean
+): Promise<boolean> => {
+  if (!interactive) {
+    return true;
+  }
+
+  const stale = await findStaleLinterSetup(linter);
+
+  if (stale.length === 0) {
+    return true;
+  }
+
+  const name =
+    providers.find((provider) => provider.id === linter)?.name ?? linter;
+  log.info(
+    `Found the setup of other linters:\n${stale.map((item) => `  ${item}`).join("\n")}`
+  );
+
+  const confirmed = await confirm({
+    initialValue: true,
+    message: `Remove it, now that the project uses ${name}?`,
+  });
+  if (isCancelled(confirmed)) {
+    throw cancelInitialize();
+  }
+  return confirmed;
+};
+
+// The type-aware rules need strictNullChecks, which an interactive run asks
+// about before changing any tsconfig.
+const confirmTsConfigUpdates = async (
+  typeAware: boolean,
+  interactive: boolean
+): Promise<TsConfigUpdate[]> => {
+  if (!typeAware) {
+    return [];
+  }
+
+  const updates = await tsconfig.plan();
+
+  if (!interactive || updates.length === 0) {
+    return updates;
+  }
+
+  const confirmed = await confirm({
+    initialValue: true,
+    message: `Type-aware rules need strictNullChecks. Turn it on in ${updates.map((update) => update.filePath).join(", ")}?`,
+  });
+  if (isCancelled(confirmed)) {
+    throw cancelInitialize();
+  }
+
+  if (!confirmed) {
+    log.warn(
+      "strictNullChecks was left off. Type-aware rules that need it, such as prefer-nullish-coalescing, won't work properly until it's on."
+    );
+    return [];
+  }
+  return updates;
+};
+
+const confirmProjectChanges = async (
+  { linter, typeAware }: InitializeSelections,
+  interactive: boolean
+): Promise<ProjectChanges> => ({
+  removeStaleSetup: await confirmStaleSetupRemoval(linter, interactive),
+  tsconfigUpdates: await confirmTsConfigUpdates(typeAware, interactive),
+});
+
 interface InitializeContext {
+  changes: ProjectChanges;
   install: boolean;
   installSkill: boolean | undefined;
   interactive: boolean;
   pmInfo: PackageManager;
   quiet: boolean;
   selections: InitializeSelections;
-  typeAware: boolean | undefined;
   workspaces: WorkspaceFrameworks[];
 }
 
 const setupLinting = async ({
+  changes,
   install,
   pmInfo,
   quiet,
   selections,
-  typeAware,
   workspaces,
 }: InitializeContext): Promise<void> => {
-  const { frameworks, jsPlugins, linter } = selections;
+  const { frameworks, jsPlugins, linter, typeAware } = selections;
 
   // Workspace frameworks need their plugins installed (and, for Prettier,
   // configured) at the root, though their rules only apply in the
@@ -1435,15 +1688,17 @@ const setupLinting = async ({
     jsPlugins
   );
 
-  await upsertTsConfig(quiet);
-  await migrateLinterConfig(linter, quiet);
+  await upsertTsConfig(changes.tsconfigUpdates, quiet);
+  if (changes.removeStaleSetup) {
+    await migrateLinterConfig(linter, quiet);
+  }
 
   // Create config for selected linter
   if (linter === "biome") {
     await upsertBiomeConfig(frameworks, quiet, typeAware);
   }
   if (linter === "eslint") {
-    await upsertEslintConfig(frameworks, quiet);
+    await upsertEslintConfig(frameworks, quiet, typeAware);
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
     await upsertPrettierConfig(allFrameworks, quiet);
     await upsertStylelintConfig(quiet);
@@ -1453,12 +1708,21 @@ const setupLinting = async ({
     // package.json's "type" to make them load, since that changes how
     // every .js file is loaded; outside an ES module package the configs
     // are written as .mts instead (see resolveEsmConfigPath).
-    await upsertOxlintConfig(frameworks, quiet, jsPlugins);
+    await upsertOxlintConfig(frameworks, quiet, jsPlugins, typeAware);
     // Oxlint is only a linter, so we need oxfmt for formatting
     await upsertOxfmtConfig(quiet);
   }
 
   await upsertWorkspaceConfigs(linter, workspaces, quiet);
+
+  // check and fix run the linter whose config is nearest, Biome before
+  // ESLint before Oxlint in one folder, so a kept config can win.
+  const active = changes.removeStaleSetup ? linter : detectLinter();
+  if (active && active !== linter) {
+    log.warn(
+      `The other linters' setup was left in place, so \`ultracite check\` will run ${active} instead of ${linter}. Remove its config to switch.`
+    );
+  }
 };
 
 const setupSelectedFiles = async ({
@@ -1542,28 +1806,30 @@ const completeInitialization = async ({
 };
 
 export const initialize = async (flags?: InitializeFlags) => {
-  const opts = flags ?? {};
-  const quiet = opts.quiet ?? false;
+  const quiet = flags?.quiet ?? false;
 
   if (!quiet) {
     intro(`Ultracite v${ultraciteVersion} Initialization`);
   }
 
   try {
+    const opts = normalizeInitializeFlags(flags ?? {});
     validateInitializeFlags(opts);
     const workspaces = parseWorkspaceFrameworks(opts["workspace-framework"]);
     const pmInfo = await resolvePackageManager(opts, quiet);
     const interactive =
-      !quiet && nonInteractiveFlags.every((flag) => opts[flag] === undefined);
+      !opts.yes &&
+      nonInteractiveFlags.every((flag) => opts[flag] === undefined);
     const selections = await selectInitializeOptions(opts, interactive);
+    const changes = await confirmProjectChanges(selections, interactive);
     const context: InitializeContext = {
+      changes,
       install: !opts.skipInstall,
       installSkill: opts.installSkill,
       interactive,
       pmInfo,
       quiet,
       selections,
-      typeAware: opts["type-aware"],
       workspaces,
     };
 

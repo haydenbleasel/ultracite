@@ -198,6 +198,9 @@ export default defineConfig({
     { from: "/docs/rules", to: "/docs/ai/rules" },
     { from: "/docs/skills", to: "/docs/ai/skills" },
     { from: "/docs/hooks", to: "/docs/ai/hooks" },
+    // Agents renamed in v8; their pages follow the new init ids.
+    { from: "/agents/kimi-cli", to: "/agents/kimi-code" },
+    { from: "/agents/snowflake-cortex", to: "/agents/snowflake-coco" },
     // Retired MCP server pages
     { from: "/mcp", to: "/" },
     { from: "/mcp-server", to: "/" },

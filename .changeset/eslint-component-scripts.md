@@ -1,5 +1,5 @@
 ---
-"ultracite": patch
+"ultracite": major
 ---
 
 Lint the scripts in Vue, Svelte and Astro components with the ESLint core rules. Core's globs only matched `.js` and `.ts` files, so a `.vue` file got only the Vue rules, a `.svelte` file only the Svelte rules, and an `.astro` file's frontmatter only the Astro rules, while Oxlint already runs its core rules on those scripts. The `vue`, `svelte` and `astro` presets now apply core's rules to their components, including the TypeScript rules, with the type-checked ones off because a script block isn't part of a tsconfig.

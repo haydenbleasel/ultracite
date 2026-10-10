@@ -9,6 +9,7 @@ import type { ProviderId } from "./data/providers";
 import type { JsonObject, JsonValue } from "./data/types";
 import { detectJsonFormatting, parseJsoncStrict } from "./schemas";
 import { spawnSync } from "./spawn-sync";
+import type { SpawnSyncResult } from "./spawn-sync";
 import { exists, isJsonObject, writeProjectFile } from "./utils";
 
 const settingsSchema = z.record(z.string(), z.json());
@@ -28,6 +29,35 @@ const collectSettings = (
       : [[[...parentPath, key], value] satisfies [string[], JsonValue]];
   });
 
+// What an editor with no launcher on PATH reports, so the caller asks the user
+// to install the extension by hand, as it does for a failed install.
+const NO_LAUNCHER: SpawnSyncResult = {
+  errorCode: "ENOENT",
+  status: null,
+};
+
+/**
+ * Install an extension with the editor's own launcher, never VS Code's `code`:
+ * that would put it in VS Code, not the editor the user picked. Launchers are
+ * tried in order until one is on PATH.
+ */
+const installExtension = (
+  clis: readonly string[],
+  extensionId: string
+): SpawnSyncResult => {
+  for (const cli of clis) {
+    const result = spawnSync(cli, ["--install-extension", extensionId], {
+      stdio: "pipe",
+    });
+
+    if (result.errorCode !== "ENOENT") {
+      return result;
+    }
+  }
+
+  return NO_LAUNCHER;
+};
+
 export const createEditorConfig = (
   editorId: string,
   linter: ProviderId = "biome"
@@ -39,7 +69,7 @@ export const createEditorConfig = (
   }
 
   const content = editor.config.getContent(linter);
-  const { extensionCommand } = editor.config;
+  const { extensionClis } = editor.config;
 
   return {
     create: async () => {
@@ -51,15 +81,8 @@ export const createEditorConfig = (
 
     exists: () => exists(editor.config.path),
 
-    extension: extensionCommand
-      ? (extensionId: string) => {
-          // extensionCommand is a full command line, e.g.
-          // "code --install-extension" — split it so spawn gets a real binary
-          const [command, ...commandArgs] = extensionCommand.split(" ");
-          return spawnSync(command, [...commandArgs, extensionId], {
-            stdio: "pipe",
-          });
-        }
+    extension: extensionClis
+      ? (extensionId: string) => installExtension(extensionClis, extensionId)
       : undefined,
 
     update: async () => {

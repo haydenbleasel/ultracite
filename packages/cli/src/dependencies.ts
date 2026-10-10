@@ -46,6 +46,18 @@ export const isOxlintNpmJsPlugin = (
   jsPlugin: OxlintJsPlugin
 ): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== "anti-slop";
 
+/**
+ * The Oxlint toolchain `init` installs and `upgrade` re-syncs, at the ranges
+ * the presets were verified against. oxfmt is pre-1.0, so its caret range
+ * holds the minor version and formatting doesn't change under a project
+ * between Ultracite releases.
+ */
+export const OXLINT_TOOLCHAIN_DEV_DEPENDENCIES = {
+  oxfmt: packageJson.devDependencies.oxfmt,
+  oxlint: packageJson.devDependencies.oxlint,
+  "oxlint-tsgolint": packageJson.devDependencies["oxlint-tsgolint"],
+};
+
 export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
   "@shadcn/lint": packageJson.devDependencies["@shadcn/lint"],
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
@@ -73,19 +85,14 @@ export const eslintCoreDevDependencies = {
   "eslint-import-resolver-typescript":
     packageJson.devDependencies["eslint-import-resolver-typescript"],
   "eslint-plugin-compat": packageJson.devDependencies["eslint-plugin-compat"],
-  "eslint-plugin-cypress": packageJson.devDependencies["eslint-plugin-cypress"],
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
   "eslint-plugin-html": packageJson.devDependencies["eslint-plugin-html"],
   "eslint-plugin-import-x":
     packageJson.devDependencies["eslint-plugin-import-x"],
   "eslint-plugin-jsdoc": packageJson.devDependencies["eslint-plugin-jsdoc"],
   "eslint-plugin-n": packageJson.devDependencies["eslint-plugin-n"],
-  "eslint-plugin-prettier":
-    packageJson.devDependencies["eslint-plugin-prettier"],
   "eslint-plugin-promise": packageJson.devDependencies["eslint-plugin-promise"],
   "eslint-plugin-sonarjs": packageJson.devDependencies["eslint-plugin-sonarjs"],
-  "eslint-plugin-storybook":
-    packageJson.devDependencies["eslint-plugin-storybook"],
   "eslint-plugin-unicorn": packageJson.devDependencies["eslint-plugin-unicorn"],
   "eslint-plugin-unused-imports":
     packageJson.devDependencies["eslint-plugin-unused-imports"],
@@ -96,9 +103,6 @@ export const eslintCoreDevDependencies = {
   prettier: toolchainPeerRanges.prettier,
   "prettier-plugin-tailwindcss":
     packageJson.devDependencies["prettier-plugin-tailwindcss"],
-  // Required peer of eslint-plugin-storybook, which the flat config imports
-  // unconditionally — without it the config fails to load.
-  storybook: packageJson.devDependencies.storybook,
   stylelint: toolchainPeerRanges.stylelint,
   // The generated stylelint config extends/uses these; `stylelint` alone
   // cannot resolve them.
@@ -106,12 +110,12 @@ export const eslintCoreDevDependencies = {
     packageJson.devDependencies["stylelint-config-idiomatic-order"],
   "stylelint-config-standard":
     packageJson.devDependencies["stylelint-config-standard"],
-  "stylelint-prettier": packageJson.devDependencies["stylelint-prettier"],
 } satisfies Record<string, string>;
 // Extra ESLint devDependencies, keyed by the framework that needs them.
 export const eslintFrameworkDevDependencies = {
   angular: {
-    "@angular-eslint/eslint-plugin": "latest",
+    "@angular-eslint/eslint-plugin":
+      packageJson.devDependencies["@angular-eslint/eslint-plugin"],
   },
   astro: {
     "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
@@ -121,6 +125,10 @@ export const eslintFrameworkDevDependencies = {
       packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "prettier-plugin-astro":
       packageJson.devDependencies["prettier-plugin-astro"],
+  },
+  cypress: {
+    "eslint-plugin-cypress":
+      packageJson.devDependencies["eslint-plugin-cypress"],
   },
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
@@ -152,6 +160,13 @@ export const eslintFrameworkDevDependencies = {
   },
   solid: {
     "eslint-plugin-solid": packageJson.devDependencies["eslint-plugin-solid"],
+  },
+  storybook: {
+    "eslint-plugin-storybook":
+      packageJson.devDependencies["eslint-plugin-storybook"],
+    // Required peer of eslint-plugin-storybook, which the preset imports;
+    // without it the config fails to load.
+    storybook: packageJson.devDependencies.storybook,
   },
   svelte: {
     "eslint-plugin-svelte": packageJson.devDependencies["eslint-plugin-svelte"],
@@ -204,7 +219,15 @@ export const dependencyNamesByLinter = {
   biome: new Set(["@biomejs/biome"]),
   // Only the Oxlint setup installs eslint-plugin-tsdoc, but it's an ESLint
   // plugin an ESLint config may load too, so ESLint setups don't prune it.
-  eslint: new Set([...eslintDevDependencyNames, "eslint-plugin-tsdoc"]),
+  // eslint-plugin-prettier and stylelint-prettier are what earlier versions
+  // installed to run Prettier inside ESLint and Stylelint, so switching
+  // linters still removes them.
+  eslint: new Set([
+    ...eslintDevDependencyNames,
+    "eslint-plugin-prettier",
+    "eslint-plugin-tsdoc",
+    "stylelint-prettier",
+  ]),
   oxlint: new Set([
     "@shadcn/lint",
     "eslint-plugin-github",

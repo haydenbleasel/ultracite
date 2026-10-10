@@ -41,8 +41,8 @@ const overrideRules = {
   "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
   "unicorn/no-keyword-prefix": "off",
   // Its fixer wraps the inner ternary in parentheses that Prettier strips,
-  // so the two fight inside `eslint --fix`. eslint-config-prettier turns it
-  // off for the same reason; the core `no-nested-ternary` still reports.
+  // so every `fix` run ping-pongs. eslint-config-prettier turns it off for
+  // the same reason; the core `no-nested-ternary` still reports.
   "unicorn/no-nested-ternary": "off",
   "unicorn/no-null": "off",
   "unicorn/no-process-exit": "off",

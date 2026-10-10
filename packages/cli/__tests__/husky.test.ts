@@ -476,7 +476,9 @@ describe("husky", () => {
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
-      expect(script).toContain("pnpm exec ultracite fix || FORMAT_EXIT_CODE");
+      expect(script).toContain(
+        "xargs -0 pnpm exec ultracite fix || FORMAT_EXIT_CODE"
+      );
       expect(script).not.toContain("dlx");
     });
 
@@ -500,6 +502,85 @@ describe("husky", () => {
       const script = written.get("./.husky/pre-commit") ?? "";
       expect(script).not.toContain("exit 0");
       expect(script).toContain('echo "No staged files to format"\nelse');
+    });
+
+    test("fixes only the staged files, passed safely through xargs", async () => {
+      const written = mockProject({});
+
+      await husky.create("pnpm", false);
+      restoreFileSystemMock();
+
+      const script = written.get("./.husky/pre-commit") ?? "";
+      expect(script).toContain(
+        "git diff --cached --name-only -z --diff-filter=ACMR | xargs -0 pnpm exec ultracite fix || FORMAT_EXIT_CODE=$?"
+      );
+      // The empty check guards xargs, which runs the command once with no
+      // arguments (fixing the whole project) on empty input with GNU xargs
+      expect(script.indexOf('if [ -z "$STAGED_FILES" ]')).toBeLessThan(
+        script.indexOf("xargs -0")
+      );
+      // No bare fix run over the whole project
+      expect(script).not.toMatch(/^\s*pnpm exec ultracite fix/mu);
+    });
+
+    test("re-stages only the files that had no unstaged changes", async () => {
+      const written = mockProject({});
+
+      await husky.create("npm", false);
+      restoreFileSystemMock();
+
+      const script = written.get("./.husky/pre-commit") ?? "";
+      // Names with spaces or non-ASCII characters are read unquoted, a line
+      // each, so `git add -- "$file"` gets the real path
+      expect(script).toContain(
+        "STAGED_FILES=$(git -c core.quotePath=false diff --cached --name-only --diff-filter=ACMR)"
+      );
+      // Partially staged files are found before the fix runs
+      expect(script.indexOf("UNSTAGED_FILES=$(")).toBeLessThan(
+        script.indexOf("xargs -0")
+      );
+      expect(script).toContain(
+        "printf '%s\\n' \"$FULLY_STAGED\" | while IFS= read -r file; do"
+      );
+      expect(script).toContain("printf '%s\\n' \"$PARTIALLY_STAGED\" | sed");
+      expect(script).not.toContain('"$STAGED_FILES" | while');
+    });
+
+    test("replaces a pre-v8 section that fixed the whole project", async () => {
+      const written = mockProject({
+        "./.husky/pre-commit": [
+          'echo "before"',
+          "# ultracite",
+          "#!/bin/sh",
+          "# Check if there are any staged files",
+          "STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)",
+          'if [ -z "$STAGED_FILES" ]; then',
+          '  echo "No staged files to format"',
+          "else",
+          "  FORMAT_EXIT_CODE=0",
+          "  npx ultracite fix || FORMAT_EXIT_CODE=$?",
+          '  echo "$STAGED_FILES" | while IFS= read -r file; do',
+          '    if [ -f "$file" ]; then',
+          '      git add -- "$file"',
+          "    fi",
+          "  done",
+          '  echo "✨ Files formatted by Ultracite"',
+          "fi",
+          "# ultracite end",
+          "npm test",
+          "",
+        ].join("\n"),
+      });
+
+      await husky.update("npm", false);
+      restoreFileSystemMock();
+
+      const script = written.get("./.husky/pre-commit") ?? "";
+      expect(countMarkers(script)).toBe(1);
+      expect(script).toContain("xargs -0 npx ultracite fix");
+      expect(script).not.toContain("  npx ultracite fix ||");
+      expect(script.startsWith('echo "before"\n# ultracite\n')).toBe(true);
+      expect(script.endsWith("# ultracite end\nnpm test\n")).toBe(true);
     });
 
     test("replaces the section of a CRLF hook instead of appending another", async () => {

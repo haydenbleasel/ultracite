@@ -176,7 +176,7 @@ export const agentDirectory = {
     tagline:
       "Open-source coding agent for VS Code, JetBrains and the terminal.",
   },
-  "kimi-cli": {
+  "kimi-code": {
     group: "terminal",
     logo: "kimi",
     maker: "Moonshot AI",
@@ -263,7 +263,7 @@ export const agentDirectory = {
     tagline:
       "Replit’s in-browser agent that builds, runs and deploys apps from prompts.",
   },
-  "snowflake-cortex": {
+  "snowflake-coco": {
     group: "terminal",
     logo: "snowflake",
     maker: "Snowflake",
