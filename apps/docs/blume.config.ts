@@ -3,6 +3,8 @@ import { openai } from "blume/ai";
 import { cloudflare } from "blume/deploy";
 import { filesystem, githubReleases } from "blume/sources";
 
+import { ultraciteDark, ultraciteLight } from "./lib/code-theme";
+
 export default defineConfig({
   agents: {
     // Representative queries for the ultracite skill's entry in the AI
@@ -114,6 +116,11 @@ export default defineConfig({
   logo: {
     image: "/logo.svg",
     text: "Ultracite",
+  },
+
+  // Syntax highlighting in the brand palette (lib/code-theme.ts).
+  markdown: {
+    code: { theme: { dark: ultraciteDark, light: ultraciteLight } },
   },
 
   navigation: {
