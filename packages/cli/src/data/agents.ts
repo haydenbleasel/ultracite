@@ -6,10 +6,23 @@ export interface AgentConfig {
   header?: string;
   path: string;
   /**
-   * A file an earlier version wrote the rules into by mistake, reset to
-   * `emptyContent` when it still holds exactly those rules.
+   * A file an earlier version wrote the rules into, reset to `emptyContent`
+   * when it still holds exactly those rules, or removed when there's no
+   * `emptyContent` and the file holds nothing else.
    */
-  supersedes?: { emptyContent: string; path: string };
+  supersedes?: { emptyContent?: string; path: string };
+}
+
+/**
+ * A YAML settings file the agent needs before it loads the rules at all
+ * (Aider reads no instructions file on its own). init adds the rules file to
+ * the list under `readKey` and, with `lintKey`, points that key at the
+ * project's `ultracite fix`, which the agent runs on each file it edits.
+ */
+export interface AgentSettings {
+  lintKey?: string;
+  path: string;
+  readKey: string;
 }
 
 export interface Agent {
@@ -17,6 +30,7 @@ export interface Agent {
   hooks?: HooksConfig;
   id: string;
   name: string;
+  settings?: AgentSettings;
 }
 
 export interface AgentSetupFacts {
@@ -191,7 +205,7 @@ export const agents: Agent[] = [
       path: "AGENTS.md",
     },
     id: "snowflake-cortex",
-    name: "Snowflake Cortex",
+    name: "Snowflake CoCo",
   },
   {
     config: {
@@ -199,7 +213,7 @@ export const agents: Agent[] = [
       path: "AGENTS.md",
     },
     id: "deepagents",
-    name: "Deepagents",
+    name: "Deep Agents",
   },
   {
     config: {
@@ -294,11 +308,22 @@ export const agents: Agent[] = [
     name: "Amp",
   },
   {
+    // Aider loads only the files .aider.conf.yml lists under `read`, and runs
+    // `lint-cmd` on every file it edits, asking the model to fix whatever the
+    // command reports. Earlier versions wrote the rules to ultracite.md, which
+    // Aider never loaded.
     config: {
-      path: "ultracite.md",
+      appendMode: true,
+      path: "AGENTS.md",
+      supersedes: { path: "ultracite.md" },
     },
     id: "aider",
     name: "Aider",
+    settings: {
+      lintKey: "lint-cmd",
+      path: ".aider.conf.yml",
+      readKey: "read",
+    },
   },
   {
     config: {
@@ -314,7 +339,7 @@ export const agents: Agent[] = [
       path: "GEMINI.md",
     },
     id: "gemini",
-    name: "Gemini",
+    name: "Gemini CLI",
   },
   {
     config: {
@@ -354,7 +379,7 @@ export const agents: Agent[] = [
       path: "AGENTS.md",
     },
     id: "goose",
-    name: "Goose",
+    name: "goose",
   },
   {
     config: {

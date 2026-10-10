@@ -16,9 +16,13 @@ mock.module("node:fs/promises", () => ({
   writeFile: mock((_path: string, _content: string) => Promise.resolve()),
 }));
 
+// Paths the last mockProject run removed.
+const removed = new Set<string>();
+
 // A project whose files are exactly `files`; returns what gets written.
 const mockProject = (files: Record<string, string>) => {
   const written = new Map<string, string>();
+  removed.clear();
 
   mock.module("node:fs/promises", () => ({
     access: mock((path: string) =>
@@ -30,6 +34,10 @@ const mockProject = (files: Record<string, string>) => {
         ? Promise.resolve(files[path])
         : Promise.reject(new Error("ENOENT"))
     ),
+    rm: mock((path: string) => {
+      removed.add(path);
+      return Promise.resolve();
+    }),
     writeFile: mock((path: string, content: string) => {
       written.set(path, content);
       return Promise.resolve();
@@ -452,6 +460,69 @@ describe("firebender rules", () => {
     restoreFileSystemMock();
 
     expect(written.has("firebender.json")).toBe(false);
+  });
+});
+
+describe("aider", () => {
+  test("writes the rules to AGENTS.md and points .aider.conf.yml at them", async () => {
+    const written = mockProject({});
+
+    await createAgents("aider", "pnpm", "oxlint").create();
+    restoreFileSystemMock();
+
+    expect(written.get("AGENTS.md")).toContain("# Ultracite Code Standards");
+    expect(written.get(".aider.conf.yml")).toBe(
+      "read: AGENTS.md\nlint-cmd: pnpm exec ultracite fix\n"
+    );
+    expect(written.has("ultracite.md")).toBe(false);
+  });
+
+  test("merges into an existing .aider.conf.yml", async () => {
+    const written = mockProject({
+      ".aider.conf.yml":
+        "# Team settings\nmodel: sonnet\nauto-commits: false\n",
+    });
+
+    await createAgents("aider", "npm", "biome").create();
+    restoreFileSystemMock();
+
+    expect(written.get(".aider.conf.yml")).toBe(
+      "# Team settings\nmodel: sonnet\nauto-commits: false\nread: AGENTS.md\nlint-cmd: npx ultracite fix\n"
+    );
+  });
+
+  test("removes the ultracite.md earlier versions wrote", async () => {
+    mockProject({
+      ".aider.conf.yml": "read: ultracite.md\n",
+      "ultracite.md": getRules("npx ultracite", "Biome"),
+    });
+
+    await createAgents("aider", "npm", "biome").create();
+    restoreFileSystemMock();
+
+    expect(removed.has("ultracite.md")).toBe(true);
+  });
+
+  test("keeps an ultracite.md that holds more than the rules", async () => {
+    mockProject({
+      "ultracite.md": `${getRules("npx ultracite", "Biome")}\n# Our notes\n\nKeep these.\n`,
+    });
+
+    await createAgents("aider", "npm", "biome").create();
+    restoreFileSystemMock();
+
+    expect(removed.has("ultracite.md")).toBe(false);
+  });
+
+  test("gets its own setup option rather than riding on universal", () => {
+    const targets = getAgentFileTargets();
+    const universal = targets.find((target) => target.id === "universal");
+    const aiderTarget = targets.find((target) => target.id === "aider");
+
+    expect(universal?.agentIds).not.toContain("aider");
+    expect(aiderTarget?.promptLabel).toBe(
+      "Aider (creates .aider.conf.yml and AGENTS.md)"
+    );
   });
 });
 

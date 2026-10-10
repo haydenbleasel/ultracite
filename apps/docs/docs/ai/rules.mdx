@@ -41,12 +41,23 @@ Each agent reads its rules from one file. Pass the ID to `--agents` to write tha
 
 | File | Agents (`--agents` ID) |
 | --- | --- |
-| `AGENTS.md` | Codex (`codex`), Jules (`jules`), Devin (`devin`), Lovable (`lovable`), Zencoder (`zencoder`), Ona (`ona`), OpenClaw (`openclaw`), Snowflake Cortex (`snowflake-cortex`), Deepagents (`deepagents`), Qoder (`qoder`), Kimi Code CLI (`kimi-cli`), Xum (`xum`), Pi (`pi`), AdaL (`adal`), GitHub Copilot (`copilot`), Cline (`cline`), Amp (`amp`), OpenHands (`open-hands`), Junie (`junie`), Augment Code (`augmentcode`), IBM Bob (`bob`), Kilo Code (`kilo-code`), Goose (`goose`), Warp (`warp`), Droid (`droid`), OpenCode (`opencode`), Crush (`crush`), Qwen Code (`qwen`), Kiro CLI (`kiro-cli`), Cursor CLI (`cursor-cli`), Mistral Vibe (`mistral-vibe`), Vercel Agent (`vercel`). Use `universal` to write it once for all of them. |
+| `AGENTS.md` | Codex (`codex`), Jules (`jules`), Devin (`devin`), Lovable (`lovable`), Zencoder (`zencoder`), Ona (`ona`), OpenClaw (`openclaw`), Snowflake CoCo (`snowflake-cortex`), Deep Agents (`deepagents`), Qoder (`qoder`), Kimi Code CLI (`kimi-cli`), Xum (`xum`), Pi (`pi`), AdaL (`adal`), GitHub Copilot (`copilot`), Cline (`cline`), Amp (`amp`), OpenHands (`open-hands`), Junie (`junie`), Augment Code (`augmentcode`), IBM Bob (`bob`), Kilo Code (`kilo-code`), goose (`goose`), Warp (`warp`), Droid (`droid`), OpenCode (`opencode`), Crush (`crush`), Qwen Code (`qwen`), Kiro CLI (`kiro-cli`), Cursor CLI (`cursor-cli`), Mistral Vibe (`mistral-vibe`), Vercel Agent (`vercel`). Use `universal` to write it once for all of them. |
 | `.claude/CLAUDE.md` | Claude Code (`claude`) |
-| `GEMINI.md` | Gemini (`gemini`) |
+| `GEMINI.md` | Gemini CLI (`gemini`) |
 | `replit.md` | Replit Agent (`replit`) |
 | `.firebender/rules/ultracite.mdc` | Firebender (`firebender`) |
-| `ultracite.md` | Aider (`aider`) |
+| `AGENTS.md` and `.aider.conf.yml` | Aider (`aider`) |
+
+### Aider
+
+Aider doesn't load an instructions file on its own, only the files `.aider.conf.yml` lists under `read`. So for Aider, `init` writes the rules to `AGENTS.md` and merges two keys into `.aider.conf.yml`, leaving the rest of the file as it was:
+
+```yaml title=".aider.conf.yml"
+read: AGENTS.md
+lint-cmd: npx ultracite fix
+```
+
+Aider lints every file it edits, so `lint-cmd` makes it run `ultracite fix` on each one. When problems are left, Aider shows them to the model and asks it to fix them before moving on. If your config already sets `lint-cmd` to another linter, `init` leaves it alone: a `lint-cmd` without a language replaces Aider's per-language linters. Earlier versions wrote the rules to `ultracite.md`, which Aider never loaded; `init` removes it if it holds nothing but the rules.
 
 ## Reusable Skills
 

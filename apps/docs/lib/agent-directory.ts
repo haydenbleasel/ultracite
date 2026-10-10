@@ -28,7 +28,7 @@ export const agentDirectory = {
     maker: "Aider-AI",
     name: "Aider",
     tagline:
-      "Terminal pair programmer that commits each change. Add `ultracite.md` to `read:` in `.aider.conf.yml` so it loads the rules.",
+      "Terminal pair programmer that edits files in your git repo, lints each one and commits the change.",
   },
   amp: {
     group: "terminal",

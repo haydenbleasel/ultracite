@@ -36,6 +36,7 @@ const entries = cliAgents.map((agent) => {
     logo: `/logos/${details?.logo ?? agent.id}.svg`,
     maker: details?.maker,
     name: details?.name ?? agent.name,
+    settings: agent.settings?.path,
     tagline: details?.tagline,
   };
 });
@@ -70,9 +71,14 @@ const groups = agentGroups
 const files = [...Map.groupBy(entries, (entry) => entry.file)]
   .map(([path, readers]) => ({ path, readers: readers.toSorted(byName) }))
   .toSorted((a, b) => b.readers.length - a.readers.length || a.path.localeCompare(b.path));
-const hookFiles = entries.flatMap((entry) =>
-  entry.hook ? [{ path: entry.hook, reader: entry }] : []
-);
+// The files beyond the rules: post-edit hooks, and the settings file that
+// makes Aider load its rules and lint each edit.
+const extraFiles = entries.flatMap((entry) => [
+  ...(entry.hook ? [{ path: entry.hook, reader: entry, tag: "Hook" }] : []),
+  ...(entry.settings
+    ? [{ path: entry.settings, reader: entry, tag: "Config" }]
+    : []),
+]);
 const [sharedFile] = files;
 const STACK_SIZE = 9;
 
@@ -83,7 +89,7 @@ const hookNames = new Intl.ListFormat("en", {
 
 const faqs: FaqItem[] = [
   {
-    answer: `Most agents read \`AGENTS.md\`, so \`npx ultracite init --agents universal\` writes it once for ${sharedFile?.readers.length ?? 0} of them. The rest get their own file: \`.claude/CLAUDE.md\` for Claude Code, \`GEMINI.md\` for Gemini CLI, \`replit.md\` for Replit Agent, \`.firebender/rules/ultracite.mdc\` for Firebender, and \`ultracite.md\` for Aider.`,
+    answer: `Most agents read \`AGENTS.md\`, so \`npx ultracite init --agents universal\` writes it once for ${sharedFile?.readers.length ?? 0} of them. The rest get their own file: \`.claude/CLAUDE.md\` for Claude Code, \`GEMINI.md\` for Gemini CLI, \`replit.md\` for Replit Agent, and \`.firebender/rules/ultracite.mdc\` for Firebender. Aider reads \`AGENTS.md\` too, through the \`.aider.conf.yml\` that \`init\` writes for it.`,
     question: "Which file does Ultracite write for my agent?",
   },
   {
@@ -92,7 +98,7 @@ const faqs: FaqItem[] = [
     question: "What happens to my existing AGENTS.md?",
   },
   {
-    answer: `With \`--hooks\`, \`init\` sets up a hook that runs \`ultracite fix --hook\` on every file the agent edits, in ${hookNames}. For OpenCode, add the plugin from its page.`,
+    answer: `With \`--hooks\`, \`init\` sets up a hook that runs \`ultracite fix --hook\` on every file the agent edits, in ${hookNames}. Aider runs \`ultracite fix\` on each file it edits through the \`lint-cmd\` that \`init\` sets in \`.aider.conf.yml\`. For OpenCode, add the plugin from its page.`,
     question: "Which agents get checked after every edit?",
   },
   {
@@ -148,7 +154,7 @@ const faqs: FaqItem[] = [
             class="flex h-11 items-center justify-between gap-4 border-border border-b px-4 font-medium text-muted-foreground text-xs"
           >
             <span>What init writes</span>
-            <span class="font-mono text-accent">{files.length + hookFiles.length} files</span>
+            <span class="font-mono text-accent">{files.length + extraFiles.length} files</span>
           </figcaption>
           <ul class="divide-y divide-border" role="list">
             {
@@ -179,12 +185,12 @@ const faqs: FaqItem[] = [
               ))
             }
             {
-              hookFiles.map((file) => (
+              extraFiles.map((file) => (
                 <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 bg-signal/7 px-4 py-3 sm:px-6">
                   <span class="flex items-center gap-3">
                     <code class="font-mono text-[13px]/6">{file.path}</code>
                     <span class="rounded-sm bg-foreground px-1.5 font-mono text-[11px]/5 text-background uppercase tracking-wider">
-                      Hook
+                      {file.tag}
                     </span>
                   </span>
                   <span class="flex items-center gap-3">
@@ -328,6 +334,9 @@ const faqs: FaqItem[] = [
                   )}
                   <span class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 font-mono text-muted-foreground text-xs/5">
                     <span class="text-foreground">{entry.file}</span>
+                    {entry.settings && (
+                      <span class="text-foreground">{entry.settings}</span>
+                    )}
                     {entry.hook && (
                       <span class="rounded-sm bg-foreground px-1.5 text-[11px]/5 text-background uppercase tracking-wider">
                         Hook

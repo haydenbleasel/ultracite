@@ -1,7 +1,8 @@
-import { readFile } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
 
 import type { PackageManagerName } from "nypm";
 
+import { mergeAgentSettings } from "./agent-settings";
 import { agents } from "./data/agents";
 import type { options } from "./data/options";
 import { providers } from "./data/providers";
@@ -35,13 +36,22 @@ const buildPromptLabel = (path: string, agentNames: string[]) => {
   return `${agentName} (creates ${path})`;
 };
 
+// An agent with a settings file (Aider) is its own target even when it shares
+// a rules file: the universal AGENTS.md target writes the rules but not the
+// settings file that makes the agent load them.
+const targetPath = (agent: (typeof agents)[number]): string =>
+  agent.settings
+    ? `${agent.settings.path} and ${agent.config.path}`
+    : agent.config.path;
+
 export const getAgentFileTargets = (): AgentFileTarget[] => {
   const groupedTargets = new Map<string, typeof agents>();
 
   for (const agent of agents) {
-    const existingGroup = groupedTargets.get(agent.config.path) ?? [];
+    const path = targetPath(agent);
+    const existingGroup = groupedTargets.get(path) ?? [];
     existingGroup.push(agent);
-    groupedTargets.set(agent.config.path, existingGroup);
+    groupedTargets.set(path, existingGroup);
   }
 
   const targets = [...groupedTargets.entries()].map(([path, groupedAgents]) => {
@@ -177,17 +187,17 @@ export const createAgents = (
 
   // The rules tell agents to run the project's installed CLI; a dlx runner
   // fetches the latest release, and `yarn dlx` doesn't exist in Yarn 1.
-  const rules = getRules(
-    localBinCommand(packageManager, "ultracite"),
-    provider.name
-  );
+  const ultracite = localBinCommand(packageManager, "ultracite");
+  const rules = getRules(ultracite, provider.name);
   const content = agent.config.header
     ? `${agent.config.header}\n\n${rules}`
     : rules;
 
-  // An earlier version wrote the rules as Markdown into a file that must hold
-  // something else (Firebender's firebender.json must be JSON). Reset it to an
-  // empty config if it still holds exactly what we wrote.
+  // An earlier version wrote the rules somewhere else. A file that must hold
+  // something else (Firebender's firebender.json must be JSON) is reset to an
+  // empty config if it still holds what we wrote; one that was only ever ours
+  // (Aider's ultracite.md, which Aider never loaded) is removed if it holds
+  // nothing but the rules.
   const repairSupersededFile = async (): Promise<void> => {
     const superseded = agent.config.supersedes;
 
@@ -197,15 +207,51 @@ export const createAgents = (
 
     const contents = await readFile(superseded.path, "utf-8");
 
-    if (contents.trimStart().startsWith(RULES_HEADER)) {
-      await writeProjectFile(superseded.path, superseded.emptyContent);
+    if (superseded.emptyContent !== undefined) {
+      if (contents.trimStart().startsWith(RULES_HEADER)) {
+        await writeProjectFile(superseded.path, superseded.emptyContent);
+      }
+      return;
     }
+
+    if (replaceRulesBlock(contents, "")?.trim() === "") {
+      await rm(superseded.path, { force: true });
+    }
+  };
+
+  // The settings file an agent needs to load the rules (see AgentSettings),
+  // merged in place so the user's own settings stay.
+  const writeSettings = async (): Promise<void> => {
+    const { settings } = agent;
+
+    if (!settings) {
+      return;
+    }
+
+    const existing = exists(settings.path)
+      ? await readFile(settings.path, "utf-8")
+      : "";
+    const merged = mergeAgentSettings(
+      existing,
+      settings,
+      agent.config.path,
+      `${ultracite} fix`
+    );
+
+    if (merged !== existing) {
+      await writeProjectFile(settings.path, merged);
+    }
+  };
+
+  const finish = async (): Promise<void> => {
+    await repairSupersededFile();
+    await writeSettings();
   };
 
   return {
     create: async () => {
       await writeProjectFile(agent.config.path, content);
-      await repairSupersededFile();
+      await finish();
     },
 
     exists: () => exists(agent.config.path),
@@ -215,7 +261,7 @@ export const createAgents = (
 
       if (!(agent.config.appendMode && doesExist)) {
         await writeProjectFile(agent.config.path, content);
-        await repairSupersededFile();
+        await finish();
         return;
       }
 
@@ -227,6 +273,7 @@ export const createAgents = (
         if (replaced !== existingContents) {
           await writeProjectFile(agent.config.path, replaced);
         }
+        await finish();
         return;
       }
 
@@ -237,6 +284,7 @@ export const createAgents = (
           ? withLineEndings(rules, eol)
           : `${kept}${eol}${eol}${withLineEndings(rules, eol)}`
       );
+      await finish();
     },
   };
 };
