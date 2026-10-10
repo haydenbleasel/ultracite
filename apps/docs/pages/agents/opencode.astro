@@ -1,0 +1,129 @@
+---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
+import Options from "../../components/agents/opencode/options.astro";
+import Pipeline from "../../components/agents/opencode/pipeline.astro";
+import PluginSection from "../../components/agents/opencode/plugin.astro";
+import Session from "../../components/agents/opencode/session.astro";
+import Cta from "../../components/home/cta.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingHero from "../../components/landing/landing-hero.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import NextSteps from "../../components/landing/next-steps.astro";
+import type { NextStep } from "../../components/landing/next-steps.astro";
+import { agentLogos } from "../../lib/logos";
+
+// Checked against OpenCode 1.18.35 (its docs and source) on this date; the
+// plugin, AGENTS.md loading and the /lint command were run for real.
+const lastModified = "2026-10-10";
+const command = "npx ultracite@latest init --agents opencode";
+
+const breadcrumbs: Crumb[] = [
+  { href: "/agents", name: "Agents" },
+  { href: "/agents/opencode", name: "OpenCode" },
+];
+
+const faqs: FaqItem[] = [
+  {
+    answer:
+      "Both, in that order. OpenCode puts every `AGENTS.md` from your working directory up to the repo root into the system prompt, falls back to `CLAUDE.md` when there’s none, and adds your global `~/.config/opencode/AGENTS.md`. `ultracite init --agents opencode` appends Ultracite’s rules to `AGENTS.md`, so they’re in context from the first message.",
+    question: "Does OpenCode read AGENTS.md or CLAUDE.md?",
+  },
+  {
+    answer:
+      "No. OpenCode ignores the hooks in `.claude/settings.json`, and the request to support them is still open. Plugins cover the same ground: a `tool.execute.after` hook runs after every tool call and can add to the result the model reads, which is what Ultracite’s plugin does.",
+    question: "Does OpenCode run Claude Code hooks?",
+  },
+  {
+    answer:
+      "Its formatters are off by default, and when they’re on, OpenCode throws away their output, so the model never hears about a problem they couldn’t fix. The built-in Biome formatter also runs `biome format --write`, which formats without applying lint fixes. The plugin runs the whole `ultracite fix` and reports what’s left.",
+    question: "Why not use OpenCode’s built-in formatters?",
+  },
+  {
+    answer:
+      "Yes. OpenCode gives GPT models an `apply_patch` tool instead of `write` and `edit`. The plugin reads the files a patch added, changed or moved from the tool’s metadata and skips deleted ones.",
+    question: "Does the plugin work with GPT models?",
+  },
+  {
+    answer:
+      "Not yet. `init` writes the rules into `AGENTS.md` and offers to install the Ultracite skill. The plugin is one file you add to `.opencode/plugins/`; OpenCode installs its types the first time it loads it.",
+    question: "Does `ultracite init` set up the plugin?",
+  },
+  {
+    answer:
+      "Each problem `ultracite fix` couldn’t settle, with its file, line, rule and a hint. On Oxlint it’s one line per problem with no code frame or summary: Oxlint notices it’s running under OpenCode and switches to a format built for agents, so the feedback costs few tokens.",
+    question: "What does the model see when a problem is left?",
+  },
+];
+
+const nextSteps: NextStep[] = [
+  {
+    description: "What `init` writes for each agent, and how to keep it current.",
+    href: "/docs/ai/rules",
+    label: "Docs",
+    title: "Agent rules",
+  },
+  {
+    description: "The Ultracite skill: setup, commands and troubleshooting.",
+    href: "/docs/ai/skills",
+    label: "Docs",
+    title: "Agent skills",
+  },
+  {
+    description: "Post-edit hooks for Claude Code, Cursor, Windsurf and Copilot.",
+    href: "/docs/ai/hooks",
+    label: "Docs",
+    title: "Agent hooks",
+  },
+  {
+    description: "Every agent Ultracite sets up, and what it writes for each.",
+    href: "/agents",
+    label: "Agents",
+    title: "All agents",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description="Set up Ultracite for OpenCode: rules in AGENTS.md, and a plugin that runs ultracite fix after every edit and hands the model what’s left to fix."
+  faqs={faqs}
+  lastModified={lastModified}
+  title="Ultracite for OpenCode — Lint Every Edit Your Agent Makes"
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={agentLogos.opencode ?? ""}
+    name="OpenCode"
+    title="Lint every file OpenCode writes"
+  >
+    OpenCode reads Ultracite’s rules from{" "}
+    <code class="font-mono text-base text-foreground">AGENTS.md</code>{" "}
+    before it writes. A one-file plugin runs{" "}
+    <code class="font-mono text-base text-foreground">ultracite fix</code>{" "}
+    after every edit and hands the model what’s left, so it fixes the problem
+    in the same turn instead of in review.
+    <Fragment slot="note">
+      <span>For</span>
+      <a
+        aria-describedby={NEW_TAB_HINT_ID}
+        class="underline underline-offset-2 hover:text-foreground"
+        href="https://opencode.ai"
+        rel="noopener noreferrer"
+        target="_blank">OpenCode</a
+      >
+      <span>by Anomaly</span>
+      <span aria-hidden="true">·</span>
+      <span>Tested on 1.18.35</span>
+    </Fragment>
+    <Session slot="visual" />
+  </LandingHero>
+  <Pipeline />
+  <PluginSection />
+  <Options />
+  <Faq id="oc-faq" items={faqs} title="OpenCode questions, answered" />
+  <NextSteps id="oc-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>

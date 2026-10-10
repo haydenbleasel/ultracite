@@ -1,0 +1,80 @@
+---
+import Icon from "../../home/icon.astro";
+import RichText from "../../landing/rich-text.astro";
+
+// A real `opencode run` transcript (OpenCode 1.18.35, Oxlint 1.87.0) with the
+// plugin from plugin.astro installed. The model was a local stand-in scripted
+// to make the two edits; the lines below are as OpenCode and Ultracite printed
+// them, with the edit's diff trimmed to its hunk.
+const steps = [
+  {
+    body: "It writes `var` and `any`, without semicolons.",
+    title: "The agent writes a file",
+  },
+  {
+    body: "`ultracite fix` turns `var` into `const`, formats the file, and adds the one problem it can’t fix to the tool result.",
+    title: "The plugin fixes what it can",
+  },
+  {
+    body: "The model reads that result before its next step, and the file passes `ultracite check`.",
+    title: "The agent fixes the rest",
+  },
+];
+---
+
+<div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
+  <figure
+    class="m-0 min-w-0 overflow-hidden rounded-blume border border-panel-border bg-panel text-panel-foreground lg:col-span-8"
+  >
+    <div
+      class="flex h-11 items-center justify-between gap-4 border-panel-border border-b px-4 font-medium text-panel-muted text-xs"
+    >
+      <span class="flex items-center gap-2.5">
+        <Icon class="size-3.5" name="bash" />
+        opencode run
+      </span>
+      <span>OpenCode 1.18.35</span>
+    </div>
+    <div class="overflow-x-auto px-5 py-4">
+      <div class="w-max min-w-full font-mono text-[13px]/[1.65]">
+        <p class="text-panel-muted">&gt; build</p>
+        <p class="mt-3"><span class="text-panel-muted">←</span> Write src/parse.ts</p>
+        <p class="text-panel-muted">Wrote file successfully.</p>
+        <div class="mt-3 border-signal border-l-2 pl-3">
+          <p class="text-signal">
+            Ultracite fixed what it could. Fix these, then re-read the file
+            before editing it again:
+          </p>
+          <p class="whitespace-pre text-panel-foreground">src/parse.ts:1:30: error typescript(no-explicit-any): Unexpected `any`. Specify a different type. <span class="text-panel-muted">help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.</span></p>
+          <p class="text-panel-muted">Finished in 31ms on 1 files using 10 threads.</p>
+        </div>
+        <p class="mt-4"><span class="text-panel-muted">←</span> Edit src/parse.ts</p>
+        <p class="text-panel-muted">@@ -1,4 +1,4 @@</p>
+        <p class="whitespace-pre text-[#ff8a80]">-export const parse = (input: any) =&gt; {"{"}</p>
+        <p class="whitespace-pre text-ok">+export const parse = (input: string): unknown =&gt; {"{"}</p>
+        <p class="whitespace-pre text-panel-muted">   const value = JSON.parse(input);</p>
+        <p class="whitespace-pre text-panel-muted">   return value;</p>
+        <p class="whitespace-pre text-panel-muted"> {"};"}</p>
+        <p class="mt-4 text-panel-foreground">Done.</p>
+      </div>
+    </div>
+  </figure>
+  <ol
+    class="flex flex-col gap-2 sm:gap-4 lg:col-span-4"
+    role="list"
+  >
+    {
+      steps.map((step, index) => (
+        <li class="flex flex-1 flex-col gap-2 rounded-blume border border-border bg-code p-5 sm:p-6">
+          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+            {index + 1}
+          </p>
+          <p class="font-medium text-lg/6 tracking-[-0.01em]">{step.title}</p>
+          <p class="text-pretty text-[15px]/6 text-muted-foreground">
+            <RichText text={step.body} />
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+</div>

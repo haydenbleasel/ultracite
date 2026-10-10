@@ -1,0 +1,87 @@
+---
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+
+import SectionHeading from "../../home/section-heading.astro";
+import RichText from "../../landing/rich-text.astro";
+
+// Config for OpenCode 1.18.35. The /lint command was run for real; the rest
+// follow opencode.ai/docs (lsp, permissions) and Ultracite's skill installer.
+const options = [
+  {
+    body: "Type `/lint` and OpenCode runs `ultracite check`, pastes the output into the prompt and asks for fixes.",
+    // Joined from lines: a bare `---` line here would end the frontmatter.
+    code: [
+      "---",
+      "description: Run Ultracite and fix what it reports",
+      "---",
+      "",
+      "Ultracite check output:",
+      "",
+      "!`npx ultracite check`",
+      "",
+      "Fix every problem above, then run `npx ultracite check` again until it passes.",
+    ].join("\n"),
+    file: ".opencode/commands/lint.md",
+    lang: "md",
+    title: "A /lint command",
+  },
+  {
+    body: "Ultracite’s skill teaches the agent `init`, `check`, `fix` and `doctor`. `init` offers to install it into `.agents/skills`, which OpenCode reads, or add it yourself.",
+    code: "npx skills add haydenbleasel/ultracite",
+    file: "Terminal",
+    lang: "bash",
+    title: "The Ultracite skill",
+  },
+  {
+    body: "Turn on language servers to also get Oxlint’s, Biome’s or ESLint’s errors after each edit, up to 20 per file.",
+    code: `{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true
+}`,
+    file: "opencode.json",
+    lang: "json",
+    title: "LSP diagnostics",
+  },
+  {
+    body: "Bash runs without asking by default. If you’ve locked it down, let Ultracite through; the last matching rule wins.",
+    code: `{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "bash": { "*": "ask", "npx ultracite *": "allow" }
+  }
+}`,
+    file: "opencode.json",
+    lang: "json",
+    title: "Permissions",
+  },
+];
+---
+
+<section aria-labelledby="oc-options" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="oc-options" title="More ways to wire it in">
+      None of these are required. Each one gives the agent another way to
+      reach the same standard.
+    </SectionHeading>
+    <ul
+      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+      role="list"
+    >
+      {
+        options.map((option) => (
+          <li class="flex min-w-0 flex-col bg-background">
+            <div class="flex flex-col gap-2 px-4 pt-8 pb-6 sm:px-6 lg:px-10">
+              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{option.title}</h3>
+              <p class="max-w-[52ch] text-pretty text-[15px]/6 text-muted-foreground">
+                <RichText text={option.body} />
+              </p>
+            </div>
+            <div class="lp-code mt-auto min-w-0 px-4 pb-8 sm:px-6 lg:px-10">
+              <CodeBlock code={option.code} lang={option.lang} title={option.file} />
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

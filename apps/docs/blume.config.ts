@@ -128,6 +128,14 @@ export default defineConfig({
         path: "/docs",
       },
       {
+        label: "Providers",
+        path: "/providers",
+      },
+      {
+        label: "Agents",
+        path: "/agents",
+      },
+      {
         label: "Changelog",
         path: "/changelog",
       },

@@ -1,0 +1,93 @@
+---
+import SectionHeading from "../../home/section-heading.astro";
+import RichText from "../../landing/rich-text.astro";
+
+// What OpenCode 1.18.35 does around a file edit, in order (packages/opencode
+// src/session/instruction.ts, tool/write.ts, tool/edit.ts, format/,
+// lsp/diagnostic.ts, session/tools.ts), and where Ultracite comes in.
+const stages = [
+  {
+    body: "OpenCode puts every `AGENTS.md` from your working directory up to the repo root into the system prompt, or `CLAUDE.md` if there’s none.",
+    default: "Always",
+    on: true,
+    title: "Session starts",
+    ultracite: "`init` appends Ultracite’s rules to `AGENTS.md`.",
+  },
+  {
+    body: "The `write` and `edit` tools, or `apply_patch` for GPT models, save the file to disk.",
+    default: "Always",
+    on: true,
+    title: "The agent edits",
+    ultracite: "The rules in context mean the first draft starts closer to passing.",
+  },
+  {
+    body: "Prettier, Oxfmt or Biome run on the file. Their output is thrown away, and Biome’s only formats: it doesn’t apply lint fixes.",
+    default: "Off by default",
+    on: false,
+    title: "Formatters",
+    ultracite: "Leave them off. The plugin runs the whole `ultracite fix`.",
+  },
+  {
+    body: "With `\"lsp\": true`, Oxlint’s, Biome’s or ESLint’s language server reports on the file. Errors are added to the result, up to 20; warnings are dropped.",
+    default: "Off by default",
+    on: false,
+    title: "LSP diagnostics",
+    ultracite: "Every Ultracite rule is an error, so none of them are dropped.",
+  },
+  {
+    body: "Plugins’ `tool.execute.after` hooks run with the tool’s result, and whatever they add to it goes to the model.",
+    default: "With a plugin",
+    on: true,
+    title: "Plugins",
+    ultracite: "The plugin runs `ultracite fix` and adds what’s left.",
+  },
+];
+---
+
+<section aria-labelledby="oc-pipeline" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="oc-pipeline"
+      title="What happens when OpenCode writes a file"
+    >
+      OpenCode has three places a linter can plug in. Two of them are off by
+      default, and only one tells the model about every problem it leaves.
+    </SectionHeading>
+    <ol
+      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2 lg:grid-cols-5"
+      role="list"
+    >
+      {
+        stages.map((stage, index) => (
+          <li class:list={["flex min-w-0 flex-col bg-background", !stage.on && "hatch"]}>
+            <div class="flex flex-1 flex-col gap-3 px-4 pt-6 pb-6 sm:px-6 lg:pt-8">
+              <p class="flex items-center justify-between gap-3 font-mono text-xs/5">
+                <span class="text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
+                <span
+                  class:list={[
+                    "rounded-sm px-1.5 uppercase tracking-wider",
+                    stage.on
+                      ? "bg-foreground text-background"
+                      : "border border-foreground/20 bg-background text-muted-foreground",
+                  ]}
+                >
+                  {stage.default}
+                </span>
+              </p>
+              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{stage.title}</h3>
+              <p class="text-pretty text-[15px]/6 text-muted-foreground">
+                <RichText text={stage.body} />
+              </p>
+            </div>
+            <p class="text-pretty border-border border-t bg-background px-4 py-4 text-[15px]/6 sm:px-6 lg:min-h-37">
+              <span class="mb-1 block font-mono text-accent text-xs/5 uppercase tracking-wider">
+                Ultracite
+              </span>
+              <RichText text={stage.ultracite} />
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

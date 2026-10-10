@@ -1,0 +1,82 @@
+---
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+
+import SectionHeading from "../../home/section-heading.astro";
+import RichText from "../../landing/rich-text.astro";
+
+// Exercised against OpenCode 1.18.35 with `write`, `edit` and `apply_patch`
+// edits (see session.astro); re-run that check when OpenCode's plugin API
+// changes.
+const plugin = `import type { Plugin } from "@opencode-ai/plugin";
+
+// The tools that write files: \`write\` and \`edit\` take a \`filePath\`; GPT
+// models get \`apply_patch\`, which lists what it touched in its metadata.
+const EDIT_TOOLS = new Set(["apply_patch", "edit", "write"]);
+
+export const Ultracite: Plugin = async ({ $ }) => ({
+  "tool.execute.after": async (input, output) => {
+    if (!EDIT_TOOLS.has(input.tool)) {
+      return;
+    }
+    const files =
+      input.tool === "apply_patch"
+        ? (output.metadata?.files ?? [])
+            .filter((file) => file.type !== "delete")
+            .map((file) => file.movePath ?? file.filePath)
+        : [input.args.filePath];
+    const result = await $\`npx ultracite fix \${files}\`.nothrow().quiet();
+    if (result.exitCode !== 0) {
+      // The tool's output goes back to the model, so this is what it reads.
+      output.output += \`\\n\\nUltracite fixed what it could. Fix these, then re-read the file before editing it again:\\n\${result.stdout}\${result.stderr}\`;
+    }
+  },
+});`;
+
+const notes = [
+  {
+    body: "OpenCode loads every `.ts` file in `.opencode/plugins/` when a session starts, and installs the types for you.",
+    title: "Drop it in",
+  },
+  {
+    body: "It skips reads, searches and shell commands, and runs only on the files an edit touched, so a check takes about a third of a second instead of a full-project pass.",
+    title: "Only the edited files",
+  },
+  {
+    body: "`ultracite fix` applies safe fixes and formats. When problems remain it exits non-zero, and the plugin appends them to the tool result the model reads next.",
+    title: "Fix, then report",
+  },
+  {
+    body: "Swap `npx` for `pnpm exec`, `yarn` or `bunx` to match your package manager.",
+    title: "Your runner",
+  },
+];
+---
+
+<section aria-labelledby="oc-plugin" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="oc-plugin" title="The plugin: one file, every edit">
+      OpenCode doesn’t run Claude Code-style hooks, but its plugins see every
+      tool call. This one closes the loop the way Ultracite’s hooks do in
+      Claude Code and Copilot.
+    </SectionHeading>
+    <div
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-12"
+    >
+      <ul class="flex flex-col gap-px lg:col-span-4" role="list">
+        {
+          notes.map((note) => (
+            <li class="flex flex-1 flex-col gap-2 bg-background px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{note.title}</h3>
+              <p class="text-pretty text-[15px]/6 text-muted-foreground">
+                <RichText text={note.body} />
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="lp-code min-w-0 bg-background p-2 sm:p-6 lg:col-span-8 lg:p-10">
+        <CodeBlock code={plugin} lang="ts" title=".opencode/plugins/ultracite.ts" />
+      </div>
+    </div>
+  </div>
+</section>

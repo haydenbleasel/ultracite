@@ -1,0 +1,274 @@
+---
+import { agents as cliAgents } from "../../../../packages/cli/src/data/agents";
+import Cta from "../../components/home/cta.astro";
+import Icon from "../../components/home/icon.astro";
+import Installer from "../../components/home/installer.astro";
+import SectionHeading from "../../components/home/section-heading.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import RichText from "../../components/landing/rich-text.astro";
+import { agentDirectory, agentGroups } from "../../lib/agent-directory";
+import type { AgentEntry } from "../../lib/agent-directory";
+import { hookIntegrations } from "../../lib/hooks";
+
+const lastModified = "2026-10-10";
+
+const breadcrumbs: Crumb[] = [{ href: "/agents", name: "Agents" }];
+
+// An agent links to its landing page once pages/agents/<id>.astro exists.
+const landingPages = import.meta.glob("./*.astro");
+const hasLandingPage = (id: string): boolean =>
+  `./${id}.astro` in landingPages;
+
+// The CLI's table decides which agents exist and what `init` writes for each;
+// the directory adds who makes them and what they are. An agent the CLI adds
+// before the directory catches up still shows, under its CLI name.
+const directory = new Map<string, AgentEntry>(Object.entries(agentDirectory));
+const entries = cliAgents.map((agent) => {
+  const details = directory.get(agent.id);
+  return {
+    file: agent.config.path,
+    group: details?.group ?? "terminal",
+    hook: agent.hooks?.path,
+    id: agent.id,
+    landing: hasLandingPage(agent.id),
+    logo: `/logos/${details?.logo ?? agent.id}.svg`,
+    maker: details?.maker,
+    name: details?.name ?? agent.name,
+    tagline: details?.tagline,
+  };
+});
+
+const byName = (a: { name: string }, b: { name: string }): number =>
+  a.name.localeCompare(b.name, "en", { sensitivity: "base" });
+
+const groups = agentGroups
+  .map((group) => ({
+    ...group,
+    entries: entries.filter((entry) => entry.group === group.id).toSorted(byName),
+  }))
+  .filter((group) => group.entries.length > 0);
+
+// Every file `init` writes for an agent, most-shared first, then the hooks.
+const files = [...Map.groupBy(entries, (entry) => entry.file)]
+  .map(([path, readers]) => ({ path, readers: readers.toSorted(byName) }))
+  .toSorted((a, b) => b.readers.length - a.readers.length || a.path.localeCompare(b.path));
+const hookFiles = entries.flatMap((entry) =>
+  entry.hook ? [{ path: entry.hook, reader: entry }] : []
+);
+const [sharedFile] = files;
+const STACK_SIZE = 9;
+
+const hookNames = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+}).format(hookIntegrations.map((hook) => hook.name));
+
+const faqs: FaqItem[] = [
+  {
+    answer: `Most agents read \`AGENTS.md\`, so \`npx ultracite init --agents universal\` writes it once for ${sharedFile?.readers.length ?? 0} of them. The rest get their own file: \`.claude/CLAUDE.md\` for Claude Code, \`GEMINI.md\` for Gemini CLI, \`replit.md\` for Replit Agent, and a rules file in their own folder for Roo Code, Kiro CLI and Firebender.`,
+    question: "Which file does Ultracite write for my agent?",
+  },
+  {
+    answer:
+      "Ultracite adds its block, starting at `# Ultracite Code Standards`, below your own content. Running `init` again replaces that block in place and leaves the rest of the file alone.",
+    question: "What happens to my existing AGENTS.md?",
+  },
+  {
+    answer: `With \`--hooks\`, \`init\` sets up a hook that runs \`ultracite fix --hook\` on every file the agent edits, in ${hookNames}. For OpenCode, add the plugin from its page.`,
+    question: "Which agents get checked after every edit?",
+  },
+  {
+    answer:
+      "If it reads `AGENTS.md`, yes: run `npx ultracite init --agents universal`. Most new agents do. Otherwise, copy the Ultracite block from `AGENTS.md` into the file your agent reads.",
+    question: "My agent isn’t listed. Will Ultracite work with it?",
+  },
+  {
+    answer:
+      "`init` asks which agent files to add. Pass `--agents` with one or more IDs, separated by spaces, to skip the prompts: `npx ultracite init --agents claude opencode`.",
+    question: "How do I pick agents without the prompt?",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description={`Ultracite writes its rules into the files ${entries.length} coding agents read, from Claude Code and Codex to OpenCode and Copilot, and can lint every edit they make.`}
+  faqs={faqs}
+  lastModified={lastModified}
+  title={`Ultracite for Coding Agents — ${entries.length} Agents, One Standard`}
+>
+  <section class="border-border border-y">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
+        <p class="font-mono text-muted-foreground text-xs/5">Agents</p>
+        <h1
+          class="mt-10 max-w-[17ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:mt-12 lg:text-7xl"
+        >
+          The same standard in every coding agent
+        </h1>
+        <div
+          class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10"
+        >
+          <p
+            class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
+          >
+            <code class="font-mono text-base text-foreground">ultracite init</code>{" "}
+            writes the rules into the file each agent reads before it writes a
+            line, and for some, adds a hook that checks every edit. {entries.length}{" "}
+            agents, one command.
+          </p>
+          <div class="flex flex-col gap-3 lg:col-span-6 lg:items-end">
+            <Installer />
+          </div>
+        </div>
+      </div>
+      <div class="border-border border-t bg-signal p-2 sm:p-6 lg:p-10">
+        <figure
+          class="m-0 overflow-hidden rounded-blume border border-border bg-code"
+        >
+          <figcaption
+            class="flex h-11 items-center justify-between gap-4 border-border border-b px-4 font-medium text-muted-foreground text-xs"
+          >
+            <span>What init writes</span>
+            <span class="font-mono text-accent">{files.length + hookFiles.length} files</span>
+          </figcaption>
+          <ul class="divide-y divide-border" role="list">
+            {
+              files.map((file) => (
+                <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
+                  <code class="font-mono text-[13px]/6">{file.path}</code>
+                  <span class="flex items-center gap-3">
+                    <span class="flex items-center">
+                      {file.readers.slice(0, STACK_SIZE).map((reader) => (
+                        <img
+                          alt=""
+                          class="-mr-1.5 size-6 rounded-md ring-2 ring-code"
+                          height="24"
+                          loading="lazy"
+                          src={reader.logo}
+                          title={reader.name}
+                          width="24"
+                        />
+                      ))}
+                    </span>
+                    <span class="ml-1.5 text-muted-foreground text-sm/6">
+                      {file.readers.length === 1
+                        ? file.readers[0]?.name
+                        : `${file.readers.length} agents`}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+            {
+              hookFiles.map((file) => (
+                <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 bg-signal/7 px-4 py-3 sm:px-6">
+                  <span class="flex items-center gap-3">
+                    <code class="font-mono text-[13px]/6">{file.path}</code>
+                    <span class="rounded-sm bg-foreground px-1.5 font-mono text-[11px]/5 text-background uppercase tracking-wider">
+                      Hook
+                    </span>
+                  </span>
+                  <span class="flex items-center gap-3">
+                    <img
+                      alt=""
+                      class="size-6 rounded-md"
+                      height="24"
+                      loading="lazy"
+                      src={file.reader.logo}
+                      width="24"
+                    />
+                    <span class="text-muted-foreground text-sm/6">{file.reader.name}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  {
+    groups.map((group) => (
+      <section aria-labelledby={`ag-${group.id}`} class="border-border border-b">
+        <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+          <SectionHeading id={`ag-${group.id}`} title={group.title}>
+            <RichText text={group.description} />
+          </SectionHeading>
+          <ul
+            class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
+            role="list"
+          >
+            {group.entries.map((entry) => {
+              const body = (
+                <>
+                  <span class="flex items-center gap-3">
+                    <img
+                      alt=""
+                      class="size-10 shrink-0 rounded-lg ring-1 ring-foreground/10"
+                      height="40"
+                      loading="lazy"
+                      src={entry.logo}
+                      width="40"
+                    />
+                    <span class="flex min-w-0 flex-col">
+                      <span class="font-medium text-lg/6 tracking-[-0.01em]">{entry.name}</span>
+                      {entry.maker && (
+                        <span class="truncate text-muted-foreground text-sm/5">{entry.maker}</span>
+                      )}
+                    </span>
+                    {entry.landing && (
+                      <Icon
+                        class="ml-auto size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+                        name="arrow-right"
+                      />
+                    )}
+                  </span>
+                  {entry.tagline && (
+                    <span class="text-pretty text-[15px]/6 text-muted-foreground">
+                      <RichText text={entry.tagline} />
+                    </span>
+                  )}
+                  <span class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 font-mono text-muted-foreground text-xs/5">
+                    <span class="text-foreground">{entry.file}</span>
+                    {entry.hook && (
+                      <span class="rounded-sm bg-foreground px-1.5 text-[11px]/5 text-background uppercase tracking-wider">
+                        Hook
+                      </span>
+                    )}
+                    <span class="ml-auto">--agents {entry.id}</span>
+                  </span>
+                </>
+              );
+              return (
+                <li class="flex bg-background">
+                  {entry.landing ? (
+                    <a
+                      class="group flex w-full flex-col gap-3 px-4 py-6 hover:bg-muted/50 sm:px-6 lg:px-8"
+                      href={`/agents/${entry.id}`}
+                    >
+                      {body}
+                    </a>
+                  ) : (
+                    <div class="flex w-full flex-col gap-3 px-4 py-6 sm:px-6 lg:px-8">
+                      {body}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+            {group.entries.length % 3 !== 0 && (
+              <li aria-hidden="true" class="hatch bg-background max-lg:hidden" style={{ gridColumn: `span ${3 - (group.entries.length % 3)}` }} />
+            )}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+
+  <Faq id="ag-faq" items={faqs} title="Agent questions, answered" />
+  <Cta />
+</LandingLayout>
