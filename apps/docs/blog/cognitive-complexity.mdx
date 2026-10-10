@@ -23,7 +23,7 @@ Cyclomatic complexity measures what it was designed to measure. The trouble star
 
 In December 2016, G. Ann Campbell at SonarSource published [Cognitive Complexity: A new way of measuring understandability](https://www.sonarsource.com/docs/CognitiveComplexity.pdf), a white paper. It starts from that gap: "methods with equal Cyclomatic Complexity do not necessarily present equal difficulty". Rather than deriving a number from a graph, it writes down judgments about what makes code hard to read as scoring rules. Campbell also knew the score would become a target. In the [launch post](https://www.sonarsource.com/blog/cognitive-complexity-because-testability-understandability/) she wrote, "if we measure it, you will try to improve it", so the rules were built to reward the changes that make code easier to read.
 
-## How the score works
+## Why nesting costs more
 
 The white paper has three basic rules:
 
@@ -75,7 +75,7 @@ const countBlocking = (files: LintFile[], ignored: Set<string>): number => {
 
 The other half of the design is the `switch`. The white paper gives "a switch and all its cases combined" a single increment, because a switch compares one value against named cases and "can often be taken in at a glance." A twenty-case lookup scores 1. Its cyclomatic complexity is 21, twice McCabe's suggested limit, even though it's one of the easiest kinds of function to read.
 
-## What the research says
+## A coarse proxy for reading effort
 
 Cognitive complexity was designed from intuition, not experiments. The white paper reports no user study. The evidence came later, and it's mixed.
 
@@ -89,7 +89,7 @@ What holds up best is the intuition underneath it. In a study of 275 developers,
 
 So, honestly: cognitive complexity is a coarse proxy for reading effort. It predicts how long code takes to understand better than whether it's understood correctly. It isn't clearly better than simpler measures, and there's no evidence for any particular threshold, ours included. We turn it on anyway, because a lint rule doesn't have to be a perfect measure. It has to be cheap, deterministic, explainable, and point the right way most of the time. This one does, and the case for it gets stronger when an agent writes the code.
 
-## What changes when agents write the code
+## The agent and the reviewer
 
 Cognitive complexity was built to measure a human reader. When an agent writes the code, there are two readers: the agent itself, as it edits the code later, and the person who reviews what it wrote.
 
@@ -141,7 +141,7 @@ Turn the outer `if` into an early return (`if (seconds <= 0) return ...`) and ev
 
 That's the case for picking a limit that sits in the tail rather than the body of the distribution, and for lowering it over time rather than starting low. A limit below the 95th percentile turns the rule into a style debate about ordinary code. A limit in the tail flags the functions a reviewer would also flag.
 
-## What an agent does with the error
+## The cheapest change wins
 
 To see what agents actually do with this error, we ran an experiment in October 2026. We took two real functions from those codebases, set the rule to Sonar's default limit of 15, and handed each function to Claude Code and to Codex four times, with each CLI on its default model. We used the same prompt and permissions Ultracite uses when it passes lint errors to an agent. The first function was `formatTimespan`, at 23. The second was Astro's [`computePreferredLocaleList`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/i18n/utils.ts#L117-L146), which matches a browser's preferred languages against a site's locales using loops nested inside loops, and scores 37.
 
@@ -181,9 +181,9 @@ The two agents had different styles. Codex was minimal and almost deterministic,
 
 Each agent found the cheapest change that made the error go away. When the cheapest change was a real improvement, like an early return, that's what we got. When it wasn't (early returns alone only bring the Astro function down to 23), the cheapest change was to move the nesting somewhere the rule doesn't count it. The rule's biggest loophole and the agent's incentive point the same way. That's not a reason to turn the rule off. It's a reason to read the names of the functions an agent creates, and to treat a helper that scores exactly one under the limit as a question, not an answer.
 
-## Where it breaks
+## What the score misses
 
-**Extraction is free.** The white paper deliberately ignores function boundaries, because pulling code into "a single, evocatively named call" is the kind of shorthand it wants to reward. But the rule can't tell an evocative name from `processPart2`. Splitting a function in two can halve its score whether or not anything became easier to read. It's mechanical enough that [Saborido et al.](https://doi.org/10.1109/ACCESS.2022.3144743) built a search over Extract Method refactorings that cleared 78% of 1,050 cognitive complexity issues across 10 open-source projects without a person involved. It's also what most runs in [our experiment](#what-an-agent-does-with-the-error) did when the nesting couldn't be removed in place. Callbacks get the same treatment. `eslint-plugin-sonarjs` scores every function on its own, so a callback starts again at zero nesting however deep it sits, and none of its score counts toward the function around it. In our eight codebases, 42% of functions were nested inside another one. Counting each callback toward its parent would have pushed at least 55% more top-level functions over a limit of 20.
+**Extraction is free.** The white paper deliberately ignores function boundaries, because pulling code into "a single, evocatively named call" is the kind of shorthand it wants to reward. But the rule can't tell an evocative name from `processPart2`. Splitting a function in two can halve its score whether or not anything became easier to read. It's mechanical enough that [Saborido et al.](https://doi.org/10.1109/ACCESS.2022.3144743) built a search over Extract Method refactorings that cleared 78% of 1,050 cognitive complexity issues across 10 open-source projects without a person involved. It's also what most runs in [our experiment](#the-cheapest-change-wins) did when the nesting couldn't be removed in place. Callbacks get the same treatment. `eslint-plugin-sonarjs` scores every function on its own, so a callback starts again at zero nesting however deep it sits, and none of its score counts toward the function around it. In our eight codebases, 42% of functions were nested inside another one. Counting each callback toward its parent would have pushed at least 55% more top-level functions over a limit of 20.
 
 **It's blind to most of what makes code hard.** The score sees control flow and nothing else: not names, not data flow, not mutable state, not types, and not size. A 300-line function with no branches scores 0. The fMRI study found that "a code's textual size drives programmers' attention, and vocabulary size burdens programmers' working memory." Limits on length and parameter count are separate rules, and cognitive complexity won't do their job.
 
@@ -193,7 +193,7 @@ Each agent found the cheapest change that made the error go away. When the cheap
 
 **Cyclomatic complexity is a poor stand-in.** Not every linter implements cognitive complexity, and falling back to the cyclomatic `complexity` rule is tempting. But it's the metric this post argues against. Across our eight codebases the two metrics were strongly correlated, but they disagreed about the functions that matter. VS Code's [`toLabel`](https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages.ts#L436-L469), a 29-case switch, scores 30 on cyclomatic complexity and 1 on cognitive complexity. A [callback in Next.js](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/app-link-gc.ts#L4-L64) nests loops and conditions 13 levels deep and scores 87 on cognitive complexity, but only 18 on cyclomatic. Of the functions over 20 on cognitive complexity, 39% were at or under 20 on cyclomatic.
 
-## Using it well
+## Living with a limit
 
 **Make it an error.** A warning is a suggestion people learn to scroll past.
 

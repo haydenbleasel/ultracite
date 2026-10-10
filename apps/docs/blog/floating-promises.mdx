@@ -24,7 +24,7 @@ Error bubbling only works if something is waiting at the top. A promise nobody a
 
 The lint rule came from TypeScript. Josh Goldberg wrote [`no-floating-promises`](https://github.com/palantir/tslint/pull/1632) for TSLint in 2016, noting that "floating (unhandled) Promises can cause unexpected behavior." typescript-eslint [ported it](https://github.com/typescript-eslint/typescript-eslint/pull/495) in 2019, and added [`no-misused-promises`](https://github.com/typescript-eslint/typescript-eslint/issues/508) a month later for the promises the first rule missed: ones "passed to code that will not handle it." Both are errors in typescript-eslint's recommended type-checked configuration.
 
-## What the rules can see
+## What counts as handled
 
 `no-floating-promises` reports a promise "created without any code set up to handle any errors it might throw", in [typescript-eslint's words](https://typescript-eslint.io/rules/no-floating-promises/). Awaiting it, returning it, or attaching a rejection handler all count. So does putting `void` in front of it, which the rule treats as a deliberate marker for fire-and-forget. `no-misused-promises` reports a promise used as a condition, and an async function passed where the caller expects a function that returns nothing. `require-await` reports async functions that never await, and `no-await-in-loop` reports `await` inside a loop body.
 
@@ -44,7 +44,7 @@ The second and third lines are the ones to remember. `void` tells the rule a pro
 
 The fourth line is the rule's biggest blind spot. A promise stored in a variable, a field or a map isn't floating as far as the rule can tell, even if nothing ever awaits it.
 
-## What the research says
+## Bugs in the error path
 
 Promise bugs have been studied since soon after promises arrived. When [Madsen, Lhoták and Tip](https://doi.org/10.1145/3133910) built a formal model of JavaScript promises in 2017, they collected 21 promise bugs from StackOverflow. The most common type, 8 of 21, was a "missing return": a promise created inside a callback and never passed back, so the chain lost it. A year later, their tool [PromiseKeeper](https://doi.org/10.1145/3276532) ran the test suites of 12 Node.js applications and found 1,864 promises with no rejection handler (920 after filtering out likely false alarms). It found something more telling about the tests themselves: five of the twelve suites never exercised a single rejected promise. Whatever happens when those promises reject, the tests weren't checking.
 
@@ -56,7 +56,7 @@ The most expensive version is a missing `await` in a condition. A promise is alw
 
 So async bugs are a minority of all bugs, but a stubborn one, concentrated in error paths that tests don't exercise, and occasionally severe. Platforms have started saying so. Cloudflare's [guide for Workers](https://developers.cloudflare.com/workers/best-practices/workers-best-practices/) warns that floating promises "cause silent bugs: dropped results, swallowed errors, and unfinished work", and recommends the lint rule to catch them.
 
-## What it looks like in real code
+## Eight codebases, 260 floating promises
 
 In October 2026 we measured these rules across the same eight codebases as [our other research](/research/cognitive-complexity): [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core. That's 694,309 lines of source, excluding tests, generated and vendored code. We ran the type-aware rules with typescript-eslint and Oxlint, which agreed line for line.
 
@@ -88,17 +88,17 @@ The rules would have flagged 13 of the 25. The other 12 are a fair map of their 
 
 That rule is the most common of the four, and usually wrong to obey blindly. Of 76 sampled `await`s inside loops, two-thirds had to stay sequential: reading a stream, retrying, paginating, or stopping at the first match. Only 14 could have run in parallel. Just 12 of the 76 had a comment saying why they were sequential.
 
-## What changes when agents write the code
+## The error message offers a way out
 
 A floating promise is an easy mistake for anyone writing glue code: call the API, move on, and forget that the call returns before the work is done. Agents write a lot of glue code. The question for a lint rule isn't whether agents float promises, since everyone does. It's what an agent does when the rule tells it to stop.
 
 Here the rule hands it an answer. typescript-eslint's error message ends with the options that satisfy it: a promise must be "awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator." Oxlint's is shorter: "Promises must be awaited, add void operator to ignore." For an agent working until the check passes, the cheapest change is printed in the error.
 
-That change doesn't fix anything. `void` is a marker the rule accepts, and its own documentation says it "doesn't handle it or change the runtime behavior." It isn't a suppression comment either, so instructions that forbid an agent from disabling rules don't cover it. An empty `.catch(() => {})` is the other cheap exit, and it silences the error at runtime too. This is the same problem the [cognitive complexity](/research/cognitive-complexity#what-changes-when-agents-write-the-code) and [type escape hatch](/research/type-escape-hatches#what-changes-when-agents-write-the-code) posts describe: a check that can be satisfied without doing what it asks for, and an optimizer that will find the cheapest way through.
+That change doesn't fix anything. `void` is a marker the rule accepts, and its own documentation says it "doesn't handle it or change the runtime behavior." It isn't a suppression comment either, so instructions that forbid an agent from disabling rules don't cover it. An empty `.catch(() => {})` is the other cheap exit, and it silences the error at runtime too. This is the same problem the [cognitive complexity](/research/cognitive-complexity#the-agent-and-the-reviewer) and [type escape hatch](/research/type-escape-hatches#when-it-compiles-is-the-goal) posts describe: a check that can be satisfied without doing what it asks for, and an optimizer that will find the cheapest way through.
 
 We didn't find any study measuring how often agents take that exit, so we ran one.
 
-## What an agent does with the error
+## Sixteen runs, three fixes
 
 In October 2026 we took two real functions from the corpus, each with a floating promise that's a genuine bug, and handed each one to Claude Code and to Codex four times, using the same prompt and permissions Ultracite uses when it passes lint errors to an agent:
 
@@ -127,7 +127,7 @@ Neither agent could check its work against the rule either. Claude had no permis
 
 That's as much a finding about the instructions agents get as about the agents. When a linter hands an agent an error, the wording decides which fix is cheapest. Here the error message offered the silence, the instructions ruled out the fix, and the check afterwards couldn't tell the difference.
 
-## Where it breaks
+## Where the rules fall short
 
 **It needs types, and goes quiet without them.** The type-aware rules can only see a promise the type checker can see. When dependencies are missing, or a value is typed `any`, a floating promise isn't reported, and nothing tells you so. In our corpus the same code would have produced more errors with its dependencies installed.
 
@@ -139,7 +139,7 @@ That's as much a finding about the instructions agents get as about the agents. 
 
 **`no-await-in-loop` is mostly a prompt to explain.** Two-thirds of the loops it flagged in our sample were correct as written. The rule is better read as "make sure this is sequential on purpose" than "this is slow".
 
-## Using it well
+## Make each one a decision
 
 **Turn on type-aware linting, and make sure types resolve.** The rules that catch floating and misused promises only run with type information. Without it they report nothing, and with unresolved dependencies they report less than is there.
 

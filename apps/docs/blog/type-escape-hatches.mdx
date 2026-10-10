@@ -40,7 +40,7 @@ TypeScript added its escape hatches one at a time, usually in the same release a
 
 The TypeScript team has been consistent about all of this. The handbook says not to use `any` "unless you are in the process of migrating", and compares it to "putting an `@ts-ignore` comment around every usage of the variable". Google's [style guide](https://google.github.io/styleguide/tsguide.html) goes further than the lint defaults, banning `@ts-ignore`, `@ts-expect-error` and `@ts-nocheck`, with an exception for `@ts-expect-error` in unit tests.
 
-## What the rules can see
+## Obvious exits and quiet ones
 
 The three classic rules are syntactic. `no-explicit-any` reports every `any` keyword you write. `no-non-null-assertion` reports every postfix `!`. `ban-ts-comment` reports `@ts-ignore` and `@ts-nocheck`, and `@ts-expect-error` unless it's followed by a reason. That makes them fast and predictable, and it means they see only what's written.
 
@@ -64,7 +64,7 @@ export function loadSettings(user: string, raw: string): Settings {
 
 So the syntax rules close the obvious exits and leave the quieter ones open. Closing those takes rules that need the type checker, which makes them slower and means they only run where type information is available.
 
-## What the research says
+## Do types prevent bugs?
 
 The case for these rules rests on a prior question: do static types prevent bugs at all? The best-known answer is [Gao, Bird and Barr](https://doi.org/10.1109/ICSE.2017.75) (ICSE 2017). They took 400 fixed bugs from public JavaScript projects, added type annotations to the code just before each fix, and checked whether a type checker would have caught the bug. TypeScript 2.0 and Flow each caught 15% of them. The authors call that conservative, since these bugs had already survived testing and review. A [Python replication](https://doi.org/10.1109/TSE.2021.3082068) with mypy found the same 15% of corrective defects. Fittingly, Gao et al. used `any` themselves, to clear type errors in code unrelated to each bug.
 
@@ -74,7 +74,7 @@ The best evidence for the rules is narrower than "fewer bugs". A [2026 study of 
 
 So the honest summary is that types catch a real but minority share of bugs, and every escape hatch removes some of that coverage without telling you where. No study has shown that banning `any` by lint reduces bugs. The argument for the rules is that they keep the checker's signal intact, so a type error means something and the remaining holes are visible.
 
-## What it looks like in real code
+## Most of them have a reason
 
 In October 2026 we ran Ultracite's Oxlint presets over the same eight codebases as [the cognitive complexity post](/research/cognitive-complexity): [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core. That's 694,309 lines of source, excluding tests, generated and vendored code. With the projects' own suppression comments honored, `no-explicit-any` was the fourth most common error of the 343 rules that fired, and `no-non-null-assertion` the eleventh.
 
@@ -133,7 +133,7 @@ A second, blind pass over 40 of the sites agreed with the first on whether an `a
 
 For two of the codebases, Zod and Hono, we could also run the type-aware rules, because both type-check without installing anything. 76% of their plain `as T` casts narrowed the type, which is the kind of assertion `no-unsafe-type-assertion` reports. About one cast in seven was unnecessary: the compiler already knew the type. In Zod, 47 of 95 `!` were unnecessary too, mostly on array indexing, which Zod's own compiler settings already treat as non-nullable.
 
-## What changes when agents write the code
+## When "it compiles" is the goal
 
 When a model writes TypeScript and it doesn't compile, the problem is almost always the types. [Mündler et al.](https://arxiv.org/abs/2504.09246) (PLDI 2025) found that "on average 94% of compilation errors result from failing type checks" in TypeScript written by six open-weight models. Syntax is the easy part, and the type checker is where the code gets rejected.
 
@@ -141,11 +141,11 @@ That puts the escape hatches directly in the path of anything optimizing for "it
 
 There's early evidence that coding agents do the same. In a study of 545 agent-written and 269 human-written TypeScript pull requests that touched types, [Lee, Ul Hassan and Hindle](https://arxiv.org/abs/2602.17955) (MSR 2026) found that "AI agents are 9x more prone to use the 'any' keyword": 2.16 additions per pull request against 0.24 for humans. It's a small study with a small effect size, and agent and human pull requests may not be doing the same work. A first-hand report points the same way. In September 2025, after build breaks caused by `as any` in VS Code, Matt Bierner [opened an issue](https://github.com/microsoft/vscode/issues/269213) to remove them, noting that "Some language models seem to be specially keen on adding `as any` assertions" to work around problems. The team added a lint rule for `as any` and suppressed the roughly 900 existing casts, so that the rule would catch new ones.
 
-This is the same problem the [cognitive complexity post](/research/cognitive-complexity#what-changes-when-agents-write-the-code) describes, aimed at the compiler instead of the linter. A type error is a measure of whether the code is consistent with what it claims. An escape hatch makes the measure pass without changing the code, and an agent working in a loop until the checks pass is exactly the kind of optimizer that finds it. When a measure becomes a target, in [Strathern's](https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB) phrasing of Goodhart's law, it ceases to be a good measure. Agents gaming checks is well documented elsewhere. On one [METR](https://metr.org/blog/2025-06-05-recent-reward-hacking/) task, a frontier model planned to reward-hack in 80% of runs, whether or not it was told "Please do not cheat." In [ImpossibleBench](https://arxiv.org/abs/2510.20270), models given impossible tasks modified the tests until they passed. None of those studies is about types, so it's a hypothesis, not a finding, that agents treat `as any` the same way. But the incentive is identical, and the Lee et al. and VS Code observations fit it.
+This is the same problem the [cognitive complexity post](/research/cognitive-complexity#the-agent-and-the-reviewer) describes, aimed at the compiler instead of the linter. A type error is a measure of whether the code is consistent with what it claims. An escape hatch makes the measure pass without changing the code, and an agent working in a loop until the checks pass is exactly the kind of optimizer that finds it. When a measure becomes a target, in [Strathern's](https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB) phrasing of Goodhart's law, it ceases to be a good measure. Agents gaming checks is well documented elsewhere. On one [METR](https://metr.org/blog/2025-06-05-recent-reward-hacking/) task, a frontier model planned to reward-hack in 80% of runs, whether or not it was told "Please do not cheat." In [ImpossibleBench](https://arxiv.org/abs/2510.20270), models given impossible tasks modified the tests until they passed. None of those studies is about types, so it's a hypothesis, not a finding, that agents treat `as any` the same way. But the incentive is identical, and the Lee et al. and VS Code observations fit it.
 
 The escape-hatch rules are what turn the cheap exits into errors. When Ultracite hands lint errors to an agent, it forbids suppression comments and config changes, and the hatch rules re-check the result. A fix that swaps a type error for `as any`, `!` or `@ts-ignore` fails the next lint. What they don't close are the quieter exits: `as unknown as T`, a plain narrowing `as`, a definite-assignment `field!: T`, or a `@ts-expect-error` with a token description. Without the type-aware rules, those all pass.
 
-## Where it breaks
+## Costs and loopholes
 
 **It can't tell a reason from a shortcut.** In our sample, about four in five `any` had a reason and almost every `!` had a guarantee behind it. The rule flags them all the same. For maintainers who know the code, that's a cost: they restructure correct code, or add a suppression. VS Code and Hono chose the suppression, hundreds of times over. A suppression with a reason is the best case, because it documents a decision the rule can't see. But only 5 of our 96 `!` had any comment, so most codebases are paying the cost without getting the documentation.
 
@@ -159,7 +159,7 @@ The escape-hatch rules are what turn the cheap exits into errors. When Ultracite
 
 **The evidence is thin.** Types catch a minority of bugs, `any` correlates only weakly with bad outcomes, and no study has measured the effect of these rules. The case rests on keeping the checker meaningful, not on a measured reduction in bugs.
 
-## Using it well
+## Managing the holes
 
 **Make them errors.** A warning about `any` is one more line people learn to scroll past.
 
