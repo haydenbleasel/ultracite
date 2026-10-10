@@ -1,3 +1,36 @@
+## 7.13.0
+
+### Minor Changes
+
+- d0875c0: Every agent now reads Ultracite's rules from `AGENTS.md`. `init` writes the rules there once, whichever agents you pick, and only adds a file for the four agents that need one more step to see them:
+  
+  - **Claude Code** reads `AGENTS.md` only when the project has no `CLAUDE.md`, so `init` adds an `@AGENTS.md` import to the project's `CLAUDE.md` or `.claude/CLAUDE.md` when there is one.
+  - **Gemini CLI** reads `GEMINI.md` by default, so `init` adds `AGENTS.md` to `context.fileName` in `.gemini/settings.json`, keeping `GEMINI.md`.
+  - **Aider** gets `.aider.conf.yml` pointed at `AGENTS.md`, as before.
+  - **Replit Agent** reads only `replit.md`, so it keeps a copy of the rules there.
+  
+  Firebender now reads `AGENTS.md` too. The `init` prompt asks which agents you use and lists `AGENTS.md` (Universal) plus those four.
+  
+  Projects set up by earlier versions move over the next time `init` runs: it takes Ultracite's block out of `.claude/CLAUDE.md`, `GEMINI.md`, `.firebender/rules/ultracite.mdc` and Aider's `ultracite.md`, removes a file left with nothing else in it, and adds the import or settings that agent needs. That happens whenever one of those files still holds the rules, whichever agents you pick, since a leftover `.claude/CLAUDE.md` stops Claude Code from reading `AGENTS.md`.
+
+### Patch Changes
+
+- 3ee5b8c: Aider now loads Ultracite's rules and lints each file it edits. Aider reads no instructions file on its own, so the `ultracite.md` that `init --agents aider` used to write was never loaded. Now `init` writes the rules to `AGENTS.md` and merges two keys into `.aider.conf.yml`: `read: AGENTS.md`, and `lint-cmd` set to the project's `ultracite fix`, which Aider runs on every file it edits, asking the model to fix whatever is left. The rest of the file, comments included, stays as written, a `lint-cmd` that runs another linter is left alone, and an `ultracite.md` that holds nothing but the rules is removed. Aider keeps its own option in the `init` prompt, since the universal `AGENTS.md` option doesn't write `.aider.conf.yml`.
+  
+  The agent list also uses the current names for Snowflake CoCo (formerly Snowflake Cortex), Deep Agents, goose and Gemini CLI. Their `--agents` IDs don't change.
+- 7965ec2: `ultracite fix --hook` now hands the problems it can't fix back to the agent. In Claude Code, CodeBuddy, Windsurf, and GitHub Copilot in VS Code, the hook prints everything the linter and formatter report to stderr and exits with code 2 when problems remain, which those hosts show to the agent so it fixes them in its next step. Cursor and the Copilot CLI don't pass a hook's output to the agent, so their hooks keep the previous output and exit code.
+- cbb349c: Add three agents and fix the Windsurf hook.
+  
+  - `init --agents` now takes `fx` (Vercel Labs), `antigravity` (Antigravity CLI, Google's successor to Gemini CLI for consumer accounts) and `grok` (Grok Build). All three read `AGENTS.md`.
+  - `init --hooks grok` writes a post-edit hook to `.grok/hooks/ultracite.json` in Claude Code's format. Grok Build runs it after each `Write` or `Edit` once you trust project hooks with `/hooks-trust`, and hands the problems `ultracite fix --hook` leaves back to the model. `fix --hook` now recognises Grok's own tool names (`search_replace`, `hashline_edit`), which it used to skip. Grok also runs `.claude/settings.json` hooks, so set up one of the two.
+  - The Windsurf hook now goes in `.devin/hooks.json`. Devin Desktop, formerly Windsurf, reads that file and ignores `.windsurf/hooks.json` once it has hooks, so a project with its own `.devin/hooks.json` never ran Ultracite's hook. Re-running `init --hooks windsurf` moves the hook, copies the project's own hooks from `.windsurf/hooks.json` into the new file so they keep running, and leaves the old file with only those hooks, or removes it when nothing else is in it.
+- edc6ca6: Update the agents `ultracite init` sets up to match what's still shipping.
+  
+  - Remove Roo Code (shut down in May 2026), Continue (no longer maintained since Cursor acquired it), Firebase Studio (closing in March 2027) and MCPJam (an MCP testing tool rather than a coding agent). `--agents roo-code`, `continue`, `firebase-studio` and `mcpjam` now stop init with the list of valid IDs, and the skill installer no longer targets `.roo` or `.continue`. Files earlier versions wrote for them, such as `.roo/rules/ultracite.md`, are left in place.
+  - Amazon Q CLI is now Kiro CLI, with the ID `kiro-cli` instead of `amazon-q-cli`. Kiro reads `AGENTS.md` in both its CLI and IDE and ignores `.amazonq/rules` once a project has a `.kiro` folder, so init writes the rules to `AGENTS.md` (and `universal` covers it) instead of `.amazonq/rules/ultracite.md`.
+  - Mux is now Xum, with the ID `xum` instead of `mux`.
+  - Kimi CLI is now Kimi Code CLI, and AMP is Amp. Their IDs don't change.
+
 ## 7.12.4
 
 ### Patch Changes
