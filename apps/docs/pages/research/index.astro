@@ -12,23 +12,23 @@ const pages = import.meta.glob("./*.astro");
 for (const post of posts) {
   if (!(`./${post.slug}.astro` in pages)) {
     throw new Error(
-      `blog/${post.slug}.mdx has no page. Add pages/blog/${post.slug}.astro; the comment at the top of lib/blog.ts shows what goes in it.`
+      `blog/${post.slug}.mdx has no page. Add pages/research/${post.slug}.astro; the comment at the top of lib/blog.ts shows what goes in it.`
     );
   }
 }
 
 const title = "The reasoning behind the rules";
 const description =
-  "Long reads on the lint rules Ultracite turns on: what each one measures, what it means for the people and agents writing the code, and what it costs at scale.";
+  "Research on the lint rules Ultracite turns on: what each one measures, what it means for the people and agents writing the code, and what it costs at scale.";
 
 const siteUrl = data.config.site ?? "https://www.ultracite.ai";
-const blogUrl = new URL("/blog", siteUrl).href;
+const indexUrl = new URL("/research", siteUrl).href;
 
 const jsonLd: JsonLdNode = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@id": `${blogUrl}#blog`,
+      "@id": `${indexUrl}#research`,
       "@type": "Blog",
       blogPost: posts.map((post) => ({
         "@type": "BlogPosting",
@@ -39,15 +39,15 @@ const jsonLd: JsonLdNode = {
       })),
       description,
       inLanguage: "en",
-      name: "Ultracite Blog",
+      name: "Ultracite Research",
       publisher: { "@type": "Organization", name: "Ultracite", url: siteUrl },
-      url: blogUrl,
+      url: indexUrl,
     },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
         { item: siteUrl, name: "Home" },
-        { item: blogUrl, name: "Blog" },
+        { item: indexUrl, name: "Research" },
       ].map((crumb, index) => ({
         "@type": "ListItem",
         ...crumb,
@@ -61,12 +61,12 @@ const jsonLd: JsonLdNode = {
 <BlogLayout
   description={description}
   jsonLd={jsonLd}
-  title="Blog — Ultracite"
+  title="Research — Ultracite"
 >
   <section aria-labelledby="blog-title" class="border-border border-y">
     <div class="hp-frame mx-auto max-w-7xl border-border border-x">
       <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
-        <p class="font-mono text-muted-foreground text-xs/5">Blog</p>
+        <p class="font-mono text-muted-foreground text-xs/5">Research</p>
         <h1
           class="mt-10 max-w-[16ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:mt-12 lg:text-7xl"
           id="blog-title"

@@ -1,6 +1,6 @@
 # Research for the blog
 
-The harnesses and verified sources behind the posts at `/blog`. A post's numbers have to be measured, not estimated (see the Blog section of `AGENTS.md`), and this folder is where that happens. Reuse it rather than rebuilding it.
+The harnesses and verified sources behind the posts at `/research`. A post's numbers have to be measured, not estimated (see the "Research posts" section of `AGENTS.md`), and this folder is where that happens. Reuse it rather than rebuilding it.
 
 | Folder | What it's for |
 | --- | --- |

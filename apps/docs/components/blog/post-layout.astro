@@ -23,7 +23,7 @@ const post = postFor(file);
 
 if (Astro.url.pathname !== post.href) {
   throw new Error(
-    `${Astro.url.pathname} renders blog/${post.slug}.mdx. Rename the page to pages/blog/${post.slug}.astro so the URL matches the post.`
+    `${Astro.url.pathname} renders blog/${post.slug}.mdx. Rename the page to pages/research/${post.slug}.astro so the URL matches the post.`
   );
 }
 
@@ -31,7 +31,7 @@ const sections = headings.filter((heading) => heading.depth === 2);
 
 const siteUrl = data.config.site ?? "https://www.ultracite.ai";
 const url = new URL(post.href, siteUrl).href;
-const blogUrl = new URL("/blog", siteUrl).href;
+const indexUrl = new URL("/research", siteUrl).href;
 
 // Blume generates the OG card for every static custom page at /og/<route>.png.
 const article: JsonLdNode = {
@@ -44,7 +44,7 @@ const article: JsonLdNode = {
   headline: post.title,
   image: new URL(`/og${post.href}.png`, siteUrl).href,
   inLanguage: "en",
-  isPartOf: { "@id": `${blogUrl}#blog` },
+  isPartOf: { "@id": `${indexUrl}#research` },
   mainEntityOfPage: url,
   publisher: {
     "@type": "Organization",
@@ -66,7 +66,7 @@ const jsonLd: JsonLdNode = {
       "@type": "BreadcrumbList",
       itemListElement: [
         { item: siteUrl, name: "Home" },
-        { item: blogUrl, name: "Blog" },
+        { item: indexUrl, name: "Research" },
         { item: url, name: post.title },
       ].map((crumb, index) => ({
         "@type": "ListItem",
@@ -81,7 +81,7 @@ const jsonLd: JsonLdNode = {
 <BlogLayout
   description={post.description}
   jsonLd={jsonLd}
-  title={`${post.title} — Ultracite Blog`}
+  title={`${post.title} — Ultracite Research`}
 >
   <article aria-labelledby="post-title">
     <header class="border-border border-y">
@@ -89,13 +89,13 @@ const jsonLd: JsonLdNode = {
         <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
           <a
             class="group inline-flex items-center gap-2 font-mono text-muted-foreground text-xs/5 hover:text-foreground"
-            href="/blog"
+            href="/research"
           >
             <Icon
               class="size-3.5 rotate-180 transition-transform group-hover:-translate-x-0.5"
               name="arrow-right"
             />
-            Blog
+            Research
           </a>
           <h1
             class="mt-10 max-w-[22ch] text-balance font-medium text-4xl tracking-[-0.045em] sm:text-5xl lg:mt-12 lg:text-6xl"
@@ -188,9 +188,9 @@ const jsonLd: JsonLdNode = {
             }
             <a
               class="group inline-flex items-center gap-2 font-medium text-[15px]/6"
-              href="/blog"
+              href="/research"
             >
-              All posts
+              All research
               <Icon
                 class="size-4 transition-transform group-hover:translate-x-0.5"
                 name="arrow-right"

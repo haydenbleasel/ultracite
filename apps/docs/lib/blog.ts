@@ -1,10 +1,10 @@
-// Blog posts are MDX files in apps/docs/blog. Each one is served by an .astro
-// page of the same name in pages/blog, which renders the post's body into
+// Research posts are MDX files in apps/docs/blog, served under /research. Each
+// one has an .astro page of the same name in pages/research, which renders the post's body into
 // PostLayout. The page exists so every post is a static route: Blume leaves a
 // dynamic [slug].astro route out of the sitemap and gives it no OG card.
 //
 // To add a post, write blog/<slug>.mdx with the frontmatter below, then add
-// pages/blog/<slug>.astro. The index fails the build if a post has no page.
+// pages/research/<slug>.astro. The index fails the build if a post has no page.
 //
 //   ---
 //   import { components } from "../../components/blog/post-components";
@@ -145,7 +145,7 @@ const toPost = (path: string, data: PostFrontmatter): Post => {
     author: authors[authorId],
     date: toDate(file, "date", data.date),
     description: requireText(file, "description", data.description),
-    href: `/blog/${slug}`,
+    href: `/research/${slug}`,
     readingMinutes: countMinutes(sources[path] ?? ""),
     rules: data.rules ?? [],
     slug,

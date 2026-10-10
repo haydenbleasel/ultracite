@@ -30,14 +30,14 @@ packages/cli/                 The published `ultracite` package
   build.ts                    Bun.build -> dist/index.js (single minified ESM file, deps external)
 apps/docs/                    Docs + marketing site (blume on Astro, deployed to Cloudflare Workers)
   docs/**/*.mdx               Documentation content; meta.ts files order the sidebar
-  blog/*.mdx                  Blog posts, each with a page in pages/blog (see "Blog" below)
-  pages/                      Custom .astro routes: the homepage, the blog index and posts
+  blog/*.mdx                  Research posts (served at /research), each with a page in pages/research (see "Research posts" below)
+  pages/                      Custom .astro routes: the homepage, landing pages, the research index and posts
   blume.config.ts             Site config, content sources, redirects under /docs/*
 packages/video/               Remotion release videos (private, not linted: vendored UI)
 packages/typescript-config/   Shared tsconfig bases (private)
 skills/ultracite/             Source of the agent skill; copied into packages/cli/skills on pack
 benchmark/                    PR-time performance regression gate for check/fix across all providers
-research/                     Blog research: verified bibliography, real-codebase corpus, agent fix experiment (see research/README.md)
+research/                     Research harnesses: verified bibliography, real-codebase corpus, agent fix experiment (see research/README.md)
 scripts/                      validate-configs (loads every preset + runs the ESLint/oxlint parity check)
 patches/                      bun patchedDependencies (currently oxfmt)
 .changeset/                   Changesets; every user-facing change needs one
@@ -172,9 +172,9 @@ Presets: `core` plus framework variants (`angular`, `astro`, `jest`, `nestjs`, `
 - Keep the site fully static Astro. Do not introduce React or client-side component libraries.
 - Deploy is `wrangler deploy --config dist/server/wrangler.json` after `blume build`; CI handles it.
 
-## Blog (`apps/docs/blog`)
+## Research posts (`apps/docs/blog`, served at `/research`)
 
-The blog at `/blog` publishes long reads on the rules Ultracite turns on. A post is not a rule reference page. It explains where a rule came from, how it works, what the research says, what it means for people and for agents writing the code, what it costs at scale, where it breaks, and how to use it well. Each post is the canonical answer to "why is this rule on?", so it has to hold up to an expert reader.
+The Research section at `/research` publishes long reads on the rules Ultracite turns on. Ultracite presents itself as a code quality research company, and these posts are where that has to be earned. The post sources live in `apps/docs/blog/` (an internal name), and the harnesses that produce their data live in `research/`. A post is not a rule reference page. It explains where a rule came from, how it works, what the research says, what it means for people and for agents writing the code, what it costs at scale, where it breaks, and how to use it well. Each post is the canonical answer to "why is this rule on?", so it has to hold up to an expert reader.
 
 ### Standards for a post
 
@@ -188,14 +188,14 @@ The blog at `/blog` publishes long reads on the rules Ultracite turns on. A post
 
 ### Adding a post
 
-- A post is two files: the MDX at `apps/docs/blog/<slug>.mdx`, and a page at `apps/docs/pages/blog/<slug>.astro`. The page template is in the comment at the top of `apps/docs/lib/blog.ts`. Every post needs its own static page, because Blume leaves dynamic `[slug].astro` routes out of the sitemap and generates no OG card for them. The index fails the build if a post has no page.
+- A post is two files: the MDX at `apps/docs/blog/<slug>.mdx`, and a page at `apps/docs/pages/research/<slug>.astro`. The page template is in the comment at the top of `apps/docs/lib/blog.ts`. Every post needs its own static page, because Blume leaves dynamic `[slug].astro` routes out of the sitemap and generates no OG card for them. The index fails the build if a post has no page.
 - Frontmatter: `title`, `description` (used on the index, in meta tags and in search results), `date` (`2026-10-10`), `author` (a key of `authors` in `lib/blog.ts`), `rules` (config names, such as `sonarjs/cognitive-complexity`), and optional `updated`. `lib/blog.ts` validates all of these at build time.
 - Don't repeat the title in the body. The layout renders the title, description, byline and reading time. `##` headings become the "In this post" rail, so keep them short.
 - Blume's MDX components (callouts with `:::note`, `CodeGroup`, `Tabs`, `Steps` and more) are wired in through `components/blog/post-components.ts`. To use another Blume component, add it there.
 - Oxfmt formats code fences inside MDX: it moves trailing comments onto their own lines and restyles quoted code. Put `{/* prettier-ignore */}` on the line above a fence that has to stay as written, such as code with score annotations or a verbatim excerpt from another project.
 - Shallow-clone repos you measure into the gitignored `research/corpus/repos/`, and never install or run their code. Only parse it with the repo's own tooling. Never commit agent session logs, stdout or stderr; the agent harness gitignores them and redacts what it copies back.
-- Preview with `cd apps/docs && bun run dev --port 4377` (any non-default port), then check `/blog` and `/blog/<slug>` in light and dark mode and at 390px wide. `bun run build` in `apps/docs` checks routes and generates the OG card at `/og/blog/<slug>.png`.
-- Add the post's title under `seo.og.titles` in `blume.config.ts`, keyed by `/blog/<slug>`. Without it, Blume titles the generated share card from the slug.
+- Preview with `cd apps/docs && bun run dev --port 4377` (any non-default port), then check `/research` and `/research/<slug>` in light and dark mode and at 390px wide. `bun run build` in `apps/docs` checks routes and generates the OG card at `/og/research/<slug>.png`.
+- Add the post's title under `seo.og.titles` in `blume.config.ts`, keyed by `/research/<slug>`. Without it, Blume titles the generated share card from the slug.
 - Known gaps: there's no RSS feed (Blume only builds feeds from content sources, not custom pages), and the share card always shows the site description, not the post's.
 
 ## Gotchas

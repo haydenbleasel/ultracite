@@ -1,6 +1,6 @@
 # What coding agents do with a cognitive complexity error: experiment report
 
-The experiment behind the "What an agent does with the error" section of `/blog/cognitive-complexity`, run on 2026-10-10. Machine-readable data is in `results.json` and `classifications.json`, `tables.md` has the generated tables, and each run's artifacts are in `runs/<id>/`.
+The experiment behind the "What an agent does with the error" section of `/research/cognitive-complexity`, run on 2026-10-10. Machine-readable data is in `results.json` and `classifications.json`, `tables.md` has the generated tables, and each run's artifacts are in `runs/<id>/`.
 
 ## Headline findings
 

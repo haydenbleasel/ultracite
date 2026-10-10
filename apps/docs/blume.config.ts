@@ -136,8 +136,8 @@ export default defineConfig({
         path: "/agents",
       },
       {
-        label: "Blog",
-        path: "/blog",
+        label: "Research",
+        path: "/research",
       },
       {
         label: "Changelog",
@@ -204,7 +204,7 @@ export default defineConfig({
     // last URL segment ("Cognitive Complexity"). Each blog post gets its title.
     og: {
       titles: {
-        "/blog/cognitive-complexity":
+        "/research/cognitive-complexity":
           "Cognitive complexity: the rule that measures the reader",
       },
     },
