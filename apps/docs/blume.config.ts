@@ -226,11 +226,11 @@ export default defineConfig({
     og: {
       titles: {
         "/research/cognitive-complexity":
-          "Cognitive complexity: the rule that measures the reader",
+          "Cognitive complexity and the cost of reading code",
         "/research/floating-promises":
-          "Floating promises: the errors with nowhere to go",
+          "What happens to a promise nobody awaits",
         "/research/type-escape-hatches":
-          "Type escape hatches: when the compiler becomes the target",
+          "Why TypeScript lets you overrule its type checker",
       },
     },
     // JSON-LD: the organization behind the site, and Ultracite as a
