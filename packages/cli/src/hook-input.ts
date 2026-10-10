@@ -186,6 +186,20 @@ export const editedFilesFromHookPayload = (
   return unique.length > 0 ? unique : null;
 };
 
+// The hosts that hand a post-edit hook's stderr to the agent when the hook
+// exits with 2: Claude Code, CodeBuddy and VS Code send a `PostToolUse`
+// payload, and Windsurf a `post_write_code` one. Cursor's `afterFileEdit` has
+// no way to reach the agent (and reads 2 as "block"), and the Copilot CLI only
+// shows a hook's stderr to the user, so neither is listed.
+const feedbackPayloadSchema = z.union([
+  z.looseObject({ hook_event_name: z.literal("PostToolUse") }),
+  z.looseObject({ agent_action_name: z.literal("post_write_code") }),
+]);
+
+/** Whether the host that sent this payload shows the agent a hook's stderr on exit code 2. */
+export const hookFeedsAgent = (payload: string): boolean =>
+  feedbackPayloadSchema.safeParse(parseJson(payload)).success;
+
 // A host writes the payload as it spawns the hook, so it is on stdin within
 // milliseconds. The deadline only bounds a host that leaves stdin open without
 // writing anything, which would otherwise block the hook until its timeout.
@@ -272,32 +286,15 @@ interface HookTargetsOptions {
   targets?: string[];
 }
 
-/**
- * What `fix --hook` lints, read from the agent's payload on stdin:
- * - the edited files that exist inside the project, as paths relative to the
- *   project root.
- * - `[]` when every named file is gone, outside the project, or outside the
- *   command line's own targets, or the tool edited nothing, so there is
- *   nothing to fix. An agent editing its own notes or a temp file must not
- *   format them with this project's config.
- * - `null` when no file can be read from the payload, or the command line's
- *   targets are globs the files cannot be checked against, which keeps the
- *   run the command would have done without `--hook`.
- */
-export const hookTargets = async ({
-  cwd = process.cwd(),
-  read = readHookStdin,
-  resolvePath = realPath,
-  targets = [],
-}: HookTargetsOptions = {}): Promise<string[] | null> => {
-  let payload = "";
-
-  try {
-    payload = await read();
-  } catch {
-    return null;
-  }
-
+// The edited files to lint, as `hookTargets` describes.
+const targetsFromPayload = (
+  payload: string,
+  {
+    cwd = process.cwd(),
+    resolvePath = realPath,
+    targets = [],
+  }: Omit<HookTargetsOptions, "read">
+): string[] | null => {
   const files = editedFilesFromHookPayload(payload);
 
   if (files === null) {
@@ -332,4 +329,49 @@ export const hookTargets = async ({
   return resolved
     .filter((file) => resolvedTargets.some((target) => covers(target, file)))
     .map(relative);
+};
+
+export interface HookRun {
+  /** Whether the host shows the agent a hook's stderr when it exits with 2. */
+  feedsAgent: boolean;
+  /** What to lint, as `hookTargets` describes. */
+  targets: string[] | null;
+}
+
+/** Reads the agent's hook payload once: what to lint, and how to report back. */
+export const readHook = async ({
+  read = readHookStdin,
+  ...options
+}: HookTargetsOptions = {}): Promise<HookRun> => {
+  let payload = "";
+
+  try {
+    payload = await read();
+  } catch {
+    return { feedsAgent: false, targets: null };
+  }
+
+  return {
+    feedsAgent: hookFeedsAgent(payload),
+    targets: targetsFromPayload(payload, options),
+  };
+};
+
+/**
+ * What `fix --hook` lints, read from the agent's payload on stdin:
+ * - the edited files that exist inside the project, as paths relative to the
+ *   project root.
+ * - `[]` when every named file is gone, outside the project, or outside the
+ *   command line's own targets, or the tool edited nothing, so there is
+ *   nothing to fix. An agent editing its own notes or a temp file must not
+ *   format them with this project's config.
+ * - `null` when no file can be read from the payload, or the command line's
+ *   targets are globs the files cannot be checked against, which keeps the
+ *   run the command would have done without `--hook`.
+ */
+export const hookTargets = async (
+  options: HookTargetsOptions = {}
+): Promise<string[] | null> => {
+  const { targets } = await readHook(options);
+  return targets;
 };

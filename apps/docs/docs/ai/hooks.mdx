@@ -5,7 +5,7 @@ description: Run Ultracite after AI-assisted file edits with agent hooks so form
 
 Ultracite can automatically format and fix code after AI coding assistants make edits through hooks. This ensures all AI-generated code adheres to your project's standards without manual intervention.
 
-The hooks work alongside your linter's formatting. After an AI coding assistant edits a file, the hook automatically runs your project's `fix` script (which runs `ultracite fix`) to format and fix auto-fixable linting issues. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
+The hooks work alongside your linter's formatting. After an AI coding assistant edits a file, the hook automatically runs your project's `fix` script (which runs `ultracite fix`) to format and fix auto-fixable linting issues, and in most hosts hands whatever it can't fix back to the agent. This dual approach ensures both intelligent code generation (through AI rules) and automated code quality (through hooks).
 
 :::note
 Hooks are separate from AI coding rules. The `--agents` flag configures AI coding rules, while the `--hooks` flag sets up automatic formatting after file edits.
@@ -70,7 +70,8 @@ This keeps the project's current linter and your changes to its configs. Alterna
 2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor, Windsurf, GitHub Copilot in VS Code, and the Copilot CLI all send the path; multi-file edits (VS Code's multi-replace and `apply_patch`) fix each file they name. VS Code and the Copilot CLI run the hook after every tool, so a tool that doesn't edit files (like reading one) fixes nothing. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
 3. **Code Formatting**: Ultracite formats the edited code according to your linter configuration
 4. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
-5. **Seamless Integration**: The process happens transparently without interrupting your workflow
+5. **Remaining Problems Go Back to the Agent**: When issues remain that need a manual fix, the hook prints them to stderr and exits with code 2. Claude Code, CodeBuddy, Windsurf, and GitHub Copilot in VS Code show a hook's stderr to the agent on that exit code, so the agent sees what's left and fixes it in its next step. Cursor's `afterFileEdit` hook and the Copilot CLI don't pass a hook's output to the agent, so there the hook keeps the linter's own output and exit code, which only you see.
+6. **Seamless Integration**: The process happens transparently without interrupting your workflow
 
 ## Benefits
 

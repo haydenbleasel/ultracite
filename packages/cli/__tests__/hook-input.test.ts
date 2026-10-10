@@ -4,7 +4,9 @@ import { PassThrough } from "node:stream";
 
 import {
   editedFilesFromHookPayload,
+  hookFeedsAgent,
   hookTargets,
+  readHook,
   readHookStdin,
 } from "../src/hook-input";
 
@@ -350,5 +352,84 @@ describe("hookTargets", () => {
         read: () => Promise.reject(new Error("EAGAIN")),
       })
     ).toBe(null);
+  });
+});
+
+describe("hookFeedsAgent", () => {
+  test("is true for hosts that show the agent stderr on exit code 2", () => {
+    // Claude Code and CodeBuddy
+    expect(
+      hookFeedsAgent(
+        JSON.stringify({
+          hook_event_name: "PostToolUse",
+          tool_input: { file_path: "/repo/src/a.ts" },
+          tool_name: "Write",
+        })
+      )
+    ).toBe(true);
+    // VS Code
+    expect(
+      hookFeedsAgent(
+        JSON.stringify({
+          hook_event_name: "PostToolUse",
+          tool_input: { filePath: "/repo/src/a.ts" },
+          tool_name: "replace_string_in_file",
+        })
+      )
+    ).toBe(true);
+    // Windsurf
+    expect(
+      hookFeedsAgent(
+        JSON.stringify({
+          agent_action_name: "post_write_code",
+          tool_info: { file_path: "/repo/src/a.py" },
+        })
+      )
+    ).toBe(true);
+  });
+
+  test("is false for Cursor, the Copilot CLI and unknown payloads", () => {
+    expect(
+      hookFeedsAgent(
+        JSON.stringify({
+          file_path: "/repo/src/b.ts",
+          hook_event_name: "afterFileEdit",
+        })
+      )
+    ).toBe(false);
+    expect(
+      hookFeedsAgent(
+        JSON.stringify({ toolArgs: { path: "src/a.ts" }, toolName: "edit" })
+      )
+    ).toBe(false);
+    expect(hookFeedsAgent('{"hook_event_name":"Stop"}')).toBe(false);
+    expect(hookFeedsAgent("not json")).toBe(false);
+    expect(hookFeedsAgent("")).toBe(false);
+  });
+});
+
+describe("readHook", () => {
+  test("returns the targets and whether the host reports to the agent", async () => {
+    expect(
+      await readHook({
+        cwd: repo,
+        read: () =>
+          JSON.stringify({
+            hook_event_name: "PostToolUse",
+            tool_input: { file_path: inRepo("src", "a.ts") },
+            tool_name: "Edit",
+          }),
+        resolvePath: exists,
+      })
+    ).toEqual({ feedsAgent: true, targets: ["src/a.ts"] });
+  });
+
+  test("keeps the whole-project run and the plain exit code when stdin fails", async () => {
+    expect(
+      await readHook({
+        cwd: repo,
+        read: () => Promise.reject(new Error("EPIPE")),
+      })
+    ).toEqual({ feedsAgent: false, targets: null });
   });
 });

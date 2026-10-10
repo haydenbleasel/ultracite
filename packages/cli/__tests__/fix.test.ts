@@ -14,8 +14,8 @@ import { log } from "@clack/prompts";
 
 import type { AgentAdapter } from "../src/agent-fix/agents";
 import * as runAgentModule from "../src/agent-fix/run-agent";
-import { fix } from "../src/commands/fix";
-import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
+import { fix, HOOK_FEEDBACK_EXIT_CODE } from "../src/commands/fix";
+import { LinterExitError, STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -1030,5 +1030,113 @@ describe("fix with an agent", () => {
 
     expect(mockRunAgent).toHaveBeenCalledTimes(1);
     expect(biomeCalls).toBe(2);
+  });
+});
+
+const mockLinter = (
+  linter: string,
+  status: (cmd: string) => number = () => 0
+) => {
+  const mockSpawn = mock(
+    (cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+      status: status(cmd),
+    })
+  );
+  mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+  mock.module("../src/utils", () => ({
+    detectLinter: mock(() => linter),
+  }));
+  return mockSpawn;
+};
+
+const captureError = (run: () => void): Error => {
+  try {
+    run();
+  } catch (error) {
+    if (error instanceof Error) {
+      return error;
+    }
+  }
+  throw new Error("Expected the call to throw an Error");
+};
+
+describe("fix reporting to the agent", () => {
+  afterEach(() => {
+    mock.restore();
+  });
+
+  test("sends every tool's output to stderr", () => {
+    const mockSpawn = mockLinter("oxlint");
+
+    fix(["src/a.ts"], [], { reportToAgent: true });
+
+    const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
+    expect(stdios).toEqual([
+      ["inherit", 2, "inherit"],
+      ["inherit", 2, "inherit"],
+    ]);
+  });
+
+  test("keeps output on stdout when not reporting to the agent", () => {
+    const mockSpawn = mockLinter("oxlint");
+
+    fix(["src/a.ts"]);
+
+    const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
+    expect(stdios).toEqual(["inherit", "inherit"]);
+  });
+
+  test("exits with the feedback code when problems remain", () => {
+    mockLinter("oxlint", (cmd) => (cmd === "oxlint" ? 1 : 0));
+
+    const error = captureError(() =>
+      fix(["src/a.ts"], [], { reportToAgent: true })
+    );
+
+    expect(error).toBeInstanceOf(LinterExitError);
+    expect(error).toMatchObject({
+      commandName: "Oxlint",
+      exitCode: HOOK_FEEDBACK_EXIT_CODE,
+    });
+  });
+
+  test("uses the feedback code for Biome and ESLint too", () => {
+    mockLinter("biome", () => 1);
+    expect(() => fix(["src/a.ts"], [], { reportToAgent: true })).toThrow(
+      `Biome exited with code ${HOOK_FEEDBACK_EXIT_CODE}`
+    );
+
+    mock.restore();
+    mockLinter("eslint", (cmd) => (cmd === "eslint" ? 1 : 0));
+    expect(() => fix(["src/a.ts"], [], { reportToAgent: true })).toThrow(
+      `ESLint exited with code ${HOOK_FEEDBACK_EXIT_CODE}`
+    );
+  });
+
+  test("succeeds quietly when nothing is left to fix", () => {
+    mockLinter("oxlint");
+
+    expect(() => fix(["src/a.ts"], [], { reportToAgent: true })).not.toThrow();
+  });
+
+  test("keeps a missing tool a setup error, not agent feedback", () => {
+    const mockSpawn = mock(
+      (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+        error: new Error("spawn oxlint ENOENT"),
+        errorCode: "ENOENT",
+        status: null,
+      })
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "oxlint"),
+    }));
+
+    const error = captureError(() =>
+      fix(["src/a.ts"], [], { reportToAgent: true })
+    );
+
+    expect(error).not.toBeInstanceOf(LinterExitError);
+    expect(error.message).toContain("isn't installed");
   });
 });

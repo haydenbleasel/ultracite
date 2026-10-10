@@ -10,7 +10,7 @@ import { fix } from "./commands/fix";
 import { upgrade } from "./commands/upgrade";
 import { UltraciteSetupError } from "./config-resolution";
 import { options } from "./data/options";
-import { hookTargets } from "./hook-input";
+import { readHook } from "./hook-input";
 import { initialize } from "./initialize";
 import {
   extractAgentFlags,
@@ -154,7 +154,9 @@ program
       const { agent } = agentFlags;
 
       if (hook) {
-        const targets = await hookTargets({ targets: split.files });
+        const { feedsAgent, targets } = await readHook({
+          targets: split.files,
+        });
 
         // The agent edited a file outside the project or the command's own
         // targets, or one that is gone.
@@ -162,7 +164,10 @@ program
           return;
         }
 
-        await fix(targets ?? split.files, passthrough, { agent });
+        await fix(targets ?? split.files, passthrough, {
+          agent,
+          reportToAgent: feedsAgent,
+        });
         return;
       }
 

@@ -5,9 +5,13 @@ import { execaSync } from "execa";
 import { npmRunPathEnv } from "npm-run-path";
 import { whichCommandSync } from "which-command";
 
+// Inherit stdin and stderr, and send the child's stdout to this process's
+// stderr (fd 2), so everything the command prints lands on stderr.
+export type StdoutToStderr = readonly ["inherit", 2, "inherit"];
+
 export interface SpawnSyncOptions {
   maxBuffer?: number;
-  stdio?: "ignore" | "inherit" | "pipe";
+  stdio?: "ignore" | "inherit" | "pipe" | StdoutToStderr;
 }
 
 /**
