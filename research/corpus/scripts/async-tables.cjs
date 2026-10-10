@@ -33,6 +33,8 @@ const fmt = (n) =>
   typeof n === "number" ? n.toLocaleString("en-US") : (n ?? "–");
 const pct = (a, b) => (b ? `${((a / b) * 100).toFixed(1)}%` : "–");
 const per10k = (n, lines) => (lines ? ((n / lines) * 1e4).toFixed(1) : "–");
+// Escape backslashes first, so a backslash in the text cannot escape the pipe after it.
+const cell = (text) => text.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
 const row = (cells) => `| ${cells.join(" | ")} |`;
 const table = (head, align, rows) =>
   [row(head), row(align), ...rows.map(row)].join("\n");
@@ -443,7 +445,7 @@ const main = () => {
       ],
       ["---", "---", "---", "---", "---", "---"],
       cal.map((c) => [
-        `${c.id} ${c.description.replace(/\|/g, "\\|")}`,
+        `${c.id} ${cell(c.description)}`,
         s(c.tsc),
         s(asyncOnly(c.oxlint)),
         s(asyncOnly(c.eslint)),
@@ -647,7 +649,7 @@ const main = () => {
           c.repo,
           `[${c.id.split("#")[1]}](${c.fixUrl})`,
           c.date,
-          c.description.replace(/\|/g, "\\|"),
+          cell(c.description),
           c.flaggedBy["no-floating-promises"],
           c.flaggedBy["no-misused-promises"],
           c.flaggedBy.other ?? "–",
