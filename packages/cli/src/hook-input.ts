@@ -192,7 +192,7 @@ export const editedFilesFromHookPayload = (
 };
 
 // The hosts that hand a post-edit hook's stderr to the agent when the hook
-// exits with 2: Claude Code, CodeBuddy, VS Code and Grok Build send a
+// exits with 2: Claude Code, CodeBuddy, VS Code, Deep Agents and Grok Build send a
 // `PostToolUse` payload, and Windsurf (Devin Desktop) a `post_write_code` one. Cursor's `afterFileEdit` has
 // no way to reach the agent (and reads 2 as "block"), and the Copilot CLI only
 // shows a hook's stderr to the user, so neither is listed.

@@ -769,7 +769,7 @@ describe("writing outside the project", () => {
 // A project whose files start as `initial` and change as they're written and
 // removed. Returns the files afterwards and the paths removed.
 const runInProject = async (
-  hook: "grok" | "windsurf",
+  hook: "deepagents" | "grok" | "windsurf",
   initial: Record<string, string>
 ) => {
   const files = { ...initial };
@@ -881,6 +881,23 @@ describe("grok build hooks", () => {
                 type: "command",
               },
             ],
+            matcher: "Write|Edit",
+          },
+        ],
+      },
+    });
+  });
+});
+
+describe("deep agents hooks", () => {
+  test("go in .deepagents/hooks.json in Claude Code's format", async () => {
+    const { files } = await runInProject("deepagents", {});
+
+    expect(JSON.parse(files[".deepagents/hooks.json"] ?? "{}")).toEqual({
+      hooks: {
+        PostToolUse: [
+          {
+            hooks: [{ command: "npm run fix -- --hook", type: "command" }],
             matcher: "Write|Edit",
           },
         ],

@@ -106,6 +106,28 @@ export const agents: Agent[] = [
     name: "Snowflake CoCo",
   },
   {
+    hooks: {
+      // Deep Agents Code reads a trusted project's .deepagents/hooks.json in
+      // Claude Code's format, names its file tools `Write` and `Edit` in hook
+      // payloads, and appends a PostToolUse hook's stderr to the tool result
+      // the model sees when the hook exits with code 2.
+      getContent: (command) => ({
+        hooks: {
+          PostToolUse: [
+            {
+              hooks: [
+                {
+                  command,
+                  type: "command",
+                },
+              ],
+              matcher: "Write|Edit",
+            },
+          ],
+        },
+      }),
+      path: ".deepagents/hooks.json",
+    },
     id: "deepagents",
     name: "Deep Agents",
   },

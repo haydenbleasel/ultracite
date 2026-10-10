@@ -13,7 +13,7 @@ Hooks are separate from AI coding rules. The `--agents` flag configures AI codin
 
 ## Setup
 
-Some tools like Cursor, Windsurf (Devin Desktop), CodeBuddy, Claude Code, GitHub Copilot, and Grok Build support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
+Some tools like Cursor, Windsurf (Devin Desktop), CodeBuddy, Claude Code, Deep Agents, GitHub Copilot, and Grok Build support hooks that run after AI agents edit files. Ultracite can configure these hooks automatically.
 
 ### Automatic Setup
 
@@ -25,6 +25,7 @@ When you run `npx ultracite init`, you'll be prompted to select which agent hook
   ◯ Windsurf
   ◯ CodeBuddy
   ◯ Claude Code
+  ◯ Deep Agents
   ◯ GitHub Copilot
   ◯ Grok Build
 ```
@@ -37,12 +38,22 @@ Ultracite writes the following files:
 - Windsurf (Devin Desktop): `.devin/hooks.json`
 - CodeBuddy: `.codebuddy/settings.json`
 - Claude Code: `.claude/settings.json`
+- Deep Agents: `.deepagents/hooks.json`
 - GitHub Copilot: `.github/hooks/ultracite.json`
 - Grok Build: `.grok/hooks/ultracite.json`
 
 Devin Desktop, formerly Windsurf, reads `.devin/hooks.json` and falls back to `.windsurf/hooks.json` only while the new file has no hooks. Earlier versions wrote the hook to `.windsurf/hooks.json`; re-running `init` moves it, copies your own hooks from the old file into the new one so they keep running, and leaves the old file with just your hooks (or removes it when nothing else is in it).
 
-Grok Build uses Claude Code's format and maps its `Write|Edit` matcher onto its own file tools. It runs project hooks once you trust them with `/hooks-trust`. Grok also runs the hooks in `.claude/settings.json`, so if a project has both the Claude Code and Grok Build hooks, Grok runs `ultracite fix` twice per edit; choose one.
+Grok Build uses Claude Code's format and maps its `Write|Edit` matcher onto its own file tools. It runs project hooks once you trust them with `/hooks-trust`.
+
+Deep Agents Code (`dcode`) also uses Claude Code's format, and names its file tools `Write` and `Edit` in hook payloads. It runs a project's hooks once you trust the workspace; a headless run needs `--trust-project-hooks`.
+
+### Hosts That Read Each Other's Hooks
+
+Some agents also run hooks written for another tool, so a project with several Ultracite hooks can run `ultracite fix` more than once per edit. The second run finds nothing left to fix, so it only costs time.
+
+- **Grok Build** also reads `.claude/settings.json` and `.cursor/hooks.json`, but runs a hook once when several files give it the same event, command and matcher. The Claude Code and Grok Build hooks match on all three, so together they run once. The Cursor hook has no matcher, so with it as well, Grok runs the fix twice.
+- **The Copilot CLI** also reads `.claude/settings.json` and runs the hooks from every file, so with both the Claude Code and GitHub Copilot hooks it runs the fix twice. The Copilot cloud agent reads only `.github/hooks/`.
 
 The GitHub Copilot file uses the format the Copilot CLI and cloud agent read (a numeric `version` and camelCase events), which VS Code also understands:
 
@@ -65,7 +76,7 @@ The GitHub Copilot file uses the format the Copilot CLI and cloud agent read (a 
 If you want to manually set things up or add hooks after initialization, run:
 
 ```bash
-npx ultracite init --hooks cursor windsurf codebuddy claude copilot grok
+npx ultracite init --hooks cursor windsurf codebuddy claude deepagents copilot grok
 ```
 
 This keeps the project's current linter and your changes to its configs. Alternatively, you can manually create or edit the hook configuration files in your project directory and add the appropriate hook command.
@@ -73,10 +84,10 @@ This keeps the project's current linter and your changes to its configs. Alterna
 ## How It Works
 
 1. **Automatic Execution**: After the AI agent edits a file, the hook automatically runs your project's `fix` script (added to `package.json` during init) with `--hook`. On Biome projects, the hook also passes `--skip=correctness/noUnusedImports` to avoid removing imports mid-edit.
-2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor, Windsurf, GitHub Copilot in VS Code, the Copilot CLI, and Grok Build all send the path; multi-file edits (VS Code's multi-replace and `apply_patch`) fix each file they name. VS Code and the Copilot CLI run the hook after every tool, so a tool that doesn't edit files (like reading one) fixes nothing. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
+2. **Only the Edited File**: `--hook` reads the agent's hook payload from stdin and fixes just the file it names, so an edit costs one file instead of the whole project. Claude Code, CodeBuddy, Cursor, Windsurf, Deep Agents, GitHub Copilot in VS Code, the Copilot CLI, and Grok Build all send the path; multi-file edits (VS Code's multi-replace and `apply_patch`) fix each file they name. VS Code and the Copilot CLI run the hook after every tool, so a tool that doesn't edit files (like reading one) fixes nothing. A file outside the project, one that no longer exists, or one none of your linters handle (a `Dockerfile`, `.env`) is skipped. When no path can be read from the payload, the hook fixes the whole project as before. Re-running `npx ultracite init --hooks` rewrites a hook from an earlier init, including one generated before `--hook` existed or for a different package manager or linter.
 3. **Code Formatting**: Ultracite formats the edited code according to your linter configuration
 4. **Linting Fixes**: Auto-fixable linting issues are resolved automatically
-5. **Remaining Problems Go Back to the Agent**: When issues remain that need a manual fix, the hook prints them to stderr and exits with code 2. Claude Code, CodeBuddy, Windsurf, GitHub Copilot in VS Code, and Grok Build show a hook's stderr to the agent on that exit code, so the agent sees what's left and fixes it in its next step. Cursor's `afterFileEdit` hook and the Copilot CLI don't pass a hook's output to the agent, so there the hook keeps the linter's own output and exit code, which only you see.
+5. **Remaining Problems Go Back to the Agent**: When issues remain that need a manual fix, the hook prints them to stderr and exits with code 2. Claude Code, CodeBuddy, Windsurf, Deep Agents, Grok Build, and VS Code's Local agent show a hook's stderr to the agent on that exit code, so the agent sees what's left and fixes it in its next step. Cursor's `afterFileEdit` hook doesn't pass a hook's output to the agent, and the Copilot CLI, the Copilot cloud agent and Copilot sessions on VS Code's Agent Host show it only to you. There the hook keeps the linter's own output and exit code.
 6. **Seamless Integration**: The process happens transparently without interrupting your workflow
 
 ## Benefits

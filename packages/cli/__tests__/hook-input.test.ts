@@ -90,6 +90,37 @@ describe("editedFilesFromHookPayload (Grok Build)", () => {
   });
 });
 
+// Deep Agents Code maps its write_file and edit_file tools to Claude Code's
+// public names and argument shapes before calling a hook.
+const deepAgentsPayload = (toolName: string) =>
+  JSON.stringify({
+    cwd: "/repo",
+    hook_event_name: "PostToolUse",
+    session_id: "abc",
+    tool_input: {
+      file_path: "/repo/src/f.ts",
+      new_string: "b",
+      old_string: "a",
+      replace_all: false,
+    },
+    tool_name: toolName,
+    tool_response: "Successfully replaced 1 instance(s)",
+    tool_use_id: "call_1",
+    transcript_path: "/tmp/transcript.jsonl",
+  });
+
+describe("editedFilesFromHookPayload (Deep Agents)", () => {
+  test.each(["Write", "Edit"])("reads the edited file from %s", (toolName) => {
+    expect(editedFilesFromHookPayload(deepAgentsPayload(toolName))).toEqual([
+      "/repo/src/f.ts",
+    ]);
+  });
+
+  test("hands the problems back to the model", () => {
+    expect(hookFeedsAgent(deepAgentsPayload("Edit"))).toBe(true);
+  });
+});
+
 describe("editedFilesFromHookPayload (Copilot and VS Code)", () => {
   test("reads toolArgs.path from the Copilot CLI, as a JSON string or object", () => {
     expect(

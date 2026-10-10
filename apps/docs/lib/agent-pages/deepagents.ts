@@ -10,7 +10,7 @@ export const deepagents: AgentPageContent = {
     },
     {
       answer:
-        "Yes. `hooks.json` in `~/.deepagents/`, or in a trusted project’s `.deepagents/`, takes Claude-style events, and a `PostToolUse` handler that exits 2 sends its stderr back as feedback. Ultracite doesn’t configure one yet.",
+        "Yes, in Claude Code’s format. `init --hooks deepagents` writes a `PostToolUse` hook to `.deepagents/hooks.json`, which `dcode` runs once you trust the workspace; headless runs need `--trust-project-hooks`. When the hook exits 2, `dcode` appends its stderr to the tool result the model reads.",
       question: "Does Deep Agents Code support hooks?",
     },
     {
@@ -40,26 +40,26 @@ export const deepagents: AgentPageContent = {
     },
   ],
   intro:
-    "Deep Agents Code (`dcode`), LangChain’s terminal agent, appends the `AGENTS.md` at your git root to its instructions every session, so it starts with Ultracite’s rules. It runs `ultracite fix` when the rules tell it to, through its `execute` tool and your approval mode. Agents you build on the SDK load an `AGENTS.md` only when you pass it to `memory=`.",
+    "Deep Agents Code (`dcode`), LangChain’s terminal agent, appends the `AGENTS.md` at your git root to its instructions every session, so it starts with Ultracite’s rules. With `init --hooks deepagents`, a hook runs `ultracite fix` on every file it writes and hands back what’s left in the same turn. Agents you build on the SDK load an `AGENTS.md` only when you pass it to `memory=`.",
   loop: {
-    body: "Ultracite doesn’t configure hooks for Deep Agents, so `dcode` runs `ultracite fix` because `AGENTS.md` tells it to. `dcode` does have Claude-style hooks: a `PostToolUse` handler in `~/.deepagents/hooks.json`, or a trusted project’s `.deepagents/hooks.json`, can send feedback on exit 2.",
+    body: "`init --hooks deepagents` adds a `PostToolUse` hook to `.deepagents/hooks.json` in Claude Code’s format. `dcode` runs it once you trust the workspace, and when problems remain the hook exits with code 2, which `dcode` turns into feedback on the edit.",
     snippets: [
       {
-        code: 'dcode -n "Run npx ultracite fix, then fix what it reports" -S "npx" --max-turns 10',
+        code: 'dcode -n "Run npx ultracite fix, then fix what it reports" -S "npx" --trust-project-hooks --max-turns 10',
         lang: "bash",
-        title: "Headless run in CI",
+        title: "Headless run in CI, with project hooks",
       },
     ],
     steps: [
-      "`dcode` changes a file with `write_file` or `edit_file`.",
-      "Following `AGENTS.md`, it calls `execute` to run `npx ultracite fix`.",
-      "Manual mode asks you first and Auto mode leaves it to an LLM classifier; in headless runs, `-S` decides which commands may run.",
-      "The agent reads the output and fixes what’s left before it finishes.",
+      "`dcode` changes a file with `write_file` or `edit_file`, which hooks see as `Write` and `Edit`.",
+      "The hook reads the file’s path from the payload and runs `ultracite fix` on just that file.",
+      "If nothing is left, it exits 0 and `dcode` carries on.",
+      "If problems remain, it prints them and exits 2, and `dcode` appends them to the tool result the model reads next.",
     ],
-    title: "The rules run the linter, approvals gate it",
+    title: "A hook on every Write and Edit",
   },
   metaDescription:
-    "Set up Ultracite for Deep Agents: dcode appends the root AGENTS.md every session, while SDK agents load it only when you pass it to memory=.",
+    "Set up Ultracite for Deep Agents: dcode reads the root AGENTS.md every session and runs a hook that fixes each edit; SDK agents load AGENTS.md via memory=.",
   metaTitle: "Ultracite for Deep Agents — Rules for dcode and the SDK",
   related: ["open-hands", "pi", "codex"],
   rules: {
