@@ -10,30 +10,30 @@ import type { CoverageRow } from "../coverage.astro";
 // unused-imports and compat, one rule each. Re-derive when a version moves.
 //
 // Type information: ultracite/eslint/type-aware turns on 62 typescript-eslint
-// rules (replacing five of ESLint's), and gives a TypeScript program to the
-// 70 SonarJS and Unicorn rules in core that their plugins mark
-// `requiresTypeChecking`. 38 of those 70 register no listeners without one.
+// rules (replacing five of ESLint's) and the 37 SonarJS rules and one Unicorn
+// rule that register no listeners without a TypeScript program. It also gives
+// that program to the 32 SonarJS rules in core that use types when there are
+// some (all marked `requiresTypeChecking` by their plugins).
 const catalogSize = 1190;
 const recommendedCount = 726;
-const coreCount = 956;
-const typedPresetCount = 62;
-const typedCoreCount = 70;
-const typedCoreInertCount = 38;
+const coreCount = 918;
+const typedPresetCount = 100;
+const typedCoreCount = 32;
 
 const plugins: CoverageRow[] = [
   {
     available: 374,
-    defaults: 321,
+    defaults: 320,
     description: "Modern, idiomatic JavaScript",
-    enabled: 347,
+    enabled: 346,
     mono: true,
     name: "unicorn",
   },
   {
     available: 282,
-    defaults: 230,
+    defaults: 200,
     description: "Bugs and code smells, from SonarQube",
-    enabled: 271,
+    enabled: 234,
     mono: true,
     name: "sonarjs",
   },
@@ -102,11 +102,11 @@ const plugins: CoverageRow[] = [
   id="es-rules"
   notes={[
     {
-      body: `All ${coreCount} are errors, because an agent takes a zero exit code as done, and a warning doesn’t change it. That includes \`compat/compat\`, which flags browser APIs your browserslist targets don’t support.`,
+      body: `All ${coreCount} are errors, because an agent takes a zero exit code as done, and a warning doesn’t change it. That includes \`compat/compat\`, which flags browser APIs your browserslist targets don’t support, or Baseline’s when you set none.`,
       title: "Errors, never warnings",
     },
     {
-      body: `Core works from the syntax alone, without a \`tsconfig.json\`. The \`type-aware\` preset adds ${typedPresetCount} typescript-eslint rules, such as \`no-floating-promises\`, and hands TypeScript’s type checker to ${typedCoreCount} SonarJS and Unicorn rules in core, ${typedCoreInertCount} of which do nothing without it. It’s opt-in, with \`init --type-aware\`.`,
+      body: `Core works from the syntax alone, without a \`tsconfig.json\`. The \`type-aware\` preset adds ${typedPresetCount} typescript-eslint, SonarJS and Unicorn rules that need TypeScript’s type checker, such as \`no-floating-promises\`, and hands it to ${typedCoreCount} SonarJS rules in core that use it when it’s there. It’s opt-in, with \`init --type-aware\`.`,
       title: `${typedPresetCount + typedCoreCount} rules that read your types`,
     },
   ]}

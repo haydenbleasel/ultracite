@@ -21,9 +21,7 @@ const zedSettings = `"TSX": {
     "source.fixAll.eslint": true,
     "source.organizeImports.eslint": true
   },
-  "formatter": {
-    "language_server": { "name": "eslint" }
-  }
+  "formatter": "prettier"
 }`;
 
 const unformatted = "src/data.ts";
@@ -62,7 +60,7 @@ const files = [
       title: "Fix and format on save",
     },
     {
-      body: "Zed runs ESLint’s language server as the formatter for JavaScript, TypeScript and TSX, applying fixes and sorting imports as it goes.",
+      body: "Zed applies ESLint’s fixes and sorts imports, then formats with its Prettier integration, using your Prettier config and plugins.",
       code: { lang: "jsonc", path: ".zed/settings.json", text: zedSettings },
       eyebrow: "Zed",
       title: "Fix as you format",
