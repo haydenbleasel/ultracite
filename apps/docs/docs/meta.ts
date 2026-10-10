@@ -5,6 +5,7 @@ export default defineMeta({
     "index",
     "setup",
     "configuration",
+    "presets",
     "usage",
     "languages",
     "monorepos",

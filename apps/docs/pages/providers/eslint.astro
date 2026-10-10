@@ -55,12 +55,12 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Yes, with Stylelint. Ultracite’s config extends `stylelint-config-standard` and `stylelint-config-idiomatic-order` for property order, allows Tailwind’s at-rules and functions, and reads SCSS and Less through their own syntaxes.",
-    question: "Does it lint CSS?",
+      "ESLint lints JavaScript and TypeScript modules (`.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts`, `.cts`) and inline scripts in HTML files, and the Vue, Svelte and Astro presets add their components. It doesn’t lint JSON, which Prettier formats. Stylelint lints `.css`, `.scss` and `.less`, extending `stylelint-config-standard` and `stylelint-config-idiomatic-order`, reads SCSS and Less through the `postcss-scss` and `postcss-less` syntaxes `init` installs, and accepts Tailwind v4’s at-rules, functions and theme variables.",
+    question: "Which files does it lint?",
   },
   {
     answer:
-      "Yes. `prettier.config.mjs` is an ordinary Prettier config that spreads Ultracite’s settings, so add plugins to its `plugins` array. `init` puts `prettier-plugin-tailwindcss` there, and `prettier-plugin-svelte` or `prettier-plugin-astro` when you pick those frameworks.",
+      "Yes. `prettier.config.mjs` is an ordinary Prettier config that spreads Ultracite’s settings, so add plugins to its `plugins` array. `init` puts `prettier-plugin-tailwindcss` there, and `prettier-plugin-svelte` or `prettier-plugin-astro` before it when you pick those frameworks. Keep the Tailwind plugin last, as its docs require.",
     question: "Can I use Prettier plugins?",
   },
 ];
@@ -68,10 +68,10 @@ const faqs: FaqItem[] = [
 const nextSteps: NextStep[] = [
   {
     description:
-      "Every ESLint preset and how Prettier and Stylelint fit around them.",
-    href: "/docs/provider/eslint",
+      "Framework presets, type-aware rules and overriding rules.",
+    href: "/docs/configuration",
     label: "Reference",
-    title: "ESLint provider docs",
+    title: "Configuration",
   },
   {
     description: "The same standard on a native engine, with ESLint’s rule names.",

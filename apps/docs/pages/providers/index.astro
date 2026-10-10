@@ -20,11 +20,7 @@ const lastModified = "2026-10-10";
 
 const breadcrumbs: Crumb[] = [{ href: "/providers", name: "Providers" }];
 
-// An engine links to its landing page once pages/providers/<id>.astro exists,
-// and to its docs page until then.
-const landingPages = import.meta.glob("./*.astro");
-const hrefFor = (id: ProviderId): string =>
-  `./${id}.astro` in landingPages ? `/providers/${id}` : `/docs/provider/${id}`;
+const hrefFor = (id: ProviderId): string => `/providers/${id}`;
 
 // Rules on in each core preset (Ultracite 7.12.4): Oxlint's set to "error",
 // Biome's from `biome rage --linter`, and ESLint's from `eslint
@@ -213,9 +209,7 @@ const faqs: FaqItem[] = [
                     </span>
                   </span>
                   <span class="flex items-center gap-2 font-medium text-[15px]/6">
-                    {hrefFor(engine.id).startsWith("/providers")
-                      ? `Ultracite for ${engine.name.split(" ")[0]}`
-                      : `${engine.name.split(" ")[0]} docs`}
+                    Ultracite for {engine.name.split(" ")[0]}
                     <Icon
                       class="size-4 transition-transform group-hover:translate-x-0.5"
                       name="arrow-right"

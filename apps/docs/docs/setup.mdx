@@ -63,6 +63,23 @@ You can combine `--quiet` with `--linter` to specify a toolchain:
 npx ultracite init --quiet --linter eslint --pm npm
 ```
 
+### Editor Extensions
+
+When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. If the settings file already existed, or the install failed, install them yourself. The Stylelint extension is never installed for you:
+
+```bash title="Terminal"
+# Oxlint + Oxfmt
+code --install-extension oxc.oxc-vscode
+
+# Biome
+code --install-extension biomejs.biome
+
+# ESLint + Prettier + Stylelint
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension esbenp.prettier-vscode
+code --install-extension stylelint.vscode-stylelint
+```
+
 ### Usage with Tailwind CSS
 
 If you use Tailwind CSS, it's recommended to install the [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) extension for class sorting and hints:

@@ -1,57 +1,11 @@
 ---
-title: Oxlint
-description: Explore Ultracite's Oxlint and Oxfmt setup for teams that prioritize lint speed, shared presets, and lightweight editor defaults.
+title: Optional Presets
+description: Opt-in Ultracite presets for ESLint parity, TSDoc, anti-slop rules, shadcn design systems and gdp-ts authorization proofs, and how to set each one up.
 ---
 
-[Oxlint](https://oxc.rs/docs/guide/usage/linter.html) is part of the [Oxc project](https://oxc.rs/), a collection of high-performance JavaScript tools written in Rust. Paired with [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) for formatting, this toolchain is ideal for large codebases where speed is critical.
+Ultracite's core and framework presets are on when you run `init`. The presets on this page are opt-in: each adds rules that suit some projects and not others, and most run through Oxlint's JS plugin API, which is slower than Oxlint's native rules. The JS plugin, TSDoc, anti-slop and `@shadcn/lint` presets are for Oxlint; the gdp-ts preset works with Oxlint and ESLint.
 
-## Benefits
-
-- **50-100x faster** — Lint your entire codebase in milliseconds
-- **15 plugin equivalents** — Built-in support for React, TypeScript, Next.js, Vue, Jest, Vitest, and more
-- **Bug-focused rules** — Prioritizes catching real bugs over stylistic issues
-- **High signal-to-noise ratio** — Fewer false positives, more actionable feedback
-- **Oxc ecosystem** — Part of a larger project with parser, resolver, transformer, and minifier
-- **Drop-in ready** — Works alongside existing setups or as a complete replacement
-
-## Usage
-
-Ultracite generates two TypeScript config files for Oxlint. They're named `oxlint.config.ts` and `oxfmt.config.ts` in an ES module package (`"type": "module"` in `package.json`) and `oxlint.config.mts` and `oxfmt.config.mts` otherwise, because Node only loads ES module syntax from a `.ts` file in an ES module package. `init` never changes `"type"`. The examples on this page use `.ts`:
-
-```ts title="oxlint.config.ts"
-import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-
-export default defineConfig({
-  extends: [core],
-  ignorePatterns: core.ignorePatterns,
-});
-```
-
-```ts title="oxfmt.config.ts"
-import { defineConfig } from "oxfmt";
-import ultracite from "ultracite/oxfmt";
-
-export default defineConfig({
-  ...ultracite,
-});
-```
-
-Add framework presets as needed:
-
-```ts title="oxlint.config.ts"
-import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-import next from "ultracite/oxlint/next";
-import react from "ultracite/oxlint/react";
-
-export default defineConfig({
-  extends: [core, react, next],
-  ignorePatterns: core.ignorePatterns,
-});
-```
-
-## ESLint Parity (Optional)
+## ESLint Parity
 
 The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support. TSDoc syntax and public API documentation checks are available as separate, explicitly selected plugins below; they are not added to the full preset, so existing users do not gain new dependencies when upgrading.
 
@@ -114,7 +68,7 @@ export default defineConfig({
 });
 ```
 
-### TSDoc and Public API Documentation (Optional)
+### TSDoc and Public API Documentation
 
 Two more JS plugins check the documentation in TypeScript files (`.ts`, `.tsx`, `.mts`, and `.cts`). They aren't part of the full `js-plugins` preset, so they only run when you select them:
 
@@ -151,7 +105,7 @@ export default defineConfig({
 });
 ```
 
-## Anti-Slop Rules (Optional)
+## Anti-Slop Rules
 
 Ultracite also ships an opt-in `anti-slop` preset built on [anti-slop](https://github.com/dmmulroy/anti-slop), Dillon Mulroy's set of opinionated Oxlint rules that reject low-evidence, low-signal TypeScript and JavaScript patterns — unjustified type assertions, `unknown` leaking through function signatures, `Reflect`-based property access, module mocking, and similar escape hatches.
 
@@ -178,7 +132,7 @@ export default defineConfig({
 
 All fifteen rules are enabled at the `error` level, including `require-safety-comment-for-type-assertion` (every `as` assertion needs a `SAFETY:` comment stating the checked invariant), `no-unknown-returns` / `no-unknown-parameters` (parse values into named domain types at boundaries), and `no-module-mocking` (inject dependencies instead of mocking modules). If a rule doesn't fit your codebase — `no-module-mocking` is a common example in test-heavy projects — turn it off in your own config's `rules` block.
 
-## Design System Rules with @shadcn/lint (Optional)
+## Design System Rules with @shadcn/lint
 
 Ultracite also ships an opt-in `shadcn` preset built on [`@shadcn/lint`](https://github.com/shadcn-ui/lint), shadcn's agent-first linter for Tailwind v4 design systems. It reads your components, variants, and theme, and when a class breaks the design system the error explains what is wrong and what to use instead — the component's variants, sizes, theme tokens, and the file to edit. shadcn/ui is not required: it works with any Tailwind v4 component directory and theme.
 
@@ -244,7 +198,7 @@ export default defineConfig({
 
 Per-component policies (`contracts`), custom messages, and exceptions for external stylesheets are configured on the rules themselves — see the [`@shadcn/lint` documentation](https://github.com/shadcn-ui/lint/blob/main/docs/rules.md). `no-unknown-classes` asks your installed Tailwind v4 which classes exist; when Tailwind or the theme cannot be loaded it falls back to a bundled grammar and warns once.
 
-## Authorization Proofs with gdp-ts (Optional)
+## Authorization Proofs with gdp-ts
 
 Ultracite also ships an opt-in `gdp` preset for [gdp-ts](https://github.com/rauchg/gdp-ts), a TypeScript take on Ghosts of Departed Proofs. Sensitive functions demand a proof about their exact arguments (`UserIsProjectAdmin<U, P>`) that only a trusted module in `proofs/` can mint, so a skipped or mismatched authorization check is a compile error. TypeScript can't stop a proof being forged with `{} as UserIsProjectAdmin<U, P>`; these rules close that gap.
 
@@ -274,204 +228,15 @@ Upstream's strict-mode `no-any` is left off because core's `typescript/no-explic
 
 The preset follows the upstream layout: trusted modules in `proofs/` and branded-id constructors in `lib/ids.ts`. For a different layout, add overrides with the same shape in your own config.
 
-## Configuration Approach
+### On ESLint
 
-Ultracite's Oxlint configuration uses an **opt-out** approach. This means we explicitly enable rules from every category at the `error` level, then selectively disable rules that are too strict or don't fit our opinionated defaults. This ensures maximum bug-catching coverage while avoiding noise.
+The same preset ships for ESLint. Spread it after core:
 
-## Rule Categories
+```javascript title="eslint.config.mjs"
+import core from "ultracite/eslint/core";
+import gdp from "ultracite/eslint/gdp";
 
-Oxlint organizes rules into the following categories:
-
-### Correctness
-
-Rules that catch definite bugs and errors. These are high-confidence rules that identify code that is almost certainly wrong.
-
-### Suspicious
-
-Rules that catch code patterns that are likely bugs or mistakes. These have a slightly higher false-positive rate but catch important issues.
-
-### Pedantic
-
-Rules that enforce stricter coding standards. These are more opinionated and may require more effort to satisfy.
-
-### Performance
-
-Rules that identify performance issues and suggest optimizations for better runtime efficiency.
-
-### Restriction
-
-Rules that restrict certain language features or patterns. These are typically project-specific preferences.
-
-### Style
-
-Rules that enforce consistent code style across the codebase.
-
-## Included Plugins
-
-Oxlint includes built-in support equivalent to these ESLint plugins:
-
-- **eslint** — Core JavaScript rules
-- **typescript** — TypeScript-specific rules
-- **unicorn** — Opinionated code quality rules
-- **oxc** — Oxc-specific optimizations
-- **import** — Import/export validation
-- **jsdoc** — JSDoc comment validation
-- **node** — Node.js-specific rules
-- **promise** — Promise and async/await best practices
-- **jest** / **vitest** — Testing framework rules (enabled via the `jest` / `vitest` framework presets)
-
-For extra ESLint parity, the optional **js-plugins** preset adds **github**, **sonarjs**, and **react-doctor** via Oxlint's JS plugin support. It also offers opt-in TSDoc syntax and public API documentation checks through **tsdoc** and **jsdoc-js**. See [ESLint Parity](#eslint-parity-optional) and [TSDoc and Public API Documentation](#tsdoc-and-public-api-documentation-optional) — these JS plugins are not enabled by default. The optional **shadcn** preset adds **shadcn** (`@shadcn/lint`) the same way — see [Design System Rules](#design-system-rules-with-shadcnlint-optional) — and the optional **gdp** preset adds **gdp-ts** (from `@gdp-ts/core`) — see [Authorization Proofs](#authorization-proofs-with-gdp-ts-optional).
-
-## Adding Third-Party Plugins
-
-Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
-
-```package-install
-npm install -D oxlint-plugin-complexity
+export default [...core, ...gdp];
 ```
 
-```ts title="oxlint.config.ts"
-import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-
-export default defineConfig({
-  extends: [core],
-  ignorePatterns: core.ignorePatterns,
-  jsPlugins: ["oxlint-plugin-complexity"],
-  rules: {
-    "complexity/complexity": ["error", { cognitive: 15 }],
-  },
-});
-```
-
-This approach lets you opt in to additional checks without Ultracite taking on third-party dependencies in its core preset.
-
-### Effect
-
-[Effect](https://effect.website/)'s type-aware diagnostics — floating Effects, unhandled error and requirement channels, Layer and Scope mistakes, and Effect-native alternatives to `console`, `Date`, `process.env`, and friends — are available to Oxlint through [`@effect/tsgo`](https://github.com/Effect-TS/tsgo). Ultracite doesn't ship an Effect preset because the `effecttsgo` plugin isn't part of stock Oxlint: `@effect/tsgo` replaces the installed `oxlint` and `oxlint-tsgolint` binaries with builds that include it, and only supports specific versions of each. Layer it on top of `core` yourself:
-
-```package-install
-npm install -D @effect/tsgo oxlint-tsgolint
-```
-
-Patch the binaries after every install with a `prepare` script (`--no-typescript` limits the patch to Oxlint; drop it if you also want Effect's TypeScript-Go integration):
-
-```json title="package.json"
-{
-  "scripts": {
-    "prepare": "effect-tsgo patch --no-typescript --oxlint"
-  }
-}
-```
-
-Then extend one of the presets `@effect/tsgo` ships:
-
-```ts title="oxlint.config.ts"
-import { strict } from "@effect/tsgo/oxlint-presets";
-import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-
-export default defineConfig({
-  extends: [core, strict],
-  ignorePatterns: core.ignorePatterns,
-  rules: {
-    "effecttsgo/global-console-in-effect": "error",
-    "effecttsgo/global-date-in-effect": "error",
-  },
-});
-```
-
-`strict` raises every Effect diagnostic that is on by default to `error`; use `recommended` instead to keep upstream's severities. Both presets turn on Oxlint's type-aware mode, so `--type-aware` isn't needed — and core's type-aware rules, such as `typescript/no-floating-promises`, run too. Upstream leaves some rules off, like the `*-in-effect` family above; enable the ones you want in `rules`, but skip `effecttsgo/strict-boolean-expressions`, which duplicates core's `typescript/strict-boolean-expressions`. Some rules only apply to Effect 3 or Effect 4 and do nothing on the other major version — see the [rule list](https://github.com/Effect-TS/tsgo#diagnostic-status).
-
-A few things to keep in mind:
-
-- Unpatched Oxlint fails the whole run with `Unknown plugin: 'effecttsgo'`, so the patch has to be in place everywhere you lint, CI included.
-- Reinstalling or upgrading `oxlint` or `oxlint-tsgolint` (including through `ultracite upgrade`) can restore the stock binaries without re-running `prepare`. Run `npx effect-tsgo patch --no-typescript --oxlint` again afterwards.
-- The patch refuses versions it doesn't support, which fails the install. Check the supported versions in the [`@effect/tsgo` README](https://github.com/Effect-TS/tsgo#supported-package-versions) before upgrading either package.
-- Effect's fixes are reported as suggestions, so `ultracite fix` only applies them with `--unsafe`.
-
-## Enforcing Path Aliases
-
-Ultracite's core preset does not assume a project layout, so it does not force `@/*` (or `#/*`) aliases over relative imports — that convention depends on your `tsconfig.json`, and it would false-positive in monorepos, libraries, and projects without a `src` directory. If your project maps `@/*` to `src/*` and you want to ban `../` imports between source modules, add an override scoped to `src`:
-
-```ts title="oxlint.config.ts"
-import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-
-export default defineConfig({
-  extends: [core],
-  ignorePatterns: core.ignorePatterns,
-  overrides: [
-    {
-      files: ["src/**"],
-      rules: {
-        "import/no-relative-parent-imports": "error",
-      },
-    },
-  ],
-});
-```
-
-`import/no-relative-parent-imports` is a native Oxlint rule: it flags `../` in imports, type imports, and re-exports at any depth, while still allowing `./sibling` imports within a directory. Scoping it to `src/**` keeps tests, scripts, and config files that legitimately reach into `src` unaffected.
-
-If you would rather point people at the alias in the diagnostic itself, use `no-restricted-imports` with a pattern instead:
-
-```ts title="oxlint.config.ts"
-overrides: [
-  {
-    files: ["src/**"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              regex: "^\\.\\./",
-              message: "Use the @/* alias for imports between src modules.",
-            },
-          ],
-        },
-      ],
-    },
-  },
-],
-```
-
-## Formatter Settings (Oxfmt)
-
-Ultracite configures Oxfmt with these defaults:
-
-- **Indentation**: 2 spaces
-- **Line Width**: 80 characters
-- **Semicolons**: Always required
-- **Double Quotes**: Yes
-- **Trailing Commas**: ES5 style
-- **Arrow Parentheses**: Always include
-- **Tailwind Class Sorting**: Enabled, including inside `clsx`, `cva`, `tw`, `twMerge`, `cn`, `twJoin`, and `tv` calls
-
-Tailwind class sorting uses the same algorithm as `prettier-plugin-tailwindcss`. If you use Tailwind CSS v4 with a custom theme, point Oxfmt at your stylesheet so sorting respects your custom utilities:
-
-```ts title="oxfmt.config.ts"
-import { defineConfig } from "oxfmt";
-import ultracite from "ultracite/oxfmt";
-
-export default defineConfig({
-  ...ultracite,
-  sortTailwindcss: {
-    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
-    stylesheet: "./app/globals.css",
-  },
-});
-```
-
-## Rule Reference
-
-For the complete list of rules and their settings, see the [Oxlint configuration on GitHub](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/oxlint).
-
-## VS Code Extension
-
-Install the [Oxc extension](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode) for VS Code:
-
-```bash title="Terminal"
-code --install-extension oxc.oxc-vscode
-```
+It matches the Oxlint preset: upstream's strict mode stops proofs being forged with type assertions or minted outside `proofs/`, and empty proof interfaces (`interface X<P> extends Proof<"X", [P]> {}`) are allowed inside `proofs/`. It also sets `@typescript-eslint/no-unused-vars` to ignore `_`-prefixed arguments, as Oxlint does by default, because sensitive functions take proofs they never read at runtime (`_proof: UserIsProjectAdmin<U, P>`).

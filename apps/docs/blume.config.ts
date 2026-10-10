@@ -162,9 +162,15 @@ export default defineConfig({
     { from: "/git-hooks", to: "/docs/git-hooks" },
     { from: "/monorepos", to: "/docs/monorepos" },
     { from: "/faq", to: "/docs/faq" },
-    { from: "/provider/biome", to: "/docs/provider/biome" },
-    { from: "/provider/eslint", to: "/docs/provider/eslint" },
-    { from: "/provider/oxlint", to: "/docs/provider/oxlint" },
+    { from: "/provider/biome", to: "/providers/biome" },
+    { from: "/provider/eslint", to: "/providers/eslint" },
+    { from: "/provider/oxlint", to: "/providers/oxlint" },
+    // The provider docs pages became the /providers landing pages; their
+    // presets and recipes moved to /docs/presets and /docs/configuration.
+    { from: "/docs/provider", to: "/providers" },
+    { from: "/docs/provider/biome", to: "/providers/biome" },
+    { from: "/docs/provider/eslint", to: "/providers/eslint" },
+    { from: "/docs/provider/oxlint", to: "/providers/oxlint" },
     { from: "/migrate/biome", to: "/docs/migrate/biome" },
     { from: "/migrate/eslint", to: "/docs/migrate/eslint" },
     { from: "/migrate/oxlint", to: "/docs/migrate/oxlint" },

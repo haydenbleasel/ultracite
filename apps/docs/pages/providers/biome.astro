@@ -12,6 +12,7 @@ import Coverage from "../../components/providers/biome/coverage.astro";
 import Everywhere from "../../components/providers/biome/everywhere.astro";
 import Formatter from "../../components/providers/biome/formatter.astro";
 import Speed from "../../components/providers/biome/speed.astro";
+import Videos from "../../components/providers/biome/videos.astro";
 import { hooks } from "../../../../packages/cli/src/data/hooks";
 import { formatMs, runFor } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
@@ -60,18 +61,23 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Biome reads types itself, without the TypeScript compiler. Install with `npx ultracite init --linter biome --type-aware` to add the `type-aware` preset: 8 rules, such as `noImportCycles`, `noUnresolvedImports` and `noUndeclaredDependencies`, that need Biome to scan the whole project first.",
+      "Biome reads types itself, without the TypeScript compiler. Install with `npx ultracite init --linter biome --type-aware` to add the `type-aware` preset, whose 8 rules need Biome to scan the whole project first: `noPrivateImports`, `noUndeclaredDependencies`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useImportExtensions`, `useJsonImportAttributes` and `useArraySortCompare`. `useImportExtensions` requires relative imports to include their file extension.",
     question: "Does it support type-aware rules?",
+  },
+  {
+    answer:
+      "Add negated globs to `files.includes` in your `biome.jsonc`, after `\"**\"`: `[\"**\", \"!components/ui/**\", \"!public\"]`. Keep `\"**\"` first. Biome needs a positive glob to start from, so a list of only negated patterns matches no files at all. The core preset already leaves out build output, caches and generated files.",
+    question: "How do I exclude files?",
   },
 ];
 
 const nextSteps: NextStep[] = [
   {
     description:
-      "Every Biome preset, the type-aware rules and how to configure them.",
-    href: "/docs/provider/biome",
+      "Framework presets, type-aware rules, safe fixes and overriding rules.",
+    href: "/docs/configuration",
     label: "Reference",
-    title: "Biome provider docs",
+    title: "Configuration",
   },
   {
     description:
@@ -116,7 +122,7 @@ const nextSteps: NextStep[] = [
     <Fragment slot="note">
       <span>Also on</span>
       <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/docs/provider/eslint">ESLint</a>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/eslint">ESLint</a>
       <span aria-hidden="true">·</span>
       <span>Checked against Biome 2.5</span>
     </Fragment>
@@ -127,6 +133,7 @@ const nextSteps: NextStep[] = [
   <Formatter />
   <AgentFixes />
   <Everywhere />
+  <Videos />
   <Faq id="bi-faq" items={faqs} title="Biome questions, answered" />
   <NextSteps id="bi-next" items={nextSteps} title="Keep going" />
   <Cta command={command} />
