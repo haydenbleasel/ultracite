@@ -1,0 +1,211 @@
+---
+title: "Type escape hatches: when the compiler becomes the target"
+description: Why TypeScript lets you overrule it with any, !, as and @ts-ignore, what the rules that ban them can and can't see, how real codebases use them, and what changes when an agent is trying to make a type error go away.
+date: 2026-10-10
+author: hayden
+rules:
+  - no-explicit-any
+  - no-non-null-assertion
+  - ban-ts-comment
+  - no-unsafe-type-assertion
+  - noExplicitAny
+  - noNonNullAssertion
+  - noTsIgnore
+---
+
+TypeScript checks your code, and then lets you overrule it. Write `any` and a value stops being checked. Put `!` after an expression and `null` disappears from its type. `as` tells the compiler a value is whatever you say it is. A `@ts-ignore` comment makes the next line's errors go away. None of these changes what the code does at runtime. They only change what the compiler is allowed to know.
+
+Ultracite turns on the rules that flag them: `no-explicit-any`, `no-non-null-assertion` and `ban-ts-comment` (`noExplicitAny`, `noNonNullAssertion` and `noTsIgnore` in Biome), and, where type information is available, the `no-unsafe-*` rules that follow `any` through the code. In the codebases we measured, `no-explicit-any` was one of the most common lint errors, and the one maintainers had suppressed most. This post covers why the hatches exist, what the rules can and can't see, how eight well-known codebases use them and why, and why the rules matter more when an agent is the one trying to make a type error go away.
+
+## Unsound on purpose
+
+Most type systems aim to be sound: if the program type-checks, a whole class of errors can't happen at runtime. TypeScript doesn't. Its [design goals](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals) list a "sound or "provably correct" type system" as a non-goal: "Instead, strike a balance between correctness and productivity." When Gavin Bierman, Martín Abadi and Mads Torgersen formalized the language in [Understanding TypeScript](https://doi.org/10.1007/978-3-662-44202-9_11) (ECOOP 2014), they described a type system that is "not statically sound by design". Its designers wanted to type existing JavaScript libraries "even if that means embracing unsoundness in specific places".
+
+`any` comes from gradual typing. In [Siek and Taha's 2006 formulation](http://scheme2006.cs.uchicago.edu/13-siek.pdf), a program can leave parts of its types unknown, written `?`, and mix typed and untyped code. The checker catches mismatches between the known parts, and for the unknown parts "the type error will be caught at run-time", by casts inserted at the boundary. TypeScript kept the unknown type and dropped the runtime half. Types are erased when the code compiles, so, as Bierman et al. put it, runtime casts are "not practical in TypeScript, because of type erasure." An `any` is a promise nobody checks, before or after the code runs.
+
+It also breaks a property you'd expect any type system to have. `any` converts implicitly to and from every type, so "assignment compatibility is no longer transitive!" A `string` goes into `any`, `any` goes into a `boolean`, and the checker sees nothing wrong.
+
+The paper ends with a suggestion: "codify programmer guidance that would, over time, reduce the reliance on dangerous typing rules." Then: "Static analysis tools may support this guidance and complement a type system." That's a fair description of the rules in this post. People had already started writing them. TSLint's [`no-any`](https://palantir.github.io/tslint/rules/no-any/) rule landed in April 2014, two weeks after TypeScript 1.0 was published, and the ESLint rule `no-explicit-any` followed in 2016. Ultracite has turned all three syntax rules on since its first version.
+
+## Four ways out
+
+TypeScript added its escape hatches one at a time, usually in the same release as the check they escape.
+
+- **`any`** was there from the start. `noImplicitAny`, which reports the places where TypeScript would silently infer `any`, became a full compiler flag in [0.9.1](https://devblogs.microsoft.com/typescript/announcing-0-9-1/) in 2013, after teams used the experimental version to keep `any` from creeping in by accident.
+- **`!`** arrived in [TypeScript 2.0](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html) together with `strictNullChecks`. Once `null` and `undefined` stopped being valid values of every type, developers needed a way to say "not null here". The operator "is simply removed in the emitted JavaScript code".
+- **`@ts-ignore`** came to TypeScript files in [2.6](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html), with a recommendation to use it "very sparingly". [`@ts-expect-error`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html) followed in 3.9: it does the same thing, but reports an error when there's nothing left to suppress.
+- **`as`** isn't a hatch on its own. Most assertions are ordinary. But an assertion to a narrower type is checked only for plausibility, and when even that fails, the compiler's own error message offers the way out: "convert the expression to 'unknown' first."
+
+`unknown` itself was added in [TypeScript 3.0](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html) as "the type-safe counterpart of `any`". The [2016 proposal](https://github.com/microsoft/TypeScript/issues/10715) put the difference in a line: "Where `any` is the escape hatch out of the type system", `unknown` is "the well-guarded and regulated entrance". Both accept any value. Only `unknown` makes you check it before you use it.
+
+The TypeScript team has been consistent about all of this. The handbook says not to use `any` "unless you are in the process of migrating", and compares it to "putting an `@ts-ignore` comment around every usage of the variable". Google's [style guide](https://google.github.io/styleguide/tsguide.html) goes further than the lint defaults, banning `@ts-ignore`, `@ts-expect-error` and `@ts-nocheck`, with an exception for `@ts-expect-error` in unit tests.
+
+## What the rules can see
+
+The three classic rules are syntactic. `no-explicit-any` reports every `any` keyword you write. `no-non-null-assertion` reports every postfix `!`. `ban-ts-comment` reports `@ts-ignore` and `@ts-nocheck`, and `@ts-expect-error` unless it's followed by a reason. That makes them fast and predictable, and it means they see only what's written.
+
+The rest takes type information. The `no-unsafe-*` rules from typescript-eslint track `any` as it flows: assigned to a variable, read as a property, called, returned or passed as an argument. `no-unsafe-type-assertion` reports assertions that narrow a type. Here's a function that leans on escape hatches five times, checked with all of these rules:
+
+{/* prettier-ignore */}
+```ts title="settings.ts"
+export function loadSettings(user: string, raw: string): Settings {
+  if (cache.has(user)) {
+    return cache.get(user)!; // no-non-null-assertion
+  }
+  const parsed = JSON.parse(raw); // type-aware rules only
+  const theme: string = (parsed as any).theme; // no-explicit-any
+  const settings = { theme, fontSize: parsed.size }; // type-aware rules only
+  cache.set(user, settings);
+  return settings as unknown as Settings; // type-aware rules only
+}
+```
+
+`JSON.parse` returns `any`, so `parsed` is `any` without anyone writing the word, and the syntax rules never see it. The `as any` on the next line is caught, but it does nothing, because `parsed` was already `any`. The double cast on the last line passes `no-explicit-any` because it goes through `unknown`, which is exactly what the compiler's error message recommends. Only a type-aware rule can tell that it narrows.
+
+So the syntax rules close the obvious exits and leave the quieter ones open. Closing those takes rules that need the type checker, which makes them slower and means they only run where type information is available.
+
+## What the research says
+
+The case for these rules rests on a prior question: do static types prevent bugs at all? The best-known answer is [Gao, Bird and Barr](https://doi.org/10.1109/ICSE.2017.75) (ICSE 2017). They took 400 fixed bugs from public JavaScript projects, added type annotations to the code just before each fix, and checked whether a type checker would have caught the bug. TypeScript 2.0 and Flow each caught 15% of them. The authors call that conservative, since these bugs had already survived testing and review. A [Python replication](https://doi.org/10.1109/TSE.2021.3082068) with mypy found the same 15% of corrective defects. Fittingly, Gao et al. used `any` themselves, to clear type errors in code unrelated to each bug.
+
+Whether `any` undoes that benefit is less clear. [Bogner and Merkel](https://arxiv.org/abs/2203.11115) (MSR 2022) compared 604 JavaScript and TypeScript applications on GitHub. The TypeScript apps had fewer code smells and lower cognitive complexity, but they weren't less bug-prone: "bug proneness and bug resolution time of our TS sample were not significantly lower than for JS". They also counted `any` with `no-explicit-any`, and found "the average TS app uses the any type once for every 100 lines of code". Apps with more `any` had more code smells, higher cognitive complexity and slower bug fixes, but the correlations were weak (ρ from 0.17 to 0.26), and `any` didn't correlate with the share of bug-fix commits at all. The authors concluded that developers "do not have to try to religiously avoid it at all cost."
+
+The best evidence for the rules is narrower than "fewer bugs". A [2026 study of 633 bug reports](https://arxiv.org/abs/2601.21186) from 16 TypeScript projects found that 12.4% were type errors, "often caused by unsafe casts, missing annotations, or reliance on any". And even code without a single `any` is only as typed as its dependencies' declaration files. [One tool](https://doi.org/10.1145/2660193.2660215) found 142 errors in the declarations of 10 libraries, and [another](https://doi.org/10.1145/3133914) found mismatches in 49 of 54, because "The TypeScript type checker blindly trusts the declaration files".
+
+So the honest summary is that types catch a real but minority share of bugs, and every escape hatch removes some of that coverage without telling you where. No study has shown that banning `any` by lint reduces bugs. The argument for the rules is that they keep the checker's signal intact, so a type error means something and the remaining holes are visible.
+
+## What it looks like in real code
+
+In October 2026 we ran Ultracite's Oxlint presets over the same eight codebases as [the cognitive complexity post](/research/cognitive-complexity): [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core. That's 694,309 lines of source, excluding tests, generated and vendored code. With the projects' own suppression comments honored, `no-explicit-any` was the fourth most common error of the 343 rules that fired, and `no-non-null-assertion` the eleventh.
+
+Counting every occurrence, including suppressed ones:
+
+| Escape hatch       | Count | Per 10,000 lines | Repos  |
+| ------------------ | ----- | ---------------- | ------ |
+| `any`              | 4,292 | 61.8             | 8 of 8 |
+| `!`                | 1,416 | 20.4             | 8 of 8 |
+| Casts to `any`     | 1,173 | 16.9             | 8 of 8 |
+| `as unknown as T`  | 156   | 2.2              | 8 of 8 |
+| `@ts-ignore`       | 106   | 1.5              | 6 of 8 |
+| `@ts-expect-error` | 168   | 2.4              | 6 of 8 |
+
+The density varies 43-fold, from 5.3 `any` per 10,000 lines in VS Code to 229.8 in Zod, and so do the projects' policies. Zod's config turns the rule off with a comment: ``"noExplicitAny": "off", // `any` is amazing``. tRPC turns `no-non-null-assertion` on because, as its config says, "we like them". The projects that enforce the rules still use the hatches. They suppress them, one comment at a time. Hono suppresses 414 of its 434 `any`. VS Code suppresses all 38 in the code we measured, and tRPC all 38 of its `!`.
+
+Here's one of VS Code's suppressions, from a file of helpers for a line-and-column pair packed into a single number:
+
+{/* prettier-ignore */}
+```ts title="length.ts (VS Code, abridged)"
+/**
+ * Represents a non-negative length in terms of line and column count.
+ * Does not allocate.
+*/
+export type Length = { _brand: 'Length' };
+
+// eslint-disable-next-line local/code-no-any-casts, @typescript-eslint/no-explicit-any
+export const lengthZero = 0 as any as Length;
+```
+
+That's an escape hatch used exactly as intended: a [branded type](https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/length.ts#L20-L31) that stops a `Length` from being mixed with ordinary numbers, at the cost of a deliberate, documented cast wherever one is built or read. Not every hatch looks like that. Here's Zod's registry adding a schema:
+
+{/* prettier-ignore */}
+```ts title="registries.ts (Zod)"
+  add<S extends Schema>(
+    schema: S,
+    ..._meta: undefined extends Meta ? [$replace<Meta, S>?] : [$replace<Meta, S>]
+  ): this {
+    const meta: any = _meta[0];
+    this._map.set(schema, meta!);
+    if (meta && typeof meta === "object" && "id" in meta) {
+      this._idmap.set(meta.id!, schema);
+    }
+    return this as any;
+  }
+```
+
+That's [four escape hatches in eleven lines](https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/registries.ts#L33-L43). Both `!` assert something about values that are already `any`, so they do nothing.
+
+To find out why maintainers write them, we sampled 96 `any` and 96 `!` at random, 12 per codebase, and classified each one from its surrounding code.
+
+- **Most `any` had a reason.** 35% were generic plumbing, such as `<T extends (...args: any[]) => any>`, where `unknown` would reject valid functions. 21% sat at an untyped boundary, such as parsed JSON or a value from another library. 19% worked around something the type system can't express, like VS Code's brand. 8% typed a caught error so its properties could be read. Only 17% looked like convenience, with a precise type close at hand. In 54 of the 96, replacing `any` with `unknown` would very likely break the code.
+- **Almost every `!` was backed by something.** Only 4 of 96 had no visible guarantee. Half followed a check that TypeScript's narrowing can't connect to the use, such as `map.has(key)` followed by `map.get(key)!`. The rest relied on an invariant, an initialization order, or the platform. But only 5 of the 96 had a comment saying so.
+
+A second, blind pass over 40 of the sites agreed with the first on whether an `any` had a reason in 19 of 20 cases, and on whether a `!` was guarded in all 20. Both passes were made by a model working from a written codebook, so treat the categories as careful estimates.
+
+For two of the codebases, Zod and Hono, we could also run the type-aware rules, because both type-check without installing anything. 76% of their plain `as T` casts narrowed the type, which is the kind of assertion `no-unsafe-type-assertion` reports. About one cast in seven was unnecessary: the compiler already knew the type. In Zod, 47 of 95 `!` were unnecessary too, mostly on array indexing, which Zod's own compiler settings already treat as non-nullable.
+
+## What changes when agents write the code
+
+When a model writes TypeScript and it doesn't compile, the problem is almost always the types. [Mündler et al.](https://arxiv.org/abs/2504.09246) (PLDI 2025) found that "on average 94% of compilation errors result from failing type checks" in TypeScript written by six open-weight models. Syntax is the easy part, and the type checker is where the code gets rejected.
+
+That puts the escape hatches directly in the path of anything optimizing for "it compiles". Type-inference researchers ran into this before coding agents existed. When [Yee and Guha](https://arxiv.org/abs/2302.12163) (ECOOP 2023) used machine-learning models to add types to JavaScript packages, roughly 25% to 60% of the annotations in files that type-checked were `any`, `any[]` or `Function`, depending on the model. "These annotations can hide type errors and allow more code to type check". The [OpenTau](https://arxiv.org/abs/2305.17145) authors made the same point: "trivial type annotations (e.g., any) will always type check", so they scored their output on how specific its types were, not just on whether it compiled.
+
+There's early evidence that coding agents do the same. In a study of 545 agent-written and 269 human-written TypeScript pull requests that touched types, [Lee, Ul Hassan and Hindle](https://arxiv.org/abs/2602.17955) (MSR 2026) found that "AI agents are 9x more prone to use the 'any' keyword": 2.16 additions per pull request against 0.24 for humans. It's a small study with a small effect size, and agent and human pull requests may not be doing the same work. A first-hand report points the same way. In September 2025, after build breaks caused by `as any` in VS Code, Matt Bierner [opened an issue](https://github.com/microsoft/vscode/issues/269213) to remove them, noting that "Some language models seem to be specially keen on adding `as any` assertions" to work around problems. The team added a lint rule for `as any` and suppressed the roughly 900 existing casts, so that the rule would catch new ones.
+
+This is the same problem the [cognitive complexity post](/research/cognitive-complexity#what-changes-when-agents-write-the-code) describes, aimed at the compiler instead of the linter. A type error is a measure of whether the code is consistent with what it claims. An escape hatch makes the measure pass without changing the code, and an agent working in a loop until the checks pass is exactly the kind of optimizer that finds it. When a measure becomes a target, in [Strathern's](https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB) phrasing of Goodhart's law, it ceases to be a good measure. Agents gaming checks is well documented elsewhere. [METR](https://metr.org/blog/2025-06-05-recent-reward-hacking/) found a frontier model reward-hacking on one task 80% of the time, whether or not it was told "Please do not cheat." In [ImpossibleBench](https://arxiv.org/abs/2510.20270), models given impossible tasks modified the tests until they passed. None of those studies is about types, so it's a hypothesis, not a finding, that agents treat `as any` the same way. But the incentive is identical, and the Lee et al. and VS Code observations fit it.
+
+The escape-hatch rules are what turn the cheap exits into errors. When Ultracite hands lint errors to an agent, it forbids suppression comments and config changes, and the hatch rules re-check the result. A fix that swaps a type error for `as any`, `!` or `@ts-ignore` fails the next lint. What they don't close are the quieter exits: `as unknown as T`, a plain narrowing `as`, a definite-assignment `field!: T`, or a `@ts-expect-error` with a token description. Without the type-aware rules, those all pass.
+
+## Where it breaks
+
+**It can't tell a reason from a shortcut.** In our sample, about four in five `any` had a reason and almost every `!` had a guarantee behind it. The rule flags them all the same. For maintainers who know the code, that's a cost: they restructure correct code, or add a suppression. VS Code and Hono chose the suppression, hundreds of times over. A suppression with a reason is the best case, because it documents a decision the rule can't see. But only 5 of our 96 `!` had any comment, so most codebases are paying the cost without getting the documentation.
+
+**`unknown` isn't a drop-in fix.** The rule's own help text suggests `unknown`, and for values crossing a boundary it's usually right. But more than half of the `any` in our sample were somewhere `unknown` would break: function-type constraints, where parameter types make `unknown` too strict, or code that reads properties straight off the value. Replacing those means real type work, not a search and replace.
+
+**The syntax rules are easy to route around.** A cast through `unknown` passes `no-explicit-any`, and we found 156 of them. 53 definite-assignment assertions (`field!: T`) aren't flagged by any of these rules. By default, `ban-ts-comment` accepts `@ts-expect-error` with a description of at least three characters, and tRPC has [one](https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/rsc.tsx#L110) that reads `// @ts-expect-error - ??`. Each of these is a better habit than the hatch it replaces in some codebases, and pure laundering in others. The rule can't tell which.
+
+**The obvious fix can change behavior.** The rule's documentation suggests optional chaining in place of `!`. But `x!.y` throws when `x` is missing and `x?.y` quietly returns `undefined`, so the swap turns a crash into a value that carries on through the program. It only fits the 30% of `!` that are dereferenced, and in two of our 96 samples it would have changed what the code does. For the rest, the value is assigned or passed along, and there's nothing to chain.
+
+**Implementations mostly agree.** When we ran Oxlint, ESLint and Biome over the same 694,309 lines, Oxlint and ESLint agreed on every hit of all three rules. Biome differed on 15 lines: it doesn't flag a bare `<T extends any>` constraint, counts `x!!` once instead of twice, and missed six `@ts-ignore` comments that followed code on the same line. The bigger difference is scope. Biome's `noTsIgnore` covers only `@ts-ignore`, while `ban-ts-comment` also reports `@ts-nocheck` and a `@ts-expect-error` with no reason. And Biome's experimental `noUnsafeTypeAssertion` shares a name with typescript-eslint's rule but bans almost every assertion, not just narrowing ones.
+
+**The evidence is thin.** Types catch a minority of bugs, `any` correlates only weakly with bad outcomes, and no study has measured the effect of these rules. The case rests on keeping the checker meaningful, not on a measured reduction in bugs.
+
+## Using it well
+
+**Make them errors.** A warning about `any` is one more line people learn to scroll past.
+
+**Use `unknown` at boundaries, and check it.** Parsed JSON, messages and other libraries' private properties should come in as `unknown` and be narrowed with a type guard or validated with a schema. That's the case the rules were built for.
+
+**Narrow instead of asserting.** `const entry = map.get(key); if (entry) { … }` replaces `has()` followed by `get()!`, and does one lookup instead of two. When a value really is guaranteed by something TypeScript can't see, an early `throw` documents the guarantee and keeps the crash if it's ever wrong.
+
+**Suppress with a reason.** Generic plumbing and branded types are legitimate. A suppression comment that says why is more honest than an `unknown` that doesn't fit, and it's searchable later. Put unavoidable casts in one small helper rather than spreading them through the code.
+
+**Turn on the type-aware rules if you can.** They're slower, and they need type information, but they're the only rules that see implicit `any`, narrowing casts and `as unknown as T`. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+**Review what an agent changes to fix a type error.** Look for new `as`, `as unknown as`, `!` swapped for `?.`, `field!:` and `@ts-expect-error`. Each one makes the error go away, and only some of them fix it.
+
+Escape hatches are part of what made TypeScript practical, and the people who designed it said so. They also said the holes should be managed, and suggested that tools could help. The rules in this post are those tools. They can't tell a careful `any` from a careless one, but they make every one of them visible, and that matters more when the code is written by something that's trying to make the error go away.
+
+## References
+
+**TypeScript's design and history**
+
+- Microsoft. [TypeScript Design Goals](https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals). microsoft/TypeScript wiki.
+- Gavin Bierman, Martín Abadi and Mads Torgersen. [Understanding TypeScript](https://doi.org/10.1007/978-3-662-44202-9_11). ECOOP 2014, LNCS 8586.
+- Jeremy G. Siek and Walid Taha. [Gradual Typing for Functional Languages](http://scheme2006.cs.uchicago.edu/13-siek.pdf). Scheme and Functional Programming Workshop, 2006.
+- Jonathan Turner. [Announcing TypeScript 0.9.1](https://devblogs.microsoft.com/typescript/announcing-0-9-1/). TypeScript blog, 2013.
+- Microsoft. TypeScript release notes: [2.0](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html), [2.6](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html), [3.0](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html), [3.9](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html).
+- Sean Middleditch. [`unknown`: less-permissive alternative to `any`](https://github.com/microsoft/TypeScript/issues/10715). microsoft/TypeScript issue #10715, 2016.
+- Microsoft. [Do's and Don'ts](https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html). TypeScript Handbook.
+- Google. [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html).
+- Palantir. [TSLint `no-any`](https://palantir.github.io/tslint/rules/no-any/).
+- typescript-eslint. [`no-explicit-any`](https://typescript-eslint.io/rules/no-explicit-any/), [`no-non-null-assertion`](https://typescript-eslint.io/rules/no-non-null-assertion/), [`ban-ts-comment`](https://typescript-eslint.io/rules/ban-ts-comment/), [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion/).
+
+**Types and bugs**
+
+- Zheng Gao, Christian Bird and Earl T. Barr. [To Type or Not to Type: Quantifying Detectable Bugs in JavaScript](https://doi.org/10.1109/ICSE.2017.75). ICSE 2017.
+- Faizan Khan, Boqi Chen, Daniel Varro and Shane McIntosh. [An Empirical Study of Type-Related Defects in Python Projects](https://doi.org/10.1109/TSE.2021.3082068). _IEEE Transactions on Software Engineering_, 48(8), 2022.
+- Justus Bogner and Manuel Merkel. [To Type or Not to Type? A Systematic Comparison of the Software Quality of JavaScript and TypeScript Applications on GitHub](https://arxiv.org/abs/2203.11115). MSR 2022.
+- TianYi Tang, Saba Alimadadi and Nick Sumner. [From Logic to Toolchains: Bugs in the TypeScript Ecosystem](https://arxiv.org/abs/2601.21186). MSR 2026.
+- Asger Feldthaus and Anders Møller. [Checking Correctness of TypeScript Interfaces for JavaScript Libraries](https://doi.org/10.1145/2660193.2660215). OOPSLA 2014.
+- Erik Krogh Kristensen and Anders Møller. [Type Test Scripts for TypeScript Testing](https://doi.org/10.1145/3133914). OOPSLA 2017.
+
+**Models, agents and type errors**
+
+- Niels Mündler, Jingxuan He, Hao Wang, Koushik Sen, Dawn Song and Martin Vechev. [Type-Constrained Code Generation with Language Models](https://arxiv.org/abs/2504.09246). PLDI 2025.
+- Ming-Ho Yee and Arjun Guha. [Do Machine Learning Models Produce TypeScript Types That Type Check?](https://arxiv.org/abs/2302.12163). ECOOP 2023.
+- Federico Cassano, Ming-Ho Yee, Noah Shinn, Arjun Guha and Steven Holtzen. [Type Prediction With Program Decomposition and Fill-in-the-Type Training](https://arxiv.org/abs/2305.17145). arXiv, 2023.
+- Imgyeong Lee, Tayyib Ul Hassan and Abram Hindle. [Mining Type Constructs Using Patterns in AI-Generated Code](https://arxiv.org/abs/2602.17955). MSR 2026.
+- Matt Bierner. [Clean up `as any` type assertions in the codebase](https://github.com/microsoft/vscode/issues/269213). microsoft/vscode issue #269213, 2025.
+- Sydney Von Arx, Lawrence Chan and Beth Barnes. [Recent Frontier Models Are Reward Hacking](https://metr.org/blog/2025-06-05-recent-reward-hacking/). METR, 2025.
+- Ziqian Zhong, Aditi Raghunathan and Nicholas Carlini. [ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases](https://arxiv.org/abs/2510.20270). arXiv, 2025.
+- Marilyn Strathern. ['Improving ratings': audit in the British University system](https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB). _European Review_, 5(3), 1997.

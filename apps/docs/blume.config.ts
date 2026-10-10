@@ -221,6 +221,8 @@ export default defineConfig({
       titles: {
         "/research/cognitive-complexity":
           "Cognitive complexity: the rule that measures the reader",
+        "/research/type-escape-hatches":
+          "Type escape hatches: when the compiler becomes the target",
       },
     },
     // JSON-LD: the organization behind the site, and Ultracite as a

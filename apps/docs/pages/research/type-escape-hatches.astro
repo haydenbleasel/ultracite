@@ -1,0 +1,9 @@
+---
+import { components } from "../../components/blog/post-components";
+import PostLayout from "../../components/blog/post-layout.astro";
+import * as post from "../../blog/type-escape-hatches.mdx";
+---
+
+<PostLayout file={post.file} headings={post.getHeadings()}>
+  <post.Content components={components} />
+</PostLayout>
