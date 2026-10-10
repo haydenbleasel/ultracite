@@ -1,0 +1,525 @@
+---
+// One editor's landing page. What `ultracite init --editors <id>` writes and
+// installs comes from the CLI's own tables, so it can't drift from the CLI;
+// who makes the editor comes from lib/editor-directory.ts; everything else is
+// the page's researched content (lib/editor-pages/<id>.ts).
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
+import { agents as cliAgents } from "../../../../packages/cli/src/data/agents";
+import { editors as cliEditors } from "../../../../packages/cli/src/data/editors";
+import { agentDirectory } from "../../lib/agent-directory";
+import type { AgentEntry } from "../../lib/agent-directory";
+import { editorDirectory } from "../../lib/editor-directory";
+import type { EditorEntry } from "../../lib/editor-directory";
+import type { EditorPageContent } from "../../lib/editor-pages/types";
+import { vscodeToolchains, zedToolchains } from "../../lib/editor-settings";
+import Cta from "../home/cta.astro";
+import Icon from "../home/icon.astro";
+import SectionHeading from "../home/section-heading.astro";
+import AnnotatedCode from "../landing/annotated-code.astro";
+import Faq from "../landing/faq.astro";
+import LandingHero from "../landing/landing-hero.astro";
+import LandingLayout from "../landing/landing-layout.astro";
+import type { Crumb } from "../landing/landing-layout.astro";
+import NextSteps from "../landing/next-steps.astro";
+import type { NextStep } from "../landing/next-steps.astro";
+import RichText from "../landing/rich-text.astro";
+
+interface Props {
+  content: EditorPageContent;
+  id: string;
+}
+
+const { content, id } = Astro.props;
+
+const editor = cliEditors.find((candidate) => candidate.id === id);
+if (!editor) {
+  throw new Error(`No editor "${id}" in the CLI's table`);
+}
+
+const directory = new Map<string, EditorEntry>(Object.entries(editorDirectory));
+const details = directory.get(id);
+const name = details?.name ?? editor.name;
+const logo = `/logos/${details?.logo ?? id}.svg`;
+const command = `npx ultracite@latest init --editors ${id}`;
+const settingsPath = editor.config.path;
+const isZed = editor.config.extensionClis === undefined;
+const slug = (text: string): string =>
+  text.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-").replaceAll(/^-|-$/gu, "");
+
+const breadcrumbs: Crumb[] = [
+  { href: "/editors", name: "Editors" },
+  { href: `/editors/${id}`, name },
+];
+
+// The settings file for a new project on the default toolchain, with a note
+// beside the lines that decide how files get formatted and fixed.
+const settings = JSON.stringify(editor.config.getContent("oxlint"), null, 2);
+const lineNotes: [string, string][] = [
+  ['"editor.formatOnSave"', "Format on save"],
+  ['"format_on_save"', "Format on save"],
+  ['"js/ts.tsdk.path"', "The project’s TypeScript"],
+  ['"[typescript]"', "Oxfmt formats it"],
+  ['"name": "oxfmt"', "Oxfmt formats it"],
+  ['"source.fixAll.oxc"', "Oxlint’s safe fixes"],
+];
+const settingsNotes = new Map<number, string>();
+const notedNeedles = new Set<string>();
+for (const [index, line] of settings.split("\n").entries()) {
+  const match = lineNotes.find(
+    ([needle]) => line.includes(needle) && !notedNeedles.has(needle)
+  );
+  if (match) {
+    notedNeedles.add(match[0]);
+    settingsNotes.set(index, match[1]);
+  }
+}
+
+// How each toolchain runs here, read from what `init` writes.
+const toolchainRows = isZed ? zedToolchains() : vscodeToolchains();
+
+const [defaultToolchain] = toolchainRows;
+const defaultExtensions = defaultToolchain?.extensions ?? [];
+const launchers = editor.config.extensionClis ?? [];
+
+// What `init --editors <id>` does here, in order.
+const initSteps: { note: string; title: string }[] = [
+  {
+    note: "A new file, or merged into yours setting by setting, with your comments and other settings kept.",
+    title: `Writes \`${settingsPath}\``,
+  },
+];
+if (isZed) {
+  initSteps.push({
+    note: "Zed extensions install from its own extensions view, so `init` installs nothing here. ESLint and Prettier are built into Zed.",
+    title: "Leaves the Oxc or Biome extension to you",
+  });
+} else if (launchers.length > 0) {
+  initSteps.push({
+    note: `With \`${launchers[0]} --install-extension\`${launchers.length > 1 ? `, or \`${launchers.slice(1).join("`, `")}\` on older installs` : ""}, when it creates the settings file.`,
+    title: `Installs \`${defaultExtensions.join("` and `")}\``,
+  });
+} else {
+  initSteps.push({
+    note: `${name} has no command-line installer \`init\` can use, so it asks you to install the extension yourself.`,
+    title: `Asks you to install \`${defaultExtensions.join("` and `")}\``,
+  });
+}
+// The agent page that covers this editor's built-in agent, if any.
+const agentDetails = new Map<string, AgentEntry>(Object.entries(agentDirectory));
+const agentId = details?.agent;
+const agentEntry = agentId ? agentDetails.get(agentId) : undefined;
+const agentPages = import.meta.glob("../../pages/agents/*.astro");
+const agentPage =
+  agentId && `../../pages/agents/${agentId}.astro` in agentPages
+    ? `/agents/${agentId}`
+    : undefined;
+
+// The post-edit hook: the editor's own, or, for an editor without one, the
+// hook its built-in agent gets from `init --hooks <agent>` (Copilot in VS
+// Code).
+const hookCommand = "npx ultracite fix --hook";
+const linkedAgent = agentId
+  ? cliAgents.find((candidate) => candidate.id === agentId)
+  : undefined;
+const findHookSource = () => {
+  if (editor.hooks) {
+    return { hooks: editor.hooks, id };
+  }
+  return linkedAgent?.hooks
+    ? { hooks: linkedAgent.hooks, id: linkedAgent.id }
+    : undefined;
+};
+const hookSource = findHookSource();
+const hookFile = hookSource
+  ? {
+      code: JSON.stringify(hookSource.hooks.getContent(hookCommand), null, 2),
+      hooksId: hookSource.id,
+      path: hookSource.hooks.path,
+    }
+  : null;
+if (hookFile) {
+  initSteps.push({
+    note: content.hookNote ?? `Runs \`${hookCommand}\` on each file ${name}’s agent edits.`,
+    title: `With \`--hooks ${hookFile.hooksId}\`, writes \`${hookFile.path}\``,
+  });
+}
+
+const relatedSteps: NextStep[] = content.related.slice(0, 3).flatMap((relatedId) => {
+  const relatedEditor = cliEditors.find((candidate) => candidate.id === relatedId);
+  const relatedDetails = directory.get(relatedId);
+  return relatedEditor
+    ? [
+        {
+          description: relatedDetails?.tagline ?? "",
+          href: `/editors/${relatedId}`,
+          label: "Editor",
+          title: relatedDetails?.name ?? relatedEditor.name,
+        },
+      ]
+    : [];
+});
+const nextSteps: NextStep[] = [
+  ...(agentPage && agentEntry
+    ? [
+        {
+          description: agentEntry.tagline,
+          href: agentPage,
+          label: "Agent",
+          title: agentEntry.name,
+        },
+      ]
+    : []),
+  ...relatedSteps,
+].slice(0, 3);
+nextSteps.push({
+  description: "Every editor `init` configures, and the extension each toolchain needs.",
+  href: "/docs/setup#editor-extensions",
+  label: "Docs",
+  title: "Editor setup",
+});
+
+const checkedAgainst = content.checked.version
+  ? `${name} ${content.checked.version}`
+  : new Date(content.checked.date).toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description={content.metaDescription}
+  faqs={content.faqs}
+  lastModified={content.checked.date}
+  title={content.metaTitle}
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={logo}
+    name={name}
+    title={content.headline}
+  >
+    <RichText text={content.intro} />
+    <Fragment slot="note">
+      {details?.maker && <span>{name} by {details.maker}</span>}
+      <span aria-hidden="true">·</span>
+      <span>Checked against {checkedAgainst}</span>
+    </Fragment>
+    <div class="grid gap-2 sm:gap-4 lg:h-[34rem] lg:grid-cols-12" slot="visual">
+      <AnnotatedCode
+        class="lp-code-fill h-[26rem] lg:col-span-7 lg:h-auto"
+        code={settings}
+        lang="jsonc"
+        meta="Oxlint + Oxfmt"
+        notes={settingsNotes}
+        title={settingsPath}
+      />
+      <div class="flex min-w-0 flex-col gap-2 sm:gap-4 lg:col-span-5">
+        <figure
+          class="m-0 flex min-w-0 flex-col overflow-hidden rounded-blume border border-border bg-code"
+        >
+          <figcaption
+            class="flex h-11 shrink-0 items-center gap-2.5 border-border border-b px-4 font-medium text-muted-foreground text-xs"
+          >
+            <Icon class="size-3.5" name="bash" />
+            What <code class="font-mono">init</code> does in {name}
+          </figcaption>
+          <ol class="flex flex-col divide-y divide-border" role="list">
+            {
+              initSteps.map((step, index) => (
+                <li class="flex gap-3 px-4 py-3.5">
+                  <span class="w-4 shrink-0 font-mono text-muted-foreground text-xs/6 tabular-nums">
+                    {index + 1}
+                  </span>
+                  <span class="flex min-w-0 flex-col gap-1">
+                    <span class="text-pretty text-[15px]/6">
+                      <RichText text={step.title} />
+                    </span>
+                    <span class="text-pretty text-muted-foreground text-sm/5">
+                      <RichText text={step.note} />
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </figure>
+        <figure
+          class="m-0 flex min-w-0 flex-1 flex-col overflow-hidden rounded-blume border border-border bg-code"
+        >
+          <figcaption
+            class="flex h-11 shrink-0 items-center gap-2.5 border-border border-b px-4 font-medium text-muted-foreground text-xs"
+          >
+            <Icon class="size-3.5" name="check" />
+            Then, in {name}
+          </figcaption>
+          <ol class="flex flex-col divide-y divide-border" role="list">
+            {
+              content.afterInit.map((step, index) => (
+                <li class="flex gap-3 px-4 py-3.5">
+                  <span class="w-4 shrink-0 font-mono text-accent text-xs/6 tabular-nums">
+                    {initSteps.length + index + 1}
+                  </span>
+                  <span class="text-pretty text-[15px]/6">
+                    <RichText text={step} />
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </figure>
+      </div>
+    </div>
+  </LandingHero>
+
+  <section aria-labelledby="ed-toolchains" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ed-toolchains" title={`Three toolchains, one ${settingsPath.split("/").at(-1)}`}>
+        <code class="font-mono text-base">init</code> writes the settings for
+        the toolchain you pick, so {name} formats with the same tool as{" "}
+        <code class="font-mono text-base">ultracite fix</code> and applies its
+        fixes when you save.
+      </SectionHeading>
+      <ul
+        class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-3"
+        role="list"
+      >
+        {
+          toolchainRows.map((row, index) => (
+            <li class="flex flex-col gap-6 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <p class="flex items-center justify-between gap-4">
+                <span class="flex items-center gap-3">
+                  <img
+                    alt=""
+                    class="size-8 shrink-0 rounded-md"
+                    height="32"
+                    loading="lazy"
+                    src={`/logos/${row.providerId}.svg`}
+                    width="32"
+                  />
+                  <a
+                    class="font-medium text-lg/6 tracking-[-0.01em] hover:underline"
+                    href={`/providers/${row.providerId}`}
+                  >
+                    {row.providerName}
+                  </a>
+                </span>
+                {index === 0 && (
+                  <span class="rounded-sm bg-signal px-1.5 font-mono text-[11px]/5 text-ink uppercase tracking-wider">
+                    Default
+                  </span>
+                )}
+              </p>
+              <dl class="flex flex-col divide-y divide-border border-border border-y">
+                <div class="grid gap-1 py-3">
+                  <dt class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+                    {isZed ? "Needs" : `${row.extensions.length > 1 ? "Extensions" : "Extension"}`}
+                  </dt>
+                  <dd class="flex flex-col font-mono text-[13px]/6">
+                    {row.extensions.map((extension) => <span class="truncate">{extension}</span>)}
+                  </dd>
+                </div>
+                <div class="grid gap-1 py-3">
+                  <dt class="font-mono text-accent text-xs/5 uppercase tracking-wider">Formats with</dt>
+                  <dd class="truncate font-mono text-[13px]/6">{row.formatter}</dd>
+                </div>
+                <div class="grid gap-1 py-3">
+                  <dt class="font-mono text-accent text-xs/5 uppercase tracking-wider">On save</dt>
+                  <dd class="flex flex-col font-mono text-[13px]/6">
+                    {row.onSave.map((action) => <span class="truncate">{action}</span>)}
+                  </dd>
+                </div>
+              </dl>
+              <p class="mt-auto font-mono text-muted-foreground text-xs/5">
+                --linter {row.providerId}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="ed-setup" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ed-setup" title={content.setup.title}>
+        <RichText text={content.setup.summary} />
+      </SectionHeading>
+      <dl
+        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {
+          content.setup.facts.map((fact) => (
+            <div class="flex flex-col gap-2 bg-background px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+              <dt class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+                {fact.label}
+              </dt>
+              <dd class="text-pretty text-[15px]/6 [&_code]:whitespace-normal [&_code]:[overflow-wrap:anywhere]">
+                <RichText text={fact.value} />
+              </dd>
+            </div>
+          ))
+        }
+        {
+          content.setup.facts.length % 3 !== 0 && (
+            <div
+              aria-hidden="true"
+              class="hatch bg-background max-lg:hidden"
+              style={{ gridColumn: `span ${3 - (content.setup.facts.length % 3)}` }}
+            />
+          )
+        }
+      </dl>
+    </div>
+  </section>
+
+  {
+    content.agent && (
+      <section aria-labelledby="ed-agent" class="border-border border-b">
+        <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+          <SectionHeading id="ed-agent" title={content.agent.title}>
+            <RichText text={content.agent.body} />
+          </SectionHeading>
+          <div class="border-border border-t bg-muted/60 p-2 sm:p-6 lg:p-10">
+            <div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
+              <div class="flex min-w-0 flex-col gap-2 sm:gap-4 lg:col-span-7">
+                <figure class="m-0 flex min-w-0 flex-col overflow-hidden rounded-blume border border-border bg-code">
+                  <figcaption class="flex h-11 shrink-0 items-center gap-2.5 border-border border-b px-4 font-medium text-muted-foreground text-xs">
+                    <Icon class="size-3.5" name="folder" />
+                    Where the agent looks for instructions
+                  </figcaption>
+                  <ol class="flex flex-col divide-y divide-border" role="list">
+                    {content.agent.lookup.map((step, index) => (
+                      <li class="flex gap-3 px-4 py-3">
+                        <span class="w-4 shrink-0 font-mono text-muted-foreground text-xs/6 tabular-nums">
+                          {index + 1}
+                        </span>
+                        <span class="flex min-w-0 flex-col gap-0.5">
+                          <span class="flex flex-wrap items-center gap-2">
+                            <code class="font-mono text-[13px]/6">{step.path}</code>
+                            {step.path.startsWith("AGENTS.md") && (
+                              <span class="rounded-sm bg-signal px-1.5 font-mono text-[11px]/5 text-ink uppercase tracking-wider">
+                                Ultracite
+                              </span>
+                            )}
+                          </span>
+                          <span class="text-pretty text-muted-foreground text-sm/5">
+                            <RichText text={step.note} />
+                          </span>
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </figure>
+                {hookFile && (
+                  <AnnotatedCode
+                    code={hookFile.code}
+                    lang="json"
+                    meta={`init --hooks ${hookFile.hooksId}`}
+                    title={hookFile.path}
+                  />
+                )}
+                {(content.agent.snippets ?? []).map((snippet) => (
+                  <AnnotatedCode code={snippet.code} lang={snippet.lang} title={snippet.title} />
+                ))}
+              </div>
+              <div class="flex min-w-0 flex-col gap-2 self-start sm:gap-4 lg:col-span-5">
+                <ol
+                  class="flex flex-col overflow-hidden rounded-blume border border-border bg-code"
+                  role="list"
+                >
+                  {content.agent.steps.map((step, index) => (
+                    <li class="flex gap-4 border-border px-5 py-4 [&+&]:border-t">
+                      <span class="font-mono text-accent text-xs/6 tabular-nums">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span class="text-pretty text-[15px]/6">
+                        <RichText text={step} />
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+                {agentPage && agentEntry && (
+                  <a
+                    class="group flex items-center justify-between gap-4 rounded-blume border border-border bg-background px-5 py-4 hover:bg-muted/50"
+                    href={agentPage}
+                  >
+                    <span class="flex flex-col">
+                      <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+                        Agent page
+                      </span>
+                      <span class="font-medium text-[15px]/6">
+                        Ultracite for {agentEntry.name}
+                      </span>
+                    </span>
+                    <Icon
+                      class="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+                      name="arrow-right"
+                    />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section aria-labelledby="ed-notes" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="ed-notes" title={`Worth knowing about ${name}`} />
+      <ul
+        class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-3"
+        role="list"
+      >
+        {
+          content.highlights.map((highlight) => (
+            <li class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
+                {highlight.title}
+              </h3>
+              <p class="max-w-[60ch] text-pretty text-base/7 text-muted-foreground">
+                <RichText text={highlight.body} />
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Faq id={`ed-faq-${slug(id)}`} items={content.faqs} title={`${name} questions, answered`} />
+
+  <section aria-labelledby="ed-sources" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <div class="flex flex-col gap-4 px-4 py-10 sm:px-6 lg:flex-row lg:gap-10 lg:px-10">
+        <h2 class="shrink-0 font-medium text-lg/7 lg:w-56" id="ed-sources">
+          Sources
+        </h2>
+        <ul class="flex flex-col gap-1.5 text-[15px]/6" role="list">
+          {
+            content.sources.map((source) => (
+              <li>
+                <a
+                  aria-describedby={NEW_TAB_HINT_ID}
+                  class="text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                  href={source.url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {source.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <NextSteps id="ed-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>

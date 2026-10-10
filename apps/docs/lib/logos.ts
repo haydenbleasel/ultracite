@@ -27,11 +27,11 @@ export const editorLogos = logoMap([
   "bob",
   "codebuddy",
   "cursor",
+  "devin",
   "kiro",
   "trae",
   "void",
   "vscode",
-  "windsurf",
   "zed",
 ]);
 

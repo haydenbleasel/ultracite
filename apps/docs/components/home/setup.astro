@@ -139,34 +139,39 @@ const editorTiles = editors.map((editor) => ({
         </div>
         <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
           <p class="font-medium text-base/7">
-            Format on save in {editors.length} editors
+            <a class="hover:underline" href="/editors">
+              Format on save in {editors.length} editors
+            </a>
           </p>
           <ul class="grid w-fit grid-cols-5 gap-2" role="list">
             {
-              editorTiles.map((editor) =>
-                editor.logo ? (
-                  <li>
-                    <img
-                      alt={editor.name}
-                      class="size-8 rounded-md"
-                      height="32"
-                      src={editor.logo}
-                      title={editor.name}
-                      width="32"
-                    />
-                  </li>
-                ) : (
-                  <li>
-                    <span
-                      aria-label={editor.name}
-                      class="flex size-8 items-center justify-center rounded-md border border-border bg-muted font-medium text-muted-foreground text-xs"
-                      role="img"
-                    >
-                      {editor.name.charAt(0)}
-                    </span>
-                  </li>
-                )
-              )
+              editorTiles.map((editor) => (
+                <li>
+                  <a
+                    class="block rounded-md transition-opacity hover:opacity-80"
+                    href={`/editors/${editor.id}`}
+                    title={editor.name}
+                  >
+                    {editor.logo ? (
+                      <img
+                        alt={editor.name}
+                        class="size-8 rounded-md"
+                        height="32"
+                        src={editor.logo}
+                        width="32"
+                      />
+                    ) : (
+                      <span
+                        aria-label={editor.name}
+                        class="flex size-8 items-center justify-center rounded-md border border-border bg-muted font-medium text-muted-foreground text-xs"
+                        role="img"
+                      >
+                        {editor.name.charAt(0)}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))
             }
           </ul>
         </div>

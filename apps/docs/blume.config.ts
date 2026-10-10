@@ -136,6 +136,10 @@ export default defineConfig({
         path: "/agents",
       },
       {
+        label: "Editors",
+        path: "/editors",
+      },
+      {
         label: "Research",
         path: "/research",
       },
@@ -201,6 +205,8 @@ export default defineConfig({
     // Agents renamed in v8; their pages follow the new init ids.
     { from: "/agents/kimi-cli", to: "/agents/kimi-code" },
     { from: "/agents/snowflake-cortex", to: "/agents/snowflake-coco" },
+    // Windsurf became Devin Desktop; the old editor page used its old id.
+    { from: "/editors/windsurf", to: "/editors/devin" },
     // Retired MCP server pages
     { from: "/mcp", to: "/" },
     { from: "/mcp-server", to: "/" },
