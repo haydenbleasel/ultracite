@@ -3,8 +3,6 @@ import { openai } from "blume/ai";
 import { cloudflare } from "blume/deploy";
 import { filesystem, githubReleases } from "blume/sources";
 
-import { ultraciteDark, ultraciteLight } from "./lib/code-theme";
-
 export default defineConfig({
   agents: {
     // Representative queries for the ultracite skill's entry in the AI
@@ -118,9 +116,9 @@ export default defineConfig({
     text: "Ultracite",
   },
 
-  // Syntax highlighting in the brand palette (lib/code-theme.ts).
+  // Syntax highlighting: Shiki's Vitesse pair.
   markdown: {
-    code: { theme: { dark: ultraciteDark, light: ultraciteLight } },
+    code: { theme: { dark: "vitesse-dark", light: "vitesse-light" } },
   },
 
   navigation: {
