@@ -13,3 +13,4 @@ When writing a post, cite from these files instead of re-verifying, and add to t
 | File | Topic |
 | --- | --- |
 | [`cognitive-complexity.md`](./cognitive-complexity.md) | Cyclomatic and cognitive complexity: history, the white paper's scoring rules, tool defaults, understandability research, working memory, complexity of AI-written code, and agents gaming metrics. |
+| [`type-escape-hatches.md`](./type-escape-hatches.md) | `any`, `!`, `as` and `@ts-*` comments: TypeScript's deliberate unsoundness and gradual typing, release history, the lint rules and their history, migrations, whether types prevent bugs, LLMs and type errors, and agents adding `any`. |

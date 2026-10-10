@@ -14,6 +14,7 @@ Each harness keeps one post's output under `results/<topic>/`. The first topic i
 
 - Clone measured repos shallowly (`git clone --depth 1`, sparse where possible) into the gitignored `corpus/repos/`.
 - Never install, build or run anything from a cloned repo. Only parse its files with this repo's own tooling.
+- Bun's test runner doesn't skip gitignored folders, so a bare `bun test` from the repo root also finds the clones' own test files (and those in `out/` mirrors) and fails by the thousand. Use `bun run test`, which Turbo scopes to `packages/cli`, or move `corpus/repos/` and `corpus/out/` aside first.
 - Never commit an agent's session log, stdout or stderr. They carry account details, so they're gitignored, and everything else `run-one.mjs` copies back is redacted (paths, home directory, session ids).
 - Agents run in a temp directory outside the repo, so they can't load this repo's `CLAUDE.md` or `AGENTS.md`, or find this harness, from a parent directory.
 
@@ -39,7 +40,51 @@ node research/corpus/scripts/score.mjs path/to/example.ts
 
 Committed: `scripts/`, `calibration/` (hand-written edge cases), `examples/` (real functions copied with their licenses) and `results/<topic>/`. Regenerated and gitignored: `repos/`, `biome-input/` (Biome's config-free mirror of the sources) and `out/` (per-function rows).
 
-The analysis is specific to complexity rules. Measuring a different rule across the same corpus means adding it to the ESLint run in `scripts/analyze.cjs` and its aggregation in `scripts/aggregate.cjs`. Making the rule a parameter is the obvious next step.
+`analyze.cjs` and `aggregate.cjs` are specific to complexity rules. For any other rule, start with the rule census.
+
+### Rule census (any rule, every post)
+
+`scripts/rule-census.cjs` runs Ultracite's own Oxlint presets, unchanged, over the corpus and counts diagnostics per rule and per repo, with hits per 10,000 lines. It covers every rule the presets enable, so one run answers "how often does rule X fire in real code?" for any post.
+
+```sh
+node research/corpus/scripts/rule-census.cjs --topic <slug> \
+  [--presets core,react]          # presets under packages/cli/config/oxlint (default core,react)
+  [--focus rule,rule]             # rules to tabulate first and keep per-hit rows for
+  [--repos zod,hono]              # a subset of scripts/repos.json
+  [--modes reported,raw]          # default both
+# ~10 s for both modes over all 9 repos
+```
+
+- **Two modes.** `reported` lints the files as they are, so in-file `eslint-disable` / `oxlint-disable` comments are honoured: what `ultracite check` would print. `raw` lints a mirror (`out/rule-census/<slug>/mirror/`) with every disable directive rewritten to the same length, so it counts every occurrence, including the ones maintainers already suppressed. The difference between the two is a measure of how much a repo already enforces a rule.
+- **Same files as every other measurement.** Files come from `collect-files.cjs`, passed to Oxlint as explicit lists with `--disable-nested-config`, so no config from a clone is read. Line counts match `results/cognitive-complexity/results.json`.
+- **Type-aware rules never run** here (no `--type-aware`, and the clones have no `node_modules`), so they always count 0. `rule-census.json` marks them.
+- **Outputs:** `results/<slug>/rule-census.json` (every enabled rule, per repo and pooled), `results/<slug>/rule-census.md` (focus rules, top 40, rules with no hits), and `out/rule-census/<slug>/<repo>.<mode>.json` (every hit of the focus rules, gitignored) for downstream sampling.
+- **Pooled numbers exclude Ultracite's own CLI**, which is listed separately.
+- **Checks.** The run fails if Oxlint lints a different number of files than it was given, or if a diagnostic maps to a rule the presets don't enable (that's how a scope alias such as `react-hooks` → `react` was found).
+
+### Type escape hatches (second post)
+
+The escape-hatch scripts build on the rule census:
+
+| Script | What it does |
+| --- | --- |
+| `escape-hatch-census.cjs` | Parses every file (syntax only) and counts `any`, `unknown`, `!`, definite assignments, every kind of type assertion, `satisfies`, `@ts-*` comments and suppression comments, each classified by where it sits. Its `any` and `!` counts match the rule census's raw counts exactly. |
+| `escape-hatch-linters.cjs` | Runs the same rules in Oxlint, ESLint (typescript-eslint, with type information for the calibration cases) and Biome, on `calibration/escape-hatches/` and on the raw mirror, and records every line where Biome disagrees. |
+| `typed-census.cjs` | For repos that type-check without installing anything (zod, hono), runs typescript-eslint's type-aware rules and joins `no-unsafe-type-assertion` and `no-unnecessary-type-assertion` to each assertion site. It records the TypeScript diagnostics first, so unresolved types can't silently become `any`. |
+| `sample-escape-hatches.cjs` | Draws a seeded sample of `any` and `!` sites, 12 per repo, and writes a classification worksheet with code context and permalinks. |
+| `escape-hatch-tables.cjs` | Generates `results/type-escape-hatches/tables.md` from all of the above plus the hand classifications. |
+
+```sh
+T=type-escape-hatches
+node research/corpus/scripts/rule-census.cjs --topic $T --focus typescript/no-explicit-any,typescript/no-non-null-assertion,typescript/ban-ts-comment
+node research/corpus/scripts/escape-hatch-census.cjs --topic $T
+node --max-old-space-size=8192 research/corpus/scripts/escape-hatch-linters.cjs --topic $T --calibration --corpus
+node --max-old-space-size=8192 research/corpus/scripts/typed-census.cjs --topic $T --repos zod,hono
+node research/corpus/scripts/sample-escape-hatches.cjs --topic $T
+node research/corpus/scripts/escape-hatch-tables.cjs --topic $T
+```
+
+The method, findings and caveats are in `corpus/results/type-escape-hatches/REPORT.md`.
 
 ## Agent experiment
 

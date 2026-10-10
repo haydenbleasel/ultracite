@@ -1,0 +1,1559 @@
+{
+  "codebook": {
+    "any": {
+      "generic-plumbing": "Type-level machinery where `any` means 'any type fits' and `unknown` would break assignability or inference: constraints and defaults like `T extends (...args: any[]) => any`, `ZodType<any>`, `infer` positions, wrappers forwarding arbitrary signatures, heterogeneous containers of generic types.",
+      "untyped-boundary": "The value comes from or goes to something whose type isn't modeled: parsed JSON or input, untyped or mistyped libraries, runtime globals, dynamic require/import, plugin or user-supplied objects, another library's private properties, serialization boundaries.",
+      "type-system-workaround": "The types are known but TypeScript can't express or verify the relationship: overload implementations, generic code it can't narrow, readonly or differently-typed assignments, branded types cast to their representation, objects built up field by field.",
+      "error-handling": "A caught error or rejection reason typed `any` so its properties can be read.",
+      "convenience": "No evident reason in context; a precise type or `unknown` with a check looks straightforward. Includes brevity, stubs, leftovers, redundant casts, and extra properties attached to the author's own objects.",
+      "fields": {
+        "acknowledged": "a nearby comment or suppression explains or acknowledges the `any`",
+        "unknownWouldDo": "yes / no / unclear: would `unknown` type-check with no other change"
+      }
+    },
+    "nonNull": {
+      "checked-nearby": "A check in the same function guarantees it, but narrowing can't see it: has() then get(), length check then index, a check on another variable, narrowing lost in a closure.",
+      "lifecycle": "Set by an initialization or lifecycle step before this code runs: fields set in init(), servers created earlier, refs after mount.",
+      "invariant": "Guaranteed by a data-structure or algorithm invariant not checked locally: tree structure, keys from the same map, find() over a list known to contain the item, regex groups.",
+      "external-contract": "Guaranteed by something outside the code: the page's DOM, the framework or platform, an API contract validated elsewhere.",
+      "unguarded": "No visible justification; plausibly null or undefined at runtime.",
+      "fields": {
+        "acknowledged": "a comment at the site explains or acknowledges the assertion (file-level disables not counted)",
+        "optionalChainSafe": "whether swapping `x!` for `?.` would preserve behavior"
+      }
+    }
+  },
+  "method": "First pass: one Claude subagent per kind, given only the codebook and the worksheet (code context and the repo file, read-only). Second pass: the lead agent re-labelled a seeded subset of 20 per kind blind (classification-agreement.cjs --print shows code only), then agreement was computed with --compute. Both raters are Claude models; this measures consistency of the codebook, not human judgment.",
+  "labels": [
+    {
+      "id": "a001",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Redundant: Processor already types ctx as ToJSONSchemaContext, exactly processSchema's parameter; the same cast repeats at ten call sites."
+    },
+    {
+      "id": "a002",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Base $ZodType prototype getter must fit every schema's Standard Schema props; Props<any, any> means any input/output. Runner-up: type-system-workaround."
+    },
+    {
+      "id": "a003",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "v3-compat branch reinterprets the arguments (keyType becomes valueType), so the built ZodRecord can't match the declared ZodRecord<Key, Value>."
+    },
+    {
+      "id": "a004",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Constraint ZodType<any, any, any> accepts every schema; unknown fails the Def extends ZodTypeDef parameter constraint."
+    },
+    {
+      "id": "a005",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Conditional-type match on any discriminated union; the Disc slot is constrained to string, so unknown would fail."
+    },
+    {
+      "id": "a006",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Tags an extra property on a function; zod's core compile.ts types the same write as (wrapped as { __originalRun?: typeof originalRun })."
+    },
+    {
+      "id": "a007",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Any-function and any-constructor patterns in a BuiltIn type for conditional matching; unknown[] parameters would reject typed functions."
+    },
+    {
+      "id": "a008",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "fieldErrors is typed with default U = string but mapper returns generic U; the cast lets push accept U."
+    },
+    {
+      "id": "a009",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Union of every first-party schema type instantiated with any; the Value slot is constrained to ZodTypeAny, so unknown fails."
+    },
+    {
+      "id": "a010",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Seed value for the recursive conditional ZodFormattedError<T>, built up field by field; TS can't check {_errors: []} against generic T."
+    },
+    {
+      "id": "a011",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Unneeded: result is ZodStandardJSONSchemaPayload<T>, which declares ~standard, so the destructuring type-checks without the cast."
+    },
+    {
+      "id": "a012",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Heterogeneous list of parse results for arbitrary fields, matching mergeObjectSync's ParseReturnType<any>; pairs is later passed as any anyway."
+    },
+    {
+      "id": "a025",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Default for the response type parameter in hono's handler alias; an unknown default would not satisfy the HandlerResponse constraint."
+    },
+    {
+      "id": "a026",
+      "category": "generic-plumbing",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Conditional type matching any TypedResponse; the status slot is constrained to StatusCode, so unknown fails."
+    },
+    {
+      "id": "a027",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "HandlerResponse<any> constraint on a factory overload's type parameter; HandlerResponse<unknown> is an equivalent supertype here."
+    },
+    {
+      "id": "a028",
+      "category": "convenience",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Redundant: jsx() already returns JSXNode, createElement's declared return type; the suppression comment covers an unnecessary cast."
+    },
+    {
+      "id": "a029",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Default response type on an app.get overload; an unknown default would fail the HandlerResponse constraint."
+    },
+    {
+      "id": "a030",
+      "category": "untyped-boundary",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Reads navigator off globalThis to detect Cloudflare Workers; presence of that global varies by runtime and isn't modeled."
+    },
+    {
+      "id": "a031",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "infer-based extraction from any handler; unknown in the c/next parameter positions would make typed handlers fail to match."
+    },
+    {
+      "id": "a032",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Endpoint is the structural constraint every route schema entry satisfies; any lets arbitrary input/output types fit and flow through."
+    },
+    {
+      "id": "a033",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Same factory overload constraint HandlerResponse<any>; HandlerResponse<unknown> would accept the same types."
+    },
+    {
+      "id": "a034",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Default Env for a hook usable from any app; hono uses any for an unspecified Env, and unknown fails the Env constraint."
+    },
+    {
+      "id": "a035",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Redundant cast: paramKey is already typed any, and indexing the string[] param stash needs no assertion."
+    },
+    {
+      "id": "a036",
+      "category": "convenience",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Reads back an addedStyles Set the code stashed on a CSSStyleSheet; an intersection type would do. Runner-up: type-system-workaround."
+    },
+    {
+      "id": "a049",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Tuple accumulator constraint in recursive QueriesOptions; idiomatic any[], though unknown[] would likely work here."
+    },
+    {
+      "id": "a050",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Any* union of infinite-query option types instantiated with any so every procedure's options fit."
+    },
+    {
+      "id": "a051",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "AnyFn predicate type meaning any callable; any[] parameters let functions with typed parameters fit."
+    },
+    {
+      "id": "a052",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Resolver def shape used as a constraint for procedure types; any lets each procedure's input type fit and flow through."
+    },
+    {
+      "id": "a053",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Conditional check for any legacy observable subscription; TDef is constrained to BuiltProcedureDef, so unknown fails."
+    },
+    {
+      "id": "a054",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Accepts any router; Router's record parameter is constrained to RouterRecord, so unknown would fail."
+    },
+    {
+      "id": "a055",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "User-supplied data transformer (e.g. superjson) at the wire serialization boundary; the serialized shape is the transformer's business."
+    },
+    {
+      "id": "a056",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Resolver def constraint shape; errorShape varies with each router's error formatter, so any lets every shape fit."
+    },
+    {
+      "id": "a057",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Constraint accepting any decorated procedure; TDef is constrained to ResolverDef, so unknown fails."
+    },
+    {
+      "id": "a058",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Duck type for Node streams; listener args vary by event, mirroring EventEmitter's signature. Runner-up: generic-plumbing."
+    },
+    {
+      "id": "a059",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Recursive proxy erases per-procedure types, so args[1] is cast to options with any type arguments. Runner-up: generic-plumbing."
+    },
+    {
+      "id": "a060",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Same erased-proxy pattern for prefetchInfinite: procedure input/output types aren't available inside the proxy implementation."
+    },
+    {
+      "id": "a073",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "HotChannel types off's listener as Function but the store holds WebSocketCustomListener<any>; any bridges the mismatch."
+    },
+    {
+      "id": "a074",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Plugin-supplied module metadata mirroring Rollup's meta shape; contents are defined by arbitrary plugins."
+    },
+    {
+      "id": "a075",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Exhaustiveness default: dep is never after satisfies, so reading .type for the error message needs an assertion."
+    },
+    {
+      "id": "a076",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Dynamic import() of an external module whose namespace is unmodeled; Promise<unknown> would still satisfy the evaluator interface."
+    },
+    {
+      "id": "a077",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "WeakMap keyed by listeners for arbitrary custom events; an unknown data parameter would reject typed listeners. Runner-up: untyped-boundary."
+    },
+    {
+      "id": "a078",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Forwards connect's (req, res, next) into a sirv handler; any bridges the two libraries' mismatched middleware types."
+    },
+    {
+      "id": "a079",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Helper stringified into client code; glob holds import.meta.glob loaders or modules, and typeof checks would work on unknown."
+    },
+    {
+      "id": "a080",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Dynamic import result handed to transformed SSR module code; the module namespace is unmodeled."
+    },
+    {
+      "id": "a081",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Double cast to fit noop into an overloaded intersection type; as unknown as would do the same job."
+    },
+    {
+      "id": "a082",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "User define config values of arbitrary type; values only reach typeof checks and JSON.stringify."
+    },
+    {
+      "id": "a083",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Backs import.meta.hot.data, arbitrary user data kept across HMR updates; values are only stored and passed through."
+    },
+    {
+      "id": "a084",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Receives an arbitrary module namespace object for export * re-exports from generated SSR code."
+    },
+    {
+      "id": "a097",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Raw content collections as held by the deserialized data store. Runner-up: convenience, since sibling methods use DataEntry."
+    },
+    {
+      "id": "a098",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "resolve/reject are assigned inside the executor callback, which flow analysis can't see; any avoids definite-assignment errors."
+    },
+    {
+      "id": "a099",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Key position of Record<any, any>; keys are property names, so string or PropertyKey would do. Runner-up: untyped-boundary (user props)."
+    },
+    {
+      "id": "a100",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Async-iterable children from user templates can yield any renderable value; each goes straight to renderChild(child: any)."
+    },
+    {
+      "id": "a101",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Default for a Record<string, any> config constraint; any lets interface-typed provider configs fit without index signatures."
+    },
+    {
+      "id": "a102",
+      "category": "type-system-workaround",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Recurses with a finalized nested union issue where errorMap expects a raw issue; author asserts compatibility. Runner-up: untyped-boundary."
+    },
+    {
+      "id": "a103",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Constraint accepting any ActionClient; the accept slot is constrained, so unknown would fail."
+    },
+    {
+      "id": "a104",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Reads a hidden Symbol.for property on a Response that no other code in the repo sets; an external, unmodeled protocol."
+    },
+    {
+      "id": "a105",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Caught error typed any to read er2.code."
+    },
+    {
+      "id": "a106",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Element-wise array comparison; unknown[] (or T[]) works since only length and !== are used."
+    },
+    {
+      "id": "a107",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "JSX children are arbitrary user values; only a typeof check is applied before passing them to renderJSX."
+    },
+    {
+      "id": "a108",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Attaches stderr/stdout to a new Error; Object.assign or an intersection type would do. Runner-up: type-system-workaround."
+    },
+    {
+      "id": "a121",
+      "category": "convenience",
+      "acknowledged": true,
+      "unknownWouldDo": "yes",
+      "note": "Param any mirrors Array.isArray(arg: any); the predicate is the hack, and unknown would work. Runner-up: type-system-workaround."
+    },
+    {
+      "id": "a122",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Generic wrapper forwarding arbitrary arguments to userFn; unknown[] would also type-check here."
+    },
+    {
+      "id": "a123",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Caught error typed any to read error.message."
+    },
+    {
+      "id": "a124",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Constraint for any one-argument event handler; unknown in the parameter position would reject typed handlers."
+    },
+    {
+      "id": "a125",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Reads the module's own symbol flag, set later in the same function on the same File; an intersection type would do."
+    },
+    {
+      "id": "a126",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Caught error typed any to read error?.name for an AbortError check."
+    },
+    {
+      "id": "a127",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Accepts any value but only uses typeof and == null; unknown fits directly."
+    },
+    {
+      "id": "a128",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Listener return any copies lib.dom's addEventListener signature; an unknown or void return would accept the same listeners."
+    },
+    {
+      "id": "a129",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Classic any-function constraint T extends (...args: any[]) => any; unknown[] would reject functions with typed parameters."
+    },
+    {
+      "id": "a130",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Caught error typed any to read err.message in a warning."
+    },
+    {
+      "id": "a131",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "catch (error: any) habit; the error is only logged and replaced with a new Error, so unknown would work."
+    },
+    {
+      "id": "a132",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Host-app-supplied customData on elements, serialized with the scene; Excalidraw doesn't model its contents."
+    },
+    {
+      "id": "a145",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Caught value typed any and flattened via [].concat(a); unknown would fail concat's overloads."
+    },
+    {
+      "id": "a146",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Any-function constraint F extends (...args: any) => any for a wrapper using Parameters<F>; unknown isn't a valid rest type."
+    },
+    {
+      "id": "a147",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Returns a dynamically required page module (or HTML string); callers read module properties."
+    },
+    {
+      "id": "a148",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Key position of Map<any, any>; keys are string names. Runner-up: untyped-boundary, since the map is read off global."
+    },
+    {
+      "id": "a149",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Sets a handled flag on a redirect error that RedirectBoundary checks with 'in'; Object.assign would type-check."
+    },
+    {
+      "id": "a150",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Caught error typed any to read e.message."
+    },
+    {
+      "id": "a151",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "package.json parsed with JSON5.parse and destructured immediately."
+    },
+    {
+      "id": "a152",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "User-supplied <Head> children with arbitrary props; the code reads h.props fields dynamically. Runner-up: generic-plumbing."
+    },
+    {
+      "id": "a153",
+      "category": "error-handling",
+      "acknowledged": false,
+      "unknownWouldDo": "no",
+      "note": "Webpack's callback types err as Error; the cast reads WebpackError's details property. Runner-up: untyped-boundary."
+    },
+    {
+      "id": "a154",
+      "category": "convenience",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Key position of the exported Map<any, any>; keys are string names. Runner-up: untyped-boundary (global trace registry)."
+    },
+    {
+      "id": "a155",
+      "category": "generic-plumbing",
+      "acknowledged": false,
+      "unknownWouldDo": "unclear",
+      "note": "Accepts a webpack LoaderContext with any loader options type."
+    },
+    {
+      "id": "a156",
+      "category": "untyped-boundary",
+      "acknowledged": false,
+      "unknownWouldDo": "yes",
+      "note": "Caches the result of a legacy postcss.plugin API patched in under @ts-ignore, so the transformer is untyped."
+    },
+    {
+      "id": "a169",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "yes",
+      "note": "Branded Length cast to its number representation; as unknown as number would do the same."
+    },
+    {
+      "id": "a170",
+      "category": "generic-plumbing",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "F-bounded default BaseStringReplacement<any>; unknown fails the recursive T extends BaseStringReplacement<T> constraint."
+    },
+    {
+      "id": "a171",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Generic T metadata can't be shown assignable to the constructor's metadata union, so the author asserts it."
+    },
+    {
+      "id": "a172",
+      "category": "generic-plumbing",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Constraint IEditorOption<any, any> with infer R; K is constrained to EditorOption, so unknown fails."
+    },
+    {
+      "id": "a173",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "yes",
+      "note": "Branded Length compared as a number; the brand is a phantom type over a plain number."
+    },
+    {
+      "id": "a174",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Return cast adds the phantom metadataT: T property, which never exists at runtime."
+    },
+    {
+      "id": "a175",
+      "category": "generic-plumbing",
+      "acknowledged": true,
+      "unknownWouldDo": "unclear",
+      "note": "Static cache shared by all instantiations; static members can't use the class's T, so any stands for every T."
+    },
+    {
+      "id": "a176",
+      "category": "generic-plumbing",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "F-bounded default BaseReplacement<any>; unknown fails the recursive T extends BaseReplacement<T> constraint."
+    },
+    {
+      "id": "a177",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "yes",
+      "note": "Encodes line and column into a number, then casts it to the branded Length type."
+    },
+    {
+      "id": "a178",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "no",
+      "note": "Overload implementation takes any so branded Lengths can be added as numbers; unknown would break the arithmetic."
+    },
+    {
+      "id": "a179",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "yes",
+      "note": "Zero literal cast to the branded Length type."
+    },
+    {
+      "id": "a180",
+      "category": "type-system-workaround",
+      "acknowledged": true,
+      "unknownWouldDo": "yes",
+      "note": "Branded Length unwrapped to its number representation."
+    },
+    {
+      "id": "n013",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "key comes from for...in over the same shape object, so shape[key] always holds a schema."
+    },
+    {
+      "id": "n014",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Earlier returns for 0 or 1 enum values, plus the length < 2 guard, mean literalSchemas has at least two entries."
+    },
+    {
+      "id": "n015",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The \"id\" in meta check just above proves the key exists; meta is any, so the ! is type-level noise."
+    },
+    {
+      "id": "n016",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Processors are only invoked by processSchema, which registers the schema in ctx.seen before calling them."
+    },
+    {
+      "id": "n017",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Unreachable defensive branch: earlier length 0 and 1 returns guarantee literalSchemas has two or more entries."
+    },
+    {
+      "id": "n018",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Loop bound i < options.length guarantees options[i] exists; TypeScript doesn't narrow indexed access from loop bounds."
+    },
+    {
+      "id": "n019",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "allKeys is built from Object.keys and own symbols of the same shape object, so propShape[k] is always present."
+    },
+    {
+      "id": "n020",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Inside the mime.length === 1 branch, mime[0] necessarily exists."
+    },
+    {
+      "id": "n021",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "As with other processors, processSchema adds the schema to ctx.seen before invoking prefaultProcessor."
+    },
+    {
+      "id": "n022",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "options.every(o => o._zod.pattern) is checked first; narrowing doesn't survive the separate map into patterns."
+    },
+    {
+      "id": "n023",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Loop runs i from items.length - 1 down to 0, so items[i] is in bounds."
+    },
+    {
+      "id": "n024",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "sources.every(Boolean) on the same line proves every entry is truthy; every() isn't a type predicate here."
+    },
+    {
+      "id": "n037",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "The error-handler stack context[5] is initialized by the render entry points (renderNode, update) before build runs."
+    },
+    {
+      "id": "n038",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Nodes are pushed onto #patterns only right after their #pattern is assigned, so every child has one."
+    },
+    {
+      "id": "n039",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "#tries is set in the constructor and cleared only after matchers are built; add(), the only caller, throws after that."
+    },
+    {
+      "id": "n040",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "String.prototype.split always returns at least one element, so shift() cannot return undefined."
+    },
+    {
+      "id": "n041",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "#routes and #middleware are cleared together; the !middleware throw right below guards routes before it is used."
+    },
+    {
+      "id": "n042",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Mirrors the push at line 526; context[5] is initialized by renderNode/update before build runs."
+    },
+    {
+      "id": "n043",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "The enclosing ternary tests optionHandler; narrowing of the let variable is lost inside the closure."
+    },
+    {
+      "id": "n044",
+      "category": "unguarded",
+      "acknowledged": false,
+      "optionalChainSafe": "changes-failure-mode",
+      "note": "input.form is null when the input isn't inside a form; nothing ensures a formAction input has a form ancestor."
+    },
+    {
+      "id": "n045",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "#routes exists from the constructor until buildAllMatchers releases it at the end of this same call."
+    },
+    {
+      "id": "n046",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "#buildMatcher is only called from buildAllMatchers, before the fields are released."
+    },
+    {
+      "id": "n047",
+      "category": "unguarded",
+      "acknowledged": false,
+      "optionalChainSafe": "changes-failure-mode",
+      "note": "element stays null when not deduplicating (e.g. a non-stylesheet link with blocking=\"render\"); the cast on the previous line hides it."
+    },
+    {
+      "id": "n048",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Follows the !middleware throw, and #tries is released together with #middleware. Assignment target, so ?. can't be used."
+    },
+    {
+      "id": "n061",
+      "category": "invariant",
+      "acknowledged": true,
+      "optionalChainSafe": "not-applicable",
+      "note": "Group 1 (.*?) always participates when the \\{(.*?)\\} regex matches, so match[1] is a string."
+    },
+    {
+      "id": "n062",
+      "category": "invariant",
+      "acknowledged": true,
+      "optionalChainSafe": "not-applicable",
+      "note": "The decoration proxy is only reached via proxy[key], so the call path always has at least one segment to pop."
+    },
+    {
+      "id": "n063",
+      "category": "external-contract",
+      "acknowledged": true,
+      "optionalChainSafe": "not-applicable",
+      "note": "useSuspenseInfiniteQuery suspends or throws until data exists, a React Query guarantee lost by the cast to UseTRPCInfiniteQueryResult."
+    },
+    {
+      "id": "n064",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Inside path.length > 1, after one shift newPath still has at least one element."
+    },
+    {
+      "id": "n065",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "results is mapped from rpcCalls, which is mapped from info.calls, so indexes line up one-to-one."
+    },
+    {
+      "id": "n066",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "call = info.calls[index] where index comes from rpcCalls, which is info.calls.map(...); same length by construction."
+    },
+    {
+      "id": "n067",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Same parallel-array invariant as line 599: rpcCalls is info.calls.map(...)."
+    },
+    {
+      "id": "n068",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "trpcImportName is checked with a throw at the top of the transform; narrowing doesn't reach the nested function declaration."
+    },
+    {
+      "id": "n069",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Index comes from rpcCalls, built as info.calls.map(...), so info.calls[index] always exists."
+    },
+    {
+      "id": "n070",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "A non-batch request parses to exactly one path, so info.calls and rpcCalls always have one entry."
+    },
+    {
+      "id": "n071",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Relies on the BatchLoader.fetch contract returning at most one result per requested key."
+    },
+    {
+      "id": "n072",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "dispatch only runs from the timer load() schedules after filling pendingItems; both are cleared together."
+    },
+    {
+      "id": "n085",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Per ESTree and the JS grammar, a non-default exported function or class declaration always has an id."
+    },
+    {
+      "id": "n086",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "mlly's ESM_STATIC_IMPORT_RE uses named groups and the no-match case returned earlier, so match.groups exists."
+    },
+    {
+      "id": "n087",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Node's http server always sets req.url on incoming requests; it's optional only because IncomingMessage is shared with clients."
+    },
+    {
+      "id": "n088",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Vite's hook wrapper injects viteMetadata into every bundle chunk before plugin generateBundle handlers run."
+    },
+    {
+      "id": "n089",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Guarded by if (source); mapSourcePosition returns either that input or a mapping with non-null source."
+    },
+    {
+      "id": "n090",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The css plugin's buildStart hook sets this cache entry, and buildStart always runs before generateBundle."
+    },
+    {
+      "id": "n091",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Vite parses HTML with parse5's sourceCodeLocationInfo: true, so parsed nodes carry source locations."
+    },
+    {
+      "id": "n092",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Upgrade requests from Node's http server always have req.url."
+    },
+    {
+      "id": "n093",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "depsOptimizer is a const already checked in the enclosing if; the assertion is redundant."
+    },
+    {
+      "id": "n094",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Placeholder hashes are only emitted by publicFileToBuiltUrl, which stores each hash in this same map."
+    },
+    {
+      "id": "n095",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Earlier in resolveConfig, environments is defaulted to {} and given a client entry; TypeScript doesn't carry that forward."
+    },
+    {
+      "id": "n096",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "rolldownOptions.resolve ??= {} runs just before; narrowing is lost inside the setResolveOptions closure."
+    },
+    {
+      "id": "n109",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Classic has() then get() on the same Map key."
+    },
+    {
+      "id": "n110",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Each app canvas is a DevToolbarCanvas that attaches an open shadow root in its constructor."
+    },
+    {
+      "id": "n111",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Assumes route resolution set routeData before the component is loaded; handlePages makes the same assumption."
+    },
+    {
+      "id": "n112",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "The only caller, handleAction, returns early when action is undefined before calling executeAction."
+    },
+    {
+      "id": "n113",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The same non-global regex was just tested on the same string, so exec() matches."
+    },
+    {
+      "id": "n114",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "has() then get() on the same Map key."
+    },
+    {
+      "id": "n115",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "The enclosing if checks globalThis.astroAsset.addStaticImage; narrowing is lost inside the map callback."
+    },
+    {
+      "id": "n116",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Loop condition queue.length > 0 guarantees pop() returns an element."
+    },
+    {
+      "id": "n117",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "has() then get() on the same Map key."
+    },
+    {
+      "id": "n118",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The built-in app list always includes astroSettingsApp, so find() over it succeeds."
+    },
+    {
+      "id": "n119",
+      "category": "lifecycle",
+      "acknowledged": true,
+      "optionalChainSafe": "not-applicable",
+      "note": "SAFETY comment: createResult runs only after route resolution, so the params getter always has routeData."
+    },
+    {
+      "id": "n120",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Node's http server always sets req.url on incoming requests."
+    },
+    {
+      "id": "n133",
+      "category": "unguarded",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Optional prop; postfix !! is two type-only assertions (likely meant as a !!x boolean cast), so undefined still flows through."
+    },
+    {
+      "id": "n134",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Early return when content is empty guarantees pop() returns an element."
+    },
+    {
+      "id": "n135",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "bucketFillColor is computed whenever activeTool.type is \"bucketfill\", the same condition this branch tests."
+    },
+    {
+      "id": "n136",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Assigned a Map just above; the let is later set to null, so narrowing is lost inside the map callback."
+    },
+    {
+      "id": "n137",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Guarded by checkedGroups.has(gid) on the line above; the !! is a doubled assertion, not a boolean cast."
+    },
+    {
+      "id": "n138",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "getElementsInAtomicUnit filters out entries with undefined latest and already casts them non-null; the assertion is redundant."
+    },
+    {
+      "id": "n139",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "positionOf has an entry for every node in adjacency, and to is always a neighbour taken from adjacency."
+    },
+    {
+      "id": "n140",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Loop condition while (queue.length) guarantees pop() returns an element."
+    },
+    {
+      "id": "n141",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Caller protocol: App only calls addMidpoint after shouldAddMidpoint, which returns false when segmentMidpoint.index is null."
+    },
+    {
+      "id": "n142",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Assumes the scene's binding invariant that a binding's elementId refers to an existing element; the sibling branch uses ?. instead."
+    },
+    {
+      "id": "n143",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "RE_REDDIT (non-global) was just tested against the same link, so match() returns the groups."
+    },
+    {
+      "id": "n144",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The pointer-down handler records lastPointerDownEvent before the pointer-up path calls handleElementLinkClick."
+    },
+    {
+      "id": "n157",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The dev bundler propagates actualMiddlewareFile when it finds middleware; hasMiddleware runs only after getMiddleware() returned one."
+    },
+    {
+      "id": "n158",
+      "category": "unguarded",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "appUrl starts null in the console store and the target field accepts null; nothing guarantees it is set."
+    },
+    {
+      "id": "n159",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "The enclosing if checks prerenderManifest; narrowing of the let is lost inside the async map callback."
+    },
+    {
+      "id": "n160",
+      "category": "checked-nearby",
+      "acknowledged": true,
+      "optionalChainSafe": "not-applicable",
+      "note": "Explicit has() check just above, with a comment saying so."
+    },
+    {
+      "id": "n161",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Directly inside if (this.prevChunkNames); the assertion is redundant."
+    },
+    {
+      "id": "n162",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The webpack-compilation hook's onStart stores the span before any later compilation hook calls parentSpan."
+    },
+    {
+      "id": "n163",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The early return above leaves only paths where startMsSinceEpoch was set (hasUpdates, or onBuilding's deferred report fired)."
+    },
+    {
+      "id": "n164",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Only called during a prerender with an active work-unit store, which Next always enters inside workAsyncStorage."
+    },
+    {
+      "id": "n165",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The only caller throws when partytown is missing, so hasNecessaryDependencies resolved it."
+    },
+    {
+      "id": "n166",
+      "category": "external-contract",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The generated middleware manifest script sets self.__MIDDLEWARE_MATCHERS before invoking this callback."
+    },
+    {
+      "id": "n167",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "Guarded by if (referenceNode) outside the forEach and only reassigned to non-null tags; narrowing is lost in the callback."
+    },
+    {
+      "id": "n168",
+      "category": "lifecycle",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "The compilation hook's onStart creates this compilation's module-span map before any buildModule event fires."
+    },
+    {
+      "id": "n181",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "nextNodes and offsets are pushed and popped in lockstep, so the non-empty check on nextNodes covers offsets."
+    },
+    {
+      "id": "n182",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Caller protocol: EditStack only appends to an element whose canAppend() returned true, which checks this map."
+    },
+    {
+      "id": "n183",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "_flushBuffer() on the previous line always initializes _completedStrings; TypeScript can't see the helper's side effect."
+    },
+    {
+      "id": "n184",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Guarded by consumedStartS0Line !== null; the start and end variables are assigned together."
+    },
+    {
+      "id": "n185",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "patternMatch is only assigned inside if (association.filepattern), so its filepattern is set."
+    },
+    {
+      "id": "n186",
+      "category": "invariant",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Diffs are sorted and non-overlapping, so the widened diff always intersects the gap between its neighbours."
+    },
+    {
+      "id": "n187",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Loop condition stack.length > 0 guarantees pop() returns an element."
+    },
+    {
+      "id": "n188",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "has() then get() on the same Map key."
+    },
+    {
+      "id": "n189",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "has() then get() on the same Map key."
+    },
+    {
+      "id": "n190",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "Early return on childCount === 0, so index childCount - 1 is in range."
+    },
+    {
+      "id": "n191",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "not-applicable",
+      "note": "The else branch establishes offset overlap; this assumes the Range positions describe the same span as the offsets."
+    },
+    {
+      "id": "n192",
+      "category": "checked-nearby",
+      "acknowledged": false,
+      "optionalChainSafe": "no-behavior-change-in-practice",
+      "note": "injectedText is non-null only when injectionOffsets !== null (getInjectedTextAtOffset), and this function returned early otherwise."
+    }
+  ],
+  "secondRater": {
+    "a002": {
+      "category": "generic-plumbing"
+    },
+    "a006": {
+      "category": "convenience"
+    },
+    "a007": {
+      "category": "generic-plumbing"
+    },
+    "a009": {
+      "category": "generic-plumbing"
+    },
+    "a049": {
+      "category": "generic-plumbing"
+    },
+    "a053": {
+      "category": "generic-plumbing"
+    },
+    "a055": {
+      "category": "untyped-boundary"
+    },
+    "a057": {
+      "category": "generic-plumbing"
+    },
+    "a076": {
+      "category": "untyped-boundary"
+    },
+    "a078": {
+      "category": "convenience"
+    },
+    "a081": {
+      "category": "type-system-workaround"
+    },
+    "a084": {
+      "category": "untyped-boundary"
+    },
+    "a100": {
+      "category": "untyped-boundary"
+    },
+    "a105": {
+      "category": "error-handling"
+    },
+    "a108": {
+      "category": "convenience"
+    },
+    "a129": {
+      "category": "generic-plumbing"
+    },
+    "a145": {
+      "category": "error-handling"
+    },
+    "a149": {
+      "category": "convenience"
+    },
+    "a178": {
+      "category": "type-system-workaround"
+    },
+    "a179": {
+      "category": "type-system-workaround"
+    },
+    "n018": {
+      "category": "checked-nearby"
+    },
+    "n039": {
+      "category": "lifecycle"
+    },
+    "n041": {
+      "category": "lifecycle"
+    },
+    "n043": {
+      "category": "checked-nearby"
+    },
+    "n044": {
+      "category": "unguarded"
+    },
+    "n045": {
+      "category": "lifecycle"
+    },
+    "n048": {
+      "category": "checked-nearby"
+    },
+    "n068": {
+      "category": "checked-nearby"
+    },
+    "n095": {
+      "category": "lifecycle"
+    },
+    "n116": {
+      "category": "checked-nearby"
+    },
+    "n118": {
+      "category": "invariant"
+    },
+    "n136": {
+      "category": "checked-nearby"
+    },
+    "n138": {
+      "category": "invariant"
+    },
+    "n142": {
+      "category": "invariant"
+    },
+    "n159": {
+      "category": "lifecycle"
+    },
+    "n167": {
+      "category": "invariant"
+    },
+    "n181": {
+      "category": "invariant"
+    },
+    "n185": {
+      "category": "invariant"
+    },
+    "n186": {
+      "category": "invariant"
+    },
+    "n190": {
+      "category": "checked-nearby"
+    }
+  },
+  "agreement": {
+    "any": {
+      "coarse": {
+        "kappa": 0.83,
+        "same": 19
+      },
+      "disagreements": [
+        {
+          "first": "untyped-boundary",
+          "id": "a078",
+          "second": "convenience"
+        }
+      ],
+      "kappa": 0.93,
+      "n": 20,
+      "same": 19
+    },
+    "nonNull": {
+      "coarse": {
+        "kappa": 1,
+        "same": 20
+      },
+      "disagreements": [
+        {
+          "first": "checked-nearby",
+          "id": "n041",
+          "second": "lifecycle"
+        },
+        {
+          "first": "checked-nearby",
+          "id": "n095",
+          "second": "lifecycle"
+        },
+        {
+          "first": "checked-nearby",
+          "id": "n138",
+          "second": "invariant"
+        },
+        {
+          "first": "checked-nearby",
+          "id": "n159",
+          "second": "lifecycle"
+        },
+        {
+          "first": "checked-nearby",
+          "id": "n167",
+          "second": "invariant"
+        },
+        {
+          "first": "checked-nearby",
+          "id": "n181",
+          "second": "invariant"
+        },
+        {
+          "first": "checked-nearby",
+          "id": "n185",
+          "second": "invariant"
+        }
+      ],
+      "kappa": 0.48,
+      "n": 20,
+      "same": 13
+    }
+  }
+}

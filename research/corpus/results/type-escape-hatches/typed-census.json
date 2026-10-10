@@ -1,0 +1,491 @@
+{
+  "generated": "2026-10-10",
+  "note": "Type-aware rules need resolved types. typeCheck.unresolved counts module-resolution errors; a repo with many is not trustworthy here.",
+  "repos": {
+    "zod": {
+      "assertionsByKind": {
+        "as any": {
+          "both": 44,
+          "neither": 0,
+          "total": 372,
+          "unnecessary": 48,
+          "unnecessaryOnly": 4,
+          "unsafe": 368,
+          "unsafeOnly": 324
+        },
+        "non-null (x!)": {
+          "both": 0,
+          "neither": 47,
+          "total": 95,
+          "unnecessary": 47,
+          "unnecessaryOnly": 47,
+          "unsafe": 1,
+          "unsafeOnly": 1,
+          "unnecessaryByAsserted": {
+            "an indexed access (x[i])": 41,
+            "a variable or parameter": 4,
+            "another property": 2
+          }
+        },
+        "as T (other)": {
+          "both": 6,
+          "neither": 47,
+          "total": 368,
+          "unnecessary": 52,
+          "unnecessaryOnly": 46,
+          "unsafe": 275,
+          "unsafeOnly": 269
+        },
+        "as const": {
+          "both": 0,
+          "neither": 29,
+          "total": 29,
+          "unnecessary": 0,
+          "unnecessaryOnly": 0,
+          "unsafe": 0,
+          "unsafeOnly": 0
+        },
+        "double, through any": {
+          "both": 4,
+          "neither": 0,
+          "total": 58,
+          "unnecessary": 4,
+          "unnecessaryOnly": 0,
+          "unsafe": 58,
+          "unsafeOnly": 54
+        },
+        "double, through unknown": {
+          "both": 2,
+          "neither": 0,
+          "total": 42,
+          "unnecessary": 2,
+          "unnecessaryOnly": 0,
+          "unsafe": 42,
+          "unsafeOnly": 40
+        },
+        "as never": {
+          "both": 0,
+          "neither": 0,
+          "total": 6,
+          "unnecessary": 0,
+          "unnecessaryOnly": 0,
+          "unsafe": 6,
+          "unsafeOnly": 6
+        },
+        "as unknown": {
+          "both": 0,
+          "neither": 1,
+          "total": 1,
+          "unnecessary": 0,
+          "unnecessaryOnly": 0,
+          "unsafe": 0,
+          "unsafeOnly": 0
+        }
+      },
+      "unnecessaryExamples": [
+        {
+          "file": "packages/zod/src/v3/ZodError.ts",
+          "kind": "non-null (x!)",
+          "line": 238
+        },
+        {
+          "file": "packages/zod/src/v3/ZodError.ts",
+          "kind": "non-null (x!)",
+          "line": 313
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 445
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 448
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 461
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "non-null (x!)",
+          "line": 2500
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 2576
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 2597
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 2604
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 2766
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "non-null (x!)",
+          "line": 2827
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as T (other)",
+          "line": 2863
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as any",
+          "line": 3772
+        },
+        {
+          "file": "packages/zod/src/v3/types.ts",
+          "kind": "as T (other)",
+          "line": 4319
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "non-null (x!)",
+          "line": 151
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "non-null (x!)",
+          "line": 464
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "non-null (x!)",
+          "line": 466
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "non-null (x!)",
+          "line": 466
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "as T (other)",
+          "line": 632
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "as T (other)",
+          "line": 637
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "as T (other)",
+          "line": 650
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "as T (other)",
+          "line": 770
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "as T (other)",
+          "line": 792
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "kind": "as T (other)",
+          "line": 286
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "kind": "double, through unknown",
+          "line": 351
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "kind": "double, through unknown",
+          "line": 355
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "kind": "double, through any",
+          "line": 1979
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "kind": "double, through any",
+          "line": 2934
+        },
+        {
+          "file": "packages/zod/src/v4/mini/schemas.ts",
+          "kind": "double, through any",
+          "line": 1296
+        },
+        {
+          "file": "packages/zod/src/v4/mini/schemas.ts",
+          "kind": "double, through any",
+          "line": 1726
+        }
+      ],
+      "assertionJoin": {
+        "unnecessaryDiagnostics": 153,
+        "unnecessaryJoined": 153,
+        "unsafeDiagnosticPositions": 749,
+        "unsafeJoined": 750
+      },
+      "files": 125,
+      "lint": {
+        "counts": {
+          "no-explicit-any": 871,
+          "no-unsafe-assignment": 312,
+          "no-unsafe-member-access": 306,
+          "no-unsafe-call": 54,
+          "no-unsafe-type-assertion": 807,
+          "(inline config ignored)": 8,
+          "no-unnecessary-type-assertion": 153,
+          "no-non-null-assertion": 95,
+          "no-unsafe-return": 276,
+          "no-unsafe-argument": 214
+        },
+        "fatal": 0
+      },
+      "seconds": 7,
+      "tsconfig": "tsconfig.json",
+      "typeCheck": {
+        "byCode": {},
+        "total": 0,
+        "unresolved": 0,
+        "unresolvedSamples": []
+      }
+    },
+    "hono": {
+      "assertionsByKind": {
+        "as T (other)": {
+          "both": 7,
+          "neither": 36,
+          "total": 335,
+          "unnecessary": 45,
+          "unnecessaryOnly": 38,
+          "unsafe": 261,
+          "unsafeOnly": 254
+        },
+        "double, through unknown": {
+          "both": 4,
+          "neither": 0,
+          "total": 32,
+          "unnecessary": 4,
+          "unnecessaryOnly": 0,
+          "unsafe": 32,
+          "unsafeOnly": 28
+        },
+        "non-null (x!)": {
+          "both": 0,
+          "neither": 15,
+          "total": 20,
+          "unnecessary": 4,
+          "unnecessaryOnly": 4,
+          "unsafe": 1,
+          "unsafeOnly": 1,
+          "unnecessaryByAsserted": {
+            "a variable or parameter": 3,
+            "a ref's .current": 1
+          }
+        },
+        "as any": {
+          "both": 5,
+          "neither": 0,
+          "total": 72,
+          "unnecessary": 6,
+          "unnecessaryOnly": 1,
+          "unsafe": 71,
+          "unsafeOnly": 66
+        },
+        "as unknown": {
+          "both": 0,
+          "neither": 3,
+          "total": 3,
+          "unnecessary": 0,
+          "unnecessaryOnly": 0,
+          "unsafe": 0,
+          "unsafeOnly": 0
+        },
+        "as const": {
+          "both": 0,
+          "neither": 15,
+          "total": 15,
+          "unnecessary": 0,
+          "unnecessaryOnly": 0,
+          "unsafe": 0,
+          "unsafeOnly": 0
+        },
+        "as never": {
+          "both": 0,
+          "neither": 0,
+          "total": 4,
+          "unnecessary": 0,
+          "unnecessaryOnly": 0,
+          "unsafe": 4,
+          "unsafeOnly": 4
+        }
+      },
+      "unnecessaryExamples": [
+        {
+          "file": "src/adapter/cloudflare-workers/utils.ts",
+          "kind": "double, through unknown",
+          "line": 55
+        },
+        {
+          "file": "src/adapter/cloudflare-workers/websocket.ts",
+          "kind": "as T (other)",
+          "line": 31
+        },
+        {
+          "file": "src/adapter/deno/websocket.ts",
+          "kind": "as T (other)",
+          "line": 30
+        },
+        {
+          "file": "src/adapter/lambda-edge/handler.ts",
+          "kind": "as T (other)",
+          "line": 220
+        },
+        {
+          "file": "src/client/client.ts",
+          "kind": "as T (other)",
+          "line": 180
+        },
+        {
+          "file": "src/client/utils.ts",
+          "kind": "as T (other)",
+          "line": 71
+        },
+        {
+          "file": "src/helper/css/index.ts",
+          "kind": "as T (other)",
+          "line": 212
+        },
+        {
+          "file": "src/helper/ssg/ssg.ts",
+          "kind": "double, through unknown",
+          "line": 240
+        },
+        {
+          "file": "src/helper/streaming/sse.ts",
+          "kind": "as T (other)",
+          "line": 20
+        },
+        {
+          "file": "src/helper/websocket/index.ts",
+          "kind": "as T (other)",
+          "line": 132
+        },
+        {
+          "file": "src/hono-base.ts",
+          "kind": "non-null (x!)",
+          "line": 357
+        },
+        {
+          "file": "src/jsx/components.ts",
+          "kind": "as any",
+          "line": 248
+        },
+        {
+          "file": "src/jsx/dom/css.ts",
+          "kind": "as any",
+          "line": 202
+        },
+        {
+          "file": "src/jsx/dom/index.ts",
+          "kind": "as any",
+          "line": 57
+        },
+        {
+          "file": "src/jsx/dom/intrinsic-element/components.ts",
+          "kind": "non-null (x!)",
+          "line": 171
+        },
+        {
+          "file": "src/jsx/hooks/index.ts",
+          "kind": "non-null (x!)",
+          "line": 428
+        },
+        {
+          "file": "src/jsx/intrinsic-element/components.ts",
+          "kind": "double, through unknown",
+          "line": 126
+        },
+        {
+          "file": "src/middleware/jsx-renderer/index.ts",
+          "kind": "as any",
+          "line": 54
+        },
+        {
+          "file": "src/middleware/jsx-renderer/index.ts",
+          "kind": "as any",
+          "line": 61
+        },
+        {
+          "file": "src/middleware/mount/index.ts",
+          "kind": "non-null (x!)",
+          "line": 92
+        },
+        {
+          "file": "src/request.ts",
+          "kind": "as any",
+          "line": 124
+        },
+        {
+          "file": "src/utils/html.ts",
+          "kind": "double, through unknown",
+          "line": 154
+        }
+      ],
+      "assertionJoin": {
+        "unnecessaryDiagnostics": 59,
+        "unnecessaryJoined": 59,
+        "unsafeDiagnosticPositions": 368,
+        "unsafeJoined": 369
+      },
+      "files": 187,
+      "lint": {
+        "counts": {
+          "(inline config ignored)": 133,
+          "no-unsafe-return": 66,
+          "no-unsafe-call": 44,
+          "no-unsafe-member-access": 96,
+          "no-unsafe-assignment": 128,
+          "no-explicit-any": 434,
+          "no-unsafe-type-assertion": 368,
+          "no-unsafe-argument": 75,
+          "no-unnecessary-type-assertion": 59,
+          "no-non-null-assertion": 20
+        },
+        "fatal": 0
+      },
+      "seconds": 4,
+      "tsconfig": "tsconfig.json",
+      "typeCheck": {
+        "byCode": {
+          "2304": 4,
+          "2503": 3,
+          "2591": 6,
+          "7006": 4
+        },
+        "total": 17,
+        "unresolved": 0,
+        "unresolvedSamples": []
+      }
+    }
+  },
+  "tools": {
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "typescript": "6.0.3"
+  }
+}

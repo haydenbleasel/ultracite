@@ -1,0 +1,1049 @@
+{
+  "generated": "2026-10-10",
+  "note": "Syntax only: no type information. Pooled numbers exclude dogfood repos. In-file suppressions are ignored (every occurrence counts).",
+  "pooled": {
+    "lines": 694309,
+    "per10k": {
+      "any": 61.8,
+      "assertions": 77.4,
+      "nonNull": 20.4,
+      "unknown": 29.1
+    },
+    "tally": {
+      "any": {
+        "by": {
+          "form": {
+            "bare": 2858,
+            "generic argument": 1163,
+            "any[]": 264,
+            "union or intersection member": 7
+          },
+          "site": {
+            "parameter": 779,
+            "return type": 172,
+            "cast": 1230,
+            "conditional, mapped or indexed type": 128,
+            "type parameter constraint or default": 459,
+            "index signature": 29,
+            "function type or method signature": 452,
+            "variable annotation": 224,
+            "interface or type-literal property": 326,
+            "type alias": 145,
+            "class property": 32,
+            "catch parameter": 161,
+            "extends or implements clause": 26,
+            "rest parameter": 91,
+            "type argument at a call site": 38
+          }
+        },
+        "total": 4292
+      },
+      "assertions": {
+        "angleBracket": 30,
+        "by": {
+          "as any": 1068,
+          "as T (other)": 3571,
+          "as const": 445,
+          "double, through any": 105,
+          "double, through unknown": 156,
+          "as never": 17,
+          "as unknown": 7,
+          "double, other": 6
+        },
+        "total": 5375
+      },
+      "definite": 53,
+      "disables": {
+        "blanketFiles": 5,
+        "byRule": {
+          "eslint: @typescript-eslint/no-explicit-any": 141,
+          "eslint: @typescript-eslint/ban-ts-comment": 11,
+          "eslint: @typescript-eslint/no-non-null-assertion": 23,
+          "eslint: @typescript-eslint/no-unsafe-function-type": 2,
+          "eslint: local/code-no-any-casts": 20
+        },
+        "total": 177
+      },
+      "nonNull": {
+        "by": {
+          "asserted": {
+            "an indexed access (x[i])": 88,
+            "a .get() result (Map, WeakMap, ...)": 181,
+            "another property": 444,
+            "a variable or parameter": 321,
+            "another call's result": 115,
+            "an array search or pop": 75,
+            "a ref's .current": 9,
+            "a field on this": 111,
+            "a DOM lookup": 18,
+            "another expression": 44,
+            "a regex match": 10
+          },
+          "usage": {
+            "value": 951,
+            "member access (x!.y)": 419,
+            "call (f!())": 46
+          }
+        },
+        "total": 1416
+      },
+      "satisfies": 429,
+      "tsComments": {
+        "@ts-ignore": {
+          "reasoned": 53,
+          "total": 106
+        },
+        "@ts-expect-error": {
+          "reasoned": 141,
+          "total": 168
+        },
+        "@ts-check": {
+          "reasoned": 0,
+          "total": 1
+        }
+      },
+      "unknown": {
+        "by": {
+          "site": {
+            "interface or type-literal property": 229,
+            "conditional, mapped or indexed type": 65,
+            "parameter": 612,
+            "type parameter constraint or default": 211,
+            "function type or method signature": 296,
+            "extends or implements clause": 13,
+            "index signature": 20,
+            "variable annotation": 112,
+            "cast": 253,
+            "return type": 81,
+            "type alias": 67,
+            "class property": 12,
+            "rest parameter": 8,
+            "type argument at a call site": 21,
+            "catch parameter": 18,
+            "satisfies": 1
+          }
+        },
+        "total": 2019
+      }
+    }
+  },
+  "repos": {
+    "zod": {
+      "dogfood": false,
+      "files": 125,
+      "lines": 37903,
+      "parseFailures": [],
+      "per10k": {
+        "any": 229.8,
+        "assertions": 231.1,
+        "nonNull": 25.1,
+        "unknown": 110
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "bare": 649,
+              "generic argument": 179,
+              "any[]": 43
+            },
+            "site": {
+              "parameter": 100,
+              "return type": 43,
+              "cast": 438,
+              "conditional, mapped or indexed type": 32,
+              "type parameter constraint or default": 40,
+              "index signature": 2,
+              "function type or method signature": 51,
+              "variable annotation": 51,
+              "interface or type-literal property": 33,
+              "type alias": 46,
+              "class property": 1,
+              "catch parameter": 2,
+              "extends or implements clause": 20,
+              "rest parameter": 12
+            }
+          },
+          "total": 871
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as any": 372,
+            "as T (other)": 368,
+            "as const": 29,
+            "double, through any": 58,
+            "double, through unknown": 42,
+            "as never": 6,
+            "as unknown": 1
+          },
+          "total": 876
+        },
+        "definite": 13,
+        "disables": {
+          "blanketFiles": 1,
+          "byRule": {},
+          "total": 0
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "an indexed access (x[i])": 48,
+              "a .get() result (Map, WeakMap, ...)": 18,
+              "another property": 10,
+              "a variable or parameter": 13,
+              "another call's result": 4,
+              "an array search or pop": 2
+            },
+            "usage": {
+              "value": 79,
+              "member access (x!.y)": 15,
+              "call (f!())": 1
+            }
+          },
+          "total": 95
+        },
+        "satisfies": 7,
+        "tsComments": {
+          "@ts-ignore": {
+            "reasoned": 6,
+            "total": 16
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "interface or type-literal property": 48,
+              "conditional, mapped or indexed type": 14,
+              "parameter": 64,
+              "type parameter constraint or default": 119,
+              "function type or method signature": 79,
+              "extends or implements clause": 9,
+              "index signature": 4,
+              "variable annotation": 6,
+              "cast": 59,
+              "return type": 9,
+              "type alias": 5,
+              "class property": 1
+            }
+          },
+          "total": 417
+        }
+      }
+    },
+    "hono": {
+      "dogfood": false,
+      "files": 187,
+      "lines": 25540,
+      "parseFailures": [],
+      "per10k": {
+        "any": 169.9,
+        "assertions": 180.5,
+        "nonNull": 7.8,
+        "unknown": 73.6
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "bare": 250,
+              "generic argument": 177,
+              "union or intersection member": 2,
+              "any[]": 5
+            },
+            "site": {
+              "interface or type-literal property": 28,
+              "type parameter constraint or default": 244,
+              "variable annotation": 4,
+              "parameter": 14,
+              "function type or method signature": 37,
+              "return type": 2,
+              "class property": 4,
+              "conditional, mapped or indexed type": 25,
+              "cast": 72,
+              "rest parameter": 2,
+              "type alias": 2
+            }
+          },
+          "total": 434
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as T (other)": 335,
+            "double, through unknown": 32,
+            "as any": 72,
+            "as unknown": 3,
+            "as const": 15,
+            "as never": 4
+          },
+          "total": 461
+        },
+        "definite": 9,
+        "disables": {
+          "blanketFiles": 0,
+          "byRule": {
+            "eslint: @typescript-eslint/no-explicit-any": 113,
+            "eslint: @typescript-eslint/ban-ts-comment": 7
+          },
+          "total": 120
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "an array search or pop": 1,
+              "a variable or parameter": 6,
+              "another property": 3,
+              "an indexed access (x[i])": 2,
+              "a ref's .current": 1,
+              "a field on this": 7
+            },
+            "usage": {
+              "value": 7,
+              "call (f!())": 3,
+              "member access (x!.y)": 10
+            }
+          },
+          "total": 20
+        },
+        "satisfies": 13,
+        "tsComments": {
+          "@ts-expect-error": {
+            "reasoned": 14,
+            "total": 14
+          },
+          "@ts-ignore": {
+            "reasoned": 0,
+            "total": 7
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "interface or type-literal property": 7,
+              "type parameter constraint or default": 14,
+              "function type or method signature": 19,
+              "variable annotation": 12,
+              "cast": 52,
+              "conditional, mapped or indexed type": 24,
+              "extends or implements clause": 2,
+              "parameter": 34,
+              "class property": 3,
+              "rest parameter": 1,
+              "type alias": 9,
+              "return type": 5,
+              "type argument at a call site": 4,
+              "index signature": 2
+            }
+          },
+          "total": 188
+        }
+      }
+    },
+    "trpc": {
+      "dogfood": false,
+      "files": 176,
+      "lines": 25948,
+      "parseFailures": [],
+      "per10k": {
+        "any": 152.2,
+        "assertions": 97.9,
+        "nonNull": 14.6,
+        "unknown": 163.8
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "generic argument": 232,
+              "bare": 142,
+              "any[]": 21
+            },
+            "site": {
+              "return type": 5,
+              "parameter": 24,
+              "cast": 101,
+              "interface or type-literal property": 37,
+              "variable annotation": 11,
+              "function type or method signature": 52,
+              "type argument at a call site": 5,
+              "type parameter constraint or default": 41,
+              "rest parameter": 5,
+              "type alias": 79,
+              "conditional, mapped or indexed type": 29,
+              "extends or implements clause": 6
+            }
+          },
+          "total": 395
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as unknown": 1,
+            "as any": 68,
+            "as T (other)": 149,
+            "as never": 1,
+            "as const": 26,
+            "double, through any": 3,
+            "double, through unknown": 6
+          },
+          "total": 254
+        },
+        "definite": 0,
+        "disables": {
+          "blanketFiles": 0,
+          "byRule": {
+            "eslint: @typescript-eslint/ban-ts-comment": 4,
+            "eslint: @typescript-eslint/no-non-null-assertion": 23,
+            "eslint: @typescript-eslint/no-unsafe-function-type": 1
+          },
+          "total": 28
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "an array search or pop": 7,
+              "an indexed access (x[i])": 10,
+              "a variable or parameter": 17,
+              "another property": 4
+            },
+            "usage": {
+              "value": 31,
+              "call (f!())": 1,
+              "member access (x!.y)": 6
+            }
+          },
+          "total": 38
+        },
+        "satisfies": 1,
+        "tsComments": {
+          "@ts-ignore": {
+            "reasoned": 4,
+            "total": 4
+          },
+          "@ts-expect-error": {
+            "reasoned": 9,
+            "total": 9
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "parameter": 109,
+              "interface or type-literal property": 58,
+              "cast": 25,
+              "function type or method signature": 72,
+              "type parameter constraint or default": 44,
+              "type argument at a call site": 5,
+              "type alias": 40,
+              "variable annotation": 24,
+              "return type": 20,
+              "extends or implements clause": 2,
+              "catch parameter": 2,
+              "conditional, mapped or indexed type": 20,
+              "index signature": 2,
+              "rest parameter": 1,
+              "class property": 1
+            }
+          },
+          "total": 425
+        }
+      }
+    },
+    "vite": {
+      "dogfood": false,
+      "files": 124,
+      "lines": 45885,
+      "parseFailures": [],
+      "per10k": {
+        "any": 44.7,
+        "assertions": 54.5,
+        "nonNull": 55.4,
+        "unknown": 10.9
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "bare": 128,
+              "generic argument": 63,
+              "any[]": 14
+            },
+            "site": {
+              "cast": 33,
+              "variable annotation": 28,
+              "return type": 12,
+              "class property": 5,
+              "type parameter constraint or default": 13,
+              "parameter": 40,
+              "interface or type-literal property": 14,
+              "function type or method signature": 30,
+              "index signature": 4,
+              "rest parameter": 11,
+              "catch parameter": 7,
+              "type argument at a call site": 3,
+              "type alias": 1,
+              "conditional, mapped or indexed type": 4
+            }
+          },
+          "total": 205
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as any": 30,
+            "as T (other)": 192,
+            "as const": 18,
+            "double, through unknown": 6,
+            "double, other": 2,
+            "double, through any": 2
+          },
+          "total": 250
+        },
+        "definite": 5,
+        "disables": {
+          "blanketFiles": 0,
+          "byRule": {},
+          "total": 0
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "another property": 120,
+              "a variable or parameter": 40,
+              "a .get() result (Map, WeakMap, ...)": 55,
+              "another call's result": 13,
+              "a DOM lookup": 2,
+              "a field on this": 2,
+              "an array search or pop": 5,
+              "an indexed access (x[i])": 12,
+              "another expression": 5
+            },
+            "usage": {
+              "call (f!())": 8,
+              "member access (x!.y)": 106,
+              "value": 140
+            }
+          },
+          "total": 254
+        },
+        "satisfies": 36,
+        "tsComments": {
+          "@ts-expect-error": {
+            "reasoned": 26,
+            "total": 26
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "function type or method signature": 15,
+              "variable annotation": 4,
+              "interface or type-literal property": 2,
+              "parameter": 9,
+              "cast": 9,
+              "type argument at a call site": 1,
+              "satisfies": 1,
+              "catch parameter": 2,
+              "type alias": 1,
+              "return type": 1,
+              "conditional, mapped or indexed type": 2,
+              "type parameter constraint or default": 2,
+              "rest parameter": 1
+            }
+          },
+          "total": 50
+        }
+      }
+    },
+    "astro": {
+      "dogfood": false,
+      "files": 635,
+      "lines": 82969,
+      "parseFailures": [],
+      "per10k": {
+        "any": 69.1,
+        "assertions": 58.1,
+        "nonNull": 20.5,
+        "unknown": 24.7
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "bare": 310,
+              "generic argument": 241,
+              "union or intersection member": 3,
+              "any[]": 19
+            },
+            "site": {
+              "parameter": 172,
+              "return type": 56,
+              "interface or type-literal property": 45,
+              "function type or method signature": 61,
+              "cast": 96,
+              "variable annotation": 19,
+              "type parameter constraint or default": 56,
+              "conditional, mapped or indexed type": 9,
+              "type alias": 7,
+              "catch parameter": 25,
+              "class property": 8,
+              "index signature": 4,
+              "type argument at a call site": 9,
+              "rest parameter": 6
+            }
+          },
+          "total": 573
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as T (other)": 332,
+            "as any": 85,
+            "as const": 54,
+            "double, through unknown": 10,
+            "as unknown": 1
+          },
+          "total": 482
+        },
+        "definite": 0,
+        "disables": {
+          "blanketFiles": 0,
+          "byRule": {
+            "eslint: @typescript-eslint/no-unsafe-function-type": 1
+          },
+          "total": 1
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "a variable or parameter": 23,
+              "an array search or pop": 12,
+              "another property": 64,
+              "a .get() result (Map, WeakMap, ...)": 33,
+              "another call's result": 11,
+              "a field on this": 19,
+              "a regex match": 1,
+              "an indexed access (x[i])": 2,
+              "a DOM lookup": 5
+            },
+            "usage": {
+              "member access (x!.y)": 36,
+              "value": 126,
+              "call (f!())": 8
+            }
+          },
+          "total": 170
+        },
+        "satisfies": 153,
+        "tsComments": {
+          "@ts-expect-error": {
+            "reasoned": 24,
+            "total": 32
+          },
+          "@ts-ignore": {
+            "reasoned": 3,
+            "total": 4
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "return type": 15,
+              "parameter": 78,
+              "variable annotation": 16,
+              "cast": 25,
+              "catch parameter": 4,
+              "type parameter constraint or default": 17,
+              "function type or method signature": 18,
+              "interface or type-literal property": 21,
+              "index signature": 1,
+              "type alias": 4,
+              "type argument at a call site": 2,
+              "class property": 2,
+              "rest parameter": 1,
+              "conditional, mapped or indexed type": 1
+            }
+          },
+          "total": 205
+        }
+      }
+    },
+    "excalidraw": {
+      "dogfood": false,
+      "files": 444,
+      "lines": 128127,
+      "parseFailures": [],
+      "per10k": {
+        "any": 21.7,
+        "assertions": 69.3,
+        "nonNull": 15.5,
+        "unknown": 6.3
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "any[]": 16,
+              "generic argument": 46,
+              "bare": 216
+            },
+            "site": {
+              "type parameter constraint or default": 26,
+              "type argument at a call site": 4,
+              "cast": 62,
+              "class property": 3,
+              "function type or method signature": 32,
+              "conditional, mapped or indexed type": 26,
+              "variable annotation": 4,
+              "parameter": 26,
+              "return type": 2,
+              "index signature": 1,
+              "catch parameter": 79,
+              "interface or type-literal property": 11,
+              "rest parameter": 1,
+              "type alias": 1
+            }
+          },
+          "total": 278
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as T (other)": 701,
+            "as const": 104,
+            "as any": 59,
+            "double, through unknown": 20,
+            "double, other": 1,
+            "as never": 2,
+            "double, through any": 1
+          },
+          "total": 888
+        },
+        "definite": 4,
+        "disables": {
+          "blanketFiles": 1,
+          "byRule": {},
+          "total": 0
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "an array search or pop": 13,
+              "a .get() result (Map, WeakMap, ...)": 24,
+              "another call's result": 14,
+              "another property": 57,
+              "a variable or parameter": 34,
+              "a regex match": 6,
+              "another expression": 11,
+              "an indexed access (x[i])": 6,
+              "a DOM lookup": 9,
+              "a field on this": 16,
+              "a ref's .current": 8
+            },
+            "usage": {
+              "value": 141,
+              "member access (x!.y)": 50,
+              "call (f!())": 7
+            }
+          },
+          "total": 198
+        },
+        "satisfies": 0,
+        "tsComments": {
+          "@ts-ignore": {
+            "reasoned": 4,
+            "total": 15
+          },
+          "@ts-expect-error": {
+            "reasoned": 1,
+            "total": 1
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "type alias": 1,
+              "parameter": 29,
+              "cast": 21,
+              "type parameter constraint or default": 7,
+              "conditional, mapped or indexed type": 3,
+              "index signature": 3,
+              "function type or method signature": 8,
+              "interface or type-literal property": 5,
+              "catch parameter": 1,
+              "return type": 2,
+              "variable annotation": 1
+            }
+          },
+          "total": 81
+        }
+      }
+    },
+    "next.js": {
+      "dogfood": false,
+      "files": 1416,
+      "lines": 276128,
+      "parseFailures": [],
+      "per10k": {
+        "any": 54.3,
+        "assertions": 70,
+        "nonNull": 16.6,
+        "unknown": 19.1
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "bare": 1137,
+              "generic argument": 213,
+              "any[]": 146,
+              "union or intersection member": 2
+            },
+            "site": {
+              "cast": 404,
+              "interface or type-literal property": 158,
+              "variable annotation": 107,
+              "catch parameter": 48,
+              "parameter": 401,
+              "type argument at a call site": 15,
+              "rest parameter": 54,
+              "return type": 52,
+              "type alias": 9,
+              "type parameter constraint or default": 30,
+              "function type or method signature": 189,
+              "index signature": 18,
+              "class property": 11,
+              "conditional, mapped or indexed type": 2
+            }
+          },
+          "total": 1498
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as any": 377,
+            "as T (other)": 1342,
+            "as const": 148,
+            "double, through any": 22,
+            "double, through unknown": 35,
+            "as never": 4,
+            "double, other": 3,
+            "as unknown": 1
+          },
+          "total": 1932
+        },
+        "definite": 5,
+        "disables": {
+          "blanketFiles": 3,
+          "byRule": {},
+          "total": 0
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "another property": 160,
+              "another call's result": 30,
+              "a variable or parameter": 151,
+              "a .get() result (Map, WeakMap, ...)": 41,
+              "another expression": 17,
+              "an array search or pop": 20,
+              "a DOM lookup": 2,
+              "a field on this": 28,
+              "an indexed access (x[i])": 6,
+              "a regex match": 3
+            },
+            "usage": {
+              "value": 318,
+              "member access (x!.y)": 125,
+              "call (f!())": 15
+            }
+          },
+          "total": 458
+        },
+        "satisfies": 217,
+        "tsComments": {
+          "@ts-expect-error": {
+            "reasoned": 67,
+            "total": 86
+          },
+          "@ts-ignore": {
+            "reasoned": 36,
+            "total": 60
+          },
+          "@ts-check": {
+            "reasoned": 0,
+            "total": 1
+          }
+        },
+        "unknown": {
+          "by": {
+            "site": {
+              "parameter": 209,
+              "variable annotation": 48,
+              "type alias": 7,
+              "cast": 56,
+              "interface or type-literal property": 64,
+              "function type or method signature": 77,
+              "return type": 27,
+              "catch parameter": 9,
+              "class property": 3,
+              "type argument at a call site": 8,
+              "type parameter constraint or default": 8,
+              "rest parameter": 4,
+              "index signature": 7
+            }
+          },
+          "total": 527
+        }
+      }
+    },
+    "vscode": {
+      "dogfood": false,
+      "files": 226,
+      "lines": 71809,
+      "parseFailures": [],
+      "per10k": {
+        "any": 5.3,
+        "assertions": 32.3,
+        "nonNull": 25.5,
+        "unknown": 17.5
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {
+              "generic argument": 12,
+              "bare": 26
+            },
+            "site": {
+              "type parameter constraint or default": 9,
+              "conditional, mapped or indexed type": 1,
+              "cast": 24,
+              "parameter": 2,
+              "type argument at a call site": 2
+            }
+          },
+          "total": 38
+        },
+        "assertions": {
+          "angleBracket": 30,
+          "by": {
+            "as T (other)": 152,
+            "as const": 51,
+            "as any": 5,
+            "double, through unknown": 5,
+            "double, through any": 19
+          },
+          "total": 232
+        },
+        "definite": 17,
+        "disables": {
+          "blanketFiles": 0,
+          "byRule": {
+            "eslint: @typescript-eslint/no-explicit-any": 28,
+            "eslint: local/code-no-any-casts": 20
+          },
+          "total": 28
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {
+              "a field on this": 39,
+              "another property": 26,
+              "a variable or parameter": 37,
+              "an array search or pop": 15,
+              "another call's result": 43,
+              "a .get() result (Map, WeakMap, ...)": 10,
+              "an indexed access (x[i])": 2,
+              "another expression": 11
+            },
+            "usage": {
+              "value": 109,
+              "member access (x!.y)": 71,
+              "call (f!())": 3
+            }
+          },
+          "total": 183
+        },
+        "satisfies": 2,
+        "tsComments": {},
+        "unknown": {
+          "by": {
+            "site": {
+              "conditional, mapped or indexed type": 1,
+              "function type or method signature": 8,
+              "parameter": 80,
+              "variable annotation": 1,
+              "interface or type-literal property": 24,
+              "cast": 6,
+              "index signature": 1,
+              "class property": 2,
+              "return type": 2,
+              "type argument at a call site": 1
+            }
+          },
+          "total": 126
+        }
+      }
+    },
+    "ultracite": {
+      "dogfood": true,
+      "files": 51,
+      "lines": 13213,
+      "parseFailures": [],
+      "per10k": {
+        "any": 0,
+        "assertions": 18.2,
+        "nonNull": 0,
+        "unknown": 2.3
+      },
+      "tally": {
+        "any": {
+          "by": {
+            "form": {},
+            "site": {}
+          },
+          "total": 0
+        },
+        "assertions": {
+          "angleBracket": 0,
+          "by": {
+            "as T (other)": 6,
+            "as const": 18
+          },
+          "total": 24
+        },
+        "definite": 0,
+        "disables": {
+          "blanketFiles": 0,
+          "byRule": {},
+          "total": 0
+        },
+        "nonNull": {
+          "by": {
+            "asserted": {},
+            "usage": {}
+          },
+          "total": 0
+        },
+        "satisfies": 14,
+        "tsComments": {},
+        "unknown": {
+          "by": {
+            "site": {
+              "interface or type-literal property": 1,
+              "catch parameter": 1,
+              "parameter": 1
+            }
+          },
+          "total": 3
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "@typescript-eslint/typescript-estree": "8.71.0"
+  }
+}
