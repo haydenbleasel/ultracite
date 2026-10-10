@@ -1,0 +1,24 @@
+---
+// The lint rules a post is about, by their config names.
+interface Props {
+  class?: string;
+  rules: string[];
+}
+
+const { class: className, rules } = Astro.props;
+---
+
+{
+  rules.length > 0 && (
+    <ul
+      class:list={["flex flex-wrap content-start items-start gap-1.5", className]}
+      role="list"
+    >
+      {rules.map((rule) => (
+        <li class="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-muted-foreground text-xs/5">
+          {rule}
+        </li>
+      ))}
+    </ul>
+  )
+}

@@ -1,0 +1,48 @@
+---
+// The shell for the blog index and its posts: Blume's PageLayout with the
+// homepage's chrome, call to action and footer. Blume's own JSON-LD would
+// call every custom page a TechArticle, so it's off here and each page passes
+// its own graph (a Blog on the index, a BlogPosting on a post).
+import PageLayout from "blume/components/layout/PageLayout.astro";
+import data from "blume:data";
+import "../../styles/home.css";
+
+import type { JsonLdNode } from "../../lib/blog";
+import Cta from "../home/cta.astro";
+import Footer from "../home/footer.astro";
+
+interface Props {
+  description: string;
+  jsonLd: JsonLdNode;
+  title: string;
+}
+
+const { description, jsonLd, title } = Astro.props;
+const { config } = data;
+
+// `<` can't end the script element early once escaped.
+const jsonLdSource = JSON.stringify(jsonLd).replaceAll("<", "\\u003c");
+---
+
+<PageLayout
+  analytics={config.analytics}
+  appleIcon={config.appleIcon}
+  banner={config.banner}
+  favicon={config.favicon}
+  fontCssVars={data.fontCssVars}
+  logo={config.logo}
+  navigation={data.navigation}
+  ogEnabled={config.og.enabled}
+  page={{ description, title }}
+  searchEnabled={config.search.enabled}
+  site={{ title: config.title, description: config.description ?? "" }}
+  siteUrl={config.site}
+  structuredDataEnabled={false}
+  themeMode={config.theme.mode}
+  x={config.x}
+>
+  <script is:inline set:html={jsonLdSource} type="application/ld+json" />
+  <slot />
+  <Cta />
+  <Footer slot="footer" />
+</PageLayout>

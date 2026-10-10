@@ -136,6 +136,10 @@ export default defineConfig({
         path: "/agents",
       },
       {
+        label: "Blog",
+        path: "/blog",
+      },
+      {
         label: "Changelog",
         path: "/changelog",
       },

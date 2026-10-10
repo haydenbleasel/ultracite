@@ -1,0 +1,14 @@
+/* Blog post type (imported by components/blog/post-layout.astro). Blume's
+   .prose is set for docs, at 14px in the muted color, and it's unlayered, so
+   Tailwind's prose-lg can't override it. Posts are read start to finish, so
+   they get a larger size and darker text. The second class outranks Blume's
+   rule. */
+.prose.blog-prose {
+  color: color-mix(
+    in oklab,
+    var(--blume-foreground) 85%,
+    var(--blume-background)
+  );
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
