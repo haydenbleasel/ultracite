@@ -1,0 +1,116 @@
+---
+import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
+
+import SectionHeading from "../../home/section-heading.astro";
+
+// Rules set to "error" per preset (packages/cli/config/oxlint), Ultracite
+// 7.12.4. Native presets run in Oxlint's Rust engine; the rest load ESLint
+// plugins through Oxlint's JS plugin API.
+const native = [
+  { count: 474, description: "ESLint, TypeScript, Unicorn, imports, promises", name: "core" },
+  { count: 107, description: "React, hooks and jsx-a11y", name: "react" },
+  { count: 63, description: "Vitest test files", name: "vitest" },
+  { count: 56, description: "Jest test files", name: "jest" },
+  { count: 45, description: "Vue script blocks", name: "vue" },
+  { count: 21, description: "Next.js", name: "next" },
+];
+
+const jsPlugins = [
+  { count: 202, description: "eslint-plugin-sonarjs", name: "js-plugins" },
+  { count: 149, description: "oxlint-plugin-react-doctor", name: "js-plugins" },
+  { count: 21, description: "eslint-plugin-github", name: "js-plugins" },
+  { count: 15, description: "Escape hatches agents reach for, vendored", name: "anti-slop" },
+  { count: 6, description: "@shadcn/lint, for Tailwind design systems", name: "shadcn" },
+];
+
+const scale = Math.max(...native.map((preset) => preset.count));
+const width = (count: number): string => `${(count / scale) * 100}%`;
+---
+
+<section aria-labelledby="ox-plugins" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="ox-plugins"
+      title="Native rules by default, ESLint plugins when you ask"
+    >
+      Every rule in the core and framework presets runs in Oxlint’s Rust
+      engine. Plugins with no native port run through Oxlint’s
+      ESLint-compatible JS plugin API, which adds a pass in Node, so they’re
+      opt-in.
+    </SectionHeading>
+    <div
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
+    >
+      <div class="flex flex-col bg-background">
+        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">Native, in Rust</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider"
+            >Core always, frameworks you pick</span
+          >
+        </div>
+        <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {
+            native.map((preset) => (
+              <li class="flex flex-col gap-2">
+                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
+                  <span>
+                    <code class="font-mono text-sm">{preset.name}</code>
+                    <span class="text-muted-foreground"> · {preset.description}</span>
+                  </span>
+                  <span class="font-mono text-sm tabular-nums">{preset.count}</span>
+                </p>
+                <span class="h-2 rounded-r-[2px] bg-signal" style={{ width: width(preset.count) }} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-col bg-background">
+        <div class="hatch flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">JS plugins, through Node</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">Opt-in</span>
+        </div>
+        <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {
+            jsPlugins.map((preset) => (
+              <li class="flex flex-col gap-2">
+                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
+                  <span>
+                    <code class="font-mono text-sm">{preset.name}</code>
+                    <span class="text-muted-foreground"> · {preset.description}</span>
+                  </span>
+                  <span class="font-mono text-sm tabular-nums">{preset.count}</span>
+                </p>
+                <span
+                  class="h-2 rounded-r-[2px] bg-foreground/35"
+                  style={{ width: width(preset.count) }}
+                />
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-auto border-border border-t px-4 py-5 sm:px-6 lg:px-10">
+          <code class="block overflow-x-auto whitespace-nowrap font-mono text-[13px]/6 text-muted-foreground">
+            <span class="text-accent">$</span> npx ultracite init --linter oxlint --js-plugins eslint-plugin-sonarjs
+          </code>
+        </div>
+      </div>
+    </div>
+    <div class="border-border border-t px-4 py-8 sm:px-6 lg:px-10">
+      <p class="max-w-[80ch] text-pretty text-base/7 text-muted-foreground">
+        <span class="font-medium text-foreground">Why they’re opt-in.</span>{" "}
+        Ultracite 7.9.1 folded the GitHub and SonarJS rules into core. On one
+        user’s 22-file project, Oxlint went from 78 ms to 3.5 s{" "}
+        (<a
+          aria-describedby={NEW_TAB_HINT_ID}
+          class="underline underline-offset-2 hover:text-foreground"
+          href="https://github.com/haydenbleasel/ultracite/issues/741"
+          rel="noopener noreferrer"
+          target="_blank">#741</a
+        >). Two releases later every JS plugin moved into its own preset, and
+        every pull request now runs a benchmark that fails on a significant
+        slowdown of 25% or more.
+      </p>
+    </div>
+  </div>
+</section>

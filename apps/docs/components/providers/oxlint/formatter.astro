@@ -1,0 +1,101 @@
+---
+import CodeBlock from "blume/components/content/CodeBlock.astro";
+
+import SectionHeading from "../../home/section-heading.astro";
+
+// A component as an agent might write it, and Oxfmt 0.72.0's output for it
+// under ultracite/oxfmt (run for real; regenerate when the config changes).
+const before = `import { cn } from '@/lib/utils'
+import { Slot } from '@radix-ui/react-slot'
+import type { ReactNode } from 'react'
+
+export function Button({ asChild, children }: { asChild?: boolean, children: ReactNode }) {
+  const Comp = asChild ? Slot : 'button'
+  return <Comp className={cn('text-sm px-4 bg-primary hover:bg-primary/90 rounded-md h-10 font-medium')}>{children}</Comp>
+}`;
+
+const after = `import { Slot } from "@radix-ui/react-slot";
+import type { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
+
+export function Button({
+  asChild,
+  children,
+}: {
+  asChild?: boolean;
+  children: ReactNode;
+}) {
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={cn(
+        "bg-primary hover:bg-primary/90 h-10 rounded-md px-4 text-sm font-medium"
+      )}
+    >
+      {children}
+    </Comp>
+  );
+}`;
+
+const sorts = [
+  {
+    description:
+      "Packages first, then your own aliases, with a blank line between the groups and A–Z order inside each.",
+    name: "sortImports",
+  },
+  {
+    description:
+      "Tailwind classes in the order Tailwind’s Prettier plugin uses, in className and in cn, clsx, cva, tw, twMerge, twJoin and tv calls.",
+    name: "sortTailwindcss",
+  },
+  {
+    description:
+      "package.json keys in the conventional order, so a dependency an agent adds lands where a reviewer expects.",
+    name: "sortPackageJson",
+  },
+];
+---
+
+<section aria-labelledby="ox-format" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="ox-format"
+      title="Oxfmt, set up like the Prettier config you’d write"
+    >
+      Oxfmt is built to match Prettier’s output. Ultracite keeps Prettier’s
+      80-column width (Oxfmt defaults to 100), then turns on the sorting you’d
+      otherwise install plugins for.
+    </SectionHeading>
+    <div class="border-border border-t bg-muted/60 p-2 sm:p-6 lg:p-10">
+      <div class="lp-code grid gap-2 sm:gap-4 lg:grid-cols-2">
+        <div class="flex min-w-0 flex-col gap-2">
+          <p class="px-1 font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+            As written
+          </p>
+          <CodeBlock code={before} lang="tsx" title="components/button.tsx" />
+        </div>
+        <div class="flex min-w-0 flex-col gap-2">
+          <p class="px-1 font-mono text-accent text-xs/5 uppercase tracking-wider">
+            After ultracite fix
+          </p>
+          <CodeBlock code={after} lang="tsx" title="components/button.tsx" />
+        </div>
+      </div>
+    </div>
+    <dl
+      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-3"
+    >
+      {
+        sorts.map((sort) => (
+          <div class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+            <dt class="font-mono text-[15px]/6">{sort.name}</dt>
+            <dd class="text-pretty text-[15px]/6 text-muted-foreground">
+              {sort.description}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

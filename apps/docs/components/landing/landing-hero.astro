@@ -1,0 +1,108 @@
+---
+// The top of a provider or agent landing page, on the homepage hero's grid:
+// a breadcrumb trail, the tool's mark beside Ultracite's, the headline, and
+// the install command, with the page's own diagram on the signal slab below.
+// The description goes in the default slot (so it can hold inline code), a
+// line under the installer in `note`, and the diagram in `visual`.
+import type { Crumb } from "./landing-layout.astro";
+import Installer from "../home/installer.astro";
+import Logo from "../home/logo.astro";
+
+interface Props {
+  breadcrumbs: Crumb[];
+  command: string;
+  logo: string;
+  /** The tool the page is about, for the logo pairing's label. */
+  name: string;
+  title: string;
+}
+
+const { breadcrumbs, command, logo, name, title } = Astro.props;
+---
+
+<section class="border-border border-y">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
+      <nav aria-label="Breadcrumb">
+        <ol
+          class="flex flex-wrap items-center gap-x-2 font-mono text-muted-foreground text-xs/5"
+          role="list"
+        >
+          {
+            breadcrumbs.map((crumb, index) => {
+              const last = index === breadcrumbs.length - 1;
+              return (
+                <li class="flex items-center gap-2">
+                  {last ? (
+                    <span aria-current="page" class="text-foreground">
+                      {crumb.name}
+                    </span>
+                  ) : (
+                    <>
+                      <a class="hover:text-foreground" href={crumb.href}>
+                        {crumb.name}
+                      </a>
+                      <span aria-hidden="true">/</span>
+                    </>
+                  )}
+                </li>
+              );
+            })
+          }
+        </ol>
+      </nav>
+      <div
+        aria-label={`Ultracite and ${name}`}
+        class="mt-10 flex items-center gap-3 lg:mt-12"
+        role="img"
+      >
+        <span
+          class="flex size-12 items-center justify-center rounded-xl bg-signal text-ink"
+        >
+          <Logo class="size-7" />
+        </span>
+        <span aria-hidden="true" class="font-mono text-muted-foreground text-sm"
+          >+</span
+        >
+        <img
+          alt=""
+          class="size-12 rounded-xl ring-1 ring-foreground/10"
+          height="48"
+          src={logo}
+          width="48"
+        />
+      </div>
+      <h1
+        class="mt-8 max-w-[18ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:text-7xl"
+      >
+        {title}
+      </h1>
+      <div
+        class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10"
+      >
+        <p
+          class="max-w-[50ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
+        >
+          <slot />
+        </p>
+        <div class="flex flex-col gap-3 lg:col-span-6 lg:items-end">
+          <Installer command={command} wide />
+          {
+            Astro.slots.has("note") && (
+              <p class="flex w-full max-w-[560px] flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-sm/6">
+                <slot name="note" />
+              </p>
+            )
+          }
+        </div>
+      </div>
+    </div>
+    {
+      Astro.slots.has("visual") && (
+        <div class="border-border border-t bg-signal p-2 sm:p-6 lg:p-10">
+          <slot name="visual" />
+        </div>
+      )
+    }
+  </div>
+</section>

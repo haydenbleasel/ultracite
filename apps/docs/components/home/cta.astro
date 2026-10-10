@@ -1,6 +1,13 @@
 ---
 import Installer from "./installer.astro";
 import Logo from "./logo.astro";
+
+interface Props {
+  /** The install command, for a landing page that preselects an engine. */
+  command?: string;
+}
+
+const { command } = Astro.props;
 ---
 
 <section aria-labelledby="hp-cta">
@@ -21,7 +28,7 @@ import Logo from "./logo.astro";
         One command sets up your linter, formatter, editor and agents. Works
         with Oxlint, Biome and ESLint.
       </p>
-      <Installer tone="inverse" />
+      <Installer command={command} tone="inverse" wide={Boolean(command)} />
     </div>
   </div>
 </section>

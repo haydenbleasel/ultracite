@@ -1,0 +1,59 @@
+---
+// A code block exactly like Blume's <CodeBlock> (same highlighter, themes,
+// header and icon), with a note at the end of chosen lines: a rule count
+// beside an import, say. Shiki joins lines with "\n", one
+// `<span class="line">` each, so a note goes in before its line's closing tag.
+import data from "blume:data";
+import { codeBlockHtml } from "blume/components/content/code-block.ts";
+
+interface Props {
+  class?: string;
+  code: string;
+  lang: string;
+  /** Right side of the header bar. */
+  meta?: string;
+  /** Notes keyed by the line they annotate (zero-based). */
+  notes?: Map<number, string>;
+  title: string;
+}
+
+const { class: className, code, lang, meta, notes, title } = Astro.props;
+
+const LINE_END = /<\/span>$/u;
+const escapeHtml = (text: string): string =>
+  text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+
+const highlighted =
+  (await codeBlockHtml({ code, lang, title }, data.config.codeThemes)) ?? "";
+const [open = "", body = "", close = ""] =
+  highlighted.split(/(?<=<code>)|(?=<\/code>)/u);
+const annotated = body
+  .split("\n")
+  .map((line, index) => {
+    const note = notes?.get(index);
+    return note
+      ? line.replace(
+          LINE_END,
+          `<span class="lp-note">${escapeHtml(note)}</span></span>`
+        )
+      : line;
+  })
+  .join("\n");
+---
+
+<div class:list={["lp-code relative", className]}>
+  <div class="prose max-w-none">
+    <Fragment set:html={`${open}${annotated}${close}`} />
+  </div>
+  {
+    meta && (
+      <span class="pointer-events-none absolute top-0 right-4 flex h-11 items-center font-mono text-accent text-xs">
+        {meta}
+      </span>
+    )
+  }
+  <slot />
+</div>

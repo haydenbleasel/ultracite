@@ -1,0 +1,20 @@
+---
+// Renders a copy string with `backticks` as inline code (see lib/inline-code).
+import { segments } from "../../lib/inline-code";
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+{
+  segments(text).map((segment) =>
+    segment.code ? (
+      <code class="font-mono text-[0.875em] text-foreground">{segment.text}</code>
+    ) : (
+      segment.text
+    )
+  )
+}

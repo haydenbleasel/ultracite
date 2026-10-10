@@ -1,0 +1,60 @@
+---
+// Where to go from a landing page: the reference docs it summarizes and its
+// neighbors. Three or four cards, one row on large screens.
+import Icon from "../home/icon.astro";
+import SectionHeading from "../home/section-heading.astro";
+import RichText from "./rich-text.astro";
+
+export interface NextStep {
+  description: string;
+  href: string;
+  label: string;
+  title: string;
+}
+
+interface Props {
+  id: string;
+  items: NextStep[];
+  title: string;
+}
+
+const { id, items, title } = Astro.props;
+---
+
+<section aria-labelledby={id} class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id={id} title={title} />
+    <ul
+      class:list={[
+        "grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2",
+        items.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4",
+      ]}
+      role="list"
+    >
+      {
+        items.map((item) => (
+          <li class="flex bg-background">
+            <a
+              class="group flex w-full flex-col gap-3 px-4 py-8 hover:bg-muted/50 sm:px-6 lg:px-8"
+              href={item.href}
+            >
+              <span class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+                {item.label}
+              </span>
+              <span class="flex items-center justify-between gap-4 font-medium text-lg/7 tracking-[-0.01em]">
+                {item.title}
+                <Icon
+                  class="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+                  name="arrow-right"
+                />
+              </span>
+              <span class="text-pretty text-[15px]/6 text-muted-foreground">
+                <RichText text={item.description} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

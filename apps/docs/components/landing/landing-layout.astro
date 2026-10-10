@@ -1,0 +1,90 @@
+---
+// The shell for the provider and agent landing pages: Blume's PageLayout with
+// the homepage's chrome and footer, plus BreadcrumbList and FAQPage JSON-LD.
+// Blume's own graph (WebSite plus an article node) still comes from the
+// layout; these add the two shapes answer engines read for a landing page.
+import PageLayout from "blume/components/layout/PageLayout.astro";
+import data from "blume:data";
+import "../../styles/home.css";
+
+import { plainText } from "../../lib/inline-code";
+import Footer from "../home/footer.astro";
+
+export interface Crumb {
+  href: string;
+  name: string;
+}
+
+export interface Faq {
+  answer: string;
+  question: string;
+}
+
+interface Props {
+  /** The trail after Home, ending with this page. */
+  breadcrumbs: Crumb[];
+  description: string;
+  faqs?: Faq[];
+  /** When the page's facts were last checked (ISO date). */
+  lastModified: string;
+  title: string;
+}
+
+const { breadcrumbs, description, faqs = [], lastModified, title } =
+  Astro.props;
+const { config } = data;
+const siteUrl = config.site ?? "";
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [{ href: "/", name: "Home" }, ...breadcrumbs].map(
+    (crumb, index) => ({
+      "@type": "ListItem",
+      item: new URL(crumb.href, siteUrl || "https://www.ultracite.ai").href,
+      name: crumb.name,
+      position: index + 1,
+    })
+  ),
+};
+
+const faqLd =
+  faqs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          acceptedAnswer: { "@type": "Answer", text: plainText(faq.answer) },
+          name: plainText(faq.question),
+        })),
+      }
+    : null;
+---
+
+<PageLayout
+  analytics={config.analytics}
+  appleIcon={config.appleIcon}
+  banner={config.banner}
+  favicon={config.favicon}
+  fontCssVars={data.fontCssVars}
+  lastModified={lastModified}
+  logo={config.logo}
+  navigation={data.navigation}
+  ogEnabled={config.og.enabled}
+  page={{ description, title }}
+  searchEnabled={config.search.enabled}
+  site={{ title: config.title, description: config.description ?? "" }}
+  siteUrl={config.site}
+  themeMode={config.theme.mode}
+  x={config.x}
+>
+  <script is:inline set:html={JSON.stringify(breadcrumbLd)} type="application/ld+json" />
+  {
+    faqLd && (
+      <script is:inline set:html={JSON.stringify(faqLd)} type="application/ld+json" />
+    )
+  }
+  <slot />
+  <Footer slot="footer" />
+</PageLayout>

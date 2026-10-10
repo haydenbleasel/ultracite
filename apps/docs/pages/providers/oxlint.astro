@@ -1,0 +1,135 @@
+---
+import Cta from "../../components/home/cta.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingHero from "../../components/landing/landing-hero.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import NextSteps from "../../components/landing/next-steps.astro";
+import type { NextStep } from "../../components/landing/next-steps.astro";
+import ConfigFiles from "../../components/providers/oxlint/config-files.astro";
+import Coverage from "../../components/providers/oxlint/coverage.astro";
+import Everywhere from "../../components/providers/oxlint/everywhere.astro";
+import Formatter from "../../components/providers/oxlint/formatter.astro";
+import Plugins from "../../components/providers/oxlint/plugins.astro";
+import Speed from "../../components/providers/oxlint/speed.astro";
+import { providerLogos } from "../../lib/logos";
+
+// Facts on this page were checked against Oxlint 1.87.0, Oxfmt 0.72.0 and
+// Ultracite 7.12.4 on this date.
+const lastModified = "2026-10-10";
+const command = "npx ultracite@latest init --linter oxlint";
+
+const breadcrumbs: Crumb[] = [
+  { href: "/providers", name: "Providers" },
+  { href: "/providers/oxlint", name: "Oxlint" },
+];
+
+const faqs: FaqItem[] = [
+  {
+    answer:
+      "For most projects, yes. Oxlint implements 871 rules ported from ESLint, typescript-eslint, Unicorn, React, jsx-a11y, Next.js and other plugins under their original names, and loads ESLint v9-style plugins through its JS plugin API, which is still in alpha. It doesn’t support custom parsers, so in `.vue`, `.svelte` and `.astro` files only the script blocks are linted. If you need template linting, Ultracite’s ESLint provider has it.",
+    question: "Is Oxlint a drop-in replacement for ESLint?",
+  },
+  {
+    answer:
+      "Oxlint enables 111 correctness rules by default. Ultracite’s core preset turns on 474 across eight plugins, every one set to `error`, and framework presets add more: 107 for React, 21 for Next.js, 45 for Vue, 56 for Jest and 63 for Vitest. `init` also writes a matching Oxfmt config, editor settings for VS Code and Zed, rules files for coding agents, and optional post-edit hooks.",
+    question: "What does Ultracite add on top of Oxlint’s defaults?",
+  },
+  {
+    answer:
+      "Set it in `rules` in your `oxlint.config.ts`. Oxlint applies the presets in `extends` first and your own rules after them, so `rules: { \"no-console\": \"off\" }` wins. For a single line, use `// oxlint-disable-next-line no-console`.",
+    question: "How do I turn off a rule?",
+  },
+  {
+    answer:
+      "No. Ultracite pairs Oxlint with Oxfmt, the Oxc formatter, set to Prettier’s defaults with import, Tailwind class and package.json sorting turned on. Oxfmt doesn’t run Prettier plugins, so if your project depends on one, pick Ultracite’s ESLint provider, which uses Prettier.",
+    question: "Do I still need Prettier?",
+  },
+  {
+    answer:
+      "Both are native and fast. In our benchmark, Biome’s single binary checked 420 files in 226 ms and Oxlint with Oxfmt took 353 ms. Pick Oxlint for the larger rule set (474 core rules to Biome’s 326), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.",
+    question: "Should I use Oxlint or Biome?",
+  },
+  {
+    answer:
+      "Run `npx ultracite init --linter oxlint`. It removes the ESLint, Prettier and Stylelint packages it would have installed and their config files, moves an existing `.oxlintrc.json` into `oxlint.config.ts`, and merges into your `.vscode/settings.json` rather than replacing it. Copy any custom rules you want to keep into the new config.",
+    question: "How do I switch an existing project from ESLint?",
+  },
+  {
+    answer:
+      "Oxlint has native plugins for React, Next.js, Vue, Jest and Vitest, so those presets add rules. Svelte, Astro, Angular, Solid, Qwik, Remix, NestJS and TanStack have no native plugin yet: their presets keep the config the same shape as on Biome and ESLint, and core’s rules still check their TypeScript and JavaScript.",
+    question: "Which frameworks does the Oxlint config cover?",
+  },
+  {
+    answer:
+      "Yes. Install with `npx ultracite init --linter oxlint --type-aware`, which adds `oxlint-tsgolint`, then run `npx ultracite check --type-aware`. That turns on the 56 core rules that need type information, such as `no-floating-promises` and `no-misused-promises`, on Oxlint’s typescript-go backend.",
+    question: "Does it support type-aware rules?",
+  },
+];
+
+const nextSteps: NextStep[] = [
+  {
+    description:
+      "Every Oxlint preset, the opt-in JS plugins and how to configure them.",
+    href: "/docs/provider/oxlint",
+    label: "Reference",
+    title: "Oxlint provider docs",
+  },
+  {
+    description:
+      "What `init` removes, keeps and rewrites when you leave ESLint.",
+    href: "/docs/migrate/eslint",
+    label: "Guide",
+    title: "Migrate from ESLint",
+  },
+  {
+    description: "Run the 56 rules that read your types, and `tsc` diagnostics.",
+    href: "/docs/usage#type-aware-linting",
+    label: "Guide",
+    title: "Type-aware linting",
+  },
+  {
+    description: "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    href: "/providers",
+    label: "Providers",
+    title: "Compare the engines",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description="Ultracite turns on 474 of Oxlint’s 871 rules (the default is 111), sets up Oxfmt, VS Code, Zed and your coding agents, and checks 420 files in 353 ms."
+  faqs={faqs}
+  lastModified={lastModified}
+  title="Ultracite for Oxlint — Strict Oxlint and Oxfmt Config"
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={providerLogos.oxlint}
+    name="Oxlint"
+    title="The strict Oxlint config, set up in one command"
+  >
+    Oxlint ships 871 rules and turns on 111. Ultracite turns on 474 across
+    eight plugins, sets up Oxfmt to match, and wires both into your editor and
+    coding agents. Nothing to maintain but one line of{" "}
+    <code class="font-mono text-base text-foreground">extends</code>.
+    <Fragment slot="note">
+      <span>Also on</span>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/docs/provider/biome">Biome</a>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/docs/provider/eslint">ESLint</a>
+      <span aria-hidden="true">·</span>
+      <span>Checked against Oxlint 1.87</span>
+    </Fragment>
+    <ConfigFiles slot="visual" />
+  </LandingHero>
+  <Coverage />
+  <Speed />
+  <Plugins />
+  <Formatter />
+  <Everywhere />
+  <Faq id="ox-faq" items={faqs} title="Oxlint questions, answered" />
+  <NextSteps id="ox-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>

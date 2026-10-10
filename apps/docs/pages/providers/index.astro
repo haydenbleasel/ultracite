@@ -1,0 +1,275 @@
+---
+import Cta from "../../components/home/cta.astro";
+import Icon from "../../components/home/icon.astro";
+import Installer from "../../components/home/installer.astro";
+import SectionHeading from "../../components/home/section-heading.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import RichText from "../../components/landing/rich-text.astro";
+import { providerLogos } from "../../lib/logos";
+import type { ProviderId } from "../../lib/providers";
+
+const lastModified = "2026-10-10";
+
+const breadcrumbs: Crumb[] = [{ href: "/providers", name: "Providers" }];
+
+// An engine links to its landing page once pages/providers/<id>.astro exists,
+// and to its docs page until then.
+const landingPages = import.meta.glob("./*.astro");
+const hrefFor = (id: ProviderId): string =>
+  `./${id}.astro` in landingPages ? `/providers/${id}` : `/docs/provider/${id}`;
+
+// Rules set to "error" in each core preset (Ultracite 7.12.4), and medians of
+// `ultracite check` from the benchmark harness on an Apple M1 Pro: Oxlint
+// 1.87.0 + Oxfmt 0.72.0, Biome 2.5.15, ESLint 10.12.0 + Prettier 3.9.10 +
+// Stylelint 17.16.0, over the fixture copied to 42 and 420 files.
+const engines = [
+  {
+    check420: "353 ms",
+    coreRules: 474,
+    id: "oxlint",
+    name: "Oxlint + Oxfmt",
+    recommended: true,
+    summary:
+      "The Oxc project’s Rust linter and formatter, with ESLint’s rule names and an API for ESLint plugins.",
+  },
+  {
+    check420: "226 ms",
+    coreRules: 326,
+    id: "biome",
+    name: "Biome",
+    recommended: false,
+    summary:
+      "One Rust binary that lints and formats from a single config file, with its own rule set.",
+  },
+  {
+    check420: "11.6 s",
+    coreRules: 1041,
+    id: "eslint",
+    name: "ESLint + Prettier + Stylelint",
+    recommended: false,
+    summary:
+      "The JavaScript toolchain most projects started on, with every plugin ever written for it.",
+  },
+] satisfies {
+  check420: string;
+  coreRules: number;
+  id: ProviderId;
+  name: string;
+  recommended: boolean;
+  summary: string;
+}[];
+
+const rows: { label: string; values: [string, string, string] }[] = [
+  { label: "Runs on", values: ["Native Rust binaries", "One native Rust binary", "Node.js"] },
+  { label: "Rules on in the core preset", values: ["474", "326", "1,041"] },
+  { label: "`ultracite check`, 42 files", values: ["340 ms", "231 ms", "3.18 s"] },
+  { label: "`ultracite check`, 420 files", values: ["353 ms", "226 ms", "11.6 s"] },
+  {
+    label: "Rules that read types",
+    values: [
+      "56, with `--type-aware`",
+      "8 project-wide rules, opt-in at setup",
+      "62, always on",
+    ],
+  },
+  {
+    label: "ESLint plugins",
+    values: ["Opt-in, through JS plugins", "No", "Any of them"],
+  },
+  { label: "Formatter", values: ["Oxfmt", "Biome", "Prettier, with its plugins"] },
+  {
+    label: "Files `init` writes",
+    values: [
+      "`oxlint.config.ts`, `oxfmt.config.ts`",
+      "`biome.jsonc`",
+      "`eslint.config.mjs`, `prettier.config.mjs`, `stylelint.config.mjs`",
+    ],
+  },
+  {
+    label: "Pick it for",
+    values: [
+      "Speed and breadth together: the default for new projects",
+      "The fastest check, from one tool and one config file",
+      "Template linting in Vue and Svelte, Prettier plugins, niche ESLint plugins",
+    ],
+  },
+];
+
+const faqs: FaqItem[] = [
+  {
+    answer:
+      "Start with Oxlint. It’s what `init` recommends: native speed, 474 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want the fastest check from a single tool and config file. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted.",
+    question: "Which engine should I pick?",
+  },
+  {
+    answer:
+      "Yes. Run `npx ultracite init --linter biome` (or `oxlint`, or `eslint`). `init` removes the packages and config files it installed for the old engine, writes the new engine’s config, and merges into your `.vscode/settings.json` instead of replacing it.",
+    question: "Can I switch engines later?",
+  },
+  {
+    answer:
+      "They aim at the same standard: type safety, React and hooks, accessibility, async code and imports. Names differ by engine (`noExplicitAny` in Biome, `no-explicit-any` in Oxlint and ESLint), and ESLint turns on the most rules because the most plugins exist for it.",
+    question: "Do all three enforce the same rules?",
+  },
+  {
+    answer:
+      "Biome checks and formats in one process, while `ultracite check` on Oxlint runs Oxlint and then Oxfmt. Both stay near a third of a second from 42 files to 420; the ESLint toolchain goes from 3.2 to 11.6 seconds.",
+    question: "Why is Biome faster than Oxlint here?",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description="Ultracite configures Oxlint + Oxfmt, Biome or ESLint + Prettier + Stylelint with the same strict standard. Compare their rules, speed and tradeoffs."
+  faqs={faqs}
+  lastModified={lastModified}
+  title="Ultracite Providers — Oxlint, Biome and ESLint Compared"
+>
+  <section class="border-border border-y">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
+        <p class="font-mono text-muted-foreground text-xs/5">Providers</p>
+        <h1
+          class="mt-10 max-w-[16ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:mt-12 lg:text-7xl"
+        >
+          One standard, three engines
+        </h1>
+        <div
+          class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10"
+        >
+          <p
+            class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
+          >
+            Ultracite is a preset, not a linter. It sets up the toolchain you
+            pick with the same strict rules, editor settings and agent
+            instructions, and you can switch engines with one command.
+          </p>
+          <div class="flex flex-col gap-3 lg:col-span-6 lg:items-end">
+            <Installer />
+          </div>
+        </div>
+      </div>
+      <div class="border-border border-t bg-signal p-2 sm:p-6 lg:p-10">
+        <ul class="grid gap-2 sm:gap-4 lg:grid-cols-3" role="list">
+          {
+            engines.map((engine) => (
+              <li class="flex">
+                <a
+                  class="group flex w-full flex-col gap-6 rounded-blume border border-border bg-code p-6 hover:border-foreground/30 sm:p-8"
+                  href={hrefFor(engine.id)}
+                >
+                  <span class="flex items-center justify-between gap-4">
+                    <img
+                      alt=""
+                      class="size-9 rounded-md"
+                      height="36"
+                      src={providerLogos[engine.id]}
+                      width="36"
+                    />
+                    {engine.recommended && (
+                      <span class="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-background text-xs/5">
+                        Recommended
+                      </span>
+                    )}
+                  </span>
+                  <span class="flex flex-col gap-2">
+                    <span class="font-medium text-2xl tracking-[-0.02em]">
+                      {engine.name}
+                    </span>
+                    <span class="text-pretty text-[15px]/6 text-muted-foreground">
+                      {engine.summary}
+                    </span>
+                  </span>
+                  <span class="mt-auto grid grid-cols-2 gap-4 border-border border-t pt-5">
+                    <span class="flex flex-col gap-1">
+                      <span class="font-medium text-2xl tabular-nums tracking-[-0.02em]">
+                        {engine.coreRules.toLocaleString("en-US")}
+                      </span>
+                      <span class="text-muted-foreground text-sm/5">core rules</span>
+                    </span>
+                    <span class="flex flex-col gap-1">
+                      <span class="font-medium text-2xl tabular-nums tracking-[-0.02em]">
+                        {engine.check420}
+                      </span>
+                      <span class="text-muted-foreground text-sm/5">to check 420 files</span>
+                    </span>
+                  </span>
+                  <span class="flex items-center gap-2 font-medium text-[15px]/6">
+                    {hrefFor(engine.id).startsWith("/providers")
+                      ? `Ultracite for ${engine.name.split(" ")[0]}`
+                      : `${engine.name.split(" ")[0]} docs`}
+                    <Icon
+                      class="size-4 transition-transform group-hover:translate-x-0.5"
+                      name="arrow-right"
+                    />
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="pv-compare" class="border-border border-b">
+    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <SectionHeading id="pv-compare" title="Side by side">
+        The same project, the same machine, each engine through Ultracite’s
+        core preset.
+      </SectionHeading>
+      <div class="overflow-x-auto border-border border-t">
+        <table class="w-full min-w-[56rem] border-collapse text-left text-[15px]/6">
+          <thead>
+            <tr class="border-border border-b">
+              <th class="w-[22%] px-4 py-4 font-normal text-muted-foreground sm:px-6 lg:px-10" scope="col">
+                <span class="sr-only">Property</span>
+              </th>
+              {
+                engines.map((engine) => (
+                  <th class="w-[26%] px-4 py-4 font-medium sm:px-6" scope="col">
+                    <span class="flex items-center gap-2.5">
+                      <img alt="" class="size-5 rounded-[3px]" height="20" src={providerLogos[engine.id]} width="20" />
+                      {engine.name}
+                    </span>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map((row) => (
+                <tr class="border-border border-b last:border-b-0">
+                  <th class="px-4 py-4 align-top font-normal text-muted-foreground sm:px-6 lg:px-10" scope="row">
+                    <RichText text={row.label} />
+                  </th>
+                  {row.values.map((value) => (
+                    <td class="text-pretty px-4 py-4 align-top tabular-nums sm:px-6">
+                      <RichText text={value} />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p
+        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
+      >
+        Ultracite 7.12.4. Times are medians of five runs of <code
+          class="font-mono text-[13px]">ultracite check</code
+        > on an Apple M1 Pro over the repo’s benchmark fixture, with Oxlint 1.87.0
+        and Oxfmt 0.72.0, Biome 2.5.15, and ESLint 10.12.0 with Prettier 3.9.10
+        and Stylelint 17.16.0. They include starting Node and the CLI.
+      </p>
+    </div>
+  </section>
+
+  <Faq id="pv-faq" items={faqs} title="Choosing an engine" />
+  <Cta />
+</LandingLayout>

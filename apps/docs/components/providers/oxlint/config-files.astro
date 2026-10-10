@@ -1,0 +1,80 @@
+---
+// The whole Oxlint setup `ultracite init --linter oxlint` writes for a React
+// and Next.js app (rendered by lib/providers.ts, as on the homepage), with the
+// rule count each preset brings. Counts are rules set to "error" in
+// packages/cli/config/oxlint/<preset> as of Ultracite 7.12.4.
+import { providers } from "../../../lib/providers";
+import AnnotatedCode from "../../landing/annotated-code.astro";
+
+const PRESETS = ["core", "react", "next"];
+const ruleCounts = new Map([
+  ["core", 474],
+  ["next", 21],
+  ["react", 107],
+]);
+let totalRules = 0;
+for (const count of ruleCounts.values()) {
+  totalRules += count;
+}
+
+const oxlint = providers.find((provider) => provider.id === "oxlint");
+const [lintFile, formatFile] = oxlint?.configFiles ?? [];
+const lintCode = lintFile?.code(PRESETS) ?? "";
+const formatCode = formatFile?.code(PRESETS) ?? "";
+
+// The import line of each preset gets its rule count.
+const lintNotes = new Map(
+  lintCode.split("\n").flatMap((line, index): [number, string][] => {
+    const preset = PRESETS.find((name) =>
+      line.includes(`"ultracite/oxlint/${name}"`)
+    );
+    const count = preset ? ruleCounts.get(preset) : undefined;
+    return count ? [[index, `${count} rules`]] : [];
+  })
+);
+
+// What the `ultracite/oxfmt` spread sets (packages/cli/config/oxfmt), as
+// option and value, or what an object-valued option does.
+const formatterSettings = [
+  ["printWidth", "80"],
+  ["singleQuote", "false"],
+  ["semi", "true"],
+  ["trailingComma", '"es5"'],
+  ["sortImports", "grouped, A–Z"],
+  ["sortTailwindcss", "in cn(), cva()…"],
+];
+---
+
+<div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
+  <AnnotatedCode
+    class="lp-code-fill lg:col-span-7"
+    code={lintCode}
+    lang={lintFile?.lang ?? "typescript"}
+    meta={`${totalRules} rules, all errors`}
+    notes={lintNotes}
+    title={lintFile?.name ?? "oxlint.config.ts"}
+  />
+  <AnnotatedCode
+    class="lp-code-attached lg:col-span-5"
+    code={formatCode}
+    lang={formatFile?.lang ?? "typescript"}
+    title={formatFile?.name ?? "oxfmt.config.ts"}
+  >
+    {/* The divider color is translucent, so the grid sits on the code
+        background rather than showing the slab through its gaps. */}
+    <div class="overflow-hidden rounded-b-blume border border-border border-t-0 bg-code">
+      <dl
+        class="grid grid-cols-2 gap-px bg-border font-mono text-xs/5 sm:grid-cols-3"
+      >
+        {
+          formatterSettings.map(([key, value]) => (
+            <div class="flex flex-col gap-0.5 bg-code px-4 py-2.5">
+              <dt class="text-muted-foreground">{key}</dt>
+              <dd class="text-foreground">{value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </AnnotatedCode>
+</div>

@@ -1,0 +1,39 @@
+---
+// Questions and answers, all open: the answers are the page's most quotable
+// text, so they stay in the document rather than behind a disclosure. The
+// same items feed the page's FAQPage JSON-LD (landing-layout.astro).
+import SectionHeading from "../home/section-heading.astro";
+import type { Faq as FaqItem } from "./landing-layout.astro";
+import RichText from "./rich-text.astro";
+
+interface Props {
+  id: string;
+  items: FaqItem[];
+  title: string;
+}
+
+const { id, items, title } = Astro.props;
+---
+
+<section aria-labelledby={id} class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id={id} title={title} />
+    <dl
+      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+    >
+      {
+        items.map((item) => (
+          <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
+            <dt class="text-pretty font-medium text-lg/7 tracking-[-0.01em]">
+              <RichText text={item.question} />
+            </dt>
+            <dd class="max-w-[60ch] text-pretty text-base/7 text-muted-foreground">
+              <RichText text={item.answer} />
+            </dd>
+          </div>
+        ))
+      }
+      {items.length % 2 === 1 && <div aria-hidden="true" class="hatch bg-background max-md:hidden" />}
+    </dl>
+  </div>
+</section>

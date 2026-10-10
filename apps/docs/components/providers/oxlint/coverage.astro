@@ -1,0 +1,228 @@
+---
+import SectionHeading from "../../home/section-heading.astro";
+
+// A snapshot of Oxlint 1.87.0's catalog (`oxlint --rules --format=json`) and
+// the rules ultracite/oxlint/core sets to "error" in Ultracite 7.12.4. The
+// categories count rules in the eight plugins core enables (546 of the 871);
+// the other plugins (react, jsx-a11y, nextjs, vue, jest, vitest) belong to the
+// framework presets. Re-derive both when either version moves.
+const catalogSize = 871;
+const defaultCount = 111;
+const coreCount = 474;
+const typeAwareCount = 56;
+
+const categories = [
+  {
+    available: 125,
+    defaults: 111,
+    description: "Code that’s outright wrong or useless",
+    enabled: 125,
+    name: "Correctness",
+  },
+  {
+    available: 50,
+    defaults: 0,
+    description: "Code that’s most likely wrong",
+    enabled: 47,
+    name: "Suspicious",
+  },
+  {
+    available: 118,
+    defaults: 0,
+    description: "Stricter checks that can flag code that works",
+    enabled: 105,
+    name: "Pedantic",
+  },
+  {
+    available: 7,
+    defaults: 0,
+    description: "Code that could run faster",
+    enabled: 6,
+    name: "Perf",
+  },
+  {
+    available: 156,
+    defaults: 0,
+    description: "Code with a more idiomatic form",
+    enabled: 131,
+    name: "Style",
+  },
+  {
+    available: 80,
+    defaults: 0,
+    description: "Bans on language and library features",
+    enabled: 59,
+    name: "Restriction",
+  },
+  {
+    available: 10,
+    defaults: 0,
+    description: "Rules still in development",
+    enabled: 1,
+    name: "Nursery",
+  },
+];
+
+const scale = Math.max(...categories.map((category) => category.available));
+const percent = (count: number, of: number): string => `${(count / of) * 100}%`;
+
+const plugins = [
+  { count: 166, name: "eslint" },
+  { count: 127, name: "unicorn" },
+  { count: 102, name: "typescript" },
+  { count: 23, name: "oxc" },
+  { count: 19, name: "jsdoc" },
+  { count: 16, name: "import" },
+  { count: 13, name: "promise" },
+  { count: 8, name: "node" },
+];
+---
+
+<section aria-labelledby="ox-rules" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="ox-rules"
+      title={`${defaultCount} rules by default. ${coreCount} with Ultracite.`}
+    >
+      Out of the box, Oxlint only runs correctness rules: code that is
+      definitely broken. Ultracite also turns on the suspicious, pedantic,
+      style and restriction rules that catch what agents get wrong, like loose
+      types, floating promises and nested ternaries.
+    </SectionHeading>
+    <figure class="m-0 border-border border-t">
+      <dl
+        class="grid gap-px bg-border bg-clip-padding sm:grid-cols-3"
+      >
+        <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-[15px]/6 text-muted-foreground">Rules in Oxlint 1.87</dt>
+          <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+            {catalogSize}
+          </dd>
+        </div>
+        <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-[15px]/6 text-muted-foreground">
+            On by default, all of them correctness rules
+          </dt>
+          <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+            {defaultCount}
+          </dd>
+        </div>
+        <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-[15px]/6 text-muted-foreground">
+            On in Ultracite’s core preset, before any framework rules
+          </dt>
+          <dd class="order-first font-medium text-5xl text-accent tracking-[-0.04em] tabular-nums">
+            {coreCount}
+          </dd>
+        </div>
+      </dl>
+      <div class="border-border border-t px-4 py-10 sm:px-6 lg:px-10 lg:py-12">
+        <div
+          class="flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground text-sm/6"
+        >
+          <span class="flex items-center gap-2">
+            <span aria-hidden="true" class="size-3 rounded-[2px] bg-foreground"></span>
+            On by default
+          </span>
+          <span class="flex items-center gap-2">
+            <span aria-hidden="true" class="size-3 rounded-[2px] bg-signal"></span>
+            Turned on by Ultracite
+          </span>
+          <span class="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              class="hatch size-3 rounded-[2px] ring-1 ring-foreground/15 ring-inset"
+            ></span>
+            Left off
+          </span>
+        </div>
+        <ul class="mt-8 flex flex-col gap-6 sm:gap-5" role="list">
+          {
+            categories.map((category) => (
+              <li class="grid items-center gap-x-6 gap-y-2 sm:grid-cols-[13rem_1fr_6rem] lg:grid-cols-[16rem_1fr_6rem]">
+                <p class="flex flex-col">
+                  <span class="font-medium text-base/6">{category.name}</span>
+                  <span class="text-pretty text-muted-foreground text-sm/5">
+                    {category.description}
+                  </span>
+                </p>
+                <div class="h-7">
+                  <div
+                    class="flex h-full overflow-hidden rounded-[3px] ring-1 ring-foreground/15 ring-inset"
+                    style={{ width: percent(category.available, scale) }}
+                  >
+                    {category.defaults > 0 && (
+                      <span
+                        class="h-full bg-foreground"
+                        style={{ width: percent(category.defaults, category.available) }}
+                      />
+                    )}
+                    <span
+                      class="h-full bg-signal"
+                      style={{
+                        width: percent(
+                          category.enabled - category.defaults,
+                          category.available
+                        ),
+                      }}
+                    />
+                    <span class="hatch h-full flex-1" />
+                  </div>
+                </div>
+                <p class="font-mono text-sm/6 tabular-nums sm:text-right">
+                  {category.enabled}
+                  <span class="text-muted-foreground"> / {category.available}</span>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <dl
+        class="grid grid-cols-2 gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-4 lg:grid-cols-8"
+      >
+        {
+          plugins.map((plugin) => (
+            <div class="flex flex-col gap-1 bg-background px-4 py-6 sm:px-6">
+              <dt class="font-mono text-muted-foreground text-xs/5">{plugin.name}</dt>
+              <dd class="order-first font-medium text-2xl tracking-[-0.02em] tabular-nums">
+                {plugin.count}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2">
+        <div class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
+            Errors, never warnings
+          </h3>
+          <p class="max-w-[52ch] text-pretty text-base/7 text-muted-foreground">
+            All {coreCount} are set to <code class="font-mono text-sm text-foreground">error</code>.
+            An agent takes a zero exit code as done, and a warning doesn’t
+            change it, so a warning is a problem nobody fixes.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
+            {typeAwareCount} rules that read your types
+          </h3>
+          <p class="max-w-[52ch] text-pretty text-base/7 text-muted-foreground">
+            Rules like <code class="font-mono text-sm text-foreground">no-floating-promises</code>{" "}
+            and <code class="font-mono text-sm text-foreground">no-misused-promises</code>{" "}
+            need type information. They run with <code class="font-mono text-sm text-foreground">--type-aware</code>,
+            on Oxlint’s typescript‑go backend.
+          </p>
+        </div>
+      </div>
+      <figcaption
+        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
+      >
+        Oxlint 1.87.0 and Ultracite 7.12.4. Categories count the 546 rules in
+        the eight plugins the core preset enables, drawn to one scale; the
+        React, Next.js, Vue, Jest and Vitest presets turn on rules from the
+        other plugins.
+      </figcaption>
+    </figure>
+  </div>
+</section>

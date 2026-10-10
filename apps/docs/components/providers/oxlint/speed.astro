@@ -1,0 +1,157 @@
+---
+import SectionHeading from "../../home/section-heading.astro";
+
+// Medians of `ultracite check` from the repo's benchmark harness
+// (`BENCH_FIXTURE_COPIES=6|60 BENCH_SAMPLES=5 bun ./benchmark/index.ts`) on an
+// Apple M1 Pro with Ultracite 7.12.4, Oxlint 1.87.0 + Oxfmt 0.72.0 and
+// ESLint 10.12.0 + Prettier 3.9.10 + Stylelint 17.16.0. Biome ran too
+// (231 ms and 226 ms); it's compared on /providers.
+const runs = [
+  { eslint: 3175.1, files: 42, oxlint: 340.4 },
+  { eslint: 11_636.8, files: 420, oxlint: 352.7 },
+];
+
+const AXIS_MAX_MS = 12_000;
+const TICK_STEP_MS = 2000;
+const ticks = Array.from(
+  { length: AXIS_MAX_MS / TICK_STEP_MS + 1 },
+  (_, index) => index * TICK_STEP_MS
+);
+
+const MS_PER_SECOND = 1000;
+// Seconds as shown: two decimals under ten seconds, one above.
+const shownSeconds = (ms: number): number =>
+  Number((ms / MS_PER_SECOND).toFixed(ms < 10 * MS_PER_SECOND ? 2 : 1));
+const formatMs = (ms: number): string =>
+  ms < MS_PER_SECOND ? `${Math.round(ms)} ms` : `${shownSeconds(ms)} s`;
+const width = (ms: number): string => `${(ms / AXIS_MAX_MS) * 100}%`;
+
+const [small, large] = runs;
+const speedup = large ? Math.round(large.eslint / large.oxlint) : 0;
+// Differences of the rounded times shown, so the figures add up on the page.
+const oxlintGrowth =
+  small && large ? Math.round(large.oxlint) - Math.round(small.oxlint) : 0;
+const eslintGrowth =
+  small && large
+    ? (shownSeconds(large.eslint) - shownSeconds(small.eslint)).toFixed(1)
+    : "0";
+
+const toolchains = [
+  { color: "bg-signal", key: "oxlint", name: "Oxlint + Oxfmt" },
+  {
+    color: "bg-foreground/35",
+    key: "eslint",
+    name: "ESLint + Prettier + Stylelint",
+  },
+] as const;
+---
+
+<section aria-labelledby="ox-speed" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="ox-speed"
+      title="Ten times the files, 13 more milliseconds"
+    >
+      Oxlint and Oxfmt are native binaries that spread the work across every
+      core, so a bigger project barely moves the clock. The ESLint toolchain
+      runs in Node and slows down with every file you add.
+    </SectionHeading>
+    <figure class="m-0 border-border border-t">
+      <div class="px-4 pt-10 pb-8 sm:px-6 lg:px-10 lg:pt-14">
+        <div class="flex flex-col gap-8">
+          {
+            runs.map((run) => (
+              <div class="flex flex-col gap-3">
+                <p class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+                  {run.files} files
+                </p>
+                {toolchains.map((toolchain) => {
+                  const ms = run[toolchain.key];
+                  return (
+                    <div class="grid items-center gap-x-6 gap-y-1.5 md:grid-cols-[15rem_1fr]">
+                      <p class="text-[15px]/6">{toolchain.name}</p>
+                      <div class="flex items-center gap-3">
+                        <div class="relative h-8 flex-1">
+                          <span
+                            class:list={["absolute inset-y-0 left-0 rounded-r-[3px]", toolchain.color]}
+                            style={{ width: width(ms) }}
+                          />
+                        </div>
+                        <span class="w-16 shrink-0 text-right font-mono text-sm/6 tabular-nums">
+                          {formatMs(ms)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))
+          }
+          <div
+            aria-hidden="true"
+            class="grid gap-x-6 md:grid-cols-[15rem_1fr] max-md:hidden"
+          >
+            <span></span>
+            <div class="flex items-center gap-3">
+              <div class="relative h-5 flex-1 border-foreground/20 border-t">
+                {
+                  ticks.map((tick) => (
+                    <span
+                      class="absolute top-1.5 -translate-x-1/2 font-mono text-[11px]/4 text-muted-foreground tabular-nums first:translate-x-0"
+                      style={{ left: width(tick) }}
+                    >
+                      {tick / MS_PER_SECOND}s
+                    </span>
+                  ))
+                }
+              </div>
+              <span class="w-16 shrink-0"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <dl
+        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-3"
+      >
+        <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-pretty text-[15px]/6 text-muted-foreground">
+            Faster than the ESLint toolchain on 420 files
+          </dt>
+          <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+            {speedup}×
+          </dd>
+        </div>
+        <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-pretty text-[15px]/6 text-muted-foreground">
+            Added on Oxlint going from 42 to 420 files
+          </dt>
+          <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+            +{oxlintGrowth}
+            <span class="ml-1 text-2xl text-muted-foreground tracking-normal">ms</span>
+          </dd>
+        </div>
+        <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-pretty text-[15px]/6 text-muted-foreground">
+            Added on ESLint for the same growth
+          </dt>
+          <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
+            +{eslintGrowth}
+            <span class="ml-1 text-2xl text-muted-foreground tracking-normal">s</span>
+          </dd>
+        </div>
+      </dl>
+      <figcaption
+        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
+      >
+        Medians of five runs of <code class="font-mono text-[13px]">ultracite check</code>{" "}
+        on an Apple M1 Pro, through each toolchain’s core preset: Oxlint 1.87.0
+        and Oxfmt 0.72.0 against ESLint 10.12.0, Prettier 3.9.10 and Stylelint
+        17.16.0, on the repo’s benchmark fixture copied to 42 and 420 files.
+        Times include starting Node and the CLI.{" "}
+        <a class="underline underline-offset-2 hover:text-foreground" href="/providers"
+          >How Biome compares</a
+        >.
+      </figcaption>
+    </figure>
+  </div>
+</section>

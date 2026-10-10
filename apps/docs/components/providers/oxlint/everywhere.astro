@@ -1,0 +1,173 @@
+---
+import { agents } from "../../../lib/agents";
+import Icon from "../../home/icon.astro";
+import SectionHeading from "../../home/section-heading.astro";
+import AnnotatedCode from "../../landing/annotated-code.astro";
+
+// Excerpts of what `ultracite init` writes for Oxlint
+// (packages/cli/src/data/editors.ts and data/agents.ts), and lines from a real
+// `ultracite check` run under a coding agent, where Oxlint prints its compact
+// agent format (paths shortened from the benchmark fixture's src/copy-0/).
+const vscodeSettings = `{
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit"
+  },
+  "editor.formatOnSave": true
+}`;
+
+const zedSettings = `"oxlint": {
+  "initialization_options": {
+    "settings": {
+      "run": "onType",
+      "typeAware": true,
+      "unusedDisableDirectives": "deny"
+    }
+  }
+}`;
+
+const diagnostics = [
+  {
+    location: "src/data.ts:20:14",
+    message: "Use `Array#toSorted()` instead of `Array#sort()`.",
+    rule: "unicorn(no-array-sort)",
+  },
+  {
+    location: "src/store.ts:1:22",
+    message:
+      "Prefer using a top-level type-only import instead of inline type specifiers.",
+    rule: "import(consistent-type-specifier-style)",
+  },
+  {
+    location: "src/utils.ts:5:54",
+    message: "Object keys should be sorted",
+    rule: "eslint(sort-keys)",
+  },
+  {
+    location: "src/utils.ts:59:14",
+    message: "Unexpected `await` inside a loop.",
+    rule: "eslint(no-await-in-loop)",
+  },
+  {
+    location: "src/format.ts:42:6",
+    message:
+      "Prefer `String#replaceAll()` over `String#replace()` when using a regex with the global flag.",
+    rule: "unicorn(prefer-string-replace-all)",
+  },
+];
+---
+
+<section aria-labelledby="ox-everywhere" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading
+      id="ox-everywhere"
+      title="The same rules in your editor, your agent and CI"
+    >
+      <code class="font-mono text-base">init</code> points your editor at
+      Oxlint and Oxfmt and tells your agents how to run them, so a file passes
+      or fails the same way wherever it’s checked.
+    </SectionHeading>
+    <ol
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-3"
+      role="list"
+    >
+      <li class="flex min-w-0 flex-col bg-background">
+        <div
+          class="flex h-80 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-6"
+        >
+          <AnnotatedCode
+            class="lp-code-fill"
+            code={vscodeSettings}
+            lang="jsonc"
+            title=".vscode/settings.json"
+          />
+        </div>
+        <div class="flex flex-col gap-2 p-6 sm:p-8">
+          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+            VS Code, Cursor, Windsurf
+          </p>
+          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+            Fix and format on save
+          </h3>
+          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
+            The Oxc extension formats 16 languages, from TypeScript and CSS to
+            YAML and Markdown, and applies Oxlint’s safe fixes when you save.
+          </p>
+        </div>
+      </li>
+      <li class="flex min-w-0 flex-col bg-background">
+        <div
+          class="flex h-80 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-6"
+        >
+          <AnnotatedCode
+            class="lp-code-fill"
+            code={zedSettings}
+            lang="jsonc"
+            title=".zed/settings.json"
+          />
+        </div>
+        <div class="flex flex-col gap-2 p-6 sm:p-8">
+          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+            Zed
+          </p>
+          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+            Lint as you type
+          </h3>
+          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
+            Oxlint’s language server checks each keystroke with the type-aware
+            rules on, and a stale <code class="font-mono text-sm">oxlint-disable</code>{" "}
+            comment is an error.
+          </p>
+        </div>
+      </li>
+      <li class="flex min-w-0 flex-col bg-background">
+        <div
+          class="flex h-80 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-6"
+        >
+          <div
+            class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-blume border border-panel-border bg-panel"
+          >
+            <p
+              class="flex h-11 shrink-0 items-center gap-2.5 border-panel-border border-b px-4 font-medium text-panel-muted text-xs"
+            >
+              <Icon class="size-3.5" name="bash" />
+              Terminal
+            </p>
+            <div
+              class="flex flex-col px-5 py-4 font-mono text-[13px]/[1.55] text-panel-muted"
+            >
+              <p class="mb-1 truncate text-panel-foreground">
+                <span class="text-signal">$</span> npx ultracite check
+              </p>
+              {
+                diagnostics.map((line) => (
+                  <p class="truncate">
+                    {line.location}: <span class="text-signal">error</span>{" "}
+                    <span class="text-panel-foreground">{line.rule}</span>:{" "}
+                    {line.message}
+                  </p>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 p-6 sm:p-8">
+          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+            Coding agents
+          </p>
+          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+            Output written for agents
+          </h3>
+          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
+            Oxlint notices when a coding agent runs it and prints one line per
+            problem and no summary, to save tokens. <code
+              class="font-mono text-sm">init</code
+            > also writes the rules into the files {agents.length} agents read.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
