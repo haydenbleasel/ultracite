@@ -1,4 +1,6 @@
 import { readFile } from "node:fs/promises";
+import nodePath from "node:path";
+import process from "node:process";
 
 import { log } from "@clack/prompts";
 import { applyEdits, modify } from "jsonc-parser";
@@ -23,6 +25,39 @@ const biomeCoreConfig = "ultracite/biome/core";
 const defaultConfig = {
   $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
   extends: [biomeCoreConfig],
+};
+
+// The core preset reads ignores from version control (`vcs.useIgnoreFile`),
+// and Biome looks for them only in the folder that holds its config: without
+// a .git, .gitignore or .ignore there, it stops with "couldn't find an ignore
+// file". A new config in a package below the repository root points Biome at
+// that root; one outside any repository gets the .gitignore the project will
+// want anyway.
+const VCS_FILES = [".git", ".gitignore", ".ignore"];
+const DEFAULT_GITIGNORE = "node_modules\n";
+
+const findGitRoot = (from: string): string | undefined => {
+  let directory = from;
+  while (!exists(nodePath.join(directory, ".git"))) {
+    const parent = nodePath.dirname(directory);
+    if (parent === directory) {
+      return undefined;
+    }
+    directory = parent;
+  }
+  return directory;
+};
+
+/** Where Biome should look for ignore files, when it isn't the project. */
+const findVcsRoot = (): string | undefined => {
+  if (VCS_FILES.some((file) => exists(file))) {
+    return undefined;
+  }
+  const cwd = process.cwd();
+  const gitRoot = findGitRoot(nodePath.dirname(cwd));
+  return gitRoot
+    ? nodePath.relative(cwd, gitRoot).split(nodePath.sep).join("/")
+    : undefined;
 };
 
 // A nested config in a Biome monorepo extends "//" to inherit the root
@@ -91,8 +126,8 @@ const getUpdatedExtends = (
 };
 
 export const biome = {
-  create: (opts?: BiomeOptions) => {
-    const path = getBiomeConfigPath();
+  create: async (opts?: BiomeOptions) => {
+    const configPath = getBiomeConfigPath();
     const extendsList = [biomeCoreConfig];
 
     // Add type-aware config for project/scanner rules
@@ -108,12 +143,20 @@ export const biome = {
       }
     }
 
-    const config = {
+    const vcsRoot = findVcsRoot();
+    const config: typeof defaultConfig & { vcs?: { root: string } } = {
       ...defaultConfig,
       extends: extendsList,
     };
+    if (vcsRoot) {
+      config.vcs = { root: vcsRoot };
+    }
 
-    return writeProjectFile(path, `${JSON.stringify(config, null, 2)}\n`);
+    await writeProjectFile(configPath, `${JSON.stringify(config, null, 2)}\n`);
+
+    if (!(vcsRoot || VCS_FILES.some((file) => exists(file)))) {
+      await writeProjectFile(".gitignore", DEFAULT_GITIGNORE);
+    }
   },
   // A nested config can only inherit the root config through extends, and
   // "//" (which inherits all of it) can't be combined with other entries.

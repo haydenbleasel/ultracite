@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import nodePath from "node:path";
+import process from "node:process";
 
 import { biome } from "../src/linters/biome";
 
@@ -33,6 +35,29 @@ const mockBiomeConfig = (
     existsSync: mock(() => false),
     readFileSync: mock(() => "{}"),
   }));
+};
+
+// Biome reads ignore files only from its config's folder, and stops when
+// that folder has no .git, .gitignore or .ignore.
+const mockProjectFiles = (present: (path: string) => boolean) => {
+  const mockWriteFile = mock((_path: string, _content: string) =>
+    Promise.resolve()
+  );
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.reject(new Error("ENOENT"))),
+    readFile: mock(() => Promise.resolve("{}")),
+    writeFile: mockWriteFile,
+  }));
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      if (!present(path)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock(() => false),
+    readFileSync: mock(() => "{}"),
+  }));
+  return mockWriteFile;
 };
 
 describe("biome", () => {
@@ -228,6 +253,43 @@ describe("biome", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.biome.json");
+    });
+
+    test("leaves version control alone when the project has a .gitignore", async () => {
+      const mockWriteFile = mockProjectFiles((path) => path === ".gitignore");
+
+      await biome.create();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1]).vcs).toBeUndefined();
+    });
+
+    test("points Biome at the repository root from a package below it", async () => {
+      const gitDirectory = nodePath.join(
+        nodePath.dirname(process.cwd()),
+        ".git"
+      );
+      const mockWriteFile = mockProjectFiles((path) => path === gitDirectory);
+
+      await biome.create();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1]).vcs).toEqual({
+        root: "..",
+      });
+    });
+
+    test("writes a .gitignore outside any repository", async () => {
+      const mockWriteFile = mockProjectFiles(() => false);
+
+      await biome.create();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(2);
+      expect(JSON.parse(mockWriteFile.mock.calls[0][1]).vcs).toBeUndefined();
+      expect(mockWriteFile.mock.calls[1]).toEqual([
+        ".gitignore",
+        "node_modules\n",
+      ]);
     });
   });
 
