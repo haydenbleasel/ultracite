@@ -5,7 +5,7 @@
 import data from "blume:data";
 import "../../styles/blog.css";
 
-import { formatDate, isoDate, postFor } from "../../lib/blog";
+import { isoDate, postFor } from "../../lib/blog";
 import type { Heading, JsonLdNode } from "../../lib/blog";
 import Icon from "../home/icon.astro";
 import BlogLayout from "./blog-layout.astro";
@@ -115,22 +115,7 @@ const jsonLd: JsonLdNode = {
               >{post.author.name}</a
             >
             <span aria-hidden="true">·</span>
-            <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
-            <span aria-hidden="true">·</span>
             <span>{post.readingMinutes} min read</span>
-            {
-              post.updated && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>
-                    Updated{" "}
-                    <time datetime={isoDate(post.updated)}>
-                      {formatDate(post.updated)}
-                    </time>
-                  </span>
-                </>
-              )
-            }
           </p>
         </div>
       </div>

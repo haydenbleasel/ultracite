@@ -3,7 +3,7 @@ import data from "blume:data";
 
 import BlogLayout from "../../components/blog/blog-layout.astro";
 import RuleTags from "../../components/blog/rule-tags.astro";
-import { formatDate, isoDate, posts } from "../../lib/blog";
+import { isoDate, posts } from "../../lib/blog";
 import type { JsonLdNode } from "../../lib/blog";
 
 // Every post needs its own page to have a route (see lib/blog.ts), so a post
@@ -93,12 +93,8 @@ const jsonLd: JsonLdNode = {
                   class="group grid gap-4 px-4 py-8 hover:bg-muted/50 sm:px-6 sm:py-10 lg:grid-cols-12 lg:gap-10 lg:px-10"
                   href={post.href}
                 >
-                  <p class="flex items-center gap-3 font-mono text-muted-foreground text-xs/5 lg:col-span-3 lg:items-start lg:pt-2">
-                    <time datetime={isoDate(post.date)}>
-                      {formatDate(post.date)}
-                    </time>
-                    <span aria-hidden="true">·</span>
-                    <span>{post.readingMinutes} min read</span>
+                  <p class="font-mono text-muted-foreground text-xs/5 lg:col-span-3 lg:pt-2">
+                    {post.readingMinutes} min read
                   </p>
                   <div class="lg:col-span-6">
                     <h2 class="text-balance font-medium text-2xl tracking-[-0.03em] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4 sm:text-3xl">

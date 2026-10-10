@@ -170,17 +170,6 @@ export const postFor = (file: string): Post => {
   return post;
 };
 
-// Dates are calendar days, so format them in UTC: a reader west of UTC would
-// otherwise see 2026-10-10 as the 9th.
-const dateFormat = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  month: "short",
-  timeZone: "UTC",
-  year: "numeric",
-});
-
-export const formatDate = (date: Date): string => dateFormat.format(date);
-
-/** The yyyy-mm-dd form for `<time datetime>` and JSON-LD. */
+/** The yyyy-mm-dd form for JSON-LD. Dates aren't shown on the page, so posts read as evergreen. */
 export const isoDate = (date: Date): string =>
   date.toISOString().slice(0, "yyyy-mm-dd".length);
