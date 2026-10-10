@@ -5,15 +5,17 @@ import { getTweet } from "../../lib/get-tweet";
 import SectionHeading from "./section-heading.astro";
 
 // Hand-picked testimonials, fetched at build time. The first is featured
-// large; `text` overrides the fetched body (Christopher Burns' is a long note
-// the syndication endpoint truncates, quoted here up to its first break).
-const entries: { featured?: boolean; id: string; text?: string }[] = [
-  {
-    featured: true,
-    id: "1969727618237820980",
-    text: "One of the biggest lessons I learned from my first startup is to set the bar extremely high for code quality and linting from day one. If you do not, it turns into an impossible escalator you can never step off.",
-  },
-  { id: "1937342910519038142" },
+// large. `name` overrides the fetched display name (Joel's carries an emoji),
+// and `text` the fetched body, for a long note the syndication endpoint
+// truncates.
+const entries: {
+  featured?: boolean;
+  id: string;
+  name?: string;
+  text?: string;
+}[] = [
+  { featured: true, id: "1937342910519038142" },
+  { id: "2028943177831604429", name: "Joel Hooks" },
   { id: "1976732830487958011" },
 ];
 
@@ -26,7 +28,12 @@ const quotes = fetched.flatMap((tweet, index) => {
     return [];
   }
   return [
-    { ...tweet, featured: entry.featured, text: entry.text ?? tweet.text },
+    {
+      ...tweet,
+      featured: entry.featured,
+      name: entry.name ?? tweet.name,
+      text: entry.text ?? tweet.text,
+    },
   ];
 });
 
