@@ -110,7 +110,7 @@ export const bob: AgentPageContent = {
       "Bob combines global rules first, then workspace rules, and loads `AGENTS.md` after the current mode’s rules but before the general rules in `.bob/rules/`.",
   },
   skills:
-    "Bob loads skills from `.bob/skills/` and `~/.bob/skills/`, and asks before activating one unless Skills is auto-approved. Its docs don’t list `.agents/skills/`, where `init` installs the Ultracite skill, so add it for Bob with `npx skills add haydenbleasel/ultracite -a bob`.",
+    "Bob loads skills from `.bob/skills/` and `~/.bob/skills/`, not from `.agents/skills/`, and asks before activating one unless Skills is auto-approved. When you choose Bob, `init` installs the Ultracite skill into `.bob/skills/` as well.",
   sources: [
     {
       title: "IBM Bob: Custom rules",

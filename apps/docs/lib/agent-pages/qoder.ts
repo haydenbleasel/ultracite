@@ -129,7 +129,7 @@ export const qoder: AgentPageContent = {
       "Qoder CLI rebuilds its context each session from `AGENTS.md` files and `.qoder/rules/`, searching up from the working directory to the folder that holds `.git`. Qoder IDE picks up the project’s `AGENTS.md` with no setup.",
   },
   skills:
-    "Qoder loads skills from `.qoder/skills/` and `~/.qoder/skills/`. Its docs don’t list `.agents/skills/`, where `init` installs the Ultracite skill, so add it for Qoder with `npx skills add haydenbleasel/ultracite -a qoder`.",
+    "Qoder loads skills from `.qoder/skills/` and `~/.qoder/skills/`, not from `.agents/skills/`. When you choose Qoder, `init` installs the Ultracite skill into `.qoder/skills/` as well.",
   sources: [
     {
       title: "Qoder CLI: Memory",

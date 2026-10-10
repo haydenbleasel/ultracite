@@ -9,6 +9,8 @@ const ultraciteSkillRepo = "haydenbleasel/ultracite";
 const ultraciteSkillName = "ultracite";
 
 interface MaybeInstallUltraciteSkillOptions {
+  /** The agents chosen in `init --agents`, by CLI id. */
+  agents?: readonly string[];
   /** Whether to ask when `shouldInstall` is unset. Defaults to `!quiet`. */
   interactive?: boolean;
   packageManager: PackageManagerName;
@@ -21,7 +23,9 @@ interface MaybeInstallUltraciteSkillOptions {
 // some of these by the time the skill is installed (`.claude`, `.windsurf`,
 // `.codebuddy`), so the list follows the user's choices.
 const projectAgentDirectories = new Map([
+  [".adal", "adal"],
   [".augment", "augment"],
+  [".bob", "bob"],
   [".claude", "claude-code"],
   [".codebuddy", "codebuddy"],
   [".crush", "crush"],
@@ -29,24 +33,41 @@ const projectAgentDirectories = new Map([
   [".junie", "junie"],
   [".kiro", "kiro-cli"],
   [".openhands", "openhands"],
+  [".qoder", "qoder"],
   [".qwen", "qwen-code"],
   [".trae", "trae"],
   [".windsurf", "windsurf"],
 ]);
 
+// init agents that read skills only from their own directory, never from
+// `.agents/skills`, by CLI id and skills agent. They get the skill when chosen,
+// even in a project that doesn't have their directory yet.
+const ownDirectoryAgents = new Map([
+  ["adal", "adal"],
+  ["bob", "bob"],
+  ["qoder", "qoder"],
+]);
+
 /**
  * The skills agents to install to: `universal` (`.agents/skills`, read by
- * Codex, Cursor, GitHub Copilot, Gemini CLI, Amp, Cline, OpenCode and more)
- * plus each agent above whose directory the project has. Naming them keeps
- * `skills add --yes` from falling back to "all agents" when it detects none,
- * which also wrote a `.claude/skills` link and a second copy under a
- * top-level `agent/` directory (for the Eve framework).
+ * Codex, Cursor, GitHub Copilot, Gemini CLI, Amp, Cline, OpenCode and more),
+ * each agent above whose directory the project has, and each chosen agent
+ * that only reads its own directory. Naming them keeps `skills add --yes` from
+ * falling back to "all agents" when it detects none, which also wrote a
+ * `.claude/skills` link and a second copy under a top-level `agent/`
+ * directory (for the Eve framework).
  */
-const skillAgents = (): string[] => [
-  "universal",
-  ...[...projectAgentDirectories]
-    .filter(([directory]) => exists(directory))
-    .map(([, agent]) => agent),
+const skillAgents = (chosenAgents: readonly string[] = []): string[] => [
+  ...new Set([
+    "universal",
+    ...[...projectAgentDirectories]
+      .filter(([directory]) => exists(directory))
+      .map(([, agent]) => agent),
+    ...chosenAgents.flatMap((id) => {
+      const agent = ownDirectoryAgents.get(id);
+      return agent ? [agent] : [];
+    }),
+  ]),
 ];
 
 // `skills add` asks which agents to install to and where, which it can only
@@ -56,11 +77,18 @@ const skillAgents = (): string[] => [
 // `--yes` and explicit agents it installs into the project without asking.
 const buildUltraciteSkillInstallCommand = (
   packageManager: PackageManagerName,
-  nonInteractive = false
+  nonInteractive = false,
+  chosenAgents: readonly string[] = []
 ) =>
   dlxCommand(packageManager, "skills", {
     args: nonInteractive
-      ? ["add", ultraciteSkillRepo, "--yes", "--agent", ...skillAgents()]
+      ? [
+          "add",
+          ultraciteSkillRepo,
+          "--yes",
+          "--agent",
+          ...skillAgents(chosenAgents),
+        ]
       : ["add", ultraciteSkillRepo],
     short: packageManager === "npm",
   });
@@ -126,6 +154,7 @@ export const getUltraciteSkillInstallCommand = (
 ) => buildUltraciteSkillInstallCommand(packageManager);
 
 export const maybeInstallUltraciteSkill = async ({
+  agents = [],
   interactive,
   packageManager,
   quiet = false,
@@ -147,7 +176,11 @@ export const maybeInstallUltraciteSkill = async ({
     return false;
   }
 
-  const fullCommand = buildUltraciteSkillInstallCommand(packageManager, true);
+  const fullCommand = buildUltraciteSkillInstallCommand(
+    packageManager,
+    true,
+    agents
+  );
   const [command, ...args] = fullCommand.split(" ");
   const s = spinner();
 

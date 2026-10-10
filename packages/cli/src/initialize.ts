@@ -1520,12 +1520,14 @@ const completeInitialization = async ({
   interactive,
   pmInfo,
   quiet,
+  selections,
 }: InitializeContext): Promise<void> => {
   if (!quiet) {
     log.success("Successfully initialized Ultracite!");
   }
 
   const hasUltraciteSkill = await maybeInstallUltraciteSkill({
+    agents: selections.agents,
     interactive,
     packageManager: pmInfo.name,
     quiet,

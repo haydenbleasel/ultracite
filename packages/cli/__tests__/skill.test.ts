@@ -86,6 +86,37 @@ describe("maybeInstallUltraciteSkill", () => {
     );
   });
 
+  test("installs for chosen agents that only read their own directory", async () => {
+    // AdaL, IBM Bob and Qoder never read .agents/skills, and a project that
+    // just chose them doesn't have their directory yet.
+    const spawn = mockSpawn(0);
+    mockFileSystem({ ".qoder": "" });
+
+    await maybeInstallUltraciteSkill({
+      agents: ["claude", "adal", "bob", "qoder"],
+      packageManager: "npm",
+      quiet: true,
+      shouldInstall: true,
+    });
+    restoreFileSystemMock();
+
+    expect(spawn).toHaveBeenCalledWith(
+      "npx",
+      [
+        "skills",
+        "add",
+        "haydenbleasel/ultracite",
+        "--yes",
+        "--agent",
+        "universal",
+        "qoder",
+        "adal",
+        "bob",
+      ],
+      { stdio: "pipe" }
+    );
+  });
+
   test("reports a failed install", async () => {
     mockSpawn(1);
 

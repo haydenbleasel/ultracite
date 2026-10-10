@@ -90,7 +90,7 @@ export const adal: AgentPageContent = {
       "AdaL has one project instructions file: `AGENTS.md` at the workspace root, injected every turn as project context. A custom prompt file changes AdaL’s role, not the project rules.",
   },
   skills:
-    "AdaL loads skills from `~/.adal/skills/`, the project’s `.adal/skills/` and installed plugins. Its docs don’t list `.agents/skills/`, and `init` doesn’t write to `.adal/`, so copy `.agents/skills/ultracite` into `.adal/skills/` if you want AdaL to have the Ultracite skill.",
+    "AdaL loads skills from `~/.adal/skills/`, the project’s `.adal/skills/` and installed plugins, not from `.agents/skills/`. When you choose AdaL, `init` installs the Ultracite skill into `.adal/skills/` as well.",
   sources: [
     {
       title: "AdaL: Custom system prompt",

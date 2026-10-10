@@ -18,7 +18,7 @@ When you run `npx ultracite init`, it offers to install the skill (and skips the
 npx ultracite init --install-skill
 ```
 
-`init` installs the skill into your project without prompting. It runs `skills add haydenbleasel/ultracite --yes --agent universal`, plus the agents whose project folders already exist (such as `.claude`, `.windsurf`, `.codebuddy`, or `.roo`). `universal` is the shared `.agents/skills` folder that Codex, Cursor, GitHub Copilot, Gemini CLI, Amp, Cline, OpenCode, and more read.
+`init` installs the skill into your project without prompting. It runs `skills add haydenbleasel/ultracite --yes --agent universal`, plus the agents whose project folders already exist (such as `.claude`, `.windsurf`, `.codebuddy`, or `.junie`). `universal` is the shared `.agents/skills` folder that Codex, Cursor, GitHub Copilot, Gemini CLI, Amp, Cline, OpenCode, and more read. AdaL, IBM Bob and Qoder read only their own folders, so when you choose one of them, `init` installs the skill there too.
 
 To choose the agents and scope yourself, including a global install that carries across repositories, run the skills CLI directly:
 
