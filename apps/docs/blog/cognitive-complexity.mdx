@@ -1,0 +1,245 @@
+---
+title: "Cognitive complexity: the rule that measures the reader"
+description: Where the metric came from, how it scores a function, what the research says it does and doesn't measure, and why it matters more when agents write the code.
+date: 2026-10-10
+author: hayden
+rules:
+  - sonarjs/cognitive-complexity
+  - noExcessiveCognitiveComplexity
+  - complexity
+---
+
+Most lint rules ask whether code is correct. A few ask whether it's readable, and cognitive complexity is the most ambitious of them. It puts a number on how hard a function is to understand, and fails the check when the number gets too high. Ultracite turns it on.
+
+It's also one of the rules people argue with most. It flags code that works. Its threshold is a judgment call. And the research behind it is thinner than its confident error message suggests. This post covers where the metric came from, how it scores a function, what the evidence says, what changes when agents write the code, how to choose a limit, what agents do when they hit it, and where the rule breaks.
+
+## From testability to understandability
+
+In 1976, Thomas McCabe published [A Complexity Measure](https://doi.org/10.1109/TSE.1976.233837). His cyclomatic complexity counts the independent paths through a function: one, plus one for every decision. McCabe wanted modules that were "both testable and maintainable", and the number maps straight onto testing, since it's the number of test cases needed to cover every independent path. He suggested 10 as "a reasonable, but not magical, upper limit", with one exception: a long `case` statement choosing between independent branches was allowed.
+
+Twenty years later, [NIST's guide to structured testing](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication500-235.pdf) kept the limit at 10, noting that limits as high as 15 had "been used successfully as well". It also records an early case of a complexity metric being gamed. One developer's "modified" metric divided complexity by the number of switch branches, which let them report a module of complexity 90 as 10 by "adding a ten-branch multiway decision statement to it that did nothing."
+
+Cyclomatic complexity measures what it was designed to measure. The trouble starts when it's used as a measure of readability. A flat `switch` with twenty cases scores 21, while four levels of nested loops and conditions can score 6. Critics have argued since the 1980s that it's largely a proxy for lines of code ([Shepperd, 1988](https://doi.org/10.1049/sej.1988.0003)), and a study of 24 million functions found the link is moderate for single functions but strengthens once scores are added up across files ([Landman et al., 2016](https://doi.org/10.1002/smr.1760)). And when [Peitek et al.](https://doi.org/10.1109/ICSE43902.2021.00056) put programmers in an fMRI scanner in 2021, McCabe's metric "consistently lacked any significant correlation" with what they observed.
+
+In December 2016, G. Ann Campbell at SonarSource published [Cognitive Complexity: A new way of measuring understandability](https://www.sonarsource.com/docs/CognitiveComplexity.pdf), a white paper. It starts from that gap: "methods with equal Cyclomatic Complexity do not necessarily present equal difficulty". Rather than deriving a number from a graph, it writes down judgments about what makes code hard to read as scoring rules. Campbell also knew the score would become a target. In the [launch post](https://www.sonarsource.com/blog/cognitive-complexity-because-testability-understandability/) she wrote, "if we measure it, you will try to improve it", so the rules were built to reward the changes that make code easier to read.
+
+## How the score works
+
+The white paper has three basic rules:
+
+1. Ignore structures that let several statements be "readably shorthanded into one".
+2. Add one for each break in the linear flow of the code.
+3. Add more when flow-breaking structures are nested.
+
+Breaks in linear flow are `if`, `else if`, `else`, ternaries, `switch`, loops, `catch`, sequences of boolean operators, recursion, and jumps to labels. What doesn't count is just as deliberate: `try` and `finally`, early returns, plain `break` and `continue`, the function itself, and shorthand such as null-coalescing and optional chaining. An early return costs nothing "because an early return can often make code much clearer."
+
+Nesting is where the metric earns its name. A structure nested inside another adds its depth on top of the base increment, so an `if` at the top of a function costs 1 and the same `if` inside two loops costs 3. Here's a function scored by hand against the white paper:
+
+{/* prettier-ignore */}
+```ts title="count-blocking.ts"
+const countBlocking = (files: LintFile[], ignored: Set<string>): number => {
+  let count = 0;
+  for (const file of files) { // +1
+    if (!ignored.has(file.path)) { // +2 (nesting 1)
+      for (const issue of file.issues) { // +3 (nesting 2)
+        if (issue.severity === "error" || issue.fatal) { // +4 (nesting 3) +1 (||)
+          count += 1;
+        }
+      }
+    }
+  }
+  return count;
+};
+```
+
+That's a cognitive complexity of 11. Its cyclomatic complexity is 6. Here's the same behavior with the nesting taken out:
+
+{/* prettier-ignore */}
+```ts title="count-blocking.ts"
+const isBlocking = (issue: Issue): boolean =>
+  issue.severity === "error" || issue.fatal; // +1 (||)
+
+const countBlocking = (files: LintFile[], ignored: Set<string>): number => {
+  let count = 0;
+  for (const file of files) { // +1
+    if (ignored.has(file.path)) { // +2 (nesting 1)
+      continue;
+    }
+    count += file.issues.filter(isBlocking).length;
+  }
+  return count;
+};
+```
+
+`countBlocking` drops to 3, and `isBlocking` scores 1. Cyclomatic complexity barely notices the difference: 3 and 2, where it was 6. The rewrite is what most reviewers would ask for, and cognitive complexity is the only one of the two metrics that rewards it.
+
+The other half of the design is the `switch`. The white paper gives "a switch and all its cases combined" a single increment, because a switch compares one value against named cases and "can often be taken in at a glance." A twenty-case lookup scores 1. Its cyclomatic complexity is 21, twice McCabe's suggested limit, even though it's one of the easiest kinds of function to read.
+
+## What the research says
+
+Cognitive complexity was designed from intuition, not experiments. The white paper reports no user study. The evidence came later, and it's mixed.
+
+The main validation is a meta-analysis by [Muñoz Barón, Wyrich and Wagner](https://arxiv.org/abs/2007.12520), which won Best Full Paper at ESEM 2020. They pulled together 10 data sets from earlier comprehension experiments, covering 427 code snippets and about 24,000 human evaluations, and scored every snippet. Cognitive complexity correlated strongly with the time people took to understand the code (r = 0.54), and moderately with how difficult they rated it. It didn't correlate with whether they understood it correctly, or with brain activity in the one fMRI data set. The authors called it "the first validated and solely code-based metric" that captures at least some aspects of understandability.
+
+One caveat from the same paper matters for anyone setting a threshold. Almost every snippet in the data scored low: "only two of the studies included code snippets with a value greater than 15." So the authors make "no recommendation for a meaningful threshold", beyond keeping the score "as low as possible."
+
+Later work is less generous. [Lavazza et al.](https://doi.org/10.1016/j.jss.2022.111561) re-analyzed the same data alongside older metrics and found cognitive complexity correlates with understandability "approximately as much as traditional measures", concluding it "does not appear to fulfill the promise of being a significant improvement." A follow-up with new maintenance tasks ([Lavazza, Morasca and Gatto, 2023](https://doi.org/10.1007/s10664-023-10396-7)) found models built on one or two code measures were off by around 30%. The fMRI study found cognitive complexity "shows an improvement over McCabe, but only a small correlation, at best."
+
+What holds up best is the intuition underneath it. In a study of 275 developers, [Johnson et al.](https://doi.org/10.1109/ICSME.2019.00085) found that "minimizing nesting decreases the time a developer spends reading and understanding source code." Peitek et al. recommend that programmers minimize "branching depth." The usual explanation is working memory: [Cowan](https://doi.org/10.1017/S0140525X01003922) puts our central capacity at "about four chunks", and every level of nesting is context a reader has to hold. That's an analogy, not a calibration. Nobody has shown that four nested `if` statements is where comprehension falls apart.
+
+So, honestly: cognitive complexity is a coarse proxy for reading effort. It predicts how long code takes to understand better than whether it's understood correctly. It isn't clearly better than simpler measures, and there's no evidence for any particular threshold, ours included. We turn it on anyway, because a lint rule doesn't have to be a perfect measure. It has to be cheap, deterministic, explainable, and point the right way most of the time. This one does, and the case for it gets stronger when an agent writes the code.
+
+## What changes when agents write the code
+
+Cognitive complexity was built to measure a human reader. When an agent writes the code, there are two readers: the agent itself, as it edits the code later, and the person who reviews what it wrote.
+
+The evidence that complexity makes code harder for models is real but inconsistent. [CodeMind](https://arxiv.org/abs/2402.09664) found that models' ability to reason about code "drops for code with higher complexity", and that nested constructs and complex conditions were the hard parts. But [Xie et al.](https://arxiv.org/abs/2602.07882) (ICML 2026) found that "classical complexity metrics exhibit no consistent correlation with LLM performance" once code length is accounted for, cognitive complexity included. We wouldn't claim a lower score makes an agent smarter.
+
+The reviewer is a different matter. The reviewer is exactly the reader the metric was built for, and reading time, the thing cognitive complexity predicts best, is the cost that grows when agents produce more code than people can carefully read.
+
+And models don't seem to keep track of it. Per function, generated code is often simpler than human code: [Cotroneo et al.](https://arxiv.org/abs/2508.21634) found lower average cyclomatic complexity across more than 500,000 samples. The trouble is accumulation. In a study of [806 open-source repositories that adopted Cursor](https://arxiv.org/abs/2511.04427), He et al. found that adoption brought "a substantial and persistent increase in static analysis warnings and code complexity": codebase cognitive complexity rose 41% and stayed up. Sonar's researchers [suggest a reason](https://arxiv.org/abs/2508.14727): a model generates one token at a time, and "the accumulating complexity of a given method is not tracked." That's a hypothesis, not a measurement, but it describes the gap a linter fills. A linter that runs after every edit re-scores the whole function every time.
+
+Telling a model about complexity also seems to help it get code right. [Sepidband et al.](https://arxiv.org/abs/2505.23953) prompted models with the complexity metrics of their failed attempts. For GPT-3.5 on HumanEval, pass@1 rose 35.71%, against 12.5% for feedback from running the tests alone.
+
+The biggest change is in enforcement. People negotiate with lint warnings. They suppress them, raise the limit, or decide the function is fine. An agent in a loop with a linter keeps editing until the check passes, so every rule becomes a hard constraint on every function it writes. That makes a well-chosen rule much more valuable, and a bad threshold much more expensive. It also makes gaming cheap. Writing on martinfowler.com about lint rules as sensors for coding agents, [Birgitta Böckeler](https://martinfowler.com/articles/sensors-for-coding-agents.html) reports that "AI frequently decided to increase the cyclomatic complexity threshold" rather than refactor. In [ImpossibleBench](https://arxiv.org/abs/2510.20270), agents asked to make impossible tests pass would "delete failing tests rather than fix the underlying bug." This is Goodhart's law in the form [Marilyn Strathern](https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB) gave it: "When a measure becomes a target, it ceases to be a good measure." So an agent's fix loop has to close the obvious exits. It should rule out suppression comments and config changes, and make clear that restyling the flagged code won't count as a fix. When Ultracite hands lint errors to an agent, it says all three.
+
+## Choosing a threshold
+
+Sonar's rule defaults to 15, and most tools that adopted the metric adopted the number with it. As the research section showed, nothing in the evidence picks it, or any other number. So instead of asking which limit is right, we measured what different limits do to real code.
+
+In October 2026 we scored every function in eight well-known TypeScript codebases: [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core (`src/vs/editor/common`). We left out tests, generated code and vendored code, and scored 30,904 functions with `eslint-plugin-sonarjs`.
+
+| Limit | Functions over it | Share of all functions |
+| ----- | ----------------- | ---------------------- |
+| 10    | 1,834             | 5.9%                   |
+| 15    | 1,147             | 3.7%                   |
+| 20    | 802               | 2.6%                   |
+| 25    | 535               | 1.7%                   |
+| 30    | 396               | 1.3%                   |
+
+Most code is nowhere near any of these limits. 55% of the functions scored 0, with no branching at all, and 89% scored 5 or less. The 95th percentile was 12. The tail, though, is long. The 99th percentile was 35, and the highest-scoring function, Next.js's [`createMetadataElements`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata-elements.tsx#L83-L1633), scored 989 across 1,551 lines. Choosing a limit is choosing how far into that tail to cut, and each step costs real work: a limit of 15 flagged 43% more functions than a limit of 20, and between 10% and 75% more in each repo.
+
+The functions just over a limit are often one change away from being well under it. Next.js's [`formatTimespan`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/router-utils/cache-life-type-utils.ts#L12-L49) scores 23. It's eleven flat checks, all inside one `if`:
+
+{/* prettier-ignore */}
+```ts title="cache-life-type-utils.ts (Next.js, abridged)"
+function formatTimespan(seconds: number): string {
+  if (seconds > 0) { // +1
+    if (seconds === MONTH_30_DAYS_IN_SECONDS) { // +2 (nesting 1)
+      return '1 month'
+    }
+    // ...nine more checks like it, +2 each
+    if (seconds % MINUTE_IN_SECONDS === 0) { // +2 (nesting 1)
+      return seconds / MINUTE_IN_SECONDS + ' minutes'
+    }
+  }
+  return seconds + ' seconds'
+}
+```
+
+Turn the outer `if` into an early return (`if (seconds <= 0) return ...`) and every check moves up a level. The score drops to 12, the behavior is the same, and the cyclomatic score doesn't move at all. The penalty isn't for having eleven checks. It's for making the reader carry a condition through all of them.
+
+That's the case for picking a limit that sits in the tail rather than the body of the distribution, and for lowering it over time rather than starting low. A limit below the 95th percentile turns the rule into a style debate about ordinary code. A limit in the tail flags the functions a reviewer would also flag.
+
+## What an agent does with the error
+
+To see what agents actually do with this error, we ran an experiment in October 2026. We took two real functions from those codebases, set the rule to Sonar's default limit of 15, and handed each function to Claude Code and to Codex four times, with each CLI on its default model. We used the same prompt and permissions Ultracite uses when it passes lint errors to an agent. The first function was `formatTimespan`, at 23. The second was Astro's [`computePreferredLocaleList`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/i18n/utils.ts#L117-L146), which matches a browser's preferred languages against a site's locales using loops nested inside loops, and scores 37.
+
+The headline results are reassuring:
+
+- All 16 runs cleared the error on the first attempt.
+- All 16 preserved behavior. We compared every version against the original on about 6,000 inputs each, and checked that the Astro function made the same helper calls in the same order.
+- None of them cheated: no suppression comments, no config changes, no other files touched. The prompt forbids all of that explicitly, and 16 runs can only rule out cheating that happens often.
+
+What the agents did depended on the function. On `formatTimespan`, every run removed complexity in place. Five, including all four Codex runs, made exactly the change from the previous section, inverting the outer `if` into an early return, and the score fell from 23 to 12. The other three, all Claude Code, replaced the eleven checks with ordered lookup tables. That cut the branching itself, and they scored between 5 and 11.
+
+On `computePreferredLocaleList`, every run extracted a helper, and in six of the eight that's all it did. The inner loop moved into a new function, unchanged apart from names:
+
+{/* prettier-ignore */}
+```diff title="utils.ts (one of six near-identical runs, abridged)"
++function appendMatchingLocales(
++  browserLocale: { locale: string },
++  locales: Locales,
++  result: string[],
++): void {
++  for (const loopLocale of locales) {
++    // ...the rest of the loop, moved
++  }
++}
+ ...
+       for (const browserLocale of browserLocaleList) {
+-        for (const loopLocale of locales) {
+-          // ...the loop body
+-        }
++        appendMatchingLocales(browserLocale, locales, result);
+       }
+```
+
+The helper scores 14, one under the limit. The file's total fell from 37 to 22, but no decision was removed: the code has 10 branch points before and after. The whole drop is nesting that the moved loop no longer carries, because the helper is scored from zero. The same loop scored 29 in place and 14 on its own. To be fair to the agents, the deepest nesting went from seven levels to four, and the helper has a reasonable name. But each one stopped a point under the limit, with every branch a reader has to follow still there. The other two runs, both Claude Code, also simplified the logic by merging the string and object cases and using `.filter`, and landed at 16 and 13.
+
+The two agents had different styles. Codex was minimal and almost deterministic, producing three distinct files across eight runs, and it checked its own work by re-running the linter and testing its version against the original. Claude Code varied more, producing eight different files, and restructured more boldly. It didn't have permission to run the linter, so it scored its own changes by hand, correctly every time.
+
+Each agent found the cheapest change that made the error go away. When the cheapest change was a real improvement, like an early return, that's what we got. When it wasn't (early returns alone only bring the Astro function down to 23), the cheapest change was to move the nesting somewhere the rule doesn't count it. The rule's biggest loophole and the agent's incentive point the same way. That's not a reason to turn the rule off. It's a reason to read the names of the functions an agent creates, and to treat a helper that scores exactly one under the limit as a question, not an answer.
+
+## Where it breaks
+
+**Extraction is free.** The white paper deliberately ignores function boundaries, because pulling code into "a single, evocatively named call" is the kind of shorthand it wants to reward. But the rule can't tell an evocative name from `processPart2`. Splitting a function in two can halve its score whether or not anything became easier to read. It's mechanical enough that [Saborido et al.](https://doi.org/10.1109/ACCESS.2022.3144743) built a search over Extract Method refactorings that cleared 78% of 1,050 cognitive complexity issues across 10 open-source projects without a person involved. It's also what most runs in [our experiment](#what-an-agent-does-with-the-error) did when the nesting couldn't be removed in place. Callbacks get the same treatment. `eslint-plugin-sonarjs` scores every function on its own, so a callback starts again at zero nesting however deep it sits, and none of its score counts toward the function around it. In our eight codebases, 42% of functions were nested inside another one. Counting each callback toward its parent would have pushed at least 55% more top-level functions over a limit of 20.
+
+**It's blind to most of what makes code hard.** The score sees control flow and nothing else: not names, not data flow, not mutable state, not types, and not size. A 300-line function with no branches scores 0. The fMRI study found that "a code's textual size drives programmers' attention, and vocabulary size burdens programmers' working memory." Limits on length and parameter count are separate rules, and cognitive complexity won't do their job.
+
+**Implementations drift.** "Cognitive complexity" names a white paper, not a standard, and the tools that implement it don't all agree with it or with each other. In October 2024, Sonar's own JavaScript implementation, which `eslint-plugin-sonarjs` ships, [stopped counting](https://github.com/SonarSource/SonarJS/pull/4862) `||` and `??` sequences, treating them as default-value shorthand. It also skips `&&` used to render JSX, and doesn't roll nested functions into a React component's score. Under those rules, the first `countBlocking` above scores one point lower than the white paper says, because its `||` is free. The same function can pass in one linter and fail in another, at the same limit. When we scored our eight codebases with both `eslint-plugin-sonarjs` and Biome, they agreed exactly on only 32% of the functions where either one reported a score of 2 or more. Biome usually scored higher, mostly because it carries nesting into callbacks and counts `||`. At the same limit it flagged 37% more functions, so a limit only means something alongside the tool that enforces it.
+
+**No threshold has evidence behind it.** The validation data barely goes above 15, so any limit is a policy, not a finding.
+
+**Cyclomatic complexity is a poor stand-in.** Not every linter implements cognitive complexity, and falling back to the cyclomatic `complexity` rule is tempting. But it's the metric this post argues against. Across our eight codebases the two metrics were strongly correlated, but they disagreed about the functions that matter. VS Code's [`toLabel`](https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages.ts#L436-L469), a 29-case switch, scores 30 on cyclomatic complexity and 1 on cognitive complexity. A [callback in Next.js](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/app-link-gc.ts#L4-L64) nests loops and conditions 13 levels deep and scores 87 on cognitive complexity, but only 18 on cyclomatic. Of the functions over 20 on cognitive complexity, 39% were at or under 20 on cyclomatic.
+
+## Using it well
+
+**Make it an error.** A warning is a suggestion people learn to scroll past.
+
+**Measure before you pick a number.** Run the rule with a limit of 0 and every function reports its score. Set the limit where it flags the functions you'd actually want rewritten, then bring it down over time.
+
+**Flatten before you extract.** Most high scores come from nesting. Guard clauses and early returns, `continue` in loops, lookup tables instead of branching on a value, and named predicates for compound conditions all remove complexity rather than moving it. Extract a function when its name will tell the reader something.
+
+**Don't raise the limit for one function.** Some code really can't get simpler, like a parser's main loop or a state machine. A suppression comment explaining why is more honest than a higher limit for the whole codebase, and it shows up in review.
+
+**Review the names when an agent fixes it.** The diff that clears the error is usually an extraction. Check that every new function has a name you'd have chosen, and a reason to exist on its own.
+
+Cognitive complexity is a rough measure of something real. It can't tell you whether code is good. It can tell you, on every edit, that a function has grown past the point most readers can hold in their heads. When the code is written by an agent that doesn't notice that on its own, that's worth knowing. Ultracite turns it on in its presets, and the [configuration docs](/docs/configuration#overriding-rules) show how to change its settings for your linter.
+
+## References
+
+**History and specification**
+
+- Thomas J. McCabe. [A Complexity Measure](https://doi.org/10.1109/TSE.1976.233837). _IEEE Transactions on Software Engineering_, SE-2(4), 1976.
+- Arthur H. Watson and Thomas J. McCabe. [Structured Testing: A Testing Methodology Using the Cyclomatic Complexity Metric](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication500-235.pdf). NIST Special Publication 500-235, 1996.
+- Martin Shepperd. [A critique of cyclomatic complexity as a software metric](https://doi.org/10.1049/sej.1988.0003). _Software Engineering Journal_, 3(2), 1988.
+- Davy Landman, Alexander Serebrenik, Eric Bouwers and Jurgen J. Vinju. [Empirical analysis of the relationship between CC and SLOC in a large corpus of Java methods and C functions](https://doi.org/10.1002/smr.1760). _Journal of Software: Evolution and Process_, 28(7), 2016.
+- G. Ann Campbell. [Cognitive Complexity: A new way of measuring understandability](https://www.sonarsource.com/docs/CognitiveComplexity.pdf). SonarSource white paper, version 1.7, 2023 (first published 2016).
+- G. Ann Campbell. [Cognitive Complexity, Because Testability != Understandability](https://www.sonarsource.com/blog/cognitive-complexity-because-testability-understandability/). Sonar blog, 2016.
+- SonarJS. [Improve S3776 (cognitive-complexity): Do not increase complexity on short-circuiting and null coalescing](https://github.com/SonarSource/SonarJS/pull/4862). Pull request #4862, 2024.
+
+**Cognitive complexity and human understanding**
+
+- Marvin Muñoz Barón, Marvin Wyrich and Stefan Wagner. [An Empirical Validation of Cognitive Complexity as a Measure of Source Code Understandability](https://arxiv.org/abs/2007.12520). ESEM 2020.
+- Luigi Lavazza, Abedallah Zaid Abualkishik, Geng Liu and Sandro Morasca. [An empirical evaluation of the "Cognitive Complexity" measure as a predictor of code understandability](https://doi.org/10.1016/j.jss.2022.111561). _Journal of Systems and Software_, 197, 2023.
+- Luigi Lavazza, Sandro Morasca and Marco Gatto. [An empirical study on software understandability and its dependence on code characteristics](https://doi.org/10.1007/s10664-023-10396-7). _Empirical Software Engineering_, 28, 2023.
+- Norman Peitek, Sven Apel, Chris Parnin, André Brechmann and Janet Siegmund. [Program Comprehension and Code Complexity Metrics: An fMRI Study](https://doi.org/10.1109/ICSE43902.2021.00056). ICSE 2021.
+- John Johnson, Sergio Lubo, Nishitha Yedla, Jairo Aponte and Bonita Sharif. [An Empirical Study Assessing Source Code Readability in Comprehension](https://doi.org/10.1109/ICSME.2019.00085). ICSME 2019.
+- Nelson Cowan. [The magical number 4 in short-term memory](https://doi.org/10.1017/S0140525X01003922). _Behavioral and Brain Sciences_, 24(1), 2001.
+- Rubén Saborido, Javier Ferrer, Francisco Chicano and Enrique Alba. [Automatizing Software Cognitive Complexity Reduction](https://doi.org/10.1109/ACCESS.2022.3144743). _IEEE Access_, 10, 2022.
+
+**Complexity and AI-written code**
+
+- Changshu Liu, Yang Chen and Reyhaneh Jabbarvand. [CodeMind: Evaluating Large Language Models for Implicit and Explicit Code Execution Reasoning](https://arxiv.org/abs/2402.09664). _IEEE Transactions on Software Engineering_, 2026.
+- Chen Xie, Xiaodong Gu, Yuling Shi and Beijun Shen. [Rethinking Code Complexity Through the Lens of Large Language Models](https://arxiv.org/abs/2602.07882). ICML 2026.
+- Domenico Cotroneo, Cristina Improta and Pietro Liguori. [Human-Written vs. AI-Generated Code: A Large-Scale Study of Defects, Vulnerabilities, and Complexity](https://arxiv.org/abs/2508.21634). ISSRE 2025.
+- Hao He, Courtney Miller, Shyam Agarwal, Christian Kästner and Bogdan Vasilescu. [Speed at the Cost of Quality: How Cursor AI Increases Short-Term Velocity and Long-Term Complexity in Open-Source Projects](https://arxiv.org/abs/2511.04427). MSR 2026.
+- Abbas Sabra, Olivier Schmitt and Joseph Tyler. [Assessing the Quality and Security of AI-Generated Code: A Quantitative Analysis](https://arxiv.org/abs/2508.14727). arXiv, 2025.
+- Melika Sepidband, Hamed Taherkhani, Song Wang and Hadi Hemmati. [Enhancing LLM-Based Code Generation with Complexity Metrics: A Feedback-Driven Approach](https://arxiv.org/abs/2505.23953). COMPSAC 2025.
+
+**Agents and metrics as targets**
+
+- Birgitta Böckeler. [Maintainability sensors for coding agents](https://martinfowler.com/articles/sensors-for-coding-agents.html). martinfowler.com, 2026.
+- Ziqian Zhong, Aditi Raghunathan and Nicholas Carlini. [ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases](https://arxiv.org/abs/2510.20270). arXiv, 2025.
+- Marilyn Strathern. ['Improving ratings': audit in the British University system](https://www.cambridge.org/core/journals/european-review/article/improving-ratings-audit-in-the-british-university-system/FC2EE640C0C44E3DB87C29FB666E9AAB). _European Review_, 5(3), 1997.

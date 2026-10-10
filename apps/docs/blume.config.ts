@@ -194,6 +194,14 @@ export default defineConfig({
   ],
 
   seo: {
+    // Generated share-card titles for custom pages, which otherwise take the
+    // last URL segment ("Cognitive Complexity"). Each blog post gets its title.
+    og: {
+      titles: {
+        "/blog/cognitive-complexity":
+          "Cognitive complexity: the rule that measures the reader",
+      },
+    },
     // JSON-LD: the organization behind the site, and Ultracite as a
     // SoftwareApplication on the homepage.
     organization: {

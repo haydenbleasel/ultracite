@@ -173,15 +173,16 @@ Presets: `core` plus framework variants (`angular`, `astro`, `jest`, `nestjs`, `
 
 ## Blog (`apps/docs/blog`)
 
-The blog at `/blog` publishes long reads on the rules Ultracite turns on. A post is not a rule reference page. It explains where a rule came from, how it works, what the research says, what it means for people and for agents writing the code, what it costs at scale, where it breaks, and what Ultracite does with it and why. Each post is the canonical answer to "why is this rule on?", so it has to hold up to an expert reader.
+The blog at `/blog` publishes long reads on the rules Ultracite turns on. A post is not a rule reference page. It explains where a rule came from, how it works, what the research says, what it means for people and for agents writing the code, what it costs at scale, where it breaks, and how to use it well. Each post is the canonical answer to "why is this rule on?", so it has to hold up to an expert reader.
 
 ### Standards for a post
 
 - **Do the homework, and show it.** Cite history, research papers and official specs, not just linter docs. Open every source and check it says what you claim; never cite from memory. Prefer primary sources (DOI or publisher pages, arXiv, official PDFs, the rule's own docs). Link sources inline and list them in a `## References` section at the end.
-- **Every number is measured.** Get rule scores by running the actual rule. Get codebase statistics from real repos at pinned commits, and state the commit SHAs and tool versions. Get claims about agent behavior from running agents (`claude -p` or `codex exec`, with the prompt from `packages/cli/src/agent-fix/prompt.ts`), not from intuition. Keep the scripts so the numbers can be reproduced.
-- **Check what Ultracite actually ships, per linter.** Read the rule's config in `packages/cli/config` for Oxlint core, the Oxlint JS plugins preset, Biome and ESLint. Rules that live only in `oxlint/js-plugins` are opt-in, so Oxlint users don't get them by default. Say so. Run the rule in each linter on the same code, because implementations of the "same" rule often score differently, and that's worth reporting.
-- **Find the real history of the decision.** Use `git log -S "<rule name>"`, `packages/cli/CHANGELOG.md`, and `gh issue list` / `gh pr list --search`. Don't invent a rationale. If none was recorded, say so or ask Hayden.
-- **Be honest about weaknesses.** Every post covers where the rule breaks: what it can't see, how it can be gamed, where the evidence is thin, and where Ultracite's own presets are inconsistent (fix the presets first if you can). Frame hypotheses about agents as hypotheses unless a source or an experiment backs them.
+- **Keep it evergreen.** Posts should stay true as Ultracite and the linters change. Leave out details that will change: Ultracite's current thresholds and options, which preset or linter enables what, tool versions, whether a linter supports a rule natively, and CLI flags. Link to the docs for current settings instead (for example `/docs/configuration#overriding-rules`). Measurements and experiments are fine, since they're dated facts: say when they were run, and with what.
+- **Every number is measured.** Get rule scores by running the actual rule. Get codebase statistics from real repos at pinned commits, and keep the commit SHAs and tool versions with the scripts. Get claims about agent behavior from running agents (`claude -p` or `codex exec`, with the prompt from `packages/cli/src/agent-fix/prompt.ts`), not from intuition. Keep the scripts so the numbers can be reproduced.
+- **Know what Ultracite ships before writing about it.** Read the rule's config in `packages/cli/config` for Oxlint core, the Oxlint JS plugins preset, Biome and ESLint, so nothing in the post contradicts it, even though the post won't list it. Run the rule in each linter on the same code: implementations of the "same" rule often score differently, which is worth explaining in general terms. If you find a preset inconsistency, raise it with Hayden rather than writing around it.
+- **Find the real history of the decision.** Use `git log -S "<rule name>"`, `packages/cli/CHANGELOG.md`, and `gh issue list` / `gh pr list --search`, so the post's reasoning matches what actually happened. Don't invent a rationale. If none was recorded, ask Hayden.
+- **Be honest about weaknesses.** Every post covers where the rule breaks: what it can't see, how it can be gamed, where the evidence is thin, and where implementations disagree. Frame hypotheses about agents as hypotheses unless a source or an experiment backs them.
 - **Plain, specific prose.** Short sentences, concrete examples, no marketing language, and never call Ultracite a "thought leader". Code examples should be realistic and scored by the real rule.
 
 ### Adding a post
@@ -190,9 +191,11 @@ The blog at `/blog` publishes long reads on the rules Ultracite turns on. A post
 - Frontmatter: `title`, `description` (used on the index, in meta tags and in search results), `date` (`2026-10-10`), `author` (a key of `authors` in `lib/blog.ts`), `rules` (config names, such as `sonarjs/cognitive-complexity`), and optional `updated`. `lib/blog.ts` validates all of these at build time.
 - Don't repeat the title in the body. The layout renders the title, description, byline and reading time. `##` headings become the "In this post" rail, so keep them short.
 - Blume's MDX components (callouts with `:::note`, `CodeGroup`, `Tabs`, `Steps` and more) are wired in through `components/blog/post-components.ts`. To use another Blume component, add it there.
+- Oxfmt formats code fences inside MDX: it moves trailing comments onto their own lines and restyles quoted code. Put `{/* prettier-ignore */}` on the line above a fence that has to stay as written, such as code with score annotations or a verbatim excerpt from another project.
 - Do research and experiments outside the repo, in a scratch directory. Shallow-clone repos you measure, and never install or run their code. Only parse it with the repo's own tooling.
 - Preview with `cd apps/docs && bun run dev --port 4377` (any non-default port), then check `/blog` and `/blog/<slug>` in light and dark mode and at 390px wide. `bun run build` in `apps/docs` checks routes and generates the OG card at `/og/blog/<slug>.png`.
-- Known gaps: there's no RSS feed (Blume only builds feeds from content sources, not custom pages), and the generated OG card titles a post from its slug, with the site description. Set a better title with `seo.og.titles` in `blume.config.ts`.
+- Add the post's title under `seo.og.titles` in `blume.config.ts`, keyed by `/blog/<slug>`. Without it, Blume titles the generated share card from the slug.
+- Known gaps: there's no RSS feed (Blume only builds feeds from content sources, not custom pages), and the share card always shows the site description, not the post's.
 
 ## Gotchas
 
