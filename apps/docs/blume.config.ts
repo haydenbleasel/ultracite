@@ -85,7 +85,7 @@ export default defineConfig({
 
   // Also the homepage's meta description (pages/index.astro) and llms.txt.
   description:
-    "Ultracite is a zero-config preset for Oxlint, Biome, and ESLint that helps humans and agents write consistent, type-safe code.",
+    "Ultracite is the linter and formatter for agentic development. A zero-config preset for Oxlint, Biome, and ESLint that keeps agent-written code consistent and type-safe.",
 
   // The site footer on docs pages (the homepage renders its own). The GitHub
   // icon comes from `github` below; X sits beside it.
