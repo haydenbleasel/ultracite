@@ -36,6 +36,11 @@ const NO_LAUNCHER: SpawnSyncResult = {
   status: null,
 };
 
+// A launcher that isn't the editor's own (Kiro's `kiro` can be set to open
+// Kiro CLI instead of the IDE) must not hang init; a timed-out install counts
+// as failed, and init asks the user to install the extension.
+const EXTENSION_INSTALL_TIMEOUT_MS = 120_000;
+
 /**
  * Install an extension with the editor's own launcher, never VS Code's `code`:
  * that would put it in VS Code, not the editor the user picked. Launchers are
@@ -48,6 +53,7 @@ const installExtension = (
   for (const cli of clis) {
     const result = spawnSync(cli, ["--install-extension", extensionId], {
       stdio: "pipe",
+      timeout: EXTENSION_INSTALL_TIMEOUT_MS,
     });
 
     if (result.errorCode !== "ENOENT") {

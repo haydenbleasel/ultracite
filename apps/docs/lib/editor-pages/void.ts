@@ -62,7 +62,7 @@ export const voidEditor: EditorPageContent = {
     },
     {
       answer:
-        "Not through `init`’s setting. Void is built on VS Code 1.99.3, which reads `typescript.tsdk`, not the `js/ts.tsdk.path` key `init` writes. Set `typescript.tsdk` to point Void at the workspace TypeScript.",
+        "Yes. Void is built on VS Code 1.99.3, which reads `typescript.tsdk` rather than VS Code’s newer `js/ts.tsdk.path`, so for Void `init` writes both.",
       question: "Does Void use my project’s TypeScript version?",
     },
   ],
@@ -112,7 +112,7 @@ export const voidEditor: EditorPageContent = {
       {
         label: "TypeScript",
         value:
-          "VS Code 1.99 reads `typescript.tsdk`, not the `js/ts.tsdk.path` key `init` writes, so Void ignores that setting.",
+          "VS Code 1.99 reads `typescript.tsdk`, not the newer `js/ts.tsdk.path`, so for Void `init` writes both and Void uses the workspace TypeScript.",
       },
       {
         label: "Explicit saves",

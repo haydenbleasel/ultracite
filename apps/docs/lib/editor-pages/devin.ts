@@ -7,7 +7,7 @@ export const devin: EditorPageContent = {
     "Save a file: Oxfmt formats it and Oxlint’s safe fixes apply.",
   ],
   agent: {
-    body: "Devin Local runs the same architecture as Devin CLI: it loads `AGENTS.md` as an always-on rule and is fed the lint errors detected after its edits. The hook `--hooks devin` writes uses `post_write_code`, a Cascade event. Devin Local reads its own hooks from `.devin/hooks.v1.json`, in Claude Code’s format, and Ultracite doesn’t write that file.",
+    body: "Devin Local runs the same architecture as Devin CLI: it loads `AGENTS.md` as an always-on rule and is fed the lint errors detected after its edits. `--hooks devin` adds a `PostToolUse` hook to `.devin/hooks.v1.json`, which runs `ultracite fix --hook` on each file it writes or edits and adds what’s left to its context.",
     lookup: [
       {
         note: "Your global rules, loaded in every project alongside the project’s own.",
@@ -31,10 +31,10 @@ export const devin: EditorPageContent = {
       },
     ],
     steps: [
-      "Devin Local edits a file, and the change shows as a diff zone you can accept or reject.",
-      "The Oxc, Biome or ESLint extension lints the file, as it does your own edits.",
-      "Lint errors detected after the edit go back to the agent, new ones marked apart from ones it has seen, and it fixes them. A cap stops it looping on one it can’t resolve.",
-      "Following `AGENTS.md`, it runs `npx ultracite check` once you approve the command.",
+      "Devin Local writes or edits a file, and the change shows as a diff zone you can accept or reject.",
+      "With `--hooks devin`, `ultracite fix --hook` fixes and formats that file, and hands what it couldn’t fix back as `additionalContext`.",
+      "The Oxc, Biome or ESLint extension lints the file too, and lint errors detected after the edit go back to the agent, with a cap so it doesn’t loop on one it can’t resolve.",
+      "It fixes what’s left in its next step, or runs `npx ultracite check` as `AGENTS.md` says once you approve the command.",
     ],
     title: "Devin Local took over from Cascade",
   },
@@ -55,8 +55,8 @@ export const devin: EditorPageContent = {
     },
     {
       answer:
-        "`--hooks devin` writes a `post_write_code` hook to `.devin/hooks.json`, and `post_write_code` is a Cascade hook event. Devin Local reads its hooks from `.devin/hooks.v1.json`, in Claude Code’s format, which Ultracite doesn’t configure.",
-      question: "Does the Windsurf hook work in Devin Desktop?",
+        "Yes. It writes a `PostToolUse` hook to `.devin/hooks.v1.json`, in Claude Code’s format, which Devin Local and Devin CLI read. Re-running `init` takes the `post_write_code` hook earlier versions wrote for Cascade out of `.devin/hooks.json` and `.windsurf/hooks.json`, and leaves your own hooks there.",
+      question: "Does --hooks devin work with Devin Local?",
     },
     {
       answer:
@@ -89,10 +89,8 @@ export const devin: EditorPageContent = {
       title: "Worktrees need their own install",
     },
   ],
-  hookNote:
-    "A `post_write_code` hook, written for Cascade. Devin Desktop removed Cascade in 3.9.19, and Devin Local reads its hooks from `.devin/hooks.v1.json` instead.",
   intro:
-    "`ultracite init --editors devin` writes `.vscode/settings.json`, so Devin Desktop formats on save and applies your linter’s safe fixes, and installs the extension from its Open VSX mirror with the `devin-desktop` launcher. Since 3.9.19 its only agent is Devin Local, which loads `AGENTS.md` and gets lint errors fed back after its edits. Cascade, the agent the `--hooks devin` hook was written for, is gone.",
+    "`ultracite init --editors devin` writes `.vscode/settings.json`, so Devin Desktop formats on save and applies your linter’s safe fixes, and installs the extension from its Open VSX mirror with the `devin-desktop` launcher. Since 3.9.19 its only agent is Devin Local, which loads `AGENTS.md`, and `--hooks devin` hands it what `ultracite fix` couldn’t fix after each edit.",
   metaDescription:
     "Ultracite sets up Devin Desktop, formerly Windsurf, to format and fix on save with Oxlint, Biome or ESLint. Devin Local reads AGENTS.md and fixes lint errors.",
   metaTitle: "Ultracite for Devin Desktop — formerly Windsurf, now Devin Local",
@@ -150,6 +148,10 @@ export const devin: EditorPageContent = {
     {
       title: "Devin Desktop: Cascade hooks",
       url: "https://docs.devin.ai/desktop/cascade/hooks",
+    },
+    {
+      title: "Devin CLI: Hooks",
+      url: "https://docs.devin.ai/cli/extensibility/hooks/overview",
     },
     {
       title: "Devin CLI: Rules and AGENTS.md",

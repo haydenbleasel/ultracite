@@ -324,7 +324,11 @@ describe("installing editor extensions", () => {
     ["vscode", "code"],
     ["cursor", "cursor"],
     ["devin", "devin-desktop"],
+    ["codebuddy", "buddy"],
+    ["antigravity", "antigravity-ide"],
+    ["bob", "bobide"],
     ["kiro", "kiro"],
+    ["trae", "trae"],
     ["void", "void"],
   ])("installs into %s with %s", (editorId, cli) => {
     const spawn = mockSpawn();
@@ -333,8 +337,20 @@ describe("installing editor extensions", () => {
 
     expect(result?.status).toBe(0);
     expect(spawn.mock.calls).toEqual([
-      [cli, ["--install-extension", "biomejs.biome"], { stdio: "pipe" }],
+      [
+        cli,
+        ["--install-extension", "biomejs.biome"],
+        { stdio: "pipe", timeout: 120_000 },
+      ],
     ]);
+  });
+
+  test("gives up on a launcher that doesn't finish, so init can't hang", () => {
+    mockSpawn({ kiro: { signal: "SIGTERM", status: null } });
+
+    const result = createEditorConfig("kiro").extension?.("biomejs.biome");
+
+    expect(result?.status).not.toBe(0);
   });
 
   test("only VS Code installs extensions with the code launcher", () => {
@@ -374,18 +390,6 @@ describe("installing editor extensions", () => {
     expect(result?.status).toBe(1);
     expect(spawn).toHaveBeenCalledTimes(1);
   });
-
-  test.each(["antigravity", "bob", "codebuddy", "trae"])(
-    "leaves %s's extensions to be installed by hand",
-    (editorId) => {
-      const spawn = mockSpawn();
-
-      const result = createEditorConfig(editorId).extension?.("biomejs.biome");
-
-      expect(result).toEqual(missing);
-      expect(spawn).not.toHaveBeenCalled();
-    }
-  );
 
   test("has nothing to install for Zed", () => {
     expect(createEditorConfig("zed").extension).toBeUndefined();

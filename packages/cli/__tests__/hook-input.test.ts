@@ -5,6 +5,7 @@ import { PassThrough } from "node:stream";
 import {
   editedFilesFromHookPayload,
   hookFeedsAgent,
+  hookReport,
   hookTargets,
   readHook,
   readHookStdin,
@@ -520,6 +521,69 @@ describe("hookFeedsAgent", () => {
   });
 });
 
+const devinPayload = (toolName: string, toolInput: Record<string, string>) =>
+  JSON.stringify({
+    hook_event_name: "PostToolUse",
+    prompt_id: "b71e9d40",
+    session_id: "3f8d1c2a",
+    tool_input: toolInput,
+    tool_name: toolName,
+    tool_response: { error: null, output: "", success: true },
+  });
+
+describe("Devin's PostToolUse payloads", () => {
+  test("read the edited file from its write and edit tools", () => {
+    expect(
+      editedFilesFromHookPayload(
+        devinPayload("write", { content: "x", file_path: "/repo/src/a.ts" })
+      )
+    ).toEqual(["/repo/src/a.ts"]);
+    expect(
+      editedFilesFromHookPayload(
+        devinPayload("edit", { file_path: "/repo/src/b.ts", new_string: "b" })
+      )
+    ).toEqual(["/repo/src/b.ts"]);
+  });
+
+  test("read the files an apply_patch patch names", () => {
+    expect(
+      editedFilesFromHookPayload(
+        devinPayload("apply_patch", {
+          patch:
+            "*** Begin Patch\n*** Update File: src/c.ts\n@@\n-a\n+b\n*** End Patch",
+        })
+      )
+    ).toEqual(["src/c.ts"]);
+  });
+
+  test("fix nothing after a tool that edits no file", () => {
+    expect(
+      editedFilesFromHookPayload(devinPayload("exec", { command: "ls" }))
+    ).toEqual([]);
+  });
+});
+
+describe("hookReport", () => {
+  const payload = devinPayload("write", { file_path: "/repo/src/a.ts" });
+
+  test("hands what's left to Devin as additionalContext", () => {
+    expect(hookReport(payload, { DEVIN_PROJECT_DIR: "/repo" })).toBe("context");
+  });
+
+  test("sends it to stderr for other hosts that read a PostToolUse hook's stderr", () => {
+    expect(hookReport(payload, {})).toBe("stderr");
+  });
+
+  test("keeps the linter's own output where the host can't reach the agent", () => {
+    const cursor = JSON.stringify({
+      file_path: "/repo/src/b.ts",
+      hook_event_name: "afterFileEdit",
+    });
+    expect(hookReport(cursor, { DEVIN_PROJECT_DIR: "/repo" })).toBe("none");
+    expect(hookReport("not json", {})).toBe("none");
+  });
+});
+
 describe("readHook", () => {
   test("returns the targets and whether the host reports to the agent", async () => {
     expect(
@@ -533,7 +597,7 @@ describe("readHook", () => {
           }),
         resolvePath: exists,
       })
-    ).toEqual({ feedsAgent: true, targets: ["src/a.ts"] });
+    ).toEqual({ report: "stderr", targets: ["src/a.ts"] });
   });
 
   test("keeps the whole-project run and the plain exit code when stdin fails", async () => {
@@ -542,6 +606,6 @@ describe("readHook", () => {
         cwd: repo,
         read: () => Promise.reject(new Error("EPIPE")),
       })
-    ).toEqual({ feedsAgent: false, targets: null });
+    ).toEqual({ report: "none", targets: null });
   });
 });

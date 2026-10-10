@@ -604,6 +604,11 @@ const additionalVscodeExtensions: Partial<Record<Linter, string[]>> = {
   eslint: ["esbenp.prettier-vscode"],
 };
 
+const zedExtensionHints: Partial<Record<Linter, string>> = {
+  biome: "Biome extension: https://biomejs.dev/reference/zed/",
+  oxlint: "Oxc extension: https://zed.dev/extensions/oxc",
+};
+
 export const upsertEditorConfig = async (
   editorId: string,
   linter: Linter = "biome",
@@ -679,15 +684,15 @@ export const upsertEditorConfig = async (
     return;
   }
 
-  // Non-VS Code editors (like Zed)
+  // Zed: Oxlint, Oxfmt and Biome run through Zed extensions, which install
+  // from Zed's own extensions view; ESLint and Prettier ship with Zed.
   if (!quiet) {
-    if (editorId === "zed" && linter === "biome") {
-      s.stop(
-        `${editor.config.path} created. Install the Biome extension: https://biomejs.dev/reference/zed/`
-      );
-    } else {
-      s.stop(`${editor.config.path} created.`);
-    }
+    const zedExtension = zedExtensionHints[linter];
+    s.stop(
+      editorId === "zed" && zedExtension
+        ? `${editor.config.path} created. Install the ${zedExtension}`
+        : `${editor.config.path} created.`
+    );
   }
 };
 

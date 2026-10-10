@@ -817,56 +817,56 @@ const windsurfHook = (command: string) =>
   });
 
 describe("devin desktop (formerly Windsurf) hooks", () => {
-  test("go in .devin/hooks.json", async () => {
+  test("go in .devin/hooks.v1.json in Claude Code's format, for Devin Local", async () => {
     const { files } = await runInProject("devin", {});
 
-    expect(JSON.parse(files[".devin/hooks.json"] ?? "{}")).toEqual({
-      hooks: {
-        post_write_code: [
-          { command: "npx ultracite fix --hook", show_output: true },
-        ],
-      },
+    expect(JSON.parse(files[".devin/hooks.v1.json"] ?? "{}")).toEqual({
+      PostToolUse: [
+        {
+          hooks: [{ command: "npx ultracite fix --hook", type: "command" }],
+          matcher: "^(write|edit|apply_patch)$",
+        },
+      ],
     });
+    expect(files[".devin/hooks.json"]).toBeUndefined();
     expect(files[".windsurf/hooks.json"]).toBeUndefined();
   });
 
-  test("move from .windsurf/hooks.json, which is removed once empty", async () => {
+  test("take Cascade's hook out of .devin/hooks.json and .windsurf/hooks.json, removing them once empty", async () => {
     const { files, removed } = await runInProject("devin", {
+      ".devin/hooks.json": windsurfHook("npx ultracite fix --hook"),
       ".windsurf/hooks.json": windsurfHook("npm run fix -- --hook"),
     });
 
+    expect(removed.has(".devin/hooks.json")).toBe(true);
     expect(removed.has(".windsurf/hooks.json")).toBe(true);
-    expect(files[".devin/hooks.json"]).toContain("npx ultracite fix --hook");
+    expect(files[".devin/hooks.v1.json"]).toContain("npx ultracite fix --hook");
   });
 
-  test("bring the user's own hooks along, since Devin Desktop stops reading the old file", async () => {
+  test("leave the user's own hooks in .devin/hooks.json, which Devin Desktop still reads", async () => {
     const { files, removed } = await runInProject("devin", {
-      ".windsurf/hooks.json": JSON.stringify({
+      ".devin/hooks.json": JSON.stringify({
         hooks: {
+          post_setup_worktree: [{ command: "npm install" }],
           post_write_code: [
             { command: "./notify.sh" },
-            { command: "npm run fix -- --hook", show_output: true },
+            { command: "npx ultracite fix --hook", show_output: true },
           ],
-          pre_user_prompt: [{ command: "./audit.sh" }],
         },
       }),
     });
 
-    const devin = JSON.parse(files[".devin/hooks.json"] ?? "{}");
-    expect(devin.hooks.pre_user_prompt).toEqual([{ command: "./audit.sh" }]);
-    expect(devin.hooks.post_write_code).toEqual([
-      { command: "./notify.sh" },
-      { command: "npx ultracite fix --hook", show_output: true },
-    ]);
-
-    // The old file keeps only the user's hooks.
-    expect(removed.has(".windsurf/hooks.json")).toBe(false);
-    expect(JSON.parse(files[".windsurf/hooks.json"] ?? "{}")).toEqual({
+    expect(removed.has(".devin/hooks.json")).toBe(false);
+    expect(JSON.parse(files[".devin/hooks.json"] ?? "{}")).toEqual({
       hooks: {
+        post_setup_worktree: [{ command: "npm install" }],
         post_write_code: [{ command: "./notify.sh" }],
-        pre_user_prompt: [{ command: "./audit.sh" }],
       },
     });
+    // Nothing in the old format is copied into the new file.
+    expect(
+      Object.keys(JSON.parse(files[".devin/hooks.v1.json"] ?? "{}"))
+    ).toEqual(["PostToolUse"]);
   });
 });
 

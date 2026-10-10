@@ -14,8 +14,8 @@ import { isGlobPattern } from "./linter-args";
 const filePathSchema = z.string().optional();
 
 // The fields hosts put an edited file's path in: `file_path` (Claude Code,
-// CodeBuddy, Cursor, Windsurf), `filePath` (VS Code's edit tools) and `path`
-// (the Copilot CLI's `create` and `edit`).
+// Cursor, Windsurf), `filePath` (VS Code's edit tools and CodeBuddy) and
+// `path` (the Copilot CLI's `create` and `edit`).
 const pathFieldsSchema = z.looseObject({
   filePath: filePathSchema,
   file_path: filePathSchema,
@@ -47,7 +47,8 @@ const toolInfoPayloadSchema = z.looseObject({
 // Build, which names its tools in lower case. Claude Code and CodeBuddy hooks
 // only fire for Write/Edit through their matcher.
 const editToolNames = new Set([
-  // Copilot CLI and cloud agent
+  // Copilot CLI and cloud agent, and Devin, whose file tools are `write`,
+  // `edit` and `apply_patch`
   "apply_patch",
   "create",
   "edit",
@@ -144,10 +145,10 @@ const deletesFiles = (input: JsonValue | null): boolean =>
 /**
  * The files an agent's post-edit hook payload names:
  * - a list of paths when the payload names the edited file(s): Claude Code
- *   and CodeBuddy send `tool_input.file_path`, Cursor's `afterFileEdit` sends
- *   `file_path`, Windsurf sends `tool_info.file_path`, VS Code sends
- *   `tool_input.filePath`, the Copilot CLI `toolArgs.path`, and Codex an
- *   `apply_patch` patch in `tool_input.command`;
+ *   sends `tool_input.file_path`, Cursor's `afterFileEdit` sends
+ *   `file_path`, Windsurf sends `tool_info.file_path`, VS Code and CodeBuddy
+ *   send `tool_input.filePath`, the Copilot CLI `toolArgs.path`, and Codex
+ *   and Devin an `apply_patch` patch in `tool_input`;
  * - `[]` when a host without matchers ran the hook for a tool that edits
  *   nothing (e.g. VS Code's `read_file`), or a patch only deletes files, so
  *   there is nothing to fix;
@@ -205,7 +206,7 @@ export const editedFilesFromHookPayload = (
 
 // The hosts that hand a post-edit hook's stderr to the agent when the hook
 // exits with 2: Claude Code, CodeBuddy, Codex, VS Code, Deep Agents and Grok Build send a
-// `PostToolUse` payload, and Windsurf (Devin Desktop) a `post_write_code` one. Cursor's `afterFileEdit` has
+// `PostToolUse` payload, and Windsurf's Cascade a `post_write_code` one. Cursor's `afterFileEdit` has
 // no way to reach the agent (and reads 2 as "block"), and the Copilot CLI only
 // shows a hook's stderr to the user, so neither is listed.
 const feedbackPayloadSchema = z.union([
@@ -216,6 +217,37 @@ const feedbackPayloadSchema = z.union([
 /** Whether the host that sent this payload shows the agent a hook's stderr on exit code 2. */
 export const hookFeedsAgent = (payload: string): boolean =>
   feedbackPayloadSchema.safeParse(parseJson(payload)).success;
+
+/**
+ * How `fix --hook` hands the problems it couldn't fix to the agent:
+ * - `"stderr"`: print them to stderr and exit with 2, which the host shows
+ *   the agent (see hookFeedsAgent);
+ * - `"context"`: print them to stdout as a PostToolUse hook's
+ *   `hookSpecificOutput.additionalContext` and exit with 0. Devin (Devin
+ *   Local in Devin Desktop, and Devin CLI) adds that to the agent's context
+ *   and reads exit code 2 as "block";
+ * - `"none"`: keep the linter's own output and exit code.
+ */
+export type HookReport = "context" | "none" | "stderr";
+
+const postToolUsePayloadSchema = z.looseObject({
+  hook_event_name: z.literal("PostToolUse"),
+});
+
+/** How to report back to the host that sent this payload. */
+export const hookReport = (
+  payload: string,
+  env: NodeJS.ProcessEnv = process.env
+): HookReport => {
+  if (!hookFeedsAgent(payload)) {
+    return "none";
+  }
+  // Devin sets DEVIN_PROJECT_DIR for every hook it runs.
+  const fromDevin =
+    env.DEVIN_PROJECT_DIR !== undefined &&
+    postToolUsePayloadSchema.safeParse(parseJson(payload)).success;
+  return fromDevin ? "context" : "stderr";
+};
 
 // A host writes the payload as it spawns the hook, so it is on stdin within
 // milliseconds. The deadline only bounds a host that leaves stdin open without
@@ -349,8 +381,8 @@ const targetsFromPayload = (
 };
 
 export interface HookRun {
-  /** Whether the host shows the agent a hook's stderr when it exits with 2. */
-  feedsAgent: boolean;
+  /** How to hand what's left to the agent. */
+  report: HookReport;
   /** What to lint, as `hookTargets` describes. */
   targets: string[] | null;
 }
@@ -365,11 +397,11 @@ export const readHook = async ({
   try {
     payload = await read();
   } catch {
-    return { feedsAgent: false, targets: null };
+    return { report: "none", targets: null };
   }
 
   return {
-    feedsAgent: hookFeedsAgent(payload),
+    report: hookReport(payload),
     targets: targetsFromPayload(payload, options),
   };
 };

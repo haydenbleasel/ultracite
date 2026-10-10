@@ -169,7 +169,7 @@ program
       const { agent } = agentFlags;
 
       if (hook) {
-        const { feedsAgent, targets } = await readHook({
+        const { report, targets } = await readHook({
           targets: split.files,
         });
 
@@ -181,7 +181,7 @@ program
 
         await fix(targets ?? split.files, passthrough, {
           agent,
-          reportToAgent: feedsAgent,
+          report,
         });
         return;
       }

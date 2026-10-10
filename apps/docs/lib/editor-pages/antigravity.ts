@@ -2,7 +2,7 @@ import type { EditorPageContent } from "./types";
 
 export const antigravity: EditorPageContent = {
   afterInit: [
-    "Install `oxc.oxc-vscode` from the Extensions view, or `biomejs.biome` if you picked Biome. Antigravity IDE searches Open VSX.",
+    "If `init` couldn’t run `antigravity-ide`, install `oxc.oxc-vscode` from the Extensions view, or `biomejs.biome` if you picked Biome. Antigravity IDE searches Open VSX.",
     "Save a TypeScript file: Oxfmt formats it and Oxlint’s safe fixes apply.",
   ],
   agent: {
@@ -44,7 +44,7 @@ export const antigravity: EditorPageContent = {
   faqs: [
     {
       answer:
-        "Yes. `npx ultracite init --editors antigravity` writes `.vscode/settings.json` for Oxlint and Oxfmt, Biome, or ESLint and Prettier. Install the matching extension from the Extensions view, which searches Open VSX.",
+        "Yes. `npx ultracite init --editors antigravity` writes `.vscode/settings.json` for Oxlint and Oxfmt, Biome, or ESLint and Prettier. It installs the matching extension from Open VSX with the IDE’s `antigravity-ide` command.",
       question: "Does Ultracite work with Antigravity IDE?",
     },
     {
@@ -59,7 +59,7 @@ export const antigravity: EditorPageContent = {
     },
     {
       answer:
-        "`init` doesn’t install extensions for Antigravity IDE; it tells you which one to add. Install `biomejs.biome` from the Extensions view: Antigravity searches Open VSX, where Biome publishes it.",
+        "`init` installs it with `antigravity-ide --install-extension` only when it creates `.vscode/settings.json`, and only if `antigravity-ide` is on your `PATH`. Otherwise, install `biomejs.biome` from the Extensions view: Antigravity searches Open VSX, where Biome publishes it.",
       question: "Why didn’t the Biome extension install in Antigravity?",
     },
     {
@@ -89,9 +89,9 @@ export const antigravity: EditorPageContent = {
     },
   ],
   intro:
-    "`ultracite init --editors antigravity` writes `.vscode/settings.json`, so Antigravity IDE formats on save and applies safe fixes through Oxc, Biome or ESLint once you add the extension from Open VSX. Its agent loads `AGENTS.md` folder by folder, and its edit tools can aim at the lint errors your extension reports, by ID.",
+    "`ultracite init --editors antigravity` writes `.vscode/settings.json`, so Antigravity IDE formats on save and applies safe fixes through Oxc, Biome or ESLint, and installs the extension from Open VSX with `antigravity-ide`. Its agent loads `AGENTS.md` folder by folder, and its edit tools can aim at the lint errors your extension reports, by ID.",
   metaDescription:
-    "Ultracite writes .vscode/settings.json for Antigravity IDE: add Oxc, Biome or ESLint from Open VSX, and its agent reads AGENTS.md in every folder.",
+    "Ultracite writes .vscode/settings.json for Antigravity IDE and installs Oxc, Biome or ESLint from Open VSX; its agent reads AGENTS.md in every folder.",
   metaTitle: "Ultracite for Antigravity IDE — Format on save, AGENTS.md rules",
   related: ["vscode", "kiro", "cursor"],
   setup: {
@@ -104,7 +104,7 @@ export const antigravity: EditorPageContent = {
       {
         label: "Code OSS 1.107",
         value:
-          "Antigravity IDE 2.5.5 is built on Code OSS 1.107, so it reads `.vscode/settings.json` as VS Code does.",
+          "Antigravity IDE 2.5.5 is built on Code OSS 1.107, which predates `js/ts.tsdk.path`, so for Antigravity `init` also writes `typescript.tsdk`.",
       },
       {
         label: "Moving from 1.0",
@@ -129,7 +129,7 @@ export const antigravity: EditorPageContent = {
     ],
     summary:
       "Antigravity IDE takes the same settings file as VS Code but gets its extensions from Open VSX. How far its agent can reach into `.vscode` and the terminal depends on your security settings.",
-    title: "Open VSX extensions, installed by hand",
+    title: "Open VSX extensions and the agent’s reach",
   },
   sources: [
     {

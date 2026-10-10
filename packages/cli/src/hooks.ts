@@ -257,30 +257,42 @@ export const createHooks = (
     return isJsonObject(pruned) ? pruned : existing;
   };
 
-  // Takes Ultracite's hook out of the file the host used to read, and removes
-  // the file when that leaves it empty.
-  const retireLegacyPath = async (): Promise<void> => {
-    const { legacyPath } = hookIntegration.hooks;
-
-    if (!(legacyPath && exists(legacyPath))) {
+  // Takes Ultracite's hook, written in `template`'s shape, out of a file the
+  // host used to read, and removes the file when that leaves it empty.
+  const pruneFile = async (
+    filePath: string,
+    template: JsonObject
+  ): Promise<void> => {
+    if (!exists(filePath)) {
       return;
     }
 
-    const legacy = await readJson(legacyPath);
+    const existing = await readJson(filePath);
     const pruned = removeGeneratedEntries(
-      legacy,
-      content,
+      existing,
+      template,
       command,
       isGeneratedCommand
     );
 
-    if (JSON.stringify(pruned) === JSON.stringify(legacy)) {
+    if (JSON.stringify(pruned) === JSON.stringify(existing)) {
       return;
     }
 
     await (isJsonObject(pruned) && Object.keys(pruned).length === 0
-      ? rm(legacyPath, { force: true })
-      : writeProjectFile(legacyPath, `${JSON.stringify(pruned, null, 2)}\n`));
+      ? rm(filePath, { force: true })
+      : writeProjectFile(filePath, `${JSON.stringify(pruned, null, 2)}\n`));
+  };
+
+  const retireLegacyPath = async (): Promise<void> => {
+    const { legacyPath, retiredFiles = [] } = hookIntegration.hooks;
+
+    await Promise.all([
+      ...(legacyPath ? [pruneFile(legacyPath, content)] : []),
+      ...retiredFiles.map((retired) =>
+        pruneFile(retired.path, retired.getContent(command))
+      ),
+    ]);
   };
 
   const updateConfig = async (): Promise<void> => {

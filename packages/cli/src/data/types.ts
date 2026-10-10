@@ -26,4 +26,15 @@ export interface HooksConfig {
    */
   legacyPath?: string;
   path: string;
+  /**
+   * Files earlier versions wrote this hook to, in each file's own format,
+   * for a host that has since moved its hooks to `path` in a new format. A
+   * re-run takes Ultracite's hook out of each one, and removes a file left
+   * empty; the user's own hooks stay where they are, since the new file
+   * can't hold them.
+   */
+  retiredFiles?: {
+    getContent: (command: string) => JsonObject;
+    path: string;
+  }[];
 }

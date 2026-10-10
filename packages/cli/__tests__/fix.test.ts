@@ -1068,7 +1068,7 @@ describe("fix reporting to the agent", () => {
   test("sends every tool's output to stderr", () => {
     const mockSpawn = mockLinter("oxlint");
 
-    fix(["src/a.ts"], [], { reportToAgent: true });
+    fix(["src/a.ts"], [], { report: "stderr" });
 
     const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
     expect(stdios).toEqual([
@@ -1090,7 +1090,7 @@ describe("fix reporting to the agent", () => {
     mockLinter("oxlint", (cmd) => (cmd === "oxlint" ? 1 : 0));
 
     const error = captureError(() =>
-      fix(["src/a.ts"], [], { reportToAgent: true })
+      fix(["src/a.ts"], [], { report: "stderr" })
     );
 
     expect(error).toBeInstanceOf(LinterExitError);
@@ -1102,13 +1102,13 @@ describe("fix reporting to the agent", () => {
 
   test("uses the feedback code for Biome and ESLint too", () => {
     mockLinter("biome", () => 1);
-    expect(() => fix(["src/a.ts"], [], { reportToAgent: true })).toThrow(
+    expect(() => fix(["src/a.ts"], [], { report: "stderr" })).toThrow(
       `Biome exited with code ${HOOK_FEEDBACK_EXIT_CODE}`
     );
 
     mock.restore();
     mockLinter("eslint", (cmd) => (cmd === "eslint" ? 1 : 0));
-    expect(() => fix(["src/a.ts"], [], { reportToAgent: true })).toThrow(
+    expect(() => fix(["src/a.ts"], [], { report: "stderr" })).toThrow(
       `ESLint exited with code ${HOOK_FEEDBACK_EXIT_CODE}`
     );
   });
@@ -1116,7 +1116,7 @@ describe("fix reporting to the agent", () => {
   test("succeeds quietly when nothing is left to fix", () => {
     mockLinter("oxlint");
 
-    expect(() => fix(["src/a.ts"], [], { reportToAgent: true })).not.toThrow();
+    expect(() => fix(["src/a.ts"], [], { report: "stderr" })).not.toThrow();
   });
 
   test("keeps a missing tool a setup error, not agent feedback", () => {
@@ -1133,10 +1133,59 @@ describe("fix reporting to the agent", () => {
     }));
 
     const error = captureError(() =>
-      fix(["src/a.ts"], [], { reportToAgent: true })
+      fix(["src/a.ts"], [], { report: "stderr" })
     );
 
     expect(error).not.toBeInstanceOf(LinterExitError);
     expect(error.message).toContain("isn't installed");
+  });
+});
+
+// Oxlint prints what it couldn't fix, and exits with `oxlintStatus`.
+const mockOutput = (oxlintStatus: number) => {
+  const mockSpawn = mock(
+    (cmd: string, _args: string[], _opts: SpawnSyncOptions) => ({
+      status: cmd === "oxlint" ? oxlintStatus : 0,
+      stderr: "",
+      stdout: cmd === "oxlint" ? "src/a.ts:3:7 no-var\n" : "Finished\n",
+    })
+  );
+  mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+  mock.module("../src/utils", () => ({
+    detectLinter: mock(() => "oxlint"),
+  }));
+  return mockSpawn;
+};
+
+describe("fix reporting to Devin", () => {
+  afterEach(() => {
+    mock.restore();
+  });
+
+  test("hands what's left to the agent as the hook's additionalContext", () => {
+    const mockSpawn = mockOutput(1);
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    expect(() => fix(["src/a.ts"], [], { report: "context" })).not.toThrow();
+
+    const stdios = mockSpawn.mock.calls.map((call) => call[2].stdio);
+    expect(stdios).toEqual(["pipe", "pipe"]);
+    const [[printed]] = write.mock.calls;
+    const output = JSON.parse(String(printed));
+    expect(output.hookSpecificOutput.hookEventName).toBe("PostToolUse");
+    expect(output.hookSpecificOutput.additionalContext).toContain(
+      "src/a.ts:3:7 no-var"
+    );
+    write.mockRestore();
+  });
+
+  test("prints nothing when everything was fixed", () => {
+    mockOutput(0);
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    fix(["src/a.ts"], [], { report: "context" });
+
+    expect(write).not.toHaveBeenCalled();
+    write.mockRestore();
   });
 });

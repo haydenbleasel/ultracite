@@ -1,3 +1,5 @@
+import process from "node:process";
+
 import { log } from "@clack/prompts";
 
 import { runAgentFix } from "../agent-fix";
@@ -6,6 +8,7 @@ import {
   findUnresolvableBiomeConfig,
   UltraciteSetupError,
 } from "../config-resolution";
+import type { HookReport } from "../hook-input";
 import {
   eslintIgnoredFileArgs,
   normalizeFileArgs,
@@ -37,6 +40,23 @@ const STDOUT_TO_STDERR: StdoutToStderr = ["inherit", 2, "inherit"];
 
 type FixStdio = NonNullable<SpawnSyncOptions["stdio"]>;
 
+// Where a fix step's tools print: a stdio mode, plus, for a hook that hands
+// the output to the agent in one piece, a list it's collected in.
+interface FixIo {
+  collected?: string[];
+  stdio: FixStdio;
+}
+
+const runTool = (command: string, args: string[], io: FixIo) => {
+  const result = spawnSync(command, args, { stdio: io.stdio });
+  io.collected?.push(
+    ...[result.stdout, result.stderr].filter(
+      (text): text is string => text !== undefined && text.trim() !== ""
+    )
+  );
+  return result;
+};
+
 // ESLint has no unsafe tier of fixes and rejects an unknown --unsafe flag, so
 // it's dropped rather than failing the whole run.
 const dropUnsupportedUnsafe = (passthrough: string[]): string[] => {
@@ -53,7 +73,7 @@ const dropUnsupportedUnsafe = (passthrough: string[]): string[] => {
 const runBiomeFix = (
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   const unresolvableConfig = findUnresolvableBiomeConfig();
 
@@ -71,14 +91,14 @@ const runBiomeFix = (
     args.push("./");
   }
 
-  const result = spawnSync("biome", args, { stdio });
+  const result = runTool("biome", args, io);
   exitOnCommandFailure("Biome", result);
 };
 
 const runEslintFix = (
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   const args = [
     "--fix",
@@ -87,14 +107,14 @@ const runEslintFix = (
     ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("eslint", args, { stdio });
+  const result = runTool("eslint", args, io);
   exitOnCommandFailure("ESLint", result);
 };
 
 const runPrettierFix = (
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   // An explicit file Prettier has no parser for (a Dockerfile, .env) is an
   // error without this; with it, Prettier skips the file as it does when
@@ -106,14 +126,14 @@ const runPrettierFix = (
     ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("prettier", args, { stdio });
+  const result = runTool("prettier", args, io);
   exitOnCommandFailure("Prettier", result);
 };
 
 const runStylelintFix = (
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   const targets = toStylelintTargets(files);
 
@@ -123,7 +143,7 @@ const runStylelintFix = (
 
   const args = ["--fix", ...passthrough, "--allow-empty-input", ...targets];
 
-  const result = spawnSync("stylelint", args, { stdio });
+  const result = runTool("stylelint", args, io);
 
   if (result.errorCode === "ENOENT") {
     log.warn(STYLELINT_MISSING_MESSAGE);
@@ -136,7 +156,7 @@ const runStylelintFix = (
 const runOxlintFix = (
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   const targets = toOxlintTargets(files);
 
@@ -154,14 +174,14 @@ const runOxlintFix = (
     ...targets,
   ];
 
-  const result = spawnSync("oxlint", args, { stdio });
+  const result = runTool("oxlint", args, io);
   exitOnCommandFailure("Oxlint", result);
 };
 
 const runOxfmtFix = (
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   // An explicit file oxfmt does not format (a Dockerfile, .env) is an error
   // without this; with it, oxfmt reports zero files and exits 0.
@@ -172,25 +192,35 @@ const runOxfmtFix = (
     ...(files.length > 0 ? files : ["."]),
   ];
 
-  const result = spawnSync("oxfmt", args, { stdio });
+  const result = runTool("oxfmt", args, io);
   exitOnCommandFailure("oxfmt", result);
 };
 
 interface FixOptions {
   agent?: FixAgent | null;
   /**
-   * Running from a post-edit hook whose host shows the agent a hook's stderr
-   * on exit code 2: everything the tools print goes to stderr, and problems
-   * left after fixing exit with HOOK_FEEDBACK_EXIT_CODE.
+   * Running from a post-edit hook, how the problems left after fixing reach
+   * the agent (see HookReport): `"stderr"` sends everything the tools print
+   * to stderr and exits with HOOK_FEEDBACK_EXIT_CODE; `"context"` prints it
+   * to stdout as the hook's `additionalContext` and exits with 0.
    */
-  reportToAgent?: boolean;
+  report?: HookReport;
 }
+
+// A PostToolUse hook's output that adds the problems to the agent's context.
+const hookContextOutput = (collected: string[]): string =>
+  `${JSON.stringify({
+    hookSpecificOutput: {
+      additionalContext: `\`ultracite fix\` left these problems in the files you edited:\n\n${collected.join("\n").trim()}`,
+      hookEventName: "PostToolUse",
+    },
+  })}\n`;
 
 const runLinterFixes = (
   linter: NonNullable<ReturnType<typeof detectLinter>>,
   files: string[],
   passthrough: string[],
-  stdio: FixStdio
+  io: FixIo
 ): void => {
   switch (linter) {
     // Lint fixes first, then the formatter: a fixer can insert unformatted
@@ -199,21 +229,21 @@ const runLinterFixes = (
     // adapters in agent-fix/linters.ts follow the same order.
     case "eslint": {
       runSteps([
-        () => runEslintFix(files, passthrough, stdio),
-        () => runStylelintFix(files, [], stdio),
-        () => runPrettierFix(files, [], stdio),
+        () => runEslintFix(files, passthrough, io),
+        () => runStylelintFix(files, [], io),
+        () => runPrettierFix(files, [], io),
       ]);
       break;
     }
     case "oxlint": {
       runSteps([
-        () => runOxlintFix(files, passthrough, stdio),
-        () => runOxfmtFix(files, [], stdio),
+        () => runOxlintFix(files, passthrough, io),
+        () => runOxfmtFix(files, [], io),
       ]);
       break;
     }
     default: {
-      runBiomeFix(files, passthrough, stdio);
+      runBiomeFix(files, passthrough, io);
     }
   }
 };
@@ -223,7 +253,7 @@ const runLinterFixes = (
 export const fix = (
   files: string[],
   linterArgs: string[] = [],
-  { agent, reportToAgent = false }: FixOptions = {}
+  { agent, report = "none" }: FixOptions = {}
 ): Promise<void> | void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
@@ -244,13 +274,31 @@ export const fix = (
     });
   }
 
-  if (!reportToAgent) {
-    runLinterFixes(linter, normalizedFiles, passthrough, "inherit");
+  if (report === "none") {
+    runLinterFixes(linter, normalizedFiles, passthrough, { stdio: "inherit" });
+    return;
+  }
+
+  if (report === "context") {
+    const collected: string[] = [];
+    try {
+      runLinterFixes(linter, normalizedFiles, passthrough, {
+        collected,
+        stdio: "pipe",
+      });
+    } catch (error) {
+      if (!(error instanceof LinterExitError)) {
+        throw error;
+      }
+      process.stdout.write(hookContextOutput(collected));
+    }
     return;
   }
 
   try {
-    runLinterFixes(linter, normalizedFiles, passthrough, STDOUT_TO_STDERR);
+    runLinterFixes(linter, normalizedFiles, passthrough, {
+      stdio: STDOUT_TO_STDERR,
+    });
   } catch (error) {
     if (error instanceof LinterExitError) {
       throw new LinterExitError(error.commandName, HOOK_FEEDBACK_EXIT_CODE);

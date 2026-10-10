@@ -12,6 +12,8 @@ export type StdoutToStderr = readonly ["inherit", 2, "inherit"];
 export interface SpawnSyncOptions {
   maxBuffer?: number;
   stdio?: "ignore" | "inherit" | "pipe" | StdoutToStderr;
+  /** Milliseconds before the command is killed; it then has no exit code. */
+  timeout?: number;
 }
 
 /**
@@ -26,6 +28,8 @@ export interface SpawnSyncResult {
   errorCode?: string;
   signal?: string;
   status: number | null;
+  // What the command printed, when stdio is "pipe".
+  stderr?: string;
   stdout?: string;
 }
 
@@ -136,6 +140,8 @@ export const spawnSync = (
 
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- I/O boundary decoding execa's loosely-typed stdout: a string only when piped, absent for ignore/inherit stdio
   const stdout = typeof result.stdout === "string" ? result.stdout : undefined;
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- same decoding as stdout
+  const stderr = typeof result.stderr === "string" ? result.stderr : undefined;
 
   // No exit code and no signal means the process never ran.
   if (result.exitCode === undefined && result.signal === undefined) {
@@ -143,6 +149,7 @@ export const spawnSync = (
       error: new Error(result.shortMessage ?? `Failed to run ${command}`),
       errorCode: result.code,
       status: null,
+      stderr,
       stdout,
     };
   }
@@ -150,6 +157,7 @@ export const spawnSync = (
   return {
     signal: result.signal,
     status: result.signal === undefined ? (result.exitCode ?? null) : null,
+    stderr,
     stdout,
   };
 };

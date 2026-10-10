@@ -99,7 +99,7 @@ export const zed: EditorPageContent = {
       {
         label: "Oxlint and Oxfmt",
         value:
-          "Run through the Oxc extension (`oxc-project/oxc-zed`), which needs Zed 0.205 or later and Oxlint 1.35 or later. Install it from `zed: extensions`.",
+          "Run through the Oxc extension (`oxc-project/oxc-zed`), which needs Zed 0.205 or later and Oxlint 1.35 or later. `init` points you to it; install it from `zed: extensions`.",
       },
       {
         label: "Biome",

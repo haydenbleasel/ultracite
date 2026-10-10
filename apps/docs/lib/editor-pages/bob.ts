@@ -3,7 +3,7 @@ import type { EditorPageContent } from "./types";
 export const bob: EditorPageContent = {
   afterInit: [
     "Trust the folder when Bob asks. Until you do, it runs the folder in safe mode, with workspace rules, skills and MCP servers suspended.",
-    "Install `oxc.oxc-vscode` from the Extensions view, or Biome’s if you picked Biome. Bob installs extensions from Open VSX.",
+    "If `init` couldn’t run `bobide`, install `oxc.oxc-vscode` from the Extensions view, or Biome’s if you picked Biome. Bob installs extensions from Open VSX.",
     "Save a file: Oxfmt formats it and Oxlint’s safe fixes apply.",
   ],
   agent: {
@@ -41,12 +41,12 @@ export const bob: EditorPageContent = {
   faqs: [
     {
       answer:
-        "Yes. `npx ultracite init --editors bob` writes `.vscode/settings.json` for Oxlint and Oxfmt, Biome, or ESLint and Prettier. Install the matching extension from Open VSX in Bob’s Extensions view.",
+        "Yes. `npx ultracite init --editors bob` writes `.vscode/settings.json` for Oxlint and Oxfmt, Biome, or ESLint and Prettier. It installs the matching extension from Open VSX with Bob’s `bobide` command.",
       question: "Does Ultracite work with IBM Bob?",
     },
     {
       answer:
-        "`init` has no launcher to call for Bob, so it asks you to install the extension. Install it from the Extensions view; Bob’s own command-line launcher is `bobide`.",
+        "`init` installs it with `bobide --install-extension` only when it creates `.vscode/settings.json`, and only if `bobide` is on your `PATH`. Otherwise, install it from the Extensions view.",
       question: "Why didn’t init install the Oxc extension in IBM Bob?",
     },
     {
@@ -96,7 +96,7 @@ export const bob: EditorPageContent = {
       {
         label: "Launcher",
         value:
-          "Bob’s own launcher is `bobide`, built from VS Code’s command-line tool, and it takes `--install-extension`. The Linux packages link it to `/usr/bin/bobide`.",
+          "Bob’s own launcher is `bobide`, built from VS Code’s command-line tool, and `init` installs the extension with `bobide --install-extension`. The Linux packages link it to `/usr/bin/bobide`.",
       },
       {
         label: "VS Code base",

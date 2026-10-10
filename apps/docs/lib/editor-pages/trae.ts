@@ -2,7 +2,7 @@ import type { EditorPageContent } from "./types";
 
 export const trae: EditorPageContent = {
   afterInit: [
-    "In Trae’s IDE window, install `oxc.oxc-vscode` from the Extensions view, or Biome’s if you picked Biome. If the store doesn’t list it, install its `.vsix` with ··· → Install from VSIX.",
+    "If `init` couldn’t run `trae`, install `oxc.oxc-vscode` from the Extensions view in Trae’s IDE window, or Biome’s if you picked Biome. If the store doesn’t list it, install its `.vsix` with ··· → Install from VSIX.",
     "If you also ran `--agents`, turn on “Include AGENTS.md in the context” under Settings → Rules & Memories → Import Settings.",
     "Save a file: Oxfmt formats it and Oxlint’s safe fixes apply.",
   ],
@@ -45,7 +45,7 @@ export const trae: EditorPageContent = {
   faqs: [
     {
       answer:
-        "Yes. `npx ultracite init --editors trae` writes `.vscode/settings.json` for Oxlint and Oxfmt, Biome, or ESLint and Prettier. Install the matching extension in Trae’s IDE window, then saving a file formats it and applies the linter’s safe fixes.",
+        "Yes. `npx ultracite init --editors trae` writes `.vscode/settings.json` for Oxlint and Oxfmt, Biome, or ESLint and Prettier. It installs the matching extension with Trae’s `trae` command, then saving a file formats it and applies the linter’s safe fixes.",
       question: "Does Ultracite work with Trae?",
     },
     {
@@ -55,7 +55,7 @@ export const trae: EditorPageContent = {
     },
     {
       answer:
-        "`init` doesn’t run a launcher for Trae, so it asks you to install the extension. Install it from the Extensions view in the IDE window, or bring it over from VS Code or Cursor with Import Configuration.",
+        "`init` installs it with `trae --install-extension` only when it creates `.vscode/settings.json`, and only if `trae` is on your `PATH`. Otherwise, install it from the Extensions view in the IDE window, or bring it over from VS Code or Cursor with Import Configuration.",
       question: "Why didn’t init install the Oxc extension in Trae?",
     },
     {
@@ -105,12 +105,12 @@ export const trae: EditorPageContent = {
       {
         label: "Launcher",
         value:
-          "Trae ships a `trae` command, built from VS Code’s command-line tool, that takes `--install-extension`. `init` doesn’t call it, so it asks you to install the extension.",
+          "Trae ships a `trae` command, built from VS Code’s command-line tool, and `init` installs the extension with `trae --install-extension`.",
       },
       {
         label: "VS Code base",
         value:
-          "Trae 3.6.2 is built on VS Code 1.107.1 and applies `.vscode/settings.json` as VS Code does. The Oxc, Biome, ESLint and Prettier extensions all support that version.",
+          "Trae 3.6.2 is built on VS Code 1.107.1. That predates `js/ts.tsdk.path`, so for Trae `init` also writes `typescript.tsdk`. The Oxc, Biome, ESLint and Prettier extensions all support that version.",
       },
       {
         label: "Agent sandbox",

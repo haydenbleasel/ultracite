@@ -70,7 +70,7 @@ npx ultracite init --yes --linter eslint --pm npm
 
 ### Editor Extensions
 
-When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. It installs them with your editor's own command-line launcher (`code`, `cursor`, `devin-desktop` or `windsurf`, `kiro` or `void`), so they land in the editor you picked. It doesn't install them into Antigravity, CodeBuddy, IBM Bob or Trae, so install them from the editor's Extensions view. Also install them yourself if the settings file already existed, the launcher isn't on your `PATH`, or the install failed. The Stylelint extension is never installed for you. For VS Code (use your editor's launcher in place of `code`):
+When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. It installs them with your editor's own command-line launcher (`code`, `cursor`, `devin-desktop` or `windsurf`, `buddy` for CodeBuddy, `antigravity-ide`, `bobide` for IBM Bob, `kiro`, `trae` or `void`), so they land in the editor you picked. Install them yourself from the editor's Extensions view if the settings file already existed, the launcher isn't on your `PATH`, or the install failed or took more than two minutes. The Stylelint extension is never installed for you. For VS Code (use your editor's launcher in place of `code`):
 
 ```bash title="Terminal"
 # Oxlint + Oxfmt

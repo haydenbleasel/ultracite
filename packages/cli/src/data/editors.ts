@@ -102,6 +102,15 @@ export const vscodeEslintConfig = {
   },
 };
 
+// VS Code 1.111 renamed `typescript.tsdk` and
+// `typescript.enablePromptUseWorkspaceTsdk` to the `js/ts.*` settings above
+// and marks the old names deprecated. Editors built on an earlier VS Code only
+// read the old names, so they get both.
+const legacyTypeScriptConfig = {
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+};
+
 export const getVscodeConfig = (linter: ProviderId = "biome") => {
   switch (linter) {
     case "biome": {
@@ -206,7 +215,6 @@ const zedOxcConfig = {
     JavaScript: {
       code_actions_on_format: {
         "source.fixAll.oxc": true,
-        "source.organizeImports.oxc": true,
       },
       formatter: {
         language_server: {
@@ -217,7 +225,6 @@ const zedOxcConfig = {
     TSX: {
       code_actions_on_format: {
         "source.fixAll.oxc": true,
-        "source.organizeImports.oxc": true,
       },
       formatter: {
         language_server: {
@@ -228,7 +235,6 @@ const zedOxcConfig = {
     TypeScript: {
       code_actions_on_format: {
         "source.fixAll.oxc": true,
-        "source.organizeImports.oxc": true,
       },
       formatter: {
         language_server: {
@@ -265,6 +271,10 @@ const zedOxcConfig = {
   },
 };
 
+/** The VS Code settings for an editor built on VS Code before 1.111. */
+export const getPre111VscodeConfig = (linter: ProviderId = "biome") =>
+  deepmerge(getVscodeConfig(linter), legacyTypeScriptConfig);
+
 export const getZedConfig = (linter: ProviderId = "biome") => {
   switch (linter) {
     case "biome": {
@@ -281,6 +291,14 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
     }
   }
 };
+
+// The `post_write_code` hook Cascade (Devin Desktop's agent before 3.9.19,
+// and Windsurf's) ran.
+const cascadeHookContent = (command: string) => ({
+  hooks: {
+    post_write_code: [{ command, show_output: true }],
+  },
+});
 
 export const editors: Editor[] = [
   {
@@ -320,25 +338,34 @@ export const editors: Editor[] = [
       path: VSCODE_SETTINGS_PATH,
     },
     hooks: {
+      // Devin Local, Devin Desktop's only agent since 3.9.19 (and Devin
+      // CLI), reads hooks in Claude Code's format from .devin/hooks.v1.json
+      // and names its file tools in lower case. Cascade, which it replaced,
+      // ran `post_write_code` hooks from .devin/hooks.json, and Windsurf's
+      // from .windsurf/hooks.json; a re-run takes Ultracite's out of both.
       getContent: (command) => ({
-        hooks: {
-          post_write_code: [{ command, show_output: true }],
-        },
+        PostToolUse: [
+          {
+            hooks: [{ command, type: "command" }],
+            matcher: "^(write|edit|apply_patch)$",
+          },
+        ],
       }),
-      // Devin Desktop (formerly Windsurf) reads .devin/hooks.json, and the
-      // old .windsurf/hooks.json only while that file has no hooks.
-      legacyPath: ".windsurf/hooks.json",
-      path: ".devin/hooks.json",
+      path: ".devin/hooks.v1.json",
+      retiredFiles: [
+        { getContent: cascadeHookContent, path: ".devin/hooks.json" },
+        { getContent: cascadeHookContent, path: ".windsurf/hooks.json" },
+      ],
     },
     id: "devin",
     name: "Devin Desktop",
   },
   {
     config: {
-      // `codebuddy` on PATH is CodeBuddy Code, the agent CLI, not a
-      // launcher for the IDE.
-      extensionClis: [],
-      getContent: getVscodeConfig,
+      // The IDE's launcher is `buddy`; `codebuddy` on PATH is CodeBuddy
+      // Code, the agent CLI. Built on VS Code 1.106.
+      extensionClis: ["buddy"],
+      getContent: getPre111VscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
     hooks: {
@@ -365,8 +392,9 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionClis: [],
-      getContent: getVscodeConfig,
+      // Antigravity IDE, built on Code OSS 1.107.
+      extensionClis: ["antigravity-ide"],
+      getContent: getPre111VscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
     id: "antigravity",
@@ -374,7 +402,7 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionClis: [],
+      extensionClis: ["bobide"],
       getContent: getVscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
@@ -392,8 +420,9 @@ export const editors: Editor[] = [
   },
   {
     config: {
-      extensionClis: [],
-      getContent: getVscodeConfig,
+      // Built on VS Code 1.107.
+      extensionClis: ["trae"],
+      getContent: getPre111VscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
     id: "trae",
@@ -401,8 +430,9 @@ export const editors: Editor[] = [
   },
   {
     config: {
+      // Archived, on VS Code 1.99.
       extensionClis: ["void"],
-      getContent: getVscodeConfig,
+      getContent: getPre111VscodeConfig,
       path: VSCODE_SETTINGS_PATH,
     },
     id: "void",

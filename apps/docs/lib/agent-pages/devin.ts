@@ -25,7 +25,7 @@ export const devin: AgentPageContent = {
     },
     {
       answer:
-        "Devin CLI does: `PostToolUse` and other events in `.devin/hooks.v1.json`, where exit code 2 blocks the action. It also loads Claude Code hooks from `.claude/settings.json`. Ultracite doesn’t set up a Devin hook.",
+        "Devin CLI does: `PostToolUse` and other events in `.devin/hooks.v1.json`, where exit code 2 blocks the action. It also loads Claude Code hooks from `.claude/settings.json`. `npx ultracite init --hooks devin` adds Ultracite’s to `.devin/hooks.v1.json`: it fixes each file Devin writes or edits and adds what’s left to its context.",
       question: "Does Devin support hooks?",
     },
   ],

@@ -2,7 +2,7 @@ import type { EditorPageContent } from "./types";
 
 export const codebuddy: EditorPageContent = {
   afterInit: [
-    "Install `oxc.oxc-vscode` from the Extensions view, or Biome’s if you picked Biome. CodeBuddy installs extensions from Open VSX.",
+    "If `init` couldn’t run `buddy`, install `oxc.oxc-vscode` from the Extensions view, or Biome’s if you picked Biome. CodeBuddy installs extensions from Open VSX.",
     "Start a new chat, so the agent loads the rules and, with `--hooks codebuddy`, the hook in `.codebuddy/settings.json`.",
     "Save a file: Oxfmt formats it and Oxlint’s safe fixes apply.",
   ],
@@ -51,7 +51,7 @@ export const codebuddy: EditorPageContent = {
     },
     {
       answer:
-        "`codebuddy` on your `PATH` is CodeBuddy Code, the agent CLI, so `init` has no launcher to call and asks you to install the extension. Install it from the Extensions view; the IDE’s own command is `buddy`.",
+        "`init` installs it with the IDE’s own command, `buddy`, only when it creates `.vscode/settings.json` and only if `buddy` is on your `PATH`. (`codebuddy` is CodeBuddy Code, the agent CLI.) Otherwise, install it from the Extensions view.",
       question: "Why didn’t init install the Oxc extension in CodeBuddy?",
     },
     {
@@ -96,12 +96,12 @@ export const codebuddy: EditorPageContent = {
       {
         label: "Launcher",
         value:
-          "The IDE’s own launcher is `buddy`, built from VS Code’s command-line tool, and it takes `--install-extension`. `codebuddy` on your `PATH` is CodeBuddy Code, the agent CLI.",
+          "The IDE’s own launcher is `buddy`, built from VS Code’s command-line tool, and `init` installs the extension with `buddy --install-extension`. `codebuddy` on your `PATH` is CodeBuddy Code, the agent CLI.",
       },
       {
         label: "VS Code base",
         value:
-          "CodeBuddy 4.12.1 is built on VS Code 1.106 and applies `.vscode/settings.json` as VS Code does.",
+          "CodeBuddy 4.12.1 is built on VS Code 1.106, which predates `js/ts.tsdk.path`, so for CodeBuddy `init` also writes `typescript.tsdk`.",
       },
       {
         label: "Two settings files",

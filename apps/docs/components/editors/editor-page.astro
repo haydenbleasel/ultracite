@@ -91,8 +91,8 @@ const initSteps: { note: string; title: string }[] = [
 ];
 if (isZed) {
   initSteps.push({
-    note: "Zed extensions install from its own extensions view, so `init` installs nothing here. ESLint and Prettier are built into Zed.",
-    title: "Leaves the Oxc or Biome extension to you",
+    note: "Zed extensions install from its own extensions view, so `init` links the one your toolchain needs. ESLint and Prettier are built into Zed.",
+    title: "Points you to the Oxc or Biome extension",
   });
 } else if (launchers.length > 0) {
   initSteps.push({

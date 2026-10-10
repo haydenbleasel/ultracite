@@ -2761,6 +2761,38 @@ describe("helper functions", () => {
       expect(mockWriteFile).toHaveBeenCalled();
     });
 
+    test.each([
+      ["oxlint", "Install the Oxc extension: https://zed.dev/extensions/oxc"],
+      [
+        "biome",
+        "Install the Biome extension: https://biomejs.dev/reference/zed/",
+      ],
+    ] as const)(
+      "points to the Zed extension %s needs",
+      async (linter, hint) => {
+        const stop = mock((_message: string) => {});
+        mock.module("node:fs/promises", () => ({
+          access: mock(() => Promise.reject(new Error("ENOENT"))),
+          mkdir: mock(() => Promise.resolve()),
+          readFile: mock(() => Promise.resolve("{}")),
+          writeFile: mock(() => Promise.resolve()),
+        }));
+        mock.module("@clack/prompts", () => ({
+          spinner: mock(() => ({
+            message: mock(noop),
+            start: mock(noop),
+            stop,
+          })),
+        }));
+
+        await upsertEditorConfig("zed", linter);
+
+        expect(stop.mock.calls.at(-1)?.[0]).toBe(
+          `.zed/settings.json created. ${hint}`
+        );
+      }
+    );
+
     test("updates existing vscode settings", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
