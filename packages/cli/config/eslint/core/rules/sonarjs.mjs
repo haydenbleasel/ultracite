@@ -42,4 +42,64 @@ const overrideRules = {
 
 const config = Object.assign(baseRules, overrideRules);
 
+// SonarJS marks the rules that use type information with
+// `meta.docs.requiresTypeChecking`. Most of them register nothing without a
+// TypeScript program, so they run only with the type-aware preset. These
+// marked rules also check the syntax tree, using types only where there are
+// some, so core keeps them. The ESLint smoke test checks this list against
+// the installed plugin.
+const worksWithoutTypes = new Set([
+  "anchor-precedence",
+  "arguments-order",
+  "bitwise-operators",
+  "class-prototype",
+  "concise-regex",
+  "disabled-auto-escaping",
+  "dompurify-unsafe-config",
+  "duplicates-in-character-class",
+  "empty-string-repetition",
+  "no-collection-size-mischeck",
+  "no-control-regex",
+  "no-empty-after-reluctant",
+  "no-empty-alternatives",
+  "no-empty-character-class",
+  "no-empty-group",
+  "no-inconsistent-returns",
+  "no-invalid-regexp",
+  "no-misleading-character-class",
+  "no-redundant-optional",
+  "no-regex-spaces",
+  "no-require-or-define",
+  "no-small-switch",
+  "prefer-immediate-return",
+  "reduce-initial-value",
+  "regex-complexity",
+  "single-char-in-character-classes",
+  "single-character-alternation",
+  "slow-regex",
+  "sql-queries",
+  "unicode-aware-regex",
+  "unused-import",
+  "void-use",
+]);
+
+const needsTypes = (key) => {
+  const name = key.slice("sonarjs/".length);
+  return (
+    rules[name]?.meta?.docs?.requiresTypeChecking === true &&
+    !worksWithoutTypes.has(name)
+  );
+};
+
+const pickRules = (typeChecked) =>
+  Object.fromEntries(
+    Object.entries(config).filter(([key]) => needsTypes(key) === typeChecked)
+  );
+
+/** The rules core runs, which work without type information. */
+export const syntacticRules = pickRules(false);
+
+/** The rules the type-aware preset adds, which need a TypeScript program. */
+export const typeCheckedRules = pickRules(true);
+
 export default config;

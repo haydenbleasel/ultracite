@@ -16,8 +16,10 @@ import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
-import { ESLint } from "eslint";
-import type { Linter } from "eslint";
+// biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
+import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
+import { ESLint, Linter } from "eslint";
+import type { Rule } from "eslint";
 
 interface FixtureFile {
   content: string;
@@ -761,6 +763,108 @@ const checkPreset = async (
   return failures;
 };
 
+const isEnabled = (entry: Linter.RuleEntry | undefined): boolean => {
+  const severity = Array.isArray(entry) ? entry[0] : entry;
+  return severity !== undefined && severity !== "off" && severity !== 0;
+};
+
+// The listeners a rule registers for a TypeScript file without type
+// information. A rule that registers none does nothing there, and one that
+// throws (typescript-eslint's) can't run at all.
+const listenersWithoutTypes = (rule: Rule.RuleModule): number => {
+  let count = 0;
+  const probe: Rule.RuleModule = {
+    ...rule,
+    create: (context) => {
+      const listeners = rule.create(context);
+      count = Object.keys(listeners).length;
+      return listeners;
+    },
+  };
+  try {
+    new Linter({ configType: "flat" }).verify(
+      "export const value = 1;\n",
+      [
+        {
+          files: ["**/*.ts"],
+          languageOptions: { parser: typescriptParser },
+          plugins: { probe: { rules: { rule: probe } } },
+          rules: { "probe/rule": "error" },
+        },
+      ],
+      "probe.ts"
+    );
+  } catch {
+    return 0;
+  }
+  return count;
+};
+
+/**
+ * Plugins mark the rules that read types `meta.docs.requiresTypeChecking`.
+ * Some of those also work from the syntax tree; the rest register no
+ * listeners without a TypeScript program, so in core they would be on but do
+ * nothing. Core must run only the first kind, and the SonarJS and Unicorn
+ * rules the type-aware preset adds must be the second. (typescript-eslint's
+ * split follows its own `disable-type-checked` list instead.)
+ */
+const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
+  const core = await loadPreset("core");
+  const withTypeAware = [...core, ...(await loadPreset("type-aware"))];
+  const plugins = new Map<string, Rule.RuleModule>();
+  for (const config of withTypeAware) {
+    for (const [namespace, plugin] of Object.entries(config.plugins ?? {})) {
+      for (const [name, rule] of Object.entries(plugin.rules ?? {})) {
+        // SAFETY: the presets register ESLint plugins, whose rules are rule
+        // modules; the looser plugin type also admits other languages' rules.
+        plugins.set(`${namespace}/${name}`, rule as Rule.RuleModule);
+      }
+    }
+  }
+  const rulesFor = async (configs: Linter.Config[]) => {
+    const eslint = new ESLint({
+      cwd: tempRoot,
+      overrideConfig: configs,
+      overrideConfigFile: true,
+    });
+    const config: Linter.Config =
+      await eslint.calculateConfigForFile("src/probe.ts");
+    return Object.entries(config.rules ?? {}).filter(([, entry]) =>
+      isEnabled(entry)
+    );
+  };
+  const needsTypes = (ruleId: string): boolean | undefined => {
+    const rule = plugins.get(ruleId);
+    const docs = rule?.meta?.docs;
+    const marked =
+      docs !== undefined &&
+      "requiresTypeChecking" in docs &&
+      docs.requiresTypeChecking === true;
+    return rule && marked ? listenersWithoutTypes(rule) === 0 : undefined;
+  };
+
+  const failures: string[] = [];
+  const coreRules = await rulesFor(core);
+  for (const [ruleId] of coreRules) {
+    if (needsTypes(ruleId) === true) {
+      failures.push(
+        `core: ${ruleId} does nothing without type information; move it to eslint/type-aware`
+      );
+    }
+  }
+  const coreIds = new Set(coreRules.map(([ruleId]) => ruleId));
+  for (const [ruleId] of await rulesFor(withTypeAware)) {
+    const added = !coreIds.has(ruleId);
+    const ownSplit = ruleId.startsWith("@typescript-eslint/");
+    if (added && !ownSplit && needsTypes(ruleId) !== true) {
+      failures.push(
+        `type-aware: ${ruleId} works without type information; keep it in core`
+      );
+    }
+  }
+  return failures;
+};
+
 const main = async () => {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "ultracite-eslint-"));
   const failures: string[] = [];
@@ -790,6 +894,12 @@ const main = async () => {
       console.log(`${presetFailures.length === 0 ? "✓" : "✗"} eslint/${name}`);
       failures.push(...presetFailures);
     }
+
+    const typeFailures = await checkTypeInformation(tempRoot);
+    console.log(
+      `${typeFailures.length === 0 ? "✓" : "✗"} rules that need type information are only in eslint/type-aware`
+    );
+    failures.push(...typeFailures);
   } finally {
     process.chdir(previousCwd);
     await rm(tempRoot, { force: true, recursive: true });

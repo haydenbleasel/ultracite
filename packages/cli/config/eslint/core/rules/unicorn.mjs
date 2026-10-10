@@ -63,4 +63,22 @@ const overrideRules = {
 
 const config = Object.assign(baseRules, overrideRules);
 
+// The rules unicorn marks `meta.docs.requiresTypeChecking` register nothing
+// without a TypeScript program, so they run only with the type-aware preset.
+const needsTypes = (key) => {
+  const { docs } = rules[key.slice("unicorn/".length)]?.meta ?? {};
+  return docs?.requiresTypeChecking === true;
+};
+
+const pickRules = (typeChecked) =>
+  Object.fromEntries(
+    Object.entries(config).filter(([key]) => needsTypes(key) === typeChecked)
+  );
+
+/** The rules core runs, which work without type information. */
+export const syntacticRules = pickRules(false);
+
+/** The rules the type-aware preset adds, which need a TypeScript program. */
+export const typeCheckedRules = pickRules(true);
+
 export default config;

@@ -239,7 +239,8 @@ const config = defineConfig({
     // ── sonarjs ────────────────────────────────────────────────────────
     // Every non-deprecated sonarjs rule that does not require type checking
     // (the JS plugin bridge has no type information); the type-aware rules
-    // stay enabled in the ESLint preset only.
+    // stay in the ESLint presets only (core, for those that also work from the
+    // syntax tree, and type-aware).
     "sonarjs/arguments-usage": "error",
     "sonarjs/array-constructor": "error",
     // Fights the formatter (arrowParentheses: always).

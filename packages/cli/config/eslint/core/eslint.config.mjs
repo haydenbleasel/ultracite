@@ -19,7 +19,7 @@ import {
   PAGE_ROUTE_FILENAME_PATTERN,
   ROUTE_FILE_GLOB,
 } from "../../shared/route-filenames.mjs";
-import compatRules from "./rules/compat.mjs";
+import compatRules, { compatSettings } from "./rules/compat.mjs";
 import eslintTypescriptRules from "./rules/eslint-typescript.mjs";
 import eslintRules from "./rules/eslint.mjs";
 import githubRules from "./rules/github.mjs";
@@ -27,9 +27,9 @@ import importRules from "./rules/import.mjs";
 import jsdocRules from "./rules/jsdoc.mjs";
 import nRules from "./rules/n.mjs";
 import promiseRules from "./rules/promise.mjs";
-import sonarjsRules from "./rules/sonarjs.mjs";
+import { syntacticRules as sonarjsRules } from "./rules/sonarjs.mjs";
 import { syntacticRules as typescriptRules } from "./rules/typescript.mjs";
-import unicornRules from "./rules/unicorn.mjs";
+import { syntacticRules as unicornRules } from "./rules/unicorn.mjs";
 import unusedImportsRules from "./rules/unused-imports.mjs";
 
 export const scriptConfig = {
@@ -89,6 +89,7 @@ export const scriptConfig = {
   },
 
   settings: {
+    ...compatSettings,
     // TypeScript extensions are mapped to @typescript-eslint/parser by
     // importX.flatConfigs.typescript above.
     "import-x/parsers": {

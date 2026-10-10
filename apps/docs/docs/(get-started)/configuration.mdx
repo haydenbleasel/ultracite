@@ -42,7 +42,7 @@ Rules that read type information, or scan the whole project, are slower than the
 
 ### ESLint
 
-The `type-aware` preset adds the `@typescript-eslint` rules that need a TypeScript program, such as `no-floating-promises`, `no-unsafe-return` and `strict-boolean-expressions`, and points the parser at your tsconfig files with the project service. `core` lints TypeScript without them, so it needs no tsconfig. Add `type-aware` straight after `core`:
+The `type-aware` preset adds the `@typescript-eslint`, SonarJS and Unicorn rules that need a TypeScript program, such as `no-floating-promises`, `no-unsafe-return` and `strict-boolean-expressions`, and points the parser at your tsconfig files with the project service. `core` lints TypeScript without them, so it needs no tsconfig. Add `type-aware` straight after `core`:
 
 ```js title="eslint.config.mjs"
 import core from "ultracite/eslint/core";
@@ -114,6 +114,18 @@ Ultracite's base config uses `files.includes` to match all files while excluding
 ```
 
 **Important:** Always include `"**"` as the first entry. Using only negated patterns (e.g. `["!public", "!prisma/client"]`) will result in zero files being matched, because Biome needs at least one positive glob to start from.
+
+### Browser Targets (ESLint)
+
+`compat/compat` reports browser and JavaScript APIs your target browsers don't support. It reads the targets from your [browserslist](https://github.com/browserslist/browserslist) config. Without one, Ultracite checks against [Baseline Widely available](https://web.dev/baseline) browsers, so set your own when you support older or fewer browsers:
+
+```json title="package.json"
+{
+  "browserslist": ["> 0.5%", "last 2 versions", "not dead"]
+}
+```
+
+A `.browserslistrc` file works too. Ultracite looks for the config from the folder ESLint runs in, so in a monorepo that sets targets per package, run ESLint in each package or add targets at the root. For code that only runs on a server, turn the rule off with `{ rules: { "compat/compat": "off" } }`.
 
 ### Enforcing Path Aliases (Oxlint)
 

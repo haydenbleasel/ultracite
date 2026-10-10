@@ -97,7 +97,7 @@ Since the rules are baked into your Biome config, they work in both the CLI and 
 
 #### ESLint
 
-For ESLint, `--type-aware` adds `ultracite/eslint/type-aware` to `eslint.config.mjs`, plus the type-aware add-on of each framework preset that has one. It turns on typescript-eslint's type-checked rules, such as `no-floating-promises` and `no-misused-promises`, through `projectService`, which finds the `tsconfig.json` that includes each file. Without it, ESLint lints TypeScript without type information and needs no tsconfig.
+For ESLint, `--type-aware` adds `ultracite/eslint/type-aware` to `eslint.config.mjs`, plus the type-aware add-on of each framework preset that has one. It turns on the typescript-eslint, SonarJS and Unicorn rules that need type information, such as `no-floating-promises` and `no-misused-promises`, through `projectService`, which finds the `tsconfig.json` that includes each file. Without it, ESLint lints TypeScript without type information and needs no tsconfig.
 
 ```bash title="Terminal"
 npx ultracite init --linter eslint --type-aware
