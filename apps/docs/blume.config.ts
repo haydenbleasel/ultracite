@@ -38,6 +38,12 @@ export default defineConfig({
   description:
     "Ultracite is a zero-config preset for Oxlint, Biome, and ESLint that helps humans and agents write consistent, type-safe code.",
 
+  // The site footer on docs pages (the homepage renders its own). The GitHub
+  // icon comes from `github` below; X sits beside it.
+  footer: {
+    socials: { x: "https://x.com/haydenbleasel" },
+  },
+
   github: {
     dir: "apps/docs",
     owner: "haydenbleasel",
