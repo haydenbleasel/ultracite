@@ -15,4 +15,19 @@ describe("getZedConfig", () => {
       });
     }
   );
+
+  // ESLint no longer runs Prettier as a rule, so ESLint's language server
+  // can't format; Zed's Prettier integration formats after ESLint's fixes.
+  test.each(["JavaScript", "TSX", "TypeScript"] as const)(
+    "formats %s with Prettier after ESLint's fixes on ESLint",
+    (language) => {
+      expect(getZedConfig("eslint")).toHaveProperty(["languages", language], {
+        code_actions_on_format: {
+          "source.fixAll.eslint": true,
+          "source.organizeImports.eslint": true,
+        },
+        formatter: "prettier",
+      });
+    }
+  );
 });

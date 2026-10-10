@@ -181,41 +181,23 @@ const zedBiomeConfig = {
   },
 };
 
+// ESLint's code actions fix and sort imports, then Zed's Prettier integration
+// formats, the order `ultracite fix` runs them in. Zed uses the project's own
+// Prettier install, its config and the plugins that config lists. ESLint no
+// longer runs Prettier as a rule, so its language server can't format.
+const zedEslintLanguage = {
+  code_actions_on_format: {
+    "source.fixAll.eslint": true,
+    "source.organizeImports.eslint": true,
+  },
+  formatter: "prettier",
+};
+
 const zedEslintConfig = {
   languages: {
-    JavaScript: {
-      code_actions_on_format: {
-        "source.fixAll.eslint": true,
-        "source.organizeImports.eslint": true,
-      },
-      formatter: {
-        language_server: {
-          name: "eslint",
-        },
-      },
-    },
-    TSX: {
-      code_actions_on_format: {
-        "source.fixAll.eslint": true,
-        "source.organizeImports.eslint": true,
-      },
-      formatter: {
-        language_server: {
-          name: "eslint",
-        },
-      },
-    },
-    TypeScript: {
-      code_actions_on_format: {
-        "source.fixAll.eslint": true,
-        "source.organizeImports.eslint": true,
-      },
-      formatter: {
-        language_server: {
-          name: "eslint",
-        },
-      },
-    },
+    JavaScript: zedEslintLanguage,
+    TSX: zedEslintLanguage,
+    TypeScript: zedEslintLanguage,
   },
 };
 

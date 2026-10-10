@@ -250,6 +250,28 @@ describe("updating existing settings", () => {
     expect(written).toContain('"editor.formatOnSave": true');
   });
 
+  test("replaces v7's ESLint formatter in Zed with Prettier", async () => {
+    const settings = mockSettingsFile(`{
+  "languages": {
+    "TypeScript": {
+      "formatter": { "language_server": { "name": "eslint" } },
+      "tab_size": 4
+    }
+  }
+}
+`);
+
+    await createEditorConfig("zed", "eslint").update();
+
+    const [[, written]] = settings.writeFile.mock.calls;
+    const { languages } = JSON.parse(written);
+    expect(languages.TypeScript.formatter).toBe("prettier");
+    expect(languages.TypeScript.tab_size).toBe(4);
+    expect(
+      languages.TypeScript.code_actions_on_format["source.fixAll.eslint"]
+    ).toBe(true);
+  });
+
   test("leaves a settings file with a syntax error unchanged", async () => {
     const settings = mockSettingsFile(
       '{ "editor.tabSize": 2, "files.exclude": { "**/.git": true }, "x": '

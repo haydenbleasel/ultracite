@@ -61,6 +61,8 @@ export interface ProjectState {
   oxlintConfig?: string | null;
   /** The text of the Stylelint config nearest the project. */
   stylelintConfig?: string | null;
+  /** The text of the project's Zed settings, `.zed/settings.json`. */
+  zedSettings?: string | null;
 }
 
 const BIOME_ONE_SCHEMA_RE = /\/schemas\/1\./u;
@@ -115,6 +117,38 @@ const missesOxlintTypeAware = ({
   dependencies.includes("oxlint-tsgolint") &&
   !TYPE_AWARE_OPTION_RE.test(oxlintConfig ?? "");
 
+const eslintFormatterSchema = z.object({
+  language_server: z.object({ name: z.literal("eslint") }),
+});
+
+const zedSettingsSchema = z.looseObject({
+  languages: z
+    .record(z.string(), z.looseObject({ formatter: z.unknown().optional() }))
+    .optional(),
+});
+
+// v7's Zed settings for ESLint formatted with ESLint's language server, which
+// only applied Prettier through the prettier/prettier rule v8 removed.
+const zedFormatsWithEslint = ({
+  eslintConfig,
+  zedSettings,
+}: ProjectState): boolean => {
+  if (!(eslintConfig?.includes("ultracite/eslint/") && zedSettings)) {
+    return false;
+  }
+
+  const parsed = zedSettingsSchema.safeParse(parse(zedSettings));
+  if (!parsed.success) {
+    return false;
+  }
+
+  return Object.values(parsed.data.languages ?? {}).some(({ formatter }) =>
+    [formatter]
+      .flat()
+      .some((entry) => eslintFormatterSchema.safeParse(entry).success)
+  );
+};
+
 const extendsList = (config: BiomeConfig | null): string[] =>
   config?.extends ?? [];
 
@@ -154,12 +188,14 @@ const guideChecks: GuideCheck[] = [
   },
   {
     // The Prettier rule, the Cypress and Storybook presets, Oxlint's
-    // type-aware option, or an init that relied on --quiet skipping prompts.
+    // type-aware option, Zed formatting with ESLint, or an init that relied
+    // on --quiet skipping prompts.
     applies: (project) =>
       PRETTIER_RULE_RE.test(project.eslintConfig ?? "") ||
       PRETTIER_RULE_RE.test(project.stylelintConfig ?? "") ||
       missesEslintPreset(project) ||
       missesOxlintTypeAware(project) ||
+      zedFormatsWithEslint(project) ||
       project.commandSources.some(runsQuietInit),
     content: v8Guide,
     version: 8,
@@ -247,6 +283,7 @@ export const readProjectState = (cwd = process.cwd()): ProjectState => {
     eslintConfig: readNearest(eslintConfigNames, cwd),
     oxlintConfig: readNearest(oxlintConfigNames, cwd),
     stylelintConfig: readNearest(stylelintConfigNames, cwd),
+    zedSettings: readText(path.join(cwd, ".zed", "settings.json")),
   };
 };
 

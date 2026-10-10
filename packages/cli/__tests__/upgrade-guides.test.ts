@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 
+import type { JsonValue } from "../src/data/types";
 import { buildUpgradePrompt } from "../src/upgrade-agent";
 import { findPendingGuides, readProjectState } from "../src/upgrade-guides";
 import type { ProjectState } from "../src/upgrade-guides";
@@ -13,6 +14,10 @@ const project = (state: Partial<ProjectState>): ProjectState => ({
 
 const versionsFor = (state: Partial<ProjectState>): number[] =>
   findPendingGuides(project(state)).map((guide) => guide.version);
+
+// Zed settings that format TypeScript with the given formatter.
+const zedWith = (formatter: JsonValue): string =>
+  JSON.stringify({ languages: { TypeScript: { formatter } } });
 
 describe("findPendingGuides", () => {
   test("needs nothing for a current Biome config", () => {
@@ -124,6 +129,40 @@ describe("findPendingGuides", () => {
     ).toEqual([]);
   });
 
+  test("needs v8 for Zed formatting with ESLint's language server", () => {
+    const eslintConfig =
+      'import core from "ultracite/eslint/core";\nexport default [...core];';
+    const eslintServer = { language_server: { name: "eslint" } };
+
+    expect(
+      versionsFor({ eslintConfig, zedSettings: zedWith(eslintServer) })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        eslintConfig,
+        zedSettings: zedWith([
+          { code_action: "source.fixAll.eslint" },
+          eslintServer,
+        ]),
+      })
+    ).toEqual([8]);
+    expect(
+      versionsFor({ eslintConfig, zedSettings: zedWith("prettier") })
+    ).toEqual([]);
+    expect(
+      versionsFor({
+        eslintConfig,
+        zedSettings: zedWith({ language_server: { name: "biome" } }),
+      })
+    ).toEqual([]);
+    expect(
+      versionsFor({
+        eslintConfig: "export default [];",
+        zedSettings: zedWith(eslintServer),
+      })
+    ).toEqual([]);
+  });
+
   test("leaves an ESLint config that doesn't use Ultracite alone", () => {
     expect(
       versionsFor({
@@ -211,6 +250,20 @@ describe("readProjectState", () => {
 
     expect(state.eslintConfig).toContain("ultracite/eslint/core");
     expect(state.dependencies).toEqual(["react", "cypress"]);
+    expect(findPendingGuides(state).map((guide) => guide.version)).toEqual([8]);
+  });
+
+  test("reads the Zed settings, comments and all", () => {
+    mockFileSystem({
+      "/repo/.zed/settings.json":
+        '{\n  // v7\n  "languages": { "TSX": { "formatter": { "language_server": { "name": "eslint" } } } },\n}',
+      "/repo/eslint.config.mjs":
+        'import core from "ultracite/eslint/core";\nexport default [...core];',
+    });
+
+    const state = readProjectState("/repo");
+
+    expect(state.zedSettings).toContain('"name": "eslint"');
     expect(findPendingGuides(state).map((guide) => guide.version)).toEqual([8]);
   });
 });
