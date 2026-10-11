@@ -1,0 +1,3316 @@
+{
+  "generated": "2026-10-10",
+  "note": "Oxlint js-plugins is an opt-in preset; core and react are the defaults. ESLint core runs the syntactic rules; type-aware is opt-in. Biome's core preset leaves `recommended` on, so recommended rules it doesn't mention are enabled too. Nursery rules are never enabled by recommended.",
+  "classes": {
+    "code-injection": "Code execution from strings (CWE-94/95)",
+    "xss": "HTML/script injection (CWE-79)",
+    "url-scheme": "javascript: URLs (CWE-79)",
+    "tabnabbing": "Reverse tabnabbing / opener access (CWE-1022)",
+    "cookies": "Cookie handling (CWE-1004, CWE-614)",
+    "randomness": "Insecure randomness (CWE-338)",
+    "secrets": "Hardcoded credentials, secrets and IPs (CWE-798)",
+    "crypto": "Weak cryptography and TLS (CWE-326/327/295)",
+    "transport": "Clear-text protocols (CWE-319)",
+    "http-headers": "HTTP security headers and server config (CWE-693, CWE-200)",
+    "cross-origin": "CORS, CSRF and postMessage (CWE-942, CWE-352, CWE-345)",
+    "injection": "SQL, OS command and template injection (CWE-89/78/1336)",
+    "redos": "Regular-expression denial of service (CWE-1333)",
+    "file-system": "File permissions, uploads and temp dirs (CWE-732/434/377)",
+    "framework": "Framework-specific sanitizer bypasses and misconfiguration",
+    "cloud": "AWS CDK infrastructure misconfiguration",
+    "data-exposure": "Secrets or tokens exposed to the client",
+    "other": "Other"
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@typescript-eslint/parser": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-github": "6.1.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "@biomejs/biome": "2.5.15"
+  },
+  "rules": [
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "eval(…), (0, eval)(…), globalThis.eval, globalThis['eval'], Reflect.apply(eval); window.eval only with the browser env; not self.eval",
+      "eslint": {
+        "name": "no-eval",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "no-eval",
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "plugin": "eslint",
+      "rule": "no-eval"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "setTimeout/setInterval/execScript with a string, template or same-file const string; Oxlint only when the browser env is set",
+      "eslint": {
+        "name": "no-implied-eval",
+        "offIn": [
+          "type-aware"
+        ],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "no-implied-eval",
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "plugin": "eslint",
+      "rule": "no-implied-eval"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "new Function(…) and Function(…) by name; not aliases or Function.prototype.constructor",
+      "eslint": {
+        "name": "no-new-func",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "no-new-func",
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "plugin": "eslint",
+      "rule": "no-new-func"
+    },
+    {
+      "class": "url-scheme",
+      "deprecated": false,
+      "description": null,
+      "detects": "string literals that start with javascript: (not templates or split strings)",
+      "eslint": {
+        "name": "no-script-url",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "no-script-url",
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "plugin": "eslint",
+      "rule": "no-script-url"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": "Disallow the use of `eval()`-like functions",
+      "detects": "type-aware: implied eval, including setTimeout(string) through variables and new Function",
+      "eslint": {
+        "name": "@typescript-eslint/no-implied-eval",
+        "offIn": [],
+        "presets": [
+          "type-aware"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "typescript/no-implied-eval",
+        "presets": [
+          "core"
+        ],
+        "typeAware": true
+      },
+      "plugin": "typescript",
+      "rule": "no-implied-eval"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "Disallow unsafe DOM HTML APIs.",
+      "detects": "writes to innerHTML/outerHTML/srcdoc (also el['innerHTML']), insertAdjacentHTML, createContextualFragment, setHTMLUnsafe, setAttribute('srcdoc'), document.write/writeln",
+      "eslint": {
+        "name": "unicorn/no-unsafe-dom-html",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "missing",
+        "name": "unicorn/no-unsafe-dom-html",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "unicorn",
+      "rule": "no-unsafe-dom-html"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": "Disallow interpolation into SQL strings passed to Node’s `node:sqlite` APIs.",
+      "detects": "interpolation into SQL passed to node:sqlite",
+      "eslint": {
+        "name": "unicorn/no-unsafe-sqlite-interpolation",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "missing",
+        "name": "unicorn/no-unsafe-sqlite-interpolation",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "unicorn",
+      "rule": "no-unsafe-sqlite-interpolation"
+    },
+    {
+      "class": "cookies",
+      "deprecated": false,
+      "description": "Do not use `document.cookie` directly.",
+      "detects": "assignments to document.cookie",
+      "eslint": {
+        "name": "unicorn/no-document-cookie",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "unicorn/no-document-cookie",
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "plugin": "unicorn",
+      "rule": "no-document-cookie"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": "Enforce using the `targetOrigin` argument with `window.postMessage()`.",
+      "detects": "window.postMessage() without a targetOrigin",
+      "eslint": {
+        "name": "unicorn/require-post-message-target-origin",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "unicorn/require-post-message-target-origin",
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "plugin": "unicorn",
+      "rule": "require-post-message-target-origin"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "Disallow usage of dangerous JSX properties",
+      "detects": "the dangerouslySetInnerHTML JSX prop (Oxlint also createElement props; neither a spread object)",
+      "eslint": {
+        "name": "react/no-danger",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "react/no-danger",
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react",
+      "rule": "no-danger"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "Disallow when a DOM element is using both children and dangerouslySetInnerHTML",
+      "detects": "dangerouslySetInnerHTML together with children (a correctness check)",
+      "eslint": {
+        "name": "react/no-danger-with-children",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "react/no-danger-with-children",
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react",
+      "rule": "no-danger-with-children"
+    },
+    {
+      "class": "tabnabbing",
+      "deprecated": false,
+      "description": "Disallow `target=\"_blank\"` attribute without `rel=\"noreferrer\"`",
+      "detects": "target=\"_blank\" (literal or conditional) on links to external or dynamic URLs without rel=\"noreferrer\"; noopener alone is flagged, internal links and forms are not",
+      "eslint": {
+        "name": "react/jsx-no-target-blank",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "react/jsx-no-target-blank",
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react",
+      "rule": "jsx-no-target-blank"
+    },
+    {
+      "class": "url-scheme",
+      "deprecated": false,
+      "description": "Disallow usage of `javascript:` URLs",
+      "detects": "a literal javascript: URL in a JSX href",
+      "eslint": {
+        "name": "react/jsx-no-script-url",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "react/jsx-no-script-url",
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react",
+      "rule": "jsx-no-script-url"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "Enforce sandbox attribute on iframe elements",
+      "detects": "<iframe> without sandbox, or with a literal allow-scripts + allow-same-origin; Oxlint also document.createElement('iframe')",
+      "eslint": {
+        "name": "react/iframe-missing-sandbox",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "native",
+        "name": "react/iframe-missing-sandbox",
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react",
+      "rule": "iframe-missing-sandbox"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "disallow `Element.prototype.innerHTML` in favor of `Element.prototype.textContent`",
+      "detects": "reads and writes of Element.innerHTML",
+      "eslint": {
+        "name": "github/no-inner-html",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "github/no-inner-html",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "github",
+      "rule": "no-inner-html"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": "disallow creating dynamic script tags",
+      "detects": "document.createElement('script'), whatever is assigned to it",
+      "eslint": {
+        "name": "github/no-dynamic-script-tag",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "github/no-dynamic-script-tag",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "github",
+      "rule": "no-dynamic-script-tag"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": "disallow usage of CSRF tokens in JavaScript",
+      "detects": "reading Rails authenticity_token (CSRF token) values in JavaScript",
+      "eslint": {
+        "name": "github/authenticity-token",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "github/authenticity-token",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "github",
+      "rule": "authenticity-token"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "disallow unescaped HTML literals",
+      "detects": "HTML string literals and templates that interpolate without escaping",
+      "eslint": {
+        "name": "github/unescaped-html-literal",
+        "offIn": [
+          "core"
+        ],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "github/unescaped-html-literal",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "github",
+      "rule": "unescaped-html-literal"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "AWS API Gateway should require authentication",
+      "detects": "AWS CDK: API Gateway without auth",
+      "eslint": {
+        "name": "sonarjs/aws-apigateway-public-api",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-apigateway-public-api",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-apigateway-public-api"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Public network access to cloud resources should be disabled",
+      "detects": "AWS CDK: public network access",
+      "eslint": {
+        "name": "sonarjs/aws-ec2-rds-dms-public",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-ec2-rds-dms-public",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-ec2-rds-dms-public"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "EBS volumes should be encrypted",
+      "detects": "AWS CDK: unencrypted EBS",
+      "eslint": {
+        "name": "sonarjs/aws-ec2-unencrypted-ebs-volume",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-ec2-unencrypted-ebs-volume",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-ec2-unencrypted-ebs-volume"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Amazon EFS file systems should be encrypted",
+      "detects": "AWS CDK: unencrypted EFS",
+      "eslint": {
+        "name": "sonarjs/aws-efs-unencrypted",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-efs-unencrypted",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-efs-unencrypted"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Policies should not grant all privileges",
+      "detects": "AWS CDK: IAM *:* privileges",
+      "eslint": {
+        "name": "sonarjs/aws-iam-all-privileges",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-iam-all-privileges",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-iam-all-privileges"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "IAM policies should not grant access to all account resources",
+      "detects": "AWS CDK: IAM all resources",
+      "eslint": {
+        "name": "sonarjs/aws-iam-all-resources-accessible",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-iam-all-resources-accessible",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-iam-all-resources-accessible"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "AWS IAM policies should limit the scope of permissions given",
+      "detects": "AWS CDK: IAM privilege escalation",
+      "eslint": {
+        "name": "sonarjs/aws-iam-privilege-escalation",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-iam-privilege-escalation",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-iam-privilege-escalation"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "AWS resource-based policies should not grant public access",
+      "detects": "AWS CDK: public resource policies",
+      "eslint": {
+        "name": "sonarjs/aws-iam-public-access",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-iam-public-access",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-iam-public-access"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "OpenSearch domains should have encryption at rest enabled",
+      "detects": "AWS CDK: unencrypted OpenSearch",
+      "eslint": {
+        "name": "sonarjs/aws-opensearchservice-domain",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-opensearchservice-domain",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-opensearchservice-domain"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Amazon RDS resources should be encrypted at rest",
+      "detects": "AWS CDK: unencrypted RDS",
+      "eslint": {
+        "name": "sonarjs/aws-rds-unencrypted-databases",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-rds-unencrypted-databases",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-rds-unencrypted-databases"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Administration services access should be restricted to specific IP addresses",
+      "detects": "AWS CDK: admin ports open to 0.0.0.0/0",
+      "eslint": {
+        "name": "sonarjs/aws-restricted-ip-admin-access",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-restricted-ip-admin-access",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-restricted-ip-admin-access"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "S3 buckets should not grant access to all users or authenticated users",
+      "detects": "AWS CDK: S3 public grants",
+      "eslint": {
+        "name": "sonarjs/aws-s3-bucket-granted-access",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-s3-bucket-granted-access",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-s3-bucket-granted-access"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "S3 buckets should enforce HTTPS-only access",
+      "detects": "AWS CDK: S3 without HTTPS-only",
+      "eslint": {
+        "name": "sonarjs/aws-s3-bucket-insecure-http",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-s3-bucket-insecure-http",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-s3-bucket-insecure-http"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Amazon S3 bucket public access should be fully blocked",
+      "detects": "AWS CDK: S3 public access",
+      "eslint": {
+        "name": "sonarjs/aws-s3-bucket-public-access",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-s3-bucket-public-access",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-s3-bucket-public-access"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Amazon S3 buckets should have versioning enabled",
+      "detects": "AWS CDK: S3 versioning off",
+      "eslint": {
+        "name": "sonarjs/aws-s3-bucket-versioning",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-s3-bucket-versioning",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-s3-bucket-versioning"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "SageMaker notebook instances should be encrypted at rest",
+      "detects": "AWS CDK: unencrypted SageMaker",
+      "eslint": {
+        "name": "sonarjs/aws-sagemaker-unencrypted-notebook",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-sagemaker-unencrypted-notebook",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-sagemaker-unencrypted-notebook"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "Amazon SNS topics should be encrypted at rest",
+      "detects": "AWS CDK: unencrypted SNS",
+      "eslint": {
+        "name": "sonarjs/aws-sns-unencrypted-topics",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-sns-unencrypted-topics",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-sns-unencrypted-topics"
+    },
+    {
+      "class": "cloud",
+      "deprecated": false,
+      "description": "SQS queues should be encrypted",
+      "detects": "AWS CDK: unencrypted SQS",
+      "eslint": {
+        "name": "sonarjs/aws-sqs-unencrypted-queue",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/aws-sqs-unencrypted-queue",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "aws-sqs-unencrypted-queue"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": "Dynamic code execution should not use user-controlled data",
+      "detects": "eval, Function (including a local alias) and node:vm called with a non-literal argument, and dynamic javascript: URLs",
+      "eslint": {
+        "name": "sonarjs/code-eval",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/code-eval",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "code-eval"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "HTTP request content length should be limited",
+      "detects": "body-parser/multer/formidable without size limits",
+      "eslint": {
+        "name": "sonarjs/content-length",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/content-length",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "content-length"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "Content security policy fetch directives should not be disabled",
+      "detects": "helmet CSP disabled or weakened",
+      "eslint": {
+        "name": "sonarjs/content-security-policy",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/content-security-policy",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "content-security-policy"
+    },
+    {
+      "class": "cookies",
+      "deprecated": false,
+      "description": "Cookies should have the \"HttpOnly\" flag",
+      "detects": "httpOnly: false passed to cookie-session, express-session, csurf or the cookies package (not Express res.cookie)",
+      "eslint": {
+        "name": "sonarjs/cookie-no-httponly",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/cookie-no-httponly",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "cookie-no-httponly"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": "Cross-Origin Resource Sharing (CORS) policy should be restricted to trusted origins",
+      "detects": "cors() from the cors package, '*' set in an http.createServer callback, Express handlers reflecting the Origin header",
+      "eslint": {
+        "name": "sonarjs/cors",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/cors",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "cors"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": "CSRF protections should not be disabled",
+      "detects": "csurf disabled or unsafe methods ignored",
+      "eslint": {
+        "name": "sonarjs/csrf",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/csrf",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "csrf"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "Auto-escaping in HTML template engines should not be disabled",
+      "detects": "template engines with auto-escaping turned off",
+      "eslint": {
+        "name": "sonarjs/disabled-auto-escaping",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/disabled-auto-escaping",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "disabled-auto-escaping"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "Remote artifacts should not be used without integrity checks",
+      "detects": "type-aware: <script> created without an integrity attribute",
+      "eslint": {
+        "name": "sonarjs/disabled-resource-integrity",
+        "offIn": [],
+        "presets": [
+          "type-aware"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/disabled-resource-integrity",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "disabled-resource-integrity"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": "DOMPurify configuration should not be bypassable",
+      "detects": "DOMPurify configs that allow bypass",
+      "eslint": {
+        "name": "sonarjs/dompurify-unsafe-config",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/dompurify-unsafe-config",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "dompurify-unsafe-config"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": "Templates should not be constructed dynamically",
+      "detects": "server-side template engines compiling non-literal templates",
+      "eslint": {
+        "name": "sonarjs/dynamically-constructed-templates",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/dynamically-constructed-templates",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "dynamically-constructed-templates"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Encryption algorithms should be used with secure mode and padding scheme",
+      "detects": "ECB / no-padding cipher modes",
+      "eslint": {
+        "name": "sonarjs/encryption-secure-mode",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/encryption-secure-mode",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "encryption-secure-mode"
+    },
+    {
+      "class": "file-system",
+      "deprecated": false,
+      "description": "File permissions should not be set to world-accessible values",
+      "detects": "x.chmod*/process.umask member calls with world-accessible modes (not named imports)",
+      "eslint": {
+        "name": "sonarjs/file-permissions",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/file-permissions",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "file-permissions"
+    },
+    {
+      "class": "file-system",
+      "deprecated": false,
+      "description": "File uploads should be restricted",
+      "detects": "formidable/multer without upload restrictions",
+      "eslint": {
+        "name": "sonarjs/file-uploads",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/file-uploads",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "file-uploads"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": "Credentials should not be hard-coded",
+      "detects": "string literals matching known secret formats (keys, tokens)",
+      "eslint": {
+        "name": "sonarjs/hardcoded-secret-signatures",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/hardcoded-secret-signatures",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "hardcoded-secret-signatures"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Weak hashing algorithms should not be used",
+      "detects": "MD5/SHA-1 and other weak hashes via crypto",
+      "eslint": {
+        "name": "sonarjs/hashing",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/hashing",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "hashing"
+    },
+    {
+      "class": "cookies",
+      "deprecated": false,
+      "description": "Cookies should have the \"secure\" flag",
+      "detects": "secure: false passed to the same cookie libraries as cookie-no-httponly",
+      "eslint": {
+        "name": "sonarjs/insecure-cookie",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/insecure-cookie",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "insecure-cookie"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "JWT should be signed and verified with strong cipher algorithms",
+      "detects": "jsonwebtoken with the none algorithm",
+      "eslint": {
+        "name": "sonarjs/insecure-jwt-token",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/insecure-jwt-token",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "insecure-jwt-token"
+    },
+    {
+      "class": "tabnabbing",
+      "deprecated": false,
+      "description": "Opened windows should not have access to the originating page",
+      "detects": "window.open(url, '_blank') without noopener in the features",
+      "eslint": {
+        "name": "sonarjs/link-with-target-blank",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/link-with-target-blank",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "link-with-target-blank"
+    },
+    {
+      "class": "framework",
+      "deprecated": false,
+      "description": "Angular built-in sanitization should not be disabled",
+      "detects": "Angular DomSanitizer bypassSecurityTrust*",
+      "eslint": {
+        "name": "sonarjs/no-angular-bypass-sanitization",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-angular-bypass-sanitization",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-angular-bypass-sanitization"
+    },
+    {
+      "class": "transport",
+      "deprecated": false,
+      "description": "Clear-text protocols should not be used",
+      "detects": "http://, ftp://, telnet:// URLs (example.com and localhost excluded) and clear-text clients",
+      "eslint": {
+        "name": "sonarjs/no-clear-text-protocols",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-clear-text-protocols",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-clear-text-protocols"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": "IP addresses should not be hardcoded",
+      "detects": "IP-address literals; loopback, unspecified and documentation addresses are excluded unless written as full-length IPv6",
+      "eslint": {
+        "name": "sonarjs/no-hardcoded-ip",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-hardcoded-ip",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-hardcoded-ip"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": "Credentials should not be hard-coded",
+      "detects": "string literals (entropy ≥ 3 bits/char) under password-like names, and password= in literals",
+      "eslint": {
+        "name": "sonarjs/no-hardcoded-passwords",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-hardcoded-passwords",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-hardcoded-passwords"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": "Secrets should not be hard-coded",
+      "detects": "high-entropy string literals assigned to secret-like names",
+      "eslint": {
+        "name": "sonarjs/no-hardcoded-secrets",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-hardcoded-secrets",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-hardcoded-secrets"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "Browsers should not be allowed to perform MIME type sniffing",
+      "detects": "helmet noSniff disabled",
+      "eslint": {
+        "name": "sonarjs/no-mime-sniff",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-mime-sniff",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-mime-sniff"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": "OS commands should not rely on PATH resolution",
+      "detects": "child_process commands resolved through PATH",
+      "eslint": {
+        "name": "sonarjs/no-os-command-from-path",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-os-command-from-path",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-os-command-from-path"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "HTTP Referrer-Policy should not be set to an unsafe value",
+      "detects": "helmet referrerPolicy set to an unsafe value",
+      "eslint": {
+        "name": "sonarjs/no-referrer-policy",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-referrer-policy",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-referrer-policy"
+    },
+    {
+      "class": "cookies",
+      "deprecated": false,
+      "description": "Static Assets should not serve session cookies",
+      "detects": "session middleware before static files",
+      "eslint": {
+        "name": "sonarjs/no-session-cookies-on-static-assets",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-session-cookies-on-static-assets",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-session-cookies-on-static-assets"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Cipher algorithms should be robust",
+      "detects": "DES/RC4 and other weak ciphers",
+      "eslint": {
+        "name": "sonarjs/no-weak-cipher",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-weak-cipher",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-weak-cipher"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Cryptographic keys should be robust",
+      "detects": "short RSA/EC keys",
+      "eslint": {
+        "name": "sonarjs/no-weak-keys",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/no-weak-keys",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "no-weak-keys"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": "Origins should be verified during cross-origin communications",
+      "detects": "type-aware: message listeners without origin checks",
+      "eslint": {
+        "name": "sonarjs/post-message",
+        "offIn": [],
+        "presets": [
+          "type-aware"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/post-message",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "post-message"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "Debugging features should not be enabled in production",
+      "detects": "errorhandler / debug features enabled",
+      "eslint": {
+        "name": "sonarjs/production-debug",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/production-debug",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "production-debug"
+    },
+    {
+      "class": "randomness",
+      "deprecated": false,
+      "description": "Pseudorandom number generators (PRNGs) should not be used in security contexts",
+      "detects": "every Math.random() call",
+      "eslint": {
+        "name": "sonarjs/pseudo-random",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/pseudo-random",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "pseudo-random"
+    },
+    {
+      "class": "file-system",
+      "deprecated": false,
+      "description": "Temporary files should not be created in publicly writable directories",
+      "detects": "/tmp and similar paths in literals",
+      "eslint": {
+        "name": "sonarjs/publicly-writable-directories",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/publicly-writable-directories",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "publicly-writable-directories"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": "Wallet phrases should not be hard-coded",
+      "detects": "hardcoded wallet seed phrases",
+      "eslint": {
+        "name": "sonarjs/review-blockchain-mnemonic",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/review-blockchain-mnemonic",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "review-blockchain-mnemonic"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": "A new session should be created during user authentication",
+      "detects": "passport login without session regeneration",
+      "eslint": {
+        "name": "sonarjs/session-regeneration",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/session-regeneration",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "session-regeneration"
+    },
+    {
+      "class": "redos",
+      "deprecated": false,
+      "description": "Regular expressions should not cause catastrophic backtracking",
+      "detects": "regexes vulnerable to catastrophic backtracking",
+      "eslint": {
+        "name": "sonarjs/slow-regex",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/slow-regex",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "slow-regex"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": "SQL queries should not be dynamically formatted",
+      "detects": "SQL built by concatenation or templates and passed to a known driver's query (pg, mysql, mysql2, sequelize, …)",
+      "eslint": {
+        "name": "sonarjs/sql-queries",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": true
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/sql-queries",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "sql-queries"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "HTTP Strict-Transport-Security policy should not be disabled",
+      "detects": "helmet HSTS disabled or too short",
+      "eslint": {
+        "name": "sonarjs/strict-transport-security",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/strict-transport-security",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "strict-transport-security"
+    },
+    {
+      "class": "redos",
+      "deprecated": false,
+      "description": "Regular expressions should not cause non-linear backtracking",
+      "detects": "regexes with super-linear backtracking",
+      "eslint": {
+        "name": "sonarjs/super-linear-regex",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/super-linear-regex",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "super-linear-regex"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Server certificates should be verified during SSL/TLS connections",
+      "detects": "rejectUnauthorized: false",
+      "eslint": {
+        "name": "sonarjs/unverified-certificate",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/unverified-certificate",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "unverified-certificate"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Server hostnames should be verified during SSL/TLS connections",
+      "detects": "checkServerIdentity that accepts any host",
+      "eslint": {
+        "name": "sonarjs/unverified-hostname",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/unverified-hostname",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "unverified-hostname"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": "Weak SSL/TLS protocols should not be used",
+      "detects": "SSLv3/TLS 1.0/1.1",
+      "eslint": {
+        "name": "sonarjs/weak-ssl",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/weak-ssl",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "weak-ssl"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": "Web application technologies should not disclose version information",
+      "detects": "Express without disabling x-powered-by",
+      "eslint": {
+        "name": "sonarjs/x-powered-by",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/x-powered-by",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "x-powered-by"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": "XML parsers should not be vulnerable to XXE attacks",
+      "detects": "libxmljs parsing with external entities",
+      "eslint": {
+        "name": "sonarjs/xml-parser-xxe",
+        "offIn": [],
+        "presets": [
+          "core"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "sonarjs/xml-parser-xxe",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "sonarjs",
+      "rule": "xml-parser-xxe"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Executable SVG exposure",
+      "eslint": {
+        "name": "react-doctor/active-static-asset",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/active-static-asset",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "active-static-asset"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "Agent tool exposes dangerous capability",
+      "eslint": {
+        "name": "react-doctor/agent-tool-capability-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/agent-tool-capability-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "agent-tool-capability-risk"
+    },
+    {
+      "class": "data-exposure",
+      "deprecated": false,
+      "description": null,
+      "detects": "BaaS authority map shipped in browser artifact",
+      "eslint": {
+        "name": "react-doctor/artifact-baas-authority-surface",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/artifact-baas-authority-surface",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "artifact-baas-authority-surface"
+    },
+    {
+      "class": "data-exposure",
+      "deprecated": false,
+      "description": null,
+      "detects": "Server env leaked to browser artifact",
+      "eslint": {
+        "name": "react-doctor/artifact-env-leak",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/artifact-env-leak",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "artifact-env-leak"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Secret shipped in browser artifact",
+      "eslint": {
+        "name": "react-doctor/artifact-secret-leak",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/artifact-secret-leak",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "artifact-secret-leak"
+    },
+    {
+      "class": "data-exposure",
+      "deprecated": false,
+      "description": null,
+      "detects": "Auth token in web storage",
+      "eslint": {
+        "name": "react-doctor/auth-token-in-web-storage",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/auth-token-in-web-storage",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "auth-token-in-web-storage"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Build pipeline runs code near secrets",
+      "eslint": {
+        "name": "react-doctor/build-pipeline-secret-boundary",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/build-pipeline-secret-boundary",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "build-pipeline-secret-boundary"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": null,
+      "detects": "Redirect or frame boundary risk",
+      "eslint": {
+        "name": "react-doctor/clickjacking-redirect-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/clickjacking-redirect-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "clickjacking-redirect-risk"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "Command execution uses caller-shaped input",
+      "eslint": {
+        "name": "react-doctor/command-execution-input-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/command-execution-input-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "command-execution-input-risk"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": null,
+      "detects": "Broad cookie or credentialed CORS trust",
+      "eslint": {
+        "name": "react-doctor/cors-cookie-trust-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/cors-cookie-trust-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "cors-cookie-trust-risk"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": null,
+      "detects": "HTML injection sink with dynamic content",
+      "eslint": {
+        "name": "react-doctor/dangerous-html-sink",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/dangerous-html-sink",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "dangerous-html-sink"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Client writes authorization field",
+      "eslint": {
+        "name": "react-doctor/firebase-client-owned-authz-field",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/firebase-client-owned-authz-field",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "firebase-client-owned-authz-field"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Permissive Firebase security rule",
+      "eslint": {
+        "name": "react-doctor/firebase-permissive-rules",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/firebase-permissive-rules",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "firebase-permissive-rules"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Firestore query filter used as authorization",
+      "eslint": {
+        "name": "react-doctor/firebase-query-filter-as-auth",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/firebase-query-filter-as-auth",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "firebase-query-filter-as-auth"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Git provider URL built from interpolation",
+      "eslint": {
+        "name": "react-doctor/git-provider-url-injection-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/git-provider-url-injection-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "git-provider-url-injection-risk"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": null,
+      "detects": "iframe missing sandbox attribute",
+      "eslint": {
+        "name": "react-doctor/iframe-missing-sandbox",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/iframe-missing-sandbox",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "iframe-missing-sandbox"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "Imported metadata reaches code execution",
+      "eslint": {
+        "name": "react-doctor/import-metadata-execution-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/import-metadata-execution-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "import-metadata-execution-risk"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": null,
+      "detects": "Weak cryptography in security context",
+      "eslint": {
+        "name": "react-doctor/insecure-crypto-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/insecure-crypto-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "insecure-crypto-risk"
+    },
+    {
+      "class": "cookies",
+      "deprecated": false,
+      "description": null,
+      "detects": "Auth cookie missing HttpOnly protection",
+      "eslint": {
+        "name": "react-doctor/insecure-session-cookie",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/insecure-session-cookie",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "insecure-session-cookie"
+    },
+    {
+      "class": "url-scheme",
+      "deprecated": false,
+      "description": null,
+      "detects": "javascript: URL in JSX",
+      "eslint": {
+        "name": "react-doctor/jsx-no-script-url",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/jsx-no-script-url",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "jsx-no-script-url"
+    },
+    {
+      "class": "tabnabbing",
+      "deprecated": false,
+      "description": null,
+      "detects": "Unsafe target=_blank link",
+      "eslint": {
+        "name": "react-doctor/jsx-no-target-blank",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/jsx-no-target-blank",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "jsx-no-target-blank"
+    },
+    {
+      "class": "crypto",
+      "deprecated": false,
+      "description": null,
+      "detects": "JWT verified with the 'none' algorithm",
+      "eslint": {
+        "name": "react-doctor/jwt-insecure-verification",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/jwt-insecure-verification",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "jwt-insecure-verification"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Long-lived key material in repository",
+      "eslint": {
+        "name": "react-doctor/key-lifecycle-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/key-lifecycle-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "key-lifecycle-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Weak localhost native bridge boundary",
+      "eslint": {
+        "name": "react-doctor/local-rpc-native-bridge-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/local-rpc-native-bridge-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "local-rpc-native-bridge-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "MCP tool exposes dangerous capability",
+      "eslint": {
+        "name": "react-doctor/mcp-tool-capability-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/mcp-tool-capability-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "mcp-tool-capability-risk"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "Server-rendered MDX can execute code",
+      "eslint": {
+        "name": "react-doctor/mdx-ssr-execution-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/mdx-ssr-execution-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "mdx-ssr-execution-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Side effect in GET handler",
+      "eslint": {
+        "name": "react-doctor/nextjs-no-side-effect-in-get-handler",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/nextjs-no-side-effect-in-get-handler",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "nextjs-no-side-effect-in-get-handler"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": null,
+      "detects": "Raw HTML injection can run unsafe markup",
+      "eslint": {
+        "name": "react-doctor/no-danger",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/no-danger",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "no-danger"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": null,
+      "detects": "document.write/writeln",
+      "eslint": {
+        "name": "react-doctor/no-document-write",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/no-document-write",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "no-document-write"
+    },
+    {
+      "class": "code-injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "eval() runs untrusted code strings",
+      "eslint": {
+        "name": "react-doctor/no-eval",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/no-eval",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "no-eval"
+    },
+    {
+      "class": "file-system",
+      "deprecated": false,
+      "description": null,
+      "detects": "Path containment check uses a string prefix",
+      "eslint": {
+        "name": "react-doctor/no-path-prefix-containment",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/no-path-prefix-containment",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "no-path-prefix-containment"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Secret in client code",
+      "eslint": {
+        "name": "react-doctor/no-secrets-in-client-code",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/no-secrets-in-client-code",
+        "presets": [
+          "js-plugins"
+        ],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "no-secrets-in-client-code"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "NoSQL query accepts operator-shaped input",
+      "eslint": {
+        "name": "react-doctor/nosql-injection-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/nosql-injection-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "nosql-injection-risk"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Secret-like package metadata",
+      "eslint": {
+        "name": "react-doctor/package-metadata-secret",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/package-metadata-secret",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "package-metadata-secret"
+    },
+    {
+      "class": "file-system",
+      "deprecated": false,
+      "description": null,
+      "detects": "Filesystem path uses caller input",
+      "eslint": {
+        "name": "react-doctor/path-traversal-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/path-traversal-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "path-traversal-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Plugin or updater trust boundary risk",
+      "eslint": {
+        "name": "react-doctor/plugin-update-trust-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/plugin-update-trust-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "plugin-update-trust-risk"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": null,
+      "detects": "postMessage handler without origin check",
+      "eslint": {
+        "name": "react-doctor/postmessage-origin-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/postmessage-origin-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "postmessage-origin-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Public debug artifact",
+      "eslint": {
+        "name": "react-doctor/public-debug-artifact",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/public-debug-artifact",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "public-debug-artifact"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Secret-like public env variable",
+      "eslint": {
+        "name": "react-doctor/public-env-secret-name",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/public-env-secret-name",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "public-env-secret-name"
+    },
+    {
+      "class": "injection",
+      "deprecated": false,
+      "description": null,
+      "detects": "Raw SQL built outside parameter binding",
+      "eslint": {
+        "name": "react-doctor/raw-sql-injection-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/raw-sql-injection-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "raw-sql-injection-risk"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": null,
+      "detects": "Unsanitized raw HTML in React Markdown",
+      "eslint": {
+        "name": "react-doctor/react-markdown-unsanitized-raw-html",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/react-markdown-unsanitized-raw-html",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "react-markdown-unsanitized-raw-html"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "CSP nonce is not shared across server rendering",
+      "eslint": {
+        "name": "react-doctor/react-router-csp-nonce-consistency",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/react-router-csp-nonce-consistency",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "react-router-csp-nonce-consistency"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Secret file checked into repository",
+      "eslint": {
+        "name": "react-doctor/repository-secret-file",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/repository-secret-file",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "repository-secret-file"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Request input spread without field allowlist",
+      "eslint": {
+        "name": "react-doctor/request-body-mass-assignment",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/request-body-mass-assignment",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "request-body-mass-assignment"
+    },
+    {
+      "class": "secrets",
+      "deprecated": false,
+      "description": null,
+      "detects": "Hardcoded secret fallback for env var",
+      "eslint": {
+        "name": "react-doctor/secret-in-fallback",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/secret-in-fallback",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "secret-in-fallback"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Client writes Supabase authorization field",
+      "eslint": {
+        "name": "react-doctor/supabase-client-owned-authz-field",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/supabase-client-owned-authz-field",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "supabase-client-owned-authz-field"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Permissive Supabase RLS policy",
+      "eslint": {
+        "name": "react-doctor/supabase-rls-policy-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/supabase-rls-policy-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "supabase-rls-policy-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Supabase table created without Row Level Security",
+      "eslint": {
+        "name": "react-doctor/supabase-table-missing-rls",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/supabase-table-missing-rls",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "supabase-table-missing-rls"
+    },
+    {
+      "class": "http-headers",
+      "deprecated": false,
+      "description": null,
+      "detects": "SVG-filtered iframe clickjacking primitive",
+      "eslint": {
+        "name": "react-doctor/svg-filter-clickjacking-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/svg-filter-clickjacking-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "svg-filter-clickjacking-risk"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Mutation in GET server function",
+      "eslint": {
+        "name": "react-doctor/tanstack-start-get-mutation",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/tanstack-start-get-mutation",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "tanstack-start-get-mutation"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Secret exposed in a loader",
+      "eslint": {
+        "name": "react-doctor/tanstack-start-no-secrets-in-loader",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/tanstack-start-no-secrets-in-loader",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "tanstack-start-no-secrets-in-loader"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Tenant-controlled static asset proxy",
+      "eslint": {
+        "name": "react-doctor/tenant-static-proxy-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/tenant-static-proxy-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "tenant-static-proxy-risk"
+    },
+    {
+      "class": "xss",
+      "deprecated": false,
+      "description": null,
+      "detects": "Unescaped JSON in HTML or script sink",
+      "eslint": {
+        "name": "react-doctor/unsafe-json-in-html",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/unsafe-json-in-html",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "unsafe-json-in-html"
+    },
+    {
+      "class": "cross-origin",
+      "deprecated": false,
+      "description": null,
+      "detects": "Server fetch follows redirects for caller-shaped URL",
+      "eslint": {
+        "name": "react-doctor/untrusted-redirect-following",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/untrusted-redirect-following",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "untrusted-redirect-following"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "URL pre-fills a privileged action",
+      "eslint": {
+        "name": "react-doctor/url-prefilled-privileged-action",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/url-prefilled-privileged-action",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "url-prefilled-privileged-action"
+    },
+    {
+      "class": "other",
+      "deprecated": false,
+      "description": null,
+      "detects": "Webhook handler lacks signature verification",
+      "eslint": {
+        "name": "react-doctor/webhook-signature-risk",
+        "offIn": [],
+        "presets": [],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/webhook-signature-risk",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "webhook-signature-risk"
+    },
+    {
+      "class": "tabnabbing",
+      "deprecated": false,
+      "description": null,
+      "detects": "window.open without noopener",
+      "eslint": {
+        "name": "react-doctor/window-open-without-noopener",
+        "offIn": [],
+        "presets": [
+          "react"
+        ],
+        "typeAware": false
+      },
+      "oxlint": {
+        "available": "js-plugin",
+        "name": "react-doctor/window-open-without-noopener",
+        "presets": [],
+        "typeAware": false
+      },
+      "plugin": "react-doctor",
+      "rule": "window-open-without-noopener"
+    }
+  ],
+  "biome": [
+    {
+      "class": "tabnabbing",
+      "detects": "literal target=\"_blank\" on links and forms (internal too) without rel noopener or noreferrer",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": true,
+        "explicit": "error",
+        "group": "security",
+        "recommended": true,
+        "since": "1.0.0"
+      },
+      "rule": "security/noBlankTarget"
+    },
+    {
+      "class": "xss",
+      "detects": "the dangerouslySetInnerHTML prop, in JSX and createElement (not a spread object)",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": true,
+        "explicit": "error",
+        "group": "security",
+        "recommended": false,
+        "since": "1.0.0"
+      },
+      "rule": "security/noDangerouslySetInnerHtml"
+    },
+    {
+      "class": "xss",
+      "detects": "dangerouslySetInnerHTML together with children",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": true,
+        "explicit": "error",
+        "group": "security",
+        "recommended": false,
+        "since": "1.0.0"
+      },
+      "rule": "security/noDangerouslySetInnerHtmlWithChildren"
+    },
+    {
+      "class": "code-injection",
+      "detects": "eval(…), aliases, window/globalThis.eval, Reflect.apply(eval); not self.eval or new Function",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": true,
+        "explicit": "error",
+        "group": "security",
+        "recommended": true,
+        "since": "1.5.0"
+      },
+      "rule": "security/noGlobalEval"
+    },
+    {
+      "class": "url-scheme",
+      "detects": "a literal javascript: URL in a JSX href (not other string literals)",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": true,
+        "explicit": "error",
+        "group": "security",
+        "recommended": true,
+        "since": "2.3.9"
+      },
+      "rule": "security/noScriptUrl"
+    },
+    {
+      "class": "secrets",
+      "detects": "high-entropy and known-format secrets in string literals",
+      "biome": {
+        "defaultSeverity": "info",
+        "enabled": false,
+        "explicit": "off",
+        "group": "security",
+        "recommended": false,
+        "since": "1.9.0"
+      },
+      "rule": "security/noSecrets"
+    },
+    {
+      "class": "cookies",
+      "detects": "assignments to document.cookie",
+      "biome": {
+        "defaultSeverity": "warn",
+        "enabled": true,
+        "explicit": "error",
+        "group": "suspicious",
+        "recommended": true,
+        "since": "1.9.4"
+      },
+      "rule": "suspicious/noDocumentCookie"
+    },
+    {
+      "class": "code-injection",
+      "detects": "setTimeout/setInterval/Function with strings",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": false,
+        "explicit": null,
+        "group": "nursery",
+        "recommended": true,
+        "since": "2.4.10"
+      },
+      "rule": "nursery/noImpliedEval"
+    },
+    {
+      "class": "xss",
+      "detects": "<iframe> without sandbox",
+      "biome": {
+        "defaultSeverity": "warn",
+        "enabled": false,
+        "explicit": null,
+        "group": "nursery",
+        "recommended": false,
+        "since": "2.4.12"
+      },
+      "rule": "nursery/useIframeSandbox"
+    },
+    {
+      "class": "xss",
+      "detects": "unsafe sandbox values",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": false,
+        "explicit": null,
+        "group": "nursery",
+        "recommended": true,
+        "since": "2.5.13"
+      },
+      "rule": "nursery/noUnsafeIframeSandbox"
+    },
+    {
+      "class": "xss",
+      "detects": "Astro set:html",
+      "biome": {
+        "defaultSeverity": "error",
+        "enabled": false,
+        "explicit": null,
+        "group": "nursery",
+        "recommended": false,
+        "since": "2.5.11"
+      },
+      "rule": "nursery/noAstroSetHtmlDirective"
+    },
+    {
+      "class": "xss",
+      "detects": "Svelte {@html}",
+      "biome": {
+        "defaultSeverity": "info",
+        "enabled": false,
+        "explicit": null,
+        "group": "nursery",
+        "recommended": false,
+        "since": "2.5.11"
+      },
+      "rule": "nursery/noSvelteAtHtmlTags"
+    }
+  ],
+  "reviewedNotSecurity": [
+    "@typescript-eslint/no-unsafe-argument",
+    "@typescript-eslint/no-unsafe-assignment",
+    "@typescript-eslint/no-unsafe-call",
+    "@typescript-eslint/no-unsafe-declaration-merging",
+    "@typescript-eslint/no-unsafe-enum-assignment",
+    "@typescript-eslint/no-unsafe-enum-comparison",
+    "@typescript-eslint/no-unsafe-function-type",
+    "@typescript-eslint/no-unsafe-member-access",
+    "@typescript-eslint/no-unsafe-return",
+    "@typescript-eslint/no-unsafe-type-assertion",
+    "@typescript-eslint/no-unsafe-unary-minus",
+    "jsx-a11y/html-has-lang",
+    "n/hashbang",
+    "n/prefer-global/crypto",
+    "no-unsafe-finally",
+    "no-unsafe-negation",
+    "no-unsafe-optional-chaining",
+    "react-doctor/html-label-has-single-control",
+    "react-doctor/html-no-invalid-paragraph-child",
+    "react-doctor/html-no-invalid-table-nesting",
+    "react-doctor/html-no-nested-form",
+    "react-doctor/html-no-nested-interactive",
+    "react-doctor/no-random-key",
+    "react-doctor/no-unsafe-json-parse",
+    "react-doctor/prefer-html-dialog",
+    "react-doctor/react-router-no-static-cookie-expires",
+    "react-doctor/remotion-deterministic-randomness",
+    "react-doctor/server-fetch-without-revalidate",
+    "react/no-unsafe",
+    "typescript/no-unsafe-argument",
+    "typescript/no-unsafe-assignment",
+    "typescript/no-unsafe-call",
+    "typescript/no-unsafe-declaration-merging",
+    "typescript/no-unsafe-enum-comparison",
+    "typescript/no-unsafe-function-type",
+    "typescript/no-unsafe-member-access",
+    "typescript/no-unsafe-return",
+    "typescript/no-unsafe-type-assertion",
+    "typescript/no-unsafe-unary-minus",
+    "unicorn/no-invalid-dom-token",
+    "unicorn/no-unsafe-buffer-conversion",
+    "unicorn/no-unsafe-json-serialization",
+    "unicorn/no-unsafe-promise-all-settled-values",
+    "unicorn/no-unsafe-property-key",
+    "unicorn/no-unsafe-string-replacement",
+    "unicorn/prefer-classlist-toggle",
+    "unicorn/prefer-dom-node-html-methods"
+  ]
+}

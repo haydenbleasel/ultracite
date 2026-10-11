@@ -1,0 +1,17 @@
+Fix the lint issues below in a single file. They were reported by Ultracite and could not be fixed automatically.
+
+File: <run-root>/s2-codex-4/script.tsx
+
+Issues:
+1. line 112, col 13 — react/no-danger: Dangerous property 'dangerouslySetInnerHTML' found
+2. line 125, col 13 — react/no-danger: Dangerous property 'dangerouslySetInnerHTML' found
+
+Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: <run-root>/s2-codex-4/script.tsx.1dacd996.json
+
+Rules:
+- Edit only the file above. Do not create, delete, or modify any other file.
+- Make the minimal change that resolves each issue while preserving runtime behavior.
+- Fix the underlying problem — the file is re-linted after your edit, and a diagnostic that still fires is a failed fix. Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it; rework the code so the rule genuinely no longer applies.
+- Follow the rule's help text from the JSON file where provided.
+- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.
+- Do not reformat unrelated code.

@@ -115,6 +115,41 @@ Biome's inference-based rules only work when the config sits at the root of the 
 
 The hand labels (`classifications.json`), the detector review (`detector-review.json`) and the history search (`history.json`) are inputs, not outputs. The method, findings and caveats are in `corpus/results/floating-promises/REPORT.md`.
 
+### Security rules (fourth post)
+
+The security-rule scripts build on the rule census. They share `security-lib.cjs`, which holds the catalogue of security rules (what each detects, as the calibration measured it) and loads Ultracite's presets for all three linters.
+
+| Script | What it does |
+| --- | --- |
+| `security-inventory.cjs` | Reads the Oxlint (core, react, js-plugins), ESLint (core, type-aware, react) and Biome (core, react, plus Biome's recommended set) presets and records, for every security rule, which presets turn it on and whether it needs types. `--print-focus` lists the Oxlint names for the census. |
+| `security-census.cjs` | Runs `rule-census.cjs` with the core, react and js-plugins presets, focused on every security rule they enable. |
+| `security-linters.cjs` | `--calibration` runs the cases in `calibration/security-rules/` through each linter as Ultracite configures it: Oxlint default, with core's `env` re-declared on the root, with js-plugins, with `--type-aware`; ESLint untyped and type-aware; Biome, plus the Biome rules Ultracite leaves off. `--corpus` runs the security rules in ESLint and Biome on the census's raw mirror. Exports the runners. |
+| `security-sink-census.cjs` | Parses every file (syntax only) and records each security sink: eval and the Function constructor (including aliases), string timers, `node:vm`, HTML writes, `dangerouslySetInnerHTML`, script elements, `javascript:` strings, cookie writes, `Math.random()`, `target="_blank"`, `window.open`, secret-looking strings and IP literals. Each site is joined to the security-rule diagnostics on its lines. |
+| `security-sample.cjs` | Writes the classification worksheets and `sample.json` (every sink, plus a seeded sample of Biome `noSecrets` hits). `--print` prints the blind second-rater subset, `--compute` writes agreement into `classifications.json`. |
+| `security-advisories.cjs` | Fetches the published GitHub advisories for the eight projects with `gh api`, both repository advisories and the global database by npm package. De-duplicates them and joins the hand labels from `advisory-classifications.json`. |
+| `security-advisory-fixes.cjs` | For 25 fix commits (every XSS fix with a linked commit, the injection, ReDoS and a few contrast cases), downloads the changed files before and after the fix and lints both. |
+| `security-examples.cjs` | Lints the agent-experiment subjects in `examples/security-rules/` and writes what fires to `examples.json`. |
+| `security-tables.cjs` | Generates `results/security-rules/tables.md`. |
+
+```sh
+T=security-rules
+node research/corpus/scripts/security-inventory.cjs --topic $T
+node research/corpus/scripts/security-census.cjs --topic $T
+node --max-old-space-size=8192 research/corpus/scripts/security-linters.cjs --topic $T --calibration --corpus
+node research/corpus/scripts/security-sink-census.cjs --topic $T
+node research/corpus/scripts/security-sample.cjs --topic $T --worksheet
+node research/corpus/scripts/security-advisories.cjs --topic $T --fetch --build      # needs gh and the network
+node --max-old-space-size=8192 research/corpus/scripts/security-advisory-fixes.cjs --topic $T   # needs gh
+node --max-old-space-size=8192 research/corpus/scripts/security-examples.cjs
+node research/corpus/scripts/security-tables.cjs --topic $T
+```
+
+- **Running the js-plugins preset.** `rule-census.cjs` runs it unchanged. The sonarjs, github and react-doctor plugins load from the root `node_modules`, and Oxlint applies them to every file. Type-aware Oxlint (`typescript/no-implied-eval`) needs `OXLINT_TSGOLINT_PATH`, which `security-linters.cjs` sets from the installed `oxlint-tsgolint`. It runs on the calibration cases only.
+- **ESLint uses Ultracite's own preset modules.** The `ignores` block is dropped, because it ignores `build/` and `out/` and would skip `packages/next/src/build` and the mirror. Rules are filtered to the security set for the corpus run.
+- **Advisories change over time.** `--fetch` writes the raw responses to `out/security-rules/advisories/` (gitignored), with the fetch date. New advisories show up in `advisories.json` as `unlabelled` until they're added to `advisory-classifications.json`.
+
+The method, findings and caveats are in `corpus/results/security-rules/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -171,3 +206,48 @@ Harness changes made with this topic, all backwards-compatible:
 - session logs are found by the run directory's real path too, since macOS's `$TMPDIR` resolves through `/private`;
 - other runs' staging folders are locked during a run;
 - emails and the macOS per-user temp root are redacted from committed artifacts.
+
+### Security rules (fourth post)
+
+Subjects are `s1` (Vite's `evalValue`, `no-new-func` + `sonarjs/code-eval`) and `s2` (Next.js `Script`'s `beforeInteractive` branch with `htmlEscapeJsonString`, `react/no-danger` ×2), from `corpus/examples/security-rules/`. Both inputs are safe: s1 evaluates the developer's own options text, and s2's script body is JSON that has been HTML-escaped.
+
+- **Lint.** Ultracite's ESLint core + react presets, unchanged, with the output filtered to the corpus inventory's security rules (`corpus/results/security-rules/inventory.json`). That's every security rule that fires, in the shape Ultracite's ESLint adapter produces.
+- **Re-lint.** Each result is re-linted with:
+  - the same lint, honoring and ignoring inline config;
+  - Oxlint core + react and core + react + js-plugins, with the root config `ultracite init` writes, and once more with core's `env` re-declared (corpus report §7);
+  - Biome with Ultracite's core + react presets;
+  - every rule of all four presets, recording the rules that fire more after the edit.
+
+  The generated Oxlint and Biome configs go in the gitignored `lint-configs/`, inside the repo, so the js-plugins specifiers resolve.
+
+- **Oracle.** `scripts/topics/security-rules-behavior.ts`:
+  - **s1.** Evaluates 113 inputs with the original and the agent's file. The tiers are real option strings, other static JavaScript, invalid input, shadowed names and adversarial input. In the adversarial tier, `process.exit` and the like are stubbed, side effects go to a probe and the environment carries a canary. s1 runs under Bun and again under Node.
+  - **s2.** Renders 266 prop sets with `renderToStaticMarkup` (React 19.3.0) and compares the markup byte for byte. It also runs the script body in a vm and compares the queued payload, checks for `</script>` breakouts, and wraps React's `createElement`/JSX runtime to see which prop carried the body.
+- **Extra measurements.**
+  - A static scan for constructs that keep the capability: `Function` aliases, `.constructor` calls, computed `eval`, `vm`, `Reflect`, `createElement` or spread `dangerouslySetInnerHTML`, DOM HTML sinks, refs and effects, and suppressions.
+  - Typecheck with React's types.
+  - For runs over Ultracite's 5-minute timeout, the file at 300 s, rebuilt from the session log and checked again.
+  - `aggregate` also puts 18 hand-made rewrites and evasions through every linter (the evasion matrix).
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=security-rules
+node scripts/prepare-subjects.cjs        # subjects/security-rules/ (analysis, rule and behavior lines stripped from the headers)
+node scripts/test-behavior-harness.cjs   # oracle self-test, 20 cases (s1 under Bun and Node) -> results/security-rules/oracle-self-test.json
+SECURITY_RULES_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs s1:claude:1 s1:codex:1 s2:claude:1 s2:codex:1   # ...4 of each
+node scripts/aggregate.cjs               # results.json, including the evasion matrix (~2 min)
+node scripts/report-tables.cjs > results/security-rules/tables.md
+```
+
+`SECURITY_RULES_EXTRA_LOCKS` is optional: colon-separated paths outside the repo that describe the expected fixes (an orchestrating session's notes, say), locked with everything else and recorded as `<outside-repo>/<name>`.
+
+In this post's runs, Claude Code cost $0.36–1.53 a run (median $0.41) and Codex used 20.6k–33.9k tokens. Runs took 33–349 s, measuring one takes about 12 s, and two Claude runs went past Ultracite's 5-minute agent timeout. While an agent runs, these are locked as well: the corpus's security-rules examples, results, calibration and output; the `security-*.cjs` corpus scripts; the post draft and its page; and `plans/`. The method, numbers and caveats are in `agent-experiment/results/security-rules/REPORT.md`.
+
+Harness changes made with this topic, all backwards-compatible:
+
+- `run-one.mjs` names a `.tsx` subject's copies `before.tsx` and `after.tsx`; `.ts` subjects still get `before.ts` and `after.ts`;
+- `run-one.mjs` records a lock path outside both the repo and the run root as `<outside-repo>/<name>`;
+- `lib.redact` also replaces the OS account name as a whole word, which an agent's `ls -l` output can print;
+- `lint-configs/` is gitignored;
+- the cognitive-complexity and floating-promises measurements, tables and `results.json` still reproduce exactly from their committed runs.

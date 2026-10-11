@@ -1,0 +1,671 @@
+{
+  "react": "19.3.0 (react-dom/server renderToStaticMarkup, production build)",
+  "cases": [
+    {
+      "name": "s1 original (itself)",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": true,
+        "cap": {
+          "codeRuns": true
+        }
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "7/7",
+        "adversarial": "10/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": true,
+        "processExitReached": [
+          "exit-via-globalThis"
+        ],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": true,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-original-restyled.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": true,
+        "cap": {
+          "codeRuns": true
+        }
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "7/7",
+        "adversarial": "10/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": true,
+        "processExitReached": [
+          "exit-via-globalThis"
+        ],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": true,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-function-alias.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": true,
+        "cap": {
+          "codeRuns": true
+        }
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "7/7",
+        "adversarial": "10/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": true,
+        "processExitReached": [
+          "exit-via-globalThis"
+        ],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": true,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-prototype-constructor.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": true,
+        "cap": {
+          "codeRuns": true
+        }
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "7/7",
+        "adversarial": "10/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": true,
+        "processExitReached": [
+          "exit-via-globalThis"
+        ],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": true,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-json5.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": false,
+        "cap": {
+          "codeRuns": false,
+          "processEnvViaGlobalThis": false
+        }
+      },
+      "ok": true,
+      "strictOk": false,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "12/31",
+        "invalid": "17/17",
+        "shadowed": "0/7",
+        "adversarial": "1/10"
+      },
+      "capability": {
+        "codeRuns": false,
+        "hostRealmSideEffects": false,
+        "processExitReached": [],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": false,
+        "processEnvViaConstructorChain": false,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-hand-parser.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": false,
+        "cap": {
+          "codeRuns": false,
+          "processEnvViaGlobalThis": false
+        }
+      },
+      "ok": true,
+      "strictOk": false,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "11/31",
+        "invalid": "17/17",
+        "shadowed": "0/7",
+        "adversarial": "1/10"
+      },
+      "capability": {
+        "codeRuns": false,
+        "hostRealmSideEffects": false,
+        "processExitReached": [],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": false,
+        "processEnvViaConstructorChain": false,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-json-parse.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": false,
+        "strict": false,
+        "cap": {
+          "codeRuns": false
+        }
+      },
+      "ok": false,
+      "strictOk": false,
+      "semanticOk": null,
+      "tiers": {
+        "real": "5/48",
+        "staticJs": "3/31",
+        "invalid": "17/17",
+        "shadowed": "0/7",
+        "adversarial": "1/10"
+      },
+      "capability": {
+        "codeRuns": false,
+        "hostRealmSideEffects": false,
+        "processExitReached": [],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": false,
+        "processEnvViaConstructorChain": false,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-no-shadowing.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": false,
+        "cap": {
+          "codeRuns": true,
+          "processByBareName": true
+        }
+      },
+      "ok": true,
+      "strictOk": false,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "3/7",
+        "adversarial": "9/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": true,
+        "processExitReached": [
+          "process-exit-by-name",
+          "exit-via-globalThis"
+        ],
+        "processByBareName": true,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": true,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-vm.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": false,
+        "cap": {
+          "codeRuns": true,
+          "hostRealmSideEffects": false,
+          "foreignRealmValues": true
+        }
+      },
+      "ok": true,
+      "strictOk": false,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "5/7",
+        "adversarial": "6/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": false,
+        "processExitReached": [],
+        "processByBareName": false,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": false,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": true
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s1-computed-eval.ts",
+      "subject": "s1",
+      "expected": {
+        "ok": true,
+        "strict": false,
+        "cap": {
+          "codeRuns": true,
+          "processByBareName": true
+        }
+      },
+      "ok": true,
+      "strictOk": false,
+      "semanticOk": null,
+      "tiers": {
+        "real": "48/48",
+        "staticJs": "31/31",
+        "invalid": "17/17",
+        "shadowed": "3/7",
+        "adversarial": "9/10"
+      },
+      "capability": {
+        "codeRuns": true,
+        "hostRealmSideEffects": true,
+        "processExitReached": [
+          "process-exit-by-name",
+          "exit-via-globalThis"
+        ],
+        "processByBareName": true,
+        "requireByBareName": false,
+        "processEnvViaGlobalThis": true,
+        "processEnvViaConstructorChain": true,
+        "foreignRealmValues": false
+      },
+      "nodeAgreesWithBun": true,
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2 original (itself)",
+      "subject": "s2",
+      "expected": {
+        "ok": true,
+        "semantic": true,
+        "carrier": "dangerouslySetInnerHTML via jsx"
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": true,
+      "bytesEqual": "266/266",
+      "semanticEqual": "266/266",
+      "emptyScripts": 0,
+      "payloadBroken": 0,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "dangerouslySetInnerHTML via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-original-restyled.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": true,
+        "semantic": true,
+        "carrier": "dangerouslySetInnerHTML via jsx"
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": true,
+      "bytesEqual": "266/266",
+      "semanticEqual": "266/266",
+      "emptyScripts": 0,
+      "payloadBroken": 0,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "dangerouslySetInnerHTML via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-create-element.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": true,
+        "semantic": true,
+        "carrier": "dangerouslySetInnerHTML via createElement"
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": true,
+      "bytesEqual": "266/266",
+      "semanticEqual": "266/266",
+      "emptyScripts": 0,
+      "payloadBroken": 0,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "dangerouslySetInnerHTML via createElement"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-spread.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": true,
+        "semantic": true,
+        "carrier": "dangerouslySetInnerHTML via jsx"
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": true,
+      "bytesEqual": "266/266",
+      "semanticEqual": "266/266",
+      "emptyScripts": 0,
+      "payloadBroken": 0,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "dangerouslySetInnerHTML via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-children.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": true,
+        "semantic": true,
+        "carrier": "string children via jsx"
+      },
+      "ok": true,
+      "strictOk": true,
+      "semanticOk": true,
+      "bytesEqual": "266/266",
+      "semanticEqual": "266/266",
+      "emptyScripts": 0,
+      "payloadBroken": 0,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "string children via jsx"
+      ],
+      "harnessError": null,
+      "note": "The brief expected this children rewrite to fail byte equality (the corpus note says React escapes text children). It doesn't: React 19.3's server renderer writes a <script>'s single string child without HTML-escaping it, and only rewrites `<script` and `</script` (to `\\u0073cript`), which htmlEscapeJsonString's output never contains. The three children rewrites below do fail.",
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-children-mixed.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": false,
+        "semantic": false,
+        "carrier": "array children via jsxs",
+        "emptyScripts": true
+      },
+      "ok": false,
+      "strictOk": false,
+      "semanticOk": false,
+      "bytesEqual": "0/266",
+      "semanticEqual": "0/266",
+      "emptyScripts": 266,
+      "payloadBroken": 266,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "array children via jsxs"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-children-unescaped.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": false,
+        "semantic": true,
+        "carrier": "string children via jsx",
+        "breakouts": false
+      },
+      "ok": false,
+      "strictOk": false,
+      "semanticOk": true,
+      "bytesEqual": "93/266",
+      "semanticEqual": "266/266",
+      "emptyScripts": 0,
+      "payloadBroken": 0,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "string children via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-no-escape.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": false,
+        "semantic": false,
+        "carrier": "dangerouslySetInnerHTML via jsx",
+        "breakouts": true
+      },
+      "ok": false,
+      "strictOk": false,
+      "semanticOk": false,
+      "bytesEqual": "93/266",
+      "semanticEqual": "219/266",
+      "emptyScripts": 0,
+      "payloadBroken": 47,
+      "xss": {
+        "candidateBreakouts": 46,
+        "candidateDoubleEscapeRisk": 7,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "dangerouslySetInnerHTML via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-ref-effect.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": false,
+        "semantic": false,
+        "carrier": "no content via jsx",
+        "emptyScripts": true
+      },
+      "ok": false,
+      "strictOk": false,
+      "semanticOk": false,
+      "bytesEqual": "0/266",
+      "semanticEqual": "0/266",
+      "emptyScripts": 266,
+      "payloadBroken": 266,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "no content via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    },
+    {
+      "name": "s2-html-escaped-children.tsx",
+      "subject": "s2",
+      "expected": {
+        "ok": false,
+        "semantic": false,
+        "carrier": "string children via jsx",
+        "payloadBroken": true
+      },
+      "ok": false,
+      "strictOk": false,
+      "semanticOk": false,
+      "bytesEqual": "4/266",
+      "semanticEqual": "4/266",
+      "emptyScripts": 0,
+      "payloadBroken": 262,
+      "xss": {
+        "candidateBreakouts": 0,
+        "candidateDoubleEscapeRisk": 0,
+        "referenceBreakouts": 0
+      },
+      "carriers": [
+        "string children via jsx"
+      ],
+      "harnessError": null,
+      "note": null,
+      "failedChecks": [],
+      "pass": true
+    }
+  ],
+  "failures": 0
+}

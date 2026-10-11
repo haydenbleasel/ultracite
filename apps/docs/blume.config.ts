@@ -229,6 +229,8 @@ export default defineConfig({
           "Cognitive complexity and the cost of reading code",
         "/research/floating-promises":
           "What happens to a promise nobody awaits",
+        "/research/security-rules":
+          "Security lint rules find the sink, not the bug",
         "/research/type-escape-hatches":
           "Why TypeScript lets you overrule its type checker",
       },

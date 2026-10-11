@@ -1,0 +1,755 @@
+{
+  "generated": "2026-10-10",
+  "note": "Security-rule diagnostics (Oxlint core+react+js-plugins, ESLint core+react security rules, Biome security rules; Biome's off-by-default noSecrets/nursery listed separately) on each fix commit's changed source files (tests excluded), before and after the fix.",
+  "sample": [
+    {
+      "ghsa": "GHSA-m85w-3h95-hcf9",
+      "repo": "withastro/astro",
+      "sha": "a4ffbfaa5cb460c12bd486fd75e36147f51d3e5e",
+      "why": "XSS via DOM clobbering",
+      "commit": "https://github.com/withastro/astro/commit/a4ffbfaa5cb460c12bd486fd75e36147f51d3e5e",
+      "date": "2024-10-11",
+      "files": [
+        {
+          "added": 2,
+          "file": "packages/astro/src/transitions/router.ts",
+          "removed": 2,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): suppressions/parse": 1,
+        "eslint: github/no-dynamic-script-tag": 1,
+        "eslint: github/no-inner-html": 2,
+        "eslint: unicorn/no-unsafe-dom-html": 1,
+        "oxlint: github/no-dynamic-script-tag": 1,
+        "oxlint: github/no-inner-html": 2
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): suppressions/parse": 1,
+        "eslint: github/no-dynamic-script-tag": 1,
+        "eslint: github/no-inner-html": 2,
+        "eslint: unicorn/no-unsafe-dom-html": 1,
+        "oxlint: github/no-dynamic-script-tag": 1,
+        "oxlint: github/no-inner-html": 2
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 2,
+      "message": "Ensure router only targets scripts for execution (#12177)"
+    },
+    {
+      "ghsa": "GHSA-w2vj-39qv-7vh7",
+      "repo": "withastro/astro",
+      "sha": "790d9425f39bbbb462f1c27615781cd965009f91",
+      "why": "reflected XSS (dev error page; same fix as GHSA-wrwg-2hg8-v723)",
+      "commit": "https://github.com/withastro/astro/commit/790d9425f39bbbb462f1c27615781cd965009f91",
+      "date": "2025-11-13",
+      "files": [
+        {
+          "added": 3,
+          "file": "packages/astro/src/template/4xx.ts",
+          "removed": 2,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 2,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-fvmw-cj7j-j39q",
+      "repo": "withastro/astro",
+      "sha": "9e9c528191b6f5e06db9daf6ad26b8f68016e533",
+      "why": "XSS in /_image (Cloudflare adapter)",
+      "commit": "https://github.com/withastro/astro/commit/9e9c528191b6f5e06db9daf6ad26b8f68016e533",
+      "date": "2025-11-17",
+      "files": [
+        {
+          "added": 1,
+          "file": "packages/internal-helpers/src/remote.ts",
+          "removed": 6,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 6,
+      "message": "fix: require explicit authorization to use data urls (#14791)"
+    },
+    {
+      "ghsa": "GHSA-8j5q-mfj2-5q9q",
+      "repo": "withastro/astro",
+      "sha": "fbcfa039dfe3d700b239f595a6c55ee35e45bd06",
+      "why": "XML injection in @astrojs/rss",
+      "commit": "https://github.com/withastro/astro/commit/fbcfa039dfe3d700b239f595a6c55ee35e45bd06",
+      "date": "2026-06-26",
+      "files": [
+        {
+          "added": 9,
+          "file": "packages/astro-rss/src/index.ts",
+          "removed": 6,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 1
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 1
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 6,
+      "message": "Escape source and enclosure fields in RSS feed generation (#17209)"
+    },
+    {
+      "ghsa": "GHSA-4g3v-8h47-v7g6",
+      "repo": "withastro/astro",
+      "sha": "092da560eea77ee63a3e2c583c80d8238544e42b",
+      "why": "reflected XSS via view transition properties",
+      "commit": "https://github.com/withastro/astro/commit/092da560eea77ee63a3e2c583c80d8238544e42b",
+      "date": "2026-07-15",
+      "files": [
+        {
+          "added": 2,
+          "file": "packages/astro/src/core/app/dev/pipeline.ts",
+          "removed": 1,
+          "status": "modified"
+        },
+        {
+          "added": 5,
+          "file": "packages/astro/src/runtime/server/escape.ts",
+          "removed": 0,
+          "status": "modified"
+        },
+        {
+          "added": 6,
+          "file": "packages/astro/src/runtime/server/render/server-islands.ts",
+          "removed": 4,
+          "status": "modified"
+        },
+        {
+          "added": 2,
+          "file": "packages/astro/src/runtime/server/transition.ts",
+          "removed": 2,
+          "status": "modified"
+        },
+        {
+          "added": 2,
+          "file": "packages/astro/src/vite-plugin-app/pipeline.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 1
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 1
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 8,
+      "message": "Add more escaping for rendered content (#17393)"
+    },
+    {
+      "ghsa": "GHSA-f48w-9m4c-m7f5",
+      "repo": "withastro/astro",
+      "sha": "5240e26c9dd91f9bc7140dcfacdb48d5a132830d",
+      "why": "XSS via spread attribute names",
+      "commit": "https://github.com/withastro/astro/commit/5240e26c9dd91f9bc7140dcfacdb48d5a132830d",
+      "date": "2026-07-02",
+      "files": [
+        {
+          "added": 7,
+          "file": "packages/astro/src/runtime/server/render/dom.ts",
+          "removed": 1,
+          "status": "modified"
+        },
+        {
+          "added": 1,
+          "file": "packages/astro/src/runtime/server/render/util.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 2,
+      "message": "Validate attribute names on custom HTML elements during SSR (#17251)"
+    },
+    {
+      "ghsa": "GHSA-7pw4-f3q4-r2p2",
+      "repo": "withastro/astro",
+      "sha": "7ba0bb1dc7516e88caff9abd7767322af44b0294",
+      "why": "XSS via transition:* directive values",
+      "commit": "https://github.com/withastro/astro/commit/7ba0bb1dc7516e88caff9abd7767322af44b0294",
+      "date": "2026-06-29",
+      "files": [
+        {
+          "added": 1,
+          "file": "packages/astro/src/runtime/server/hydration.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 1,
+      "message": "Harden transition directive attribute rendering (#17212)"
+    },
+    {
+      "ghsa": "GHSA-v7v8-gjv7-ffmr",
+      "repo": "excalidraw/excalidraw",
+      "sha": "b33fa6d6f64d27adc3a47b25c0aa55711740d0af",
+      "why": "XSS via element links",
+      "commit": "https://github.com/excalidraw/excalidraw/commit/b33fa6d6f64d27adc3a47b25c0aa55711740d0af",
+      "date": "2023-06-29",
+      "files": [
+        {
+          "added": 11,
+          "file": "src/components/App.tsx",
+          "removed": 5,
+          "status": "modified"
+        },
+        {
+          "added": 2,
+          "file": "src/data/restore.ts",
+          "removed": 1,
+          "status": "modified"
+        },
+        {
+          "added": 9,
+          "file": "src/data/url.ts",
+          "removed": 0,
+          "status": "added"
+        },
+        {
+          "added": 9,
+          "file": "src/element/Hyperlink.tsx",
+          "removed": 17,
+          "status": "modified"
+        },
+        {
+          "added": 2,
+          "file": "src/packages/excalidraw/index.tsx",
+          "removed": 0,
+          "status": "modified"
+        },
+        {
+          "added": 2,
+          "file": "src/renderer/renderElement.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 2,
+        "eslint: sonarjs/super-linear-regex": 1,
+        "oxlint: sonarjs/super-linear-regex": 1
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 2,
+        "eslint: sonarjs/super-linear-regex": 1,
+        "oxlint: sonarjs/super-linear-regex": 1
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 24,
+      "message": "fix: stronger enforcement of normalizeLink (#6728)"
+    },
+    {
+      "ghsa": "GHSA-m64q-4jqh-f72f",
+      "repo": "excalidraw/excalidraw",
+      "sha": "6be752e1b6d776ccfbd3bb9eea17463cb264121d",
+      "why": "stored XSS in the embed component",
+      "commit": "https://github.com/excalidraw/excalidraw/commit/6be752e1b6d776ccfbd3bb9eea17463cb264121d",
+      "date": "2024-04-17",
+      "files": [
+        {
+          "added": 73,
+          "file": "src/element/embeddable.ts",
+          "removed": 26,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "eslint: sonarjs/super-linear-regex": 1,
+        "oxlint: sonarjs/super-linear-regex": 1
+      },
+      "hitsBefore": {
+        "eslint: sonarjs/super-linear-regex": 1,
+        "oxlint: sonarjs/super-linear-regex": 1
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 26,
+      "message": "fix: allow same origin for all necessary domains (#7889)"
+    },
+    {
+      "ghsa": "GHSA-9r54-q6cx-xmh5",
+      "repo": "honojs/hono",
+      "sha": "2cf60046d730df9fd0aba85178f3ecfe8212d990",
+      "why": "XSS (ErrorBoundary)",
+      "commit": "https://github.com/honojs/hono/commit/2cf60046d730df9fd0aba85178f3ecfe8212d990",
+      "date": "2026-01-27",
+      "files": [
+        {
+          "added": 41,
+          "file": "src/jsx/components.ts",
+          "removed": 11,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 11,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-w62v-xxxg-mg59",
+      "repo": "honojs/hono",
+      "sha": "cd3f6f7194f0e5c9d4b26ae0cf232018d0f388fc",
+      "why": "XSS via cx() escaping bypass",
+      "commit": "https://github.com/honojs/hono/commit/cd3f6f7194f0e5c9d4b26ae0cf232018d0f388fc",
+      "date": "2026-06-23",
+      "files": [
+        {
+          "added": 6,
+          "file": "src/helper/css/common.ts",
+          "removed": 1,
+          "status": "modified"
+        },
+        {
+          "added": 11,
+          "file": "src/helper/css/index.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 3
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 3
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 2,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-hxh3-vqpv-xpqv",
+      "repo": "honojs/hono",
+      "sha": "2b8ed402cdab6dfc5e829b480806dcd8db94161e",
+      "why": "XSS: plain strings unescaped in boundary components",
+      "commit": "https://github.com/honojs/hono/commit/2b8ed402cdab6dfc5e829b480806dcd8db94161e",
+      "date": "2026-09-04",
+      "files": [
+        {
+          "added": 33,
+          "file": "src/jsx/base.ts",
+          "removed": 2,
+          "status": "modified"
+        },
+        {
+          "added": 27,
+          "file": "src/jsx/components.ts",
+          "removed": 32,
+          "status": "modified"
+        },
+        {
+          "added": 15,
+          "file": "src/jsx/context.ts",
+          "removed": 10,
+          "status": "modified"
+        },
+        {
+          "added": 7,
+          "file": "src/jsx/dom/server.ts",
+          "removed": 1,
+          "status": "modified"
+        },
+        {
+          "added": 3,
+          "file": "src/jsx/intrinsic-element/components.ts",
+          "removed": 3,
+          "status": "modified"
+        },
+        {
+          "added": 17,
+          "file": "src/jsx/streaming.ts",
+          "removed": 6,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 2
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 2
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 54,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-9gr3-7897-pp7m",
+      "repo": "vercel/next.js",
+      "sha": "7afc97c5744b38bdf36aa7f87625f438224688aa",
+      "why": "XSS in the image optimizer",
+      "commit": "https://github.com/vercel/next.js/commit/7afc97c5744b38bdf36aa7f87625f438224688aa",
+      "date": "2021-08-30",
+      "files": [
+        {
+          "added": 2,
+          "file": "packages/next/server/image-optimizer.ts",
+          "removed": 0,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 0,
+      "message": "Add CSP to Image Optimization API (#28620)"
+    },
+    {
+      "ghsa": "GHSA-xv57-4mr9-wg8v",
+      "repo": "vercel/next.js",
+      "sha": "6b12c60c61ee80cb0443ccd20de82ca9b4422ddd",
+      "why": "content injection in the image optimizer",
+      "commit": "https://github.com/vercel/next.js/commit/6b12c60c61ee80cb0443ccd20de82ca9b4422ddd",
+      "date": "2025-07-28",
+      "files": [
+        {
+          "added": 0,
+          "file": "packages/next/src/server/image-optimizer.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 1,
+      "message": "fix(next/image): fix image-optimizer.ts headers (#82114)"
+    },
+    {
+      "ghsa": "GHSA-64vr-g452-qvp3",
+      "repo": "vitejs/vite",
+      "sha": "ade1d89660e17eedfd35652165b0c26905259fad",
+      "why": "XSS via DOM clobbering in bundled scripts",
+      "commit": "https://github.com/vitejs/vite/commit/ade1d89660e17eedfd35652165b0c26905259fad",
+      "date": "2024-09-16",
+      "files": [
+        {
+          "added": 1,
+          "file": "packages/vite/src/node/build.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 1,
+      "message": "fix: avoid DOM Clobbering gadget in `getRelativeUrlFromDocument` (#18115)"
+    },
+    {
+      "ghsa": "GHSA-c27g-q93r-2cwf",
+      "repo": "vitejs/launch-editor",
+      "sha": "971291e8a6a91226e1616c5c0ec85423d2d50a5e",
+      "why": "command injection (launch-editor, Windows)",
+      "commit": "https://github.com/vitejs/launch-editor/commit/971291e8a6a91226e1616c5c0ec85423d2d50a5e",
+      "date": "2024-09-05",
+      "files": [
+        {
+          "added": 49,
+          "file": "packages/launch-editor/index.js",
+          "removed": 37,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {
+        "eslint: sonarjs/no-os-command-from-path": 1,
+        "oxlint: sonarjs/no-os-command-from-path": 1
+      },
+      "hitsOnRemovedLines": [
+        {
+          "code": "'cmd.exe',",
+          "file": "packages/launch-editor/index.js",
+          "line": 148,
+          "rule": "sonarjs/no-os-command-from-path",
+          "tool": "eslint"
+        },
+        {
+          "code": "'cmd.exe',",
+          "file": "packages/launch-editor/index.js",
+          "line": 148,
+          "rule": "sonarjs/no-os-command-from-path",
+          "tool": "oxlint"
+        }
+      ],
+      "linesRemoved": 37,
+      "message": "fix: use escape instead of allow list when launching through Windows cmd (#78)"
+    },
+    {
+      "ghsa": "GHSA-p6xx-57qc-3wxr",
+      "repo": "honojs/hono",
+      "sha": "f4123ed9ea3c7c52380cc99a079a4d773838846e",
+      "why": "SSE field injection via CR/LF",
+      "commit": "https://github.com/honojs/hono/commit/f4123ed9ea3c7c52380cc99a079a4d773838846e",
+      "date": "2026-03-03",
+      "files": [
+        {
+          "added": 6,
+          "file": "src/helper/streaming/sse.ts",
+          "removed": 0,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 0,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-5pq2-9x2x-5p6w",
+      "repo": "honojs/hono",
+      "sha": "44ae0c8cc4d5ab2bed529127a4ac72e1483ad073",
+      "why": "cookie attribute injection",
+      "commit": "https://github.com/honojs/hono/commit/44ae0c8cc4d5ab2bed529127a4ac72e1483ad073",
+      "date": "2026-03-03",
+      "files": [
+        {
+          "added": 6,
+          "file": "src/utils/cookie.ts",
+          "removed": 0,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 0,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-f6gv-hh8j-q8vq",
+      "repo": "honojs/hono",
+      "sha": "8e2b6b08518998783f66d31db4f21b1b1eecc4c8",
+      "why": "CWE-94 per the advisory: path parameter override in TrieRouter",
+      "commit": "https://github.com/honojs/hono/commit/8e2b6b08518998783f66d31db4f21b1b1eecc4c8",
+      "date": "2023-12-14",
+      "files": [
+        {
+          "added": 17,
+          "file": "deno_dist/router/trie-router/node.ts",
+          "removed": 12,
+          "status": "modified"
+        },
+        {
+          "added": 17,
+          "file": "src/router/trie-router/node.ts",
+          "removed": 12,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 24,
+      "message": "Merge pull request from GHSA-f6gv-hh8j-q8vq"
+    },
+    {
+      "ghsa": "GHSA-m95q-7qp3-xv42",
+      "repo": "colinhacks/zod",
+      "sha": "2ba00fe2377f4d53947a84b8cdb314a63bbd6dd4",
+      "why": "ReDoS in the email regex",
+      "commit": "https://github.com/colinhacks/zod/commit/2ba00fe2377f4d53947a84b8cdb314a63bbd6dd4",
+      "date": "2023-10-03",
+      "files": [
+        {
+          "added": 1,
+          "file": "deno/lib/types.ts",
+          "removed": 1,
+          "status": "modified"
+        },
+        {
+          "added": 1,
+          "file": "src/types.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 2
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 2,
+        "eslint: sonarjs/slow-regex": 2
+      },
+      "hitsOnRemovedLines": [
+        {
+          "code": "/^([A-Z0-9_+-]+\\.?)*[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\\-]*\\.)+[A-Z]{2,}$/i;",
+          "file": "deno/lib/types.ts",
+          "line": 568,
+          "rule": "sonarjs/slow-regex",
+          "tool": "eslint"
+        },
+        {
+          "code": "/^([A-Z0-9_+-]+\\.?)*[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\\-]*\\.)+[A-Z]{2,}$/i;",
+          "file": "src/types.ts",
+          "line": 568,
+          "rule": "sonarjs/slow-regex",
+          "tool": "eslint"
+        }
+      ],
+      "linesRemoved": 2,
+      "message": "[2609] fix ReDoS vulnerability in email regex (#2824)"
+    },
+    {
+      "ghsa": "GHSA-8j4g-w8fx-2239",
+      "repo": "honojs/hono",
+      "sha": "93fc250d8b4df58ea542cb945171de8013d5e6d5",
+      "why": "ReDoS in the CORS middleware",
+      "commit": "https://github.com/honojs/hono/commit/93fc250d8b4df58ea542cb945171de8013d5e6d5",
+      "date": "2026-08-03",
+      "files": [
+        {
+          "added": 1,
+          "file": "src/middleware/cors/index.ts",
+          "removed": 1,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {
+        "eslint: sonarjs/super-linear-regex": 1,
+        "oxlint: sonarjs/super-linear-regex": 1
+      },
+      "hitsOnRemovedLines": [
+        {
+          "code": "headers = requestHeaders.split(/\\s*,\\s*/)",
+          "file": "src/middleware/cors/index.ts",
+          "line": 132,
+          "rule": "sonarjs/super-linear-regex",
+          "tool": "eslint"
+        },
+        {
+          "code": "headers = requestHeaders.split(/\\s*,\\s*/)",
+          "file": "src/middleware/cors/index.ts",
+          "line": 132,
+          "rule": "sonarjs/super-linear-regex",
+          "tool": "oxlint"
+        }
+      ],
+      "linesRemoved": 1,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-f67f-6cw9-8mq4",
+      "repo": "honojs/hono",
+      "sha": "cc0aa7ae327ed84cc391d29086dec2a3e44e7a1f",
+      "why": "JWT algorithm confusion (contrast)",
+      "commit": "https://github.com/honojs/hono/commit/cc0aa7ae327ed84cc391d29086dec2a3e44e7a1f",
+      "date": "2026-01-13",
+      "files": [
+        {
+          "added": 7,
+          "file": "src/middleware/jwt/jwt.ts",
+          "removed": 2,
+          "status": "modified"
+        },
+        {
+          "added": 17,
+          "file": "src/utils/jwt/jwt.ts",
+          "removed": 4,
+          "status": "modified"
+        },
+        {
+          "added": 14,
+          "file": "src/utils/jwt/types.ts",
+          "removed": 0,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {
+        "biome (off in Ultracite): security/noSecrets": 5
+      },
+      "hitsBefore": {
+        "biome (off in Ultracite): security/noSecrets": 4
+      },
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 6,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-gq3j-xvxp-8hrf",
+      "repo": "honojs/hono",
+      "sha": "91def7cab654bad5eecc9270e6620d577971ff5e",
+      "why": "timing comparison (contrast)",
+      "commit": "https://github.com/honojs/hono/commit/91def7cab654bad5eecc9270e6620d577971ff5e",
+      "date": "2026-02-18",
+      "files": [
+        {
+          "added": 56,
+          "file": "src/utils/buffer.ts",
+          "removed": 5,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 5,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-v8w9-8mx6-g223",
+      "repo": "honojs/hono",
+      "sha": "ef902257e0beacbb83d2a9549b3b83e03514a6fe",
+      "why": "prototype pollution (contrast)",
+      "commit": "https://github.com/honojs/hono/commit/ef902257e0beacbb83d2a9549b3b83e03514a6fe",
+      "date": "2026-03-10",
+      "files": [
+        {
+          "added": 4,
+          "file": "src/utils/body.ts",
+          "removed": 0,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 0,
+      "message": "Merge commit from fork"
+    },
+    {
+      "ghsa": "GHSA-43p4-m455-4f4j",
+      "repo": "trpc/trpc",
+      "sha": "78629d524968ef8db5a7adf68d8b95a44369d77e",
+      "why": "prototype pollution (contrast)",
+      "commit": "https://github.com/trpc/trpc/commit/78629d524968ef8db5a7adf68d8b95a44369d77e",
+      "date": "2025-12-13",
+      "files": [
+        {
+          "added": 18,
+          "file": "packages/server/src/unstable-core-do-not-import/http/formDataToObject.ts",
+          "removed": 3,
+          "status": "modified"
+        }
+      ],
+      "hitsAfter": {},
+      "hitsBefore": {},
+      "hitsOnRemovedLines": [],
+      "linesRemoved": 3,
+      "message": "Fix bug (#7043)"
+    }
+  ]
+}

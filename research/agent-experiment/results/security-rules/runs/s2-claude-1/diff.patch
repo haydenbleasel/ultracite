@@ -1,0 +1,53 @@
+--- a/script.tsx
++++ b/script.tsx
+@@ -13,8 +13,10 @@
+  *   - ReactDOM.preload(…) in the src branch (script.tsx L338-L349) is omitted, because it
+  *     needs react-dom's resource APIs and doesn't affect the rendered element;
+  *   - htmlescape.ts's export of ESCAPE_REGEX is kept, its attribute-escaping half
+- *     (L14-L22, L28-L33) is not used and is left out.
+- * Everything inside the marked regions is copied verbatim.
++ *     (L14-L22, L28-L33) is not used and is left out;
++ *   - the two inline `<script>` elements pass their (already JSON-escaped) source as
++ *     children instead of via dangerouslySetInnerHTML.
++ * Everything else inside the marked regions is copied verbatim.
+  *
+  * License of the source repository (vercel/next.js/license.md), reproduced in full:
+  *
+@@ -107,27 +109,21 @@
+         }
+ 
+         return (
+-          <script
+-            nonce={nonce}
+-            dangerouslySetInnerHTML={{
+-              __html: `(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
+-                JSON.stringify([0, { ...restProps, id }])
+-              )})`,
+-            }}
+-          />
++          <script nonce={nonce}>
++            {`(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
++              JSON.stringify([0, { ...restProps, id }])
++            )})`}
++          </script>
+         )
+       } else {
+   // ── end verbatim (L338-L349, ReactDOM.preload, omitted) ──
+   // ── verbatim: packages/next/src/client/script.tsx L350-L360 ──
+         return (
+-          <script
+-            nonce={nonce}
+-            dangerouslySetInnerHTML={{
+-              __html: `(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
+-                JSON.stringify([src, { ...restProps, id }])
+-              )})`,
+-            }}
+-          />
++          <script nonce={nonce}>
++            {`(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
++              JSON.stringify([src, { ...restProps, id }])
++            )})`}
++          </script>
+         )
+       }
+   // ── end verbatim ──

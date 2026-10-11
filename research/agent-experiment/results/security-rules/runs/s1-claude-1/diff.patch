@@ -1,0 +1,18 @@
+--- a/utils.ts
++++ b/utils.ts
+@@ -30,10 +30,10 @@
+  * SOFTWARE.
+  */
+ 
++import { runInNewContext } from 'node:vm'
++
+ export function evalValue<T = any>(rawValue: string): T {
+-  const fn = new Function(`
+-    var console, exports, global, module, process, require
+-    return (\n${rawValue}\n)
+-  `)
+-  return fn()
++  // Evaluate in a fresh context so the value can't reach Node globals
++  // (console, exports, global, module, process, require, globalThis)
++  return runInNewContext(`(\n${rawValue}\n)`)
+ }

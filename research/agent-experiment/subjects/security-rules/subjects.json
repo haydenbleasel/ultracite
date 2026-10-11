@@ -1,0 +1,66 @@
+[
+  {
+    "id": "s1",
+    "example": "s1-vite-eval-value.ts",
+    "basename": "utils.ts",
+    "exportName": "evalValue",
+    "source": "vitejs/vite packages/vite/src/node/utils.ts",
+    "corpusSinkId": "vite:015",
+    "whatFlowsIn": "trusted-dev: the options-object source text of the project's own import.meta.glob / new Worker calls",
+    "expectedDiagnostics": 2,
+    "path": "subjects/security-rules/s1/utils.ts",
+    "sha256": "e7d79dad5d85645f6cd244f2437e985aee3ea33b63703effae8f188ddad953b7",
+    "permalinks": [
+      "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/utils.ts#L1780-L1786"
+    ],
+    "corpusRule": "no-new-func",
+    "corpusSecurityHits": {
+      "eslint": [
+        "no-new-func:52",
+        "sonarjs/code-eval:52"
+      ],
+      "oxlint": [
+        "no-new-func:52"
+      ],
+      "oxlint +js-plugins": [
+        "no-new-func:52",
+        "sonarjs/code-eval:52"
+      ]
+    }
+  },
+  {
+    "id": "s2",
+    "example": "s2-next-before-interactive-script.tsx",
+    "basename": "script.tsx",
+    "exportName": "BeforeInteractiveScript",
+    "source": "vercel/next.js packages/next/src/client/script.tsx + packages/next/src/shared/lib/htmlescape.ts",
+    "corpusSinkId": "next.js:040, next.js:041",
+    "whatFlowsIn": "escaped: the developer's <Script> props, JSON-serialized and passed through htmlEscapeJsonString",
+    "expectedDiagnostics": 2,
+    "path": "subjects/security-rules/s2/script.tsx",
+    "sha256": "a976ace23a45b605b4b82563e587b495c31cfb79705fd624585fb075bc581efa",
+    "permalinks": [
+      "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/script.tsx#L318-L359",
+      "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/htmlescape.ts#L1-L26"
+    ],
+    "corpusRule": "react/no-danger",
+    "corpusSecurityHits": {
+      "biome": [
+        "security/noDangerouslySetInnerHtml:127",
+        "security/noDangerouslySetInnerHtml:140"
+      ],
+      "eslint": [
+        "react/no-danger:127",
+        "react/no-danger:140"
+      ],
+      "oxlint": [
+        "react/no-danger:127",
+        "react/no-danger:140"
+      ],
+      "oxlint +js-plugins": [
+        "react/no-danger:127",
+        "react/no-danger:140"
+      ]
+    }
+  }
+]

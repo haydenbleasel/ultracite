@@ -1,0 +1,3593 @@
+{
+  "generated": "2026-10-10",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@typescript-eslint/parser": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-github": "6.1.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "@biomejs/biome": "2.5.15"
+  },
+  "calibration": {
+    "cases": [
+      {
+        "description": "dangerouslySetInnerHTML from a variable",
+        "file": "components.tsx",
+        "id": "J01",
+        "line": 18,
+        "hits": {
+          "oxlint": [
+            "react/no-danger"
+          ],
+          "oxlint (env on root)": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/no-danger"
+          ],
+          "eslint": [
+            "react/no-danger"
+          ],
+          "eslint +type-aware": [
+            "react/no-danger"
+          ],
+          "biome": [
+            "security/noDangerouslySetInnerHtml"
+          ]
+        },
+        "other": {
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention"
+          ]
+        }
+      },
+      {
+        "description": "dangerouslySetInnerHTML from a static literal",
+        "file": "components.tsx",
+        "id": "J02",
+        "line": 20,
+        "hits": {
+          "oxlint": [
+            "react/no-danger"
+          ],
+          "oxlint (env on root)": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/no-danger"
+          ],
+          "eslint": [
+            "react/no-danger"
+          ],
+          "eslint +type-aware": [
+            "react/no-danger"
+          ],
+          "biome": [
+            "security/noDangerouslySetInnerHtml"
+          ]
+        },
+        "other": {
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention"
+          ]
+        }
+      },
+      {
+        "description": "dangerouslySetInnerHTML passed through a spread",
+        "file": "components.tsx",
+        "id": "J03",
+        "line": 22,
+        "hits": {},
+        "other": {
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention"
+          ]
+        }
+      },
+      {
+        "description": "dangerouslySetInnerHTML through createElement",
+        "file": "components.tsx",
+        "id": "J04",
+        "line": 24,
+        "hits": {
+          "oxlint": [
+            "react/no-danger"
+          ],
+          "oxlint (env on root)": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/no-danger"
+          ],
+          "biome": [
+            "security/noDangerouslySetInnerHtml"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins": [
+            "sonarjs/function-name"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/function-name",
+            "typescript/no-unsafe-call"
+          ],
+          "eslint": [
+            "sonarjs/function-name"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention",
+            "@typescript-eslint/no-unsafe-call",
+            "sonarjs/function-name"
+          ]
+        }
+      },
+      {
+        "description": "innerHTML through a ref in an effect, instead of dangerouslySetInnerHTML",
+        "file": "components.tsx",
+        "id": "J05",
+        "line": 26,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-inner-html"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-inner-html"
+          ],
+          "eslint": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-assignment",
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access",
+            "typescript/strict-boolean-expressions"
+          ],
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-assignment",
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "@typescript-eslint/strict-boolean-expressions",
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "innerHTML through a callback ref",
+        "file": "components.tsx",
+        "id": "J06",
+        "line": 36,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-inner-html"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-inner-html"
+          ],
+          "eslint": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-member-access",
+            "typescript/strict-boolean-expressions"
+          ],
+          "eslint": [
+            "unicorn/consistent-arrow-return-style"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-member-access",
+            "@typescript-eslint/strict-boolean-expressions",
+            "unicorn/consistent-arrow-return-style"
+          ],
+          "biome": [
+            "performance/noJsxPropsBind"
+          ]
+        }
+      },
+      {
+        "description": "dangerouslySetInnerHTML with a sanitizer (still flagged: the rules can't see sanitizers)",
+        "file": "components.tsx",
+        "id": "J07",
+        "line": 46,
+        "hits": {
+          "oxlint": [
+            "react/no-danger"
+          ],
+          "oxlint (env on root)": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/no-danger"
+          ],
+          "eslint": [
+            "react/no-danger"
+          ],
+          "eslint +type-aware": [
+            "react/no-danger"
+          ],
+          "biome": [
+            "security/noDangerouslySetInnerHtml"
+          ]
+        },
+        "other": {
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention"
+          ]
+        }
+      },
+      {
+        "description": "serialized JSON in a script tag (the Next.js pattern)",
+        "file": "components.tsx",
+        "id": "J08",
+        "line": 48,
+        "hits": {
+          "oxlint": [
+            "react/no-danger"
+          ],
+          "oxlint (env on root)": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins": [
+            "react/no-danger"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/no-danger"
+          ],
+          "eslint": [
+            "react/no-danger"
+          ],
+          "eslint +type-aware": [
+            "react/no-danger"
+          ],
+          "biome": [
+            "security/noDangerouslySetInnerHtml"
+          ]
+        },
+        "other": {
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention"
+          ]
+        }
+      },
+      {
+        "description": "an iframe with srcDoc from a variable",
+        "file": "components.tsx",
+        "id": "J09",
+        "line": 50,
+        "hits": {
+          "oxlint": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint (env on root)": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint +js-plugins": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/iframe-missing-sandbox"
+          ],
+          "eslint": [
+            "react/iframe-missing-sandbox"
+          ],
+          "eslint +type-aware": [
+            "react/iframe-missing-sandbox"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/useIframeSandbox"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "an iframe with a src from a variable and no sandbox",
+        "file": "components.tsx",
+        "id": "J10",
+        "line": 52,
+        "hits": {
+          "oxlint": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint (env on root)": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint +js-plugins": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/iframe-missing-sandbox"
+          ],
+          "eslint": [
+            "react/iframe-missing-sandbox"
+          ],
+          "eslint +type-aware": [
+            "react/iframe-missing-sandbox"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/useIframeSandbox"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "an iframe whose sandbox allows scripts and same-origin",
+        "file": "components.tsx",
+        "id": "J11",
+        "line": 54,
+        "hits": {
+          "oxlint": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint (env on root)": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint +js-plugins": [
+            "react/iframe-missing-sandbox"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/iframe-missing-sandbox"
+          ],
+          "eslint": [
+            "react/iframe-missing-sandbox"
+          ],
+          "eslint +type-aware": [
+            "react/iframe-missing-sandbox"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/noUnsafeIframeSandbox"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "href=\"javascript:…\"",
+        "file": "components.tsx",
+        "id": "J12",
+        "line": 58,
+        "hits": {
+          "oxlint": [
+            "no-script-url",
+            "react/jsx-no-script-url"
+          ],
+          "oxlint (env on root)": [
+            "no-script-url",
+            "react/jsx-no-script-url"
+          ],
+          "oxlint +js-plugins": [
+            "no-script-url",
+            "react/jsx-no-script-url"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-script-url",
+            "react/jsx-no-script-url"
+          ],
+          "eslint": [
+            "no-script-url",
+            "react/jsx-no-script-url"
+          ],
+          "eslint +type-aware": [
+            "no-script-url",
+            "react/jsx-no-script-url"
+          ],
+          "biome": [
+            "security/noScriptUrl"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "oxlint (env on root)": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "oxlint +js-plugins": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "eslint": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "eslint +type-aware": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "biome": [
+            "a11y/useValidAnchor"
+          ]
+        }
+      },
+      {
+        "description": "a javascript: href built by concatenation",
+        "file": "components.tsx",
+        "id": "J13",
+        "line": 60,
+        "hits": {
+          "oxlint": [
+            "no-script-url"
+          ],
+          "oxlint (env on root)": [
+            "no-script-url"
+          ],
+          "oxlint +js-plugins": [
+            "no-script-url",
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-script-url",
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "no-script-url",
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "no-script-url",
+            "sonarjs/code-eval"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "prefer-template"
+          ],
+          "oxlint (env on root)": [
+            "prefer-template"
+          ],
+          "oxlint +js-plugins": [
+            "prefer-template"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "prefer-template"
+          ],
+          "eslint": [
+            "jsx-a11y/anchor-is-valid",
+            "prefer-template"
+          ],
+          "eslint +type-aware": [
+            "jsx-a11y/anchor-is-valid",
+            "prefer-template"
+          ],
+          "biome": [
+            "style/useTemplate"
+          ]
+        }
+      },
+      {
+        "description": "a javascript: href built with a template literal",
+        "file": "components.tsx",
+        "id": "J14",
+        "line": 62,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/code-eval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "jsx-a11y/anchor-is-valid"
+          ],
+          "eslint +type-aware": [
+            "jsx-a11y/anchor-is-valid"
+          ]
+        }
+      },
+      {
+        "description": "an href from a variable",
+        "file": "components.tsx",
+        "id": "J15",
+        "line": 64,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "external link, target _blank, no rel",
+        "file": "components.tsx",
+        "id": "J16",
+        "line": 68,
+        "hits": {
+          "oxlint": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint (env on root)": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint +type-aware": [
+            "react/jsx-no-target-blank"
+          ],
+          "biome": [
+            "security/noBlankTarget"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "rel=\"noopener\" only",
+        "file": "components.tsx",
+        "id": "J17",
+        "line": 70,
+        "hits": {
+          "oxlint": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint (env on root)": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint +type-aware": [
+            "react/jsx-no-target-blank"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "rel=\"noreferrer\"",
+        "file": "components.tsx",
+        "id": "J18",
+        "line": 72,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "dynamic href, no rel",
+        "file": "components.tsx",
+        "id": "J19",
+        "line": 74,
+        "hits": {
+          "oxlint": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint (env on root)": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint +type-aware": [
+            "react/jsx-no-target-blank"
+          ],
+          "biome": [
+            "security/noBlankTarget"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "internal link, no rel",
+        "file": "components.tsx",
+        "id": "J20",
+        "line": 76,
+        "hits": {
+          "biome": [
+            "security/noBlankTarget"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "href and rel arrive through a spread",
+        "file": "components.tsx",
+        "id": "J21",
+        "line": 78,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "a link component, not <a>",
+        "file": "components.tsx",
+        "id": "J22",
+        "line": 80,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "target chosen by a condition",
+        "file": "components.tsx",
+        "id": "J23",
+        "line": 82,
+        "hits": {
+          "oxlint": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint (env on root)": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins": [
+            "react/jsx-no-target-blank"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint": [
+            "react/jsx-no-target-blank"
+          ],
+          "eslint +type-aware": [
+            "react/jsx-no-target-blank"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a form that posts to a new tab",
+        "file": "components.tsx",
+        "id": "J24",
+        "line": 84,
+        "hits": {
+          "biome": [
+            "security/noBlankTarget"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "eval in an event handler",
+        "file": "components.tsx",
+        "id": "J25",
+        "line": 88,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "no-eval",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "react/unsupported-syntax"
+          ],
+          "oxlint (env on root)": [
+            "react/unsupported-syntax"
+          ],
+          "oxlint +js-plugins": [
+            "react/unsupported-syntax"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react/unsupported-syntax",
+            "typescript/no-unsafe-return"
+          ],
+          "eslint": [
+            "react-hooks/unsupported-syntax"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-return",
+            "react-hooks/unsupported-syntax"
+          ],
+          "biome": [
+            "performance/noJsxPropsBind"
+          ]
+        }
+      },
+      {
+        "description": "setTimeout with a string in an event handler",
+        "file": "components.tsx",
+        "id": "J26",
+        "line": 90,
+        "hits": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-implied-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval"
+          ]
+        },
+        "other": {
+          "biome": [
+            "performance/noJsxPropsBind"
+          ]
+        }
+      },
+      {
+        "description": "MD5",
+        "file": "server.ts",
+        "id": "V01",
+        "line": 26,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/hashing"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/hashing"
+          ],
+          "eslint": [
+            "sonarjs/hashing"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/hashing"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "SHA-1",
+        "file": "server.ts",
+        "id": "V02",
+        "line": 28,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/hashing"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/hashing"
+          ],
+          "eslint": [
+            "sonarjs/hashing"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/hashing"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "triple DES",
+        "file": "server.ts",
+        "id": "V03",
+        "line": 30,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/encryption-secure-mode",
+            "sonarjs/no-weak-cipher"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/encryption-secure-mode",
+            "sonarjs/no-weak-cipher"
+          ],
+          "eslint": [
+            "sonarjs/encryption-secure-mode",
+            "sonarjs/no-weak-cipher"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/encryption-secure-mode",
+            "sonarjs/no-weak-cipher"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "AES in ECB mode",
+        "file": "server.ts",
+        "id": "V04",
+        "line": 32,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/encryption-secure-mode"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/encryption-secure-mode"
+          ],
+          "eslint": [
+            "sonarjs/encryption-secure-mode"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/encryption-secure-mode"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "TLS without certificate verification",
+        "file": "server.ts",
+        "id": "V05",
+        "line": 34,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/unverified-certificate",
+            "sonarjs/unverified-hostname"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/unverified-certificate",
+            "sonarjs/unverified-hostname"
+          ],
+          "eslint": [
+            "sonarjs/unverified-certificate",
+            "sonarjs/unverified-hostname"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/unverified-certificate",
+            "sonarjs/unverified-hostname"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a JWT signed with the none algorithm",
+        "file": "server.ts",
+        "id": "V06",
+        "line": 36,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/insecure-jwt-token"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/insecure-jwt-token"
+          ],
+          "eslint": [
+            "sonarjs/insecure-jwt-token"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/insecure-jwt-token"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access",
+            "typescript/no-unsafe-return"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "@typescript-eslint/no-unsafe-return"
+          ]
+        }
+      },
+      {
+        "description": "an Express app (x-powered-by left on)",
+        "file": "server.ts",
+        "id": "V07",
+        "line": 40,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/x-powered-by"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/x-powered-by"
+          ],
+          "eslint": [
+            "sonarjs/x-powered-by"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/x-powered-by"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-assignment",
+            "typescript/no-unsafe-call"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-assignment",
+            "@typescript-eslint/no-unsafe-call"
+          ]
+        }
+      },
+      {
+        "description": "cors() with the default (any origin)",
+        "file": "server.ts",
+        "id": "V08",
+        "line": 42,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/cors"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/cors"
+          ],
+          "eslint": [
+            "sonarjs/cors"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/cors"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "unicorn/no-top-level-side-effects"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "unicorn/no-top-level-side-effects"
+          ]
+        }
+      },
+      {
+        "description": "a wildcard CORS header set by hand",
+        "file": "server.ts",
+        "id": "V09",
+        "line": 44,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention",
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ]
+        }
+      },
+      {
+        "description": "a cookie with no flags",
+        "file": "server.ts",
+        "id": "V10",
+        "line": 49,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention",
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ]
+        }
+      },
+      {
+        "description": "a cookie with httpOnly and secure turned off",
+        "file": "server.ts",
+        "id": "V11",
+        "line": 54,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/naming-convention",
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ]
+        }
+      },
+      {
+        "description": "reflecting a query parameter into HTML",
+        "file": "server.ts",
+        "id": "V12",
+        "line": 59,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "unicorn/name-replacements",
+            "unicorn/no-top-level-side-effects"
+          ]
+        }
+      },
+      {
+        "description": "SQL built by concatenation",
+        "file": "server.ts",
+        "id": "V13",
+        "line": 65,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "prefer-template",
+            "require-await"
+          ],
+          "oxlint (env on root)": [
+            "prefer-template",
+            "require-await"
+          ],
+          "oxlint +js-plugins": [
+            "prefer-template",
+            "require-await"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "prefer-template",
+            "require-await",
+            "typescript/return-await"
+          ],
+          "eslint": [
+            "prefer-template",
+            "require-await"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/return-await",
+            "prefer-template"
+          ],
+          "biome": [
+            "style/useTemplate"
+          ]
+        }
+      },
+      {
+        "description": "SQL built with a template literal",
+        "file": "server.ts",
+        "id": "V14",
+        "line": 67,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "require-await"
+          ],
+          "oxlint (env on root)": [
+            "require-await"
+          ],
+          "oxlint +js-plugins": [
+            "require-await"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "require-await",
+            "typescript/return-await"
+          ],
+          "eslint": [
+            "require-await"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/return-await"
+          ]
+        }
+      },
+      {
+        "description": "a shell command built by concatenation",
+        "file": "server.ts",
+        "id": "V15",
+        "line": 69,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "prefer-template"
+          ],
+          "oxlint (env on root)": [
+            "prefer-template"
+          ],
+          "oxlint +js-plugins": [
+            "prefer-template"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "prefer-template"
+          ],
+          "eslint": [
+            "prefer-template"
+          ],
+          "eslint +type-aware": [
+            "prefer-template"
+          ],
+          "biome": [
+            "style/useTemplate"
+          ]
+        }
+      },
+      {
+        "description": "a command resolved through PATH",
+        "file": "server.ts",
+        "id": "V16",
+        "line": 71,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/no-os-command-from-path"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/no-os-command-from-path"
+          ],
+          "eslint": [
+            "sonarjs/no-os-command-from-path"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/no-os-command-from-path"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "vm.runInNewContext on a variable",
+        "file": "server.ts",
+        "id": "V17",
+        "line": 73,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/code-eval"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "new vm.Script on a variable",
+        "file": "server.ts",
+        "id": "V18",
+        "line": 75,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/code-eval"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "require of a variable",
+        "file": "server.ts",
+        "id": "V19",
+        "line": 77,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "node/global-require",
+            "unicorn/prefer-module"
+          ],
+          "oxlint (env on root)": [
+            "node/global-require",
+            "unicorn/prefer-module"
+          ],
+          "oxlint +js-plugins": [
+            "node/global-require",
+            "unicorn/prefer-module"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "node/global-require",
+            "unicorn/prefer-module"
+          ],
+          "eslint": [
+            "n/global-require",
+            "unicorn/prefer-module"
+          ],
+          "eslint +type-aware": [
+            "n/global-require",
+            "unicorn/prefer-module"
+          ]
+        }
+      },
+      {
+        "description": "world-writable permissions through fs.chmodSync",
+        "file": "server.ts",
+        "id": "V20",
+        "line": 81,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/file-permissions"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/file-permissions"
+          ],
+          "eslint": [
+            "sonarjs/file-permissions"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/file-permissions"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-confusing-void-expression"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-confusing-void-expression"
+          ]
+        }
+      },
+      {
+        "description": "a file in /tmp",
+        "file": "server.ts",
+        "id": "V21",
+        "line": 83,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/publicly-writable-directories"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/publicly-writable-directories"
+          ],
+          "eslint": [
+            "sonarjs/publicly-writable-directories"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/publicly-writable-directories"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-confusing-void-expression"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-confusing-void-expression"
+          ]
+        }
+      },
+      {
+        "description": "world-writable permissions through a named import",
+        "file": "server.ts",
+        "id": "V22",
+        "line": 85,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-confusing-void-expression"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-confusing-void-expression"
+          ]
+        }
+      },
+      {
+        "description": "express-session with secure and httpOnly turned off",
+        "file": "server.ts",
+        "id": "V23",
+        "line": 89,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/cookie-no-httponly",
+            "sonarjs/insecure-cookie"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/cookie-no-httponly",
+            "sonarjs/insecure-cookie"
+          ],
+          "eslint": [
+            "sonarjs/cookie-no-httponly",
+            "sonarjs/insecure-cookie"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/cookie-no-httponly",
+            "sonarjs/insecure-cookie"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "unicorn/no-top-level-side-effects"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "unicorn/no-top-level-side-effects"
+          ]
+        }
+      },
+      {
+        "description": "SQL built by concatenation through node-postgres",
+        "file": "server.ts",
+        "id": "V24",
+        "line": 91,
+        "hits": {
+          "eslint": [
+            "sonarjs/sql-queries"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "prefer-template",
+            "require-await"
+          ],
+          "oxlint (env on root)": [
+            "prefer-template",
+            "require-await"
+          ],
+          "oxlint +js-plugins": [
+            "prefer-template",
+            "require-await"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "prefer-template",
+            "require-await",
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access"
+          ],
+          "eslint": [
+            "prefer-template",
+            "require-await",
+            "unicorn/no-unreadable-new-expression"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "@typescript-eslint/require-await",
+            "prefer-template",
+            "unicorn/no-unreadable-new-expression"
+          ],
+          "biome": [
+            "style/useTemplate"
+          ]
+        }
+      },
+      {
+        "description": "direct eval of a variable",
+        "file": "sinks.ts",
+        "id": "E01",
+        "line": 15,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "no-eval",
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval",
+            "sonarjs/code-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "direct eval of a literal",
+        "file": "sinks.ts",
+        "id": "E02",
+        "line": 17,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval",
+            "react-doctor/no-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval",
+            "react-doctor/no-eval"
+          ],
+          "eslint": [
+            "no-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "window.eval",
+        "file": "sinks.ts",
+        "id": "E03",
+        "line": 19,
+        "hits": {
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "eslint": [
+            "no-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "globalThis.eval",
+        "file": "sinks.ts",
+        "id": "E04",
+        "line": 21,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval",
+            "react-doctor/no-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval",
+            "react-doctor/no-eval"
+          ],
+          "eslint": [
+            "no-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "indirect eval through a sequence expression, (0, eval)(x)",
+        "file": "sinks.ts",
+        "id": "E05",
+        "line": 23,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval"
+          ],
+          "eslint": [
+            "no-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ],
+          "biome": [
+            "complexity/noCommaOperator"
+          ]
+        }
+      },
+      {
+        "description": "eval reached through a computed, concatenated name",
+        "file": "sinks.ts",
+        "id": "E06",
+        "line": 25,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "no-useless-concat"
+          ],
+          "oxlint (env on root)": [
+            "no-useless-concat"
+          ],
+          "oxlint +js-plugins": [
+            "no-useless-concat"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-useless-concat",
+            "typescript/no-unsafe-type-assertion"
+          ],
+          "eslint": [
+            "no-useless-concat",
+            "unicorn/name-replacements",
+            "unicorn/no-useless-concat"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-type-assertion",
+            "no-useless-concat",
+            "unicorn/name-replacements",
+            "unicorn/no-useless-concat"
+          ],
+          "biome": [
+            "complexity/noUselessStringConcat"
+          ]
+        }
+      },
+      {
+        "description": "eval reached through a computed string literal",
+        "file": "sinks.ts",
+        "id": "E07",
+        "line": 27,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval",
+            "react-doctor/no-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval",
+            "react-doctor/no-eval"
+          ],
+          "eslint": [
+            "no-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/dot-notation"
+          ],
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/dot-notation",
+            "unicorn/name-replacements"
+          ],
+          "biome": [
+            "complexity/useLiteralKeys"
+          ]
+        }
+      },
+      {
+        "description": "eval aliased to a variable first",
+        "file": "sinks.ts",
+        "id": "E08",
+        "line": 29,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval",
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval",
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "no-eval",
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval",
+            "sonarjs/code-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "self.eval",
+        "file": "sinks.ts",
+        "id": "E09",
+        "line": 34,
+        "hits": {},
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "new Function with a body from a variable",
+        "file": "sinks.ts",
+        "id": "E10",
+        "line": 36,
+        "hits": {
+          "oxlint": [
+            "no-new-func"
+          ],
+          "oxlint (env on root)": [
+            "no-new-func"
+          ],
+          "oxlint +js-plugins": [
+            "no-new-func",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-new-func",
+            "react-doctor/no-eval",
+            "sonarjs/code-eval",
+            "typescript/no-implied-eval"
+          ],
+          "eslint": [
+            "no-new-func",
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval",
+            "no-new-func",
+            "sonarjs/code-eval"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/noImpliedEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "Function called without new",
+        "file": "sinks.ts",
+        "id": "E11",
+        "line": 38,
+        "hits": {
+          "oxlint": [
+            "no-new-func"
+          ],
+          "oxlint (env on root)": [
+            "no-new-func"
+          ],
+          "oxlint +js-plugins": [
+            "no-new-func",
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-new-func",
+            "sonarjs/code-eval",
+            "typescript/no-implied-eval"
+          ],
+          "eslint": [
+            "no-new-func",
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval",
+            "no-new-func",
+            "sonarjs/code-eval"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/noImpliedEval"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "unicorn/new-for-builtins"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/new-for-builtins"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/new-for-builtins"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/new-for-builtins"
+          ],
+          "eslint": [
+            "unicorn/name-replacements",
+            "unicorn/new-for-builtins"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements",
+            "unicorn/new-for-builtins"
+          ]
+        }
+      },
+      {
+        "description": "Function.prototype.constructor",
+        "file": "sinks.ts",
+        "id": "E12",
+        "line": 40,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call"
+          ],
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "an arrow function's constructor (which is Function)",
+        "file": "sinks.ts",
+        "id": "E13",
+        "line": 42,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "unicorn/no-useless-undefined"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/no-useless-undefined"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/no-useless-undefined"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-call",
+            "unicorn/no-useless-undefined"
+          ],
+          "eslint": [
+            "unicorn/name-replacements",
+            "unicorn/no-useless-undefined"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "unicorn/name-replacements",
+            "unicorn/no-useless-undefined"
+          ]
+        }
+      },
+      {
+        "description": "the AsyncFunction constructor",
+        "file": "sinks.ts",
+        "id": "E14",
+        "line": 44,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "require-await",
+            "unicorn/no-useless-undefined"
+          ],
+          "oxlint (env on root)": [
+            "require-await",
+            "unicorn/no-useless-undefined"
+          ],
+          "oxlint +js-plugins": [
+            "require-await",
+            "unicorn/no-useless-undefined"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "require-await",
+            "typescript/no-unsafe-call",
+            "typescript/no-unsafe-member-access",
+            "unicorn/no-useless-undefined"
+          ],
+          "eslint": [
+            "require-await",
+            "unicorn/name-replacements",
+            "unicorn/no-useless-undefined"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-call",
+            "@typescript-eslint/no-unsafe-member-access",
+            "@typescript-eslint/require-await",
+            "unicorn/name-replacements",
+            "unicorn/no-useless-undefined"
+          ]
+        }
+      },
+      {
+        "description": "Reflect.apply on eval",
+        "file": "sinks.ts",
+        "id": "E15",
+        "line": 46,
+        "hits": {
+          "oxlint": [
+            "no-eval"
+          ],
+          "oxlint (env on root)": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins": [
+            "no-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-eval"
+          ],
+          "eslint": [
+            "no-eval"
+          ],
+          "eslint +type-aware": [
+            "no-eval"
+          ],
+          "biome": [
+            "security/noGlobalEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "Reflect.construct on Function",
+        "file": "sinks.ts",
+        "id": "E16",
+        "line": 48,
+        "hits": {},
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "setTimeout with a string literal",
+        "file": "sinks.ts",
+        "id": "E17",
+        "line": 50,
+        "hits": {
+          "oxlint (env on root)": [
+            "no-implied-eval"
+          ],
+          "oxlint +js-plugins": [
+            "react-doctor/no-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react-doctor/no-eval",
+            "typescript/no-implied-eval"
+          ],
+          "eslint": [
+            "no-implied-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/noImpliedEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "setTimeout with a string variable",
+        "file": "sinks.ts",
+        "id": "E18",
+        "line": 52,
+        "hits": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-implied-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "setInterval with a template literal",
+        "file": "sinks.ts",
+        "id": "E19",
+        "line": 54,
+        "hits": {
+          "oxlint (env on root)": [
+            "no-implied-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-implied-eval"
+          ],
+          "eslint": [
+            "no-implied-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "window.setTimeout with a string literal",
+        "file": "sinks.ts",
+        "id": "E20",
+        "line": 56,
+        "hits": {
+          "oxlint (env on root)": [
+            "no-implied-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-implied-eval"
+          ],
+          "eslint": [
+            "no-implied-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval"
+          ],
+          "biome (off in Ultracite)": [
+            "nursery/noImpliedEval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "setTimeout with a const string declared above",
+        "file": "sinks.ts",
+        "id": "E21",
+        "line": 58,
+        "hits": {
+          "oxlint (env on root)": [
+            "no-implied-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-implied-eval"
+          ],
+          "eslint": [
+            "no-implied-eval"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-implied-eval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "dynamic import of a variable specifier",
+        "file": "sinks.ts",
+        "id": "E22",
+        "line": 63,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "require-await"
+          ],
+          "oxlint (env on root)": [
+            "require-await"
+          ],
+          "oxlint +js-plugins": [
+            "react-doctor/no-dynamic-import-path",
+            "require-await"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react-doctor/no-dynamic-import-path",
+            "require-await",
+            "typescript/return-await"
+          ],
+          "eslint": [
+            "import-x/dynamic-import-chunkname",
+            "require-await",
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/return-await",
+            "import-x/dynamic-import-chunkname",
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "a Worker built from a Blob of code",
+        "file": "sinks.ts",
+        "id": "E23",
+        "line": 65,
+        "hits": {},
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "a script element whose src is set from a variable",
+        "file": "sinks.ts",
+        "id": "E24",
+        "line": 67,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-dynamic-script-tag"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-dynamic-script-tag"
+          ],
+          "eslint": [
+            "github/no-dynamic-script-tag"
+          ],
+          "eslint +type-aware": [
+            "github/no-dynamic-script-tag"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "a script element whose text is set from a variable",
+        "file": "sinks.ts",
+        "id": "E25",
+        "line": 73,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-dynamic-script-tag"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-dynamic-script-tag"
+          ],
+          "eslint": [
+            "github/no-dynamic-script-tag"
+          ],
+          "eslint +type-aware": [
+            "github/no-dynamic-script-tag"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "innerHTML from a variable",
+        "file": "sinks.ts",
+        "id": "H01",
+        "line": 81,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-inner-html"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-inner-html"
+          ],
+          "eslint": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "innerHTML from a static literal",
+        "file": "sinks.ts",
+        "id": "H02",
+        "line": 85,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-inner-html"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-inner-html"
+          ],
+          "eslint": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "innerHTML +=",
+        "file": "sinks.ts",
+        "id": "H03",
+        "line": 89,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-inner-html"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-inner-html"
+          ],
+          "eslint": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "github/no-inner-html",
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "outerHTML",
+        "file": "sinks.ts",
+        "id": "H04",
+        "line": 93,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "innerHTML through a computed, concatenated name",
+        "file": "sinks.ts",
+        "id": "H05",
+        "line": 97,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "no-useless-concat"
+          ],
+          "oxlint (env on root)": [
+            "no-useless-concat"
+          ],
+          "oxlint +js-plugins": [
+            "no-useless-concat"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-useless-concat",
+            "typescript/no-unsafe-type-assertion"
+          ],
+          "eslint": [
+            "no-useless-concat",
+            "unicorn/no-useless-concat"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-type-assertion",
+            "no-useless-concat",
+            "unicorn/no-useless-concat"
+          ],
+          "biome": [
+            "complexity/noUselessStringConcat"
+          ]
+        }
+      },
+      {
+        "description": "innerHTML through a computed string literal",
+        "file": "sinks.ts",
+        "id": "H06",
+        "line": 101,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/dot-notation"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/dot-notation"
+          ],
+          "biome": [
+            "complexity/useLiteralKeys"
+          ]
+        }
+      },
+      {
+        "description": "innerHTML through a variable holding the property name",
+        "file": "sinks.ts",
+        "id": "H07",
+        "line": 105,
+        "hits": {},
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-unsafe-type-assertion"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-unsafe-type-assertion"
+          ]
+        }
+      },
+      {
+        "description": "Object.assign onto the element",
+        "file": "sinks.ts",
+        "id": "H08",
+        "line": 110,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "Reflect.set onto the element",
+        "file": "sinks.ts",
+        "id": "H09",
+        "line": 114,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "insertAdjacentHTML",
+        "file": "sinks.ts",
+        "id": "H10",
+        "line": 118,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "document.write",
+        "file": "sinks.ts",
+        "id": "H11",
+        "line": 122,
+        "hits": {
+          "oxlint +js-plugins": [
+            "react-doctor/no-document-write"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react-doctor/no-document-write"
+          ],
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-deprecated"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-deprecated",
+            "sonarjs/deprecation"
+          ]
+        }
+      },
+      {
+        "description": "document.writeln",
+        "file": "sinks.ts",
+        "id": "H12",
+        "line": 126,
+        "hits": {
+          "oxlint +js-plugins": [
+            "react-doctor/no-document-write"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react-doctor/no-document-write"
+          ],
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/no-deprecated"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/no-deprecated",
+            "sonarjs/deprecation"
+          ]
+        }
+      },
+      {
+        "description": "iframe srcdoc property",
+        "file": "sinks.ts",
+        "id": "H13",
+        "line": 130,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "iframe srcdoc via setAttribute",
+        "file": "sinks.ts",
+        "id": "H14",
+        "line": 134,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "Range.createContextualFragment",
+        "file": "sinks.ts",
+        "id": "H15",
+        "line": 138,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "setHTMLUnsafe",
+        "file": "sinks.ts",
+        "id": "H16",
+        "line": 142,
+        "hits": {
+          "eslint": [
+            "unicorn/no-unsafe-dom-html"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unsafe-dom-html"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "DOMParser, then move the parsed nodes into the page",
+        "file": "sinks.ts",
+        "id": "H17",
+        "line": 146,
+        "hits": {},
+        "other": {
+          "eslint": [
+            "unicorn/no-unreadable-new-expression"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unreadable-new-expression"
+          ]
+        }
+      },
+      {
+        "description": "an inline event handler attribute",
+        "file": "sinks.ts",
+        "id": "H18",
+        "line": 151,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "reading innerHTML (not a sink)",
+        "file": "sinks.ts",
+        "id": "H19",
+        "line": 155,
+        "hits": {
+          "oxlint +js-plugins": [
+            "github/no-inner-html"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "github/no-inner-html"
+          ],
+          "eslint": [
+            "github/no-inner-html"
+          ],
+          "eslint +type-aware": [
+            "github/no-inner-html"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/prefer-dom-node-html-methods"
+          ],
+          "eslint +type-aware": [
+            "unicorn/prefer-dom-node-html-methods"
+          ]
+        }
+      },
+      {
+        "description": "javascript: literal assigned to location",
+        "file": "sinks.ts",
+        "id": "U01",
+        "line": 159,
+        "hits": {
+          "oxlint": [
+            "no-script-url"
+          ],
+          "oxlint (env on root)": [
+            "no-script-url"
+          ],
+          "oxlint +js-plugins": [
+            "no-script-url"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-script-url"
+          ],
+          "eslint": [
+            "no-script-url"
+          ],
+          "eslint +type-aware": [
+            "no-script-url"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/prefer-location-assign"
+          ],
+          "eslint +type-aware": [
+            "unicorn/prefer-location-assign"
+          ]
+        }
+      },
+      {
+        "description": "javascript: in a template literal",
+        "file": "sinks.ts",
+        "id": "U02",
+        "line": 163,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/code-eval"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/code-eval"
+          ],
+          "eslint": [
+            "sonarjs/code-eval"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/code-eval"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/prefer-location-assign"
+          ],
+          "eslint +type-aware": [
+            "unicorn/prefer-location-assign"
+          ]
+        }
+      },
+      {
+        "description": "javascript: split across a concatenation",
+        "file": "sinks.ts",
+        "id": "U03",
+        "line": 167,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "no-useless-concat",
+            "prefer-template"
+          ],
+          "oxlint (env on root)": [
+            "no-useless-concat",
+            "prefer-template"
+          ],
+          "oxlint +js-plugins": [
+            "no-useless-concat",
+            "prefer-template"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-useless-concat",
+            "prefer-template"
+          ],
+          "eslint": [
+            "no-useless-concat",
+            "prefer-template",
+            "unicorn/no-useless-concat",
+            "unicorn/prefer-location-assign"
+          ],
+          "eslint +type-aware": [
+            "no-useless-concat",
+            "prefer-template",
+            "unicorn/no-useless-concat",
+            "unicorn/prefer-location-assign"
+          ],
+          "biome": [
+            "complexity/noUselessStringConcat",
+            "style/useTemplate"
+          ]
+        }
+      },
+      {
+        "description": "new URL with a javascript: literal",
+        "file": "sinks.ts",
+        "id": "U04",
+        "line": 171,
+        "hits": {
+          "oxlint": [
+            "no-script-url"
+          ],
+          "oxlint (env on root)": [
+            "no-script-url"
+          ],
+          "oxlint +js-plugins": [
+            "no-script-url"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "no-script-url"
+          ],
+          "eslint": [
+            "no-script-url"
+          ],
+          "eslint +type-aware": [
+            "no-script-url"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/no-unreadable-new-expression"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-unreadable-new-expression"
+          ]
+        }
+      },
+      {
+        "description": "a URL from a variable assigned to an anchor",
+        "file": "sinks.ts",
+        "id": "U05",
+        "line": 173,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "window.open without noopener",
+        "file": "sinks.ts",
+        "id": "U06",
+        "line": 177,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "window.open with _blank and noopener",
+        "file": "sinks.ts",
+        "id": "U07",
+        "line": 179,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "window.open with _blank and no features",
+        "file": "sinks.ts",
+        "id": "U08",
+        "line": 181,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/link-with-target-blank"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/link-with-target-blank"
+          ],
+          "eslint": [
+            "sonarjs/link-with-target-blank"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/link-with-target-blank"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "location.assign from a variable",
+        "file": "sinks.ts",
+        "id": "U09",
+        "line": 183,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "document.cookie with a literal",
+        "file": "sinks.ts",
+        "id": "K01",
+        "line": 189,
+        "hits": {
+          "oxlint": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "biome": [
+            "suspicious/noDocumentCookie"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "document.cookie with a template literal",
+        "file": "sinks.ts",
+        "id": "K02",
+        "line": 193,
+        "hits": {
+          "oxlint": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "biome": [
+            "suspicious/noDocumentCookie"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "window.document.cookie",
+        "file": "sinks.ts",
+        "id": "K03",
+        "line": 197,
+        "hits": {
+          "oxlint": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "biome": [
+            "suspicious/noDocumentCookie"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "document aliased first",
+        "file": "sinks.ts",
+        "id": "K04",
+        "line": 201,
+        "hits": {
+          "oxlint": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "biome": [
+            "suspicious/noDocumentCookie"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/name-replacements"
+          ],
+          "eslint +type-aware": [
+            "unicorn/name-replacements"
+          ]
+        }
+      },
+      {
+        "description": "document[\"cookie\"]",
+        "file": "sinks.ts",
+        "id": "K05",
+        "line": 206,
+        "hits": {
+          "oxlint": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/no-document-cookie"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint": [
+            "unicorn/no-document-cookie"
+          ],
+          "eslint +type-aware": [
+            "unicorn/no-document-cookie"
+          ],
+          "biome": [
+            "suspicious/noDocumentCookie"
+          ]
+        },
+        "other": {
+          "oxlint +js-plugins +type-aware": [
+            "typescript/dot-notation"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/dot-notation"
+          ],
+          "biome": [
+            "complexity/useLiteralKeys"
+          ]
+        }
+      },
+      {
+        "description": "reading document.cookie (not a write)",
+        "file": "sinks.ts",
+        "id": "K06",
+        "line": 210,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "an auth token in localStorage",
+        "file": "sinks.ts",
+        "id": "K07",
+        "line": 212,
+        "hits": {
+          "oxlint +js-plugins": [
+            "react-doctor/auth-token-in-web-storage"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "react-doctor/auth-token-in-web-storage"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "Math.random",
+        "file": "sinks.ts",
+        "id": "R01",
+        "line": 218,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/pseudo-random"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/pseudo-random"
+          ],
+          "eslint": [
+            "sonarjs/pseudo-random"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/pseudo-random"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "Math.random used for a token",
+        "file": "sinks.ts",
+        "id": "R02",
+        "line": 220,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/pseudo-random"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/pseudo-random"
+          ],
+          "eslint": [
+            "sonarjs/pseudo-random"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/pseudo-random"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "Math.random destructured first",
+        "file": "sinks.ts",
+        "id": "R03",
+        "line": 222,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/pseudo-random"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/pseudo-random"
+          ],
+          "eslint": [
+            "sonarjs/pseudo-random"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/pseudo-random"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "crypto.getRandomValues (secure)",
+        "file": "sinks.ts",
+        "id": "R04",
+        "line": 227,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "crypto.randomUUID (secure)",
+        "file": "sinks.ts",
+        "id": "R05",
+        "line": 229,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "a password literal",
+        "file": "sinks.ts",
+        "id": "S01",
+        "line": 233,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "AWS's documented example access key id",
+        "file": "sinks.ts",
+        "id": "S02",
+        "line": 235,
+        "hits": {
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "AWS's documented example secret access key",
+        "file": "sinks.ts",
+        "id": "S03",
+        "line": 237,
+        "hits": {
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a high-entropy literal under a secret-like name",
+        "file": "sinks.ts",
+        "id": "S04",
+        "line": 239,
+        "hits": {
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "credentials inside a connection URL",
+        "file": "sinks.ts",
+        "id": "S05",
+        "line": 241,
+        "hits": {
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a public IP literal (TEST-NET-3)",
+        "file": "sinks.ts",
+        "id": "S06",
+        "line": 243,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "loopback",
+        "file": "sinks.ts",
+        "id": "S07",
+        "line": 245,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "a private IP",
+        "file": "sinks.ts",
+        "id": "S08",
+        "line": 247,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/no-hardcoded-ip"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/no-hardcoded-ip"
+          ],
+          "eslint": [
+            "sonarjs/no-hardcoded-ip"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/no-hardcoded-ip"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a hardcoded fallback for a secret environment variable",
+        "file": "sinks.ts",
+        "id": "S09",
+        "line": 249,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "a secret read from the environment (fine)",
+        "file": "sinks.ts",
+        "id": "S10",
+        "line": 251,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "a label that only mentions passwords (fine)",
+        "file": "sinks.ts",
+        "id": "S11",
+        "line": 253,
+        "hits": {},
+        "other": {}
+      },
+      {
+        "description": "a bearer token literal in a header",
+        "file": "sinks.ts",
+        "id": "S12",
+        "line": 255,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/no-hardcoded-secrets"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/no-hardcoded-secrets"
+          ],
+          "eslint": [
+            "sonarjs/no-hardcoded-secrets"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/no-hardcoded-secrets"
+          ],
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a password with more varied characters (S01's has too little entropy for sonarjs)",
+        "file": "sinks.ts",
+        "id": "S13",
+        "line": 257,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/no-hardcoded-passwords"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/no-hardcoded-passwords"
+          ],
+          "eslint": [
+            "sonarjs/no-hardcoded-passwords"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/no-hardcoded-passwords"
+          ],
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a hardcoded fallback for a secret, under a secret-like name",
+        "file": "sinks.ts",
+        "id": "S14",
+        "line": 259,
+        "hits": {
+          "biome (off in Ultracite)": [
+            "security/noSecrets"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "postMessage without a target origin",
+        "file": "sinks.ts",
+        "id": "M01",
+        "line": 263,
+        "hits": {
+          "oxlint": [
+            "unicorn/require-post-message-target-origin"
+          ],
+          "oxlint (env on root)": [
+            "unicorn/require-post-message-target-origin"
+          ],
+          "oxlint +js-plugins": [
+            "unicorn/require-post-message-target-origin"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "unicorn/require-post-message-target-origin"
+          ],
+          "eslint": [
+            "unicorn/require-post-message-target-origin"
+          ],
+          "eslint +type-aware": [
+            "unicorn/require-post-message-target-origin"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "postMessage to \"*\"",
+        "file": "sinks.ts",
+        "id": "M02",
+        "line": 267,
+        "hits": {
+          "eslint +type-aware": [
+            "sonarjs/post-message"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a message listener that doesn't check the origin",
+        "file": "sinks.ts",
+        "id": "M03",
+        "line": 271,
+        "hits": {
+          "eslint +type-aware": [
+            "sonarjs/post-message"
+          ]
+        },
+        "other": {}
+      },
+      {
+        "description": "a clear-text http URL",
+        "file": "sinks.ts",
+        "id": "T01",
+        "line": 279,
+        "hits": {},
+        "other": {
+          "oxlint": [
+            "require-await"
+          ],
+          "oxlint (env on root)": [
+            "require-await"
+          ],
+          "oxlint +js-plugins": [
+            "require-await"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "require-await",
+            "typescript/return-await"
+          ],
+          "eslint": [
+            "require-await"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/return-await"
+          ]
+        }
+      },
+      {
+        "description": "a regex with nested quantifiers",
+        "file": "sinks.ts",
+        "id": "T02",
+        "line": 281,
+        "hits": {
+          "eslint": [
+            "sonarjs/slow-regex"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/slow-regex"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "prefer-named-capture-group"
+          ],
+          "oxlint (env on root)": [
+            "prefer-named-capture-group"
+          ],
+          "oxlint +js-plugins": [
+            "prefer-named-capture-group"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "prefer-named-capture-group"
+          ],
+          "eslint": [
+            "prefer-named-capture-group",
+            "unicorn/consistent-boolean-name"
+          ],
+          "eslint +type-aware": [
+            "prefer-named-capture-group",
+            "unicorn/consistent-boolean-name"
+          ],
+          "biome": [
+            "performance/useTopLevelRegex"
+          ]
+        }
+      },
+      {
+        "description": "a regex with super-linear backtracking",
+        "file": "sinks.ts",
+        "id": "T03",
+        "line": 283,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/super-linear-regex"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/super-linear-regex"
+          ],
+          "eslint": [
+            "sonarjs/super-linear-regex"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/super-linear-regex"
+          ]
+        },
+        "other": {
+          "eslint": [
+            "unicorn/consistent-boolean-name"
+          ],
+          "eslint +type-aware": [
+            "unicorn/consistent-boolean-name"
+          ],
+          "biome": [
+            "performance/useTopLevelRegex"
+          ]
+        }
+      },
+      {
+        "description": "a clear-text http URL on a domain that isn't example.com",
+        "file": "sinks.ts",
+        "id": "T04",
+        "line": 285,
+        "hits": {
+          "oxlint +js-plugins": [
+            "sonarjs/no-clear-text-protocols"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "sonarjs/no-clear-text-protocols"
+          ],
+          "eslint": [
+            "sonarjs/no-clear-text-protocols"
+          ],
+          "eslint +type-aware": [
+            "sonarjs/no-clear-text-protocols"
+          ]
+        },
+        "other": {
+          "oxlint": [
+            "require-await"
+          ],
+          "oxlint (env on root)": [
+            "require-await"
+          ],
+          "oxlint +js-plugins": [
+            "require-await"
+          ],
+          "oxlint +js-plugins +type-aware": [
+            "require-await",
+            "typescript/return-await"
+          ],
+          "eslint": [
+            "require-await"
+          ],
+          "eslint +type-aware": [
+            "@typescript-eslint/return-await"
+          ]
+        }
+      }
+    ],
+    "parseErrors": {
+      "oxlint": [],
+      "oxlint (env on root)": [],
+      "oxlint +js-plugins": [],
+      "oxlint +js-plugins +type-aware": [],
+      "eslint": [],
+      "eslint +type-aware": [],
+      "biome": [],
+      "biome (off in Ultracite)": []
+    },
+    "stray": []
+  },
+  "corpus": {
+    "zod": {
+      "biome": {
+        "suppressions/unused": 3
+      },
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 85,
+        "suppressions/unused": 3
+      },
+      "eslint": {
+        "sonarjs/code-eval": 4,
+        "sonarjs/pseudo-random": 1,
+        "sonarjs/super-linear-regex": 1
+      },
+      "eslintParseErrors": [],
+      "files": 125,
+      "seconds": 2.4
+    },
+    "hono": {
+      "biome": {},
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 12
+      },
+      "eslint": {
+        "github/no-inner-html": 2,
+        "sonarjs/super-linear-regex": 6,
+        "unicorn/no-unsafe-dom-html": 2
+      },
+      "eslintParseErrors": [],
+      "files": 187,
+      "seconds": 1.3
+    },
+    "trpc": {
+      "biome": {},
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 1
+      },
+      "eslint": {
+        "sonarjs/super-linear-regex": 2
+      },
+      "eslintParseErrors": [],
+      "files": 176,
+      "seconds": 1.1
+    },
+    "vite": {
+      "biome": {},
+      "biome (off in Ultracite)": {
+        "nursery/noImpliedEval": 3,
+        "security/noSecrets": 17
+      },
+      "eslint": {
+        "no-new-func": 3,
+        "sonarjs/code-eval": 1,
+        "sonarjs/no-clear-text-protocols": 4,
+        "sonarjs/no-hardcoded-ip": 2,
+        "sonarjs/no-os-command-from-path": 2,
+        "sonarjs/pseudo-random": 2,
+        "sonarjs/super-linear-regex": 24,
+        "unicorn/require-post-message-target-origin": 6
+      },
+      "eslintParseErrors": [],
+      "files": 124,
+      "seconds": 2.2
+    },
+    "astro": {
+      "biome": {
+        "suppressions/unused": 3
+      },
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 54,
+        "suppressions/unused": 3
+      },
+      "eslint": {
+        "github/no-dynamic-script-tag": 2,
+        "github/no-inner-html": 57,
+        "sonarjs/file-permissions": 1,
+        "sonarjs/pseudo-random": 1,
+        "sonarjs/super-linear-regex": 18,
+        "unicorn/no-unsafe-dom-html": 54
+      },
+      "eslintParseErrors": [],
+      "files": 635,
+      "seconds": 4.6
+    },
+    "excalidraw": {
+      "biome": {},
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 87
+      },
+      "eslint": {
+        "github/no-inner-html": 4,
+        "react/jsx-no-target-blank": 6,
+        "sonarjs/no-clear-text-protocols": 1,
+        "sonarjs/pseudo-random": 6,
+        "sonarjs/super-linear-regex": 16,
+        "unicorn/no-unsafe-dom-html": 4
+      },
+      "eslintParseErrors": [],
+      "files": 444,
+      "seconds": 6.3
+    },
+    "next.js": {
+      "biome": {
+        "security/noDangerouslySetInnerHtml": 14,
+        "suspicious/noDocumentCookie": 4,
+        "syntax/correctness/noTypeOnlyImportAttributes": 6
+      },
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 137,
+        "syntax/correctness/noTypeOnlyImportAttributes": 6
+      },
+      "eslint": {
+        "github/no-dynamic-script-tag": 4,
+        "github/no-inner-html": 4,
+        "react/no-danger": 14,
+        "sonarjs/code-eval": 2,
+        "sonarjs/file-permissions": 1,
+        "sonarjs/hashing": 6,
+        "sonarjs/no-clear-text-protocols": 26,
+        "sonarjs/no-os-command-from-path": 6,
+        "sonarjs/pseudo-random": 13,
+        "sonarjs/publicly-writable-directories": 5,
+        "sonarjs/super-linear-regex": 34,
+        "unicorn/no-document-cookie": 4,
+        "unicorn/no-unsafe-dom-html": 3
+      },
+      "eslintParseErrors": [],
+      "files": 1416,
+      "seconds": 13.9
+    },
+    "vscode": {
+      "biome": {},
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 75
+      },
+      "eslint": {
+        "sonarjs/super-linear-regex": 6
+      },
+      "eslintParseErrors": [],
+      "files": 226,
+      "seconds": 2.8
+    },
+    "ultracite": {
+      "biome": {
+        "suppressions/unused": 1
+      },
+      "biome (off in Ultracite)": {
+        "security/noSecrets": 1,
+        "suppressions/unused": 1
+      },
+      "eslint": {
+        "sonarjs/super-linear-regex": 3
+      },
+      "eslintParseErrors": [],
+      "files": 53,
+      "seconds": 0.6
+    }
+  }
+}

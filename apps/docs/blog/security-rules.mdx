@@ -1,0 +1,212 @@
+---
+title: Security lint rules find the sink, not the bug
+description: Where the rules against eval and innerHTML came from, what they see in real code, how few published vulnerabilities they would have caught, and why they still matter when agents write the code.
+date: 2026-10-10
+author: hayden
+rules:
+  - no-eval
+  - no-implied-eval
+  - no-new-func
+  - sonarjs/code-eval
+  - no-script-url
+  - react/no-danger
+  - noDangerouslySetInnerHtml
+---
+
+Cross-site scripting is the [most dangerous software weakness](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html) in MITRE's 2025 ranking, with more than double the score of second place. Code injection, the class `eval` belongs to, is tenth. Lint rules target both: `no-eval`, `no-implied-eval` and `no-new-func` flag code that turns strings into code, and `react/no-danger` and its equivalents flag HTML written straight into the page. Ultracite turns them on.
+
+It would be easy to write a post that stops there. Instead, we checked them against what actually goes wrong. We ran the rules across eight well-known codebases, classified every dangerous call they found, and lined them up against 255 published security advisories for the same projects. The answer is uncomfortable, and more useful than the easy version: these rules almost never catch a real vulnerability. They do something narrower, and when agents write the code, that narrower thing matters more.
+
+## Named to frighten
+
+The warnings are older than the rules. In 2003, Eric Lippert, who worked on Microsoft's JScript, wrote [Eval is evil](https://ericlippert.com/2003/11/01/eval-is-evil-part-one/): "In the majority of cases, eval is used like a sledgehammer swatting a fly." By 2010, Douglas Crockford's JSLint printed "eval is evil." for calls to `eval` and `Function`, and "Implied eval is evil. Pass a function instead of a string." for `setTimeout` with a string, the direct ancestors of today's rules.
+
+The browser side came at the same time. Amit Klein's [2005 paper](http://www.webappsec.org/projects/articles/071105.shtml) on DOM-based XSS listed the places attacker-controlled strings do damage: `eval`, `setTimeout`, `document.write` and `innerHTML`. When Mozilla proposed Content Security Policy [in 2010](https://doi.org/10.1145/1772690.1772784), one of its base rules was "Strings May Not Become Code."
+
+React took a different approach to the same problem. It kept a way to write raw HTML, and gave it a name nobody would type by accident. Its docs explained that ["the prop name `dangerouslySetInnerHTML` is intentionally chosen to be frightening"](https://github.com/facebook/react/blob/v0.13.3/docs/tips/19-dangerously-set-inner-html.md), and that the `{ __html }` wrapper is "a 'type/taint' of sorts." The name has been there since React's first public release.
+
+All of these share one idea: the dangerous operation should be visible. A lint rule that bans `eval` by name is that idea, automated.
+
+## Banning the sink
+
+Security people call these operations sinks: the places where data becomes code or markup. Banning them works better than it sounds, because most uses don't need them. When [Richards et al.](https://doi.org/10.1007/978-3-642-22655-7_4) studied `eval` on the web in 2011, more than 82% of the 100 most popular pages used it, and 76% of the strings they evaluated could have been replaced with something simpler.
+
+The strongest evidence comes from Google. In 2018 it made [compile-time checks mandatory](https://doi.org/10.1109/ICSE43902.2021.00123) for all of its JavaScript, forbidding sinks like `innerHTML` and `eval` in favor of typed, safe APIs, with exemptions only after security review. In one product studied in the paper, DOM-based XSS reports went from 10 in the year before to 2 during the rollout and 1 after. Fewer than 1% of more than a million files needed an exemption. Google has since gone further with Trusted Types, a browser feature that rejects plain strings at the sinks themselves, and [reports](https://github.com/mozilla/standards-positions/issues/20#issuecomment-1783279722) no XSS at all against properties that adopted it. Those last figures are Google's own claims, not a study, but they point the same way.
+
+So banning sinks can work. What Google banned, though, was the operation, with safe replacements and a review for every exception. A lint rule that flags `eval` is the first half of that. Whether it catches vulnerabilities depends on whether the vulnerabilities are at the sinks.
+
+## Another spelling gets through
+
+The rules are syntactic. They look for calls and properties by name, and they can't see what flows into them. That makes them easy to get around, and their own documentation says so. ESLint's `no-eval` notes that it ["cannot catch renaming the global object."](https://eslint.org/docs/latest/rules/no-eval) We ran 136 cases through Oxlint, ESLint and Biome to map the edges:
+
+{/* prettier-ignore */}
+```ts title="sinks.ts"
+eval(code); // caught by all three
+(0, eval)(code); // caught by all three
+globalThis.eval(code); // caught by all three
+window["ev" + "al"](code); // missed by all three
+Function.prototype.constructor(code); // missed by all three
+element.innerHTML = html; // caught by some linters' rule sets, not others
+element["inner" + "HTML"] = html; // missed by all three
+```
+
+A computed property name, a constructor reached through a prototype, or HTML passed through a spread object gets past every one of them. So does a URL or a string of HTML that arrives in a variable, which is how real ones usually arrive. Which plain cases get caught also depends heavily on the linter and its configuration: the configurations we tested caught anywhere from 24 to 83 of the 136 cases.
+
+## One sink worth a second look
+
+In October 2026 we measured the rules across the same eight codebases as [our other research](/research/cognitive-complexity): [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core, 694,309 lines in all. Besides running the rules, we parsed every file and found every injection sink directly: 96 in total, from `innerHTML` writes and `dangerouslySetInnerHTML` to `new Function` and `document.cookie`. There wasn't a single `eval`.
+
+Then we classified what flows into each one:
+
+| What flows into the sink                    | Sinks | Share |
+| ------------------------------------------- | ----- | ----- |
+| A constant                                  | 53    | 55%   |
+| Generated internally and escaped            | 15    | 16%   |
+| Controlled by the developer, such as config | 26    | 27%   |
+| Could carry user data                       | 2     | 2%    |
+
+The broadest rule sets flagged 94 of the 96. Only one of those was a sink worth a second look: an `innerHTML` in Astro's development toolbar that interpolates a URL fetched from a remote API. The other user-controlled sink, an Excalidraw iframe that renders AI-generated HTML, wasn't flagged by anything. The rules can find the sinks, but they can't tell the one that matters from the 93 that don't.
+
+The rules that aren't about injection did worse. A rule against `Math.random()` flagged all 23 calls, and none was security-sensitive: they made IDs, jitter and visual effects. A rule against `target="_blank"` links flagged 6, all of which already had `rel="noopener"`, and missed the one unprotected link, which was set through a DOM property. Rules for hardcoded secrets found nothing, and there was nothing to find.
+
+## The vulnerabilities that actually shipped
+
+Sinks are a proxy. The question that matters is whether the rules would have caught the vulnerabilities these projects actually had. We collected all 255 published security advisories for the eight projects, from 2017 to 2026, classified each one, and asked whether any rule would have flagged the vulnerable code.
+
+Of the 226 we could judge, the rules would have flagged 2: both regular expressions vulnerable to catastrophic backtracking, in Zod and Hono. In 2 more, a rule fired on the sink involved but couldn't see the bug. The other 222 were path traversal, authorization bypasses, cache poisoning, request forgery, and XSS caused by a missing escape. None of them had a construct a syntactic rule could object to.
+
+The XSS fixes make the point most clearly. We linted the code before and after 15 fixes for XSS. No security rule fired on any line the fixes removed. The vulnerable code was an unescaped value in a template, `JSON.stringify` inside a `<script>` tag, an unvalidated attribute name, a `data:` URL let through an allowlist. One of them, [a Next.js XSS](https://github.com/advisories/GHSA-gx5p-jg67-6x7h) through the `beforeInteractive` script strategy, sat right on a `dangerouslySetInnerHTML`. The fix escaped the value and kept the sink, so the rule that flags that line fires on the fixed code exactly as it would have on the vulnerable version.
+
+That matches the wider research. When [Brito et al.](https://doi.org/10.1109/TR.2023.3286301) ran nine static analyzers over 957 real vulnerabilities in npm packages, a bundle of ESLint security rules detected the most, 41.5%, at a precision of about 0.1%: it found them by flagging almost everything. CodeQL found 31.3%, and a third of the vulnerabilities were found by no tool at all.
+
+## Agents reach for the sinks
+
+If the rules catch so little, why turn them on? Because the code they guard is increasingly written by agents, and agents reach for the sinks more often than people do.
+
+The evidence on AI-written code is consistent. When [Fu et al.](https://doi.org/10.1145/3716848) scanned Copilot-generated code in real GitHub projects, 24.2% of the JavaScript snippets had a security weakness, and the two most common were code injection and XSS. In [BaxBench](https://arxiv.org/abs/2502.11844), which attacks the backends models write with real exploits, 90–95% of the working JavaScript backends that could have an XSS vulnerability had one. On SWE-bench, [Sajadi et al.](https://arxiv.org/abs/2507.02976) found eval injection in 39 model-written patches and only one developer patch, which they put down to "the model's tendency to translate task instructions into overly literal code." And agents doing whole tasks do no better: in [SusVibes](https://arxiv.org/abs/2512.03262), the best-scoring setup produced working code 57% of the time and secure code 11.8% of the time.
+
+There's a counterpoint worth keeping. Modern frameworks escape output by default, so an agent writing React mostly can't produce XSS by accident. What it can get wrong are the escape hatches: `dangerouslySetInnerHTML`, `eval`, `javascript:` URLs, raw DOM writes. Those are exactly what these rules see. Meta's [CyberSecEval](https://arxiv.org/abs/2312.04724), one of the standard benchmarks for insecure code from models, detects it with rules that are lint rules in all but name, `eval` and `dangerouslySetInnerHTML` included. By that measure, models suggested insecure code 30% of the time.
+
+Timing is the other half of the argument. At Facebook, the same static analysis that [got a fix rate of "near zero"](https://doi.org/10.1145/3338112) as a nightly batch job got "over 70%" when it reported on each change as it was written: "The same program analysis, with same false positive rate." At Google, developers rated [74% of issues](https://doi.org/10.1145/3188720) flagged at compile time as real problems, against 21% of those found in code already checked in. A lint rule running inside an agent's loop is as early as feedback gets. And the feedback helps: when Fu et al. pasted the static analysis warnings into Copilot Chat along with the code, it fixed 55.5% of the weaknesses, against 19.3% with its own fix command, and XSS went from 0% fixed to 70%. Code injection barely moved.
+
+The risk is the same one the [other posts](/research/type-escape-hatches#when-it-compiles-is-the-goal) describe. A rule that bans `eval` by name can be satisfied by writing it another way, and models are good at that: in [CodeBreaker](https://arxiv.org/abs/2406.06822), GPT-4 rewrote vulnerable code so that it passed Semgrep 84–90% of the time when asked to. Instructions that forbid an agent from disabling rules don't cover a different spelling of the same call. We wanted to know whether agents do this without being asked, so we ran an experiment.
+
+## Asked to fix safe code
+
+In October 2026 we took two of the sinks from our corpus and handed each one to Claude Code and to Codex four times, using the same prompt and permissions Ultracite uses when it passes lint errors to an agent. Both sinks were safe, which made this a test of the common case in the corpus: a security rule firing on code that doesn't need fixing.
+
+- **Vite's [`evalValue`](https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/utils.ts#L1780-L1786)** turns the options object a developer writes in their own `import.meta.glob` or `new Worker` call into a value, by running its text with `new Function`. `no-new-func` and `sonarjs/code-eval` flag it.
+- **Next.js's [`beforeInteractive` script](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/script.tsx#L318-L359)** writes an inline `<script>` with `dangerouslySetInnerHTML`, after escaping the JSON that goes in it. `react/no-danger` flags it twice.
+
+We checked every result against the original: Vite's function on 113 inputs, from real option strings to input that tries to reach the host process, and the Next.js script on 266 sets of props, comparing the rendered HTML byte for byte. Eight runs per function make these examples, not rates.
+
+On the Next.js script, all eight runs made the same change. The escaped script moved out of `dangerouslySetInnerHTML` and into the element's children:
+
+{/* prettier-ignore */}
+```diff title="script.tsx (Next.js, abridged; the same in all eight runs)"
+-<script
+-  nonce={nonce}
+-  dangerouslySetInnerHTML={{
+-    __html: `(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
+-      JSON.stringify([0, { ...restProps, id }])
+-    )})`,
+-  }}
+-/>
++<script nonce={nonce}>
++  {`(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
++    JSON.stringify([0, { ...restProps, id }])
++  )})`}
++</script>
+```
+
+The rendered HTML was identical in all 266 cases, and every linter we tried cleared. It's a real improvement, too, not just a way around the rule. React stops a script's text from closing the element early, which it doesn't do for raw HTML. With the escaping removed, the agents' version still kept every payload inside the script, while the original let markup out in 46 of 266 cases. The rule can't see that difference, though. Put text around the expression and the same rewrite renders an empty script, and every linter accepts that as well. Both agents explained why their change was safe, and three of the four Claude runs warned that it might not hold on older versions of React, which we didn't test.
+
+Vite's function went differently. Only one run in eight removed the risk. A Claude run replaced `new Function` with a parser for the literals Vite accepts, more than 200 lines of it. It matched the original on every real option string and still rejected every invalid one, but it took almost six minutes and cost $1.53. A second Claude run wrote the same kind of parser and left a file that doesn't parse: one of its regular expressions contains two raw line-separator characters, which end a regex literal. It had tried to run its code to check it, and Claude Code, which wasn't permitted to run commands, refused.
+
+All four Codex runs left the code alone. Each one decided that switching to `JSON.parse` "would change runtime behavior", asked whether inputs could be restricted to JSON, waited a minute for an answer a non-interactive run can't receive, and exited. It was the right question, with nobody there to answer it.
+
+The other two Claude runs moved the code execution into Node's `vm` module, which the rules against `eval` and `new Function` don't name:
+
+{/* prettier-ignore */}
+```diff title="utils.ts (Vite, one Claude run)"
++import { runInNewContext } from 'node:vm'
++
+ export function evalValue<T = any>(rawValue: string): T {
+-  const fn = new Function(`
+-    var console, exports, global, module, process, require
+-    return (\n${rawValue}\n)
+-  `)
+-  return fn()
++  // Evaluate in a fresh context so the value can't reach Node globals
++  // (console, exports, global, module, process, require, globalThis)
++  return runInNewContext(`(\n${rawValue}\n)`)
+ }
+```
+
+The comment overstates it. Our checks still read the host's environment variables through the new version, with the well-known `constructor.constructor` trick, though it is more contained than the original, which could reach `process` through `globalThis`. Neither run hid what it had done. Both said in their final message that the input still runs as code, and one put it plainly: "The lint rules check for `Function` and `eval`, not `node:vm`, so they stop firing." Whether that cleared the error depended on the linter. `sonarjs/code-eval` flags `vm` as well, so the change failed the lint the agents were given, but a configuration without that rule would have passed it.
+
+No run used the evasions from our test cases: no `Function.prototype.constructor`, no computed `eval`, no spread `dangerouslySetInnerHTML`, and no suppression comments. What separated the two functions was what the rule asked for. `react/no-danger` names a property, and there was a safe way to write the same thing without it. `sonarjs/code-eval` asks for a judgment: "Make sure that this dynamic injection or execution of code is safe." The code was safe, but the agents' instructions forbid the one way to say so, a suppression comment with a reason. That leaves a rewrite or a refusal, and on Vite's function the agents tried both, with one safe result in eight.
+
+## The limits of matching names
+
+**It sees the sink, not the data.** A rule that flags `innerHTML` flags a constant string the same as a value from a request. In our corpus that meant one sink worth reviewing among 94 flagged.
+
+**Real vulnerabilities are mostly elsewhere.** 222 of 226 judged advisories had nothing a syntactic rule could see. A clean lint run says almost nothing about whether code is secure.
+
+**It's easy to get around.** Computed property names, a constructor reached through a prototype, or a different sink altogether all pass. That doesn't take malice, only the wish to make an error go away.
+
+**It can't be told the code is safe.** On a false positive, the only ways to clear the rule are a rewrite or a suppression. In our experiment, with suppressions ruled out, a seven-line function became a parser of more than 200 lines, a file that doesn't parse, the same capability under another name, or no change at all.
+
+**Noisy rules teach people to ignore all of them.** Google holds its code review analyzers to [under 10% "effective false positives"](https://doi.org/10.1145/3188720), findings developers don't act on, and switches off checks that exceed it, because developers stop trusting them. Rules that flag every `Math.random()` or already-protected link spend that trust on nothing.
+
+**Linters disagree.** The same rule name can cover different cases in different linters, and the defaults range from a handful of security rules to dozens. Two projects that both "lint for security" can be checking very different things.
+
+## Guardrails, not a review
+
+**Treat the rules as guardrails on escape hatches.** They're good at one job: making sure every `eval`, raw HTML write and `javascript:` URL in a codebase was put there on purpose. Use them for that, not as a security review.
+
+**Require a reason for every exception.** A suppression with a comment saying why the input is safe is the review Google required for its exemptions, at the size of a code comment. It also keeps exceptions searchable.
+
+**Prefer the safe API to the suppression.** `textContent` instead of `innerHTML`, `JSON.parse` instead of `eval`, a sanitizer before any HTML you didn't write.
+
+**Back the rules up at runtime.** A Content Security Policy without `'unsafe-eval'`, and Trusted Types where you can, stop the evasions that lint can't see.
+
+**Use analysis that follows data for the real vulnerabilities.** Taint-tracking tools like CodeQL and Semgrep's dataflow rules, plus review, are what find the missing escape and the unchecked path.
+
+**Decide the false positives yourself.** When a security rule fires on code that's already safe, the right change is usually a suppression with a reason. That's a call for a person who knows where the input comes from, not for an agent told to make the error go away.
+
+**Review what an agent changes to fix a security error.** Look for the evasions above, a different sink in place of the flagged one, and suppressions without a reason.
+
+Security lint rules don't find vulnerabilities. In our corpus they flagged 94 sinks to find one worth reviewing, and they would have caught 2 of 226 published advisories. What they do is narrower: they make sure every place a string becomes code or markup was put there on purpose. That job matters more when agents write the code, because agents reach for the sinks, and because the rule's wording decides what an agent does next. A rule that points to a safer API gets the safer API. A rule that asks for a judgment gets a rewrite, a refusal, or the same operation under another name. Keep them on as guardrails, give every exception a reason, and don't mistake a clean run for a security review. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+## References
+
+**History**
+
+- MITRE. [2025 CWE Top 25 Most Dangerous Software Weaknesses](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html). 2025.
+- Eric Lippert. [Eval is evil, part one](https://ericlippert.com/2003/11/01/eval-is-evil-part-one/). _Fabulous Adventures in Coding_, 2003.
+- Amit Klein. [DOM Based Cross Site Scripting or XSS of the Third Kind](http://www.webappsec.org/projects/articles/071105.shtml). Web Application Security Consortium, 2005.
+- Sid Stamm, Brandon Sterne and Gervase Markham. [Reining in the Web with Content Security Policy](https://doi.org/10.1145/1772690.1772784). WWW 2010.
+- React. [Dangerously Set innerHTML](https://github.com/facebook/react/blob/v0.13.3/docs/tips/19-dangerously-set-inner-html.md). React documentation, 2015.
+- ESLint. [no-eval](https://eslint.org/docs/latest/rules/no-eval) rule documentation.
+
+**Sinks and their prevention**
+
+- Gregor Richards, Christian Hammer, Brian Burg and Jan Vitek. [The Eval That Men Do: A Large-scale Study of the Use of Eval in JavaScript Applications](https://doi.org/10.1007/978-3-642-22655-7_4). ECOOP 2011.
+- Pei Wang, Julian Bangert and Christoph Kern. [If It's Not Secure, It Should Not Compile: Preventing DOM-Based XSS in Large-Scale Web Development with API Hardening](https://doi.org/10.1109/ICSE43902.2021.00123). ICSE 2021.
+- Daniel Vogelheim. [Comment on Trusted Types](https://github.com/mozilla/standards-positions/issues/20#issuecomment-1783279722). mozilla/standards-positions #20, 2023.
+
+**Static analysis**
+
+- Tiago Brito, Mafalda Ferreira, Miguel Monteiro, Pedro Lopes, Miguel Barros, José Fragoso Santos and Nuno Santos. [Study of JavaScript Static Analysis Tools for Vulnerability Detection in Node.js Packages](https://doi.org/10.1109/TR.2023.3286301). _IEEE Transactions on Reliability_, 72(4), 2023.
+- Caitlin Sadowski, Edward Aftandilian, Alex Eagle, Liam Miller-Cushon and Ciera Jaspan. [Lessons from Building Static Analysis Tools at Google](https://doi.org/10.1145/3188720). _Communications of the ACM_, 61(4), 2018.
+- Dino Distefano, Manuel Fähndrich, Francesco Logozzo and Peter W. O'Hearn. [Scaling Static Analyses at Facebook](https://doi.org/10.1145/3338112). _Communications of the ACM_, 62(8), 2019.
+
+**AI-written code**
+
+- Yujia Fu, Peng Liang, Amjed Tahir, Zengyang Li, Mojtaba Shahin, Jiaxin Yu and Jinfu Chen. [Security Weaknesses of Copilot-Generated Code in GitHub Projects](https://doi.org/10.1145/3716848). _ACM Transactions on Software Engineering and Methodology_, 34(8), 2025.
+- Mark Vero, Niels Mündler, Victor Chibotaru, Veselin Raychev, Maximilian Baader, Nikola Jovanović, Jingxuan He and Martin Vechev. [BaxBench: Can LLMs Generate Correct and Secure Backends?](https://arxiv.org/abs/2502.11844) ICML 2025.
+- Amirali Sajadi, Kostadin Damevski and Preetha Chatterjee. [How Safe Are AI-Generated Patches? A Large-scale Study on Security Risks in LLM and Agentic Automated Program Repair on SWE-bench](https://arxiv.org/abs/2507.02976). arXiv, 2025.
+- Songwen Zhao, Danqing Wang, Kexun Zhang, Jiaxuan Luo, Zhuo Li and Lei Li. [Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks](https://arxiv.org/abs/2512.03262). ICML 2026.
+- Manish Bhatt et al. [Purple Llama CyberSecEval: A Secure Coding Benchmark for Language Models](https://arxiv.org/abs/2312.04724). arXiv, 2023.
+- Shenao Yan, Shen Wang, Yue Duan, Hanbin Hong, Kiho Lee, Doowon Kim and Yuan Hong. [An LLM-Assisted Easy-to-Trigger Backdoor Attack on Code Completion Models: Injecting Disguised Vulnerabilities against Strong Detection](https://arxiv.org/abs/2406.06822). USENIX Security 2024.

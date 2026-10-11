@@ -1,0 +1,1575 @@
+{
+  "codebook": {
+    "class": {
+      "xss": "HTML, script, CSS or XML injection into a rendered page or document, including DOM clobbering gadgets (CWE-79, 80, 83, 91, 116).",
+      "headers-cookies": "CR/LF or attribute injection into HTTP headers, cookies or SSE fields, and cookie parsing confusion (CWE-113, 74).",
+      "code-execution": "Remote or local code execution: command injection, deserialization, code built from input, memory corruption in native dependencies (CWE-77, 94, 502, 125, 787, 1395).",
+      "path-traversal": "Reading or writing files outside an allowed root, including server.fs bypasses and zip-slip (CWE-22, 23, 50, 58, 69, 73, 177, 178, 180, 706).",
+      "ssrf": "Server-side requests to attacker-chosen hosts, including image proxy allowlist bypasses (CWE-918, 441, 183, 625).",
+      "host-header": "Host or X-Forwarded-Host trusted without validation.",
+      "open-redirect": "CWE-601.",
+      "authz-bypass": "Middleware, routing or authorization checks bypassed (CWE-285, 288, 284, 306, 639, 647, 862, 863, 187, 174).",
+      "csrf-origin": "CSRF protections, origin validation and CORS (CWE-352, 346, 1385, 942).",
+      "cache": "Cache poisoning, deception and cross-user cache leaks (CWE-524, 525, 349, 436, 328).",
+      "request-smuggling": "Inconsistent interpretation of requests (CWE-444, 348).",
+      "dos": "Resource exhaustion and crashes (CWE-400, 770, 674, 834, 407, 248, 754, 20).",
+      "redos": "Regular-expression denial of service (CWE-1333).",
+      "info-disclosure": "Exposure of source, secrets, tokens or other users' data (CWE-200, 201, 209, 219, 497, 522, 488, 362).",
+      "prototype-pollution": "CWE-1321.",
+      "crypto-auth": "Signature verification, JWT handling, timing-safe comparison, nonce reuse (CWE-347, 208, 323, 1284).",
+      "ip-validation": "IP allow/deny lists and client-IP trust (CWE-185, 1289, 345, 636).",
+      "trust-boundary": "VS Code workspace trust, restricted mode, agent and MCP confirmations.",
+      "ci-workflow": "GitHub Actions workflows.",
+      "ui-spoofing": "CWE-451 and similar.",
+      "unspecified": "MSRC entries that give only an impact label (RCE, EoP, spoofing, information disclosure)."
+    },
+    "lint": {
+      "flagged": "A rule in an Ultracite preset reports the vulnerable construct itself, and doing what it asks removes the vulnerability.",
+      "sink-only": "A rule reports the sink or line involved but not the defect: it fires the same way on safe code, or for a different weakness, and the fix doesn't change it.",
+      "not-flagged": "Nothing in the presets reports the vulnerable code; the defect is a missing or wrong check, escape, canonicalization, limit or configuration.",
+      "unknown": "The advisory gives too little detail to judge."
+    },
+    "basis": {
+      "fix-lint": "The fix commit was fetched and both versions of its changed source files were linted (advisory-fixes.json).",
+      "summary+corpus": "Advisory text plus the code at the pinned corpus SHA.",
+      "summary": "Advisory summary and description only."
+    }
+  },
+  "note": "Hand classification by the lead agent (Claude). Classes come from each advisory's CWEs and summary; where an advisory lists several CWEs, the one that names the vulnerable mechanism wins.",
+  "labels": {
+    "GHSA-m85w-3h95-hcf9": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "DOM clobbering: document.scripts could be shadowed by a named element; the fix iterates getElementsByTagName('script'). The same file's github/no-inner-html and no-dynamic-script-tag hits are on other lines and identical before and after."
+    },
+    "GHSA-c4pw-33h3-35xw": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "checkOrigin middleware bypass (logic)."
+    },
+    "GHSA-49w6-73cw-chjr": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Server source exposed through emitted sourcemaps (build output configuration)."
+    },
+    "GHSA-cq8c-xv66-36gw": {
+      "basis": "summary",
+      "class": "open-redirect",
+      "lint": "not-flagged",
+      "note": "Trailing-slash redirect handling."
+    },
+    "GHSA-9x9c-ghc5-jhw9": {
+      "basis": "summary",
+      "class": "open-redirect",
+      "lint": "not-flagged",
+      "note": "Trailing-slash redirect handling in @astrojs/node."
+    },
+    "GHSA-xf8x-j4p2-f749": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "The /_image endpoint served unauthorized third-party images (allowlist logic)."
+    },
+    "GHSA-qpr4-c339-7vq8": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "/_image endpoint fetched arbitrary URLs (Cloudflare adapter)."
+    },
+    "GHSA-5ff5-9fcw-vg88": {
+      "basis": "summary",
+      "class": "host-header",
+      "lint": "not-flagged",
+      "note": "X-Forwarded-Host trusted without validation."
+    },
+    "GHSA-j47w-4mr3-8gq6": {
+      "basis": "summary",
+      "class": "ci-workflow",
+      "lint": "not-flagged",
+      "note": "Code injection in a GitHub Actions workflow (YAML, outside what a JS linter reads)."
+    },
+    "GHSA-qcpr-679q-rhm2": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Bypass of the image proxy domain check."
+    },
+    "GHSA-w2vj-39qv-7vh7": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "The 404 page interpolated the request pathname into an HTML template string; the fix wraps it in escape(). No rule fires before or after."
+    },
+    "GHSA-hr2q-hp5q-x767": {
+      "basis": "summary",
+      "class": "host-header",
+      "lint": "not-flagged",
+      "note": "URL rebuilt from unsanitized headers bypasses path-based middleware."
+    },
+    "GHSA-ggxq-hp9w-j794": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Middleware checks on url.pathname bypassed with URL encoding."
+    },
+    "GHSA-wrwg-2hg8-v723": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Same fix as GHSA-w2vj-39qv-7vh7 (missing escape() in a template string)."
+    },
+    "GHSA-fvmw-cj7j-j39q": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "data: URLs were always allowed by the remote-image allowlist; the fix changes the protocol check."
+    },
+    "GHSA-x3h8-62x9-952g": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Dev-server file read outside the root."
+    },
+    "GHSA-whqg-ppgf-wp8c": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Bypass of the GHSA-ggxq fix (non-canonical paths)."
+    },
+    "GHSA-jm64-8m5q-4qh8": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "No request body size limit for Server Actions."
+    },
+    "GHSA-cj9f-h6r6-4cx2": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Allowlist not enforced in inferSize."
+    },
+    "GHSA-qq67-mvv5-fw3g": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Host header used to fetch the error page."
+    },
+    "GHSA-mr6q-rp88-fx84": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Unauthenticated path override through a request header."
+    },
+    "GHSA-3rmj-9m5h-8fpv": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "No request body size limit for Server Islands."
+    },
+    "GHSA-g735-7g2w-hh3f": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Unanchored wildcard in a pathname allowlist matcher."
+    },
+    "GHSA-c57f-mm3j-27q9": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Malformed If-Match header handled in a cacheable way."
+    },
+    "GHSA-88gm-j2wx-58h6": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Redirects followed by the image transform endpoint."
+    },
+    "GHSA-j687-52p2-xcff": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Incomplete </script> escaping in define:vars (a case-sensitive string replacement)."
+    },
+    "GHSA-xr5h-phrj-8vxv": {
+      "basis": "summary",
+      "class": "crypto-auth",
+      "lint": "not-flagged",
+      "note": "Encrypted server-island parameters replayable across components."
+    },
+    "GHSA-2pvr-wf23-7pc7": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Host header used to fetch a prerendered error page."
+    },
+    "GHSA-jrpj-wcv7-9fh9": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Attribute names from spread props not escaped during SSR (string building)."
+    },
+    "GHSA-529g-xq4f-cw38": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Adapter widened the image allowlist in generated CDN config."
+    },
+    "GHSA-8hv8-536x-4wqp": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Slot name not escaped during SSR."
+    },
+    "GHSA-vj59-8hwv-xxmv": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Decode-iteration limit and rewrite canonicalization mismatch."
+    },
+    "GHSA-hp3v-mfqw-h74c": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Allowlist regex built from config without escaping metacharacters (a regex-correctness bug, not backtracking)."
+    },
+    "GHSA-8j5q-mfj2-5q9q": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "RSS source/enclosure fields interpolated into an XML template string before parsing; the fix builds objects instead."
+    },
+    "GHSA-r557-wffq-wvrc": {
+      "basis": "summary",
+      "class": "open-redirect",
+      "lint": "not-flagged",
+      "note": "Backslash-prefixed paths not treated as internal."
+    },
+    "GHSA-4g3v-8h47-v7g6": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "JSON.stringify inside an inline <script>, an unescaped URL in a <link> attribute and CSS text in <style>; the fix adds script-, attribute- and CSS-safe escaping. No rule fires."
+    },
+    "GHSA-x27w-589x-frm2": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Unauthenticated ISR path override."
+    },
+    "GHSA-8mv7-9c27-98vc": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "checkOrigin skipped when middleware is absent or misordered."
+    },
+    "GHSA-f48w-9m4c-m7f5": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Attribute names on custom elements were not validated during SSR; the fix adds a character check."
+    },
+    "GHSA-7pw4-f3q4-r2p2": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "transition:* directive values copied into island props without escapeHTML."
+    },
+    "GHSA-26w7-cxv4-gfx2": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "Memory corruption in the AVIF image decoder (native dependency)."
+    },
+    "GHSA-4233-jc72-56c5": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Permissive regex in a generated image CDN allowlist."
+    },
+    "GHSA-376h-93r7-7g6f": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Base path stripped by prefix match without a segment boundary."
+    },
+    "GHSA-qh8j-hqjv-7m4x": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Malformed Host port throws and crashes the adapter."
+    },
+    "GHSA-v7v8-gjv7-ffmr": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "User-controlled element links went straight into href={element.link} and setAttribute('href', ...); no-script-url and jsx-no-script-url only see literal javascript: strings. The fix runs links through sanitizeUrl."
+    },
+    "GHSA-m64q-4jqh-f72f": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "The embed iframe's sandbox flags are computed at runtime; the fix narrows which domains get allow-same-origin. react/iframe-missing-sandbox can't evaluate a dynamic sandbox value."
+    },
+    "GHSA-39h7-pwv7-rc3x": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "XSS in a dependency (Mermaid KaTeX labels), fixed by a version bump."
+    },
+    "GHSA-f6gv-hh8j-q8vq": {
+      "basis": "fix-lint",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Labelled CWE-94, but the bug is a params object shared between matched handlers in TrieRouter."
+    },
+    "GHSA-3mpf-rcc7-5347": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "serveStatic on Deno."
+    },
+    "GHSA-rpfr-3m35-5vx5": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "CSRF middleware bypass."
+    },
+    "GHSA-2234-fmw7-43wr": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "CSRF middleware bypass without a Content-Type header."
+    },
+    "GHSA-9hp6-4448-45g2": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "URL path parsing confusion."
+    },
+    "GHSA-92vj-g62v-jqhh": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Body limit middleware bypass."
+    },
+    "GHSA-m732-5p4w-x69g": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Improper authorization."
+    },
+    "GHSA-q7jf-gf43-6x6p": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "Vary header injection leading to a CORS bypass."
+    },
+    "GHSA-3vhc-576x-3qv4": {
+      "basis": "summary",
+      "class": "crypto-auth",
+      "lint": "not-flagged",
+      "note": "JWT algorithm taken from the token header when the JWK lacks alg. sonarjs/insecure-jwt-token only models the jsonwebtoken package's none algorithm."
+    },
+    "GHSA-f67f-6cw9-8mq4": {
+      "basis": "fix-lint",
+      "class": "crypto-auth",
+      "lint": "not-flagged",
+      "note": "Unsafe HS256 default in hono's own JWT code; the fix makes alg required."
+    },
+    "GHSA-9r54-q6cx-xmh5": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "ErrorBoundary children rendered as raw HTML; the fix resolves children through the escaping path."
+    },
+    "GHSA-w332-q679-j88p": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Arbitrary KV key read in serveStatic (Workers)."
+    },
+    "GHSA-r354-f388-2fhh": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "not-flagged",
+      "note": "IPv4 validation regex accepted invalid input (correctness, not backtracking)."
+    },
+    "GHSA-6wqw-2p9w-4vw4": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache middleware ignored Cache-Control: private."
+    },
+    "GHSA-gq3j-xvxp-8hrf": {
+      "basis": "fix-lint",
+      "class": "crypto-auth",
+      "lint": "not-flagged",
+      "note": "Timing-unsafe comparison in basicAuth/bearerAuth; no rule in the presets looks for non-constant-time comparisons."
+    },
+    "GHSA-xh87-mx6m-69f3": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "not-flagged",
+      "note": "Client IP taken from a spoofable header on ALB."
+    },
+    "GHSA-5pq2-9x2x-5p6w": {
+      "basis": "fix-lint",
+      "class": "headers-cookies",
+      "lint": "not-flagged",
+      "note": "setCookie did not reject ; CR LF in domain/path; the fix only adds a check."
+    },
+    "GHSA-p6xx-57qc-3wxr": {
+      "basis": "fix-lint",
+      "class": "headers-cookies",
+      "lint": "not-flagged",
+      "note": "writeSSE did not reject CR/LF in event/id/retry; the fix only adds a check."
+    },
+    "GHSA-q5qw-h33p-qvwr": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "serveStatic URL decoding."
+    },
+    "GHSA-v8w9-8mx6-g223": {
+      "basis": "fix-lint",
+      "class": "prototype-pollution",
+      "lint": "not-flagged",
+      "note": "__proto__ path segments accepted by parseBody({ dot: true }); the fix adds a key check. No rule here tracks dynamic keys."
+    },
+    "GHSA-r5rp-j6wh-rvv4": {
+      "basis": "summary",
+      "class": "headers-cookies",
+      "lint": "not-flagged",
+      "note": "Cookie names with a non-breaking-space prefix parsed as another cookie."
+    },
+    "GHSA-26pp-8wgv-hjvm": {
+      "basis": "summary",
+      "class": "headers-cookies",
+      "lint": "not-flagged",
+      "note": "Cookie name not validated on write."
+    },
+    "GHSA-xpcf-pg52-r92g": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "not-flagged",
+      "note": "IPv4-mapped IPv6 addresses not matched by ipRestriction."
+    },
+    "GHSA-xf4j-xp2r-rqqx": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "toSSG wrote outside the output directory."
+    },
+    "GHSA-wmmm-f939-6g9c": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Repeated slashes bypassed middleware in front of serveStatic."
+    },
+    "GHSA-458j-xx4x-4375": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "JSX attribute names not validated during SSR."
+    },
+    "GHSA-9vqf-7f2p-gf9v": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "bodyLimit bypass for chunked requests."
+    },
+    "GHSA-69xw-7hcm-h432": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "JSX tag names not validated during SSR."
+    },
+    "GHSA-hm8q-7f3q-5f36": {
+      "basis": "summary",
+      "class": "crypto-auth",
+      "lint": "not-flagged",
+      "note": "JWT NumericDate claims not validated."
+    },
+    "GHSA-qp7p-654g-cw7p": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "CSS declaration injection through style object values in JSX SSR."
+    },
+    "GHSA-p77w-8qqv-26rm": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache middleware ignored Vary: Authorization/Cookie."
+    },
+    "GHSA-2gcr-mfcq-wcc3": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "app.mount() stripped the prefix from the undecoded path."
+    },
+    "GHSA-xrhx-7g5j-rcj5": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "not-flagged",
+      "note": "Non-canonical IPv6 bypassed static deny rules."
+    },
+    "GHSA-3hrh-pfw6-9m5x": {
+      "basis": "summary",
+      "class": "headers-cookies",
+      "lint": "not-flagged",
+      "note": "sameSite/priority not sanitized in setCookie."
+    },
+    "GHSA-f577-qrjj-4474": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "JWT middleware accepted any Authorization scheme."
+    },
+    "GHSA-wwfh-h76j-fc44": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Encoded backslash on Windows."
+    },
+    "GHSA-88fw-hqm2-52qc": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "CORS middleware reflected any Origin with credentials. sonarjs/cors models the cors package and literal header values; hono sets the header from a variable, and calibration V09 shows even a literal res.setHeader(\"Access-Control-Allow-Origin\", \"*\") isn't flagged."
+    },
+    "GHSA-rv63-4mwf-qqc2": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Body limit bypass with an understated Content-Length on Lambda."
+    },
+    "GHSA-wgpf-jwqj-8h8p": {
+      "basis": "summary",
+      "class": "request-smuggling",
+      "lint": "not-flagged",
+      "note": "Lambda@Edge adapter kept only the last value of a repeated header."
+    },
+    "GHSA-j6c9-x7qj-28xf": {
+      "basis": "summary",
+      "class": "headers-cookies",
+      "lint": "not-flagged",
+      "note": "Lambda adapter merged multiple Set-Cookie headers."
+    },
+    "GHSA-xgm2-5f3f-mvvc": {
+      "basis": "summary",
+      "class": "request-smuggling",
+      "lint": "not-flagged",
+      "note": "API Gateway adapter dropped a repeated header value."
+    },
+    "GHSA-w62v-xxxg-mg59": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "cx() class names marked as escaped without being escaped; the fix escapes them."
+    },
+    "GHSA-hvrm-45r6-mjfj": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "JSX context shared across requests."
+    },
+    "GHSA-f23p-vx2j-j53r": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "memo() kept SSR output across requests."
+    },
+    "GHSA-79qm-7rj5-m7r9": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Proxy helper kept hop-by-hop headers."
+    },
+    "GHSA-54fx-42gc-7vw4": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Algorithmic complexity in the language middleware."
+    },
+    "GHSA-8j4g-w8fx-2239": {
+      "basis": "fix-lint",
+      "class": "redos",
+      "lint": "flagged",
+      "rule": "sonarjs/super-linear-regex",
+      "note": "requestHeaders.split(/\\s*,\\s*/) is flagged by super-linear-regex in both Oxlint (js-plugins) and ESLint; the fix replaces the regex and the hit goes away."
+    },
+    "GHSA-g6gw-c38x-mqfc": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Unbounded dot-notation nesting in parseBody."
+    },
+    "GHSA-gqvv-2mrq-wpjv": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Incomplete fix for GHSA-xf4j (toSSG)."
+    },
+    "GHSA-crvj-82cr-hjcx": {
+      "basis": "summary",
+      "class": "request-smuggling",
+      "lint": "not-flagged",
+      "note": "Query parsed after the URL fragment."
+    },
+    "GHSA-hxh3-vqpv-xpqv": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Plain strings in boundary components rendered without escaping; the fix routes them through renderChildren."
+    },
+    "GHSA-5r4p-p66f-jhc7": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "serveStatic decoded the path twice."
+    },
+    "GHSA-3f5c-4qxj-vmpf": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "2017 directory traversal."
+    },
+    "GHSA-m34x-wgrh-g897": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "2018 directory traversal."
+    },
+    "GHSA-qw96-mm2g-c8m7": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "unknown",
+      "note": "Next.js 7 /_error page XSS; no fix or detail linked."
+    },
+    "GHSA-fq77-7p7r-83rj": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Directory traversal below 9.3.2."
+    },
+    "GHSA-5vj8-3v2h-h38v": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "The /path: route passed unsanitized input to require() (Next.js < 5.1). No rule in the presets flags a non-literal require() (calibration V19)."
+    },
+    "GHSA-x56p-c8cg-q435": {
+      "basis": "summary",
+      "class": "open-redirect",
+      "lint": "not-flagged",
+      "note": "Open redirect in 9.5.x."
+    },
+    "GHSA-vxf5-wxwp-m7g9": {
+      "basis": "summary",
+      "class": "open-redirect",
+      "lint": "not-flagged",
+      "note": "Open redirect below 11.1.0."
+    },
+    "GHSA-9gr3-7897-pp7m": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Image optimizer served SVG without a CSP; the fix only adds a header."
+    },
+    "GHSA-25mp-g6fv-mqxx": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server crash on malformed input."
+    },
+    "GHSA-wr66-vrwm-5g5x": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "i18n DoS."
+    },
+    "GHSA-fmvm-x8mv-47mj": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Image optimizer served user SVG without proper CSP."
+    },
+    "GHSA-wff4-fpwg-qqv3": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Uncaught exception."
+    },
+    "GHSA-c59h-r6p8-q9wc": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Missing cache-control header."
+    },
+    "GHSA-77r5-gw3j-2mpf": {
+      "basis": "summary",
+      "class": "request-smuggling",
+      "lint": "not-flagged",
+      "note": "HTTP request smuggling."
+    },
+    "GHSA-fr5h-rqp8-mj6g": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Server Actions SSRF via the Host header."
+    },
+    "GHSA-fq54-2j52-jc42": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "DoS condition."
+    },
+    "GHSA-gp8f-8m3g-qvj9": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache poisoning."
+    },
+    "GHSA-g77x-44xx-532m": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Uncontrolled recursion in image optimization."
+    },
+    "GHSA-7gfc-8cq8-jh5f": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Authorization bypass."
+    },
+    "GHSA-7m27-7ghc-44w9": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server Actions DoS."
+    },
+    "GHSA-f82v-jwr5-mffw": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "x-middleware-subrequest header skipped middleware."
+    },
+    "GHSA-223j-4rm8-mrmf": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Internal header leaked to external hosts."
+    },
+    "GHSA-qpjv-v59x-3qc4": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Race condition to cache poisoning."
+    },
+    "GHSA-3h52-269p-cp9r": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "Dev server WebSocket without origin verification."
+    },
+    "GHSA-r2fc-ccr8-96c4": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Missing Vary header."
+    },
+    "GHSA-67rr-84xm-4c7r": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "DoS via cache poisoning."
+    },
+    "GHSA-4342-x723-ch2f": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Middleware redirect handling."
+    },
+    "GHSA-xv57-4mr9-wg8v": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Image optimizer could serve attacker-controlled downloads; the fix stops forwarding request headers. No rule fires."
+    },
+    "GHSA-g5qg-72qw-gw5v": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache key confusion in the image optimizer."
+    },
+    "GHSA-9qr9-h5gf-34mp": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "Deserialization RCE in React's Flight protocol (React2Shell); the defect is in React."
+    },
+    "GHSA-5j59-xgg2-r9c4": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server Components DoS (incomplete fix)."
+    },
+    "GHSA-w37m-7fhw-fmv9": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Server Actions source code exposure."
+    },
+    "GHSA-mwv6-3258-q52c": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server Components DoS."
+    },
+    "GHSA-9g9p-9gw9-jx7f": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Image optimizer DoS."
+    },
+    "GHSA-5f7q-jpqc-wp7h": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Partial prerendering DoS."
+    },
+    "GHSA-h25m-26qc-wcjf": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server Components DoS."
+    },
+    "GHSA-3x4c-7xq6-9pq8": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Unbounded image cache growth."
+    },
+    "GHSA-mq59-m269-xvcx": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "Origin: null bypassed the Server Actions CSRF check."
+    },
+    "GHSA-jcc7-9wpm-mj36": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "Origin: null bypassed allowedDevOrigins."
+    },
+    "GHSA-h27x-g6w4-24gq": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Unbounded postponed resume buffering."
+    },
+    "GHSA-ggv3-7p47-pfv8": {
+      "basis": "summary",
+      "class": "request-smuggling",
+      "lint": "not-flagged",
+      "note": "Request smuggling in rewrites."
+    },
+    "GHSA-q4gf-8mx6-v5v3": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server Components DoS."
+    },
+    "GHSA-267c-6grr-h53f": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Middleware bypass via segment-prefetch routes."
+    },
+    "GHSA-ffhc-5mcf-pf4q": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Malformed CSP nonce from a request header reflected into an HTML attribute; the fix validates the nonce."
+    },
+    "GHSA-vfv6-92ff-j949": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Collisions in a short cache-busting hash. sonarjs/hashing only flags MD5/SHA-1 through crypto APIs."
+    },
+    "GHSA-gx5p-jg67-6x7h": {
+      "basis": "summary+corpus",
+      "class": "xss",
+      "lint": "sink-only",
+      "rule": "react/no-danger",
+      "note": "beforeInteractive script content embedded without escaping. At the pinned SHA, _document.tsx renders those scripts through dangerouslySetInnerHTML, which react/no-danger and noDangerouslySetInnerHtml flag; they flag it the same way after the fix, which only escapes the value."
+    },
+    "GHSA-mg66-mrh9-m8jx": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Connection exhaustion with Cache Components."
+    },
+    "GHSA-492v-c6pp-mqqv": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Middleware bypass through route parameter injection."
+    },
+    "GHSA-h64f-5h5j-jqjh": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Image Optimization API DoS."
+    },
+    "GHSA-c4j6-fc7j-m34r": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "SSRF via WebSocket upgrades."
+    },
+    "GHSA-wfc6-r584-vfw7": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache poisoning of RSC responses."
+    },
+    "GHSA-36qx-fr4f-26g5": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Middleware bypass with i18n."
+    },
+    "GHSA-8h8q-6873-q5fj": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Server Components DoS."
+    },
+    "GHSA-3g8h-86w9-wvmq": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Redirects cache-poisoned."
+    },
+    "GHSA-26hh-7cqf-hhc6": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Incomplete fix for GHSA-267c."
+    },
+    "GHSA-p9j2-gv94-2wf4": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Rewrite destination hostname controlled by the attacker."
+    },
+    "GHSA-4c39-4ccg-62r3": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Unbounded Server Action payload on Edge."
+    },
+    "GHSA-89xv-2m56-2m9x": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Server Actions SSRF on custom servers."
+    },
+    "GHSA-68g3-v927-f742": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache confusion for requests with bodies."
+    },
+    "GHSA-6gpp-xcg3-4w24": {
+      "basis": "summary",
+      "class": "authz-bypass",
+      "lint": "not-flagged",
+      "note": "Middleware bypass with Turbopack and a single locale."
+    },
+    "GHSA-m99w-x7hq-7vfj": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "Excessive iteration in Server Actions."
+    },
+    "GHSA-4633-3j49-mh5q": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache confusion for bodies with invalid UTF-8."
+    },
+    "GHSA-q8wf-6r8g-63ch": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "SVG complexity in the image optimizer."
+    },
+    "GHSA-955p-x3mx-jcvp": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Internal Server Function endpoints disclosed."
+    },
+    "GHSA-2xp9-vwfh-vxw4": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "RCE in a vulnerable AVIF dependency."
+    },
+    "GHSA-p293-qw3h-jr36": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Path traversal leading to RCE on Windows hosts."
+    },
+    "GHSA-vcvr-r3jv-pc5j": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "RCE in a vulnerable dependency of next/og."
+    },
+    "GHSA-h694-7cp9-m8p3": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache leak across root params."
+    },
+    "GHSA-3w37-wq28-93x7": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Draft Mode content leaked into cached responses."
+    },
+    "GHSA-cjq9-62q9-8jv4": {
+      "basis": "summary",
+      "class": "ssrf",
+      "lint": "not-flagged",
+      "note": "Image Optimization SSRF."
+    },
+    "GHSA-39w2-rjm5-chcv": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "Dev server MCP endpoint without origin validation."
+    },
+    "GHSA-4jqv-mc3x-m676": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache poisoning of SSG/ISR pages."
+    },
+    "GHSA-mcj8-r9mp-w47p": {
+      "basis": "summary",
+      "class": "cache",
+      "lint": "not-flagged",
+      "note": "Cache poisoning in SSG/ISR rendering."
+    },
+    "GHSA-f87g-xv8r-7p7x": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "dynamicParams bypass on metadata image routes."
+    },
+    "GHSA-pj3v-9cm8-gvj8": {
+      "basis": "summary",
+      "class": "dos",
+      "lint": "not-flagged",
+      "note": "WebSocket DoS (uncaught exception)."
+    },
+    "GHSA-43p4-m455-4f4j": {
+      "basis": "fix-lint",
+      "class": "prototype-pollution",
+      "lint": "not-flagged",
+      "note": "formDataToObject wrote obj[key] for __proto__/constructor; the fix adds a key check and Object.create(null)."
+    },
+    "GHSA-mv48-hcvh-8jj8": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Directory traversal (2022)."
+    },
+    "GHSA-353f-5xf4-qw67": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with //."
+    },
+    "GHSA-92r3-m2mg-pj97": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "transformIndexHtml reflected the request URL into an html-proxy script src (string building)."
+    },
+    "GHSA-c24v-8rfc-w8vw": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass on case-insensitive filesystems."
+    },
+    "GHSA-8jhw-289h-jh2g": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny with directory patterns."
+    },
+    "GHSA-64vr-g452-qvp3": {
+      "basis": "fix-lint",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "DOM clobbering of document.currentScript in an emitted runtime snippet (a string of code); the fix checks tagName."
+    },
+    "GHSA-9cwx-2883-4wfx": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with ?import&raw."
+    },
+    "GHSA-vg6x-rcgg-rjx6": {
+      "basis": "summary",
+      "class": "csrf-origin",
+      "lint": "not-flagged",
+      "note": "Dev server answered cross-origin requests."
+    },
+    "GHSA-x574-m823-4x7w": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with ?raw??."
+    },
+    "GHSA-4r4m-qw57-chr8": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with ?import."
+    },
+    "GHSA-xcj6-pq6g-qj4x": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with .svg or relative paths."
+    },
+    "GHSA-356w-63v5-8wf4": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with an invalid request-target."
+    },
+    "GHSA-859w-5945-r5v3": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with /."
+    },
+    "GHSA-g4jq-h2w9-997c": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Prefix match on the public directory name."
+    },
+    "GHSA-jqfw-vq24-v9c3": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs not applied to HTML files."
+    },
+    "GHSA-93m4-6634-74q7": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with backslashes on Windows."
+    },
+    "GHSA-4w7w-66w2-5vf9": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Path traversal in optimized-deps .map handling."
+    },
+    "GHSA-v2wj-q39q-566r": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with queries."
+    },
+    "GHSA-p9ff-h696-f583": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Arbitrary file read through the dev server WebSocket."
+    },
+    "GHSA-fx2h-pf6j-xcff": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "server.fs.deny bypass with Windows alternate paths."
+    },
+    "GHSA-c27g-q93r-2cwf": {
+      "basis": "fix-lint",
+      "class": "code-execution",
+      "lint": "sink-only",
+      "rule": "sonarjs/no-os-command-from-path",
+      "note": "Command injection through cmd.exe in launch-editor. sonarjs/no-os-command-from-path fires on the vulnerable spawn('cmd.exe', ...) line, but for resolving cmd.exe through PATH, not for the unescaped arguments; the fix (exec with escaping) isn't flagged."
+    },
+    "GHSA-v6wh-96g9-6wx3": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "NTLM hash disclosure via UNC paths (launch-editor)."
+    },
+    "GHSA-rq7h-c2jc-7f22": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Files outside server.fs.allow when project paths match system paths."
+    },
+    "GHSA-vfpm-58rq-9qcg": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "First bytes of files outside server.fs exposed."
+    },
+    "GHSA-9jrq-w75r-8gcw": {
+      "basis": "summary",
+      "class": "xss",
+      "lint": "not-flagged",
+      "note": "Request URL passed to transformIndexHtml let another origin load scripts (path handling)."
+    },
+    "GHSA-5q6q-39p2-37cx": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-9rwm-gmc5-vhrf": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Spoofing, no detail."
+    },
+    "GHSA-wrm3-w8h4-q8mx": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Elevation of Privilege, no detail."
+    },
+    "GHSA-jfjw-mv65-hg44": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-6c5x-m47q-5xmf": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Elevation of Privilege, no detail."
+    },
+    "GHSA-fj7x-w8c2-xx4c": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Information Disclosure, no detail."
+    },
+    "GHSA-q6rv-h25q-6pj6": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-p996-wrgh-crrj": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-4v3r-wv86-6mjj": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-mmfh-4pv3-39hr": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Information Disclosure, no detail."
+    },
+    "GHSA-j5wm-6crw-xvmr": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Information Disclosure, no detail."
+    },
+    "GHSA-r6q2-478f-5gmr": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-5cm6-54wm-6gg6": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-54p6-6j68-j5vr": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Elevation of Privilege, no detail."
+    },
+    "GHSA-g56j-w527-8x6f": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution (Linux), no detail."
+    },
+    "GHSA-f85p-3684-2g3j": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Elevation of Privilege, no detail."
+    },
+    "GHSA-532g-4pv9-25f2": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Elevation of Privilege, no detail."
+    },
+    "GHSA-hwrx-jgf2-74hw": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-742r-ggwg-vqxm": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Security Feature Bypass, no detail."
+    },
+    "GHSA-3pwg-f3hj-wp8p": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "terminal.integrated.autoReplies not marked restricted; the fix is a configuration flag."
+    },
+    "GHSA-g84c-g4wq-2pwp": {
+      "basis": "summary",
+      "class": "ui-spoofing",
+      "lint": "not-flagged",
+      "note": "Unicode in URLs shown by Copilot Chat not escaped."
+    },
+    "GHSA-w79r-pmq3-8v4f": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "apply_patch sensitive-file check bypassed."
+    },
+    "GHSA-6xq8-9qf3-p6qv": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Workspace trust not applied to MCP servers."
+    },
+    "GHSA-9f6c-63gp-pwpf": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "MCP deeplink install lacked confirmation detail."
+    },
+    "GHSA-rg3f-8xq5-hwh6": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "apply_patch sensitive-file workaround."
+    },
+    "GHSA-5vj9-2628-2rm4": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "Wrong buffer size in the webview protocol handler (the description names the fix)."
+    },
+    "GHSA-v32f-vf7g-ggmw": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "Same webview buffer bug, reached through notebook markdown rendering."
+    },
+    "GHSA-qcxw-jfff-cxpc": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Unanchored /github\\.com/i host check sent tokens to look-alike hosts (regex correctness, not backtracking)."
+    },
+    "GHSA-hgwg-xqr5-q87f": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Zip-slip in profile snippet import."
+    },
+    "GHSA-c82g-9gj4-hxp2": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Auto-approved file write via an environment-variable path."
+    },
+    "GHSA-5j3g-c7qg-xfvx": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Remote host connection from a workspace file without confirmation (lists CWE-798, but the summary is about confirmation)."
+    },
+    "GHSA-wr9x-42j2-jvh3": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Hidden workspace settings sent the Copilot token to an attacker's server; the fix honours them only in trusted workspaces."
+    },
+    "GHSA-9mw4-h26x-gfxw": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "unknown",
+      "note": "Workspace Trust bypass, no detail."
+    },
+    "GHSA-v282-cxqj-xgj4": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "MSRC: Remote Code Execution, no detail."
+    },
+    "GHSA-3hjg-cwxj-qfc6": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "unknown",
+      "note": "Copilot Chat security feature bypass, no detail."
+    },
+    "GHSA-vcpf-2mpp-vx3v": {
+      "basis": "summary",
+      "class": "unspecified",
+      "lint": "unknown",
+      "note": "Information disclosure, no detail."
+    },
+    "GHSA-fp6w-v29h-43rj": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "NODE_OPTIONS controlled by a URL in VS Code Web's remote terminal."
+    },
+    "GHSA-w79w-rj9h-vg4f": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "unknown",
+      "note": "Copilot custom agent hook RCE, no detail."
+    },
+    "GHSA-h9j4-x76r-fvj4": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Workspace Trust bypass via terminal waitOnExit."
+    },
+    "GHSA-h29r-p8vr-4vfm": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "NODE_OPTIONS --import taken from a URL payload."
+    },
+    "GHSA-h6v9-3cqc-v234": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "Local RCE via an extensions.json recommendation link opening a terminal."
+    },
+    "GHSA-36qf-jgq9-4m6j": {
+      "basis": "summary",
+      "class": "code-execution",
+      "lint": "not-flagged",
+      "note": "Fetch tool launched OS protocol handlers without authorization."
+    },
+    "GHSA-6xp2-9cj3-f488": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "not-flagged",
+      "note": "Agent network filter bypassed with IPv4-mapped IPv6 literals."
+    },
+    "GHSA-4gv7-q2x8-32p8": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "unknown",
+      "note": "Agent network filter bypass, no detail."
+    },
+    "GHSA-4xcg-6mm5-hj26": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "unknown",
+      "note": "Agent network filter bypass, no detail."
+    },
+    "GHSA-g6p5-6xp8-5jwg": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "MCP gallery metadata path traversal."
+    },
+    "GHSA-vww8-mqc2-4x8v": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Remote images fetched automatically in chat."
+    },
+    "GHSA-rvgr-2w56-2j67": {
+      "basis": "summary",
+      "class": "info-disclosure",
+      "lint": "not-flagged",
+      "note": "Azure DevOps token disclosed through workspace settings."
+    },
+    "GHSA-x5qc-gqm7-93qp": {
+      "basis": "summary",
+      "class": "path-traversal",
+      "lint": "not-flagged",
+      "note": "Webview resource path containment bypass."
+    },
+    "GHSA-2cmq-rv52-5rf6": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Workspace-configured remote agent host connections."
+    },
+    "GHSA-hr37-8jwr-q8p8": {
+      "basis": "summary",
+      "class": "ip-validation",
+      "lint": "unknown",
+      "note": "Agent network filter bypass, no detail."
+    },
+    "GHSA-r2gr-w3c8-wvqv": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Workspace Trust bypass through attacker-controlled services (incomplete comparison)."
+    },
+    "GHSA-q2f8-hh8x-wpc2": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "not-flagged",
+      "note": "Restricted Mode bypass through nested configuration objects (incomplete denylist)."
+    },
+    "GHSA-2mjm-fqwf-jq98": {
+      "basis": "summary",
+      "class": "trust-boundary",
+      "lint": "unknown",
+      "note": "Trusted URL validation bypass, no detail."
+    },
+    "GHSA-m95q-7qp3-xv42": {
+      "basis": "fix-lint",
+      "class": "redos",
+      "lint": "flagged",
+      "rule": "sonarjs/slow-regex",
+      "note": "The email regex /^([A-Z0-9_+-]+\\.?)*…/ is flagged by sonarjs/slow-regex in ESLint (core preset); the fix's regex isn't. Oxlint misses it: slow-regex isn't in the js-plugins preset (sonarjs marks it type-aware), and super-linear-regex doesn't report this pattern."
+    }
+  }
+}

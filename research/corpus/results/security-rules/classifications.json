@@ -1,0 +1,1847 @@
+{
+  "codebook": {
+    "injection": {
+      "kinds": [
+        "function-constructor",
+        "eval",
+        "timer-string",
+        "vm",
+        "html-property",
+        "html-method",
+        "document-write",
+        "dangerously-set-inner-html",
+        "script-element",
+        "cookie-write"
+      ],
+      "question": "What flows into the sink?",
+      "categories": {
+        "constant": "A literal or static string, or markup assembled only from constants in the source (icons, fixed templates). Clearing with \"\" counts here.",
+        "escaped": "Generated internally and escaped or serialized for the context before the sink (e.g. JSON with HTML-escaping, framework-escaped attributes).",
+        "sanitized": "Arbitrary input that passes through a sanitizer or allowlist before the sink.",
+        "trusted-dev": "Developer- or build-controlled input: project config, compiled code, files on the developer's machine, the framework's own runtime chunks or manifests.",
+        "user-controlled": "Could carry attacker-controlled data at runtime without escaping: request data, URL parts, user documents, third-party responses, error text that can include any of these."
+      }
+    },
+    "javascript-url": {
+      "kinds": [
+        "javascript-url"
+      ],
+      "question": "Is this a javascript: URL being used, or code that defends against one?",
+      "categories": {
+        "sink": "A javascript: URL that is navigated to or rendered.",
+        "defense": "A check, regex or error message that blocks javascript: URLs."
+      }
+    },
+    "randomness": {
+      "kinds": [
+        "math-random"
+      ],
+      "question": "What is the random value used for?",
+      "categories": {
+        "security-sensitive": "A token, secret, nonce or identifier whose unpredictability protects something.",
+        "unique-id": "A non-secret identifier (element ids, cache-busting, temp names, request ids for logs).",
+        "jitter-sampling": "Retry jitter, sampling decisions, load spreading.",
+        "visual-or-dev": "Visual variation, seeds for drawing, demo data, dev-only tooling."
+      }
+    },
+    "links": {
+      "kinds": [
+        "target-blank",
+        "window-open"
+      ],
+      "question": "Can the opened page reach window.opener?",
+      "categories": {
+        "protected": "rel/features include noopener or noreferrer.",
+        "unprotected-internal": "No noopener, but the destination is same-origin or the app's own docs.",
+        "unprotected-external": "No noopener and an external or arbitrary destination (protected only by modern browsers' implicit noopener)."
+      }
+    },
+    "secrets-ips": {
+      "kinds": [
+        "secret",
+        "ip-literal"
+      ],
+      "question": "Is this a hardcoded credential or a meaningful hardcoded address?",
+      "categories": {
+        "real-secret": "A credential that would grant access if leaked.",
+        "public-or-placeholder": "A public identifier, documented example or placeholder.",
+        "not-a-secret": "Matched only because of a secret-like name or format; the value is not a credential (labels, header names, token types).",
+        "local-address": "Loopback or unspecified address (localhost, 0.0.0.0, ::) used for binding, comparison or display.",
+        "not-an-ip": "Matched the IP pattern but isn't an address (SVG path data, delimiters, prefixes).",
+        "public-address": "A real, routable address hardcoded in the source."
+      }
+    },
+    "nosecrets": {
+      "kinds": [
+        "biome-noSecrets-hit"
+      ],
+      "question": "Is the flagged string a secret?",
+      "categories": {
+        "real-secret": "A credential that would grant access if leaked.",
+        "not-a-secret": "Any other string (identifiers, messages, regexes, hashes of public data, URLs)."
+      }
+    }
+  },
+  "raters": {
+    "first": "A Claude subagent per group (injection; everything else), reading the worksheet from security-sample.cjs --worksheet and the repo files read-only. The noSecrets sample was relabelled by a third subagent after the sample was made deterministic (sorted before drawing).",
+    "second": "The lead agent (also Claude), blind to the first labels: the --print subset (seed 7, 10 per group), code context only, plus three file reads to trace a value (astro:033, astro:062, zod:002). Then a top-up of 15 injection sites (seed 8, excluding every id the first rater named in its summary), labelled the same way, with one file read (astro:063)."
+  },
+  "labels": {
+    "zod:001": {
+      "category": "escaped",
+      "source": "code generated from a zod schema",
+      "note": "compileFn builds code from the schema; string keys and literals pass through util.esc (JSON.stringify), numeric bounds are type-checked by numericOperand, and other values are hoisted as constants passed as arguments.",
+      "confidence": "high"
+    },
+    "zod:002": {
+      "category": "escaped",
+      "source": "object-shape JIT code",
+      "note": "Doc content comes from generateFastpass in schemas.ts, where each shape key is embedded via util.esc (JSON.stringify) or as syms[i], and the closed-over values are passed as arguments.",
+      "confidence": "high"
+    },
+    "zod:004": {
+      "category": "constant",
+      "source": "empty string",
+      "note": "new F(\"\") is a CSP/eval capability probe with a literal empty body.",
+      "confidence": "high"
+    },
+    "hono:001": {
+      "category": "constant",
+      "source": "empty string",
+      "note": "Clears the element with e.innerHTML = ''.",
+      "confidence": "high"
+    },
+    "hono:002": {
+      "category": "trusted-dev",
+      "source": "app's dangerouslySetInnerHTML prop",
+      "note": "Hono's JSX DOM renderer applies value.__html from the dangerouslySetInnerHTML prop as-is; whether it is safe depends on what the application passes.",
+      "confidence": "medium"
+    },
+    "vite:001": {
+      "category": "constant",
+      "source": "literal 'return this'",
+      "note": "Function('return this') is a globalThis fallback with a literal body.",
+      "confidence": "high"
+    },
+    "vite:011": {
+      "category": "constant",
+      "source": "literal throw snippet",
+      "note": "new Function with a fixed string, used to measure the stack-trace line offset.",
+      "confidence": "high"
+    },
+    "vite:015": {
+      "category": "trusted-dev",
+      "source": "options literal from project source",
+      "note": "evalValue is called from importMetaGlob.ts and workerImportMetaUrl.ts on the options-object text of import.meta.glob(...) or new Worker(...) in the modules being transformed.",
+      "confidence": "high"
+    },
+    "astro:007": {
+      "category": "constant",
+      "source": "overlayTemplate",
+      "note": "overlayTemplate is a static HTML string whose only interpolation is the static style constant.",
+      "confidence": "high"
+    },
+    "astro:008": {
+      "category": "escaped",
+      "source": "Shiki-highlighted source file",
+      "note": "err.highlightedCode is produced server-side by Shiki codeToHtml(err.fullCode) in getViteErrorPayload, and Shiki HTML-escapes the code tokens.",
+      "confidence": "high"
+    },
+    "astro:010": {
+      "category": "constant",
+      "source": "checkmarkIconSvg",
+      "note": "checkmarkIconSvg is a literal SVG string defined in overlay.ts.",
+      "confidence": "high"
+    },
+    "astro:011": {
+      "category": "constant",
+      "source": "saved copy-icon markup",
+      "note": "copyIconSvg is the button's previous innerHTML, which came from the static overlayTemplate.",
+      "confidence": "high"
+    },
+    "astro:012": {
+      "category": "escaped",
+      "source": "error message/hint (may include request data)",
+      "note": "err.message and err.hint are HTML-escaped by renderErrorMarkdown (html-escaper) in getViteErrorPayload before limited markup is added, and module-loader/vite.ts routes raw Vite HMR errors through the same function.",
+      "confidence": "high"
+    },
+    "astro:013": {
+      "category": "constant",
+      "source": "fixed link labels",
+      "note": "Both createLink callers pass literal text plus the constant openNewWindowIcon ('See Docs Reference', 'Open in editor').",
+      "confidence": "high"
+    },
+    "astro:019": {
+      "category": "escaped",
+      "source": "prefetch URL (page link href)",
+      "note": "The url is JSON.stringify'd into textContent of a non-executable type=speculationrules script.",
+      "confidence": "high"
+    },
+    "astro:020": {
+      "category": "constant",
+      "source": "literal button markup",
+      "note": "Fixed 'Copy debug info' string with a static icon element.",
+      "confidence": "high"
+    },
+    "astro:021": {
+      "category": "constant",
+      "source": "empty string",
+      "note": "Clears the integration list.",
+      "confidence": "high"
+    },
+    "astro:022": {
+      "category": "escaped",
+      "source": "astro.build API title + constant SVG",
+      "note": "The appended SVG is constant; += re-serializes integration.title from the astro.build API, which was set via textContent, so that text arrives HTML-escaped.",
+      "confidence": "medium"
+    },
+    "astro:023": {
+      "category": "constant",
+      "source": "static style/template",
+      "note": "Literal style block and button with a slot, with no interpolation.",
+      "confidence": "high"
+    },
+    "astro:024": {
+      "category": "constant",
+      "source": "static style block",
+      "note": "Appends a literal style to the badge shadow root, whose existing content is the badge's constant template.",
+      "confidence": "high"
+    },
+    "astro:025": {
+      "category": "constant",
+      "source": "category icon name",
+      "note": "The only caller passes the icon from the constant rulesCategories ('person-arms-spread' or 'gauge').",
+      "confidence": "high"
+    },
+    "astro:026": {
+      "category": "constant",
+      "source": "category icon + numeric count",
+      "note": "icon comes from the constant rulesCategories and count is a number.",
+      "confidence": "high"
+    },
+    "astro:027": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal style and markup for the audit window, with no interpolation.",
+      "confidence": "high"
+    },
+    "astro:028": {
+      "category": "constant",
+      "source": "empty string",
+      "note": "Clears the audit list container.",
+      "confidence": "high"
+    },
+    "astro:029": {
+      "category": "constant",
+      "source": "rulesCategories icon/name",
+      "note": "category.icon and category.name come from the constant rulesCategories array (Accessibility/Performance).",
+      "confidence": "high"
+    },
+    "astro:030": {
+      "category": "constant",
+      "source": "static empty-state markup",
+      "note": "Literal 'No accessibility or performance issues detected' template.",
+      "confidence": "high"
+    },
+    "astro:031": {
+      "category": "escaped",
+      "source": "audited element tag name",
+      "note": "selectorName (the page element's tagName, truncated) passes through escapeHTML (html-escaper).",
+      "confidence": "high"
+    },
+    "astro:032": {
+      "category": "trusted-dev",
+      "source": "audited element tag name (dev page DOM)",
+      "note": "The same selectorName that line 123 escapes is interpolated here unescaped; it is truncated to 7 characters plus &hellip;, and it comes from the developer's page DOM in dev mode.",
+      "confidence": "medium"
+    },
+    "astro:033": {
+      "category": "escaped",
+      "source": "audit rule message (may include element data)",
+      "note": "simpleRenderMarkdown runs escapeHTML (html-escaper) on the resolved rule message before adding link/bold/code markup.",
+      "confidence": "high"
+    },
+    "astro:034": {
+      "category": "escaped",
+      "source": "audit rule description",
+      "note": "simpleRenderMarkdown runs escapeHTML on the resolved description before adding limited markup.",
+      "confidence": "high"
+    },
+    "astro:035": {
+      "category": "constant",
+      "source": "settingsRows name/description",
+      "note": "setting.name and setting.description are literals in the settingsRows array in settings.ts.",
+      "confidence": "high"
+    },
+    "astro:037": {
+      "category": "trusted-dev",
+      "source": "built-in app window templates",
+      "note": "The callers (settings, xray, astro apps) pass static templates; the riskiest interpolation is latestAstroVersion, taken unescaped from the npm registry's astro@latest package.json behind a version comparison.",
+      "confidence": "medium"
+    },
+    "astro:038": {
+      "category": "constant",
+      "source": "notificationSVGs[level]",
+      "note": "level is checked against notificationLevels and indexes a map of literal SVG strings.",
+      "confidence": "high"
+    },
+    "astro:039": {
+      "category": "constant",
+      "source": "static CSS",
+      "note": "Literal dropdown stylesheet with no interpolation.",
+      "confidence": "high"
+    },
+    "astro:040": {
+      "category": "trusted-dev",
+      "source": "toolbar app icon (integration config)",
+      "note": "getAppIcon returns a predefined icon's outerHTML, or the raw icon string supplied by an integration's dev toolbar app definition.",
+      "confidence": "high"
+    },
+    "astro:041": {
+      "category": "constant",
+      "source": "notificationSVGs[level]",
+      "note": "level is checked against notificationLevels and indexes a map of literal SVGs.",
+      "confidence": "high"
+    },
+    "astro:042": {
+      "category": "trusted-dev",
+      "source": "toolbar app id/name/icon + placement setting",
+      "note": "getAppTemplate interpolates app.id, app.name and app.icon unescaped from integration-registered toolbar apps; placement comes from config or the developer's own localStorage.",
+      "confidence": "high"
+    },
+    "astro:043": {
+      "category": "constant",
+      "source": "static style",
+      "note": "Literal style block for the app canvas.",
+      "confidence": "high"
+    },
+    "astro:044": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal badge style and slot markup.",
+      "confidence": "high"
+    },
+    "astro:045": {
+      "category": "constant",
+      "source": "allowlisted badgeStyle/size",
+      "note": "The badgeStyle and size setters reject any value not in the fixed styles/sizes arrays.",
+      "confidence": "high"
+    },
+    "astro:046": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal button style and slot markup.",
+      "confidence": "high"
+    },
+    "astro:047": {
+      "category": "constant",
+      "source": "allowlisted buttonStyle/size/radius",
+      "note": "The buttonStyle, size and buttonBorderRadius setters each check against a fixed array.",
+      "confidence": "high"
+    },
+    "astro:048": {
+      "category": "constant",
+      "source": "allowlisted cardStyle",
+      "note": "The cardStyle setter only accepts values from the fixed styles array.",
+      "confidence": "high"
+    },
+    "astro:049": {
+      "category": "user-controlled",
+      "source": "integration.homepageUrl from astro.build API",
+      "note": "this.link is set from integration.homepageUrl in the JSON fetched from https://astro.build/api/v1/dev-overlay/ and goes unescaped into href=\"...\" (dev toolbar only).",
+      "confidence": "medium"
+    },
+    "astro:050": {
+      "category": "constant",
+      "source": "static style template",
+      "note": "Literal highlight styles; the icon attribute is not interpolated.",
+      "confidence": "high"
+    },
+    "astro:051": {
+      "category": "constant",
+      "source": "allowlisted highlightStyle",
+      "note": "The highlightStyle setter checks against the fixed styles array.",
+      "confidence": "high"
+    },
+    "astro:052": {
+      "category": "trusted-dev",
+      "source": "custom highlight icon SVG from toolbar app code",
+      "note": "This branch only runs for non-predefined icons; the built-in caller passes 'warning', so a custom SVG string would have to come from a toolbar app's code.",
+      "confidence": "medium"
+    },
+    "astro:053": {
+      "category": "constant",
+      "source": "predefined icon markup or '<slot />'",
+      "note": "getIconHTML returns a predefined icon's outerHTML or the literal '<slot />'.",
+      "confidence": "high"
+    },
+    "astro:054": {
+      "category": "constant",
+      "source": "icons map",
+      "note": "icons[name] is a literal SVG from the static icons object in icons.ts.",
+      "confidence": "high"
+    },
+    "astro:055": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal radio styles.",
+      "confidence": "high"
+    },
+    "astro:056": {
+      "category": "constant",
+      "source": "allowlisted radioStyle",
+      "note": "The radioStyle setter checks against the fixed styles array.",
+      "confidence": "high"
+    },
+    "astro:057": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal select styles and slot.",
+      "confidence": "high"
+    },
+    "astro:058": {
+      "category": "constant",
+      "source": "allowlisted selectStyle",
+      "note": "The selectStyle setter checks against the fixed styles array.",
+      "confidence": "high"
+    },
+    "astro:059": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal toggle styles.",
+      "confidence": "high"
+    },
+    "astro:060": {
+      "category": "constant",
+      "source": "allowlisted toggleStyle",
+      "note": "The toggleStyle setter checks against the fixed styles array.",
+      "confidence": "high"
+    },
+    "astro:061": {
+      "category": "constant",
+      "source": "static style",
+      "note": "Literal tooltip stylesheet.",
+      "confidence": "high"
+    },
+    "astro:062": {
+      "category": "trusted-dev",
+      "source": "tooltip sections from audit/xray apps",
+      "note": "Audit titles/messages and island props are escaped with escapeHTML, but source-file paths, component-url and client directive values read from dev-page DOM attributes are interpolated unescaped.",
+      "confidence": "medium"
+    },
+    "astro:063": {
+      "category": "trusted-dev",
+      "source": "custom section icon SVG from toolbar app code",
+      "note": "Only non-predefined icons reach innerHTML; built-in callers use 'warning', so this takes raw SVG from toolbar app code.",
+      "confidence": "medium"
+    },
+    "astro:064": {
+      "category": "constant",
+      "source": "static template",
+      "note": "Literal window styles and slot.",
+      "confidence": "high"
+    },
+    "astro:065": {
+      "category": "constant",
+      "source": "styleMap lookup",
+      "note": "styleMap[this.placement] picks one of three literal CSS strings, and placement is checked by isValidPlacement.",
+      "confidence": "high"
+    },
+    "astro:069": {
+      "category": "constant",
+      "source": "literal script tag",
+      "note": "Inserts a fixed '<script type=\"module\" src=\"data:application/javascript,\"/>'.",
+      "confidence": "high"
+    },
+    "astro:070": {
+      "category": "trusted-dev",
+      "source": "scripts from the swapped-in same-origin page",
+      "note": "runScripts recreates each script in the new document, copying its innerHTML and attributes (including src), so the app's own page scripts re-execute after a view-transition swap.",
+      "confidence": "medium"
+    },
+    "astro:071": {
+      "category": "trusted-dev",
+      "source": "script text from the swapped-in same-origin page",
+      "note": "newScript.innerHTML = script.innerHTML copies inline script text from the app's own fetched page HTML.",
+      "confidence": "medium"
+    },
+    "astro:073": {
+      "category": "trusted-dev",
+      "source": "existing media element children",
+      "note": "reifyMediaElements copies media.innerHTML (source/track children) from the page's own already-parsed DOM, a serialize/re-parse round trip.",
+      "confidence": "medium"
+    },
+    "excalidraw:005": {
+      "category": "user-controlled",
+      "source": "AI-generated HTML / scene customData; error message",
+      "note": "For iframe (diagram-to-code) elements, srcdoc returns data.html from el.customData.generationData or the generation stream unescaped, and the error branch interpolates data.message raw; the iframe is sandboxed with allow-scripts but no allow-same-origin (embed links use regex-extracted IDs plus escapeDoubleQuotes).",
+      "confidence": "high"
+    },
+    "excalidraw:015": {
+      "category": "escaped",
+      "source": "SVG export of library item elements",
+      "note": "svg comes from exportToSvg of libItem.elements, which builds the SVG with createElementNS, setAttribute and text nodes, so outerHTML is a DOM serialization.",
+      "confidence": "medium"
+    },
+    "excalidraw:028": {
+      "category": "escaped",
+      "source": "SVG export of library items",
+      "note": "svg comes from exportToSvg in useLibraryItemSvg (DOM-built SVG of user library elements), serialized via outerHTML.",
+      "confidence": "medium"
+    },
+    "excalidraw:029": {
+      "category": "constant",
+      "source": "empty string",
+      "note": "The effect cleanup clears node.innerHTML.",
+      "confidence": "high"
+    },
+    "excalidraw:030": {
+      "category": "constant",
+      "source": "empty string",
+      "note": "The replaceChildren polyfill clears innerHTML before appending nodes.",
+      "confidence": "high"
+    },
+    "next.js:010": {
+      "category": "trusted-dev",
+      "source": "beforeInteractive Script entries (self.__next_s)",
+      "note": "loadScriptsInSequence reads self.__next_s, which is filled by the server-rendered pushes of the developer's next/script beforeInteractive props (src and inline content).",
+      "confidence": "high"
+    },
+    "next.js:011": {
+      "category": "trusted-dev",
+      "source": "developer's inline Script children",
+      "note": "props.children comes from self.__next_s entries holding the developer's beforeInteractive inline script content.",
+      "confidence": "high"
+    },
+    "next.js:014": {
+      "category": "constant",
+      "source": "errorThemeCss",
+      "note": "errorThemeCss is a literal CSS template in error-styles.tsx with no interpolation.",
+      "confidence": "high"
+    },
+    "next.js:015": {
+      "category": "constant",
+      "source": "errorThemeCss",
+      "note": "errorThemeCss is a literal CSS template in error-styles.tsx with no interpolation.",
+      "confidence": "high"
+    },
+    "next.js:017": {
+      "category": "trusted-dev",
+      "source": "page's own SSR HTML",
+      "note": "rootHtml is document.documentElement.innerHTML captured at first client render, so the server-rendered page is re-applied via a DOM serialization round trip.",
+      "confidence": "medium"
+    },
+    "next.js:018": {
+      "category": "constant",
+      "source": "literal CSS",
+      "note": "Fixed minified CSS string.",
+      "confidence": "high"
+    },
+    "next.js:023": {
+      "category": "trusted-dev",
+      "source": "framework InstantCookie + existing cookie path/domain",
+      "note": "The value is a framework-built array (random id, optionally FlightRouterState route trees that can carry URL param values) that is JSON.stringify'd but not cookie-encoded; it only exists in Instant Navigation Testing API builds.",
+      "confidence": "medium"
+    },
+    "next.js:026": {
+      "category": "constant",
+      "source": "literal cookie deletion",
+      "note": "Writes a fixed name with an empty value, Path=/ and Max-Age=0.",
+      "confidence": "high"
+    },
+    "next.js:032": {
+      "category": "trusted-dev",
+      "source": "next/head dangerouslySetInnerHTML prop",
+      "note": "reactElementToDOM copies dangerouslySetInnerHTML.__html from head elements written by the app developer; this is a pass-through.",
+      "confidence": "medium"
+    },
+    "next.js:036": {
+      "category": "trusted-dev",
+      "source": "build-manifest chunk URLs",
+      "note": "appendScript receives URLs from getFilesForRoute (assetPrefix + /_next/ + encodeURIPath of manifest entries).",
+      "confidence": "high"
+    },
+    "next.js:038": {
+      "category": "trusted-dev",
+      "source": "developer's next/script props",
+      "note": "loadScript builds the element from the Script component's src, children and dangerouslySetInnerHTML.",
+      "confidence": "high"
+    },
+    "next.js:039": {
+      "category": "trusted-dev",
+      "source": "developer's Script dangerouslySetInnerHTML",
+      "note": "dangerouslySetInnerHTML.__html comes straight from the next/script props.",
+      "confidence": "high"
+    },
+    "next.js:040": {
+      "category": "escaped",
+      "source": "Script props serialized as JSON",
+      "note": "restProps and id are JSON.stringify'd and passed through htmlEscapeJsonString inside a fixed push() template.",
+      "confidence": "high"
+    },
+    "next.js:041": {
+      "category": "escaped",
+      "source": "Script src/props serialized as JSON",
+      "note": "[src, {...restProps, id}] is JSON.stringify'd and passed through htmlEscapeJsonString inside a fixed push() template.",
+      "confidence": "high"
+    },
+    "next.js:053": {
+      "category": "constant",
+      "source": "no script content",
+      "note": "The script element is only a non-executing shadow-host container for the dev overlay, with no src or text set.",
+      "confidence": "high"
+    },
+    "next.js:063": {
+      "category": "trusted-dev",
+      "source": "framework-generated nonce cookie",
+      "note": "Both callers pass createPendingInstantNavCookie(), i.e. [0, 'p'+Math.random()], JSON.stringify'd.",
+      "confidence": "high"
+    },
+    "next.js:064": {
+      "category": "constant",
+      "source": "literal cookie deletion",
+      "note": "Fixed COOKIE_NAME with empty value, Path=/ and Max-Age=0.",
+      "confidence": "high"
+    },
+    "next.js:074": {
+      "category": "escaped",
+      "source": "Turbopack bootstrap from build manifest",
+      "note": "getTurbopackChunkGroupBootstrap JSON.stringify's the manifest params into a fixed push() statement, and the result passes through htmlEscapeJsonString.",
+      "confidence": "high"
+    },
+    "next.js:075": {
+      "category": "trusted-dev",
+      "source": "assetPrefix from next.config",
+      "note": "assetPrefix is interpolated unescaped into a JS string literal of the partytown config script.",
+      "confidence": "high"
+    },
+    "next.js:076": {
+      "category": "trusted-dev",
+      "source": "partytown library snippet",
+      "note": "partytownSnippet() is the static snippet from the installed @builder.io/partytown/integration dependency, called with no arguments.",
+      "confidence": "high"
+    },
+    "next.js:077": {
+      "category": "trusted-dev",
+      "source": "developer's beforeInteractive inline script",
+      "note": "html comes from the dangerouslySetInnerHTML.__html or children of the developer's beforeInteractive Script in _document.",
+      "confidence": "high"
+    },
+    "next.js:078": {
+      "category": "constant",
+      "source": "literal CSS",
+      "note": "Fixed 'body{display:none}'.",
+      "confidence": "high"
+    },
+    "next.js:079": {
+      "category": "constant",
+      "source": "literal CSS",
+      "note": "Fixed 'body{display:block}'.",
+      "confidence": "high"
+    },
+    "next.js:080": {
+      "category": "escaped",
+      "source": "__NEXT_DATA__ (page props, query)",
+      "note": "getInlineScriptSource JSON.stringify's __NEXT_DATA__ (which includes request query and page props) and passes it through htmlEscapeJsonString.",
+      "confidence": "high"
+    },
+    "next.js:081": {
+      "category": "constant",
+      "source": "literal CSS",
+      "note": "The boolean withDarkMode chooses between two literal CSS strings.",
+      "confidence": "high"
+    },
+    "next.js:095": {
+      "category": "trusted-dev",
+      "source": "build manifest file",
+      "note": "evalManifest reads a JS manifest file from the .next build output (readFileSync(path)) and runs it in a new context.",
+      "confidence": "high"
+    },
+    "next.js:097": {
+      "category": "trusted-dev",
+      "source": "edge function bundle files",
+      "note": "evaluateInContext reads compiled edge-runtime chunk files from disk (build output) and runs them in the sandbox context.",
+      "confidence": "high"
+    },
+    "zod:003": {
+      "category": "unique-id",
+      "note": "Generic exported randomString helper in zod core util; nothing in the library source calls it (benchmarks use their own copy).",
+      "confidence": "medium",
+      "needsCsprng": false
+    },
+    "vite:003": {
+      "category": "unique-id",
+      "note": "Random suffix for the temporary bundled config file name, alongside Date.now().",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "vite:010": {
+      "category": "unique-id",
+      "note": "Hashed with pid and timestamp into a temp directory suffix for the deps optimizer cache.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "astro:036": {
+      "category": "visual-or-dev",
+      "note": "Picks a random icon for an integration card in the dev toolbar.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "excalidraw:002": {
+      "category": "visual-or-dev",
+      "note": "Fuzzy x offset for a point drawn by the visual debugger.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "excalidraw:003": {
+      "category": "visual-or-dev",
+      "note": "Fuzzy y offset for a point drawn by the visual debugger.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "excalidraw:004": {
+      "category": "visual-or-dev",
+      "note": "Random starting color offset for chart backgrounds when no seed is supplied.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "excalidraw:006": {
+      "category": "unique-id",
+      "note": "Change marker on the cursor-hint atom so the hint effect re-runs each time it is shown.",
+      "confidence": "medium",
+      "needsCsprng": false
+    },
+    "excalidraw:013": {
+      "category": "visual-or-dev",
+      "note": "Initial color seed for a pasted chart's palette.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "excalidraw:014": {
+      "category": "visual-or-dev",
+      "note": "Reshuffles the pasted chart's color seed when the user asks.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:024": {
+      "category": "unique-id",
+      "note": "Makes each Instant Navigation Testing cookie write a distinct value so change handlers fire; testing API only.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:025": {
+      "category": "unique-id",
+      "note": "Makes each Instant Navigation Testing cookie write a distinct value so change handlers fire; testing API only.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:027": {
+      "category": "unique-id",
+      "note": "Makes each Instant Navigation Testing cookie write a distinct value so change handlers fire; testing API only.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:030": {
+      "category": "unique-id",
+      "note": "Dev HMR client id attached to websocket messages; browser dev mode only.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:033": {
+      "category": "unique-id",
+      "note": "Fallback id for a web-vitals metric report, combined with a timestamp.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:044": {
+      "category": "unique-id",
+      "note": "Request id correlating MSW handler events in the experimental Playwright test mode.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:046": {
+      "category": "jitter-sampling",
+      "note": "Up to 30% random jitter on exponential backoff when retrying failed export page builds.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:048": {
+      "category": "unique-id",
+      "note": "Temp file name suffix for an atomic write-then-rename.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:062": {
+      "category": "unique-id",
+      "note": "Distinct pending-state value for the instant-nav devtools cookie.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:073": {
+      "category": "unique-id",
+      "note": "Per-process execution id returned by the dev server status endpoint to detect restarts.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:088": {
+      "category": "unique-id",
+      "note": "Dev HMR session id sent to clients and used in the server-components HMR refresh hash.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:096": {
+      "category": "unique-id",
+      "note": "Per-request suffix for opaque fallback route param placeholder keys, used to spot leaks into static output.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "next.js:099": {
+      "category": "unique-id",
+      "note": "Key for pages-router history state entries.",
+      "confidence": "high",
+      "needsCsprng": false
+    },
+    "astro:014": {
+      "category": "unprotected-internal",
+      "note": "Dev error overlay sets target=_blank with no rel; href is only err.docslink, built by getDocsForError as https://docs.astro.build/en/reference/errors/... (Astro's own docs).",
+      "confidence": "high"
+    },
+    "excalidraw:007": {
+      "category": "protected",
+      "note": "rel=noopener on a link to docs.excalidraw.com.",
+      "confidence": "high"
+    },
+    "excalidraw:008": {
+      "category": "protected",
+      "note": "rel=noopener on a link to the Excalidraw+ blog.",
+      "confidence": "high"
+    },
+    "excalidraw:009": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a link to GitHub issues.",
+      "confidence": "high"
+    },
+    "excalidraw:010": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a link to YouTube.",
+      "confidence": "high"
+    },
+    "excalidraw:011": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a dynamic published-library URL.",
+      "confidence": "high"
+    },
+    "excalidraw:012": {
+      "category": "protected",
+      "note": "LinkButton always sets rel=noopener on its href prop.",
+      "confidence": "high"
+    },
+    "excalidraw:016": {
+      "category": "protected",
+      "note": "rel=noopener on a link to libraries.excalidraw.com.",
+      "confidence": "high"
+    },
+    "excalidraw:017": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a GitHub guidelines link.",
+      "confidence": "high"
+    },
+    "excalidraw:018": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a GitHub license link.",
+      "confidence": "high"
+    },
+    "excalidraw:019": {
+      "category": "protected",
+      "note": "window.open passes the 'noopener' feature string.",
+      "confidence": "high"
+    },
+    "excalidraw:020": {
+      "category": "protected",
+      "note": "rel=noreferrer (implies noopener) on a mermaid.js.org docs link.",
+      "confidence": "high"
+    },
+    "excalidraw:021": {
+      "category": "protected",
+      "note": "rel=noreferrer (implies noopener) on a mermaid.js.org docs link.",
+      "confidence": "high"
+    },
+    "excalidraw:022": {
+      "category": "protected",
+      "note": "rel=noreferrer (implies noopener) on a mermaid.js.org docs link.",
+      "confidence": "high"
+    },
+    "excalidraw:023": {
+      "category": "protected",
+      "note": "rel=noreferrer (implies noopener) on a mermaid.js.org docs link.",
+      "confidence": "high"
+    },
+    "excalidraw:024": {
+      "category": "protected",
+      "note": "rel is the template `noopener ${rel}`, so noopener is always present, and it comes after the {...rest} spread.",
+      "confidence": "high"
+    },
+    "excalidraw:025": {
+      "category": "protected",
+      "note": "Element hyperlink opens in _blank for non-local links with rel=noopener noreferrer.",
+      "confidence": "high"
+    },
+    "excalidraw:026": {
+      "category": "protected",
+      "note": "rel=noopener is set after the {...props} spread, so props cannot remove it.",
+      "confidence": "high"
+    },
+    "excalidraw:031": {
+      "category": "protected",
+      "note": "SVG export anchor gets rel=noopener noreferrer right after target=_blank.",
+      "confidence": "high"
+    },
+    "next.js:054": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a nextjs.org docs link.",
+      "confidence": "high"
+    },
+    "next.js:055": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a nextjs.org docs link.",
+      "confidence": "high"
+    },
+    "next.js:056": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a nextjs.org docs link.",
+      "confidence": "high"
+    },
+    "next.js:057": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a nextjs.org docs link.",
+      "confidence": "high"
+    },
+    "next.js:058": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on the error overlay docs button.",
+      "confidence": "high"
+    },
+    "next.js:059": {
+      "category": "protected",
+      "note": "rel=noreferrer noopener on links auto-detected in dev overlay text.",
+      "confidence": "high"
+    },
+    "next.js:065": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer; the spread sharedProps only holds data attributes.",
+      "confidence": "high"
+    },
+    "next.js:066": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a docs 'Learn more' link.",
+      "confidence": "high"
+    },
+    "next.js:067": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on a docs 'Learn more' link.",
+      "confidence": "high"
+    },
+    "next.js:068": {
+      "category": "protected",
+      "note": "rel=noopener noreferrer on the version staleness docs link.",
+      "confidence": "high"
+    },
+    "next.js:070": {
+      "category": "protected",
+      "note": "window.open passes 'noopener, noreferrer' features.",
+      "confidence": "high"
+    },
+    "next.js:071": {
+      "category": "protected",
+      "note": "rel=noreferrer noopener on a Turbopack docs link.",
+      "confidence": "high"
+    },
+    "next.js:072": {
+      "category": "protected",
+      "note": "rel=noreferrer noopener on the devtools 'Learn More' footer link.",
+      "confidence": "high"
+    },
+    "next.js:012": {
+      "category": "defense",
+      "note": "Error thrown when gesturePush receives a javascript: URL.",
+      "confidence": "high"
+    },
+    "next.js:013": {
+      "category": "defense",
+      "note": "completeHardNavigation logs and refuses to navigate to a javascript: URL.",
+      "confidence": "high"
+    },
+    "next.js:019": {
+      "category": "defense",
+      "note": "Error thrown when prefetchRoute receives a javascript: URL.",
+      "confidence": "high"
+    },
+    "next.js:029": {
+      "category": "defense",
+      "note": "Error thrown when the router queue receives a javascript: URL.",
+      "confidence": "high"
+    },
+    "next.js:031": {
+      "category": "defense",
+      "note": "Regex detects React's javascript: placeholder formAction so <Form> skips prefetch and navigation for it; a guard, not aimed at attacker input.",
+      "confidence": "medium"
+    },
+    "next.js:100": {
+      "category": "defense",
+      "note": "Pages router push() throws when url or as is a javascript: URL.",
+      "confidence": "high"
+    },
+    "next.js:101": {
+      "category": "defense",
+      "note": "Pages router replace() throws when url or as is a javascript: URL.",
+      "confidence": "high"
+    },
+    "hono:003": {
+      "category": "not-a-secret",
+      "note": "Regex source for the bearer token character class.",
+      "confidence": "high"
+    },
+    "hono:004": {
+      "category": "not-an-ip",
+      "note": "The '::ffff:' IPv4-mapped prefix prepended to a rule.",
+      "confidence": "high"
+    },
+    "hono:007": {
+      "category": "local-address",
+      "note": "Returns '::' as the string form of the unspecified IPv6 address.",
+      "confidence": "high"
+    },
+    "hono:008": {
+      "category": "not-an-ip",
+      "note": "The '::ffff:' IPv4-mapped prefix used when formatting an address.",
+      "confidence": "high"
+    },
+    "hono:009": {
+      "category": "not-an-ip",
+      "note": "'::' is the zero-run compression delimiter in a replace() during IPv6 formatting.",
+      "confidence": "medium"
+    },
+    "vite:004": {
+      "category": "local-address",
+      "note": "127.0.0.1 in the loopbackHosts set used for host comparisons.",
+      "confidence": "high"
+    },
+    "vite:005": {
+      "category": "local-address",
+      "note": "::1 in the loopbackHosts set used for host comparisons.",
+      "confidence": "high"
+    },
+    "vite:006": {
+      "category": "local-address",
+      "note": "Expanded IPv6 loopback in the loopbackHosts set.",
+      "confidence": "high"
+    },
+    "vite:007": {
+      "category": "local-address",
+      "note": "0.0.0.0 in the wildcardHosts set.",
+      "confidence": "high"
+    },
+    "vite:008": {
+      "category": "local-address",
+      "note": ":: in the wildcardHosts set.",
+      "confidence": "high"
+    },
+    "vite:009": {
+      "category": "local-address",
+      "note": "Expanded IPv6 unspecified address in the wildcardHosts set.",
+      "confidence": "high"
+    },
+    "vite:012": {
+      "category": "local-address",
+      "note": "Replaces 127.0.0.1 with the resolved hostname when printing server URLs.",
+      "confidence": "high"
+    },
+    "vite:013": {
+      "category": "local-address",
+      "note": "Checks for 127.0.0.1 to sort server URLs into local vs network.",
+      "confidence": "high"
+    },
+    "vite:014": {
+      "category": "local-address",
+      "note": "Skips [::1] in certificate DNS names because it is already listed as local.",
+      "confidence": "high"
+    },
+    "astro:001": {
+      "category": "local-address",
+      "note": "127.0.0.1 comparison in an isLocal hostname check for remote images.",
+      "confidence": "high"
+    },
+    "astro:002": {
+      "category": "local-address",
+      "note": "[::1] comparison in an isLocal hostname check for remote images.",
+      "confidence": "high"
+    },
+    "astro:003": {
+      "category": "not-a-secret",
+      "note": "Build placeholder marker '__ASTRO_ASSET_IMAGE__' stored in a field named token.",
+      "confidence": "high"
+    },
+    "astro:004": {
+      "category": "not-a-secret",
+      "note": "Build placeholder marker '__VITE_ASSET__' stored in a field named token.",
+      "confidence": "high"
+    },
+    "astro:005": {
+      "category": "not-a-secret",
+      "note": "Code prefix 'import.meta.ROLLDOWN_FILE_URL_' stored in a field named token.",
+      "confidence": "high"
+    },
+    "astro:015": {
+      "category": "local-address",
+      "note": "127.0.0.1 in a set of local hosts that decides network logging.",
+      "confidence": "high"
+    },
+    "excalidraw:001": {
+      "category": "not-a-secret",
+      "note": "localStorage key name for where the user's OpenAI key is stored, not the key itself.",
+      "confidence": "high"
+    },
+    "next.js:001": {
+      "category": "local-address",
+      "note": "Compares a bound address to '::' to display localhost.",
+      "confidence": "high"
+    },
+    "next.js:002": {
+      "category": "local-address",
+      "note": "Compares a bound address to '::1' to display localhost.",
+      "confidence": "high"
+    },
+    "next.js:003": {
+      "category": "not-a-secret",
+      "note": "JSON property name 'previewModeSigningKey' for the preview config file; the key is generated with crypto.",
+      "confidence": "high"
+    },
+    "next.js:007": {
+      "category": "local-address",
+      "note": "CLI fetches the local trace MCP server at 127.0.0.1.",
+      "confidence": "high"
+    },
+    "next.js:008": {
+      "category": "local-address",
+      "note": "Trace MCP server binds to 127.0.0.1.",
+      "confidence": "high"
+    },
+    "next.js:009": {
+      "category": "local-address",
+      "note": "Console message showing the local 127.0.0.1 MCP URL.",
+      "confidence": "high"
+    },
+    "next.js:021": {
+      "category": "not-a-secret",
+      "note": "fetch credentials mode 'same-origin'.",
+      "confidence": "high"
+    },
+    "next.js:034": {
+      "category": "not-a-secret",
+      "note": "fetch credentials mode 'same-origin'.",
+      "confidence": "high"
+    },
+    "next.js:035": {
+      "category": "not-a-secret",
+      "note": "fetch credentials mode 'same-origin'.",
+      "confidence": "high"
+    },
+    "next.js:037": {
+      "category": "not-a-secret",
+      "note": "fetch credentials mode 'same-origin'.",
+      "confidence": "high"
+    },
+    "next.js:042": {
+      "category": "local-address",
+      "note": "Default Playwright baseURL http://127.0.0.1:3000.",
+      "confidence": "high"
+    },
+    "next.js:043": {
+      "category": "local-address",
+      "note": "Default Playwright webServer URL http://127.0.0.1:3000.",
+      "confidence": "high"
+    },
+    "next.js:045": {
+      "category": "local-address",
+      "note": "Test-mode proxy server binds to '::' on a random port.",
+      "confidence": "high"
+    },
+    "next.js:047": {
+      "category": "not-a-secret",
+      "note": "Header name 'x-next-revalidate-tag-token'.",
+      "confidence": "high"
+    },
+    "next.js:049": {
+      "category": "local-address",
+      "note": "Excludes ::1 when picking a network interface address.",
+      "confidence": "high"
+    },
+    "next.js:050": {
+      "category": "local-address",
+      "note": "Excludes 127.0.0.1 when picking a network interface address.",
+      "confidence": "high"
+    },
+    "next.js:051": {
+      "category": "local-address",
+      "note": "127.0.0.1 in default hosts for a self-signed dev certificate.",
+      "confidence": "high"
+    },
+    "next.js:052": {
+      "category": "local-address",
+      "note": "::1 in default hosts for a self-signed dev certificate.",
+      "confidence": "high"
+    },
+    "next.js:069": {
+      "category": "not-an-ip",
+      "note": "SVG path data in an icon.",
+      "confidence": "high"
+    },
+    "next.js:092": {
+      "category": "local-address",
+      "note": "Compares the bound hostname to 0.0.0.0 to display localhost.",
+      "confidence": "high"
+    },
+    "next.js:093": {
+      "category": "local-address",
+      "note": "Compares the bound hostname to [::] to display [::1].",
+      "confidence": "high"
+    },
+    "next.js:094": {
+      "category": "local-address",
+      "note": "Displays [::1] when bound to [::].",
+      "confidence": "high"
+    },
+    "next.js:098": {
+      "category": "not-a-secret",
+      "note": "fetch credentials mode 'same-origin'.",
+      "confidence": "high"
+    },
+    "vscode:001": {
+      "category": "not-an-ip",
+      "note": "':::' delimiter joining language id and bracket text into a key.",
+      "confidence": "high"
+    },
+    "vscode:002": {
+      "category": "not-a-secret",
+      "note": "Semantic token type label 'not-in-legend'.",
+      "confidence": "high"
+    },
+    "noSecrets:01": {
+      "category": "not-a-secret",
+      "note": "system font family names (font fallback list)",
+      "confidence": "high"
+    },
+    "noSecrets:02": {
+      "category": "not-a-secret",
+      "note": "error data name identifier",
+      "confidence": "high"
+    },
+    "noSecrets:03": {
+      "category": "not-a-secret",
+      "note": "error data name identifier",
+      "confidence": "high"
+    },
+    "noSecrets:04": {
+      "category": "not-a-secret",
+      "note": "inline SVG markup (Astro logo paths/gradient)",
+      "confidence": "high"
+    },
+    "noSecrets:05": {
+      "category": "not-a-secret",
+      "note": "CSS attribute selector for lazy img/iframe",
+      "confidence": "high"
+    },
+    "noSecrets:06": {
+      "category": "not-a-secret",
+      "note": "CSS animation name",
+      "confidence": "high"
+    },
+    "noSecrets:07": {
+      "category": "not-a-secret",
+      "note": "keyboard shortcut descriptor",
+      "confidence": "high"
+    },
+    "noSecrets:08": {
+      "category": "not-a-secret",
+      "note": "i18n translation key",
+      "confidence": "high"
+    },
+    "noSecrets:09": {
+      "category": "not-a-secret",
+      "note": "i18n translation key",
+      "confidence": "high"
+    },
+    "noSecrets:10": {
+      "category": "not-a-secret",
+      "note": "keyboard shortcut descriptor",
+      "confidence": "high"
+    },
+    "noSecrets:11": {
+      "category": "not-a-secret",
+      "note": "keyboard shortcut descriptor",
+      "confidence": "high"
+    },
+    "noSecrets:12": {
+      "category": "not-a-secret",
+      "note": "CSS transform value",
+      "confidence": "high"
+    },
+    "noSecrets:13": {
+      "category": "not-a-secret",
+      "note": "i18n translation key",
+      "confidence": "high"
+    },
+    "noSecrets:14": {
+      "category": "not-a-secret",
+      "note": "i18n translation key",
+      "confidence": "high"
+    },
+    "noSecrets:15": {
+      "category": "not-a-secret",
+      "note": "React component displayName",
+      "confidence": "high"
+    },
+    "noSecrets:16": {
+      "category": "not-a-secret",
+      "note": "i18n translation key",
+      "confidence": "high"
+    },
+    "noSecrets:17": {
+      "category": "not-a-secret",
+      "note": "language label (Simplified Chinese name)",
+      "confidence": "high"
+    },
+    "noSecrets:18": {
+      "category": "not-a-secret",
+      "note": "nanoid-style element id in sample scene data",
+      "confidence": "high"
+    },
+    "noSecrets:19": {
+      "category": "not-a-secret",
+      "note": "AST node type name",
+      "confidence": "high"
+    },
+    "noSecrets:20": {
+      "category": "not-a-secret",
+      "note": "worker exposed method name",
+      "confidence": "high"
+    },
+    "noSecrets:21": {
+      "category": "not-a-secret",
+      "note": "request meta key identifier",
+      "confidence": "high"
+    },
+    "noSecrets:22": {
+      "category": "not-a-secret",
+      "note": "CSS attribute selector fragment",
+      "confidence": "high"
+    },
+    "noSecrets:23": {
+      "category": "not-a-secret",
+      "note": "module path in require",
+      "confidence": "high"
+    },
+    "noSecrets:24": {
+      "category": "not-a-secret",
+      "note": "JSX code snippet for docs UI",
+      "confidence": "high"
+    },
+    "noSecrets:25": {
+      "category": "not-a-secret",
+      "note": "JS code snippet for docs UI",
+      "confidence": "high"
+    },
+    "noSecrets:26": {
+      "category": "not-a-secret",
+      "note": "JSX code snippet for docs UI",
+      "confidence": "high"
+    },
+    "noSecrets:27": {
+      "category": "not-a-secret",
+      "note": "JS code snippet for docs UI",
+      "confidence": "high"
+    },
+    "noSecrets:28": {
+      "category": "not-a-secret",
+      "note": "error message with docs URL",
+      "confidence": "high"
+    },
+    "noSecrets:29": {
+      "category": "not-a-secret",
+      "note": "request meta key identifier",
+      "confidence": "high"
+    },
+    "noSecrets:30": {
+      "category": "not-a-secret",
+      "note": "libvips operation name",
+      "confidence": "high"
+    },
+    "noSecrets:31": {
+      "category": "not-a-secret",
+      "note": "request meta key identifier",
+      "confidence": "high"
+    },
+    "noSecrets:32": {
+      "category": "not-a-secret",
+      "note": "TypeScript type name",
+      "confidence": "high"
+    },
+    "noSecrets:33": {
+      "category": "not-a-secret",
+      "note": "TypeScript type name",
+      "confidence": "high"
+    },
+    "noSecrets:34": {
+      "category": "not-a-secret",
+      "note": "API expression label for error message",
+      "confidence": "high"
+    },
+    "noSecrets:35": {
+      "category": "not-a-secret",
+      "note": "request meta key identifier",
+      "confidence": "high"
+    },
+    "noSecrets:36": {
+      "category": "not-a-secret",
+      "note": "error class name",
+      "confidence": "high"
+    },
+    "noSecrets:37": {
+      "category": "not-a-secret",
+      "note": "future-deprecation flag name",
+      "confidence": "high"
+    },
+    "noSecrets:38": {
+      "category": "not-a-secret",
+      "note": "tsconfig compiler option name",
+      "confidence": "high"
+    },
+    "noSecrets:39": {
+      "category": "not-a-secret",
+      "note": "future-deprecation flag name",
+      "confidence": "high"
+    },
+    "noSecrets:40": {
+      "category": "not-a-secret",
+      "note": "property name identifier",
+      "confidence": "high"
+    },
+    "noSecrets:41": {
+      "category": "not-a-secret",
+      "note": "nls localization key and UI description",
+      "confidence": "high"
+    },
+    "noSecrets:42": {
+      "category": "not-a-secret",
+      "note": "nls localization key and UI description",
+      "confidence": "high"
+    },
+    "noSecrets:43": {
+      "category": "not-a-secret",
+      "note": "nls localization key and UI description",
+      "confidence": "high"
+    },
+    "noSecrets:44": {
+      "category": "not-a-secret",
+      "note": "editor option name identifier",
+      "confidence": "high"
+    },
+    "noSecrets:45": {
+      "category": "not-a-secret",
+      "note": "JSON schema enum values (cursor move targets)",
+      "confidence": "high"
+    },
+    "noSecrets:46": {
+      "category": "not-a-secret",
+      "note": "context key name and nls key/description",
+      "confidence": "high"
+    },
+    "noSecrets:47": {
+      "category": "not-a-secret",
+      "note": "context key name and nls key/description",
+      "confidence": "high"
+    },
+    "noSecrets:48": {
+      "category": "not-a-secret",
+      "note": "nls localization key and accessibility help text",
+      "confidence": "high"
+    },
+    "noSecrets:49": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:50": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:51": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:52": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:53": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:54": {
+      "category": "not-a-secret",
+      "note": "locale label (Hungarian 'credit card number')",
+      "confidence": "high"
+    },
+    "noSecrets:55": {
+      "category": "not-a-secret",
+      "note": "locale label (Chinese 'email')",
+      "confidence": "high"
+    },
+    "noSecrets:56": {
+      "category": "not-a-secret",
+      "note": "locale label (Chinese 'emoji')",
+      "confidence": "high"
+    },
+    "noSecrets:57": {
+      "category": "not-a-secret",
+      "note": "locale label (Chinese 'null value')",
+      "confidence": "high"
+    },
+    "noSecrets:58": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:59": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    },
+    "noSecrets:60": {
+      "category": "not-a-secret",
+      "note": "class constructor name",
+      "confidence": "high"
+    }
+  },
+  "secondRater": {
+    "astro:033": {
+      "category": "escaped",
+      "note": "simpleRenderMarkdown() runs escapeHTML on the audit message before adding links/bold/code"
+    },
+    "astro:047": {
+      "category": "trusted-dev",
+      "note": "CSS built from the button's size/style attributes, set by toolbar code"
+    },
+    "astro:053": {
+      "category": "constant",
+      "note": "style block plus a predefined icon's SVG or <slot />"
+    },
+    "astro:057": {
+      "category": "constant",
+      "note": "static style template"
+    },
+    "astro:062": {
+      "category": "trusted-dev",
+      "note": "tooltip sections: escaped titles/messages plus unescaped component paths and client directive names from Astro's own render"
+    },
+    "excalidraw:030": {
+      "category": "constant",
+      "note": "clears with an empty string (replaceChildren polyfill)"
+    },
+    "next.js:015": {
+      "category": "constant",
+      "note": "static error theme CSS"
+    },
+    "next.js:081": {
+      "category": "constant",
+      "note": "static minified CSS, choice controlled by a boolean"
+    },
+    "vite:011": {
+      "category": "constant",
+      "note": "literal source used to measure the stack-trace offset"
+    },
+    "zod:002": {
+      "category": "escaped",
+      "note": "zod's JIT code from the schema shape; keys go through util.esc (JSON.stringify)"
+    },
+    "next.js:012": {
+      "category": "defense"
+    },
+    "next.js:013": {
+      "category": "defense"
+    },
+    "next.js:019": {
+      "category": "defense"
+    },
+    "next.js:029": {
+      "category": "defense"
+    },
+    "next.js:031": {
+      "category": "defense"
+    },
+    "next.js:100": {
+      "category": "defense"
+    },
+    "next.js:101": {
+      "category": "defense"
+    },
+    "excalidraw:003": {
+      "category": "visual-or-dev",
+      "needsCsprng": false
+    },
+    "excalidraw:006": {
+      "category": "unique-id",
+      "needsCsprng": false,
+      "note": "change token to re-trigger the cursor hint"
+    },
+    "excalidraw:013": {
+      "category": "visual-or-dev",
+      "needsCsprng": false
+    },
+    "excalidraw:014": {
+      "category": "visual-or-dev",
+      "needsCsprng": false
+    },
+    "next.js:027": {
+      "category": "unique-id",
+      "needsCsprng": false,
+      "note": "value in the navigation-testing-lock cookie"
+    },
+    "next.js:046": {
+      "category": "jitter-sampling",
+      "needsCsprng": false
+    },
+    "next.js:088": {
+      "category": "unique-id",
+      "needsCsprng": false,
+      "note": "dev-server HMR session id"
+    },
+    "next.js:099": {
+      "category": "unique-id",
+      "needsCsprng": false,
+      "note": "history entry key"
+    },
+    "vite:003": {
+      "category": "unique-id",
+      "needsCsprng": false,
+      "note": "temp config file name"
+    },
+    "zod:003": {
+      "category": "unique-id",
+      "needsCsprng": false
+    },
+    "excalidraw:009": {
+      "category": "protected"
+    },
+    "next.js:054": {
+      "category": "protected"
+    },
+    "next.js:056": {
+      "category": "protected"
+    },
+    "next.js:057": {
+      "category": "protected"
+    },
+    "next.js:058": {
+      "category": "protected"
+    },
+    "next.js:059": {
+      "category": "protected"
+    },
+    "next.js:068": {
+      "category": "protected"
+    },
+    "next.js:070": {
+      "category": "protected"
+    },
+    "next.js:071": {
+      "category": "protected"
+    },
+    "next.js:072": {
+      "category": "protected"
+    },
+    "astro:004": {
+      "category": "not-a-secret",
+      "note": "asset placeholder token"
+    },
+    "hono:003": {
+      "category": "not-a-secret",
+      "note": "regex for bearer token characters"
+    },
+    "hono:004": {
+      "category": "not-an-ip",
+      "note": "IPv4-mapped prefix ::ffff:"
+    },
+    "hono:008": {
+      "category": "not-an-ip",
+      "note": "IPv4-mapped prefix ::ffff:"
+    },
+    "hono:009": {
+      "category": "not-an-ip",
+      "note": "the :: compression marker in a replace()"
+    },
+    "next.js:001": {
+      "category": "local-address"
+    },
+    "next.js:007": {
+      "category": "local-address"
+    },
+    "next.js:009": {
+      "category": "local-address"
+    },
+    "next.js:050": {
+      "category": "local-address"
+    },
+    "vite:007": {
+      "category": "local-address"
+    },
+    "astro:019": {
+      "category": "escaped",
+      "note": "speculation-rules JSON built with JSON.stringify and set via textContent"
+    },
+    "astro:023": {
+      "category": "constant"
+    },
+    "astro:025": {
+      "category": "constant",
+      "note": "icon name passed by toolbar code"
+    },
+    "astro:030": {
+      "category": "constant"
+    },
+    "astro:034": {
+      "category": "escaped",
+      "note": "simpleRenderMarkdown escapes before formatting"
+    },
+    "astro:038": {
+      "category": "constant",
+      "note": "predefined notification SVG"
+    },
+    "astro:046": {
+      "category": "constant"
+    },
+    "astro:055": {
+      "category": "constant"
+    },
+    "astro:061": {
+      "category": "constant"
+    },
+    "astro:063": {
+      "category": "trusted-dev",
+      "note": "custom SVG icon string supplied by a dev toolbar app"
+    },
+    "astro:064": {
+      "category": "constant"
+    },
+    "astro:069": {
+      "category": "constant"
+    },
+    "next.js:014": {
+      "category": "constant"
+    },
+    "next.js:053": {
+      "category": "constant",
+      "note": "script element used as an empty shadow-root host"
+    },
+    "vite:001": {
+      "category": "constant"
+    },
+    "noSecrets:13": {
+      "category": "not-a-secret",
+      "note": "i18n key"
+    },
+    "noSecrets:14": {
+      "category": "not-a-secret",
+      "note": "i18n key"
+    },
+    "noSecrets:19": {
+      "category": "not-a-secret",
+      "note": "AST node type name"
+    },
+    "noSecrets:22": {
+      "category": "not-a-secret",
+      "note": "CSS attribute selector"
+    },
+    "noSecrets:24": {
+      "category": "not-a-secret",
+      "note": "code snippet shown in the dev overlay"
+    },
+    "noSecrets:25": {
+      "category": "not-a-secret",
+      "note": "code snippet shown in the dev overlay"
+    },
+    "noSecrets:42": {
+      "category": "not-a-secret",
+      "note": "setting key and description"
+    },
+    "noSecrets:43": {
+      "category": "not-a-secret",
+      "note": "setting key and description"
+    },
+    "noSecrets:56": {
+      "category": "not-a-secret",
+      "note": "localized label"
+    },
+    "noSecrets:57": {
+      "category": "not-a-secret",
+      "note": "localized label"
+    }
+  },
+  "agreement": {
+    "byGroup": {
+      "injection": {
+        "agree": 0.96,
+        "kappa": 0.9,
+        "n": 25,
+        "same": 24
+      },
+      "javascript-url": {
+        "agree": 1,
+        "kappa": null,
+        "n": 7,
+        "same": 7
+      },
+      "randomness": {
+        "agree": 1,
+        "kappa": 1,
+        "n": 10,
+        "same": 10
+      },
+      "links": {
+        "agree": 1,
+        "kappa": null,
+        "n": 10,
+        "same": 10
+      },
+      "secrets-ips": {
+        "agree": 1,
+        "kappa": 1,
+        "n": 10,
+        "same": 10
+      },
+      "nosecrets": {
+        "agree": 1,
+        "kappa": null,
+        "n": 10,
+        "same": 10
+      }
+    },
+    "disagreements": [
+      {
+        "first": "constant",
+        "id": "astro:047",
+        "second": "trusted-dev"
+      }
+    ],
+    "overall": {
+      "agree": 0.986,
+      "kappa": 0.98,
+      "n": 72,
+      "same": 71
+    }
+  }
+}

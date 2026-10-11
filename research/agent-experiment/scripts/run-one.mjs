@@ -10,8 +10,9 @@
 // directory holds only the subject file, the topic's run files and the diagnostics JSON. Logs
 // stream to
 // <RUN_ROOT>/.staging/<id>/ so the agent never sees its own logs, the prompt file or the
-// pristine copy. Afterwards everything except the edited subject (kept as after.ts) is copied,
-// with paths and session ids redacted, into results/<topic>/runs/<id>/.
+// pristine copy. Afterwards everything except the edited subject (kept as after.ts, or
+// after.tsx for a .tsx subject) is copied, with paths and session ids redacted, into
+// results/<topic>/runs/<id>/.
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
@@ -29,7 +30,7 @@ import {
 } from "node:fs";
 import { createRequire } from "node:module";
 import { homedir } from "node:os";
-import { basename, dirname, join, relative } from "node:path";
+import { basename, dirname, extname, join, relative } from "node:path";
 
 const require = createRequire(import.meta.url);
 const lib = require("./lib.cjs");
@@ -282,11 +283,15 @@ for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
   });
 }
 lockAll();
-const lockedPaths = locked.map((l) =>
-  l.path.startsWith(`${lib.RUN_ROOT}/`)
-    ? `<run-root>/${relative(lib.RUN_ROOT, l.path)}`
-    : relative(HERE, l.path)
-);
+// Paths in the repo are recorded relative to this folder; a path outside both the repo and the
+// run root (a topic's machine-specific extra lock) only by its name.
+const lockedPaths = locked.map((l) => {
+  if (l.path.startsWith(`${lib.RUN_ROOT}/`))
+    return `<run-root>/${relative(lib.RUN_ROOT, l.path)}`;
+  if (!l.path.startsWith(`${ULTRACITE}/`))
+    return `<outside-repo>/${basename(l.path)}`;
+  return relative(HERE, l.path);
+});
 
 const startedAt = new Date();
 const startMs = Date.now();
@@ -365,12 +370,16 @@ for (const k of new Set([...Object.keys(preRun), ...Object.keys(postRun)])) {
 }
 const subjectDeleted = !postRun[subject.basename];
 
-// Move logs in and add the before/after/diff files.
+// Move logs in and add the before/after/diff files. They keep the subject's extension, so a
+// .tsx subject's copies still parse as TSX (a .ts subject's are before.ts and after.ts, as
+// before).
 for (const f of ["prompt.txt", "stdout.txt", "stderr.txt"])
   renameSync(join(stagingDir, f), join(runDir, f));
-copyFileSync(lib.subjectPath(subject), join(runDir, "before.ts"));
-chmodSync(join(runDir, "before.ts"), 0o644);
-if (!subjectDeleted) copyFileSync(file, join(runDir, "after.ts"));
+const artifactExt = extname(subject.basename) || ".ts";
+const beforeName = `before${artifactExt}`;
+copyFileSync(lib.subjectPath(subject), join(runDir, beforeName));
+chmodSync(join(runDir, beforeName), 0o644);
+if (!subjectDeleted) copyFileSync(file, join(runDir, `after${artifactExt}`));
 let diff = "";
 try {
   execFileSync(
@@ -381,7 +390,7 @@ try {
       `a/${subject.basename}`,
       "--label",
       `b/${subject.basename}`,
-      join(runDir, "before.ts"),
+      join(runDir, beforeName),
       file,
     ],
     {
@@ -449,9 +458,9 @@ const meta = {
 
 // Copy the run into the repo. Text artifacts are redacted (paths, home dir, session ids);
 // the session log, stdout and stderr are copied too but gitignored, since they carry account
-// details. The edited subject is already saved as after.ts.
+// details. The edited subject is already saved as after.ts (after.tsx for a .tsx subject).
 mkdirSync(resultDir, { recursive: true });
-const TEXT = /\.(txt|json|ts|patch|jsonl)$/;
+const TEXT = /\.(txt|json|tsx?|patch|jsonl)$/;
 for (const name of readdirSync(runDir)) {
   if (name === subject.basename || unchangedRunFile(runDir, name)) continue;
   const from = join(runDir, name);

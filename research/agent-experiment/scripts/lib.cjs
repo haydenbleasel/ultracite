@@ -7,7 +7,7 @@
 const { execFileSync } = require("node:child_process");
 const { createHash } = require("node:crypto");
 const { mkdirSync, readFileSync, rmSync, writeFileSync } = require("node:fs");
-const { homedir, tmpdir } = require("node:os");
+const { homedir, tmpdir, userInfo } = require("node:os");
 const { basename, join, resolve } = require("node:path");
 
 const CENSUS_DIR = resolve(__dirname, "../../corpus/scripts");
@@ -40,6 +40,12 @@ const CONFIG_FILE =
 
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g;
 const EMAIL = /\b[\w.%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}\b/gi;
+// The OS account name as a whole word, e.g. the owner column of `ls -l` output an agent's
+// tool call printed (added with the security-rules topic; no earlier run contains it).
+const USER_NAME = userInfo().username;
+const USER_WORD = USER_NAME
+  ? new RegExp(`\\b${USER_NAME.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g")
+  : null;
 
 /**
  * Replaces machine-specific paths, session ids and email addresses in anything written to a
@@ -71,7 +77,10 @@ const redact = (value) => {
   // Emails are replaced in the parsed strings, not the JSON text, so an escape such as `\n`
   // right before an address can't be mangled.
   const scrub = (v) => {
-    if (typeof v === "string") return v.replace(EMAIL, "<email>");
+    if (typeof v === "string") {
+      const s = v.replace(EMAIL, "<email>");
+      return USER_WORD ? s.replace(USER_WORD, "<user>") : s;
+    }
     if (Array.isArray(v)) return v.map(scrub);
     if (v && typeof v === "object") {
       return Object.fromEntries(

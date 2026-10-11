@@ -1,0 +1,36 @@
+--- a/script.tsx
++++ b/script.tsx
+@@ -109,12 +109,11 @@
+         return (
+           <script
+             nonce={nonce}
+-            dangerouslySetInnerHTML={{
+-              __html: `(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
++          >
++            {`(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
+                 JSON.stringify([0, { ...restProps, id }])
+-              )})`,
+-            }}
+-          />
++              )})`}
++          </script>
+         )
+       } else {
+   // ── end verbatim (L338-L349, ReactDOM.preload, omitted) ──
+@@ -122,12 +121,11 @@
+         return (
+           <script
+             nonce={nonce}
+-            dangerouslySetInnerHTML={{
+-              __html: `(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
++          >
++            {`(self.__next_s=self.__next_s||[]).push(${htmlEscapeJsonString(
+                 JSON.stringify([src, { ...restProps, id }])
+-              )})`,
+-            }}
+-          />
++              )})`}
++          </script>
+         )
+       }
+   // ── end verbatim ──

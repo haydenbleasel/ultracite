@@ -1,0 +1,123 @@
+{
+  "generated": "2026-10-10",
+  "note": "Measured by scripts/security-examples.cjs. react-doctor skips files under an examples/ directory, so react-doctor/no-eval, which fires on s1's code in the corpus and in a temp directory, is missing here. `security` lists security-rule hits (rule:line) per configuration; `otherRules` lists every other rule that fires, which an agent fixing the file would also see. Oxlint = core + react (Ultracite's default), then with the opt-in js-plugins preset; ESLint = Ultracite's core + react presets, untyped; Biome = Ultracite's core + react presets.",
+  "subjects": [
+    {
+      "file": "s1-vite-eval-value.ts",
+      "behaviourOracle": "Call evalValue on option-object sources from real import.meta.glob/new Worker calls, e.g. `{ eager: true }`, `{ query: '?raw', import: 'default' }`, `{ as: 'url', eager: true, }`, `{ type: 'module', name: 'w' }`, `['./a/*.ts', '!./a/b.ts']`, `{ query: { foo: 'bar', n: 1 } }`; compare results with the original (deep equality) and check that invalid input (`{ eager: }`) still throws. Also check `typeof process`/`typeof require` inside the expression stay `undefined`.",
+      "classification": "trusted-dev (vite:015)",
+      "repo": "vitejs/vite",
+      "rule": "no-new-func",
+      "sinkId": "vite:015",
+      "lines": 58,
+      "security": {
+        "eslint": [
+          "no-new-func:52",
+          "sonarjs/code-eval:52"
+        ],
+        "oxlint": [
+          "no-new-func:52"
+        ],
+        "oxlint +js-plugins": [
+          "no-new-func:52",
+          "sonarjs/code-eval:52"
+        ]
+      },
+      "otherRules": {
+        "biome": [
+          "suspicious/noExplicitAny:51"
+        ],
+        "eslint": [
+          "@typescript-eslint/no-explicit-any:51",
+          "func-style:51",
+          "unicorn/name-replacements:52"
+        ],
+        "oxlint": [
+          "func-style:51",
+          "typescript/no-explicit-any:51"
+        ],
+        "oxlint +js-plugins": [
+          "func-style:51",
+          "typescript/no-explicit-any:51"
+        ]
+      }
+    },
+    {
+      "file": "s2-next-before-interactive-script.tsx",
+      "behaviourOracle": "Render <BeforeInteractiveScript> with react-dom/server renderToStaticMarkup for props with and without src, with dangerouslySetInnerHTML or children, and with strings containing </script>, <!--, &, U+2028 and quotes; compare the HTML byte for byte with the original.",
+      "classification": "escaped (next.js:040, next.js:041)",
+      "repo": "vercel/next.js",
+      "rule": "react/no-danger",
+      "sinkId": "next.js:040, next.js:041",
+      "lines": 150,
+      "security": {
+        "biome": [
+          "security/noDangerouslySetInnerHtml:127",
+          "security/noDangerouslySetInnerHtml:140"
+        ],
+        "eslint": [
+          "react/no-danger:127",
+          "react/no-danger:140"
+        ],
+        "oxlint": [
+          "react/no-danger:127",
+          "react/no-danger:140"
+        ],
+        "oxlint +js-plugins": [
+          "react/no-danger:127",
+          "react/no-danger:140"
+        ]
+      },
+      "otherRules": {
+        "biome": [
+          "style/noNegationElse:115",
+          "performance/noDelete:121",
+          "style/noUselessElse:134"
+        ],
+        "eslint": [
+          "@typescript-eslint/consistent-indexed-object-style:90",
+          "sort-keys:93",
+          "unicorn/prefer-unicode-code-point-escapes:94",
+          "unicorn/prefer-unicode-code-point-escapes:95",
+          "require-unicode-regexp:98",
+          "unicorn/prefer-unicode-code-point-escapes:98",
+          "func-style:102",
+          "unicorn/name-replacements:102",
+          "unicorn/prefer-string-replace-all:103",
+          "unicorn/name-replacements:108",
+          "react/prefer-read-only-props:109",
+          "func-style:112",
+          "react/function-component-definition:112",
+          "unicorn/name-replacements:112",
+          "unicorn/name-replacements:113",
+          "no-negated-condition:115",
+          "unicorn/no-negated-condition:115",
+          "no-else-return:134",
+          "unicorn/no-useless-else:134"
+        ],
+        "oxlint": [
+          "sort-keys:90",
+          "typescript/consistent-indexed-object-style:90",
+          "require-unicode-regexp:98",
+          "func-style:102",
+          "func-style:112",
+          "react/function-component-definition:112",
+          "no-negated-condition:115",
+          "unicorn/no-negated-condition:115",
+          "no-else-return:124"
+        ],
+        "oxlint +js-plugins": [
+          "sort-keys:90",
+          "typescript/consistent-indexed-object-style:90",
+          "require-unicode-regexp:98",
+          "func-style:102",
+          "func-style:112",
+          "react/function-component-definition:112",
+          "no-negated-condition:115",
+          "unicorn/no-negated-condition:115",
+          "no-else-return:124"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+--- a/utils.ts
++++ b/utils.ts
+@@ -30,10 +30,16 @@
+  * SOFTWARE.
+  */
+ 
++import { runInNewContext } from 'node:vm'
++
+ export function evalValue<T = any>(rawValue: string): T {
+-  const fn = new Function(`
+-    var console, exports, global, module, process, require
+-    return (\n${rawValue}\n)
+-  `)
+-  return fn()
++  // Evaluate in a fresh V8 context with a null-prototype global so the
++  // expression cannot reach this realm's globals (process, require, Buffer...)
++  return runInNewContext(
++    `(function () {
++      var console, exports, global, module, process, require
++      return (\n${rawValue}\n)
++    })()`,
++    Object.create(null),
++  )
+ }
