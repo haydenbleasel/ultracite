@@ -597,7 +597,7 @@ describe("readHook", () => {
           }),
         resolvePath: exists,
       })
-    ).toEqual({ report: "stderr", targets: ["src/a.ts"] });
+    ).toEqual({ report: "stderr", targets: [edited] });
   });
 
   test("keeps the whole-project run and the plain exit code when stdin fails", async () => {

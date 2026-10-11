@@ -12,6 +12,11 @@ import {
 import type { ProjectState } from "../src/upgrade-guides";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
+// The project root for tests that read files. Resolved, as the config lookup
+// resolves it, so the mocked paths match on Windows (`D:\repo`) too.
+const repo = path.resolve("/repo");
+const inRepo = (...segments: string[]): string => path.join(repo, ...segments);
+
 const project = (state: Partial<ProjectState>): ProjectState => ({
   biomeConfig: null,
   commandSources: [],
@@ -54,13 +59,13 @@ describe("findPendingGuides", () => {
   });
 
   test("needs v7 for a string extends of a v6 preset", () => {
-    mockFileSystem({ "/repo/biome.json": '{ "extends": "ultracite/core" }' });
+    mockFileSystem({
+      [inRepo("biome.json")]: '{ "extends": "ultracite/core" }',
+    });
 
     try {
       expect(
-        findPendingGuides(readProjectState("/repo")).map(
-          (guide) => guide.version
-        )
+        findPendingGuides(readProjectState(repo)).map((guide) => guide.version)
       ).toEqual([7]);
     } finally {
       restoreFileSystemMock();
@@ -349,11 +354,12 @@ describe("readProjectState", () => {
 
   test("reads the Biome config and the files that run Ultracite", () => {
     mockFileSystem({
-      "/repo/biome.jsonc": '{\n  // v6\n  "extends": ["ultracite/core"],\n}',
-      "/repo/package.json": '{"scripts":{"format":"ultracite format"}}',
+      [inRepo("biome.jsonc")]:
+        '{\n  // v6\n  "extends": ["ultracite/core"],\n}',
+      [inRepo("package.json")]: '{"scripts":{"format":"ultracite format"}}',
     });
 
-    const state = readProjectState("/repo");
+    const state = readProjectState(repo);
 
     expect(state.biomeConfig?.extends).toEqual(["ultracite/core"]);
     expect(state.commandSources).toEqual([
@@ -363,13 +369,13 @@ describe("readProjectState", () => {
 
   test("reads the ESLint config and the dependencies", () => {
     mockFileSystem({
-      "/repo/eslint.config.mjs":
+      [inRepo("eslint.config.mjs")]:
         'import core from "ultracite/eslint/core";\nexport default [...core];',
-      "/repo/package.json":
+      [inRepo("package.json")]:
         '{"dependencies":{"react":"19"},"devDependencies":{"cypress":"15"}}',
     });
 
-    const state = readProjectState("/repo");
+    const state = readProjectState(repo);
 
     expect(state.eslintConfig).toContain("ultracite/eslint/core");
     expect(state.dependencies).toEqual(["react", "cypress"]);
@@ -378,13 +384,13 @@ describe("readProjectState", () => {
 
   test("reads the Zed settings, comments and all", () => {
     mockFileSystem({
-      "/repo/.zed/settings.json":
+      [inRepo(".zed", "settings.json")]:
         '{\n  // v7\n  "languages": { "TSX": { "formatter": { "language_server": { "name": "eslint" } } } },\n}',
-      "/repo/eslint.config.mjs":
+      [inRepo("eslint.config.mjs")]:
         'import core from "ultracite/eslint/core";\nexport default [...core];',
     });
 
-    const state = readProjectState("/repo");
+    const state = readProjectState(repo);
 
     expect(state.zedSettings).toContain('"name": "eslint"');
     expect(findPendingGuides(state).map((guide) => guide.version)).toEqual([8]);
