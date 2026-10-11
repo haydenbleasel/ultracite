@@ -6,6 +6,8 @@ Ultracite helps you and your AI models write consistent, type-safe code without 
 
 [![npm downloads](https://img.shields.io/npm/dm/ultracite.svg)](https://www.npmjs.com/package/ultracite) [![Socket Badge](https://badge.socket.dev/npm/package/ultracite/latest)](https://socket.dev/npm/package/ultracite/overview/latest) ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/haydenbleasel/ultracite?utm_source=oss&utm_medium=github&utm_campaign=haydenbleasel%2Fultracite&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
+> For the thinking behind Ultracite, read [The agentic development loop](https://haydenbleasel.com/writing/ultracite) by Hayden Bleasel. For the reasoning behind the rules, browse our [open research](https://ultracite.ai/research).
+
 ## Quick Start
 
 ```sh
