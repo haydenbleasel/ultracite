@@ -180,23 +180,30 @@ export default defineConfig({
 ```
 
 :::note
-`sortTailwindcss` is an **Oxfmt-only** setting. Configuring it in `oxlint.config.ts` causes Oxlint to throw an `unknown field sortTailwindcss` error.
+`sortTailwindcss` is an Oxfmt option, not an Oxlint one. Put it in your Oxfmt config: Oxlint's config rejects it with `` unknown field `sortTailwindcss` ``.
 :::
 
-In monorepos or workspaces with a root `oxfmt.config.ts`, configure `sortTailwindcss` in the root configuration file and point `stylesheet` at your app stylesheet relative to the repository root:
+Setting `sortTailwindcss` replaces the preset's value instead of merging with it, so keep the preset's `functions` list.
 
-```ts title="oxfmt.config.ts"
+Oxfmt resolves `stylesheet` relative to the config file that sets it. A path that doesn't resolve turns sorting off without an error, so check that classes still sort after you change it. In a monorepo with a single root config, use the path from the root, such as `./apps/web/src/styles.css`.
+
+Oxfmt formats each file with its nearest config and doesn't merge it with the root one, so a workspace with an Oxfmt config of its own doesn't get the root's `sortTailwindcss`. The same goes for apps with different themes, since `stylesheet` takes one file. Give each of those workspaces a config that spreads the root config and points at its own stylesheet:
+
+```ts title="apps/web/oxfmt.config.ts"
 import { defineConfig } from "oxfmt";
-import ultracite from "ultracite/oxfmt";
+
+import root from "../../oxfmt.config.ts";
 
 export default defineConfig({
-  ...ultracite,
+  ...root,
   sortTailwindcss: {
     functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
-    stylesheet: "./apps/web/src/styles.css",
+    stylesheet: "./src/styles.css",
   },
 });
 ```
+
+If the root config is `oxfmt.config.mts`, import that file instead. In a workspace whose `package.json` doesn't set `"type": "module"`, name the workspace config `oxfmt.config.mts`.
 
 ### Adding Third-Party Plugins (Oxlint)
 
