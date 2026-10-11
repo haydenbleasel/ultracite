@@ -41,7 +41,7 @@ Ultimately, you control your project's lint config. Ultracite is a starting poin
 
 In that case, you could build your own linter config from scratch, but you'd lose a lot of the convenience. Usually, a few tweaks are all that's needed to make Ultracite fit nicely.
 
-## Q: Can I use Ultracite without VS Code / Cursor / Windsurf?
+## Q: Can I use Ultracite without VS Code / Cursor / Devin Desktop?
 
 Yes. We focus on VS Code and its forks as they're the most popular IDEs for modern web development, but `init` can also write Zed settings (`--editors zed`), and every toolchain runs from the command line with `ultracite check` and `ultracite fix`, so it works in any editor or CI.
 
@@ -80,7 +80,7 @@ Some users have encountered signature verification errors when running `pnpm dlx
 Here are the recommended solutions:
 
 - **Update corepack**: Upgrade to corepack version 0.34.0 or later. You can do this with `corepack prepare pnpm@latest --activate` or by following the [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
-- **Update Node.js**: If you're on Node.js v20.x, consider upgrading to v22 or later, which includes a more recent corepack version.
+- **Update Node.js**: Ultracite needs Node.js 22.18 or later, or Bun. Newer Node.js releases bundle newer corepack versions, so updating Node.js can also fix the error.
 - **Use npx instead**: If corepack continues to cause issues, you can use `npx ultracite init` instead of `pnpm dlx ultracite init`.
 
 If none of these work, please open an issue on the [Ultracite GitHub repo](https://github.com/haydenbleasel/ultracite/issues) with details about your Node.js and corepack versions.

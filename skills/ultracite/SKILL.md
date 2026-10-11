@@ -13,7 +13,7 @@ Check if `ultracite` is in `package.json` dependencies or devDependencies. Detec
 
 - `biome.json` / `biome.jsonc` → Biome
 - `eslint.config.*` (`.mjs`, `.js`, `.cjs`, `.ts`, `.mts`, `.cts`) → ESLint (with Prettier for formatting)
-- `oxlint.config.ts` → Oxlint (with `oxfmt.config.ts` for formatting)
+- `oxlint.config.ts`, `oxlint.config.mts` or `.oxlintrc.json` → Oxlint (with `oxfmt.config.ts` or `oxfmt.config.mts` for formatting; init writes the `.mts` form in a package that isn't an ES module)
 
 ## CLI Commands
 
@@ -59,7 +59,7 @@ bunx ultracite init \
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest` | `cypress` | `storybook`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
 - `--hooks` — Enable auto-fix hooks: `claude` | `codex` | `copilot` | `cursor` | `devin` | `codebuddy` | `deepagents` | `grok`
-- `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-sonarjs` | `oxlint-plugin-react-doctor`
+- `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-jsdoc` | `eslint-plugin-sonarjs` | `eslint-plugin-tsdoc` | `oxlint-plugin-react-doctor`
 - `--type-aware` — Enable type-aware linting (ESLint and Biome: extend their `type-aware` preset; Oxlint: installs `oxlint-tsgolint` and sets `typeAware`), and turn on `strictNullChecks` in tsconfig files
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation
@@ -90,7 +90,7 @@ export default defineConfig({
 });
 ```
 
-Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`. Biome also has `type-aware`. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
+Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`, `cypress`, `storybook` (`cypress` and `storybook` only have rules on ESLint; on Oxlint and Biome they're empty). ESLint and Biome also have `type-aware`, the rules that need type information, and ESLint has a `<framework>/type-aware` add-on for `angular`, `jest`, `nestjs`, `qwik`, `tanstack` and `vitest`, extended after that framework's preset. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
 
 ## Migrating an Existing Project
 
@@ -114,6 +114,7 @@ To apply them yourself, follow each guide that applies, oldest first. Each one s
 - [references/upgrades/v5.md](references/upgrades/v5.md): Biome 1's config format to Biome 2's
 - [references/upgrades/v6.md](references/upgrades/v6.md): the single `ultracite` preset to `ultracite/core` plus framework presets
 - [references/upgrades/v7.md](references/upgrades/v7.md): `ultracite/<preset>` to `ultracite/biome/<preset>`, and the `lint` and `format` commands to `check` and `fix`
+- [references/upgrades/v8.md](references/upgrades/v8.md): removing `prettier/prettier` from ESLint and Stylelint configs, the Cypress and Storybook presets, ESLint configs that set type-checked rules, Oxlint's `typeAware` option, `init --yes`, and Zed's formatter on ESLint
 
 ## Code Standards
 
@@ -140,10 +141,10 @@ Run `bunx ultracite doctor` to diagnose. It checks:
 1. Linter and formatter installation (Biome; or ESLint + Prettier + Stylelint; or Oxlint + oxfmt)
 2. Config validity (extends the ultracite presets correctly)
 3. Ultracite in package.json dependencies
-4. Conflicting tools (legacy `.eslintrc.*` files; `.prettierrc.*`/`prettier.config.*` when not using the ESLint backend)
+4. Conflicting tools when not using the ESLint backend (legacy `.eslintrc.*` files, `.prettierrc.*`/`prettier.config.*`)
 
 Common fixes:
 
-- **Conflicting configs**: Delete legacy `.eslintrc.*` and `.prettierrc.*` files after migrating to Ultracite
+- **Conflicting configs**: After moving to Oxlint or Biome, delete leftover `.eslintrc.*` and `.prettierrc.*` files. On ESLint, `.eslintrc.*` files are inert (ESLint 10 only reads `eslint.config.*`) and `.prettierrc.*` is the formatter's config, so neither is a conflict
 - **Missing dependency**: Run `bunx ultracite init` again or manually add `ultracite` to devDependencies
 - **Rules not applying**: Ensure config file extends the correct presets for your framework

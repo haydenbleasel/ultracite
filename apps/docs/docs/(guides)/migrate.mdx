@@ -26,15 +26,15 @@ npx ultracite@latest init
 
 `init` preselects the linter it finds your config for. What it does with your existing configuration:
 
-- **ESLint**: writes a flat config that spreads Ultracite's presets. An ES module config is updated in place, a CommonJS one is replaced by `eslint.config.mjs`, and legacy `.eslintrc*` files are removed. A config that doesn't use Ultracite's presets yet is replaced, with a warning naming the file, so its rules have to be carried over (step 2). Once it spreads an `ultracite/eslint/*` preset, re-running `init` keeps your additions.
+- **ESLint**: writes a flat config that spreads Ultracite's presets. An ES module config is updated in place, and a CommonJS one is replaced by `eslint.config.mjs`. Legacy `.eslintrc*` files stay, since ESLint 10 doesn't read them, so you can carry their rules over and delete them yourself. A config that doesn't use Ultracite's presets yet is replaced, with a warning naming the file, so its rules have to be carried over (step 2). Once it spreads an `ultracite/eslint/*` preset, re-running `init` keeps your additions.
 - **Prettier** (with ESLint): writes a `prettier.config.mjs` that spreads Ultracite's settings. An ES module config is updated in place; a JSON, YAML, TOML or CommonJS config, or a `"prettier"` key in `package.json`, is replaced, with a warning.
-- **Stylelint** (with ESLint): writes a `stylelint.config.mjs` that re-exports Ultracite's config. A config that doesn't reference `ultracite/stylelint` is replaced, with a warning; one that extends it and adds rules is left as it is.
+- **Stylelint** (with ESLint): writes a `stylelint.config.mjs` that spreads Ultracite's config. A config that doesn't reference `ultracite/stylelint` is replaced, with a warning; one that builds on it and adds rules is left as it is.
 - **Biome**: adds Ultracite's presets to the `extends` list of your `biome.json` or `biome.jsonc`, editing it in place, so your rules, settings and comments stay.
 - **Oxlint**: adds Ultracite's presets to your `oxlint.config.ts`, keeping your own imports, `rules`, `overrides`, `ignorePatterns`, `jsPlugins` and `settings`. An `.oxlintrc.json` or `.oxfmtrc.json` is moved into the TypeScript configs and deleted, since Oxlint and Oxfmt refuse to run with two configs in one folder.
 
-Moving to another engine removes the ESLint, Prettier and Stylelint packages Ultracite would have installed, and their config files, including legacy `.eslintrc*` files and the `"prettier"` and `"stylelint"` keys in `package.json`. Packages in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, stay. Oxlint doesn't lint CSS (Oxfmt only formats it), so pick Biome or ESLint if you rely on Stylelint.
+Moving to another engine removes the ESLint, Prettier and Stylelint packages Ultracite would have installed, and their config files, including legacy `.eslintrc*` files and the `"prettier"` and `"stylelint"` keys in `package.json`. An interactive run lists them and asks first; with `--yes`, `init` removes them without asking. If you keep them, `init` warns when `ultracite check` would still find and run the old linter. Packages in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, stay. Oxlint doesn't lint CSS (Oxfmt only formats it), so pick Biome or ESLint if you rely on Stylelint.
 
-`init` also merges your `.vscode/settings.json` rather than replacing it, adds `check` and `fix` scripts, turns on `strictNullChecks` unless your `tsconfig.json` sets it to `false`, and writes Ultracite's rules to `AGENTS.md`, so your agents write code that passes from the start. A config `init` can't parse is left unchanged, with a warning.
+`init` also merges your `.vscode/settings.json` rather than replacing it, adds `check` and `fix` scripts, and writes Ultracite's rules to `AGENTS.md`, so your agents write code that passes from the start. With type-aware linting, it also turns on `strictNullChecks` in your `tsconfig*.json` files unless one sets it to `false`, and an interactive run asks first. A config `init` can't parse is left unchanged, with a warning.
 
 ## 2. Carry Over Your Own Rules
 
@@ -112,9 +112,12 @@ npx ultracite check --suppress-all
 That writes `eslint-suppressions.json`, which you commit. The recorded errors stop failing `check`, but any new one fails, even in a file that already has some: the file records how many problems each rule has in each file, and when a file goes over, ESLint shows all of that rule's problems there. ESLint only suppresses errors, so warnings still show. Stylelint has no suppressions, so turn its failing rules off in `stylelint.config.mjs`, with `null`:
 
 ```js title="stylelint.config.mjs"
+import ultracite from "ultracite/stylelint";
+
 export default {
-  extends: ["ultracite/stylelint"],
+  ...ultracite,
   rules: {
+    ...ultracite.rules,
     // Progressive migration: remove a rule as its problems are fixed.
     "selector-class-pattern": null,
   },
