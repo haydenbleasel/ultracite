@@ -191,6 +191,32 @@ export default defineConfig({
 });
 ```
 
+:::note
+`sortTailwindcss` is an Oxfmt option, not an Oxlint one. Put it in your Oxfmt config: Oxlint's config rejects it with `` unknown field `sortTailwindcss` ``.
+:::
+
+Setting `sortTailwindcss` replaces the preset's value instead of merging with it, so keep the preset's `functions` list.
+
+Oxfmt resolves `stylesheet` relative to the config file that sets it. A path that doesn't resolve turns sorting off without an error, so check that classes still sort after you change it. In a monorepo with a single root config, use the path from the root, such as `./apps/web/src/styles.css`.
+
+Oxfmt formats each file with its nearest config and doesn't merge it with the root one, so a workspace with an Oxfmt config of its own doesn't get the root's `sortTailwindcss`. The same goes for apps with different themes, since `stylesheet` takes one file. Give each of those workspaces a config that spreads the root config and points at its own stylesheet:
+
+```ts title="apps/web/oxfmt.config.ts"
+import { defineConfig } from "oxfmt";
+
+import root from "../../oxfmt.config.ts";
+
+export default defineConfig({
+  ...root,
+  sortTailwindcss: {
+    functions: ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"],
+    stylesheet: "./src/styles.css",
+  },
+});
+```
+
+If the root config is `oxfmt.config.mts`, import that file instead. In a workspace whose `package.json` doesn't set `"type": "module"`, name the workspace config `oxfmt.config.mts`.
+
 ### Adding Third-Party Plugins (Oxlint)
 
 Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
