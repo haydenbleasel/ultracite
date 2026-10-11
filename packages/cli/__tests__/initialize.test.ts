@@ -167,6 +167,35 @@ const expectStoppedBeforeSetup = ({
   expect(mockSuccess).not.toHaveBeenCalled();
 };
 
+// A project whose `links` are symbolic links (path to target).
+const mockLinkedProject = (
+  initial: Record<string, string>,
+  links: Record<string, string>
+) => {
+  const files = { ...initial };
+  const resolve = (path: string): string => links[path] ?? path;
+
+  mock.module("node:fs/promises", () => ({
+    access: mock((path: string) =>
+      resolve(path) in files
+        ? Promise.resolve()
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock((path: string) =>
+      resolve(path) in files
+        ? Promise.resolve(files[resolve(path)])
+        : Promise.reject(new Error("ENOENT"))
+    ),
+    rm: mock(() => Promise.resolve()),
+    writeFile: mock((path: string, content: string) => {
+      files[path] = content;
+      return Promise.resolve();
+    }),
+  }));
+  mockFileSystem(files, links);
+};
+
 describe("initialize", () => {
   // Note: We don't call mock.restore() here because it causes issues
   // with module re-loading when the tests transition between each other
@@ -1996,6 +2025,32 @@ describe("helper functions", () => {
       expect(mockAddDep).toHaveBeenCalled();
     });
 
+    test("reports a failed install as a setup error", async () => {
+      mock.module("nypm", () => ({
+        addDevDependency: mock(() =>
+          Promise.reject(new Error("npm error code ERESOLVE"))
+        ),
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          error: mock(noop),
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      const install = installDependencies(npmPm, "biome", true);
+      await expect(install).rejects.toBeInstanceOf(UltraciteSetupError);
+      await expect(install).rejects.toThrow("ultracite init");
+    });
+
     test("updates package.json when install is false", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
@@ -3653,6 +3708,33 @@ describe("helper functions", () => {
         "AGENTS.md",
       ]);
     });
+
+    test("warns about a file it skipped, even in quiet runs", async () => {
+      const mockWarn = mock(noop);
+      mockLinkedProject(
+        { "docs/ai.md": "Use pnpm.\n" },
+        { "CLAUDE.md": "docs/ai.md" }
+      );
+
+      mock.module("@clack/prompts", () => ({
+        log: { warn: mockWarn },
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      try {
+        await upsertAgents(["claude"], "npm", "biome", true);
+      } finally {
+        restoreFileSystemMock();
+      }
+
+      expect(mockWarn).toHaveBeenCalledWith(
+        expect.stringContaining("CLAUDE.md is a symbolic link")
+      );
+    });
   });
 
   describe("interactive prompts", () => {
@@ -4215,6 +4297,30 @@ const mockProject = (files: Record<string, string>) => {
   return { removed, written };
 };
 
+// A project whose writes later reads and existence checks see, for steps
+// that build on a file an earlier step wrote. Returns its files, which
+// writes add to.
+const mockLiveProject = (files: Record<string, string>) => {
+  mockFileSystem(files);
+  mock.module("node:fs/promises", () => ({
+    access: mock(() => Promise.reject(new Error("ENOENT"))),
+    mkdir: mock(() => Promise.resolve()),
+    readFile: mock((filePath: string) => {
+      const content = files[String(filePath)];
+      return content === undefined
+        ? Promise.reject(new Error("ENOENT"))
+        : Promise.resolve(content);
+    }),
+    rm: mock(() => Promise.resolve()),
+    writeFile: mock((filePath: string, content: string) => {
+      files[String(filePath)] = content;
+      return Promise.resolve();
+    }),
+  }));
+
+  return files;
+};
+
 const restoreProject = () => {
   restoreFileSystemMock();
   mock.module("fast-glob", () => ({
@@ -4413,6 +4519,142 @@ describe("init questions", () => {
         prompt.message.includes("type-aware")
       )
     ).toBe(true);
+  });
+
+  // Init can't take the type-aware rules out again, so a "No" would do
+  // nothing.
+  test.each([
+    [
+      "eslint",
+      {
+        "eslint.config.mjs":
+          'import core from "ultracite/eslint/core";\nimport typeAware from "ultracite/eslint/type-aware";\n\nexport default [...core, ...typeAware];\n',
+        "package.json": '{"name": "app"}',
+      },
+      "eslint.config.mjs",
+      "ultracite/eslint/type-aware",
+    ],
+    [
+      "oxlint",
+      {
+        "package.json":
+          '{"name": "app", "devDependencies": {"oxlint-tsgolint": "^7.0.0"}}',
+      },
+      "oxlint.config.mts",
+      "typeAware: true",
+    ],
+  ] as const)(
+    "keeps type-aware linting on %s without asking",
+    async (linter, files, configFile, expected) => {
+      const prompts = recordingPrompts();
+      const { written } = mockProject({
+        ...files,
+        "tsconfig.json": '{"compilerOptions": {}}',
+      });
+
+      try {
+        await initialize({ linter, skipInstall: true });
+      } finally {
+        restoreProject();
+      }
+
+      expect(
+        prompts.confirm.mock.calls.some(([prompt]) =>
+          prompt.message.includes("Turn on type-aware")
+        )
+      ).toBe(false);
+      expect(written.get(`./${configFile}`)).toContain(expected);
+    }
+  );
+
+  test("asks about the Ultracite skill before writing anything", async () => {
+    const writtenWhenAsked: number[] = [];
+    const { written } = mockProject({ "package.json": '{"name": "app"}' });
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 0, stdout: "[]" })),
+    }));
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: {
+        error: mock(noop),
+        info: mock(noop),
+        success: mock(noop),
+        warn: mock(noop),
+      },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mock((prompt: { message: string }) => {
+        if (prompt.message.includes("Ultracite skill")) {
+          writtenWhenAsked.push(written.size);
+          return Promise.resolve("skip");
+        }
+        return Promise.resolve("oxlint");
+      }),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+
+    try {
+      await initialize({ linter: "oxlint", skipInstall: true });
+    } finally {
+      restoreProject();
+    }
+
+    expect(writtenWhenAsked).toEqual([0]);
+    expect(written.size).toBeGreaterThan(0);
+  });
+
+  // Written at once, each editor saw no file and the last write won, so
+  // Trae lost the pre-1.111 TypeScript settings it reads.
+  test("keeps every editor's settings when editors share a settings file", async () => {
+    recordingPrompts();
+    const files = mockLiveProject({
+      "./package.json": '{"name": "app"}',
+      "package.json": '{"name": "app"}',
+    });
+    const spawn = mock((_command: string, _args: string[]) => ({
+      status: 0,
+      stdout: "[]",
+    }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: spawn }));
+
+    try {
+      await initialize({
+        agents: [],
+        editors: ["trae", "vscode"],
+        frameworks: [],
+        hooks: [],
+        integrations: [],
+        linter: "oxlint",
+        pm: "npm",
+        quiet: true,
+        skipInstall: true,
+      });
+    } finally {
+      restoreProject();
+    }
+
+    const settings: unknown = JSON.parse(files[".vscode/settings.json"] ?? "");
+    expect(settings).toHaveProperty(
+      ["typescript.tsdk"],
+      "node_modules/typescript/lib"
+    );
+    expect(settings).toHaveProperty(
+      ["js/ts.tsdk.path"],
+      "node_modules/typescript/lib"
+    );
+    // Each editor still gets the extension, with its own launcher.
+    expect(
+      spawn.mock.calls
+        .filter(([, args]) => args[0] === "--install-extension")
+        .map(([command]) => command)
+    ).toEqual(["trae", "code"]);
   });
 });
 

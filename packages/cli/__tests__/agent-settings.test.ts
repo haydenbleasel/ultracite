@@ -28,6 +28,18 @@ describe("mergeAgentSettings", () => {
     );
   });
 
+  test("keeps the comment on a single file it turns into a list", () => {
+    expect(merge("read: CONVENTIONS.md # team rules\n")).toBe(
+      "read:\n  - CONVENTIONS.md # team rules\n  - AGENTS.md\nlint-cmd: npx ultracite fix\n"
+    );
+  });
+
+  test("keeps the comment on a read of the old ultracite.md it replaces", () => {
+    expect(merge("read: ultracite.md # rules\n")).toBe(
+      "read: AGENTS.md # rules\nlint-cmd: npx ultracite fix\n"
+    );
+  });
+
   test("edits a read list in place, keeping comments and dropping ultracite.md", () => {
     expect(
       merge("read:\n  - CONVENTIONS.md # team rules\n  - ultracite.md\n")

@@ -6,7 +6,7 @@ import {
   parseTree,
 } from "jsonc-parser";
 import type { ParseError } from "jsonc-parser";
-import { isNode, isScalar, isSeq, parseDocument } from "yaml";
+import { isNode, isScalar, isSeq, parseDocument, YAMLSeq } from "yaml";
 import { z } from "zod";
 
 import type { AgentSettings } from "./data/agents";
@@ -103,7 +103,8 @@ const mergeYaml = (
     );
   };
 
-  const readNode = document.getIn(settings.readKey);
+  // Scalars too, as nodes, so their comments can be kept.
+  const readNode = document.getIn(settings.readKey, true);
 
   if (isSeq(readNode)) {
     // Edit the list in place, so comments on the user's entries survive.
@@ -117,7 +118,16 @@ const mergeYaml = (
     }
   } else {
     const read = nextRead(stringsAt(settings.readKey), settings, rulesPath);
-    if (read) {
+    if (read && isScalar(readNode) && read[0] === readNode.value) {
+      // Turn the one file into a list around the user's own node, so a
+      // comment on it survives.
+      const list = new YAMLSeq();
+      list.items = [
+        readNode,
+        ...read.slice(1).map((file) => document.createNode(file)),
+      ];
+      document.setIn(settings.readKey, list);
+    } else if (read) {
       document.setIn(settings.readKey, read.length === 1 ? read[0] : read);
     }
   }

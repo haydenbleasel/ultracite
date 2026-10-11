@@ -2,7 +2,7 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 
 import {
   getUltraciteSkillInstallCommand,
-  maybeInstallUltraciteSkill,
+  installUltraciteSkill,
 } from "../src/skill";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -28,17 +28,16 @@ afterEach(() => {
   }));
 });
 
-describe("maybeInstallUltraciteSkill", () => {
-  test("runs skills add non-interactively so it installs from init", async () => {
+describe("installUltraciteSkill", () => {
+  test("runs skills add non-interactively so it installs from init", () => {
     // With piped stdio and no --yes, `skills add` cancels its own prompts
     // and exits without installing anything.
     const spawn = mockSpawn(0);
     mockFileSystem({});
 
-    const installed = await maybeInstallUltraciteSkill({
+    const installed = installUltraciteSkill({
       packageManager: "npm",
       quiet: true,
-      shouldInstall: true,
     });
     restoreFileSystemMock();
 
@@ -59,14 +58,13 @@ describe("maybeInstallUltraciteSkill", () => {
     );
   });
 
-  test("also installs for agents whose project directory exists", async () => {
+  test("also installs for agents whose project directory exists", () => {
     const spawn = mockSpawn(0);
     mockFileSystem({ ".claude": "", ".windsurf": "" });
 
-    await maybeInstallUltraciteSkill({
+    installUltraciteSkill({
       packageManager: "npm",
       quiet: true,
-      shouldInstall: true,
     });
     restoreFileSystemMock();
 
@@ -86,17 +84,16 @@ describe("maybeInstallUltraciteSkill", () => {
     );
   });
 
-  test("installs for chosen agents that only read their own directory", async () => {
+  test("installs for chosen agents that only read their own directory", () => {
     // AdaL, IBM Bob and Qoder never read .agents/skills, and a project that
     // just chose them doesn't have their directory yet.
     const spawn = mockSpawn(0);
     mockFileSystem({ ".qoder": "" });
 
-    await maybeInstallUltraciteSkill({
+    installUltraciteSkill({
       agents: ["claude", "adal", "bob", "qoder"],
       packageManager: "npm",
       quiet: true,
-      shouldInstall: true,
     });
     restoreFileSystemMock();
 
@@ -117,13 +114,12 @@ describe("maybeInstallUltraciteSkill", () => {
     );
   });
 
-  test("reports a failed install", async () => {
+  test("reports a failed install", () => {
     mockSpawn(1);
 
-    const installed = await maybeInstallUltraciteSkill({
+    const installed = installUltraciteSkill({
       packageManager: "npm",
       quiet: true,
-      shouldInstall: true,
     });
 
     expect(installed).toBe(false);

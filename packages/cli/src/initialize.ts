@@ -51,6 +51,7 @@ import { prettier } from "./linters/prettier";
 import { stylelint } from "./linters/stylelint";
 import {
   getRootInstallOptions,
+  installFailedError,
   normalizePackageManager,
   resolveRequestedPackageManager,
   supportedPackageManagers,
@@ -58,7 +59,8 @@ import {
 import { readPackageJson } from "./schemas";
 import {
   getUltraciteSkillInstallCommand,
-  maybeInstallUltraciteSkill,
+  hasUltraciteSkillInstalled,
+  installUltraciteSkill,
 } from "./skill";
 import { tsconfig } from "./tsconfig";
 import type { TsConfigUpdate } from "./tsconfig";
@@ -540,11 +542,22 @@ export const installDependencies = async (
   }
 
   if (install) {
-    await addDevDependency(packages, {
-      corepack: false,
-      silent: true,
-      ...getRootInstallOptions(packageManager),
-    });
+    try {
+      await addDevDependency(packages, {
+        corepack: false,
+        silent: true,
+        ...getRootInstallOptions(packageManager),
+      });
+    } catch (error) {
+      if (!quiet) {
+        s.error("Install failed.");
+      }
+      throw installFailedError(
+        error instanceof Error ? error.message : String(error),
+        packageManager,
+        "ultracite init"
+      );
+    }
     // Add ultracite scripts to package.json
     if (scripts) {
       await updatePackageJson({ scripts });
@@ -612,7 +625,11 @@ const zedExtensionHints: Partial<Record<Linter, string>> = {
 export const upsertEditorConfig = async (
   editorId: string,
   linter: Linter = "biome",
-  quiet = false
+  quiet = false,
+  // Whether the settings file was there before init started. Editors that
+  // share one (VS Code and its forks) write it in turn, and each installs its
+  // extension when init created the file, as the first one does.
+  existedBefore?: boolean
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Editor configuration requires multiple conditional paths
 ) => {
   const editor = editors.find((e) => e.id === editorId);
@@ -628,7 +645,9 @@ export const upsertEditorConfig = async (
     s.start(`Checking for ${editor.config.path}...`);
   }
 
-  if (await editorConfig.exists()) {
+  const fileExists = await editorConfig.exists();
+
+  if (fileExists && (existedBefore ?? true)) {
     if (!quiet) {
       s.message(`${editor.config.path} found, updating...`);
     }
@@ -639,11 +658,16 @@ export const upsertEditorConfig = async (
     return;
   }
 
-  if (!quiet) {
-    s.message(`${editor.config.path} not found, creating...`);
+  if (fileExists) {
+    // Another editor created it in this run; add this one's settings.
+    await editorConfig.update();
+  } else {
+    if (!quiet) {
+      s.message(`${editor.config.path} not found, creating...`);
+    }
+    // create() is a required side effect that must complete before the extension-install branches below
+    await editorConfig.create();
   }
-  // create() is a required side effect that must complete before the extension-install branches below
-  await editorConfig.create();
 
   // Install extension for VS Code-based editors
   if (editorConfig.extension) {
@@ -1098,7 +1122,7 @@ export const upsertAgents = async (
     s.start(`Writing ${AGENTS_FILE}...`);
   }
 
-  const { created, files } = await writeAgentFiles(
+  const { created, files, warnings } = await writeAgentFiles(
     selection,
     packageManager,
     linter
@@ -1108,14 +1132,12 @@ export const upsertAgents = async (
     const also = files.length > 0 ? `, and updated ${files.join(", ")}` : "";
     s.stop(`${AGENTS_FILE} ${created ? "created" : "updated"}${also}.`);
   }
-};
 
-export const upsertEditorFile = async (
-  target: EditorFileTarget,
-  linter: Linter = "biome",
-  quiet = false
-) => {
-  await upsertEditorConfig(target.representativeEditorId, linter, quiet);
+  // Printed in quiet runs too: each one names a file init skipped and what
+  // to add to it by hand.
+  for (const warning of warnings) {
+    log.warn(warning);
+  }
 };
 
 export const upsertHooks = async (
@@ -1393,15 +1415,19 @@ const selectTypeAware = async (
     return opts["type-aware"];
   }
 
-  const existing = await hasTypeAwareSetup(linter);
+  // A project that already runs the type-aware rules keeps them, so there's
+  // nothing to ask: init has no way to take them out again.
+  if (await hasTypeAwareSetup(linter)) {
+    return true;
+  }
 
   // Only a TypeScript project has types to check.
   if (!interactive || !(await tsconfig.exists())) {
-    return existing;
+    return false;
   }
 
   const typeAware = await confirm({
-    initialValue: existing,
+    initialValue: false,
     message:
       "Turn on type-aware linting? It adds rules that need type information, such as no-floating-promises, and makes linting slower.",
   });
@@ -1657,11 +1683,52 @@ const confirmProjectChanges = async (
   tsconfigUpdates: await confirmTsConfigUpdates(typeAware, interactive),
 });
 
+type SkillChoice = "install" | "installed" | "skip";
+
+// Asked with the other questions, so init writes nothing before the last
+// answer. The install itself runs last, once init has written the agent
+// directories it looks for.
+const selectSkillInstall = async (
+  opts: InitializeFlags,
+  packageManager: PackageManagerName,
+  interactive: boolean,
+  quiet: boolean
+): Promise<SkillChoice> => {
+  if (opts.installSkill !== undefined) {
+    return opts.installSkill ? "install" : "skip";
+  }
+
+  // The check runs `skills list`, so it's skipped when there's neither a
+  // question to save nor a message to print.
+  if (!interactive && quiet) {
+    return "skip";
+  }
+
+  if (hasUltraciteSkillInstalled(packageManager)) {
+    return "installed";
+  }
+
+  if (!interactive) {
+    return "skip";
+  }
+
+  const choice = await select<"install" | "skip">({
+    message: "Do you want to install the Ultracite skill?",
+    options: [
+      { label: "Yes, install it", value: "install" },
+      { label: "No, I'll do it later", value: "skip" },
+    ],
+  });
+  if (isCancelled(choice)) {
+    throw cancelInitialize();
+  }
+  return choice;
+};
+
 interface InitializeContext {
   changes: ProjectChanges;
   install: boolean;
-  installSkill: boolean | undefined;
-  interactive: boolean;
+  installSkill: SkillChoice;
   pmInfo: PackageManager;
   quiet: boolean;
   selections: InitializeSelections;
@@ -1746,13 +1813,32 @@ const setupSelectedFiles = async ({
   const { agents, editorConfig, hooks, linter, selectedEditorFiles } =
     selections;
 
-  await Promise.all(
-    selectedEditorFiles.map((target) => upsertEditorFile(target, linter, quiet))
+  // Editors that share a settings file (VS Code and its forks) write it one
+  // after another, each adding its settings to the last one's. Written at
+  // once, they each saw no file and the last write won, dropping settings
+  // such as the older editors' `typescript.tsdk`.
+  const editorIds = [
+    ...selectedEditorFiles.map((target) => target.representativeEditorId),
+    ...editorConfig,
+  ];
+  const existingSettingsFiles = new Set(
+    editors
+      .filter((editor) => editorIds.includes(editor.id))
+      .map((editor) => editor.config.path)
+      .filter((settingsPath) => exists(settingsPath))
   );
 
-  await Promise.all(
-    editorConfig.map((editorId) => upsertEditorConfig(editorId, linter, quiet))
-  );
+  for (const editorId of editorIds) {
+    const settingsPath = editors.find((editor) => editor.id === editorId)
+      ?.config.path;
+    // oxlint-disable-next-line no-await-in-loop -- editors that share a settings file must write it in turn
+    await upsertEditorConfig(
+      editorId,
+      linter,
+      quiet,
+      settingsPath !== undefined && existingSettingsFiles.has(settingsPath)
+    );
+  }
 
   if (agents.length > 0) {
     await upsertAgents(agents, pmInfo.name, linter, quiet);
@@ -1792,24 +1878,24 @@ const setupProject = async (context: InitializeContext): Promise<void> => {
   await setupIntegrations(context);
 };
 
-const completeInitialization = async ({
+const completeInitialization = ({
   installSkill,
-  interactive,
   pmInfo,
   quiet,
   selections,
-}: InitializeContext): Promise<void> => {
+}: InitializeContext): void => {
   if (!quiet) {
     log.success("Successfully initialized Ultracite!");
   }
 
-  const hasUltraciteSkill = await maybeInstallUltraciteSkill({
-    agents: selections.agents,
-    interactive,
-    packageManager: pmInfo.name,
-    quiet,
-    shouldInstall: installSkill,
-  });
+  const hasUltraciteSkill =
+    installSkill === "installed" ||
+    (installSkill === "install" &&
+      installUltraciteSkill({
+        agents: selections.agents,
+        packageManager: pmInfo.name,
+        quiet,
+      }));
 
   if (!quiet && !hasUltraciteSkill) {
     log.info(
@@ -1834,12 +1920,17 @@ export const initialize = async (flags?: InitializeFlags) => {
       !opts.yes &&
       nonInteractiveFlags.every((flag) => opts[flag] === undefined);
     const selections = await selectInitializeOptions(opts, interactive);
+    const installSkill = await selectSkillInstall(
+      opts,
+      pmInfo.name,
+      interactive,
+      quiet
+    );
     const changes = await confirmProjectChanges(selections, interactive);
     const context: InitializeContext = {
       changes,
       install: !opts.skipInstall,
-      installSkill: opts.installSkill,
-      interactive,
+      installSkill,
       pmInfo,
       quiet,
       selections,
@@ -1847,7 +1938,7 @@ export const initialize = async (flags?: InitializeFlags) => {
     };
 
     await setupProject(context);
-    await completeInitialization(context);
+    completeInitialization(context);
   } catch (error) {
     if (error instanceof InitializeCancelledError) {
       return;

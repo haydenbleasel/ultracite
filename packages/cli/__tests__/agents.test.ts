@@ -12,10 +12,15 @@ import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 const removed = new Set<string>();
 
 // A project whose files start as exactly `files` and change as they're
-// written and removed; returns what gets written.
-const mockProject = (initial: Record<string, string>) => {
+// written and removed, with `links` as symbolic links (path to target);
+// returns what gets written.
+const mockProject = (
+  initial: Record<string, string>,
+  links: Record<string, string> = {}
+) => {
   const files = { ...initial };
   const written = new Map<string, string>();
+  const resolve = (path: string): string => links[path] ?? path;
   removed.clear();
 
   mock.module("node:fs/promises", () => ({
@@ -24,8 +29,8 @@ const mockProject = (initial: Record<string, string>) => {
     ),
     mkdir: mock(() => Promise.resolve()),
     readFile: mock((path: string) =>
-      path in files
-        ? Promise.resolve(files[path])
+      resolve(path) in files
+        ? Promise.resolve(files[resolve(path)])
         : Promise.reject(new Error("ENOENT"))
     ),
     rm: mock((path: string) => {
@@ -39,7 +44,7 @@ const mockProject = (initial: Record<string, string>) => {
       return Promise.resolve();
     }),
   }));
-  mockFileSystem(files);
+  mockFileSystem(files, links);
 
   return written;
 };
@@ -49,9 +54,10 @@ const setUp = async (
   files: Record<string, string>,
   selection: Parameters<typeof writeAgentFiles>[0],
   packageManager: Parameters<typeof writeAgentFiles>[1] = "npm",
-  linter: Parameters<typeof writeAgentFiles>[2] = "biome"
+  linter: Parameters<typeof writeAgentFiles>[2] = "biome",
+  links: Record<string, string> = {}
 ) => {
-  const written = mockProject(files);
+  const written = mockProject(files, links);
 
   try {
     const result = await writeAgentFiles(selection, packageManager, linter);
@@ -72,7 +78,7 @@ describe("writeAgentFiles", () => {
   test("writes the rules to AGENTS.md for an agent that needs nothing else", async () => {
     const { result, written } = await setUp({}, ["codex"]);
 
-    expect(result).toEqual({ created: true, files: [] });
+    expect(result).toEqual({ created: true, files: [], warnings: [] });
     expect([...written.keys()]).toEqual(["AGENTS.md"]);
     expect(written.get("AGENTS.md")).toBe(rules);
   });
@@ -295,6 +301,129 @@ describe("gemini cli", () => {
 
     expect(written.get("GEMINI.md")).toBe("Our notes.\n");
     expect(written.has(".gemini/settings.json")).toBe(true);
+  });
+});
+
+describe("symbolic links", () => {
+  test("leaves a CLAUDE.md that links to AGENTS.md alone", async () => {
+    const { result, written } = await setUp(
+      { "AGENTS.md": "# Ours\n" },
+      ["claude"],
+      "npm",
+      "biome",
+      { "CLAUDE.md": "AGENTS.md" }
+    );
+
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
+    expect(written.get("AGENTS.md")).toBe(`# Ours\n\n${rules}`);
+    expect(result).toEqual({ created: false, files: [], warnings: [] });
+  });
+
+  test("keeps a GEMINI.md that links to an AGENTS.md holding only the rules", async () => {
+    const { result } = await setUp(
+      { "AGENTS.md": rules },
+      ["universal"],
+      "npm",
+      "biome",
+      { "GEMINI.md": "AGENTS.md" }
+    );
+
+    expect(removed.size).toBe(0);
+    expect(result.files).toEqual([]);
+    expect(result.warnings).toEqual([]);
+  });
+
+  test("keeps the rules in an AGENTS.md that GEMINI.md links to", async () => {
+    const { result, written } = await setUp(
+      { "AGENTS.md": `Our notes.\n\n${rules}` },
+      ["gemini"],
+      "npm",
+      "biome",
+      { "GEMINI.md": "AGENTS.md" }
+    );
+
+    expect(removed.size).toBe(0);
+    expect(written.has("GEMINI.md")).toBe(false);
+    expect(written.get("AGENTS.md")).toBeUndefined();
+    expect(result.files).toEqual([".gemini/settings.json"]);
+    expect(result.warnings).toEqual([]);
+  });
+
+  test("writes the rules into the file AGENTS.md links to, and doesn't import it there", async () => {
+    const { result, written } = await setUp(
+      { "CLAUDE.md": "# Ours\n" },
+      ["claude"],
+      "npm",
+      "biome",
+      { "AGENTS.md": "CLAUDE.md" }
+    );
+
+    expect([...written.keys()]).toEqual(["CLAUDE.md"]);
+    expect(written.get("CLAUDE.md")).toBe(`# Ours\n\n${rules}`);
+    expect(result).toEqual({ created: false, files: [], warnings: [] });
+  });
+
+  test("warns instead of writing through an AGENTS.md that links outside the project", async () => {
+    const { result, written } = await setUp({}, ["codex"], "npm", "biome", {
+      "AGENTS.md": "../shared/AGENTS.md",
+    });
+
+    expect(written.size).toBe(0);
+    expect(result.created).toBe(false);
+    expect(result.warnings).toHaveLength(1);
+    expect(result.warnings[0]).toContain("AGENTS.md is a symbolic link");
+  });
+
+  test("warns instead of writing through a CLAUDE.md that links to another file", async () => {
+    const { result, written } = await setUp(
+      { "docs/ai.md": "Use pnpm.\n" },
+      ["claude"],
+      "npm",
+      "biome",
+      { "CLAUDE.md": "docs/ai.md" }
+    );
+
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
+    expect(result.files).toEqual([]);
+    expect(result.warnings).toEqual([
+      "CLAUDE.md is a symbolic link, so Ultracite didn't add `@AGENTS.md` to it. Add that import to the file it links to so Claude Code reads AGENTS.md.",
+    ]);
+  });
+
+  test("warns instead of removing old rules through a link to another file", async () => {
+    const { result, written } = await setUp(
+      { "docs/gemini.md": rules },
+      ["universal"],
+      "npm",
+      "biome",
+      { "GEMINI.md": "docs/gemini.md" }
+    );
+
+    expect(removed.size).toBe(0);
+    expect(written.has("docs/gemini.md")).toBe(false);
+    expect(result.warnings).toHaveLength(1);
+    expect(result.warnings[0]).toContain(
+      "GEMINI.md is a symbolic link, so Ultracite left the rules"
+    );
+  });
+
+  test("warns instead of copying the rules through a linked replit.md or settings file", async () => {
+    const { result, written } = await setUp(
+      { "docs/aider.yml": "read: x.md\n", "docs/replit.md": "# Overview\n" },
+      ["replit", "aider"],
+      "npm",
+      "biome",
+      { ".aider.conf.yml": "docs/aider.yml", "replit.md": "docs/replit.md" }
+    );
+
+    expect([...written.keys()]).toEqual(["AGENTS.md"]);
+    expect(result.warnings).toHaveLength(2);
+    expect(result.warnings.join("\n")).toContain(
+      "replit.md is a symbolic link"
+    );
+    expect(result.warnings.join("\n")).toContain(
+      "add AGENTS.md to `read` and set `lint-cmd` to `npx ultracite fix`"
+    );
   });
 });
 

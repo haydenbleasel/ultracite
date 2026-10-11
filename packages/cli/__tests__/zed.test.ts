@@ -141,6 +141,41 @@ describe("zed editor config", () => {
       expect(writtenContent.theme).toBe("dark");
     });
 
+    test("clears the type-aware setting earlier versions turned on", async () => {
+      const existingSettings = JSON.stringify({
+        lsp: {
+          oxlint: {
+            initialization_options: {
+              settings: { run: "onSave", typeAware: true },
+            },
+          },
+        },
+      });
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingSettings)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      await createEditorConfig("zed", "oxlint").update();
+
+      const [writeCall] = mockWriteFile.mock.calls;
+      expect(
+        JSON.parse(writeCall[1]).lsp.oxlint.initialization_options.settings
+          .typeAware
+      ).toBeNull();
+    });
+
     test("skips invalid JSON instead of replacing the file", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

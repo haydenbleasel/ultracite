@@ -263,7 +263,11 @@ const zedOxcConfig = {
           disableNestedConfig: false,
           fixKind: "safe_fix",
           run: "onType",
-          typeAware: true,
+          // Unset, the language server follows `options.typeAware` in the
+          // Oxlint config, which init sets only with oxlint-tsgolint
+          // installed. A null also overwrites the `true` earlier versions
+          // wrote.
+          typeAware: null,
           unusedDisableDirectives: "deny",
         },
       },

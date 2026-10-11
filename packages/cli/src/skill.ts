@@ -1,4 +1,4 @@
-import { isCancel, select, spinner } from "@clack/prompts";
+import { spinner } from "@clack/prompts";
 import { dlxCommand } from "nypm";
 import type { PackageManagerName } from "nypm";
 
@@ -8,20 +8,20 @@ import { exists } from "./utils";
 const ultraciteSkillRepo = "haydenbleasel/ultracite";
 const ultraciteSkillName = "ultracite";
 
-interface MaybeInstallUltraciteSkillOptions {
+interface InstallUltraciteSkillOptions {
   /** The agents chosen in `init --agents`, by CLI id. */
   agents?: readonly string[];
-  /** Whether to ask when `shouldInstall` is unset. Defaults to `!quiet`. */
-  interactive?: boolean;
   packageManager: PackageManagerName;
   quiet?: boolean;
-  shouldInstall?: boolean;
 }
 
 // skills agents that read skills from their own project directory rather
 // than the shared `.agents/skills`, keyed by that directory. init has written
-// some of these by the time the skill is installed (`.claude`, `.windsurf`,
-// `.codebuddy`), so the list follows the user's choices.
+// some of these by the time the skill is installed (`.claude`, `.codebuddy`),
+// so the list follows the user's choices. Devin Desktop and Devin Local also
+// read `.agents/skills`, so the `.devin` folder init writes for Devin's hook
+// needs no entry; `.windsurf` is for projects set up before Windsurf became
+// Devin Desktop.
 const projectAgentDirectories = new Map([
   [".adal", "adal"],
   [".augment", "augment"],
@@ -127,55 +127,27 @@ const isUltraciteSkillInstalledInScope = (
   }
 };
 
-const hasUltraciteSkillInstalled = (packageManager: PackageManagerName) =>
+/** Whether the skill is installed in the project or globally. */
+export const hasUltraciteSkillInstalled = (
+  packageManager: PackageManagerName
+): boolean =>
   isUltraciteSkillInstalledInScope(packageManager) ||
   isUltraciteSkillInstalledInScope(packageManager, true);
-
-const promptToInstallUltraciteSkill = async () => {
-  const installSkillResult = await select({
-    message: "Do you want to install the Ultracite skill?",
-    options: [
-      {
-        label: "Yes, install it",
-        value: "install",
-      },
-      {
-        label: "No, I'll do it later",
-        value: "skip",
-      },
-    ],
-  });
-
-  return !isCancel(installSkillResult) && installSkillResult === "install";
-};
 
 export const getUltraciteSkillInstallCommand = (
   packageManager: PackageManagerName
 ) => buildUltraciteSkillInstallCommand(packageManager);
 
-export const maybeInstallUltraciteSkill = async ({
+/**
+ * Install the skill for the agents the project uses. init asks whether to
+ * with its other questions and installs it last, once it has written the
+ * agent directories the install looks for.
+ */
+export const installUltraciteSkill = ({
   agents = [],
-  interactive,
   packageManager,
   quiet = false,
-  shouldInstall,
-}: MaybeInstallUltraciteSkillOptions) => {
-  if (
-    shouldInstall === undefined &&
-    !quiet &&
-    hasUltraciteSkillInstalled(packageManager)
-  ) {
-    return true;
-  }
-
-  const wantsInstall =
-    shouldInstall ??
-    ((interactive ?? !quiet) && (await promptToInstallUltraciteSkill()));
-
-  if (!wantsInstall) {
-    return false;
-  }
-
+}: InstallUltraciteSkillOptions): boolean => {
   const fullCommand = buildUltraciteSkillInstallCommand(
     packageManager,
     true,

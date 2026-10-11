@@ -40,9 +40,23 @@ const getStylelintConfigPath = (): string | null => {
   return null;
 };
 
+// A spread, because ESLint's core preset flags the other ways to hand on
+// Ultracite's config: `export { default } from` is a barrel file
+// (unicorn/no-barrel-files), and importing it to `export default` it as is
+// breaks unicorn/prefer-export-from. Extending it (`extends:
+// ["ultracite/stylelint"]`) would resolve its ignoreFiles from
+// node_modules/ultracite, so they'd stop matching the project's files.
 const generateStylelintConfig =
-  (): string => `export { default } from "ultracite/stylelint";
+  (): string => `import config from "ultracite/stylelint";
+
+export default { ...config };
 `;
+
+// What versions before 8 wrote, which the ESLint core preset reports as a
+// barrel file. Re-running init replaces it, and any other config that uses
+// Ultracite's is left as it is.
+const LEGACY_GENERATED_CONFIG =
+  'export { default } from "ultracite/stylelint";';
 
 const warnReplaced = (source: string, target: string): void => {
   log.warn(
@@ -61,7 +75,8 @@ export const stylelint = {
   },
   // A config that already uses Ultracite's (it re-exports or extends
   // ultracite/stylelint, perhaps with overrides of its own) is left as it is:
-  // the generated config holds nothing it could be missing.
+  // the generated config holds nothing it could be missing. The one exception
+  // is the exact config earlier versions generated.
   update: async () => {
     const existingPath = getStylelintConfigPath() ?? defaultConfigPath;
 
@@ -87,6 +102,11 @@ export const stylelint = {
     }
 
     const contents = await readFile(existingPath, "utf-8");
+
+    if (contents.trim() === LEGACY_GENERATED_CONFIG) {
+      await writeProjectFile(existingPath, generateStylelintConfig());
+      return;
+    }
 
     if (contents.includes(ULTRACITE_STYLELINT)) {
       return;

@@ -1,3 +1,4 @@
+import { lstatSync, realpathSync } from "node:fs";
 import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
 
@@ -5,7 +6,7 @@ import type { PackageManagerName } from "nypm";
 
 import { mergeAgentSettings } from "./agent-settings";
 import { agents } from "./data/agents";
-import type { Agent } from "./data/agents";
+import type { Agent, AgentSettings } from "./data/agents";
 import type { options } from "./data/options";
 import { providers } from "./data/providers";
 import { getRules } from "./data/rules";
@@ -177,8 +178,50 @@ const upsertRulesBlock = async (
 
 const FRONTMATTER_ONLY_RE = /^---\r?\n[\s\S]*?\r?\n---$/u;
 
+// Symbolic links: writeProjectFile won't write through one, and removing one
+// would delete the user's link, so a linked file is never written or removed.
+const isSymlink = (filePath: string): boolean => {
+  try {
+    return lstatSync(filePath).isSymbolicLink();
+  } catch {
+    return false;
+  }
+};
+
+// Whether `filePath` is AGENTS.md under another name, through a symbolic link
+// either way (CLAUDE.md -> AGENTS.md, or AGENTS.md -> GEMINI.md). The agent
+// already reads AGENTS.md through it, so it's left as it is.
+const isAgentsFile = (filePath: string): boolean => {
+  try {
+    return realpathSync(filePath) === realpathSync(AGENTS_FILE);
+  } catch {
+    return false;
+  }
+};
+
+// Where to write the rules: AGENTS.md, or the file it links to when it's a
+// symbolic link to another file in the project. Null when it links outside
+// the project or to nothing.
+const agentsFileTarget = (): string | null => {
+  if (!isSymlink(AGENTS_FILE)) {
+    return AGENTS_FILE;
+  }
+
+  try {
+    const target = path.relative(
+      realpathSync(process.cwd()),
+      realpathSync(AGENTS_FILE)
+    );
+    return target === "" || target.startsWith("..") || path.isAbsolute(target)
+      ? null
+      : target;
+  } catch {
+    return null;
+  }
+};
+
 const holdsRules = async (filePath: string): Promise<boolean> => {
-  if (!exists(filePath)) {
+  if (!exists(filePath) || isAgentsFile(filePath)) {
     return false;
   }
   const contents = await readFile(filePath, "utf-8");
@@ -188,8 +231,11 @@ const holdsRules = async (filePath: string): Promise<boolean> => {
 // Takes Ultracite's block out of a file an earlier version wrote the rules
 // into, and removes the file when nothing else is left (Firebender's rule
 // file keeps only the frontmatter we wrote).
-const removeLegacyRules = async (filePath: string): Promise<boolean> => {
-  if (!exists(filePath)) {
+const removeLegacyRules = async (
+  filePath: string,
+  warnings: string[]
+): Promise<boolean> => {
+  if (!exists(filePath) || isAgentsFile(filePath)) {
     return false;
   }
 
@@ -197,6 +243,13 @@ const removeLegacyRules = async (filePath: string): Promise<boolean> => {
   const remaining = replaceRulesBlock(existing, "");
 
   if (remaining === null) {
+    return false;
+  }
+
+  if (isSymlink(filePath)) {
+    warnings.push(
+      `${filePath} is a symbolic link, so Ultracite left the rules an earlier version wrote there. They're in ${AGENTS_FILE} now: remove the "${RULES_HEADER}" section from the file it links to.`
+    );
     return false;
   }
 
@@ -210,11 +263,18 @@ const removeLegacyRules = async (filePath: string): Promise<boolean> => {
 };
 
 // Adds an `@AGENTS.md` import to the first of the agent's own instructions
-// files that exists, unless it already has one. Returns the file it changed.
-const importAgentsFile = async (agent: Agent): Promise<string | null> => {
-  const filePath = agent.imports?.find((candidate) => exists(candidate));
+// files that exists, unless it already has one or one of them is AGENTS.md
+// through a link. Returns the file it changed.
+const importAgentsFile = async (
+  agent: Agent,
+  warnings: string[]
+): Promise<string | null> => {
+  const candidates = (agent.imports ?? []).filter((candidate) =>
+    exists(candidate)
+  );
+  const [filePath] = candidates;
 
-  if (!filePath) {
+  if (!filePath || candidates.some(isAgentsFile)) {
     return null;
   }
 
@@ -229,6 +289,13 @@ const importAgentsFile = async (agent: Agent): Promise<string | null> => {
     return null;
   }
 
+  if (isSymlink(filePath)) {
+    warnings.push(
+      `${filePath} is a symbolic link, so Ultracite didn't add \`${line}\` to it. Add that import to the file it links to so ${agent.name} reads ${AGENTS_FILE}.`
+    );
+    return null;
+  }
+
   const eol = eolOf(existing);
   const kept = existing.trimEnd();
   await writeProjectFile(
@@ -238,45 +305,104 @@ const importAgentsFile = async (agent: Agent): Promise<string | null> => {
   return filePath;
 };
 
+// Copies the rules into the one file an agent reads instead of AGENTS.md.
+// Returns whether it changed the file.
+const copyRules = async (
+  agent: Agent,
+  filePath: string,
+  rules: string,
+  warnings: string[]
+): Promise<boolean> => {
+  if (isAgentsFile(filePath)) {
+    return false;
+  }
+
+  if (isSymlink(filePath)) {
+    warnings.push(
+      `${filePath} is a symbolic link, so Ultracite didn't copy its rules there. Add the rules from ${AGENTS_FILE} to the file it links to so ${agent.name} sees them.`
+    );
+    return false;
+  }
+
+  await upsertRulesBlock(filePath, rules);
+  return true;
+};
+
+// Points the agent's settings file at AGENTS.md (and, for Aider, its lint
+// command at Ultracite). Returns whether it changed the file.
+const updateSettings = async (
+  agent: Agent,
+  settings: AgentSettings,
+  fixCommand: string,
+  warnings: string[]
+): Promise<boolean> => {
+  if (isSymlink(settings.path)) {
+    const lint = settings.lintKey
+      ? ` and set \`${settings.lintKey.join(".")}\` to \`${fixCommand}\``
+      : "";
+    warnings.push(
+      `${settings.path} is a symbolic link, so Ultracite didn't change it. In the file it links to, add ${AGENTS_FILE} to \`${settings.readKey.join(".")}\`${lint} so ${agent.name} reads the rules.`
+    );
+    return false;
+  }
+
+  const existing = exists(settings.path)
+    ? await readFile(settings.path, "utf-8")
+    : "";
+  const merged = mergeAgentSettings(
+    existing,
+    settings,
+    AGENTS_FILE,
+    fixCommand
+  );
+
+  if (merged === existing) {
+    return false;
+  }
+
+  await writeProjectFile(settings.path, merged);
+  return true;
+};
+
+interface AgentSetup {
+  files: string[];
+  warnings: string[];
+}
+
 // What an agent needs beyond AGENTS.md, in order: its old rules file
-// cleaned up first, so the import can land in what's left of it. Returns the
-// files it changed.
+// cleaned up first, so the import can land in what's left of it.
 const setUpAgent = async (
   agent: Agent,
   rules: string,
   fixCommand: string
-): Promise<string[]> => {
+): Promise<AgentSetup> => {
+  const warnings: string[] = [];
   const legacy = agent.legacyRules ?? [];
-  const cleaned = await Promise.all(legacy.map(removeLegacyRules));
+  const cleaned = await Promise.all(
+    legacy.map((file) => removeLegacyRules(file, warnings))
+  );
   const files = legacy.filter((_, index) => cleaned[index]);
 
-  if (agent.rulesCopy) {
-    await upsertRulesBlock(agent.rulesCopy, rules);
+  if (
+    agent.rulesCopy &&
+    (await copyRules(agent, agent.rulesCopy, rules, warnings))
+  ) {
     files.push(agent.rulesCopy);
   }
 
-  if (agent.settings) {
-    const existing = exists(agent.settings.path)
-      ? await readFile(agent.settings.path, "utf-8")
-      : "";
-    const merged = mergeAgentSettings(
-      existing,
-      agent.settings,
-      AGENTS_FILE,
-      fixCommand
-    );
-    if (merged !== existing) {
-      await writeProjectFile(agent.settings.path, merged);
-      files.push(agent.settings.path);
-    }
+  if (
+    agent.settings &&
+    (await updateSettings(agent, agent.settings, fixCommand, warnings))
+  ) {
+    files.push(agent.settings.path);
   }
 
-  const imported = await importAgentsFile(agent);
+  const imported = await importAgentsFile(agent, warnings);
   if (imported) {
     files.push(imported);
   }
 
-  return files;
+  return { files, warnings };
 };
 
 /** What `writeAgentFiles` did. */
@@ -285,6 +411,11 @@ export interface AgentFilesResult {
   created: boolean;
   /** Other files it created or changed. */
   files: string[];
+  /**
+   * Changes it left to the user, such as an import it couldn't add to a
+   * file that's a symbolic link.
+   */
+  warnings: string[];
 }
 
 /**
@@ -292,7 +423,9 @@ export interface AgentFilesResult {
  * to read them: an import, a copy, or a settings file. Agents an earlier
  * version set up (their old rules file still holds Ultracite's block) are
  * moved over too, whether or not they were selected, so the old file stops
- * shadowing AGENTS.md.
+ * shadowing AGENTS.md. Files that are symbolic links are never written
+ * through or removed: one that links to AGENTS.md (or that AGENTS.md links
+ * to) needs nothing more, and any other gets a warning instead.
  */
 export const writeAgentFiles = async (
   selection: readonly (AgentId | "universal")[],
@@ -309,7 +442,13 @@ export const writeAgentFiles = async (
   // fetches the latest release, and `yarn dlx` doesn't exist in Yarn 1.
   const ultracite = localBinCommand(packageManager, "ultracite");
   const rules = getRules(ultracite, provider.name);
-  const created = await upsertRulesBlock(AGENTS_FILE, rules);
+  const target = agentsFileTarget();
+  const created = target ? await upsertRulesBlock(target, rules) : false;
+  const warnings = target
+    ? []
+    : [
+        `${AGENTS_FILE} is a symbolic link to a file outside the project or to nothing, so Ultracite didn't write its rules. Replace it with a file and re-run \`ultracite init\`.`,
+      ];
 
   const legacy = await Promise.all(
     agents.map(async (agent) => {
@@ -328,5 +467,9 @@ export const writeAgentFiles = async (
     toSetUp.map((agent) => setUpAgent(agent, rules, `${ultracite} fix`))
   );
 
-  return { created, files: [...new Set(touched.flat())] };
+  return {
+    created,
+    files: [...new Set(touched.flatMap((setup) => setup.files))],
+    warnings: [...warnings, ...touched.flatMap((setup) => setup.warnings)],
+  };
 };

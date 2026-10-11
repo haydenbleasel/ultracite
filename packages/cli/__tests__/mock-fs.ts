@@ -12,18 +12,31 @@ import { mock } from "bun:test";
 // preload before it installs the default node:fs mock.
 const realReaddirSync = globalThis.__realReaddirSync;
 
-export const mockFileSystem = (files: Record<string, string>): void => {
+/**
+ * `links` maps a path to the path its symbolic link points at: reads and
+ * existence checks follow it, `lstatSync` reports it as a link, and
+ * `realpathSync` resolves it.
+ */
+export const mockFileSystem = (
+  files: Record<string, string>,
+  links: Record<string, string> = {}
+): void => {
+  const resolve = (filePath: string): string =>
+    links[String(filePath)] ?? String(filePath);
+
   mock.module("node:fs", () => ({
     accessSync: mock((filePath: string) => {
-      if (!(String(filePath) in files)) {
+      if (!(resolve(filePath) in files)) {
         throw new Error("ENOENT");
       }
     }),
-    existsSync: mock((filePath: string) => String(filePath) in files),
-    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+    existsSync: mock((filePath: string) => resolve(filePath) in files),
+    lstatSync: mock((filePath: string) => ({
+      isSymbolicLink: () => String(filePath) in links,
+    })),
     mkdirSync: mock(() => {}),
     readFileSync: mock((filePath: string) => {
-      const content = files[String(filePath)];
+      const content = files[resolve(filePath)];
 
       if (content === undefined) {
         throw new Error("ENOENT");
@@ -32,7 +45,7 @@ export const mockFileSystem = (files: Record<string, string>): void => {
       return content;
     }),
     readdirSync: realReaddirSync,
-    realpathSync: mock((filePath: string) => filePath),
+    realpathSync: mock(resolve),
     writeFileSync: mock(() => {}),
   }));
 };

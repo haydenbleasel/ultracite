@@ -112,7 +112,11 @@ describe("stylelint linter", () => {
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./stylelint.config.mjs");
-      expect(writeCall[1]).toContain("ultracite/stylelint");
+      // A spread, not `export { default } from`, which ESLint's core preset
+      // reports as a barrel file.
+      expect(writeCall[1]).toBe(
+        'import config from "ultracite/stylelint";\n\nexport default { ...config };\n'
+      );
     });
   });
 
@@ -184,6 +188,34 @@ export default { ...ultracite, rules: { ...ultracite.rules, "color-named": null 
 
     expect(project.writeFile).not.toHaveBeenCalled();
     expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("replaces the barrel file earlier versions generated", async () => {
+    const project = mockProject({
+      "./stylelint.config.mjs":
+        'export { default } from "ultracite/stylelint";\n',
+    });
+
+    await stylelint.update();
+
+    expect(project.writeFile.mock.calls).toEqual([
+      [
+        "./stylelint.config.mjs",
+        'import config from "ultracite/stylelint";\n\nexport default { ...config };\n',
+      ],
+    ]);
+    expect(project.warn).not.toHaveBeenCalled();
+  });
+
+  test("leaves a re-export the user added to", async () => {
+    const project = mockProject({
+      "./stylelint.config.mjs":
+        '// Shared with the docs site\nexport { default } from "ultracite/stylelint";\n',
+    });
+
+    await stylelint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
   });
 
   test("leaves a package.json key that extends Ultracite's config", async () => {

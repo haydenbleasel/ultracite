@@ -62,4 +62,13 @@ describe("Zed's Oxc settings", () => {
       { "source.fixAll.oxc": true }
     );
   });
+
+  // Unset, Oxlint's language server reads `options.typeAware` from the
+  // Oxlint config, which init only sets with oxlint-tsgolint installed.
+  test("leave type-aware linting to the Oxlint config", () => {
+    expect(getZedConfig("oxlint")).toHaveProperty(
+      ["lsp", "oxlint", "initialization_options", "settings", "typeAware"],
+      null
+    );
+  });
 });
