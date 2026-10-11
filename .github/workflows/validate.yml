@@ -6,6 +6,11 @@ on:
   pull_request:
     branches:
       - main
+  # Maintainer commits go straight to main, so run there too: the Windows
+  # tests otherwise only ran on the next pull request.
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
