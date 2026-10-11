@@ -49,6 +49,7 @@ mock.module("@clack/prompts", () => ({
   },
   outro: mock(noop),
   spinner: mock(() => ({
+    error: mock(noop),
     message: mock(noop),
     start: mock(noop),
     stop: mock(noop),
@@ -113,6 +114,8 @@ interface Harness {
 
 interface SetupOptions {
   checks?: DiagnosticCheck[];
+  /** What every install rejects with, when installs should fail. */
+  installError?: Error;
   linter?: string | null;
   /** Guides the agent leaves undone. */
   leftAfterAgent?: UpgradeGuide[];
@@ -125,6 +128,7 @@ interface SetupOptions {
 const setup = (options: SetupOptions = {}): Harness => {
   const {
     checks = [passingCheck],
+    installError,
     leftAfterAgent = [],
     linter = "biome",
     pending = [],
@@ -147,7 +151,7 @@ const setup = (options: SetupOptions = {}): Harness => {
   const steps: string[] = [];
   const addDevDependency = mock((packages: string[]) => {
     steps.push(`install ${packages.join(" ")}`);
-    return Promise.resolve();
+    return installError ? Promise.reject(installError) : Promise.resolve();
   });
   const addEslintPeerOverrides = mock((names: readonly string[]) => {
     steps.push(`overrides ${names.join(" ")}`);
@@ -487,6 +491,38 @@ describe("upgrade", () => {
       upgrade({ pm: "npm", version: "7 --registry=https://example.com" })
     ).rejects.toThrow("isn't a version");
     expect(harness.addDevDependency).not.toHaveBeenCalled();
+  });
+
+  test("rejects --claude or --codex with a release before 8, before installing anything", async () => {
+    const harness = setup();
+    const { upgrade } = await loadUpgrade();
+
+    await expect(
+      upgrade({ agent: "claude", pm: "npm", version: "7" })
+    ).rejects.toThrow("`--claude` needs Ultracite 8 or later");
+    await expect(
+      upgrade({ agent: "codex", pm: "npm", version: "7.12.4" })
+    ).rejects.toThrow("`--codex` needs Ultracite 8 or later");
+    expect(harness.addDevDependency).not.toHaveBeenCalled();
+  });
+
+  test("explains a failed install instead of throwing its stack", async () => {
+    setup({
+      installError: new Error(
+        "`npm install -D ultracite@latest` failed.\n\nnpm error code ERESOLVE\nnpm error ERESOLVE could not resolve"
+      ),
+    });
+    const { upgrade } = await loadUpgrade();
+
+    const failure = upgrade({ pm: "npm" });
+
+    await expect(failure).rejects.toBeInstanceOf(
+      realConfigResolution.UltraciteSetupError
+    );
+    await expect(failure).rejects.toThrow("npm couldn't install the packages.");
+    await expect(failure).rejects.toThrow("npm error code ERESOLVE");
+    await expect(failure).rejects.toThrow("legacy-peer-deps=true");
+    await expect(failure).rejects.toThrow("run `ultracite upgrade` again");
   });
 
   test("hands the agent to the installed CLI", async () => {

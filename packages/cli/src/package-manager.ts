@@ -130,3 +130,30 @@ export const getRootInstallOptions = (
 
   return { packageManager, workspace: true };
 };
+
+/**
+ * The error to report when installing packages fails, in place of a stack
+ * trace. `output` is nypm's error message, which names the command and, for a
+ * silent install, carries the package manager's output.
+ */
+export const installFailedError = (
+  output: string,
+  packageManager: PackageManager,
+  retryCommand: string
+): UltraciteSetupError => {
+  const npmPeerConflict =
+    packageManager.name === "npm" && output.includes("ERESOLVE");
+
+  return new UltraciteSetupError(
+    [
+      `${packageManager.name} couldn't install the packages.`,
+      output.trim(),
+      npmPeerConflict
+        ? "npm refused a package whose peer dependency range leaves out a version the project has. Setting `legacy-peer-deps=true` in `.npmrc` lets npm install it anyway."
+        : "",
+      `Fix the problem above, then run \`${retryCommand}\` again.`,
+    ]
+      .filter(Boolean)
+      .join("\n\n")
+  );
+};

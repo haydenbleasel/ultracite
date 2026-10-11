@@ -204,7 +204,7 @@ program
   )
   .option(
     "--version <version>",
-    "Release to upgrade to, such as 7 or 7.13.0 (default: latest)"
+    "Release to upgrade to, such as 7 or 7.12.4 (default: latest)"
   )
   .addOption(
     new Option(

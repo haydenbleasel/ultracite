@@ -107,6 +107,181 @@ const missesEslintPreset = ({
   );
 };
 
+// The rules v8 moved from the ESLint core and framework presets to
+// `ultracite/eslint/type-aware` and the `<framework>/type-aware` add-ons,
+// by plugin prefix. v7 ran them with type information in every project, so a
+// config could tune any of them; without type information they fail with
+// "requires type information" or do nothing. A test keeps the list in step
+// with the type-aware presets.
+const TYPE_CHECKED_RULES = {
+  "@angular-eslint": [
+    "no-developer-preview",
+    "no-experimental",
+    "no-uncalled-signals",
+    "prefer-signal-model",
+    "prefer-signals",
+    "reactive-context-must-read-signal",
+  ],
+  "@darraghor/nestjs-typed": [
+    "all-properties-have-explicit-defined",
+    "api-enum-property-best-practices",
+    "validated-non-primitive-property-needs-type-decorator",
+  ],
+  "@tanstack/start": [
+    "no-async-client-component",
+    "no-client-code-in-server-component",
+  ],
+  "@typescript-eslint": [
+    "await-thenable",
+    "consistent-return",
+    "consistent-type-exports",
+    "dot-notation",
+    "naming-convention",
+    "no-array-delete",
+    "no-base-to-string",
+    "no-confusing-void-expression",
+    "no-deprecated",
+    "no-duplicate-type-constituents",
+    "no-floating-promises",
+    "no-for-in-array",
+    "no-generated-empty-object-type",
+    "no-implied-eval",
+    "no-meaningless-void-operator",
+    "no-misused-promises",
+    "no-misused-spread",
+    "no-mixed-enums",
+    "no-redundant-type-constituents",
+    "no-unnecessary-boolean-literal-compare",
+    "no-unnecessary-condition",
+    "no-unnecessary-qualifier",
+    "no-unnecessary-template-expression",
+    "no-unnecessary-type-arguments",
+    "no-unnecessary-type-assertion",
+    "no-unnecessary-type-conversion",
+    "no-unnecessary-type-parameters",
+    "no-unsafe-argument",
+    "no-unsafe-assignment",
+    "no-unsafe-call",
+    "no-unsafe-enum-assignment",
+    "no-unsafe-enum-comparison",
+    "no-unsafe-member-access",
+    "no-unsafe-return",
+    "no-unsafe-type-assertion",
+    "no-unsafe-unary-minus",
+    "no-useless-default-assignment",
+    "non-nullable-type-assertion-style",
+    "only-throw-error",
+    "prefer-destructuring",
+    "prefer-find",
+    "prefer-includes",
+    "prefer-nullish-coalescing",
+    "prefer-optional-chain",
+    "prefer-promise-reject-errors",
+    "prefer-readonly",
+    "prefer-readonly-parameter-types",
+    "prefer-reduce-type-parameter",
+    "prefer-regexp-exec",
+    "prefer-return-this-type",
+    "prefer-string-starts-ends-with",
+    "promise-function-async",
+    "related-getter-setter-pairs",
+    "require-array-sort-compare",
+    "require-await",
+    "restrict-plus-operands",
+    "restrict-template-expressions",
+    "return-await",
+    "strict-boolean-expressions",
+    "strict-void-return",
+    "switch-exhaustiveness-check",
+    "unbound-method",
+    "use-unknown-in-catch-callback-variable",
+  ],
+  jest: [
+    "no-error-equal",
+    "no-unnecessary-assertion",
+    "unbound-method",
+    "valid-expect-with-promise",
+  ],
+  qwik: ["valid-lexical-scope"],
+  sonarjs: [
+    "argument-type",
+    "array-callback-without-return",
+    "assertions-in-tests",
+    "deprecation",
+    "different-types-comparison",
+    "disabled-resource-integrity",
+    "existing-groups",
+    "function-return-type",
+    "in-operator-type-error",
+    "index-of-compare-to-positive-number",
+    "jsx-no-leaked-render",
+    "new-operator-misuse",
+    "no-alphabetical-sort",
+    "no-array-delete",
+    "no-associative-arrays",
+    "no-async-constructor",
+    "no-for-in-iterable",
+    "no-ignored-return",
+    "no-in-misuse",
+    "no-incompatible-assertion-types",
+    "no-incorrect-string-concat",
+    "no-misleading-array-reverse",
+    "no-return-type-any",
+    "no-selector-parameter",
+    "no-try-promise",
+    "no-undefined-argument",
+    "no-useless-intersection",
+    "non-number-in-arithmetic-expression",
+    "null-dereference",
+    "operation-returning-nan",
+    "post-message",
+    "prefer-read-only-props",
+    "prefer-regexp-exec",
+    "strings-comparison",
+    "synchronous-exception-assertions",
+    "unused-named-groups",
+    "values-not-convertible-to-numbers",
+  ],
+  unicorn: ["no-non-function-verb-prefix"],
+  vitest: ["unbound-method"],
+} as const;
+
+/** Every rule v8 runs only with type information, as `plugin/rule` IDs. */
+export const typeCheckedRuleIds: readonly string[] = Object.entries(
+  TYPE_CHECKED_RULES
+).flatMap(([prefix, rules]) => rules.map((rule) => `${prefix}/${rule}`));
+
+// A quoted rule ID used as an object key: `"plugin/rule":` or `'plugin/rule':`.
+// Rule IDs hold only letters, digits, `@`, `/` and `-`, none of which needs
+// escaping.
+const TYPE_CHECKED_RULE_KEY_RE = new RegExp(
+  `(?<quote>["'])(?:${typeCheckedRuleIds.join("|")})\\k<quote>\\s*:`,
+  "gu"
+);
+// A setting that turns the rule off: "off", 0, or a list starting with one.
+const OFF_SETTING_RE =
+  /^\s*(?:\[\s*)?(?:(?<quote>["'])off\k<quote>|0(?![\d.]))/u;
+// A config that already gives ESLint type information.
+const TYPE_INFORMATION_RE =
+  /ultracite\/eslint\/type-aware|\bprojectService\b|\bproject\s*:/u;
+
+// v7's ESLint core preset gave every TypeScript file type information, so a
+// config could turn on or tune a type-checked rule; v8 needs the type-aware
+// preset for that.
+const tunesTypeCheckedRule = ({ eslintConfig }: ProjectState): boolean => {
+  if (
+    !eslintConfig?.includes("ultracite/eslint/") ||
+    TYPE_INFORMATION_RE.test(eslintConfig)
+  ) {
+    return false;
+  }
+
+  return [...eslintConfig.matchAll(TYPE_CHECKED_RULE_KEY_RE)].some(
+    (match) =>
+      !OFF_SETTING_RE.test(eslintConfig.slice(match.index + match[0].length))
+  );
+};
+
 // v7's `init --type-aware` installed oxlint-tsgolint without turning on
 // Oxlint's type-aware mode.
 const missesOxlintTypeAware = ({
@@ -187,13 +362,15 @@ const guideChecks: GuideCheck[] = [
     version: 7,
   },
   {
-    // The Prettier rule, the Cypress and Storybook presets, Oxlint's
-    // type-aware option, Zed formatting with ESLint, or an init that relied
-    // on --quiet skipping prompts.
+    // The Prettier rule, the Cypress and Storybook presets, a type-checked
+    // ESLint rule without the type-aware preset, Oxlint's type-aware option,
+    // Zed formatting with ESLint, or an init that relied on --quiet skipping
+    // prompts.
     applies: (project) =>
       PRETTIER_RULE_RE.test(project.eslintConfig ?? "") ||
       PRETTIER_RULE_RE.test(project.stylelintConfig ?? "") ||
       missesEslintPreset(project) ||
+      tunesTypeCheckedRule(project) ||
       missesOxlintTypeAware(project) ||
       zedFormatsWithEslint(project) ||
       project.commandSources.some(runsQuietInit),

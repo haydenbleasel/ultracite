@@ -1,8 +1,14 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import path from "node:path";
+import process from "node:process";
 
 import type { JsonValue } from "../src/data/types";
 import { buildUpgradePrompt } from "../src/upgrade-agent";
-import { findPendingGuides, readProjectState } from "../src/upgrade-guides";
+import {
+  findPendingGuides,
+  readProjectState,
+  typeCheckedRuleIds,
+} from "../src/upgrade-guides";
 import type { ProjectState } from "../src/upgrade-guides";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -18,6 +24,10 @@ const versionsFor = (state: Partial<ProjectState>): number[] =>
 // Zed settings that format TypeScript with the given formatter.
 const zedWith = (formatter: JsonValue): string =>
   JSON.stringify({ languages: { TypeScript: { formatter } } });
+
+// An ESLint config on Ultracite's core preset with the given rule settings.
+const withRules = (rules: string, extra = ""): string =>
+  `import core from "ultracite/eslint/core";${extra}\nexport default [...core, {\n  rules: {\n    ${rules}\n  },\n}];`;
 
 describe("findPendingGuides", () => {
   test("needs nothing for a current Biome config", () => {
@@ -172,6 +182,119 @@ describe("findPendingGuides", () => {
     ).toEqual([]);
   });
 
+  test("needs v8 for a type-checked ESLint rule without the type-aware preset", () => {
+    expect(
+      versionsFor({
+        eslintConfig: withRules(
+          '"@typescript-eslint/no-floating-promises": ["error", { ignoreVoid: true }],'
+        ),
+      })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        eslintConfig: withRules("'sonarjs/deprecation': 'warn',"),
+      })
+    ).toEqual([8]);
+    expect(
+      versionsFor({
+        eslintConfig: withRules('"vitest/unbound-method": [\n  "error",\n],'),
+      })
+    ).toEqual([8]);
+  });
+
+  test("leaves type-checked ESLint rules alone when they're off or have type information", () => {
+    for (const setting of [
+      '"off"',
+      "'off'",
+      "0",
+      '["off"]',
+      "[\n  'off',\n]",
+    ]) {
+      expect(
+        versionsFor({
+          eslintConfig: withRules(
+            `"@typescript-eslint/strict-boolean-expressions": ${setting},`
+          ),
+        })
+      ).toEqual([]);
+    }
+    // Not a type-checked rule, though its name starts like one.
+    expect(
+      versionsFor({
+        eslintConfig: withRules('"@typescript-eslint/no-floating": "error",'),
+      })
+    ).toEqual([]);
+    // Already type-aware, through the preset or its own parser options.
+    expect(
+      versionsFor({
+        eslintConfig: withRules(
+          '"@typescript-eslint/no-floating-promises": "error",',
+          '\nimport typeAware from "ultracite/eslint/type-aware";'
+        ),
+      })
+    ).toEqual([]);
+    expect(
+      versionsFor({
+        eslintConfig: withRules(
+          '"@typescript-eslint/no-floating-promises": "error",\n  },\n  languageOptions: { parserOptions: { projectService: true } '
+        ),
+      })
+    ).toEqual([]);
+    // A config that doesn't use Ultracite's presets.
+    expect(
+      versionsFor({
+        eslintConfig:
+          'export default [{ rules: { "@typescript-eslint/no-floating-promises": "error" } }];',
+      })
+    ).toEqual([]);
+  });
+
+  test("lists every rule the ESLint type-aware presets run", () => {
+    // The presets are imported in a child process: they load plugins that
+    // read node:fs, which this test suite mocks.
+    const presets = [
+      "type-aware",
+      ...["angular", "jest", "nestjs", "qwik", "tanstack", "vitest"].map(
+        (framework) => `${framework}/type-aware`
+      ),
+    ];
+    const script = `
+      const ids = new Set();
+      for (const preset of ${JSON.stringify(presets)}) {
+        const { default: config } = await import(\`./config/eslint/\${preset}/eslint.config.mjs\`);
+        for (const block of config) {
+          for (const id of Object.keys(block.rules ?? {})) {
+            if (id.includes("/")) ids.add(id);
+          }
+        }
+      }
+      console.log(JSON.stringify([...ids]));
+    `;
+    const result = Bun.spawnSync([process.execPath, "-e", script], {
+      cwd: path.join(import.meta.dir, ".."),
+    });
+
+    expect(result.exitCode, result.stderr.toString()).toBe(0);
+    // SAFETY: the script above prints a JSON array of rule IDs.
+    const presetRuleIds = JSON.parse(result.stdout.toString()) as string[];
+    expect([...typeCheckedRuleIds].toSorted()).toEqual(
+      presetRuleIds.toSorted()
+    );
+  }, 30_000);
+
+  test("the v8 guide lists every type-checked rule for the agent", () => {
+    const [guide] = findPendingGuides(
+      project({
+        eslintConfig: withRules('"sonarjs/deprecation": "error",'),
+      })
+    );
+
+    expect(guide?.version).toBe(8);
+    expect(
+      typeCheckedRuleIds.filter((id) => !guide?.content.includes(`\`${id}\``))
+    ).toEqual([]);
+  });
+
   test("needs v8 for oxlint-tsgolint without Oxlint's type-aware option", () => {
     const oxlintConfig =
       "export default defineConfig({ extends: [core], ignorePatterns: core.ignorePatterns });";
@@ -279,10 +402,10 @@ describe("buildUpgradePrompt", () => {
     const prompt = buildUpgradePrompt({
       guides,
       linter: "biome",
-      version: "7.13.0",
+      version: "8.0.0",
     });
 
-    expect(prompt).toContain("Ultracite has been upgraded to 7.13.0");
+    expect(prompt).toContain("Ultracite has been upgraded to 8.0.0");
     expect(prompt).toContain("Don't install or remove packages");
     expect(
       prompt.indexOf("--- skills/ultracite/references/upgrades/v6.md ---")

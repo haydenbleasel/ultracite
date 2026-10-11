@@ -9,7 +9,7 @@ Ultracite's presets are pinned to specific linter releases, so bumping `ultracit
 npx ultracite@latest upgrade
 ```
 
-Use `@latest` the first time. `npx ultracite` runs the copy installed in your project, and releases before 7.13 don't have the options on this page.
+Use `@latest` the first time. `npx ultracite` runs the copy installed in your project, and releases before 8.0 don't have the options on this page.
 
 ## What It Does
 
@@ -21,7 +21,7 @@ Use `@latest` the first time. `npx ultracite` runs the copy installed in your pr
 
 ## Let Your Coding Agent Update the Configuration
 
-Major releases change what your configuration looks like: v7 moved the Biome presets under `ultracite/biome/` and removed the `lint` and `format` commands, and v6 split the single preset into one per framework. Pass `--claude` or `--codex`, and Ultracite hands the changes your project still needs to that agent's CLI:
+Major releases change what your configuration looks like: v8 took Prettier out of ESLint and Stylelint and moved ESLint's Cypress, Storybook and type-checked rules into presets of their own, v7 moved the Biome presets under `ultracite/biome/` and removed the `lint` and `format` commands, and v6 split the single preset into one per framework. Pass `--claude` or `--codex`, and Ultracite hands the changes your project still needs to that agent's CLI:
 
 ```bash title="Terminal"
 npx ultracite@latest upgrade --claude
@@ -40,7 +40,7 @@ Without `--claude` or `--codex`, `upgrade` lists the guides your project still n
 
 | Release | What changes |
 | --- | --- |
-| v8 | `prettier/prettier` overrides come out of ESLint and Stylelint configs, ESLint projects that use Cypress or Storybook import `ultracite/eslint/cypress` or `ultracite/eslint/storybook`, Oxlint projects with `oxlint-tsgolint` set `typeAware: true`, and `ultracite init --quiet` gains `--yes`. |
+| v8 | `prettier/prettier` overrides come out of ESLint and Stylelint configs, ESLint projects that use Cypress or Storybook import `ultracite/eslint/cypress` or `ultracite/eslint/storybook`, ESLint configs that set a type-checked rule import `ultracite/eslint/type-aware` and the framework add-ons, Oxlint projects with `oxlint-tsgolint` set `typeAware: true`, Zed formats with Prettier rather than ESLint's language server, and `ultracite init --quiet` gains `--yes`. |
 | v7 | Biome presets move from `ultracite/<preset>` to `ultracite/biome/<preset>`, and `ultracite lint` and `ultracite format` become `ultracite check` and `ultracite fix`. |
 | v6 | The single `ultracite` Biome preset splits into `ultracite/core` plus a preset for each framework. |
 | v5 | Biome 2's configuration format replaces Biome 1's. |
@@ -55,13 +55,13 @@ Between major releases your configuration keeps working as it is. When the relea
 npx ultracite@latest upgrade --version 7
 ```
 
-`--version 7` installs the newest 7.x release, so you can stay on one major after the next is out.
+`--version 7` installs the newest 7.x release, so you can stay on one major after the next is out. `--claude` and `--codex` need 8 or later, since earlier releases can't hand the upgrade to an agent.
 
 ## Options
 
 | Option | Description |
 | --- | --- |
-| `--version <version>` | The release to upgrade to, such as `7` or `7.13.0`. Defaults to `latest`. |
+| `--version <version>` | The release to upgrade to, such as `7` or `7.12.4`. Defaults to `latest`. |
 | `--claude` | Have the Claude Code CLI make the configuration changes the release needs. |
 | `--codex` | Have the Codex CLI make the configuration changes the release needs. |
 | `--pm <pm>` | The package manager to use, when it can't be detected from a lockfile. |

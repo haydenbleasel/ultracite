@@ -24,6 +24,7 @@ import {
 import type { FixAgent } from "../linter-args";
 import {
   getRootInstallOptions,
+  installFailedError,
   normalizePackageManager,
   resolveRequestedPackageManager,
 } from "../package-manager";
@@ -59,7 +60,7 @@ export interface UpgradeOptions {
   skipSelf?: boolean;
   /**
    * The release to upgrade to: `latest` (the default), a dist-tag, or a
-   * version or major such as `7` or `7.13.0`.
+   * version or major such as `7` or `7.12.4`.
    */
   version?: string;
 }
@@ -72,12 +73,50 @@ const VERSION_SPEC_RE =
 const assertVersionSpec = (version: string): void => {
   if (!VERSION_SPEC_RE.test(version)) {
     throw new UltraciteSetupError(
-      `\`${version}\` isn't a version. Pass a release such as \`--version 7\` or \`--version 7.13.0\`, or a dist-tag such as \`latest\`.`
+      `\`${version}\` isn't a version. Pass a release such as \`--version 7\` or \`--version 7.12.4\`, or a dist-tag such as \`latest\`.`
+    );
+  }
+};
+
+// The first major whose `upgrade` takes --claude and --codex. The hand-off
+// passes the flag on to the release it installs, and older ones reject it.
+const FIRST_AGENT_UPGRADE_MAJOR = 8;
+const VERSION_MAJOR_RE = /^(?<major>\d+)/u;
+
+const assertAgentUpgradeSupported = (
+  version: string,
+  agent: FixAgent | undefined
+): void => {
+  const major = VERSION_MAJOR_RE.exec(version)?.groups?.major;
+
+  if (agent && major && Number(major) < FIRST_AGENT_UPGRADE_MAJOR) {
+    throw new UltraciteSetupError(
+      `\`--${agent}\` needs Ultracite ${FIRST_AGENT_UPGRADE_MAJOR} or later, since earlier releases can't hand the upgrade to an agent. Drop \`--${agent}\` to install ${version}, or upgrade to ${FIRST_AGENT_UPGRADE_MAJOR} or later.`
     );
   }
 };
 
 type InstallOptions = Parameters<typeof addDevDependency>[1];
+type Spinner = ReturnType<typeof spinner>;
+
+/** Installs the packages, stopping the spinner and explaining a failure. */
+const installPackages = async (
+  packages: string[],
+  installOptions: InstallOptions,
+  packageManager: PackageManager,
+  s: Spinner
+): Promise<void> => {
+  try {
+    await addDevDependency(packages, installOptions);
+  } catch (error) {
+    s.error("Install failed.");
+    throw installFailedError(
+      error instanceof Error ? error.message : String(error),
+      packageManager,
+      "ultracite upgrade"
+    );
+  }
+};
 
 const resolvePackageManager = async (
   requested?: string
@@ -220,6 +259,7 @@ const compareUrl = (previous: string, current: string): string =>
  */
 const updateSelf = async (
   installOptions: InstallOptions,
+  packageManager: PackageManager,
   version: string
 ): Promise<InstalledPackage | null> => {
   const previous = findInstalledPackage(PACKAGE_NAME)?.manifest.version;
@@ -230,7 +270,12 @@ const updateSelf = async (
       ? "Updating Ultracite to the latest release..."
       : `Updating Ultracite to ${version}...`
   );
-  await addDevDependency([`${PACKAGE_NAME}@${version}`], installOptions);
+  await installPackages(
+    [`${PACKAGE_NAME}@${version}`],
+    installOptions,
+    packageManager,
+    s
+  );
 
   const installed = findInstalledPackage(PACKAGE_NAME);
   const current = installed?.manifest.version;
@@ -326,7 +371,7 @@ const syncToolchain = async (
   s.start(
     `Syncing the ${linter} toolchain with Ultracite ${packageJson.version}...`
   );
-  await addDevDependency(packages, installOptions);
+  await installPackages(packages, installOptions, packageManager, s);
   s.stop(`Installed ${packages.join(", ")}`);
 };
 
@@ -394,6 +439,7 @@ export const upgrade = async (
 
   const version = options.version ?? "latest";
   assertVersionSpec(version);
+  assertAgentUpgradeSupported(version, options.agent);
 
   const linter = detectLinter();
 
@@ -425,7 +471,7 @@ export const upgrade = async (
   }
 
   if (!options.skipSelf) {
-    const newer = await updateSelf(installOptions, version);
+    const newer = await updateSelf(installOptions, packageManager, version);
     const handOffStatus = newer
       ? handOffToInstalled(newer, options.pm, options.agent)
       : null;
