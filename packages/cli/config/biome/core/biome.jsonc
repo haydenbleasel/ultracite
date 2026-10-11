@@ -238,6 +238,9 @@
         "noSetterReturn": "error",
         "noStringCaseMismatch": "error",
         "noSwitchDeclarations": "error",
+        // A project rule, but no measurable cost: core force-ignores
+        // node_modules, so the scanner never indexes dependencies (#843).
+        "noUndeclaredDependencies": "error",
         "noUndeclaredVariables": "error",
         "noUnreachable": "error",
         "noUnreachableSuper": "error",
@@ -270,7 +273,6 @@
 
         /** ------ Project/Scanner rules. Use ultracite/biome/type-aware to enable. ------ **/
         "noPrivateImports": "off",
-        "noUndeclaredDependencies": "off",
         "noUnresolvedImports": "off",
         "useImportExtensions": "off",
         "useJsonImportAttributes": "off",
@@ -482,6 +484,7 @@
         "noExplicitAny": "error",
         "noExtraNonNullAssertion": "error",
         "noFallthroughSwitchClause": "error",
+        "noForIn": "error",
         "noFunctionAssign": "error",
         "noGlobalAssign": "error",
         "noGlobalIsFinite": "error",
@@ -537,7 +540,6 @@
         "noUnusedExpressions": "error",
 
         "noConsole": "off",
-        "noForIn": "off",
         "noUndeclaredEnvVars": "off",
         "useDeprecatedDate": "off",
 

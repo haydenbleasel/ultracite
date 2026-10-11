@@ -10,22 +10,22 @@ import type { CoverageRow } from "../coverage.astro";
 // complexity/noImportantStyles. Re-derive when either version moves.
 const catalogSize = 565;
 const defaultCount = 215;
-const coreCount = 329;
-const typeAwareCount = 7;
+const coreCount = 331;
+const typeAwareCount = 6;
 
 const groups: CoverageRow[] = [
   {
     available: 121,
     defaults: 75,
     description: "Code that’s likely wrong or useless",
-    enabled: 100,
+    enabled: 101,
     name: "Suspicious",
   },
   {
     available: 100,
     defaults: 52,
     description: "Code that’s guaranteed to be wrong or useless",
-    enabled: 58,
+    enabled: 59,
     name: "Correctness",
   },
   {
@@ -72,13 +72,13 @@ const groups: CoverageRow[] = [
   },
 ];
 
-// What `ultracite fix` can do about each of the 329, by the fix kind Biome
+// What `ultracite fix` can do about each of the 331, by the fix kind Biome
 // gives it. Ultracite makes three unsafe fixes safe: noUnusedImports,
 // useBlockStatements and useSortedClasses.
 const fixes = [
   { label: "safe fix, applied by fix", value: "72" },
   { label: "unsafe fix, with --unsafe", value: "73" },
-  { label: "no fix, for the agent", value: "184" },
+  { label: "no fix, for the agent", value: "186" },
   { label: "type-aware, opt-in", value: String(typeAwareCount) },
 ];
 ---
@@ -92,7 +92,7 @@ const fixes = [
       title: "Errors, never warnings",
     },
     {
-      body: "The `type-aware` preset adds rules like `noImportCycles`, `noUnresolvedImports` and `noUndeclaredDependencies`. They need Biome to scan your whole project first, so they’re opt-in: `init --type-aware` adds the preset.",
+      body: "The `type-aware` preset adds rules like `noImportCycles`, `noUnresolvedImports` and `noDeprecatedImports`. They need Biome to scan your whole project first, so they’re opt-in: `init --type-aware` adds the preset.",
       title: `${typeAwareCount} rules that read your project`,
     },
   ]}
