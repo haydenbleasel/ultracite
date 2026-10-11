@@ -16,6 +16,7 @@ import {
   runsUltraciteFix,
   ultraciteFixCommand,
 } from "./project-command";
+import { stagedFileExtensions } from "./staged-files";
 import {
   renderYamlDocument,
   replaceYamlStrings,
@@ -40,35 +41,6 @@ const findConfigPath = (): string | undefined =>
 const isYamlPath = (file: string): boolean =>
   file.endsWith(".yml") || file.endsWith(".yaml");
 
-// Every file type Biome, Oxlint + Oxfmt or ESLint + Prettier + Stylelint
-// lints or formats. The job only gets the staged files that match, so a type
-// missing here is never fixed on commit.
-const fileExtensions = [
-  "js",
-  "jsx",
-  "mjs",
-  "cjs",
-  "ts",
-  "tsx",
-  "mts",
-  "cts",
-  "json",
-  "jsonc",
-  "css",
-  "scss",
-  "less",
-  "vue",
-  "svelte",
-  "astro",
-  "html",
-  "md",
-  "mdx",
-  "yaml",
-  "yml",
-  "graphql",
-  "gql",
-];
-
 // The narrower list init wrote before v8, when the job fixed the whole
 // project and the globs only decided whether it ran.
 const legacyFileExtensions = ["js", "jsx", "ts", "tsx", "json", "jsonc", "css"];
@@ -84,13 +56,13 @@ const globsFor = (extensions: string[], doublestar: boolean): string[] =>
   );
 
 const createGlobs = (doublestar: boolean): string[] =>
-  globsFor(fileExtensions, doublestar);
+  globsFor(stagedFileExtensions, doublestar);
 
 // Every glob list an init has written, for either matcher: the current
 // extensions, and the narrower legacy ones (whose `**` form also missed
 // root-level files under the default matcher).
 const generatedGlobLists = new Set(
-  [fileExtensions, legacyFileExtensions].flatMap((extensions) => [
+  [stagedFileExtensions, legacyFileExtensions].flatMap((extensions) => [
     JSON.stringify(globsFor(extensions, false)),
     JSON.stringify(globsFor(extensions, true)),
   ])

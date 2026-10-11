@@ -9,40 +9,14 @@ import {
   isGeneratedUltraciteFixCommand,
   ultraciteFixCommand,
 } from "./project-command";
+import { stagedFileExtensions } from "./staged-files";
 import { renderYamlDocument, replaceYamlStrings } from "./yaml-document";
 
 const path = "./.pre-commit-config.yaml";
 const HOOK_ID = "ultracite";
-// Every file type Biome, Oxlint + Oxfmt or ESLint + Prettier + Stylelint
-// lints or formats. A `files` pattern rather than `types_or`, because
-// pre-commit's file type tags (from identify) have none for .jsonc, .mts,
-// .cts or .gql.
-const FILE_EXTENSIONS = [
-  "js",
-  "jsx",
-  "mjs",
-  "cjs",
-  "ts",
-  "tsx",
-  "mts",
-  "cts",
-  "json",
-  "jsonc",
-  "css",
-  "scss",
-  "less",
-  "vue",
-  "svelte",
-  "astro",
-  "html",
-  "md",
-  "mdx",
-  "yaml",
-  "yml",
-  "graphql",
-  "gql",
-];
-const FILES_PATTERN = String.raw`\.(${FILE_EXTENSIONS.join("|")})$`;
+// A `files` pattern rather than `types_or`, because pre-commit's file type
+// tags (from identify) have none for .jsonc, .mts, .cts or .gql.
+const FILES_PATTERN = String.raw`\.(${stagedFileExtensions.join("|")})$`;
 
 // The `types_or` init wrote before v8, which missed most of those types.
 const LEGACY_FILE_TYPES = ["javascript", "jsx", "ts", "tsx", "json", "css"];

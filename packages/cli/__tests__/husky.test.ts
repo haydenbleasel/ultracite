@@ -1,4 +1,7 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { randomUUID } from "node:crypto";
+import { tmpdir } from "node:os";
+import nodePath from "node:path";
 
 import type { PackageManager } from "nypm";
 
@@ -47,6 +50,88 @@ const mockProject = (files: Record<string, string>) => {
 
 const countMarkers = (script: string | undefined): number =>
   (script ?? "").split("\n").filter((line) => line === "# ultracite").length;
+
+// Runs a command for real (node:fs and spawn-sync are mocked in tests) and
+// returns its exit code and combined output.
+const run = (cwd: string, command: string[]) => {
+  const result = Bun.spawnSync(command, {
+    cwd,
+    stderr: "pipe",
+    stdout: "pipe",
+  });
+  return {
+    exitCode: result.exitCode,
+    output: `${result.stdout.toString()}${result.stderr.toString()}`,
+  };
+};
+
+const git = (cwd: string, ...args: string[]): string => {
+  const { exitCode, output } = run(cwd, ["git", ...args]);
+  if (exitCode !== 0) {
+    throw new Error(`git ${args.join(" ")} failed: ${output}`);
+  }
+  return output;
+};
+
+// A stand-in for `ultracite fix` that appends a line to each file it gets,
+// and fails when FIX_FAILS is set.
+const FIXER = `for file in "$@"; do
+  printf 'fixed\\n' >> "$file"
+done
+if [ -n "$FIX_FAILS" ]; then
+  exit 1
+fi
+`;
+
+// A git repository holding the generated standalone hook, with `a.ts`,
+// `b.ts` and `my file.ts` committed. The hook runs `sh fix.sh` in place of
+// `npx ultracite fix`.
+const createHookRepo = async (dir: string): Promise<void> => {
+  const written = mockProject({});
+  await husky.create("npm", false);
+  restoreFileSystemMock();
+
+  const script = (written.get("./.husky/pre-commit") ?? "").replace(
+    "xargs -0 npx ultracite fix",
+    "xargs -0 sh fix.sh"
+  );
+  if (!script.includes("xargs -0 sh fix.sh")) {
+    throw new Error("The hook no longer runs the fix through xargs");
+  }
+
+  await Bun.write(nodePath.join(dir, ".husky", "pre-commit"), script);
+  await Bun.write(nodePath.join(dir, "fix.sh"), FIXER);
+  await Bun.write(nodePath.join(dir, "a.ts"), "a\n");
+  await Bun.write(nodePath.join(dir, "b.ts"), "b\n");
+  await Bun.write(nodePath.join(dir, "my file.ts"), "c\n");
+
+  git(dir, "init", "-q");
+  git(dir, "config", "user.email", "test@example.com");
+  git(dir, "config", "user.name", "Test");
+  git(dir, "config", "core.autocrlf", "false");
+  git(dir, "config", "commit.gpgsign", "false");
+  git(dir, "add", ".");
+  git(dir, "commit", "-q", "--no-verify", "-m", "init");
+};
+
+// Husky runs hook scripts as `sh -e .husky/pre-commit`.
+const runHook = (dir: string, env: Record<string, string> = {}) => {
+  const result = Bun.spawnSync(["sh", "-e", ".husky/pre-commit"], {
+    cwd: dir,
+    env: { ...process.env, ...env },
+    stderr: "pipe",
+    stdout: "pipe",
+  });
+  return {
+    exitCode: result.exitCode,
+    output: `${result.stdout.toString()}${result.stderr.toString()}`,
+  };
+};
+
+const append = async (dir: string, file: string, text: string) => {
+  const filePath = nodePath.join(dir, file);
+  await Bun.write(filePath, `${await Bun.file(filePath).text()}${text}`);
+};
 
 describe("husky", () => {
   beforeEach(() => {
@@ -624,6 +709,94 @@ describe("husky", () => {
       expect(script).toContain("# ultracite end\nnpm test\n");
       expect(script).toContain("\nyarn lint-staged\n");
       expect(script).not.toContain("dlx");
+    });
+  });
+
+  describe("standalone hook run by husky", () => {
+    let dir = "";
+
+    beforeEach(async () => {
+      dir = nodePath.join(tmpdir(), `ultracite-husky-${randomUUID()}`);
+      await createHookRepo(dir);
+    });
+
+    afterEach(() => {
+      // node:fs is mocked, and Git's sh (which the hook needs anyway) has rm
+      // on Windows too.
+      run(tmpdir(), ["sh", "-c", 'rm -rf "$1"', "sh", dir]);
+    });
+
+    test("fixes and re-stages the staged files on a clean tree", async () => {
+      await append(dir, "a.ts", "a2\n");
+      git(dir, "add", "a.ts");
+
+      const { exitCode } = runHook(dir);
+
+      expect(exitCode).toBe(0);
+      expect(git(dir, "show", ":a.ts")).toBe("a\na2\nfixed\n");
+      expect(git(dir, "diff", "--name-only")).toBe("");
+    });
+
+    test("ignores an unrelated file with unstaged changes", async () => {
+      // grep finds no partially staged file here, which ended the script
+      // under `sh -e` before anything was fixed.
+      await append(dir, "a.ts", "a2\n");
+      git(dir, "add", "a.ts");
+      await append(dir, "b.ts", "b2\n");
+
+      const { exitCode } = runHook(dir);
+
+      expect(exitCode).toBe(0);
+      expect(git(dir, "show", ":a.ts")).toBe("a\na2\nfixed\n");
+      expect(await Bun.file(nodePath.join(dir, "b.ts")).text()).toBe("b\nb2\n");
+      expect(git(dir, "diff", "--name-only")).toBe("b.ts\n");
+    });
+
+    test("fixes a partially staged file but leaves the fix unstaged", async () => {
+      await append(dir, "a.ts", "a2\n");
+      git(dir, "add", "a.ts");
+      await append(dir, "a.ts", "a3\n");
+
+      const { exitCode, output } = runHook(dir);
+
+      expect(exitCode).toBe(0);
+      expect(output).toContain("left unstaged");
+      expect(output).toContain("  a.ts");
+      expect(git(dir, "show", ":a.ts")).toBe("a\na2\n");
+      expect(await Bun.file(nodePath.join(dir, "a.ts")).text()).toBe(
+        "a\na2\na3\nfixed\n"
+      );
+    });
+
+    test("fixes and re-stages a file with a space in its name", async () => {
+      await append(dir, "my file.ts", "c2\n");
+      git(dir, "add", "my file.ts");
+
+      const { exitCode } = runHook(dir);
+
+      expect(exitCode).toBe(0);
+      expect(git(dir, "show", ":my file.ts")).toBe("c\nc2\nfixed\n");
+    });
+
+    test("does nothing when no files are staged", async () => {
+      await append(dir, "a.ts", "a2\n");
+
+      const { exitCode, output } = runHook(dir);
+
+      expect(exitCode).toBe(0);
+      expect(output).toContain("No staged files to format");
+      expect(await Bun.file(nodePath.join(dir, "a.ts")).text()).toBe("a\na2\n");
+    });
+
+    test("blocks the commit when the fix fails, after re-staging", async () => {
+      await append(dir, "a.ts", "a2\n");
+      git(dir, "add", "a.ts");
+
+      const { exitCode, output } = runHook(dir, { FIX_FAILS: "1" });
+
+      expect(exitCode).not.toBe(0);
+      expect(output).toContain("could not be auto-fixed");
+      expect(git(dir, "show", ":a.ts")).toBe("a\na2\nfixed\n");
     });
   });
 });

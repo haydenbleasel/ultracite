@@ -17,13 +17,29 @@ import {
   isGeneratedUltraciteFixCommand,
   ultraciteFixCommand,
 } from "./project-command";
+import { stagedFileExtensions } from "./staged-files";
 import { renderYamlDocument, replaceYamlStrings } from "./yaml-document";
 
 const packageJsonPath = "./package.json";
 const packageYamlPaths = ["./package.yaml", "./package.yml"];
 const LINT_STAGED_KEY = "lint-staged";
 
-const ULTRACITE_PATTERN = "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}";
+// lint-staged matches a glob without a slash against each file's basename,
+// so this covers files in every directory.
+const ULTRACITE_PATTERN = `*.{${stagedFileExtensions.join(",")}}`;
+
+// The glob init wrote before v8, which missed .mjs, .cjs, .vue, .svelte,
+// .astro, .yaml and other types the linters handle.
+const LEGACY_ULTRACITE_PATTERN = "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}";
+
+// The legacy glob as a quoted key in a JS config, with its task: a list, or a
+// single quoted command.
+const LEGACY_PATTERN_ENTRY_RE =
+  /(?<quote>["'`])\*\.\{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx\}\k<quote>(?<separator>\s*:\s*)(?<task>\[[^\]]*\]|(?<taskQuote>["'`])[^"'`\n]*\k<taskQuote>)/gu;
+
+// A task holding one quoted command, alone or as the only item of a list.
+const SINGLE_COMMAND_TASK_RE =
+  /^(?:\[\s*)?(?<quote>["'`])(?<command>[^"'`\n]*)\k<quote>(?:\s*,?\s*\])?$/u;
 
 const createLintStagedConfig = (packageManager: PackageManagerName) => ({
   [ULTRACITE_PATTERN]: [ultraciteFixCommand(packageManager)],
@@ -134,12 +150,39 @@ const upgradeCommand = (value: JsonValue, command: string): JsonValue => {
   return value;
 };
 
+// Whether a task is nothing but the `ultracite fix` command an init wrote.
+const isGeneratedTask = (task: JsonValue): boolean => {
+  const commands = Array.isArray(task) ? task : [task];
+  return (
+    commands.length > 0 &&
+    commands.every(
+      (entry) =>
+        // oxlint-disable-next-line anti-slop/no-runtime-typeof -- a lint-staged task is a string or an array of strings
+        typeof entry === "string" && isGeneratedUltraciteFixCommand(entry)
+    )
+  );
+};
+
+// The glob for a task: the legacy glob an earlier init wrote becomes the
+// current one while its task is still only Ultracite's command. A glob or
+// task the user wrote or edited is left alone.
+const upgradePattern = (
+  pattern: string,
+  task: JsonValue,
+  config: JsonObject
+): string =>
+  pattern === LEGACY_ULTRACITE_PATTERN &&
+  isGeneratedTask(task) &&
+  !Object.hasOwn(config, ULTRACITE_PATTERN)
+    ? ULTRACITE_PATTERN
+    : pattern;
+
 /**
  * `config` with the ultracite task added under its glob: appended to an
  * existing command list, or turned into a list alongside an existing single
  * command. A config that already runs ultracite only has generated commands
- * upgraded. Returns null when the glob holds something we can't extend and so
- * needs a manual edit.
+ * and the glob an earlier init wrote upgraded. Returns null when the glob
+ * holds something we can't extend and so needs a manual edit.
  */
 const mergeUltraciteTask = (
   config: JsonObject,
@@ -147,10 +190,10 @@ const mergeUltraciteTask = (
 ): JsonObject | null => {
   if (mentionsUltracite(config)) {
     return Object.fromEntries(
-      Object.entries(config).map(([pattern, task]) => [
-        pattern,
-        upgradeCommand(task, command),
-      ])
+      Object.entries(config).map(([pattern, task]) => {
+        const upgradedTask = upgradeCommand(task, command);
+        return [upgradePattern(pattern, upgradedTask, config), upgradedTask];
+      })
     );
   }
 
@@ -288,6 +331,32 @@ const quoteGlobKeys = (content: string): string =>
     (_match, key: string, rest: string) => `'${key}':${rest}`
   );
 
+// Renames the legacy glob in a YAML config, as upgradePattern does for JSON.
+// Returns whether it changed anything.
+const upgradeYamlPattern = (config: YAML.YAMLMap): boolean => {
+  const pair = config.items.find(
+    (item) =>
+      YAML.isScalar(item.key) && item.key.value === LEGACY_ULTRACITE_PATTERN
+  );
+
+  if (
+    !(pair && YAML.isScalar(pair.key) && YAML.isNode(pair.value)) ||
+    config.has(ULTRACITE_PATTERN)
+  ) {
+    return false;
+  }
+
+  // The yaml library's toJSON is untyped; a task node holds JSON data.
+  const task: JsonValue = pair.value.toJSON();
+
+  if (!isGeneratedTask(task)) {
+    return false;
+  }
+
+  pair.key.value = ULTRACITE_PATTERN;
+  return true;
+};
+
 /**
  * Adds the ultracite task to a YAML lint-staged config in place, through the
  * yaml Document API so comments and formatting elsewhere in the file survive.
@@ -299,7 +368,12 @@ const addUltraciteTaskToYaml = (
   command: string
 ): boolean | null => {
   if (mentionsUltracite(config.toJSON())) {
-    return replaceYamlStrings(config, isGeneratedUltraciteFixCommand, command);
+    const commandChanged = replaceYamlStrings(
+      config,
+      isGeneratedUltraciteFixCommand,
+      command
+    );
+    return upgradeYamlPattern(config) || commandChanged;
   }
 
   const existing = config.get(ULTRACITE_PATTERN, true);
@@ -358,15 +432,32 @@ const updateYamlConfig = async (
   }
 };
 
-// Replace generated dlx commands that appear as whole string literals.
-const upgradeCommandLiterals = (content: string, command: string): string =>
-  content.replaceAll(
+// Replace generated dlx commands that appear as whole string literals, then
+// the legacy glob where its task is only a generated command.
+const upgradeCommandLiterals = (content: string, command: string): string => {
+  const upgraded = content.replaceAll(
     /(?<quote>["'`])(?<value>[^"'`\n]*ultracite fix)\k<quote>/gu,
     (match, quote: string, value: string) =>
       value !== command && isGeneratedUltraciteFixCommand(value)
         ? `${quote}${command}${quote}`
         : match
   );
+
+  if (upgraded.includes(ULTRACITE_PATTERN)) {
+    return upgraded;
+  }
+
+  return upgraded.replaceAll(
+    LEGACY_PATTERN_ENTRY_RE,
+    (match, quote: string, separator: string, task: string) => {
+      const taskCommand = SINGLE_COMMAND_TASK_RE.exec(task)?.groups?.command;
+      return taskCommand !== undefined &&
+        isGeneratedUltraciteFixCommand(taskCommand)
+        ? `${quote}${ULTRACITE_PATTERN}${quote}${separator}${task}`
+        : match;
+    }
+  );
+};
 
 // Update ESM (and TypeScript) config files. magicast edits the module's AST
 // in place, so comments and function-valued entries elsewhere in the config

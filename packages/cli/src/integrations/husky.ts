@@ -25,7 +25,9 @@ ${lintStagedCommand}
 // arguments on empty input, which would fix the whole project. No early
 // `exit 0`: commands a user keeps after the ultracite section must still run
 // when nothing is staged (e.g. `git commit --amend` or an empty commit). A
-// fix failure still exits non-zero to block the commit.
+// fix failure still exits non-zero to block the commit. Husky runs the hook
+// with `sh -e`, so every command that can fail in a normal run (grep finding
+// no match, the fix itself) carries its own `||`.
 const createStandaloneHookScript = (command: string) => `#!/bin/sh
 # Fix only the staged files
 STAGED_FILES=$(git -c core.quotePath=false diff --cached --name-only --diff-filter=ACMR)
@@ -37,10 +39,10 @@ else
   PARTIALLY_STAGED=""
   FULLY_STAGED=$STAGED_FILES
   if [ -n "$UNSTAGED_FILES" ]; then
-    PARTIALLY_STAGED=$(printf '%s\\n' "$STAGED_FILES" | grep -Fx -- "$UNSTAGED_FILES")
+    PARTIALLY_STAGED=$(printf '%s\\n' "$STAGED_FILES" | grep -Fx -- "$UNSTAGED_FILES" || true)
   fi
   if [ -n "$PARTIALLY_STAGED" ]; then
-    FULLY_STAGED=$(printf '%s\\n' "$STAGED_FILES" | grep -Fxv -- "$PARTIALLY_STAGED")
+    FULLY_STAGED=$(printf '%s\\n' "$STAGED_FILES" | grep -Fxv -- "$PARTIALLY_STAGED" || true)
   fi
 
   # Run the fixer on the staged files, capturing the exit code so we can

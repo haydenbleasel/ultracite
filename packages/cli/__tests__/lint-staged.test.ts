@@ -9,6 +9,13 @@ import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 const npmPm = { command: "npm", name: "npm" } satisfies PackageManager;
 
+// The glob init writes: every file type the linters and formatters handle.
+const PATTERN =
+  "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,jsonc,css,scss,less,vue,svelte,astro,html,md,mdx,yaml,yml,graphql,gql}";
+
+// The narrower glob init wrote before v8.
+const LEGACY_PATTERN = "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}";
+
 mock.module("node:fs/promises", () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
   readFile: mock(() => Promise.resolve("{}")),
@@ -1209,8 +1216,8 @@ export default {
       expect(output).toContain("# lint on commit");
       expect(YAML.parse(output)).toEqual({
         "*.css": "stylelint --fix",
-        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"],
         "*.{js,ts}": "eslint --fix",
+        [PATTERN]: ["npx ultracite fix"],
       });
     });
 
@@ -1224,7 +1231,7 @@ export default {
 
       expect(YAML.parse(written.get("./.lintstagedrc") ?? "")).toEqual({
         "*.js": "eslint --fix",
-        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"],
+        [PATTERN]: ["npx ultracite fix"],
       });
     });
 
@@ -1269,24 +1276,20 @@ export default {
       expect(written.has("./package.json")).toBe(false);
       expect(JSON.parse(written.get("./.lintstagedrc.json") ?? "{}")).toEqual({
         "*.md": ["prettier --write"],
-        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"],
+        [PATTERN]: ["npx ultracite fix"],
       });
     });
 
     test("keeps an existing single command for the same glob", async () => {
       const written = mockProject({
-        "./.lintstagedrc.json":
-          '{"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": "tsc --noEmit"}',
+        "./.lintstagedrc.json": JSON.stringify({ [PATTERN]: "tsc --noEmit" }),
       });
 
       await lintStaged.update("npm");
       restoreFileSystemMock();
 
       expect(JSON.parse(written.get("./.lintstagedrc.json") ?? "{}")).toEqual({
-        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-          "tsc --noEmit",
-          "npx ultracite fix",
-        ],
+        [PATTERN]: ["tsc --noEmit", "npx ultracite fix"],
       });
     });
 
@@ -1294,9 +1297,7 @@ export default {
       const written = mockProject({
         "./.lintstagedrc.json": JSON.stringify({
           "*.py": ["ruff check"],
-          "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-            "yarn dlx ultracite fix",
-          ],
+          [LEGACY_PATTERN]: ["yarn dlx ultracite fix"],
         }),
       });
 
@@ -1305,7 +1306,7 @@ export default {
 
       expect(JSON.parse(written.get("./.lintstagedrc.json") ?? "{}")).toEqual({
         "*.py": ["ruff check"],
-        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["yarn ultracite fix"],
+        [PATTERN]: ["yarn ultracite fix"],
       });
     });
 
@@ -1323,7 +1324,7 @@ export default {
     test("upgrades a dlx command in a YAML config without touching comments", async () => {
       const written = mockProject({
         "./.lintstagedrc.yml": `# keep me
-"*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}":
+"${LEGACY_PATTERN}":
   - pnpm dlx ultracite fix
 `,
       });
@@ -1335,6 +1336,9 @@ export default {
       expect(output).toContain("# keep me");
       expect(output).toContain("- pnpm exec ultracite fix");
       expect(output).not.toContain("dlx");
+      expect(YAML.parse(output)).toEqual({
+        [PATTERN]: ["pnpm exec ultracite fix"],
+      });
     });
 
     test("adds ultracite under the lint-staged key of package.yaml", async () => {
@@ -1351,9 +1355,7 @@ lint-staged:
       expect(YAML.parse(written.get("./package.yaml") ?? "")).toEqual({
         "lint-staged": {
           "*.md": "prettier --write",
-          "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-            "pnpm exec ultracite fix",
-          ],
+          [PATTERN]: ["pnpm exec ultracite fix"],
         },
         name: "app",
       });
@@ -1366,8 +1368,109 @@ lint-staged:
       restoreFileSystemMock();
 
       expect(JSON.parse(written.get(".lintstagedrc.json") ?? "{}")).toEqual({
-        "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["yarn ultracite fix"],
+        [PATTERN]: ["yarn ultracite fix"],
       });
+    });
+
+    test("widens the glob an earlier init wrote, in place", async () => {
+      const written = mockProject({
+        "./package.json": JSON.stringify({
+          "lint-staged": {
+            [LEGACY_PATTERN]: ["npx ultracite fix"],
+            "*.py": ["ruff check"],
+          },
+          name: "app",
+        }),
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      const config = JSON.parse(written.get("./package.json") ?? "{}")[
+        "lint-staged"
+      ];
+      expect(Object.keys(config)).toEqual([PATTERN, "*.py"]);
+      expect(config[PATTERN]).toEqual(["npx ultracite fix"]);
+    });
+
+    test("keeps the legacy glob when its task runs more than ultracite", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.json": JSON.stringify({
+          [LEGACY_PATTERN]: ["npx ultracite fix", "vitest related --run"],
+        }),
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+    });
+
+    test("keeps a glob the user wrote for ultracite", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.json": '{"*.{ts,tsx}": ["npx ultracite fix"]}',
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
+    });
+
+    test("widens the legacy glob in an ESM config without touching the rest", async () => {
+      const written = mockProject({
+        "./lint-staged.config.mjs": `// lint on commit
+export default {
+  "*.md": (files) => \`prettier --write \${files.join(" ")}\`,
+  "${LEGACY_PATTERN}": ["npx ultracite fix"],
+};
+`,
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.get("./lint-staged.config.mjs")).toBe(`// lint on commit
+export default {
+  "*.md": (files) => \`prettier --write \${files.join(" ")}\`,
+  "${PATTERN}": ["npx ultracite fix"],
+};
+`);
+    });
+
+    test("widens the legacy glob in a CommonJS config an earlier init wrote", async () => {
+      const written = mockProject({
+        "./.lintstagedrc.cjs": `module.exports = {
+  "${LEGACY_PATTERN}": [
+    "yarn dlx ultracite fix"
+  ]
+};
+`,
+      });
+
+      await lintStaged.update("yarn");
+      restoreFileSystemMock();
+
+      expect(written.get("./.lintstagedrc.cjs")).toBe(`module.exports = {
+  "${PATTERN}": [
+    "yarn ultracite fix"
+  ]
+};
+`);
+    });
+
+    test("keeps the legacy glob in a JS config when its task does more", async () => {
+      const written = mockProject({
+        "./lint-staged.config.mjs": `export default {
+  "${LEGACY_PATTERN}": ["npx ultracite fix", "vitest related --run"],
+};
+`,
+      });
+
+      await lintStaged.update("npm");
+      restoreFileSystemMock();
+
+      expect(written.size).toBe(0);
     });
   });
 });

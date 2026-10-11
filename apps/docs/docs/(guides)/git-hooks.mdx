@@ -123,11 +123,15 @@ If you already have a Lefthook config, Ultracite edits the one Lefthook actually
 
 ```json title=".lintstagedrc.json"
 {
-  "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": ["npx ultracite fix"]
+  "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,jsonc,css,scss,less,vue,svelte,astro,html,md,mdx,yaml,yml,graphql,gql}": [
+    "npx ultracite fix"
+  ]
 }
 ```
 
 If you already have one, Ultracite adds its task to the config lint-staged actually uses: a dedicated config file (`.lintstagedrc` in any format, including `.ts`, `.mts`, and `.cts`, or `lint-staged.config.*`) wins over a `"lint-staged"` key in `package.json`, which wins over one in `package.yaml`. YAML configs keep their comments, ES module and TypeScript configs are edited in place, and CommonJS configs are rewritten from their loaded values. If a config can't be merged safely (for example, one that exports a function or wraps its object in `defineConfig()`), Ultracite leaves it untouched and prints the command to add, rather than creating a second config that would shadow yours.
+
+The glob covers the same file types as the Lefthook globs, in every directory, and lint-staged passes the staged files that match it to `ultracite fix` and re-stages them. Re-running `init` widens the narrower glob earlier versions wrote (`*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}`) while its task is still only Ultracite's command.
 
 lint-staged needs a Git hook to trigger it, so it's typically used alongside Husky or Lefthook.
 
