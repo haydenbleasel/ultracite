@@ -1,4 +1,5 @@
 ---
+import { latestVersion } from "../../lib/latest-version";
 import Icon from "./icon.astro";
 
 interface Props {
@@ -10,55 +11,159 @@ interface Props {
   wide?: boolean;
 }
 
-const {
-  class: className,
-  command = "npx ultracite@latest init",
-  tone = "default",
-  wide = false,
-} = Astro.props;
+const { class: className, command, tone = "default", wide = false } = Astro.props;
 const inverse = tone === "inverse";
+
+const terminal = command ?? "npx ultracite@latest init";
+// Pages that preselect an engine, agent or editor pass their own command and
+// keep the plain field. The generic install can also be copied as a prompt to
+// paste into a coding agent, which picks the presets by reading the project.
+// The field shows it on one truncated line; Copy copies it as written.
+const [major] = latestVersion.split(".");
+const prompt = command
+  ? undefined
+  : [
+      `Install Ultracite v${major} in this project and enable the presets that match its stack. The setup docs are at https://www.ultracite.ai/docs/setup.`,
+      "",
+      "1. Inspect the project first: the package manager (from the lockfile), any existing ESLint, Prettier, Stylelint, Biome or Oxlint config, the frameworks and test runners in package.json (React, Next.js, Vue, Svelte, Astro, Angular, Jest, Vitest, Storybook and so on), the workspaces if it's a monorepo, the editor and agent folders that exist (.vscode, .cursor, .zed, .claude and so on), and any git hook tools (husky, lefthook, lint-staged).",
+      "2. Run `npx ultracite@latest init --yes` (or the pnpm, Yarn or Bun equivalent) with flags for what you found: `--pm`, `--linter` (keep the linter the project already uses, otherwise oxlint), `--frameworks`, `--workspace-framework <path>=<framework>` for a framework only one workspace uses, `--editors`, `--agents` (include yourself), `--hooks` for yourself if you're supported, `--integrations` for the git hook tools already in use, and `--install-skill`. `init --help` lists the accepted values.",
+      "3. Leave the opt-in extras (`--type-aware`, `--js-plugins`) off unless I ask for them.",
+      "4. If the project had its own lint or format config, carry over the rules Ultracite's presets don't cover, after the presets.",
+      "5. Run `npx ultracite fix`, then `npx ultracite check` and `npx ultracite doctor`. Fix what's left where the fix is clear, and don't turn rules off to make the check pass.",
+      "6. Tell me which linter and presets you enabled, what changed, and what `check` still reports.",
+    ].join("\n");
+
+const modes = [
+  { id: "terminal", label: "For developers" },
+  { id: "prompt", label: "For agents" },
+];
 ---
 
 <div
   class:list={[
-    "hp-installer flex h-14 w-full items-center gap-3 rounded-md pr-1.5 pl-4 font-mono text-[15px]",
+    "hp-installer flex w-full flex-col gap-2",
     wide ? "max-w-[560px]" : "max-w-[520px]",
-    inverse
-      ? "bg-panel text-panel-foreground"
-      : "border border-foreground/90 bg-code text-foreground",
     className,
   ]}
 >
-  <span aria-hidden="true" class:list={[inverse ? "text-signal" : "text-accent"]}
-    >$</span
-  >
-  {/*
-    No outline-none here: Blume's base :focus-visible ring is the only focus
-    indicator this read-only field has.
-  */}
-  <input
-    aria-label="Install command"
-    class="hp-cmd min-w-0 flex-1 truncate rounded-sm bg-transparent"
-    readonly
-    value={command}
-  />
-  <button
+  {
+    prompt && (
+      <div aria-label="Install" class="flex gap-1" role="tablist">
+        {modes.map((mode) => (
+          <button
+            aria-selected={String(mode.id === "terminal")}
+            class:list={[
+              "rounded-md px-2.5 py-1 font-medium text-sm/5",
+              inverse
+                ? "text-ink/80 hover:text-ink aria-selected:bg-panel aria-selected:text-panel-foreground"
+                : "text-muted-foreground hover:text-foreground aria-selected:bg-foreground aria-selected:text-background",
+            ]}
+            data-hp-mode={mode.id}
+            role="tab"
+            tabindex={mode.id === "terminal" ? "0" : "-1"}
+            type="button"
+          >
+            {mode.label}
+          </button>
+        ))}
+      </div>
+    )
+  }
+  <div
     class:list={[
-      "hp-copy flex h-11 shrink-0 items-center gap-2 rounded-[5px] px-3.5 font-sans font-semibold text-sm sm:pr-4 sm:pl-3",
+      "flex h-14 items-center gap-3 rounded-md pr-1.5 pl-4 font-mono text-[15px]",
       inverse
-        ? "bg-panel-foreground text-ink hover:bg-white"
-        : "bg-signal text-ink hover:brightness-95",
+        ? "bg-panel text-panel-foreground"
+        : "border border-foreground/90 bg-code text-foreground",
     ]}
-    type="button"
   >
-    <Icon class="hp-copy-icon size-4 shrink-0" name="copy" />
-    <Icon class="hp-check-icon hidden size-4 shrink-0" name="check" />
-    <span class="max-sm:sr-only">Copy</span>
-  </button>
-  <span aria-live="polite" class="hp-copy-status sr-only"></span>
+    <span
+      aria-hidden="true"
+      class:list={[inverse ? "text-signal" : "text-accent"]}
+      data-hp-only="terminal">$</span
+    >
+    {
+      prompt && (
+        <span
+          aria-hidden="true"
+          class:list={[inverse ? "text-signal" : "text-accent"]}
+          data-hp-only="prompt"
+          hidden
+        >
+          &gt;
+        </span>
+      )
+    }
+    {/*
+      No outline-none here: Blume's base :focus-visible ring is the only focus
+      indicator these read-only fields have.
+    */}
+    <input
+      aria-label="Install command"
+      class="hp-cmd min-w-0 flex-1 truncate rounded-sm bg-transparent"
+      data-hp-only="terminal"
+      readonly
+      value={terminal}
+    />
+    {
+      prompt && (
+        <input
+          aria-label="Install prompt for a coding agent"
+          class="hp-prompt min-w-0 flex-1 truncate rounded-sm bg-transparent"
+          data-hp-copy={prompt}
+          data-hp-only="prompt"
+          hidden
+          readonly
+          value={prompt.replaceAll(/\s+/g, " ")}
+        />
+      )
+    }
+    <button
+      class:list={[
+        "hp-copy flex h-11 shrink-0 items-center gap-2 rounded-[5px] px-3.5 font-sans font-semibold text-sm sm:pr-4 sm:pl-3",
+        inverse
+          ? "bg-panel-foreground text-ink hover:bg-white"
+          : "bg-signal text-ink hover:brightness-95",
+      ]}
+      type="button"
+    >
+      <Icon class="hp-copy-icon size-4 shrink-0" name="copy" />
+      <Icon class="hp-check-icon hidden size-4 shrink-0" name="check" />
+      <span class="max-sm:sr-only">Copy</span>
+    </button>
+    <span aria-live="polite" class="hp-copy-status sr-only"></span>
+  </div>
 </div>
 
 <script>
+  type Mode = "terminal" | "prompt";
+
+  const ARROW_KEYS = new Set(["ArrowLeft", "ArrowRight"]);
+
+  // The tab picked last, shared by every installer on the page (the hero and
+  // the closing slab) and kept across client-router navigations.
+  let currentMode: Mode = "terminal";
+
+  const showMode = (el: HTMLElement) => {
+    for (const tab of el.querySelectorAll<HTMLElement>("[data-hp-mode]")) {
+      const selected = tab.dataset.hpMode === currentMode;
+      tab.setAttribute("aria-selected", String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+    }
+    for (const part of el.querySelectorAll<HTMLElement>("[data-hp-only]")) {
+      part.hidden = part.dataset.hpOnly !== currentMode;
+    }
+  };
+
+  const selectMode = (mode: Mode) => {
+    currentMode = mode;
+    for (const el of document.querySelectorAll<HTMLElement>(".hp-installer")) {
+      if (el.querySelector("[data-hp-mode]")) {
+        showMode(el);
+      }
+    }
+  };
+
   // Blume's layouts use Astro's client router, which runs this module once per
   // session and never again after a navigation swaps the homepage back in. So
   // setup runs now (interactive before `load`) and again on every
@@ -68,6 +173,7 @@ const inverse = tone === "inverse";
       return;
     }
     const input = el.querySelector<HTMLInputElement>(".hp-cmd");
+    const prompt = el.querySelector<HTMLInputElement>(".hp-prompt");
     const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
     const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
     const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
@@ -77,17 +183,40 @@ const inverse = tone === "inverse";
     }
     el.dataset.hpBound = "true";
 
+    const tabs = [...el.querySelectorAll<HTMLButtonElement>("[data-hp-mode]")];
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => {
+        selectMode(tab.dataset.hpMode === "prompt" ? "prompt" : "terminal");
+      });
+      tab.addEventListener("keydown", (event) => {
+        if (!ARROW_KEYS.has(event.key)) {
+          return;
+        }
+        event.preventDefault();
+        const next = tabs.find((other) => other !== tab);
+        if (next) {
+          next.click();
+          next.focus();
+        }
+      });
+    }
+    if (tabs.length > 0) {
+      showMode(el);
+    }
+
     let timer: ReturnType<typeof setTimeout>;
     copyBtn.addEventListener("click", async () => {
       clearTimeout(timer);
+      const field = prompt && currentMode === "prompt" ? prompt : input;
       try {
-        await navigator.clipboard.writeText(input.value);
+        // The prompt field shows one flattened line; copy it as written.
+        await navigator.clipboard.writeText(field.dataset.hpCopy ?? field.value);
       } catch {
         // Clipboard access can be blocked (permissions, insecure context).
-        // Select the command so it can be copied by hand instead of flashing
-        // a success check for a copy that never happened.
-        input.select();
-        status.textContent = "Copy failed. The command is selected.";
+        // Select the text so it can be copied by hand instead of flashing a
+        // success check for a copy that never happened.
+        field.select();
+        status.textContent = `Copy failed. The ${field === prompt ? "prompt" : "command"} is selected.`;
         return;
       }
       copyIcon.classList.add("hidden");
