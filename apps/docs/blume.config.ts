@@ -221,9 +221,19 @@ export default defineConfig({
   ],
 
   seo: {
-    // Generated share-card titles for custom pages, which otherwise take the
-    // last URL segment ("Cognitive Complexity"). Each blog post gets its title.
     og: {
+      // Share cards match the homepage's closing call to action: ink on the
+      // signal-orange slab, with the description at ink/80. The ink logo
+      // comes from `logo.image`.
+      palette: {
+        background: "#ff4f1a",
+        border: "rgb(19 19 17 / 0.15)",
+        foreground: "#131311",
+        muted: "rgb(19 19 17 / 0.8)",
+      },
+      // Generated share-card titles for custom pages, which otherwise take the
+      // last URL segment ("Cognitive Complexity"). Each blog post gets its
+      // title.
       titles: {
         "/research/cognitive-complexity":
           "Cognitive complexity and the cost of reading code",
