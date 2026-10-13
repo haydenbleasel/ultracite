@@ -426,7 +426,7 @@ const makeResolver = (root, options, host) => {
               const rest = subKey.slice(prefix.length);
               const t = exportTargets(v).map((x) => x.target)[0];
               if (t) {
-                target = t.replace("*", rest);
+                target = t.replaceAll("*", rest);
               }
             }
           }

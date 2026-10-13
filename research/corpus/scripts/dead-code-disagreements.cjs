@@ -200,12 +200,13 @@ const main = () => {
         let reason = reasonForName(ast, m.line, name);
         if (reason === "local variable") {
           const text = lines.join("\n");
-          const re = new RegExp(`\\b${name.replace(/[$]/g, "\\$")}\\b`, "g");
+          const escaped = lib.escapeRegExp(name);
+          const re = new RegExp(`\\b${escaped}\\b`, "g");
           const uses = text.match(re)?.length ?? 0;
           const updates =
             text.match(
               new RegExp(
-                `\\b${name.replace(/[$]/g, "\\$")}\\s*(?:[-+*/%|&^]|\\?\\?|&&|\\|\\|)?=(?!=)|\\b${name.replace(/[$]/g, "\\$")}\\s*(?:\\+\\+|--)|(?:\\+\\+|--)\\s*${name.replace(/[$]/g, "\\$")}\\b`,
+                `\\b${escaped}\\s*(?:[-+*/%|&^]|\\?\\?|&&|\\|\\|)?=(?!=)|\\b${escaped}\\s*(?:\\+\\+|--)|(?:\\+\\+|--)\\s*${escaped}\\b`,
                 "g"
               )
             )?.length ?? 0;

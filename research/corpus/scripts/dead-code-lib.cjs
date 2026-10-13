@@ -277,6 +277,7 @@ const permalink = (github, sha, file, line, endLine) =>
 
 const per10k = (n, lines) => Math.round((n / lines) * 1e5) / 10;
 const pct = (a, b) => (b === 0 ? null : Math.round((a / b) * 1000) / 10);
+const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 // ── Oxlint ─────────────────────────────────────────────────────────────
 const SCOPE_ALIASES = { "react-hooks": "react" };
@@ -716,6 +717,7 @@ module.exports = {
   biomeConfigFor,
   biomeConsoleAdvices,
   categoryOf,
+  escapeRegExp,
   eslintBlocks,
   eslintInstance,
   flag,

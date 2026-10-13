@@ -382,7 +382,7 @@ const analyse = (name) => {
               const rest = subKey.slice(prefix.length);
               const t = exportTargets(v).map((x) => x.target)[0];
               if (t) {
-                target = t.replace("*", rest);
+                target = t.replaceAll("*", rest);
               }
             }
           }
@@ -945,7 +945,7 @@ const analyse = (name) => {
   collectText(root);
   const texts = new Map(textFiles.map((f) => [f, readFileSync(f, "utf8")]));
   for (const r of rows.filter((x) => x.category === "unreferenced")) {
-    const re = new RegExp(`\\b${r.exportName.replace(/[$]/g, "\\$")}\\b`);
+    const re = new RegExp(`\\b${lib.escapeRegExp(r.exportName)}\\b`);
     const abs = join(root, r.file);
     r.textualReferences = [...texts]
       .filter(([f, t]) => f !== abs && re.test(t))
@@ -958,7 +958,7 @@ const analyse = (name) => {
       .pop()
       .replace(/\.[cm]?[jt]sx?$/, "");
     const re = new RegExp(
-      `["'/]${stem.replace(/[.$]/g, "\\$&")}(?:\\.[cm]?[jt]sx?)?["']`
+      `["'/]${lib.escapeRegExp(stem)}(?:\\.[cm]?[jt]sx?)?["']`
     );
     const abs = join(root, r.file);
     r.textualReferences = [...texts]
