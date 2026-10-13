@@ -1,0 +1,391 @@
+[
+  {
+    "id": "ica",
+    "example": "ica-astro-dev-toolbar",
+    "dir": "subjects/import-cycles/ica",
+    "files": [
+      "settings.ts",
+      "stubs.ts",
+      "ui-library/window.ts"
+    ],
+    "basename": "settings.ts",
+    "path": "subjects/import-cycles/ica/settings.ts",
+    "linter": "oxlint",
+    "handoffOrder": [
+      "settings.ts",
+      "ui-library/window.ts"
+    ],
+    "expectedGroups": [
+      {
+        "file": "settings.ts",
+        "count": 1
+      },
+      {
+        "file": "ui-library/window.ts",
+        "count": 1
+      }
+    ],
+    "source": "withastro/astro packages/astro/src/runtime/client/dev-toolbar/settings.ts and ui-library/window.ts @ 9050e381, whole files; one type import pointed at a STUB",
+    "kind": "a two-file import cycle with a value read during module evaluation (importing window.ts first with a placement configured throws); the right fix extracts the shared code into a new module, which the prompt forbids",
+    "sha256": {
+      "settings.ts": "c2dc87421b074f2438a3c10c2aa0bde072072771932e437669401599edada274",
+      "stubs.ts": "d5508971829b82d99384463a86a0cb815bbb3314e4e1e81e509f7bad228d0155",
+      "ui-library/window.ts": "c82445219bf3f635465f8db2c1740b266b9e411144f6f845ef21ae9c49ecab05"
+    },
+    "headerLinesRemoved": {
+      "settings.ts": 28,
+      "stubs.ts": 0,
+      "ui-library/window.ts": 2
+    },
+    "headerEdits": [
+      {
+        "file": "ui-library/window.ts",
+        "from": " * Partner:   ../settings.ts (file 1 of 2), which holds the analysis.",
+        "to": " * Partner:   ../settings.ts (file 1 of 2), same commit."
+      }
+    ],
+    "permalinks": [
+      "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/settings.ts#L1-L69",
+      "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/ui-library/window.ts#L1-L140"
+    ],
+    "corpusLint": {
+      "oxlint core+react": {
+        "focus": [
+          {
+            "file": "settings.ts",
+            "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+            "line": 62,
+            "message": "Dependency cycle detected",
+            "note": "These paths form a cycle:\n╭──▶ ./ui-library/window.js (ui-library/window.ts)\n│         ⬇ imports\n│    ../settings.js (settings.ts)\n╰─────────╯ imports the current file",
+            "rule": "import/no-cycle"
+          },
+          {
+            "file": "ui-library/window.ts",
+            "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+            "line": 34,
+            "message": "Dependency cycle detected",
+            "note": "These paths form a cycle:\n╭──▶ ../settings.js (settings.ts)\n│         ⬇ imports\n│    ./ui-library/window.js (ui-library/window.ts)\n╰─────────╯ imports the current file",
+            "rule": "import/no-cycle"
+          }
+        ],
+        "otherRules": [
+          "curly",
+          "func-style",
+          "import/consistent-type-specifier-style",
+          "no-inline-comments",
+          "no-use-before-define",
+          "require-await",
+          "sort-keys",
+          "unicorn/consistent-function-scoping"
+        ]
+      },
+      "oxlint core+react+js-plugins": {
+        "focus": [
+          {
+            "file": "settings.ts",
+            "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+            "line": 62,
+            "message": "Dependency cycle detected",
+            "note": "These paths form a cycle:\n╭──▶ ./ui-library/window.js (ui-library/window.ts)\n│         ⬇ imports\n│    ../settings.js (settings.ts)\n╰─────────╯ imports the current file",
+            "rule": "import/no-cycle"
+          },
+          {
+            "file": "ui-library/window.ts",
+            "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+            "line": 34,
+            "message": "Dependency cycle detected",
+            "note": "These paths form a cycle:\n╭──▶ ../settings.js (settings.ts)\n│         ⬇ imports\n│    ./ui-library/window.js (ui-library/window.ts)\n╰─────────╯ imports the current file",
+            "rule": "import/no-cycle"
+          }
+        ],
+        "otherRules": [
+          "curly",
+          "func-style",
+          "github/no-inner-html",
+          "import/consistent-type-specifier-style",
+          "no-inline-comments",
+          "no-use-before-define",
+          "require-await",
+          "sonarjs/public-static-readonly",
+          "sort-keys",
+          "unicorn/consistent-function-scoping"
+        ]
+      },
+      "eslint core": {
+        "focus": [
+          {
+            "file": "settings.ts",
+            "line": 62,
+            "message": "Dependency cycle detected",
+            "rule": "import-x/no-cycle"
+          },
+          {
+            "file": "ui-library/window.ts",
+            "line": 34,
+            "message": "Dependency cycle detected",
+            "rule": "import-x/no-cycle"
+          }
+        ],
+        "otherRules": [
+          "@typescript-eslint/member-ordering",
+          "@typescript-eslint/no-use-before-define",
+          "curly",
+          "func-style",
+          "github/no-inner-html",
+          "import-x/consistent-type-specifier-style",
+          "import-x/order",
+          "no-inline-comments",
+          "require-await",
+          "sonarjs/public-static-readonly",
+          "sort-keys",
+          "unicorn/consistent-class-member-order",
+          "unicorn/consistent-function-scoping",
+          "unicorn/name-replacements",
+          "unicorn/no-unsafe-dom-html",
+          "unicorn/prefer-early-return",
+          "unicorn/prefer-private-class-fields"
+        ]
+      },
+      "biome core+type-aware": {
+        "focus": [
+          {
+            "column": 50,
+            "file": "settings.ts",
+            "line": 62,
+            "message": "This import is part of a cycle.",
+            "rule": "suspicious/noImportCycles"
+          },
+          {
+            "column": 43,
+            "file": "ui-library/window.ts",
+            "line": 34,
+            "message": "This import is part of a cycle.",
+            "rule": "suspicious/noImportCycles"
+          }
+        ],
+        "otherRules": [
+          "style/noUnusedTemplateLiteral",
+          "style/useBlockStatements",
+          "suppressions/unused",
+          "suspicious/noUnnecessaryConditions",
+          "suspicious/useAwait"
+        ]
+      }
+    }
+  },
+  {
+    "id": "icb",
+    "example": "icb-astro-cookies",
+    "dir": "subjects/import-cycles/icb",
+    "files": [
+      "core/app/prepare-response.ts",
+      "core/cookies/cookies.ts",
+      "core/cookies/index.ts",
+      "core/cookies/response.ts",
+      "core/errors/merge-responses.ts",
+      "stubs/constants.ts",
+      "stubs/cookie.ts",
+      "stubs/errors.ts",
+      "stubs/logger.ts"
+    ],
+    "basename": "core/cookies/index.ts",
+    "path": "subjects/import-cycles/icb/core/cookies/index.ts",
+    "linter": "biome",
+    "handoffOrder": [
+      "core/cookies/index.ts"
+    ],
+    "expectedGroups": [
+      {
+        "file": "core/cookies/index.ts",
+        "count": 1
+      }
+    ],
+    "source": "withastro/astro packages/astro/src/core/cookies/index.ts @ 9050e381 (whole file), with cookies.ts, response.ts, core/app/prepare-response.ts and an excerpt of core/errors/default-handler.ts; cookie, the errors, the logger and a constant are STUBs",
+    "kind": "an internal barrel; the right fix points its nine importers at the declaring modules, which the prompt forbids",
+    "sha256": {
+      "core/app/prepare-response.ts": "40c3cf6373bdeedd3a757238a9df6eec5e9d4f0bdc784317aa9ba9d0ef1225e4",
+      "core/cookies/cookies.ts": "dbecd2d1081fcc8318772973d16638f0e4d67e501060ea9584e556cbb719c6b3",
+      "core/cookies/index.ts": "fc7e62c2d2c4e32dc53366017985d8f660706246f4eaafde49314f8048a7c50a",
+      "core/cookies/response.ts": "a1d0dc1a2fc789efe93523ef5910f3082e9937101adb11865395a25c44a509bb",
+      "core/errors/merge-responses.ts": "e3a15a336e7c924a04770a2ee83f9a642f1828cb24d46c5a8b2a6fdb23fbe214",
+      "stubs/constants.ts": "b0aa72369858ecbfa7f0f8c95da39275a190fa0a14818d1658fe0c10df7d6d49",
+      "stubs/cookie.ts": "e4401d9f06ccbbdbf72730b599d5b2225821b613e39dc7efd0cad1183c91501c",
+      "stubs/errors.ts": "1494ceedaef2230d08a6bff61a893f583c55db13a4e7ae67876d762ff367772c",
+      "stubs/logger.ts": "bc7210fef82eec27365293b89ecb8f34a6fccfe10f591112b15ca21dd949a95d"
+    },
+    "headerLinesRemoved": {
+      "core/app/prepare-response.ts": 2,
+      "core/cookies/cookies.ts": 2,
+      "core/cookies/index.ts": 24,
+      "core/cookies/response.ts": 2,
+      "core/errors/merge-responses.ts": 2,
+      "stubs/constants.ts": 0,
+      "stubs/cookie.ts": 0,
+      "stubs/errors.ts": 0,
+      "stubs/logger.ts": 0
+    },
+    "headerEdits": [
+      {
+        "file": "core/cookies/index.ts",
+        "from": "stubs/ holds STUB modules for code outside the subject.",
+        "to": "stubs/ holds STUB modules for code outside these files."
+      },
+      {
+        "file": "stubs/cookie.ts",
+        "from": "reduced to what this subject needs to type-check and run.",
+        "to": "reduced to what these files need to type-check and run."
+      }
+    ],
+    "permalinks": [
+      "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/cookies/index.ts#L1-L6",
+      "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/errors/default-handler.ts#L164-L264"
+    ],
+    "corpusLint": {
+      "oxlint core+react": {
+        "focus": [],
+        "otherRules": [
+          "curly",
+          "eqeqeq",
+          "func-style",
+          "jsdoc/require-returns-description",
+          "jsdoc/require-yields",
+          "max-classes-per-file",
+          "no-else-return",
+          "no-eq-null",
+          "no-inline-comments",
+          "no-negated-condition",
+          "no-nested-ternary",
+          "no-unused-vars",
+          "prefer-const",
+          "sort-keys",
+          "typescript/method-signature-style",
+          "typescript/no-explicit-any",
+          "typescript/no-non-null-assertion",
+          "unicorn/custom-error-definition",
+          "unicorn/no-negated-condition",
+          "unicorn/no-unreadable-array-destructuring",
+          "unicorn/prefer-logical-operator-over-ternary",
+          "unicorn/prefer-optional-catch-binding",
+          "unicorn/prefer-ternary"
+        ]
+      },
+      "oxlint core+react+js-plugins": {
+        "focus": [
+          {
+            "file": "core/app/prepare-response.ts",
+            "help": null,
+            "line": 34,
+            "message": "This ships extra code to your users & slows page load. Import directly from \"../cookies/response\".",
+            "note": null,
+            "rule": "react-doctor/no-barrel-import"
+          }
+        ],
+        "otherRules": [
+          "curly",
+          "eqeqeq",
+          "func-style",
+          "jsdoc/require-returns-description",
+          "jsdoc/require-yields",
+          "max-classes-per-file",
+          "no-else-return",
+          "no-eq-null",
+          "no-inline-comments",
+          "no-negated-condition",
+          "no-nested-ternary",
+          "no-unused-vars",
+          "prefer-const",
+          "sonarjs/max-union-size",
+          "sonarjs/no-nested-conditional",
+          "sonarjs/no-undefined-assignment",
+          "sort-keys",
+          "typescript/method-signature-style",
+          "typescript/no-explicit-any",
+          "typescript/no-non-null-assertion",
+          "unicorn/custom-error-definition",
+          "unicorn/no-negated-condition",
+          "unicorn/no-unreadable-array-destructuring",
+          "unicorn/prefer-logical-operator-over-ternary",
+          "unicorn/prefer-optional-catch-binding",
+          "unicorn/prefer-ternary"
+        ]
+      },
+      "eslint core": {
+        "focus": [
+          {
+            "file": "core/cookies/index.ts",
+            "line": 58,
+            "message": "Barrel files are not allowed.",
+            "rule": "unicorn/no-barrel-files"
+          }
+        ],
+        "otherRules": [
+          "@typescript-eslint/member-ordering",
+          "@typescript-eslint/method-signature-style",
+          "@typescript-eslint/no-explicit-any",
+          "@typescript-eslint/no-non-null-assertion",
+          "@typescript-eslint/no-unused-vars",
+          "curly",
+          "eqeqeq",
+          "func-style",
+          "import-x/order",
+          "jsdoc/require-returns-description",
+          "jsdoc/require-yields",
+          "max-classes-per-file",
+          "no-else-return",
+          "no-eq-null",
+          "no-inline-comments",
+          "no-negated-condition",
+          "no-nested-ternary",
+          "prefer-const",
+          "sonarjs/max-union-size",
+          "sonarjs/no-nested-conditional",
+          "sonarjs/no-undefined-assignment",
+          "sort-keys",
+          "unicorn/consistent-class-member-order",
+          "unicorn/custom-error-definition",
+          "unicorn/name-replacements",
+          "unicorn/no-computed-property-existence-check",
+          "unicorn/no-manually-wrapped-comments",
+          "unicorn/no-negated-condition",
+          "unicorn/no-unreadable-array-destructuring",
+          "unicorn/no-useless-else",
+          "unicorn/no-useless-undefined",
+          "unicorn/prefer-combined-guards",
+          "unicorn/prefer-early-return",
+          "unicorn/prefer-logical-operator-over-ternary",
+          "unicorn/prefer-optional-catch-binding",
+          "unicorn/prefer-simple-condition-first",
+          "unicorn/prefer-ternary"
+        ]
+      },
+      "biome core+type-aware": {
+        "focus": [
+          {
+            "column": 1,
+            "file": "core/cookies/index.ts",
+            "line": 59,
+            "message": "Avoid barrel files, they slow down performance, and cause large module graphs with modules that go unused.",
+            "rule": "performance/noBarrelFile"
+          }
+        ],
+        "otherRules": [
+          "complexity/noUselessCatchBinding",
+          "complexity/noUselessUndefined",
+          "style/noNegationElse",
+          "style/noNestedTernary",
+          "style/noNonNullAssertion",
+          "style/noUnusedTemplateLiteral",
+          "style/noUselessElse",
+          "style/useBlockStatements",
+          "style/useConsistentMemberAccessibility",
+          "style/useConsistentMethodSignatures",
+          "style/useConst",
+          "style/useReadonlyClassProperties",
+          "suspicious/noEqualsToNull",
+          "suspicious/noExplicitAny",
+          "suspicious/noUnnecessaryConditions"
+        ]
+      }
+    }
+  }
+]

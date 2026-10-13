@@ -1,0 +1,1486 @@
+{
+  "generated": "2026-10-13",
+  "note": "Files of each bug's cycle at the fix's parent commit, linted with Ultracite's presets. 'flagged' means the cycle rule reports at least one of the cycle's files.",
+  "bugs": [
+    {
+      "fetched": {
+        "packages/zod/src/v4/classic/schemas.ts": "cached",
+        "packages/zod/src/v4/classic/iso.ts": "cached"
+      },
+      "id": "zod-5926",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/zod/src/v4/classic/iso.ts",
+          "line": 2,
+          "path": [
+            "packages/zod/src/v4/classic/schemas.ts",
+            "packages/zod/src/v4/classic/iso.ts"
+          ]
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "line": 8,
+          "path": [
+            "packages/zod/src/v4/classic/iso.ts",
+            "packages/zod/src/v4/classic/schemas.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "line": 8,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "packages/zod/src/v4/classic/iso.ts",
+          "line": 2,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "packages/zod/src/v4/classic/iso.ts",
+          "line": 2
+        },
+        {
+          "file": "packages/zod/src/v4/classic/schemas.ts",
+          "line": 8
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/zod/src/v4/classic/from-json-schema.ts": "cached",
+        "packages/zod/src/v4/index.ts": "cached",
+        "packages/zod/src/v4/classic/index.ts": "cached",
+        "packages/zod/src/v4/classic/external.ts": "cached",
+        "packages/zod/src/index.ts": "cached"
+      },
+      "id": "zod-5b5b129",
+      "kind": "undefined-import",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/zod/src/v4/classic/index.ts",
+          "line": 1,
+          "path": [
+            "packages/zod/src/v4/classic/external.ts",
+            "packages/zod/src/v4/classic/from-json-schema.ts",
+            "packages/zod/src/v4/index.ts",
+            "packages/zod/src/v4/classic/index.ts"
+          ]
+        },
+        {
+          "file": "packages/zod/src/v4/index.ts",
+          "line": 1,
+          "path": [
+            "packages/zod/src/v4/classic/index.ts",
+            "packages/zod/src/v4/classic/external.ts",
+            "packages/zod/src/v4/classic/from-json-schema.ts",
+            "packages/zod/src/v4/index.ts"
+          ]
+        },
+        {
+          "file": "packages/zod/src/v4/classic/external.ts",
+          "line": 33,
+          "path": [
+            "packages/zod/src/v4/classic/from-json-schema.ts",
+            "packages/zod/src/v4/index.ts",
+            "packages/zod/src/v4/classic/index.ts",
+            "packages/zod/src/v4/classic/external.ts"
+          ]
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "line": 2,
+          "path": [
+            "packages/zod/src/v4/index.ts",
+            "packages/zod/src/v4/classic/index.ts",
+            "packages/zod/src/v4/classic/external.ts",
+            "packages/zod/src/v4/classic/from-json-schema.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "line": 2,
+          "message": "Dependency cycle via \"./classic/index.js:1=>./external.js:1\""
+        },
+        {
+          "file": "packages/zod/src/v4/index.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"./external.js:1=>./from-json-schema.js:33\""
+        },
+        {
+          "file": "packages/zod/src/v4/classic/index.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"./from-json-schema.js:33=>../index.js:2\""
+        },
+        {
+          "file": "packages/zod/src/v4/classic/external.ts",
+          "line": 33,
+          "message": "Dependency cycle via \"../index.js:2=>./classic/index.js:1\""
+        }
+      ],
+      "biome": [
+        {
+          "file": "packages/zod/src/v4/classic/external.ts",
+          "line": 33
+        },
+        {
+          "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "line": 2
+        },
+        {
+          "file": "packages/zod/src/v4/classic/index.ts",
+          "line": 1
+        },
+        {
+          "file": "packages/zod/src/v4/classic/index.ts",
+          "line": 4
+        },
+        {
+          "file": "packages/zod/src/v4/index.ts",
+          "line": 1
+        },
+        {
+          "file": "packages/zod/src/v4/index.ts",
+          "line": 2
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/ZodError.ts": "cached",
+        "src/helpers/parseUtil.ts": "cached",
+        "src/helpers/util.ts": "cached",
+        "src/index.ts": "cached"
+      },
+      "id": "zod-44916fe",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/helpers/parseUtil.ts",
+          "line": 7,
+          "path": [
+            "src/ZodError.ts",
+            "src/helpers/parseUtil.ts"
+          ]
+        },
+        {
+          "file": "src/ZodError.ts",
+          "line": 2,
+          "path": [
+            "src/helpers/parseUtil.ts",
+            "src/ZodError.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/ZodError.ts",
+          "line": 2,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/helpers/parseUtil.ts",
+          "line": 1,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/ZodError.ts",
+          "line": 2
+        },
+        {
+          "file": "src/helpers/parseUtil.ts",
+          "line": 7
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/parser.ts": "cached",
+        "src/index.ts": "cached",
+        "src/types/any.ts": "cached",
+        "src/types/base.ts": "cached"
+      },
+      "id": "zod-226",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/types/any.ts",
+          "line": 1,
+          "path": [
+            "src/types/base.ts",
+            "src/index.ts",
+            "src/types/any.ts"
+          ]
+        },
+        {
+          "file": "src/index.ts",
+          "line": 6,
+          "path": [
+            "src/parser.ts",
+            "src/index.ts"
+          ]
+        },
+        {
+          "file": "src/index.ts",
+          "line": 7,
+          "path": [
+            "src/types/any.ts",
+            "src/types/base.ts",
+            "src/index.ts"
+          ]
+        },
+        {
+          "file": "src/index.ts",
+          "line": 17,
+          "path": [
+            "src/types/base.ts",
+            "src/index.ts"
+          ]
+        },
+        {
+          "file": "src/types/base.ts",
+          "line": 10,
+          "path": [
+            "src/index.ts",
+            "src/parser.ts",
+            "src/index.ts",
+            "src/types/any.ts",
+            "src/types/base.ts"
+          ]
+        },
+        {
+          "file": "src/types/base.ts",
+          "line": 11,
+          "path": [
+            "src/parser.ts",
+            "src/index.ts",
+            "src/parser.ts",
+            "src/types/base.ts"
+          ]
+        },
+        {
+          "file": "src/parser.ts",
+          "line": 3,
+          "path": [
+            "src/index.ts",
+            "src/parser.ts"
+          ]
+        },
+        {
+          "file": "src/parser.ts",
+          "line": 5,
+          "path": [
+            "src/types/base.ts",
+            "src/index.ts",
+            "src/parser.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/parser.ts",
+          "line": 3,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/parser.ts",
+          "line": 5,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/index.ts",
+          "line": 6,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/index.ts",
+          "line": 7,
+          "message": "Dependency cycle via \"./base:1\""
+        },
+        {
+          "file": "src/types/any.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"../index:10\""
+        },
+        {
+          "file": "src/types/base.ts",
+          "line": 2,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/types/base.ts",
+          "line": 11,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/index.ts",
+          "line": 6
+        },
+        {
+          "file": "src/index.ts",
+          "line": 7
+        },
+        {
+          "file": "src/index.ts",
+          "line": 17
+        },
+        {
+          "file": "src/parser.ts",
+          "line": 3
+        },
+        {
+          "file": "src/parser.ts",
+          "line": 5
+        },
+        {
+          "file": "src/types/any.ts",
+          "line": 1
+        },
+        {
+          "file": "src/types/base.ts",
+          "line": 10
+        },
+        {
+          "file": "src/types/base.ts",
+          "line": 11
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/utils/body.ts": "cached",
+        "src/request.ts": "cached"
+      },
+      "id": "hono-5071",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/utils/body.ts",
+          "line": 6,
+          "path": [
+            "src/request.ts",
+            "src/utils/body.ts"
+          ]
+        },
+        {
+          "file": "src/request.ts",
+          "line": 14,
+          "path": [
+            "src/utils/body.ts",
+            "src/request.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/utils/body.ts",
+          "line": 6,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/request.ts",
+          "line": 14,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/request.ts",
+          "line": 14
+        },
+        {
+          "file": "src/request.ts",
+          "line": 15
+        },
+        {
+          "file": "src/utils/body.ts",
+          "line": 6
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/helper/html/index.ts": "cached",
+        "src/utils/html.ts": "cached"
+      },
+      "id": "hono-2143",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/helper/html/index.ts",
+          "line": 1,
+          "path": [
+            "src/utils/html.ts",
+            "src/helper/html/index.ts"
+          ]
+        },
+        {
+          "file": "src/utils/html.ts",
+          "line": 34,
+          "path": [
+            "src/helper/html/index.ts",
+            "src/utils/html.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/helper/html/index.ts",
+          "line": 1,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/utils/html.ts",
+          "line": 34,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/helper/html/index.ts",
+          "line": 1
+        },
+        {
+          "file": "src/helper/html/index.ts",
+          "line": 7
+        },
+        {
+          "file": "src/utils/html.ts",
+          "line": 34
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/jsx/dom/render.ts": "cached",
+        "src/jsx/dom/index.ts": "cached",
+        "src/jsx/dom/context.ts": "cached",
+        "src/jsx/context.ts": "cached"
+      },
+      "id": "hono-2268",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/jsx/dom/index.ts",
+          "line": 15,
+          "path": [
+            "src/jsx/dom/render.ts",
+            "src/jsx/dom/index.ts"
+          ]
+        },
+        {
+          "file": "src/jsx/dom/context.ts",
+          "line": 3,
+          "path": [
+            "src/jsx/context.ts",
+            "src/jsx/dom/context.ts"
+          ]
+        },
+        {
+          "file": "src/jsx/context.ts",
+          "line": 5,
+          "path": [
+            "src/jsx/dom/context.ts",
+            "src/jsx/context.ts"
+          ]
+        },
+        {
+          "file": "src/jsx/dom/render.ts",
+          "line": 8,
+          "path": [
+            "src/jsx/dom/index.ts",
+            "src/jsx/dom/render.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/jsx/dom/render.ts",
+          "line": 8,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/jsx/dom/index.ts",
+          "line": 15,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/jsx/dom/context.ts",
+          "line": 4,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/jsx/context.ts",
+          "line": 5,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/jsx/context.ts",
+          "line": 5
+        },
+        {
+          "file": "src/jsx/dom/context.ts",
+          "line": 3
+        },
+        {
+          "file": "src/jsx/dom/context.ts",
+          "line": 4
+        },
+        {
+          "file": "src/jsx/dom/index.ts",
+          "line": 15
+        },
+        {
+          "file": "src/jsx/dom/render.ts",
+          "line": 8
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/server/src/error/TRPCError.ts": "cached",
+        "packages/server/src/error/utils.ts": "cached"
+      },
+      "id": "trpc-3877-server",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/server/src/error/TRPCError.ts",
+          "line": 4,
+          "path": [
+            "packages/server/src/error/utils.ts",
+            "packages/server/src/error/TRPCError.ts"
+          ]
+        },
+        {
+          "file": "packages/server/src/error/utils.ts",
+          "line": 1,
+          "path": [
+            "packages/server/src/error/TRPCError.ts",
+            "packages/server/src/error/utils.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/server/src/error/TRPCError.ts",
+          "line": 1,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "packages/server/src/error/utils.ts",
+          "line": 1,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "packages/server/src/error/TRPCError.ts",
+          "line": 4
+        },
+        {
+          "file": "packages/server/src/error/utils.ts",
+          "line": 1
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/react-query/src/shared/hooks/createHooksInternal.tsx": "cached",
+        "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx": "cached"
+      },
+      "id": "trpc-3877-react-query",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+          "line": 520,
+          "path": [
+            "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx",
+            "packages/react-query/src/shared/hooks/createHooksInternal.tsx"
+          ]
+        },
+        {
+          "file": "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx",
+          "line": 36,
+          "path": [
+            "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+            "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+          "line": 520,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx",
+          "line": 36,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+          "line": 520
+        },
+        {
+          "file": "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx",
+          "line": 36
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/common/src/index.ts": "cached",
+        "packages/common/src/visualdebug.ts": "cached",
+        "packages/common/src/constants.ts": "cached",
+        "packages/element/src/index.ts": "cached",
+        "packages/element/src/renderElement.ts": "cached",
+        "packages/element/src/typeChecks.ts": "cached",
+        "tsconfig.json": "cached"
+      },
+      "id": "excalidraw-10544",
+      "kind": "undefined-import",
+      "topLevelUse": "packages/element/src/renderElement.ts:372 `IMAGE_PLACEHOLDER_IMG.src = `data:${MIME_TYPES.svg},${encodeURIComponent(` — a top-level statement that reads MIME_TYPES (exported from packages/common/src/constants.ts:251 through the common barrel) during module evaluation",
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/common/src/index.ts",
+          "line": 13,
+          "path": [
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/renderElement.ts",
+            "packages/element/src/typeChecks.ts",
+            "packages/common/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/common/src/visualdebug.ts",
+          "line": 9,
+          "path": [
+            "packages/element/src/index.ts",
+            "packages/element/src/renderElement.ts",
+            "packages/element/src/typeChecks.ts",
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 82,
+          "path": [
+            "packages/element/src/renderElement.ts",
+            "packages/element/src/typeChecks.ts",
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 96,
+          "path": [
+            "packages/element/src/typeChecks.ts",
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 1,
+          "path": [
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/typeChecks.ts",
+          "line": 1,
+          "path": [
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/renderElement.ts",
+            "packages/element/src/typeChecks.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/renderElement.ts",
+          "line": 63,
+          "path": [
+            "packages/element/src/typeChecks.ts",
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/renderElement.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/renderElement.ts",
+          "line": 25,
+          "path": [
+            "packages/common/src/index.ts",
+            "packages/common/src/visualdebug.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/renderElement.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/common/src/index.ts",
+          "line": 13,
+          "message": "Dependency cycle via \"@excalidraw/element:9\""
+        },
+        {
+          "file": "packages/common/src/visualdebug.ts",
+          "line": 9,
+          "message": "Dependency cycle via \"@excalidraw/common:1\""
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"./visualdebug:13\""
+        },
+        {
+          "file": "packages/element/src/renderElement.ts",
+          "line": 13,
+          "message": "Dependency cycle via \"./visualdebug:13=>@excalidraw/element:9\""
+        },
+        {
+          "file": "packages/element/src/typeChecks.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"./visualdebug:13=>@excalidraw/element:9\""
+        }
+      ],
+      "biome": [],
+      "flagged": {
+        "biome": false,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/math/src/curve.ts": "cached",
+        "packages/math/src/index.ts": "cached",
+        "packages/element/src/index.ts": "cached",
+        "packages/element/src/bounds.ts": "cached",
+        "tsconfig.json": "cached"
+      },
+      "id": "excalidraw-9650",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/math/src/index.ts",
+          "line": 2,
+          "path": [
+            "packages/math/src/curve.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/bounds.ts",
+            "packages/math/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 78,
+          "path": [
+            "packages/element/src/bounds.ts",
+            "packages/math/src/index.ts",
+            "packages/math/src/curve.ts",
+            "packages/element/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/math/src/curve.ts",
+          "line": 1,
+          "path": [
+            "packages/element/src/index.ts",
+            "packages/element/src/bounds.ts",
+            "packages/math/src/index.ts",
+            "packages/math/src/curve.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/bounds.ts",
+          "line": 17,
+          "path": [
+            "packages/math/src/index.ts",
+            "packages/math/src/curve.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/bounds.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/math/src/curve.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"./bounds:78=>@excalidraw/math:17\""
+        },
+        {
+          "file": "packages/math/src/index.ts",
+          "line": 2,
+          "message": "Dependency cycle via \"@excalidraw/element:1=>./bounds:78\""
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 78,
+          "message": "Dependency cycle via \"@excalidraw/math:17=>./curve:2\""
+        },
+        {
+          "file": "packages/element/src/bounds.ts",
+          "line": 10,
+          "message": "Dependency cycle via \"./curve:2=>@excalidraw/element:1\""
+        }
+      ],
+      "biome": [],
+      "flagged": {
+        "biome": false,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/common/src/utils.ts": "cached",
+        "packages/common/src/index.ts": "cached",
+        "packages/element/src/index.ts": "cached",
+        "packages/element/src/bounds.ts": "cached",
+        "tsconfig.json": "cached"
+      },
+      "id": "excalidraw-9647",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/common/src/index.ts",
+          "line": 11,
+          "path": [
+            "packages/common/src/utils.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/bounds.ts",
+            "packages/common/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 78,
+          "path": [
+            "packages/element/src/bounds.ts",
+            "packages/common/src/index.ts",
+            "packages/common/src/utils.ts",
+            "packages/element/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 1,
+          "path": [
+            "packages/common/src/index.ts",
+            "packages/common/src/utils.ts",
+            "packages/element/src/index.ts"
+          ]
+        },
+        {
+          "file": "packages/element/src/bounds.ts",
+          "line": 9,
+          "path": [
+            "packages/common/src/index.ts",
+            "packages/common/src/utils.ts",
+            "packages/element/src/index.ts",
+            "packages/element/src/bounds.ts"
+          ]
+        },
+        {
+          "file": "packages/common/src/utils.ts",
+          "line": 2,
+          "path": [
+            "packages/element/src/index.ts",
+            "packages/element/src/bounds.ts",
+            "packages/common/src/index.ts",
+            "packages/common/src/utils.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/common/src/utils.ts",
+          "line": 2,
+          "message": "Dependency cycle via \"@excalidraw/common:1\""
+        },
+        {
+          "file": "packages/common/src/index.ts",
+          "line": 11,
+          "message": "Dependency cycle via \"@excalidraw/element:2\""
+        },
+        {
+          "file": "packages/element/src/index.ts",
+          "line": 1,
+          "message": "Dependency cycle via \"./utils:11\""
+        },
+        {
+          "file": "packages/element/src/bounds.ts",
+          "line": 3,
+          "message": "Dependency cycle via \"./utils:11=>@excalidraw/element:2\""
+        }
+      ],
+      "biome": [],
+      "flagged": {
+        "biome": false,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/vite/src/node/config.ts": "cached",
+        "packages/vite/src/node/server/environments/runnableEnvironment.ts": "cached",
+        "packages/vite/src/node/server/environment.ts": "cached",
+        "packages/vite/src/node/baseEnvironment.ts": "cached",
+        "packages/vite/src/node/plugins/optimizedDeps.ts": "cached",
+        "packages/vite/src/node/constants.ts": "cached"
+      },
+      "id": "vite-18237",
+      "kind": "circular-fix",
+      "topLevelUse": "packages/vite/src/node/server/environments/runnableEnvironment.ts:34 `class RunnableDevEnvironment extends DevEnvironment {` — class extends at module evaluation. If server/environment.ts is entered first, it imports ../config (line 11) before declaring DevEnvironment (line 45), config.ts imports runnableEnvironment.ts, and the extends clause reads DevEnvironment in its TDZ.",
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+          "line": 3,
+          "path": [
+            "packages/vite/src/node/server/environment.ts",
+            "packages/vite/src/node/config.ts",
+            "packages/vite/src/node/server/environments/runnableEnvironment.ts"
+          ]
+        },
+        {
+          "file": "packages/vite/src/node/server/environment.ts",
+          "line": 10,
+          "path": [
+            "packages/vite/src/node/config.ts",
+            "packages/vite/src/node/server/environment.ts"
+          ]
+        },
+        {
+          "file": "packages/vite/src/node/config.ts",
+          "line": 41,
+          "path": [
+            "packages/vite/src/node/server/environment.ts",
+            "packages/vite/src/node/config.ts"
+          ]
+        },
+        {
+          "file": "packages/vite/src/node/config.ts",
+          "line": 42,
+          "path": [
+            "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+            "packages/vite/src/node/server/environment.ts",
+            "packages/vite/src/node/config.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "packages/vite/src/node/config.ts",
+          "line": 41,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+          "line": 4,
+          "message": "Dependency cycle via \"../config:11\""
+        },
+        {
+          "file": "packages/vite/src/node/server/environment.ts",
+          "line": 11,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "packages/vite/src/node/config.ts",
+          "line": 41
+        },
+        {
+          "file": "packages/vite/src/node/config.ts",
+          "line": 42
+        },
+        {
+          "file": "packages/vite/src/node/server/environment.ts",
+          "line": 10
+        },
+        {
+          "file": "packages/vite/src/node/server/environment.ts",
+          "line": 11
+        },
+        {
+          "file": "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+          "line": 3
+        },
+        {
+          "file": "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+          "line": 4
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "packages/astro/src/vite-plugin-routes/index.ts": "cached",
+        "packages/astro/src/core/app/entrypoints/index.ts": "cached",
+        "packages/astro/src/core/app/entrypoints/manifest.ts": "cached",
+        "packages/astro/src/core/app/base.ts": "cached",
+        "packages/astro/src/core/fetch/default-handler.ts": "cached",
+        "packages/astro/src/core/manifest/ambient.ts": "cached",
+        "packages/astro/src/core/manifest/ambient-source.ts": "cached",
+        "packages/astro/src/manifest/serialized.ts": "cached",
+        "packages/astro/package.json": "cached"
+      },
+      "id": "astro-17787",
+      "kind": "undefined-import",
+      "topLevelUse": "generated module top level, packages/astro/src/vite-plugin-routes/index.ts:191: `const routes = serializedData.map(deserializeRouteInfo);`",
+      "virtual": true,
+      "oxlint": [],
+      "eslint": [],
+      "biome": [],
+      "flagged": {
+        "biome": false,
+        "eslint": false,
+        "oxlint": false
+      }
+    },
+    {
+      "fetched": {
+        "packages/astro/src/assets/vite-plugin-assets.ts": "cached",
+        "packages/astro/components/Picture.astro": "cached",
+        "packages/astro/src/content/runtime.ts": "cached",
+        "packages/astro/src/assets/consts.ts": "cached"
+      },
+      "id": "astro-16171",
+      "kind": "tdz",
+      "topLevelUse": "Not in source: Picture.astro only calls getImage while rendering. The top-level read is in Rollup's output — content/runtime.ts:458 `const { getImage } = await import('astro:assets');` makes Rollup build a namespace object for astro:assets, which references $$Picture at chunk top level before Picture's declaration runs (PR: \"Rollup eagerly referencing `$$Picture` in the namespace object before its declaration is initialized\").",
+      "virtual": true,
+      "oxlint": [],
+      "eslint": [],
+      "biome": [],
+      "flagged": {
+        "biome": false,
+        "eslint": false,
+        "oxlint": false
+      }
+    },
+    {
+      "fetched": {
+        "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts": "cached",
+        "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts": "cached",
+        "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts": "cached",
+        "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts": "cached",
+        "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts": "cached",
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts": "cached",
+        "src/vs/workbench/contrib/notebook/common/notebookCommon.ts": "cached"
+      },
+      "id": "vscode-251003-notebook",
+      "kind": "tdz",
+      "topLevelUse": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts:196 `registerAction2(class ToggleLineNumberAction extends Action2 {` — registerAction2 instantiates the class during module evaluation and the constructor reads `category: NOTEBOOK_ACTIONS_CATEGORY` (line 209; declared at coreActions.ts:28). Line 230 `registerAction2(class ToggleActiveLineNumberAction extends NotebookMultiCellAction {` also extends a class imported from coreActions.ts (declared at coreActions.ts:184).",
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "line": 17,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "line": 18,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+          "line": 35,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+          "line": 12,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+            "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "line": 26,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "line": 34,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+            "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+            "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "line": 27,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "line": 13,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "line": 58,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "line": 68,
+          "path": [
+            "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+            "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+            "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+          "line": 12,
+          "message": "Dependency cycle via \"./diff/notebookDiffEditor.js:35=>../notebookEditorWidget.js:13=>./view/renderers/cellRenderer.js:68=>../cellParts/cellEditorOptions.js:34\""
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+          "line": 35,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "line": 13,
+          "message": "Dependency cycle via \"./notebookBrowser.js:58\""
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "line": 58,
+          "message": "Dependency cycle via \"./diff/notebookDiffEditor.js:35\""
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "line": 26,
+          "message": "Dependency cycle via \"./diff/notebookDiffEditor.js:35=>../notebookEditorWidget.js:13\""
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "line": 17,
+          "message": "Dependency cycle via \"../notebookBrowser.js:12=>./diff/notebookDiffEditor.js:35=>../notebookEditorWidget.js:13=>./view/renderers/cellRenderer.js:68\""
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+          "line": 12
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "line": 13
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "line": 27
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+          "line": 35
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "line": 58
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "line": 68
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "line": 17
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "line": 18
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "line": 26
+        },
+        {
+          "file": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "line": 34
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/vs/workbench/contrib/scm/browser/scmHistory.ts": "cached",
+        "src/vs/workbench/contrib/scm/browser/util.ts": "cached"
+      },
+      "id": "vscode-251003-scm",
+      "kind": "circular-fix",
+      "topLevelUse": null,
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/vs/workbench/contrib/scm/browser/util.ts",
+          "line": 29,
+          "path": [
+            "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+            "src/vs/workbench/contrib/scm/browser/util.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+          "line": 13,
+          "path": [
+            "src/vs/workbench/contrib/scm/browser/util.ts",
+            "src/vs/workbench/contrib/scm/browser/scmHistory.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+          "line": 13,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/vs/workbench/contrib/scm/browser/util.ts",
+          "line": 29,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+          "line": 13
+        },
+        {
+          "file": "src/vs/workbench/contrib/scm/browser/util.ts",
+          "line": 29
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    },
+    {
+      "fetched": {
+        "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts": "cached",
+        "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts": "cached"
+      },
+      "id": "vscode-a783943",
+      "kind": "circular-fix",
+      "topLevelUse": "chatToolConfirmationSubPart.ts:34 `export class ToolConfirmationSubPart extends BaseChatToolInvocationSubPart {` — class extends at module evaluation; BaseChatToolInvocationSubPart is declared at chatToolInvocationPart.ts:213, after that file's imports, so evaluating chatToolInvocationPart.ts first would throw a TDZ ReferenceError",
+      "virtual": false,
+      "oxlint": [
+        {
+          "file": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+          "line": 25,
+          "path": [
+            "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts",
+            "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts"
+          ]
+        },
+        {
+          "file": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts",
+          "line": 32,
+          "path": [
+            "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+            "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts"
+          ]
+        }
+      ],
+      "eslint": [
+        {
+          "file": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+          "line": 25,
+          "message": "Dependency cycle detected"
+        },
+        {
+          "file": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts",
+          "line": 32,
+          "message": "Dependency cycle detected"
+        }
+      ],
+      "biome": [
+        {
+          "file": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts",
+          "line": 32
+        },
+        {
+          "file": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+          "line": 25
+        }
+      ],
+      "flagged": {
+        "biome": true,
+        "eslint": true,
+        "oxlint": true
+      }
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3"
+  }
+}

@@ -1,0 +1,1360 @@
+{
+  "agreement": {
+    "rater1VsAuto": {
+      "kappa": 0.69,
+      "n": 50,
+      "same": 41
+    },
+    "rater1VsRater2": {
+      "kappa": 0.81,
+      "n": 20,
+      "same": 18
+    },
+    "rater1VsRater2Coarse": {
+      "kappa": 0.74,
+      "n": 20,
+      "same": 18
+    },
+    "rater2VsAuto": {
+      "kappa": 0.64,
+      "n": 20,
+      "same": 17
+    }
+  },
+  "codebook": {
+    "label": {
+      "type-only": "The cycle never exists at runtime: at least one hop is removed when the file is compiled with the repo's own settings (an `import type`, an import whose bindings are only used as types or not at all while verbatimModuleSyntax is off, or a type-only re-export).",
+      "barrel-induced": "The cycle exists at runtime only because a hop imports from a module that re-exports (a barrel, an index file or a package entry). If that import pointed at the module that declares the names, this cycle would not exist.",
+      "top-level-use": "The cycle exists at runtime and some module on it reads a value imported from another module on it while it is being evaluated: a top-level statement or const initializer, a class `extends`, a static member, a decorator, or a top-level call that reaches the import. Depending on which module loads first, that read can throw a TDZ ReferenceError or see undefined.",
+      "late-use": "The cycle exists at runtime and every value imported along it is only used inside functions or methods that run after all modules have loaded. Under ESM this is benign.",
+      "unclear": "The code doesn't let you decide."
+    },
+    "risk": "For barrel-induced cycles, also say whether a value is read at module evaluation (top-level-use) or not (late-use).",
+    "rightFix": {
+      "import-type": "mark the import(s) `import type` (only for type-only cycles)",
+      "import-direct": "import from the declaring module instead of the re-exporting one",
+      "extract-module": "move the shared code into a new or lower module that both can import",
+      "move-code": "move a declaration from one file of the cycle to another",
+      "lazy": "defer the import (dynamic import() or a require inside a function)",
+      "leave": "leave it: the cycle is harmless and the change isn't worth it",
+      "other": "something else (say what)"
+    }
+  },
+  "counts": {
+    "auto": {
+      "late-use": 34,
+      "barrel-induced": 2,
+      "top-level-use": 6,
+      "type-only": 8
+    },
+    "rater1": {
+      "late-use": 28,
+      "barrel-induced": 8,
+      "top-level-use": 6,
+      "type-only": 8
+    },
+    "rater1RightFix": {
+      "leave": 19,
+      "extract-module": 14,
+      "import-direct": 8,
+      "move-code": 1,
+      "import-type": 8
+    },
+    "rater1Risk": {
+      "late-use": 5,
+      "top-level-use": 3
+    },
+    "rater2": {
+      "late-use": 14,
+      "barrel-induced": 1,
+      "top-level-use": 3,
+      "type-only": 2
+    }
+  },
+  "disagreements": [
+    {
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "id": "ic012",
+      "rater1": {
+        "id": "ic012",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin from '..' (node/index.ts:35 re-exports it from './plugin'), and only that barrel reaches build.ts (index.ts:39). Risk: config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864) reads a build.ts const at evaluation, and L888 `css: cssConfigDefaults,` reads plugins/css.ts.",
+        "rightFix": "import-direct",
+        "note": "Every hop on the printed path is late; the top-level reads are chords (config.ts->build.ts, config.ts->plugins/css.ts) between modules on the path."
+      },
+      "rater2": {
+        "id": "ic012",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin from '..' (node/index.ts), which only re-exports it from ./plugin (index.ts:35); plugin.ts imports nothing on the path, so this path only closes through index.ts -> build.ts.",
+        "rightFix": "import-direct",
+        "note": "Risk: config.ts:864, :888 and :896 read buildEnvironmentOptionsDefaults, cssConfigDefaults (from plugins/css.ts) and builderOptionsDefaults while config.ts evaluates. build.ts and css.ts are both on this path, but the config->build and config->css edges are not printed hops. Every hop's own import is used late. Caveat: importing directly from ../plugin removes this path but not the report at css.ts:111. manifest.ts:8 imports cssEntriesMap from ./asset, so css -> manifest -> asset -> html -> css is still a late-use cycle without any barrel."
+      }
+    },
+    {
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "id": "ic014",
+      "rater1": {
+        "id": "ic014",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin through the '..' entry (index.ts:35), which is what reaches preview.ts (index.ts:38). Risk: config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864), L888 `css: cssConfigDefaults,`, L897 `server: serverConfigDefaults,` read consts of build.ts, plugins/css.ts and server/index.ts at evaluation.",
+        "rightFix": "import-direct",
+        "note": "Top-level reads are chords; the printed hops are all late. Path visits plugins/html.ts twice."
+      },
+      "rater2": null
+    },
+    {
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "id": "ic016",
+      "rater1": {
+        "id": "ic016",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin via '..' (index.ts:35), and index.ts:61 re-exports DevEnvironment from server/environment.ts to close the path. Risk: config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864) and L888 `css: cssConfigDefaults,` read build.ts/css.ts consts at evaluation.",
+        "rightFix": "import-direct",
+        "note": "Top-level reads are chords; printed hops are late."
+      },
+      "rater2": null
+    },
+    {
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "id": "ic022",
+      "rater1": {
+        "id": "ic022",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/astro/src/jsx-runtime/index.ts:1 imports escapeHTML/Fragment/markHTMLString/Renderer from runtime/server/index.js, which only re-exports them (index.ts:6-13, 23-47), and that entry is what reaches jsx.ts (index.ts:15); component.ts:15 also takes renderTemplate through the render/astro/index.js barrel. Uses are inside functions (jsx-runtime 54, 69, 85).",
+        "rightFix": "import-direct",
+        "note": "jsx-runtime/index.ts:95 `export { ... Fragment ... }` re-exports the binding; it is not an evaluation-time read."
+      },
+      "rater2": null
+    },
+    {
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "id": "ic028",
+      "rater1": {
+        "id": "ic028",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/element/src/linearElementEditor.ts:33 imports utils/binding helpers from '@excalidraw/element' (index.ts `export *` lines 59-109), which is the hop that reaches Scene.ts and align.ts; all uses are inside methods (e.g. 450, 744, 956), and Scene.ts:70 validateFractionalIndices sits inside a throttled callback.",
+        "rightFix": "import-direct",
+        "note": "A shorter direct cycle (linearElementEditor <-> binding/utils/bounds) would remain. Path visits index.ts twice."
+      },
+      "rater2": {
+        "id": "ic028",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/utils.ts:848 calls LinearElementEditor.getPointAtIndexGlobalCoordinates inside a function; every other hop (align.ts:46, binding.ts:1656, bounds.ts:1494, collision.ts:334, distance.ts:77/104/138) is a call inside a function.",
+        "rightFix": "leave",
+        "note": "This is not barrel-induced, although the reported import (L33-41) goes through the @excalidraw/element barrel and the path detours index -> Scene -> index -> align. Most of the names it imports are declared in utils.ts, and utils.ts imports linearElementEditor.ts (L43), so a direct import would still close a cycle. linearElementEditor.ts:57 already imports ./binding directly, so binding -> bounds -> collision -> distance -> utils -> linearElementEditor exists without any barrel."
+      }
+    },
+    {
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "id": "ic032",
+      "rater1": {
+        "id": "ic032",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/excalidraw/components/App.tsx:265 imports from '../actions', and index.ts:26 re-exports actionCanvas, but none of the names App imports there come from actionCanvas.tsx, so the path exists only through the barrel. Uses are inside functions (actionCanvas.tsx:68, ColorPicker.tsx:101, Toolbar.tsx:240).",
+        "rightFix": "import-direct",
+        "note": "Path visits App.tsx twice."
+      },
+      "rater2": {
+        "id": "ic032",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/excalidraw/components/Toolbar.tsx:240-241 call useEditorInterface and useStylesPanelMode inside the Toolbar component; App.tsx:2457 renders <LayerUI> and LayerUI.tsx:365 renders <Toolbar> inside render functions.",
+        "rightFix": "leave",
+        "note": "The path visits App.tsx twice. The App -> actions/index (barrel) -> actionCanvas -> ColorPicker -> App loop is a detour, and Toolbar -> App -> LayerUI -> Toolbar still closes without it, so this is not barrel-induced. App.tsx's top-level createContext calls and createTestHook() read nothing from path modules. Optional alternative: move the contexts and hooks out of App.tsx (extract-module)."
+      }
+    },
+    {
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "id": "ic037",
+      "rater1": {
+        "id": "ic037",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/cache.ts:426 `const routeCacheMap: CacheMap<RouteCacheEntry> = createCacheMap()` (and L451 segmentCacheMap) calls cache-map.ts's export while cache.ts evaluates; cache-map.ts is on the path.",
+        "rightFix": "leave",
+        "note": "Chord (cache.ts->cache-map.ts), not a hop; all printed hops are late. createCacheMap is a hoisted function declaration that touches no module state (cache-map.ts:146), so it cannot hit TDZ."
+      },
+      "rater2": {
+        "id": "ic037",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/cache.ts:426 and :451 call createCacheMap() (imported from cache-map.ts, which is on the path) in top-level const initializers.",
+        "rightFix": "leave",
+        "note": "Every printed hop's own import is used late: fetch.ts:18, navigation-testing-lock.ts:227, cache-map.ts:256, lru.ts:106 and scheduler.ts are all inside functions. The top-level read uses the cache.ts -> cache-map.ts edge, which is not a printed hop. createCacheMap is a hoisted, pure `export function` (cache-map.ts:146), so in practice it cannot hit the TDZ. That is why the fix is leave. Labelled top-level-use per the codebook's wording; reasonable to adjudicate as late-use if hoisted function declarations are exempt."
+      }
+    },
+    {
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "id": "ic039",
+      "rater1": {
+        "id": "ic039",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts:19 `export const STATIC_STALETIME_MS = getStaleTimeMs(` calls segment-cache/cache.ts's export during evaluation; both modules are on this path.",
+        "rightFix": "extract-module",
+        "note": "Chord (navigate-reducer->cache), not a hop; printed hops are late. getStaleTimeMs is a hoisted pure function (cache.ts:115), so no TDZ in practice. Moving the staletime constants and getStaleTimeMs into a leaf module removes hop 1 (cache.ts:92)."
+      },
+      "rater2": {
+        "id": "ic039",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts:19 `export const STATIC_STALETIME_MS = getStaleTimeMs(...)` calls getStaleTimeMs, imported from segment-cache/cache.ts (on the path), during module evaluation.",
+        "rightFix": "move-code",
+        "note": "The top-level read uses the navigate-reducer -> cache.ts back-edge, not a printed hop. The printed hops are all late: cache.ts:1345, app-router-state.ts:278, links.ts:244, and scheduler's uses of cache.ts. getStaleTimeMs is a hoisted pure function declaration (cache.ts:115), so it is currently safe in practice. Moving STATIC_STALETIME_MS next to getStaleTimeMs (or into a leaf constants module) would remove hop 1 and the whole cycle."
+      }
+    },
+    {
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "id": "ic042",
+      "rater1": {
+        "id": "ic042",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts:19 `export const STATIC_STALETIME_MS = getStaleTimeMs(` calls the export of segment-cache/cache.ts (hop 1) during evaluation.",
+        "rightFix": "extract-module",
+        "note": "getStaleTimeMs is a hoisted pure function declaration (cache.ts:115), so no TDZ in practice. Move the staletime constants and getStaleTimeMs into a leaf module."
+      },
+      "rater2": null
+    }
+  ],
+  "generated": "2026-10-13",
+  "items": [
+    {
+      "id": "ic001",
+      "file": "packages/zod/src/v4/core/util.ts",
+      "line": 2,
+      "repo": "zod",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic001",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/zod/src/v4/core/util.ts:519 reads globalConfig only inside the lazy cached() getter for allowsEval (Cached only calls it on .value); core.ts:99 calls installMembers only inside $constructor's init function.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic001",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/zod/src/v4/core/util.ts:519 reads globalConfig only inside the lazy getter passed to cached() (Cached runs it on first .value access); core.ts:99 calls installMembers only inside init().",
+        "rightFix": "leave",
+        "note": "Both imports are runtime value imports, so the cycle exists, but neither module reads the other at evaluation. The top-level cached(...) call only stores the getter."
+      }
+    },
+    {
+      "id": "ic002",
+      "file": "packages/zod/src/v4/core/core.ts",
+      "line": 3,
+      "repo": "zod",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic002",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/zod/src/v4/core/core.ts:99 calls installMembers inside the $constructor init function; util.ts:519 reads globalConfig inside the lazy cached() getter. Nothing on the cycle is read at evaluation.",
+        "rightFix": "leave",
+        "note": "Same cycle as ic001, reported from the other end."
+      },
+      "rater2": {
+        "id": "ic002",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/zod/src/v4/core/core.ts:99 calls installMembers inside $constructor's init(); util.ts:519 reads globalConfig only inside a lazy cached() getter.",
+        "rightFix": "leave",
+        "note": "This is the same util.ts <-> core.ts cycle as ic001, reported from the other end."
+      }
+    },
+    {
+      "id": "ic003",
+      "file": "src/jsx/streaming.ts",
+      "line": 11,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic003",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/streaming.ts:83 calls childrenToString inside the Suspense render function; components.ts:66 reads StreamingContext inside ErrorBoundary.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic004",
+      "file": "src/jsx/intrinsic-element/components.ts",
+      "line": 3,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic004",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/intrinsic-element/components.ts:94,107,122 use JSXNode/renderChildren/getNameSpaceContext inside component functions; base.ts:136,177,377 use context and intrinsicElementTags inside functions (jsxFn); context.ts:224-229 use base exports inside createContext.",
+        "rightFix": "leave",
+        "note": "The path visits base.ts twice (base<->context loop inside base<->intrinsic-element/components)."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic005",
+      "file": "src/jsx/base.ts",
+      "line": 14,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic005",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/base.ts:377,385 touch the intrinsicElementTags namespace only inside jsxFn; intrinsic-element/components.ts:94,107 use JSXNode/renderChildren inside component functions.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic005",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/base.ts:377 and :385 read intrinsicElementTags only inside jsxFn(); intrinsic-element/components.ts:94 and :122 use JSXNode, renderChildren and getNameSpaceContext only inside component functions.",
+        "rightFix": "leave",
+        "note": "There are no top-level reads in either file. components.ts:257 assigns at top level, but its values come from ./constants and ./dom/components, which are not on the path."
+      }
+    },
+    {
+      "id": "ic006",
+      "file": "src/jsx/components.ts",
+      "line": 10,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic006",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/components.ts:66 reads StreamingContext inside ErrorBoundary; streaming.ts:83 calls childrenToString inside Suspense.",
+        "rightFix": "leave",
+        "note": "Same cycle as ic003."
+      },
+      "rater2": {
+        "id": "ic006",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/components.ts:66 reads StreamingContext inside ErrorBoundary; streaming.ts:83 calls childrenToString inside Suspense.",
+        "rightFix": "leave",
+        "note": "streaming.ts:30 calls createContext at top level, but it comes from ./context, which is not on this two-file path."
+      }
+    },
+    {
+      "id": "ic007",
+      "file": "src/jsx/base.ts",
+      "line": 11,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic007",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/context.ts:224-229 use renderChildren/isUntrustedObject/JSXFragmentNode inside createContext's provider function; base.ts:136,177,248,330 use context exports inside functions.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic007",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/context.ts:224-229 uses renderChildren, isUntrustedObject, renderUntrustedObject and JSXFragmentNode only inside createContext's Provider; base.ts:136, :248, :330 and :392 use the context imports only inside functions.",
+        "rightFix": "leave",
+        "note": "The `import type { Context }` hop line is erased, but the value import on base.ts:5 keeps the hop at runtime."
+      }
+    },
+    {
+      "id": "ic008",
+      "file": "src/jsx/context.ts",
+      "line": 6,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic008",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/dom/context.ts:50 pushes into globalContexts inside createContext(); context.ts:251 calls createContextProviderFunction inside createContext.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic009",
+      "file": "src/jsx/hooks/index.ts",
+      "line": 3,
+      "repo": "hono",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic009",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "src/jsx/dom/render.ts:308,345 read STASH_EFFECT inside functions; hooks/index.ts:90,216 use buildDataStack/update inside hook functions.",
+        "rightFix": "extract-module",
+        "note": "render.ts only needs the numeric STASH_EFFECT constant from hooks; moving the STASH_* constants to jsx/constants.ts removes the cycle."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic010",
+      "file": "src/helper/streaming/text.ts",
+      "line": 4,
+      "repo": "hono",
+      "auto": {
+        "label": "barrel-induced",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic010",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "src/helper/streaming/text.ts:4 imports stream from './' (index.ts:6 only re-exports it from './stream'), and index.ts:9 re-exports text.ts; stream is called only inside streamText (text.ts:14).",
+        "rightFix": "import-direct",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic011",
+      "file": "packages/vite/src/node/config.ts",
+      "line": 109,
+      "repo": "vite",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic011",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/vite/src/node/config.ts:2003 calls resolvePreviewOptions inside resolveConfig; preview.ts:138 calls resolveConfig inside preview(). No evaluation-time reads between the two.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic012",
+      "file": "packages/vite/src/node/plugins/css.ts",
+      "line": 111,
+      "repo": "vite",
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "rater1": {
+        "id": "ic012",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin from '..' (node/index.ts:35 re-exports it from './plugin'), and only that barrel reaches build.ts (index.ts:39). Risk: config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864) reads a build.ts const at evaluation, and L888 `css: cssConfigDefaults,` reads plugins/css.ts.",
+        "rightFix": "import-direct",
+        "note": "Every hop on the printed path is late; the top-level reads are chords (config.ts->build.ts, config.ts->plugins/css.ts) between modules on the path."
+      },
+      "rater2": {
+        "id": "ic012",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin from '..' (node/index.ts), which only re-exports it from ./plugin (index.ts:35); plugin.ts imports nothing on the path, so this path only closes through index.ts -> build.ts.",
+        "rightFix": "import-direct",
+        "note": "Risk: config.ts:864, :888 and :896 read buildEnvironmentOptionsDefaults, cssConfigDefaults (from plugins/css.ts) and builderOptionsDefaults while config.ts evaluates. build.ts and css.ts are both on this path, but the config->build and config->css edges are not printed hops. Every hop's own import is used late. Caveat: importing directly from ../plugin removes this path but not the report at css.ts:111. manifest.ts:8 imports cssEntriesMap from ./asset, so css -> manifest -> asset -> html -> css is still a late-use cycle without any barrel."
+      }
+    },
+    {
+      "id": "ic013",
+      "file": "packages/vite/src/node/config.ts",
+      "line": 113,
+      "repo": "vite",
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "rater1": {
+        "id": "ic013",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/vite/src/node/config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864) and L896 `builder: builderOptionsDefaults,` read build.ts consts during evaluation; build.ts->config.ts (build.ts:40) closes the loop, so entering via build.ts hits TDZ.",
+        "rightFix": "extract-module",
+        "note": "All printed hops are late (no barrels: optimizer/index.ts and plugins/index.ts declare the imported names); the top-level read is a chord config.ts->build.ts. Fix: move the *Defaults objects into a leaf module."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic014",
+      "file": "packages/vite/src/node/server/middlewares/indexHtml.ts",
+      "line": 13,
+      "repo": "vite",
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "rater1": {
+        "id": "ic014",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin through the '..' entry (index.ts:35), which is what reaches preview.ts (index.ts:38). Risk: config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864), L888 `css: cssConfigDefaults,`, L897 `server: serverConfigDefaults,` read consts of build.ts, plugins/css.ts and server/index.ts at evaluation.",
+        "rightFix": "import-direct",
+        "note": "Top-level reads are chords; the printed hops are all late. Path visits plugins/html.ts twice."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic015",
+      "file": "packages/vite/src/node/server/index.ts",
+      "line": 101,
+      "repo": "vite",
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "rater1": {
+        "id": "ic015",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/vite/src/node/config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864), L888 `css: cssConfigDefaults,` and L897 `server: serverConfigDefaults,` read consts from build.ts, plugins/css.ts and server/index.ts, all on this path, during evaluation.",
+        "rightFix": "extract-module",
+        "note": "Printed hops are all late and not barrel-induced (server/index.ts declares restartServerWithUrls at L1495); the top-level reads are chords from config.ts."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic016",
+      "file": "packages/vite/src/node/server/environment.ts",
+      "line": 32,
+      "repo": "vite",
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "rater1": {
+        "id": "ic016",
+        "label": "barrel-induced",
+        "risk": "top-level-use",
+        "evidence": "packages/vite/src/node/plugins/manifest.ts:4 imports perEnvironmentPlugin via '..' (index.ts:35), and index.ts:61 re-exports DevEnvironment from server/environment.ts to close the path. Risk: config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864) and L888 `css: cssConfigDefaults,` read build.ts/css.ts consts at evaluation.",
+        "rightFix": "import-direct",
+        "note": "Top-level reads are chords; printed hops are late."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic017",
+      "file": "packages/vite/src/node/plugins/asset.ts",
+      "line": 25,
+      "repo": "vite",
+      "auto": {
+        "label": "top-level-use",
+        "risk": "top-level-use"
+      },
+      "rater1": {
+        "id": "ic017",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/vite/src/node/config.ts:852-864 `const configDefaults = Object.freeze({` ... `build: buildEnvironmentOptionsDefaults,` (L864; also L896 `builder: builderOptionsDefaults,`) reads build.ts consts while config.ts evaluates; hop 3 is config->build and hop 2 build->config, so loading build.ts first throws a TDZ error.",
+        "rightFix": "extract-module",
+        "note": "Move buildEnvironmentOptionsDefaults/builderOptionsDefaults into a leaf module (or build configDefaults lazily). Path visits build.ts twice."
+      },
+      "rater2": {
+        "id": "ic017",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/vite/src/node/config.ts:864 and :896 read buildEnvironmentOptionsDefaults and builderOptionsDefaults (hop 3, config.ts -> build.ts) inside the top-level `configDefaults = Object.freeze({...})` initializer.",
+        "rightFix": "extract-module",
+        "note": "The simple cycle asset -> build -> plugins/index -> asset is late-use on its own: asset.ts:126 and :148, build.ts:1413 and plugins/index.ts:131 are all inside functions. The printed path detours build -> config -> build, and that detour carries the top-level read. Fix: move the defaults objects, and/or the URL helpers asset.ts needs, out of build.ts into a lower module."
+      }
+    },
+    {
+      "id": "ic018",
+      "file": "packages/vite/src/node/config.ts",
+      "line": 123,
+      "repo": "vite",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic018",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/vite/src/node/config.ts:2490 calls runnerImport inside runnerImportConfigFile; ssr/runnerImport.ts:21 calls resolveConfig inside runnerImport().",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic019",
+      "file": "packages/astro/src/i18n/middleware.ts",
+      "line": 1,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic019",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "All imports are used inside functions or methods: i18n/middleware.ts:28, core/fetch/fetch-state.ts:460,609,792 (FetchState methods), actions/utils.ts:24, actions/runtime/server.ts:174, i18n/utils.ts:65, i18n/index.ts:387.",
+        "rightFix": "leave",
+        "note": "No barrel: i18n/index.ts declares getAllCodes (L209). Path visits fetch-state.ts twice."
+      },
+      "rater2": {
+        "id": "ic019",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/i18n/middleware.ts:28 calls getFetchStateFromAPIContext inside the returned middleware; i18n/utils.ts:65, actions/utils.ts:24, actions/runtime/server.ts:174 and fetch-state.ts:460/609/792 are all inside functions or methods.",
+        "rightFix": "leave",
+        "note": "i18n/index.ts declares getAllCodes itself (L209), so it is not a barrel hop. None of the path modules reads an import at top level; their only top-level values are Symbols and literals."
+      }
+    },
+    {
+      "id": "ic020",
+      "file": "packages/astro/src/core/render/params-and-props.ts",
+      "line": 9,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic020",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/core/render/route-cache.ts:139-141 calls getEnvironment inside the createManifestMemo derive callback, which runs lazily on get() (core/manifest/memo.ts:34); the other hops are inside functions (params-and-props.ts:51, environment/index.ts:113, production.ts:140, rewrite-validate.ts:23).",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic020",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/core/environment/production.ts:140 calls createRewriteRouteValidator inside a productionEnvironment method; route-cache.ts:141 calls getEnvironment inside the lazy createManifestMemo derive callback.",
+        "rightFix": "leave",
+        "note": "environment/index.ts declares getEnvironment (L112), so it is not a barrel. The type-only RouteCache line on hop 1 doesn't matter, because L10 is a value import."
+      }
+    },
+    {
+      "id": "ic021",
+      "file": "packages/astro/src/core/fetch/fetch-state.ts",
+      "line": 34,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic021",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/core/errors/default-handler.ts:48 constructs FetchState inside renderDefaultError; fetch-state.ts:423 calls executeRewrite inside a FetchState method; rewrites/handler.ts:117, astro-middleware.ts:134, errors/handler.ts:40, build-handler.ts:25 are inside functions.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic022",
+      "file": "packages/astro/src/runtime/server/render/astro/index.ts",
+      "line": 6,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic022",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/astro/src/jsx-runtime/index.ts:1 imports escapeHTML/Fragment/markHTMLString/Renderer from runtime/server/index.js, which only re-exports them (index.ts:6-13, 23-47), and that entry is what reaches jsx.ts (index.ts:15); component.ts:15 also takes renderTemplate through the render/astro/index.js barrel. Uses are inside functions (jsx-runtime 54, 69, 85).",
+        "rightFix": "import-direct",
+        "note": "jsx-runtime/index.ts:95 `export { ... Fragment ... }` re-exports the binding; it is not an evaluation-time read."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic023",
+      "file": "packages/astro/src/runtime/server/render/common.ts",
+      "line": 14,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic023",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/runtime/server/render/common.ts:151 uses isSlotString inside stringifyChunk; slot.ts:85 calls renderChild inside a SlotRenderInstance method; any.ts:26 calls isRenderInstance inside renderChild.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic023",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/runtime/server/render/common.ts:151 calls isSlotString inside chunkToString; slot.ts:85 calls renderChild inside a method; any.ts:26 calls isRenderInstance inside renderChild.",
+        "rightFix": "leave",
+        "note": "slot.ts:27 `class SlotString extends HTMLString` runs at top level, but HTMLString comes from ../escape.js, which is not on the path."
+      }
+    },
+    {
+      "id": "ic024",
+      "file": "packages/astro/src/core/i18n/handler.ts",
+      "line": 2,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic024",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/core/i18n/handler.ts:171, i18n/fallback.ts:89, i18n/index.ts:387 and i18n/middleware.ts:24,28 use their imports only inside functions.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic025",
+      "file": "packages/astro/src/core/middleware/index.ts",
+      "line": 6,
+      "repo": "astro",
+      "auto": {
+        "label": "barrel-induced",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic025",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/astro/src/core/middleware/astro-middleware.ts:13 imports sequence from './index.js', which imports it from './sequence.js' (index.ts:17) and re-exports it (index.ts:231); that hop is what reaches i18n/utils. sequence is used only inside handleMiddleware (L75).",
+        "rightFix": "import-direct",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic026",
+      "file": "packages/astro/src/core/errors/default-handler.ts",
+      "line": 5,
+      "repo": "astro",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic026",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/core/errors/default-handler.ts:48,106 use FetchState inside renderDefaultError; every other hop (fetch-state.ts:423,609, actions/utils.ts:24, runtime/server.ts:174, astro-middleware.ts:134) is inside functions.",
+        "rightFix": "leave",
+        "note": "Path visits fetch-state.ts twice."
+      },
+      "rater2": {
+        "id": "ic026",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/astro/src/core/errors/default-handler.ts:48 and :106 call `new FetchState(...)` inside renderDefaultError; every other hop (fetch-state.ts:423, rewrites/handler.ts:117, astro-middleware.ts:134, errors/handler.ts:40, build-handler.ts:25) is a call inside a function.",
+        "rightFix": "leave",
+        "note": "FetchState has no static members, and these modules have no top-level reads."
+      }
+    },
+    {
+      "id": "ic027",
+      "file": "packages/excalidraw/actions/actionDuplicateSelection.tsx",
+      "line": 30,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic027",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/excalidraw/actions/actionDuplicateSelection.tsx:121 calls useStylesPanelMode inside PanelComponent; components/App.tsx:11880 uses actionDuplicateSelection inside class methods. Not barrel-induced: App needs actionDuplicateSelection itself, so a direct import still closes the cycle.",
+        "rightFix": "extract-module",
+        "note": "Move the React context hooks (useStylesPanelMode, useApp, ...) out of App.tsx into a small context module."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic028",
+      "file": "packages/element/src/linearElementEditor.ts",
+      "line": 41,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic028",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/element/src/linearElementEditor.ts:33 imports utils/binding helpers from '@excalidraw/element' (index.ts `export *` lines 59-109), which is the hop that reaches Scene.ts and align.ts; all uses are inside methods (e.g. 450, 744, 956), and Scene.ts:70 validateFractionalIndices sits inside a throttled callback.",
+        "rightFix": "import-direct",
+        "note": "A shorter direct cycle (linearElementEditor <-> binding/utils/bounds) would remain. Path visits index.ts twice."
+      },
+      "rater2": {
+        "id": "ic028",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/utils.ts:848 calls LinearElementEditor.getPointAtIndexGlobalCoordinates inside a function; every other hop (align.ts:46, binding.ts:1656, bounds.ts:1494, collision.ts:334, distance.ts:77/104/138) is a call inside a function.",
+        "rightFix": "leave",
+        "note": "This is not barrel-induced, although the reported import (L33-41) goes through the @excalidraw/element barrel and the path detours index -> Scene -> index -> align. Most of the names it imports are declared in utils.ts, and utils.ts imports linearElementEditor.ts (L43), so a direct import would still close a cycle. linearElementEditor.ts:57 already imports ./binding directly, so binding -> bounds -> collision -> distance -> utils -> linearElementEditor exists without any barrel."
+      }
+    },
+    {
+      "id": "ic029",
+      "file": "packages/excalidraw/components/Stats/Dimension.tsx",
+      "line": 22,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic029",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/excalidraw/components/Stats/DragInput.tsx:90,93 call useApp/useExcalidrawSetAppState inside the component; App.tsx:2457 renders LayerUI in a method; LayerUI.tsx:428 and Stats/index.tsx:325 use their imports inside component bodies.",
+        "rightFix": "extract-module",
+        "note": "Stats/index.tsx declares Stats, so no barrel. Fix as ic027: move App's context hooks into their own module."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic030",
+      "file": "packages/element/src/transform.ts",
+      "line": 41,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic030",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/binding.ts:69 imports isNonDeletedElement from '.', but index.ts declares it itself (index.ts:43), so importing from the declaring module still closes the path (index.ts:102 `export * from \"./transform\"`); it is used only inside functions (binding.ts:1229,1349), as are all other hops.",
+        "rightFix": "extract-module",
+        "note": "Not barrel-induced by the codebook test because the package entry both declares and re-exports. Move isNonDeletedElement/getNonDeletedElements out of index.ts into a leaf module."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic031",
+      "file": "packages/element/src/collision.ts",
+      "line": 32,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic031",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/binding.ts:69 imports isNonDeletedElement, which index.ts declares (index.ts:43), so the barrel test fails; collision.ts:99, utils.ts:651, align.ts:30 and bounds.ts:1494 use their imports inside functions.",
+        "rightFix": "extract-module",
+        "note": "Same pattern as ic030 (index.ts:59 `export * from \"./align\"`)."
+      },
+      "rater2": {
+        "id": "ic031",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/binding.ts:1229 uses isNonDeletedElement inside a function; collision.ts:99/635, utils.ts:651/864, align.ts:30 and bounds.ts:1494 are also inside functions.",
+        "rightFix": "leave",
+        "note": "binding.ts imports isNonDeletedElement from '.', which declares it (index.ts:43), so the barrel test doesn't apply, even though the path then follows index.ts's `export * from ./align`. binding.ts:31 imports ./bounds directly anyway, so collision -> utils -> binding -> bounds -> collision exists without index.ts."
+      }
+    },
+    {
+      "id": "ic032",
+      "file": "packages/excalidraw/components/Toolbar.tsx",
+      "line": 9,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic032",
+        "label": "barrel-induced",
+        "risk": "late-use",
+        "evidence": "packages/excalidraw/components/App.tsx:265 imports from '../actions', and index.ts:26 re-exports actionCanvas, but none of the names App imports there come from actionCanvas.tsx, so the path exists only through the barrel. Uses are inside functions (actionCanvas.tsx:68, ColorPicker.tsx:101, Toolbar.tsx:240).",
+        "rightFix": "import-direct",
+        "note": "Path visits App.tsx twice."
+      },
+      "rater2": {
+        "id": "ic032",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/excalidraw/components/Toolbar.tsx:240-241 call useEditorInterface and useStylesPanelMode inside the Toolbar component; App.tsx:2457 renders <LayerUI> and LayerUI.tsx:365 renders <Toolbar> inside render functions.",
+        "rightFix": "leave",
+        "note": "The path visits App.tsx twice. The App -> actions/index (barrel) -> actionCanvas -> ColorPicker -> App loop is a detour, and Toolbar -> App -> LayerUI -> Toolbar still closes without it, so this is not barrel-induced. App.tsx's top-level createContext calls and createTestHook() read nothing from path modules. Optional alternative: move the contexts and hooks out of App.tsx (extract-module)."
+      }
+    },
+    {
+      "id": "ic033",
+      "file": "packages/element/src/transformHandles.ts",
+      "line": 16,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic033",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/binding.ts:69 imports isNonDeletedElement, declared in index.ts:43, so the barrel test fails; transformHandles.ts:318 and resizeTest.ts:64 use their imports inside functions.",
+        "rightFix": "extract-module",
+        "note": "Same pattern as ic030 (index.ts:90 `export * from \"./resizeTest\"`)."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic034",
+      "file": "packages/element/src/listMarker.ts",
+      "line": 3,
+      "repo": "excalidraw",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic034",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/element/src/listMarker.ts:220 calls refreshTextDimensions inside setText; binding.ts:69 imports isNonDeletedElement, declared in index.ts:43, so the barrel test fails.",
+        "rightFix": "extract-module",
+        "note": "Same pattern as ic030 (index.ts:84 `export * from \"./listMarker\"`)."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic035",
+      "file": "packages/next/src/build/webpack-config.ts",
+      "line": 83,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic035",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/build/create-compiler-aliases.ts:130 calls hasExternalOtelApiPackage inside createWebpackAliases; webpack-config.ts:784 calls the alias builders inside getBaseWebpackConfig.",
+        "rightFix": "move-code",
+        "note": "hasExternalOtelApiPackage (webpack-config.ts:286) is only used by create-compiler-aliases.ts; move it there."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic036",
+      "file": "packages/next/src/client/components/segment-cache/scheduler.ts",
+      "line": 1,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic036",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/lru.ts:106 calls pingPrefetchScheduler inside ensureCleanupIsScheduled; vary-path.ts:149, cache-map.ts:256 and scheduler.ts:1332 use their imports inside functions.",
+        "rightFix": "leave",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic037",
+      "file": "packages/next/src/client/components/segment-cache/cache.ts",
+      "line": 32,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic037",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/cache.ts:426 `const routeCacheMap: CacheMap<RouteCacheEntry> = createCacheMap()` (and L451 segmentCacheMap) calls cache-map.ts's export while cache.ts evaluates; cache-map.ts is on the path.",
+        "rightFix": "leave",
+        "note": "Chord (cache.ts->cache-map.ts), not a hop; all printed hops are late. createCacheMap is a hoisted function declaration that touches no module state (cache-map.ts:146), so it cannot hit TDZ."
+      },
+      "rater2": {
+        "id": "ic037",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/cache.ts:426 and :451 call createCacheMap() (imported from cache-map.ts, which is on the path) in top-level const initializers.",
+        "rightFix": "leave",
+        "note": "Every printed hop's own import is used late: fetch.ts:18, navigation-testing-lock.ts:227, cache-map.ts:256, lru.ts:106 and scheduler.ts are all inside functions. The top-level read uses the cache.ts -> cache-map.ts edge, which is not a printed hop. createCacheMap is a hoisted, pure `export function` (cache-map.ts:146), so in practice it cannot hit the TDZ. That is why the fix is leave. Labelled top-level-use per the codebook's wording; reasonable to adjudicate as late-use if hoisted function declarations are exempt."
+      }
+    },
+    {
+      "id": "ic038",
+      "file": "packages/next/src/client/components/segment-cache/scheduler.ts",
+      "line": 48,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic038",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/scheduler.ts:699 calls cleanup inside processQueueInMicrotask; lru.ts:124 and 106 and cache-map.ts:256,388,444 use their imports inside functions.",
+        "rightFix": "leave",
+        "note": "Path visits lru.ts twice (lru<->cache-map inside lru<->scheduler)."
+      },
+      "rater2": {
+        "id": "ic038",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/segment-cache/lru.ts:106 calls pingPrefetchScheduler and lru.ts:124 calls deleteMapEntry inside functions; cache-map.ts:256/388/444 call lruPut, updateLruSize and deleteFromLru inside functions.",
+        "rightFix": "leave",
+        "note": "scheduler.ts, lru.ts and cache-map.ts have no top-level reads of each other's imports. cache.ts, which has the top-level createCacheMap() call, is not on this path."
+      }
+    },
+    {
+      "id": "ic039",
+      "file": "packages/next/src/client/components/segment-cache/cache.ts",
+      "line": 92,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic039",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts:19 `export const STATIC_STALETIME_MS = getStaleTimeMs(` calls segment-cache/cache.ts's export during evaluation; both modules are on this path.",
+        "rightFix": "extract-module",
+        "note": "Chord (navigate-reducer->cache), not a hop; printed hops are late. getStaleTimeMs is a hoisted pure function (cache.ts:115), so no TDZ in practice. Moving the staletime constants and getStaleTimeMs into a leaf module removes hop 1 (cache.ts:92)."
+      },
+      "rater2": {
+        "id": "ic039",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts:19 `export const STATIC_STALETIME_MS = getStaleTimeMs(...)` calls getStaleTimeMs, imported from segment-cache/cache.ts (on the path), during module evaluation.",
+        "rightFix": "move-code",
+        "note": "The top-level read uses the navigate-reducer -> cache.ts back-edge, not a printed hop. The printed hops are all late: cache.ts:1345, app-router-state.ts:278, links.ts:244, and scheduler's uses of cache.ts. getStaleTimeMs is a hoisted pure function declaration (cache.ts:115), so it is currently safe in practice. Moving STATIC_STALETIME_MS next to getStaleTimeMs (or into a leaf constants module) would remove hop 1 and the whole cycle."
+      }
+    },
+    {
+      "id": "ic040",
+      "file": "packages/next/src/next-devtools/dev-overlay/menu/panel-router.tsx",
+      "line": 4,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic040",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/next-devtools/dev-overlay/panel/dynamic-panel.tsx:188 reads INDICATOR_PADDING inside DynamicPanel; next-logo.tsx:75 and panel-router.tsx:278 use their imports inside component bodies.",
+        "rightFix": "extract-module",
+        "note": "Move the INDICATOR_PADDING constant (and the render-error context hook) out of component modules."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic041",
+      "file": "packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx",
+      "line": 14,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic041",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx:161 reads INDICATOR_PADDING inside DevtoolMenu; panel-router.tsx:68 uses DevtoolMenu inside MenuPanel.",
+        "rightFix": "extract-module",
+        "note": "Same fix as ic040."
+      },
+      "rater2": {
+        "id": "ic041",
+        "label": "late-use",
+        "risk": null,
+        "evidence": "packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx:161 and :165 read INDICATOR_PADDING inside the DevtoolMenu component body; NextLogo, useRenderErrorContext, PanelRouter and ChevronRight/DevtoolMenu/IssueCount are all used inside components.",
+        "rightFix": "leave",
+        "note": "This is a React component-tree cycle; the only top-level reads are createContext from react. Moving INDICATOR_PADDING (devtools-indicator.tsx:21) into a constants module would cheaply break it, but nothing requires that."
+      }
+    },
+    {
+      "id": "ic042",
+      "file": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts",
+      "line": 11,
+      "repo": "next.js",
+      "auto": {
+        "label": "late-use",
+        "risk": "late-use"
+      },
+      "rater1": {
+        "id": "ic042",
+        "label": "top-level-use",
+        "risk": null,
+        "evidence": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts:19 `export const STATIC_STALETIME_MS = getStaleTimeMs(` calls the export of segment-cache/cache.ts (hop 1) during evaluation.",
+        "rightFix": "extract-module",
+        "note": "getStaleTimeMs is a hoisted pure function declaration (cache.ts:115), so no TDZ in practice. Move the staletime constants and getStaleTimeMs into a leaf module."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic043",
+      "file": "src/vs/editor/common/model.ts",
+      "line": 29,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic043",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/model.ts:29 TextModelEditSource appears only in type annotations (1248, 1262, 1278), so tsc drops the import; languages.ts:23 `import * as model` is also only used in types.",
+        "rightFix": "import-type",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic044",
+      "file": "src/vs/editor/common/textModelBracketPairs.ts",
+      "line": 11,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic044",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/textModelBracketPairs.ts:11 PairAstNode appears only in type positions (98, 122), so the hop is elided; languages.ts:23 and model.ts:21 are type-only too.",
+        "rightFix": "import-type",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic045",
+      "file": "src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts",
+      "line": 8,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic045",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts:8 BracketKind is only a parameter type (640, 657), so the hop is elided; languages.ts:23 is type-only too.",
+        "rightFix": "import-type",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic046",
+      "file": "src/vs/editor/common/modelLineProjectionData.ts",
+      "line": 11,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic046",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/modelLineProjectionData.ts:11 LineInjectedText appears only in a return type (333); textModelEvents.ts:9, model.ts:31 and viewModel.ts:18 are also type-only.",
+        "rightFix": "import-type",
+        "note": ""
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic047",
+      "file": "src/vs/editor/common/languages/languageConfigurationRegistry.ts",
+      "line": 14,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic047",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/languages/supports/indentRules.ts:6 IndentationRule is only a field/parameter type (25, 27), so that hop is elided; brackets.ts:6 is type-only too.",
+        "rightFix": "import-type",
+        "note": "The reported hop is real (`new IndentRulesSupport` at languageConfigurationRegistry.ts:385)."
+      },
+      "rater2": null
+    },
+    {
+      "id": "ic048",
+      "file": "src/vs/editor/common/tokenizationTextModelPart.ts",
+      "line": 9,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic048",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/tokenizationTextModelPart.ts:9 SparseMultilineTokens appears only in parameter types (21, 27); sparseMultilineTokens.ts:10 ITextModel and model.ts:25 are interface-only.",
+        "rightFix": "import-type",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic048",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/tokens/sparseMultilineTokens.ts:10 imports ITextModel, an interface (model.ts:707) used only in parameter types (L168, L573), so TypeScript elides the hop with verbatimModuleSyntax off.",
+        "rightFix": "import-type",
+        "note": "Every hop is type-only. model.ts:25 ITokenizationTextModelPart is an interface used only as a property type (L1439), and tokenizationTextModelPart.ts:9 SparseMultilineTokens appears only in interface signatures (L21, L27)."
+      }
+    },
+    {
+      "id": "ic049",
+      "file": "src/vs/editor/common/model/editStack.ts",
+      "line": 10,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic049",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/model/editStack.ts:10 TextModel is only a field/parameter type (386, 389), and bracketPairsImpl.ts:16 likewise (35), so both return hops are elided; textModel.ts's `new EditStack` (382) has no partner at runtime.",
+        "rightFix": "import-type",
+        "note": ""
+      },
+      "rater2": {
+        "id": "ic049",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/model/editStack.ts:10 imports TextModel but uses it only as a field and parameter type (L386, L389), so the hop is elided with verbatimModuleSyntax off.",
+        "rightFix": "import-type",
+        "note": "bracketPairsImpl.ts:16 is also type-only: TextModel is used only as a constructor parameter-property type (L35). vscode has experimentalDecorators but no emitDecoratorMetadata, and neither constructor is decorated. textModel.ts's `new EditStack` and `new BracketPairsTextModelPart` (L357, L382) are real, but both back-edges disappear."
+      }
+    },
+    {
+      "id": "ic050",
+      "file": "src/vs/editor/common/languages.ts",
+      "line": 23,
+      "repo": "vscode",
+      "auto": {
+        "label": "type-only",
+        "risk": null
+      },
+      "rater1": {
+        "id": "ic050",
+        "label": "type-only",
+        "risk": null,
+        "evidence": "src/vs/editor/common/languages.ts:23 `import * as model` is used only in type positions, so tsc drops it; editorCommon.ts:16 and model.ts:19 are type-only too.",
+        "rightFix": "import-type",
+        "note": "Path visits model.ts twice."
+      },
+      "rater2": null
+    }
+  ],
+  "method": "Seed 20261013; up to 8 import/no-cycle reports per repo, drawn from Oxlint's reports with Ultracite's default root config (core + react). Population sizes are in graph.json (oxlint.noCycle).",
+  "population": {
+    "zod": 2,
+    "hono": 13,
+    "trpc": 0,
+    "vite": 166,
+    "astro": 77,
+    "excalidraw": 505,
+    "next.js": 87,
+    "vscode": 146
+  },
+  "raters": "Rater 1 (a Claude subagent) labelled every item from the worksheet, with read-only access to the clones and without the automatic label. Rater 2 (a separate Claude subagent) labelled the blind subset without either. Both raters are Claude models, so agreement measures how consistently the codebook applies."
+}

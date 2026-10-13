@@ -1,0 +1,12 @@
+{
+  "subject": "ica",
+  "description": "as ica-dynamic-import, but `export const settings = await getSettings();` (top-level await): with a placement configured, the dynamic import of window.ts waits for settings.ts, which is waiting for it",
+  "verdict": "changed",
+  "files": [
+    "settings.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "settingsAsync": false
+  }
+}

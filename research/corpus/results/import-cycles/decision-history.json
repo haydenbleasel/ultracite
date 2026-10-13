@@ -1,0 +1,462 @@
+{
+  "generated": "2026-10-13",
+  "method": "git log -S '<rule>' (and -G for severity flips, e.g. noBarrelFile off -> error) over every path the published configs have lived at (src/eslint.js 2022, eslint.js / eslint.config.mjs / rules/*.mjs 2022-2024, biome.json 2024-2025, biome.jsonc 2025, packages/cli/biome.jsonc and packages/cli/config/** from 2025-10), git show of each hit, packages/cli/CHANGELOG.md (including the pre-7748b21d text, since that 2026-04-23 commit rewrote older entries), .changeset/, and gh issue/pr list --search on haydenbleasel/ultracite for: cycle, circular, no-cycle, noImportCycles, barrel, noBarrelFile, re-export, reexport, export *, namespace import, noNamespaceImport, wildcard, import-x, resolver, scanner, project rules, type-aware. Bodies and comments of #139, #233, #343, #367, #445, #457, #603, #604, #606, #730, #742, #782, #843 and PRs #140, #162, #322, #324, #819 were read. Current presets were read from packages/cli/config, and the effective ESLint state was computed read-only with ESLint 10.12.0 calculateConfigForFile against core, core+react and core+type-aware for .ts/.js/.tsx files. Option defaults were read from the installed schemas/sources: oxlint 1.86.0 configuration_schema.json, @biomejs/biome 2.5.15 configuration_schema.json, eslint-plugin-import-x 4.17.1 lib/rules/*.js, eslint-plugin-unicorn 77.0.0 rules/*.js, eslint-plugin-sonarjs 4.2.2 cjs/S2208, oxlint-plugin-react-doctor 0.9.16 dist. The unicorn release that added no-barrel-files / no-useless-re-export was read from the plugin's GitHub releases (public API). Pickaxe hits that are only file moves (762ef70c, 86ee61e3, c4a205f8 for Biome, 2df05bc8, c1b7f6d2) or research-post/data commits (8d62c6a0, 99358e3a, 3cb763d5, 2752cddb) or the website inspector (0415979b, 1c864ded) are not decisions.",
+  "eras": [
+    { "from": "2022-03-18", "sha": "e403fb15", "what": "eslint-config-harmony: hand-written ESLint config (src/eslint.js) with eslint-plugin-import rules listed one by one, extending plugin:import/typescript" },
+    { "from": "2023-01-14", "sha": "5b7d6da3", "what": "Harmony V2 (#83): flat config, rules split into rules/*.mjs. Same day f89fb4de added import/resolver {typescript, node}; babdaa38 then commented out eslint-plugin-import entirely ('temporarily disabled until this issue is resolved: https://github.com/import-js/eslint-plugin-import/issues/2556', upstream title '[Feature Request] Support new ESLint flat config'). Re-enabled 2023-04-15 (9a802d59). So no import rule, including import/no-cycle, ran from 2023-01-14 to 2023-04-15." },
+    { "from": "2023-06-08", "sha": "c52fef07", "what": "Migrate to opt-in config (#115): every non-deprecated eslint-plugin-import rule at error, then overrides" },
+    { "from": "2024-07-18", "sha": "c92a9d2e", "what": "Switch to Biome (#140, resolves the ESLint performance issue #139): biome.json \"all\": true (Biome 1.8.3); the ESLint config was deleted" },
+    { "from": "2025-06-22", "sha": "871ee738", "what": "Ultracite v5 (#162): Biome 2.0.0, every rule listed explicitly in biome.jsonc with a comment" },
+    { "from": "2025-12-28", "sha": "c4a205f8", "what": "V7 (#466): ESLint (eslint-plugin-import ^2.32.0, all rules) and Oxlint (^1.35.0, categories correctness/perf/restriction/suspicious/pedantic/style at error) presets reintroduced beside Biome" },
+    { "from": "2026-03-14", "sha": "acf301cd", "what": "Resolves #603: eslint-plugin-import replaced by eslint-plugin-import-x (ESLint 10 compatibility); import/* -> import-x/* and settings import/* -> import-x/*" },
+    { "from": "2026-04-13", "sha": "a63d9c57", "what": "Resolves #660: Oxlint core's categories replaced by an explicit rule list (changeset: 'Fix cross-config leaking rules')" },
+    { "from": "2026-07-04", "sha": "44403937", "what": "sonarjs/github via Oxlint JS plugins; folded into core 2026-07-05 (29e30ce9); moved to opt-in ultracite/oxlint/js-plugins 2026-07-07 (d186c53c, #742). react-doctor joined js-plugins the same day (5da879b3)." }
+  ],
+  "rules": [
+    {
+      "rule": "import/no-cycle",
+      "linter": "Oxlint",
+      "firstSeen": { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "path": "packages/cli/config/oxlint/core/.oxlintrc.json" },
+      "changes": [
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on through \"restriction\": \"error\" (import/no-cycle is in the restriction category in oxlint 1.86.0; its category in 1.35 was not checked), no options" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "listed explicitly as \"import/no-cycle\": \"error\", no options (packages/cli/config/oxlint/core/index.mjs, now L263)" }
+      ],
+      "optionsUnderUltracite": "None ever set (git log -S maxDepth/ignoreExternal/ignoreTypes/allowUnsafeDynamicCyclicDependency finds nothing in any config path). Oxlint 1.86.0 schema defaults: ignoreTypes true ('Ignore type-only imports'), maxDepth 4294967295 (u32::MAX), ignoreExternal false, allowUnsafeDynamicCyclicDependency false. Not type-aware; runs in core without options.typeAware.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/660", "title": "Conflict on test title descriptions", "note": "why categories became an explicit list; not about cycles" }],
+      "note": "No issue, PR, changeset or changelog entry names import/no-cycle for Oxlint. It arrived with the restriction category and was kept when every non-nursery rule was listed. No Oxlint-specific performance complaint about it was found (the Oxlint perf issues #741/#742 are about JS plugins)."
+    },
+    {
+      "rule": "import/no-cycle -> import-x/no-cycle",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "\"import/no-cycle\": \"error\" (under '// ESLint-Import: Static analysis'), no options; resolver came from extends plugin:import/typescript" },
+        { "sha": "babdaa38", "date": "2023-01-14", "subject": "Temporarily disable eslint-plugin-import", "what": "whole plugin commented out (upstream flat-config issue import-js/eslint-plugin-import#2556)" },
+        { "sha": "9a802d59", "date": "2023-04-15", "subject": "Fix import-order", "what": "plugin and import rules re-enabled" },
+        { "sha": "c52fef07", "date": "2023-06-08", "subject": "Migrate to opt-in config (#115)", "what": "explicit entry dropped; on through 'every non-deprecated eslint-plugin-import rule'" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "ESLint config deleted" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "back via every non-deprecated eslint-plugin-import ^2.32.0 rule" },
+        { "sha": "acf301cd", "date": "2026-03-14", "subject": "Resolves #603", "what": "renamed import-x/no-cycle (eslint-plugin-import-x), still via 'every non-deprecated rule'" },
+        { "sha": "8f236ee3", "date": "2026-09-28", "subject": "Lint TSX, JSX, MTS and CTS files with the ESLint core preset", "what": "core block widened to every JS/TS extension. Changeset: before this, 'ESLint skipped `.mts` and `.cts` files entirely' and '`.jsx` and `.tsx` files received only the framework preset's rules', so import-x/no-cycle did not run on .tsx/.jsx/.mts/.cts from V7 until this commit. Same commit dropped the '.ts' entry that mapped TypeScript to espree in import-x/parsers ('stray', per the commit body)." }
+      ],
+      "optionsUnderUltracite": "None ever set. eslint-plugin-import-x 4.17.1 source: maxDepth Infinity unless a number is given, ignoreExternal false, allowUnsafeDynamicCyclicDependency false; type-only imports are always skipped (importKind 'type' on the declaration, or every specifier 'type'; no option). Effective state (ESLint 10.12.0 calculateConfigForFile): [2] on .ts, .js and .tsx in core, core+react and core+type-aware.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/139", "title": "Performance issues", "note": "the maintainer's own TIMING=1 run (2024-06-29 comment) lists import/no-cycle as the second most expensive rule on one file: 'import/no-cycle | 160.265 | 19.9%' (after prettier/prettier 30.1%). The issue led to the Biome switch (#140); no-cycle is not singled out as the reason." },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/603", "title": "Use eslint-plugin-import-x for ESLint v10 compatiblity", "note": "why import/* became import-x/*" }
+      ],
+      "note": "On since the first config with no recorded reason. Only performance data on record is #139."
+    },
+    {
+      "rule": "ESLint import resolver settings (import/resolver -> import-x/resolver, import/parsers -> import-x/parsers)",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "no explicit resolver; extends plugin:import/typescript" },
+        { "sha": "f89fb4de", "date": "2023-01-14", "subject": "Add import/resolver settings", "what": "settings 'import/resolver': { typescript: true, node: true } (CHANGELOG 2.0.4: 'Add import/resolver settings')" },
+        { "sha": "babdaa38", "date": "2023-01-14", "subject": "Temporarily disable eslint-plugin-import", "what": "settings commented out with the plugin" },
+        { "sha": "9a802d59", "date": "2023-04-15", "subject": "Fix import-order", "what": "restored with 'import/parsers': { espree: ['.js', '.cjs', '.mjs', '.jsx'] } and the comment '// https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561'" },
+        { "sha": "2071f80e", "date": "2023-04-16", "subject": "Add Typescript import resolver", "what": "eslint-import-resolver-typescript ^3.5.5 added and registered as a plugin 'import/typescript' (CHANGELOG 2.2.4)" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "deleted" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "'import/parsers': { espree: ['.js', '.cjs', '.mjs', '.ts'] }, 'import/resolver': { typescript: true, node: true }; eslint-import-resolver-typescript ^4.4.4" },
+        { "sha": "acf301cd", "date": "2026-03-14", "subject": "Resolves #603", "what": "keys renamed import-x/parsers and import-x/resolver; importX.flatConfigs.typescript added first in the config array" },
+        { "sha": "8f236ee3", "date": "2026-09-28", "subject": "Lint TSX, JSX, MTS and CTS files with the ESLint core preset", "what": "espree list becomes ['.js', '.jsx', '.cjs', '.mjs'] with the comment 'TypeScript extensions are mapped to @typescript-eslint/parser by importX.flatConfigs.typescript above.'; the stray resolver 'plugin' registration removed" }
+      ],
+      "optionsUnderUltracite": "Current (packages/cli/config/eslint/core/eslint.config.mjs L93-101): 'import-x/parsers': { espree: ['.js', '.jsx', '.cjs', '.mjs'] }, 'import-x/resolver': { node: true, typescript: true }. Effective settings on a .ts file: parsers { '@typescript-eslint/parser': ['.ts','.tsx','.cts','.mts'], espree: ['.js','.jsx','.cjs','.mjs'] }, extensions ['.ts','.tsx','.cts','.mts','.js','.jsx','.cjs','.mjs']. init installs eslint-import-resolver-typescript (src/dependencies.ts L85); `node` is served by import-x's built-in node resolver (eslint-import-resolver-node is only required for legacy options Ultracite doesn't set).",
+      "rationale": "Only the 2023 workaround comment linking https://github.com/import-js/eslint-plugin-import/issues/2556#issuecomment-1419518561 for import/parsers. No recorded reason for the resolver choice.",
+      "rationaleSource": "9a802d59, c4a205f8",
+      "issues": [],
+      "note": "Whether the V7-era '.ts' -> espree mapping (2025-12-28 to 2026-09-28) stopped import-x/no-cycle from traversing TypeScript dependencies was not checked; flatConfigs.typescript also mapped .ts to @typescript-eslint/parser in the same period."
+    },
+    {
+      "rule": "noImportCycles",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "\"all\": true and nursery \"all\": true on Biome 1.8.3; whether noImportCycles existed in 1.8.3 was not checked" },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "nursery \"noImportCycles\": \"off\" (Biome 2.0.0) under the header '/** ------ These rules should be enabled but Scanner makes them too slow ------ **/' with noFloatingPromises and noUnresolvedImports" },
+        { "sha": "c5c7ca17", "date": "2025-10-20", "subject": "fix: ultracite is slow (#324)", "what": "already off; header reworded to '/** ------ Project rules use Scanner and are too slow (https://biomejs.dev/linter/domains/#project-rules) ------ **/' and more project rules turned off. The 2026-04-23 changelog rewrite (7748b21d, CHANGELOG 6.0.0 L1422) lists noImportCycles among the rules this commit disabled, which is inaccurate: it was off since v5. The original changeset said only 'Disable project rules'." },
+        { "sha": "628a5c39", "date": "2025-12-21", "subject": "Resolves #457", "what": "removed with every nursery entry (Biome 2.3.10); not configured at all from here to 2026-03-10" },
+        { "sha": "668fe627", "date": "2026-03-10", "subject": "Resolves #445", "what": "now stable in suspicious (Biome 2.4.5): \"noImportCycles\": \"error\" in core under '/** ------ Project/Scanner rules. Enabled in config but skipped by default at runtime for performance. Use --type-aware to enable. ------ **/'; `ultracite check`/`fix` passed --skip=project unless --type-aware (released 7.3.0)" },
+        { "sha": "f84edfff", "date": "2026-03-12", "subject": "Fix type-aware", "what": "core back to \"off\" ('/** ------ Project/Scanner rules. Use ultracite/biome/type-aware to enable. ------ **/'); new packages/cli/config/biome/type-aware/biome.jsonc with suspicious.noImportCycles \"error\"; init --type-aware adds the preset to extends (released 7.3.1)" },
+        { "sha": "4d3fab83", "date": "2026-08-13", "subject": "Move useArraySortCompare to the type-aware Biome config", "what": "touches the line only to append useArraySortCompare after it" }
+      ],
+      "optionsUnderUltracite": "None set. Biome 2.5.15 schema: one option, ignoreTypes, 'Enabled by default'; it treats only `import type` as type-only ('named type imports (`import { type Foo }`) aren't considered as type-only because it's not removed by the compiler if the `verbatimModuleSyntax` option is enabled').",
+      "rationale": "Scanner cost. v5 config comment: \"These rules should be enabled but Scanner makes them too slow\". Docs note added by #324 (apps/docs/content/preset/core.mdx, since replaced): \"Certain rules are disabled because they are too slow to run with the Scanner. As noted in the [Biome docs](https://biomejs.dev/guides/investigate-slowness/#first-things-first), project rules enabled are known to cause performance overhead in return for more advanced analysis. In our testing, we have found these rules can make the difference between a 300ms and a 13s lint.\" Why a separate preset rather than a runtime skip: #606 (7.3.0 made a direct `biome check` go from 1.3s to 4s); maintainer: \"it's a Biome project domain issue related to how we implemented #445\" and \"If you upgrade to 7.3.1 the Biome scanner rules have been re-disabled by default and we've found a different way to enable them\". f84edfff docs: \"Since the rules are baked into your Biome config, they work in both the CLI and your IDE automatically — no runtime flags needed.\" Request for the opt-in preset (#445, rahdirigs): \"I suggest addition of another preset for type-aware rules, which can be \\\"opt-in\\\" by nature\".",
+      "rationaleSource": "871ee738 (biome.jsonc comment); c5c7ca17 / PR #324; https://github.com/haydenbleasel/ultracite/issues/445; https://github.com/haydenbleasel/ultracite/issues/606; f84edfff (apps/docs/usage.mdx)",
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/pull/324", "title": "fix: ultracite is slow", "note": "PR body: 'disables several Biome project rules that were causing significant performance issues during linting, particularly when using the Scanner ... reducing times from several seconds to under a second.' No per-rule timing for noImportCycles." },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/445", "title": "Preset for Type-Aware rules", "note": "origin of the opt-in layer; maintainer reply lists noImportCycles among '7 project/scanner domain rules'" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/606", "title": "3x worse performance when upgrading from 7.2.5 to 7.3.0", "note": "why the runtime --skip=project approach was replaced by the type-aware preset two days later" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/457", "title": "Don't turn on nursery rules by default", "note": "why it vanished from the config 2025-12-21 to 2026-03-10" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/843", "title": "Enable noForIn and noUndeclaredDependencies rules by default", "note": "2026-10-11 maintainer timing (Biome 2.5.15, 1,244-file TS project, hyperfine 20 runs): core 864 ms ± 18; core + the whole type-aware preset (which includes noImportCycles) 915 ms ± 92; 'The scanner already runs with core alone, taking about 130 ms either way.' noUndeclaredDependencies moved to core on that basis; noImportCycles stayed in type-aware with no recorded reason." }
+      ],
+      "note": "Biome core users have had no import-cycle check in any Ultracite version since rules were listed explicitly (v5, 2025-06-22)."
+    },
+    {
+      "rule": "import/no-self-import / import-x/no-self-import",
+      "linter": "ESLint / Oxlint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint \"import/no-self-import\": \"error\"; then via all-rules (c52fef07), deleted 2024-07-18, back in V7, import-x from 2026-03-14" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "Oxlint: on via the suspicious category" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "Oxlint: listed explicitly at error (core L276)" }
+      ],
+      "optionsUnderUltracite": "None (rule has no options in either).",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "No Biome counterpart is configured in core or type-aware (not checked whether Biome's noImportCycles reports a self-import)."
+    },
+    {
+      "rule": "oxc/no-barrel-file",
+      "linter": "Oxlint",
+      "firstSeen": { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "path": "packages/cli/config/oxlint/core/.oxlintrc.json" },
+      "changes": [
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on via the restriction category, no options" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "listed explicitly as \"oxc/no-barrel-file\": \"error\" (core L341), no options" }
+      ],
+      "optionsUnderUltracite": "None. Oxlint 1.86.0 schema: threshold default 100, 'The maximum number of modules that can be re-exported via `export *` before the rule is triggered.' So with Ultracite's config the rule fires only past 100 modules re-exported through `export *`; named re-exports (`export { x } from`) are not counted.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "No ESLint counterpart named oxc/*; the parity script skips oxc/* and react-doctor/* rules in its Oxlint->ESLint direction (compare-rule-parity.ts L293-296, 'oxlint-only implementations')."
+    },
+    {
+      "rule": "noBarrelFile",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "on via \"all\": true" },
+        { "sha": "7616c187", "date": "2024-12-10", "subject": "next-forge changes", "what": "\"performance\": { \"noBarrelFile\": \"off\", \"noReExportAll\": \"off\" } plus style.noNamespaceImport off. The 2026-04-23 changelog rewrite describes it (CHANGELOG 4.1.9 L2297) as 'Sync the shipped `biome.json` with the ruleset used by next-forge'." },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "explicit \"noBarrelFile\": \"off\" with comment '// Disallow the use of barrel file.'" },
+        { "sha": "54671eb2", "date": "2025-08-16", "subject": "Resolves #233", "what": "\"noBarrelFile\": \"error\" (released v5.1.9; CHANGELOG 5.1.9: 'Enable `noBarrelFile` in `biome.jsonc` (was previously set to `off`) (#233)'); noReExportAll left off" }
+      ],
+      "optionsUnderUltracite": "None; Biome 2.5.15 schema gives the rule no options.",
+      "rationale": "Issue #233 (Odonno, 2025-07-29): \"For some reason, the `noBarrelFile` rule is disabled. Since it became a good practice to avoid them (https://tkdodo.eu/blog/please-stop-using-barrel-files), I suppose it would be a good idea to enable the rule, right?\" Maintainer (2025-08-16): \"Hey @Odonno good call - I originally disabled the rule because I use barrel files in monorepos sometimes, but that's more an exception and I should be using biome-ignore for that.\"",
+      "rationaleSource": "https://github.com/haydenbleasel/ultracite/issues/233",
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/233", "title": "noBarrelFile", "note": "enabling rationale and the reason it had been off" }],
+      "note": "The 2024-12 turn-off came from aligning with next-forge (commit subject); #233's maintainer comment is the only stated reason."
+    },
+    {
+      "rule": "noReExportAll",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "on via \"all\": true" },
+        { "sha": "7616c187", "date": "2024-12-10", "subject": "next-forge changes", "what": "off (with noBarrelFile and noNamespaceImport)" },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "explicit \"noReExportAll\": \"off\" with comment '// Avoid re-export all.'" },
+        { "sha": "54671eb2", "date": "2025-08-16", "subject": "Resolves #233", "what": "unchanged (still off) while noBarrelFile was turned on" }
+      ],
+      "optionsUnderUltracite": "Off; no options in the schema.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/233", "title": "noBarrelFile", "note": "asked about noBarrelFile only; noReExportAll is not mentioned in the issue or the fix" }],
+      "note": "Why noReExportAll is off while noBarrelFile is on: no recorded reason. It was switched off together with noBarrelFile in the 2024-12 next-forge alignment, and #233 flipped only the rule it named. The maintainer's 'I use barrel files in monorepos sometimes' (#233) is the closest recorded motive for both, but it was given for noBarrelFile."
+    },
+    {
+      "rule": "import/no-namespace / import-x/no-namespace (off)",
+      "linter": "ESLint / Oxlint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint \"import/no-namespace\": \"off\" (under '// ESLint-Import: Style guide'), no comment" },
+        { "sha": "c52fef07", "date": "2023-06-08", "subject": "Migrate to opt-in config (#115)", "what": "kept off in the overrides" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint override off; Oxlint \"import/no-namespace\": \"off\" (style category otherwise on)" },
+        { "sha": "acf301cd", "date": "2026-03-14", "subject": "Resolves #603", "what": "ESLint renamed import-x/no-namespace, off" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "Oxlint explicit off (core L273)" }
+      ],
+      "optionsUnderUltracite": "Off in both.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "581ea40a / 984d9541 (2026-03-28 / 2026-04-11) hits are a typed-exports file added and removed, not decisions."
+    },
+    {
+      "rule": "sonarjs/no-wildcard-import",
+      "linter": "ESLint (core) / Oxlint (js-plugins, opt-in)",
+      "firstSeen": { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "path": "rules/sonarjs.mjs" },
+      "changes": [
+        { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "what": "ESLint: every non-deprecated rule of eslint-plugin-sonarjs ^1.0.3 (whether 1.0.3 contained no-wildcard-import was not checked); deleted 2024-07-18" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: every non-deprecated sonarjs rule (^3.0.5; presence of this rule in 3.0.5 not checked); present and on in 4.2.2 today" },
+        { "sha": "44403937", "date": "2026-07-04", "subject": "Run eslint-plugin-github and eslint-plugin-sonarjs via oxlint JS plugins", "what": "Oxlint: \"sonarjs/no-wildcard-import\": \"error\" in the new ultracite/oxlint/sonarjs preset, which init added by default" },
+        { "sha": "29e30ce9", "date": "2026-07-05", "subject": "Fold github and sonarjs rules into oxlint core", "what": "Oxlint: moved into core" },
+        { "sha": "d186c53c", "date": "2026-07-07", "subject": "Resolves #742", "what": "Oxlint: moved to the opt-in ultracite/oxlint/js-plugins preset (L426)" }
+      ],
+      "optionsUnderUltracite": "None (rule has no options). sonarjs 4.2.2 source (S2208): reports every ImportNamespaceSpecifier ('Explicitly import the specific member needed.') and every ExportAllDeclaration ('Explicitly export ...'), i.e. both `import * as ns` and `export * from`. requiresTypeChecking false, so it is in ESLint core's syntacticRules.",
+      "rationale": "For the Oxlint move to opt-in only (performance and dependencies, not this rule): changeset 'The core preset now runs entirely on Oxlint's native Rust rules, so new Oxlint setups no longer install those two dependencies and no longer pay the slower JS-plugin lint pass.' No rule-specific rationale.",
+      "rationaleSource": "d186c53c, .changeset/oxlint-js-plugins-preset.md",
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/742", "title": "Plugins should be opt-in", "note": "why sonarjs rules left Oxlint core" }],
+      "note": "Ultracite's own ESLint presets import @typescript-eslint/parser with `import * as` and carry '// oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility' plus '// biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility' (eslint/core, astro, svelte, vue)."
+    },
+    {
+      "rule": "unicorn/no-barrel-files",
+      "linter": "ESLint (no Oxlint or Biome counterpart under that name)",
+      "firstSeen": { "sha": "dde17253", "date": "2026-08-19", "subject": "Update the ESLint family to latest", "path": "packages/cli/config/eslint/core/rules/unicorn.mjs (via every non-deprecated JS unicorn rule)" },
+      "changes": [
+        { "sha": "dde17253", "date": "2026-08-19", "subject": "Update the ESLint family to latest", "what": "eslint-plugin-unicorn ^73.0.0; the rule was added in unicorn v73.0.0 (released 2026-08-04, upstream PR #3570) and turned on automatically. The changeset (56aef65) says only 'the dynamic presets adopt their new rules automatically'; the rule is not named." },
+        { "sha": "eb13a45b", "date": "2026-10-10", "subject": "Stop init from writing through symbolic links to agent files", "what": "init's generated stylelint.config.mjs changed because the rule flagged it (CHANGELOG 8.0.0 L134)" }
+      ],
+      "optionsUnderUltracite": "None (schema []). unicorn 77.0.0 source: reports a file whose top level contains only imports (with specifiers) and re-exports (`export *`, `export {..} from`, `export { importedBinding }`, `export default importedBinding`), with at least one re-export. No count threshold.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "eb13a45b (CHANGELOG 8.0.0): the init-written `export { default } from \"ultracite/stylelint\";` 'which the ESLint core preset reports as a barrel file (`unicorn/no-barrel-files`), so a new project failed its first check on a file it never wrote'. packages/cli/src/linters/stylelint.ts L42-46: '`export { default } from` is a barrel file (unicorn/no-barrel-files), and importing it to `export default` it as is breaks unicorn/prefer-export-from', so init writes `export default { ...config };`."
+    },
+    {
+      "rule": "unicorn/no-useless-re-export",
+      "linter": "ESLint (not in Oxlint 1.86.0)",
+      "firstSeen": { "sha": "477cd6eb", "date": "2026-08-01", "subject": "Update ESLint and plugins to latest versions", "path": "packages/cli/config/eslint/core/rules/unicorn.mjs (via every non-deprecated JS unicorn rule)" },
+      "changes": [
+        { "sha": "477cd6eb", "date": "2026-08-01", "subject": "Update ESLint and plugins to latest versions", "what": "eslint-plugin-unicorn ^72.0.0 (rule added in v72.0.0, released 2026-07-14, upstream PR #3540); CHANGELOG 7.10.0 L525 lists it among unicorn 72's new rules" }
+      ],
+      "optionsUnderUltracite": "None (schema []). Reports a named re-export already covered by a single `export *` from the same module.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": []
+    },
+    {
+      "rule": "unicorn/prefer-export-from",
+      "linter": "ESLint / Oxlint",
+      "firstSeen": { "sha": "9f717281", "date": "2024-05-28", "subject": "Add eslint-plugin-unicorn (#135)", "path": "rules/unicorn.mjs" },
+      "changes": [
+        { "sha": "9f717281", "date": "2024-05-28", "subject": "Add eslint-plugin-unicorn (#135)", "what": "ESLint: every non-deprecated unicorn rule; deleted 2024-07-18 (c92a9d2e)" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: back via every non-deprecated unicorn rule (^62.0.0). Oxlint: not enabled (not in any enabled category then)" },
+        { "sha": "f7025b12", "date": "2026-07-04", "subject": "Extend cross-linter parity to framework presets and add a parity check", "what": "Oxlint: \"unicorn/prefer-export-from\": \"error\" as one of 'five newly stabilized rules' the revived exhaustiveness test caught (CHANGELOG 7.9.0 L588)" }
+      ],
+      "optionsUnderUltracite": "None set. Both default checkUsedVariables to true: ESLint effective [2, {\"checkUsedVariables\": true}]; Oxlint 1.86.0 schema default true.",
+      "rationale": "Oxlint: enabled because the exhaustiveness test requires every non-nursery rule (f7025b12). No rule-specific rationale.",
+      "rationaleSource": "f7025b12; CHANGELOG 7.9.0",
+      "issues": []
+    },
+    {
+      "rule": "react-doctor/no-barrel-import",
+      "linter": "ESLint (react preset) / Oxlint (js-plugins, opt-in)",
+      "firstSeen": { "sha": "223233f7", "date": "2026-07-04", "subject": "Resolves #730", "path": "packages/cli/config/eslint/react/rules/react-doctor.mjs, packages/cli/config/oxlint/react/index.mjs" },
+      "changes": [
+        { "sha": "223233f7", "date": "2026-07-04", "subject": "Resolves #730", "what": "\"react-doctor/no-barrel-import\": \"error\" in the ESLint and Oxlint react presets (changeset: 'Add React Doctor rules to the ESLint and Oxlint React, Next.js, and TanStack presets')" },
+        { "sha": "5da879b3", "date": "2026-07-07", "subject": "Move react-doctor into the opt-in js-plugins oxlint preset", "what": "Oxlint: moved to ultracite/oxlint/js-plugins (L509), which applies to every file of any project that extends it. ESLint keeps it in eslint/react (L93)." }
+      ],
+      "optionsUnderUltracite": "None (wrapped rule schema []). React Doctor 0.9.16 metadata: title 'Import from a barrel file', severity warn, category Performance, framework 'global', defaultEnabled false; reports relative imports that resolve to a barrel index ('Import from the direct path: `import { Button } from './components/Button'` instead of `./components`'). Ultracite enables it at error although React Doctor leaves it off by default.",
+      "rationale": "Move to opt-in (cost, not the rule): 5da879b3 body 'Benchmarked (native vs +react-doctor, identical otherwise): 3.3x faster on a small React project, 10.2x on a 420-file one'.",
+      "rationaleSource": "5da879b3",
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/730", "title": "Oxlint React Doctor", "note": "request to add the plugin; no rule-level discussion" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/742", "title": "Plugins should be opt-in", "note": "led to js-plugins" }
+      ]
+    },
+    {
+      "rule": "noNamespaceImport, noDynamicNamespaceImportAccess",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "on via \"all\": true (whether noDynamicNamespaceImportAccess existed in 1.8.3 not checked)" },
+        { "sha": "7616c187", "date": "2024-12-10", "subject": "next-forge changes", "what": "style.noNamespaceImport off" },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "performance.noNamespaceImport and noDynamicNamespaceImportAccess at error; PR #162 commit list: 'Add style rules, re-enable noNamespaceImport'" }
+      ],
+      "optionsUnderUltracite": "None; neither rule has options in the 2.5.15 schema.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "The only record of the 2025 re-enable is the squashed bullet 'Add style rules, re-enable noNamespaceImport' in PR #162."
+    },
+    {
+      "rule": "noExportedImports",
+      "linter": "Biome",
+      "firstSeen": { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "path": "biome.jsonc" },
+      "changes": [
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "style.noExportedImports at error (whether it was already on through \"all\": true in Biome 1.x not checked)" }
+      ],
+      "optionsUnderUltracite": "None (no options in the schema).",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": []
+    },
+    {
+      "rule": "no-restricted-imports / noRestrictedImports / import-x/no-restricted-paths",
+      "linter": "ESLint / Oxlint / Biome",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint: base no-restricted-imports off, @typescript-eslint/no-restricted-imports error, import/no-restricted-paths error; none with options" },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "Biome style.noRestrictedImports error, no options" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: on via @eslint/js configs.all and import plugin all-rules; Oxlint: on via restriction category" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "Oxlint explicit \"no-restricted-imports\": \"error\" (core L164)" },
+        { "sha": "477cd6eb", "date": "2026-08-01", "subject": "Update ESLint and plugins to latest versions", "what": "@typescript-eslint/no-restricted-imports deprecated upstream in typescript-eslint 8.65 (CHANGELOG 7.10.0 L527), so the base rule now covers TS files" },
+        { "sha": "d9b7b9c8", "date": "2026-08-26", "subject": "Document enforcing path aliases over relative imports with Oxlint", "what": "docs recipe only (configuration.mdx 'Enforcing Path Aliases')" }
+      ],
+      "optionsUnderUltracite": "No paths, patterns or zones in any linter, so all of them are enabled but have nothing to report. Effective ESLint: no-restricted-imports [2], import-x/no-restricted-paths [2] (import-x 4.17.1: `options.zones || []`).",
+      "rationale": "Why no project-specific restriction ships (#782, maintainer 2026-08-27): \"Core deliberately doesn't assume a project layout. `@/*` → `src/*` is one convention; it would false-positive in monorepos, libraries, `app/`-at-root projects, and codebases moving to `#/` subpath imports\".",
+      "rationaleSource": "https://github.com/haydenbleasel/ultracite/issues/782",
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/782", "title": "Add a core rule to prefer `@/*` aliases for imports between `src` modules", "note": "declined for core; documented as a recipe" }]
+    },
+    {
+      "rule": "import/no-relative-parent-imports / import-x/no-relative-parent-imports (off)",
+      "linter": "Oxlint / ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint \"import/no-relative-parent-imports\": \"off\", no comment; kept off in every ESLint era" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "Oxlint: ON via the restriction category (no override), so Oxlint reported every `../` import while ESLint did not" },
+        { "sha": "43166b14", "date": "2026-03-13", "subject": "Oxlint (#607)", "what": "Oxlint core test-file override '// Disabled: test files import from parent src/ directory' and off in the repo's own .oxlintrc.json" },
+        { "sha": "5749eb1a", "date": "2026-03-14", "subject": "604 oxlint core rules overlap with eachother (#610)", "what": "Oxlint core \"import/no-relative-parent-imports\": \"off\" everywhere (squashed bullet 'Disable import/no-relative-parent-imports'; #604 itself is about jest/vitest)" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "Oxlint explicit off (core L275)" }
+      ],
+      "optionsUnderUltracite": "Off.",
+      "rationale": "Only the 2026-03-13 comment 'Disabled: test files import from parent src/ directory' (tests only), then #782 (2026-08-27) after the fact: 'Core deliberately doesn't assume a project layout.' The docs recommend scoping it to src/** as a recipe.",
+      "rationaleSource": "43166b14; https://github.com/haydenbleasel/ultracite/issues/782; apps/docs/docs/(get-started)/configuration.mdx L152",
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/782", "title": "Add a core rule to prefer `@/*` aliases for imports between `src` modules", "note": "maintainer recommends this rule as an opt-in override" }]
+    },
+    {
+      "rule": "import/max-dependencies / import-x/max-dependencies (off)",
+      "linter": "Oxlint / ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint off, no comment; off in every ESLint era" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "Oxlint explicit off (pedantic category otherwise on)" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "Oxlint explicit off (core L256)" }
+      ],
+      "optionsUnderUltracite": "Off.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": []
+    },
+    {
+      "rule": "import-x/no-internal-modules (off), import-x/no-relative-packages, import-x/no-useless-path-segments",
+      "linter": "ESLint (no Oxlint 1.86.0 implementation)",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "no-internal-modules off; no-relative-packages error; no-useless-path-segments error; no options" },
+        { "sha": "c52fef07", "date": "2023-06-08", "subject": "Migrate to opt-in config (#115)", "what": "no-internal-modules kept off in overrides; the other two on via all-rules (and in V7, import-x since 2026-03-14)" },
+        { "sha": "d5523c53", "date": "2026-10-05", "subject": "feat(cli): scope framework presets to monorepo workspaces (#819)", "what": "init's generated workspace eslint.config gets `/* eslint-disable import-x/no-relative-packages ... -- imports the presets and config of the root package */` (src/linters/eslint.ts L216-221)" }
+      ],
+      "optionsUnderUltracite": "None. Effective: no-internal-modules [0], no-relative-packages [2], no-useless-path-segments [2] (noUselessIndex not set).",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "Counted by the parity script as 'ESLint-only rules with no oxlint implementation' (informational)."
+    },
+    {
+      "rule": "import-x/no-unused-modules (off)",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "\"import/no-unused-modules\": \"error\" with no options" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on via all-rules, no options" },
+        { "sha": "73c1993b", "date": "2026-07-04", "subject": "Require ESLint 10 for ESLint setups", "what": "off: '// No-op under ESLint 10 (the FileEnumerator API it needs was removed) // and it prints a warning on every run while enabled.'" }
+      ],
+      "optionsUnderUltracite": "Off.",
+      "rationale": "\"No-op under ESLint 10 (the FileEnumerator API it needs was removed) and it prints a warning on every run while enabled.\"",
+      "rationaleSource": "packages/cli/config/eslint/core/rules/import.mjs L30-32 (73c1993b); CHANGELOG 7.9.0 L584",
+      "issues": [],
+      "note": "Never configured with unusedExports/missingExports, so it reported nothing even before ESLint 10 (see dead-code/decision-history.json)."
+    },
+    {
+      "rule": "Agent rules template: 'Prefer specific imports over namespace imports', 'Avoid barrel files (index files that re-export everything)'",
+      "linter": "AGENTS.md / CLAUDE.md template and skill",
+      "firstSeen": { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "path": ".cursor/rules/ultracite.mdc and docs/lib/rules.ts" },
+      "changes": [
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "one line per Biome rule: '- Prevent import cycles.' (while noImportCycles was off), '- Don't access namespace imports dynamically.', '- Don't use namespace imports.' (no barrel line; noBarrelFile was off)" },
+        { "sha": "d0ba90bc", "date": "2025-10-20", "subject": "Composable rules (#322)", "what": "packages/cli/src/agents/rules.ts '// Performance' block: \"Don't use spread syntax on accumulators.\", \"Don't use barrel files.\", \"Don't use the `delete` operator.\", \"Don't access namespace imports dynamically.\", \"Don't use namespace imports.\"; 'Prevent import cycles.' removed" },
+        { "sha": "ff83b527", "date": "2025-10-20", "subject": "fix: windsurf context is too long max 12000 chars but there are around 16700 (#323)", "what": "condensed to \"No spread syntax on accumulators, barrel files, `delete` op, dynamic namespace import access, namespace imports, or duplicate polyfills from Polyfill.io\"" },
+        { "sha": "18ed1f31", "date": "2025-11-02", "subject": "Resolves #343", "what": "rewritten as prose; '### Performance' now reads: '- Avoid spread syntax in accumulators within loops' / '- Use top-level regex literals instead of creating them in loops' / '- Prefer specific imports over namespace imports' / '- Avoid barrel files (index files that re-export everything)' / '- Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags'. Changeset .changeset/sixty-wings-ring.md (minor): 'Refactor rules based on hooks and feedback from Cursor team'" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "moved to packages/data/src/rules.ts (unchanged text)" },
+        { "sha": "d1e8490b", "date": "2026-02-18", "subject": "Create Skill", "what": "skills/ultracite/references/code-standards.md created with the same two lines under '## Performance' (L72-76)" },
+        { "sha": "c1b7f6d2", "date": "2026-07-05", "subject": "New website (#736)", "what": "moved to packages/cli/src/data/rules.ts (rename, no text change)" }
+      ],
+      "optionsUnderUltracite": "Now: packages/cli/src/data/rules.ts L87-93 and skills/ultracite/references/code-standards.md L70-76, identical: '- Avoid spread syntax in accumulators within loops', '- Use top-level regex literals instead of creating them in loops', '- Prefer specific imports over namespace imports', '- Avoid barrel files (index files that re-export everything)', '- Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags'. Neither file mentions import cycles.",
+      "rationale": "No recorded reason for these two lines. #343 ('Rules improvements', opened by the maintainer 2025-10-27) asked only: '- Tell agent to run rules file - @vasylsemiliak' / '- Notes from cursor team - @xn1cklas' / 'Related to #367'. Its one comment (vasylsemiliak) argues for telling the agent to run `ultra:fix` after each task; #367 swaps Cursor rules for an afterFileEdit hook. Neither mentions barrels or namespace imports; the lines are a rewording of the Biome rule list that preceded them.",
+      "rationaleSource": "https://github.com/haydenbleasel/ultracite/issues/343; https://github.com/haydenbleasel/ultracite/pull/367",
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/343", "title": "Rules improvements", "note": "closed by 18ed1f31; about agent workflow, not barrels" },
+        { "url": "https://github.com/haydenbleasel/ultracite/pull/367", "title": "Fix/replace-cursor-rule-with-cursor-hook", "note": "the related Cursor-team change" }
+      ]
+    }
+  ],
+  "parityScript": {
+    "file": "packages/cli/scripts/compare-rule-parity.ts",
+    "allowlist": "Empty (`const allowlist = new Map<string, string>();`, L27). git log -S finds no allowlist entry for any rule in this file ever (no-cycle, self-import, barrel, no-namespace, restricted, prefer-export-from, wildcard, max-dependencies, relative-parent, internal-modules, useless-path, relative-packages, unused-modules, useless-re-export). The 2026-07-04 allowlist had two unrelated entries (sonarjs/no-reference-error, unicorn/number-literal-case).",
+    "coverage": "Compares Oxlint core+js-plugins (+framework) with ESLint core+type-aware (+framework) only. Biome is 'aligned manually — it is not covered here' (header). oxc/* and react-doctor/* are skipped in the Oxlint->ESLint direction. ESLint-enabled rules Oxlint can't run are only counted as informational 'gaps': here import-x/no-relative-packages, import-x/no-useless-path-segments, import-x/no-restricted-paths, unicorn/no-barrel-files, unicorn/no-useless-re-export. Options are compared only when the Oxlint preset spells some out; none of these Oxlint rules do. Because js-plugins is always included, the core-only Oxlint gap on sonarjs/no-wildcard-import is never flagged."
+  },
+  "docsMentions": [
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 41, "text": "'Rules that read type information, or scan the whole project, are slower than the rest and need more setup, so every linter keeps them out of `core`.'" },
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 60, "text": "'The `type-aware` preset enables project-graph and type-aware rules: `noPrivateImports`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`. These rules require Biome's scanner, so they're slower and shipped as a separate layer:'" },
+    { "file": "apps/docs/docs/(get-started)/usage.mdx", "line": 90, "text": "'For Biome, `--type-aware` adds the `ultracite/biome/type-aware` preset to your Biome config's `extends` array. This enables the project/scanner rules `noPrivateImports`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`.' L96: 'Since the rules are baked into your Biome config, they work in both the CLI and your IDE automatically — no runtime flags needed.'" },
+    { "file": "apps/docs/pages/providers/biome.astro", "line": 65, "text": "FAQ: 'add the `type-aware` preset, whose 6 rules need Biome to scan the whole project first: `noPrivateImports`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes` and `useArraySortCompare`.'" },
+    { "file": "apps/docs/components/providers/biome/coverage.astro", "line": 95, "text": "'The `type-aware` preset adds rules like `noImportCycles`, `noUnresolvedImports` and `noDeprecatedImports`. They need Biome to scan your whole project first, so they’re opt-in: `init --type-aware` adds the preset.' L117: rules 'catch what agents get wrong: barrel files, nested ternaries, awaits inside loops and forEach where for…of would do.'" },
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 152, "text": "'Enforcing Path Aliases' recipe: '`import/no-relative-parent-imports` is a native Oxlint rule: it flags `../` in imports, type imports, and re-exports at any depth, while still allowing `./sibling` imports within a directory.' plus a no-restricted-imports pattern variant (L154-170)." },
+    { "file": "apps/docs/docs/(guides)/migrate.mdx", "line": 43, "text": "project-specific rules 'such as `no-restricted-imports` paths' are not carried over" },
+    { "file": "apps/docs/docs/**", "line": null, "text": "No page explains import/no-cycle, import-x/no-cycle, oxc/no-barrel-file, sonarjs/no-wildcard-import or unicorn/no-barrel-files." }
+  ],
+  "inconsistencies": [
+    {
+      "topic": "Import cycles",
+      "detail": "Oxlint core: import/no-cycle error (core L263). ESLint core: import-x/no-cycle error (effective [2] on .ts/.js/.tsx). Biome core: noImportCycles off (core L548); error only in the opt-in biome/type-aware preset (L16). A Biome user on the default setup gets no cycle check; Oxlint and ESLint users do.",
+      "verifiedIn": ["packages/cli/config/oxlint/core/index.mjs", "packages/cli/config/eslint/core/rules/import.mjs", "packages/cli/config/biome/core/biome.jsonc", "packages/cli/config/biome/type-aware/biome.jsonc"]
+    },
+    {
+      "topic": "Docs claim vs presets on whole-project rules",
+      "detail": "configuration.mdx L41 says rules that 'scan the whole project ... every linter keeps them out of `core`', but import/no-cycle (Oxlint) and import-x/no-cycle (ESLint) build a module graph and run in core, and Biome's project rule noUndeclaredDependencies moved into Biome core in v8 (#843)."
+    },
+    {
+      "topic": "Stale cost rationale for noImportCycles",
+      "detail": "The maintainer's #843 timing (2026-10-11, Biome 2.5.15, one 1,244-file project) put core + the whole type-aware preset at 915 ms vs 864 ms for core, and moved noUndeclaredDependencies to core on that basis; noImportCycles stayed opt-in with no recorded reason. Its own cost was not measured separately (useArraySortCompare, also in type-aware, is the rule #768 measured as up to ~260x slower)."
+    },
+    {
+      "topic": "What counts as a type-only import in cycle detection",
+      "detail": "Biome noImportCycles ignoreTypes (default on) skips only `import type`, not `import { type Foo }` (schema text). import-x/no-cycle skips both `import type` and declarations whose specifiers are all `type`. Oxlint's ignoreTypes defaults to true; which forms it treats as type-only was not checked. The same cycle through inline type specifiers can be reported by Biome and not by ESLint."
+    },
+    {
+      "topic": "Namespace imports (`import * as ns`)",
+      "detail": "Oxlint core: import/no-namespace off, and nothing else in core reports it. ESLint core: import-x/no-namespace off, but sonarjs/no-wildcard-import is on (effective [2]) and reports every ImportNamespaceSpecifier. Biome core: noNamespaceImport error (plus noDynamicNamespaceImportAccess). Oxlint reports it only with the opt-in js-plugins preset (sonarjs/no-wildcard-import, L426). The agent rules tell every user 'Prefer specific imports over namespace imports'.",
+      "verifiedIn": ["packages/cli/config/oxlint/core/index.mjs L273", "packages/cli/config/eslint/core/rules/import.mjs L25", "packages/cli/config/eslint/core/rules/sonarjs.mjs (all non-deprecated, no override)", "packages/cli/config/biome/core/biome.jsonc L313-315", "packages/cli/config/oxlint/js-plugins/index.mjs L426"]
+    },
+    {
+      "topic": "`export *` (re-export all)",
+      "detail": "Biome core: noReExportAll off. ESLint core: every `export * from` is reported by sonarjs/no-wildcard-import (ExportAllDeclaration), and unicorn/no-barrel-files reports files that are only re-exports. Oxlint core: allowed unless one file re-exports more than 100 modules through `export *` (oxc/no-barrel-file default threshold); Oxlint js-plugins reports it via sonarjs. So the same `export * from './x'` fails ESLint core, passes Oxlint core, and passes Biome core unless noBarrelFile flags the file (Biome's noBarrelFile semantics not checked here)."
+    },
+    {
+      "topic": "Barrel files",
+      "detail": "Three different definitions are on: Biome noBarrelFile (error, no options); ESLint unicorn/no-barrel-files (since 2026-08-19, any file made only of imports and re-exports, no threshold); Oxlint oxc/no-barrel-file (only past 100 `export *` modules by default, named re-exports not counted). ESLint has no oxc/no-barrel-file and Oxlint has no unicorn/no-barrel-files, and the parity script skips oxc/* and lists unicorn/no-barrel-files only as an informational gap. The agent rules say 'Avoid barrel files (index files that re-export everything)', which Oxlint core will almost never enforce."
+    },
+    {
+      "topic": "react-doctor/no-barrel-import scope",
+      "detail": "ESLint: only in the eslint/react preset. Oxlint: in js-plugins, which applies to every file of any project that extends it (React Doctor marks the rule framework 'global'). An Oxlint js-plugins user without React gets it; an ESLint user without the react preset does not. React Doctor itself ships it defaultEnabled false; Ultracite sets error in both."
+    },
+    {
+      "topic": "noReExportAll off, noBarrelFile on (Biome)",
+      "detail": "Both were turned off together on 2024-12-10 (7616c187, next-forge alignment); #233 (2025-08-16) turned only noBarrelFile back on. No recorded reason keeps noReExportAll off, while ESLint core effectively bans `export *` via sonarjs/no-wildcard-import."
+    },
+    {
+      "topic": "Rules on in ESLint only",
+      "detail": "import-x/no-relative-packages, import-x/no-useless-path-segments, unicorn/no-useless-re-export and unicorn/no-barrel-files are on in ESLint core with no Oxlint 1.86.0 implementation and no Biome counterpart configured. Biome-only: noDynamicNamespaceImportAccess, noExportedImports."
+    },
+    {
+      "topic": "Enabled but inert",
+      "detail": "Oxlint no-restricted-imports, ESLint no-restricted-imports and import-x/no-restricted-paths, and Biome noRestrictedImports are all on with no paths, patterns or zones, so none can report anything. Consistent across linters, but each preset lists them as 'error'."
+    },
+    {
+      "topic": "Historical: Oxlint vs ESLint on ../ imports",
+      "detail": "From V7 (2025-12-28) to 2026-03-14 Oxlint core reported every `../` import (import/no-relative-parent-imports via the restriction category) while ESLint has had the rule off since 2022."
+    },
+    {
+      "topic": "Historical: ESLint cycle check missed whole file types",
+      "detail": "From V7 (2025-12-28) to 2026-09-28 (8f236ee3) ESLint core did not lint .tsx/.jsx (framework rules only) or .mts/.cts (no matching config), so import-x/no-cycle never ran on them, while Oxlint checked all of them."
+    },
+    {
+      "topic": "Historical: agent rules vs Biome on cycles",
+      "detail": "From v5 (2025-06-22) to 2025-10-20 the generated rules said 'Prevent import cycles.' while Biome's noImportCycles was off. Since 2025-10-20 the template says nothing about cycles, though Oxlint and ESLint core enforce them."
+    },
+    {
+      "topic": "Two ESLint rules leave no clean re-export",
+      "detail": "Within ESLint core, `export { default } from 'pkg'` trips unicorn/no-barrel-files and `import x from 'pkg'; export default x` trips unicorn/prefer-export-from (and is also a barrel), so init's stylelint config has to spread the object (`export default { ...config }`; src/linters/stylelint.ts L42-46, eb13a45b)."
+    }
+  ],
+  "notes": [
+    "Recorded rationales exist only for: Biome noBarrelFile (#233), Biome noImportCycles being off in core / living in type-aware (v5 comment, #324, #445, #606, f84edfff docs), ESLint import-x/no-unused-modules off (ESLint 10 no-op), the Oxlint js-plugins move (cost; #742, d186c53c, 5da879b3), and the core declining layout-specific import restrictions (#782). Nothing records why import/no-cycle or import-x/no-cycle is on, why import/no-namespace or max-dependencies are off, why noReExportAll is off, or why the agent template has its barrel and namespace lines.",
+    "Cycle-rule options have never been set anywhere: no maxDepth, ignoreExternal, ignoreTypes or allowUnsafeDynamicCyclicDependency in any config path in the history.",
+    "The only rule-level performance number on record for a cycle rule is #139 (2024-06-29): import/no-cycle 160.265 ms, 19.9% of lint time on one file under ESLint. For Biome the numbers are for the scanner rules as a group: '300ms and a 13s lint' (#324 docs note), 1.3s -> 4s (#606), 864 -> 915 ms for the whole type-aware preset (#843).",
+    "The 2026-04-23 changelog rewrite (7748b21d) added retroactive entries (4.1.9 'Sync ... with the ruleset used by next-forge', 5.1.9 '#233', 6.0.0 'c5c7ca1 ... noImportCycles ...'). The 6.0.0 entry wrongly says c5c7ca1 disabled noImportCycles; it had been off since v5.",
+    "ESLint import resolver: settings { node: true, typescript: true } since 2023-01-14 (f89fb4de), removed with ESLint in 2024-07, restored in V7, renamed import-x/* on 2026-03-14 (acf301cd). eslint-import-resolver-typescript is a dependency since 2023-04-16 (2071f80e) and is what init installs today."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "subject": "icb",
+  "description": "the barrel imports the names and re-declares them as consts aliasing the same objects, plus a type alias for AstroCookies: same objects, same cost, no `export \u2026 from` left for values",
+  "verdict": "unchanged",
+  "files": [
+    "core/cookies/index.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "identitySame": true,
+    "importersStillLoadCookiesTs": [
+      "core/app/prepare-response.ts",
+      "core/errors/merge-responses.ts"
+    ]
+  }
+}

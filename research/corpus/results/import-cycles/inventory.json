@@ -1,0 +1,1995 @@
+{
+  "biome": [
+    {
+      "defaultSeverity": "warn",
+      "domain": "project",
+      "fix": "none",
+      "options": "The rule provides the options described below.\n\n`ignoreTypes`\n\n Ignores type-only imports when finding an import cycle. A type-only import (`import type`)\n will be removed by the compiler, so it cuts an import cycle at runtime. Note that named type\n imports (`import { type Foo }`) aren't considered as type-only because it's not removed by\n the compiler if the `verbatimModuleSyntax` option is enabled. Enabled by default.\n\n ```json,options\n {\n   \"options\": {\n     \"ignoreTypes\": false\n   }\n }\n ```",
+      "presets": {
+        "core": "off",
+        "type-aware": "error"
+      },
+      "recommended": false,
+      "rule": "suspicious/noImportCycles",
+      "since": "2.0.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "performance/noBarrelFile",
+      "since": "1.6.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "off",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "performance/noReExportAll",
+      "since": "1.6.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "performance/noNamespaceImport",
+      "since": "1.6.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": true,
+      "rule": "performance/noDynamicNamespaceImportAccess",
+      "since": "1.9.0"
+    },
+    {
+      "defaultSeverity": "info",
+      "domain": null,
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "style/noExportedImports",
+      "since": "1.9.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "none",
+      "options": "```json\n {\n     \"noRestrictedImports\": {\n         \"options\": {\n             \"paths\": {\n                 \"lodash\": \"Using lodash is not encouraged\",\n                 \"underscore\": \"Using underscore is not encouraged\"\n             }\n         }\n     }\n }\n ```\n\n Use the options to specify import paths and/or patterns, including specific import names, that you want to restrict in your source code.\n\n ```json,options\n {\n     \"options\": {\n         \"paths\": {\n             \"lodash\": \"Using lodash is not encouraged\",\n             \"underscore\": \"Using underscore is not encouraged\",\n             \"import-foo\": {\n                 \"importNames\": [\"Bar\"],\n                 \"message\": \"Please use Bar from /import-bar/baz/ instead.\"\n             },\n             \"import-bar\": {\n               \"allowImportNames\": [\"Bar\"],\n               \"message\": \"Please use only Bar from import-bar.\"\n             }\n         }\n     }\n }\n ```\n\n ```json,options\n {\n     \"options\": {\n         \"patterns\": [{\n             \"group\": [\"import-foo/*\", \"!import-foo/bar\"]\n         }]\n     }\n }\n ```\n\n`paths`\n\n An object that lists the import paths that are either wholly or partially restricted.\n\n The keys of the object are the impo",
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "style/noRestrictedImports",
+      "since": "1.6.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "safe",
+      "options": "This rule respects the [`jsxRuntime`](https://biomejs.dev/reference/configuration/#javascriptjsxruntime)\n setting and will make an exception for React globals if it is set to\n `\"reactClassic\"`.\n\n`style`\n\n The `style` option allows enforcing a style for importing types.\n The option supports three values:\n\n - `inlineType`: always use `import { type T }` instead of `import type { T }`\n - `separatedType`: always use `import type { T }` instead of `import { type T }`\n - `auto`: use `import type { T }` or `import { type T, V }` when values are imported alongside types (default)\n\n ```jsonc,options\n {\n     \"options\": {\n         \"style\": \"inlineType\"\n     }\n }\n ```\n\n ```ts,expect_diagnostic,use_options\n import { A } from \"./mod.ts\";\n export type { A };\n ```\n\n ```jsonc,options\n {\n     \"options\": {\n         \"style\": \"separatedType\"\n     }\n }\n ```\n\n ```ts,expect_diagnostic,use_options\n import { A } from \"./mod.ts\";\n export type { A };\n ```\n\n ```ts,expect_diagnostic,use_options\n import { type A, type B } from \"./mod.ts\";\n export type { A, B };\n ```",
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": true,
+      "rule": "style/useImportType",
+      "since": "1.5.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "safe",
+      "options": "`style`\n\n The `style` option allows enforcing a style for exporting types.\n The option supports three values:\n\n - `inlineType`: always use `export { type T }` instead of `export type { T }`\n - `separatedType`: always use `export type { T }` instead of `export { type T }`\n - `auto`: use `export type { T }` or `export { type T, V }` when values are exported alongside types (default)\n\n ```jsonc,options\n {\n     \"options\": {\n         \"style\": \"inlineType\"\n     }\n }\n ```\n\n ```ts,expect_diagnostic,use_options\n import type { A } from \"./mod.ts\";\n export { A };\n ```\n\n ```ts,expect_diagnostic,use_options\n import { A } from \"./mod.ts\";\n export type { A };\n ```\n\n ```jsonc,options\n {\n     \"options\": {\n         \"style\": \"separatedType\"\n     }\n }\n ```\n\n ```ts,expect_diagnostic,use_options\n import type { A } from \"./mod.ts\";\n export { A };\n ```\n\n ```ts,expect_diagnostic,use_options\n import { A, B } from \"./mod.ts\";\n export { type A, B };\n ```",
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": true,
+      "rule": "style/useExportType",
+      "since": "1.5.0"
+    },
+    {
+      "defaultSeverity": "error",
+      "domain": "project",
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "off",
+        "type-aware": "error"
+      },
+      "recommended": false,
+      "rule": "correctness/noUnresolvedImports",
+      "since": "2.0.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": "project",
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "off",
+        "type-aware": "error"
+      },
+      "recommended": false,
+      "rule": "correctness/noPrivateImports",
+      "since": "2.0.0"
+    },
+    {
+      "defaultSeverity": "error",
+      "domain": "project",
+      "fix": "none",
+      "options": "This rule supports the following options:\n - `devDependencies`: If set to `false`, then the rule will show an error when `devDependencies` are imported. Defaults to `true`.\n - `peerDependencies`: If set to `false`, then the rule will show an error when `peerDependencies` are imported. Defaults to `true`.\n - `optionalDependencies`: If set to `false`, then the rule will show an error when `optionalDependencies` are imported. Defaults to `true`.\n - `bundleDependencies`: If set to `false`, then the rule will show an error when `bundleDependencies` are imported. Defaults to `true`.\n\n You can set the options like this:\n\n ```json,options\n {\n   \"options\": {\n     \"devDependencies\": false,\n     \"peerDependencies\": false,\n     \"optionalDependencies\": false,\n     \"bundleDependencies\": false\n   }\n }\n ```\n\n You can also use an array of globs instead of literal booleans.\n When using an array of globs, the setting will be set to `true` (no errors reported)\n if the name of the file being linted (i.e. not the imported file/module) matches a single glob\n in the array, and `false` otherwise.\n\nExample using the `devDependencies` option\n\n In this example, only test files can use dependencies in the `dev",
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "correctness/noUndeclaredDependencies",
+      "since": "1.6.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": "project",
+      "fix": "safe",
+      "options": "The rule provides the options described below.\n\nextensionMappings\n\n A map of file extensions to their suggested replacements. This allows you\n to specify custom mappings for import extensions. For example, you can\n map TypeScript imports to JavaScript extensions.\n\n This is useful if you are bundling your code to JavaScript into a package\n and want to make sure all imports of TypeScript files use the `.js` extension\n instead.\n\n If no mapping is found for a given extension, and the import is missing an extension,\n the rule will suggest using the actual extension of the resolved file.\n\n Default: `{}` (empty object)\n\n ```json,options\n {\n     \"options\": {\n         \"extensionMappings\": {\n             \"ts\": \"js\",\n             \"tsx\": \"js\"\n         }\n     }\n }\n ```\n\nforceJsExtensions\n\n Normally, this rule suggests to use the extension of the module that is\n found in your project. For instance, `.ts` or `.tsx` for a TypeScript\n file. If this option is set to `true`, the rule will always suggest to\n use `.js` regardless of the extension in your project.\n\n This is useful if you use the `\"module\": \"node16\"` setting when building\n your code with `tsc`.\n\n Default: `false`\n\n ```json,options\n {\n   ",
+      "presets": {
+        "core": "off",
+        "type-aware": "off"
+      },
+      "recommended": false,
+      "rule": "correctness/useImportExtensions",
+      "since": "1.8.0"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": "project",
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "off",
+        "type-aware": "error"
+      },
+      "recommended": false,
+      "rule": "suspicious/noDeprecatedImports",
+      "since": "2.2.5"
+    },
+    {
+      "defaultSeverity": "warn",
+      "domain": null,
+      "fix": "none",
+      "options": null,
+      "presets": {
+        "core": "error",
+        "type-aware": null
+      },
+      "recommended": false,
+      "rule": "style/noNamespace",
+      "since": "1.0.0"
+    }
+  ],
+  "eslint": {
+    "rows": [
+      {
+        "core": null,
+        "core+react (.tsx)": null,
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "@typescript-eslint/consistent-type-exports"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "@typescript-eslint/consistent-type-imports"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "@typescript-eslint/no-import-type-side-effects"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "@typescript-eslint/no-namespace"
+      },
+      {
+        "core": [
+          2,
+          "prefer-top-level"
+        ],
+        "core+react (.tsx)": [
+          2,
+          "prefer-top-level"
+        ],
+        "core+type-aware": [
+          2,
+          "prefer-top-level"
+        ],
+        "optionNames": [],
+        "rule": "import-x/consistent-type-specifier-style"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/default"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "importFunctions",
+          "allowEmpty",
+          "webpackChunknameFormat"
+        ],
+        "rule": "import-x/dynamic-import-chunkname"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/export"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/exports-last"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/extensions"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/first"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/group-exports"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "max",
+          "ignoreTypeImports"
+        ],
+        "rule": "import-x/max-dependencies"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "commonjs"
+        ],
+        "rule": "import-x/named"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "allowComputed"
+        ],
+        "rule": "import-x/namespace"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "count",
+          "exactCount",
+          "considerComments"
+        ],
+        "rule": "import-x/newline-after-import"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "commonjs",
+          "amd",
+          "esmodule",
+          "ignore"
+        ],
+        "rule": "import-x/no-absolute-path"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-amd"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "allowArray",
+          "allowArrowFunction",
+          "allowCallExpression",
+          "allowAnonymousClass",
+          "allowAnonymousFunction",
+          "allowLiteral",
+          "allowObject",
+          "allowNew"
+        ],
+        "rule": "import-x/no-anonymous-default-export"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-commonjs"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "commonjs",
+          "amd",
+          "esmodule",
+          "ignore",
+          "maxDepth",
+          "ignoreExternal",
+          "allowUnsafeDynamicCyclicDependency"
+        ],
+        "rule": "import-x/no-cycle"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-default-export"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-deprecated"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "considerQueryString",
+          "prefer-inline"
+        ],
+        "rule": "import-x/no-duplicates"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "esmodule"
+        ],
+        "rule": "import-x/no-dynamic-require"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-empty-named-blocks"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "devDependencies",
+          "optionalDependencies",
+          "peerDependencies",
+          "bundledDependencies",
+          "packageDir",
+          "includeInternal",
+          "includeTypes",
+          "whitelist"
+        ],
+        "rule": "import-x/no-extraneous-dependencies"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "exceptions"
+        ],
+        "rule": "import-x/no-import-module-exports"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-internal-modules"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-mutable-exports"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-named-as-default"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-named-as-default-member"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-named-default"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-named-export"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "ignore"
+        ],
+        "rule": "import-x/no-namespace"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "allow"
+        ],
+        "rule": "import-x/no-nodejs-modules"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "commonjs",
+          "amd",
+          "esmodule",
+          "ignore"
+        ],
+        "rule": "import-x/no-relative-packages"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "commonjs",
+          "amd",
+          "esmodule",
+          "ignore"
+        ],
+        "rule": "import-x/no-relative-parent-imports"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "commonjs",
+          "preventRenamingBindings"
+        ],
+        "rule": "import-x/no-rename-default"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "zones",
+          "basePath"
+        ],
+        "rule": "import-x/no-restricted-paths"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-self-import"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "devDependencies",
+          "optionalDependencies",
+          "peerDependencies",
+          "allow"
+        ],
+        "rule": "import-x/no-unassigned-import"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "commonjs",
+          "amd",
+          "esmodule",
+          "ignore",
+          "caseSensitive",
+          "caseSensitiveStrict"
+        ],
+        "rule": "import-x/no-unresolved"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "src",
+          "ignoreExports",
+          "missingExports",
+          "unusedExports",
+          "ignoreUnusedTypeExports",
+          "suppressMissingFileEnumeratorAPIWarning"
+        ],
+        "rule": "import-x/no-unused-modules"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "commonjs",
+          "noUselessIndex"
+        ],
+        "rule": "import-x/no-useless-path-segments"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [],
+        "rule": "import-x/no-webpack-loader-syntax"
+      },
+      {
+        "core": [
+          2,
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type"
+            ],
+            "distinctGroup": true,
+            "sortTypesGroup": false,
+            "named": false,
+            "warnOnUnassignedImports": false
+          }
+        ],
+        "core+react (.tsx)": [
+          2,
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type"
+            ],
+            "distinctGroup": true,
+            "sortTypesGroup": false,
+            "named": false,
+            "warnOnUnassignedImports": false
+          }
+        ],
+        "core+type-aware": [
+          2,
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type"
+            ],
+            "distinctGroup": true,
+            "sortTypesGroup": false,
+            "named": false,
+            "warnOnUnassignedImports": false
+          }
+        ],
+        "optionNames": [
+          "groups",
+          "pathGroupsExcludedImportTypes",
+          "distinctGroup",
+          "pathGroups",
+          "newlines-between",
+          "newlines-between-types",
+          "consolidateIslands",
+          "sortTypesGroup",
+          "named",
+          "alphabetize",
+          "warnOnUnassignedImports"
+        ],
+        "rule": "import-x/order"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [
+          "target"
+        ],
+        "rule": "import-x/prefer-default-export"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": [
+          "patterns"
+        ],
+        "rule": "import-x/prefer-namespace-import"
+      },
+      {
+        "core": [
+          0
+        ],
+        "core+react (.tsx)": [
+          0
+        ],
+        "core+type-aware": [
+          0
+        ],
+        "optionNames": [],
+        "rule": "import-x/unambiguous"
+      },
+      {
+        "core": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "core+react (.tsx)": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "core+type-aware": [
+          2,
+          {
+            "includeExports": false,
+            "allowSeparateTypeImports": true
+          }
+        ],
+        "optionNames": null,
+        "rule": "no-duplicate-imports"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "no-restricted-imports"
+      },
+      {
+        "core": null,
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": null,
+        "optionNames": null,
+        "rule": "react-doctor/no-barrel-import"
+      },
+      {
+        "core": [
+          0,
+          {
+            "whitelist": []
+          }
+        ],
+        "core+react (.tsx)": [
+          0,
+          {
+            "whitelist": []
+          }
+        ],
+        "core+type-aware": [
+          0,
+          {
+            "whitelist": []
+          }
+        ],
+        "optionNames": null,
+        "rule": "sonarjs/no-implicit-dependencies"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "sonarjs/no-wildcard-import"
+      },
+      {
+        "core": [
+          2,
+          {}
+        ],
+        "core+react (.tsx)": [
+          2,
+          {}
+        ],
+        "core+type-aware": [
+          2,
+          {}
+        ],
+        "optionNames": null,
+        "rule": "unicorn/import-style"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "unicorn/no-barrel-files"
+      },
+      {
+        "core": [
+          2
+        ],
+        "core+react (.tsx)": [
+          2
+        ],
+        "core+type-aware": [
+          2
+        ],
+        "optionNames": null,
+        "rule": "unicorn/no-useless-re-export"
+      },
+      {
+        "core": [
+          2,
+          {
+            "checkUsedVariables": true
+          }
+        ],
+        "core+react (.tsx)": [
+          2,
+          {
+            "checkUsedVariables": true
+          }
+        ],
+        "core+type-aware": [
+          2,
+          {
+            "checkUsedVariables": true
+          }
+        ],
+        "optionNames": null,
+        "rule": "unicorn/prefer-export-from"
+      }
+    ],
+    "settings": {
+      "import-x/parsers": {
+        "@typescript-eslint/parser": [
+          ".ts",
+          ".tsx",
+          ".cts",
+          ".mts"
+        ],
+        "espree": [
+          ".js",
+          ".jsx",
+          ".cjs",
+          ".mjs"
+        ]
+      },
+      "import-x/resolver": {
+        "typescript": true,
+        "node": true
+      }
+    }
+  },
+  "generated": "2026-10-13",
+  "note": "See the header of import-cycles-inventory.cjs. Oxlint `presets` entries are null where the preset doesn't name the rule (so it's off unless another preset turns it on). ESLint entries are [severity, ...options] as calculateConfigForFile returns them.",
+  "oxlint": [
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "conditional_fix",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [
+            "prefer-top-level"
+          ],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/consistent-type-specifier-style",
+      "typeAware": false
+    },
+    {
+      "category": "correctness",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/default",
+      "typeAware": false
+    },
+    {
+      "category": "nursery",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": null,
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/export",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/exports-last",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/extensions",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "pending",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/first",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/group-exports",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/max-dependencies",
+      "typeAware": false
+    },
+    {
+      "category": "nursery",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": null,
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/named",
+      "typeAware": false
+    },
+    {
+      "category": "correctness",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/namespace",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "fixable_fix",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/newline-after-import",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "pending",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-absolute-path",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-amd",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-anonymous-default-export",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-commonjs",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": true,
+      "defaults": {
+        "allowUnsafeDynamicCyclicDependency": false,
+        "ignoreExternal": false,
+        "ignoreTypes": true,
+        "maxDepth": 4294967295
+      },
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-cycle",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-default-export",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "conditional_fix",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-duplicates",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-dynamic-require",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "fixable_safe_fix_or_suggestion",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-empty-named-blocks",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-mutable-exports",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-named-as-default",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-named-as-default-member",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-named-default",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-named-export",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": {
+        "ignore": []
+      },
+      "fix": "pending",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-namespace",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-nodejs-modules",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-relative-parent-imports",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "crossFile": true,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-self-import",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-unassigned-import",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/no-webpack-loader-syntax",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/prefer-default-export",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "import/unambiguous",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "pending",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [
+            {
+              "allowSeparateTypeImports": true
+            }
+          ],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "no-duplicate-imports",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "no-restricted-imports",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": true,
+      "defaults": {
+        "threshold": 100
+      },
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "oxc/no-barrel-file",
+      "typeAware": false
+    },
+    {
+      "category": "js-plugin",
+      "crossFile": false,
+      "defaults": null,
+      "fix": null,
+      "presets": {
+        "core": null,
+        "react": null,
+        "js-plugins": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        }
+      },
+      "rule": "react-doctor/no-barrel-import",
+      "typeAware": false
+    },
+    {
+      "category": "js-plugin",
+      "crossFile": false,
+      "defaults": null,
+      "fix": null,
+      "presets": {
+        "core": null,
+        "react": null,
+        "js-plugins": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        }
+      },
+      "rule": "sonarjs/no-implicit-dependencies",
+      "typeAware": false
+    },
+    {
+      "category": "js-plugin",
+      "crossFile": false,
+      "defaults": null,
+      "fix": null,
+      "presets": {
+        "core": null,
+        "react": null,
+        "js-plugins": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        }
+      },
+      "rule": "sonarjs/no-wildcard-import",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "typescript/consistent-type-exports",
+      "typeAware": true
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "conditional_fix",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "typescript/consistent-type-imports",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "fixable_fix",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "typescript/no-import-type-side-effects",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "typescript/no-namespace",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": null,
+      "fix": "pending",
+      "presets": {
+        "core": {
+          "on": false,
+          "options": [],
+          "severity": "off"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "typescript/no-require-imports",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "crossFile": false,
+      "defaults": {
+        "checkDynamicImport": true,
+        "checkExportFrom": false,
+        "checkImport": true,
+        "checkRequire": true,
+        "extendDefaultStyles": true,
+        "styles": {}
+      },
+      "fix": "none",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "unicorn/import-style",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "crossFile": false,
+      "defaults": {
+        "checkUsedVariables": true
+      },
+      "fix": "fixable_suggestion",
+      "presets": {
+        "core": {
+          "on": true,
+          "options": [],
+          "severity": "error"
+        },
+        "react": null,
+        "js-plugins": null
+      },
+      "rule": "unicorn/prefer-export-from",
+      "typeAware": false
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3"
+  }
+}

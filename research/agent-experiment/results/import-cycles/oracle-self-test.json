@@ -1,0 +1,704 @@
+{
+  "runtime": "node v24.14.1",
+  "cases": [
+    {
+      "name": "ica original (itself)",
+      "subject": "ica",
+      "description": "the pristine subject against itself",
+      "expected": "hazard kept",
+      "verdict": "hazard kept",
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [
+          "window-first|bottom-left|none",
+          "window-first|bottom-left|saved",
+          "window-first|nowhere|none",
+          "window-first|nowhere|saved"
+        ],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "8/12",
+        "sameAsOriginal": "12/12",
+        "configUnchanged": true,
+        "isValidPlacementUnchanged": true,
+        "exportsUnchanged": true,
+        "fieldsDifferingFromSafeOrder": [
+          "settingsExports",
+          "windowExports",
+          "settingsIsPromise",
+          "defaultSettings",
+          "config",
+          "isValidPlacement",
+          "placements",
+          "observedAttributes",
+          "window",
+          "logger",
+          "updateSetting",
+          "consoleAfter"
+        ]
+      }
+    },
+    {
+      "name": "icb original (itself)",
+      "subject": "icb",
+      "description": "the pristine subject against itself",
+      "expected": "unchanged",
+      "verdict": "unchanged",
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [
+          "core/app/prepare-response.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "barrelExportsSame": true,
+        "identitySame": true,
+        "functionalSame": true,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 7",
+          "core/errors/merge-responses.ts": "6 -> 6",
+          "core/cookies/index.ts": "5 -> 5",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "ica-drop-check",
+      "subject": "ica",
+      "description": "settings.ts only: `import type { Placement }` and the isValidPlacement check removed, so an invalid configured placement is accepted",
+      "expected": "changed",
+      "verdict": "changed",
+      "checks": [
+        {
+          "fact": "configUnchanged",
+          "expected": false,
+          "actual": false,
+          "pass": true
+        },
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "10/12",
+        "sameAsOriginal": "7/12",
+        "configUnchanged": false,
+        "isValidPlacementUnchanged": true,
+        "exportsUnchanged": true,
+        "fieldsDifferingFromSafeOrder": [
+          "config"
+        ]
+      }
+    },
+    {
+      "name": "ica-dynamic-import",
+      "subject": "ica",
+      "description": "settings.ts only: getSettings becomes async and loads isValidPlacement with `await import()` when a placement is configured; `settings` is now a promise",
+      "expected": "changed",
+      "verdict": "changed",
+      "checks": [
+        {
+          "fact": "settingsAsync",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [],
+        "settingsAsync": true,
+        "sameAsSafeOrder": "0/12",
+        "sameAsOriginal": "0/12",
+        "configUnchanged": false,
+        "isValidPlacementUnchanged": true,
+        "exportsUnchanged": false,
+        "fieldsDifferingFromSafeOrder": [
+          "settingsExports",
+          "settingsIsPromise",
+          "config",
+          "window",
+          "logger",
+          "updateSetting"
+        ]
+      }
+    },
+    {
+      "name": "ica-dynamic-import-tla",
+      "subject": "ica",
+      "description": "as ica-dynamic-import, but `export const settings = await getSettings();` (top-level await): with a placement configured, the dynamic import of window.ts waits for settings.ts, which is waiting for it",
+      "expected": "changed",
+      "verdict": "changed",
+      "checks": [
+        {
+          "fact": "settingsAsync",
+          "expected": false,
+          "actual": false,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [
+          "settings-first|bottom-left|none",
+          "settings-first|bottom-left|saved",
+          "settings-first|nowhere|none",
+          "settings-first|nowhere|saved",
+          "window-first|bottom-left|none",
+          "window-first|bottom-left|saved",
+          "window-first|nowhere|none",
+          "window-first|nowhere|saved"
+        ],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "4/12",
+        "sameAsOriginal": "4/12",
+        "configUnchanged": false,
+        "isValidPlacementUnchanged": false,
+        "exportsUnchanged": false,
+        "fieldsDifferingFromSafeOrder": [
+          "hang"
+        ]
+      }
+    },
+    {
+      "name": "ica-extract-module",
+      "subject": "ica",
+      "description": "extract placements, Placement and isValidPlacement into ui-library/placement.ts; settings.ts and window.ts import it, and window.ts re-exports the three names (the expected fix; it creates a file and edits window.ts)",
+      "expected": "hazard removed",
+      "verdict": "hazard removed",
+      "checks": [
+        {
+          "fact": "exportsUnchanged",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "12/12",
+        "sameAsOriginal": "8/12",
+        "configUnchanged": true,
+        "isValidPlacementUnchanged": true,
+        "exportsUnchanged": true,
+        "fieldsDifferingFromSafeOrder": []
+      }
+    },
+    {
+      "name": "ica-extract-module-no-reexport",
+      "subject": "ica",
+      "description": "extract into ui-library/placement.ts as above, but window.ts no longer exports placements, Placement and isValidPlacement",
+      "expected": "changed",
+      "verdict": "changed",
+      "checks": [
+        {
+          "fact": "exportsUnchanged",
+          "expected": false,
+          "actual": false,
+          "pass": true
+        },
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "0/12",
+        "sameAsOriginal": "0/12",
+        "configUnchanged": true,
+        "isValidPlacementUnchanged": false,
+        "exportsUnchanged": false,
+        "fieldsDifferingFromSafeOrder": [
+          "windowExports",
+          "isValidPlacement",
+          "placements"
+        ]
+      }
+    },
+    {
+      "name": "ica-import-type-misuse",
+      "subject": "ica",
+      "description": "settings.ts only: `import type { isValidPlacement, Placement }` while getSettings still calls isValidPlacement (a type error; at runtime the name doesn't exist)",
+      "expected": "changed",
+      "verdict": "changed",
+      "checks": [
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [
+            "settings-first|bottom-left|none",
+            "settings-first|bottom-left|saved",
+            "settings-first|nowhere|none",
+            "settings-first|nowhere|saved",
+            "window-first|bottom-left|none",
+            "window-first|bottom-left|saved",
+            "window-first|nowhere|none",
+            "window-first|nowhere|saved"
+          ],
+          "actual": [
+            "settings-first|bottom-left|none",
+            "settings-first|bottom-left|saved",
+            "settings-first|nowhere|none",
+            "settings-first|nowhere|saved",
+            "window-first|bottom-left|none",
+            "window-first|bottom-left|saved",
+            "window-first|nowhere|none",
+            "window-first|nowhere|saved"
+          ],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [
+          "settings-first|bottom-left|none",
+          "settings-first|bottom-left|saved",
+          "settings-first|nowhere|none",
+          "settings-first|nowhere|saved",
+          "window-first|bottom-left|none",
+          "window-first|bottom-left|saved",
+          "window-first|nowhere|none",
+          "window-first|nowhere|saved"
+        ],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "4/12",
+        "sameAsOriginal": "4/12",
+        "configUnchanged": false,
+        "isValidPlacementUnchanged": false,
+        "exportsUnchanged": false,
+        "fieldsDifferingFromSafeOrder": [
+          "settingsExports",
+          "windowExports",
+          "settingsIsPromise",
+          "defaultSettings",
+          "config",
+          "isValidPlacement",
+          "placements",
+          "observedAttributes",
+          "window",
+          "logger",
+          "updateSetting",
+          "consoleAfter"
+        ]
+      }
+    },
+    {
+      "name": "ica-local-copy",
+      "subject": "ica",
+      "description": "settings.ts only: `import type { Placement }`, and a local copy of the placement list and isValidPlacement declared above the top-level getSettings() call (the closest correct fix inside the one file)",
+      "expected": "hazard removed",
+      "verdict": "hazard removed",
+      "checks": [
+        {
+          "fact": "exportsUnchanged",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "12/12",
+        "sameAsOriginal": "8/12",
+        "configUnchanged": true,
+        "isValidPlacementUnchanged": true,
+        "exportsUnchanged": true,
+        "fieldsDifferingFromSafeOrder": []
+      }
+    },
+    {
+      "name": "ica-local-copy-after-use",
+      "subject": "ica",
+      "description": "settings.ts only: the local copy as above, but the list is a const declared at the end of the file, after the top-level getSettings() call reads it",
+      "expected": "changed",
+      "verdict": "changed",
+      "checks": [
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [
+            "settings-first|bottom-left|none",
+            "settings-first|bottom-left|saved",
+            "settings-first|nowhere|none",
+            "settings-first|nowhere|saved",
+            "window-first|bottom-left|none",
+            "window-first|bottom-left|saved",
+            "window-first|nowhere|none",
+            "window-first|nowhere|saved"
+          ],
+          "actual": [
+            "settings-first|bottom-left|none",
+            "settings-first|bottom-left|saved",
+            "settings-first|nowhere|none",
+            "settings-first|nowhere|saved",
+            "window-first|bottom-left|none",
+            "window-first|bottom-left|saved",
+            "window-first|nowhere|none",
+            "window-first|nowhere|saved"
+          ],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [
+          "settings-first|bottom-left|none",
+          "settings-first|bottom-left|saved",
+          "settings-first|nowhere|none",
+          "settings-first|nowhere|saved",
+          "window-first|bottom-left|none",
+          "window-first|bottom-left|saved",
+          "window-first|nowhere|none",
+          "window-first|nowhere|saved"
+        ],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "4/12",
+        "sameAsOriginal": "8/12",
+        "configUnchanged": false,
+        "isValidPlacementUnchanged": false,
+        "exportsUnchanged": false,
+        "fieldsDifferingFromSafeOrder": [
+          "settingsExports",
+          "windowExports",
+          "settingsIsPromise",
+          "defaultSettings",
+          "config",
+          "isValidPlacement",
+          "placements",
+          "observedAttributes",
+          "window",
+          "logger",
+          "updateSetting",
+          "consoleAfter"
+        ]
+      }
+    },
+    {
+      "name": "ica-window-local-copy",
+      "subject": "ica",
+      "description": "window.ts only: it no longer imports settings.ts; the default placement and the logger's error format are copied in",
+      "expected": "hazard removed",
+      "verdict": "hazard removed",
+      "checks": [
+        {
+          "fact": "exportsUnchanged",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "fact": "throwsOrHangsIn",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "throwsOrHangsIn": [],
+        "settingsAsync": false,
+        "sameAsSafeOrder": "12/12",
+        "sameAsOriginal": "8/12",
+        "configUnchanged": true,
+        "isValidPlacementUnchanged": true,
+        "exportsUnchanged": true,
+        "fieldsDifferingFromSafeOrder": []
+      }
+    },
+    {
+      "name": "icb-deleted",
+      "subject": "icb",
+      "description": "the barrel is deleted",
+      "expected": "API changed",
+      "verdict": "API changed",
+      "checks": [],
+      "pass": true,
+      "facts": {
+        "importErrors": {
+          "core/app/prepare-response.ts": "Error: Cannot find module '<run-root>/.measure/self-icb-deleted-oracle/core/cookies/index.js' imported from <run-root>/.measure/self-icb-deleted-oracle/core/app/prepare-response.js",
+          "core/errors/merge-responses.ts": "Error: Cannot find module '<run-root>/.measure/self-icb-deleted-oracle/core/cookies/index.js' imported from <run-root>/.measure/self-icb-deleted-oracle/core/errors/merge-responses.js",
+          "core/cookies/index.ts": "Error: Cannot find module '<run-root>/.measure/self-icb-deleted-oracle/core/cookies/index.js' imported from <experiment>/scripts/topics/import-cycles-behavior.mjs"
+        },
+        "importersStillLoadCookiesTs": [],
+        "barrelExportsSame": false,
+        "identitySame": false,
+        "functionalSame": false,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> threw",
+          "core/errors/merge-responses.ts": "6 -> threw",
+          "core/cookies/index.ts": "5 -> threw",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-emptied",
+      "subject": "icb",
+      "description": "the barrel keeps its header and exports nothing (`export {};`)",
+      "expected": "API changed",
+      "verdict": "API changed",
+      "checks": [],
+      "pass": true,
+      "facts": {
+        "importErrors": {
+          "core/app/prepare-response.ts": "SyntaxError: The requested module '../cookies/index.js' does not provide an export named 'getSetCookiesFromResponse'",
+          "core/errors/merge-responses.ts": "SyntaxError: The requested module '../cookies/index.js' does not provide an export named 'attachCookiesToResponse'"
+        },
+        "importersStillLoadCookiesTs": [],
+        "barrelExportsSame": false,
+        "identitySame": false,
+        "functionalSame": false,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> threw",
+          "core/errors/merge-responses.ts": "6 -> threw",
+          "core/cookies/index.ts": "5 -> 1",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-export-star",
+      "subject": "icb",
+      "description": "the barrel re-exports everything: `export * from` both modules (one more value export, getCookiesFromResponse, and the third type)",
+      "expected": "API widened",
+      "verdict": "API widened",
+      "checks": [
+        {
+          "fact": "identitySame",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [
+          "core/app/prepare-response.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "barrelExportsSame": false,
+        "identitySame": true,
+        "functionalSame": true,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 7",
+          "core/errors/merge-responses.ts": "6 -> 6",
+          "core/cookies/index.ts": "5 -> 5",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-import-then-export",
+      "subject": "icb",
+      "description": "the barrel imports the names and exports them with a local `export { … }` list",
+      "expected": "unchanged",
+      "verdict": "unchanged",
+      "checks": [
+        {
+          "fact": "identitySame",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [
+          "core/app/prepare-response.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "barrelExportsSame": true,
+        "identitySame": true,
+        "functionalSame": true,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 7",
+          "core/errors/merge-responses.ts": "6 -> 6",
+          "core/cookies/index.ts": "5 -> 5",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-importers-direct",
+      "subject": "icb",
+      "description": "the two importers import from response.js instead of the barrel; the barrel is unchanged (the expected fix for these two importers; it edits files other than the barrel)",
+      "expected": "cost removed, API kept",
+      "verdict": "cost removed, API kept",
+      "checks": [
+        {
+          "fact": "importersStillLoadCookiesTs",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [],
+        "barrelExportsSame": true,
+        "identitySame": true,
+        "functionalSame": true,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 3",
+          "core/errors/merge-responses.ts": "6 -> 2",
+          "core/cookies/index.ts": "5 -> 5",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-importers-direct-type-only-barrel",
+      "subject": "icb",
+      "description": "the two importers repointed as above, and the barrel keeps only its type re-exports (the expected fix once all nine importers are repointed; the seven not in the subject would break)",
+      "expected": "API changed",
+      "verdict": "API changed",
+      "checks": [
+        {
+          "fact": "importersStillLoadCookiesTs",
+          "expected": [],
+          "actual": [],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [],
+        "barrelExportsSame": false,
+        "identitySame": false,
+        "functionalSame": false,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 3",
+          "core/errors/merge-responses.ts": "6 -> 2",
+          "core/cookies/index.ts": "5 -> 1",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-redeclare-const",
+      "subject": "icb",
+      "description": "the barrel imports the names and re-declares them as consts aliasing the same objects, plus a type alias for AstroCookies: same objects, same cost, no `export … from` left for values",
+      "expected": "unchanged",
+      "verdict": "unchanged",
+      "checks": [
+        {
+          "fact": "identitySame",
+          "expected": true,
+          "actual": true,
+          "pass": true
+        },
+        {
+          "fact": "importersStillLoadCookiesTs",
+          "expected": [
+            "core/app/prepare-response.ts",
+            "core/errors/merge-responses.ts"
+          ],
+          "actual": [
+            "core/app/prepare-response.ts",
+            "core/errors/merge-responses.ts"
+          ],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [
+          "core/app/prepare-response.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "barrelExportsSame": true,
+        "identitySame": true,
+        "functionalSame": true,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 7",
+          "core/errors/merge-responses.ts": "6 -> 6",
+          "core/cookies/index.ts": "5 -> 5",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    },
+    {
+      "name": "icb-redeclare-subclass",
+      "subject": "icb",
+      "description": "the barrel imports the names and re-declares them: `export class AstroCookies extends BaseAstroCookies {}` and `export const attachCookiesToResponse = attach` (no `export … from` left for values)",
+      "expected": "API changed",
+      "verdict": "API changed",
+      "checks": [
+        {
+          "fact": "identitySame",
+          "expected": false,
+          "actual": false,
+          "pass": true
+        },
+        {
+          "fact": "importersStillLoadCookiesTs",
+          "expected": [
+            "core/app/prepare-response.ts",
+            "core/errors/merge-responses.ts"
+          ],
+          "actual": [
+            "core/app/prepare-response.ts",
+            "core/errors/merge-responses.ts"
+          ],
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "facts": {
+        "importErrors": {},
+        "importersStillLoadCookiesTs": [
+          "core/app/prepare-response.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "barrelExportsSame": true,
+        "identitySame": false,
+        "functionalSame": true,
+        "modules": {
+          "core/app/prepare-response.ts": "7 -> 7",
+          "core/errors/merge-responses.ts": "6 -> 6",
+          "core/cookies/index.ts": "5 -> 5",
+          "core/cookies/cookies.ts": "3 -> 3",
+          "core/cookies/response.ts": "1 -> 1"
+        }
+      }
+    }
+  ],
+  "failures": 0
+}

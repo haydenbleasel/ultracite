@@ -1,0 +1,61 @@
+--- a/settings.ts
++++ b/settings.ts
+@@ -31,8 +31,15 @@
+  * SOFTWARE.
+  */
+ import type { DevToolbarMetadata } from './stubs.js'; // STUB: was '../../../types/public/toolbar.js'
+-import { isValidPlacement, type Placement } from './ui-library/window.js';
+ 
++const placements = ['bottom-left', 'bottom-center', 'bottom-right'] as const;
++
++type Placement = (typeof placements)[number];
++
++function isValidPlacement(value: string): value is Placement {
++	return placements.map(String).includes(value);
++}
++
+ export interface Settings {
+ 	disableAppNotification: boolean;
+ 	verbose: boolean;
+--- a/ui-library/window.ts
++++ b/ui-library/window.ts
+@@ -29,8 +29,6 @@
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  * SOFTWARE.
+  */
+-import { defaultSettings, settings } from '../settings.js';
+-
+ export const placements = ['bottom-left', 'bottom-center', 'bottom-right'] as const;
+ 
+ export type Placement = (typeof placements)[number];
+@@ -39,16 +37,28 @@
+ 	return placements.map(String).includes(value);
+ }
+ 
++// Mirrors `defaultSettings.placement` and `settings.logger.error` from ../settings.ts, which
++// imports this module and so cannot be imported back without creating a dependency cycle.
++const defaultPlacement: Placement = 'bottom-center';
++
++function logError(message: string) {
++	console.error(
++		`%cAstro`,
++		'background: linear-gradient(66.77deg, #D83333 0%, #F041FF 100%); color: white; padding-inline: 4px; border-radius: 2px; font-family: monospace;',
++		message,
++	);
++}
++
+ export class DevToolbarWindow extends HTMLElement {
+ 	shadowRoot: ShadowRoot;
+-	_placement: Placement = defaultSettings.placement;
++	_placement: Placement = defaultPlacement;
+ 
+ 	get placement() {
+ 		return this._placement;
+ 	}
+ 	set placement(value) {
+ 		if (!isValidPlacement(value)) {
+-			settings.logger.error(
++			logError(
+ 				`Invalid placement: ${value}, expected one of ${placements.join(', ')}, got ${value}.`,
+ 			);
+ 			return;

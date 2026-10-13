@@ -1,0 +1,34 @@
+{
+  "diagnostics": [
+    {
+      "column": 50,
+      "file": "settings.ts",
+      "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+      "line": 34,
+      "message": "Dependency cycle detected",
+      "raw": {
+        "message": "Dependency cycle detected",
+        "code": "import(no-cycle)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/import/no-cycle.html",
+        "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+        "note": "These paths form a cycle:\n╭──▶ ./ui-library/window.js (ui-library/window.ts)\n│         ⬇ imports\n│    ../settings.js (settings.ts)\n╰─────────╯ imports the current file",
+        "filename": "settings.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 1951,
+              "length": 24,
+              "line": 34,
+              "column": 50
+            }
+          }
+        ]
+      },
+      "rule": "import(no-cycle)",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/import/no-cycle.html"
+    }
+  ],
+  "file": "settings.ts"
+}

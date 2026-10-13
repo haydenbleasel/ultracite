@@ -1,0 +1,12 @@
+{
+  "subject": "icb",
+  "description": "the barrel re-exports everything: `export * from` both modules (one more value export, getCookiesFromResponse, and the third type)",
+  "verdict": "API widened",
+  "files": [
+    "core/cookies/index.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "identitySame": true
+  }
+}

@@ -1,0 +1,16 @@
+Fix the lint issues below in a single file. They were reported by Ultracite and could not be fixed automatically.
+
+File: <run-root>/icb-codex-3/core/cookies/index.ts
+
+Issues:
+1. line 35, col 1 — lint/performance/noBarrelFile: Avoid barrel files, they slow down performance, and cause large module graphs with modules that go unused.
+
+Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: <run-root>/icb-codex-3/index.ts.baa93e09.json
+
+Rules:
+- Edit only the file above. Do not create, delete, or modify any other file.
+- Make the minimal change that resolves each issue while preserving runtime behavior.
+- Fix the underlying problem — the file is re-linted after your edit, and a diagnostic that still fires is a failed fix. Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it; rework the code so the rule genuinely no longer applies.
+- Follow the rule's help text from the JSON file where provided.
+- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.
+- Do not reformat unrelated code.

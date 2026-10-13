@@ -1,0 +1,15 @@
+--- a/core/cookies/index.ts
++++ b/core/cookies/index.ts
+@@ -32,8 +32,7 @@
+  * SOFTWARE.
+  */
+ export type { AstroCookieGetOptions, AstroCookieSetOptions } from './cookies.js';
+-export { AstroCookies } from './cookies.js';
+-export {
+-	attachCookiesToResponse,
+-	getSetCookiesFromResponse,
+-} from './response.js';
++import { AstroCookies } from './cookies.js';
++import { attachCookiesToResponse, getSetCookiesFromResponse } from './response.js';
++
++export { AstroCookies, attachCookiesToResponse, getSetCookiesFromResponse };

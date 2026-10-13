@@ -1,0 +1,54 @@
+--- a/settings.ts
++++ b/settings.ts
+@@ -31,7 +31,7 @@
+  * SOFTWARE.
+  */
+ import type { DevToolbarMetadata } from './stubs.js'; // STUB: was '../../../types/public/toolbar.js'
+-import { isValidPlacement, type Placement } from './ui-library/window.js';
++import type { Placement } from './ui-library/window.js';
+ 
+ export interface Settings {
+ 	disableAppNotification: boolean;
+@@ -53,7 +53,11 @@
+ 
+ 	// 2. Override with config placement (if provided)
+ 	const configPlacement = (globalThis as DevToolbarMetadata).__astro_dev_toolbar__?.placement;
+-	if (configPlacement && isValidPlacement(configPlacement)) {
++	if (
++		configPlacement === 'bottom-left' ||
++		configPlacement === 'bottom-center' ||
++		configPlacement === 'bottom-right'
++	) {
+ 		_settings.placement = configPlacement;
+ 	}
+ 
+--- a/ui-library/window.ts
++++ b/ui-library/window.ts
+@@ -29,8 +29,6 @@
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  * SOFTWARE.
+  */
+-import { defaultSettings, settings } from '../settings.js';
+-
+ export const placements = ['bottom-left', 'bottom-center', 'bottom-right'] as const;
+ 
+ export type Placement = (typeof placements)[number];
+@@ -41,14 +39,16 @@
+ 
+ export class DevToolbarWindow extends HTMLElement {
+ 	shadowRoot: ShadowRoot;
+-	_placement: Placement = defaultSettings.placement;
++	_placement: Placement = 'bottom-center';
+ 
+ 	get placement() {
+ 		return this._placement;
+ 	}
+ 	set placement(value) {
+ 		if (!isValidPlacement(value)) {
+-			settings.logger.error(
++			console.error(
++				`%cAstro`,
++				'background: linear-gradient(66.77deg, #D83333 0%, #F041FF 100%); color: white; padding-inline: 4px; border-radius: 2px; font-family: monospace;',
+ 				`Invalid placement: ${value}, expected one of ${placements.join(', ')}, got ${value}.`,
+ 			);
+ 			return;

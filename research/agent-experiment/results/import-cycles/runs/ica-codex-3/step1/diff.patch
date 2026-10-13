@@ -1,0 +1,24 @@
+--- a/settings.ts
++++ b/settings.ts
+@@ -31,7 +31,7 @@
+  * SOFTWARE.
+  */
+ import type { DevToolbarMetadata } from './stubs.js'; // STUB: was '../../../types/public/toolbar.js'
+-import { isValidPlacement, type Placement } from './ui-library/window.js';
++import type { Placement } from './ui-library/window.js';
+ 
+ export interface Settings {
+ 	disableAppNotification: boolean;
+@@ -53,7 +53,11 @@
+ 
+ 	// 2. Override with config placement (if provided)
+ 	const configPlacement = (globalThis as DevToolbarMetadata).__astro_dev_toolbar__?.placement;
+-	if (configPlacement && isValidPlacement(configPlacement)) {
++	if (
++		configPlacement === 'bottom-left' ||
++		configPlacement === 'bottom-center' ||
++		configPlacement === 'bottom-right'
++	) {
+ 		_settings.placement = configPlacement;
+ 	}
+ 

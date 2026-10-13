@@ -1,0 +1,13 @@
+{
+  "subject": "icb",
+  "description": "the two importers import from response.js instead of the barrel; the barrel is unchanged (the expected fix for these two importers; it edits files other than the barrel)",
+  "verdict": "cost removed, API kept",
+  "files": [
+    "core/app/prepare-response.ts",
+    "core/errors/merge-responses.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "importersStillLoadCookiesTs": []
+  }
+}

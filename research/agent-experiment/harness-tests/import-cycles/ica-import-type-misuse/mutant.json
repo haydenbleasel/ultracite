@@ -1,0 +1,21 @@
+{
+  "subject": "ica",
+  "description": "settings.ts only: `import type { isValidPlacement, Placement }` while getSettings still calls isValidPlacement (a type error; at runtime the name doesn't exist)",
+  "verdict": "changed",
+  "files": [
+    "settings.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "throwsOrHangsIn": [
+      "settings-first|bottom-left|none",
+      "settings-first|bottom-left|saved",
+      "settings-first|nowhere|none",
+      "settings-first|nowhere|saved",
+      "window-first|bottom-left|none",
+      "window-first|bottom-left|saved",
+      "window-first|nowhere|none",
+      "window-first|nowhere|saved"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "subject": "icb",
+  "description": "the two importers repointed as above, and the barrel keeps only its type re-exports (the expected fix once all nine importers are repointed; the seven not in the subject would break)",
+  "verdict": "API changed",
+  "files": [
+    "core/app/prepare-response.ts",
+    "core/cookies/index.ts",
+    "core/errors/merge-responses.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "importersStillLoadCookiesTs": []
+  }
+}

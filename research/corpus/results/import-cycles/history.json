@@ -1,0 +1,2077 @@
+{
+  "generated": "2026-10-13",
+  "method": "Searched each repo's PRs, issues and commits with the GitHub search API (OR-grouped phrases for cycle terms, TDZ/undefined-import error strings, barrel/re-export terms, load-order terms; title-restricted searches for the large repos; 116 searches in total, each logged with its hit count). Plausible hits were read with gh pr view / gh pr diff / gh api commits; only merged fixes were kept. For each, the fix commit's first parent (or the PR base when the PR merged without a merge commit) was fetched with gh api contents, the import lines of every file on the cycle were read and quoted with line numbers, and the use of the imported binding was classified as module-evaluation (class extends, top-level call or object literal) or function-internal. Cycles through virtual modules were traced through the code-generation strings that produce them. Nothing from the repos was installed, built or run.",
+  "searched": [
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 28
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 15
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "\"cyclic\" OR \"circular reference\" OR \"import order\" OR \"load order\" OR \"evaluation order\"",
+      "hits": 66
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"export *\" OR \"index file\" OR \"optimizePackageImports\"",
+      "hits": 340
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "circular \"dynamic import\"",
+      "hits": 0
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 38
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 33
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 5
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "commits",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 2
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "commits",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"export *\" OR \"index file\" OR \"optimizePackageImports\"",
+      "hits": 68
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 5
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 8
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "\"cyclic\" OR \"circular reference\" OR \"import order\" OR \"load order\" OR \"evaluation order\"",
+      "hits": 9
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"export *\" OR \"index file\" OR \"optimizePackageImports\"",
+      "hits": 409
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "circular \"dynamic import\"",
+      "hits": 0
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 2
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 8
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 3
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "commits",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 0
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "commits",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"export *\" OR \"index file\" OR \"optimizePackageImports\"",
+      "hits": 126
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"optimizePackageImports\" OR \"export star\"",
+      "hits": 59
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"optimizePackageImports\" OR \"export star\"",
+      "hits": 16
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 31
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 22
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"cyclic\" OR \"circular reference\" OR \"import order\" OR \"load order\" OR \"evaluation order\"",
+      "hits": 74
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"optimizePackageImports\" OR \"export star\"",
+      "hits": 112
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "circular \"dynamic import\"",
+      "hits": 3
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 6
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 9
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 1
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "commits",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 31
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 14
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"cyclic\" OR \"circular reference\" OR \"import order\" OR \"load order\" OR \"evaluation order\"",
+      "hits": 29
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"optimizePackageImports\" OR \"export star\"",
+      "hits": 83
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "circular \"dynamic import\"",
+      "hits": 1
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 1
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 9
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"dependency cycle\"",
+      "hits": 1
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "commits",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 2
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" is:merged",
+      "hits": 33
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\" is:merged",
+      "hits": 40
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\" is:merged",
+      "hits": 17
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"optimizePackageImports\" OR \"export star\" is:merged",
+      "hits": 89
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"import order\" OR \"load order\" OR \"evaluation order\" OR \"lazy import\" OR \"lazy require\" is:merged",
+      "hits": 72
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "circular \"dynamic import\" is:merged",
+      "hits": 13
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\"",
+      "hits": 67
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 153
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\"",
+      "hits": 4
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "commits",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\"",
+      "hits": 10
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" is:merged",
+      "hits": 24
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\" is:merged",
+      "hits": 28
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\" is:merged",
+      "hits": 9
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"optimizePackageImports\" OR \"export star\" is:merged",
+      "hits": 114
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"import order\" OR \"load order\" OR \"evaluation order\" OR \"lazy import\" OR \"lazy require\" is:merged",
+      "hits": 58
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "circular \"dynamic import\" is:merged",
+      "hits": 276
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\"",
+      "hits": 16
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"Cannot access\" OR \"TDZ\" OR \"temporal dead zone\" OR \"is not a constructor\" OR \"extends value undefined\"",
+      "hits": 63
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\"",
+      "hits": 2
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "commits",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\"",
+      "hits": 7
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" OR \"cyclic dependencies\" is:merged",
+      "hits": 68
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\" is:merged",
+      "hits": 35
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"TDZ\" OR \"temporal dead zone\" OR \"extends value undefined\" is:merged",
+      "hits": 33
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" OR \"re-exports\" OR \"export star\" is:merged",
+      "hits": 663
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"cold start\" OR \"module count\" OR \"too many modules\" OR \"import cost\" OR \"startup time\" OR \"number of modules\" is:merged",
+      "hits": 79
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"optimizePackageImports\" is:merged",
+      "hits": 31
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "\"before initialization\" \"next/dist\"",
+      "hits": 4
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" OR \"cyclic dependencies\"",
+      "hits": 40
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" OR \"cyclic dependencies\"",
+      "hits": 12
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "commits",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\"",
+      "hits": 5
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "commits",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" OR \"cyclic dependencies\"",
+      "hits": 60
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "commits",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\"",
+      "hits": 16
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "commits",
+      "term": "\"before initialization\" OR \"TDZ\" OR \"temporal dead zone\" OR \"extends value undefined\"",
+      "hits": 20
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "commits",
+      "term": "\"cycle\" \"import\"",
+      "hits": 16
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" OR \"cyclic dependencies\" is:merged",
+      "hits": 79
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "\"circular import\" OR \"circular imports\" OR \"import cycle\" OR \"cyclic import\" OR \"circular reference\" is:merged",
+      "hits": 41
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "\"before initialization\" OR \"TDZ\" OR \"temporal dead zone\" OR \"extends value undefined\" is:merged",
+      "hits": 108
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "issues",
+      "term": "\"before initialization\" OR \"TDZ\" OR \"temporal dead zone\" OR \"extends value undefined\"",
+      "hits": 68
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "issues",
+      "term": "\"circular dependency\" OR \"circular dependencies\" OR \"dependency cycle\" OR \"cyclic dependency\" OR \"cyclic dependencies\"",
+      "hits": 78
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "circular in:title is:merged",
+      "hits": 6
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "cycle in:title is:merged",
+      "hits": 8
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"before initialization\" in:title",
+      "hits": 1
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "barrel in:title is:merged",
+      "hits": 14
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"re-export\" in:title is:merged",
+      "hits": 27
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"is not a function\" circular is:merged",
+      "hits": 0
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "cyclic in:title is:merged",
+      "hits": 17
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "circular in:title is:merged",
+      "hits": 9
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "issues",
+      "term": "\"before initialization\" in:title",
+      "hits": 13
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "commits",
+      "term": "\"is not a constructor\" OR \"extends value undefined\" OR \"Cannot access\"",
+      "hits": 6
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "circular in:title is:merged",
+      "hits": 17
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "circular in:title is:merged",
+      "hits": 6
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "cyclic in:title is:merged",
+      "hits": 2
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "\"extends value undefined\" \"next/dist\"",
+      "hits": 2
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"lazy require\" OR \"lazily require\" OR \"require cycle\" OR \"import cycle\" is:merged",
+      "hits": 1811
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "issues",
+      "term": "\"before initialization\" \"vite/dist\"",
+      "hits": 9
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "issues",
+      "term": "\"before initialization\" \"astro/dist\"",
+      "hits": 13
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "issues",
+      "term": "\"extends value undefined\" OR \"is not a constructor\" is:closed",
+      "hits": 35
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "perf in:title import is:merged",
+      "hits": 2
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "perf in:title import is:merged",
+      "hits": 15
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "perf in:title import is:merged",
+      "hits": 2
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"barrel\" OR \"re-export\" OR \"reexport\" perf is:merged",
+      "hits": 613
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"bundle size\" in:title is:merged",
+      "hits": 22
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"tree shaking\" OR \"tree-shaking\" OR \"treeshake\" in:title is:merged",
+      "hits": 54
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"bundle size\" OR \"tree shaking\" OR \"tree-shaking\" in:title is:merged",
+      "hits": 5
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"bundle size\" OR \"tree shaking\" OR \"tree-shaking\" in:title is:merged",
+      "hits": 5
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "\"bundle size\" OR \"tree shaking\" OR \"tree-shaking\" OR \"treeshake\" is:merged",
+      "hits": 71
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "\"bundle size\" OR \"tree shaking\" OR \"tree-shaking\" OR \"treeshake\" is:merged",
+      "hits": 517
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"bundle size\" OR \"tree shaking\" OR \"tree-shaking\" OR \"treeshake\" is:merged",
+      "hits": 26
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"bundle size\" OR \"tree shaking\" OR \"tree-shaking\" OR \"treeshake\" is:merged",
+      "hits": 28
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"avoid circular\" OR \"avoid a circular\" OR \"break the cycle\" OR \"circular require\" is:merged",
+      "hits": 6
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "\"avoid circular\" OR \"avoid a circular\" OR \"break the cycle\" OR \"circular require\" is:merged",
+      "hits": 9
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "\"avoid circular\" OR \"avoid a circular\" OR \"break the cycle\" OR \"circular require\" is:merged",
+      "hits": 14
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "commits",
+      "term": "\"avoid circular\" OR \"avoid cyclic\" OR \"break cycle\" OR \"cyclic import\"",
+      "hits": 8
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"circular\" OR \"cycle\" OR \"cyclic\" is:merged",
+      "hits": 41
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "code",
+      "term": "path:packages/next/src \"circular\" (default branch only)",
+      "hits": 9
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "code",
+      "term": "path:packages/next/src \"before initialization\" (default branch only)",
+      "hits": 3
+    }
+  ],
+  "bugs": [
+    {
+      "id": "zod-5926",
+      "repo": "colinhacks/zod",
+      "kind": "circular-fix",
+      "title": "fix(v4): break circular import between classic schemas and iso (#5275)",
+      "fix": "https://github.com/colinhacks/zod/pull/5926",
+      "issue": "https://github.com/colinhacks/zod/issues/5275",
+      "fixCommit": "dfd8766bf44943eb0dc136bb87b53f6bde008995",
+      "parentCommit": "fbe8ad1b709460fc45d88fdcb5eca591198de60d",
+      "mergedAt": "2026-05-04",
+      "symptom": "Issue #5362 (zod 4.1.12, webpack with a cycle checker): \"ERROR in Detected 2 cycles which exceeds configured limit of 0 / ERROR in node_modules/zod/v4/classic/iso.js -> node_modules/zod/v4/classic/schemas.js -> node_modules/zod/v4/classic/iso.js\". Issue #6073 (Rollup): \"(!) Circular dependency node_modules/zod/v4/classic/schemas.js -> node_modules/zod/v4/classic/iso.js -> node_modules/zod/v4/classic/schemas.js\". Issue #5275: \"This caused issues in our build stack\".",
+      "runtimeImpact": "build failure for consumers with a strict cycle checker; bundler warnings; no runtime crash reported",
+      "cycle": [
+        "packages/zod/src/v4/classic/schemas.ts",
+        "packages/zod/src/v4/classic/iso.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/zod/src/v4/classic/schemas.ts",
+          "line": 8,
+          "specifier": "./iso.js",
+          "to": "packages/zod/src/v4/classic/iso.ts",
+          "kind": "value",
+          "text": "import * as iso from \"./iso.js\";"
+        },
+        {
+          "from": "packages/zod/src/v4/classic/iso.ts",
+          "line": 2,
+          "specifier": "./schemas.js",
+          "to": "packages/zod/src/v4/classic/schemas.ts",
+          "kind": "value",
+          "text": "import * as schemas from \"./schemas.js\";"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "moved code to new module: the ZodISO* classes moved into schemas.ts; iso.ts became a one-way facade that re-exports them",
+      "files": [
+        "packages/zod/src/v4/classic/schemas.ts",
+        "packages/zod/src/v4/classic/iso.ts"
+      ],
+      "notes": "Both directions are used only lazily: iso.ts calls schemas.ZodStringFormat.init(inst, def) inside the core.$constructor initializer (iso.ts:19), which runs at instance construction, and schemas.ts calls iso.datetime() etc. inside method closures (schemas.ts:562-565). So the cycle never failed at runtime; it failed builds. The PR added a static no-circular-imports test for v4/classic and a Rollup-based test."
+    },
+    {
+      "id": "zod-5b5b129",
+      "repo": "colinhacks/zod",
+      "kind": "undefined-import",
+      "title": "4.2.1 (fix for #5536: from-json-schema.ts imported the ../index.js barrel)",
+      "fix": "https://github.com/colinhacks/zod/commit/5b5b129315fbc94a3b0d6244185eaeefcbe438d1",
+      "issue": "https://github.com/colinhacks/zod/issues/5536",
+      "fixCommit": "5b5b129315fbc94a3b0d6244185eaeefcbe438d1",
+      "parentCommit": "dcef9734f55fc1c8e73795a2be80c60fa7a4a568",
+      "mergedAt": "2025-12-16",
+      "symptom": "\"TypeError: Cannot read property 'fromJSONSchema' of undefined\" — \"Getting this error when using `zod` with react native/expo. Issue only occurs on zod@4.2.0, zod@4.1.13 works fine.\" Maintainer: \"Fixed in 4.2.1\" linking this commit.",
+      "runtimeImpact": "crash at import time under React Native / Metro; the release that introduced from-json-schema.ts (4.2.0) broke Expo apps",
+      "cycle": [
+        "packages/zod/src/v4/classic/from-json-schema.ts",
+        "packages/zod/src/v4/index.ts",
+        "packages/zod/src/v4/classic/index.ts",
+        "packages/zod/src/v4/classic/external.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "line": 2,
+          "specifier": "../index.js",
+          "to": "packages/zod/src/v4/index.ts",
+          "kind": "value",
+          "text": "import * as z from \"../index.js\";"
+        },
+        {
+          "from": "packages/zod/src/v4/index.ts",
+          "line": 2,
+          "specifier": "./classic/index.js",
+          "to": "packages/zod/src/v4/classic/index.ts",
+          "kind": "export-star",
+          "text": "export * from \"./classic/index.js\";"
+        },
+        {
+          "from": "packages/zod/src/v4/classic/index.ts",
+          "line": 4,
+          "specifier": "./external.js",
+          "to": "packages/zod/src/v4/classic/external.ts",
+          "kind": "export-star",
+          "text": "export * from \"./external.js\";"
+        },
+        {
+          "from": "packages/zod/src/v4/classic/external.ts",
+          "line": 33,
+          "specifier": "./from-json-schema.js",
+          "to": "packages/zod/src/v4/classic/from-json-schema.ts",
+          "kind": "reexport",
+          "text": "export { fromJSONSchema } from \"./from-json-schema.js\";"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": null,
+      "fixShape": "replaced barrel import with direct imports: a local `const z = { ..._schemas, ..._checks, iso: _iso }` built from ./schemas.js, ./checks.js and ./iso.js (plus a madge check:circular CI job)",
+      "files": [
+        "packages/zod/src/v4/classic/from-json-schema.ts",
+        "packages/zod/src/v4/index.ts",
+        "packages/zod/src/v4/classic/index.ts",
+        "packages/zod/src/v4/classic/external.ts",
+        "packages/zod/src/index.ts"
+      ],
+      "notes": "The package entry packages/zod/src/index.ts imports ./v4/classic/external.js, so loading zod enters external.ts, which reaches from-json-schema.ts, which imports the v4 barrel that re-exports external.ts again. In the TypeScript source `z` is only used inside function bodies (e.g. from-json-schema.ts:66 `return z.never();`), so the failure needs a module system that reads the barrel's bindings eagerly; per the issue it showed up under Metro/React Native only. Extra edges: v4/index.ts:1 `import z4 from \"./classic/index.js\";` and classic/index.ts:1 `import * as z from \"./external.js\";`. PR #5537 proposed the same fix and was closed unmerged."
+    },
+    {
+      "id": "zod-44916fe",
+      "repo": "colinhacks/zod",
+      "kind": "circular-fix",
+      "title": "Remove circular dependency",
+      "fix": "https://github.com/colinhacks/zod/commit/44916fe7dee9413216ee0b24001cfbf835cda584",
+      "issue": null,
+      "fixCommit": "44916fe7dee9413216ee0b24001cfbf835cda584",
+      "parentCommit": "cb5db0fdbe5ec4e40dbc7cbe20506fafa87300fd",
+      "mergedAt": "2022-05-22",
+      "symptom": "none stated (commit message only)",
+      "runtimeImpact": "none stated (refactor)",
+      "cycle": [
+        "src/ZodError.ts",
+        "src/helpers/parseUtil.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/ZodError.ts",
+          "line": 2,
+          "specifier": "./helpers/parseUtil",
+          "to": "src/helpers/parseUtil.ts",
+          "kind": "value",
+          "text": "import { ZodParsedType } from \"./helpers/parseUtil\";"
+        },
+        {
+          "from": "src/helpers/parseUtil.ts",
+          "line": 1,
+          "specifier": "../ZodError",
+          "to": "src/ZodError.ts",
+          "kind": "value",
+          "text": "import { defaultErrorMap, IssueData, overrideErrorMap, ZodErrorMap, ZodIssue } from \"../ZodError\";"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "moved code to new module: ZodParsedType moved from helpers/parseUtil.ts to helpers/util.ts",
+      "files": [
+        "src/ZodError.ts",
+        "src/helpers/parseUtil.ts",
+        "src/helpers/util.ts",
+        "src/index.ts"
+      ],
+      "notes": "ZodParsedType is read inside defaultErrorMap's body (ZodError.ts:308); parseUtil reads defaultErrorMap/overrideErrorMap inside a function (parseUtil.ts:157-158). ZodError.ts also has `import type { TypeOf, ZodType } from \".\"` (type-only, erased). Zod 3 era; the deno/lib mirror got the same change."
+    },
+    {
+      "id": "zod-226",
+      "repo": "colinhacks/zod",
+      "kind": "circular-fix",
+      "title": "Remove circular dependencies",
+      "fix": "https://github.com/colinhacks/zod/pull/226",
+      "issue": "https://github.com/colinhacks/zod/issues/215",
+      "fixCommit": "c3dc9cd417901cd4bea75fe6c989e264b5af5c98",
+      "parentCommit": "e2a64bb45469ecac9302e280347ba187e13cbe44",
+      "mergedAt": "2021-01-04",
+      "symptom": "Issue #215 \"ESM module in Zod 2 beta causing runtime error\" (crash on z.object({}) only in the ESM build). The PR quotes the maintainer from #175: \"It seems to be related to some tricky circular dependency issues that are doing to take some time to figure out, so I'm removing the ESM module in zod@2.0.0-beta.21.\"",
+      "runtimeImpact": "crash in the ESM build; the ESM build was withdrawn until the cycles were removed",
+      "cycle": [
+        "src/parser.ts",
+        "src/index.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/parser.ts",
+          "line": 3,
+          "specifier": "./index",
+          "to": "src/index.ts",
+          "kind": "value",
+          "text": "import { ZodDef, ZodNever, ZodPromise } from \"./index\";"
+        },
+        {
+          "from": "src/index.ts",
+          "line": 6,
+          "specifier": "./parser",
+          "to": "src/parser.ts",
+          "kind": "value",
+          "text": "import { ZodParsedType } from \"./parser\";"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": null,
+      "fixShape": "replaced barrel import with direct imports (parser now imports ../types/never and ../types/promise) and extracted ZodParsedType, ZodTypes and ZodDef into their own modules; added dependency-cruiser",
+      "files": [
+        "src/parser.ts",
+        "src/index.ts",
+        "src/types/any.ts",
+        "src/types/base.ts"
+      ],
+      "notes": "The PR was merged into the v2 branch without a merge commit, so fixCommit is the PR head and parentCommit is the PR base (not the head's first parent, which is another PR commit). In the 2-file cycle ZodNever/ZodPromise are only used in instanceof checks inside ZodParser (parser.ts:411, 470, 756). A longer cycle at the base has a top-level use: src/types/any.ts:10 `export class ZodAny extends z.ZodType<any, ZodAnyDef> {` (z = ./base), base.ts:11 imports ../parser, parser.ts:3 imports ./index, which imports ./types/any. Not every cycle was removed: one PR commit is titled \"Resolve almost all except 6 circular dependencies\", and types/base/type/index.ts <-> types/array.ts (array.ts:16 `export class ZodArray<...> extends ZodType<`) still existed at the PR head."
+    },
+    {
+      "id": "hono-5071",
+      "repo": "honojs/hono",
+      "kind": "circular-fix",
+      "title": "fix: avoid circular dependency between body.ts and request.ts",
+      "fix": "https://github.com/honojs/hono/pull/5071",
+      "issue": "https://github.com/honojs/hono/issues/5068",
+      "fixCommit": "82b321b5b0e7a57cdaab45f2f90671ec0737795b",
+      "parentCommit": "b20d4225c9aa9e615717ca74e437852cc9fd5b94",
+      "mergedAt": "2026-07-03",
+      "symptom": "Issue #5068 (hono 4.12.27): Rollup circular dependency warning (screenshot); \"It does build, so this is a low priority bug but I'm reporting it either way cause it's not right.\"",
+      "runtimeImpact": "bundler warning only",
+      "cycle": [
+        "src/utils/body.ts",
+        "src/request.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/utils/body.ts",
+          "line": 6,
+          "specifier": "../request",
+          "to": "src/request.ts",
+          "kind": "value",
+          "text": "import { HonoRequest } from '../request'"
+        },
+        {
+          "from": "src/request.ts",
+          "line": 14,
+          "specifier": "./utils/body",
+          "to": "src/utils/body.ts",
+          "kind": "value",
+          "text": "import { parseBody } from './utils/body'"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "import type + duck-typed guard: `instanceof HonoRequest` replaced by `'headers' in request`, so body.ts imports HonoRequest as a type only",
+      "files": [
+        "src/utils/body.ts",
+        "src/request.ts"
+      ],
+      "notes": "HonoRequest is only used in instanceof checks inside parseBody/parseFormData (body.ts:101, 125, 128); parseBody is only called from the HonoRequest#parseBody method. The maintainer rejected an alternative fix (#5069) as too complex and noted \"The bundle size should actually be slightly smaller, since there are fewer imports.\""
+    },
+    {
+      "id": "hono-2143",
+      "repo": "honojs/hono",
+      "kind": "circular-fix",
+      "title": "fix(html): Remove circular dependencies in `hono/html`",
+      "fix": "https://github.com/honojs/hono/pull/2143",
+      "issue": null,
+      "fixCommit": "f44c7055e077c457b309bf037922d932f7ea380c",
+      "parentCommit": "f2ec8d458ded93bded4c30f9c242eb82f02c7206",
+      "mergedAt": "2024-02-03",
+      "symptom": "\"There is a circular dependency between `src/helper/html/index.ts` and `src/utils/html.ts`... I found this circular dependency while running Hono in Expo API Routes.\" (Metro require-cycle warning; the author notes warning on node_modules is an Expo bug)",
+      "runtimeImpact": "bundler/Metro warning only",
+      "cycle": [
+        "src/helper/html/index.ts",
+        "src/utils/html.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/helper/html/index.ts",
+          "line": 1,
+          "specifier": "../../utils/html",
+          "to": "src/utils/html.ts",
+          "kind": "value",
+          "text": "import { escapeToBuffer, stringBufferToString } from '../../utils/html'"
+        },
+        {
+          "from": "src/utils/html.ts",
+          "line": 34,
+          "specifier": "../helper/html",
+          "to": "src/helper/html/index.ts",
+          "kind": "value",
+          "text": "import { raw } from '../helper/html'"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "moved code to new module: `raw` moved into src/utils/html.ts and re-exported from the helper",
+      "files": [
+        "src/helper/html/index.ts",
+        "src/utils/html.ts"
+      ],
+      "notes": "helper/html/index.ts is the `hono/html` entry module (it defines raw and html, so it is an index file but not a pure barrel). raw is only called inside functions in utils/html.ts (lines 71, 140). Verified with `npx dpdm --transform --no-tree ./src/helper/html/index.ts` per the PR."
+    },
+    {
+      "id": "hono-2268",
+      "repo": "honojs/hono",
+      "kind": "circular-fix",
+      "title": "fix(jsx/dom): import from correct file for avoiding circular dependency",
+      "fix": "https://github.com/honojs/hono/pull/2268",
+      "issue": "https://github.com/honojs/honox/issues/92",
+      "fixCommit": "4b3cd3c6e16c16e4d9b22b872d5ebc9e38c3272a",
+      "parentCommit": "5e9b9a37647b37061435a6c9c279327a6514b822",
+      "mergedAt": "2024-02-25",
+      "symptom": "Rollup (via honox build): \"Export \"use\" of module \"node_modules/hono/dist/jsx/hooks/index.js\" was reexported through module \"node_modules/hono/dist/jsx/dom/index.js\" while both modules are dependencies of each other and will end up in different chunks by current Rollup settings. This scenario is not well supported at the moment as it will produce a circular dependency between chunks and will likely lead to broken execution order.\"",
+      "runtimeImpact": "bundler warning about possible broken execution order; no crash reported",
+      "cycle": [
+        "src/jsx/dom/render.ts",
+        "src/jsx/dom/index.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/jsx/dom/render.ts",
+          "line": 8,
+          "specifier": ".",
+          "to": "src/jsx/dom/index.ts",
+          "kind": "value",
+          "text": "import { useContext, createContext } from '.'"
+        },
+        {
+          "from": "src/jsx/dom/index.ts",
+          "line": 15,
+          "specifier": "./render",
+          "to": "src/jsx/dom/render.ts",
+          "kind": "reexport",
+          "text": "export { render } from './render'"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": null,
+      "fixShape": "replaced barrel import with direct imports (useContext from '../context', createContext from './context')",
+      "files": [
+        "src/jsx/dom/render.ts",
+        "src/jsx/dom/index.ts",
+        "src/jsx/dom/context.ts",
+        "src/jsx/context.ts"
+      ],
+      "notes": "render.ts uses useContext (line 398) and createContext (line 443) only inside functions. The barrel src/jsx/dom/index.ts re-exports from ./render, ../context, ./context, ../base and ../hooks."
+    },
+    {
+      "id": "trpc-3877-server",
+      "repo": "trpc/trpc",
+      "kind": "circular-fix",
+      "title": "chore: break circular dependencies between internal files",
+      "fix": "https://github.com/trpc/trpc/pull/3877",
+      "issue": null,
+      "fixCommit": "19c7c27d8ed548b2bc7ab5eb921fd179143aa230",
+      "parentCommit": "2857a6f9231e81e94e82913c129509bf1744f5c7",
+      "mergedAt": "2023-02-27",
+      "symptom": "\"Fix circular dependency warnings emitted during every build job.\" — \"@trpc/server:build: (!) Circular dependency / @trpc/server:build: src/error/TRPCError.ts -> } -> src/error/TRPCError.ts\"",
+      "runtimeImpact": "none stated (build warnings); \"There were no functional changes to the API or public exports.\"",
+      "cycle": [
+        "packages/server/src/error/TRPCError.ts",
+        "packages/server/src/error/utils.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/server/src/error/TRPCError.ts",
+          "line": 1,
+          "specifier": "../error/utils",
+          "to": "packages/server/src/error/utils.ts",
+          "kind": "value",
+          "text": "import { getErrorFromUnknown, getMessageFromUnknownError } from '../error/utils';"
+        },
+        {
+          "from": "packages/server/src/error/utils.ts",
+          "line": 1,
+          "specifier": "./TRPCError",
+          "to": "packages/server/src/error/TRPCError.ts",
+          "kind": "value",
+          "text": "import { TRPCError } from './TRPCError';"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "moved code: the unknown-error helpers moved from error/utils.ts into TRPCError.ts",
+      "files": [
+        "packages/server/src/error/TRPCError.ts",
+        "packages/server/src/error/utils.ts"
+      ],
+      "notes": "The helpers are called in the TRPCError constructor (TRPCError.ts:18, 20); utils.ts calls `new TRPCError` inside a function (line 33). utils.ts:27 carries the comment \"this should ideally be an `instanceof TRPCError` but for some reason that isn't working\" — nothing links that to the cycle."
+    },
+    {
+      "id": "trpc-3877-react-query",
+      "repo": "trpc/trpc",
+      "kind": "circular-fix",
+      "title": "chore: break circular dependencies between internal files",
+      "fix": "https://github.com/trpc/trpc/pull/3877",
+      "issue": null,
+      "fixCommit": "19c7c27d8ed548b2bc7ab5eb921fd179143aa230",
+      "parentCommit": "2857a6f9231e81e94e82913c129509bf1744f5c7",
+      "mergedAt": "2023-02-27",
+      "symptom": "\"@trpc/react-query:build: (!) Circular dependency / @trpc/react-query:build: src/shared/hooks/createHooksInternal.tsx -> src/shared/hooks/deprecated/createHooksInternal.tsx -> src/shared/hooks/createHooksInternal.tsx\"",
+      "runtimeImpact": "none stated (build warnings)",
+      "cycle": [
+        "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+        "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+          "line": 520,
+          "specifier": "./deprecated/createHooksInternal",
+          "to": "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx",
+          "kind": "export-star",
+          "text": "export * from './deprecated/createHooksInternal';"
+        },
+        {
+          "from": "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx",
+          "line": 36,
+          "specifier": "../createHooksInternal",
+          "to": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+          "kind": "value",
+          "text": "import { createRootHooks } from '../createHooksInternal';"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "moved code to new module: createRootHooks moved to shared/hooks/createRootHooks.tsx",
+      "files": [
+        "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+        "packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx"
+      ],
+      "notes": "createRootHooks is only called inside a function (deprecated/createHooksInternal.tsx:624). The cycle runs through an `export *` at the bottom of a non-index module."
+    },
+    {
+      "id": "excalidraw-10544",
+      "repo": "excalidraw/excalidraw",
+      "kind": "undefined-import",
+      "title": "fix: Circular reference",
+      "fix": "https://github.com/excalidraw/excalidraw/pull/10544",
+      "issue": "https://github.com/excalidraw/excalidraw/issues/10528",
+      "fixCommit": "d87620b23907cef9a119c758124569b5f44991a4",
+      "parentCommit": "7cc31ac64a9ec3f9ce5bc3a09cd3716c2eb07370",
+      "mergedAt": "2025-12-21",
+      "symptom": "Issue #10528 \"Regression on examples/with-script-in-browser\": \"TypeError: can't access property \"svg\" of undefined\n    <anonymous> renderElement.ts:372\" — \"there's an error that blocks the example application from loading\". Introduced by 8fb16669 \"feat: Add binding visual debug (#10222)\".",
+      "runtimeImpact": "crash at startup (example app does not load)",
+      "cycle": [
+        "packages/common/src/index.ts",
+        "packages/common/src/visualdebug.ts",
+        "packages/element/src/index.ts",
+        "packages/element/src/renderElement.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/common/src/index.ts",
+          "line": 13,
+          "specifier": "./visualdebug",
+          "to": "packages/common/src/visualdebug.ts",
+          "kind": "export-star",
+          "text": "export * from \"./visualdebug\";"
+        },
+        {
+          "from": "packages/common/src/visualdebug.ts",
+          "line": 9,
+          "specifier": "@excalidraw/element",
+          "to": "packages/element/src/index.ts",
+          "kind": "value",
+          "text": "import { isBounds } from \"@excalidraw/element\";"
+        },
+        {
+          "from": "packages/element/src/index.ts",
+          "line": 82,
+          "specifier": "./renderElement",
+          "to": "packages/element/src/renderElement.ts",
+          "kind": "export-star",
+          "text": "export * from \"./renderElement\";"
+        },
+        {
+          "from": "packages/element/src/renderElement.ts",
+          "line": 13,
+          "specifier": "@excalidraw/common",
+          "to": "packages/common/src/index.ts",
+          "kind": "value",
+          "text": "import { ..., MIME_TYPES, ... } from \"@excalidraw/common\"; (lines 13-25)"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": "packages/element/src/renderElement.ts:372 `IMAGE_PLACEHOLDER_IMG.src = `data:${MIME_TYPES.svg},${encodeURIComponent(` — a top-level statement that reads MIME_TYPES (exported from packages/common/src/constants.ts:251 through the common barrel) during module evaluation",
+      "fixShape": "moved code to new module: Bounds and isBounds moved to packages/common/src/bounds.ts, so common no longer imports @excalidraw/element",
+      "files": [
+        "packages/common/src/index.ts",
+        "packages/common/src/visualdebug.ts",
+        "packages/common/src/constants.ts",
+        "packages/element/src/index.ts",
+        "packages/element/src/renderElement.ts",
+        "packages/element/src/typeChecks.ts",
+        "tsconfig.json"
+      ],
+      "notes": "@excalidraw/* resolve through tsconfig.json paths (\"@excalidraw/common\": [\"./packages/common/src/index.ts\"], \"@excalidraw/element\": [\"./packages/element/src/index.ts\"]). isBounds is defined at element/src/typeChecks.ts:360 and used inside a function (visualdebug.ts:106). Reading the source, common/src/index.ts evaluates ./constants (line 3) before ./visualdebug (line 13), so an unbundled ESM load that enters through @excalidraw/common would see MIME_TYPES; the `undefined` (not a TDZ ReferenceError) fits the browser example, which consumes the packages as built bundles where each package is one module and its hoisted import of @excalidraw/element runs before any of common's own code. That last point is inference from the error text, not reproduced."
+    },
+    {
+      "id": "excalidraw-9650",
+      "repo": "excalidraw/excalidraw",
+      "kind": "circular-fix",
+      "title": "fix: move doBoundsIntersect from element/src/bounds.ts to common/math/src/utils.ts",
+      "fix": "https://github.com/excalidraw/excalidraw/pull/9650",
+      "issue": null,
+      "fixCommit": "84e96e939358a559bcef3863670bcf55874cd14b",
+      "parentCommit": "320af405e9578d67443c6261d42fecb8d46e38ae",
+      "mergedAt": "2025-06-14",
+      "symptom": "\"#9488 imported doBoundsIntersect from \"@excalidraw/element\" to @excalidraw/math/src/curve.ts creating a circular reference and breaking the self-contained integrity of the math package.\"",
+      "runtimeImpact": "none stated (package layering)",
+      "cycle": [
+        "packages/math/src/curve.ts",
+        "packages/element/src/index.ts",
+        "packages/element/src/bounds.ts",
+        "packages/math/src/index.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/math/src/curve.ts",
+          "line": 1,
+          "specifier": "@excalidraw/element",
+          "to": "packages/element/src/index.ts",
+          "kind": "value",
+          "text": "import { doBoundsIntersect, type Bounds } from \"@excalidraw/element\";"
+        },
+        {
+          "from": "packages/element/src/index.ts",
+          "line": 78,
+          "specifier": "./bounds",
+          "to": "packages/element/src/bounds.ts",
+          "kind": "export-star",
+          "text": "export * from \"./bounds\";"
+        },
+        {
+          "from": "packages/element/src/bounds.ts",
+          "line": 10,
+          "specifier": "@excalidraw/math",
+          "to": "packages/math/src/index.ts",
+          "kind": "value",
+          "text": "import { ... } from \"@excalidraw/math\"; (lines 10-17)"
+        },
+        {
+          "from": "packages/math/src/index.ts",
+          "line": 2,
+          "specifier": "./curve",
+          "to": "packages/math/src/curve.ts",
+          "kind": "export-star",
+          "text": "export * from \"./curve\";"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": null,
+      "fixShape": "moved code: doBoundsIntersect moved to packages/math/src/utils.ts",
+      "files": [
+        "packages/math/src/curve.ts",
+        "packages/math/src/index.ts",
+        "packages/element/src/index.ts",
+        "packages/element/src/bounds.ts",
+        "tsconfig.json"
+      ],
+      "notes": "doBoundsIntersect is only called inside a function (curve.ts:116). Cross-package cycle through two package barrels; introduced by #9488 and fixed the same day as excalidraw-9647."
+    },
+    {
+      "id": "excalidraw-9647",
+      "repo": "excalidraw/excalidraw",
+      "kind": "circular-fix",
+      "title": "fix: move elementCenterPoint from common/src/utils.ts to element/src/bounds.ts",
+      "fix": "https://github.com/excalidraw/excalidraw/pull/9647",
+      "issue": null,
+      "fixCommit": "320af405e9578d67443c6261d42fecb8d46e38ae",
+      "parentCommit": "60512f13d51a6440809cf6f9d2ce84a76f74038c",
+      "mergedAt": "2025-06-14",
+      "symptom": "\"#9488 imported getCenterForBounds, getElementBounds from \"@excalidraw/element\" to @excalidraw/common/src/utils.ts creating a circular reference and breaking the self-contained integrity of the elements and common packages.\"",
+      "runtimeImpact": "none stated (package layering)",
+      "cycle": [
+        "packages/common/src/utils.ts",
+        "packages/element/src/index.ts",
+        "packages/element/src/bounds.ts",
+        "packages/common/src/index.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/common/src/utils.ts",
+          "line": 2,
+          "specifier": "@excalidraw/element",
+          "to": "packages/element/src/index.ts",
+          "kind": "value",
+          "text": "import { getCenterForBounds, getElementBounds } from \"@excalidraw/element\";"
+        },
+        {
+          "from": "packages/element/src/index.ts",
+          "line": 78,
+          "specifier": "./bounds",
+          "to": "packages/element/src/bounds.ts",
+          "kind": "export-star",
+          "text": "export * from \"./bounds\";"
+        },
+        {
+          "from": "packages/element/src/bounds.ts",
+          "line": 3,
+          "specifier": "@excalidraw/common",
+          "to": "packages/common/src/index.ts",
+          "kind": "value",
+          "text": "import { arrayToMap, elementCenterPoint, invariant, rescalePoints, sizeOf } from \"@excalidraw/common\"; (lines 3-8)"
+        },
+        {
+          "from": "packages/common/src/index.ts",
+          "line": 11,
+          "specifier": "./utils",
+          "to": "packages/common/src/utils.ts",
+          "kind": "export-star",
+          "text": "export * from \"./utils\";"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": null,
+      "fixShape": "moved code: elementCenterPoint moved to packages/element/src/bounds.ts",
+      "files": [
+        "packages/common/src/utils.ts",
+        "packages/common/src/index.ts",
+        "packages/element/src/index.ts",
+        "packages/element/src/bounds.ts",
+        "tsconfig.json"
+      ],
+      "notes": "Both directions concern one function: common/utils.ts defined elementCenterPoint using element's bounds helpers (call at utils.ts:1248, inside the function), and element/bounds.ts imported elementCenterPoint back from common."
+    },
+    {
+      "id": "vite-18237",
+      "repo": "vitejs/vite",
+      "kind": "circular-fix",
+      "title": "refactor: break circular dependencies to fix test-unit",
+      "fix": "https://github.com/vitejs/vite/pull/18237",
+      "issue": null,
+      "fixCommit": "a577828d826805c5693d773eea4c4179e21f1a16",
+      "parentCommit": "ec0efe8a06d0271ef0154f38fb9beabcd4b1bd89",
+      "mergedAt": "2024-09-30",
+      "symptom": "\"Some circular dependency in the code base was making the tests fail locally. This PR removes the circular dependencies to fix it.\" Commit 5300f2f: \"breaks the following circular dependecy: config.ts -> server/environments/runnableEnvironment.ts -> server/environment.ts -> config.ts\". Commit f25a8de lists a 9-module cycle (server/environment.ts -> plugins/optimizedDeps.ts -> optimizer/index.ts -> optimizer/esbuildDepPlugin.ts -> plugins/css.ts -> build.ts -> config.ts -> server/environments/runnableEnvironment.ts -> server/environment.ts).",
+      "runtimeImpact": "unit tests failed locally (error text not quoted); no user-facing report",
+      "cycle": [
+        "packages/vite/src/node/config.ts",
+        "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+        "packages/vite/src/node/server/environment.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "packages/vite/src/node/config.ts",
+          "line": 42,
+          "specifier": "./server/environments/runnableEnvironment",
+          "to": "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+          "kind": "value",
+          "text": "import { createRunnableDevEnvironment } from './server/environments/runnableEnvironment'"
+        },
+        {
+          "from": "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+          "line": 4,
+          "specifier": "../environment",
+          "to": "packages/vite/src/node/server/environment.ts",
+          "kind": "value",
+          "text": "import { DevEnvironment } from '../environment'"
+        },
+        {
+          "from": "packages/vite/src/node/server/environment.ts",
+          "line": 11,
+          "specifier": "../config",
+          "to": "packages/vite/src/node/config.ts",
+          "kind": "value",
+          "text": "import { getDefaultResolvedEnvironmentOptions } from '../config'"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": "packages/vite/src/node/server/environments/runnableEnvironment.ts:34 `class RunnableDevEnvironment extends DevEnvironment {` — class extends at module evaluation. If server/environment.ts is entered first, it imports ../config (line 11) before declaring DevEnvironment (line 45), config.ts imports runnableEnvironment.ts, and the extends clause reads DevEnvironment in its TDZ.",
+      "fixShape": "moved code: getDefaultResolvedEnvironmentOptions moved out of config.ts (to server/environment.ts, then baseEnvironment.ts); ERR_* constants moved from plugins/optimizedDeps.ts to constants.ts",
+      "files": [
+        "packages/vite/src/node/config.ts",
+        "packages/vite/src/node/server/environments/runnableEnvironment.ts",
+        "packages/vite/src/node/server/environment.ts",
+        "packages/vite/src/node/baseEnvironment.ts",
+        "packages/vite/src/node/plugins/optimizedDeps.ts",
+        "packages/vite/src/node/constants.ts"
+      ],
+      "notes": "config.ts:41 also imports `{ DevEnvironment } from './server/environment'`, so config.ts <-> server/environment.ts is itself a 2-cycle (value edges both ways). The PR does not quote the failing error, so `kind` stays circular-fix; the top-level extends is the only module-evaluation use I found on the cycle. Vite ships a bundle, so source-level cycles only bite when the source runs unbundled (vitest, tsx); see notes.vite for a live one."
+    },
+    {
+      "id": "astro-17787",
+      "repo": "withastro/astro",
+      "kind": "undefined-import",
+      "title": "Fix circular import in virtual:astro:routes causing \"undefined is not a function\" with server:defer + astro:i18n",
+      "fix": "https://github.com/withastro/astro/pull/17787",
+      "issue": "https://github.com/withastro/astro/issues/17785",
+      "fixCommit": "6661fbe54a2bd5e784110d89b31bc682b8ff7f21",
+      "parentCommit": "60b14ffff5b7a66b06d9b12e72933ba9222f519d",
+      "mergedAt": "2026-08-21",
+      "symptom": "Issue: \"server:defer with \"getRelativeLocaleUrl\" crashes with \"undefined is not a function\" on \"virtual:astro:routes\"\". PR: \"breaking a circular dependency that caused `deserializeRouteInfo` to be `undefined` at evaluation time ... causing `serializedData.map(deserializeRouteInfo)` to throw \"undefined is not a function\".\"",
+      "runtimeImpact": "dev server crash when the module graph re-evaluates (server islands + astro:i18n); regression from #17636 (v7.2.3)",
+      "cycle": [
+        "virtual:astro:routes (code generated in packages/astro/src/vite-plugin-routes/index.ts)",
+        "packages/astro/src/core/app/entrypoints/index.ts",
+        "packages/astro/src/core/app/base.ts",
+        "packages/astro/src/core/fetch/default-handler.ts",
+        "packages/astro/src/core/manifest/ambient.ts",
+        "virtual:astro:manifest (code generated in packages/astro/src/manifest/serialized.ts)"
+      ],
+      "cycleEdges": [
+        {
+          "from": "virtual:astro:routes",
+          "line": 189,
+          "specifier": "astro/app",
+          "to": "packages/astro/src/core/app/entrypoints/index.ts",
+          "kind": "value",
+          "text": "import { deserializeRouteInfo } from 'astro/app';  (generated string, vite-plugin-routes/index.ts:189; 'astro/app' -> ./dist/core/app/entrypoints/index.js via packages/astro/package.json exports)"
+        },
+        {
+          "from": "packages/astro/src/core/app/entrypoints/index.ts",
+          "line": 3,
+          "specifier": "../base.js",
+          "to": "packages/astro/src/core/app/base.ts",
+          "kind": "reexport",
+          "text": "export { BaseApp, type RenderErrorOptions, type RenderOptions, type LogRequestPayload } from '../base.js';  (lines 3-8)"
+        },
+        {
+          "from": "packages/astro/src/core/app/base.ts",
+          "line": 16,
+          "specifier": "../fetch/default-handler.js",
+          "to": "packages/astro/src/core/fetch/default-handler.ts",
+          "kind": "value",
+          "text": "import { DefaultFetchHandler } from '../fetch/default-handler.js';"
+        },
+        {
+          "from": "packages/astro/src/core/fetch/default-handler.ts",
+          "line": 2,
+          "specifier": "../manifest/ambient.js",
+          "to": "packages/astro/src/core/manifest/ambient.ts",
+          "kind": "value",
+          "text": "import { getAmbientManifest } from '../manifest/ambient.js';"
+        },
+        {
+          "from": "packages/astro/src/core/manifest/ambient.ts",
+          "line": 9,
+          "specifier": "#astro-internal/ambient-manifest",
+          "to": "virtual:astro:manifest",
+          "kind": "value",
+          "text": "import { manifest as viteManifest } from '#astro-internal/ambient-manifest';  (package.json imports map; in Vite environments the serialized-manifest plugin resolves it to virtual:astro:manifest)"
+        },
+        {
+          "from": "virtual:astro:manifest",
+          "line": 134,
+          "specifier": "virtual:astro:routes",
+          "to": "virtual:astro:routes",
+          "kind": "value",
+          "text": "import { routes } from '${ASTRO_ROUTES_MODULE_ID}';  (generated string, manifest/serialized.ts:134)"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": "generated module top level, packages/astro/src/vite-plugin-routes/index.ts:191: `const routes = serializedData.map(deserializeRouteInfo);`",
+      "fixShape": "replaced barrel import with direct import ('astro/app/manifest')",
+      "files": [
+        "packages/astro/src/vite-plugin-routes/index.ts",
+        "packages/astro/src/core/app/entrypoints/index.ts",
+        "packages/astro/src/core/app/entrypoints/manifest.ts",
+        "packages/astro/src/core/app/base.ts",
+        "packages/astro/src/core/fetch/default-handler.ts",
+        "packages/astro/src/core/manifest/ambient.ts",
+        "packages/astro/src/core/manifest/ambient-source.ts",
+        "packages/astro/src/manifest/serialized.ts",
+        "packages/astro/package.json"
+      ],
+      "notes": "Two of the six nodes are virtual modules whose code is a template string, so a file-based cycle detector cannot see this cycle. The same barrel cycle had already been fixed once in manifest/serialized.ts, whose generated code carries the comment: \"'astro/app/manifest' (not the 'astro/app' barrel): the barrel pulls in BaseApp -> DefaultFetchHandler -> the ambient-manifest module, which resolves to THIS virtual module — importing the barrel here would close a top-level import cycle that leaves deserializeManifest uninitialized when the dev module graph re-evaluates after invalidation.\" The PR says the second occurrence \"was missed\"."
+    },
+    {
+      "id": "astro-16171",
+      "repo": "withastro/astro",
+      "kind": "tdz",
+      "title": "fix(assets): resolve Picture TDZ error when combined with content render()",
+      "fix": "https://github.com/withastro/astro/pull/16171",
+      "issue": "https://github.com/withastro/astro/issues/16036",
+      "fixCommit": "5bcd03c1852cb7a7e165017089cc39c111599530",
+      "parentCommit": "39a4c434ff9d22878f35c11d2b52e611750290b2",
+      "mergedAt": "2026-04-08",
+      "symptom": "\"[ERROR] ReferenceError: Cannot access '$$Picture' before initialization\n    at file:///.../dist/server/.prerender/chunks/Picture_BgQajNq-.mjs:745:12\" (Astro 6.0.8, static output, Cloudflare adapter)",
+      "runtimeImpact": "build failure during prerendering",
+      "cycle": [
+        "virtual module astro:assets (code generated in packages/astro/src/assets/vite-plugin-assets.ts)",
+        "packages/astro/components/Picture.astro"
+      ],
+      "cycleEdges": [
+        {
+          "from": "astro:assets",
+          "line": 180,
+          "specifier": "astro/components/Picture.astro",
+          "to": "packages/astro/components/Picture.astro",
+          "kind": "reexport",
+          "text": "export { default as Picture } from \"astro/components/${imageComponentPrefix}Picture.astro\";  (generated string, vite-plugin-assets.ts:180)"
+        },
+        {
+          "from": "packages/astro/components/Picture.astro",
+          "line": 2,
+          "specifier": "astro:assets",
+          "to": "astro:assets",
+          "kind": "value",
+          "text": "import { getImage, imageConfig, type LocalImageProps, type RemoteImageProps } from 'astro:assets';"
+        }
+      ],
+      "throughBarrel": true,
+      "topLevelUse": "Not in source: Picture.astro only calls getImage while rendering. The top-level read is in Rollup's output — content/runtime.ts:458 `const { getImage } = await import('astro:assets');` makes Rollup build a namespace object for astro:assets, which references $$Picture at chunk top level before Picture's declaration runs (PR: \"Rollup eagerly referencing `$$Picture` in the namespace object before its declaration is initialized\").",
+      "fixShape": "split the barrel: new internal virtual module virtual:astro-get-image exporting only getImage and imageConfig; the content runtime imports that instead of astro:assets",
+      "files": [
+        "packages/astro/src/assets/vite-plugin-assets.ts",
+        "packages/astro/components/Picture.astro",
+        "packages/astro/src/content/runtime.ts",
+        "packages/astro/src/assets/consts.ts"
+      ],
+      "notes": "astro:assets is a virtual barrel that re-exports components (Image, Picture, Font) next to the getImage function those components import from it. The failure needed a prerendered page using <Picture> and another page calling render(entry) so both ended up in one chunk."
+    },
+    {
+      "id": "vscode-251003-notebook",
+      "repo": "microsoft/vscode",
+      "kind": "tdz",
+      "title": "Detect and fix cyclic runtime dependencies (commit 6812a17 \"fix cyclic dependency in notebook-land\")",
+      "fix": "https://github.com/microsoft/vscode/pull/251003",
+      "issue": "https://github.com/microsoft/vscode/issues/250990",
+      "fixCommit": "73a5bfb3b0eaa45bed289afdfd8679b82022fec5",
+      "parentCommit": "be489936ee8c474aa72359f8270674f40bd4c23e",
+      "mergedAt": "2025-06-11",
+      "symptom": "\"ReferenceError: Cannot access 'NOTEBOOK_ACTIONS_CATEGORY' before initialization\n    at new ToggleLineNumberAction (cellEditorOptions.js:172:23)\n    at registerAction2 (actions.js:433:20)\n    at cellEditorOptions.js:158:1\" when running chatSelectedTools.test.ts; maintainer: \"this is caused by cyclic dependencies in MCP and/or notebook land\".",
+      "runtimeImpact": "test file crashed at load; load-order dependent",
+      "cycle": [
+        "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+        "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+        "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+        "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+        "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+          "line": 12,
+          "specifier": "../notebookBrowser.js",
+          "to": "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+          "kind": "value",
+          "text": "import { getNotebookEditorFromEditorPane, IActiveNotebookEditor, ICellViewModel, cellRangeToViewCells, ICellOutputViewModel } from '../notebookBrowser.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+          "line": 35,
+          "specifier": "./diff/notebookDiffEditor.js",
+          "to": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "kind": "value",
+          "text": "import { NotebookTextDiffEditor } from './diff/notebookDiffEditor.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+          "line": 13,
+          "specifier": "../notebookEditorWidget.js",
+          "to": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "kind": "value",
+          "text": "import { getDefaultNotebookCreationOptions } from '../notebookEditorWidget.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+          "line": 68,
+          "specifier": "./view/renderers/cellRenderer.js",
+          "to": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "kind": "value",
+          "text": "import { CodeCellRenderer, MarkupCellRenderer, NotebookCellListDelegate } from './view/renderers/cellRenderer.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+          "line": 34,
+          "specifier": "../cellParts/cellEditorOptions.js",
+          "to": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "kind": "value",
+          "text": "import { CellEditorOptions } from '../cellParts/cellEditorOptions.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+          "line": 17,
+          "specifier": "../../controller/coreActions.js",
+          "to": "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+          "kind": "value",
+          "text": "import { INotebookCellToolbarActionContext, INotebookCommandContext, NotebookMultiCellAction, NOTEBOOK_ACTIONS_CATEGORY } from '../../controller/coreActions.js';"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts:196 `registerAction2(class ToggleLineNumberAction extends Action2 {` — registerAction2 instantiates the class during module evaluation and the constructor reads `category: NOTEBOOK_ACTIONS_CATEGORY` (line 209; declared at coreActions.ts:28). Line 230 `registerAction2(class ToggleActiveLineNumberAction extends NotebookMultiCellAction {` also extends a class imported from coreActions.ts (declared at coreActions.ts:184).",
+      "fixShape": "replaced a value import with a constant: notebookBrowser.ts compares editorPane.getId() to NOTEBOOK_DIFF_EDITOR_ID from notebookCommon instead of importing NotebookTextDiffEditor for its static ID",
+      "files": [
+        "src/vs/workbench/contrib/notebook/browser/controller/coreActions.ts",
+        "src/vs/workbench/contrib/notebook/browser/notebookBrowser.ts",
+        "src/vs/workbench/contrib/notebook/browser/diff/notebookDiffEditor.ts",
+        "src/vs/workbench/contrib/notebook/browser/notebookEditorWidget.ts",
+        "src/vs/workbench/contrib/notebook/browser/view/renderers/cellRenderer.ts",
+        "src/vs/workbench/contrib/notebook/browser/view/cellParts/cellEditorOptions.ts",
+        "src/vs/workbench/contrib/notebook/common/notebookCommon.ts"
+      ],
+      "notes": "VS Code uses relative specifiers here, so no tsconfig path alias is involved. The PR background: \"historically we have never allowed to have cyclic runtime dependencies between our modules. The AMD loader would simply fail during load. Since the advent of ESM this has changed, browsers handle cycling dependencies graceful and things might work or not - it depends on the circumstances in which things get loaded ... we have added a check for cyclic runtime dependencies (as part of the ESM work). Unfortunately, this check was broken and a couple of cyclic dependencies have slipped in.\" The PR lists 12 cycles its checker found (chat, editor tokens, GPU raster, tree-sitter, notebook, SCM, extensions, prompt-syntax parsers). I verified the notebook cycle reaches the throwing file; I did not reproduce which entry order the test hit, and connor4312 also landed MCP cycle fixes in the same PR."
+    },
+    {
+      "id": "vscode-251003-scm",
+      "repo": "microsoft/vscode",
+      "kind": "circular-fix",
+      "title": "Detect and fix cyclic runtime dependencies (commit 7c3bb3a \"fix cyclic dependency in scmHistory\")",
+      "fix": "https://github.com/microsoft/vscode/pull/251003",
+      "issue": null,
+      "fixCommit": "73a5bfb3b0eaa45bed289afdfd8679b82022fec5",
+      "parentCommit": "be489936ee8c474aa72359f8270674f40bd4c23e",
+      "mergedAt": "2025-06-11",
+      "symptom": "Reported by the build's cycle checker: \"CYCLIC dependency: `vs/workbench/contrib/scm/browser/scmHistory.js -> vs/workbench/contrib/scm/browser/util.js -> vs/workbench/contrib/scm/browser/scmHistory.js`\"",
+      "runtimeImpact": "none stated (caught by the cycle check)",
+      "cycle": [
+        "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+        "src/vs/workbench/contrib/scm/browser/util.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+          "line": 13,
+          "specifier": "./util.js",
+          "to": "src/vs/workbench/contrib/scm/browser/util.ts",
+          "kind": "value",
+          "text": "import { compareHistoryItemRefs } from './util.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/scm/browser/util.ts",
+          "line": 29,
+          "specifier": "./scmHistory.js",
+          "to": "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+          "kind": "value",
+          "text": "import { historyItemHoverAdditionsForeground, historyItemHoverDefaultLabelBackground, historyItemHoverDefaultLabelForeground, historyItemHoverDeletionsForeground, historyItemHoverLabelForeground } from './scmHistory.js';"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": null,
+      "fixShape": "moved code: compareHistoryItemRefs moved from util.ts into scmHistory.ts",
+      "files": [
+        "src/vs/workbench/contrib/scm/browser/scmHistory.ts",
+        "src/vs/workbench/contrib/scm/browser/util.ts"
+      ],
+      "notes": "scmHistory.ts declares the colours with top-level registerColor calls (e.g. line 34), but util.ts reads them only inside functions (lines 199, 206, 218), and compareHistoryItemRefs is called inside a function (scmHistory.ts:342). A control case: same PR, same checker, no module-evaluation use."
+    },
+    {
+      "id": "vscode-a783943",
+      "repo": "microsoft/vscode",
+      "kind": "circular-fix",
+      "title": "Fix circular import",
+      "fix": "https://github.com/microsoft/vscode/commit/a7839433a834a8432b7efb346fb645894e0ee417",
+      "issue": null,
+      "fixCommit": "a7839433a834a8432b7efb346fb645894e0ee417",
+      "parentCommit": "4ee75f99c589c476eef608797f32fb69cda5e37c",
+      "mergedAt": "2025-05-09",
+      "symptom": "none stated (commit message \"Fix circular import\")",
+      "runtimeImpact": "none stated",
+      "cycle": [
+        "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+        "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts"
+      ],
+      "cycleEdges": [
+        {
+          "from": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+          "line": 25,
+          "specifier": "./chatToolConfirmationSubPart.js",
+          "to": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts",
+          "kind": "value",
+          "text": "import { ToolConfirmationSubPart } from './chatToolConfirmationSubPart.js';"
+        },
+        {
+          "from": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts",
+          "line": 32,
+          "specifier": "./chatToolInvocationPart.js",
+          "to": "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+          "kind": "value",
+          "text": "import { BaseChatToolInvocationSubPart } from './chatToolInvocationPart.js';"
+        }
+      ],
+      "throughBarrel": false,
+      "topLevelUse": "chatToolConfirmationSubPart.ts:34 `export class ToolConfirmationSubPart extends BaseChatToolInvocationSubPart {` — class extends at module evaluation; BaseChatToolInvocationSubPart is declared at chatToolInvocationPart.ts:213, after that file's imports, so evaluating chatToolInvocationPart.ts first would throw a TDZ ReferenceError",
+      "fixShape": "moved code to new module: BaseChatToolInvocationSubPart moved to chatToolInvocationSubPart.ts",
+      "files": [
+        "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolInvocationPart.ts",
+        "src/vs/workbench/contrib/chat/browser/chatContentParts/toolInvocationParts/chatToolConfirmationSubPart.ts"
+      ],
+      "notes": "chatToolInvocationPart.ts also imports chatTerminalToolSubPart.ts, chatResultListSubPart.ts, chatTerminalMarkdownProgressPart.ts and chatInputOutputMarkdownProgressPart.ts, all touched by the commit; I verified only the confirmation sub-part's extends edge. The commit records no crash, so this stays circular-fix."
+    }
+  ],
+  "toolHandlesCycles": [
+    {
+      "id": "vite-3950",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/3950",
+      "title": "feat(ssr): tolerate circular imports",
+      "what": "SSR module loader stops failing on circular imports in user code (2021-08-02)"
+    },
+    {
+      "id": "vite-4589",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/4589",
+      "title": "fix: circular dependency hmr causes refresh crash",
+      "what": "HMR boundary walk no longer crashes on cycles (2021-11-25)"
+    },
+    {
+      "id": "vite-b31e56a",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/commit/b31e56a42b",
+      "title": "fix(hmr): bail on circular imports when walking import chain",
+      "what": "early HMR fix: stop walking import chain on a cycle (2020-06-23)"
+    },
+    {
+      "id": "vite-14441",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/14441",
+      "title": "fix(ssr): crash on circular import",
+      "what": "SSR loader crash on circular import fixed (2024-03-13)"
+    },
+    {
+      "id": "vite-14867",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/14867",
+      "title": "feat(hmr): improve circular import updates",
+      "what": "HMR propagates through circular imports instead of always full-reloading (2023-11-08)"
+    },
+    {
+      "id": "vite-15034",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/15034",
+      "title": "perf(hmr): skip traversed modules when checking circular imports",
+      "what": "perf of the HMR cycle check (2023-11-21)"
+    },
+    {
+      "id": "vite-15118",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/15118",
+      "title": "feat(hmr): reload for circular imports only if error",
+      "what": "HMR only falls back to a full reload for cycles when the update errors (2024-01-08)"
+    },
+    {
+      "id": "vite-15229",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/15229",
+      "title": "fix(hmr): don't consider CSS dep as a circular dep",
+      "what": "false-positive cycle detection for CSS deps (2023-12-04)"
+    },
+    {
+      "id": "vite-15395",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/15395",
+      "title": "fix(ssr): resolve interlocking circular dependency issues",
+      "what": "SSR loader deadlock/partial modules with interlocking cycles (2024-06-06)"
+    },
+    {
+      "id": "vite-16103",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/16103",
+      "title": "fix(worker): throw error when circular worker import is detected and support self referencing worker",
+      "what": "worker bundling hung on circular worker imports (2024-03-06)"
+    },
+    {
+      "id": "vite-18983",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/18983",
+      "title": "fix(ssr): hoist export to handle cyclic import better",
+      "what": "SSR transform hoists exports so cyclic importers see bindings (2025-03-26)"
+    },
+    {
+      "id": "vite-19870",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/19870",
+      "title": "fix(hmr): avoid infinite loop happening with `hot.invalidate` in circular deps",
+      "what": "HMR infinite loop in cycles (2025-04-16)"
+    },
+    {
+      "id": "vite-19959",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/19959",
+      "title": "fix(ssr): handle uninitialized export access as undefined",
+      "what": "SSR module runner: reading an uninitialized export in a cycle yields undefined instead of throwing (2025-05-02); issue #22291 later notes the spec says ReferenceError"
+    },
+    {
+      "id": "vite-21632",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/21632",
+      "title": "perf(ssr): skip circular import check for already-evaluated modules",
+      "what": "perf of SSR cycle check (2026-02-16)"
+    },
+    {
+      "id": "vite-22369",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/22369",
+      "title": "fix(module-runner): prevent partial-exports race on concurrent imports of in-flight invalidated re-export chains",
+      "what": "module runner handed partially initialized re-export namespaces to concurrent importers (2026-05-08)"
+    },
+    {
+      "id": "vite-23009",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/23009",
+      "title": "fix(module-runner): exclude completed modules from in-flight cycle detection (fix #22999)",
+      "what": "false cycle detection in module runner (2026-08-19)"
+    },
+    {
+      "id": "vite-23259",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/23259",
+      "title": "fix(bundled-dev): hot update through circular imports instead of reloading",
+      "what": "bundled dev mode HMR through cycles (2026-08-18)"
+    },
+    {
+      "id": "vite-23636",
+      "repo": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite/pull/23636",
+      "title": "fix(html): skip caching CSS of chunks in a cycle (fix #23628)",
+      "what": "CSS caching bug for chunk cycles (2026-10-08)"
+    },
+    {
+      "id": "astro-5822",
+      "repo": "withastro/astro",
+      "url": "https://github.com/withastro/astro/pull/5822",
+      "title": "Fix order-of-execution bug when generating pages",
+      "what": "fixes #5754 \"Cannot access 'SITE_TITLE' before initialization\" in user builds: per-page manual chunks created cross-chunk cycles; now one chunk for all dynamic pages (2023-01-11)"
+    },
+    {
+      "id": "astro-6244",
+      "repo": "withastro/astro",
+      "url": "https://github.com/withastro/astro/pull/6244",
+      "title": "Fix hydration path for circular imports",
+      "what": "island hydration path resolution with circular imports in user code (2023-02-15)"
+    },
+    {
+      "id": "astro-9706",
+      "repo": "withastro/astro",
+      "url": "https://github.com/withastro/astro/pull/9706",
+      "title": "Simplify HMR for circular imports and CSS",
+      "what": "dev HMR with circular imports (2024-01-17)"
+    },
+    {
+      "id": "astro-15603",
+      "repo": "withastro/astro",
+      "url": "https://github.com/withastro/astro/pull/15603",
+      "title": "fix(assets): prevent circular dependency deadlock with SVG in content collections",
+      "what": "dev deadlock when SVG imports and content collections await each other (2026-02-26)"
+    },
+    {
+      "id": "astro-16011",
+      "repo": "withastro/astro",
+      "url": "https://github.com/withastro/astro/pull/16011",
+      "title": "Prevent dev server hang on first request with Cloudflare adapter",
+      "what": "closes #16010 \"Dev server hangs on first request with Cloudflare adapter: circular deadlock in ensureModulesLoaded()\" (2026-03-20); PR body not read"
+    },
+    {
+      "id": "next-82827",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/82827",
+      "title": "Turbopack: fix circular import with scope hoisting",
+      "what": "closes #82723: Turbopack production build of zod 4 threw \"ReferenceError: Cannot access 'ZodEnum' before initialization\" (same report as colinhacks/zod#5095); a bundler bug triggered by a cycle in a dependency"
+    },
+    {
+      "id": "next-76676",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/76676",
+      "title": "Turbopack: fix order of chunk items in cycles",
+      "what": "chunk item ordering for module cycles (2025-02-28)"
+    },
+    {
+      "id": "next-76475",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/76475",
+      "title": "[Turbopack] fix TLA cycle detection",
+      "what": "top-level-await cycle detection (2025-02-25)"
+    },
+    {
+      "id": "next-81620",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/81620",
+      "title": "Turbopack: fix hanging problem with reexport cycles",
+      "what": "build hang on re-export cycles (2025-07-14)"
+    },
+    {
+      "id": "next-97933",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/97933",
+      "title": "Fix Turbopack re-export cycle deadlock",
+      "what": "deadlock on re-export cycles (2026-08-26)"
+    },
+    {
+      "id": "next-98661",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/98661",
+      "title": "fix(turbopack): trace cyclic modules to explicit entries",
+      "what": "tracing of cyclic modules (2026-09-15)"
+    },
+    {
+      "id": "next-0da446b",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/commit/0da446b942",
+      "title": "Turbopack HMR: Avoid infinite loops caused by cycles between modules in the dependency chain. (vercel/turbo#8210)",
+      "what": "HMR infinite loop on module cycles (2024-05-28)"
+    },
+    {
+      "id": "next-12161",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/12161",
+      "title": "Fast Refresh: test cyclic dependencies",
+      "what": "test-only: Fast Refresh behaviour with cyclic user modules (2020-04-24)"
+    }
+  ],
+  "perf": [
+    {
+      "id": "zod-6384",
+      "repo": "colinhacks/zod",
+      "url": "https://github.com/colinhacks/zod/pull/6384",
+      "mergedAt": "2026-08-14",
+      "title": "fix(v4): let bundlers tree-shake locales out of the default import",
+      "what": "changed how the entry barrels re-export the namespace: `export { z }; export default z;` became `export { z, z as default };` (and v4/index.ts re-exports the classic namespace directly), so `import z from \"zod\"` is a re-export bundlers can shake property by property",
+      "numbers": "\"`import z from \"zod\"` was pulling all 53 locale modules into the bundle.\" | Rollup 4.62, `preset: \"smallest\"` | 591,761 (all locales) | 138,465 (none) | ; | Webpack 5.109, `mode: \"production\"` | 593,643 (all locales) | 295,761 (none) | ; \"That covers the Next.js report in #6050 where locales were 60% of the bundle\"",
+      "fixCommit": "784e5c264284a9424dc7ebdf538ad7bde0c77e4c",
+      "parentCommit": "97edd70a8f0d34ec6f50e8255713d3d49a106e2c",
+      "barrelFiles": [
+        "packages/zod/src/index.ts",
+        "packages/zod/src/v4/index.ts",
+        "packages/zod/src/v4/classic/index.ts"
+      ]
+    },
+    {
+      "id": "excalidraw-7635",
+      "repo": "excalidraw/excalidraw",
+      "url": "https://github.com/excalidraw/excalidraw/pull/7635",
+      "mergedAt": "2024-01-31",
+      "title": "fix: don't bundle react-dom when importing from element",
+      "what": "stopped re-exporting textWysiwyg from the element barrel; App.tsx imports it from ../element/textWysiwyg directly. \"we are re-exporting lot of functions from `element/index.ts` and it has `textWysiwyg` as well which leads to importing `react-dom` whenever anything is importing from `\"../element/index\"`.\"",
+      "numbers": "No numbers in the PR (screenshots). It is one of the refactors behind #7500 (ESM build for @excalidraw/utils), which states: \"So overall the bundle size has reduced from **5mb to 200kb** when dependencies are bundled and reduced by more **100kb** when dependencies are not bundled\" (UMD ~5mb, ESM before refactors ~4mb).",
+      "fixCommit": "e0fefa8025901ff73cb6b690bed3c73072c6f89a",
+      "parentCommit": "d426cc968d49071749c0d831490501cf572eb571",
+      "barrelFiles": [
+        "packages/excalidraw/element/index.ts"
+      ]
+    },
+    {
+      "id": "excalidraw-7640",
+      "repo": "excalidraw/excalidraw",
+      "url": "https://github.com/excalidraw/excalidraw/pull/7640",
+      "mergedAt": "2024-02-01",
+      "title": "fix: don't bundle react and jotai when importing from scene",
+      "what": "stopped re-exporting isOverScrollBars (scrollbars.ts) from the scene barrel; callers import ./scene/scrollbars directly. `import { getElementAtPosition } from \"../scene\"` in element/binding.ts pulled scrollbars.ts -> i18n -> jotai -> react into the utils bundle.",
+      "numbers": "No numbers in the PR (screenshots); same #7500 aggregate as excalidraw-7635: \"5mb to 200kb\".",
+      "fixCommit": "1c39bd57816f1de2b51c35e73a5d0e21b1a74fab",
+      "parentCommit": "90ad885446314bfb9efa62e46988354f1dc2daaa",
+      "barrelFiles": [
+        "packages/excalidraw/scene/index.ts"
+      ]
+    },
+    {
+      "id": "next-35512",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/35512",
+      "mergedAt": "2022-03-22",
+      "title": "Reduce hello-world middleware bundle size from 128k to 88k",
+      "what": "not a barrel: moved two utility functions out of server/router.ts into server/router-utils.ts so middleware stops pulling the full router into its bundle",
+      "numbers": "title: \"Reduce hello-world middleware bundle size from 128k to 88k\"",
+      "fixCommit": "6da769129ec94dc3f3202e89cc73ce35d4e97488",
+      "parentCommit": "860c97ccf597eddec9422cab06ab8a7cc328d8bb",
+      "barrelFiles": []
+    },
+    {
+      "id": "next-68858",
+      "repo": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js/pull/68858",
+      "mergedAt": "2024-08-13",
+      "title": "remove circular ExportError import from SSG worker",
+      "what": "not a barrel: export/worker.ts imported ExportError from '.' (export/index.ts), which imports ../build; replaced with a local ExportPageError class. \"These are technically different kinds of errors and results in the worker importing everything in `build`, which was an unintentional side effect of #68546.\"",
+      "numbers": null,
+      "fixCommit": "f63f0125b9c405d9a470db619710cc415aad1450",
+      "parentCommit": "fe7ff3f468d7651a92865350bfd0f16ceba27db5",
+      "barrelFiles": []
+    }
+  ],
+  "unverified": [
+    {
+      "url": "https://github.com/withastro/astro/pull/16968",
+      "reason": "Real module cycle with a top-level use in repo code, but it closes through the user's own fetchFile, so it cannot be reproduced from repo files alone. Issue #16956: \"`fetch.js` runs `setGetEnv(createGetEnv(globalEnv))` and `createApp()` at the top level. `createApp` comes from `astro/app/entrypoint`, which imports `virtual:astro:fetchable`, which re-exports my `worker.ts`, which imports `@astrojs/cloudflare/fetch` again\" -> \"(0 , __vite_ssr_import_0__.createGetEnv) is not a function\". Fix (7a5c00169ecc3a1ceccf27f457818c04bcc5d12b, 2026-06-05) moved the top-level calls into a lazy ensureInitialized(). File is packages/integrations/cloudflare/src/fetch.ts, outside the measured packages/astro/src."
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/68858",
+      "reason": "Title says \"circular\", but at the parent (fe7ff3f) I found no static path back to export/worker.ts: build/index.ts loads ./worker via require.resolve for a worker process and only imports its type. Recorded under perf as an import-cost fix."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/commit/1b647827f4",
+      "reason": "\"fix cyclic imports\" (2020-02-20) moved CompositeDragAndDropData out of vs/workbench/browser/parts/compositeBar into vs/base/parts/composite/browser/compositeDnd; I did not identify the cycle's other edge."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/313123",
+      "reason": "\"Fix circular import in terminal suggest\" (2026-04-28), found \"while trying to switch us to use esbuild for extension emit\"; in extensions/terminal-suggest, outside src/vs; edges not checked."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/235480",
+      "reason": "\"remove cyclic dependency notebookChatEditController -> notebookChatActionsOverlay -> chatEditorOverlay\" (2024-12-06), one of several fixes right after the compile-time cycle check landed (#235808); edges not checked."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/239077",
+      "reason": "\"avoid cyclic dependency between ChatEditorOverlayController and ChatEditorController\" (2025-01-29); edges not checked."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/228700",
+      "reason": "\"[Refactoring] refactoring color picker code - removing cyclic dependency\" (2024-09-16); edges not checked."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/150282",
+      "reason": "\"move USER_TASKS_GROUP_KEY into tasks.ts, out of taskService.ts, and prevent cyclic dependency\" (2022-05-24); edges not checked."
+    }
+  ],
+  "rejected": [
+    {
+      "url": "https://github.com/trpc/trpc/issues/4971",
+      "reason": "user-land: cycle between the reporter's own router files (\"Cannot access 'exampleRouter' before initialization\"); maintainer: \"Probably got some circular import thingy going on\" in user code"
+    },
+    {
+      "url": "https://github.com/colinhacks/zod/pull/5537",
+      "reason": "not merged; the same cycle was fixed by commit 5b5b129 (zod 4.2.1)"
+    },
+    {
+      "url": "https://github.com/honojs/hono/pull/5069",
+      "reason": "not merged; alternative fix for #5068 rejected as too complex"
+    },
+    {
+      "url": "https://github.com/colinhacks/zod/issues/5095",
+      "reason": "Turbopack bug (\"ReferenceError: Cannot access 'ZodEnum' before initialization\" only under Turbopack); fixed in Next.js by vercel/next.js#82827 (listed under toolHandlesCycles)"
+    },
+    {
+      "url": "https://github.com/vitejs/vite/issues/22634",
+      "reason": "not fixed: closed as unsupported (\"We don't support running `src/node/cli.ts` directly with tsx\"). The cycle is real: packages/vite/src/node/config.ts:112 `import { resolveServerOptions, serverConfigDefaults } from './server'` with top-level use config.ts:897 `server: serverConfigDefaults,` inside the configDefaults object, and server/index.ts:26 `import { isResolvedConfig, resolveConfig } from '../config'` — still present at the corpus SHA 3b72997. Report: \"ReferenceError: Cannot access 'serverConfigDefaults' before initialization\"."
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/commit/4fb26ee9e6ae29f8d804a77922c4a6c9ee24bc2f",
+      "reason": "\"Fixes ReferenceError: Cannot access 'SimplePriorityQueue' before initialization\" — class declared after its use in the same file (timeTravelScheduler.ts); not an import cycle"
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/163712",
+      "reason": "type-only cycle: webview.ts:20 imports WebviewInitInfo, an interface (webviewElement.ts:101), so the edge is erased at runtime; the fix was about layering"
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/commit/5c680bf93b",
+      "reason": "type-only: moved OmitFirstArg type and dropped an ITerminalInstance interface import"
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/333247",
+      "reason": "dependency-injection service cycle (ChatService -> customization migration -> agent host tools), not a module import cycle"
+    },
+    {
+      "url": "https://github.com/microsoft/vscode/pull/159840",
+      "reason": "dependency-injection service cycle (TextModelResolverService), not a module import cycle"
+    },
+    {
+      "url": "https://github.com/withastro/astro/pull/16532",
+      "reason": "package-level, type-level dependency (language-server imported @astrojs/svelte); not a module cycle in source"
+    },
+    {
+      "url": "https://github.com/vercel/next.js/issues/41716",
+      "reason": "not fixed: closed as \"shouldn't be an issue in practice\" (circular-dependency-plugin report in next's with-router)"
+    },
+    {
+      "url": "https://github.com/vercel/next.js/issues/5392",
+      "reason": "user bundling next/dist with Rollup; advice was to mark next as external"
+    },
+    {
+      "url": "https://github.com/withastro/astro/issues/8972",
+      "reason": "user-land, no fix PR (\"Cannot access 'getCollection' before initialization\")"
+    },
+    {
+      "url": "https://github.com/withastro/astro/issues/11246",
+      "reason": "no fix PR linked (\"Cannot access 'default' before initialization\" on Cloudflare)"
+    },
+    {
+      "url": "https://github.com/colinhacks/zod/pull/6511",
+      "reason": "not a perf fix: narrowed an `export *` for API reasons; \"runtime behavior and bundle size are unchanged\""
+    },
+    {
+      "url": "https://github.com/vercel/next.js/pull/91527",
+      "reason": "re-exports removed from entry-base.ts as dead indirection, no performance claim"
+    },
+    {
+      "url": "https://github.com/excalidraw/excalidraw/pull/2834",
+      "reason": "\"rewrite collabWrapper to remove TDZs\" — not checked; title and era suggest class-field ordering, not an import cycle"
+    }
+  ],
+  "notes": {
+    "zod": "4 confirmed (2020-21 restructure for the ESM build, 2022, 2025 Metro crash, 2026 bundler-checker failures). Zod now runs madge --circular in CI (since 4.2.1, excluding v4/core, v3 and iso.ts) and a static no-circular-imports test for v4/classic (since #5926). Two of the four involve the package's own entry barrels.",
+    "hono": "3 confirmed, all reported as bundler warnings (Rollup, Expo/Metro), none crashed. Two of three were fixed by importing from the defining module instead of an index file.",
+    "trpc": "2 cycles in 1 PR (#3877), Rollup warnings during their own build; no runtime symptom. No other own-source cycle fixes found; cycle-related issues are user-land.",
+    "excalidraw": "3 confirmed cross-package cycles through the @excalidraw/* package barrels (tsconfig paths); one crashed the browser example via a top-level read (10544). Perf: two PRs (7635, 7640) removed re-exports from internal index.ts barrels to keep react-dom/react/jotai out of @excalidraw/utils.",
+    "vite": "1 own-source fix (18237). Most cycle work in Vite is tool-level (HMR/SSR handling of user cycles; 18 entries in toolHandlesCycles). A live cycle with a top-level read sits in the corpus snapshot: node/config.ts <-> node/server/index.ts (config.ts:897 `server: serverConfigDefaults,`); issue #22634 hit it as a TDZ when running the source with tsx and was closed as unsupported, because the published bundle orders the modules safely. Perf searches found lazy-import fixes (20646 \"dynamically import resolveConfig\", 15621 \"lazy load rollup during dev\", 6898) but no barrel removals.",
+    "astro": "2 confirmed in packages/astro/src, both through virtual modules that act as barrels (astro/app entry, astro:assets); a file-based graph cannot see them. One more (16968, Cloudflare adapter) needs the user's file to close the cycle (unverified). 5 tool-level entries.",
+    "nextjs": "No confirmed own-source cycle bug. Title/body searches for circular/cycle/cyclic/TDZ in merged PRs return Turbopack (Rust) bundler fixes and comment noise; the one packages/next title hit (68858) has no static cycle at its parent. Next.js's barrel work is a tool feature for user dependencies: #54572 (2023-08-25) added the `optimize_barrel` SWC transform and `optimizePackageImports` (no numbers in the PR). Import-cost fixes in its own source are lazy requires rather than barrel removals: #41354 \"it's an extra ~15ms win on cold boots (tested locally) and we are now at around 68ms (started from 110+)\"; #77723 \"decreases the dev runtime bundle size for both Webpack and Turbopack by **16%**, and it decreases the prod runtime bundle size for Turbopack by **12%**\" (splitting runtime bundles per bundler); #91387 stops requiring watchpack in production.",
+    "vscode": "3 confirmed. VS Code treats module cycles as a build error: under AMD \"The AMD loader would simply fail during load\"; after the ESM migration a compile-time check landed (#235808, 2024-12-11), was found broken, and #251003 (2025-06-11) fixed 12 cycles at once, one of which caused a TDZ (#250990). A standalone script and tests followed (#296035, 2026-02-18). Many \"cyclic dependency\" hits are dependency-injection service cycles or observable cycles, not module cycles (rejected).",
+    "search": "GitHub search strips punctuation, so \"export *\" and \"index file\" match almost everything; those two terms were dropped after the first batch (the zod/hono runs that used them are kept in `searched` with their noisy counts). Commit search only indexes default branches. For the four large repos PR searches were limited to is:merged. 114 issue/PR/commit searches plus 2 code searches."
+  }
+}

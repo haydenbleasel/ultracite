@@ -230,6 +230,8 @@ export default defineConfig({
         "/research/dead-code": "Is dead code worth an error?",
         "/research/floating-promises":
           "What happens to a promise nobody awaits",
+        "/research/import-cycles":
+          "The import cycle that works until it doesn't",
         "/research/security-rules":
           "Security lint rules find the sink, not the bug",
         "/research/type-escape-hatches":

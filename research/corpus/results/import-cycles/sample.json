@@ -1,0 +1,368 @@
+{
+  "blind": [
+    "ic001",
+    "ic002",
+    "ic005",
+    "ic006",
+    "ic007",
+    "ic012",
+    "ic017",
+    "ic019",
+    "ic020",
+    "ic023",
+    "ic026",
+    "ic028",
+    "ic031",
+    "ic032",
+    "ic037",
+    "ic038",
+    "ic039",
+    "ic041",
+    "ic048",
+    "ic049"
+  ],
+  "codebook": {
+    "label": {
+      "type-only": "The cycle never exists at runtime: at least one hop is removed when the file is compiled with the repo's own settings (an `import type`, an import whose bindings are only used as types or not at all while verbatimModuleSyntax is off, or a type-only re-export).",
+      "barrel-induced": "The cycle exists at runtime only because a hop imports from a module that re-exports (a barrel, an index file or a package entry). If that import pointed at the module that declares the names, this cycle would not exist.",
+      "top-level-use": "The cycle exists at runtime and some module on it reads a value imported from another module on it while it is being evaluated: a top-level statement or const initializer, a class `extends`, a static member, a decorator, or a top-level call that reaches the import. Depending on which module loads first, that read can throw a TDZ ReferenceError or see undefined.",
+      "late-use": "The cycle exists at runtime and every value imported along it is only used inside functions or methods that run after all modules have loaded. Under ESM this is benign.",
+      "unclear": "The code doesn't let you decide."
+    },
+    "risk": "For barrel-induced cycles, also say whether a value is read at module evaluation (top-level-use) or not (late-use).",
+    "rightFix": {
+      "import-type": "mark the import(s) `import type` (only for type-only cycles)",
+      "import-direct": "import from the declaring module instead of the re-exporting one",
+      "extract-module": "move the shared code into a new or lower module that both can import",
+      "move-code": "move a declaration from one file of the cycle to another",
+      "lazy": "defer the import (dynamic import() or a require inside a function)",
+      "leave": "leave it: the cycle is harmless and the change isn't worth it",
+      "other": "something else (say what)"
+    }
+  },
+  "generated": "2026-10-13",
+  "items": [
+    {
+      "id": "ic001",
+      "file": "packages/zod/src/v4/core/util.ts",
+      "line": 2,
+      "repo": "zod"
+    },
+    {
+      "id": "ic002",
+      "file": "packages/zod/src/v4/core/core.ts",
+      "line": 3,
+      "repo": "zod"
+    },
+    {
+      "id": "ic003",
+      "file": "src/jsx/streaming.ts",
+      "line": 11,
+      "repo": "hono"
+    },
+    {
+      "id": "ic004",
+      "file": "src/jsx/intrinsic-element/components.ts",
+      "line": 3,
+      "repo": "hono"
+    },
+    {
+      "id": "ic005",
+      "file": "src/jsx/base.ts",
+      "line": 14,
+      "repo": "hono"
+    },
+    {
+      "id": "ic006",
+      "file": "src/jsx/components.ts",
+      "line": 10,
+      "repo": "hono"
+    },
+    {
+      "id": "ic007",
+      "file": "src/jsx/base.ts",
+      "line": 11,
+      "repo": "hono"
+    },
+    {
+      "id": "ic008",
+      "file": "src/jsx/context.ts",
+      "line": 6,
+      "repo": "hono"
+    },
+    {
+      "id": "ic009",
+      "file": "src/jsx/hooks/index.ts",
+      "line": 3,
+      "repo": "hono"
+    },
+    {
+      "id": "ic010",
+      "file": "src/helper/streaming/text.ts",
+      "line": 4,
+      "repo": "hono"
+    },
+    {
+      "id": "ic011",
+      "file": "packages/vite/src/node/config.ts",
+      "line": 109,
+      "repo": "vite"
+    },
+    {
+      "id": "ic012",
+      "file": "packages/vite/src/node/plugins/css.ts",
+      "line": 111,
+      "repo": "vite"
+    },
+    {
+      "id": "ic013",
+      "file": "packages/vite/src/node/config.ts",
+      "line": 113,
+      "repo": "vite"
+    },
+    {
+      "id": "ic014",
+      "file": "packages/vite/src/node/server/middlewares/indexHtml.ts",
+      "line": 13,
+      "repo": "vite"
+    },
+    {
+      "id": "ic015",
+      "file": "packages/vite/src/node/server/index.ts",
+      "line": 101,
+      "repo": "vite"
+    },
+    {
+      "id": "ic016",
+      "file": "packages/vite/src/node/server/environment.ts",
+      "line": 32,
+      "repo": "vite"
+    },
+    {
+      "id": "ic017",
+      "file": "packages/vite/src/node/plugins/asset.ts",
+      "line": 25,
+      "repo": "vite"
+    },
+    {
+      "id": "ic018",
+      "file": "packages/vite/src/node/config.ts",
+      "line": 123,
+      "repo": "vite"
+    },
+    {
+      "id": "ic019",
+      "file": "packages/astro/src/i18n/middleware.ts",
+      "line": 1,
+      "repo": "astro"
+    },
+    {
+      "id": "ic020",
+      "file": "packages/astro/src/core/render/params-and-props.ts",
+      "line": 9,
+      "repo": "astro"
+    },
+    {
+      "id": "ic021",
+      "file": "packages/astro/src/core/fetch/fetch-state.ts",
+      "line": 34,
+      "repo": "astro"
+    },
+    {
+      "id": "ic022",
+      "file": "packages/astro/src/runtime/server/render/astro/index.ts",
+      "line": 6,
+      "repo": "astro"
+    },
+    {
+      "id": "ic023",
+      "file": "packages/astro/src/runtime/server/render/common.ts",
+      "line": 14,
+      "repo": "astro"
+    },
+    {
+      "id": "ic024",
+      "file": "packages/astro/src/core/i18n/handler.ts",
+      "line": 2,
+      "repo": "astro"
+    },
+    {
+      "id": "ic025",
+      "file": "packages/astro/src/core/middleware/index.ts",
+      "line": 6,
+      "repo": "astro"
+    },
+    {
+      "id": "ic026",
+      "file": "packages/astro/src/core/errors/default-handler.ts",
+      "line": 5,
+      "repo": "astro"
+    },
+    {
+      "id": "ic027",
+      "file": "packages/excalidraw/actions/actionDuplicateSelection.tsx",
+      "line": 30,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic028",
+      "file": "packages/element/src/linearElementEditor.ts",
+      "line": 41,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic029",
+      "file": "packages/excalidraw/components/Stats/Dimension.tsx",
+      "line": 22,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic030",
+      "file": "packages/element/src/transform.ts",
+      "line": 41,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic031",
+      "file": "packages/element/src/collision.ts",
+      "line": 32,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic032",
+      "file": "packages/excalidraw/components/Toolbar.tsx",
+      "line": 9,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic033",
+      "file": "packages/element/src/transformHandles.ts",
+      "line": 16,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic034",
+      "file": "packages/element/src/listMarker.ts",
+      "line": 3,
+      "repo": "excalidraw"
+    },
+    {
+      "id": "ic035",
+      "file": "packages/next/src/build/webpack-config.ts",
+      "line": 83,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic036",
+      "file": "packages/next/src/client/components/segment-cache/scheduler.ts",
+      "line": 1,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic037",
+      "file": "packages/next/src/client/components/segment-cache/cache.ts",
+      "line": 32,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic038",
+      "file": "packages/next/src/client/components/segment-cache/scheduler.ts",
+      "line": 48,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic039",
+      "file": "packages/next/src/client/components/segment-cache/cache.ts",
+      "line": 92,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic040",
+      "file": "packages/next/src/next-devtools/dev-overlay/menu/panel-router.tsx",
+      "line": 4,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic041",
+      "file": "packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx",
+      "line": 14,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic042",
+      "file": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts",
+      "line": 11,
+      "repo": "next.js"
+    },
+    {
+      "id": "ic043",
+      "file": "src/vs/editor/common/model.ts",
+      "line": 29,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic044",
+      "file": "src/vs/editor/common/textModelBracketPairs.ts",
+      "line": 11,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic045",
+      "file": "src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts",
+      "line": 8,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic046",
+      "file": "src/vs/editor/common/modelLineProjectionData.ts",
+      "line": 11,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic047",
+      "file": "src/vs/editor/common/languages/languageConfigurationRegistry.ts",
+      "line": 14,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic048",
+      "file": "src/vs/editor/common/tokenizationTextModelPart.ts",
+      "line": 9,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic049",
+      "file": "src/vs/editor/common/model/editStack.ts",
+      "line": 10,
+      "repo": "vscode"
+    },
+    {
+      "id": "ic050",
+      "file": "src/vs/editor/common/languages.ts",
+      "line": 23,
+      "repo": "vscode"
+    }
+  ],
+  "method": "Seed 20261013; up to 8 import/no-cycle reports per repo, drawn from Oxlint's reports with Ultracite's default root config (core + react). Population sizes are in graph.json (oxlint.noCycle).",
+  "population": {
+    "zod": 2,
+    "hono": 13,
+    "trpc": 0,
+    "vite": 166,
+    "astro": 77,
+    "excalidraw": 505,
+    "next.js": 87,
+    "vscode": 146
+  },
+  "seed": 20261013,
+  "shas": {
+    "zod": "284243fb0d6532665afdc9239188773bb624f73c",
+    "hono": "f78a245abc393368583085e19c7f5b28b460bf51",
+    "trpc": "796700d8653b3832409fff997e6f5789519b9ea7",
+    "vite": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+    "astro": "9050e3819c51b0383cced278c278bc6f45c63468",
+    "excalidraw": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+    "next.js": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+    "vscode": "959031245ebb1fe077e0d512e1397c0ae82006e4"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "subject": "ica",
+  "description": "settings.ts only: getSettings becomes async and loads isValidPlacement with `await import()` when a placement is configured; `settings` is now a promise",
+  "verdict": "changed",
+  "files": [
+    "settings.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "settingsAsync": true
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "subject": "ica",
+  "description": "settings.ts only: `import type { Placement }`, and a local copy of the placement list and isValidPlacement declared above the top-level getSettings() call (the closest correct fix inside the one file)",
+  "verdict": "hazard removed",
+  "files": [
+    "settings.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "exportsUnchanged": true,
+    "throwsOrHangsIn": []
+  }
+}

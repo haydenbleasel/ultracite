@@ -1,0 +1,15 @@
+{
+  "subject": "ica",
+  "description": "extract placements, Placement and isValidPlacement into ui-library/placement.ts; settings.ts and window.ts import it, and window.ts re-exports the three names (the expected fix; it creates a file and edits window.ts)",
+  "verdict": "hazard removed",
+  "files": [
+    "settings.ts",
+    "ui-library/placement.ts",
+    "ui-library/window.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "exportsUnchanged": true,
+    "throwsOrHangsIn": []
+  }
+}

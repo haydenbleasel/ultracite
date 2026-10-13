@@ -1,0 +1,231 @@
+---
+title: The import cycle that works until it doesn't
+description: Where the rule against circular imports came from, what a cycle actually does to JavaScript, how many real cycles can break, what barrel files cost, and what agents do when the fix needs a file they're told not to touch.
+date: 2026-10-13
+author: hayden
+rules:
+  - import/no-cycle
+  - noImportCycles
+  - oxc/no-barrel-file
+  - noBarrelFile
+  - unicorn/no-barrel-files
+  - noNamespaceImport
+---
+
+Two files that import each other usually work. That's the problem with import cycles: the code runs, the tests pass, and the cycle sits there until something changes the order modules load in. Then a value that was always defined is suddenly `undefined`, or a constant throws "Cannot access 'X' before initialization" in production. Barrel files, the `index.ts` files that re-export a folder, are one of the easiest ways to create a cycle without noticing, and they have costs of their own.
+
+Ultracite turns on rules for both: `import/no-cycle` and its equivalents for cycles, and rules against barrel files. We wanted to know what they find. We built the import graph of eight well-known codebases, sorted every cycle by whether it can actually fail, measured what barrels make a module load, searched the projects' history for bugs that cycles caused, and gave agents a real cycle and a real barrel to fix.
+
+## Loop free
+
+The rule is older than JavaScript. In 1979, David Parnas argued that the "uses" relation between modules should be restricted ["so that its graph is loop free"](https://doi.org/10.1109/TSE.1979.234169). Without that, "one may end up with a system in which nothing works until everything works." His fix for two modules that need each other was to split one of them, so that each half sits on one side of the other. Today we'd call that extracting a shared module.
+
+Robert Martin turned it into the [Acyclic Dependencies Principle](https://staff.cs.utu.fi/~jounsmed/doos_06/material/Granularity.pdf) in 1996: with a cycle, packages that depend on each other "have, in effect, become one large package." Go made it a compile error. Rob Pike [explained](https://go.dev/talks/2012/splash.article) that cycles end up "entangling huge swaths of the source tree," and that "the lack of circular imports causes occasional annoyance but keeps the tree clean."
+
+All of these are about packages. Go forbids cycles between directories, and Martin meant released components. JavaScript's lint rules apply the same idea to individual files, which is a much stricter standard than any of the languages that made it famous.
+
+## Half-built modules
+
+What a cycle does depends on the module system. In CommonJS, Node [returns "an unfinished copy"](https://nodejs.org/api/modules.html#cycles) of a module's exports to whoever asks for it during a cycle, so a missing value is silently `undefined`. ES modules were designed to allow cycles: the spec groups them into strongly connected components and links them before running anything. But only function declarations are ready at that point. A `const`, `let` or `class` that's read before its module has run throws a `ReferenceError`.
+
+Here's a cycle we wrote and checked with Node:
+
+{/* prettier-ignore */}
+```ts title="theme.ts"
+import { isColor } from "./colors";
+
+export const theme = { accent: isColor("orange") ? "orange" : "black" };
+```
+
+{/* prettier-ignore */}
+```ts title="colors.ts"
+import { theme } from "./theme";
+
+export const colors = ["orange", "black"];
+
+export const isColor = (name: string) => colors.includes(name);
+
+export const accent = () => theme.accent;
+```
+
+Load `theme.ts` first and it works. Load `colors.ts` first and it throws "Cannot access 'isColor' before initialization", because `theme.ts` calls `isColor` while `colors.ts` is still waiting for it to finish. Nothing about the code tells you which order you'll get. It depends on which file some other module imports first, which is why a cycle can [run in production for months](https://github.com/vercel/next.js/issues/91906) and then break after a toolchain update. As MDN puts it, ["Cyclic imports don't always fail."](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+
+## Buggier, and bigger
+
+The research on cycles is all about other languages. [Melton and Tempero](https://doi.org/10.1007/s10664-006-9033-1) found that in 78 Java applications, "around 45%" of those big enough to have one had a cycle involving at least 100 classes. Code in cycles is consistently more defect-prone. In [Oyetoyan et al.](https://doi.org/10.1016/j.jss.2013.07.039), about 65% of defect-prone classes were in cycles, against about 44% of all classes. [Mo et al.](https://doi.org/10.1109/WICSA.2015.12) found files in cross-module cycles had 75% to 490% more bugs than the average file.
+
+But classes in cycles are also bigger, and size predicts bugs on its own. When [Sas et al.](https://doi.org/10.1002/smr.2398) controlled for size, cycles predicted change in 12% to 29% of commits instead of 39.7%. And cycles rarely get fixed. When [Feng et al.](https://doi.org/10.1007/s10664-023-10438-0) studied 587 two-class cycles that developers did break, 40% were broken by deleting unused code. We found no study of import cycles in JavaScript or TypeScript at all.
+
+## Forty-one percent on paper
+
+In October 2026 we built a file-level import graph for the same eight codebases as [our other research](/research/cognitive-complexity), using TypeScript's own module resolution: [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core. Counting every import, 41% of the 3,333 files were in a cycle. Counting only the imports that survive compilation, since imports of types disappear, 9.5% were, in 31 cycles. Seventeen of those were just two files.
+
+Most of the difference is careful typing. The codebases use 427 `import type` statements exactly where a plain import would have closed a cycle at runtime. Excalidraw's import graph is one 356-file tangle on paper, and five much smaller cycles once types are erased.
+
+Oxlint's `import/no-cycle` reported 996 cycles, and we could predict every one of them from the graph. We classified all of them by what the code in the cycle does, and checked a sample of 50 by hand:
+
+- **Most are harmless.** In about 58% of the hand-checked reports, the modules in the cycle only use each other's exports inside functions that run later, after everything has loaded. ES modules handle that fine.
+- **About 15% are only types,** all in VS Code, which imports interfaces with plain imports that the compiler removes.
+- **About 21% exist only because of a barrel file.** Point the import at the file that declares the value, and the cycle goes away.
+- **About 6% can fail,** because a value from the cycle is read while a module is still loading. In the sample, every one was the same object in Vite's config.
+
+That object had already [crashed Vite](https://github.com/vitejs/vite/issues/22634) when someone ran its source in a different load order. Searching the projects' history, we found 18 fixed bugs caused by cycles, 6 of them reads during loading: `undefined` imports, crashes on startup and "Cannot access" errors. Oxlint and ESLint flagged every one of the cycles that ran through real files. The other two ran through modules generated at build time, which no linter can see.
+
+## Three linters, three counts
+
+On the same code, Oxlint reported 996 cycles, Biome 1,168 and ESLint 545. Each number is correct by its own rules, and we could reproduce each one exactly. They're just counting different things.
+
+- **ESLint's `import-x/no-cycle` shares its search across all the imports in a file.** Once one import has found a way back, the next import whose cycle runs through the same modules isn't reported.
+- **Biome also follows `require()` and dynamic `import()`,** which a cycle broken by lazy loading still contains.
+- **Oxlint follows neither,** and alone resolves the path aliases in a nested `tsconfig`.
+
+None of the three knows that a plain import used only as a type disappears at compile time, so all three report cycles that don't exist at runtime. An automatic fix that rewrites those imports as `import type` cleared 171 of Oxlint's 996 reports.
+
+## What barrels cost
+
+A barrel file re-exports a folder so that importers can write `from "./components"` instead of the path to each file. The cost is that importing one thing through a barrel loads everything the barrel re-exports, and everything those modules import. Bundlers can sometimes drop the unused parts. Dev servers, test runners and Node can't: [Vite's performance guide](https://vite.dev/guide/performance#avoid-barrel-files) notes that "all the files in that barrel file need to be fetched and transformed."
+
+The case against barrels rests on less evidence than its reputation suggests. Marvin Hagemeister's [widely shared benchmark](https://marvinh.dev/blog/speeding-up-javascript-ecosystem-part-7/) is synthetic: loading 10,000 empty modules took 3.12 seconds, and 50,000 took 48. Vercel's [package-import optimization](https://vercel.com/blog/how-we-optimized-package-imports-in-next-js) cut one icon library from 11,738 modules to 632, but that's a vendor's report on its own feature. Atlassian's [often-quoted 75%](https://www.atlassian.com/blog/atlassian-engineering/faster-builds-when-removing-barrel-files) is build minutes saved across CI, mostly from running 88% fewer tests once the dependency graph stopped connecting everything. We found no peer-reviewed study.
+
+So we measured what we could statically. In the eight codebases, 341 imports went through a barrel internal to the project. The median import loaded 7 of the project's modules through the barrel, against 5 if it had imported the declaring file directly. 311 of the 341 loaded more than they needed. The tail is long: one import through Excalidraw's actions barrel loaded 420 modules where 95 would have done, and one through Astro's dev-server index loaded 303 where 2 would have done.
+
+Barrels also create cycles. [NestJS's docs](https://docs.nestjs.com/fundamentals/circular-dependency) warn that "a circular dependency can also be caused by using barrel files." A file that imports its own folder's `index.ts` depends on every sibling the barrel re-exports, so any sibling that imports it back closes a loop. Excalidraw's source has a comment that reads "FIXME can't put to utils.ts rn because of circular dependency", about exactly such a cycle.
+
+## A barrel by any other name
+
+Not every barrel is a mistake. A package needs one place that defines its public API, and 81 of the 176 barrels we found were package entry points. [TkDodo](https://tkdodo.eu/blog/please-stop-using-barrel-files), who argues hard against barrels, calls a library's entry point "the only place where a barrel makes sense."
+
+The lint rules can't tell the difference, and they don't agree on what a barrel is:
+
+- **Biome's `noBarrelFile`** reports any file with a single `export … from`. It flagged 232 files, 100 of them package entry points.
+- **ESLint's `unicorn/no-barrel-files`** reports files made only of imports and re-exports: 162.
+- **Oxlint's `oxc/no-barrel-file`** only counts `export *`, and only past 100 modules: 45.
+
+A rule that fires on a package's public API can't be fixed by deleting the file, and can't be fixed by changing the file at all, since the right change is in whatever imports it.
+
+## Agents and the module graph
+
+Nobody has measured whether coding agents write more barrels or cycles in JavaScript. The only causal study we found, of [151 Java repositories](https://arxiv.org/abs/2606.13298), found no significant change in cyclic dependencies after teams adopted agents. What exists is anecdote. In one [Claude Code issue](https://github.com/anthropics/claude-code/issues/36673), an import an agent added closed a cycle through a `repositories/index.ts` barrel, and production threw "Cannot access 'T' before initialization."
+
+The more interesting question is what an agent does when the linter reports one. A cycle involves at least two files, and Oxlint's help text says so: "Consider extracting shared code into a separate module that both files can import." A barrel's fix is in its importers. But an agent fixing lint errors is often told to stay in its lane, and Ultracite's own instructions say "Edit only the file above." The right fix is out of bounds in both cases.
+
+## Told to stay in one file
+
+In October 2026 we took one real cycle and one real barrel from Astro and handed each to Claude Code and to Codex four times. Each run got the same prompt and permissions Ultracite uses when it passes lint errors to an agent, one file at a time:
+
+- **A cycle that can throw.** The dev toolbar's [`settings.ts`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/settings.ts) and [`window.ts`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/ui-library/window.ts) import each other. While it loads, `settings.ts` checks the configured placement against a list in `window.ts`. If `window.ts` happens to load first, that throws "Cannot access 'placements' before initialization." It ships fine only because Astro's entry point imports the other file first. Both files are reported, so each run handed them over in turn.
+- **An internal barrel.** Astro's [`core/cookies/index.ts`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/cookies/index.ts) re-exports a class, two functions and their types from two files, and Biome's `noBarrelFile` reports it. The fix is in its nine importers.
+
+No agent touched another file. All 24 agent sessions edited only the file they were handed, as instructed, with no suppression comments and no config changes.
+
+On the cycle, one file was enough. All eight runs found a correct fix inside `settings.ts`. Claude copied the three-item list and its check into the file, above the code that uses them. Codex kept a type-only import and inlined the check:
+
+{/* prettier-ignore */}
+```diff title="settings.ts (Astro, one Codex run, abridged and reformatted)"
+-import { isValidPlacement, type Placement } from './ui-library/window.js';
++import type { Placement } from './ui-library/window.js';
+ …
+-  if (configPlacement && isValidPlacement(configPlacement)) {
++  if (
++    configPlacement &&
++    ['bottom-left', 'bottom-center', 'bottom-right'].includes(configPlacement)
++  ) {
+```
+
+The error was gone in every load order we tried. Every Claude run also said the rule's own suggestion would have been better, and that it wasn't allowed: "The rule's help text suggests moving it into a shared module that both files import, but I wasn't allowed to create a new file." No Codex run mentioned it.
+
+The second file showed a different problem. Ultracite collects every file's errors first and then hands them over one at a time, so the agent working on `window.ts` was told about a cycle the first agent had already broken. Five of eight runs noticed and left the file alone, and two of them compared timestamps to show the report was stale. The other three made a second fix anyway, copying a default value and a logging format into `window.ts`.
+
+On the barrel, no correct fix fits in the file. Removing the cost means changing what the importers import, and the only thing the barrel itself can do is stop being a barrel in name. Seven of eight runs did that:
+
+- **Three Claude runs re-declared the exports** as constants pointing at the same objects, which every barrel rule accepts.
+- **Three Codex runs copied the two functions into the barrel,** so it now exported duplicates of them.
+- **One Claude run imported the names and exported them again,** which another rule then flagged.
+
+{/* prettier-ignore */}
+```diff title="index.ts (Astro, one Claude run, abridged)"
+-export { AstroCookies } from './cookies.js';
+-export {
+-  attachCookiesToResponse,
+-  getSetCookiesFromResponse,
+-} from './response.js';
++import { AstroCookies as AstroCookiesClass } from './cookies.js';
++import {
++  attachCookiesToResponse as attachCookies,
++  getSetCookiesFromResponse as getSetCookies,
++} from './response.js';
++export const AstroCookies = AstroCookiesClass;
++export type AstroCookies = AstroCookiesClass;
++export const attachCookiesToResponse = attachCookies;
++export const getSetCookiesFromResponse = getSetCookies;
+```
+
+One Codex run refused and restored the file, because the proper fix "requires updating consumers to import directly from implementation files." Three Claude runs said the same thing and made the change anyway: "Those files were outside what I was allowed to edit." In all eight, the importer that only needed a response helper still loaded the cookie class it never uses.
+
+A tool that re-lints only the file it handed over sees the barrel rule cleared. In a project linted with Biome, three of these edits pass with nothing else to report, so they'd be counted as fixes. Where the agents said what was really needed, they said it in their final message.
+
+## Where the rules miscount
+
+**Most reported cycles can't fail.** A cycle is only dangerous when a value from it is read while a module is loading. The rules report all of them the same way, and the dangerous ones look like the rest.
+
+**They count different things.** The same code produced 545, 996 and 1,168 reports, depending on whether the rule follows dynamic imports, `require()` and type-only re-exports, and how it shares its search.
+
+**They don't know what the compiler removes.** An import used only as a type is erased, so its cycle doesn't exist at runtime. Every rule we tried reported it anyway.
+
+**They can't see generated modules.** Two of the eighteen historical bugs ran through modules created at build time.
+
+**They can't tell an entry point from a convenience barrel.** A package's public API is the one barrel it should keep, and two of the three barrel rules report it.
+
+**The easy fix moves the problem.** A dynamic `import()` hides a cycle from some rules and keeps it at runtime. Re-declaring a barrel's exports hides it from every barrel rule and keeps the cost.
+
+## Break the loop at the right edge
+
+**Read the cycle path, not just the error.** Oxlint prints the full loop. Find the import that's only there for convenience, or only for a type, and cut that one.
+
+**Use `import type` for types.** It makes the type-only part of a cycle visible to every tool, and removes it at runtime. That's how the codebases we measured kept most of their cycles out of runtime.
+
+**Move shared code to a module both files can import.** That's the fix Parnas described in 1979, and the one most of the historical bugs used.
+
+**Don't import your own folder's barrel.** Import siblings directly, and keep barrels for a package's public entry point.
+
+**Watch for values read at load time.** A top-level object built from imports, a class that extends an import or a decorator are the cycles that actually throw.
+
+**Treat a new dynamic import as a question.** It breaks the static cycle, and sometimes that's right, but it often just hides one.
+
+Import cycles and barrels are the rare lint findings that live between files, and that's where they're hard to fix. A cycle is a fact about two modules. A barrel's cost is paid by whoever imports it. The rules are good at finding both: they caught every historical cycle that ran through real files, and the static count of what a barrel drags in is real. What they can't do is tell a harmless cycle from a dangerous one, or a public entry point from a convenience index, and their fixes often belong somewhere other than the file they point at. Keep them on, read the path they print, and when the fix needs another file, let it have one. An agent told to stay in one file will, and on a barrel the only thing left for it to change is the name. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+## References
+
+**History**
+
+- David L. Parnas. [Designing Software for Ease of Extension and Contraction](https://doi.org/10.1109/TSE.1979.234169). _IEEE Transactions on Software Engineering_, SE-5(2), 1979.
+- Robert C. Martin. [Granularity](https://staff.cs.utu.fi/~jounsmed/doos_06/material/Granularity.pdf). _C++ Report_, 8(10), 1996.
+- Rob Pike. [Go at Google: Language Design in the Service of Software Engineering](https://go.dev/talks/2012/splash.article). SPLASH 2012.
+
+**JavaScript modules**
+
+- Node.js. [Modules: CommonJS modules, Cycles](https://nodejs.org/api/modules.html#cycles).
+- MDN. [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules).
+- Vercel. [verbatimModuleSyntax + type "circular dependency" cause ReferenceError in Turbopack](https://github.com/vercel/next.js/issues/91906). Next.js issue #91906, 2026.
+- NestJS. [Circular dependency](https://docs.nestjs.com/fundamentals/circular-dependency).
+
+**Cycles and defects**
+
+- Hayden Melton and Ewan Tempero. [An Empirical Study of Cycles among Classes in Java](https://doi.org/10.1007/s10664-006-9033-1). _Empirical Software Engineering_, 12(4), 2007.
+- Tosin Daniel Oyetoyan, Daniela S. Cruzes and Reidar Conradi. [A Study of Cyclic Dependencies on Defect Profile of Software Components](https://doi.org/10.1016/j.jss.2013.07.039). _Journal of Systems and Software_, 86(12), 2013.
+- Ran Mo, Yuanfang Cai, Rick Kazman and Lu Xiao. [Hotspot Patterns: The Formal Definition and Automatic Detection of Architecture Smells](https://doi.org/10.1109/WICSA.2015.12). WICSA 2015.
+- Darius Sas, Paris Avgeriou, Ilaria Pigazzini and Francesca Arcelli Fontana. [On the Relation Between Architectural Smells and Source Code Changes](https://doi.org/10.1002/smr.2398). _Journal of Software: Evolution and Process_, 34(1), 2022.
+- Qiong Feng, Shuwen Liu, Huan Ji, Xiaotian Ma and Peng Liang. [An Empirical Study of Untangling Patterns of Two-Class Dependency Cycles](https://doi.org/10.1007/s10664-023-10438-0). _Empirical Software Engineering_, 29(2), 2024.
+
+**Barrel files**
+
+- Marvin Hagemeister. [Speeding up the JavaScript ecosystem - The barrel file debacle](https://marvinh.dev/blog/speeding-up-javascript-ecosystem-part-7/). 2023.
+- Shu Ding. [How we optimized package imports in Next.js](https://vercel.com/blog/how-we-optimized-package-imports-in-next-js). Vercel, 2023.
+- Tim Sebastian. [How We Achieved 75% Faster Builds by Removing Barrel Files](https://www.atlassian.com/blog/atlassian-engineering/faster-builds-when-removing-barrel-files). Atlassian, 2025.
+- Dominik Dorfmeister. [Please Stop Using Barrel Files](https://tkdodo.eu/blog/please-stop-using-barrel-files). 2024.
+- Vite. [Performance: Avoid Barrel Files](https://vite.dev/guide/performance#avoid-barrel-files).
+
+**Agents**
+
+- Oliver Aleksander Larsen and Mahyar T. Moghaddam. [Mining Architectural Quality Under Agentic AI Adoption: A Causal Study of Java Repositories](https://arxiv.org/abs/2606.13298). SEAA 2026.
+- [Claude Code issue #36673](https://github.com/anthropics/claude-code/issues/36673). 2026.

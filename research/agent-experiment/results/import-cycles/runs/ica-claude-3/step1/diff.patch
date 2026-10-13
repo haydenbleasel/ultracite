@@ -1,0 +1,20 @@
+--- a/settings.ts
++++ b/settings.ts
+@@ -31,8 +31,16 @@
+  * SOFTWARE.
+  */
+ import type { DevToolbarMetadata } from './stubs.js'; // STUB: was '../../../types/public/toolbar.js'
+-import { isValidPlacement, type Placement } from './ui-library/window.js';
+ 
++// Defined here rather than imported from ./ui-library/window.js, which itself imports this module.
++const placements = ['bottom-left', 'bottom-center', 'bottom-right'] as const;
++
++type Placement = (typeof placements)[number];
++
++function isValidPlacement(value: string): value is Placement {
++	return placements.map(String).includes(value);
++}
++
+ export interface Settings {
+ 	disableAppNotification: boolean;
+ 	verbose: boolean;

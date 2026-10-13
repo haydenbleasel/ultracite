@@ -1,0 +1,13 @@
+{
+  "subject": "ica",
+  "description": "settings.ts only: `import type { Placement }` and the isValidPlacement check removed, so an invalid configured placement is accepted",
+  "verdict": "changed",
+  "files": [
+    "settings.ts"
+  ],
+  "delete": [],
+  "expect": {
+    "configUnchanged": false,
+    "throwsOrHangsIn": []
+  }
+}

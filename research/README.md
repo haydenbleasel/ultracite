@@ -184,6 +184,35 @@ node research/corpus/scripts/dead-code-run-all.cjs   # ~6 min; --skip-history sk
 
 The method, findings and caveats are in `corpus/results/dead-code/REPORT.md`.
 
+### Import cycles and barrel files (sixth post)
+
+The import-cycles scripts build on the rule census and on the whole-program TypeScript analysis of `dead-code-exports.cjs`. They share `import-cycles-lib.cjs`, which holds the topic's paths, the module resolution used to build each repo's file graph (TypeScript's own, then workspace package names and `dist/` paths mapped back to source), and runners for Ultracite's Oxlint, ESLint and Biome presets. The Oxlint runner keeps each diagnostic's `note`, where `import/no-cycle` prints the cycle path; Ultracite's agent handoff keeps it in the diagnostic's `raw` object.
+
+| Script | What it does |
+| --- | --- |
+| `import-cycles-inventory.cjs` | Reads the Oxlint (core, react, js-plugins), ESLint (core, react, type-aware, resolved with `calculateConfigForFile`) and Biome (core, type-aware) presets and records every import-graph rule: cycles, self-imports, barrels and re-exports, namespace imports, restricted imports, type-only imports. For each: options, defaults (Oxlint's `configuration_schema.json`), whether it reads other modules, whether it needs types or Biome's project scanner, and ESLint's resolver settings. |
+| `import-cycles-census.cjs` | Runs `rule-census.cjs` with core, react and js-plugins, focused on the import-graph rules those presets enable. |
+| `import-cycles-graph.cjs` | Builds one TypeScript program per repo and records every import-like statement: kind (import, namespace, side-effect, `export … from`, `export *`, `export * as`, `import()`, `require()`), whether it's type-only, and whether it survives `ts.transpileModule` with the repo's own `verbatimModuleSyntax`. From that it computes strongly connected components under six edge models (all static edges, each linter's, runtime, runtime plus lazy loads), classifies every runtime cycle and every Oxlint report's cycle path (type-only, barrel-induced, top-level-use, late-use; the top-level detector follows top-level calls through local functions and classes), and measures barrels, what a consumer loads through an internal barrel versus directly, `export *` chains, namespace imports by use, and the `import type` and lazy edges that already keep cycles out of runtime. It also runs Oxlint and checks that the graph predicts every `import/no-cycle` report. |
+| `import-cycles-linters.cjs` | `--calibration` runs `calibration/import-cycles/` (one directory per case) through Oxlint (core + react, and with js-plugins), ESLint (core, and core + react) and Biome (core + type-aware, and core), with every message, help text and note. `--autofix` records what each fix pass does to the cases and whether cycle reports change. `--corpus` runs ESLint's import rules on each clone in a fresh process started in the clone root, and Biome's on a copy of every file the graph loaded, then matches every cycle report against a model of that linter: a step-by-step simulation of `import-x/no-cycle`, and Biome's edge rules. It also runs `oxlint --fix` on a copy of each repo and recounts the cycle reports, applies `unicorn/prefer-export-from`'s dangerous fix alone and compares every file's exported names, and runs the ESLint process-state experiment. |
+| `import-cycles-history.cjs` | For each confirmed bug in `history.json`, downloads the cycle's files at the fix's parent commit with `gh api` (or `raw.githubusercontent.com`) and lints them with all three cycle rules. |
+| `import-cycles-sample.cjs` | `--worksheet` draws the seeded sample of Oxlint reports (frozen in `sample.json`) and writes a worksheet without the automatic labels; `--print` writes the blind subset for the second rater; `--compute` writes `classifications.json` with both raters, agreement and κ, including against the automatic labels. |
+| `import-cycles-examples.cjs` | Lints the agent-experiment subjects in `examples/import-cycles/` with all three linters and `tsc`, and checks the behaviour their headers claim by running transpiled copies of the subjects (never a clone): subject A's import-order TDZ, and which modules subject B's importers load through the barrel and directly. |
+| `import-cycles-tables.cjs` | Generates `results/import-cycles/tables.md`. |
+| `import-cycles-run-all.cjs` | Runs all of the above in order. |
+
+```sh
+bash research/corpus/scripts/clone.sh
+node research/corpus/scripts/import-cycles-run-all.cjs   # ~6 min; --skip-history skips the gh downloads
+```
+
+- **The graph predicts the linters exactly.** Oxlint's 996 `import/no-cycle` reports match the graph's Oxlint edge model one for one. ESLint's 545 match the import-x simulation, and Biome's 1,168 match its model except for 45 edges Biome doesn't resolve (tsconfig path aliases and `..` imports). If a rerun disagrees, a tool version or the resolution changed.
+- **Run ESLint's cycle rule in a fresh process per project.** In one process, linting another repo first lowers Excalidraw's count from 241 to 222 (`eslintState` in `linters.json`). Run it from the project root, too: when `eslint-import-resolver-typescript` can't be found from the linted directory, the rule reports nothing and prints no warning.
+- **Biome's project rules need its config at the root of the linted files**, and Ultracite's Biome preset ignores `**/out`. So Biome lints copies under the system temp directory (`ultracite-research-import-cycles/`). ESLint's copies stay under the gitignored `out/import-cycles/`, because its resolver packages are looked up from the project directory.
+- **Raw mode undercounts the module-graph rules.** The census's raw mirror holds only the corpus files, without tsconfig, package.json or other files, so its `import/no-cycle` count (953) is lower than reported (996) for resolution reasons. The corpus has no disable comment naming these rules.
+- **Hand inputs.** The rater labels go to `out/import-cycles/labels-*.json` (gitignored), and `classifications.json` keeps both raters. `history.json` and `decision-history.json` are hand inputs too.
+
+The method, findings and caveats are in `corpus/results/import-cycles/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -360,3 +389,81 @@ Harness changes made with this topic, all backwards-compatible:
 - **Earlier topics, re-measured and re-aggregated from their committed runs:**
   - cognitive-complexity and floating-promises reproduce exactly, apart from `generatedAt`;
   - security-rules reproduces, except Biome's full-preset counts for the s2 runs and three mutants. Commit c9b606af enabled `noUndeclaredDependencies` in Biome core after those runs were measured, and it fires on the staged files' `react` and `json5` imports. The same difference appears without this topic's harness changes, and the committed files were left as they were.
+
+### Import cycles and barrel files (sixth post)
+
+Ultracite's agent prompt says "Edit only the file above. Do not create, delete, or modify any other file." The right fix for both subjects needs other files: for a cycle, the shared module that Oxlint's help suggests; for a barrel, edits to its importers. The experiment measures what agents do instead.
+
+Subjects are multi-file, from `corpus/examples/import-cycles/`:
+
+- **ica.** Astro's dev-toolbar `settings.ts` ↔ `ui-library/window.ts` (with a stub), a two-file cycle with a value read during module evaluation: importing `window.ts` first with a placement configured throws "Cannot access 'placements' before initialization".
+  - **Handoff:** Oxlint's default `import/no-cycle` reports both files, so `ultracite fix` hands over both, one agent run each, in the order Oxlint first prints them. That order varies between runs (Oxlint lints in parallel): `settings.ts` first in 64 of 100 lints. Every run used `settings.ts` → `window.ts`.
+  - **The second run gets stale diagnostics.** Ultracite collects every file's diagnostics once, before the first agent runs (`packages/cli/src/agent-fix/index.ts`), so `window.ts` is handed a cycle that step 1 may already have broken.
+- **icb.** Astro's internal `core/cookies/index.ts` barrel, with `cookies.ts`, `response.ts`, two of its nine importers and stubs.
+  - **Handoff:** Biome core's `noBarrelFile`, through Ultracite's Biome adapter. Oxlint's default presets report nothing; ESLint's `unicorn/no-barrel-files` reports the same file (recorded in `results.json`, not run).
+
+**Lint.** The handoff is what Ultracite's adapter for the subject's linter produces, from the root config `ultracite init` writes, run from the project root over the whole subject. It's filtered to the corpus inventory's import-graph rules (`corpus/results/import-cycles/inventory.json`) that survive the linter's safe fix pass. The Oxlint and Biome parsers and `groupByFile` are copies, hash-checked against `packages/cli/src/agent-fix/` on every handoff.
+
+**Measurement.** Each run is measured on the whole subject directory after each step and at the end:
+
+- the cycle and barrel rules, and every other import-graph rule, in Oxlint core + react, Oxlint + js-plugins, ESLint core and Biome core + type-aware, honoring and ignoring inline config;
+- every rule of those presets and `tsc`, recording the rules that fire more after the edit;
+- a type-check of a stand-in for the subject's importers that aren't in it;
+- Ultracite's own re-lint of each handed-over file (cleared, still, new);
+- a static scan of the import graph and suppressions;
+- every file created, changed or deleted in each step (`run-one.mjs`).
+
+**Oracle.** `scripts/topics/import-cycles-behavior.mjs` transpiles the directory, marks each module's evaluation, and runs every scenario in a fresh Node process.
+
+- **ica: 12 scenarios.** Import order × configured placement × saved settings. The verdict is "hazard removed", "hazard kept" or "changed".
+- **icb.** Which modules each importer evaluates, the barrel's exports and whether they're the same objects, and a functional probe of the importers' functions.
+- **Self-test.** 19 cases (the originals and 17 hand-made mutants in `harness-tests/import-cycles/`), all as expected.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=import-cycles
+node scripts/prepare-subjects.cjs        # subjects/import-cycles/ (stripFields and three phrases naming the analysis removed)
+node scripts/test-behavior-harness.cjs   # oracle self-test, 19 cases -> results/import-cycles/oracle-self-test.json
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs ica:claude:1 icb:codex:1 ica:codex:1 icb:claude:1   # ...4 of each
+node scripts/aggregate.cjs               # results.json, with the handoff by linter, the fix pass and the mutant matrix (~3 min)
+node scripts/report-tables.cjs > results/import-cycles/tables.md
+```
+
+Oxlint and Biome print diagnostics in an order that varies between runs, so every list of hits is sorted. The handoff-order frequency (which file Oxlint prints first, over 100 lints) is random by nature: it's kept in `results/import-cycles/oxlint-order.json`, and `aggregate` measures it again only when that file is missing.
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.34–1.02 a run (median $0.74, $5.90 for 8 runs). An ica run is two agent sessions.
+- Codex used 40.0k–71.6k tokens a run.
+- Runs took 31–169 s, and measuring one takes about 30–45 s.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's import-cycles examples, results, calibration and output;
+- the `import-cycles-*.cjs` corpus scripts;
+- `research/bibliography/import-cycles.md`;
+- any post draft or page whose name contains "cycle", "barrel" or "import";
+- `plans/` and `lint-configs/`;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`, 130 outside-repo paths: the orchestrating session's post-draft folder, literature notes and other scratch files about this topic and earlier ones, this experiment's notes, `plans/issues.md` in the main checkout, and the batch log.
+
+The method, numbers and caveats are in `agent-experiment/results/import-cycles/REPORT.md`.
+
+Harness changes made with this topic, all backwards-compatible:
+
+- **Multi-file subjects.** `run-one.mjs` supports subjects whose manifest entry lists `files`:
+  - the whole subject is copied into the run dir, keeping its folders;
+  - the topic's `handoff(subject, runDir, { runId })` hook returns the files Ultracite would hand over, in order, with their diagnostics;
+  - each file gets its own agent run in the same directory, with its diagnostics JSON written just before it, as Ultracite does;
+  - every file's creation, change or deletion is recorded per step;
+  - artifacts are laid out as `before/`, `after/`, `diff.patch` and `step<k>/` (prompt, per-step diff, and the intermediate tree).
+
+  Single-file subjects take the same code path as before; the lock and agent-process code moved into functions without changing what they do.
+
+- **Session logs.** The finders skip a log an earlier step already claimed.
+- **`.gitignore`** also ignores `step*/` session logs, stdout and stderr.
+- **`topics.cjs`** documents the multi-file hooks.
+- **Measurement copies** for this topic are staged under the run root's real path. On macOS `$TMPDIR` is under `/var`, a symlink to `/private/var`, and eslint-plugin-import-x's `no-cycle` reports nothing when files are linted through a symlinked path.
+- **Earlier topics, re-measured and re-aggregated from their committed runs:**
+  - cognitive-complexity and floating-promises reproduce exactly, apart from `generatedAt`;
+  - security-rules and dead-code: see `REPORT.md`, "Reproduce".

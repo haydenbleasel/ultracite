@@ -1,0 +1,22 @@
+--- a/core/cookies/index.ts
++++ b/core/cookies/index.ts
+@@ -31,9 +31,14 @@
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  * SOFTWARE.
+  */
+-export type { AstroCookieGetOptions, AstroCookieSetOptions } from './cookies.js';
+-export { AstroCookies } from './cookies.js';
+-export {
+-	attachCookiesToResponse,
+-	getSetCookiesFromResponse,
++import { AstroCookies as AstroCookiesClass } from './cookies.js';
++import {
++	attachCookiesToResponse as attachCookies,
++	getSetCookiesFromResponse as getSetCookies,
+ } from './response.js';
++
++export type { AstroCookieGetOptions, AstroCookieSetOptions } from './cookies.js';
++export const AstroCookies = AstroCookiesClass;
++export type AstroCookies = AstroCookiesClass;
++export const attachCookiesToResponse = attachCookies;
++export const getSetCookiesFromResponse = getSetCookies;

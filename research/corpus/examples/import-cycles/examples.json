@@ -1,0 +1,538 @@
+{
+  "generated": "2026-10-13",
+  "note": "Measured by scripts/import-cycles-examples.cjs. `lint` lists, per configuration, the import-graph rule hits (`focus`, with message, Oxlint help and note) and every other rule that fires. Oxlint = core + react as `ultracite init` writes it, then with js-plugins; ESLint = Ultracite's core preset; Biome = core + type-aware (noImportCycles is only in type-aware); tsc = examples/import-cycles/tsconfig.json. `behaviour` runs transpiled copies of the subjects, never a clone. Header lines starting with a stripFields name hold analysis and must be removed (through the end of that field) before an agent sees a subject.",
+  "stripFields": [
+    "Import-cycle subject",
+    "Import-cycles subject",
+    "Rules it hits",
+    "The cycle",
+    "Why it matters",
+    "The cost",
+    "Not a public entry point",
+    "Behaviour to preserve",
+    "Expected fix",
+    "Tempting fixes"
+  ],
+  "subjects": [
+    {
+      "analysis": {
+        "behaviourCheck": "Transpile both files, stub HTMLElement and localStorage, and import them in both orders with no placement, a valid one and an invalid one configured (globalThis.__astro_dev_toolbar__). The original throws ReferenceError (TDZ on `placements`) when window.ts loads first and any placement is configured; a correct fix throws in no combination, gives the same settings.config in the safe order, the same isValidPlacement answers, the same DevToolbarWindow default placement and invalid-placement logging, and keeps both modules' exports. Re-lint: no import/no-cycle, import-x/no-cycle or noImportCycles; tsc passes.",
+        "cycle": "settings.ts imports isValidPlacement (value) and Placement (type) from ui-library/window.ts; window.ts imports defaultSettings and settings (values) from settings.ts. settings.ts runs `export const settings = getSettings()` at module evaluation; getSettings calls isValidPlacement, which reads the const `placements` of window.ts.",
+        "expectedFix": "Extract placements, Placement and isValidPlacement into a module of their own (e.g. ui-library/placement.ts) imported by both. Ultracite's agent prompt forbids creating or editing other files; within settings.ts alone, a local copy of the list and check plus `import type { Placement }` breaks the cycle and the hazard.",
+        "handOff": "settings.ts (its import of ./ui-library/window.js); window.ts gets the same report",
+        "temptingFixes": "`import type` while still calling isValidPlacement (type error); dynamic import() inside getSettings (settings becomes async or the check runs later); dropping the check; copying window.ts's code into settings.ts and re-exporting it."
+      },
+      "analysisFile": "settings.ts",
+      "dir": "ica-astro-dev-toolbar",
+      "id": "ica",
+      "permalinks": [
+        "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/settings.ts#L1-L69",
+        "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/ui-library/window.ts#L1-L140"
+      ],
+      "repo": "withastro/astro",
+      "role": "Subject A: a real two-file import cycle with a value read at module evaluation (latent TDZ); the right fix extracts the shared code",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "files": [
+        {
+          "file": "settings.ts",
+          "lines": 130
+        },
+        {
+          "file": "stubs.ts",
+          "lines": 16
+        },
+        {
+          "file": "ui-library/window.ts",
+          "lines": 174
+        }
+      ],
+      "lint": {
+        "summary": {
+          "oxlint core+react": {
+            "focus": [
+              {
+                "file": "settings.ts",
+                "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+                "line": 62,
+                "message": "Dependency cycle detected",
+                "note": "These paths form a cycle:\n╭──▶ ./ui-library/window.js (ui-library/window.ts)\n│         ⬇ imports\n│    ../settings.js (settings.ts)\n╰─────────╯ imports the current file",
+                "rule": "import/no-cycle"
+              },
+              {
+                "file": "ui-library/window.ts",
+                "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+                "line": 34,
+                "message": "Dependency cycle detected",
+                "note": "These paths form a cycle:\n╭──▶ ../settings.js (settings.ts)\n│         ⬇ imports\n│    ./ui-library/window.js (ui-library/window.ts)\n╰─────────╯ imports the current file",
+                "rule": "import/no-cycle"
+              }
+            ],
+            "otherRules": [
+              "curly",
+              "func-style",
+              "import/consistent-type-specifier-style",
+              "no-inline-comments",
+              "no-use-before-define",
+              "require-await",
+              "sort-keys",
+              "unicorn/consistent-function-scoping"
+            ]
+          },
+          "oxlint core+react+js-plugins": {
+            "focus": [
+              {
+                "file": "settings.ts",
+                "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+                "line": 62,
+                "message": "Dependency cycle detected",
+                "note": "These paths form a cycle:\n╭──▶ ./ui-library/window.js (ui-library/window.ts)\n│         ⬇ imports\n│    ../settings.js (settings.ts)\n╰─────────╯ imports the current file",
+                "rule": "import/no-cycle"
+              },
+              {
+                "file": "ui-library/window.ts",
+                "help": "Refactor to remove the cycle. Consider extracting shared code into a separate module that both files can import.",
+                "line": 34,
+                "message": "Dependency cycle detected",
+                "note": "These paths form a cycle:\n╭──▶ ../settings.js (settings.ts)\n│         ⬇ imports\n│    ./ui-library/window.js (ui-library/window.ts)\n╰─────────╯ imports the current file",
+                "rule": "import/no-cycle"
+              }
+            ],
+            "otherRules": [
+              "curly",
+              "func-style",
+              "github/no-inner-html",
+              "import/consistent-type-specifier-style",
+              "no-inline-comments",
+              "no-use-before-define",
+              "require-await",
+              "sonarjs/public-static-readonly",
+              "sort-keys",
+              "unicorn/consistent-function-scoping"
+            ]
+          },
+          "eslint core": {
+            "focus": [
+              {
+                "file": "settings.ts",
+                "line": 62,
+                "message": "Dependency cycle detected",
+                "rule": "import-x/no-cycle"
+              },
+              {
+                "file": "ui-library/window.ts",
+                "line": 34,
+                "message": "Dependency cycle detected",
+                "rule": "import-x/no-cycle"
+              }
+            ],
+            "otherRules": [
+              "@typescript-eslint/member-ordering",
+              "@typescript-eslint/no-use-before-define",
+              "curly",
+              "func-style",
+              "github/no-inner-html",
+              "import-x/consistent-type-specifier-style",
+              "import-x/order",
+              "no-inline-comments",
+              "require-await",
+              "sonarjs/public-static-readonly",
+              "sort-keys",
+              "unicorn/consistent-class-member-order",
+              "unicorn/consistent-function-scoping",
+              "unicorn/name-replacements",
+              "unicorn/no-unsafe-dom-html",
+              "unicorn/prefer-early-return",
+              "unicorn/prefer-private-class-fields"
+            ]
+          },
+          "biome core+type-aware": {
+            "focus": [
+              {
+                "column": 50,
+                "file": "settings.ts",
+                "line": 62,
+                "message": "This import is part of a cycle.",
+                "rule": "suspicious/noImportCycles"
+              },
+              {
+                "column": 43,
+                "file": "ui-library/window.ts",
+                "line": 34,
+                "message": "This import is part of a cycle.",
+                "rule": "suspicious/noImportCycles"
+              }
+            ],
+            "otherRules": [
+              "style/noUnusedTemplateLiteral",
+              "style/useBlockStatements",
+              "suppressions/unused",
+              "suspicious/noUnnecessaryConditions",
+              "suspicious/useAwait"
+            ]
+          }
+        },
+        "tsc": []
+      }
+    },
+    {
+      "analysis": {
+        "behaviourCheck": "Transpile the subject with a marker per module and import each importer: through the barrel, prepare-response loads cookies.ts and the cookie and errors stubs; with the importers pointed at response.js it loads response.ts only. A correct fix keeps every name the nine Astro importers use importable with the same identity (AstroCookies === the class in cookies.ts), keeps the type re-exports, and makes the importers stop loading cookies.ts when they don't need it.",
+        "cost": "In Astro at this commit, importing getSetCookiesFromResponse or attachCookiesToResponse through the barrel evaluates 10 modules instead of 1; five of the nine importers only need response.ts.",
+        "expectedFix": "Point each importer at cookies.js or response.js and delete the barrel (or keep only its type re-exports). That edits the importers, which Ultracite's agent prompt forbids.",
+        "handOff": "core/cookies/index.ts with Biome's noBarrelFile (or ESLint's unicorn/no-barrel-files); Oxlint's default presets report nothing here",
+        "temptingFixes": "Re-declaring the names (export const x = …; export class AstroCookies extends …) silences the rule, keeps the cost, and a subclass changes AstroCookies' identity; `export *` still reports; emptying or deleting the file breaks nine importers."
+      },
+      "analysisFile": "core/cookies/index.ts",
+      "dir": "icb-astro-cookies",
+      "id": "icb",
+      "importers": [
+        "packages/astro/src/core/app/prepare-response.ts:2",
+        "packages/astro/src/core/app/base.ts:11",
+        "packages/astro/src/core/errors/default-handler.ts:7",
+        "packages/astro/src/core/fetch/fetch-state.ts:14",
+        "packages/astro/src/core/middleware/astro-middleware.ts:5",
+        "packages/astro/src/core/middleware/index.ts:11",
+        "packages/astro/src/core/rewrites/handler.ts:5",
+        "packages/astro/src/types/public/index.ts:31 (export type)",
+        "packages/astro/src/vite-plugin-astro-server/response.ts:4"
+      ],
+      "permalinks": [
+        "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/cookies/index.ts#L1-L6",
+        "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/errors/default-handler.ts#L164-L264"
+      ],
+      "repo": "withastro/astro",
+      "role": "Subject B: an internal barrel Biome's noBarrelFile reports; the right fix is in its importers",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "files": [
+        {
+          "file": "core/app/prepare-response.ts",
+          "lines": 55
+        },
+        {
+          "file": "core/cookies/cookies.ts",
+          "lines": 320
+        },
+        {
+          "file": "core/cookies/index.ts",
+          "lines": 64
+        },
+        {
+          "file": "core/cookies/response.ts",
+          "lines": 61
+        },
+        {
+          "file": "core/errors/merge-responses.ts",
+          "lines": 138
+        },
+        {
+          "file": "stubs/constants.ts",
+          "lines": 3
+        },
+        {
+          "file": "stubs/cookie.ts",
+          "lines": 53
+        },
+        {
+          "file": "stubs/errors.ts",
+          "lines": 20
+        },
+        {
+          "file": "stubs/logger.ts",
+          "lines": 5
+        }
+      ],
+      "lint": {
+        "summary": {
+          "oxlint core+react": {
+            "focus": [],
+            "otherRules": [
+              "curly",
+              "eqeqeq",
+              "func-style",
+              "jsdoc/require-returns-description",
+              "jsdoc/require-yields",
+              "max-classes-per-file",
+              "no-else-return",
+              "no-eq-null",
+              "no-inline-comments",
+              "no-negated-condition",
+              "no-nested-ternary",
+              "no-unused-vars",
+              "prefer-const",
+              "sort-keys",
+              "typescript/method-signature-style",
+              "typescript/no-explicit-any",
+              "typescript/no-non-null-assertion",
+              "unicorn/custom-error-definition",
+              "unicorn/no-negated-condition",
+              "unicorn/no-unreadable-array-destructuring",
+              "unicorn/prefer-logical-operator-over-ternary",
+              "unicorn/prefer-optional-catch-binding",
+              "unicorn/prefer-ternary"
+            ]
+          },
+          "oxlint core+react+js-plugins": {
+            "focus": [
+              {
+                "file": "core/app/prepare-response.ts",
+                "help": null,
+                "line": 34,
+                "message": "This ships extra code to your users & slows page load. Import directly from \"../cookies/response\".",
+                "note": null,
+                "rule": "react-doctor/no-barrel-import"
+              }
+            ],
+            "otherRules": [
+              "curly",
+              "eqeqeq",
+              "func-style",
+              "jsdoc/require-returns-description",
+              "jsdoc/require-yields",
+              "max-classes-per-file",
+              "no-else-return",
+              "no-eq-null",
+              "no-inline-comments",
+              "no-negated-condition",
+              "no-nested-ternary",
+              "no-unused-vars",
+              "prefer-const",
+              "sonarjs/max-union-size",
+              "sonarjs/no-nested-conditional",
+              "sonarjs/no-undefined-assignment",
+              "sort-keys",
+              "typescript/method-signature-style",
+              "typescript/no-explicit-any",
+              "typescript/no-non-null-assertion",
+              "unicorn/custom-error-definition",
+              "unicorn/no-negated-condition",
+              "unicorn/no-unreadable-array-destructuring",
+              "unicorn/prefer-logical-operator-over-ternary",
+              "unicorn/prefer-optional-catch-binding",
+              "unicorn/prefer-ternary"
+            ]
+          },
+          "eslint core": {
+            "focus": [
+              {
+                "file": "core/cookies/index.ts",
+                "line": 58,
+                "message": "Barrel files are not allowed.",
+                "rule": "unicorn/no-barrel-files"
+              }
+            ],
+            "otherRules": [
+              "@typescript-eslint/member-ordering",
+              "@typescript-eslint/method-signature-style",
+              "@typescript-eslint/no-explicit-any",
+              "@typescript-eslint/no-non-null-assertion",
+              "@typescript-eslint/no-unused-vars",
+              "curly",
+              "eqeqeq",
+              "func-style",
+              "import-x/order",
+              "jsdoc/require-returns-description",
+              "jsdoc/require-yields",
+              "max-classes-per-file",
+              "no-else-return",
+              "no-eq-null",
+              "no-inline-comments",
+              "no-negated-condition",
+              "no-nested-ternary",
+              "prefer-const",
+              "sonarjs/max-union-size",
+              "sonarjs/no-nested-conditional",
+              "sonarjs/no-undefined-assignment",
+              "sort-keys",
+              "unicorn/consistent-class-member-order",
+              "unicorn/custom-error-definition",
+              "unicorn/name-replacements",
+              "unicorn/no-computed-property-existence-check",
+              "unicorn/no-manually-wrapped-comments",
+              "unicorn/no-negated-condition",
+              "unicorn/no-unreadable-array-destructuring",
+              "unicorn/no-useless-else",
+              "unicorn/no-useless-undefined",
+              "unicorn/prefer-combined-guards",
+              "unicorn/prefer-early-return",
+              "unicorn/prefer-logical-operator-over-ternary",
+              "unicorn/prefer-optional-catch-binding",
+              "unicorn/prefer-simple-condition-first",
+              "unicorn/prefer-ternary"
+            ]
+          },
+          "biome core+type-aware": {
+            "focus": [
+              {
+                "column": 1,
+                "file": "core/cookies/index.ts",
+                "line": 59,
+                "message": "Avoid barrel files, they slow down performance, and cause large module graphs with modules that go unused.",
+                "rule": "performance/noBarrelFile"
+              }
+            ],
+            "otherRules": [
+              "complexity/noUselessCatchBinding",
+              "complexity/noUselessUndefined",
+              "style/noNegationElse",
+              "style/noNestedTernary",
+              "style/noNonNullAssertion",
+              "style/noUnusedTemplateLiteral",
+              "style/noUselessElse",
+              "style/useBlockStatements",
+              "style/useConsistentMemberAccessibility",
+              "style/useConsistentMethodSignatures",
+              "style/useConst",
+              "style/useReadonlyClassProperties",
+              "suspicious/noEqualsToNull",
+              "suspicious/noExplicitAny",
+              "suspicious/noUnnecessaryConditions"
+            ]
+          }
+        },
+        "tsc": []
+      }
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3"
+  },
+  "behaviour": {
+    "ica": [
+      {
+        "order": "settings-first",
+        "placement": null,
+        "config": {
+          "disableAppNotification": false,
+          "verbose": false,
+          "placement": "bottom-center"
+        },
+        "loaded": [
+          "ui-library/window.ts",
+          "settings.ts"
+        ]
+      },
+      {
+        "order": "settings-first",
+        "placement": "bottom-left",
+        "config": {
+          "disableAppNotification": false,
+          "verbose": false,
+          "placement": "bottom-left"
+        },
+        "loaded": [
+          "ui-library/window.ts",
+          "settings.ts"
+        ]
+      },
+      {
+        "order": "settings-first",
+        "placement": "nowhere",
+        "config": {
+          "disableAppNotification": false,
+          "verbose": false,
+          "placement": "bottom-center"
+        },
+        "loaded": [
+          "ui-library/window.ts",
+          "settings.ts"
+        ]
+      },
+      {
+        "order": "window-first",
+        "placement": null,
+        "config": {
+          "disableAppNotification": false,
+          "verbose": false,
+          "placement": "bottom-center"
+        },
+        "loaded": [
+          "settings.ts",
+          "ui-library/window.ts"
+        ]
+      },
+      {
+        "order": "window-first",
+        "placement": "bottom-left",
+        "error": "ReferenceError: Cannot access 'placements' before initialization",
+        "loaded": [
+          "settings.ts"
+        ]
+      },
+      {
+        "order": "window-first",
+        "placement": "nowhere",
+        "error": "ReferenceError: Cannot access 'placements' before initialization",
+        "loaded": [
+          "settings.ts"
+        ]
+      }
+    ],
+    "icb": {
+      "as-is": {
+        "core/app/prepare-response.mjs": [
+          "stubs/constants.ts",
+          "stubs/cookie.ts",
+          "stubs/errors.ts",
+          "core/cookies/cookies.ts",
+          "core/cookies/response.ts",
+          "core/cookies/index.ts",
+          "core/app/prepare-response.ts"
+        ],
+        "core/errors/merge-responses.mjs": [
+          "stubs/cookie.ts",
+          "stubs/errors.ts",
+          "core/cookies/cookies.ts",
+          "core/cookies/response.ts",
+          "core/cookies/index.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "core/cookies/index.mjs": [
+          "stubs/cookie.ts",
+          "stubs/errors.ts",
+          "core/cookies/cookies.ts",
+          "core/cookies/response.ts",
+          "core/cookies/index.ts"
+        ]
+      },
+      "direct": {
+        "core/app/prepare-response.mjs": [
+          "stubs/constants.ts",
+          "core/cookies/response.ts",
+          "core/app/prepare-response.ts"
+        ],
+        "core/errors/merge-responses.mjs": [
+          "core/cookies/response.ts",
+          "core/errors/merge-responses.ts"
+        ],
+        "core/cookies/index.mjs": [
+          "stubs/cookie.ts",
+          "stubs/errors.ts",
+          "core/cookies/cookies.ts",
+          "core/cookies/response.ts",
+          "core/cookies/index.ts"
+        ]
+      },
+      "exports": {
+        "names": [
+          "AstroCookies",
+          "attachCookiesToResponse",
+          "getSetCookiesFromResponse"
+        ],
+        "sameAstroCookies": true
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+--- a/settings.ts
++++ b/settings.ts
+@@ -30,9 +30,14 @@
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  * SOFTWARE.
+  */
+-import type { DevToolbarMetadata } from './stubs.js'; // STUB: was '../../../types/public/toolbar.js'
+-import { isValidPlacement, type Placement } from './ui-library/window.js';
++import type { DevToolbarMetadata, DevToolbarPlacement as Placement } from './stubs.js'; // STUB: was '../../../types/public/toolbar.js'
+ 
++const placements: readonly Placement[] = ['bottom-left', 'bottom-center', 'bottom-right'];
++
++function isValidPlacement(value: string): value is Placement {
++	return placements.map(String).includes(value);
++}
++
+ export interface Settings {
+ 	disableAppNotification: boolean;
+ 	verbose: boolean;

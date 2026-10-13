@@ -1,0 +1,1999 @@
+{
+  "generated": "2026-10-13",
+  "note": "See the header of import-cycles-graph.cjs for the method.",
+  "repos": {
+    "hono": {
+      "barrels": {
+        "byTier": {
+          "some-reexports": 13,
+          "pure": 22,
+          "mostly": 2
+        },
+        "entryBarrels": 23,
+        "filesWithValueReexport": 32,
+        "biomePredicted": 32,
+        "exportStarFiles": 2,
+        "exportStarStatements": 2,
+        "exportStarAsStatements": 0,
+        "exportNamedStatements": 53,
+        "importReexportedStatements": 1,
+        "indexBarrels": 21,
+        "internalBarrels": 1,
+        "tiered": 24,
+        "maxStarDepth": 1,
+        "starChainsDepth2Plus": 0
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 0,
+        "typeDecl": 16,
+        "typeInline": 0,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 4,
+        "byLabel": {
+          "barrel-induced": 1,
+          "late-use": 3
+        },
+        "byRisk": {
+          "late-use": 4
+        },
+        "barrelInducedRisk": {
+          "late-use": 1
+        },
+        "directTopLevel": 0,
+        "withBarrel": 1,
+        "withIndex": 2,
+        "sizes": [
+          4,
+          2,
+          2,
+          2
+        ],
+        "typeOnlyComponents": 3,
+        "typeOnlySizes": [
+          6,
+          2,
+          2
+        ],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 0
+        }
+      },
+      "oxlint": {
+        "noCycle": 13,
+        "predicted": 13,
+        "matched": 13,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "late-use": 11,
+          "barrel-induced": 2
+        },
+        "byRisk": {
+          "late-use": 13
+        },
+        "topLevelPrintedHopsOnly": 0,
+        "hoistedOnly": 0,
+        "filesReported": 10,
+        "pathLengths": {
+          "2": 10,
+          "3": 1,
+          "4": 2
+        },
+        "selfImport": 0,
+        "barrelFile": 0,
+        "barrelFilePredictedOver100": 0,
+        "barrelFileExactTotals": 0,
+        "exportStarFiles": 2,
+        "exportStarTotalMedian": 38.5,
+        "exportStarTotalMax": 41
+      },
+      "fanout": {
+        "unknown": 0,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 0,
+          "barrels": 0,
+          "directMedian": null,
+          "extraMax": 0,
+          "extraMedian": null,
+          "ratioMax": 0,
+          "ratioMedian": null,
+          "viaMax": 0,
+          "viaMedian": null
+        },
+        "perBarrel": {
+          "barrels": 0,
+          "extraMedianOfMedians": null,
+          "viaMax": 0,
+          "viaMedian": null
+        }
+      },
+      "files": {
+        "measured": 187,
+        "program": 188
+      },
+      "models": {
+        "all": {
+          "components": 5,
+          "filesInCycles": 29,
+          "largest": 17,
+          "shareOfFiles": 15.5,
+          "sizes": [
+            17,
+            6,
+            2,
+            2,
+            2
+          ]
+        },
+        "biome": {
+          "components": 4,
+          "filesInCycles": 10,
+          "largest": 4,
+          "shareOfFiles": 5.3,
+          "sizes": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "eslint": {
+          "components": 4,
+          "filesInCycles": 10,
+          "largest": 4,
+          "shareOfFiles": 5.3,
+          "sizes": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "lazy": {
+          "components": 4,
+          "filesInCycles": 10,
+          "largest": 4,
+          "shareOfFiles": 5.3,
+          "sizes": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "oxlint": {
+          "components": 4,
+          "filesInCycles": 10,
+          "largest": 4,
+          "shareOfFiles": 5.3,
+          "sizes": [
+            4,
+            2,
+            2,
+            2
+          ]
+        },
+        "runtime": {
+          "components": 4,
+          "filesInCycles": 10,
+          "largest": 4,
+          "shareOfFiles": 5.3,
+          "sizes": [
+            4,
+            2,
+            2,
+            2
+          ]
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "internal": 2
+        },
+        "byUsage": {
+          "dynamic-access": 2
+        },
+        "importType": 0,
+        "total": 2
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 6,
+        "fallback": 0,
+        "resolved": 580,
+        "unresolved": 0,
+        "resolvedShare": 99,
+        "unresolvedRelative": []
+      },
+      "selfLoops": 0,
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "statements": {
+        "byKind": {
+          "import": 498,
+          "export-named": 79,
+          "export-star": 4,
+          "namespace": 2,
+          "side-effect": 3
+        },
+        "byTypeOnly": {
+          "decl": 285,
+          "none": 301
+        },
+        "internal": 580,
+        "internalElided": 0,
+        "total": 586
+      },
+      "verbatimModuleSyntax": false,
+      "seconds": 1
+    },
+    "zod": {
+      "barrels": {
+        "byTier": {
+          "pure": 15,
+          "some-reexports": 5
+        },
+        "entryBarrels": 8,
+        "filesWithValueReexport": 20,
+        "biomePredicted": 20,
+        "exportStarFiles": 12,
+        "exportStarStatements": 34,
+        "exportStarAsStatements": 12,
+        "exportNamedStatements": 84,
+        "importReexportedStatements": 6,
+        "indexBarrels": 9,
+        "internalBarrels": 7,
+        "tiered": 15,
+        "maxStarDepth": 3,
+        "starChainsDepth2Plus": 7
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 0,
+        "typeDecl": 12,
+        "typeInline": 0,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 1,
+        "byLabel": {
+          "late-use": 1
+        },
+        "byRisk": {
+          "late-use": 1
+        },
+        "barrelInducedRisk": {},
+        "directTopLevel": 0,
+        "withBarrel": 0,
+        "withIndex": 0,
+        "sizes": [
+          2
+        ],
+        "typeOnlyComponents": 1,
+        "typeOnlySizes": [
+          8
+        ],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 0
+        }
+      },
+      "oxlint": {
+        "noCycle": 2,
+        "predicted": 2,
+        "matched": 2,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "late-use": 2
+        },
+        "byRisk": {
+          "late-use": 2
+        },
+        "topLevelPrintedHopsOnly": 0,
+        "hoistedOnly": 0,
+        "filesReported": 2,
+        "pathLengths": {
+          "2": 2
+        },
+        "selfImport": 0,
+        "barrelFile": 3,
+        "barrelFilePredictedOver100": 3,
+        "barrelFileExactTotals": 0,
+        "exportStarFiles": 12,
+        "exportStarTotalMedian": 93.5,
+        "exportStarTotalMax": 832
+      },
+      "fanout": {
+        "unknown": 8,
+        "namespaceConsumers": 2,
+        "all": {
+          "consumerImports": 2,
+          "barrels": 2,
+          "directMedian": 7.5,
+          "extraMax": 79,
+          "extraMedian": 75.5,
+          "ratioMax": 20.75,
+          "ratioMedian": 14.15,
+          "viaMax": 83,
+          "viaMedian": 83
+        },
+        "perBarrel": {
+          "barrels": 2,
+          "extraMedianOfMedians": 75.5,
+          "viaMax": 83,
+          "viaMedian": 83
+        }
+      },
+      "files": {
+        "measured": 125,
+        "program": 125
+      },
+      "models": {
+        "all": {
+          "components": 2,
+          "filesInCycles": 87,
+          "largest": 79,
+          "shareOfFiles": 69.6,
+          "sizes": [
+            79,
+            8
+          ]
+        },
+        "biome": {
+          "components": 1,
+          "filesInCycles": 2,
+          "largest": 2,
+          "shareOfFiles": 1.6,
+          "sizes": [
+            2
+          ]
+        },
+        "eslint": {
+          "components": 1,
+          "filesInCycles": 2,
+          "largest": 2,
+          "shareOfFiles": 1.6,
+          "sizes": [
+            2
+          ]
+        },
+        "lazy": {
+          "components": 1,
+          "filesInCycles": 2,
+          "largest": 2,
+          "shareOfFiles": 1.6,
+          "sizes": [
+            2
+          ]
+        },
+        "oxlint": {
+          "components": 1,
+          "filesInCycles": 2,
+          "largest": 2,
+          "shareOfFiles": 1.6,
+          "sizes": [
+            2
+          ]
+        },
+        "runtime": {
+          "components": 1,
+          "filesInCycles": 2,
+          "largest": 2,
+          "shareOfFiles": 1.6,
+          "sizes": [
+            2
+          ]
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "internal": 209
+        },
+        "byUsage": {
+          "member-access": 107,
+          "whole-object": 7,
+          "unused": 3,
+          "type-only-use": 92
+        },
+        "importType": 92,
+        "total": 209
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 0,
+        "fallback": 0,
+        "resolved": 485,
+        "unresolved": 0,
+        "resolvedShare": 100,
+        "unresolvedRelative": []
+      },
+      "selfLoops": 0,
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c",
+      "statements": {
+        "byKind": {
+          "namespace": 209,
+          "import": 139,
+          "export-named": 91,
+          "export-star": 34,
+          "export-star-as": 12
+        },
+        "byTypeOnly": {
+          "decl": 192,
+          "none": 293
+        },
+        "internal": 485,
+        "internalElided": 0,
+        "total": 485
+      },
+      "verbatimModuleSyntax": false,
+      "seconds": 1
+    },
+    "astro": {
+      "barrels": {
+        "byTier": {
+          "pure": 37,
+          "some-reexports": 17,
+          "mostly": 6
+        },
+        "entryBarrels": 12,
+        "filesWithValueReexport": 54,
+        "biomePredicted": 54,
+        "exportStarFiles": 11,
+        "exportStarStatements": 12,
+        "exportStarAsStatements": 3,
+        "exportNamedStatements": 131,
+        "importReexportedStatements": 1,
+        "indexBarrels": 28,
+        "internalBarrels": 19,
+        "tiered": 43,
+        "maxStarDepth": 1,
+        "starChainsDepth2Plus": 0
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 0,
+        "typeDecl": 38,
+        "typeInline": 0,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 10,
+        "byLabel": {
+          "late-use": 9,
+          "top-level-use": 1
+        },
+        "byRisk": {
+          "late-use": 9,
+          "top-level-use": 1
+        },
+        "barrelInducedRisk": {},
+        "directTopLevel": 0,
+        "withBarrel": 1,
+        "withIndex": 4,
+        "sizes": [
+          16,
+          9,
+          5,
+          5,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "typeOnlyComponents": 5,
+        "typeOnlySizes": [
+          6,
+          3,
+          3,
+          2,
+          2
+        ],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 0
+        }
+      },
+      "oxlint": {
+        "noCycle": 77,
+        "predicted": 77,
+        "matched": 77,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "late-use": 65,
+          "barrel-induced": 10,
+          "top-level-use": 2
+        },
+        "byRisk": {
+          "late-use": 75,
+          "top-level-use": 2
+        },
+        "topLevelPrintedHopsOnly": 2,
+        "hoistedOnly": 0,
+        "filesReported": 47,
+        "pathLengths": {
+          "2": 15,
+          "3": 15,
+          "4": 8,
+          "5": 10,
+          "6": 15,
+          "7": 8,
+          "8": 4,
+          "9": 2
+        },
+        "selfImport": 0,
+        "barrelFile": 4,
+        "barrelFilePredictedOver100": 3,
+        "barrelFileExactTotals": 0,
+        "exportStarFiles": 11,
+        "exportStarTotalMedian": 4,
+        "exportStarTotalMax": 656
+      },
+      "fanout": {
+        "unknown": 0,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 173,
+          "barrels": 19,
+          "directMedian": 5,
+          "extraMax": 301,
+          "extraMedian": 2,
+          "ratioMax": 151.5,
+          "ratioMedian": 1.5,
+          "viaMax": 441,
+          "viaMedian": 7
+        },
+        "perBarrel": {
+          "barrels": 19,
+          "extraMedianOfMedians": 2,
+          "viaMax": 441,
+          "viaMedian": 20
+        }
+      },
+      "files": {
+        "measured": 635,
+        "program": 726
+      },
+      "models": {
+        "all": {
+          "components": 9,
+          "filesInCycles": 230,
+          "largest": 197,
+          "shareOfFiles": 36.2,
+          "sizes": [
+            197,
+            11,
+            6,
+            5,
+            3,
+            3,
+            2,
+            2,
+            2
+          ]
+        },
+        "biome": {
+          "components": 10,
+          "filesInCycles": 47,
+          "largest": 16,
+          "shareOfFiles": 7.4,
+          "sizes": [
+            16,
+            9,
+            5,
+            5,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "eslint": {
+          "components": 10,
+          "filesInCycles": 47,
+          "largest": 16,
+          "shareOfFiles": 7.4,
+          "sizes": [
+            16,
+            9,
+            5,
+            5,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "lazy": {
+          "components": 10,
+          "filesInCycles": 47,
+          "largest": 16,
+          "shareOfFiles": 7.4,
+          "sizes": [
+            16,
+            9,
+            5,
+            5,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "oxlint": {
+          "components": 10,
+          "filesInCycles": 47,
+          "largest": 16,
+          "shareOfFiles": 7.4,
+          "sizes": [
+            16,
+            9,
+            5,
+            5,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "runtime": {
+          "components": 10,
+          "filesInCycles": 47,
+          "largest": 16,
+          "shareOfFiles": 7.4,
+          "sizes": [
+            16,
+            9,
+            5,
+            5,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "third-party": 75,
+          "node-builtin": 8,
+          "internal": 7
+        },
+        "byUsage": {
+          "member-access": 42,
+          "type-only-use": 45,
+          "whole-object": 3
+        },
+        "importType": 45,
+        "total": 90
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 581,
+        "fallback": 70,
+        "resolved": 2735,
+        "unresolved": 9,
+        "resolvedShare": 82.6,
+        "unresolvedRelative": [
+          "packages/astro/src/runtime/server/scripts.ts -> ./astro-island.prebuilt.js",
+          "packages/astro/src/runtime/server/scripts.ts -> ./astro-island.prebuilt-dev.js",
+          "packages/astro/src/core/client-directive/default.ts -> ../../runtime/client/idle.prebuilt.js",
+          "packages/astro/src/core/client-directive/default.ts -> ../../runtime/client/load.prebuilt.js",
+          "packages/astro/src/core/client-directive/default.ts -> ../../runtime/client/media.prebuilt.js",
+          "packages/astro/src/core/client-directive/default.ts -> ../../runtime/client/only.prebuilt.js",
+          "packages/astro/src/core/client-directive/default.ts -> ../../runtime/client/visible.prebuilt.js",
+          "packages/astro/src/core/csp/common.ts -> ../../runtime/server/astro-island.prebuilt.js",
+          "packages/astro/src/core/csp/common.ts -> ../../runtime/server/astro-island.prebuilt-dev.js"
+        ]
+      },
+      "selfLoops": 0,
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "statements": {
+        "byKind": {
+          "import": 3034,
+          "namespace": 90,
+          "export-named": 166,
+          "export-star": 25,
+          "dynamic": 77,
+          "export-star-as": 3
+        },
+        "byTypeOnly": {
+          "decl": 1206,
+          "none": 2189
+        },
+        "internal": 2805,
+        "internalElided": 0,
+        "total": 3395
+      },
+      "verbatimModuleSyntax": true,
+      "seconds": 3
+    },
+    "excalidraw": {
+      "barrels": {
+        "byTier": {
+          "pure": 8,
+          "some-reexports": 3,
+          "mostly": 3
+        },
+        "entryBarrels": 5,
+        "filesWithValueReexport": 14,
+        "biomePredicted": 13,
+        "exportStarFiles": 5,
+        "exportStarStatements": 83,
+        "exportStarAsStatements": 0,
+        "exportNamedStatements": 80,
+        "importReexportedStatements": 7,
+        "indexBarrels": 11,
+        "internalBarrels": 6,
+        "tiered": 11,
+        "maxStarDepth": 1,
+        "starChainsDepth2Plus": 0
+      },
+      "closers": {
+        "dynamic": 1,
+        "requireLazy": 0,
+        "typeDecl": 71,
+        "typeInline": 9,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 5,
+        "byLabel": {
+          "barrel-induced": 2,
+          "late-use": 2,
+          "top-level-use": 1
+        },
+        "byRisk": {
+          "top-level-use": 2,
+          "late-use": 3
+        },
+        "barrelInducedRisk": {
+          "top-level-use": 1,
+          "late-use": 1
+        },
+        "directTopLevel": 2,
+        "withBarrel": 4,
+        "withIndex": 4,
+        "sizes": [
+          102,
+          45,
+          12,
+          6,
+          2
+        ],
+        "typeOnlyComponents": 0,
+        "typeOnlySizes": [],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 0
+        }
+      },
+      "oxlint": {
+        "noCycle": 505,
+        "predicted": 505,
+        "matched": 505,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "top-level-use": 78,
+          "late-use": 387,
+          "barrel-induced": 40
+        },
+        "byRisk": {
+          "top-level-use": 97,
+          "late-use": 408
+        },
+        "topLevelPrintedHopsOnly": 97,
+        "hoistedOnly": 0,
+        "filesReported": 167,
+        "pathLengths": {
+          "2": 32,
+          "3": 62,
+          "4": 81,
+          "5": 94,
+          "6": 57,
+          "7": 43,
+          "8": 26,
+          "9": 20,
+          "10": 11,
+          "11": 15,
+          "12": 14,
+          "13": 14,
+          "14": 13,
+          "15": 10,
+          "16": 7,
+          "17": 4,
+          "18": 1,
+          "19": 1
+        },
+        "selfImport": 0,
+        "barrelFile": 5,
+        "barrelFilePredictedOver100": 5,
+        "barrelFileExactTotals": 0,
+        "exportStarFiles": 5,
+        "exportStarTotalMedian": 498,
+        "exportStarTotalMax": 22338
+      },
+      "fanout": {
+        "unknown": 0,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 63,
+          "barrels": 7,
+          "directMedian": 92,
+          "extraMax": 325,
+          "extraMedian": 3,
+          "ratioMax": 100,
+          "ratioMedian": 1.03,
+          "viaMax": 420,
+          "viaMedian": 95
+        },
+        "perBarrel": {
+          "barrels": 7,
+          "extraMedianOfMedians": 1,
+          "viaMax": 420,
+          "viaMedian": 100
+        }
+      },
+      "files": {
+        "measured": 444,
+        "program": 466
+      },
+      "models": {
+        "all": {
+          "components": 1,
+          "filesInCycles": 353,
+          "largest": 356,
+          "shareOfFiles": 79.5,
+          "sizes": [
+            356
+          ]
+        },
+        "biome": {
+          "components": 5,
+          "filesInCycles": 168,
+          "largest": 102,
+          "shareOfFiles": 37.8,
+          "sizes": [
+            102,
+            45,
+            12,
+            7,
+            2
+          ]
+        },
+        "eslint": {
+          "components": 5,
+          "filesInCycles": 168,
+          "largest": 102,
+          "shareOfFiles": 37.8,
+          "sizes": [
+            102,
+            45,
+            12,
+            7,
+            2
+          ]
+        },
+        "lazy": {
+          "components": 5,
+          "filesInCycles": 168,
+          "largest": 102,
+          "shareOfFiles": 37.8,
+          "sizes": [
+            102,
+            45,
+            12,
+            7,
+            2
+          ]
+        },
+        "oxlint": {
+          "components": 5,
+          "filesInCycles": 167,
+          "largest": 102,
+          "shareOfFiles": 37.6,
+          "sizes": [
+            102,
+            45,
+            12,
+            6,
+            2
+          ]
+        },
+        "runtime": {
+          "components": 5,
+          "filesInCycles": 167,
+          "largest": 102,
+          "shareOfFiles": 37.6,
+          "sizes": [
+            102,
+            45,
+            12,
+            6,
+            2
+          ]
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "internal": 2
+        },
+        "byUsage": {
+          "whole-object": 2
+        },
+        "importType": 0,
+        "total": 2
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 347,
+        "fallback": 0,
+        "resolved": 2899,
+        "unresolved": 88,
+        "resolvedShare": 87,
+        "unresolvedRelative": [
+          "packages/excalidraw/components/Spinner.tsx -> ./Spinner.scss",
+          "packages/excalidraw/components/IconButton.tsx -> ./ToolIcon.scss",
+          "packages/excalidraw/components/EyeDropper.tsx -> ./EyeDropper.scss",
+          "packages/excalidraw/components/Island.tsx -> ./Island.scss",
+          "packages/excalidraw/components/TopPicksDnD/topPicksDnD.tsx -> ./TopPicksDnD.scss",
+          "packages/excalidraw/components/ColorPicker/ColorPicker.tsx -> ./ColorPicker.scss",
+          "packages/excalidraw/fonts/Cascadia/index.ts -> ./CascadiaCode-Regular.woff2",
+          "packages/excalidraw/fonts/Liberation/index.ts -> ./LiberationSans-Regular.woff2",
+          "packages/excalidraw/fonts/Lilita/index.ts -> ./Lilita-Regular-i7dPIFZ9Zz-WBtRtedDbYE98RXi4EwSsbg.woff2",
+          "packages/excalidraw/fonts/Lilita/index.ts -> ./Lilita-Regular-i7dPIFZ9Zz-WBtRtedDbYEF8RXi4EwQ.woff2",
+          "packages/excalidraw/fonts/Nunito/index.ts -> ./Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTA3j6zbXWjgevT5.woff2",
+          "packages/excalidraw/fonts/Nunito/index.ts -> ./Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTQ3j6zbXWjgeg.woff2",
+          "packages/excalidraw/fonts/Nunito/index.ts -> ./Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTk3j6zbXWjgevT5.woff2",
+          "packages/excalidraw/fonts/Nunito/index.ts -> ./Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTo3j6zbXWjgevT5.woff2",
+          "packages/excalidraw/fonts/Nunito/index.ts -> ./Nunito-Regular-XRXI3I6Li01BKofiOc5wtlZ2di8HDIkhdTs3j6zbXWjgevT5.woff2"
+        ]
+      },
+      "selfLoops": 0,
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "statements": {
+        "byKind": {
+          "import": 3075,
+          "export-star": 83,
+          "export-named": 84,
+          "side-effect": 78,
+          "dynamic": 10,
+          "namespace": 2,
+          "require": 2
+        },
+        "byTypeOnly": {
+          "none": 2579,
+          "decl": 738,
+          "inline": 17
+        },
+        "internal": 2899,
+        "internalElided": 0,
+        "total": 3334
+      },
+      "verbatimModuleSyntax": false,
+      "seconds": 8
+    },
+    "next.js": {
+      "barrels": {
+        "byTier": {
+          "some-reexports": 35,
+          "pure": 47,
+          "mostly": 7
+        },
+        "entryBarrels": 0,
+        "filesWithValueReexport": 84,
+        "biomePredicted": 77,
+        "exportStarFiles": 27,
+        "exportStarStatements": 34,
+        "exportStarAsStatements": 2,
+        "exportNamedStatements": 108,
+        "importReexportedStatements": 10,
+        "indexBarrels": 14,
+        "internalBarrels": 54,
+        "tiered": 54,
+        "maxStarDepth": 1,
+        "starChainsDepth2Plus": 0
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 24,
+        "typeDecl": 115,
+        "typeInline": 0,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 9,
+        "byLabel": {
+          "late-use": 9
+        },
+        "byRisk": {
+          "late-use": 9
+        },
+        "barrelInducedRisk": {},
+        "directTopLevel": 0,
+        "withBarrel": 1,
+        "withIndex": 1,
+        "sizes": [
+          15,
+          7,
+          5,
+          4,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "typeOnlyComponents": 4,
+        "typeOnlySizes": [
+          4,
+          2,
+          2,
+          2
+        ],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 5
+        }
+      },
+      "oxlint": {
+        "noCycle": 87,
+        "predicted": 87,
+        "matched": 87,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "late-use": 86,
+          "barrel-induced": 1
+        },
+        "byRisk": {
+          "late-use": 87
+        },
+        "topLevelPrintedHopsOnly": 0,
+        "hoistedOnly": 8,
+        "filesReported": 41,
+        "pathLengths": {
+          "2": 18,
+          "3": 13,
+          "4": 10,
+          "5": 15,
+          "6": 10,
+          "7": 12,
+          "8": 1,
+          "9": 1,
+          "10": 4,
+          "11": 3
+        },
+        "selfImport": 0,
+        "barrelFile": 22,
+        "barrelFilePredictedOver100": 20,
+        "barrelFileExactTotals": 10,
+        "exportStarFiles": 27,
+        "exportStarTotalMedian": 994,
+        "exportStarTotalMax": 2985
+      },
+      "fanout": {
+        "unknown": 15,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 76,
+          "barrels": 17,
+          "directMedian": 5,
+          "extraMax": 39,
+          "extraMedian": 2,
+          "ratioMax": 10,
+          "ratioMedian": 1.365,
+          "viaMax": 87,
+          "viaMedian": 7
+        },
+        "perBarrel": {
+          "barrels": 17,
+          "extraMedianOfMedians": 1.5,
+          "viaMax": 87,
+          "viaMedian": 9
+        }
+      },
+      "files": {
+        "measured": 1416,
+        "program": 1457
+      },
+      "models": {
+        "all": {
+          "components": 7,
+          "filesInCycles": 465,
+          "largest": 457,
+          "shareOfFiles": 32.8,
+          "sizes": [
+            457,
+            7,
+            4,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "biome": {
+          "components": 11,
+          "filesInCycles": 73,
+          "largest": 28,
+          "shareOfFiles": 5.2,
+          "sizes": [
+            28,
+            19,
+            6,
+            6,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "eslint": {
+          "components": 9,
+          "filesInCycles": 41,
+          "largest": 15,
+          "shareOfFiles": 2.9,
+          "sizes": [
+            15,
+            7,
+            5,
+            4,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "lazy": {
+          "components": 11,
+          "filesInCycles": 73,
+          "largest": 28,
+          "shareOfFiles": 5.2,
+          "sizes": [
+            28,
+            19,
+            6,
+            6,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "oxlint": {
+          "components": 9,
+          "filesInCycles": 41,
+          "largest": 15,
+          "shareOfFiles": 2.9,
+          "sizes": [
+            15,
+            7,
+            5,
+            4,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "runtime": {
+          "components": 9,
+          "filesInCycles": 41,
+          "largest": 15,
+          "shareOfFiles": 2.9,
+          "sizes": [
+            15,
+            7,
+            5,
+            4,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "internal": 81,
+          "node-builtin": 20,
+          "third-party": 31
+        },
+        "byUsage": {
+          "member-access": 109,
+          "whole-object": 20,
+          "type-only-use": 3
+        },
+        "importType": 1,
+        "total": 132
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 1431,
+        "fallback": 0,
+        "resolved": 6217,
+        "unresolved": 14,
+        "resolvedShare": 81.1,
+        "unresolvedRelative": [
+          "packages/next/src/next-devtools/dev-overlay/components/toast/index.tsx -> ./style.css",
+          "packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/devtools-indicator.tsx -> ./devtools-indicator.css",
+          "packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-handle.tsx -> ./resize-handle.css",
+          "packages/next/src/next-devtools/dev-overlay/panel/dynamic-panel.tsx -> ./dynamic-panel.css",
+          "packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx -> ./segment-boundary-trigger.css",
+          "packages/next/src/next-devtools/dev-overlay/components/tooltip/tooltip.tsx -> ./tooltip.css",
+          "packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx -> ./segment-explorer.css",
+          "packages/next/src/next-devtools/dev-overlay/components/instant-navs/instant-navs-panel.tsx -> ./instant-navs-panel.css",
+          "packages/next/src/next-devtools/dev-overlay/components/request-insights/request-insights-panel.tsx -> ./request-insights-panel.css",
+          "packages/next/src/next-devtools/dev-overlay/menu/panel-router.tsx -> ./panel-router.css",
+          "packages/next/src/next-devtools/dev-overlay-ux.ts -> ./dev-overlay/global.css",
+          "packages/next/src/next-devtools/dev-overlay-ux.ts -> ./dev-overlay/components/toast/style.css",
+          "packages/next/src/build/webpack/loaders/next-font-loader/postcss-next-font.ts -> ../../../../../font",
+          "packages/next/src/build/webpack/loaders/next-font-loader/index.ts -> ../../../../../font"
+        ]
+      },
+      "selfLoops": 0,
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+      "statements": {
+        "byKind": {
+          "import": 6804,
+          "export-named": 128,
+          "require": 111,
+          "require-lazy": 341,
+          "namespace": 132,
+          "export-star": 36,
+          "side-effect": 79,
+          "dynamic": 29,
+          "export-star-as": 2
+        },
+        "byTypeOnly": {
+          "none": 5722,
+          "decl": 1940
+        },
+        "internal": 6212,
+        "internalElided": 0,
+        "total": 7662
+      },
+      "verbatimModuleSyntax": true,
+      "seconds": 7
+    },
+    "trpc": {
+      "barrels": {
+        "byTier": {
+          "pure": 24,
+          "some-reexports": 7,
+          "mostly": 1
+        },
+        "entryBarrels": 18,
+        "filesWithValueReexport": 31,
+        "biomePredicted": 29,
+        "exportStarFiles": 14,
+        "exportStarStatements": 80,
+        "exportStarAsStatements": 1,
+        "exportNamedStatements": 32,
+        "importReexportedStatements": 2,
+        "indexBarrels": 15,
+        "internalBarrels": 7,
+        "tiered": 25,
+        "maxStarDepth": 3,
+        "starChainsDepth2Plus": 3
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 0,
+        "typeDecl": 11,
+        "typeInline": 1,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 0,
+        "byLabel": {},
+        "byRisk": {},
+        "barrelInducedRisk": {},
+        "directTopLevel": 0,
+        "withBarrel": 0,
+        "withIndex": 0,
+        "sizes": [],
+        "typeOnlyComponents": 2,
+        "typeOnlySizes": [
+          24,
+          21
+        ],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 0
+        }
+      },
+      "oxlint": {
+        "noCycle": 0,
+        "predicted": 0,
+        "matched": 0,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {},
+        "byRisk": {},
+        "topLevelPrintedHopsOnly": 0,
+        "hoistedOnly": 0,
+        "filesReported": 0,
+        "pathLengths": {},
+        "selfImport": 0,
+        "barrelFile": 11,
+        "barrelFilePredictedOver100": 10,
+        "barrelFileExactTotals": 7,
+        "exportStarFiles": 14,
+        "exportStarTotalMedian": 147,
+        "exportStarTotalMax": 993
+      },
+      "fanout": {
+        "unknown": 0,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 27,
+          "barrels": 5,
+          "directMedian": 2,
+          "extraMax": 50,
+          "extraMedian": 38,
+          "ratioMax": 51,
+          "ratioMedian": 5,
+          "viaMax": 51,
+          "viaMedian": 50
+        },
+        "perBarrel": {
+          "barrels": 5,
+          "extraMedianOfMedians": 20,
+          "viaMax": 51,
+          "viaMedian": 50
+        }
+      },
+      "files": {
+        "measured": 176,
+        "program": 184
+      },
+      "models": {
+        "all": {
+          "components": 2,
+          "filesInCycles": 45,
+          "largest": 24,
+          "shareOfFiles": 25.6,
+          "sizes": [
+            24,
+            21
+          ]
+        },
+        "biome": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        },
+        "eslint": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        },
+        "lazy": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        },
+        "oxlint": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        },
+        "runtime": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "node-builtin": 8,
+          "third-party": 12
+        },
+        "byUsage": {
+          "member-access": 13,
+          "type-only-use": 6,
+          "whole-object": 1
+        },
+        "importType": 5,
+        "total": 20
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 98,
+        "fallback": 0,
+        "resolved": 756,
+        "unresolved": 0,
+        "resolvedShare": 88.5,
+        "unresolvedRelative": []
+      },
+      "selfLoops": 0,
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "statements": {
+        "byKind": {
+          "import": 698,
+          "export-named": 52,
+          "export-star": 81,
+          "namespace": 20,
+          "dynamic": 2,
+          "export-star-as": 1
+        },
+        "byTypeOnly": {
+          "decl": 416,
+          "none": 431,
+          "inline": 7
+        },
+        "internal": 756,
+        "internalElided": 0,
+        "total": 854
+      },
+      "verbatimModuleSyntax": false,
+      "seconds": 1
+    },
+    "vite": {
+      "barrels": {
+        "byTier": {
+          "some-reexports": 3,
+          "pure": 3,
+          "mostly": 1
+        },
+        "entryBarrels": 2,
+        "filesWithValueReexport": 6,
+        "biomePredicted": 6,
+        "exportStarFiles": 0,
+        "exportStarStatements": 0,
+        "exportStarAsStatements": 0,
+        "exportNamedStatements": 41,
+        "importReexportedStatements": 0,
+        "indexBarrels": 2,
+        "internalBarrels": 1,
+        "tiered": 4,
+        "maxStarDepth": 0,
+        "starChainsDepth2Plus": 0
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 0,
+        "typeDecl": 162,
+        "typeInline": 2,
+        "elided": 0
+      },
+      "cycles": {
+        "runtime": 2,
+        "byLabel": {
+          "late-use": 1,
+          "top-level-use": 1
+        },
+        "byRisk": {
+          "late-use": 1,
+          "top-level-use": 1
+        },
+        "barrelInducedRisk": {},
+        "directTopLevel": 1,
+        "withBarrel": 1,
+        "withIndex": 1,
+        "sizes": [
+          48,
+          2
+        ],
+        "typeOnlyComponents": 1,
+        "typeOnlySizes": [
+          8
+        ],
+        "modelOnly": {
+          "oxlint": 0,
+          "eslint": 0,
+          "biome": 0
+        }
+      },
+      "oxlint": {
+        "noCycle": 166,
+        "predicted": 166,
+        "matched": 166,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "top-level-use": 110,
+          "barrel-induced": 15,
+          "late-use": 41
+        },
+        "byRisk": {
+          "top-level-use": 125,
+          "late-use": 41
+        },
+        "topLevelPrintedHopsOnly": 50,
+        "hoistedOnly": 0,
+        "filesReported": 49,
+        "pathLengths": {
+          "2": 15,
+          "3": 7,
+          "4": 7,
+          "5": 5,
+          "6": 4,
+          "7": 2,
+          "8": 9,
+          "9": 14,
+          "10": 9,
+          "11": 7,
+          "12": 15,
+          "13": 5,
+          "14": 7,
+          "15": 9,
+          "16": 11,
+          "17": 19,
+          "18": 11,
+          "19": 6,
+          "20": 1,
+          "21": 1,
+          "22": 2
+        },
+        "selfImport": 0,
+        "barrelFile": 0,
+        "barrelFilePredictedOver100": 0,
+        "barrelFileExactTotals": 0,
+        "exportStarFiles": 0,
+        "exportStarTotalMedian": null,
+        "exportStarTotalMax": 0
+      },
+      "fanout": {
+        "unknown": 0,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 0,
+          "barrels": 0,
+          "directMedian": null,
+          "extraMax": 0,
+          "extraMedian": null,
+          "ratioMax": 0,
+          "ratioMedian": null,
+          "viaMax": 0,
+          "viaMedian": null
+        },
+        "perBarrel": {
+          "barrels": 0,
+          "extraMedianOfMedians": null,
+          "viaMax": 0,
+          "viaMedian": null
+        }
+      },
+      "files": {
+        "measured": 124,
+        "program": 147
+      },
+      "models": {
+        "all": {
+          "components": 2,
+          "filesInCycles": 94,
+          "largest": 88,
+          "shareOfFiles": 75.8,
+          "sizes": [
+            88,
+            8
+          ]
+        },
+        "biome": {
+          "components": 2,
+          "filesInCycles": 49,
+          "largest": 48,
+          "shareOfFiles": 39.5,
+          "sizes": [
+            48,
+            2
+          ]
+        },
+        "eslint": {
+          "components": 2,
+          "filesInCycles": 49,
+          "largest": 48,
+          "shareOfFiles": 39.5,
+          "sizes": [
+            48,
+            2
+          ]
+        },
+        "lazy": {
+          "components": 2,
+          "filesInCycles": 49,
+          "largest": 48,
+          "shareOfFiles": 39.5,
+          "sizes": [
+            48,
+            2
+          ]
+        },
+        "oxlint": {
+          "components": 2,
+          "filesInCycles": 49,
+          "largest": 48,
+          "shareOfFiles": 39.5,
+          "sizes": [
+            48,
+            2
+          ]
+        },
+        "runtime": {
+          "components": 2,
+          "filesInCycles": 49,
+          "largest": 48,
+          "shareOfFiles": 39.5,
+          "sizes": [
+            48,
+            2
+          ]
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "third-party": 7,
+          "internal": 1,
+          "node-builtin": 3
+        },
+        "byUsage": {
+          "member-access": 4,
+          "unused": 2,
+          "type-only-use": 5
+        },
+        "importType": 7,
+        "total": 11
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 427,
+        "fallback": 0,
+        "resolved": 888,
+        "unresolved": 0,
+        "resolvedShare": 67.5,
+        "unresolvedRelative": []
+      },
+      "selfLoops": 0,
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "statements": {
+        "byKind": {
+          "import": 1184,
+          "side-effect": 1,
+          "export-named": 94,
+          "namespace": 11,
+          "dynamic": 24,
+          "export-star-as": 1
+        },
+        "byTypeOnly": {
+          "none": 841,
+          "decl": 470,
+          "inline": 4
+        },
+        "internal": 888,
+        "internalElided": 0,
+        "total": 1315
+      },
+      "verbatimModuleSyntax": false,
+      "seconds": 3
+    },
+    "vscode": {
+      "barrels": {
+        "byTier": {
+          "some-reexports": 1
+        },
+        "entryBarrels": 0,
+        "filesWithValueReexport": 1,
+        "biomePredicted": 1,
+        "exportStarFiles": 0,
+        "exportStarStatements": 0,
+        "exportStarAsStatements": 0,
+        "exportNamedStatements": 1,
+        "importReexportedStatements": 0,
+        "indexBarrels": 0,
+        "internalBarrels": 0,
+        "tiered": 0,
+        "maxStarDepth": 0,
+        "starChainsDepth2Plus": 0
+      },
+      "closers": {
+        "dynamic": 0,
+        "requireLazy": 0,
+        "typeDecl": 2,
+        "typeInline": 0,
+        "elided": 21
+      },
+      "cycles": {
+        "runtime": 0,
+        "byLabel": {},
+        "byRisk": {},
+        "barrelInducedRisk": {},
+        "directTopLevel": 0,
+        "withBarrel": 0,
+        "withIndex": 0,
+        "sizes": [],
+        "typeOnlyComponents": 8,
+        "typeOnlySizes": [
+          35,
+          19,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2
+        ],
+        "modelOnly": {
+          "oxlint": 9,
+          "eslint": 9,
+          "biome": 9
+        }
+      },
+      "oxlint": {
+        "noCycle": 146,
+        "predicted": 146,
+        "matched": 146,
+        "unpredicted": 0,
+        "missed": 0,
+        "byLabel": {
+          "type-only": 146
+        },
+        "byRisk": {},
+        "topLevelPrintedHopsOnly": 0,
+        "hoistedOnly": 0,
+        "filesReported": 69,
+        "pathLengths": {
+          "2": 25,
+          "3": 21,
+          "4": 31,
+          "5": 21,
+          "6": 19,
+          "7": 7,
+          "8": 4,
+          "9": 8,
+          "10": 9,
+          "11": 1
+        },
+        "selfImport": 0,
+        "barrelFile": 0,
+        "barrelFilePredictedOver100": 0,
+        "barrelFileExactTotals": 0,
+        "exportStarFiles": 0,
+        "exportStarTotalMedian": null,
+        "exportStarTotalMax": 0
+      },
+      "fanout": {
+        "unknown": 0,
+        "namespaceConsumers": 0,
+        "all": {
+          "consumerImports": 0,
+          "barrels": 0,
+          "directMedian": null,
+          "extraMax": 0,
+          "extraMedian": null,
+          "ratioMax": 0,
+          "ratioMedian": null,
+          "viaMax": 0,
+          "viaMedian": null
+        },
+        "perBarrel": {
+          "barrels": 0,
+          "extraMedianOfMedians": null,
+          "viaMax": 0,
+          "viaMedian": null
+        }
+      },
+      "files": {
+        "measured": 226,
+        "program": 229
+      },
+      "models": {
+        "all": {
+          "components": 8,
+          "filesInCycles": 71,
+          "largest": 35,
+          "shareOfFiles": 31.4,
+          "sizes": [
+            35,
+            19,
+            4,
+            4,
+            3,
+            2,
+            2,
+            2
+          ]
+        },
+        "biome": {
+          "components": 9,
+          "filesInCycles": 69,
+          "largest": 35,
+          "shareOfFiles": 30.5,
+          "sizes": [
+            35,
+            18,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "eslint": {
+          "components": 9,
+          "filesInCycles": 69,
+          "largest": 35,
+          "shareOfFiles": 30.5,
+          "sizes": [
+            35,
+            18,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "lazy": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        },
+        "oxlint": {
+          "components": 9,
+          "filesInCycles": 69,
+          "largest": 35,
+          "shareOfFiles": 30.5,
+          "sizes": [
+            35,
+            18,
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2
+          ]
+        },
+        "runtime": {
+          "components": 0,
+          "filesInCycles": 0,
+          "largest": 0,
+          "shareOfFiles": 0,
+          "sizes": []
+        }
+      },
+      "namespaces": {
+        "byTarget": {
+          "internal-unresolved": 45,
+          "internal": 17,
+          "third-party": 3
+        },
+        "byUsage": {
+          "member-access": 61,
+          "type-only-use": 4
+        },
+        "importType": 3,
+        "total": 65
+      },
+      "resolution": {
+        "dist": 0,
+        "external": 5,
+        "fallback": 0,
+        "resolved": 1008,
+        "unresolved": 442,
+        "resolvedShare": 69.3,
+        "unresolvedRelative": [
+          "src/vs/editor/common/core/cursorColumns.ts -> ../../../base/common/charCode.js",
+          "src/vs/editor/common/core/cursorColumns.ts -> ../../../base/common/strings.js",
+          "src/vs/editor/common/config/editorZoom.ts -> ../../../base/common/event.js",
+          "src/vs/editor/common/config/fontInfo.ts -> ../../../base/common/platform.js",
+          "src/vs/editor/common/core/wordHelper.ts -> ../../../base/common/iterator.js",
+          "src/vs/editor/common/core/wordHelper.ts -> ../../../base/common/lifecycle.js",
+          "src/vs/editor/common/core/wordHelper.ts -> ../../../base/common/linkedList.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/arrays.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/htmlContent.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/jsonSchema.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/objects.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/platform.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/scrollable.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../base/common/uint.js",
+          "src/vs/editor/common/config/editorOptions.ts -> ../../../platform/accessibility/common/accessibility.js"
+        ]
+      },
+      "selfLoops": 0,
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+      "statements": {
+        "byKind": {
+          "import": 1389,
+          "namespace": 65,
+          "export-named": 1
+        },
+        "byTypeOnly": {
+          "none": 1443,
+          "decl": 12
+        },
+        "internal": 1008,
+        "internalElided": 417,
+        "total": 1455
+      },
+      "verbatimModuleSyntax": false,
+      "seconds": 2
+    }
+  },
+  "setup": {
+    "astro": {
+      "tsconfig": "packages/astro/tsconfig.json"
+    },
+    "excalidraw": {
+      "tsconfig": "tsconfig.json"
+    },
+    "hono": {
+      "tsconfig": "tsconfig.json"
+    },
+    "next.js": {
+      "tsconfig": "packages/next/tsconfig.json"
+    },
+    "trpc": {
+      "tsconfig": "tsconfig.json"
+    },
+    "vite": {
+      "tsconfig": "packages/vite/src/node/tsconfig.json"
+    },
+    "vscode": {
+      "tsconfig": "src/tsconfig.json"
+    },
+    "zod": {
+      "tsconfig": "packages/zod/tsconfig.json"
+    }
+  },
+  "sparse": {
+    "next.js": "sparse clone of packages/next/src: package.json is present, the rest of the monorepo is not",
+    "vscode": "sparse clone of src/vs/editor/common (plus src/*.json): imports of src/vs/base and src/vs/platform don't resolve, so cycles through them are invisible"
+  },
+  "tools": {
+    "typescript": "6.0.3"
+  }
+}
