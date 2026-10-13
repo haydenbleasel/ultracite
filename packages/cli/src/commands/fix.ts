@@ -198,6 +198,8 @@ const runOxfmtFix = (
 
 interface FixOptions {
   agent?: FixAgent | null;
+  /** Running from an agent's post-edit hook (`--hook`). */
+  hook?: boolean;
   /**
    * Running from a post-edit hook, how the problems left after fixing reach
    * the agent (see HookReport): `"stderr"` sends everything the tools print
@@ -248,12 +250,22 @@ const runLinterFixes = (
   }
 };
 
+// A post-edit hook runs between an agent's edits, so an import the agent has
+// just added is still unused and the autofix would delete it before the code
+// that uses it lands (#483). The Biome hook command skips noUnusedImports for
+// the same reason. Turned off this way, the rule doesn't report either, but
+// no-unused-vars still does.
+const eslintPassthrough = (passthrough: string[], hook: boolean): string[] =>
+  hook
+    ? [...passthrough, "--rule", "unused-imports/no-unused-imports:off"]
+    : passthrough;
+
 // The plain path stays synchronous (and throws synchronously); only agent
 // mode returns a promise. The command action awaits either shape.
 export const fix = (
   files: string[],
   linterArgs: string[] = [],
-  { agent, report = "none" }: FixOptions = {}
+  { agent, hook = false, report = "none" }: FixOptions = {}
 ): Promise<void> | void => {
   const linter = detectLinter();
   const normalizedFiles = normalizeFileArgs(files);
@@ -263,7 +275,9 @@ export const fix = (
   }
 
   const passthrough =
-    linter === "eslint" ? dropUnsupportedUnsafe(linterArgs) : linterArgs;
+    linter === "eslint"
+      ? eslintPassthrough(dropUnsupportedUnsafe(linterArgs), hook)
+      : linterArgs;
 
   if (agent) {
     return runAgentFix({

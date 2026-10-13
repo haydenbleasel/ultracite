@@ -1167,6 +1167,26 @@ describe("fix reporting to the agent", () => {
     ]);
   });
 
+  // #483: between an agent's edits, an import it just added is still unused.
+  test("keeps ESLint from deleting unused imports in a hook run", () => {
+    const mockSpawn = mockLinter("eslint");
+
+    fix(["src/a.ts"], [], { hook: true, report: "none" });
+
+    const [eslintCall] = mockSpawn.mock.calls;
+    expect(eslintCall[0]).toBe("eslint");
+    expect(eslintCall[1]).toContain("unused-imports/no-unused-imports:off");
+  });
+
+  test("lets ESLint delete unused imports outside a hook", () => {
+    const mockSpawn = mockLinter("eslint");
+
+    fix(["src/a.ts"]);
+
+    const [eslintCall] = mockSpawn.mock.calls;
+    expect(eslintCall[1]).not.toContain("--rule");
+  });
+
   test("keeps output on stdout when not reporting to the agent", () => {
     const mockSpawn = mockLinter("oxlint");
 

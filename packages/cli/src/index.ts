@@ -181,6 +181,7 @@ program
 
         await fix(targets ?? split.files, passthrough, {
           agent,
+          hook: true,
           report,
         });
         return;
