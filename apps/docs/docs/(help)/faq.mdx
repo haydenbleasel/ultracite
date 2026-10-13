@@ -61,6 +61,16 @@ More complex issues (business logic or things that require developer intention) 
 
 The philosophy is similar to ESLint's: provide fixes where possible, but don't risk altering code behavior. Always review the Problems panel or CLI output for any remaining warnings after auto-fix.
 
+## Q: Why does an import cycle go away after `ultracite fix`?
+
+The cycle rules skip `import type`, but they don't know that TypeScript also drops a plain import whose bindings are only used as types. So an import like that counts toward a cycle in `ultracite check`, even though the cycle can't happen at runtime. `ultracite fix` rewrites it to `import type` (Biome's `useImportType`, `consistent-type-imports` in Oxlint and ESLint), and the report goes away.
+
+The linters also differ on type-only re-exports: Oxlint follows `export type * from`, and ESLint follows `export type { … } from`. Biome doesn't resolve every import the other two do, such as tsconfig `paths` inherited through `extends`, so it can miss a cycle that crosses packages.
+
+## Q: Does Ultracite find unused exports or files?
+
+No. The unused-variable rules report locals and imports, but not an export another file could import, and nothing reports a file that no other file reaches. That takes a tool that reads the whole program, such as [Knip](https://knip.dev).
+
 ## Q: Where can I learn more about the tools Ultracite uses?
 
 Each toolchain has its own documentation: [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html), [Biome](https://biomejs.dev/), and [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), and [Stylelint](https://stylelint.io/). If you're curious about how your linter formats code or the philosophy behind certain choices, its docs are the best resource.

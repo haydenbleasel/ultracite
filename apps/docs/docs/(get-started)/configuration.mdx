@@ -175,6 +175,32 @@ overrides: [
 ],
 ```
 
+### Restricting Imports, Globals and Types
+
+A few rules are on but report nothing until you list what to restrict, since that depends on your project:
+
+- **Oxlint:** `no-restricted-imports`, `no-restricted-globals` and `typescript/no-restricted-types`.
+- **ESLint:** the same three (`@typescript-eslint/no-restricted-types`), plus `no-restricted-syntax`, `no-restricted-exports`, `import-x/no-restricted-paths`, `import-x/prefer-namespace-import`, `n/no-restricted-import` and `n/no-restricted-require`.
+- **Biome:** `noRestrictedImports` and `noRestrictedTypes`. `noRestrictedGlobals` always bans `event` and `error`, and you can add more.
+
+Give one options in your config to use it:
+
+```ts title="oxlint.config.ts"
+rules: {
+  "no-restricted-imports": [
+    "error",
+    {
+      paths: [
+        {
+          name: "lodash",
+          message: "Import from lodash-es, which tree-shakes.",
+        },
+      ],
+    },
+  ],
+},
+```
+
 ### Sorting Classes from a Custom Tailwind Theme (Oxfmt)
 
 Tailwind class sorting uses the same algorithm as `prettier-plugin-tailwindcss`. If you use Tailwind CSS v4 with a custom theme, point Oxfmt at your stylesheet so sorting respects your custom utilities:

@@ -160,6 +160,9 @@ export default defineConfig({
     "no-prototype-builtins": "error",
     "no-redeclare": "error",
     "no-regex-spaces": "error",
+    // These two and typescript/no-restricted-types report nothing until a
+    // project lists what to restrict; they're on so it only has to add the
+    // options (see the configuration docs).
     "no-restricted-globals": "error",
     "no-restricted-imports": "error",
     "no-restricted-properties": "off",
