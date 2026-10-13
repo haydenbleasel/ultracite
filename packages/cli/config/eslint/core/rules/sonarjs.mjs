@@ -15,7 +15,8 @@ const baseRules = Object.fromEntries(
 const overrideRules = {
   // Fights the formatter (arrowParentheses: always).
   "sonarjs/arrow-function-convention": "off",
-  // Matches Biome's noExcessiveCognitiveComplexity limit.
+  // The same number as Biome's noExcessiveCognitiveComplexity limit, but the
+  // two score functions differently, so the limits aren't equivalent.
   "sonarjs/cognitive-complexity": ["error", 20],
   // Duplicate of the core complexity rule.
   "sonarjs/cyclomatic-complexity": "off",
@@ -46,9 +47,9 @@ const config = Object.assign(baseRules, overrideRules);
 // `meta.docs.requiresTypeChecking`. Most of them register nothing without a
 // TypeScript program, so they run only with the type-aware preset. These
 // marked rules also check the syntax tree, using types only where there are
-// some, so core keeps them. The ESLint smoke test checks this list against
-// the installed plugin.
-const worksWithoutTypes = new Set([
+// some, so core keeps them, and so does the Oxlint js-plugins preset. The
+// ESLint smoke test checks this list against the installed plugin.
+export const worksWithoutTypes = new Set([
   "anchor-precedence",
   "arguments-order",
   "bitwise-operators",

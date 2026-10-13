@@ -24,7 +24,20 @@ const here = import.meta.dirname;
  * Intentional divergences between the ESLint and oxlint presets.
  * Keyed by oxlint-normalized rule name.
  */
-const allowlist = new Map<string, string>();
+const allowlist = new Map<string, string>([
+  [
+    "require-await",
+    "oxlint keeps the base rule on TS files; the ESLint type-aware preset swaps it for @typescript-eslint/require-await, which allows an async function that returns a promise",
+  ],
+  [
+    "typescript/require-await",
+    "off in oxlint so type-aware runs don't report a function twice; see require-await",
+  ],
+]);
+
+// Base rules whose typescript/ twin reports different code, so one doesn't
+// stand in for the other when comparing the presets.
+const nonEquivalentTwins = new Set(["require-await"]);
 
 // Base rules whose @typescript-eslint twin has a different name, looked up
 // in both directions so either name finds the other.
@@ -201,6 +214,23 @@ const surfaces: Surface[] = [
 ];
 
 const nativeRules = getNativeOxlintRules();
+
+// ESLint plugins the js-plugins preset bridges into oxlint. Every rule they
+// have can run there, so a rule ESLint enables and oxlint doesn't list is a
+// gap in the preset, not a missing implementation. The exception is a rule
+// that needs type information, which the bridge doesn't provide.
+// react-doctor isn't checked yet: the ESLint react preset enables far more of
+// its rules than the curated list in the js-plugins preset.
+const bridgedPrefixes = ["github/", "sonarjs/"];
+// SAFETY: the ESLint preset's sonarjs module exports its type-checked rules
+// as a rule map keyed by prefixed rule name.
+const { typeCheckedRules: sonarjsTypeCheckedRules } = (await import(
+  path.join(here, "../config/eslint/core/rules/sonarjs.mjs")
+)) as { typeCheckedRules: Record<string, OxlintRuleEntry> };
+const needsTypeInformation = new Set(Object.keys(sonarjsTypeCheckedRules));
+const isBridged = (name: string): boolean =>
+  bridgedPrefixes.some((prefix) => name.startsWith(prefix)) &&
+  !needsTypeInformation.has(name);
 const violations: string[] = [];
 const allowlisted = new Set<string>();
 const gaps = new Set<string>();
@@ -259,6 +289,12 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
   // Base rules cover their typescript/ twins and vice versa on both sides.
   const twinsOf = (name: string): string[] => {
     const twins = [name];
+    const base = name.startsWith(typescriptPrefix)
+      ? name.slice(typescriptPrefix.length)
+      : name;
+    if (nonEquivalentTwins.has(base)) {
+      return twins;
+    }
     if (name.startsWith(typescriptPrefix)) {
       twins.push(name.slice(typescriptPrefix.length));
     } else {
@@ -325,7 +361,8 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     if (!state.enabled) {
       continue;
     }
-    const runnable = nativeRules.has(name) || oxlintState.has(name);
+    const runnable =
+      nativeRules.has(name) || oxlintState.has(name) || isBridged(name);
     if (!runnable) {
       gaps.add(name);
       continue;
@@ -349,6 +386,16 @@ for (const rule of unusedAllowlist) {
 console.log(
   `\nESLint-only rules with no oxlint implementation: ${gaps.size} (informational)`
 );
+const gapsByPlugin = new Map<string, number>();
+for (const gap of gaps) {
+  const plugin = gap.includes("/") ? gap.slice(0, gap.indexOf("/")) : "eslint";
+  gapsByPlugin.set(plugin, (gapsByPlugin.get(plugin) ?? 0) + 1);
+}
+for (const [plugin, count] of [...gapsByPlugin].toSorted(
+  ([, a], [, b]) => b - a
+)) {
+  console.log(`  ${plugin}: ${count}`);
+}
 
 if (violations.length > 0) {
   console.error(`\n${violations.length} parity violation(s):`);

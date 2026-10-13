@@ -36,9 +36,12 @@ const overrideRules = {
   "@typescript-eslint/no-magic-numbers": "off",
   "@typescript-eslint/no-require-imports": "off",
   "@typescript-eslint/prefer-readonly-parameter-types": "off",
-  // Kept on even though oxlint sets typescript/require-await off — oxlint
-  // applies the base require-await rule to TS files natively, so this is
-  // the behavioral equivalent here.
+  // Kept on even though oxlint sets typescript/require-await off. oxlint runs
+  // the base require-await rule on TS files instead, and that isn't
+  // equivalent: the base rule also reports an async function that returns a
+  // promise without awaiting it, which this one allows. The type-aware preset
+  // swaps the base rule for this one, so it reports fewer functions than
+  // oxlint does.
   "@typescript-eslint/require-await": "error",
   "@typescript-eslint/return-await": ["error", "always"],
 };

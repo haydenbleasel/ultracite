@@ -928,6 +928,11 @@ describe("oxlint js-plugins config", () => {
 
   test("js-plugins does not enable sonarjs rules that require type checking", async () => {
     const config = await readOxlintConfig("js-plugins");
+    // SAFETY: the ESLint preset's sonarjs module exports worksWithoutTypes as
+    // a Set of unprefixed rule names.
+    const { worksWithoutTypes } = (await import(
+      path.join(import.meta.dirname, "../config/eslint/core/rules/sonarjs.mjs")
+    )) as { worksWithoutTypes: Set<string> };
     const mod = await import("eslint-plugin-sonarjs");
     // SAFETY: adapting the untyped ESLint plugin module — its default export
     // is a plugin object whose rules map holds rule objects with optional meta.
@@ -942,7 +947,8 @@ describe("oxlint js-plugins config", () => {
       .filter(([key]) => key.startsWith("sonarjs/"))
       .filter(([, severity]) => severity !== "off")
       .map(([key]) => key.replace("sonarjs/", ""))
-      .filter((name) => rules[name]?.meta?.docs?.requiresTypeChecking);
+      .filter((name) => rules[name]?.meta?.docs?.requiresTypeChecking)
+      .filter((name) => !worksWithoutTypes.has(name));
 
     expect(typeAware).toEqual([]);
   });

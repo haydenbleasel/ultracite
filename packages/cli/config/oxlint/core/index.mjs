@@ -464,6 +464,9 @@ export default defineConfig({
     "typescript/promise-function-async": "error",
     "typescript/related-getter-setter-pairs": "error",
     "typescript/require-array-sort-compare": "error",
+    // The base require-await rule covers TS files. With type-aware linting
+    // on, both would report the same functions, though the base rule also
+    // reports async functions that return a promise without awaiting it.
     "typescript/require-await": "off",
     "typescript/restrict-plus-operands": "error",
     "typescript/restrict-template-expressions": "error",
