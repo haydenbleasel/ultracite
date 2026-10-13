@@ -34,20 +34,56 @@ const biomeJson = JSON.stringify({
   summary: { errors: 1 },
 });
 
-const eslintJson = JSON.stringify([
-  {
-    filePath: "/project/src/bad.ts",
-    messages: [
-      {
-        column: 13,
-        line: 4,
-        message: "eval can be harmful.",
-        ruleId: "no-eval",
-        severity: 2,
+const eslintJson = JSON.stringify({
+  metadata: {
+    rulesMeta: {
+      "no-eval": {
+        docs: {
+          description: "Disallow the use of `eval()`",
+          url: "https://eslint.org/docs/latest/rules/no-eval",
+        },
       },
-    ],
+    },
   },
-]);
+  results: [
+    {
+      filePath: "/project/src/bad.ts",
+      messages: [
+        {
+          column: 13,
+          line: 4,
+          message: "eval can be harmful.",
+          ruleId: "no-eval",
+          severity: 2,
+        },
+        {
+          column: 1,
+          fatal: true,
+          line: 9,
+          message: "Parsing error: Unexpected token",
+          ruleId: null,
+          severity: 2,
+        },
+      ],
+    },
+  ],
+});
+
+const biomeExplainOutput = `Summary
+
+- Name: noGlobalEval
+- Diagnostic category: lint/security/noGlobalEval
+
+Description
+
+ Disallow the use of global \`eval()\`.
+
+ The \`eval()\` function evaluates the passed string as a _JavaScript_ code.
+
+Examples
+
+Invalid
+`;
 
 describe("agent-fix linter adapters", () => {
   afterEach(() => {
@@ -74,15 +110,53 @@ describe("agent-fix linter adapters", () => {
     expect(diagnostics).toEqual([
       {
         column: 13,
+        fatal: false,
         file: "src/bad.ts",
         help: "Avoid eval().",
         line: 4,
         message: "eval can be harmful.",
         raw: expect.objectContaining({ code: "eslint(no-eval)" }),
-        rule: "eslint(no-eval)",
+        rule: "no-eval",
         severity: "error",
         url: "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-eval.html",
       },
+    ]);
+  });
+
+  test("oxlint adapter names plugin rules as the config does and flags parse errors", () => {
+    const stdout = JSON.stringify({
+      diagnostics: [
+        {
+          code: "typescript(no-explicit-any)",
+          filename: "src/a.ts",
+          message: "Unexpected any.",
+        },
+        {
+          code: "react-doctor(no-barrel-import)",
+          filename: "src/a.ts",
+          message: "Import directly.",
+        },
+        { filename: "src/a.ts", message: "Unexpected token" },
+        {
+          filename: "src/a.ts",
+          message:
+            "Unused oxlint-disable directive (no problems were reported).",
+        },
+      ],
+    });
+    const mockSpawn = mock((cmd: string) => ({
+      status: 1,
+      stdout: cmd === "oxlint" ? stdout : "",
+    }));
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const diagnostics = getLinterAdapter("oxlint").fixAndCollect([], []);
+
+    expect(diagnostics.map(({ fatal, rule }) => ({ fatal, rule }))).toEqual([
+      { fatal: false, rule: "typescript/no-explicit-any" },
+      { fatal: false, rule: "react-doctor/no-barrel-import" },
+      { fatal: true, rule: "oxlint" },
+      { fatal: false, rule: "oxlint" },
     ]);
   });
 
@@ -143,15 +217,16 @@ describe("agent-fix linter adapters", () => {
   });
 
   test("biome adapter runs check --write with the JSON reporter and parses diagnostics", () => {
-    const mockSpawn = mock((_cmd: string, _args: string[]) => ({
-      status: 1,
-      stdout: biomeJson,
-    }));
+    const mockSpawn = mock((_cmd: string, args: string[]) =>
+      args[0] === "explain"
+        ? { status: 0, stdout: biomeExplainOutput }
+        : { status: 1, stdout: biomeJson }
+    );
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
 
     const diagnostics = getLinterAdapter("biome").fixAndCollect([], []);
 
-    const [biomeCall] = mockSpawn.mock.calls;
+    const [biomeCall, explainCall] = mockSpawn.mock.calls;
     expect(biomeCall[0]).toBe("biome");
     expect(biomeCall[1]).toEqual([
       "check",
@@ -160,11 +235,16 @@ describe("agent-fix linter adapters", () => {
       "--reporter=json",
       "./",
     ]);
+    // Biome's JSON reporter carries no help text, so the rule's
+    // documentation stands in for it.
+    expect(explainCall[1]).toEqual(["explain", "noGlobalEval"]);
 
     expect(diagnostics).toEqual([
       {
         column: 13,
+        fatal: false,
         file: "src/bad.ts",
+        help: "Disallow the use of global `eval()`.\n\nThe `eval()` function evaluates the passed string as a _JavaScript_ code.",
         line: 4,
         message: "eval() exposes to security risks and performance issues.",
         raw: expect.objectContaining({
@@ -172,8 +252,40 @@ describe("agent-fix linter adapters", () => {
         }),
         rule: "lint/security/noGlobalEval",
         severity: "error",
+        url: "https://biomejs.dev/linter/rules/no-global-eval",
       },
     ]);
+  });
+
+  test("biome adapter flags parse errors and goes without help Biome can't explain", () => {
+    const stdout = JSON.stringify({
+      diagnostics: [
+        {
+          category: "parse",
+          location: { path: "src/a.ts" },
+          message: "Expected an expression.",
+        },
+        {
+          category: "lint/nursery/noUnknownRuleForTest",
+          location: { path: "src/a.ts" },
+          message: "message",
+        },
+      ],
+    });
+    const mockSpawn = mock((_cmd: string, args: string[]) =>
+      args[0] === "explain" ? { status: 1, stdout: "" } : { status: 1, stdout }
+    );
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const [parseError, lint] = getLinterAdapter("biome").fixAndCollect([], []);
+
+    expect(parseError).toMatchObject({ fatal: true, rule: "parse" });
+    expect(parseError.url).toBeUndefined();
+    expect(lint).toMatchObject({
+      fatal: false,
+      url: "https://biomejs.dev/linter/rules/no-unknown-rule-for-test",
+    });
+    expect(lint.help).toBeUndefined();
   });
 
   test("biome adapter reads path from an object location shape", () => {
@@ -211,17 +323,32 @@ describe("agent-fix linter adapters", () => {
     const [fixCall] = mockSpawn.mock.calls;
     const collectCall = mockSpawn.mock.calls.at(-1);
     expect(fixCall[1]).toEqual(["--fix", "."]);
-    expect(collectCall?.[1]).toEqual(["-f", "json", "."]);
+    expect(collectCall?.[1]).toEqual(["-f", "json-with-metadata", "."]);
 
     expect(diagnostics).toEqual([
       {
         column: 13,
+        fatal: false,
         file: "/project/src/bad.ts",
+        help: "Disallow the use of `eval()`",
         line: 4,
         message: "eval can be harmful.",
         raw: expect.objectContaining({ ruleId: "no-eval" }),
         rule: "no-eval",
         severity: "error",
+        url: "https://eslint.org/docs/latest/rules/no-eval",
+      },
+      {
+        column: 1,
+        fatal: true,
+        file: "/project/src/bad.ts",
+        help: undefined,
+        line: 9,
+        message: "Parsing error: Unexpected token",
+        raw: expect.objectContaining({ fatal: true }),
+        rule: "eslint",
+        severity: "error",
+        url: undefined,
       },
     ]);
   });

@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -41,7 +41,11 @@ const groupByFile = (diagnostics: Diagnostic[]): FileGroup[] => {
     groups.set(diagnostic.file, [diagnostic]);
   }
 
-  return [...groups.entries()].map(([file, issues]) => ({ file, issues }));
+  // Linters print files in the order their threads finish, so the same
+  // project could have its fix made in a different file on each run.
+  return [...groups.entries()]
+    .map(([file, issues]) => ({ file, issues }))
+    .toSorted((a, b) => a.file.localeCompare(b.file));
 };
 
 const buildFailureNote = (
@@ -61,6 +65,12 @@ const verifySafely = (
   file: string,
   passthrough: string[]
 ) => {
+  // A linter can report a missing file as a clean run (Biome's I/O error
+  // names it by absolute path, so the filter below drops it).
+  if (!existsSync(file)) {
+    return { error: "the file no longer exists.", remaining: null };
+  }
+
   try {
     const allRemaining = adapter.verify(file, passthrough);
     // Single-file verify runs can still surface diagnostics for other files
@@ -126,21 +136,37 @@ const attemptFileFix = async (
   return { agentResult, attempts: attempt, verified };
 };
 
+interface FileFixInput {
+  /** Issues an earlier file's fix already cleared, shown as fixed. */
+  clearedEarlier: Diagnostic[];
+  /** The issues handed to the agent. */
+  issues: Diagnostic[];
+}
+
 const fixFileGroup = async (
   context: FileFixContext,
-  group: FileGroup
+  group: FileGroup,
+  input?: FileFixInput
 ): Promise<{ fixed: number; remaining: number }> => {
   const { renderer } = context;
+  const clearedEarlier = input?.clearedEarlier ?? [];
+  const issues = input?.issues ?? group.issues;
 
   renderer.startFile(group.file);
 
   const { agentResult, attempts, verified } = await attemptFileFix(
     context,
     group,
-    group.issues,
+    issues,
     1
   );
   const notes: string[] = [];
+
+  if (clearedEarlier.length > 0) {
+    notes.push(
+      `${clearedEarlier.length} cleared by an earlier file's fix before ${context.agentAdapter.label} ran.`
+    );
+  }
 
   if (!agentResult.ok) {
     notes.push(buildFailureNote(context.agentAdapter.label, agentResult));
@@ -150,18 +176,39 @@ const fixFileGroup = async (
     notes.push(`Took ${attempts} attempts.`);
   }
 
-  if (verified.remaining === null) {
-    notes.push(`Verification failed: ${verified.error}`);
+  const settle = (fixed: (issue: Diagnostic) => boolean): void =>
     renderer.settleFile(
       group.file,
-      group.issues.map((issue) => ({ fixed: false, issue })),
-      notes.join(" ")
+      [
+        ...clearedEarlier.map((issue) => ({ fixed: true, issue })),
+        ...issues.map((issue) => ({ fixed: fixed(issue), issue })),
+      ],
+      notes.length > 0 ? notes.join(" ") : undefined
     );
-    return { fixed: 0, remaining: group.issues.length };
+
+  if (verified.remaining === null) {
+    notes.push(`Verification failed: ${verified.error}`);
+    settle(() => false);
+    return { fixed: clearedEarlier.length, remaining: issues.length };
+  }
+
+  // No rule runs on a file that doesn't parse, so its issues vanish from the
+  // report without having been fixed.
+  const parseError = verified.remaining.find((diagnostic) => diagnostic.fatal);
+
+  if (parseError) {
+    notes.push(
+      `The file no longer parses (line ${parseError.line}: ${parseError.message}).`
+    );
+    settle(() => false);
+    return {
+      fixed: clearedEarlier.length,
+      remaining: Math.max(issues.length, verified.remaining.length),
+    };
   }
 
   const { cleared, introduced, still } = partitionByRemaining(
-    group.issues,
+    issues,
     verified.remaining
   );
 
@@ -171,16 +218,51 @@ const fixFileGroup = async (
     );
   }
 
-  renderer.settleFile(
+  settle((issue) => cleared.includes(issue));
+
+  return {
+    fixed: clearedEarlier.length + cleared.length,
+    remaining: still.length + introduced,
+  };
+};
+
+/**
+ * An earlier file's fix can change what a later file reports — breaking an
+ * import cycle in one file clears it in the other — so every file after the
+ * first is re-linted before it's handed over. The agent gets the file's
+ * current diagnostics, and a file with none left is skipped.
+ */
+const refreshAndFixFileGroup = (
+  context: FileFixContext,
+  group: FileGroup
+): Promise<{ fixed: number; remaining: number }> => {
+  const refreshed = verifySafely(
+    context.linterAdapter,
     group.file,
-    group.issues.map((issue) => ({
-      fixed: cleared.includes(issue),
-      issue,
-    })),
-    notes.length > 0 ? notes.join(" ") : undefined
+    context.passthrough
   );
 
-  return { fixed: cleared.length, remaining: still.length + introduced };
+  // Without a fresh report, hand over the original diagnostics.
+  if (refreshed.remaining === null) {
+    return fixFileGroup(context, group);
+  }
+
+  if (refreshed.remaining.length === 0) {
+    context.renderer.startFile(group.file);
+    context.renderer.settleFile(
+      group.file,
+      group.issues.map((issue) => ({ fixed: true, issue })),
+      `Cleared by an earlier file's fix; ${context.agentAdapter.label} didn't run.`
+    );
+    return Promise.resolve({ fixed: group.issues.length, remaining: 0 });
+  }
+
+  const { cleared } = partitionByRemaining(group.issues, refreshed.remaining);
+
+  return fixFileGroup(context, group, {
+    clearedEarlier: cleared,
+    issues: refreshed.remaining,
+  });
 };
 
 export const runAgentFix = async ({
@@ -232,17 +314,19 @@ export const runAgentFix = async ({
 
   // Files are fixed strictly one at a time — concurrent agents could race on
   // shared context — hence recursion over the queue instead of Promise.all.
-  const fixQueue = async (queue: FileGroup[]): Promise<void> => {
+  const fixQueue = async (queue: FileGroup[], first = true): Promise<void> => {
     const [group, ...rest] = queue;
 
     if (!group) {
       return;
     }
 
-    const result = await fixFileGroup(context, group);
+    const result = first
+      ? await fixFileGroup(context, group)
+      : await refreshAndFixFileGroup(context, group);
     totals.fixed += result.fixed;
     totals.remaining += result.remaining;
-    await fixQueue(rest);
+    await fixQueue(rest, false);
   };
 
   try {

@@ -33,6 +33,7 @@ const buildPromptSections = (
     "- Follow the rule's help text from the JSON file where provided.",
     "- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.",
     "- Do not reformat unrelated code.",
+    "- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. If an issue needs a person's decision, leave it and explain why in your final message.",
     ...extraRules,
   ].join("\n");
 

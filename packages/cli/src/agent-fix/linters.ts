@@ -84,6 +84,29 @@ interface OxlintReport {
   diagnostics?: OxlintDiagnostic[];
 }
 
+// Oxlint reports codes as `plugin(rule)`, e.g. `eslint(no-eval)` or
+// `typescript(no-explicit-any)`. The agent gets the name the rule has in the
+// config instead: bare for the core ESLint rules, `plugin/rule` otherwise.
+const OXLINT_CODE_RE = /^(?<plugin>[\w-]+)\((?<rule>[^)]+)\)$/u;
+
+const toOxlintRuleName = (code: string): string => {
+  const match = OXLINT_CODE_RE.exec(code);
+
+  if (!match?.groups) {
+    return code;
+  }
+
+  const { plugin, rule } = match.groups;
+  return plugin === "eslint" ? rule : `${plugin}/${rule}`;
+};
+
+// Rule diagnostics carry a code. Of those that don't, everything but an
+// unused disable directive is a parse or semantic error.
+const UNUSED_DIRECTIVE_RE = /^Unused (?:oxlint|eslint)-(?:disable|enable)/u;
+
+const isOxlintFatal = (diagnostic: OxlintDiagnostic): boolean =>
+  !diagnostic.code && !UNUSED_DIRECTIVE_RE.test(diagnostic.message ?? "");
+
 const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
   const parsed = parseJsonOutput<OxlintReport>("oxlint", stdout);
   const diagnostics: Diagnostic[] = [];
@@ -97,12 +120,13 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
 
     diagnostics.push({
       column: span?.column ?? 1,
+      fatal: isOxlintFatal(diagnostic),
       file: diagnostic.filename,
       help: diagnostic.help,
       line: span?.line ?? 1,
       message: diagnostic.message ?? "",
       raw: diagnostic,
-      rule: diagnostic.code ?? "oxlint",
+      rule: diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint",
       severity: diagnostic.severity ?? "error",
       url: diagnostic.url,
     });
@@ -175,6 +199,91 @@ interface BiomeReport {
   diagnostics?: BiomeDiagnostic[];
 }
 
+const BIOME_RULE_CATEGORY_RE =
+  /^(?<kind>lint|assist)\/[a-zA-Z]+\/(?<rule>[a-zA-Z]+)$/u;
+const UPPERCASE_RE = /[A-Z]/gu;
+
+const parseBiomeRuleCategory = (
+  category: string
+): { kind: string; rule: string } | null => {
+  const groups = BIOME_RULE_CATEGORY_RE.exec(category)?.groups;
+  return groups?.kind && groups.rule
+    ? { kind: groups.kind, rule: groups.rule }
+    : null;
+};
+
+// Rule pages are the kebab-cased rule name: noExplicitAny is
+// /linter/rules/no-explicit-any, organizeImports /assist/actions/organize-imports.
+const biomeRuleUrl = (category: string): string | undefined => {
+  const parsed = parseBiomeRuleCategory(category);
+
+  if (!parsed) {
+    return undefined;
+  }
+
+  const slug = parsed.rule.replaceAll(
+    UPPERCASE_RE,
+    (letter) => `-${letter.toLowerCase()}`
+  );
+  const section = parsed.kind === "lint" ? "linter/rules" : "assist/actions";
+
+  return `https://biomejs.dev/${section}/${slug}`;
+};
+
+const BIOME_HEADING_RE = /^\S/u;
+
+/**
+ * The Description section of `biome explain <rule>`: the indented lines
+ * between the "Description" heading and the next unindented one.
+ */
+const parseBiomeExplainDescription = (output: string): string | undefined => {
+  const lines = output.split("\n");
+  const start = lines.findIndex((line) => line.trim() === "Description");
+
+  if (start === -1) {
+    return undefined;
+  }
+
+  const rest = lines.slice(start + 1);
+  const end = rest.findIndex((line) => BIOME_HEADING_RE.test(line));
+  const description = (end === -1 ? rest : rest.slice(0, end))
+    .map((line) => line.trim())
+    .join("\n")
+    .trim();
+
+  return description || undefined;
+};
+
+const biomeRuleHelp = new Map<string, string>();
+
+/**
+ * Biome's JSON reporter leaves `advices` empty for lint rules, so without
+ * this an agent gets only the message, e.g. an unnamed "This import is
+ * unused." The rule's documentation, from `biome explain`, stands in for the
+ * help text Oxlint reports. Best effort and cached per rule: a rule Biome
+ * can't explain just goes without.
+ */
+const explainBiomeRule = (category: string): string | undefined => {
+  const cached = biomeRuleHelp.get(category);
+  const parsed = parseBiomeRuleCategory(category);
+
+  if (cached !== undefined || !parsed) {
+    return cached;
+  }
+
+  const result = spawnSync("biome", ["explain", parsed.rule]);
+  const help =
+    result.status === 0
+      ? parseBiomeExplainDescription(String(result.stdout ?? ""))
+      : undefined;
+
+  if (help !== undefined) {
+    biomeRuleHelp.set(category, help);
+  }
+
+  return help;
+};
+
 const parseBiomeDiagnostics = (stdout: string): Diagnostic[] => {
   const parsed = parseJsonOutput<BiomeReport>("biome", stdout);
   const diagnostics: Diagnostic[] = [];
@@ -186,14 +295,19 @@ const parseBiomeDiagnostics = (stdout: string): Diagnostic[] => {
       continue;
     }
 
+    const category = diagnostic.category ?? "biome";
+
     diagnostics.push({
       column: diagnostic.location?.start?.column ?? 1,
+      fatal: category === "parse",
       file,
+      help: explainBiomeRule(category),
       line: diagnostic.location?.start?.line ?? 1,
       message: diagnostic.message ?? "",
       raw: diagnostic,
-      rule: diagnostic.category ?? "biome",
+      rule: category,
       severity: diagnostic.severity ?? "error",
+      url: biomeRuleUrl(category),
     });
   }
 
@@ -231,6 +345,7 @@ const biomeAdapter: LinterAdapter = {
 
 interface EslintMessage {
   column?: number;
+  fatal?: boolean;
   line?: number;
   message?: string;
   ruleId?: string | null;
@@ -242,24 +357,41 @@ interface EslintResult {
   messages?: EslintMessage[];
 }
 
+interface EslintRuleMeta {
+  docs?: { description?: string; url?: string };
+}
+
+// The json-with-metadata formatter: the json formatter's results, plus the
+// meta of every rule that reported, which is where the docs live.
+interface EslintReport {
+  metadata?: { rulesMeta?: Record<string, EslintRuleMeta | undefined> };
+  results?: EslintResult[];
+}
+
 const parseEslintDiagnostics = (stdout: string): Diagnostic[] => {
-  const parsed = parseJsonOutput<EslintResult[]>("eslint", stdout);
+  const parsed = parseJsonOutput<EslintReport>("eslint", stdout);
+  const rulesMeta = parsed.metadata?.rulesMeta ?? {};
   const diagnostics: Diagnostic[] = [];
 
-  for (const result of Array.isArray(parsed) ? parsed : []) {
+  for (const result of Array.isArray(parsed.results) ? parsed.results : []) {
     if (!result.filePath) {
       continue;
     }
 
     for (const message of result.messages ?? []) {
+      const docs = message.ruleId ? rulesMeta[message.ruleId]?.docs : undefined;
+
       diagnostics.push({
         column: message.column ?? 1,
+        fatal: message.fatal === true,
         file: result.filePath,
+        help: docs?.description,
         line: message.line ?? 1,
         message: message.message ?? "",
         raw: message,
         rule: message.ruleId ?? "eslint",
         severity: message.severity === 2 ? "error" : "warning",
+        url: docs?.url,
       });
     }
   }
@@ -301,7 +433,7 @@ const runEslintPass = (
     ...ignoredFileArgs,
     ...passthrough,
     "-f",
-    "json",
+    "json-with-metadata",
     ...targets,
   ]);
 

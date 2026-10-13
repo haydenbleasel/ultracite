@@ -1,5 +1,7 @@
 export interface Diagnostic {
   column: number;
+  /** The file doesn't parse, so no rule could run on it. */
+  fatal?: boolean;
   file: string;
   help?: string;
   line: number;

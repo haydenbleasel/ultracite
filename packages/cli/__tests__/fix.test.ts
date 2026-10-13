@@ -828,11 +828,24 @@ const oxlintDiagnostics = JSON.stringify({
   ],
 });
 
+const oxlintReport = (entries: [file: string, code: string][]): string =>
+  JSON.stringify({
+    diagnostics: entries.map(([filename, code]) => ({
+      code,
+      filename,
+      labels: [{ span: { column: 1, line: 1 } }],
+      message: `${code} message`,
+      severity: "error",
+    })),
+  });
+
 const mockAgentEnvironment = ({
   agentOk = true,
+  files = ["src/bad.ts"],
   oxlintOutputs,
 }: {
   agentOk?: boolean;
+  files?: string[];
   oxlintOutputs: string[];
 }) => {
   let collectCalls = 0;
@@ -862,6 +875,8 @@ const mockAgentEnvironment = ({
     AGENT_TIMEOUT_MS: 300_000,
     runAgent: mockRunAgent,
   }));
+  // Verification checks the file still exists before re-linting it.
+  mockFileSystem(Object.fromEntries(files.map((file) => [file, ""])));
 
   return { mockRunAgent, mockSpawn };
 };
@@ -869,6 +884,7 @@ const mockAgentEnvironment = ({
 describe("fix with an agent", () => {
   afterEach(() => {
     mock.restore();
+    restoreFileSystemMock();
   });
 
   afterAll(() => {
@@ -885,7 +901,7 @@ describe("fix with an agent", () => {
     expect(mockRunAgent).toHaveBeenCalledTimes(1);
     const [agentCall] = mockRunAgent.mock.calls;
     expect(agentCall[0].command).toBe("claude");
-    expect(agentCall[1]).toContain("eslint(no-eval)");
+    expect(agentCall[1]).toContain("no-eval: eval can be harmful.");
     expect(agentCall[1]).toContain("eval can be harmful.");
 
     // Version check, then autofix and verify passes of
@@ -905,6 +921,79 @@ describe("fix with an agent", () => {
     for (const call of verifyCalls) {
       expect(call[1]).toContain("src/bad.ts");
     }
+  });
+
+  test("hands files over in path order and skips one an earlier fix cleared", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      files: ["src/a.ts", "src/z.ts"],
+      oxlintOutputs: [
+        oxlintReport([
+          ["src/z.ts", "eslint(no-eval)"],
+          ["src/a.ts", "eslint(no-eval)"],
+        ]),
+        '{"diagnostics":[]}',
+      ],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(1);
+    expect(mockRunAgent.mock.calls[0]?.[1]).toContain(
+      `File: ${path.resolve("src/a.ts")}`
+    );
+  });
+
+  test("hands a later file only the diagnostics it still reports", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      files: ["src/a.ts", "src/z.ts"],
+      oxlintOutputs: [
+        oxlintReport([
+          ["src/a.ts", "eslint(no-eval)"],
+          ["src/z.ts", "eslint(no-eval)"],
+          ["src/z.ts", "eslint(no-console)"],
+        ]),
+        '{"diagnostics":[]}',
+        oxlintReport([["src/z.ts", "eslint(no-console)"]]),
+        '{"diagnostics":[]}',
+      ],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(2);
+    const laterPrompt = mockRunAgent.mock.calls[1]?.[1];
+    expect(laterPrompt).toContain("no-console");
+    expect(laterPrompt).not.toContain("no-eval");
+  });
+
+  test("counts a file the agent deleted as unfixed", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      files: [],
+      oxlintOutputs: [oxlintDiagnostics, '{"diagnostics":[]}'],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+    expect(mockRunAgent).toHaveBeenCalledTimes(1);
+  });
+
+  test("counts a file that no longer parses as unfixed", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      oxlintOutputs: [
+        oxlintDiagnostics,
+        JSON.stringify({
+          diagnostics: [
+            { filename: "src/bad.ts", message: "Unexpected token" },
+          ],
+        }),
+      ],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+    expect(mockRunAgent.mock.calls.at(-1)?.[1]).toContain("Unexpected token");
   });
 
   test("throws a LinterExitError when issues remain after the agent run", async () => {
@@ -1001,11 +1090,11 @@ describe("fix with an agent", () => {
       ],
     });
     let biomeCalls = 0;
-    const mockSpawn = mock((cmd: string, _args: string[]) => {
+    const mockSpawn = mock((cmd: string, args: string[]) => {
       if (cmd === "claude") {
         return { status: 0, stdout: "2.0.0" };
       }
-      if (cmd === "biome") {
+      if (cmd === "biome" && args[0] === "check") {
         biomeCalls += 1;
         return {
           status: 0,
@@ -1025,6 +1114,7 @@ describe("fix with an agent", () => {
       AGENT_TIMEOUT_MS: 300_000,
       runAgent: mockRunAgent,
     }));
+    mockFileSystem({ "src/bad.ts": "" });
 
     await fix([], [], { agent: "claude" });
 
