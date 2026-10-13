@@ -41,13 +41,14 @@ import root from "../../oxlint.config.ts";
 // Oxlint lints each file with its nearest config alone, so this extends the
 // root config and repeats the properties that extends doesn't carry over.
 export default defineConfig({
+  env: root.env,
   extends: [root, react, tanstack],
   ignorePatterns: root.ignorePatterns,
   settings: root.settings,
 });
 ```
 
-Oxlint uses the config nearest each file instead of merging it with the root one. Extending the root config brings in its presets, rules and JS plugins, but not its `ignorePatterns` or `settings`, so the workspace config repeats them. In a workspace whose `package.json` doesn't set `"type": "module"`, the file is `oxlint.config.mts`.
+Oxlint uses the config nearest each file instead of merging it with the root one. Extending the root config brings in its presets, rules and JS plugins, but not its `env`, `ignorePatterns` or `settings`, so the workspace config repeats them. In a workspace whose `package.json` doesn't set `"type": "module"`, the file is `oxlint.config.mts`.
 
 ### Biome
 

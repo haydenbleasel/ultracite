@@ -36,6 +36,7 @@ import core from "ultracite/oxlint/core";
 import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 
 export default defineConfig({
+  env: core.env,
   extends: [core, jsPlugins],
   ignorePatterns: core.ignorePatterns,
   jsPlugins: jsPlugins.jsPlugins,
@@ -61,6 +62,7 @@ import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
 import nextJsPlugins from "ultracite/oxlint/next/js-plugins";
 
 export default defineConfig({
+  env: core.env,
   extends: [core, next, jsPlugins, nextJsPlugins],
   ignorePatterns: core.ignorePatterns,
   jsPlugins: jsPlugins.jsPlugins,
@@ -99,6 +101,7 @@ import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
 const jsPlugins = selectJsPlugins(["tsdoc", "jsdoc-js"]);
 
 export default defineConfig({
+  env: core.env,
   extends: [core, jsPlugins],
   ignorePatterns: core.ignorePatterns,
   jsPlugins: jsPlugins.jsPlugins,
@@ -125,6 +128,7 @@ import antiSlop from "ultracite/oxlint/anti-slop";
 import core from "ultracite/oxlint/core";
 
 export default defineConfig({
+  env: core.env,
   extends: [core, antiSlop],
   ignorePatterns: core.ignorePatterns,
 });
@@ -154,6 +158,7 @@ import core from "ultracite/oxlint/core";
 import shadcn from "ultracite/oxlint/shadcn";
 
 export default defineConfig({
+  env: core.env,
   extends: [core, shadcn],
   ignorePatterns: core.ignorePatterns,
   jsPlugins: shadcn.jsPlugins,
@@ -177,6 +182,7 @@ Components and the theme are discovered from `components.json`, or from `compone
 
 ```ts title="oxlint.config.ts"
 export default defineConfig({
+  env: core.env,
   extends: [core, shadcn],
   ignorePatterns: core.ignorePatterns,
   jsPlugins: shadcn.jsPlugins,
@@ -210,6 +216,7 @@ import core from "ultracite/oxlint/core";
 import gdp from "ultracite/oxlint/gdp";
 
 export default defineConfig({
+  env: core.env,
   extends: [core, gdp],
   ignorePatterns: core.ignorePatterns,
 });

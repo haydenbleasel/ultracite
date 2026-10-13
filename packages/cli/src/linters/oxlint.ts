@@ -126,7 +126,7 @@ const generatedLineWidth = 80;
 
 // The properties Ultracite writes on the root config that a user may have
 // customised; a customised one is kept as written instead of regenerated.
-type OverridableProperty = "ignorePatterns" | "jsPlugins" | "settings";
+type OverridableProperty = "env" | "ignorePatterns" | "jsPlugins" | "settings";
 
 // What the regenerated config provides, for overrides that extend it rather
 // than replace it (e.g. .oxlintrc.json ignorePatterns on top of core's).
@@ -316,6 +316,11 @@ const generateConfigContent = (
     renderOverride(extras.overrides[property], generated) ??
     (value === null ? null : { comment: null, text: `${property}: ${value}` });
 
+  // oxlint doesn't carry `env` through `extends` either: without it the
+  // browser globals core declares are unknown, so rules such as
+  // no-implied-eval never see `setTimeout("…")` as the global. It goes
+  // before `extends` to keep the keys sorted.
+  const envProperty = generatedProperty("env", "core.env");
   const properties = [
     generatedProperty("ignorePatterns", "core.ignorePatterns"),
     generatedProperty("jsPlugins", jsPluginsValue),
@@ -332,7 +337,7 @@ const generateConfigContent = (
   return `${imports}
 ${selectionBlock}${statements ? `\n${statements}\n` : ""}
 export default defineConfig({
-${extendsBlock}
+${envProperty ? `${renderEntries([envProperty])}\n` : ""}${extendsBlock}
 ${renderEntries(properties, extras.danglingComments)}
 });
 `;
@@ -503,6 +508,10 @@ const readExistingConfig = (
           extras.extendsEntries.push(toRendered(element));
         }
       }
+    } else if (entry.key === "env") {
+      if (compact(entry.valueText) !== "core.env") {
+        extras.overrides.env = { entry: toRendered(entry) };
+      }
     } else if (entry.key === "ignorePatterns") {
       if (compact(entry.valueText) !== "core.ignorePatterns") {
         extras.overrides.ignorePatterns = { entry: toRendered(entry) };
@@ -592,7 +601,7 @@ const isJsonObject = (value: JsonValue): value is JsonObject =>
 /**
  * Carry an .oxlintrc.json's settings over into the regenerated config: its
  * rules, overrides, plugins and the like become root properties, its
- * ignorePatterns, jsPlugins and settings are added to the ones Ultracite
+ * env, ignorePatterns, jsPlugins and settings are added to the ones Ultracite
  * generates, and its Ultracite extends become presets. Returns the extends
  * entries that can't be carried over (paths to other JSON configs).
  */
@@ -631,6 +640,10 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
             hoistedJsPlugins.map((identifier) => `${identifier}.jsPlugins`),
             value
           ),
+      };
+    } else if (key === "env" && isJsonObject(value)) {
+      extras.overrides.env ??= {
+        entry: renderSpreadObject(key, ["core.env"], value),
       };
     } else if (key === "settings" && isJsonObject(value)) {
       extras.overrides.settings ??= {
@@ -744,6 +757,7 @@ import ${rootConfigIdentifier} from "${rootConfigImport}";
 // Oxlint lints each file with its nearest config alone, so this extends the
 // root config and repeats the properties that extends doesn't carry over.
 export default defineConfig({
+  env: ${rootConfigIdentifier}.env,
 ${extendsBlock}
   ignorePatterns: ${rootConfigIdentifier}.ignorePatterns,
   settings: ${rootConfigIdentifier}.settings,

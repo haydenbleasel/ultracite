@@ -376,6 +376,19 @@ describe("oxlint core config", () => {
    *
    * Now the core config explicitly lists rules for core plugins only.
    */
+  // oxlint doesn't merge `env` from extended configs, so init re-declares
+  // core's on the root config. Without it, no-implied-eval doesn't know
+  // `setTimeout` is the browser global and reports nothing.
+  test("reports string timers through the config init writes", () => {
+    const { flaggedBy } = lintFixture("implied-eval", "sample.js");
+
+    expect(flaggedBy("eslint(no-implied-eval)")).toEqual([
+      "sample.js",
+      "sample.js",
+      "sample.js",
+    ]);
+  });
+
   test("does not use categories (uses explicit rules instead)", async () => {
     const config = await readOxlintConfig("core");
     expect(

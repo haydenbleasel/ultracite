@@ -6,6 +6,8 @@ import core from "./packages/cli/config/oxlint/core/index.mjs";
 import react from "./packages/cli/config/oxlint/react/index.mjs";
 
 export default defineConfig({
+  // oxlint doesn't carry `env` through `extends`.
+  env: core.env,
   extends: [core, react, astro, antislop],
   ignorePatterns: [
     "packages/design-system/components/ui",
@@ -48,6 +50,9 @@ export default defineConfig({
     // Deliberately uses CommonJS in Astro frontmatter so the astro override
     // test can assert the backfilled rules still fire.
     "packages/cli/__tests__/fixtures/astro-prefer-module",
+    // Deliberately passes strings to timers so the env test can assert
+    // no-implied-eval fires through the config init writes.
+    "packages/cli/__tests__/fixtures/implied-eval",
     // Blog research harnesses (see research/README.md). The fixtures are
     // third-party code, deliberately complex cases and agent output, and the
     // results are generated. The scripts aren't shipped, and lint autofixes

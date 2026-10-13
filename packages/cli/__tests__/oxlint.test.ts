@@ -81,6 +81,8 @@ describe("oxlint linter", () => {
       expect(writeCall[0]).toBe("./oxlint.config.mts");
       const [, content] = writeCall;
       expect(content).toContain('import { defineConfig } from "oxlint"');
+      // oxlint carries neither through `extends`, so both are re-declared.
+      expect(content).toContain("env: core.env,");
       expect(content).toContain("ignorePatterns: core.ignorePatterns,");
       expect(content).toContain(getOxlintConfigPath("core"));
       expect(content).not.toContain(getOxlintConfigPath("github"));
@@ -1298,7 +1300,9 @@ export default defineConfig({
     const [[, content]] = project.writeFile.mock.calls;
     expect(content).toContain('rules: { "eqeqeq": "off" },');
     expect(content).not.toContain('"eqeqeq": "error"');
-    expect(content).toContain('"node": true');
+    expect(content).toContain(
+      "env: {\n    ...core.env,\n    node: true,\n  },"
+    );
     expect(project.rm).toHaveBeenCalled();
   });
 

@@ -76,6 +76,7 @@ List the rules that fail, then turn each one off after Ultracite's presets. Each
 
 ```ts title="oxlint.config.ts"
 export default defineConfig({
+  env: core.env,
   extends: [core, react],
   ignorePatterns: core.ignorePatterns,
   // Progressive migration: remove a rule as its problems are fixed.
