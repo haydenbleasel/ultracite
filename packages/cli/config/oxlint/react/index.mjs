@@ -87,7 +87,8 @@ export default defineConfig({
     "react/jsx-no-duplicate-props": "error",
     "react/jsx-no-literals": "off",
     "react/jsx-no-script-url": "error",
-    "react/jsx-no-target-blank": "error",
+    // Forms too, as Biome's noBlankTarget checks them.
+    "react/jsx-no-target-blank": ["error", { forms: true }],
     "react/jsx-no-undef": "error",
     "react/jsx-no-useless-fragment": "error",
     "react/jsx-pascal-case": "error",

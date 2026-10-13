@@ -59,10 +59,11 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Use early returns to reduce nesting
 - Prefer simple conditionals over nested ternary operators
 - Group related code together and separate concerns
+- Avoid import cycles; move shared code into a module both sides import
 
 ## Security
 
-- Add `rel="noopener"` when using `target="_blank"` on links
+- Add `rel="noopener noreferrer"` when using `target="_blank"` on links
 - Avoid `dangerouslySetInnerHTML` unless absolutely necessary
 - Don't use `eval()` or assign directly to `document.cookie`
 - Validate and sanitize user input

@@ -31,6 +31,8 @@ const overrideRules = {
   "react/jsx-newline": "off",
   "react/jsx-no-bind": "off",
   "react/jsx-no-literals": "off",
+  // Forms too, as Biome's noBlankTarget checks them.
+  "react/jsx-no-target-blank": ["error", { forms: true }],
   "react/jsx-one-expression-per-line": "off",
   "react/jsx-props-no-spreading": "off",
   "react/jsx-sort-props": "off",
