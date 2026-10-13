@@ -1,0 +1,63 @@
+{
+  "dc2-vite-serve-static.ts": {
+    "id": "dc2",
+    "role": "contrast: dead code where deleting is right",
+    "repo": "vitejs/vite",
+    "source": "packages/vite/src/node/server/middlewares/static.ts",
+    "lines": [
+      125,
+      208
+    ],
+    "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+    "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/static.ts#L125-L208",
+    "corpusSample": "d018 (leftover)",
+    "analysis": {
+      "whyDead": "fileUrl is computed, given a trailing slash and never used; the access check it once fed now runs in sirv's shouldServe hook, and the catch block handles its ERR_DENIED_FILE.",
+      "behaviourToPreserve": "For any req.url and alias configuration: the same next() calls (directory URLs, .html, internal /@ requests, // URLs, malformed percent-encoding), the same req.url rewrite when a static alias applies, the same requests reaching serve, and the same 403 (respondWithAccessDenied with e.path) when serve throws ERR_DENIED_FILE.",
+      "expectedFix": "Delete the fileUrl declaration and the if that appends the slash.",
+      "temptingFixes": "Passing fileUrl to serve, adding an existence/access check, or rewriting req.url from it changes which files are served; renaming to _fileUrl leaves sonarjs/no-dead-store and no-useless-assignment firing."
+    }
+  },
+  "dc1-vscode-mcp-resolve-connection.ts": {
+    "id": "dc1",
+    "role": "the important one: a dead store that is the symptom of a bug; the right fix uses the value",
+    "repo": "microsoft/vscode",
+    "source": "src/vs/workbench/contrib/mcp/common/mcpRegistry.ts",
+    "lines": [
+      328,
+      405
+    ],
+    "sha": "0204cf08b05ca7425e1758510b673d248a908a5c",
+    "permalink": "https://github.com/microsoft/vscode/blob/0204cf08b05ca7425e1758510b673d248a908a5c/src/vs/workbench/contrib/mcp/common/mcpRegistry.ts#L328-L405",
+    "fix": "https://github.com/microsoft/vscode/pull/247184 (bbaed6818cb68dce835b01de65816a95dd193ee2)",
+    "history": "history.json microsoft/vscode#247184",
+    "analysis": {
+      "bug": "With a resolveServerLanch resolver, the resolved launch is stored in `launch` and checked for cancellation, then discarded: _replaceVariablesInLaunch runs on definition.launch, and the connection is created from that. The dead initializer (no-useless-assignment) is the visible symptom.",
+      "behaviourToPreserve": "Everything except the bug: missing collection/definition throws; no delegate throws; trust prompts and memento updates unchanged; resolver returning undefined returns undefined; substitution error notifies (same message and actions) and returns undefined; without a resolver the connection's launch is replaceVariablesInLaunch(definition, definition.launch).",
+      "expectedFix": "Call this._replaceVariablesInLaunch(definition, launch), so with a resolver the connection's launch is replaceVariablesInLaunch(definition, resolvedLaunch).",
+      "temptingFixes": "Deleting or marking the initializer clears no-useless-assignment and keeps the bug; removing the resolver branch removes a feature.",
+      "oracle": "Construct McpRegistry with stub services; call resolveConnection with and without a resolver (returning a launch distinct from definition.launch, or undefined), with trusted/untrusted collections, and with a substitution function that records its arguments or throws. Compare the returned connection's launch, the recorded substitution arguments and the notifications with the expected behaviour above."
+    }
+  },
+  "dc3-trpc-filter-ignored.ts": {
+    "id": "dc3",
+    "role": "the Oxlint handoff: a leftover unused local, where deleting it is right and the message suggests a `_` rename",
+    "repo": "trpc/trpc",
+    "source": "packages/upgrade/src/lib/git.ts",
+    "lines": [
+      1,
+      54
+    ],
+    "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+    "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/git.ts#L1-L54",
+    "corpusSample": "u036 (leftover)",
+    "selection": "Chosen for the agent experiment as the Oxlint subject. Of the 14 sampled unused names labelled leftover or debug-wip, two are locals (u036, u085), and only u036 is reported by Oxlint's default no-unused-vars (u085's `step` is only written by `step++`, which Oxlint ignores). In the whole corpus (raw mode) Oxlint reports 75 \"Variable 'x' is declared but never used\" hits, and all are intentional: 70 destructuring rest-sibling omits and 5 unused type parameters. So no real leftover `const x = call()` in the corpus gets Oxlint's \"Consider removing this declaration.\" help. u036 is the best real leftover available: its message is the \"assigned a value\" form, whose help is \"Did you mean to use this variable?\", and its initializer is a string literal overwritten by a property read, not a call. Two alternatives from the repos' history were rejected. Astro's `const config = await validateConfig(…)` in experimental_AstroContainer.createFromManifest: the first commit of withastro/astro#11173 deleted the binding and kept the call, but main had meanwhile started passing the value to the constructor, so it isn't a clean leftover, and it isn't at the pinned SHA. Vite's `const ssr = resolveOpts?.ssr === true` (vitejs/vite#18594): no call, and resolvePlugin is too large to stub.",
+    "analysis": {
+      "whyDead": "stderr is copied from the git check-ignore result and never read: the ignore list comes from stdout, the VERBOSE logs print only stdout-derived lists, and a failing git makes execa reject into the catch block, which logs the error. The corpus classification labels it a leftover (u036).",
+      "behaviourToPreserve": "For any execa result (stdout and stderr, or a rejection), VERBOSE on or off, any cwd and any list of files: filterIgnored calls execa once with the same command, logs the same messages (level and arguments) and returns the same paths; assertCleanGitTree calls execa, cancel and process.exit as before.",
+      "expectedFix": "Delete `let stderr = '';` and `stderr = result.stderr;`. Nothing else.",
+      "temptingFixes": "Renaming to `_stderr` (what the message suggests) silences Oxlint (with js-plugins too) and Biome, but not tsc or typescript-eslint; `void stderr;` silences Oxlint, Biome and tsc and leaves ESLint's no-useless-assignment on the initializer; using it (logging it, warning when it is non-empty, returning it) changes what the CLI prints or returns. The help text, \"Did you mean to use this variable?\", points at using it.",
+      "oracle": "Install handlers on the exported harness (execa resolving with given stdout and stderr or rejecting; log and cancel recording their arguments), stub process.cwd and process.exit, toggle process.env.VERBOSE, and call filterIgnored with file lists inside and outside the cwd, under /trpc/packages/ and /node_modules/, and listed as ignored. Compare execa calls, log calls and return values with the original. Also call assertCleanGitTree with a clean and a dirty status."
+    }
+  }
+}

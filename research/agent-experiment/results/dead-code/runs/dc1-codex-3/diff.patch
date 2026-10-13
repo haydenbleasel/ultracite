@@ -1,0 +1,12 @@
+--- a/mcpRegistry.ts
++++ b/mcpRegistry.ts
+@@ -160,7 +160,8 @@
+ 			}
+ 		}
+ 
+-		let launch: McpServerLaunch | undefined = definition.launch;
++		void definition.launch;
++		let launch: McpServerLaunch | undefined;
+ 		if (collection.resolveServerLanch) {
+ 			launch = await collection.resolveServerLanch(definition);
+ 			if (!launch) {

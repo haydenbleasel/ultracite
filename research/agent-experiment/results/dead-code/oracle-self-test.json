@@ -1,0 +1,522 @@
+{
+  "runtime": "bun 1.4.2",
+  "cases": [
+    {
+      "name": "dc1 original (itself)",
+      "subject": "dc1",
+      "description": "the pristine subject against itself",
+      "expected": "bug kept",
+      "verdict": "bug kept",
+      "cases": 1920,
+      "matchesOriginal": 1920,
+      "matchesFix": 1856,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc1-fix-247184.ts",
+      "subject": "dc1",
+      "description": "the upstream fix, microsoft/vscode#247184 (bbaed681): substitute the resolved launch, not definition.launch.",
+      "expected": "bug fixed",
+      "verdict": "bug fixed",
+      "cases": 1920,
+      "matchesOriginal": 1856,
+      "matchesFix": 1920,
+      "mismatchesByDimension": {
+        "collection": {
+          "present": 32,
+          "lazy": 32
+        },
+        "delegate": {
+          "can": 32,
+          "second": 32
+        },
+        "trust": {
+          "by-default": 16,
+          "memento-true": 16,
+          "memento-false-force-yes": 16,
+          "ask-yes": 16
+        },
+        "resolver": {
+          "distinct": 64
+        },
+        "substitution": {
+          "ok": 32,
+          "throws": 32
+        },
+        "origin": {
+          "yes": 32,
+          "no": 32
+        }
+      },
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc1-delete-initializer.ts",
+      "subject": "dc1",
+      "description": "delete the dead initializer (clears no-useless-assignment, keeps the bug).",
+      "expected": "bug kept",
+      "verdict": "bug kept",
+      "cases": 1920,
+      "matchesOriginal": 1920,
+      "matchesFix": 1856,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc1-void-launch.ts",
+      "subject": "dc1",
+      "description": "read the dead initializer with `void launch;` (clears no-useless-assignment, keeps the bug).",
+      "expected": "bug kept",
+      "verdict": "bug kept",
+      "cases": 1920,
+      "matchesOriginal": 1920,
+      "matchesFix": 1856,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc1-rename-launch.ts",
+      "subject": "dc1",
+      "description": "rename the local `launch` to `_launch` (keeps the bug; no-useless-assignment still fires).",
+      "expected": "bug kept",
+      "verdict": "bug kept",
+      "cases": 1920,
+      "matchesOriginal": 1920,
+      "matchesFix": 1856,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc1-broken-no-resolver.ts",
+      "subject": "dc1",
+      "description": "remove the resolver branch (the extension's resolver is never called; a cancelled resolve no longer returns undefined).",
+      "expected": "broken",
+      "verdict": "broken",
+      "cases": 1920,
+      "matchesOriginal": 1664,
+      "matchesFix": 1664,
+      "mismatchesByDimension": {
+        "collection": {
+          "present": 128,
+          "lazy": 128
+        },
+        "delegate": {
+          "can": 128,
+          "second": 128
+        },
+        "trust": {
+          "by-default": 64,
+          "memento-true": 64,
+          "memento-false-force-yes": 64,
+          "ask-yes": 64
+        },
+        "resolver": {
+          "distinct": 64,
+          "same": 64,
+          "undefined": 64,
+          "throws": 64
+        },
+        "substitution": {
+          "ok": 128,
+          "throws": 128
+        },
+        "origin": {
+          "yes": 128,
+          "no": 128
+        }
+      },
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc1-broken-unsubstituted.ts",
+      "subject": "dc1",
+      "description": "use the resolved launch but drop the substitution's result (the connection gets unsubstituted variables).",
+      "expected": "broken",
+      "verdict": "broken",
+      "cases": 1920,
+      "matchesOriginal": 1792,
+      "matchesFix": 1824,
+      "mismatchesByDimension": {
+        "collection": {
+          "present": 64,
+          "lazy": 64
+        },
+        "delegate": {
+          "can": 64,
+          "second": 64
+        },
+        "trust": {
+          "by-default": 32,
+          "memento-true": 32,
+          "memento-false-force-yes": 32,
+          "ask-yes": 32
+        },
+        "resolver": {
+          "none": 32,
+          "distinct": 64,
+          "same": 32
+        },
+        "substitution": {
+          "ok": 96,
+          "throws": 32
+        },
+        "origin": {
+          "yes": 64,
+          "no": 64
+        }
+      },
+      "originalDiffersFromFix": true,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2 original (itself)",
+      "subject": "dc2",
+      "description": "the pristine subject against itself",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 448,
+      "matchesOriginal": 448,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-delete.ts",
+      "subject": "dc2",
+      "description": "delete the dead `fileUrl` declaration, its `if`, and `resolvedPathname`, which only fed it (the complete fix).",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 448,
+      "matchesOriginal": 448,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-delete-partial.ts",
+      "subject": "dc2",
+      "description": "delete the dead `fileUrl` declaration and its `if` only (the corpus note's expected fix), which leaves `resolvedPathname` unused.",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 448,
+      "matchesOriginal": 448,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-rename.ts",
+      "subject": "dc2",
+      "description": "rename `fileUrl` to `_fileUrl` (no behavior change; the dead store is still there).",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 448,
+      "matchesOriginal": 448,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-access-check.ts",
+      "subject": "dc2",
+      "description": "\"use\" `fileUrl` in an access check against the root. A no-op: fileUrl is path.resolve(dir, <relative path>) after the URL parser has removed `..`, so it never leaves the root.",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 448,
+      "matchesOriginal": 448,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-serve-file-url.ts",
+      "subject": "dc2",
+      "description": "\"use\" `fileUrl` by rewriting an aliased request's URL to it (the absolute file path) instead of the redirected pathname.",
+      "expected": "changed",
+      "verdict": "changed",
+      "cases": 448,
+      "matchesOriginal": 424,
+      "matchesFix": null,
+      "mismatchesByDimension": {
+        "alias": {
+          "string-inside-root": 7,
+          "string-outside-root": 3,
+          "regex": 1,
+          "regex-groups": 1,
+          "trailing-slash-replacement": 2,
+          "several, first wins": 10
+        },
+        "url": {
+          "/@alias/x.js": 2,
+          "/@alias": 2,
+          "/@alias/deep/z.js": 2,
+          "/@alias/a%20b.js": 2,
+          "/@alias/..%2f..%2fsecret.js": 2,
+          "/@alias/secret.js": 2,
+          "/@alias/boom.js": 2,
+          "/ext/lib.js": 2,
+          "/ext": 2,
+          "/ext/secret.js": 2,
+          "/re/img.png": 1,
+          "/x/y/z.js": 1,
+          "/a": 1,
+          "/a/b.js": 1
+        }
+      },
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-directory-guard.ts",
+      "subject": "dc2",
+      "description": "\"use\" `fileUrl` as a directory guard (an alias resolving to a directory falls through to next()).",
+      "expected": "changed",
+      "verdict": "changed",
+      "cases": 448,
+      "matchesOriginal": 447,
+      "matchesFix": null,
+      "mismatchesByDimension": {
+        "alias": {
+          "trailing-slash-replacement": 1
+        },
+        "url": {
+          "/a": 1
+        }
+      },
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc2-broken-rethrow.ts",
+      "subject": "dc2",
+      "description": "drop the `return` after the 403, so a denied request also rethrows.",
+      "expected": "changed",
+      "verdict": "changed",
+      "cases": 448,
+      "matchesOriginal": 413,
+      "matchesFix": null,
+      "mismatchesByDimension": {
+        "alias": {
+          "none": 5,
+          "string-inside-root": 5,
+          "string-outside-root": 5,
+          "regex": 5,
+          "regex-groups": 5,
+          "trailing-slash-replacement": 5,
+          "several, first wins": 5
+        },
+        "url": {
+          "/@alias/%2e%2e/secret.js": 7,
+          "/@alias/..%2f..%2fsecret.js": 7,
+          "/@alias/secret.js": 7,
+          "/ext/secret.js": 7,
+          "/secret.txt": 7
+        }
+      },
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3 original (itself)",
+      "subject": "dc3",
+      "description": "the pristine subject against itself",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 66,
+      "matchesOriginal": 66,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-delete.ts",
+      "subject": "dc3",
+      "description": "delete `let stderr = '';` and `stderr = result.stderr;` (the expected fix).",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 66,
+      "matchesOriginal": 66,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-delete-binding-keep-call.ts",
+      "subject": "dc3",
+      "description": "keep the call, destructure only `stdout` (the binding goes, the command still runs).",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 66,
+      "matchesOriginal": 66,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-rename.ts",
+      "subject": "dc3",
+      "description": "rename `stderr` to `_stderr` (what Oxlint's message suggests).",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 66,
+      "matchesOriginal": 66,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-void.ts",
+      "subject": "dc3",
+      "description": "add `void stderr;` after the assignment.",
+      "expected": "identical",
+      "verdict": "identical",
+      "cases": 66,
+      "matchesOriginal": 66,
+      "matchesFix": null,
+      "mismatchesByDimension": {},
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-log-verbose.ts",
+      "subject": "dc3",
+      "description": "\"use\" `stderr` by logging it in the VERBOSE block.",
+      "expected": "changed",
+      "verdict": "changed",
+      "cases": 66,
+      "matchesOriginal": 45,
+      "matchesFix": null,
+      "mismatchesByDimension": {
+        "function": {
+          "filterIgnored": 21
+        },
+        "result": {
+          "empty": 3,
+          "one ignored": 3,
+          "two ignored, trailing newline": 3,
+          "ignored + stderr warning": 3,
+          "stderr only": 3,
+          "rejects, not a repo": 3,
+          "rejects, nothing ignored": 3
+        },
+        "VERBOSE": {
+          "VERBOSE=\"1\"": 21
+        },
+        "files": {
+          "none": 7,
+          "two in cwd": 7,
+          "mixed": 7
+        }
+      },
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-warn-nonempty.ts",
+      "subject": "dc3",
+      "description": "\"use\" `stderr` by logging it as an error when it isn't empty.",
+      "expected": "changed",
+      "verdict": "changed",
+      "cases": 66,
+      "matchesOriginal": 48,
+      "matchesFix": null,
+      "mismatchesByDimension": {
+        "function": {
+          "filterIgnored": 18
+        },
+        "result": {
+          "ignored + stderr warning": 9,
+          "stderr only": 9
+        },
+        "VERBOSE": {
+          "VERBOSE=<unset>": 6,
+          "VERBOSE=\"1\"": 6,
+          "VERBOSE=\"\"": 6
+        },
+        "files": {
+          "none": 6,
+          "two in cwd": 6,
+          "mixed": 6
+        }
+      },
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    },
+    {
+      "name": "dc3-delete-call.ts",
+      "subject": "dc3",
+      "description": "delete the statements that call execa and read its result, with the binding (the command no longer runs).",
+      "expected": "changed",
+      "verdict": "changed",
+      "cases": 66,
+      "matchesOriginal": 3,
+      "matchesFix": null,
+      "mismatchesByDimension": {
+        "function": {
+          "filterIgnored": 63
+        },
+        "result": {
+          "empty": 9,
+          "one ignored": 9,
+          "two ignored, trailing newline": 9,
+          "ignored + stderr warning": 9,
+          "stderr only": 9,
+          "rejects, not a repo": 9,
+          "rejects, nothing ignored": 9
+        },
+        "VERBOSE": {
+          "VERBOSE=<unset>": 21,
+          "VERBOSE=\"1\"": 21,
+          "VERBOSE=\"\"": 21
+        },
+        "files": {
+          "none": 21,
+          "two in cwd": 21,
+          "mixed": 21
+        }
+      },
+      "originalDiffersFromFix": null,
+      "harnessError": null,
+      "pass": true
+    }
+  ],
+  "failures": 0
+}

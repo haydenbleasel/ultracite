@@ -1,0 +1,3851 @@
+{
+  "codebook": {
+    "clone": {
+      "accidental": "copy-paste that should be shared; a maintainer would accept extracting a helper",
+      "deliberate": "kept on purpose: platform/runtime variants, data tables, versioned copies, decoupling across boundaries, performance, parallel structure (one file per locale or adapter)",
+      "inconsistent": "the copies differ in a way that looks like a fix, guard or behavior applied to one copy only: a likely bug",
+      "trivial": "tiny or idiomatic repetition not worth sharing",
+      "unclear": "can't tell"
+    },
+    "dead-store": {
+      "debug-wip": "debug scaffolding or work in progress",
+      "bug": "the lost value should have been used; concrete consequence",
+      "false-positive": "the value is read (closures, try/finally, loops)",
+      "intentional": "deliberate: clearing a reference for GC, readability/narrowing initializer, documented defensive reset",
+      "leftover": "harmless redundancy, safe to delete: an initializer always overwritten, a redundant reset",
+      "unclear": "can't tell"
+    },
+    "export": {
+      "analysis-miss": "a static reference exists that the analysis missed",
+      "dead": "nothing uses it and it isn't public; deletable",
+      "dynamic": "used by name at runtime (registry, string-keyed lookup, virtual module)",
+      "public-api": "public surface: documented, re-exported, module augmentation, deliberate wildcard subpath",
+      "test-or-tooling": "used only by tests, scripts, build config or docs",
+      "unclear": "can't tell",
+      "unnecessary-export": "declaration live in its own file or via a side effect (self-registration); only `export` is unneeded"
+    },
+    "unused": {
+      "debug-wip": "debug scaffolding or work in progress",
+      "bug": "the value was computed or received and should have been used (wrong variable, typo, lost result, ignored option); concrete runtime consequence",
+      "false-positive": "the name is actually used",
+      "intentional": "signature placeholder, interface-conformance or API-compat parameter, destructuring omit, `_` convention, type-level trick, catch binding kept by style",
+      "leftover": "dead code, safe to delete",
+      "unclear": "can't tell"
+    }
+  },
+  "generated": "2026-10-13",
+  "labels": [
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/helpers/util.ts#L7",
+      "repo": "zod",
+      "id": "u001",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`assertNever(_x: never)` is an exhaustiveness helper whose never-typed parameter exists only so the compiler rejects unhandled union members."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/helpers/util.ts#L96",
+      "repo": "zod",
+      "id": "u002",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "medium",
+      "note": "The exported v3 helper `addQuestionMarks<T, _O = any>` keeps a defaulted second type parameter that no internal caller passes, so existing two-argument references keep compiling."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/json-schema-processors.ts#L349",
+      "repo": "zod",
+      "id": "u003",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`fileProcessor` matches the shared `Processor` callback signature and, like its sibling processors that also take `_params`, needs nothing from the params argument."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/json-schema-processors.ts#L625",
+      "repo": "zod",
+      "id": "u004",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`exclusiveMinimum` is pulled out with its numeric-constraint siblings so `...rest` no longer carries keywords that would be wrong once the key schema is re-expressed as a string."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/json-schema-processors.ts#L625",
+      "repo": "zod",
+      "id": "u005",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`format` is dropped from the stringified key schema via the rest sibling, along with the numeric bounds and the internal `id`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L1337",
+      "repo": "zod",
+      "id": "u006",
+      "category": "intentional",
+      "subkind": "catch",
+      "fix": "omit-binding",
+      "confidence": "high",
+      "note": "A failed `Number()` coercion is swallowed on purpose because the type check right after reports the invalid input, so the error object is never needed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L1420",
+      "repo": "zod",
+      "id": "u007",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `$ZodBoolean` parse function matches the `(payload, ctx)` parse signature and marks the unneeded context with the underscore convention."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L1800",
+      "repo": "zod",
+      "id": "u008",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `$ZodDate` parse function keeps the `(payload, ctx)` signature and does not need the parse context."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L3676",
+      "repo": "zod",
+      "id": "u009",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `$ZodEnum` parse function keeps the `(payload, ctx)` signature and only checks set membership, so it does not need the context."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L5125",
+      "repo": "zod",
+      "id": "u010",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`$ZodCustom`'s parse is a pass-through and leaves the logic to `check`, so the context parameter is a placeholder named `_`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/util.ts#L269",
+      "repo": "zod",
+      "id": "u011",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`assertIs<T>(_arg: T)` is a compile-time type assertion helper with an empty body; the parameter exists only to be type-checked."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/util.ts#L532",
+      "repo": "zod",
+      "id": "u012",
+      "category": "intentional",
+      "subkind": "catch",
+      "fix": "omit-binding",
+      "confidence": "high",
+      "note": "This is eval feature detection: the throw from `new Function(\"\")` is itself the signal, so the caught value is irrelevant."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/adapter/aws-lambda/handler.ts#L505",
+      "repo": "hono",
+      "id": "u013",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The v1 API Gateway processor implements the abstract `getCookies(event, headers)` as a deliberate no-op, because v1 cookies already arrive in `multiValueHeaders`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/adapter/aws-lambda/handler.ts#L505",
+      "repo": "hono",
+      "id": "u014",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "This is the same no-op override of the abstract `getCookies`; `_headers` only keeps the signature that the base class and sibling processors use."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/client/types.ts#L359",
+      "repo": "hono",
+      "id": "u015",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`infer _ extends Schema` is a positional placeholder in a conditional type; the schema slot is rebuilt from `ExtractSchema<App>` instead."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/client/utils.ts#L108",
+      "repo": "hono",
+      "id": "u016",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`infer _` fills the status slot of `ClientResponse<RT, _, RF>`, where only the body and format types are needed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/router/trie-router/node.ts#L172",
+      "repo": "hono",
+      "id": "u017",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `for (const _ in child.#children) { ...; break }` loop is an allocation-free check that the node has at least one child, so the key is never needed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2555",
+      "repo": "hono",
+      "id": "u018",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`infer _Start` absorbs the path prefix before `:` in a template-literal pattern; only `Param` and `Rest` are used."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2557",
+      "repo": "hono",
+      "id": "u019",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "This is the second branch of the same `ExtractParams` pattern, with the same placeholder for the path prefix."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2573",
+      "repo": "hono",
+      "id": "u020",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`T['input'] extends { param: infer _ }` only tests whether a `param` key exists; the inferred type is never needed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2581",
+      "repo": "hono",
+      "id": "u021",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`${infer Prefix}{${infer _}}` strips the regex pattern from a param key; only `Prefix` is kept."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2594",
+      "repo": "hono",
+      "id": "u022",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "This is the same brace-stripping key remap in the other branch of `MergeEndpointParamsWithPath`, with `_` discarding the pattern."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2691",
+      "repo": "hono",
+      "id": "u023",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`P extends `${infer _}?`` only tests for an optional `?` suffix, so the inferred name is irrelevant."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/types.ts#L2742",
+      "repo": "hono",
+      "id": "u024",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`HonoBase<infer _, infer S, any, any>` skips the env slot to extract the schema `S`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/links/localLink.ts#L139",
+      "repo": "trpc",
+      "id": "u025",
+      "category": "false-positive",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "medium",
+      "note": "`using _finally = makeResource(...)` is consumed by its disposer at scope exit, which calls `observer.complete()`, so the binding does real work; Oxlint's core rule and tsc do not report it, only sonarjs and typescript-eslint do."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/links/localLink.ts#L180",
+      "repo": "trpc",
+      "id": "u026",
+      "category": "false-positive",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "medium",
+      "note": "This `using` declaration exists for its async disposer, which resets the connection state to idle and unsubscribes; scope exit uses the binding even though it is never read."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/types.ts#L271",
+      "repo": "trpc",
+      "id": "u027",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The public `CreateTRPCReactOptions<_TRouter>` interface keeps its router type parameter so existing `CreateTRPCReactOptions<TRouter>` references in `createTRPCReact` and `withTRPC` stay valid."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/http/parseConnectionParams.ts#L16",
+      "repo": "trpc",
+      "id": "u028",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "In the filter callback over `Object.entries`, `[_key, value]` holds the key position while only the value's type is checked."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/http/resolveResponse.ts#L741",
+      "repo": "trpc",
+      "id": "u029",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "omit-binding",
+      "confidence": "high",
+      "note": "`infoError` was already thrown inside the try block (line 304) and reaches this catch as `cause`, so only `info` is needed here."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/middleware.ts#L36",
+      "repo": "trpc",
+      "id": "u030",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`_TContextOverride` is a phantom type parameter, so `MiddlewareResult<T>` carries the context-override type through the middleware chain without a runtime field."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/procedureBuilder.ts#L173",
+      "repo": "trpc",
+      "id": "u031",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`infer _TOutputIn` is a positional placeholder that is needed to reach the later `ProcedureBuilder` slots."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/procedureBuilder.ts#L175",
+      "repo": "trpc",
+      "id": "u032",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`infer _TCaller` is a positional placeholder in the same `ProcedureBuilder` pattern match."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/types.ts#L169",
+      "repo": "trpc",
+      "id": "u033",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The runtime `Symbol()` exists only so `typeof _errorSymbol` gives a unique-symbol brand for `ErrorSymbol`/`TypeError`; it is a type-level trick (`declare const` would avoid the report)."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/utils.ts#L151",
+      "repo": "trpc",
+      "id": "u034",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`cursor: _` is removed from the infinite-query input so the query key ignores pagination state; `...inputWithoutCursorAndDirection` is what gets used."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/utils.ts#L152",
+      "repo": "trpc",
+      "id": "u035",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`direction: __` is omitted from the query-key input together with `cursor` through the rest sibling."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/git.ts#L18",
+      "repo": "trpc",
+      "id": "u036",
+      "category": "leftover",
+      "subkind": "local",
+      "fix": "delete",
+      "confidence": "medium",
+      "note": "`stderr` is copied from the `git check-ignore` result but never logged or checked (the VERBOSE logs only print stdout-derived lists), so it is a dead store that can be deleted."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/module-runner/createImportMeta.ts#L25",
+      "repo": "vite",
+      "id": "u037",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "This `import.meta.resolve(_id, _parent)` stub keeps the standard signature and always throws \"not supported\" in the module runner."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/index.ts#L691",
+      "repo": "vite",
+      "id": "u038",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The pending `exportsData` promise is dropped from the discovered dep info before it is stored as optimized metadata; exports come from `idToExports` instead."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/index.ts#L1511",
+      "repo": "vite",
+      "id": "u039",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "In the graceful-fs-style `fs.stat` retry callback only the error code matters, so the stats argument is marked unused."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L318",
+      "repo": "vite",
+      "id": "u040",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "As the comment says, the clone discards the `processing` promise from each discovered dep via the rest sibling."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/css.ts#L267",
+      "repo": "vite",
+      "id": "u041",
+      "category": "false-positive",
+      "subkind": "type",
+      "fix": "none",
+      "confidence": "medium",
+      "note": "The `const enum PureCssLang` is referenced in `keyof typeof PureCssLang` for the `CssLang` union, and a const enum has no runtime value to leave unused; vite disables the rule here with a note calling it a typescript-eslint bug."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/define.ts#L124",
+      "repo": "vite",
+      "id": "u042",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`_pattern` holds a tuple position; in bundled mode the define map goes straight to Rolldown's `transform.define`, so the fast-check regex used by the dev transform is not needed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/modulePreloadPolyfill.ts#L21",
+      "repo": "vite",
+      "id": "u043",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `resolveId` hook's filter already matches the exact id, so the handler returns a constant and leaves its id argument unused."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/modulePreloadPolyfill.ts#L27",
+      "repo": "vite",
+      "id": "u044",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The filtered `load` hook returns an empty module for the one id it matches, so the id parameter is a placeholder."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/mixedModuleGraph.ts#L328",
+      "repo": "vite",
+      "id": "u045",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The backward-compatible mixed `ModuleGraph.getModuleByUrl(url, ssr)` keeps the old `ssr` flag but now queries both the client and ssr graphs, as the comment explains."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/watch.ts#L69",
+      "repo": "vite",
+      "id": "u046",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`pollInterval` is a Rolldown-only watch option, stripped here so it does not reach chokidar; `convertToDevWatchOptions` reads it."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/watch.ts#L72",
+      "repo": "vite",
+      "id": "u047",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`debounceTickRate` is a Rolldown dev-watch option, removed from the chokidar options via the rest sibling and consumed in `convertToDevWatchOptions`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/watch.ts#L75",
+      "repo": "vite",
+      "id": "u048",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`exclude` is a Rolldown watch option, stripped from the chokidar options (and passed to Rolldown in `convertToDevWatchOptions`), not a dropped user setting."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/actions/runtime/client.ts#L66",
+      "repo": "astro",
+      "id": "u049",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "As the comment states, the phantom `_T` on `ActionError` carries the input-error inference used by `isInputError`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/assets/services/service.ts#L271",
+      "repo": "astro",
+      "id": "u050",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`densities` and the other image-service options are stripped so `...attributes` holds only real HTML attributes."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/content/content-layer.ts#L240",
+      "repo": "astro",
+      "id": "u051",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`integrations` (with `vite` and `adapter`) is excluded from the hashable config before it is digested, so non-serialisable fields do not affect the cache key."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-internals.ts#L82",
+      "repo": "astro",
+      "id": "u052",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`[_, chunk]` over `Object.entries(bundle)` holds the key position, since each chunk already carries its own `fileName`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/cookies/cookies.ts#L153",
+      "repo": "astro",
+      "id": "u053",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The JSDoc says `_options` \"is no longer used\"; it is kept so public `Astro.cookies.has(key, options)` calls keep type-checking."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/csp/common.ts#L101",
+      "repo": "astro",
+      "id": "u054",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`[_, page]` over `pagesByViteID.entries()` holds the key position; only page styles are hashed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/preview/static-preview-server.ts#L54",
+      "repo": "astro",
+      "id": "u055",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "As the comment says, user Vite `plugins` are deliberately excluded from the merged preview config because Astro manages its own plugin set."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/request.ts#L78",
+      "repo": "astro",
+      "id": "u056",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "As the comment explains, `value` and `writable` are removed from the property descriptor because a descriptor with getters and setters may not carry them."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/util/pathname.ts#L43",
+      "repo": "astro",
+      "id": "u057",
+      "category": "intentional",
+      "subkind": "catch",
+      "fix": "omit-binding",
+      "confidence": "high",
+      "note": "A `decodeURI` failure is translated into a fixed 'Invalid URL encoding' error, so the original error is deliberately discarded."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/i18n/router.ts#L179",
+      "repo": "astro",
+      "id": "u058",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "medium",
+      "note": "The private strategy methods share a `(pathname, context)` shape; `allowUnprefixedPath` is documented as applying only to the prefix-always strategies, so prefix-other-locales has no use for the context."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/render/astro/render.ts#L139",
+      "repo": "astro",
+      "id": "u059",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "medium",
+      "note": "The private `renderStreamToAsyncIterable` takes `_route` to mirror `renderStreamToStream` (which uses it to set an error's file location) but never reads it; the Node async-iterable path did not annotate errors before this helper was extracted either (checked against astro@4.16.0), so this is a symmetry leftover, not a lost feature."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/render/template-depth.ts#L10",
+      "repo": "astro",
+      "id": "u060",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`templateEnter(result)` is emitted by the Astro compiler with the render result as its argument, so the signature is fixed even though the instruction is a constant."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L940",
+      "repo": "excalidraw",
+      "id": "u061",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`stripElementsProps` removes the element-related app-state keys, including `croppingElementId`, to return only the standalone props in the rest object."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L1948",
+      "repo": "excalidraw",
+      "id": "u062",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "In the filter over `Object.entries(this.updated)`, `[_, delta]` holds the id position while only the delta's changed props are inspected."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/Scene.ts#L90",
+      "repo": "excalidraw",
+      "id": "u063",
+      "category": "intentional",
+      "subkind": "type",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`type _ = Assert<SameType<...>>` is a compile-time check that the hashed keys cover the option type, and it carries an explicit eslint-disable."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionDeleteSelected.tsx#L305",
+      "repo": "excalidraw",
+      "id": "u064",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "high",
+      "note": "`deleteSelected`'s `keyTest` only checks the key and modifier, so the trailing `appState` and `elements` parameters can be dropped without any change."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L2042",
+      "repo": "excalidraw",
+      "id": "u065",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "medium",
+      "note": "`changeArrowProperties.perform` is a container action that just returns false, so all four trailing parameters, `app` included, could be removed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionZindex.tsx#L41",
+      "repo": "excalidraw",
+      "id": "u066",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "delete",
+      "confidence": "high",
+      "note": "The `sendBackward` `PanelComponent` destructures `appState` but renders a static button (as do its three siblings), so the prop binding is dead."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/CommandPalette/CommandPalette.tsx#L476",
+      "repo": "excalidraw",
+      "id": "u067",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "high",
+      "note": "The `setAppState` updater ignores `prevState` and returns a fixed partial (`openPopup`), which excalidraw merges, so the parameter is dead."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/CommandPalette/CommandPalette.tsx#L942",
+      "repo": "excalidraw",
+      "id": "u068",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "high",
+      "note": "The category `.map` callback keys its elements on `category` and never uses `idx`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LayerUI.tsx#L721",
+      "repo": "excalidraw",
+      "id": "u069",
+      "category": "intentional",
+      "subkind": "destructure-omit",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`stripIrrelevantAppStateProps` removes scroll, zoom and other canvas-only keys from the UI app state via the rest sibling, so the UI does not re-render on scroll."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryMenuItems.tsx#L345",
+      "repo": "excalidraw",
+      "id": "u070",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "high",
+      "note": "The \"esc to clear\" click handler only clears the search input and never reads `event`."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Stats/MultiDimension.tsx#L195",
+      "repo": "excalidraw",
+      "id": "u071",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "delete",
+      "confidence": "high",
+      "note": "`handleDimensionChange` destructures `app` from the drag callback args but does all its work through `scene`, so the binding is dead (the drag-finished handler further down uses its own `app`)."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/wysiwyg/textWysiwyg.tsx#L1223",
+      "repo": "excalidraw",
+      "id": "u072",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "high",
+      "note": "The `onChangeEmitter` listener only compares `app.state.theme` to `LAST_THEME`, and the FIXME concerns how theme changes are emitted, not this argument, so `elements` is dead."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/get-static-info-including-layouts.ts#L5",
+      "repo": "next.js",
+      "id": "u073",
+      "category": "leftover",
+      "subkind": "import",
+      "fix": "delete",
+      "confidence": "high",
+      "note": "The type import `__ApiPreviewProps` appears only on its import line in this file, a stale import."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/swc/index.ts#L1464",
+      "repo": "next.js",
+      "id": "u074",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The WASM-bindings stub of `startTurbopackTraceServerHandle` mirrors the native binding's signature and always throws."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-info.ts#L219",
+      "repo": "next.js",
+      "id": "u075",
+      "category": "intentional",
+      "subkind": "catch",
+      "fix": "omit-binding",
+      "confidence": "medium",
+      "note": "When `require.resolve` fails, `next info` reports the dependency check as skipped, so the resolve error is discarded on purpose."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/navigation-testing-lock.disabled.ts#L64",
+      "repo": "next.js",
+      "id": "u076",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `.disabled` build variant of the navigation-testing lock is a no-op stub that keeps the enabled module's exported signatures."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/concurrent-call-server.ts#L29",
+      "repo": "next.js",
+      "id": "u077",
+      "category": "intentional",
+      "subkind": "local",
+      "fix": "none",
+      "confidence": "high",
+      "note": "As the comment says, `_conformance` is a type-only check that this module matches `app-call-server`'s surface; it compiles to a null constant."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/form-shared.tsx#L49",
+      "repo": "next.js",
+      "id": "u078",
+      "category": "intentional",
+      "subkind": "type-parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "Per the comment and its eslint-disable, `FormProps<RouteInferType>` is a stub that typed-routes generation replaces, so the parameter must exist before it is used."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/resolve-from.ts#L52",
+      "repo": "next.js",
+      "id": "u079",
+      "category": "intentional",
+      "subkind": "catch",
+      "fix": "omit-binding",
+      "confidence": "high",
+      "note": "In `silent` mode a failed resolution returns `undefined` by design, so the error is deliberately discarded."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/typescript/getTypeScriptConfiguration.ts#L36",
+      "repo": "next.js",
+      "id": "u080",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The `readDirectory` override on `typescript.sys` keeps TypeScript's full callback signature (underscored) while returning a fake file, to skip directory enumeration in meta-only mode."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/stream-ops.web.ts#L241",
+      "repo": "next.js",
+      "id": "u081",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The web stream-ops variant's `renderToNodeFlightStream` is a not-implemented stub that keeps the Node variant's signature, since `stream-ops.ts` swaps the two modules at build time."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/stream-ops.web.ts#L265",
+      "repo": "next.js",
+      "id": "u082",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "medium",
+      "note": "The web `renderToWebFizzStream` keeps the Node variant's `options` signature; in the web path `waitForAllReady` is honored later, when `continueFizzStream` awaits `renderStream.allReady`, so ignoring it here is safe."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/hot-reloader-rspack.ts#L6",
+      "repo": "next.js",
+      "id": "u083",
+      "category": "leftover",
+      "subkind": "import",
+      "fix": "delete",
+      "confidence": "high",
+      "note": "The type import `__ApiPreviewProps` is never referenced in `hot-reloader-rspack.ts`, a stale import."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/require-hook.ts#L28",
+      "repo": "next.js",
+      "id": "u084",
+      "category": "intentional",
+      "subkind": "catch",
+      "fix": "omit-binding",
+      "confidence": "high",
+      "note": "The `styled-jsx` override resolution is best effort, so a resolve failure is swallowed and the error is never needed."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/myersDiffAlgorithm.ts#L60",
+      "repo": "vscode",
+      "id": "u085",
+      "category": "debug-wip",
+      "subkind": "local",
+      "fix": "delete",
+      "confidence": "medium",
+      "note": "`let step = 0` is incremented twice per diagonal and never read: instrumentation left in the Myers inner loop (a counter to watch while stepping), with no effect on the result."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts#L703",
+      "repo": "vscode",
+      "id": "u086",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "rename-underscore",
+      "confidence": "high",
+      "note": "`InvalidBracketAstNode` implements the abstract `computeMinIndentation(offset, textModel)` by returning `MAX_SAFE_INTEGER`, so its parameters exist only for the override signature."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/tokens/tokenizationFontDecorationsProvider.ts#L121",
+      "repo": "vscode",
+      "id": "u087",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "rename-underscore",
+      "confidence": "medium",
+      "note": "The font decoration provider declares `onlyMinimapDecorations` to match the call in `TextModel.getDecorationsInRange` but treats it only as an optimisation hint (the colorized-bracket provider short-circuits on it; the model's own interval tree ignores it too, so consumers must filter by `options.minimap`), so this costs work but gives no wrong output; the minimap renderer could not be read in the sparse clone."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/tokens/tokenizationTextModelPart.ts#L92",
+      "repo": "vscode",
+      "id": "u088",
+      "category": "leftover",
+      "subkind": "parameter",
+      "fix": "remove-param",
+      "confidence": "high",
+      "note": "`onDidChangeBackgroundTokenizationState` is an `Event<void>`, so the `e` in this listener is always undefined and never read."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewEventHandler.ts#L36",
+      "repo": "vscode",
+      "id": "u089",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "rename-underscore",
+      "confidence": "high",
+      "note": "In `ViewEventHandler`, the base-class default `onCompositionStart(e)` returns false; subclasses override it with the event, so the parameter defines the overridable signature."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewEventHandler.ts#L84",
+      "repo": "vscode",
+      "id": "u090",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "rename-underscore",
+      "confidence": "high",
+      "note": "The base-class default handler `onTokensColorsChanged(e)` keeps the event parameter for subclasses that override it."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/modelLineProjection.ts#L303",
+      "repo": "vscode",
+      "id": "u091",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The identity projection implements `IModelLineProjection.getViewLineContinuesWithWrappedLine` and never wraps, so the index is a signature placeholder."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/modelLineProjection.ts#L381",
+      "repo": "vscode",
+      "id": "u092",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The hidden-line projection's `getViewLineLength` throws \"Not supported\" and keeps the interface signature with underscored parameters."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/modelLineProjection.ts#L385",
+      "repo": "vscode",
+      "id": "u093",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The hidden-line projection's `getViewLineMinColumn` is a throwing stub that keeps the interface signature."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/viewModelLines.ts#L1195",
+      "repo": "vscode",
+      "id": "u094",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "`ViewModelLinesFromModelAsIs.acceptVersionId` is an empty implementation of the `IViewModelLines` method; the identity mapping does not track versions."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/viewModelLines.ts#L1202",
+      "repo": "vscode",
+      "id": "u095",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "none",
+      "confidence": "high",
+      "note": "The as-is lines collection implements `getActiveIndentGuide` with a trivial result, so the min/max bounds are signature placeholders."
+    },
+    {
+      "kind": "unused",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModelEventDispatcher.ts#L572",
+      "repo": "vscode",
+      "id": "u096",
+      "category": "intentional",
+      "subkind": "parameter",
+      "fix": "rename-underscore",
+      "confidence": "high",
+      "note": "`ModelLineHeightChangedEvent.attemptToMerge(other)` follows the shared outgoing-event method shape (called polymorphically in the dispatcher) and never merges, so `other` is unused."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/to-json-schema.ts#L550",
+      "repo": "zod",
+      "id": "d001",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both the if and else branches assign `folded` (or return) before the `if (!folded)` check, so the `= null` initializer is never read; the type annotation alone would do."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/client/client.ts#L99",
+      "repo": "hono",
+      "id": "d002",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "`methodUpperCase` is recomputed from the unchanged `this.method` at line 137 before any read, so the line-99 value is a duplicate computation left behind; declaring it once as const at 137 removes it."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/components.ts#L107",
+      "repo": "hono",
+      "id": "d003",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The try assigns `resArray` and both catch branches assign it (any throw in between propagates), so the `= []` initializer is never observed."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/ipaddr.ts#L230",
+      "repo": "hono",
+      "id": "d004",
+      "category": "leftover",
+      "fix": "delete-assignment",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "`index = length` is immediately followed by `break` out of the parse loop and nothing after the loop reads `index`, so the store is a redundant 'consumed everything' marker."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/ws.ts#L396",
+      "repo": "trpc",
+      "id": "d005",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Commented GC release: `next` is hoisted outside the `while (true)` loop precisely so it can be nulled after each respond() and not pin the last iterator result across the next `await Unpromise.race`."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/ws.ts#L397",
+      "repo": "trpc",
+      "id": "d006",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Same commented GC release as `next`: nulling `result` drops the last data payload before the loop awaits the next value."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/stream/sse.ts#L148",
+      "repo": "trpc",
+      "id": "d007",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Commented GC release after `yield chunk` in the SSE generator; the declarations are hoisted out of the for-await loop for exactly this reason."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/stream/utils/asyncIterable.ts#L60",
+      "repo": "trpc",
+      "id": "d008",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Commented GC release in `takeWithGrace` so the previous IteratorResult is not retained while the generator awaits the next race."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/stream/utils/withPing.ts#L43",
+      "repo": "trpc",
+      "id": "d009",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Commented GC release in `withPing` after yielding, so the yielded value is not held while waiting on the next ping/next race."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/git.ts#L17",
+      "repo": "trpc",
+      "id": "d010",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The try assigns `stdout = result.stdout` and the catch reassigns `stdout = ''`, so the `''` initializer is never read (one of the two empty-string defaults is redundant)."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/build.ts#L953",
+      "repo": "vite",
+      "id": "d011",
+      "category": "leftover",
+      "fix": "delete-assignment",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "`startTime = undefined` runs right before `throw e`, and `startTime` is a function-local that the finally block never reads, so the reset does nothing."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/scan.ts#L214",
+      "repo": "vite",
+      "id": "d012",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Every branch of the explicit-entries / input / html-glob chain assigns `entries` or throws, so the `= []` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/dynamicImportVars.ts#L247",
+      "repo": "vite",
+      "id": "d013",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The try assigns `imports` and the catch returns null, so the `= []` initializer can never reach `imports.length`."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/importMetaGlob.ts#L158",
+      "repo": "vite",
+      "id": "d014",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The try assigns `opts` from `evalValue` and the catch throws, so the `= {}` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/importMetaGlob.ts#L578",
+      "repo": "vite",
+      "id": "d015",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The onlyKeys / onlyValues / else chain assigns `replacement` on every path before `s.overwrite`, so the `''` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/workerImportMetaUrl.ts#L106",
+      "repo": "vite",
+      "id": "d016",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The try assigns `opts` and the catch either returns `{ type }` or throws, so the `= {}` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/indexHtml.ts#L415",
+      "repo": "vite",
+      "id": "d017",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both branches of the sourcemap check assign `content` before `s.overwrite`, so the `''` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/static.ts#L176",
+      "repo": "vite",
+      "id": "d018",
+      "category": "leftover",
+      "fix": "other",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "`fileUrl` is never read at all after this point: the fs-access check it used to feed now runs inside sirv's `shouldServe` (throwing ERR_DENIED_FILE), so lines 174-177 are a refactor leftover that can be removed entirely, not a skipped security check."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/assets/utils/getAssetsPrefix.ts#L4",
+      "repo": "astro",
+      "id": "d019",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "All three branches assign `prefix` (the first one to the same `''`), so the initializer is redundant."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/index.ts#L320",
+      "repo": "astro",
+      "id": "d020",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both the static and server branches assign `messages` before `messages.join`, so the `= []` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-manifest.ts#L225",
+      "repo": "astro",
+      "id": "d021",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both branches of the assetsPrefix check assign `result` before it is appended to or returned, so the `''` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/static-build.ts#L252",
+      "repo": "astro",
+      "id": "d022",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "Commented 'release output for GC': the large prerender build output is dropped before the SSR and client builds run in the same async function."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/static-build.ts#L265",
+      "repo": "astro",
+      "id": "d023",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "Commented 'release output for GC' for the SSR build output before the client build starts."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/render/route-cache.ts#L61",
+      "repo": "astro",
+      "id": "d024",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The function either throws on missing `getStaticPaths` or assigns `staticPaths` from it, so the `= []` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/render/ssr-element.ts#L41",
+      "repo": "astro",
+      "id": "d025",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The assetsPrefix / base / else chain assigns `url` on every path, so the `''` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/routing/rewrite.ts#L58",
+      "repo": "astro",
+      "id": "d026",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "complexity/noUselessUndefined": true,
+        "complexity/noUselessUndefinedInitialization": true,
+        "no-useless-assignment": true,
+        "unicorn/no-useless-undefined": true
+      },
+      "note": "All three payload branches assign `newUrl`, so the explicit `= undefined` is both a useless undefined and a dead initializer."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/binding.ts#L1659",
+      "repo": "excalidraw",
+      "id": "d027",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both the elbowed and non-elbowed branches assign `intersection` before the `!intersection` check, so the `= null` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/bounds.ts#L579",
+      "repo": "excalidraw",
+      "id": "d028",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "Both the `a === 0` branch and the quadratic branch assign `t2`, so the `Infinity` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/fractionalIndex.ts#L301",
+      "repo": "excalidraw",
+      "id": "d029",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "complexity/noUselessUndefined": true,
+        "complexity/noUselessUndefinedInitialization": true,
+        "no-useless-assignment": true,
+        "unicorn/no-useless-undefined": true
+      },
+      "note": "The outer `upperBound` is assigned at the top of every loop iteration before its only read (the closures shadow it with their own const), so `= undefined` is both a useless undefined and a dead initializer."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/fractionalIndex.ts#L379",
+      "repo": "excalidraw",
+      "id": "d030",
+      "category": "leftover",
+      "fix": "other",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Only `lowerBoundIndex` matters here (the getLowerBound closure re-derives the bound from the index and shadows `lowerBound`), and the outer loop overwrites `lowerBound` before reading it, so the value half of the destructuring is redundant but harmless."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/linearElementEditor.ts#L336",
+      "repo": "excalidraw",
+      "id": "d031",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both the discrete-angle and free-drag branches assign `deltaY` (and `deltaX`), so the `0` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.tsx#L3591",
+      "repo": "excalidraw",
+      "id": "d032",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The try assigns `initialData` on both branches and the catch assigns an error payload, so the `= null` initializer is never read."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/wysiwyg/textWysiwyg.tsx#L364",
+      "repo": "excalidraw",
+      "id": "d033",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "`maxHeight` is only read inside the container branch after being reassigned from `getBoundTextMaxHeight`, so the element-height default is a leftover from when the editor box style also used it."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/math/src/curve.ts#L536",
+      "repo": "excalidraw",
+      "id": "d034",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "`currentLength` is assigned at the top of each binary-search iteration and never read after the loop, so it should be a const inside the loop."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata-elements.tsx#L1628",
+      "repo": "next.js",
+      "id": "d035",
+      "category": "intentional",
+      "fix": "none",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Final `key={i++}` in a long function that uses a running key counter for every tag; the dead increment keeps the idiom uniform so another tag can be appended safely."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/resolvers/resolve-url.ts#L131",
+      "repo": "next.js",
+      "id": "d036",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "`isExternal` is read only when `!isRelative`, where both try and catch assign it, so the `false` initializer is dead (unlike `isFileUrl`, whose default is read on the catch path)."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/stream-ops.node.ts#L286",
+      "repo": "next.js",
+      "id": "d037",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "`iconMarkIndex` is assigned at the top of the try before any read and neither the early-return path nor the catch reads it, so the `-1` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/router-utils/setup-dev-bundler.ts#L525",
+      "repo": "next.js",
+      "id": "d038",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "`conflictingPageChange` is overwritten at line 884 from the conflict counts before its only read, so the `0` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/response-cache/index.ts#L371",
+      "repo": "next.js",
+      "id": "d039",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "The first statement in the try assigns `previousIncrementalCacheEntry` and the catch never reads it, so the `null` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/entry.ts#L31",
+      "repo": "next.js",
+      "id": "d040",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Both the page and layout branches assign `validProps` before the completion loop reads it, so the `= []` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/get-img-props.ts#L233",
+      "repo": "next.js",
+      "id": "d041",
+      "category": "leftover",
+      "fix": "delete-assignment",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "`deploymentId = undefined` sits in an if-branch whose else-if is the only reader, so it never has an effect; the branch's comment alone documents the intent and the dpl skip still works."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/turbopack/utils.ts#L135",
+      "repo": "next.js",
+      "id": "d042",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "All three range / file / title branches assign `message` before `message += '\\n'`, so the `''` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/textEdit.ts#L765",
+      "repo": "vscode",
+      "id": "d043",
+      "category": "leftover",
+      "fix": "delete-assignment",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "The suffix-trimmed `existingText` is never read because the method only returns `newText === ''`; a no-op replacement therefore also counts as an 'effective deletion', but `isEffectiveDeletion` has no callers in vscode, so nothing observable goes wrong."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/intervalTree.ts#L503",
+      "repo": "vscode",
+      "id": "d044",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "In the hand-tuned tree walk `nodeEnd` is always assigned from `delta + node.end` before its read, so the hoisted `= 0` only serves type inference."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/intervalTree.ts#L715",
+      "repo": "vscode",
+      "id": "d045",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Same hoisted-local pattern in `search`: `nodeEnd` is assigned on every path to its read, so the `0` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/intervalTree.ts#L786",
+      "repo": "vscode",
+      "id": "d046",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "Same hoisted-local pattern in `intervalSearch`: `nodeStart` is assigned from `delta + node.start` before every read, so the `0` initializer is dead."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/pieceTreeTextBuffer/pieceTreeBase.ts#L808",
+      "repo": "vscode",
+      "id": "d047",
+      "category": "leftover",
+      "fix": "other",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "The function returns the `result` array that `findMatchesInNode` fills in place, so the returned count assigned to `resultLen` right before `return result` is unused; keep the call and drop the assignment (line 803 has the same pattern)."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/pieceTreeTextBuffer/pieceTreeBase.ts#L1089",
+      "repo": "vscode",
+      "id": "d048",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "`midStop` is only read after being set from `lineStarts[mid + 1]` in the same iteration and never after the loop, so its `0` initializer is dead (unlike `mid` and `midStart`, which are read after a zero-iteration loop)."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/pieceTreeTextBuffer/pieceTreeBase.ts#L1743",
+      "repo": "vscode",
+      "id": "d049",
+      "category": "leftover",
+      "fix": "delete-assignment",
+      "confidence": "high",
+      "whichRuleRight": {
+        "no-useless-assignment": true,
+        "sonarjs/no-dead-store": true
+      },
+      "note": "Strings are passed by value, so appending `'\\n'` to the parameter has no effect; both callers (insertContentToNodeRight, appendToNode) already do `value += '\\n'` themselves when this returns true."
+    },
+    {
+      "kind": "dead-store",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/viewModelLines.ts#L404",
+      "repo": "vscode",
+      "id": "d050",
+      "category": "leftover",
+      "fix": "delete-initializer",
+      "confidence": "medium",
+      "whichRuleRight": {
+        "no-useless-assignment": true
+      },
+      "note": "All three line-count branches assign `changeTo`, so its `-1` 'empty range' default is dead, unlike the insert/delete pairs whose `-1` defaults are read."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/locales/en.ts#L73",
+      "repo": "zod",
+      "id": "c001",
+      "category": "inconsistent",
+      "deliberateReason": null,
+      "difference": "Members identical (both say \"Number must be ...\"), but the too_big bigint branch says \"BigInt must be ...\", so the too_small bigint copy was never adapted.",
+      "cheapFix": "Merge the number and bigint branches into one `issue.type === \"number\" || issue.type === \"bigint\"` condition.",
+      "rightFix": "Change the too_small bigint message to \"BigInt must be ...\" to match too_big; merging would cement the wrong wording. Differs from the cheap fix.",
+      "confidence": "medium",
+      "note": "The bigint branch was added in June 2025 to close #4035 by copying the number branch verbatim, while the too_big bigint branch (added in #1711, 2023) says \"BigInt\", so v3 reports `z.bigint().min(0n)` failures as \"Number must be ...\"."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/types.ts#L2010",
+      "repo": "zod",
+      "id": "c002",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "Expected ZodParsedType (symbol, undefined, null) and class; ZodVoid checks for `undefined` but reports `expected: void`.",
+      "cheapFix": "Extract a `parsePrimitive(input, parsedType, expected)` helper on ZodType and call it from the four classes.",
+      "rightFix": "Leave as is: v3 gives every schema class its own self-contained _parse and is kept frozen for zod/v3 compatibility, so the helper saves little.",
+      "confidence": "medium",
+      "note": "One class per schema type, each with its own _parse, is the v3 design, and the four primitive checks share a shape because the types do."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/types.ts#L4124",
+      "repo": "zod",
+      "id": "c003",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none (getter names `enum`, `Values`, `Enum` only)",
+      "cheapFix": "Have `Values` and `Enum` return `this.enum`.",
+      "rightFix": "Same as the cheap fix; the aliases are public API so the getters stay and only their bodies collapse.",
+      "confidence": "high",
+      "note": "Three public alias getters each rebuild the same value map from `_def.values`; delegating two to the third keeps the API and removes the copies."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/classic/schemas.ts#L2581",
+      "repo": "zod",
+      "id": "c004",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "Class and return type (ZodCodec vs ZodMiniCodec); the mini copy carries a `@__NO_SIDE_EFFECTS__` annotation for tree-shaking.",
+      "cheapFix": "Extract a core `_codec(Class, in, out, params)` factory used by both flavors.",
+      "rightFix": "Leave as is, or follow the existing core `_xxx(Class, ...)` pattern only if the team wants it for codecs; classic and mini are separate API surfaces by design.",
+      "confidence": "high",
+      "note": "zod/v4 classic and zod/v4 mini each expose their own factory returning their own class, so the same constructor call appears once per flavor."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/schemas.ts#L403",
+      "repo": "zod",
+      "id": "c005",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "Coercion function (String vs BigInt) and expected typeof (\"string\" vs \"bigint\"); the second parameter is named `_` vs `_ctx`.",
+      "cheapFix": "Extract a factory such as `makePrimitiveParse(typeName, coerce)` for both closures.",
+      "rightFix": "Leave as is: each $Zod* constructor owns its hot-path parse closure ($ZodBoolean has the same shape too), and a factory adds indirection for little gain.",
+      "confidence": "medium",
+      "note": "zod v4 core writes a small inline parse closure per primitive schema, and the string and bigint ones happen to share a shape."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/locales/he.ts#L191",
+      "repo": "zod",
+      "id": "c006",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none: both arms of the ternary are \"לפחות פריט אחד\" (at least one item)",
+      "cheapFix": "Replace the ternary with the literal string.",
+      "rightFix": "Same; the noun phrase does not change with the container's gender, and the verb's set/array gender switch on the line above already handles agreement.",
+      "confidence": "medium",
+      "note": "The Hebrew locale switches the verb's gender for set vs array, and the singular phrase copied that switch even though the phrase is the same; it has been a harmless no-op since #5409 introduced it."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/locales/ne.ts#L61",
+      "repo": "zod",
+      "id": "c007",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "Message strings only (Nepali vs Tajik), plus the per-locale dictionaries they read.",
+      "cheapFix": "Extract a shared message builder driven by a per-locale string table.",
+      "rightFix": "Leave as is: one file per locale is the project's convention, and translators need control of word order per message.",
+      "confidence": "high",
+      "note": "Every zod v4 locale is a hand-translated copy of the same switch, so Type-2 similarity between locales is expected and is not a sharing opportunity."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/helper/ssg/ssg.ts#L118",
+      "repo": "hono",
+      "id": "c008",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "Request vs Response types and the class used in the `instanceof` check.",
+      "cheapFix": "Extract a generic `combineHooks<T>(hooks, Ctor)` and define both exports with it.",
+      "rightFix": "Same, keeping both exported names and signatures.",
+      "confidence": "medium",
+      "note": "The before-request and after-response combinators run the same chain-until-false loop and differ only in the payload class; the after-generate combinator has a different shape and stays separate."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/jwk/jwk.ts#L176",
+      "repo": "hono",
+      "id": "c009",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Move unauthorizedResponse into a shared util and import it in both middlewares.",
+      "rightFix": "Same; place it beside the JWT utils (or in a shared auth util bearer-auth could also use) so the quote escaping lives in one place.",
+      "confidence": "high",
+      "note": "The code comment says the quote escaping copies the bearer-auth middleware, so the same header-escaping fix already had to be applied in three middlewares."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/links/httpBatchLink.ts#L33",
+      "repo": "trpc",
+      "id": "c010",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Extract a `createBatchValidator({ resolvedOpts, type, maxURLLength, maxItems })` into links/internals.",
+      "rightFix": "Same.",
+      "confidence": "high",
+      "note": "httpBatchStreamLink was forked from httpBatchLink and its URL-length and maxItems validator is identical, so any change to batch splitting has to land twice."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L624",
+      "repo": "trpc",
+      "id": "c011",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none between the two flagged queryFns; in the wider hook family useInfiniteQuery uses `{ signal: null }` instead of `{}`, and all three infinite hooks resolve abortOnUnmount without the `config?.abortOnUnmount` fallback the three query hooks use.",
+      "cheapFix": "Extract the identical infinite-query queryFn builder.",
+      "rightFix": "Extract both the queryFn builder and one abortOnUnmount resolver for all query and infinite hooks, which would also make infinite queries honor the createTRPCReact `abortOnUnmount` option that #4042 added only to useQuery. Differs from the cheap fix.",
+      "confidence": "medium",
+      "note": "The flagged pair is a clean copy, but its family has drifted: `createTRPCReact({ abortOnUnmount })` is honored by useQuery, usePrefetchQuery and useSuspenseQuery but ignored by the three infinite-query hooks, which read only the deprecated provider prop."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/aws-lambda/getPlanner.ts#L132",
+      "repo": "trpc",
+      "id": "c012",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Hoist toStream into one function shared by v1Processor and v2Processor.",
+      "rightFix": "Same; both payload versions pass the same metadata to `awslambda.HttpResponseStream.from`, unlike toResult, which rightly differs per version.",
+      "confidence": "high",
+      "note": "The v1 and v2 API Gateway processors differ in path, URL, header and toResult handling but stream responses identically, so the second toStream copy has no reason to exist."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/pkgmgr.ts#L12",
+      "repo": "trpc",
+      "id": "c013",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "Subcommand choice (add/install vs remove/uninstall).",
+      "cheapFix": "Extract `runPackageManager(verbs, packageName)` holding the execa call and the stderr/VERBOSE logging.",
+      "rightFix": "Same.",
+      "confidence": "medium",
+      "note": "Install and uninstall share the spawn and logging policy and differ only in the verb, so a small helper keeps that policy in one place."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L131",
+      "repo": "trpc",
+      "id": "c014",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none (the first guard narrows `path.node` to FunctionDeclaration, the second narrows `path.node.body` to BlockStatement)",
+      "cheapFix": "Merge into `if (j.FunctionDeclaration.check(path.node) || j.BlockStatement.check(path.node.body))`, which loses the TypeScript narrowing on `path.node.body.body`.",
+      "rightFix": "Drop the FunctionDeclaration branch: a function declaration's body is always a BlockStatement, so the second check covers both cases. Differs from the cheap fix.",
+      "confidence": "medium",
+      "note": "The two branches exist because each type guard narrows a different expression; a single BlockStatement check on the body handles function declarations and block-bodied arrows alike."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/client/client.ts#L615",
+      "repo": "vite",
+      "id": "c015",
+      "category": "deliberate",
+      "deliberateReason": "platform-variant",
+      "difference": "none",
+      "cheapFix": "Import injectQuery from client/client.ts instead of keeping a copy.",
+      "rightFix": "Leave as is: the node-side copy is serialized with `.toString()` into classic workers, which cannot import the browser client module, and a comment documents the copy.",
+      "confidence": "high",
+      "note": "importAnalysis.ts appends `__vite__injectQuery.toString()` to classic worker code, so it needs a self-contained node-side function, marked \"Copied from client/client.ts\"."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/html.ts#L346",
+      "repo": "vite",
+      "id": "c016",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "Only the comment explaining why each parse5 error is ignored.",
+      "cheapFix": "Stack the case labels so they fall through to one `return`.",
+      "rightFix": "Leave as is, or stack the labels while keeping each comment; the separate cases document why each error is tolerated, with issue links.",
+      "confidence": "high",
+      "note": "Each ignored parse5 error code has its own bare `return` and its own justification comment, so this is a list of documented exceptions rather than copied logic."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/html.ts#L349",
+      "repo": "vite",
+      "id": "c017",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "Only the comment (the duplicate-attribute case cites #5966).",
+      "cheapFix": "Stack the case labels so they fall through to one `return`.",
+      "rightFix": "Leave as is, or stack the labels while keeping each comment.",
+      "confidence": "high",
+      "note": "Same switch as c016: bare `return` cases that each carry their own reason for ignoring a parse5 error."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/html.ts#L356",
+      "repo": "vite",
+      "id": "c018",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "Only the comment (#10439 vs the lit `<?>` link).",
+      "cheapFix": "Stack the case labels so they fall through to one `return`.",
+      "rightFix": "Leave as is, or stack the labels while keeping each comment.",
+      "confidence": "high",
+      "note": "Same switch as c016: bare `return` cases that each carry their own reason for ignoring a parse5 error."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/cli/exec.ts#L13",
+      "repo": "astro",
+      "id": "c019",
+      "category": "deliberate",
+      "deliberateReason": "versioned-copy",
+      "difference": "none in the error handler; the wrappers differ in how they call tinyexec (options spread vs nodeOptions plus stdin input).",
+      "cheapFix": "Extract the NonZeroExitError-to-Error mapping into a shared function.",
+      "rightFix": "Migrate the three remaining callers of the deprecated `exec` (install-package.ts, add/index.ts, add/pnpm.ts) to CommandExecutor and delete exec.ts. Differs from the cheap fix.",
+      "confidence": "high",
+      "note": "exec.ts is marked `@deprecated use CommandExecutor instead`, so the handler is a legacy copy awaiting removal rather than something to share."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/environment.ts#L181",
+      "repo": "astro",
+      "id": "c020",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "Destructuring and return-object key order and the explanatory comment; behavior is identical, and the getComponentByRoute/getModuleForRoute they call are themselves copies.",
+      "cheapFix": "Extract a shared `tryRewriteFromManifest(manifest, payload, request, getComponentByRoute)` helper.",
+      "rightFix": "Have the build environment reuse the production environment's getModuleForRoute, getComponentByRoute and tryRewrite, which read only the manifest, keeping the raw-routes rationale in one place.",
+      "confidence": "medium",
+      "note": "The build environment labels its getModuleForRoute \"Identical to the production implementation\" and its tryRewrite comment points at the production one, so three manifest-only functions are kept in sync by hand."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-css.ts#L680",
+      "repo": "astro",
+      "id": "c021",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "none (both assign `cssInfo.order = order`)",
+      "cheapFix": "Merge into `if (cssInfo.order === -1 || (order > -1 && order < cssInfo.order))`.",
+      "rightFix": "Either form is fine; the two branches read as \"unset\" and \"lower order wins\".",
+      "confidence": "high",
+      "note": "A one-line assignment guarded by two readable conditions; merging them changes nothing and arguably reads worse."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/logger/core.ts#L293",
+      "repo": "astro",
+      "id": "c022",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Share through a base class or a module-level `flushDestination(options)` function.",
+      "rightFix": "Leave as is, or shorten each to `this.options.destination.flush?.()`; the two logger classes are separate public types.",
+      "confidence": "high",
+      "note": "AstroLogger and AstroIntegrationLogger each expose a three-line flush wrapper over the same destination, which is interface boilerplate."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/logger/core.ts#L302",
+      "repo": "astro",
+      "id": "c023",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Share through a base class or a module-level `closeDestination(options)` function.",
+      "rightFix": "Leave as is, or shorten each to `this.options.destination.close?.()`.",
+      "confidence": "high",
+      "note": "The close() twin of c022: a three-line delegating wrapper repeated in two logger classes."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/messages/runtime.ts#L191",
+      "repo": "astro",
+      "id": "c024",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "Badge label and colors (green `success` vs yellow `cancelled`).",
+      "cheapFix": "Extract a `badgeMessage(badge, headline, tip?)` helper used by success, cancelled and actionRequired.",
+      "rightFix": "Same.",
+      "confidence": "medium",
+      "note": "success, cancelled and actionRequired build the same badge-headline-footer layout, and actionRequired even keeps a `.filter((v) => v !== undefined)` that only makes sense in the copies with an optional footer."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/manifest/serialized.ts#L98",
+      "repo": "astro",
+      "id": "c025",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "Callback (reloadManifest vs rebuildRoutes).",
+      "cheapFix": "Extract a `watchAll(server, callback)` helper.",
+      "rightFix": "Leave as is; three lines of Vite watcher wiring in two unrelated plugins.",
+      "confidence": "high",
+      "note": "Subscribing one handler to add, unlink and change is standard Vite plugin boilerplate."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/binding.ts#L453",
+      "repo": "excalidraw",
+      "id": "c026",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none: both arms of `isInsideBinding || isNested ? point : point` are `point`",
+      "cheapFix": "Replace the ternary with `point`.",
+      "rightFix": "Same, after confirming orbit mode is not meant to use a projected focus point; the neighbouring no-start-binding branch also uses `point` for both modes.",
+      "confidence": "medium",
+      "note": "The no-op ternary arrived in the large arrow-snapping squash commit (#9670); behavior matches the sibling branch, so it reads as an iteration leftover rather than a bug."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/cropElement.ts#L187",
+      "repo": "excalidraw",
+      "id": "c027",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none (the `w` and `e` cases are another identical pair)",
+      "cheapFix": "Stack `case \"n\": case \"s\":` over one body.",
+      "rightFix": "Same, and merge `w`/`e` the same way.",
+      "confidence": "high",
+      "note": "North and south crop handles apply the same aspect-ratio clamp and horizontal recentering, so a 20-line body is copied verbatim."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.selectionTool.ts#L137",
+      "repo": "excalidraw",
+      "id": "c028",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Merge into `if (transformHandleType === \"rotation\" || !this.app.state.croppingElementId)`.",
+      "rightFix": "Same in effect; optionally assign `pointerDownState.resize.handleType` once and guard only the setState call.",
+      "confidence": "medium",
+      "note": "The rotation branch exists only so rotation bypasses the cropping branch, and its body is identical to the default branch."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.toolDrag.ts#L229",
+      "repo": "excalidraw",
+      "id": "c029",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "addEventListener vs removeEventListener",
+      "cheapFix": "Drive both from a shared list of [event, handler, capture] tuples.",
+      "rightFix": "Leave as is, or use an AbortController for removal; matched add/remove pairs are idiomatic.",
+      "confidence": "high",
+      "note": "A mirrored add/remove listener pair is the usual way to attach and detach window handlers, so the Type-2 match is structural."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Stats/Dimension.tsx#L287",
+      "repo": "excalidraw",
+      "id": "c030",
+      "category": "inconsistent",
+      "deliberateReason": null,
+      "difference": "Members identical; but MultiDimension's typed-input path updates frame membership for every resized frame and its drag path highlights every frame, while the copied drag-finished callback only handles originalElements[0].",
+      "cheapFix": "Move handleDragFinished into Stats/utils.ts and import it in both components.",
+      "rightFix": "Share a helper that loops over all originalElements (which still covers the single-element case), so multi-selection drags commit membership for every frame and always clear elementsToHighlight. Differs from the cheap fix.",
+      "confidence": "medium",
+      "note": "Both copies came from one fix (#9568, June 2025) that pasted the single-element callback into the multi-element panel, so after a multi-selection drag only the first element's frame membership is committed and the highlight clears only if that element is a frame."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/renderer/interactiveScene.ts#L361",
+      "repo": "excalidraw",
+      "id": "c031",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none in the drawing loops; the enclosing cases differ only in deconstructDiamondElement vs deconstructRectanguloidElement.",
+      "cheapFix": "Extract a `strokeSegmentsAndCurves(context, segments, curves, offset)` helper.",
+      "rightFix": "Pick the deconstruct function by element type, then draw once; same intent as the cheap fix.",
+      "confidence": "high",
+      "note": "The diamond and default cases duplicate a 40-line segment-and-curve drawing block that differs only in which shape decomposition feeds it."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/math/src/point.ts#L89",
+      "repo": "excalidraw",
+      "id": "c032",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "Type-guard target (LocalPoint | GlobalPoint vs Vector).",
+      "cheapFix": "Extract an `isNumberPair` helper and call it from both guards.",
+      "rightFix": "Leave as is; points and vectors are separately branded tuple types in their own modules, and the runtime check matches because their shape does.",
+      "confidence": "medium",
+      "note": "Branded types with identical runtime shape necessarily get identical type guards, so the clone reflects the type design rather than copy-paste."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/config/blocks/base.ts#L32",
+      "repo": "next.js",
+      "id": "c033",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none: both arms are `['web', 'es6']`",
+      "cheapFix": "Replace the inner ternary with `['web', 'es6']`.",
+      "rightFix": "Same.",
+      "confidence": "high",
+      "note": "Until #64508 (April 2024, top-level await coverage) the client arm was `['web', 'es5']`; raising it to es6 left an edge-runtime ternary whose arms are now equal."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/plugins/devtools-ignore-list-plugin.ts#L87",
+      "repo": "next.js",
+      "id": "c034",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "Only the explanatory comment in the second branch.",
+      "cheapFix": "Merge into `if (this.options.shouldIgnorePath(path) || isWebpackRuntimeModule(path))`.",
+      "rightFix": "Either form; the separate branch exists to hold the comment explaining why webpack runtime modules are ignore-listed.",
+      "confidence": "high",
+      "note": "Two one-line `ignoreList.push(index)` branches kept apart for documentation."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/app-dir/link.tsx#L240",
+      "repo": "next.js",
+      "id": "c035",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Move isModifiedEvent to shared/lib and import it in both link components.",
+      "rightFix": "Same; the App Router link is a deliberate fork, but this helper has no router dependency and both files already share helpers such as isLocalURL and formatUrl.",
+      "confidence": "low",
+      "note": "The App Router `<Link>` was forked from the Pages Router one, and the modifier-key check is byte-identical, including the legacy `nativeEvent.which === 2` test, so any fix would need to land twice."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/scheduler.ts#L1735",
+      "repo": "next.js",
+      "id": "c036",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "Only the comments describing each fetch strategy.",
+      "cheapFix": "Stack `case FetchStrategy.PPRRuntime: case FetchStrategy.Full:` over one call.",
+      "rightFix": "Leave as is; each case documents a different strategy and passes `fetchStrategy` through, so the shared logic is already factored into one function.",
+      "confidence": "high",
+      "note": "Both strategies call pingRouteTreeAndIncludeDynamicData with the same arguments; the duplication is one call kept separate for documentation."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/generate-agent-files.ts#L135",
+      "repo": "next.js",
+      "id": "c037",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "Block builder (buildAgentRulesBlock vs buildAgentFeedbackBlock) and upsert function (upsertFile vs upsertFeedbackFile).",
+      "cheapFix": "Extract `writeManagedBlock(projectDir, block, upsert)` and call it from both writers.",
+      "rightFix": "Same, and fold upsertFile/upsertFeedbackFile into one marker-parameterized upsert (the rules variant only adds legacy-marker stripping).",
+      "confidence": "medium",
+      "note": "The rules and feedback writers, and their has*/upsert* helpers, are parallel copies over the same AGENTS.md, and the upsert helpers have already drifted slightly (only the generic one searches for the end marker after the start marker)."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/router-utils/filesystem.ts#L102",
+      "repo": "next.js",
+      "id": "c038",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "Local variable name (routeRegex vs regex).",
+      "cheapFix": "Export buildFilesystemDynamicRoute from filesystem.ts and use it in setup-dev-bundler's map.",
+      "rightFix": "Same.",
+      "confidence": "high",
+      "note": "setup-dev-bundler rebuilds fsChecker.dynamicRoutes with an inline copy of the function filesystem.ts already uses for the same FilesystemDynamicRoute objects, so the regex options can drift between dev and the filesystem checker."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/request/cookies.ts#L277",
+      "repo": "next.js",
+      "id": "c039",
+      "category": "accidental",
+      "deliberateReason": null,
+      "difference": "API name in the warning message (`...cookies()` vs `...headers()`).",
+      "cheapFix": "Move a `createIteratorWarningDescriptor(target, route, warn, expression)` factory into server/request/utils.ts.",
+      "rightFix": "Same, covering replaceableWarningDescriptor too, since the whole dev-warning instrumentation is parallel across cookies.ts and headers.ts.",
+      "confidence": "medium",
+      "note": "cookies.ts and headers.ts carry parallel sync-access warning shims that differ only in the API name; it is transitional compatibility code, which lowers but does not remove the payoff."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/commands/replaceCommand.ts#L158",
+      "repo": "vscode",
+      "id": "c040",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Extract a shared `cursorAtEndOfFirstInverseEdit(helper)` function or base class.",
+      "rightFix": "Leave as is; each ICommand class in the file owns a three-line computeCursorState and the classes are otherwise unrelated.",
+      "confidence": "high",
+      "note": "ReplaceCommand and ReplaceOvertypeCommandOnCompositionEnd both place the cursor at the end of the edit with a three-line interface method."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/stringEdit.ts#L125",
+      "repo": "vscode",
+      "id": "c041",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "none in code; only the second branch keeps a stale comment about checking the sorted/disjoint invariant.",
+      "cheapFix": "Fold `!baseEdit` into the \"our edit starts first\" condition, which requires reordering it around the intervening conflict check.",
+      "rightFix": "Leave the ordered merge-loop branches separate and delete the stale comment. Differs from the cheap fix.",
+      "confidence": "medium",
+      "note": "A January 2026 fix (148bbfd) added a lastEndEx guard to both branches and #291840 replaced it the next day with stronger conflict detection, removing it from both; the branches stayed consistent but one kept a comment describing a check that no longer exists."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorMoveCommands.ts#L18",
+      "repo": "vscode",
+      "id": "c042",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "MoveOperations.translateDown vs translateUp",
+      "cheapFix": "Extract a helper that takes the translate function.",
+      "rightFix": "Leave as is; vscode's cursor code keeps mirrored up/down operations side by side.",
+      "confidence": "medium",
+      "note": "addCursorDown and addCursorUp are mirror images differing in one call, matching the directional pairs used throughout the cursor commands."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorMoveOperations.ts#L229",
+      "repo": "vscode",
+      "id": "c043",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "MoveOperations.down vs MoveOperations.up (plus a blank line)",
+      "cheapFix": "Extract a helper that takes the move function.",
+      "rightFix": "Leave as is; a mirrored directional pair.",
+      "confidence": "medium",
+      "note": "translateDown and translateUp are the primitives behind c042 and mirror each other the same way."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorWordOperations.ts#L606",
+      "repo": "vscode",
+      "id": "c044",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "_moveWordPartLeft vs _moveWordPartRight",
+      "cheapFix": "Extract a helper that takes the move function.",
+      "rightFix": "Leave as is; a nine-line mirrored left/right pair.",
+      "confidence": "medium",
+      "note": "Delete-word-part left and right differ only in direction, following the left/right pairs throughout WordOperations."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsImpl.ts#L344",
+      "repo": "vscode",
+      "id": "c045",
+      "category": "deliberate",
+      "deliberateReason": "parallel-structure",
+      "difference": "Regex (reversed vs forward), finder (findPrevBracketInRange vs findNextBracketInRange) and offset update (searchEndOffset = r.startColumn - 1 vs searchStartOffset = r.endColumn - 1); the shared count++/count-- is correct because count starts at -1 vs 1.",
+      "cheapFix": "Extract one search helper parameterized by regex, finder and offset update.",
+      "rightFix": "Leave as is; three direction-specific pieces would need parameterizing inside a hot search loop, and the mirrored closures are easier to verify.",
+      "confidence": "medium",
+      "note": "The up and down bracket searches are mirrored closures inside _findMatchingBracketUp/Down; the identical increment logic looks suspicious but is correct given the opposite starting counts."
+    },
+    {
+      "kind": "clone",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModelEventDispatcher.ts#L457",
+      "repo": "vscode",
+      "id": "c046",
+      "category": "trivial",
+      "deliberateReason": null,
+      "difference": "none",
+      "cheapFix": "Extract a shared `mergeIfSameKind` helper or base class.",
+      "rightFix": "Leave as is; each outgoing event class states its own merge policy (several return null, ScrollChanged combines), and stateless events merge by kind.",
+      "confidence": "high",
+      "note": "ViewZonesChanged, HiddenAreasChanged and ReadOnlyEditAttempt share a four-line \"merge with same kind\" method required by the event interface."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L1",
+      "repo": "zod",
+      "id": "e001",
+      "category": "dead",
+      "evidence": "No file in the clone imports zsf.ts or mentions any $ZSF name; v4/core/index.ts does not re-export it and neither package.json nor jsr.json exposes it.",
+      "confidence": "high",
+      "note": "An experimental 'Zod Serialization Format' type sketch, mostly commented out; the whole file can go."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L14",
+      "repo": "zod",
+      "id": "e002",
+      "category": "dead",
+      "evidence": "`$ZSFString` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L23",
+      "repo": "zod",
+      "id": "e003",
+      "category": "dead",
+      "evidence": "`$ZSFNumber` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L31",
+      "repo": "zod",
+      "id": "e004",
+      "category": "dead",
+      "evidence": "`$ZSFBoolean` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L35",
+      "repo": "zod",
+      "id": "e005",
+      "category": "dead",
+      "evidence": "`$ZSFNull` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L39",
+      "repo": "zod",
+      "id": "e006",
+      "category": "dead",
+      "evidence": "`$ZSFUndefined` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L43",
+      "repo": "zod",
+      "id": "e007",
+      "category": "dead",
+      "evidence": "`$ZSFOptional` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L48",
+      "repo": "zod",
+      "id": "e008",
+      "category": "dead",
+      "evidence": "`$ZSFNever` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L52",
+      "repo": "zod",
+      "id": "e009",
+      "category": "dead",
+      "evidence": "`$ZSFAny` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L57",
+      "repo": "zod",
+      "id": "e010",
+      "category": "dead",
+      "evidence": "`$ZSFEnum` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L62",
+      "repo": "zod",
+      "id": "e011",
+      "category": "dead",
+      "evidence": "`$ZSFArray` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L75",
+      "repo": "zod",
+      "id": "e012",
+      "category": "dead",
+      "evidence": "`$ZSFObject` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L96",
+      "repo": "zod",
+      "id": "e013",
+      "category": "dead",
+      "evidence": "`$ZSFUnion` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L101",
+      "repo": "zod",
+      "id": "e014",
+      "category": "dead",
+      "evidence": "`$ZSFIntersection` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L106",
+      "repo": "zod",
+      "id": "e015",
+      "category": "dead",
+      "evidence": "`$ZSFMap` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/zsf.ts#L112",
+      "repo": "zod",
+      "id": "e016",
+      "category": "dead",
+      "evidence": "`$ZSFConditional` appears only at its declaration in packages/zod/src/v4/core/zsf.ts, a file nothing imports or re-exports.",
+      "confidence": "high",
+      "note": "Not referenced by any other interface in the file either, so it goes with the file."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/client/types.ts#L273",
+      "repo": "hono",
+      "id": "e017",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in src/client/types.ts; src/client/index.ts re-exports InferRequestType and its siblings but not this, and client/types is not a subpath in package.json or jsr.json.",
+      "confidence": "high",
+      "note": "Looks like a sibling of InferRequestType that was never wired into the public client index."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/helper/css/common.ts#L21",
+      "repo": "hono",
+      "id": "e018",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in src/helper/css/common.ts; neither helper/css/index.ts nor jsx/dom/css.ts re-exports it.",
+      "confidence": "high",
+      "note": "Superseded by the module-private CSS_ESCAPED symbol that rawCssString actually uses."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/helper/ssg/middleware.ts#L13",
+      "repo": "hono",
+      "id": "e019",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in src/helper/ssg/middleware.ts; helper/ssg/index.ts re-exports selected middleware names and leaves it out.",
+      "confidence": "high",
+      "note": "Marked @deprecated ('will be removed in the next minor version'); its IIFE builds a Response at import time but nothing reads it."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L257",
+      "repo": "hono",
+      "id": "e020",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'title'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L272",
+      "repo": "hono",
+      "id": "e021",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'script'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L284",
+      "repo": "hono",
+      "id": "e022",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'style'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L298",
+      "repo": "hono",
+      "id": "e023",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'link'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L314",
+      "repo": "hono",
+      "id": "e024",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'meta'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L319",
+      "repo": "hono",
+      "id": "e025",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'form'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L423",
+      "repo": "hono",
+      "id": "e026",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'input'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L426",
+      "repo": "hono",
+      "id": "e027",
+      "category": "dynamic",
+      "evidence": "src/jsx/dom/jsx-dev-runtime.ts does `import * as intrinsicElementTags from './intrinsic-element/components'` and swaps the tag for intrinsicElementTags[tag] when the JSX tag string is 'button'.",
+      "confidence": "high",
+      "note": "The export name has to match the HTML tag name; the same file also registers the component into domRenderers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L121",
+      "repo": "hono",
+      "id": "e028",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'title', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <title>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L136",
+      "repo": "hono",
+      "id": "e029",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'script', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <script>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L151",
+      "repo": "hono",
+      "id": "e030",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'style', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <style>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L162",
+      "repo": "hono",
+      "id": "e031",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'link', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <link>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L171",
+      "repo": "hono",
+      "id": "e032",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'meta', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <meta>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L182",
+      "repo": "hono",
+      "id": "e033",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'form', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <form>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L207",
+      "repo": "hono",
+      "id": "e034",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'input', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <input>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/intrinsic-element/components.ts#L209",
+      "repo": "hono",
+      "id": "e035",
+      "category": "dynamic",
+      "evidence": "src/jsx/base.ts namespace-imports './intrinsic-element/components' and jsxFn looks up intrinsicElementTags[tag] by the tag string 'button', also attaching DOM_RENDERER to it by key.",
+      "confidence": "high",
+      "note": "Removing the export would silently stop server JSX from special-casing <button>."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/language/language.ts#L202",
+      "repo": "hono",
+      "id": "e036",
+      "category": "public-api",
+      "evidence": "No reference anywhere in the repo, and npm's ./language entry (middleware/language/index.ts) omits it, but jsr.json maps ./language straight to src/middleware/language/language.ts, which publishes every export of that file.",
+      "confidence": "medium",
+      "note": "Public on JSR only; for npm consumers it is unreachable, so the two entry maps disagree."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/http-status.ts#L58",
+      "repo": "hono",
+      "id": "e037",
+      "category": "public-api",
+      "evidence": "No in-repo reference; it is a @deprecated alias of UnofficialStatusCode in src/utils/http-status.ts, which package.json exposes via ./utils/* and jsr.json lists as ./utils/http-status.",
+      "confidence": "high",
+      "note": "Kept so code using the old misspelled name still compiles; removing it is a breaking change."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/types.ts#L10",
+      "repo": "hono",
+      "id": "e038",
+      "category": "public-api",
+      "evidence": "No reference anywhere (tests use Expect and Equal but never NotEqual); src/utils/types.ts is exposed via the ./utils/* wildcard and listed explicitly as ./utils/types in jsr.json.",
+      "confidence": "medium",
+      "note": "A type-assertion helper published with the types utility module; unused internally but importable by consumers."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/links/internals/httpUtils.ts#L135",
+      "repo": "trpc",
+      "id": "e039",
+      "category": "analysis-miss",
+      "evidence": "packages/client/src/links/httpBatchStreamLink.ts imports getBody from './internals/httpUtils' (line 15) and passes it to fetchHTTPResponse (line 85); httpUtils.ts also uses it in jsonHttpRequester.",
+      "confidence": "high",
+      "note": "Live, imported export; the analysis failed to resolve the httpBatchStreamLink.ts import."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/next/src/app-dir/shared.ts#L43",
+      "repo": "trpc",
+      "id": "e040",
+      "category": "dead",
+      "evidence": "The only other mention is a commented-out line in packages/next/src/app-dir/client.ts (`// const useProxy = createUseProxy<TRouter>(client);`); app-dir/shared.ts is not an export subpath.",
+      "confidence": "high",
+      "note": "Leftover of an abandoned experimental app-dir `use` proxy API."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/next/src/app-dir/shared.ts#L84",
+      "repo": "trpc",
+      "id": "e041",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/next/src/app-dir/shared.ts; nothing imports it and app-dir/client.ts and server.ts do not re-export it.",
+      "confidence": "high",
+      "note": "Part of the same abandoned `use` proxy API as createUseProxy."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/aws-lambda/getPlanner.ts#L13",
+      "repo": "trpc",
+      "id": "e042",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/server/src/adapters/aws-lambda/getPlanner.ts; aws-lambda/index.ts imports only inferAPIGWReturn, LambdaEvent and getPlanner and re-exports none of them.",
+      "confidence": "high",
+      "note": "Superseded by the inferAPIGWReturn conditional type."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/actions/runtime/entrypoints/server.ts#L23",
+      "repo": "astro",
+      "id": "e043",
+      "category": "public-api",
+      "evidence": "vite-plugin-actions.ts:151 serves `export * from 'astro/actions/runtime/entrypoints/server.js'` as the astro:actions virtual module, types/actions.d.ts declares the same, and test/fixtures/actions/src/pages/get-action-path.astro imports getActionPath from astro:actions.",
+      "confidence": "high",
+      "note": "Documented astro:actions API, reached through a virtual module and the ./actions/runtime/entrypoints/* subpath."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/cache/handler.ts#L160",
+      "repo": "astro",
+      "id": "e044",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/astro/src/core/cache/handler.ts; no Pipeline bridge or other file references it or any compiledCacheRoutes setter.",
+      "confidence": "high",
+      "note": "Its doc comment says it exists for a transitional Pipeline bridge that no longer calls it."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/prefetch/index.ts#L34",
+      "repo": "astro",
+      "id": "e045",
+      "category": "dynamic",
+      "evidence": "vite-plugin-prefetch.ts injects the page script string `import { init } from 'astro/virtual-modules/prefetch.js';init()`, and virtual-modules/prefetch.ts re-exports prefetch/index.js.",
+      "confidence": "high",
+      "note": "Called only from generated code; client.d.ts exposes just prefetch from astro:prefetch, so init is not user API."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/apps/audit/rules/index.ts#L75",
+      "repo": "astro",
+      "id": "e046",
+      "category": "dead",
+      "evidence": "The only other hits are an unrelated categoryLabel data field in test/units/content-layer/live-loaders.test.ts; nothing in the dev toolbar imports it.",
+      "confidence": "high",
+      "note": "Reachable only because ./runtime/* exposes the whole internal runtime folder."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/escape.ts#L101",
+      "repo": "astro",
+      "id": "e047",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in src/runtime/server/escape.ts; runtime/server/index.ts re-exports HTMLBytes and isHTMLString but not isHTMLBytes.",
+      "confidence": "high",
+      "note": "The runtime folder is reachable via ./runtime/*, but runtime/server/index.ts itself says it is internal API."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/index.ts#L66",
+      "repo": "astro",
+      "id": "e048",
+      "category": "dynamic",
+      "evidence": "packages/integrations/mdx/src/vite-plugin-mdx-postprocess.ts appends the code string `import { __astro_tag_component__ } from 'astro/runtime/server/index.js'` plus a call to it into compiled MDX modules.",
+      "confidence": "high",
+      "note": "Its JSDoc points at the MDX plugin; removing it breaks renderer tagging for MDX content."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/render/astro/factory.ts#L23",
+      "repo": "astro",
+      "id": "e049",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in src/runtime/server/render/astro/factory.ts; no file calls it.",
+      "confidence": "high",
+      "note": "Head propagation now goes through core/head-propagation/resolver.ts directly."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/render/head-propagation/runtime.ts#L15",
+      "repo": "astro",
+      "id": "e050",
+      "category": "dead",
+      "evidence": "The importers of head-propagation/runtime.ts (component.ts, common.ts, astro/render.ts, astro/instance.ts and runtime.test.ts) use other helpers; the other getPropagationHint hits are separate functions in core/head-propagation/resolver.ts and factory.ts.",
+      "confidence": "medium",
+      "note": "Its doc says 'used by runtime adapters' but no adapter in the monorepo imports it; outside use via ./runtime/* is possible but that path is internal."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/transitions/swap-functions.ts#L352",
+      "repo": "astro",
+      "id": "e051",
+      "category": "public-api",
+      "evidence": "vite-plugin-transitions.ts:48 builds astro:transitions/client with `export { swapFunctions } from 'astro/virtual-modules/transitions-swap-functions.js'`, types/transitions.d.ts declares it, and e2e view-transitions fixtures import it.",
+      "confidence": "high",
+      "note": "Documented view-transitions API for writing custom swaps."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/container.ts#L18",
+      "repo": "astro",
+      "id": "e052",
+      "category": "public-api",
+      "evidence": "container/vite-plugin-container.ts resolves astro:container to astro/virtual-modules/container.js, client.d.ts re-exports it, and examples/container-with-vitest/test/ReactWrapper.test.ts imports loadRenderers from 'astro:container'.",
+      "confidence": "high",
+      "note": "Documented Container API helper for Vite/Vitest users."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L62",
+      "repo": "astro",
+      "id": "e053",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; test/fixtures/i18n-client-import and i18n-css-leak-basic import it from astro:i18n.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { getRelativeLocaleUrl } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L101",
+      "repo": "astro",
+      "id": "e054",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; types/public/config.ts documents it.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { getAbsoluteLocaleUrl } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L123",
+      "repo": "astro",
+      "id": "e055",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; no fixture uses it, but its JSDoc documents it as astro:i18n API.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { getRelativeLocaleUrlList } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L142",
+      "repo": "astro",
+      "id": "e056",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; e2e/fixtures/cloudflare and the cloudflare integration's vite-plugin fixture import it from astro:i18n.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { getAbsoluteLocaleUrlList } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L186",
+      "repo": "astro",
+      "id": "e057",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; the same-named hits in src/i18n are internal helpers it wraps.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { getPathByLocale } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L218",
+      "repo": "astro",
+      "id": "e058",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; e2e/fixtures/i18n/src/pages/index.astro imports it from astro:i18n.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { getLocaleByPath } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L252",
+      "repo": "astro",
+      "id": "e059",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; the same-named hits in src/i18n are internal helpers.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { pathHasLocale } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L434",
+      "repo": "astro",
+      "id": "e060",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; the same-named hits in src/i18n are internal helpers it aliases.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { normalizeTheLocale } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L469",
+      "repo": "astro",
+      "id": "e061",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; the same-named hits in src/i18n are internal helpers it aliases.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { toCodes } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/virtual-modules/i18n.ts#L503",
+      "repo": "astro",
+      "id": "e062",
+      "category": "public-api",
+      "evidence": "i18n/vite-plugin-i18n.ts resolves astro:i18n to astro/virtual-modules/i18n.js and client.d.ts declares astro:i18n as `export * from 'astro/virtual-modules/i18n.js'`; the same-named hits in src/i18n are internal helpers it aliases.",
+      "confidence": "high",
+      "note": "Documented astro:i18n function (its JSDoc shows `import { toPaths } from \"astro:i18n\"`)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-astro-server/resolve.ts#L1",
+      "repo": "astro",
+      "id": "e063",
+      "category": "dead",
+      "evidence": "No file imports vite-plugin-astro-server/resolve(.js); the listed mentions are the ordinary word 'resolve' in container/environment.ts, container/index.ts and a test.",
+      "confidence": "high",
+      "note": "Its only export, createResolve, is unused, and the folder is not under any export subpath."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-astro-server/resolve.ts#L4",
+      "repo": "astro",
+      "id": "e064",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/astro/src/vite-plugin-astro-server/resolve.ts, a file nothing imports.",
+      "confidence": "high",
+      "note": "Goes with the file (e063)."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/common/src/utility-types.ts#L30",
+      "repo": "excalidraw",
+      "id": "e065",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/common/src/utility-types.ts; common/src/index.ts does not re-export utility-types.",
+      "confidence": "medium",
+      "note": "Type-importable through @excalidraw/common's ./* wildcard, which exists so sibling packages' emitted .d.ts paths resolve, not as a curated API."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/common/src/utility-types.ts#L58",
+      "repo": "excalidraw",
+      "id": "e066",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in utility-types.ts; its neighbour ReadonlySetLike is imported by packages/element/src/frame.ts, SetLike is not.",
+      "confidence": "medium",
+      "note": "Same wildcard caveat as NonOptional: importable as a type, but nothing documents or uses it."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionCanvas.tsx#L47",
+      "repo": "excalidraw",
+      "id": "e067",
+      "category": "unnecessary-export",
+      "evidence": "Its re-export in actions/index.ts is never imported by name; the action registers itself via register() at import time and components/main-menu/DefaultItems.tsx renders it by name with renderAction(\"changeViewBackgroundColor\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export (and its re-export in actions/index.ts) is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFrame.ts#L104",
+      "repo": "excalidraw",
+      "id": "e068",
+      "category": "dead",
+      "evidence": "Registered via register() as \"updateFrameRendering\", but nothing renders, executes or looks up that action name (no keyTest, not in the command palette or context menus); App's updateFrameRendering method is unrelated.",
+      "confidence": "medium",
+      "note": "The registry entry is never read, so deleting it should change nothing; medium because registry-driven code is easy to miss."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionNavigate.tsx#L21",
+      "repo": "excalidraw",
+      "id": "e069",
+      "category": "unnecessary-export",
+      "evidence": "Its re-export in actions/index.ts is never imported by name; the action registers itself via register() at import time and components/UserList.tsx renders it by name with renderAction(\"goToCollaborator\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export (and its re-export in actions/index.ts) is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L708",
+      "repo": "excalidraw",
+      "id": "e070",
+      "category": "unnecessary-export",
+      "evidence": "Its re-export in actions/index.ts is never imported by name; the action registers itself via register() at import time and components/Actions.tsx renders it by name with renderAction(\"changeStrokeWidth\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export (and its re-export in actions/index.ts) is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L820",
+      "repo": "excalidraw",
+      "id": "e071",
+      "category": "unnecessary-export",
+      "evidence": "Its re-export in actions/index.ts is never imported by name; the action registers itself via register() at import time and components/Actions.tsx renders it by name with renderAction(\"changeFreedrawMode\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export (and its re-export in actions/index.ts) is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L901",
+      "repo": "excalidraw",
+      "id": "e072",
+      "category": "unnecessary-export",
+      "evidence": "Not imported or re-exported anywhere; the action registers itself via register() at import time and components/Actions.tsx renders it by name with renderAction(\"changeStrokeStyle\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L956",
+      "repo": "excalidraw",
+      "id": "e073",
+      "category": "unnecessary-export",
+      "evidence": "Its re-export in actions/index.ts is never imported by name; the action registers itself via register() at import time and components/Actions.tsx renders it by name with renderAction(\"changeOpacity\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export (and its re-export in actions/index.ts) is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L1648",
+      "repo": "excalidraw",
+      "id": "e074",
+      "category": "unnecessary-export",
+      "evidence": "Its re-export in actions/index.ts is never imported by name; the action registers itself via register() at import time and components/Actions.tsx renders it by name with renderAction(\"changeVerticalAlign\").",
+      "confidence": "high",
+      "note": "Live through the action registry, so only the export (and its re-export in actions/index.ts) is unneeded."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/types.ts#L43",
+      "repo": "excalidraw",
+      "id": "e075",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/excalidraw/actions/types.ts.",
+      "confidence": "medium",
+      "note": "Type-importable via @excalidraw/excalidraw's types-only ./* wildcard, but undocumented and unused."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/clipboard.ts#L62",
+      "repo": "excalidraw",
+      "id": "e076",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/excalidraw/clipboard.ts; its WriteText and Blob siblings are imported elsewhere, ReadText is not.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/icons.tsx#L622",
+      "repo": "excalidraw",
+      "id": "e077",
+      "category": "dead",
+      "evidence": "No file imports `palette` from components/icons (an import scan found none); the other hits are unrelated ColorPicker props and variables.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/icons.tsx#L950",
+      "repo": "excalidraw",
+      "id": "e078",
+      "category": "dead",
+      "evidence": "No file imports `start` from components/icons; the other hits are the English word or unrelated `start` bindings.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/icons.tsx#L978",
+      "repo": "excalidraw",
+      "id": "e079",
+      "category": "dead",
+      "evidence": "No file imports `clone` from components/icons; the other hits are prose or unrelated variables in packages/element.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/icons.tsx#L1871",
+      "repo": "excalidraw",
+      "id": "e080",
+      "category": "dead",
+      "evidence": "No file imports `eraser` from components/icons; the other hits are the 'eraser' tool type and i18n keys.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/icons.tsx#L2077",
+      "repo": "excalidraw",
+      "id": "e081",
+      "category": "dead",
+      "evidence": "The only other mention is a commented-out `// icon: MagicIconThin,` in components/CommandPalette/CommandPalette.tsx.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/icons.tsx#L2477",
+      "repo": "excalidraw",
+      "id": "e082",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/excalidraw/components/icons.tsx.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/JSONExportDialog.tsx#L24",
+      "repo": "excalidraw",
+      "id": "e083",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/excalidraw/components/JSONExportDialog.tsx.",
+      "confidence": "medium",
+      "note": "Type-importable via the types-only ./* wildcard, but nothing uses or documents it."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Paragraph.tsx#L1",
+      "repo": "excalidraw",
+      "id": "e084",
+      "category": "dead",
+      "evidence": "No file imports Paragraph or components/Paragraph.tsx; it is the file's only export.",
+      "confidence": "high",
+      "note": "The whole file is unused."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/types.ts#L16",
+      "repo": "excalidraw",
+      "id": "e085",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in components/TTDDialog/types.ts; index.tsx re-exports TTDPersistenceAdapter, SavedChat and SavedChats from that file but not MermaidData.",
+      "confidence": "medium",
+      "note": "Type-importable via the types-only ./* wildcard, but not part of the curated re-exports."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/data/ai/types.ts#L1",
+      "repo": "excalidraw",
+      "id": "e086",
+      "category": "dead",
+      "evidence": "No file imports data/ai/types.ts or mentions OpenAIInput (or its sibling OpenAIOutput).",
+      "confidence": "high",
+      "note": "A type-only namespace mirroring OpenAI SDK types; the whole file is unused."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/data/blob.ts#L298",
+      "repo": "excalidraw",
+      "id": "e087",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/excalidraw/data/blob.ts; index.tsx re-exports other blob helpers but not this one.",
+      "confidence": "high",
+      "note": "@excalidraw/excalidraw's ./* subpath is types-only, so consumers cannot import this value at runtime either."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/utils/src/shape.ts#L364",
+      "repo": "excalidraw",
+      "id": "e088",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/utils/src/shape.ts; utils/src/index.ts re-exports only ./export and two element helpers.",
+      "confidence": "high",
+      "note": "@excalidraw/utils' ./* wildcard is types-only, so the function is not importable at runtime."
+    },
+    {
+      "kind": "export",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/utils/src/shape.ts#L509",
+      "repo": "excalidraw",
+      "id": "e089",
+      "category": "dead",
+      "evidence": "Only occurrence is the declaration in packages/utils/src/shape.ts; utils/src/index.ts does not re-export shape.ts.",
+      "confidence": "high",
+      "note": "@excalidraw/utils' ./* wildcard is types-only, so the function is not importable at runtime."
+    }
+  ],
+  "method": "First pass: one Claude subagent per kind classified every sampled site from the worksheets (out/dead-code/worksheet-<kind>.md) and the repo files, read-only. Second pass: a separate Claude subagent labelled a seeded subset of 20 per kind (dead-code-sample.cjs --print, seed 7) blind, without access to the first pass. Both raters are Claude models, so agreement measures how consistently the codebook applies, not human judgment.",
+  "missingKinds": [],
+  "secondRater": {
+    "u002": {
+      "category": "intentional",
+      "note": "Second type parameter of the exported objectUtil.addQuestionMarks is kept so existing two-argument usages still typecheck (API-compat type param)."
+    },
+    "u006": {
+      "category": "intentional",
+      "note": "Empty catch around Number() coercion; the `_` binding is a style placeholder."
+    },
+    "u007": {
+      "category": "intentional",
+      "note": "`_ctx` is the parse callback's second parameter, unused in this schema; signature placeholder."
+    },
+    "u009": {
+      "category": "intentional",
+      "note": "`_ctx` placeholder in the enum parse callback signature."
+    },
+    "u025": {
+      "category": "intentional",
+      "note": "`using _finally` exists only for its disposal side effect (completes the observer); the binding is required by `using`."
+    },
+    "u029": {
+      "category": "intentional",
+      "note": "Tuple destructuring with `_`-prefixed name to skip the first element and read `info`."
+    },
+    "u031": {
+      "category": "intentional",
+      "note": "Positional `infer _TOutputIn` needed to match the generic's arity in a conditional type."
+    },
+    "u033": {
+      "category": "intentional",
+      "note": "Unique-symbol constant used only via `typeof` to brand TypeError; type-level trick."
+    },
+    "u040": {
+      "category": "intentional",
+      "note": "Destructuring omit: `processing` is stripped so `...info` excludes the promise, as the comment says."
+    },
+    "u042": {
+      "category": "intentional",
+      "note": "`_pattern` skips the middle tuple element; the bundled path only needs define and the env value."
+    },
+    "u045": {
+      "category": "intentional",
+      "note": "`_ssr` kept for backward compatibility of the mixed module graph API; comment explains it is no longer needed."
+    },
+    "u048": {
+      "category": "intentional",
+      "note": "Destructuring omit: `include`/`exclude` are Vite dev-watch options removed so they are not spread into chokidar options."
+    },
+    "u052": {
+      "category": "intentional",
+      "note": "`_` placeholder for the unused key when iterating Object.entries."
+    },
+    "u057": {
+      "category": "intentional",
+      "note": "Unused catch binding; the error is replaced with a generic one by design."
+    },
+    "u060": {
+      "category": "intentional",
+      "note": "Compiler-emitted call passes the SSR result; parameter kept for the call signature."
+    },
+    "u069": {
+      "category": "intentional",
+      "note": "Destructuring omit with `...ret` rest sibling to strip non-UI app state."
+    },
+    "u073": {
+      "category": "leftover",
+      "note": "Type-only import of `__ApiPreviewProps` is never referenced in the file; safe to delete."
+    },
+    "u077": {
+      "category": "intentional",
+      "note": "Type-only conformance check documented in the comment; never meant to be read."
+    },
+    "u094": {
+      "category": "intentional",
+      "note": "Empty `acceptVersionId(_versionId)` implements the lines-collection interface in the identity collection."
+    },
+    "u095": {
+      "category": "intentional",
+      "note": "Unused min/max line params keep the interface signature of getActiveIndentGuide."
+    },
+    "d002": {
+      "category": "leftover",
+      "note": "`methodUpperCase` is recomputed identically before its first read, so the initial computation is wasted."
+    },
+    "d003": {
+      "category": "leftover",
+      "note": "`resArray` initializer is overwritten on every path through the try/catch."
+    },
+    "d005": {
+      "category": "intentional",
+      "note": "`next = null` clears the reference for GC inside the subscription loop, as the comment says."
+    },
+    "d006": {
+      "category": "intentional",
+      "note": "`result = null` clears the reference for GC between iterations, documented."
+    },
+    "d007": {
+      "category": "intentional",
+      "note": "`chunk = null` frees the yielded chunk for GC; comment explains why the vars live outside the loop."
+    },
+    "d010": {
+      "category": "leftover",
+      "note": "`stdout` initializer is overwritten in both try and catch."
+    },
+    "d012": {
+      "category": "leftover",
+      "note": "`entries = []` is overwritten by every branch of the if/else chain (or a throw)."
+    },
+    "d013": {
+      "category": "leftover",
+      "note": "`imports = []` is overwritten in try, and the catch returns."
+    },
+    "d019": {
+      "category": "leftover",
+      "note": "`prefix = ''` initializer is overwritten by every branch."
+    },
+    "d024": {
+      "category": "leftover",
+      "note": "`staticPaths = []` is overwritten by the getStaticPaths call (or a throw) before any read."
+    },
+    "d031": {
+      "category": "leftover",
+      "note": "`deltaY = 0` is overwritten in both branches of the discrete-angle if/else."
+    },
+    "d033": {
+      "category": "leftover",
+      "note": "`maxHeight` initial value is never read; it is only read inside the container branch after reassignment."
+    },
+    "d036": {
+      "category": "leftover",
+      "note": "`isExternal = false` is only read inside the `!isRelative` block, where try and catch both assign it."
+    },
+    "d037": {
+      "category": "leftover",
+      "note": "`iconMarkIndex = -1` is either returned past or overwritten in the try before any read."
+    },
+    "d038": {
+      "category": "leftover",
+      "note": "`conflictingPageChange = 0` is overwritten at its only computation before the read."
+    },
+    "d040": {
+      "category": "leftover",
+      "note": "`validProps = []` is overwritten in both the page and layout branches."
+    },
+    "d045": {
+      "category": "leftover",
+      "note": "`nodeEnd = 0` top-of-function initializer is always overwritten in the loop before being read."
+    },
+    "d047": {
+      "category": "leftover",
+      "note": "Final `resultLen =` assignment before `return result`; the count is unused, kept only for symmetry with the other calls."
+    },
+    "d048": {
+      "category": "leftover",
+      "note": "`midStop = 0` initializer is overwritten in the loop before every read."
+    },
+    "d049": {
+      "category": "leftover",
+      "note": "`value += '\\n'` mutates a local string parameter; both callers append the newline themselves when this returns true, so no behavioral effect."
+    },
+    "c001": {
+      "category": "inconsistent",
+      "note": "bigint too_small branch copies the number message (\"Number must be\") while the too_big bigint branch says \"BigInt must be\"; stale copy-paste label."
+    },
+    "c002": {
+      "category": "deliberate",
+      "note": "Per-class `_parse` for symbol/undefined/null/void in frozen v3; parallel structure across primitive classes."
+    },
+    "c006": {
+      "category": "trivial",
+      "note": "Ternary returns the same Hebrew phrase for set and array (the noun is masculine either way); a harmless no-op conditional."
+    },
+    "c007": {
+      "category": "deliberate",
+      "note": "One error-map function per locale file (ne vs tg)."
+    },
+    "c008": {
+      "category": "deliberate",
+      "note": "Parallel before-request/after-response hook combinators typed per hook kind (Request vs Response instanceof); sharing would need a generic with a constructor parameter."
+    },
+    "c009": {
+      "category": "accidental",
+      "note": "Token-identical unauthorizedResponse in jwk and jwt middleware (comments included); jwk already depends on jwt utilities, so this could be shared."
+    },
+    "c011": {
+      "category": "accidental",
+      "note": "Identical infinite-query queryFn closures in usePrefetchInfiniteQuery and useSuspenseInfiniteQuery; the useInfiniteQuery copy has already drifted (`{ signal: null }` vs `{}`)."
+    },
+    "c017": {
+      "category": "trivial",
+      "note": "Separate `return` cases in a switch, each with its own documented reason; idiomatic."
+    },
+    "c018": {
+      "category": "trivial",
+      "note": "Same switch: separate documented `return` cases for different parser error codes."
+    },
+    "c020": {
+      "category": "deliberate",
+      "note": "Build and production environments' tryRewrite mirror each other on purpose, with comments cross-referencing each other."
+    },
+    "c021": {
+      "category": "trivial",
+      "note": "Two one-line `cssInfo.order = order` branches that could be merged with `||`; tiny."
+    },
+    "c022": {
+      "category": "trivial",
+      "note": "Three-line flush delegation repeated in two logger classes."
+    },
+    "c023": {
+      "category": "trivial",
+      "note": "Three-line close delegation repeated in two logger classes."
+    },
+    "c024": {
+      "category": "trivial",
+      "note": "Small badge-message formatters (success/cancelled) differing only in colour and label; not worth a helper."
+    },
+    "c025": {
+      "category": "trivial",
+      "note": "Three watcher.on lines wiring a different callback in each plugin's configureServer."
+    },
+    "c028": {
+      "category": "trivial",
+      "note": "Rotation and default branches both setState and set the handle type; the cropping exception in between makes the explicit ordering readable."
+    },
+    "c035": {
+      "category": "accidental",
+      "note": "Token-identical isModifiedEvent in app-router and pages-router Link; could live in a shared util."
+    },
+    "c036": {
+      "category": "deliberate",
+      "note": "PPRRuntime and Full cases make the same call but are documented as distinct strategies, and fetchStrategy is passed through."
+    },
+    "c037": {
+      "category": "accidental",
+      "note": "writeAgentFiles and writeAgentFeedbackFiles differ only in block builder and upsert function; the remove path in the same file is already parameterised."
+    },
+    "c044": {
+      "category": "deliberate",
+      "note": "Mirrored left/right word-part delete pair, the same parallel structure used throughout WordOperations."
+    },
+    "e001": {
+      "category": "dead",
+      "note": "zsf.ts is imported nowhere and not reachable via the package exports map; orphaned file."
+    },
+    "e002": {
+      "category": "dead",
+      "note": "Type in the orphaned zsf.ts, not referenced even within the file."
+    },
+    "e014": {
+      "category": "dead",
+      "note": "Type in the orphaned zsf.ts, not referenced anywhere."
+    },
+    "e016": {
+      "category": "dead",
+      "note": "Type in the orphaned zsf.ts, not referenced anywhere."
+    },
+    "e018": {
+      "category": "dead",
+      "note": "IS_CSS_ESCAPED symbol is never used (CSS_ESCAPED is the one in use) and is not re-exported by hono/css."
+    },
+    "e042": {
+      "category": "dead",
+      "note": "APIGatewayResult is unused in getPlanner.ts and not re-exported by the aws-lambda adapter index."
+    },
+    "e050": {
+      "category": "dead",
+      "note": "Facade getPropagationHint in runtime.ts is never imported; factory.ts and resolver.ts define their own same-named functions."
+    },
+    "e051": {
+      "category": "public-api",
+      "note": "swapFunctions is re-exported by the astro:transitions/client virtual module and used by fixtures; documented API."
+    },
+    "e055": {
+      "category": "public-api",
+      "note": "Exposed via `declare module 'astro:i18n' { export * from 'astro/virtual-modules/i18n.js' }`; documented astro:i18n function."
+    },
+    "e056": {
+      "category": "public-api",
+      "note": "astro:i18n public function re-exported through the virtual module declaration."
+    },
+    "e058": {
+      "category": "public-api",
+      "note": "astro:i18n public function re-exported through the virtual module declaration."
+    },
+    "e060": {
+      "category": "public-api",
+      "note": "astro:i18n public function re-exported through the virtual module declaration."
+    },
+    "e061": {
+      "category": "public-api",
+      "note": "astro:i18n public function re-exported through the virtual module declaration."
+    },
+    "e075": {
+      "category": "dead",
+      "note": "ActionFilterFn has no references anywhere; only reachable through the types-only `./*` wildcard."
+    },
+    "e076": {
+      "category": "dead",
+      "note": "probablySupportsClipboardReadText is never read; its sibling flags are used. The `./*` wildcard is types-only, so the runtime value is not public."
+    },
+    "e077": {
+      "category": "dead",
+      "note": "The palette icon is never imported; other `palette` mentions are an unrelated colour-palette prop."
+    },
+    "e081": {
+      "category": "dead",
+      "note": "MagicIconThin's only mention is in commented-out code in CommandPalette."
+    },
+    "e083": {
+      "category": "dead",
+      "note": "ExportCB type is not referenced in its file or elsewhere."
+    },
+    "e086": {
+      "category": "dead",
+      "note": "data/ai/types.ts (OpenAIInput/OpenAIOutput) is imported nowhere in the repo."
+    },
+    "e087": {
+      "category": "dead",
+      "note": "dataURLToFile has no callers; runtime values are not public through the types-only wildcard."
+    }
+  },
+  "shares": {
+    "unused": {
+      "n": 96,
+      "unweighted": {
+        "debug-wip": 1,
+        "bug": 0,
+        "false-positive": 3,
+        "intentional": 79,
+        "leftover": 13,
+        "unclear": 0
+      },
+      "unweightedPct": {
+        "debug-wip": 1,
+        "bug": 0,
+        "false-positive": 3.1,
+        "intentional": 82.3,
+        "leftover": 13.5,
+        "unclear": 0
+      },
+      "weightedPct": {
+        "debug-wip": 1.8,
+        "bug": 0,
+        "false-positive": 0.9,
+        "intentional": 77.1,
+        "leftover": 20.2,
+        "unclear": 0
+      }
+    },
+    "dead-store": {
+      "n": 50,
+      "unweighted": {
+        "debug-wip": 0,
+        "bug": 0,
+        "false-positive": 0,
+        "intentional": 8,
+        "leftover": 42,
+        "unclear": 0
+      },
+      "unweightedPct": {
+        "debug-wip": 0,
+        "bug": 0,
+        "false-positive": 0,
+        "intentional": 16,
+        "leftover": 84,
+        "unclear": 0
+      },
+      "weightedPct": {
+        "debug-wip": 0,
+        "bug": 0,
+        "false-positive": 0,
+        "intentional": 8.6,
+        "leftover": 91.4,
+        "unclear": 0
+      }
+    },
+    "clone": {
+      "n": 46,
+      "unweighted": {
+        "accidental": 20,
+        "deliberate": 11,
+        "inconsistent": 2,
+        "trivial": 13,
+        "unclear": 0
+      },
+      "unweightedPct": {
+        "accidental": 43.5,
+        "deliberate": 23.9,
+        "inconsistent": 4.3,
+        "trivial": 28.3,
+        "unclear": 0
+      },
+      "weightedPct": {
+        "accidental": 40.7,
+        "deliberate": 28.4,
+        "inconsistent": 5.1,
+        "trivial": 25.9,
+        "unclear": 0
+      }
+    },
+    "export": {
+      "n": 89,
+      "unweighted": {
+        "analysis-miss": 1,
+        "dead": 47,
+        "dynamic": 18,
+        "public-api": 16,
+        "test-or-tooling": 0,
+        "unclear": 0,
+        "unnecessary-export": 7
+      },
+      "unweightedPct": {
+        "analysis-miss": 1.1,
+        "dead": 52.8,
+        "dynamic": 20.2,
+        "public-api": 18,
+        "test-or-tooling": 0,
+        "unclear": 0,
+        "unnecessary-export": 7.9
+      },
+      "weightedPct": {
+        "analysis-miss": 0.8,
+        "dead": 58.2,
+        "dynamic": 14.5,
+        "public-api": 12.9,
+        "test-or-tooling": 0,
+        "unclear": 0,
+        "unnecessary-export": 13.5
+      }
+    }
+  },
+  "agreement": {
+    "unused": {
+      "coarse": {
+        "kappa": 1,
+        "same": 20
+      },
+      "disagreements": [
+        {
+          "first": "false-positive",
+          "id": "u025",
+          "second": "intentional"
+        }
+      ],
+      "ids": [
+        "u002",
+        "u006",
+        "u007",
+        "u009",
+        "u025",
+        "u029",
+        "u031",
+        "u033",
+        "u040",
+        "u042",
+        "u045",
+        "u048",
+        "u052",
+        "u057",
+        "u060",
+        "u069",
+        "u073",
+        "u077",
+        "u094",
+        "u095"
+      ],
+      "kappa": 0.65,
+      "n": 20,
+      "same": 19
+    },
+    "dead-store": {
+      "coarse": {
+        "kappa": 1,
+        "same": 20
+      },
+      "disagreements": [],
+      "ids": [
+        "d002",
+        "d003",
+        "d005",
+        "d006",
+        "d007",
+        "d010",
+        "d012",
+        "d013",
+        "d019",
+        "d024",
+        "d031",
+        "d033",
+        "d036",
+        "d037",
+        "d038",
+        "d040",
+        "d045",
+        "d047",
+        "d048",
+        "d049"
+      ],
+      "kappa": 1,
+      "n": 20,
+      "same": 20
+    },
+    "clone": {
+      "coarse": {
+        "kappa": 0.5,
+        "same": 15
+      },
+      "disagreements": [
+        {
+          "first": "accidental",
+          "id": "c006",
+          "second": "trivial"
+        },
+        {
+          "first": "accidental",
+          "id": "c008",
+          "second": "deliberate"
+        },
+        {
+          "first": "accidental",
+          "id": "c020",
+          "second": "deliberate"
+        },
+        {
+          "first": "accidental",
+          "id": "c024",
+          "second": "trivial"
+        },
+        {
+          "first": "accidental",
+          "id": "c028",
+          "second": "trivial"
+        },
+        {
+          "first": "trivial",
+          "id": "c036",
+          "second": "deliberate"
+        }
+      ],
+      "ids": [
+        "c001",
+        "c002",
+        "c006",
+        "c007",
+        "c008",
+        "c009",
+        "c011",
+        "c017",
+        "c018",
+        "c020",
+        "c021",
+        "c022",
+        "c023",
+        "c024",
+        "c025",
+        "c028",
+        "c035",
+        "c036",
+        "c037",
+        "c044"
+      ],
+      "kappa": 0.57,
+      "n": 20,
+      "same": 14
+    },
+    "export": {
+      "coarse": {
+        "kappa": 1,
+        "same": 20
+      },
+      "disagreements": [],
+      "ids": [
+        "e001",
+        "e002",
+        "e014",
+        "e016",
+        "e018",
+        "e042",
+        "e050",
+        "e051",
+        "e055",
+        "e056",
+        "e058",
+        "e060",
+        "e061",
+        "e075",
+        "e076",
+        "e077",
+        "e081",
+        "e083",
+        "e086",
+        "e087"
+      ],
+      "kappa": 1,
+      "n": 20,
+      "same": 20
+    }
+  }
+}

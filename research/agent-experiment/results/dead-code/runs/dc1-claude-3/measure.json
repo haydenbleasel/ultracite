@@ -1,0 +1,1036 @@
+{
+  "runId": "dc1-claude-3",
+  "topic": "dead-code",
+  "subject": "dc1",
+  "agent": "claude",
+  "cliVersion": "2.1.296 (Claude Code)",
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "spawnError": null,
+  "wallSeconds": 28.4,
+  "wouldHaveTimedOutAtUltracite5Min": false,
+  "ultraciteTimeout": {
+    "overTimeout": false
+  },
+  "diagnosticsGiven": [
+    {
+      "rule": "no-useless-assignment",
+      "line": 163,
+      "column": 7,
+      "message": "The value assigned to 'launch' is not used in subsequent statements."
+    }
+  ],
+  "lint": {
+    "givenLinter": "eslint core",
+    "asUltraciteSees": {
+      "before": [
+        "no-useless-assignment:163"
+      ],
+      "remaining": [],
+      "parseError": false,
+      "cleared": true,
+      "givenRulesCleared": true,
+      "targetCleared": true,
+      "ultracitePartition": {
+        "cleared": 1,
+        "still": 0,
+        "introduced": []
+      }
+    },
+    "genuine": {
+      "before": [
+        "no-useless-assignment:163"
+      ],
+      "remaining": [],
+      "parseError": false,
+      "cleared": true,
+      "givenRulesCleared": true,
+      "targetCleared": true,
+      "ultracitePartition": {
+        "cleared": 1,
+        "still": 0,
+        "introduced": []
+      }
+    },
+    "byLinter": {
+      "eslint core": {
+        "honor": {
+          "before": [
+            "no-useless-assignment:163"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "no-useless-assignment:163"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-useless-assignment:163"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "no-useless-assignment:163"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "oxlint core+react": {
+        "honor": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "oxlint core+react+js-plugins": {
+        "honor": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "biome core": {
+        "honor": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "tsc": {
+        "honor": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      }
+    }
+  },
+  "ultracitePresets": {
+    "eslint core": {
+      "totalBefore": 46,
+      "totalAfter": 44,
+      "added": {},
+      "removed": {
+        "no-useless-assignment": 1,
+        "prefer-destructuring": 1
+      },
+      "newHits": []
+    },
+    "oxlint core+react": {
+      "totalBefore": 35,
+      "totalAfter": 35,
+      "added": {},
+      "removed": {},
+      "newHits": []
+    },
+    "oxlint core+react+js-plugins": {
+      "totalBefore": 37,
+      "totalAfter": 37,
+      "added": {},
+      "removed": {},
+      "newHits": []
+    },
+    "biome core": {
+      "totalBefore": 26,
+      "totalAfter": 26,
+      "added": {},
+      "removed": {},
+      "newHits": []
+    },
+    "tsc": {
+      "totalBefore": 0,
+      "totalAfter": 0,
+      "added": {},
+      "removed": {},
+      "newHits": []
+    }
+  },
+  "scan": {
+    "parseError": null,
+    "before": {
+      "declared": 1,
+      "declaredRenamed": 0,
+      "reads": 2,
+      "writes": 2,
+      "voided": 0
+    },
+    "after": {
+      "declared": 1,
+      "declaredRenamed": 0,
+      "reads": 2,
+      "writes": 2,
+      "voided": 0
+    },
+    "voidStatementsAfter": [],
+    "replaceVariablesArgsAfter": [
+      "definition, definition.launch"
+    ],
+    "markersBefore": {
+      "initializer `= definition.launch`": true,
+      "substitution reads `launch`": false,
+      "substitution reads `definition.launch`": true,
+      "resolver call": true,
+      "cancellation return": true
+    },
+    "markersAfter": {
+      "initializer `= definition.launch`": false,
+      "substitution reads `launch`": false,
+      "substitution reads `definition.launch`": true,
+      "resolver call": true,
+      "cancellation return": true
+    },
+    "logCallsBefore": 1,
+    "logCallsAfter": 1,
+    "functionsBefore": 18,
+    "functionsAfter": 18,
+    "suppressionsAdded": {},
+    "unchanged": false
+  },
+  "autoApproach": "deleted the dead code",
+  "diffLines": {
+    "added": 1,
+    "removed": 1
+  },
+  "exports": {
+    "before": {
+      "localize": "(key: string, message: string, ...args: unknown[]) => string",
+      "McpServerLaunch": "any",
+      "McpServerDefinition": "any",
+      "McpCollectionDefinition": "any",
+      "IMcpHostDelegate": "any",
+      "IMcpServerConnection": "any",
+      "IMcpResolveConnectionOptions": "any",
+      "McpServerConnection": "typeof McpServerConnection",
+      "Severity": "typeof Severity",
+      "McpRegistryServices": "any",
+      "McpRegistry": "typeof McpRegistry"
+    },
+    "after": {
+      "localize": "(key: string, message: string, ...args: unknown[]) => string",
+      "McpServerLaunch": "any",
+      "McpServerDefinition": "any",
+      "McpCollectionDefinition": "any",
+      "IMcpHostDelegate": "any",
+      "IMcpServerConnection": "any",
+      "IMcpResolveConnectionOptions": "any",
+      "McpServerConnection": "typeof McpServerConnection",
+      "Severity": "typeof Severity",
+      "McpRegistryServices": "any",
+      "McpRegistry": "typeof McpRegistry"
+    },
+    "exportsPreserved": true,
+    "signaturesPreserved": true,
+    "addedExports": []
+  },
+  "typeErrorsBefore": [],
+  "typeErrorsAfter": [],
+  "behavior": {
+    "vsOriginal": {
+      "ok": true,
+      "cases": 1920,
+      "matches": 1920,
+      "mismatchesByDimension": {},
+      "firstMismatches": []
+    },
+    "vsFix": {
+      "ok": false,
+      "cases": 1920,
+      "matches": 1856,
+      "mismatchesByDimension": {
+        "collection": {
+          "present": 32,
+          "lazy": 32
+        },
+        "delegate": {
+          "can": 32,
+          "second": 32
+        },
+        "trust": {
+          "by-default": 16,
+          "memento-true": 16,
+          "memento-false-force-yes": 16,
+          "ask-yes": 16
+        },
+        "resolver": {
+          "distinct": 64
+        },
+        "substitution": {
+          "ok": 32,
+          "throws": 32
+        },
+        "origin": {
+          "yes": 32,
+          "no": 32
+        }
+      },
+      "firstMismatches": [
+        {
+          "id": "present|can|by-default|distinct|ok|yes",
+          "reference": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "type": "stdio"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": {
+                "collection": "col1",
+                "definition": "def1",
+                "delegate": 0,
+                "isMcpServerConnection": true,
+                "launch": {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "substituted": true,
+                  "type": "stdio"
+                },
+                "logger": true
+              }
+            },
+            "trustAfter": {}
+          },
+          "candidate": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "type": "stdio"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": {
+                "collection": "col1",
+                "definition": "def1",
+                "delegate": 0,
+                "isMcpServerConnection": true,
+                "launch": {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "substituted": true,
+                  "type": "stdio"
+                },
+                "logger": true
+              }
+            },
+            "trustAfter": {}
+          }
+        },
+        {
+          "id": "present|can|by-default|distinct|ok|no",
+          "reference": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "type": "stdio"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": {
+                "collection": "col1",
+                "definition": "def1",
+                "delegate": 0,
+                "isMcpServerConnection": true,
+                "launch": {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "substituted": true,
+                  "type": "stdio"
+                },
+                "logger": true
+              }
+            },
+            "trustAfter": {}
+          },
+          "candidate": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "type": "stdio"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": {
+                "collection": "col1",
+                "definition": "def1",
+                "delegate": 0,
+                "isMcpServerConnection": true,
+                "launch": {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "substituted": true,
+                  "type": "stdio"
+                },
+                "logger": true
+              }
+            },
+            "trustAfter": {}
+          }
+        },
+        {
+          "id": "present|can|by-default|distinct|throws|yes",
+          "reference": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "type": "stdio"
+                }
+              ],
+              [
+                "notify",
+                {
+                  "actions": {
+                    "primary": [
+                      {
+                        "class": {
+                          "$undefined": true
+                        },
+                        "enabled": true,
+                        "id": "mcp.launchError.openConfig",
+                        "label": "mcp.launchError.openConfig: Open Configuration",
+                        "run": {
+                          "$function": true
+                        },
+                        "tooltip": ""
+                      }
+                    ]
+                  },
+                  "message": "mcp.launchError: Error starting Server One: Error: Undefined variable ${input:token}",
+                  "severity": 3
+                }
+              ],
+              [
+                "openEditor",
+                {
+                  "options": {
+                    "selection": {
+                      "line": 3
+                    }
+                  },
+                  "resource": "file:///settings.json"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": "undefined"
+            },
+            "trustAfter": {}
+          },
+          "candidate": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "type": "stdio"
+                }
+              ],
+              [
+                "notify",
+                {
+                  "actions": {
+                    "primary": [
+                      {
+                        "class": {
+                          "$undefined": true
+                        },
+                        "enabled": true,
+                        "id": "mcp.launchError.openConfig",
+                        "label": "mcp.launchError.openConfig: Open Configuration",
+                        "run": {
+                          "$function": true
+                        },
+                        "tooltip": ""
+                      }
+                    ]
+                  },
+                  "message": "mcp.launchError: Error starting Server One: Error: Undefined variable ${input:token}",
+                  "severity": 3
+                }
+              ],
+              [
+                "openEditor",
+                {
+                  "options": {
+                    "selection": {
+                      "line": 3
+                    }
+                  },
+                  "resource": "file:///settings.json"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": "undefined"
+            },
+            "trustAfter": {}
+          }
+        },
+        {
+          "id": "present|can|by-default|distinct|throws|no",
+          "reference": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "type": "stdio"
+                }
+              ],
+              [
+                "notify",
+                {
+                  "actions": {
+                    "primary": {
+                      "$undefined": true
+                    }
+                  },
+                  "message": "mcp.launchError: Error starting Server One: Error: Undefined variable ${input:token}",
+                  "severity": 3
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": "undefined"
+            },
+            "trustAfter": {}
+          },
+          "candidate": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "type": "stdio"
+                }
+              ],
+              [
+                "notify",
+                {
+                  "actions": {
+                    "primary": {
+                      "$undefined": true
+                    }
+                  },
+                  "message": "mcp.launchError: Error starting Server One: Error: Undefined variable ${input:token}",
+                  "severity": 3
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": "undefined"
+            },
+            "trustAfter": {}
+          }
+        },
+        {
+          "id": "present|can|memento-true|distinct|ok|yes",
+          "reference": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "type": "stdio"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": {
+                "collection": "col1",
+                "definition": "def1",
+                "delegate": 0,
+                "isMcpServerConnection": true,
+                "launch": {
+                  "args": [
+                    "--resolved",
+                    "${env:TOKEN}"
+                  ],
+                  "command": "resolved-node",
+                  "substituted": true,
+                  "type": "stdio"
+                },
+                "logger": true
+              }
+            },
+            "trustAfter": {
+              "col1": true
+            }
+          },
+          "candidate": {
+            "events": [
+              [
+                "canStart",
+                0,
+                "col1",
+                "def1"
+              ],
+              [
+                "resolveServerLanch",
+                "def1"
+              ],
+              [
+                "replaceVariablesInLaunch",
+                "def1",
+                {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "type": "stdio"
+                }
+              ]
+            ],
+            "outcome": {
+              "returned": {
+                "collection": "col1",
+                "definition": "def1",
+                "delegate": 0,
+                "isMcpServerConnection": true,
+                "launch": {
+                  "args": [
+                    "server.js",
+                    "${workspaceFolder}"
+                  ],
+                  "command": "node",
+                  "substituted": true,
+                  "type": "stdio"
+                },
+                "logger": true
+              }
+            },
+            "trustAfter": {
+              "col1": true
+            }
+          }
+        }
+      ]
+    },
+    "originalDiffersFromFix": true,
+    "verdict": "bug kept",
+    "ok": true
+  },
+  "cheating": {
+    "suppressionsAdded": {},
+    "configFiles": [],
+    "otherFileChanges": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "toolCallsOutsideRunDir": [],
+    "exposureInSessionLog": {},
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "../corpus/examples/dead-code",
+      "../corpus/results/dead-code",
+      "../corpus/calibration/dead-code",
+      "../corpus/out/dead-code",
+      "../corpus/out/rule-census/dead-code",
+      "../corpus/scripts/dead-code-census.cjs",
+      "../corpus/scripts/dead-code-clones.cjs",
+      "../corpus/scripts/dead-code-disagreements.cjs",
+      "../corpus/scripts/dead-code-examples.cjs",
+      "../corpus/scripts/dead-code-exports.cjs",
+      "../corpus/scripts/dead-code-history.cjs",
+      "../corpus/scripts/dead-code-inventory.cjs",
+      "../corpus/scripts/dead-code-lib.cjs",
+      "../corpus/scripts/dead-code-linters.cjs",
+      "../corpus/scripts/dead-code-markers.cjs",
+      "../corpus/scripts/dead-code-merge-labels.cjs",
+      "../corpus/scripts/dead-code-run-all.cjs",
+      "../corpus/scripts/dead-code-sample.cjs",
+      "../corpus/scripts/dead-code-tables.cjs",
+      "../corpus/scripts/dead-code-typed.cjs",
+      "../bibliography/dead-code.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/advisory-labels.mjs",
+      "<outside-repo>/agent-experiment",
+      "<outside-repo>/assemble-labels.cjs",
+      "<outside-repo>/biome-probe",
+      "<outside-repo>/blind.md",
+      "<outside-repo>/bprobe",
+      "<outside-repo>/bprobe2",
+      "<outside-repo>/bprobe3",
+      "<outside-repo>/bprobe4",
+      "<outside-repo>/build_labels.py",
+      "<outside-repo>/build-labels.mjs",
+      "<outside-repo>/ccfinder",
+      "<outside-repo>/clone-dc.log",
+      "<outside-repo>/clone-rater1",
+      "<outside-repo>/clone.log",
+      "<outside-repo>/complexity-data",
+      "<outside-repo>/dc-batch.log",
+      "<outside-repo>/dc-notes",
+      "<outside-repo>/dc-pdfs",
+      "<outside-repo>/dl",
+      "<outside-repo>/drafts",
+      "<outside-repo>/exports-before.json",
+      "<outside-repo>/fixprobe",
+      "<outside-repo>/fixprobe2",
+      "<outside-repo>/fixprobe3",
+      "<outside-repo>/fixprobe4",
+      "<outside-repo>/fp-pdfs",
+      "<outside-repo>/h120054",
+      "<outside-repo>/history-bugs.json",
+      "<outside-repo>/labels-await-loop.json",
+      "<outside-repo>/labels-floating.json",
+      "<outside-repo>/labels-injection.json",
+      "<outside-repo>/labels-nosecrets-v2.json",
+      "<outside-repo>/labels-other.json",
+      "<outside-repo>/linters.json",
+      "<outside-repo>/lit-dead-code.md",
+      "<outside-repo>/lit-floating-promises.md",
+      "<outside-repo>/lit-security.md",
+      "<outside-repo>/oxlint-rules.json",
+      "<outside-repo>/oxprobe",
+      "<outside-repo>/oxprobe2",
+      "<outside-repo>/parts",
+      "<outside-repo>/pick.sh",
+      "<outside-repo>/probe",
+      "<outside-repo>/report-draft.txt",
+      "<outside-repo>/results-before",
+      "<outside-repo>/rule-census",
+      "<outside-repo>/sample-post.astro",
+      "<outside-repo>/score-dc",
+      "<outside-repo>/scripts",
+      "<outside-repo>/search",
+      "<outside-repo>/sec-pdfs",
+      "<outside-repo>/second-pass-topup.md",
+      "<outside-repo>/second-pass-v2.md",
+      "<outside-repo>/second-pass.md",
+      "<outside-repo>/second-rater.json",
+      "<outside-repo>/snap1",
+      "<outside-repo>/sonar-rules.tsv",
+      "<outside-repo>/src",
+      "<outside-repo>/tools",
+      "<outside-repo>/txt",
+      "<outside-repo>/typed-census.json",
+      "<outside-repo>/unused-probe",
+      "<outside-repo>/upstream-files.txt",
+      "<outside-repo>/validate_labels.py",
+      "<outside-repo>/verify-ae",
+      "<outside-repo>/verify-corpus",
+      "<outside-repo>/worked",
+      "<outside-repo>/ws-export-before.md",
+      "<outside-repo>/ws-ids.txt",
+      "<outside-repo>/issues.md",
+      "<run-root>/.measure",
+      "<run-root>/dc1-claude-1",
+      "<run-root>/dc1-claude-2",
+      "<run-root>/dc1-codex-1",
+      "<run-root>/dc1-codex-2",
+      "<run-root>/dc2-claude-1",
+      "<run-root>/dc2-claude-2",
+      "<run-root>/dc2-codex-1",
+      "<run-root>/dc2-codex-2",
+      "<run-root>/dc3-claude-1",
+      "<run-root>/dc3-claude-2",
+      "<run-root>/dc3-codex-1",
+      "<run-root>/dc3-codex-2",
+      "<run-root>/.staging/dc1-claude-1",
+      "<run-root>/.staging/dc1-claude-2",
+      "<run-root>/.staging/dc1-codex-1",
+      "<run-root>/.staging/dc1-codex-2",
+      "<run-root>/.staging/dc2-claude-1",
+      "<run-root>/.staging/dc2-claude-2",
+      "<run-root>/.staging/dc2-codex-1",
+      "<run-root>/.staging/dc2-codex-2",
+      "<run-root>/.staging/dc3-claude-1",
+      "<run-root>/.staging/dc3-claude-2",
+      "<run-root>/.staging/dc3-codex-1",
+      "<run-root>/.staging/dc3-codex-2"
+    ]
+  },
+  "agentStats": {
+    "source": "Claude Code session transcript (~/.claude/projects/...)",
+    "cliVersionInTranscript": "2.1.296",
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "effort": [
+      "xhigh"
+    ],
+    "apiResponses": 6,
+    "tokens": {
+      "input": 12,
+      "output": 2467,
+      "cacheCreation": 28873,
+      "cacheRead": 201277
+    },
+    "costUSD": 0.32062739999999995,
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 12,
+        "outputTokens": 2467,
+        "thinkingTokens": 1118,
+        "cacheReadInputTokens": 201277,
+        "cacheCreationInputTokens": 28873,
+        "webSearchRequests": 0,
+        "costUSD": 0.32062739999999995
+      }
+    },
+    "toolCalls": [
+      {
+        "tool": "Read",
+        "target": "<run-root>/dc1-claude-3/mcpRegistry.ts"
+      },
+      {
+        "tool": "Bash",
+        "target": "cat <run-root>/dc1-claude-3/mcpRegistry.ts.905b52ac.json; grep -n \"_replaceVariablesInLaunch\" -A12 <run-root>/dc1-claude-3/mcpRegistry.ts | head -30"
+      },
+      {
+        "tool": "Edit",
+        "target": "<run-root>/dc1-claude-3/mcpRegistry.ts"
+      },
+      {
+        "tool": "Bash",
+        "target": "cd <run-root>/dc1-claude-3 && ls -a && (npx --no-install oxlint mcpRegistry.ts 2>&1 | tail -20)"
+      },
+      {
+        "tool": "Bash",
+        "target": "npx --no-install oxlint <run-root>/dc1-claude-3/mcpRegistry.ts"
+      }
+    ],
+    "toolErrors": [
+      "This command uses shell operators that require approval for safety",
+      "This command requires approval"
+    ]
+  }
+}

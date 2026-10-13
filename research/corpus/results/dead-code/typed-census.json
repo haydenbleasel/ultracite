@@ -1,0 +1,920 @@
+{
+  "codes": {
+    "6133": "'{0}' is declared but its value is never read.",
+    "6138": "Property '{0}' is declared but its value is never read.",
+    "6192": "All imports in import declaration are unused.",
+    "6196": "'{0}' is declared but never used.",
+    "6198": "All destructured elements are unused.",
+    "6199": "All variables are unused.",
+    "6205": "All type parameters are unused.",
+    "7027": "Unreachable code detected.",
+    "7028": "Unused label."
+  },
+  "generated": "2026-10-13",
+  "note": "Each measured .ts/.tsx/.mts/.cts file is checked with its nearest tsconfig's options plus noUnusedLocals, noUnusedParameters, allowUnreachableCode: false and allowUnusedLabels: false. 'ownFlags' is what the repo's tsconfigs set. Lint comparison keys are file:line:name (TS6192/TS6198/TS6199 'all unused' diagnostics carry no name and match on file:line).",
+  "repos": {
+    "zod": {
+      "byCode": {},
+      "compare": {
+        "biome": {
+          "both": 0,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 0,
+          "lintOnly": 73,
+          "lintOnlySamples": [
+            "packages/zod/src/v3/helpers/util.ts:5:_",
+            "packages/zod/src/v3/helpers/util.ts:6:_arg",
+            "packages/zod/src/v3/helpers/util.ts:7:_x",
+            "packages/zod/src/v3/helpers/util.ts:96:_O",
+            "packages/zod/src/v3/types.ts:5035:Class",
+            "packages/zod/src/v3/types.ts:5036:_",
+            "packages/zod/src/v4/core/api.ts:1260:_Disc",
+            "packages/zod/src/v4/core/api.ts:1264:_Disc",
+            "packages/zod/src/v4/core/api.ts:1837:_payload",
+            "packages/zod/src/v4/core/json-schema-generator.ts:128:_",
+            "packages/zod/src/v4/core/json-schema-processors.ts:146:_params",
+            "packages/zod/src/v4/core/json-schema-processors.ts:232:_params",
+            "packages/zod/src/v4/core/json-schema-processors.ts:244:_params",
+            "packages/zod/src/v4/core/json-schema-processors.ts:262:_params",
+            "packages/zod/src/v4/core/json-schema-processors.ts:266:_ctx"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "oxlint": {
+          "both": 0,
+          "lintOnly": 25,
+          "lintOnlySamples": [
+            "packages/zod/src/v3/helpers/util.ts:5:_",
+            "packages/zod/src/v3/types.ts:5036:_",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:exclusiveMaximum",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:exclusiveMinimum",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:format",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:id",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:maximum",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:minimum",
+            "packages/zod/src/v4/core/json-schema-processors.ts:625:multipleOf",
+            "packages/zod/src/v4/core/schemas.ts:1337:_",
+            "packages/zod/src/v4/core/schemas.ts:1424:_",
+            "packages/zod/src/v4/core/schemas.ts:1477:_",
+            "packages/zod/src/v4/core/schemas.ts:1804:_err",
+            "packages/zod/src/v4/core/schemas.ts:353:_",
+            "packages/zod/src/v4/core/schemas.ts:403:_"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        }
+      },
+      "dogfood": false,
+      "files": 125,
+      "importResolution": 100,
+      "jsFilesSkipped": 0,
+      "seconds": 2,
+      "tsconfigs": {
+        "packages/zod/tsconfig.json": {
+          "errors": [],
+          "files": 125,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 0
+    },
+    "hono": {
+      "byCode": {},
+      "compare": {
+        "biome": {
+          "both": 0,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 0,
+          "lintOnly": 20,
+          "lintOnlySamples": [
+            "src/adapter/aws-lambda/handler.ts:505:_event",
+            "src/adapter/aws-lambda/handler.ts:505:_headers",
+            "src/client/types.ts:359:_",
+            "src/client/types.ts:389:_",
+            "src/client/utils.ts:108:_",
+            "src/jsx/hooks/index.ts:373:_formatter",
+            "src/jsx/hooks/index.ts:373:_value",
+            "src/jsx/intrinsic-element/components.ts:101:blocking",
+            "src/jsx/types.ts:25:_P",
+            "src/jsx/types.ts:25:_S",
+            "src/router/trie-router/node.ts:172:_",
+            "src/types.ts:2555:_Start",
+            "src/types.ts:2557:_Start",
+            "src/types.ts:2573:_",
+            "src/types.ts:2581:_"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "oxlint": {
+          "both": 0,
+          "lintOnly": 1,
+          "lintOnlySamples": [
+            "src/jsx/intrinsic-element/components.ts:101:blocking"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        }
+      },
+      "dogfood": false,
+      "files": 187,
+      "importResolution": 99,
+      "jsFilesSkipped": 0,
+      "seconds": 1,
+      "tsconfigs": {
+        "tsconfig.json": {
+          "errors": [],
+          "files": 187,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 0
+    },
+    "trpc": {
+      "byCode": {
+        "6133": 1
+      },
+      "compare": {
+        "biome": {
+          "both": 1,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 0,
+          "lintOnly": 26,
+          "lintOnlySamples": [
+            "packages/client/src/links/localLink.ts:139:_finally",
+            "packages/client/src/links/localLink.ts:180:_finally",
+            "packages/next/src/app-dir/links/nextCache.ts:48:_cachebuster",
+            "packages/react-query/src/internals/getQueryKey.ts:52:_",
+            "packages/react-query/src/internals/getQueryKey.ts:53:__",
+            "packages/react-query/src/server/ssgProxy.ts:141:_",
+            "packages/react-query/src/shared/types.ts:271:_TRouter",
+            "packages/server/src/observable/operators.ts:33:_opts",
+            "packages/server/src/unstable-core-do-not-import/http/parseConnectionParams.ts:16:_key",
+            "packages/server/src/unstable-core-do-not-import/http/resolveResponse.ts:741:_infoError",
+            "packages/server/src/unstable-core-do-not-import/middleware.ts:29:_TContextOverride",
+            "packages/server/src/unstable-core-do-not-import/middleware.ts:36:_TContextOverride",
+            "packages/server/src/unstable-core-do-not-import/procedureBuilder.ts:109:_TMeta",
+            "packages/server/src/unstable-core-do-not-import/procedureBuilder.ts:171:_TInputIn",
+            "packages/server/src/unstable-core-do-not-import/procedureBuilder.ts:173:_TOutputIn"
+          ],
+          "tsOnly": 1,
+          "tsOnlySamples": [
+            "packages/upgrade/src/lib/git.ts:18:stderr"
+          ]
+        },
+        "oxlint": {
+          "both": 1,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        }
+      },
+      "dogfood": false,
+      "files": 176,
+      "importResolution": 90.8,
+      "jsFilesSkipped": 0,
+      "seconds": 2,
+      "tsconfigs": {
+        "packages/client/tsconfig.json": {
+          "errors": [],
+          "files": 38,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/next/tsconfig.json": {
+          "errors": [],
+          "files": 11,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/openapi/tsconfig.json": {
+          "errors": [],
+          "files": 6,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/react-query/tsconfig.json": {
+          "errors": [],
+          "files": 27,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/server/tsconfig.json": {
+          "errors": [],
+          "files": 76,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/tanstack-react-query/tsconfig.json": {
+          "errors": [],
+          "files": 9,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/upgrade/tsconfig.json": {
+          "errors": [],
+          "files": 9,
+          "flags": {
+            "noUnusedLocals": false,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 1
+    },
+    "vite": {
+      "byCode": {
+        "7027": 1
+      },
+      "compare": {
+        "biome": {
+          "both": 0,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 0,
+          "lintOnly": 25,
+          "lintOnlySamples": [
+            "packages/vite/src/module-runner/createImportMeta.ts:25:_id",
+            "packages/vite/src/module-runner/createImportMeta.ts:25:_parent",
+            "packages/vite/src/node/build.ts:441:polyfillModulePreload",
+            "packages/vite/src/node/optimizer/index.ts:1511:_st",
+            "packages/vite/src/node/optimizer/index.ts:691:exportsData",
+            "packages/vite/src/node/optimizer/optimizer.ts:318:processing",
+            "packages/vite/src/node/optimizer/pluginConverter.ts:70:_receiver",
+            "packages/vite/src/node/plugins/css.ts:2587:_maxWorkers",
+            "packages/vite/src/node/plugins/css.ts:267:PureCssLang",
+            "packages/vite/src/node/plugins/css.ts:2859:_rawUrl",
+            "packages/vite/src/node/plugins/css.ts:3136:_resolvers",
+            "packages/vite/src/node/plugins/define.ts:124:_pattern",
+            "packages/vite/src/node/plugins/dynamicImportVars.ts:229:_id",
+            "packages/vite/src/node/plugins/modulePreloadPolyfill.ts:21:_id",
+            "packages/vite/src/node/plugins/modulePreloadPolyfill.ts:27:_id"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "oxlint": {
+          "both": 0,
+          "lintOnly": 10,
+          "lintOnlySamples": [
+            "packages/vite/src/node/build.ts:441:polyfillModulePreload",
+            "packages/vite/src/node/optimizer/index.ts:691:exportsData",
+            "packages/vite/src/node/optimizer/optimizer.ts:318:processing",
+            "packages/vite/src/node/watch.ts:69:pollInterval",
+            "packages/vite/src/node/watch.ts:70:useDebounce",
+            "packages/vite/src/node/watch.ts:71:debounceDuration",
+            "packages/vite/src/node/watch.ts:72:debounceTickRate",
+            "packages/vite/src/node/watch.ts:73:compareContentsForPolling",
+            "packages/vite/src/node/watch.ts:74:include",
+            "packages/vite/src/node/watch.ts:75:exclude"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        }
+      },
+      "dogfood": false,
+      "files": 124,
+      "importResolution": 80.4,
+      "jsFilesSkipped": 0,
+      "seconds": 2,
+      "tsconfigs": {
+        "packages/vite/src/client/tsconfig.json": {
+          "errors": [],
+          "files": 6,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/vite/src/module-runner/tsconfig.json": {
+          "errors": [],
+          "files": 14,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/vite/src/node/tsconfig.json": {
+          "errors": [],
+          "files": 95,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/vite/src/shared/tsconfig.json": {
+          "errors": [],
+          "files": 9,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 0
+    },
+    "astro": {
+      "byCode": {},
+      "compare": {
+        "biome": {
+          "both": 0,
+          "lintOnly": 1,
+          "lintOnlySamples": [
+            "packages/astro/src/container/index.ts:465:"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 0,
+          "lintOnly": 56,
+          "lintOnlySamples": [
+            "packages/astro/src/actions/runtime/client.ts:66:_T",
+            "packages/astro/src/assets/build/generate.ts:115:_",
+            "packages/astro/src/assets/services/service.ts:266:src",
+            "packages/astro/src/assets/services/service.ts:267:width",
+            "packages/astro/src/assets/services/service.ts:268:height",
+            "packages/astro/src/assets/services/service.ts:269:format",
+            "packages/astro/src/assets/services/service.ts:270:quality",
+            "packages/astro/src/assets/services/service.ts:271:densities",
+            "packages/astro/src/assets/services/service.ts:272:widths",
+            "packages/astro/src/assets/services/service.ts:273:formats",
+            "packages/astro/src/assets/services/service.ts:274:layout",
+            "packages/astro/src/assets/services/service.ts:275:priority",
+            "packages/astro/src/assets/services/service.ts:276:fit",
+            "packages/astro/src/assets/services/service.ts:277:position",
+            "packages/astro/src/assets/services/service.ts:278:background"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "oxlint": {
+          "both": 0,
+          "lintOnly": 28,
+          "lintOnlySamples": [
+            "packages/astro/src/assets/services/service.ts:266:src",
+            "packages/astro/src/assets/services/service.ts:267:width",
+            "packages/astro/src/assets/services/service.ts:268:height",
+            "packages/astro/src/assets/services/service.ts:269:format",
+            "packages/astro/src/assets/services/service.ts:270:quality",
+            "packages/astro/src/assets/services/service.ts:271:densities",
+            "packages/astro/src/assets/services/service.ts:272:widths",
+            "packages/astro/src/assets/services/service.ts:273:formats",
+            "packages/astro/src/assets/services/service.ts:274:layout",
+            "packages/astro/src/assets/services/service.ts:275:priority",
+            "packages/astro/src/assets/services/service.ts:276:fit",
+            "packages/astro/src/assets/services/service.ts:277:position",
+            "packages/astro/src/assets/services/service.ts:278:background",
+            "packages/astro/src/assets/services/service.ts:323:transformWidth",
+            "packages/astro/src/assets/services/service.ts:324:transformHeight"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        }
+      },
+      "dogfood": false,
+      "files": 635,
+      "importResolution": 87.7,
+      "jsFilesSkipped": 0,
+      "seconds": 2,
+      "tsconfigs": {
+        "packages/astro/tsconfig.json": {
+          "errors": [],
+          "files": 635,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": true,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 0
+    },
+    "excalidraw": {
+      "byCode": {
+        "6133": 182,
+        "6196": 1,
+        "7027": 1
+      },
+      "compare": {
+        "biome": {
+          "both": 182,
+          "lintOnly": 18,
+          "lintOnlySamples": [
+            "packages/common/src/editorInterface.ts:196:error",
+            "packages/common/src/editorInterface.ts:209:error",
+            "packages/common/src/utils.ts:703:error",
+            "packages/element/src/elementLink.ts:89:error",
+            "packages/element/src/embeddable.ts:128:error",
+            "packages/element/src/embeddable.ts:468:error",
+            "packages/element/src/embeddable.ts:66:error",
+            "packages/element/src/fractionalIndex.ts:210:e",
+            "packages/element/src/image.ts:72:error",
+            "packages/excalidraw/actions/actionClipboard.tsx:266:e",
+            "packages/excalidraw/components/App.tsx:1110:e",
+            "packages/excalidraw/components/ColorPicker/HotkeyLabel.tsx:1:",
+            "packages/excalidraw/components/ShareableLinkDialog.tsx:34:e",
+            "packages/excalidraw/components/dropdownMenu/DropdownMenuSeparator.tsx:1:",
+            "packages/excalidraw/data/blob.ts:429:error"
+          ],
+          "tsOnly": 1,
+          "tsOnlySamples": [
+            "packages/element/src/Scene.ts:90:_"
+          ]
+        },
+        "eslint": {
+          "both": 81,
+          "lintOnly": 53,
+          "lintOnlySamples": [
+            "packages/common/src/editorInterface.ts:196:error",
+            "packages/common/src/editorInterface.ts:209:error",
+            "packages/common/src/utils.ts:1052:_",
+            "packages/common/src/utils.ts:1058:_",
+            "packages/common/src/utils.ts:703:error",
+            "packages/element/src/delta.ts:1948:_",
+            "packages/element/src/delta.ts:2209:id",
+            "packages/element/src/delta.ts:2209:updated",
+            "packages/element/src/delta.ts:936:editingGroupId",
+            "packages/element/src/delta.ts:937:selectedGroupIds",
+            "packages/element/src/delta.ts:938:selectedElementIds",
+            "packages/element/src/delta.ts:939:selectedLinearElement",
+            "packages/element/src/delta.ts:940:croppingElementId",
+            "packages/element/src/delta.ts:941:lockedMultiSelections",
+            "packages/element/src/delta.ts:942:activeLockedId"
+          ],
+          "tsOnly": 104,
+          "tsOnlySamples": [
+            "packages/element/src/binding.ts:1766:arrowElement",
+            "packages/element/src/binding.ts:1901:arrowElement",
+            "packages/element/src/zindex.ts:154:point",
+            "packages/excalidraw/actions/actionAddToLibrary.ts:13:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:118:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:118:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:152:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:152:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:186:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:186:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:220:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:220:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:250:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:250:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:84:appProps"
+          ]
+        },
+        "oxlint": {
+          "both": 78,
+          "lintOnly": 46,
+          "lintOnlySamples": [
+            "packages/common/src/editorInterface.ts:196:error",
+            "packages/common/src/editorInterface.ts:209:error",
+            "packages/common/src/utils.ts:703:error",
+            "packages/element/src/delta.ts:1948:_",
+            "packages/element/src/delta.ts:2209:id",
+            "packages/element/src/delta.ts:2209:updated",
+            "packages/element/src/delta.ts:936:editingGroupId",
+            "packages/element/src/delta.ts:937:selectedGroupIds",
+            "packages/element/src/delta.ts:938:selectedElementIds",
+            "packages/element/src/delta.ts:939:selectedLinearElement",
+            "packages/element/src/delta.ts:940:croppingElementId",
+            "packages/element/src/delta.ts:941:lockedMultiSelections",
+            "packages/element/src/delta.ts:942:activeLockedId",
+            "packages/element/src/delta.ts:956:name",
+            "packages/element/src/delta.ts:956:viewBackgroundColor"
+          ],
+          "tsOnly": 107,
+          "tsOnlySamples": [
+            "packages/element/src/Scene.ts:90:_",
+            "packages/element/src/binding.ts:1766:arrowElement",
+            "packages/element/src/binding.ts:1901:arrowElement",
+            "packages/element/src/zindex.ts:154:point",
+            "packages/excalidraw/actions/actionAddToLibrary.ts:13:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:118:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:118:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:152:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:152:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:186:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:186:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:220:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:220:elements",
+            "packages/excalidraw/actions/actionAlign.tsx:250:appProps",
+            "packages/excalidraw/actions/actionAlign.tsx:250:elements"
+          ]
+        }
+      },
+      "dogfood": false,
+      "files": 444,
+      "importResolution": 87.1,
+      "jsFilesSkipped": 0,
+      "seconds": 6,
+      "tsconfigs": {
+        "packages/common/tsconfig.json": {
+          "errors": [],
+          "files": 18,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/element/tsconfig.json": {
+          "errors": [],
+          "files": 54,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/excalidraw/tsconfig.json": {
+          "errors": [],
+          "files": 353,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/math/tsconfig.json": {
+          "errors": [],
+          "files": 16,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        },
+        "packages/utils/tsconfig.json": {
+          "errors": [],
+          "files": 3,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 1,
+      "unused": 183
+    },
+    "next.js": {
+      "byCode": {
+        "6133": 22,
+        "7027": 4
+      },
+      "compare": {
+        "biome": {
+          "both": 6,
+          "lintOnly": 63,
+          "lintOnlySamples": [
+            "packages/next/src/build/analyze/index.ts:2:",
+            "packages/next/src/build/get-static-info-including-layouts.ts:5:",
+            "packages/next/src/build/handle-externals.ts:113:err",
+            "packages/next/src/build/handle-externals.ts:83:err",
+            "packages/next/src/build/is-writeable.ts:7:err",
+            "packages/next/src/build/jest/jest.ts:30:e",
+            "packages/next/src/build/preview-key-utils.ts:87:e",
+            "packages/next/src/build/swc/index.ts:1614:e",
+            "packages/next/src/build/swc/index.ts:1912:e",
+            "packages/next/src/build/swc/types.ts:2:",
+            "packages/next/src/build/turbopack-analyze/index.ts:2:",
+            "packages/next/src/build/webpack/loaders/next-app-loader/index.ts:1138:e",
+            "packages/next/src/build/webpack/loaders/next-app-loader/index.ts:141:err",
+            "packages/next/src/cli/internal/turbo-trace-server.ts:355:err",
+            "packages/next/src/cli/next-info.ts:219:e"
+          ],
+          "tsOnly": 16,
+          "tsOnlySamples": [
+            "packages/next/src/build/babel/loader/index.ts:77:_nextBabelLoaderOuter",
+            "packages/next/src/client/app-dir/link.tsx:426:_",
+            "packages/next/src/client/app-dir/link.tsx:510:_",
+            "packages/next/src/client/components/concurrent-router-queue.ts:79:_conformance",
+            "packages/next/src/client/concurrent-call-server.ts:29:_conformance",
+            "packages/next/src/client/link.tsx:380:_",
+            "packages/next/src/client/link.tsx:471:_",
+            "packages/next/src/lib/typescript/writeConfigurationDefaults.ts:285:_",
+            "packages/next/src/pages/_document.tsx:619:__NEXT_DATA__",
+            "packages/next/src/server/base-http/helpers.ts:18:req",
+            "packages/next/src/server/base-http/helpers.ts:28:res",
+            "packages/next/src/server/base-http/helpers.ts:38:req",
+            "packages/next/src/server/base-http/helpers.ts:48:res",
+            "packages/next/src/server/dev/hot-reloader-webpack.ts:252:watcher",
+            "packages/next/src/server/dev/hot-reloader-webpack.ts:260:lockfile"
+          ]
+        },
+        "eslint": {
+          "both": 22,
+          "lintOnly": 227,
+          "lintOnlySamples": [
+            "packages/next/src/build/analyze/index.ts:2:__ApiPreviewProps",
+            "packages/next/src/build/get-static-info-including-layouts.ts:5:__ApiPreviewProps",
+            "packages/next/src/build/handle-externals.ts:113:err",
+            "packages/next/src/build/handle-externals.ts:83:err",
+            "packages/next/src/build/is-writeable.ts:7:err",
+            "packages/next/src/build/jest/jest.ts:30:e",
+            "packages/next/src/build/preview-key-utils.ts:87:e",
+            "packages/next/src/build/swc/index.ts:1411:_options",
+            "packages/next/src/build/swc/index.ts:1416:_options",
+            "packages/next/src/build/swc/index.ts:1421:_names",
+            "packages/next/src/build/swc/index.ts:1452:_options",
+            "packages/next/src/build/swc/index.ts:1453:_turboEngineOptions",
+            "packages/next/src/build/swc/index.ts:1454:_callbacks",
+            "packages/next/src/build/swc/index.ts:1463:_traceFilePath",
+            "packages/next/src/build/swc/index.ts:1464:_port"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "oxlint": {
+          "both": 10,
+          "lintOnly": 112,
+          "lintOnlySamples": [
+            "packages/next/src/build/handle-externals.ts:113:err",
+            "packages/next/src/build/handle-externals.ts:83:err",
+            "packages/next/src/build/is-writeable.ts:7:err",
+            "packages/next/src/build/jest/jest.ts:30:e",
+            "packages/next/src/build/preview-key-utils.ts:87:e",
+            "packages/next/src/build/swc/index.ts:1614:e",
+            "packages/next/src/build/swc/index.ts:1912:e",
+            "packages/next/src/build/swc/index.ts:482:_",
+            "packages/next/src/build/swc/index.ts:976:_",
+            "packages/next/src/build/swc/types.ts:18:projectCompilationEventsSubscribe",
+            "packages/next/src/build/swc/types.ts:19:projectFeatureUsage",
+            "packages/next/src/build/swc/types.ts:20:projectInvalidateFileSystemCache",
+            "packages/next/src/build/swc/types.ts:23:projectUpdateInfoSubscribe",
+            "packages/next/src/build/webpack-config.ts:860:_",
+            "packages/next/src/build/webpack/loaders/next-app-loader/index.ts:1138:e"
+          ],
+          "tsOnly": 12,
+          "tsOnlySamples": [
+            "packages/next/src/build/babel/loader/index.ts:77:_nextBabelLoaderOuter",
+            "packages/next/src/client/app-dir/link.tsx:426:_",
+            "packages/next/src/client/app-dir/link.tsx:510:_",
+            "packages/next/src/client/components/concurrent-router-queue.ts:79:_conformance",
+            "packages/next/src/client/concurrent-call-server.ts:29:_conformance",
+            "packages/next/src/client/link.tsx:380:_",
+            "packages/next/src/client/link.tsx:471:_",
+            "packages/next/src/lib/typescript/writeConfigurationDefaults.ts:285:_",
+            "packages/next/src/pages/_document.tsx:619:__NEXT_DATA__",
+            "packages/next/src/server/dev/hot-reloader-webpack.ts:252:watcher",
+            "packages/next/src/server/dev/hot-reloader-webpack.ts:260:lockfile",
+            "packages/next/src/server/dev/turbopack-utils.ts:570:_"
+          ]
+        }
+      },
+      "dogfood": false,
+      "files": 1403,
+      "importResolution": 91,
+      "jsFilesSkipped": 13,
+      "seconds": 5,
+      "tsconfigs": {
+        "packages/next/tsconfig.json": {
+          "errors": [],
+          "files": 1403,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 10,
+      "unused": 22
+    },
+    "vscode": {
+      "byCode": {
+        "6133": 155
+      },
+      "compare": {
+        "biome": {
+          "both": 155,
+          "lintOnly": 3,
+          "lintOnlySamples": [
+            "src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/myersDiffAlgorithm.ts:53:step",
+            "src/vs/editor/common/model/textModelSearch.ts:51:err",
+            "src/vs/editor/common/services/modelUndoRedoParticipant.ts:50:err"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 87,
+          "lintOnly": 71,
+          "lintOnlySamples": [
+            "src/vs/editor/common/config/editorOptions.ts:1695:_",
+            "src/vs/editor/common/config/editorOptions.ts:2070:_",
+            "src/vs/editor/common/config/editorOptions.ts:2710:_",
+            "src/vs/editor/common/config/editorOptions.ts:5688:_",
+            "src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/myersDiffAlgorithm.ts:60:step",
+            "src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts:609:_openedBracketIds",
+            "src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts:675:_openedBracketIds",
+            "src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/smallImmutableSet.ts:160:_key",
+            "src/vs/editor/common/model/textModelSearch.ts:51:err",
+            "src/vs/editor/common/model/tokens/tokenizerSyntaxTokenBackend.ts:224:_",
+            "src/vs/editor/common/model/tokens/treeSitter/treeSitterTree.ts:439:_state",
+            "src/vs/editor/common/services/editorWorker.ts:13:EditorWorker",
+            "src/vs/editor/common/services/languageFeatureDebounce.ts:50:_model",
+            "src/vs/editor/common/services/languageFeatureDebounce.ts:53:_model",
+            "src/vs/editor/common/services/languageFeatureDebounce.ts:53:_value"
+          ],
+          "tsOnly": 67,
+          "tsOnlySamples": [
+            "src/vs/editor/common/commands/columnSelectionPasteCommand.ts:70:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:100:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:104:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:127:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:131:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:158:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:181:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:186:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:24:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:28:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:60:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:77:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:81:model",
+            "src/vs/editor/common/commands/shiftCommand.ts:255:model",
+            "src/vs/editor/common/commands/surroundSelectionCommand.ts:23:model"
+          ]
+        },
+        "oxlint": {
+          "both": 77,
+          "lintOnly": 8,
+          "lintOnlySamples": [
+            "src/vs/editor/common/config/editorOptions.ts:1695:_",
+            "src/vs/editor/common/config/editorOptions.ts:2070:_",
+            "src/vs/editor/common/config/editorOptions.ts:2710:_",
+            "src/vs/editor/common/config/editorOptions.ts:5688:_",
+            "src/vs/editor/common/model/textModelSearch.ts:51:err",
+            "src/vs/editor/common/model/tokens/tokenizerSyntaxTokenBackend.ts:224:_",
+            "src/vs/editor/common/services/editorWorker.ts:13:EditorWorker",
+            "src/vs/editor/common/services/modelUndoRedoParticipant.ts:50:err"
+          ],
+          "tsOnly": 77,
+          "tsOnlySamples": [
+            "src/vs/editor/common/commands/columnSelectionPasteCommand.ts:70:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:100:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:104:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:127:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:131:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:158:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:181:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:186:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:24:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:28:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:60:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:77:model",
+            "src/vs/editor/common/commands/replaceCommand.ts:81:model",
+            "src/vs/editor/common/commands/shiftCommand.ts:255:model",
+            "src/vs/editor/common/commands/surroundSelectionCommand.ts:23:model"
+          ]
+        }
+      },
+      "dogfood": false,
+      "files": 226,
+      "importResolution": 69.3,
+      "jsFilesSkipped": 0,
+      "seconds": 1,
+      "tsconfigs": {
+        "src/tsconfig.json": {
+          "errors": [],
+          "files": 226,
+          "flags": {
+            "noUnusedLocals": true,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": false,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 155
+    },
+    "ultracite": {
+      "byCode": {},
+      "compare": {
+        "biome": {
+          "both": 0,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "eslint": {
+          "both": 0,
+          "lintOnly": 1,
+          "lintOnlySamples": [
+            "packages/cli/src/linters/oxlint.ts:61:oxlintJsPluginNames"
+          ],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        },
+        "oxlint": {
+          "both": 0,
+          "lintOnly": 0,
+          "lintOnlySamples": [],
+          "tsOnly": 0,
+          "tsOnlySamples": []
+        }
+      },
+      "dogfood": true,
+      "files": 54,
+      "importResolution": 99,
+      "jsFilesSkipped": 0,
+      "seconds": 1,
+      "tsconfigs": {
+        "packages/cli/tsconfig.json": {
+          "errors": [],
+          "files": 54,
+          "flags": {
+            "noUnusedLocals": null,
+            "noUnusedParameters": null,
+            "allowUnreachableCode": null,
+            "allowUnusedLabels": null
+          }
+        }
+      },
+      "underscore": 0,
+      "unused": 0
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "typescript": "6.0.3"
+  }
+}

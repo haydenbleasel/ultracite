@@ -1,0 +1,1829 @@
+{
+  "generated": "2026-10-12",
+  "method": "All searching used gh against the 8 upstream repos (search API for issues/PRs/commits, GraphQL for bulk PR metadata and blob reads, REST for PR diffs). Three passes. (1) Phrase searches (see `searched`) for unused/never-used/never-read, dead code, unreachable, wrong/typo'd/shadowed variables, ignored or lost return values, copy-paste, 'same fix', 'similar fix', 'consistent', 'align with', 'as well', 'missed', 'not passed', 'never called', noUnusedLocals and no-unused-vars, across PR titles and bodies, issues and commits. Phrase search on GitHub is loose (quoted phrases still match scattered words), so most hits were noise and every candidate was read. (2) A diff-shape scan: GraphQL fetched every merged PR with 'fix' in the title (zod, hono, trpc since 2018; vite, astro, excalidraw, next.js since 2020; vscode 2021-2026), kept the 'tiny' ones (1-2 non-test source files, 1-6 lines added and removed; 6,598 PRs), downloaded their patches and flagged hunks where an added line introduces an identifier that already appears in the hunk's context (a likely 'use the existing variable' fix), where a call result starts being assigned or returned (lost return value), or where an exit statement is removed. For the 'introduced identifier' hits the pre-fix file was downloaded and the identifier counted: an identifier that occurs once in the pre-fix file is a declared-but-unused binding. 421 hunks were flagged and read; the count-of-one filter found no genuine unused binding (its hits were property names, spreads and JSDoc). (3) Every candidate's diff was read; only merged fixes of a behavioural bug were kept (wrong output, wrong state, crash, ignored input, perf regression, test that tested nothing). For each confirmed bug, mergedAt, the merge commit and its first parent were read from GraphQL, and the buggy lines were checked in the pre-fix file at parentSha. expectedRules are judgments from the pre-fix code, not lint runs; 'likely' and 'unverified' entries need the lead's lint check.",
+  "searched": [
+    {
+      "repo": "-e microsoft/vscode",
+      "kind": "commits",
+      "term": "\"wrong variable\"",
+      "hits": 3
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "commits",
+      "term": "\"wrong variable\"",
+      "hits": 3
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "\"wrong variable\"",
+      "hits": 22
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "\"wrong variable\"",
+      "hits": 4
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "\"wrong variable\"",
+      "hits": 4
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "\"wrong variable\"",
+      "hits": 0
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "\"actually use\"",
+      "hits": 284
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "\"was not used\"",
+      "hits": 56
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "\"never used\"",
+      "hits": 108
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "\"actually use\"",
+      "hits": 65
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "\"was not used\"",
+      "hits": 35
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "\"never used\"",
+      "hits": 23
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "\"actually use\"",
+      "hits": 109
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "\"was not used\"",
+      "hits": 17
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "\"never used\"",
+      "hits": 32
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "\"actually use\"",
+      "hits": 10
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "\"was not used\"",
+      "hits": 4
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "\"never used\"",
+      "hits": 11
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 16
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 6
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e trpc/trpc",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e colinhacks/zod",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "fix unused in:title",
+      "hits": 2
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "fix ignored in:title",
+      "hits": 8
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "fix ignored in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "fix ignored in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e trpc/trpc",
+      "kind": "prs",
+      "term": "fix ignored in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e colinhacks/zod",
+      "kind": "prs",
+      "term": "fix ignored in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "fix ignored in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"never used\" in:title",
+      "hits": 2
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"not used\" in:title",
+      "hits": 70
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"unused variable\" in:title",
+      "hits": 18
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "unreachable in:title",
+      "hits": 7
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "issues",
+      "term": "\"is never used\"",
+      "hits": 265
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "issues",
+      "term": "\"never read\"",
+      "hits": 333
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"is never used\"",
+      "hits": 187
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"never read\"",
+      "hits": 258
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"same fix\"",
+      "hits": 1006
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"copy-paste\"",
+      "hits": 475
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"copy paste\"",
+      "hits": 475
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"copypasta\"",
+      "hits": 3
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "fix also in:title",
+      "hits": 3
+    },
+    {
+      "repo": "-e honojs/hono",
+      "kind": "prs",
+      "term": "fix also in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e trpc/trpc",
+      "kind": "prs",
+      "term": "fix also in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e colinhacks/zod",
+      "kind": "prs",
+      "term": "fix also in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"as well\" in:title fix",
+      "hits": 5
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "same in:title fix bug",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "shadowed in:title",
+      "hits": 3
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "shadowing in:title",
+      "hits": 11
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "typo variable in:title",
+      "hits": 5
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "commits",
+      "term": "\"variable shadowing\"",
+      "hits": 3
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"not passed\" in:title",
+      "hits": 6
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"not forwarded\" in:title",
+      "hits": 1
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"not being passed\" in:title",
+      "hits": 2
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"pass\" option in:title",
+      "hits": 10
+    },
+    {
+      "repo": "all 8 (one query, repo: qualifiers)",
+      "kind": "prs",
+      "term": "unused in:title (3 pages)",
+      "hits": 113
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"dead code\" fix in:title",
+      "hits": 3
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"dead code\" bug",
+      "hits": 109
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "unreachable bug fix",
+      "hits": 95
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"use the correct\" in:title",
+      "hits": 4
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"use normalized\" in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"use resolved\" in:title",
+      "hits": 6
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"use correct\" in:title",
+      "hits": 39
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix overwritten in:title",
+      "hits": 9
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"never applied\" OR \"not applied\" in:title",
+      "hits": 28681
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"is lost\" OR \"was lost\" OR \"gets lost\" in:title",
+      "hits": 28681
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "noUnusedLocals",
+      "hits": 59
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"no-unused-vars\"",
+      "hits": 73
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "commits",
+      "term": "noUnusedLocals",
+      "hits": 10
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix consistent in:title",
+      "hits": 35
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "missed in:title fix",
+      "hits": 13
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"similar fix\"",
+      "hits": 150
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"not returned\" in:title",
+      "hits": 2
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"return value\" in:title",
+      "hits": 9
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"missing return\" in:title",
+      "hits": 4
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"should have been used\"",
+      "hits": 7
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"was computed but\"",
+      "hits": 5
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"but never used\"",
+      "hits": 129
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"but not used\"",
+      "hits": 313
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "fix \"edge runtime\" also in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e vercel/next.js",
+      "kind": "prs",
+      "term": "\"same logic\" fix",
+      "hits": 71
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "\"same logic\"",
+      "hits": 25
+    },
+    {
+      "repo": "-e withastro/astro",
+      "kind": "prs",
+      "term": "\"same logic\"",
+      "hits": 48
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix align with in:title",
+      "hits": 22
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"same as\" in:title",
+      "hits": 8
+    },
+    {
+      "repo": "-e excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "fix unused",
+      "hits": 29
+    },
+    {
+      "repo": "-e vitejs/vite",
+      "kind": "prs",
+      "term": "fix unused",
+      "hits": 178
+    },
+    {
+      "repo": "-e microsoft/vscode",
+      "kind": "commits",
+      "term": "\"was never used\"",
+      "hits": 2
+    },
+    {
+      "repo": "-e microsoft/vscode",
+      "kind": "commits",
+      "term": "\"unused variable\"",
+      "hits": 54
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"never called\" in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"never reached\" in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"never runs\" in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"never executed\" in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"never called\"",
+      "hits": 166
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"unreachable code\"",
+      "hits": 66
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"not called\" in:title",
+      "hits": 6
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"forgot to\" in:title",
+      "hits": 0
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "fix \"missing call\"",
+      "hits": 146
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"instead of assignment\"",
+      "hits": 30
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "prs",
+      "term": "\"comparison instead\"",
+      "hits": 689
+    },
+    {
+      "repo": "-e ALL8",
+      "kind": "commits",
+      "term": "\"no-unused-expressions\"",
+      "hits": 3
+    },
+    {
+      "repo": "colinhacks/zod",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2018-01-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 390
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2020-01-01..2020-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 214
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-01-01..2021-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 163
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-01-01..2022-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 231
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-01-01..2023-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 194
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-01-01..2024-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 157
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-01-01..2025-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 152
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-01-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 128
+    },
+    {
+      "repo": "honojs/hono",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2018-01-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 839
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-01-01..2021-03-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 125
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-04-01..2021-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 109
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-07-01..2021-09-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 103
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-10-01..2021-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 73
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-01-01..2022-03-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 108
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-04-01..2022-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 279
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-07-01..2022-09-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 437
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-10-01..2022-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 553
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-01-01..2023-03-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 495
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-04-01..2023-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 433
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-07-01..2023-09-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 517
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-10-01..2023-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 563
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-01-01..2024-03-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 554
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-04-01..2024-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 512
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-07-01..2024-09-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 549
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-10-01..2024-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 611
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-01-01..2025-03-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 676
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-04-01..2025-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 540
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-07-01..2025-09-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 570
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-10-01..2025-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 776
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-01-01..2026-03-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 1000
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-04-01..2026-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 1000
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-07-01..2026-09-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 970
+    },
+    {
+      "repo": "microsoft/vscode",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-10-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 101
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2018-01-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 909
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2020-01-01..2020-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 200
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2020-07-01..2020-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 206
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-01-01..2021-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 189
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-07-01..2021-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 0
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-01-01..2022-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 315
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-07-01..2022-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 366
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-01-01..2023-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 550
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-07-01..2023-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 541
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-01-01..2024-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 570
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-07-01..2024-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 590
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-01-01..2025-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 551
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-07-01..2025-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 427
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-01-01..2026-06-30 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 369
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-07-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 281
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2020-01-01..2020-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 154
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-01-01..2021-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 615
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-01-01..2022-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 704
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-01-01..2023-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 468
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-01-01..2024-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 468
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-01-01..2025-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 321
+    },
+    {
+      "repo": "vitejs/vite",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-01-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 368
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2020-01-01..2020-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 0
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2021-01-01..2021-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 257
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2022-01-01..2022-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 427
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2023-01-01..2023-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 593
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2024-01-01..2024-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 635
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2025-01-01..2025-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 486
+    },
+    {
+      "repo": "withastro/astro",
+      "kind": "prs",
+      "term": "is:pr is:merged fix in:title merged:2026-01-01..2026-12-31 (GraphQL, metadata + changed files, for the tiny-fix scan)",
+      "hits": 681
+    }
+  ],
+  "confirmed": [
+    {
+      "id": "microsoft/vscode#247184",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/247184",
+      "issueUrl": null,
+      "date": "2025-04-23",
+      "title": "mcp: fix not using resolved connection from extension api",
+      "description": "An extension's resolveServerLanch() result was assigned to `launch`, then immediately overwritten by variable substitution on the unresolved `definition.launch`, so MCP servers started with the definition's launch config instead of the one the extension resolved.",
+      "kind": "dead-store-should-be-used",
+      "buggyCode": "let launch = definition.launch;\nif (collection.resolveServerLanch) { launch = await collection.resolveServerLanch(definition); if (!launch) return undefined; }\ntry { launch = await this._replaceVariablesInLaunch(definition, definition.launch); }",
+      "fixedCode": "launch = await this._replaceVariablesInLaunch(definition, launch);",
+      "fixSha": "bbaed6818cb68dce835b01de65816a95dd193ee2",
+      "parentSha": "0204cf08b05ca7425e1758510b673d248a908a5c",
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/mcp/common/mcpRegistry.ts",
+          "lines": [
+            364,
+            373
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "sonarjs/no-dead-store",
+          "verdict": "likely",
+          "reason": "the initializer `= definition.launch` on L364 is overwritten on every path before it is read (L366 or L373); this flags the initializer, not the real bug"
+        },
+        {
+          "rule": "no-useless-assignment (ESLint core)",
+          "verdict": "likely",
+          "reason": "same dead initializer on L364"
+        },
+        {
+          "rule": "no-unused-vars / noUnusedLocals",
+          "verdict": "no",
+          "reason": "`launch` is read at L367 and later"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": true,
+      "subjectNote": "The rule that fires (dead initializer) points next to the bug, not at it: deleting the initializer satisfies the rule and keeps the bug; the right fix passes the resolved `launch` to the substitution call. Needs minimal adaptation (stub the collection/definition types and _replaceVariablesInLaunch)."
+    },
+    {
+      "id": "excalidraw/excalidraw#880",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/880",
+      "issueUrl": null,
+      "date": "2020-03-09",
+      "title": "Fix perf regression",
+      "description": "The element canvas cache was read but never written: generateElement returned a freshly rendered canvas without storing it, so every frame re-rendered every element ('D'oh! We should probably actually *populate* the canvas cache'). Dragging in large scenes became very slow.",
+      "kind": "unused-should-be-used",
+      "buggyCode": "const prevElementWithCanvas = elementWithCanvasCache.get(element);\nif (!prevElementWithCanvas || prevElementWithCanvas.canvasZoom !== zoom) {\n  return generateElementCanvas(element, zoom);\n}",
+      "fixedCode": "const elementWithCanvas = generateElementCanvas(element, zoom);\nelementWithCanvasCache.set(element, elementWithCanvas);\nreturn elementWithCanvas;",
+      "fixSha": "86f9f32a59528101e703698e89f83a6166c8166e",
+      "parentSha": "30434e3e6c2459b24b806469004b950edb2a5212",
+      "files": [
+        {
+          "path": "src/renderer/renderElement.ts",
+          "lines": [
+            114,
+            249
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "sonarjs/no-empty-collection",
+          "verdict": "likely",
+          "reason": "the WeakMap declared at L114 is never written, and is read at L245"
+        },
+        {
+          "rule": "no-unused-vars / noUnusedLocals",
+          "verdict": "no",
+          "reason": "the cache variable is read"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": true,
+      "subjectNote": "generateElement (L132-249) plus the two WeakMaps is close to self-contained (stub rough.js shapes and generateElementCanvas). The cheap fix deletes the cache lookup; the right fix stores the generated canvas. Behaviour check: count generateElementCanvas calls across repeated renders at the same zoom."
+    },
+    {
+      "id": "microsoft/vscode#282685",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/282685",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/171352",
+      "date": "2025-12-11",
+      "title": "Use text argument",
+      "description": "The test helper withSplitLinesCollection(text, callback) ignored its `text` parameter and always built a hard-coded model, so every test that called it with different text was testing the same input.",
+      "kind": "unused-should-be-used",
+      "buggyCode": "function withSplitLinesCollection(text: string, callback: ...) { ... const model = createTextModel(['int main() {', ...].join('\\n')); ... callback(model, linesCollection); }",
+      "fixedCode": "const model = createTextModel(text);",
+      "fixSha": "9880f98e9d264a0d8a0ca74463d6c1b94de0a442",
+      "parentSha": "c002a5b6e296b4c4bb8350fd782df69e42657f2a",
+      "files": [
+        {
+          "path": "src/vs/editor/test/browser/viewModel/modelLineProjection.test.ts",
+          "lines": [
+            96,
+            113
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "TypeScript noUnusedParameters",
+          "verdict": "likely",
+          "reason": "`text` is never read"
+        },
+        {
+          "rule": "Biome noUnusedFunctionParameters",
+          "verdict": "likely",
+          "reason": "`text` is never read"
+        },
+        {
+          "rule": "no-unused-vars (Oxlint/ESLint default args: after-used)",
+          "verdict": "no",
+          "reason": "a later parameter (`callback`) is used, so after-used skips `text`"
+        },
+        {
+          "rule": "sonarjs/no-unused-function-argument",
+          "verdict": "unverified",
+          "reason": "depends on whether it reports parameters before a used one"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "A test file with heavy editor dependencies; illustrates the after-used blind spot rather than a standalone subject."
+    },
+    {
+      "id": "microsoft/vscode#324523",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/324523",
+      "issueUrl": null,
+      "date": "2026-07-07",
+      "title": "Use startColumn in growUntilVariableBoundaries",
+      "description": "growUntilVariableBoundaries computed a grown `startColumn` in a loop but returned a Range built from the original `startPosition.column`, so the range only ever grew to the right ('due to the typo it is not used at all').",
+      "kind": "unused-should-be-used",
+      "buggyCode": "let startColumn = startPosition.column;\nwhile (startColumn > 1 && ...) { startColumn--; }\n...\nreturn new Range(startPosition.lineNumber, startPosition.column, endPosition.lineNumber, endColumn + 1);",
+      "fixedCode": "return new Range(startPosition.lineNumber, startColumn, endPosition.lineNumber, endColumn + 1);",
+      "fixSha": "b3978bbc5260f7de546b3cc575a73a26071eeb09",
+      "parentSha": "93ad71ca816a243f807f008ab68976ed130f9132",
+      "files": [
+        {
+          "path": "src/vs/editor/contrib/inlineCompletions/browser/view/inlineEdits/inlineEditsViews/longDistanceHint/longDistancePreviewEditor.ts",
+          "lines": [
+            381,
+            407
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "`startColumn` is read in its own loop condition, which no-unused-vars, noUnusedLocals and no-dead-store all count as a use; the value after the loop is never read, which none of them track"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": true,
+      "subjectNote": "Self-contained (ITextModel and Range can be stubbed in ~10 lines) and the right fix is to use the variable, but no rule fires, so it only works as a rule-silent contrast, not as a lint-driven subject."
+    },
+    {
+      "id": "withastro/astro#17703",
+      "repo": "withastro/astro",
+      "corpusRepo": "astro",
+      "fixUrl": "https://github.com/withastro/astro/pull/17703",
+      "issueUrl": "https://github.com/withastro/astro/issues/17682",
+      "date": "2026-08-18",
+      "title": "Fix Astro.site always being undefined in Container API rendering",
+      "description": "AstroContainer.create() accepted `astroConfig.site` in its type but never read it, so Astro.site was always undefined in container rendering.",
+      "kind": "unused-should-be-used",
+      "buggyCode": "const { streaming = false, manifest, renderers = [], resolve } = containerOptions;  // astroConfig never destructured\nconst ssrManifest = createManifest(manifest, renderers);",
+      "fixedCode": "const { ..., astroConfig } = containerOptions; ... createManifest(manifest, renderers, undefined, site)",
+      "fixSha": "771b0a9a04ca4b4bcdd098b2062a5903cc988112",
+      "parentSha": "dcdfd15a9b192f64cc313c65b74fc2d9ce30df9f",
+      "files": [
+        {
+          "path": "packages/astro/src/container/index.ts",
+          "lines": [
+            319,
+            366
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "the unused input is an object property that is never destructured, so no binding exists for an unused-variable rule to see"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Large class with many dependencies."
+    },
+    {
+      "id": "microsoft/vscode#330859",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/330859",
+      "issueUrl": null,
+      "date": "2026-08-14",
+      "title": "voice: honor the new_session flag on send_to_chat",
+      "description": "The voice backend's send_to_chat tool call carries a new_session flag, but the controller's send_to_chat branch never read it, so 'start a new session and ...' requests went into the current session.",
+      "kind": "unused-should-be-used",
+      "buggyCode": "if (e.name === 'send_to_chat') { ... const rawText = e.args?.['text'] ...  /* e.args['new_session'] never read */ }",
+      "fixedCode": "if (e.args?.['new_session'] === true) { this._setPinnedSubmitSession(undefined); this.newSessionAsTarget(); ... }",
+      "fixSha": "bffa77176f93fe0c1113f5ee96ef702962ec118d",
+      "parentSha": "cc160c6a6c161eb3004488f7214075ca286d272f",
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/chat/browser/voiceClient/voiceSessionController.ts",
+          "lines": [
+            2091,
+            2110
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "a property of a tool-call argument bag that is never read; no binding"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Large controller."
+    },
+    {
+      "id": "withastro/astro#12763",
+      "repo": "withastro/astro",
+      "corpusRepo": "astro",
+      "fixUrl": "https://github.com/withastro/astro/pull/12763",
+      "issueUrl": "https://github.com/withastro/astro/issues/12372",
+      "date": "2024-12-17",
+      "title": "fix: invoke vite.build with up to date configuration during astro:build:setup",
+      "description": "clientBuild called runHookBuildSetup() and dropped its return value (the config integrations updated through updateConfig), then built with the original config, so updateConfig in astro:build:setup was ignored for the client target. ssrBuild, its sibling, used the returned config.",
+      "kind": "lost-return-value",
+      "buggyCode": "await runHookBuildSetup({ ..., target: 'client', ... });\nconst buildResult = await vite.build(viteBuildConfig);",
+      "fixedCode": "const updatedViteBuildConfig = await runHookBuildSetup({...});\nconst buildResult = await vite.build(updatedViteBuildConfig);",
+      "fixSha": "8da231855162af245f2b3664babb68dff0ba390f",
+      "parentSha": "483da89cf68d68ec792ff8721d469ed10dc14e4a",
+      "files": [
+        {
+          "path": "packages/astro/src/core/build/static-build.ts",
+          "lines": [
+            286,
+            294
+          ],
+          "note": "clientBuild; ssrBuild's correct copy is L226-234"
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "an awaited call used as a statement; no-unused-expressions allows calls and awaits, and sonarjs/no-ignored-return (type-aware, ESLint only) only knows side-effect-free built-ins"
+        }
+      ],
+      "alsoInconsistentClone": true,
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Depends on Vite and Astro's integration hooks."
+    },
+    {
+      "id": "vitejs/vite#5470",
+      "repo": "vitejs/vite",
+      "corpusRepo": "vite",
+      "fixUrl": "https://github.com/vitejs/vite/pull/5470",
+      "issueUrl": null,
+      "date": "2021-10-29",
+      "title": "fix: Vite module graph race condition",
+      "description": "ssrImport awaited ssrLoadModule() and discarded the module it returned, then re-read it from the global module graph; when a dependency rebuild invalidated the graph mid-load, in-flight imports got invalid module instances.",
+      "kind": "lost-return-value",
+      "buggyCode": "await ssrLoadModule(dep, server, context, urlStack)\n...\nreturn moduleGraph.urlToModuleMap.get(dep)?.ssrModule",
+      "fixedCode": "const mod = await ssrLoadModule(dep, server, context, urlStack)\n// return local module to avoid race condition #5470\nreturn mod",
+      "fixSha": "70fd32c1569c3d93a231577b573dbd2b34da4de2",
+      "parentSha": "1846df81b3f40c480a91632a2d02d9d2156d7ada",
+      "files": [
+        {
+          "path": "packages/vite/src/node/ssr/ssrModuleLoader.ts",
+          "lines": [
+            113,
+            120
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "awaited call statement; no rule tracks a discarded non-built-in return value"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Needs the module graph and SSR loader."
+    },
+    {
+      "id": "microsoft/vscode#182995",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/182995",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/182994",
+      "date": "2023-05-19",
+      "title": "Fix dialog aria labels",
+      "description": "getIconAriaLabel() called nls.localize('Error'/'Warning'/'In Progress') as bare statements in each switch case and discarded the results, so every dialog icon was announced as 'Info'.",
+      "kind": "lost-return-value",
+      "buggyCode": "const typeLabel = nls.localize('dialogInfoMessage', 'Info');\nswitch (this.options.type) {\n  case 'error':\n    nls.localize('dialogErrorMessage', 'Error');\n    break;",
+      "fixedCode": "let typeLabel = ...; case 'error': typeLabel = nls.localize('dialogErrorMessage', 'Error');",
+      "fixSha": "c0be5c424a7cc5132ac83680c61dcc9617b7374a",
+      "parentSha": "a89442fbd59082e0d78f7c644844a69551fe0bf4",
+      "files": [
+        {
+          "path": "src/vs/base/browser/ui/dialog/dialog.ts",
+          "lines": [
+            174,
+            191
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "call-expression statements are allowed by no-unused-expressions (all linters); sonarjs/no-ignored-return only covers known built-in methods"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": true,
+      "subjectNote": "Tiny and self-contained (stub nls.localize). The right fix assigns each result to typeLabel. No rule fires, so it is a rule-silent contrast."
+    },
+    {
+      "id": "microsoft/vscode#194278",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/194278",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/194115",
+      "date": "2023-09-27",
+      "title": "Fix silly programming error in quick diff",
+      "description": "The quick-diff decorator created a decorations collection and dropped the returned handle, so `this.decorationsCollection` stayed undefined: each update created another collection and old decorations were never cleared.",
+      "kind": "lost-return-value",
+      "buggyCode": "if (!this.decorationsCollection) {\n  this.codeEditor.createDecorationsCollection(decorations);\n}",
+      "fixedCode": "this.decorationsCollection = this.codeEditor.createDecorationsCollection(decorations);",
+      "fixSha": "8ef15195d4c35df5b402f782dda01b63935ded26",
+      "parentSha": "2c34b239ca45419760f44bb1191032fe6a299ae5",
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/scm/browser/dirtydiffDecorator.ts",
+          "lines": [
+            1178,
+            1179
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "method-call statement; the field is read but never written, which no enabled rule reports for class fields"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": ""
+    },
+    {
+      "id": "microsoft/vscode#156422",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/156422",
+      "issueUrl": null,
+      "date": "2022-07-27",
+      "title": "fix the printed installed extension version",
+      "description": "The CLI discarded the installed extension returned by installFromGallery() and printed the gallery entry's version, so `--install-extension` could report the wrong installed version.",
+      "kind": "lost-return-value",
+      "buggyCode": "await this.extensionManagementService.installFromGallery(galleryExtension, {...});\noutput.log(localize('successInstall', ..., id, galleryExtension.version));",
+      "fixedCode": "const local = await ...installFromGallery(...);\noutput.log(localize('successInstall', ..., id, local.manifest.version));",
+      "fixSha": "079c49ed1277fc42d8a49823dc6fbab473223503",
+      "parentSha": "241c77020385e27ead8398ae02a9aed2ee7fd160",
+      "files": [
+        {
+          "path": "src/vs/platform/extensionManagement/common/extensionManagementCLIService.ts",
+          "lines": [
+            226,
+            227
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "awaited call statement"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": ""
+    },
+    {
+      "id": "microsoft/vscode#136085",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/136085",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/133687",
+      "date": "2021-10-29",
+      "title": "Properly fix #133687",
+      "description": "When reconnecting persistent terminals, each split was created with the first terminal as its parent because the new instance returned by createTerminal() was dropped instead of becoming the next parent, so restored split layouts came back wrong.",
+      "kind": "lost-return-value",
+      "buggyCode": "await this.createTerminal({ config: {...}, location: { parentTerminal: terminalInstance } });",
+      "fixedCode": "terminalInstance = await this.createTerminal({ ... });",
+      "fixSha": "27eff83792c05067f1ef9eb563d08c9a428f0295",
+      "parentSha": "ac04bdd298b673f029387d33939a81891d9f2bf9",
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/terminal/browser/terminalService.ts",
+          "lines": [
+            423,
+            439
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "awaited call statement"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "The PR also removed a workaround in _getSplitParent (L1374-1377); the description is from the diff, not the issue text."
+    },
+    {
+      "id": "trpc/trpc#2943",
+      "repo": "trpc/trpc",
+      "corpusRepo": "trpc",
+      "fixUrl": "https://github.com/trpc/trpc/pull/2943",
+      "issueUrl": "https://github.com/trpc/trpc/issues/2942",
+      "date": "2022-10-09",
+      "title": "fix `setInfiniteData`",
+      "description": "In the utils proxy, setData passed `updater` to setQueryData but its sibling setInfiniteData passed `input`, so infinite-query optimistic updates set the cache to the query input (issue: 'setInfiniteData sets optimistic update to input').",
+      "kind": "inconsistent-clone",
+      "buggyCode": "setData: () => context.setQueryData(queryKey, updater, ...rest),\nsetInfiniteData: () =>\n  context.setInfiniteQueryData(queryKey, input, ...rest),",
+      "fixedCode": "context.setInfiniteQueryData(queryKey, updater, ...rest),",
+      "fixSha": "ac31dcb9ed778fc0425cd46b3d3a7cbcd0ef0adf",
+      "parentSha": "4e001688fbdd7de848beb431a343a08c9659618a",
+      "files": [
+        {
+          "path": "packages/react/src/shared/proxy/utilsProxy.ts",
+          "lines": [
+            258,
+            260
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "one-line arrow properties in an object map; sonarjs/no-identical-functions needs identical bodies of 3+ statements, and the copies differ"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "No rule fires; small, but the bug is in the wiring, not a function."
+    },
+    {
+      "id": "microsoft/vscode#273452",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/273452",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/257776",
+      "date": "2026-01-11",
+      "title": "Ignore Enter for replace while composing. Fix #257776",
+      "description": "Pressing Enter to confirm IME composition in the Find/Replace widget also ran the replace action. The IME guard (`not isComposing`) had been added to the sibling close-widget command in the same file and to rename (#174829), but not to the copied ReplaceOne registration.",
+      "kind": "inconsistent-clone",
+      "buggyCode": "kbExpr: ContextKeyExpr.and(EditorContextKeys.focus, CONTEXT_REPLACE_INPUT_FOCUSED),\nprimary: KeyCode.Enter",
+      "fixedCode": "kbExpr: ContextKeyExpr.and(EditorContextKeys.focus, CONTEXT_REPLACE_INPUT_FOCUSED, EditorContextKeys.isComposing.negate()),",
+      "fixSha": "1f9305ce59e4c752f52f1433b6922c4510218216",
+      "parentSha": "2c1a2eeb2d6171038856b3737af3283ae19295ae",
+      "files": [
+        {
+          "path": "src/vs/editor/contrib/find/browser/findController.ts",
+          "lines": [
+            1103,
+            1113
+          ],
+          "note": "the guarded sibling is L1010-1020"
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "object-literal command registrations, not functions or branches"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": ""
+    },
+    {
+      "id": "vitejs/vite#22306",
+      "repo": "vitejs/vite",
+      "corpusRepo": "vite",
+      "fixUrl": "https://github.com/vitejs/vite/pull/22306",
+      "issueUrl": null,
+      "date": "2026-04-23",
+      "title": "fix(glob): align hmr matcher options with glob enumeration",
+      "description": "import.meta.glob's HMR matcher rebuilt glob matching with picomatch defaults, while the enumeration used noextglob/dot/ignore options, so file creation under node_modules or dot-directories invalidated globs that would never include those files.",
+      "kind": "inconsistent-clone",
+      "buggyCode": "const affirmedMatcher = picomatch(affirmed)\nconst negatedMatcher = picomatch(negated)",
+      "fixedCode": "picomatch(affirmed, { noextglob: true, dot: !!i.options.exhaustive, ignore: i.options.exhaustive ? [] : ['**/node_modules/**'] })",
+      "fixSha": "30028f94516fa06dd0212567373169b3b3f6e393",
+      "parentSha": "a19003516951a3710aab0f2646d78c48b2e5d2ad",
+      "files": [
+        {
+          "path": "packages/vite/src/node/plugins/importMetaGlob.ts",
+          "lines": [
+            84,
+            85
+          ],
+          "note": "enumeration's options at L445-451"
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "two option sets for the same glob semantics, not token clones"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Effect is extra invalidation (perf), not wrong output."
+    },
+    {
+      "id": "microsoft/vscode#304452",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/304452",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/304451",
+      "date": "2026-03-25",
+      "title": "Fix copy-paste bug in performance view blocking startup count",
+      "description": "The performance view's 'blocking startup' count added the Starting-phase contributions twice and omitted Ready-phase ones; the correct pair is in the same file's _addWorkbenchContributionsPerfMarksTable().",
+      "kind": "inconsistent-clone",
+      "buggyCode": "(contribTimings.get(LifecyclePhase.Starting)?.length ?? 0) + (contribTimings.get(LifecyclePhase.Starting)?.length ?? 0)",
+      "fixedCode": "... + (contribTimings.get(LifecyclePhase.Ready)?.length ?? 0)",
+      "fixSha": "29d5ff76cd0cc4b8bb9a36ec73dbeb6e9503db90",
+      "parentSha": "e852b5875cca2df1146a9373074ce05553489e48",
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/performance/browser/perfviewEditor.ts",
+          "lines": [
+            218,
+            218
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "sonarjs/no-identical-expressions",
+          "verdict": "unverified, probably no",
+          "reason": "the rule skips `+` (and `*`), where identical operands can be intentional"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Copy-paste inside one expression rather than across two code copies."
+    },
+    {
+      "id": "honojs/hono#1721",
+      "repo": "honojs/hono",
+      "corpusRepo": "hono",
+      "fixUrl": "https://github.com/honojs/hono/pull/1721",
+      "issueUrl": null,
+      "date": "2023-11-18",
+      "title": "fix(types): fixed a typo",
+      "description": "In the 4-handler overload of app.get(), the fourth handler was typed with I3 instead of I4, breaking the pattern the neighbouring overloads follow, so the last handler's validated input types were wrong.",
+      "kind": "inconsistent-clone",
+      "buggyCode": "...handlers: [H<E2, P, I, R>, H<E3, P, I2, R>, H<E4, P, I3, R>, H<E5, P, I3, R>]",
+      "fixedCode": "H<E5, P, I4, R>",
+      "fixSha": "3b71dc647fb5ed2d648f0df1276d36ce4f3a58eb",
+      "parentSha": "ae3546e32a533af782eadf0bc7221d2a01c2a81f",
+      "files": [
+        {
+          "path": "src/types.ts",
+          "lines": [
+            113,
+            127
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "type-level; I4 is still used in the return type, so no unused type parameter"
+        }
+      ],
+      "typeLevelOnly": true,
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": ""
+    },
+    {
+      "id": "microsoft/vscode#120054",
+      "repo": "microsoft/vscode",
+      "corpusRepo": "vscode",
+      "fixUrl": "https://github.com/microsoft/vscode/pull/120054",
+      "issueUrl": "https://github.com/microsoft/vscode/issues/120053",
+      "date": "2021-04-08",
+      "title": "Fixed wrong variable name shadowing that caused Profiles for extensions not to appear",
+      "description": "Inside the loop, `let profileInfo = null` shadowed the outer profileInfo, so `if (profileInfo)` was always false and the per-extension profile block never ran; the Running Extensions view never showed profile times.",
+      "kind": "unreachable-code",
+      "buggyCode": "let profileInfo: IExtensionProfileInformation | null = null;\nif (profileInfo) { ... profileInfo = { segments, totalTime }; }",
+      "fixedCode": "let extProfileInfo = null; if (profileInfo) { ... extProfileInfo = {...}; } ... profileInfo: extProfileInfo || undefined",
+      "fixSha": "464e51e24f00de440f24b7f4285432e55dc7d32a",
+      "parentSha": "f4449876e4a9c23b6b45876093e80b57732353b4",
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/extensions/browser/abstractRuntimeExtensionsEditor.ts",
+          "lines": [
+            140,
+            160
+          ]
+        }
+      ],
+      "expectedRules": [
+        {
+          "rule": "@typescript-eslint/no-shadow (ESLint core enables every typescript-eslint rule)",
+          "verdict": "likely",
+          "reason": "the inner profileInfo shadows the outer const at L117"
+        },
+        {
+          "rule": "no-unreachable / noUnreachable / no-constant-condition",
+          "verdict": "no",
+          "reason": "the condition is a variable, so the block is not syntactically unreachable"
+        },
+        {
+          "rule": "sonarjs/no-gratuitous-expressions",
+          "verdict": "unverified",
+          "reason": "the condition is always false after `= null`; unclear whether the rule tracks literal assignments"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "subjectCandidate": false,
+      "subjectNote": "Fix commit dc9bdc2 is on the PR branch; fixSha is the merge commit and parentSha its first (main) parent."
+    }
+  ],
+  "rejected": [
+    {
+      "id": "vercel/next.js#45833",
+      "url": "https://github.com/vercel/next.js/pull/45833",
+      "reason": "swapped assignments (appDir/pagesDir); not dead code"
+    },
+    {
+      "id": "microsoft/vscode#301472",
+      "url": "https://github.com/microsoft/vscode/pull/301472",
+      "reason": "wrong property names (workspaceFolder vs workspaceFolderValue); not dead code"
+    },
+    {
+      "id": "withastro/astro#13524",
+      "url": "https://github.com/withastro/astro/pull/13524",
+      "reason": "wrong value (locale path instead of code); every variable was used"
+    },
+    {
+      "id": "vitejs/vite#7604",
+      "url": "https://github.com/vitejs/vite/pull/7604",
+      "reason": "preview proxy read server.proxy inside shared middleware; wrong config, not a clone or dead code"
+    },
+    {
+      "id": "honojs/hono#4821",
+      "url": "https://github.com/honojs/hono/issues/4632",
+      "reason": "fire() and handle() had different default options; diverged defaults, not duplicated code"
+    },
+    {
+      "id": "withastro/astro#16921",
+      "url": "https://github.com/withastro/astro/pull/16921",
+      "reason": "dead else branch removed, but the PR states no behaviour change"
+    },
+    {
+      "id": "vercel/next.js#78568",
+      "url": "https://github.com/vercel/next.js/pull/78568",
+      "reason": "a fix applied to dynamic routes then repeated for static routes in the same loop; an incomplete fix, not two code copies"
+    },
+    {
+      "id": "vitejs/vite#18098",
+      "url": "https://github.com/vitejs/vite/pull/18098",
+      "reason": "missing error handling on a new code path; not a clone"
+    },
+    {
+      "id": "vercel/next.js#73759",
+      "url": "https://github.com/vercel/next.js/pull/73759",
+      "reason": "edge route template lacked cache handler setup another template had; closer to feature parity than a diverged copy"
+    },
+    {
+      "id": "honojs/hono#5174",
+      "url": "https://github.com/honojs/hono/pull/5174",
+      "reason": "a field initializer overwritten before it was read (a dead store), but perf only (one allocation per request), no behavioural bug"
+    },
+    {
+      "id": "honojs/hono#180",
+      "url": "https://github.com/honojs/hono/pull/180",
+      "reason": "jwt `alg` option accepted but not passed to verify; a property never read (no binding). Plausible confirmed bug, but 2022 and not verified against the pre-fix file"
+    },
+    {
+      "id": "honojs/hono#4263",
+      "url": "https://github.com/honojs/hono/pull/4263",
+      "reason": "signingSecret cookie option was never used; resolved by deleting the option, so the dead input was the bug's absence, not a behaviour bug"
+    },
+    {
+      "id": "vitejs/vite#14847",
+      "url": "https://github.com/vitejs/vite/pull/14847",
+      "reason": "hard-coded '/public' in an error message; not dead code"
+    },
+    {
+      "id": "microsoft/vscode#118468",
+      "url": "https://github.com/microsoft/vscode/pull/118468",
+      "reason": "scanner false positive (spread `...title` is a use)"
+    },
+    {
+      "id": "microsoft/vscode#172948",
+      "url": "https://github.com/microsoft/vscode/pull/172948",
+      "reason": "scanner false positive (`this._layoutService` is used)"
+    },
+    {
+      "id": "vercel/next.js#46484",
+      "url": "https://github.com/vercel/next.js/pull/46484",
+      "reason": "loader name mismatch; not dead code"
+    },
+    {
+      "id": "trpc/trpc#4629",
+      "url": "https://github.com/trpc/trpc/pull/4629",
+      "reason": "cacheTag was used in one place and not passed to another call; partial use, not unused"
+    }
+  ],
+  "lintDrivenCleanups": [
+    {
+      "id": "microsoft/vscode#104521",
+      "url": "https://github.com/microsoft/vscode/pull/104521",
+      "note": "'Ban unreachable code': made TS's unreachable-code warning an error. All existing cases were switches on enums, converted to default cases with behaviour unchanged."
+    },
+    {
+      "id": "microsoft/vscode#42831",
+      "url": "https://github.com/microsoft/vscode/pull/42831",
+      "note": "Re-enabled the unused-variables tslint rule for the hygiene task (2018)."
+    },
+    {
+      "id": "microsoft/vscode@7a2065f",
+      "url": "https://github.com/microsoft/vscode/commit/7a2065f582",
+      "note": "'switching to noUnusedLocals' (2017); vscode has compiled with noUnusedLocals since, which is why its unused-variable bugs in this list are in blind spots (parameters before a used one, loop-read variables, properties)."
+    },
+    {
+      "id": "microsoft/vscode@125ba4a",
+      "url": "https://github.com/microsoft/vscode/commit/125ba4a8a6",
+      "note": "Enabled a custom/forked no-unused-expressions rule (2020). Diff not inspected."
+    },
+    {
+      "id": "withastro/astro#11173",
+      "url": "https://github.com/withastro/astro/pull/11173",
+      "note": "Raised @typescript-eslint/no-unused-vars from warn to error and fixed ~20 reports, all deletions; 'I don't believe any of the changed types impact users'."
+    },
+    {
+      "id": "withastro/astro#8832",
+      "url": "https://github.com/withastro/astro/pull/8832",
+      "note": "Made unused variables a warning in ESLint (2023)."
+    },
+    {
+      "id": "excalidraw/excalidraw#2309",
+      "url": "https://github.com/excalidraw/excalidraw/pull/2309",
+      "note": "Re-enabled @typescript-eslint/no-unused-vars; the one finding was a component inlined, no behaviour change."
+    },
+    {
+      "id": "excalidraw/excalidraw#268",
+      "url": "https://github.com/excalidraw/excalidraw/pull/268",
+      "note": "eslint --max-warnings 0; removed an unused import."
+    },
+    {
+      "id": "excalidraw/excalidraw#7991",
+      "url": "https://github.com/excalidraw/excalidraw/pull/7991",
+      "note": "'fix: remove unused param from drawImagePlaceholder' (zoomValue): deletion was correct."
+    },
+    {
+      "id": "vitejs/vite#18594",
+      "url": "https://github.com/vitejs/vite/pull/18594",
+      "note": "Removed an unused `ssr` variable left behind by the Environment API refactor; deletion was correct."
+    },
+    {
+      "id": "vercel/next.js#45307",
+      "url": "https://github.com/vercel/next.js/pull/45307",
+      "note": "Renamed an unused map callback parameter to `_` in a bench script."
+    },
+    {
+      "id": "vercel/next.js#13645",
+      "url": "https://github.com/vercel/next.js/pull/13645",
+      "note": "Added no-shadow to ESLint (2020). Diff not inspected."
+    }
+  ],
+  "notes": [
+    "Unused-binding bugs are rare in this history, and that is a finding: all eight repos compile or lint with an unused-variable check (vscode has used noUnusedLocals since 2017; hono, trpc, zod, astro and vite lint with no-unused-vars). The bugs that got through sit in the checks' blind spots: a parameter before a used one (args: after-used, vscode#282685), a variable read in its own loop condition but not after it (vscode#324523), object properties that are never read (astro#17703, vscode#330859, hono#180), a collection that is read but never written (excalidraw#880), and a dead initializer next to the real bug (vscode#247184).",
+    "Lost return values were the most common dead-value bug found (6: astro#12763, vite#5470, vscode#182995, #194278, #156422, #136085), and no enabled rule reports any of them: they are call or await statements, which no-unused-expressions allows, and sonarjs/no-ignored-return only knows side-effect-free built-ins.",
+    "None of the 5 inconsistent clones is a function-level token clone that sonarjs/no-identical-functions or no-duplicated-branches could see: they are sibling object entries (trpc#2943), command registrations (vscode#273452), two option sets for one semantics (vite#22306), an overload family (hono#1721) and operands of one expression (vscode#304452). astro#12763 is also a diverged copy (clientBuild vs ssrBuild).",
+    "Searches not run or cut short: vscode PRs merged in 2026 were collected but their patches were not scanned (REST quota); vscode before 2021 and next.js 2021-H2 (that window's GraphQL query returned nothing) were not scanned.",
+    "API use: the bulk patch download exhausted this token's REST core quota (5,000/hour) at about 04:49 UTC on 2026-10-13, with reset at 05:26 UTC; GraphQL was used after that. Other agents on the same token may have seen 403s in that window."
+  ]
+}

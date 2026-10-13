@@ -15,10 +15,15 @@
 //                                   ([{ from, name }], e.g. its tsconfig.json)
 //   lockPaths                       extra absolute paths made unreadable while an agent runs, on
 //                                   top of this harness's own folders (e.g. corpus notes that
-//                                   name the expected fix)
+//                                   name the expected fix). Paths outside the repo that only
+//                                   exist on one machine go in AGENT_EXPERIMENT_EXTRA_LOCKS
+//                                   (colon-separated), which run-one.mjs adds for every topic.
 //
 // and may export these hooks. When one is absent, the shared script runs its built-in
 // cognitive-complexity code, which predates topic modules:
+//   toDiagnostics(lintResult)       turns `lint`'s result into Ultracite's diagnostics, for a
+//                                   topic whose lint isn't ESLint (dead-code's Oxlint subject);
+//                                   default: the ESLint adapter's shape (lib.toUltraciteDiagnostics)
 //   prepareSubjects()               builds subjectsDir from the corpus examples
 //   measure(runId)                  re-measures one run, writes and returns measure.json
 //   summaryLine(measure)            the one-line summary measure.cjs prints

@@ -1,0 +1,14 @@
+--- a/git.ts
++++ b/git.ts
+@@ -69,11 +69,9 @@
+ 
+ export async function filterIgnored(files: readonly SourceFile[]) {
+   let stdout = '';
+-  let stderr = '';
+   try {
+     const result = await execa('git check-ignore **/*');
+     stdout = result.stdout;
+-    stderr = result.stderr;
+   } catch (error) {
+     log.error('Error executing git check-ignore:', error);
+     stdout = '';

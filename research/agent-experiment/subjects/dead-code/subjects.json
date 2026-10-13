@@ -1,0 +1,204 @@
+[
+  {
+    "id": "dc1",
+    "example": "dc1-vscode-mcp-resolve-connection.ts",
+    "basename": "mcpRegistry.ts",
+    "exportName": "McpRegistry",
+    "source": "microsoft/vscode src/vs/workbench/contrib/mcp/common/mcpRegistry.ts",
+    "linter": "eslint",
+    "target": "launch",
+    "kind": "bug: the dead initializer is the symptom; the right fix uses the value",
+    "expectedDiagnostics": 1,
+    "path": "subjects/dead-code/dc1/mcpRegistry.ts",
+    "sha256": "d78e126234583046b83a58e34db3cf4ed8d0d4c3e48f81f99b830fdbffd7aaeb",
+    "headerLinesRemoved": 24,
+    "permalinks": [
+      "https://github.com/microsoft/vscode/blob/0204cf08b05ca7425e1758510b673d248a908a5c/src/vs/workbench/contrib/mcp/common/mcpRegistry.ts#L328-L405"
+    ],
+    "corpusDeadCodeHits": {
+      "eslint": [
+        {
+          "line": 187,
+          "message": "The value assigned to 'launch' is not used in subsequent statements.",
+          "rule": "no-useless-assignment"
+        }
+      ],
+      "eslint +type-aware": [
+        {
+          "line": 187,
+          "message": "The value assigned to 'launch' is not used in subsequent statements.",
+          "rule": "no-useless-assignment"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dc2",
+    "example": "dc2-vite-serve-static.ts",
+    "basename": "static.ts",
+    "exportName": "serveStaticMiddleware",
+    "source": "vitejs/vite packages/vite/src/node/server/middlewares/static.ts",
+    "linter": "eslint",
+    "target": "fileUrl",
+    "kind": "leftover: deleting is right",
+    "expectedDiagnostics": 2,
+    "path": "subjects/dead-code/dc2/static.ts",
+    "sha256": "a40fbee4c1d4e6f2e63cf9a6057c0b004dfd12ddb77ba4a574f76fcc81aa001b",
+    "headerLinesRemoved": 19,
+    "permalinks": [
+      "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/static.ts#L125-L208"
+    ],
+    "corpusDeadCodeHits": {
+      "biome": [
+        {
+          "line": 158,
+          "message": "This return statement is unnecessary.",
+          "rule": "complexity/noUselessReturn"
+        }
+      ],
+      "eslint": [
+        {
+          "line": 158,
+          "message": "Unnecessary return statement.",
+          "rule": "no-useless-return"
+        },
+        {
+          "line": 213,
+          "message": "The value assigned to 'fileUrl' is not used in subsequent statements.",
+          "rule": "no-useless-assignment"
+        },
+        {
+          "line": 213,
+          "message": "Remove this useless assignment to variable \"fileUrl\".",
+          "rule": "sonarjs/no-dead-store"
+        }
+      ],
+      "eslint +type-aware": [
+        {
+          "line": 158,
+          "message": "Unnecessary return statement.",
+          "rule": "no-useless-return"
+        },
+        {
+          "line": 213,
+          "message": "The value assigned to 'fileUrl' is not used in subsequent statements.",
+          "rule": "no-useless-assignment"
+        },
+        {
+          "line": 213,
+          "message": "Remove this useless assignment to variable \"fileUrl\".",
+          "rule": "sonarjs/no-dead-store"
+        }
+      ],
+      "oxlint": [
+        {
+          "line": 158,
+          "message": "Unnecessary return statement.",
+          "rule": "no-useless-return",
+          "help": "Remove this redundant `return` statement."
+        }
+      ],
+      "oxlint +js-plugins": [
+        {
+          "line": 158,
+          "message": "Unnecessary return statement.",
+          "rule": "no-useless-return",
+          "help": "Remove this redundant `return` statement."
+        },
+        {
+          "line": 213,
+          "message": "Remove this useless assignment to variable \"fileUrl\".",
+          "rule": "sonarjs/no-dead-store"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dc3",
+    "example": "dc3-trpc-filter-ignored.ts",
+    "basename": "git.ts",
+    "exportName": "filterIgnored",
+    "source": "trpc/trpc packages/upgrade/src/lib/git.ts",
+    "linter": "oxlint",
+    "target": "stderr",
+    "kind": "leftover: deleting is right",
+    "expectedDiagnostics": 1,
+    "path": "subjects/dead-code/dc3/git.ts",
+    "sha256": "a6e184ddf3fb1f812c8e738fd2ceb8fd3c81f4ff886c089f3e0625bf516125b7",
+    "headerLinesRemoved": 25,
+    "permalinks": [
+      "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/git.ts#L1-L54"
+    ],
+    "corpusDeadCodeHits": {
+      "biome": [
+        {
+          "line": 97,
+          "message": "This variable stderr is unused.",
+          "rule": "correctness/noUnusedVariables"
+        }
+      ],
+      "eslint": [
+        {
+          "line": 96,
+          "message": "The value assigned to 'stdout' is not used in subsequent statements.",
+          "rule": "no-useless-assignment"
+        },
+        {
+          "line": 101,
+          "message": "'stderr' is assigned a value but never used.",
+          "rule": "@typescript-eslint/no-unused-vars"
+        },
+        {
+          "line": 101,
+          "message": "Remove this useless assignment to variable \"stderr\".",
+          "rule": "sonarjs/no-dead-store"
+        }
+      ],
+      "eslint +type-aware": [
+        {
+          "line": 96,
+          "message": "The value assigned to 'stdout' is not used in subsequent statements.",
+          "rule": "no-useless-assignment"
+        },
+        {
+          "line": 101,
+          "message": "'stderr' is assigned a value but never used.",
+          "rule": "@typescript-eslint/no-unused-vars"
+        },
+        {
+          "line": 101,
+          "message": "Remove this useless assignment to variable \"stderr\".",
+          "rule": "sonarjs/no-dead-store"
+        }
+      ],
+      "oxlint": [
+        {
+          "line": 97,
+          "message": "Variable 'stderr' is assigned a value but never used. Unused variables should start with a '_'.",
+          "rule": "no-unused-vars",
+          "help": "Did you mean to use this variable?"
+        }
+      ],
+      "oxlint +js-plugins": [
+        {
+          "line": 97,
+          "message": "Variable 'stderr' is assigned a value but never used. Unused variables should start with a '_'.",
+          "rule": "no-unused-vars",
+          "help": "Did you mean to use this variable?"
+        },
+        {
+          "line": 101,
+          "message": "Remove this useless assignment to variable \"stderr\".",
+          "rule": "sonarjs/no-dead-store"
+        }
+      ],
+      "tsc": [
+        {
+          "line": 97,
+          "message": "'stderr' is declared but its value is never read.",
+          "rule": "TS6133"
+        }
+      ]
+    }
+  }
+]

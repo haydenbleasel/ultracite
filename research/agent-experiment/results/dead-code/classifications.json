@@ -1,0 +1,224 @@
+{
+  "classifiedBy": "hand, from each run's diff.patch and the agent's final message (stdout.txt, not committed), 2026-10-13",
+  "codebook": {
+    "categories": {
+      "used the value": "The dead value is now read where it should be. For dc1 that's the fix of microsoft/vscode#247184: substitution runs on `launch`, the resolver's result. Changes behavior on purpose.",
+      "deleted the dead code": "The dead binding, initializer or assignment is removed. `deadCode` says exactly what went, and `initializer` whether the initializer's expression (a call, a property read) went too or was kept.",
+      "renamed to _x": "The binding is renamed to `_x` (what Oxlint's message suggests) and still never read.",
+      "void x or another artificial use": "`void x;`, logging it, exporting it, or passing it somewhere it isn't needed, so the binding counts as read.",
+      "suppression": "A disable comment or a config change.",
+      "broader rewrite": "Code beyond the dead binding and its own statements is restructured.",
+      "no change": "The file is unchanged.",
+      "other": "Anything else."
+    },
+    "fields": {
+      "deadCode": "what happened to the dead binding and the statements around it",
+      "initializer": "for a deleted binding: whether the initializer's expression was deleted with it (\"deleted\"), kept as a statement (\"kept as `void …`\"), or not applicable",
+      "noticedBug": "dc1 only: whether the final message says the resolver's result (`launch`) should have been passed to the substitution, or equivalent",
+      "diagnosis": "a quote or close paraphrase of what the final message says about the cause",
+      "verified": "what the agent says it checked"
+    }
+  },
+  "runs": {
+    "dc1-claude-1": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer: `let launch: McpServerLaunch | undefined;`",
+      "initializer": "deleted (a property read, `definition.launch`)",
+      "noticedBug": true,
+      "diagnosis": "Flagged a \"possible bug\": the substitution reads `definition.launch`, so whatever `resolveServerLanch` returns \"is only used for the cancel check and then thrown away. The intent was probably `this._replaceVariablesInLaunch(definition, launch)`. I left it alone because the rules say not to change runtime behavior, but it's worth checking.\"",
+      "verified": "nothing (Claude Code refused its lint command)",
+      "note": "Found the bug, named the right fix, and didn't apply it, citing the prompt's \"preserving runtime behavior\"."
+    },
+    "dc1-claude-2": {
+      "categories": ["used the value"],
+      "deadCode": "kept; the substitution now reads `launch` (the upstream fix, character for character)",
+      "initializer": "not applicable (the initializer is now read when there's no resolver)",
+      "noticedBug": true,
+      "diagnosis": "\"the error was pointing at a real bug\": the substitution got `definition.launch`, so \"anything the resolver returned was thrown away\". It stated the behavior change (collections with a resolver now use the resolver's launch) and why it didn't delete the initializer: \"That would also silence the rule, but the resolver's result would still be thrown away, so the bug would stay. If you need behavior kept exactly as it was, I can do that instead.\"",
+      "verified": "nothing (Claude Code refused its lint command)",
+      "note": "The only run of 24 that changed behavior on purpose."
+    },
+    "dc1-claude-3": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer: `let launch: McpServerLaunch | undefined;`",
+      "initializer": "deleted (a property read)",
+      "noticedBug": true,
+      "diagnosis": "\"A likely bug you may want to fix\": the resolver's launch \"is only checked for cancellation and then thrown away. Line 172 probably meant to pass `launch`. That would also have cleared the lint error, but it changes behaviour, so I didn't do it under the 'preserve runtime behavior' rule. Tell me if you want that version instead.\"",
+      "verified": "nothing (two attempts to run Oxlint were refused)",
+      "note": "Same as dc1-claude-1: found, explained, declined."
+    },
+    "dc1-claude-4": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer: `let launch: McpServerLaunch | undefined;`",
+      "initializer": "deleted (a property read)",
+      "noticedBug": true,
+      "diagnosis": "\"There may be a real bug here\": the substitution \"ignores whatever `collection.resolveServerLanch(definition)` returned... Passing `launch` there instead looks like the intended behaviour, but I didn't make that change because it would alter how the code runs.\"",
+      "verified": "nothing (shell command refused)",
+      "note": "Same as dc1-claude-1."
+    },
+    "dc1-codex-1": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer",
+      "initializer": "deleted (a property read)",
+      "noticedBug": false,
+      "diagnosis": "\"Removed the unused `launch` initializer... runtime logic is preserved.\" Nothing about the resolver.",
+      "verified": "\"Lint and TypeScript checks passed\": Oxlint (`--deny no-useless-assignment`) and tsc from the main Ultracite checkout under ~/GitHub",
+      "note": "Run directory was named \"dc1-codex-1 dc2\" (see meta.json `note`)."
+    },
+    "dc1-codex-2": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer",
+      "initializer": "deleted (a property read)",
+      "noticedBug": false,
+      "diagnosis": "\"Removed the unused initializer from `launch`, leaving subsequent assignments and control flow unchanged.\"",
+      "verified": "nothing (\"no local lint tooling was available\")",
+      "note": ""
+    },
+    "dc1-codex-3": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer and added `void definition.launch;` before the declaration",
+      "initializer": "kept as `void definition.launch;`",
+      "noticedBug": false,
+      "diagnosis": "\"Fixed the unused `launch` assignment while preserving the property read and any getter side effects.\"",
+      "verified": "Oxlint and tsc from the main Ultracite checkout",
+      "note": "Kept the initializer's property read as a `void` statement, in case `launch` is a getter. `definition` is a plain readonly interface field here."
+    },
+    "dc1-codex-4": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "removed the initializer",
+      "initializer": "deleted (a property read)",
+      "noticedBug": false,
+      "diagnosis": "\"Removed the unused initial assignment to `launch`... launch resolution behavior is preserved.\"",
+      "verified": "\"TypeScript strict checking passes\" (tsc from the main Ultracite checkout)",
+      "note": ""
+    },
+    "dc2-claude-1": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its trailing-slash `if`, and `resolvedPathname`, which only fed it",
+      "initializer": "deleted (pure calls: path.resolve, removeLeadingSlash, withTrailingSlash)",
+      "diagnosis": "Pure computation nobody read. Added from memory of Vite's history: \"the unused `fileUrl` was originally passed to a file-access check (`ensureServingAccess`) before serving... if this is meant to match upstream, the missing check is probably the real problem.\"",
+      "verified": "nothing",
+      "note": "The history is right, the suggestion isn't: the check moved into sirv's shouldServe hook (the subject's STUB comment says so), so restoring it would duplicate it."
+    },
+    "dc2-claude-2": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname` (\"leaving it would have produced a new unused-variable warning\")",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "\"in upstream Vite this `fileUrl` is passed to a serving-access check before `serve()` runs. That check is missing from this file, which is why the value went unused... if the check was supposed to be there, this is where it was dropped.\"",
+      "verified": "nothing",
+      "note": "Same false lead as dc2-claude-1, offered as something to look at."
+    },
+    "dc2-claude-3": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname`",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "\"`fileUrl` was built from `resolvedPathname`... and then never read.\" Pure string computations, so behavior is unchanged. \"Removing just the flagged line would have left `fileUrl` declared but unused, which another lint rule would flag.\"",
+      "verified": "nothing",
+      "note": ""
+    },
+    "dc2-claude-4": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname`",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "Pure string operations. \"In the upstream Vite source, I believe this `fileUrl` feeds an `ensureServingAccess(...)` file-access check before serving. That check isn't in this file, so removing the value is right here.\"",
+      "verified": "nothing (shell command refused)",
+      "note": ""
+    },
+    "dc2-codex-1": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname`",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "\"Removed the unused `fileUrl` calculation and its dead assignment... preserving runtime behavior.\"",
+      "verified": "a syntax check; \"no linter is installed locally\"",
+      "note": ""
+    },
+    "dc2-codex-2": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname`",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "\"Removed the unused `fileUrl` calculation... resolving both reported issues while preserving behavior.\"",
+      "verified": "a TypeScript syntax check",
+      "note": ""
+    },
+    "dc2-codex-3": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname`",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "\"Removed the unused `fileUrl` calculation and its dependent code... while preserving request handling.\"",
+      "verified": "nothing",
+      "note": ""
+    },
+    "dc2-codex-4": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `fileUrl`, its `if`, and `resolvedPathname`",
+      "initializer": "deleted (pure calls)",
+      "diagnosis": "\"Removed the unused `fileUrl` calculation and trailing-slash adjustment.\"",
+      "verified": "\"Verified unchanged behavior across 12 request scenarios\"",
+      "note": ""
+    },
+    "dc3-claude-1": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted `let stderr = '';` and `stderr = result.stderr;`",
+      "initializer": "deleted (a literal and a property read; the execa call stays)",
+      "diagnosis": "Set and never read. \"I didn't rename it to `_stderr`, because that would only hide the warning on a value that's still never used.\"",
+      "verified": "nothing",
+      "note": "The only run that mentions the `_` rename, to reject it."
+    },
+    "dc3-claude-2": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration and the assignment",
+      "initializer": "deleted (property read; \"`result` is a plain object, so reading `stderr` from it did nothing else\")",
+      "diagnosis": "\"It was set from `result.stderr` but never read.\"",
+      "verified": "nothing",
+      "note": ""
+    },
+    "dc3-claude-3": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration and the assignment",
+      "initializer": "deleted (property read)",
+      "diagnosis": "\"Nothing else read `stderr`, so the function behaves exactly as before: it still runs the `git check-ignore` command and uses only `stdout`.\"",
+      "verified": "nothing (command refused)",
+      "note": ""
+    },
+    "dc3-claude-4": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration and the assignment",
+      "initializer": "deleted (property read)",
+      "diagnosis": "\"copying `stderr` had no side effects, and the function still uses `stdout` exactly as before.\"",
+      "verified": "nothing",
+      "note": ""
+    },
+    "dc3-codex-1": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration; replaced the assignment with `void result.stderr;`",
+      "initializer": "kept as `void result.stderr;`",
+      "diagnosis": "\"removing the unused variable while preserving the `result.stderr` access.\"",
+      "verified": "\"Filtering and error-path checks passed\"",
+      "note": "Same move as dc1-codex-3: the binding goes, the property read stays as a `void` statement."
+    },
+    "dc3-codex-2": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration and the assignment",
+      "initializer": "deleted (property read)",
+      "diagnosis": "\"Removed the unused `stderr` declaration and assignment... preserving behavior.\"",
+      "verified": "nothing (\"no local linter was available\")",
+      "note": ""
+    },
+    "dc3-codex-3": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration; replaced the assignment with `void result.stderr;`",
+      "initializer": "kept as `void result.stderr;`",
+      "diagnosis": "\"Removed the unused `stderr` variable while preserving the property read and error handling.\"",
+      "verified": "\"Behavior checks passed. Oxlint wasn't available locally to rerun.\"",
+      "note": "As dc3-codex-1."
+    },
+    "dc3-codex-4": {
+      "categories": ["deleted the dead code"],
+      "deadCode": "deleted the declaration and the assignment",
+      "initializer": "deleted (property read)",
+      "diagnosis": "\"Removed the unused `stderr` declaration and assignment... runtime behavior is preserved.\"",
+      "verified": "nothing (\"Ultracite and Oxlint aren't installed\")",
+      "note": ""
+    }
+  }
+}

@@ -227,6 +227,7 @@ export default defineConfig({
       titles: {
         "/research/cognitive-complexity":
           "Cognitive complexity and the cost of reading code",
+        "/research/dead-code": "Is dead code worth an error?",
         "/research/floating-promises":
           "What happens to a promise nobody awaits",
         "/research/security-rules":

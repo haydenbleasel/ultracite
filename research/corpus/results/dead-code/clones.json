@@ -1,0 +1,3301 @@
+{
+  "generated": "2026-10-13",
+  "method": {
+    "branchRule": "no-duplicated-branches compares if-chain branches and switch cases token by token and needs the duplicate to span more than one line (braces excluded).",
+    "functionMinTokens": 50,
+    "imports": "import and re-export declarations excluded from the token stream",
+    "minLines": 5,
+    "minTokens": 50,
+    "sensitivityTokens": 100,
+    "sonarIdenticalFunctions": "same file; Type-1 body; body spans >= 3 lines (braces excluded); FunctionDeclaration, functions assigned to variables, class methods; each later duplicate reported once",
+    "thresholds": "50 tokens and 5 lines are jscpd's defaults (docs/rust.md at kucherenko/jscpd@19f2c885); 100 tokens is maven-pmd-plugin's CPD default (CpdReport.java at apache/maven-pmd-plugin@8250c2ab; PMD's own CLI makes --minimum-tokens mandatory); Svajlenko & Roy (arXiv:2006.15682) give 30-100 tokens and 6-15 lines as typical minimums. CCFinder's manual makes the minimum length mandatory without a default.",
+    "type1": "identical tokens (typescript-estree), layout and comments ignored",
+    "type2": "identifiers -> ID, string/number/regex/bigint/template/JSX-text literals -> LIT"
+  },
+  "repos": {
+    "zod": {
+      "branches": {
+        "identicalPairsMultiLine": 1,
+        "identicalPairsSingleLine": 19,
+        "statements": 1809,
+        "statementsWithDuplicate": 18,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 1,
+          "sonarjs/no-all-duplicated-branches": 1
+        },
+        "sonarMatchedMultiLine": 1
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 142,
+            "crossFile": 137,
+            "functions": 287,
+            "byPlacement": {
+              "test": 137,
+              "source": 5
+            },
+            "size": {
+              "2": 140,
+              "3": 1,
+              "4-9": 1
+            }
+          },
+          "outermost": {
+            "classes": 141,
+            "crossFile": 136,
+            "functions": 285,
+            "byPlacement": {
+              "test": 136,
+              "source": 5
+            },
+            "size": {
+              "2": 139,
+              "3": 1,
+              "4-9": 1
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 236,
+            "crossFile": 179,
+            "functions": 541,
+            "byPlacement": {
+              "test": 194,
+              "source": 42
+            },
+            "size": {
+              "2": 205,
+              "3": 15,
+              "4-9": 15,
+              "10+": 1
+            }
+          },
+          "outermost": {
+            "classes": 225,
+            "crossFile": 169,
+            "functions": 519,
+            "byPlacement": {
+              "test": 188,
+              "source": 37
+            },
+            "size": {
+              "2": 194,
+              "3": 15,
+              "4-9": 15,
+              "10+": 1
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 8354,
+        "source": 2377,
+        "sourceAtLeastMinTokens": 699
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "visible to the rule": 2,
+          "in different files": 3
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 39,
+          "in different files": 3
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "visible to the rule": 4,
+          "in different files": 4,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 95,
+          "visible to the rule": 1,
+          "in different files": 4,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        }
+      },
+      "skipped": [],
+      "sonarIdenticalFunctions": {
+        "actual": 5,
+        "expectedByDetector": 5,
+        "matched": 5,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 30381,
+          "files": 125,
+          "lines": 37903
+        },
+        "test": {
+          "codeLines": 41631,
+          "files": 207,
+          "lines": 51156
+        },
+        "vendored": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        },
+        "declaration": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 618,
+          "classesByPlacement": {
+            "test (cross-file)": 375,
+            "source (cross-file)": 80,
+            "test (same file)": 103,
+            "source (same file)": 60
+          },
+          "classSize": {
+            "2": 508,
+            "3": 62,
+            "4-9": 40,
+            "10+": 8
+          },
+          "duplicatedCodeLines": {
+            "source": 3825,
+            "test": 11092,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 12.6,
+            "test": 26.6,
+            "vendored": null,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 314,
+            "median": 59,
+            "p90": 107
+          },
+          "sourceClasses": 140,
+          "sourceClassesCrossFile": 80
+        },
+        "type1@100": {
+          "classes": 149,
+          "classesByPlacement": {
+            "test (cross-file)": 117,
+            "test (same file)": 12,
+            "source (cross-file)": 15,
+            "source (same file)": 5
+          },
+          "classSize": {
+            "2": 142,
+            "3": 2,
+            "4-9": 5
+          },
+          "duplicatedCodeLines": {
+            "source": 893,
+            "test": 6724,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 2.9,
+            "test": 16.2,
+            "vendored": null,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 314,
+            "median": 140,
+            "p90": 243
+          },
+          "sourceClasses": 20,
+          "sourceClassesCrossFile": 15
+        },
+        "type2@50": {
+          "classes": 3062,
+          "classesByPlacement": {
+            "test (cross-file)": 1134,
+            "test (same file)": 901,
+            "source (cross-file)": 333,
+            "source (same file)": 694
+          },
+          "classSize": {
+            "2": 1614,
+            "3": 448,
+            "4-9": 714,
+            "10+": 286
+          },
+          "duplicatedCodeLines": {
+            "source": 17300,
+            "test": 22909,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 56.9,
+            "test": 55,
+            "vendored": null,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 240,
+            "median": 57,
+            "p90": 89
+          },
+          "sourceClasses": 1027,
+          "sourceClassesCrossFile": 333
+        },
+        "type2@100": {
+          "classes": 842,
+          "classesByPlacement": {
+            "test (cross-file)": 296,
+            "source (same file)": 191,
+            "test (same file)": 169,
+            "source (cross-file)": 186
+          },
+          "classSize": {
+            "2": 465,
+            "3": 99,
+            "4-9": 175,
+            "10+": 103
+          },
+          "duplicatedCodeLines": {
+            "source": 12230,
+            "test": 12615,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 40.3,
+            "test": 30.3,
+            "vendored": null,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 445,
+            "median": 112,
+            "p90": 162
+          },
+          "sourceClasses": 377,
+          "sourceClassesCrossFile": 186
+        }
+      },
+      "seconds": 2.7,
+      "dogfood": false
+    },
+    "hono": {
+      "branches": {
+        "identicalPairsMultiLine": 0,
+        "identicalPairsSingleLine": 1,
+        "statements": 1148,
+        "statementsWithDuplicate": 1,
+        "sonarHits": {},
+        "sonarMatchedMultiLine": 0
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 66,
+            "crossFile": 20,
+            "functions": 163,
+            "byPlacement": {
+              "test": 65,
+              "source": 1
+            },
+            "size": {
+              "2": 46,
+              "3": 12,
+              "4-9": 8
+            }
+          },
+          "outermost": {
+            "classes": 65,
+            "crossFile": 19,
+            "functions": 160,
+            "byPlacement": {
+              "test": 64,
+              "source": 1
+            },
+            "size": {
+              "2": 46,
+              "3": 11,
+              "4-9": 8
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 236,
+            "crossFile": 36,
+            "functions": 706,
+            "byPlacement": {
+              "test": 234,
+              "source": 2
+            },
+            "size": {
+              "2": 144,
+              "3": 43,
+              "4-9": 43,
+              "10+": 6
+            }
+          },
+          "outermost": {
+            "classes": 232,
+            "crossFile": 35,
+            "functions": 697,
+            "byPlacement": {
+              "test": 230,
+              "source": 2
+            },
+            "size": {
+              "2": 141,
+              "3": 42,
+              "4-9": 43,
+              "10+": 6
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 8760,
+        "source": 1180,
+        "sourceAtLeastMinTokens": 442
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "in different files": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 1,
+          "in different files": 1
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "in different files": 8,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 7,
+          "in different files": 7,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        }
+      },
+      "skipped": [],
+      "sonarIdenticalFunctions": {
+        "actual": 0,
+        "expectedByDetector": 0,
+        "matched": 0,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 18606,
+          "files": 187,
+          "lines": 25540
+        },
+        "test": {
+          "codeLines": 48550,
+          "files": 124,
+          "lines": 55488
+        },
+        "vendored": {
+          "codeLines": 819,
+          "files": 1,
+          "lines": 925
+        },
+        "declaration": {
+          "codeLines": 24,
+          "files": 1,
+          "lines": 80
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 969,
+          "classesByPlacement": {
+            "test (cross-file)": 130,
+            "test (same file)": 692,
+            "source+test (cross-file)": 2,
+            "source (same file)": 130,
+            "source (cross-file)": 15
+          },
+          "classSize": {
+            "2": 550,
+            "3": 158,
+            "4-9": 202,
+            "10+": 59
+          },
+          "duplicatedCodeLines": {
+            "source": 2545,
+            "test": 13284,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 13.7,
+            "test": 27.4,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 265,
+            "median": 60,
+            "p90": 97
+          },
+          "sourceClasses": 145,
+          "sourceClassesCrossFile": 15
+        },
+        "type1@100": {
+          "classes": 281,
+          "classesByPlacement": {
+            "test (cross-file)": 25,
+            "test (same file)": 166,
+            "source (cross-file)": 14,
+            "source (same file)": 76
+          },
+          "classSize": {
+            "2": 135,
+            "3": 56,
+            "4-9": 70,
+            "10+": 20
+          },
+          "duplicatedCodeLines": {
+            "source": 1763,
+            "test": 5043,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 9.5,
+            "test": 10.4,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 282,
+            "median": 111,
+            "p90": 203
+          },
+          "sourceClasses": 90,
+          "sourceClassesCrossFile": 14
+        },
+        "type2@50": {
+          "classes": 3440,
+          "classesByPlacement": {
+            "test (same file)": 2373,
+            "test (cross-file)": 731,
+            "source (same file)": 270,
+            "source (cross-file)": 33,
+            "source+test (cross-file)": 5,
+            "vendored (same file)": 22,
+            "source+vendored (cross-file)": 6
+          },
+          "classSize": {
+            "2": 1486,
+            "3": 608,
+            "4-9": 1019,
+            "10+": 327
+          },
+          "duplicatedCodeLines": {
+            "source": 3912,
+            "test": 31270,
+            "vendored": 489,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 21,
+            "test": 64.4,
+            "vendored": 59.7,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 300,
+            "median": 54,
+            "p90": 78
+          },
+          "sourceClasses": 303,
+          "sourceClassesCrossFile": 33
+        },
+        "type2@100": {
+          "classes": 1029,
+          "classesByPlacement": {
+            "test (cross-file)": 96,
+            "test (same file)": 727,
+            "source (cross-file)": 25,
+            "source (same file)": 179,
+            "vendored (same file)": 2
+          },
+          "classSize": {
+            "2": 492,
+            "3": 205,
+            "4-9": 267,
+            "10+": 65
+          },
+          "duplicatedCodeLines": {
+            "source": 2719,
+            "test": 16883,
+            "vendored": 223,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 14.6,
+            "test": 34.8,
+            "vendored": 27.2,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 300,
+            "median": 109,
+            "p90": 157
+          },
+          "sourceClasses": 204,
+          "sourceClassesCrossFile": 25
+        }
+      },
+      "seconds": 2.1,
+      "dogfood": false
+    },
+    "trpc": {
+      "branches": {
+        "identicalPairsMultiLine": 1,
+        "identicalPairsSingleLine": 0,
+        "statements": 737,
+        "statementsWithDuplicate": 1,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 1
+        },
+        "sonarMatchedMultiLine": 1
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 11,
+            "crossFile": 4,
+            "functions": 23,
+            "byPlacement": {
+              "source": 5,
+              "test": 6
+            },
+            "size": {
+              "2": 10,
+              "3": 1
+            }
+          },
+          "outermost": {
+            "classes": 10,
+            "crossFile": 4,
+            "functions": 21,
+            "byPlacement": {
+              "source": 5,
+              "test": 5
+            },
+            "size": {
+              "2": 9,
+              "3": 1
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 18,
+            "crossFile": 4,
+            "functions": 38,
+            "byPlacement": {
+              "source": 9,
+              "test": 8,
+              "vendored": 1
+            },
+            "size": {
+              "2": 16,
+              "3": 2
+            }
+          },
+          "outermost": {
+            "classes": 17,
+            "crossFile": 4,
+            "functions": 36,
+            "byPlacement": {
+              "source": 9,
+              "test": 7,
+              "vendored": 1
+            },
+            "size": {
+              "2": 15,
+              "3": 2
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 1865,
+        "source": 1245,
+        "sourceAtLeastMinTokens": 536
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "in different files": 3,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2
+        },
+        "t2": {
+          "in different files": 3,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2,
+          "renamed identifiers or changed literals (Type-2 only)": 4
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "in different files": 13,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 5
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 16,
+          "in different files": 13,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 5
+        }
+      },
+      "skipped": [],
+      "sonarIdenticalFunctions": {
+        "actual": 0,
+        "expectedByDetector": 0,
+        "matched": 0,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 19683,
+          "files": 176,
+          "lines": 25948
+        },
+        "test": {
+          "codeLines": 5344,
+          "files": 36,
+          "lines": 6496
+        },
+        "vendored": {
+          "codeLines": 372,
+          "files": 7,
+          "lines": 670
+        },
+        "declaration": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 86,
+          "classesByPlacement": {
+            "source (cross-file)": 13,
+            "test (same file)": 41,
+            "test (cross-file)": 10,
+            "source (same file)": 20,
+            "vendored (cross-file)": 1,
+            "vendored (same file)": 1
+          },
+          "classSize": {
+            "2": 69,
+            "3": 14,
+            "4-9": 3
+          },
+          "duplicatedCodeLines": {
+            "source": 1063,
+            "test": 1045,
+            "vendored": 32,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 5.4,
+            "test": 19.6,
+            "vendored": 8.6,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 216,
+            "median": 60,
+            "p90": 118
+          },
+          "sourceClasses": 33,
+          "sourceClassesCrossFile": 13
+        },
+        "type1@100": {
+          "classes": 15,
+          "classesByPlacement": {
+            "source (cross-file)": 3,
+            "test (same file)": 5,
+            "test (cross-file)": 4,
+            "source (same file)": 3
+          },
+          "classSize": {
+            "2": 14,
+            "3": 1
+          },
+          "duplicatedCodeLines": {
+            "source": 360,
+            "test": 432,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 1.8,
+            "test": 8.1,
+            "vendored": 0,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 216,
+            "median": 120,
+            "p90": 216
+          },
+          "sourceClasses": 6,
+          "sourceClassesCrossFile": 3
+        },
+        "type2@50": {
+          "classes": 179,
+          "classesByPlacement": {
+            "source (cross-file)": 29,
+            "source (same file)": 59,
+            "test (same file)": 75,
+            "test (cross-file)": 12,
+            "vendored (cross-file)": 1,
+            "vendored (same file)": 3
+          },
+          "classSize": {
+            "2": 136,
+            "3": 31,
+            "4-9": 12
+          },
+          "duplicatedCodeLines": {
+            "source": 2412,
+            "test": 1652,
+            "vendored": 84,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 12.3,
+            "test": 30.9,
+            "vendored": 22.6,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 245,
+            "median": 67,
+            "p90": 120
+          },
+          "sourceClasses": 88,
+          "sourceClassesCrossFile": 29
+        },
+        "type2@100": {
+          "classes": 39,
+          "classesByPlacement": {
+            "source (cross-file)": 6,
+            "test (same file)": 13,
+            "test (cross-file)": 5,
+            "source (same file)": 14,
+            "vendored (same file)": 1
+          },
+          "classSize": {
+            "2": 35,
+            "3": 4
+          },
+          "duplicatedCodeLines": {
+            "source": 1156,
+            "test": 731,
+            "vendored": 34,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 5.9,
+            "test": 13.7,
+            "vendored": 9.1,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 245,
+            "median": 141,
+            "p90": 198
+          },
+          "sourceClasses": 20,
+          "sourceClassesCrossFile": 6
+        }
+      },
+      "seconds": 0.6,
+      "dogfood": false
+    },
+    "vite": {
+      "branches": {
+        "identicalPairsMultiLine": 0,
+        "identicalPairsSingleLine": 8,
+        "statements": 2573,
+        "statementsWithDuplicate": 4,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 4
+        },
+        "sonarMatchedMultiLine": 0
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 4,
+            "crossFile": 1,
+            "functions": 9,
+            "byPlacement": {
+              "source": 1,
+              "test": 3
+            },
+            "size": {
+              "2": 3,
+              "3": 1
+            }
+          },
+          "outermost": {
+            "classes": 4,
+            "crossFile": 1,
+            "functions": 9,
+            "byPlacement": {
+              "source": 1,
+              "test": 3
+            },
+            "size": {
+              "2": 3,
+              "3": 1
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 22,
+            "crossFile": 2,
+            "functions": 52,
+            "byPlacement": {
+              "source": 1,
+              "test": 21
+            },
+            "size": {
+              "2": 17,
+              "3": 4,
+              "4-9": 1
+            }
+          },
+          "outermost": {
+            "classes": 21,
+            "crossFile": 2,
+            "functions": 50,
+            "byPlacement": {
+              "source": 1,
+              "test": 20
+            },
+            "size": {
+              "2": 16,
+              "3": 4,
+              "4-9": 1
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 4108,
+        "source": 2336,
+        "sourceAtLeastMinTokens": 904
+      },
+      "parseErrors": [
+        {
+          "category": "test",
+          "error": "Unexpected keyword or identifier.",
+          "file": "packages/vite/src/node/ssr/__tests__/fixtures/errors/syntax-error.js"
+        },
+        {
+          "category": "test",
+          "error": "Unexpected keyword or identifier.",
+          "file": "packages/vite/src/node/ssr/__tests__/fixtures/errors/syntax-error.ts"
+        }
+      ],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "in different files": 1
+        },
+        "t2": {
+          "in different files": 1
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "in different files": 6,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 14,
+          "in different files": 6,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        }
+      },
+      "skipped": [],
+      "sonarIdenticalFunctions": {
+        "actual": 0,
+        "expectedByDetector": 0,
+        "matched": 0,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 36526,
+          "files": 124,
+          "lines": 45885
+        },
+        "test": {
+          "codeLines": 17996,
+          "files": 279,
+          "lines": 20601
+        },
+        "vendored": {
+          "codeLines": 1999,
+          "files": 11,
+          "lines": 2887
+        },
+        "declaration": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 89,
+          "classesByPlacement": {
+            "source (cross-file)": 6,
+            "test (same file)": 71,
+            "test (cross-file)": 6,
+            "source (same file)": 6
+          },
+          "classSize": {
+            "2": 62,
+            "3": 12,
+            "4-9": 12,
+            "10+": 3
+          },
+          "duplicatedCodeLines": {
+            "source": 262,
+            "test": 1588,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0.7,
+            "test": 8.8,
+            "vendored": 0,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 105,
+            "median": 73,
+            "p90": 98
+          },
+          "sourceClasses": 12,
+          "sourceClassesCrossFile": 6
+        },
+        "type1@100": {
+          "classes": 11,
+          "classesByPlacement": {
+            "test (same file)": 9,
+            "source (cross-file)": 1,
+            "source (same file)": 1
+          },
+          "classSize": {
+            "2": 9,
+            "3": 2
+          },
+          "duplicatedCodeLines": {
+            "source": 56,
+            "test": 292,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0.2,
+            "test": 1.6,
+            "vendored": 0,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 120,
+            "median": 120,
+            "p90": 120
+          },
+          "sourceClasses": 2,
+          "sourceClassesCrossFile": 1
+        },
+        "type2@50": {
+          "classes": 395,
+          "classesByPlacement": {
+            "source (cross-file)": 17,
+            "test (same file)": 308,
+            "test (cross-file)": 18,
+            "source (same file)": 34,
+            "source+test (cross-file)": 2,
+            "source+vendored (cross-file)": 3,
+            "vendored (same file)": 12,
+            "vendored (cross-file)": 1
+          },
+          "classSize": {
+            "2": 265,
+            "3": 69,
+            "4-9": 55,
+            "10+": 6
+          },
+          "duplicatedCodeLines": {
+            "source": 1128,
+            "test": 7479,
+            "vendored": 334,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 3.1,
+            "test": 41.6,
+            "vendored": 16.7,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 105,
+            "median": 58,
+            "p90": 79
+          },
+          "sourceClasses": 51,
+          "sourceClassesCrossFile": 17
+        },
+        "type2@100": {
+          "classes": 58,
+          "classesByPlacement": {
+            "test (same file)": 47,
+            "test (cross-file)": 4,
+            "source (cross-file)": 1,
+            "source (same file)": 1,
+            "vendored (same file)": 5
+          },
+          "classSize": {
+            "2": 42,
+            "3": 12,
+            "4-9": 4
+          },
+          "duplicatedCodeLines": {
+            "source": 56,
+            "test": 2801,
+            "vendored": 201,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0.2,
+            "test": 15.6,
+            "vendored": 10.1,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 120,
+            "median": 120,
+            "p90": 120
+          },
+          "sourceClasses": 2,
+          "sourceClassesCrossFile": 1
+        }
+      },
+      "seconds": 1.2,
+      "dogfood": false
+    },
+    "astro": {
+      "branches": {
+        "identicalPairsMultiLine": 1,
+        "identicalPairsSingleLine": 8,
+        "statements": 3689,
+        "statementsWithDuplicate": 7,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 3
+        },
+        "sonarMatchedMultiLine": 1
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 8,
+            "crossFile": 6,
+            "functions": 17,
+            "byPlacement": {
+              "source": 8
+            },
+            "size": {
+              "2": 7,
+              "3": 1
+            }
+          },
+          "outermost": {
+            "classes": 7,
+            "crossFile": 5,
+            "functions": 15,
+            "byPlacement": {
+              "source": 7
+            },
+            "size": {
+              "2": 6,
+              "3": 1
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 18,
+            "crossFile": 10,
+            "functions": 38,
+            "byPlacement": {
+              "source": 17,
+              "vendored": 1
+            },
+            "size": {
+              "2": 16,
+              "3": 2
+            }
+          },
+          "outermost": {
+            "classes": 17,
+            "crossFile": 9,
+            "functions": 36,
+            "byPlacement": {
+              "source": 16,
+              "vendored": 1
+            },
+            "size": {
+              "2": 15,
+              "3": 2
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 4156,
+        "source": 4012,
+        "sourceAtLeastMinTokens": 1459
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "in different files": 6,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 9,
+          "in different files": 6,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "in different files": 14,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 5,
+          "visible to the rule": 2
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 49,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 5,
+          "in different files": 8
+        }
+      },
+      "skipped": [
+        {
+          "bytes": 48889,
+          "category": "source",
+          "file": "packages/astro/src/runtime/client/dev-toolbar/ui-library/icons.ts",
+          "lines": 73
+        }
+      ],
+      "sonarIdenticalFunctions": {
+        "actual": 2,
+        "expectedByDetector": 2,
+        "matched": 2,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 58727,
+          "files": 634,
+          "lines": 82896
+        },
+        "test": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        },
+        "vendored": {
+          "codeLines": 2072,
+          "files": 32,
+          "lines": 2676
+        },
+        "declaration": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 82,
+          "classesByPlacement": {
+            "source (cross-file)": 44,
+            "source (same file)": 36,
+            "vendored (cross-file)": 1,
+            "vendored (same file)": 1
+          },
+          "classSize": {
+            "2": 68,
+            "3": 9,
+            "4-9": 5
+          },
+          "duplicatedCodeLines": {
+            "source": 1913,
+            "test": 0,
+            "vendored": 26,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 3.3,
+            "test": null,
+            "vendored": 1.3,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 234,
+            "median": 67,
+            "p90": 137
+          },
+          "sourceClasses": 80,
+          "sourceClassesCrossFile": 44
+        },
+        "type1@100": {
+          "classes": 17,
+          "classesByPlacement": {
+            "source (same file)": 5,
+            "source (cross-file)": 12
+          },
+          "classSize": {
+            "2": 16,
+            "3": 1
+          },
+          "duplicatedCodeLines": {
+            "source": 691,
+            "test": 0,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 1.2,
+            "test": null,
+            "vendored": 0,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 234,
+            "median": 137,
+            "p90": 224
+          },
+          "sourceClasses": 17,
+          "sourceClassesCrossFile": 12
+        },
+        "type2@50": {
+          "classes": 363,
+          "classesByPlacement": {
+            "source (cross-file)": 136,
+            "source+vendored (cross-file)": 13,
+            "source (same file)": 197,
+            "vendored (same file)": 10,
+            "vendored (cross-file)": 7
+          },
+          "classSize": {
+            "2": 238,
+            "3": 61,
+            "4-9": 59,
+            "10+": 5
+          },
+          "duplicatedCodeLines": {
+            "source": 5704,
+            "test": 0,
+            "vendored": 361,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 9.7,
+            "test": null,
+            "vendored": 17.4,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 235,
+            "median": 57,
+            "p90": 97
+          },
+          "sourceClasses": 333,
+          "sourceClassesCrossFile": 136
+        },
+        "type2@100": {
+          "classes": 42,
+          "classesByPlacement": {
+            "source+vendored (cross-file)": 3,
+            "source (same file)": 19,
+            "source (cross-file)": 18,
+            "vendored (same file)": 2
+          },
+          "classSize": {
+            "2": 39,
+            "3": 3
+          },
+          "duplicatedCodeLines": {
+            "source": 1693,
+            "test": 0,
+            "vendored": 84,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 2.9,
+            "test": null,
+            "vendored": 4.1,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 235,
+            "median": 123,
+            "p90": 185
+          },
+          "sourceClasses": 37,
+          "sourceClassesCrossFile": 18
+        }
+      },
+      "seconds": 1.4,
+      "dogfood": false
+    },
+    "excalidraw": {
+      "branches": {
+        "identicalPairsMultiLine": 4,
+        "identicalPairsSingleLine": 13,
+        "statements": 4616,
+        "statementsWithDuplicate": 13,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 4,
+          "sonarjs/no-all-duplicated-branches": 2
+        },
+        "sonarMatchedMultiLine": 4
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 23,
+            "crossFile": 3,
+            "functions": 49,
+            "byPlacement": {
+              "source": 6,
+              "test": 17
+            },
+            "size": {
+              "2": 21,
+              "3": 1,
+              "4-9": 1
+            }
+          },
+          "outermost": {
+            "classes": 23,
+            "crossFile": 3,
+            "functions": 49,
+            "byPlacement": {
+              "source": 6,
+              "test": 17
+            },
+            "size": {
+              "2": 21,
+              "3": 1,
+              "4-9": 1
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 92,
+            "crossFile": 9,
+            "functions": 219,
+            "byPlacement": {
+              "test": 68,
+              "source": 24
+            },
+            "size": {
+              "2": 74,
+              "3": 9,
+              "4-9": 9
+            }
+          },
+          "outermost": {
+            "classes": 89,
+            "crossFile": 8,
+            "functions": 213,
+            "byPlacement": {
+              "test": 65,
+              "source": 24
+            },
+            "size": {
+              "2": 71,
+              "3": 9,
+              "4-9": 9
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 9458,
+        "source": 5405,
+        "sourceAtLeastMinTokens": 2170
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "a function kind the rule doesn't visit (callback, object method, class property)": 5,
+          "in different files": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 19,
+          "in different files": 1,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 4
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "a function kind the rule doesn't visit (callback, object method, class property)": 14,
+          "in different files": 6,
+          "visible to the rule": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 91,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 11,
+          "in different files": 5,
+          "visible to the rule": 1
+        }
+      },
+      "skipped": [
+        {
+          "bytes": 29476,
+          "category": "source",
+          "file": "packages/excalidraw/components/ExcalidrawLogo.tsx",
+          "lines": 70
+        },
+        {
+          "bytes": 789957,
+          "category": "vendored",
+          "file": "packages/excalidraw/subset/harfbuzz/harfbuzz-wasm.ts",
+          "lines": 58
+        },
+        {
+          "bytes": 972017,
+          "category": "vendored",
+          "file": "packages/excalidraw/subset/woff2/woff2-wasm.ts",
+          "lines": 56
+        }
+      ],
+      "sonarIdenticalFunctions": {
+        "actual": 1,
+        "expectedByDetector": 1,
+        "matched": 1,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 104471,
+          "files": 443,
+          "lines": 128057
+        },
+        "test": {
+          "codeLines": 41440,
+          "files": 110,
+          "lines": 49756
+        },
+        "vendored": {
+          "codeLines": 5540,
+          "files": 7,
+          "lines": 5952
+        },
+        "declaration": {
+          "codeLines": 132,
+          "files": 5,
+          "lines": 190
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 849,
+          "classesByPlacement": {
+            "test (same file)": 650,
+            "source (same file)": 121,
+            "source (cross-file)": 29,
+            "test (cross-file)": 45,
+            "vendored (same file)": 4
+          },
+          "classSize": {
+            "2": 580,
+            "3": 138,
+            "4-9": 117,
+            "10+": 14
+          },
+          "duplicatedCodeLines": {
+            "source": 3799,
+            "test": 9871,
+            "vendored": 78,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 3.6,
+            "test": 23.8,
+            "vendored": 1.4,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 240,
+            "median": 61,
+            "p90": 102
+          },
+          "sourceClasses": 150,
+          "sourceClassesCrossFile": 29
+        },
+        "type1@100": {
+          "classes": 139,
+          "classesByPlacement": {
+            "source (same file)": 17,
+            "test (same file)": 114,
+            "source (cross-file)": 4,
+            "test (cross-file)": 4
+          },
+          "classSize": {
+            "2": 109,
+            "3": 24,
+            "4-9": 6
+          },
+          "duplicatedCodeLines": {
+            "source": 977,
+            "test": 3506,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0.9,
+            "test": 8.5,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 240,
+            "median": 120,
+            "p90": 239
+          },
+          "sourceClasses": 21,
+          "sourceClassesCrossFile": 4
+        },
+        "type2@50": {
+          "classes": 2990,
+          "classesByPlacement": {
+            "test (same file)": 1707,
+            "test (cross-file)": 335,
+            "source (same file)": 715,
+            "source (cross-file)": 135,
+            "source+test (cross-file)": 34,
+            "vendored (cross-file)": 14,
+            "vendored (same file)": 49,
+            "declaration (same file)": 1
+          },
+          "classSize": {
+            "2": 1589,
+            "3": 542,
+            "4-9": 692,
+            "10+": 167
+          },
+          "duplicatedCodeLines": {
+            "source": 14385,
+            "test": 21909,
+            "vendored": 2278,
+            "declaration": 27
+          },
+          "duplicatedShare": {
+            "source": 13.8,
+            "test": 52.9,
+            "vendored": 41.1,
+            "declaration": 20.5
+          },
+          "sourceClassTokens": {
+            "max": 208,
+            "median": 57,
+            "p90": 93
+          },
+          "sourceClasses": 850,
+          "sourceClassesCrossFile": 135
+        },
+        "type2@100": {
+          "classes": 580,
+          "classesByPlacement": {
+            "test (same file)": 387,
+            "source (same file)": 154,
+            "source (cross-file)": 13,
+            "vendored (same file)": 17,
+            "vendored (cross-file)": 2,
+            "test (cross-file)": 7
+          },
+          "classSize": {
+            "2": 388,
+            "3": 96,
+            "4-9": 85,
+            "10+": 11
+          },
+          "duplicatedCodeLines": {
+            "source": 4920,
+            "test": 10467,
+            "vendored": 1851,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 4.7,
+            "test": 25.3,
+            "vendored": 33.4,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 388,
+            "median": 110,
+            "p90": 179
+          },
+          "sourceClasses": 167,
+          "sourceClassesCrossFile": 13
+        }
+      },
+      "seconds": 3.6,
+      "dogfood": false
+    },
+    "next.js": {
+      "branches": {
+        "identicalPairsMultiLine": 7,
+        "identicalPairsSingleLine": 31,
+        "statements": 12052,
+        "statementsWithDuplicate": 26,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 9,
+          "sonarjs/no-all-duplicated-branches": 2
+        },
+        "sonarMatchedMultiLine": 7
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 2964,
+            "crossFile": 2954,
+            "functions": 13753,
+            "byPlacement": {
+              "source": 9,
+              "test": 7,
+              "vendored": 2943,
+              "source+vendored": 5
+            },
+            "size": {
+              "2": 1588,
+              "3": 127,
+              "4-9": 859,
+              "10+": 390
+            }
+          },
+          "outermost": {
+            "classes": 2073,
+            "crossFile": 2063,
+            "functions": 10645,
+            "byPlacement": {
+              "source": 8,
+              "test": 7,
+              "vendored": 2055,
+              "source+vendored": 3
+            },
+            "size": {
+              "2": 886,
+              "3": 116,
+              "4-9": 746,
+              "10+": 325
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 3453,
+            "crossFile": 3350,
+            "functions": 15214,
+            "byPlacement": {
+              "source": 37,
+              "test": 91,
+              "vendored": 3318,
+              "source+vendored": 6,
+              "source+test": 1
+            },
+            "size": {
+              "2": 2037,
+              "3": 152,
+              "4-9": 860,
+              "10+": 404
+            }
+          },
+          "outermost": {
+            "classes": 2336,
+            "crossFile": 2238,
+            "functions": 11481,
+            "byPlacement": {
+              "source": 35,
+              "test": 85,
+              "vendored": 2211,
+              "source+vendored": 4,
+              "source+test": 1
+            },
+            "size": {
+              "2": 1132,
+              "3": 138,
+              "4-9": 724,
+              "10+": 342
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 45761,
+        "source": 10136,
+        "sourceAtLeastMinTokens": 3851
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2,
+          "in different files": 7
+        },
+        "t2": {
+          "a function kind the rule doesn't visit (callback, object method, class property)": 2,
+          "renamed identifiers or changed literals (Type-2 only)": 30,
+          "in different files": 5
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "a function kind the rule doesn't visit (callback, object method, class property)": 24,
+          "in different files": 39,
+          "visible to the rule": 5
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 176,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 17,
+          "in different files": 33,
+          "visible to the rule": 4
+        }
+      },
+      "skipped": [
+        {
+          "bytes": 1796,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@edge-runtime/primitives/abort-controller.js.text.js",
+          "lines": 1
+        },
+        {
+          "bytes": 9522,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@edge-runtime/primitives/console.js.text.js",
+          "lines": 1
+        },
+        {
+          "bytes": 960,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@edge-runtime/primitives/events.js.text.js",
+          "lines": 1
+        },
+        {
+          "bytes": 674,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@edge-runtime/primitives/timers.js.text.js",
+          "lines": 1
+        },
+        {
+          "bytes": 21984,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@edge-runtime/primitives/url.js.text.js",
+          "lines": 1
+        },
+        {
+          "bytes": 27673,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@hapi/accept/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 220392,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@modelcontextprotocol/sdk/server/mcp.js",
+          "lines": 3
+        },
+        {
+          "bytes": 30230,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@modelcontextprotocol/sdk/server/streamableHttp.js",
+          "lines": 1
+        },
+        {
+          "bytes": 66410,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@mswjs/interceptors/ClientRequest/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 5023,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@napi-rs/triples/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 28576,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@opentelemetry/api/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 466960,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@vercel/blob/index.cjs",
+          "lines": 16
+        },
+        {
+          "bytes": 2786,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@vercel/detect-agent/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 282998,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@vercel/nft/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 14719,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/@vercel/routing-utils/superstatic.js",
+          "lines": 1
+        },
+        {
+          "bytes": 119565,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/acorn/acorn.js",
+          "lines": 1
+        },
+        {
+          "bytes": 6994,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/anser/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 76222,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/assert/assert.js",
+          "lines": 7
+        },
+        {
+          "bytes": 4562,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/async-retry/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3034,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/async-sema/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1537814,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/babel-packages/packages-bundle.js",
+          "lines": 335
+        },
+        {
+          "bytes": 1360307,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/babel/bundle.js",
+          "lines": 227
+        },
+        {
+          "bytes": 59600,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/browserify-zlib/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 74421,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/browserslist/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 27658,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/buffer/index.js",
+          "lines": 9
+        },
+        {
+          "bytes": 25365,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/busboy/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3797,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/ci-info/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 6564,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/cli-select/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 37693,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/commander/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 156829,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/comment-json/index.js",
+          "lines": 7
+        },
+        {
+          "bytes": 308356,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/compression/index.js",
+          "lines": 58
+        },
+        {
+          "bytes": 143364,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/conf/index.js",
+          "lines": 3
+        },
+        {
+          "bytes": 4731,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/content-disposition/index.js",
+          "lines": 6
+        },
+        {
+          "bytes": 2227,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/content-type/index.js",
+          "lines": 6
+        },
+        {
+          "bytes": 7862,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/cross-spawn/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 363583,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/crypto-browserify/index.js",
+          "lines": 3
+        },
+        {
+          "bytes": 1121,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/css.escape/css.escape.js",
+          "lines": 1
+        },
+        {
+          "bytes": 268284,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/cssnano-simple/index.js",
+          "lines": 320
+        },
+        {
+          "bytes": 1064,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/data-uri-to-buffer/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 11507,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/debug/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 5018,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/devalue/devalue.umd.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1179,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/domain-browser/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 525784,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/edge-runtime/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 7919,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/events/events.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3019,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/find-up/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 36387,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/glob/glob.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3293,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/gzip-size/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 8590,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/hash.js/sha256/256.js",
+          "lines": 1
+        },
+        {
+          "bytes": 7412,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/http-proxy-agent/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 948,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/https-browserify/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 8312,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/https-proxy-agent/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 20684,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/httpxy/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2692,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/icss-utils/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 448,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/ignore-loader/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 16918,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/image-detector/detector.js",
+          "lines": 1
+        },
+        {
+          "bytes": 22351,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/image-size/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 13562,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/ipaddr.js/ipaddr.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1992,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/is-animated/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 734,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/is-docker/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 898,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/is-wsl/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 24066,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/jest-worker/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2868,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/jest-worker/processChild.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3163,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/jest-worker/threadChild.js",
+          "lines": 1
+        },
+        {
+          "bytes": 29486,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/json5/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 120859,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/jsonwebtoken/index.js",
+          "lines": 11
+        },
+        {
+          "bytes": 8897,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/loader-runner/LoaderRunner.js",
+          "lines": 1
+        },
+        {
+          "bytes": 41024,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/loader-utils2/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 19918,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/loader-utils3/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 8286,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/lodash.curry/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 18712,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/lru-cache/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 458,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/mini-css-extract-plugin/cjs.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3183,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js",
+          "lines": 1
+        },
+        {
+          "bytes": 20801,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/mini-css-extract-plugin/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 9442,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/mini-css-extract-plugin/loader.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1245,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/nanoid/index.cjs",
+          "lines": 1
+        },
+        {
+          "bytes": 4412,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/native-url/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 56209,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/neo-async/async.js",
+          "lines": 1
+        },
+        {
+          "bytes": 193685,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/node-html-parser/index.js",
+          "lines": 2
+        },
+        {
+          "bytes": 79282,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/ora/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 816,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/os-browserify/browser.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1575,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/p-limit/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 9920,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/p-queue/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 5375,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/path-browserify/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 7310,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/path-to-regexp/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 23909,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/picomatch/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1928,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-flexbugs-fixes/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2776,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-modules-extract-imports/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 72609,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-modules-local-by-default/index.js",
+          "lines": 2
+        },
+        {
+          "bytes": 66094,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-modules-scope/index.js",
+          "lines": 2
+        },
+        {
+          "bytes": 1994,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-modules-values/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 600,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-plugin-stub-for-cssnano-simple/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 387534,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-preset-env/index.cjs",
+          "lines": 94
+        },
+        {
+          "bytes": 38570,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-safe-parser/safe-parse.js",
+          "lines": 1
+        },
+        {
+          "bytes": 13945,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-scss/scss-syntax.js",
+          "lines": 1
+        },
+        {
+          "bytes": 5840,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/postcss-value-parser/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2442,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/process/browser.js",
+          "lines": 1
+        },
+        {
+          "bytes": 3224,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/punycode/punycode.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2105,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/querystring-es3/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 153497,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/raw-body/index.js",
+          "lines": 51
+        },
+        {
+          "bytes": 1279988,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/react-dom-experimental/cjs/react-dom-client.development.js",
+          "lines": 33680
+        },
+        {
+          "bytes": 1297055,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/react-dom-experimental/cjs/react-dom-profiling.development.js",
+          "lines": 34079
+        },
+        {
+          "bytes": 1296533,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/react-dom-experimental/cjs/react-dom-unstable_testing.development.js",
+          "lines": 34163
+        },
+        {
+          "bytes": 1183766,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/react-dom/cjs/react-dom-client.development.js",
+          "lines": 31282
+        },
+        {
+          "bytes": 1200898,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/react-dom/cjs/react-dom-profiling.development.js",
+          "lines": 31682
+        },
+        {
+          "bytes": 9366,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/safe-stable-stringify/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 14635,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/sass-loader/cjs.js",
+          "lines": 1
+        },
+        {
+          "bytes": 176585,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/schema-utils2/index.js",
+          "lines": 3
+        },
+        {
+          "bytes": 176631,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/schema-utils3/index.js",
+          "lines": 3
+        },
+        {
+          "bytes": 24836,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/semver/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 67384,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/send/index.js",
+          "lines": 70
+        },
+        {
+          "bytes": 153322,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/serve-handler/index.js",
+          "lines": 19
+        },
+        {
+          "bytes": 2544,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/setimmediate/setImmediate.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2812,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/shell-quote/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 32291,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/source-map/source-map.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2217,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/stacktrace-parser/stack-trace-parser.cjs.js",
+          "lines": 1
+        },
+        {
+          "bytes": 49625,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/stream-browserify/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 59633,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/stream-http/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 5525,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/string_decoder/string_decoder.js",
+          "lines": 1
+        },
+        {
+          "bytes": 482,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/string-hash/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 747,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/strip-ansi/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 12345,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/superstruct/index.cjs",
+          "lines": 1
+        },
+        {
+          "bytes": 100382,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/tar/index.min.js",
+          "lines": 1
+        },
+        {
+          "bytes": 516875,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/terser/bundle.min.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1661,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/text-table/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 1632,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/timers-browserify/main.js",
+          "lines": 1
+        },
+        {
+          "bytes": 382,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/tty-browserify/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 17448,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/ua-parser-js/ua-parser.js",
+          "lines": 1
+        },
+        {
+          "bytes": 929,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/unistore/unistore.js",
+          "lines": 1
+        },
+        {
+          "bytes": 38431,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/util/util.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2664,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/vm-browserify/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 38517,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/watchpack/watchpack.js",
+          "lines": 1
+        },
+        {
+          "bytes": 16358,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/web-vitals-attribution/web-vitals.attribution.js",
+          "lines": 1
+        },
+        {
+          "bytes": 9683,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/web-vitals/web-vitals.js",
+          "lines": 1
+        },
+        {
+          "bytes": 24056,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/webpack-sources1/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 35291,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/webpack-sources3/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 2582685,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/webpack/bundle5.js",
+          "lines": 29
+        },
+        {
+          "bytes": 7128,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/write-file-atomic/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 45840,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/ws/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 5080,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/zod-validation-error/index.js",
+          "lines": 1
+        },
+        {
+          "bytes": 77325,
+          "category": "vendored",
+          "file": "packages/next/src/compiled/zod/index.cjs",
+          "lines": 1
+        }
+      ],
+      "sonarIdenticalFunctions": {
+        "actual": 6,
+        "expectedByDetector": 6,
+        "matched": 6,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 209593,
+          "files": 1416,
+          "lines": 276128
+        },
+        "test": {
+          "codeLines": 32964,
+          "files": 181,
+          "lines": 39616
+        },
+        "vendored": {
+          "codeLines": 641711,
+          "files": 722,
+          "lines": 652651
+        },
+        "declaration": {
+          "codeLines": 643,
+          "files": 12,
+          "lines": 1186
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 7015,
+          "classesByPlacement": {
+            "source (same file)": 145,
+            "source (cross-file)": 148,
+            "test (same file)": 206,
+            "test (cross-file)": 23,
+            "vendored (same file)": 28,
+            "vendored (cross-file)": 6454,
+            "source+vendored (cross-file)": 10,
+            "source+test (cross-file)": 1
+          },
+          "classSize": {
+            "2": 1965,
+            "3": 504,
+            "4-9": 2812,
+            "10+": 1734
+          },
+          "duplicatedCodeLines": {
+            "source": 8357,
+            "test": 4384,
+            "vendored": 612597,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 4,
+            "test": 13.3,
+            "vendored": 95.5,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 329,
+            "median": 60,
+            "p90": 107
+          },
+          "sourceClasses": 293,
+          "sourceClassesCrossFile": 148
+        },
+        "type1@100": {
+          "classes": 4338,
+          "classesByPlacement": {
+            "source (same file)": 26,
+            "test (same file)": 20,
+            "source (cross-file)": 22,
+            "vendored (same file)": 8,
+            "source+vendored (cross-file)": 3,
+            "vendored (cross-file)": 4255,
+            "test (cross-file)": 4
+          },
+          "classSize": {
+            "2": 1224,
+            "3": 357,
+            "4-9": 1905,
+            "10+": 852
+          },
+          "duplicatedCodeLines": {
+            "source": 2871,
+            "test": 1091,
+            "vendored": 608984,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 1.4,
+            "test": 3.3,
+            "vendored": 94.9,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 329,
+            "median": 120,
+            "p90": 181
+          },
+          "sourceClasses": 48,
+          "sourceClassesCrossFile": 22
+        },
+        "type2@50": {
+          "classes": 10585,
+          "classesByPlacement": {
+            "source (same file)": 714,
+            "source (cross-file)": 355,
+            "source+vendored (cross-file)": 38,
+            "test (same file)": 1232,
+            "test (cross-file)": 147,
+            "test+vendored (cross-file)": 8,
+            "source+test (cross-file)": 8,
+            "declaration (same file)": 1,
+            "vendored (cross-file)": 8050,
+            "vendored (same file)": 32
+          },
+          "classSize": {
+            "2": 3332,
+            "3": 871,
+            "4-9": 3664,
+            "10+": 2718
+          },
+          "duplicatedCodeLines": {
+            "source": 25272,
+            "test": 17849,
+            "vendored": 627266,
+            "declaration": 23
+          },
+          "duplicatedShare": {
+            "source": 12.1,
+            "test": 54.1,
+            "vendored": 97.7,
+            "declaration": 3.6
+          },
+          "sourceClassTokens": {
+            "max": 372,
+            "median": 58,
+            "p90": 90
+          },
+          "sourceClasses": 1069,
+          "sourceClassesCrossFile": 355
+        },
+        "type2@100": {
+          "classes": 5026,
+          "classesByPlacement": {
+            "source (same file)": 161,
+            "source (cross-file)": 58,
+            "test (same file)": 236,
+            "test (cross-file)": 28,
+            "source+vendored (cross-file)": 7,
+            "vendored (same file)": 8,
+            "vendored (cross-file)": 4528
+          },
+          "classSize": {
+            "2": 1447,
+            "3": 401,
+            "4-9": 2018,
+            "10+": 1160
+          },
+          "duplicatedCodeLines": {
+            "source": 9673,
+            "test": 7589,
+            "vendored": 626374,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 4.6,
+            "test": 23,
+            "vendored": 97.6,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 412,
+            "median": 113,
+            "p90": 173
+          },
+          "sourceClasses": 219,
+          "sourceClassesCrossFile": 58
+        }
+      },
+      "seconds": 32.3,
+      "dogfood": false
+    },
+    "vscode": {
+      "branches": {
+        "identicalPairsMultiLine": 3,
+        "identicalPairsSingleLine": 6,
+        "statements": 3698,
+        "statementsWithDuplicate": 7,
+        "sonarHits": {
+          "sonarjs/no-duplicated-branches": 3
+        },
+        "sonarMatchedMultiLine": 3
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 3,
+            "crossFile": 0,
+            "functions": 6,
+            "byPlacement": {
+              "source": 3
+            },
+            "size": {
+              "2": 3
+            }
+          },
+          "outermost": {
+            "classes": 3,
+            "crossFile": 0,
+            "functions": 6,
+            "byPlacement": {
+              "source": 3
+            },
+            "size": {
+              "2": 3
+            }
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 32,
+            "crossFile": 4,
+            "functions": 66,
+            "byPlacement": {
+              "source": 32
+            },
+            "size": {
+              "2": 31,
+              "4-9": 1
+            }
+          },
+          "outermost": {
+            "classes": 31,
+            "crossFile": 4,
+            "functions": 64,
+            "byPlacement": {
+              "source": 31
+            },
+            "size": {
+              "2": 30,
+              "4-9": 1
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 4208,
+        "source": 4208,
+        "sourceAtLeastMinTokens": 1464
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {
+          "visible to the rule": 2,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 29,
+          "visible to the rule": 2,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "visible to the rule": 8,
+          "in different files": 5,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 86,
+          "visible to the rule": 5,
+          "in different files": 2,
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        }
+      },
+      "skipped": [],
+      "sonarIdenticalFunctions": {
+        "actual": 11,
+        "expectedByDetector": 11,
+        "matched": 11,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 51540,
+          "files": 226,
+          "lines": 71809
+        },
+        "test": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        },
+        "vendored": {
+          "codeLines": 609,
+          "files": 1,
+          "lines": 1022
+        },
+        "declaration": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 129,
+          "classesByPlacement": {
+            "source (same file)": 115,
+            "source (cross-file)": 13,
+            "source+vendored (cross-file)": 1
+          },
+          "classSize": {
+            "2": 102,
+            "3": 16,
+            "4-9": 11
+          },
+          "duplicatedCodeLines": {
+            "source": 2080,
+            "test": 0,
+            "vendored": 29,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 4,
+            "test": null,
+            "vendored": 4.8,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 169,
+            "median": 61,
+            "p90": 97
+          },
+          "sourceClasses": 128,
+          "sourceClassesCrossFile": 13
+        },
+        "type1@100": {
+          "classes": 14,
+          "classesByPlacement": {
+            "source (same file)": 12,
+            "source+vendored (cross-file)": 1,
+            "source (cross-file)": 1
+          },
+          "classSize": {
+            "2": 13,
+            "3": 1
+          },
+          "duplicatedCodeLines": {
+            "source": 392,
+            "test": 0,
+            "vendored": 29,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0.8,
+            "test": null,
+            "vendored": 4.8,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 169,
+            "median": 114,
+            "p90": 133
+          },
+          "sourceClasses": 13,
+          "sourceClassesCrossFile": 1
+        },
+        "type2@50": {
+          "classes": 803,
+          "classesByPlacement": {
+            "source (same file)": 598,
+            "source (cross-file)": 177,
+            "source+vendored (cross-file)": 4,
+            "vendored (same file)": 24
+          },
+          "classSize": {
+            "2": 509,
+            "3": 135,
+            "4-9": 136,
+            "10+": 23
+          },
+          "duplicatedCodeLines": {
+            "source": 10356,
+            "test": 0,
+            "vendored": 597,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 20.1,
+            "test": null,
+            "vendored": 98,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 203,
+            "median": 56,
+            "p90": 83
+          },
+          "sourceClasses": 775,
+          "sourceClassesCrossFile": 177
+        },
+        "type2@100": {
+          "classes": 125,
+          "classesByPlacement": {
+            "source (same file)": 107,
+            "source (cross-file)": 9,
+            "source+vendored (cross-file)": 4,
+            "vendored (same file)": 5
+          },
+          "classSize": {
+            "2": 84,
+            "3": 22,
+            "4-9": 17,
+            "10+": 2
+          },
+          "duplicatedCodeLines": {
+            "source": 3469,
+            "test": 0,
+            "vendored": 415,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 6.7,
+            "test": null,
+            "vendored": 68.1,
+            "declaration": null
+          },
+          "sourceClassTokens": {
+            "max": 285,
+            "median": 113,
+            "p90": 172
+          },
+          "sourceClasses": 116,
+          "sourceClassesCrossFile": 9
+        }
+      },
+      "seconds": 1.7,
+      "dogfood": false
+    },
+    "ultracite": {
+      "branches": {
+        "identicalPairsMultiLine": 0,
+        "identicalPairsSingleLine": 1,
+        "statements": 666,
+        "statementsWithDuplicate": 1,
+        "sonarHits": {},
+        "sonarMatchedMultiLine": 0
+      },
+      "functions": {
+        "t1": {
+          "all": {
+            "classes": 0,
+            "crossFile": 0,
+            "functions": 0,
+            "byPlacement": {},
+            "size": {}
+          },
+          "outermost": {
+            "classes": 0,
+            "crossFile": 0,
+            "functions": 0,
+            "byPlacement": {},
+            "size": {}
+          }
+        },
+        "t2": {
+          "all": {
+            "classes": 5,
+            "crossFile": 0,
+            "functions": 10,
+            "byPlacement": {
+              "source": 5
+            },
+            "size": {
+              "2": 5
+            }
+          },
+          "outermost": {
+            "classes": 5,
+            "crossFile": 0,
+            "functions": 10,
+            "byPlacement": {
+              "source": 5
+            },
+            "size": {
+              "2": 5
+            }
+          }
+        }
+      },
+      "functionsTotal": {
+        "all": 868,
+        "source": 868,
+        "sourceAtLeastMinTokens": 286
+      },
+      "parseErrors": [],
+      "reachOfSourceFunctionClones": {
+        "t1": {},
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 5
+        }
+      },
+      "reachOfSourceFunctionClonesAtRuleThreshold": {
+        "t1": {
+          "a function kind the rule doesn't visit (callback, object method, class property)": 1
+        },
+        "t2": {
+          "renamed identifiers or changed literals (Type-2 only)": 16
+        }
+      },
+      "skipped": [],
+      "sonarIdenticalFunctions": {
+        "actual": 0,
+        "expectedByDetector": 0,
+        "matched": 0,
+        "unmatchedActual": []
+      },
+      "totals": {
+        "source": {
+          "codeLines": 11593,
+          "files": 54,
+          "lines": 15314
+        },
+        "test": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        },
+        "vendored": {
+          "codeLines": 0,
+          "files": 0,
+          "lines": 0
+        },
+        "declaration": {
+          "codeLines": 4,
+          "files": 1,
+          "lines": 7
+        }
+      },
+      "window": {
+        "type1@50": {
+          "classes": 3,
+          "classesByPlacement": {
+            "source (same file)": 1,
+            "source (cross-file)": 2
+          },
+          "classSize": {
+            "2": 3
+          },
+          "duplicatedCodeLines": {
+            "source": 58,
+            "test": 0,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0.5,
+            "test": null,
+            "vendored": null,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 69,
+            "median": 56,
+            "p90": 69
+          },
+          "sourceClasses": 3,
+          "sourceClassesCrossFile": 2
+        },
+        "type1@100": {
+          "classes": 0,
+          "classesByPlacement": {},
+          "classSize": {},
+          "duplicatedCodeLines": {
+            "source": 0,
+            "test": 0,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 0,
+            "test": null,
+            "vendored": null,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": null,
+            "median": null,
+            "p90": null
+          },
+          "sourceClasses": 0,
+          "sourceClassesCrossFile": 0
+        },
+        "type2@50": {
+          "classes": 76,
+          "classesByPlacement": {
+            "source (cross-file)": 13,
+            "source (same file)": 63
+          },
+          "classSize": {
+            "2": 55,
+            "3": 13,
+            "4-9": 8
+          },
+          "duplicatedCodeLines": {
+            "source": 1483,
+            "test": 0,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 12.8,
+            "test": null,
+            "vendored": null,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 137,
+            "median": 55,
+            "p90": 78
+          },
+          "sourceClasses": 76,
+          "sourceClassesCrossFile": 13
+        },
+        "type2@100": {
+          "classes": 6,
+          "classesByPlacement": {
+            "source (same file)": 6
+          },
+          "classSize": {
+            "2": 6
+          },
+          "duplicatedCodeLines": {
+            "source": 239,
+            "test": 0,
+            "vendored": 0,
+            "declaration": 0
+          },
+          "duplicatedShare": {
+            "source": 2.1,
+            "test": null,
+            "vendored": null,
+            "declaration": 0
+          },
+          "sourceClassTokens": {
+            "max": 178,
+            "median": 125,
+            "p90": 178
+          },
+          "sourceClasses": 6,
+          "sourceClassesCrossFile": 0
+        }
+      },
+      "seconds": 0.3,
+      "dogfood": true
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "typescript-estree": "8.71.0"
+  }
+}

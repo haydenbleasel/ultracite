@@ -1,0 +1,314 @@
+{
+  "generated": "2026-10-12",
+  "method": "git log -S '<rule>' over every path the published configs have lived at (src/eslint.js 2022, eslint.js / eslint.config.mjs / rules/*.mjs 2022-2024, biome.json 2024-2025, biome.jsonc 2025, packages/cli/biome.jsonc and packages/cli/config/** from 2025-10), git show of each hit, packages/cli/CHANGELOG.md, .changeset/, and gh issue/pr list --search on haydenbleasel/ultracite for: no-unused-vars, unused, noUnusedVariables, underscore, no-duplicate-string, duplicate string, identical-functions, dead-store, dead store, unreachable, noUnusedFunctionParameters, noUnusedImports, unused-imports, unused imports, unused variable, argsIgnorePattern, caughtErrors, unused parameter, duplicate, sonarjs, no-duplicate-imports. Issue/PR bodies were read with gh issue view / gh pr view. Option defaults were read from the installed rule sources (typescript-eslint 8.71.0, ESLint 10.12.0, eslint-plugin-import-x 4.17.1). Commit moves (762ef70c, 86ee61e3, d704b5c4, c4a205f8) show up as pickaxe hits only because files moved; they are not decisions unless noted.",
+  "eras": [
+    { "from": "2022-03-18", "sha": "e403fb15", "what": "eslint-config-harmony: hand-written ESLint config (src/eslint.js, then eslint.js at the root on 2022-03-25, 998ea3c4)" },
+    { "from": "2023-01-14", "sha": "5b7d6da3", "what": "Harmony V2 (#83): flat config, rules split into rules/*.mjs" },
+    { "from": "2023-06-08", "sha": "c52fef07", "what": "Migrate to opt-in config (#115, empty PR body): every non-deprecated rule of each plugin turned on, then overridden. This is the 'enable everything, override' pattern the ESLint preset still uses." },
+    { "from": "2024-05-27", "sha": "1c1feda2", "what": "Rebrand from eslint-config-harmony to ultracite (#129)" },
+    { "from": "2024-07-18", "sha": "c92a9d2e", "what": "Switch from ESLint, Prettier and Stylelint to Biome (#140, resolves the ESLint performance issue #139): biome.json with \"all\": true and nursery \"all\": true (Biome 1.8.3). The ESLint config, including sonarjs and unused-imports, was deleted." },
+    { "from": "2025-06-22", "sha": "871ee738", "what": "Ultracite v5 (#162): Biome 2, \"all\": true removed, every rule listed explicitly in biome.jsonc" },
+    { "from": "2025-10-07", "sha": "762ef70c", "what": "Workflow improvements (#299): published config moved to packages/cli/biome.jsonc; 2025-10-20 (#319) to packages/cli/config/core/biome.jsonc" },
+    { "from": "2025-12-28", "sha": "c4a205f8", "what": "V7 (#466): ESLint and Oxlint presets reintroduced next to Biome (packages/cli/config/{biome,eslint,oxlint}/...). Oxlint core used categories (correctness, perf, restriction, suspicious, pedantic, style all error; nursery not enabled). ESLint core re-used the 2024 'every non-deprecated plugin rule' files (@eslint/js 9.39.2 configs.all, typescript-eslint all, sonarjs ^3.0.5 all, unused-imports ^4.3.0 all, import-x all)." },
+    { "from": "2026-04-13", "sha": "a63d9c57", "what": "Resolves #660 ('Fix cross-config leaking rules'): Oxlint core replaced categories with an explicit rule list, the shape it still has" },
+    { "from": "2026-07-04", "sha": "44403937", "what": "sonarjs and github rules run through Oxlint's JS plugin bridge (ultracite/oxlint/sonarjs preset); folded into Oxlint core 2026-07-05 (29e30ce9); moved out to the opt-in ultracite/oxlint/js-plugins preset 2026-07-07 (d186c53c, #742)" }
+  ],
+  "rules": [
+    {
+      "rule": "@typescript-eslint/no-unused-vars (base no-unused-vars off on TS files)",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "\"@typescript-eslint/no-unused-vars\": \"error\" with no options; base \"no-unused-vars\": \"off\"" },
+        { "sha": "c52fef07", "date": "2023-06-08", "subject": "Migrate to opt-in config (#115)", "what": "explicit entry removed; on through 'every non-deprecated @typescript-eslint rule', still no options" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "ESLint config deleted" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "back via typescript.mjs (every non-deprecated typescript-eslint rule at error); base no-unused-vars off for TS in eslint-typescript.mjs, on for JS files via @eslint/js configs.all" },
+        { "sha": "1cdaf877", "date": "2026-10-05", "subject": "Add opt-in gdp presets for gdp-ts authorization proofs", "what": "the opt-in ultracite/eslint/gdp preset (only) sets { argsIgnorePattern: \"^_\" } on TS files" }
+      ],
+      "optionsUnderUltracite": "None set in core, ever. Effective defaults (typescript-eslint 8.71.0 source; ESLint 10.12.0 base rule identical): vars 'all', args 'after-used', caughtErrors 'all', ignoreRestSiblings false, no varsIgnorePattern/argsIgnorePattern/caughtErrorsIgnorePattern/destructuredArrayIgnorePattern. So `_`-prefixed names are reported in ESLint core.",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "No commit, issue or changelog entry records why the rule is on or why no options are set. The only recorded statement about the underscore convention is in the gdp commit 1cdaf877: \"ESLint core flags the unused _proof parameters sensitive functions take, so the ESLint preset sets argsIgnorePattern \\\"^_\\\", matching oxlint's default.\" (also apps/docs/docs/(guides)/presets.mdx:242 and the comment in config/eslint/gdp/eslint.config.mjs:26-28: \"Oxlint's no-unused-vars ignores `_`-prefixed arguments by default; typescript-eslint's does not.\"). That is, the core divergence is known and was only closed for gdp."
+    },
+    {
+      "rule": "no-unused-vars",
+      "linter": "Oxlint",
+      "firstSeen": { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "path": "packages/cli/config/oxlint/core/.oxlintrc.json" },
+      "changes": [
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on through the correctness category (\"correctness\": \"error\"), no options" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "listed explicitly as \"no-unused-vars\": \"error\", no options (part of replacing categories with an explicit list; changeset: 'Fix cross-config leaking rules')" }
+      ],
+      "optionsUnderUltracite": "None ever set, so Oxlint's defaults apply (the parent measured: `_`-prefixed vars and args ignored, a `_` catch binding still reported).",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/660", "title": "Conflict on test title descriptions", "note": "why categories became an explicit list; not about unused vars" }],
+      "note": "No rule-specific rationale recorded. The parity check (packages/cli/scripts/compare-rule-parity.ts L306-317) compares options only when the Oxlint preset spells some out (state.options !== \"[]\"), so the Oxlint/ESLint difference in default ignore patterns for no-unused-vars is never checked and has no allowlist entry."
+    },
+    {
+      "rule": "noUnusedVariables, noUnusedFunctionParameters, noUnusedPrivateClassMembers, noUnusedLabels, noUnreachable",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch from ESLint, Prettier and Stylelint to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "on through \"all\": true (Biome 1.8.3); which of these rules existed in 1.8.3 was not checked" },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "listed explicitly at \"error\" in correctness, no options" },
+        { "sha": "b4ba620a", "date": "2025-08-30", "subject": "Resolves #255", "what": "overrides added: noUnusedVariables + noUnusedImports off for Storybook files (**/*.{stories,story}.*), noUnusedVariables off for *.d.ts; comments only say 'Storybook files' and 'Environment and type definition files' (CHANGELOG 5.2.12 L1657: 'relaxing or disabling irrelevant rules (... noUnusedVariables in .d.ts ...)')" },
+        { "sha": "d704b5c4", "date": "2025-10-20", "subject": "Add first-class support for Astro (#327)", "what": "Astro/Svelte/Vue presets turn noUnusedVariables and noUnusedImports off in their template files" },
+        { "sha": "3cd6e7b3", "date": "2026-02-16", "subject": "Upgrade Biome to 2.4, for #544", "what": "noUnusedVariables override removed from the Astro, Svelte and Vue presets; noUnusedImports stays off in *.astro, *.svelte, *.vue (#544: Biome removed all imports in Svelte files on save)" }
+      ],
+      "optionsUnderUltracite": "None set (no ignoreRestSiblings or other options in any version).",
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/350", "title": "`noUnusedImports` etc. still get applied to Astro files", "note": "framework-template false positives" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/544", "title": "Biome removes all imports in Svelte files on save instead of organizing them", "note": "why noUnusedImports stays off in framework template files" }
+      ],
+      "note": "On since the Biome switch as part of 'all'; no rationale recorded beyond enabling every rule."
+    },
+    {
+      "rule": "noUnusedImports (\"fix\": \"safe\")",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "\"noUnusedImports\": \"error\"" },
+        { "sha": "52a2d346", "date": "2025-10-06", "subject": "Resolves #294", "what": "{ \"fix\": \"safe\", \"level\": \"error\" }, so `ultracite fix` and on-save formatting delete unused imports (CHANGELOG 5.5.3 L1490)" },
+        { "sha": "0d27e682", "date": "2026-03-10", "subject": "Resolves #483", "what": "agent hooks run Biome with --skip=correctness/noUnusedImports (packages/cli/src/hooks.ts L144); the preset keeps fix: safe" }
+      ],
+      "rationale": "\"By setting `fix: safe`, this rule will actually do something useful, if you're using an IDE to run biomejs on file save. It would be nice if ultracite set this by default\" (issue #294); maintainer: \"agreed, been missing this.\" For the hook exception (#483): \"Claude adds an import via Edit tool ... PostToolUse hook fires, runs `ultracite fix` ... Import gets removed (it's \\\"unused\\\" - the usage hasn't landed yet)\"; resolved by skipping the rule in hooks rather than changing the default.",
+      "rationaleSource": "https://github.com/haydenbleasel/ultracite/issues/294, https://github.com/haydenbleasel/ultracite/issues/483",
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/294", "title": "ultracite should remove unused imports", "note": "rationale for fix: safe" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/483", "title": "noUnusedImports fix: \"safe\" causes race condition with Claude Code hooks", "note": "rationale for the hook skip" }
+      ],
+      "note": "The hook skip is Biome-only (hooks.ts L144 biomeHookArgs). ESLint's unused-imports/no-unused-imports also autofixes by deleting imports, and no equivalent skip exists for ESLint hooks; whether the same race happens with ESLint or Oxlint hooks was not checked."
+    },
+    {
+      "rule": "unused-imports/no-unused-imports, unused-imports/no-unused-vars (eslint-plugin-unused-imports)",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "28e0f801", "date": "2023-08-28", "subject": "Automatically remove unused imports", "path": "rules/unused-imports.mjs" },
+      "changes": [
+        { "sha": "28e0f801", "date": "2023-08-28", "subject": "Automatically remove unused imports", "what": "every non-deprecated rule of the plugin (^3.0.0) at error, i.e. both no-unused-imports and its own no-unused-vars copy" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "deleted with the ESLint config" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "back (^4.3.0), both rules on" },
+        { "sha": "efa80e8c", "date": "2026-09-28", "subject": "Stop duplicate and false-positive ESLint reports on TypeScript files", "what": "unused-imports/no-unused-vars off" }
+      ],
+      "rationale": "Commit subject (2023): \"Automatically remove unused imports\" (the plugin's autofix). For turning its no-unused-vars off: \"unused-imports/no-unused-vars duplicated no-unused-vars on every file ... the unused-imports copy is off (no-unused-imports keeps its autofix)\" (efa80e8c); config comment: \"A copy of no-unused-vars / @typescript-eslint/no-unused-vars (the oxlint benchmark rule, which stays on) that skips imports, so enabling it reported every unused variable twice.\"",
+      "rationaleSource": "efa80e8c; .changeset/presets-eslint-typescript-duplicates.md (CHANGELOG 7.12.2 L323); packages/cli/config/eslint/core/rules/unused-imports.mjs",
+      "issues": [],
+      "note": "From 2025-12-28 to 2026-09-28 (and 2023-08 to 2024-07) every unused variable was reported twice in ESLint."
+    },
+    {
+      "rule": "no-unused-private-class-members / @typescript-eslint/no-unused-private-class-members",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "\"no-unused-private-class-members\": \"off\" (no reason given)" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "base rule still off in eslint.mjs overrides" },
+        { "sha": "44f6d7fe", "date": "2026-05-10", "subject": "Align ESLint with Oxlint", "what": "base rule on (CHANGELOG 7.7.0 L759: 'Align ESLint presets with the oxlint configs (the maintained source of truth)')" },
+        { "sha": "efa80e8c", "date": "2026-09-28", "subject": "Stop duplicate and false-positive ESLint reports on TypeScript files", "what": "base rule off for TS files because @typescript-eslint/no-unused-private-class-members is on there" }
+      ],
+      "rationale": "Turned on to match Oxlint (44f6d7fe). Why it was off from 2022 to 2026: none recorded.",
+      "rationaleSource": "CHANGELOG 7.7.0; efa80e8c",
+      "issues": []
+    },
+    {
+      "rule": "no-unused-private-class-members, no-unused-labels, no-unused-expressions",
+      "linter": "Oxlint",
+      "firstSeen": { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "path": "packages/cli/config/oxlint/core/.oxlintrc.json" },
+      "changes": [
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on through categories" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "listed explicitly at error" }
+      ],
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "ESLint: no-unused-labels on since 2022-03-18 (e403fb15); @typescript-eslint/no-unused-expressions on since 2022-03-18. No rationale recorded."
+    },
+    {
+      "rule": "noUnusedExpressions",
+      "linter": "Biome",
+      "firstSeen": { "sha": "f5fd0c23", "date": "2025-10-06", "subject": "Upgrade Biome to 2.2.5", "path": "biome.jsonc" },
+      "changes": [
+        { "sha": "f5fd0c23", "date": "2025-10-06", "subject": "Upgrade Biome to 2.2.5", "what": "enabled (nursery)" },
+        { "sha": "628a5c39", "date": "2025-12-21", "subject": "Resolves #457", "what": "removed with every nursery rule" },
+        { "sha": "67227c95", "date": "2026-04-16", "subject": "Add new Biome rules", "what": "re-enabled after stabilization (suspicious group); CHANGELOG 7.6.0 L841" }
+      ],
+      "rationale": "Removal only: issue #457 \"Nursery rules are rules that: don't follow semantic versioning; are broken, or can change scope in patch releases; can be deleted or renamed\". No rationale for enabling.",
+      "rationaleSource": "https://github.com/haydenbleasel/ultracite/issues/457",
+      "issues": [{ "url": "https://github.com/haydenbleasel/ultracite/issues/457", "title": "Don't turn on nursery rules by default", "note": "Ultracite's no-nursery policy" }]
+    },
+    {
+      "rule": "no-unreachable",
+      "linter": "ESLint / Oxlint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint: no-unreachable and no-unreachable-loop at error" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: on via @eslint/js configs.all. Oxlint: not on (it was a nursery rule; V7 enabled categories, not nursery)" },
+        { "sha": "f7025b12", "date": "2026-07-04", "subject": "Extend cross-linter parity to framework presets and add a parity check", "what": "Oxlint: \"no-unreachable\": \"error\" added as one of 'five newly stabilized rules' the revived exhaustiveness test caught (CHANGELOG 7.9.0 L588)" },
+        { "sha": "2f73a419", "date": "2026-07-07", "subject": "Upgrade to oxlint 1.73.0 and oxfmt 0.58.0 with new rules", "what": "Oxlint: no-unreachable-loop added (a nursery rule, enabled deliberately per c9860222 comment)" }
+      ],
+      "rationale": "Oxlint: enabled because the exhaustiveness test requires every non-nursery rule (f7025b12). No rule-specific rationale.",
+      "rationaleSource": "f7025b12; CHANGELOG 7.9.0",
+      "issues": [],
+      "note": "Oxlint users had no unreachable-code rule from V7 (2025-12-28) until 2026-07-04, while ESLint and Biome did."
+    },
+    {
+      "rule": "no-useless-assignment",
+      "linter": "ESLint (Oxlint: not enabled, nursery in 1.86.0)",
+      "firstSeen": { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "path": "packages/cli/config/eslint/core/rules/eslint.mjs" },
+      "changes": [
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on implicitly through @eslint/js configs.all (9.39.2 at the time; present in 10.0.1's configs.all, verified); never named in any config" }
+      ],
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "git log -S finds no commit naming the rule. Oxlint core instead lists no-unassigned-vars (added explicitly 2026-04-13, a63d9c57). No issue or PR mentions dead stores."
+    },
+    {
+      "rule": "sonarjs/no-dead-store, sonarjs/no-unused-vars, sonarjs/no-unused-function-argument, sonarjs/no-unused-collection, sonarjs/unused-import",
+      "linter": "ESLint (core) / Oxlint (js-plugins, opt-in)",
+      "firstSeen": { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "path": "rules/sonarjs.mjs" },
+      "changes": [
+        { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "what": "ESLint: every non-deprecated rule of eslint-plugin-sonarjs ^1.0.3 at error (which rules 1.0.3 contained was not checked)" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "deleted" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: every non-deprecated sonarjs rule (^3.0.5) at error" },
+        { "sha": "44403937", "date": "2026-07-04", "subject": "Run eslint-plugin-github and eslint-plugin-sonarjs via oxlint JS plugins", "what": "Oxlint: no-dead-store, no-unused-vars, no-unused-function-argument, no-unused-collection listed in the new ultracite/oxlint/sonarjs preset, which init added by default" },
+        { "sha": "29e30ce9", "date": "2026-07-05", "subject": "Fold github and sonarjs rules into oxlint core", "what": "moved into Oxlint core" },
+        { "sha": "d186c53c", "date": "2026-07-07", "subject": "Resolves #742", "what": "moved to the opt-in ultracite/oxlint/js-plugins preset" },
+        { "sha": "5cb7eff6", "date": "2026-10-10", "subject": "Move type-only ESLint rules to type-aware and default compat targets", "what": "ESLint: sonarjs/unused-import is marked requiresTypeChecking but listed in worksWithoutTypes, so it stays in core; not in the Oxlint js-plugins preset (type-aware rules excluded)" }
+      ],
+      "rationale": "PR #132 body: \"This minor update adds support for SonarJS, focused on detecting bugs and suspicious patterns.\" #742 (move to opt-in): \"Plugins should be opt-in, and separated from the 'core'\"; changeset: core 'now runs entirely on Oxlint's native Rust rules ... no longer pay the slower JS-plugin lint pass'. No rule-specific rationale for any of these five.",
+      "rationaleSource": "https://github.com/haydenbleasel/ultracite/pull/132, https://github.com/haydenbleasel/ultracite/issues/742, .changeset/oxlint-js-plugins-preset.md",
+      "issues": [
+        { "url": "https://github.com/haydenbleasel/ultracite/pull/132", "title": "Add SonarJS plugin", "note": "general rationale" },
+        { "url": "https://github.com/haydenbleasel/ultracite/issues/742", "title": "Plugins should be opt-in", "note": "why sonarjs is opt-in in Oxlint" }
+      ]
+    },
+    {
+      "rule": "no-useless-* family (no-useless-backreference, -call, -catch, -computed-key, -concat, -constructor, -escape, -rename, -return; typescript/no-useless-empty-export, -default-assignment; unicorn/no-useless-*; Biome noUseless*)",
+      "linter": "all",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint: the nine base no-useless-* rules at error (no-useless-constructor via @typescript-eslint)" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "Biome: on via \"all\": true" },
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "Biome: noUseless* listed explicitly" },
+        { "sha": "eae0a310", "date": "2025-09-20", "subject": "Upgrade to Biome 2.2.4 (#283)", "what": "Biome: noUselessCatchBinding off, commit body 'Disable noUselessCatchBinding due to false positives'" },
+        { "sha": "67227c95", "date": "2026-04-16", "subject": "Add new Biome rules", "what": "Biome: noUselessCatchBinding and noUselessUndefined on" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "Oxlint: on via categories; explicit from a63d9c57 (2026-04-13)" }
+      ],
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "Only recorded reason is for turning Biome's noUselessCatchBinding off in 2025 ('false positives'); no reason recorded for re-enabling it."
+    },
+    {
+      "rule": "import/no-unused-modules / import-x/no-unused-modules (unused exports)",
+      "linter": "ESLint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "\"import/no-unused-modules\": \"error\" with no options" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "on through 'every non-deprecated import-x rule', no options" },
+        { "sha": "73c1993b", "date": "2026-07-04", "subject": "Require ESLint 10 for ESLint setups", "what": "off" }
+      ],
+      "rationale": "For turning it off: \"No-op under ESLint 10 (the FileEnumerator API it needs was removed) and it prints a warning on every run while enabled.\" (import.mjs comment; changeset eslint-10.md: 'it is a warning-emitting no-op under ESLint 10').",
+      "rationaleSource": "73c1993b; packages/cli/config/eslint/core/rules/import.mjs L32-34",
+      "issues": [],
+      "note": "The rule was never configured with unusedExports or missingExports. In eslint-plugin-import-x 4.17.1's source (lib/rules/no-unused-modules.js L360-408) both checks return early unless those options are set, so in the V7 era it reported nothing even before ESLint 10. The 2022 eslint-plugin-import version wasn't checked. Oxlint's catalogue (1.86.0) has no import/no-unused-modules, and Biome has no unused-export rule, so no Ultracite preset has ever checked unused exports."
+    },
+    {
+      "rule": "sonarjs/no-identical-functions, sonarjs/no-duplicated-branches, sonarjs/no-all-duplicated-branches",
+      "linter": "ESLint (core) / Oxlint (js-plugins, opt-in)",
+      "firstSeen": { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "path": "rules/sonarjs.mjs" },
+      "changes": [
+        { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "what": "ESLint: on as part of 'every non-deprecated sonarjs rule' (not named; presence in 1.0.3 not checked)" },
+        { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "what": "deleted; Biome has no equivalent" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: on (every sonarjs rule)" },
+        { "sha": "44403937", "date": "2026-07-04", "subject": "Run eslint-plugin-github and eslint-plugin-sonarjs via oxlint JS plugins", "what": "Oxlint: named for the first time" },
+        { "sha": "29e30ce9", "date": "2026-07-05", "subject": "Fold github and sonarjs rules into oxlint core", "what": "Oxlint core" },
+        { "sha": "d186c53c", "date": "2026-07-07", "subject": "Resolves #742", "what": "Oxlint js-plugins (opt-in)" }
+      ],
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "No options (thresholds) ever set. Searches for identical-functions, duplicate and dead-store find no issue or PR about these rules. Oxlint core also has oxc/branches-sharing-code since 2026-07-04 (f7025b12, a newly stabilized rule)."
+    },
+    {
+      "rule": "sonarjs/no-duplicate-string (and its test-file override)",
+      "linter": "ESLint (core) / Oxlint (js-plugins, opt-in)",
+      "firstSeen": { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "path": "rules/sonarjs.mjs" },
+      "changes": [
+        { "sha": "d2e2497c", "date": "2024-05-27", "subject": "Add SonarJS plugin (#132)", "what": "ESLint: on as part of every sonarjs rule, test files included" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: on, test files included" },
+        { "sha": "44403937", "date": "2026-07-04", "subject": "Run eslint-plugin-github and eslint-plugin-sonarjs via oxlint JS plugins", "what": "Oxlint sonarjs preset: on, test files included" },
+        { "sha": "29e30ce9", "date": "2026-07-05", "subject": "Fold github and sonarjs rules into oxlint core", "what": "Oxlint core: on" },
+        { "sha": "dfe0f015", "date": "2026-07-05", "subject": "Fix lint issues", "what": "TEST OVERRIDE ADDED, same day, in both Oxlint core (overrides for **/*.{test,spec}.* and **/__tests__/**) and ESLint core (new files block, 'Mirrors the oxlint core test override'). The same commit fixes lint errors in Ultracite's own __tests__, benchmarks and CLI sources, and turns sonarjs complexity rules off in the repo's own oxlint.config.ts." },
+        { "sha": "d186c53c", "date": "2026-07-07", "subject": "Resolves #742", "what": "override moved from Oxlint core into the js-plugins preset's test override" },
+        { "sha": "44ecbba2", "date": "2026-08-27", "subject": "fix: add vitest typecheck files to configs (#783)", "what": "test globs widened to test-d/spec-d and mts/cts/mjs/cjs" }
+      ],
+      "rationale": "Only the code comment added in dfe0f015: \"Repeated string literals (test titles, expected values) are normal and idiomatic in test files.\" (ESLint copy adds: \"Mirrors the oxlint core test override.\")",
+      "rationaleSource": "dfe0f015 (commit message is only 'Fix lint issues'); packages/cli/config/oxlint/js-plugins/index.mjs L165-176; packages/cli/config/eslint/core/eslint.config.mjs (test-files block)",
+      "issues": [],
+      "note": "No issue, PR or changeset records it; it isn't in CHANGELOG. Context from the diff: it landed hours after sonarjs was folded into Oxlint core (29e30ce9), in a commit that cleans up the repo's own lint errors, so the trigger was most likely Ultracite's own test suite failing the rule (inference, not recorded). No threshold option was ever set. Biome has no duplicate-string rule."
+    },
+    {
+      "rule": "no-duplicate-imports ({ allowSeparateTypeImports: true }), import/no-duplicates",
+      "linter": "ESLint / Oxlint",
+      "firstSeen": { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "path": "src/eslint.js" },
+      "changes": [
+        { "sha": "e403fb15", "date": "2022-03-18", "subject": "Create ESLint configuration", "what": "ESLint: @typescript-eslint/no-duplicate-imports and import/no-duplicates at error; base no-duplicate-imports off" },
+        { "sha": "c4a205f8", "date": "2025-12-28", "subject": "V7 (#466)", "what": "ESLint: import-x/no-duplicates on; base no-duplicate-imports off for TS files (eslint-typescript.mjs) and the typescript-eslint twin no longer existed, so no-duplicate-imports didn't run on TS files. Oxlint: no-duplicate-imports and import/no-duplicates on through the style category, no options" },
+        { "sha": "c60533d7", "date": "2026-02-01", "subject": "Fix conflicting import/consistent-type-specifier-style", "what": "Oxlint: consistent-type-specifier-style prefer-inline -> prefer-top-level" },
+        { "sha": "34c79bb4", "date": "2026-02-03", "subject": "Fix conflicting oxlint rules", "what": "Oxlint: \"no-duplicate-imports\": [\"error\", { \"allowSeparateTypeImports\": true }]" },
+        { "sha": "a63d9c57", "date": "2026-04-13", "subject": "Resolves #660", "what": "Oxlint: import/no-duplicates listed explicitly" },
+        { "sha": "f7025b12", "date": "2026-07-04", "subject": "Extend cross-linter parity to framework presets and add a parity check", "what": "ESLint: no-duplicate-imports re-enabled for TS files with allowSeparateTypeImports ('their typescript-eslint twins were removed in v8')" }
+      ],
+      "rationale": "Only the commit subject/changeset 'Fix conflicting oxlint rules' (34c79bb4), two days after switching to prefer-top-level type imports (c60533d7); prefer-top-level asks for a separate `import type` statement, which no-duplicate-imports would otherwise flag (the conflict is inferred from the sequence, not stated).",
+      "rationaleSource": "34c79bb4, .changeset/sharp-cameras-fly.md; f7025b12",
+      "issues": []
+    },
+    {
+      "rule": "Biome noDuplicate* (noDuplicateCase, ClassMembers, ElseIf, JsxProps, ObjectKeys, Parameters, EnumValues, Fields, Dependencies, ...)",
+      "linter": "Biome",
+      "firstSeen": { "sha": "c92a9d2e", "date": "2024-07-18", "subject": "Switch to Biome (#140)", "path": "biome.json" },
+      "changes": [
+        { "sha": "871ee738", "date": "2025-06-22", "subject": "Ultracite v5 (#162)", "what": "listed explicitly" },
+        { "sha": "eae0a310", "date": "2025-09-20", "subject": "Upgrade to Biome 2.2.4 (#283)", "what": "noDuplicateDependencies (nursery) added" },
+        { "sha": "628a5c39", "date": "2025-12-21", "subject": "Resolves #457", "what": "nursery noDuplicate* removed" },
+        { "sha": "161418a6", "date": "2026-05-10", "subject": "Add new Biome 2.4 rules", "what": "noDuplicateDependencies back after stabilization" }
+      ],
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "These are same-construct duplicate checks (keys, cases, members), not code-clone rules. Biome has no identical-function or duplicate-string rule in any Ultracite version."
+    },
+    {
+      "rule": "TypeScript noUnusedLocals / noUnusedParameters",
+      "linter": "tsc",
+      "firstSeen": null,
+      "changes": [],
+      "rationale": null,
+      "rationaleSource": null,
+      "issues": [],
+      "note": "Ultracite ships no tsconfig to users. packages/typescript-config/base.json (private workspace base) sets strict but neither flag; git log -S finds them only in packages/video/tsconfig.json (private Remotion package, noUnusedLocals: true, 74e671d0, 2026-08-02). No docs page recommends either flag. `ultracite check --type-check` runs the project's own tsconfig."
+    }
+  ],
+  "docsMentions": [
+    { "file": "apps/docs/docs/(guides)/presets.mdx", "line": 242, "text": "gdp ESLint preset 'also sets @typescript-eslint/no-unused-vars to ignore _-prefixed arguments, as Oxlint does by default'" },
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 33, "text": "'Best practices: Common rules like no unused vars, ...'" },
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 72, "text": "'Safe Fixes (Biome)' section; L78 table row: noUnusedImports 'Removes unused import statements' (fix: safe, non-breaking in practice)" },
+    { "file": "apps/docs/docs/(get-started)/usage.mdx", "line": 12, "text": "unused variable as the example lint issue; 'removing an unused import' as the example autofix" },
+    { "file": "apps/docs/docs/(help)/faq.mdx", "line": 56, "text": "auto-fixes include 'removing unused imports'" },
+    { "file": "apps/docs/docs/ai/hooks.mdx", "line": 90, "text": "'On Biome projects, the hook also passes --skip=correctness/noUnusedImports to avoid removing imports mid-edit.'" },
+    { "file": "packages/cli/src/agent-fix/prompt.ts", "line": 34, "text": "agent prompt forbids suppression comments and config changes; says nothing about renaming to `_` or `void x`" },
+    { "file": "packages/cli/src/data/rules.ts and skills/ultracite/references/code-standards.md", "line": null, "text": "no mention of unused variables, the underscore convention, duplication or dead code" }
+  ],
+  "notes": [
+    "No recorded rationale exists for turning on any unused-variable, unreachable, dead-store or duplication rule. They arrived through blanket policies: everything in a plugin at error (ESLint 2023-06 #115 and V7), Biome's \"all\": true (2024-07) and then an explicit full list (v5), Oxlint categories (V7) and then an explicit list of every non-nursery rule (#660, 2026-04; exhaustiveness test f7025b12, 2026-07). AGENTS.md states the current policy: 'Prefer maximum strictness over parity with a tool's defaults.'",
+    "Unused-vars options: never set in any core preset of any linter, in any era. Oxlint therefore ignores `_`-prefixed variables and parameters by default while ESLint (typescript-eslint and base rule defaults: no ignore patterns, caughtErrors 'all', ignoreRestSiblings false) reports them. The divergence is acknowledged only in the opt-in gdp preset (1cdaf877, 2026-10-05), which sets argsIgnorePattern '^_' to match Oxlint; the parity script doesn't compare options Oxlint leaves at defaults, so core's divergence is unchecked.",
+    "no-duplicate-string test override: added 2026-07-05 (dfe0f015, 'Fix lint issues') with the comment 'Repeated string literals (test titles, expected values) are normal and idiomatic in test files.' No issue, PR, changeset or changelog entry. Before it, ESLint users had the rule on in tests from V7 (2025-12-28) to 2026-07-05.",
+    "Unused exports were never checked: import/no-unused-modules (2022) and import-x/no-unused-modules (V7 to 2026-07-04) were on without unusedExports/missingExports, which in import-x 4.17.1 makes the rule report nothing; it was then turned off as an ESLint 10 no-op. Neither Oxlint nor Biome has an equivalent.",
+    "Oxlint had no unreachable-code rule from V7 (2025-12-28) until 2026-07-04, because no-unreachable was nursery until then.",
+    "sonarjs dead-store and duplication rules have been on in ESLint core since V7 but on Oxlint only in the opt-in js-plugins preset since 2026-07-07 (#742); between 2026-07-04 and 2026-07-07 init added them by default.",
+    "Possible inconsistency for the report: the agent-hook exception for unused-import autofix (#483) is Biome-only (hooks.ts L144). ESLint's unused-imports/no-unused-imports autofix runs in hooks unchanged; not checked whether Oxlint's fix removes imports in hooks."
+  ]
+}

@@ -1,0 +1,2612 @@
+{
+  "generated": "2026-10-13",
+  "note": "Measured by scripts/dead-code-examples.cjs. `deadCode` lists the dead-code and duplication rule hits (with message and Oxlint help) per configuration; `otherRules` lists every other rule that fires, which an agent fixing the file would also see. Oxlint = core + react as `ultracite init` writes it, then with js-plugins; ESLint = Ultracite's core preset, untyped and type-aware (examples/dead-code/tsconfig.json); Biome = Ultracite's core preset; tsc = noUnusedLocals, noUnusedParameters, allowUnreachableCode false. Header fields named in stripFields hold analysis and must be removed before an agent sees a subject.",
+  "stripFields": [
+    "Dead-code subject",
+    "Rules it hits",
+    "The bug",
+    "Why it is dead",
+    "Behaviour to preserve",
+    "Expected fix",
+    "Tempting fixes",
+    "History"
+  ],
+  "subjects": [
+    {
+      "file": "dc1-vscode-mcp-resolve-connection.ts",
+      "id": "dc1",
+      "role": "the important one: a dead store that is the symptom of a bug; the right fix uses the value",
+      "repo": "microsoft/vscode",
+      "source": "src/vs/workbench/contrib/mcp/common/mcpRegistry.ts",
+      "lines": 230,
+      "sha": "0204cf08b05ca7425e1758510b673d248a908a5c",
+      "permalink": "https://github.com/microsoft/vscode/blob/0204cf08b05ca7425e1758510b673d248a908a5c/src/vs/workbench/contrib/mcp/common/mcpRegistry.ts#L328-L405",
+      "fix": "https://github.com/microsoft/vscode/pull/247184 (bbaed6818cb68dce835b01de65816a95dd193ee2)",
+      "history": "history.json microsoft/vscode#247184",
+      "analysis": {
+        "bug": "With a resolveServerLanch resolver, the resolved launch is stored in `launch` and checked for cancellation, then discarded: _replaceVariablesInLaunch runs on definition.launch, and the connection is created from that. The dead initializer (no-useless-assignment) is the visible symptom.",
+        "behaviourToPreserve": "Everything except the bug: missing collection/definition throws; no delegate throws; trust prompts and memento updates unchanged; resolver returning undefined returns undefined; substitution error notifies (same message and actions) and returns undefined; without a resolver the connection's launch is replaceVariablesInLaunch(definition, definition.launch).",
+        "expectedFix": "Call this._replaceVariablesInLaunch(definition, launch), so with a resolver the connection's launch is replaceVariablesInLaunch(definition, resolvedLaunch).",
+        "temptingFixes": "Deleting or marking the initializer clears no-useless-assignment and keeps the bug; removing the resolver branch removes a feature.",
+        "oracle": "Construct McpRegistry with stub services; call resolveConnection with and without a resolver (returning a launch distinct from definition.launch, or undefined), with trusted/untrusted collections, and with a substitution function that records its arguments or throws. Compare the returned connection's launch, the recorded substitution arguments and the notifications with the expected behaviour above."
+      },
+      "deadCode": {
+        "eslint": [
+          {
+            "line": 187,
+            "message": "The value assigned to 'launch' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          }
+        ],
+        "eslint +type-aware": [
+          {
+            "line": 187,
+            "message": "The value assigned to 'launch' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          }
+        ]
+      },
+      "headerStripFieldsPresent": [
+        "Dead-code subject",
+        "Rules it hits",
+        "The bug",
+        "Behaviour to preserve",
+        "Expected fix",
+        "Tempting fixes"
+      ],
+      "otherRules": {
+        "biome": [
+          {
+            "line": 75,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 77,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 78,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 81,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 96,
+            "message": "Use a more explicit class property instead of a parameter property.",
+            "rule": "style/noParameterProperties"
+          },
+          {
+            "line": 97,
+            "message": "Use a more explicit class property instead of a parameter property.",
+            "rule": "style/noParameterProperties"
+          },
+          {
+            "line": 98,
+            "message": "Use a more explicit class property instead of a parameter property.",
+            "rule": "style/noParameterProperties"
+          },
+          {
+            "line": 99,
+            "message": "Use a more explicit class property instead of a parameter property.",
+            "rule": "style/noParameterProperties"
+          },
+          {
+            "line": 100,
+            "message": "Use a more explicit class property instead of a parameter property.",
+            "rule": "style/noParameterProperties"
+          },
+          {
+            "line": 103,
+            "message": "The enum declaration should not be const",
+            "rule": "suspicious/noConstEnum"
+          },
+          {
+            "line": 113,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 114,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 115,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 116,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 121,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 123,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 123,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 124,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 125,
+            "message": "Prefer using property-style over method-style method signatures.",
+            "rule": "style/useConsistentMethodSignatures"
+          },
+          {
+            "line": 130,
+            "message": "Use a more explicit class property instead of a parameter property.",
+            "rule": "style/noParameterProperties"
+          },
+          {
+            "line": 151,
+            "message": "Excessive complexity of 24 detected (max: 20).",
+            "rule": "complexity/noExcessiveCognitiveComplexity"
+          },
+          {
+            "line": 151,
+            "message": "The public modifier is disallowed.",
+            "rule": "style/useConsistentMemberAccessibility"
+          },
+          {
+            "line": 159,
+            "message": "Logical expression contains unnecessary complexity.",
+            "rule": "complexity/useSimplifiedLogicExpression"
+          },
+          {
+            "line": 170,
+            "message": "Do not access Object.prototype method 'hasOwnProperty' from target object.",
+            "rule": "suspicious/noPrototypeBuiltins"
+          },
+          {
+            "line": 210,
+            "message": "Forbidden non-null assertion.",
+            "rule": "style/noNonNullAssertion"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 60,
+            "message": "File has too many classes (2). Maximum allowed is 1.",
+            "rule": "max-classes-per-file"
+          },
+          {
+            "line": 75,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 77,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 78,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 81,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 96,
+            "message": "Property collection should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 97,
+            "message": "Property definition should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 98,
+            "message": "Property delegate should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 99,
+            "message": "Property launch should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 100,
+            "message": "Property logger should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 101,
+            "message": "Do not add spaces between braces.",
+            "rule": "unicorn/empty-brace-spaces"
+          },
+          {
+            "line": 106,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 106,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 107,
+            "message": "Capture group '(\\d+)' should be converted to a named or non-capturing group.",
+            "rule": "prefer-named-capture-group"
+          },
+          {
+            "line": 107,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp"
+          },
+          {
+            "line": 107,
+            "message": "Prefer `String#replaceAll()` over `String#replace()`.",
+            "rule": "unicorn/prefer-string-replace-all"
+          },
+          {
+            "line": 113,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 114,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 115,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 116,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 121,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 123,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 123,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 124,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 125,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 127,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 130,
+            "message": "Property services should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 151,
+            "message": "Member resolveConnection should be declared before all private instance method definitions.",
+            "rule": "@typescript-eslint/member-ordering"
+          },
+          {
+            "line": 151,
+            "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 20 allowed.",
+            "rule": "sonarjs/cognitive-complexity"
+          },
+          {
+            "line": 151,
+            "message": "Refactor this function to use \"return\" consistently.",
+            "rule": "sonarjs/no-inconsistent-returns"
+          },
+          {
+            "line": 155,
+            "message": "Possible race condition: `collection` might be reassigned based on an outdated value of `collection`.",
+            "rule": "require-atomic-updates"
+          },
+          {
+            "line": 170,
+            "message": "Do not access Object.prototype method 'hasOwnProperty' from target object.",
+            "rule": "no-prototype-builtins"
+          },
+          {
+            "line": 182,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 187,
+            "message": "Use object destructuring.",
+            "rule": "prefer-destructuring"
+          },
+          {
+            "line": 191,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 197,
+            "message": "The catch parameter `e` should be named `error`.",
+            "rule": "unicorn/catch-error-name"
+          },
+          {
+            "line": 197,
+            "message": "Please rename the variable `e`. Suggested names are: `error`, `event_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 200,
+            "message": "Expected object keys to be in ascending order. 'message' should be before 'severity'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 201,
+            "message": "Expected object keys to be in ascending order. 'actions' should be before 'message'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 205,
+            "message": "Use null instead.",
+            "rule": "sonarjs/no-undefined-assignment"
+          },
+          {
+            "line": 205,
+            "message": "Expected object keys to be in ascending order. 'class' should be before 'id'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 208,
+            "message": "Expected object keys to be in ascending order. 'label' should be before 'tooltip'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 209,
+            "message": "Use an explicit return for a multiline arrow function body.",
+            "rule": "unicorn/consistent-arrow-return-style"
+          },
+          {
+            "line": 210,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 211,
+            "message": "Expected object keys to be in ascending order. 'options' should be before 'resource'.",
+            "rule": "sort-keys"
+          }
+        ],
+        "eslint +type-aware": [
+          {
+            "line": 60,
+            "message": "File has too many classes (2). Maximum allowed is 1.",
+            "rule": "max-classes-per-file"
+          },
+          {
+            "line": 75,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 77,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 78,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 81,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 96,
+            "message": "Property collection should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 97,
+            "message": "Property definition should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 98,
+            "message": "Property delegate should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 99,
+            "message": "Property launch should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 100,
+            "message": "Property logger should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 101,
+            "message": "Do not add spaces between braces.",
+            "rule": "unicorn/empty-brace-spaces"
+          },
+          {
+            "line": 106,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 106,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 107,
+            "message": "'args[Number(index)] ?? match' will use Object's default stringification format ('[object Object]') when stringified.",
+            "rule": "@typescript-eslint/no-base-to-string"
+          },
+          {
+            "line": 107,
+            "message": "Capture group '(\\d+)' should be converted to a named or non-capturing group.",
+            "rule": "prefer-named-capture-group"
+          },
+          {
+            "line": 107,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp"
+          },
+          {
+            "line": 107,
+            "message": "Prefer `String#replaceAll()` over `String#replace()`.",
+            "rule": "unicorn/prefer-string-replace-all"
+          },
+          {
+            "line": 113,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 114,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 115,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 116,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 121,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 121,
+            "message": "Class Property name `_collections` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 122,
+            "message": "Class Property name `_delegates` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 123,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 123,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 123,
+            "message": "Class Property name `_trustMemento` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 124,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 124,
+            "message": "Class Property name `_notificationService` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 125,
+            "message": "Shorthand method signature is forbidden. Use a function property instead.",
+            "rule": "@typescript-eslint/method-signature-style"
+          },
+          {
+            "line": 125,
+            "message": "Class Property name `_editorService` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 126,
+            "message": "Class Property name `_instantiationService` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 127,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 130,
+            "message": "Property services should be declared as a class property.",
+            "rule": "@typescript-eslint/parameter-properties"
+          },
+          {
+            "line": 136,
+            "message": "Value returned in a context where a void return is expected.",
+            "rule": "@typescript-eslint/strict-void-return"
+          },
+          {
+            "line": 139,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 140,
+            "message": "Functions that return promises must be async.",
+            "rule": "@typescript-eslint/promise-function-async"
+          },
+          {
+            "line": 143,
+            "message": "Class Method name `_promptForTrust` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 143,
+            "message": "Functions that return promises must be async.",
+            "rule": "@typescript-eslint/promise-function-async"
+          },
+          {
+            "line": 147,
+            "message": "Class Method name `_replaceVariablesInLaunch` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 147,
+            "message": "Functions that return promises must be async.",
+            "rule": "@typescript-eslint/promise-function-async"
+          },
+          {
+            "line": 151,
+            "message": "Member resolveConnection should be declared before all private instance method definitions.",
+            "rule": "@typescript-eslint/member-ordering"
+          },
+          {
+            "line": 151,
+            "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 20 allowed.",
+            "rule": "sonarjs/cognitive-complexity"
+          },
+          {
+            "line": 151,
+            "message": "Refactor this function to use \"return\" consistently.",
+            "rule": "sonarjs/no-inconsistent-returns"
+          },
+          {
+            "line": 155,
+            "message": "Possible race condition: `collection` might be reassigned based on an outdated value of `collection`.",
+            "rule": "require-atomic-updates"
+          },
+          {
+            "line": 170,
+            "message": "Do not access Object.prototype method 'hasOwnProperty' from target object.",
+            "rule": "no-prototype-builtins"
+          },
+          {
+            "line": 172,
+            "message": "Unexpected nullable boolean value in conditional. Please handle the nullish case explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 174,
+            "message": "Unexpected nullable boolean value in conditional. Please handle the nullish case explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 179,
+            "message": "Unexpected nullable boolean value in conditional. Please handle the nullish case explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 182,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 183,
+            "message": "Async method 'resolveConnection' expected no return value.",
+            "rule": "@typescript-eslint/consistent-return"
+          },
+          {
+            "line": 191,
+            "message": "Async method 'resolveConnection' expected no return value.",
+            "rule": "@typescript-eslint/consistent-return"
+          },
+          {
+            "line": 191,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 197,
+            "message": "The catch parameter `e` should be named `error`.",
+            "rule": "unicorn/catch-error-name"
+          },
+          {
+            "line": 197,
+            "message": "Please rename the variable `e`. Suggested names are: `error`, `event_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 200,
+            "message": "Expected object keys to be in ascending order. 'message' should be before 'severity'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 201,
+            "message": "Expected object keys to be in ascending order. 'actions' should be before 'message'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 202,
+            "message": "Unexpected nullable string value in conditional. Please handle the nullish/empty cases explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 205,
+            "message": "Use null instead.",
+            "rule": "sonarjs/no-undefined-assignment"
+          },
+          {
+            "line": 205,
+            "message": "Expected object keys to be in ascending order. 'class' should be before 'id'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 208,
+            "message": "Expected object keys to be in ascending order. 'label' should be before 'tooltip'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 209,
+            "message": "Functions that return promises must be async.",
+            "rule": "@typescript-eslint/promise-function-async"
+          },
+          {
+            "line": 209,
+            "message": "Use an explicit return for a multiline arrow function body.",
+            "rule": "unicorn/consistent-arrow-return-style"
+          },
+          {
+            "line": 210,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 211,
+            "message": "Expected object keys to be in ascending order. 'options' should be before 'resource'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 220,
+            "message": "Async method 'resolveConnection' expected no return value.",
+            "rule": "@typescript-eslint/consistent-return"
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 60,
+            "message": "File has too many classes (2). Maximum allowed is 1",
+            "rule": "max-classes-per-file",
+            "help": "Reduce the number of classes in this file"
+          },
+          {
+            "line": 75,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 77,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 78,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 81,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 96,
+            "message": "Property collection should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 97,
+            "message": "Property definition should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 98,
+            "message": "Property delegate should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 99,
+            "message": "Property launch should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 100,
+            "message": "Property logger should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 101,
+            "message": "No spaces inside empty pair of braces allowed",
+            "rule": "unicorn/empty-brace-spaces",
+            "help": "There should be no spaces or new lines inside a pair of empty braces as it affects the overall readability of the code."
+          },
+          {
+            "line": 103,
+            "message": "Unexpected const enum",
+            "rule": "oxc/no-const-enum",
+            "help": "Const enums are not supported by bundlers and are incompatible with the isolatedModules mode. Their use can lead to import nonexistent values (because const enums are erased)."
+          },
+          {
+            "line": 106,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 107,
+            "message": "Capture group should be named.",
+            "rule": "prefer-named-capture-group",
+            "help": "Use a named capture group like \"(?<name>...)\" — this regex has 1 unnamed group."
+          },
+          {
+            "line": 107,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp",
+            "help": "Add the 'u' flag."
+          },
+          {
+            "line": 107,
+            "message": "Prefer `String#replaceAll()` over `String#replace()` when using a regex with the global flag.",
+            "rule": "unicorn/prefer-string-replace-all",
+            "help": "Replace `replace` with `replaceAll`."
+          },
+          {
+            "line": 113,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 114,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 115,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 116,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 121,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 123,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 123,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 124,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 125,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 130,
+            "message": "Property services should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 170,
+            "message": "do not access Object.prototype method \"hasOwnProperty\" from target object",
+            "rule": "no-prototype-builtins",
+            "help": "to avoid prototype pollution, use `Object.prototype.hasOwnProperty.call` instead"
+          },
+          {
+            "line": 182,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 191,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 197,
+            "message": "The catch parameter \"e\" should be named \"error\"",
+            "rule": "unicorn/catch-error-name",
+            "help": "Rename `e` to `error`"
+          },
+          {
+            "line": 198,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `severity: Severity.Error,\n\t\t\t\tmessage: localize('mcp.launchError', 'Error starting {0}: {1}', definition.label, String(e)),\n\t\t\t\tactions: {\n\t\t\t\t\tprimary: collection.presentation?.origin && [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tid: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tclass: und...` with `actions: {\n\t\t\t\t\tprimary: collection.presentation?.origin && [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tid: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tclass: undefined,\n\t\t\t\t\t\t\tenabled: true,\n\t\t\t\t\t\t\ttooltip: '',\n\t\t\t\t\t\t\tlabel: localize('mcp.launchError.openConfig', 'Open Configuration'),\n\t\t...`."
+          },
+          {
+            "line": 203,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `id: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tclass: undefined,\n\t\t\t\t\t\t\tenabled: true,\n\t\t\t\t\t\t\ttooltip: '',\n\t\t\t\t\t\t\tlabel: localize('mcp.launchError.openConfig', 'Open Configuration'),\n\t\t\t\t\t\t\trun: () => this._editorService.openEditor({\n\t\t\t\t\t\t\t\tresource: collection...` with `class: undefined,\n\t\t\t\t\t\t\tenabled: true,\n\t\t\t\t\t\t\tid: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tlabel: localize('mcp.launchError.openConfig', 'Open Configuration'),\n\t\t\t\t\t\t\trun: () => this._editorService.openEditor({\n\t\t\t\t\t\t\t\tresource: collection.presentation!.origi...`."
+          },
+          {
+            "line": 209,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `resource: collection.presentation!.origin,\n\t\t\t\t\t\t\t\toptions: { selection: definition.presentation?.origin?.range }` with `options: { selection: definition.presentation?.origin?.range },\n\t\t\t\t\t\t\t\tresource: collection.presentation!.origin`."
+          },
+          {
+            "line": 210,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion",
+            "help": "Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`."
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "line": 60,
+            "message": "File has too many classes (2). Maximum allowed is 1",
+            "rule": "max-classes-per-file",
+            "help": "Reduce the number of classes in this file"
+          },
+          {
+            "line": 75,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 77,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 78,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 81,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 96,
+            "message": "Property collection should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 97,
+            "message": "Property definition should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 98,
+            "message": "Property delegate should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 99,
+            "message": "Property launch should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 100,
+            "message": "Property logger should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 101,
+            "message": "No spaces inside empty pair of braces allowed",
+            "rule": "unicorn/empty-brace-spaces",
+            "help": "There should be no spaces or new lines inside a pair of empty braces as it affects the overall readability of the code."
+          },
+          {
+            "line": 103,
+            "message": "Unexpected const enum",
+            "rule": "oxc/no-const-enum",
+            "help": "Const enums are not supported by bundlers and are incompatible with the isolatedModules mode. Their use can lead to import nonexistent values (because const enums are erased)."
+          },
+          {
+            "line": 106,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 107,
+            "message": "Capture group should be named.",
+            "rule": "prefer-named-capture-group",
+            "help": "Use a named capture group like \"(?<name>...)\" — this regex has 1 unnamed group."
+          },
+          {
+            "line": 107,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp",
+            "help": "Add the 'u' flag."
+          },
+          {
+            "line": 107,
+            "message": "Prefer `String#replaceAll()` over `String#replace()` when using a regex with the global flag.",
+            "rule": "unicorn/prefer-string-replace-all",
+            "help": "Replace `replace` with `replaceAll`."
+          },
+          {
+            "line": 113,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 114,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 115,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 116,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 121,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 123,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 123,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 124,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 125,
+            "message": "Use a property signature instead of a method signature.",
+            "rule": "typescript/method-signature-style",
+            "help": "Replace the method signature with a property whose type is a function type."
+          },
+          {
+            "line": 130,
+            "message": "Property services should be declared as a class property.",
+            "rule": "typescript/parameter-properties",
+            "help": "Remove the parameter modifier and declare this member on the class instead."
+          },
+          {
+            "line": 151,
+            "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 20 allowed.",
+            "rule": "sonarjs/cognitive-complexity"
+          },
+          {
+            "line": 170,
+            "message": "do not access Object.prototype method \"hasOwnProperty\" from target object",
+            "rule": "no-prototype-builtins",
+            "help": "to avoid prototype pollution, use `Object.prototype.hasOwnProperty.call` instead"
+          },
+          {
+            "line": 182,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 191,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 197,
+            "message": "The catch parameter \"e\" should be named \"error\"",
+            "rule": "unicorn/catch-error-name",
+            "help": "Rename `e` to `error`"
+          },
+          {
+            "line": 198,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `severity: Severity.Error,\n\t\t\t\tmessage: localize('mcp.launchError', 'Error starting {0}: {1}', definition.label, String(e)),\n\t\t\t\tactions: {\n\t\t\t\t\tprimary: collection.presentation?.origin && [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tid: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tclass: und...` with `actions: {\n\t\t\t\t\tprimary: collection.presentation?.origin && [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tid: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tclass: undefined,\n\t\t\t\t\t\t\tenabled: true,\n\t\t\t\t\t\t\ttooltip: '',\n\t\t\t\t\t\t\tlabel: localize('mcp.launchError.openConfig', 'Open Configuration'),\n\t\t...`."
+          },
+          {
+            "line": 203,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `id: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tclass: undefined,\n\t\t\t\t\t\t\tenabled: true,\n\t\t\t\t\t\t\ttooltip: '',\n\t\t\t\t\t\t\tlabel: localize('mcp.launchError.openConfig', 'Open Configuration'),\n\t\t\t\t\t\t\trun: () => this._editorService.openEditor({\n\t\t\t\t\t\t\t\tresource: collection...` with `class: undefined,\n\t\t\t\t\t\t\tenabled: true,\n\t\t\t\t\t\t\tid: 'mcp.launchError.openConfig',\n\t\t\t\t\t\t\tlabel: localize('mcp.launchError.openConfig', 'Open Configuration'),\n\t\t\t\t\t\t\trun: () => this._editorService.openEditor({\n\t\t\t\t\t\t\t\tresource: collection.presentation!.origi...`."
+          },
+          {
+            "line": 205,
+            "message": "Use null instead.",
+            "rule": "sonarjs/no-undefined-assignment"
+          },
+          {
+            "line": 209,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `resource: collection.presentation!.origin,\n\t\t\t\t\t\t\t\toptions: { selection: definition.presentation?.origin?.range }` with `options: { selection: definition.presentation?.origin?.range },\n\t\t\t\t\t\t\t\tresource: collection.presentation!.origin`."
+          },
+          {
+            "line": 210,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion",
+            "help": "Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`."
+          }
+        ]
+      }
+    },
+    {
+      "file": "dc2-vite-serve-static.ts",
+      "id": "dc2",
+      "role": "contrast: dead code where deleting is right",
+      "repo": "vitejs/vite",
+      "source": "packages/vite/src/node/server/middlewares/static.ts",
+      "lines": 246,
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/static.ts#L125-L208",
+      "corpusSample": "d018 (leftover)",
+      "analysis": {
+        "whyDead": "fileUrl is computed, given a trailing slash and never used; the access check it once fed now runs in sirv's shouldServe hook, and the catch block handles its ERR_DENIED_FILE.",
+        "behaviourToPreserve": "For any req.url and alias configuration: the same next() calls (directory URLs, .html, internal /@ requests, // URLs, malformed percent-encoding), the same req.url rewrite when a static alias applies, the same requests reaching serve, and the same 403 (respondWithAccessDenied with e.path) when serve throws ERR_DENIED_FILE.",
+        "expectedFix": "Delete the fileUrl declaration and the if that appends the slash.",
+        "temptingFixes": "Passing fileUrl to serve, adding an existence/access check, or rewriting req.url from it changes which files are served; renaming to _fileUrl leaves sonarjs/no-dead-store and no-useless-assignment firing."
+      },
+      "deadCode": {
+        "biome": [
+          {
+            "line": 158,
+            "message": "This return statement is unnecessary.",
+            "rule": "complexity/noUselessReturn"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 158,
+            "message": "Unnecessary return statement.",
+            "rule": "no-useless-return"
+          },
+          {
+            "line": 213,
+            "message": "The value assigned to 'fileUrl' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          },
+          {
+            "line": 213,
+            "message": "Remove this useless assignment to variable \"fileUrl\".",
+            "rule": "sonarjs/no-dead-store"
+          }
+        ],
+        "eslint +type-aware": [
+          {
+            "line": 158,
+            "message": "Unnecessary return statement.",
+            "rule": "no-useless-return"
+          },
+          {
+            "line": 213,
+            "message": "The value assigned to 'fileUrl' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          },
+          {
+            "line": 213,
+            "message": "Remove this useless assignment to variable \"fileUrl\".",
+            "rule": "sonarjs/no-dead-store"
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 158,
+            "message": "Unnecessary return statement.",
+            "rule": "no-useless-return",
+            "help": "Remove this redundant `return` statement."
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "line": 158,
+            "message": "Unnecessary return statement.",
+            "rule": "no-useless-return",
+            "help": "Remove this redundant `return` statement."
+          },
+          {
+            "line": 213,
+            "message": "Remove this useless assignment to variable \"fileUrl\".",
+            "rule": "sonarjs/no-dead-store"
+          }
+        ]
+      },
+      "headerStripFieldsPresent": [
+        "Dead-code subject",
+        "Rules it hits",
+        "Why it is dead",
+        "Behaviour to preserve",
+        "Expected fix",
+        "Tempting fixes"
+      ],
+      "otherRules": {
+        "biome": [
+          {
+            "line": 65,
+            "message": "TypeScript's namespaces are an outdated way to organize code.",
+            "rule": "style/noNamespace"
+          },
+          {
+            "line": 100,
+            "message": "The use of void is not allowed.",
+            "rule": "complexity/noVoid"
+          },
+          {
+            "line": 118,
+            "message": "Redundant constant declaration.",
+            "rule": "style/noShoutyConstants"
+          },
+          {
+            "line": 125,
+            "message": "This variable shadows another variable with the same name in the outer scope.",
+            "rule": "suspicious/noShadow"
+          },
+          {
+            "line": 134,
+            "message": "Do not use template literals if interpolation and special-character handling are not needed.",
+            "rule": "style/noUnusedTemplateLiteral"
+          },
+          {
+            "line": 135,
+            "message": "Do not use template literals if interpolation and special-character handling are not needed.",
+            "rule": "style/noUnusedTemplateLiteral"
+          },
+          {
+            "line": 136,
+            "message": "Do not use template literals if interpolation and special-character handling are not needed.",
+            "rule": "style/noUnusedTemplateLiteral"
+          },
+          {
+            "line": 137,
+            "message": "Do not use template literals if interpolation and special-character handling are not needed.",
+            "rule": "style/noUnusedTemplateLiteral"
+          },
+          {
+            "line": 175,
+            "message": "Excessive complexity of 22 detected (max: 20).",
+            "rule": "complexity/noExcessiveCognitiveComplexity"
+          },
+          {
+            "line": 180,
+            "message": "Forbidden non-null assertion.",
+            "rule": "style/noNonNullAssertion"
+          },
+          {
+            "line": 184,
+            "message": "Forbidden non-null assertion.",
+            "rule": "style/noNonNullAssertion"
+          },
+          {
+            "line": 192,
+            "message": "Forbidden non-null assertion.",
+            "rule": "style/noNonNullAssertion"
+          },
+          {
+            "line": 205,
+            "message": "This if statement can be collapsed into another if statement.",
+            "rule": "style/useCollapsedIf"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 54,
+            "message": "`node:path` import should occur before type import of `node:http`",
+            "rule": "import-x/order"
+          },
+          {
+            "line": 61,
+            "message": "The variable `err` should be named `error`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 65,
+            "message": "ES2015 module syntax is preferred over namespaces.",
+            "rule": "@typescript-eslint/no-namespace"
+          },
+          {
+            "line": 67,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 68,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 72,
+            "message": "The variable `ViteDevServer` should be named `ViteDevelopmentServer`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 83,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 83,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 93,
+            "message": "Expected object keys to be in ascending order. 'serve' should be before 'served'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 93,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 93,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 98,
+            "message": "Please rename the variable `dir`. Suggested names are: `direction`, `directory`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 100,
+            "message": "Remove this use of the \"void\" operator.",
+            "rule": "sonarjs/void-use"
+          },
+          {
+            "line": 101,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 101,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 107,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 110,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 121,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp"
+          },
+          {
+            "line": 121,
+            "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+            "rule": "sonarjs/super-linear-regex"
+          },
+          {
+            "line": 122,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 125,
+            "message": "'path' is already declared in the upper scope on line 54 column 8.",
+            "rule": "@typescript-eslint/no-shadow"
+          },
+          {
+            "line": 125,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 126,
+            "message": "This `if` statement can be replaced by a ternary expression.",
+            "rule": "unicorn/prefer-ternary"
+          },
+          {
+            "line": 144,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp"
+          },
+          {
+            "line": 149,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 149,
+            "message": "The variable `str` should be named `string_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 153,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 162,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 165,
+            "message": "Please rename the variable `dir`. Suggested names are: `direction`, `directory`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 175,
+            "message": "Refactor this function to use \"return\" consistently.",
+            "rule": "sonarjs/no-inconsistent-returns"
+          },
+          {
+            "line": 175,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 175,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 180,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 184,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 192,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 199,
+            "message": "'applyStaticAlias' was used before it was defined.",
+            "rule": "@typescript-eslint/no-use-before-define"
+          },
+          {
+            "line": 203,
+            "message": "Merge this if statement with the nested one.",
+            "rule": "sonarjs/no-collapsible-if"
+          },
+          {
+            "line": 205,
+            "message": "Unexpected `if` as the only statement in a `if` block without `else`.",
+            "rule": "unicorn/no-lonely-if"
+          },
+          {
+            "line": 222,
+            "message": "The catch parameter `e` should be named `error`.",
+            "rule": "unicorn/catch-error-name"
+          },
+          {
+            "line": 222,
+            "message": "Please rename the variable `e`. Suggested names are: `error`, `event_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 232,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 242,
+            "message": "Do not use a non-literal replacement value with `String#replace()`.",
+            "rule": "unicorn/no-unsafe-string-replacement"
+          }
+        ],
+        "eslint +type-aware": [
+          {
+            "line": 54,
+            "message": "`node:path` import should occur before type import of `node:http`",
+            "rule": "import-x/order"
+          },
+          {
+            "line": 61,
+            "message": "The variable `err` should be named `error`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 65,
+            "message": "ES2015 module syntax is preferred over namespaces.",
+            "rule": "@typescript-eslint/no-namespace"
+          },
+          {
+            "line": 67,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 68,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 72,
+            "message": "The variable `ViteDevServer` should be named `ViteDevelopmentServer`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 83,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 83,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 93,
+            "message": "Expected object keys to be in ascending order. 'serve' should be before 'served'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 93,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 93,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 98,
+            "message": "Please rename the variable `dir`. Suggested names are: `direction`, `directory`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 100,
+            "message": "void operator is useless here; it should only discard a call's return value",
+            "rule": "@typescript-eslint/no-meaningless-void-operator"
+          },
+          {
+            "line": 100,
+            "message": "Remove this use of the \"void\" operator.",
+            "rule": "sonarjs/void-use"
+          },
+          {
+            "line": 101,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 101,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 101,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 107,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 109,
+            "message": "Parameter name `_server` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 110,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 118,
+            "message": "Variable name `ERR_DENIED_FILE` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 121,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp"
+          },
+          {
+            "line": 121,
+            "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+            "rule": "sonarjs/super-linear-regex"
+          },
+          {
+            "line": 122,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 125,
+            "message": "'path' is already declared in the upper scope on line 54 column 8.",
+            "rule": "@typescript-eslint/no-shadow"
+          },
+          {
+            "line": 125,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 126,
+            "message": "This `if` statement can be replaced by a ternary expression.",
+            "rule": "unicorn/prefer-ternary"
+          },
+          {
+            "line": 134,
+            "message": "Variable name `FS_PREFIX` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 135,
+            "message": "Variable name `VALID_ID_PREFIX` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 136,
+            "message": "Variable name `CLIENT_PUBLIC_PATH` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 137,
+            "message": "Variable name `ENV_PUBLIC_PATH` must match one of the following formats: camelCase, PascalCase, snake_case",
+            "rule": "@typescript-eslint/naming-convention"
+          },
+          {
+            "line": 144,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp"
+          },
+          {
+            "line": 149,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 149,
+            "message": "The variable `str` should be named `string_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 150,
+            "message": "Use 'String#startsWith' method instead.",
+            "rule": "@typescript-eslint/prefer-string-starts-ends-with"
+          },
+          {
+            "line": 153,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 158,
+            "message": "Function 'decodeURIIfPossible' expected a return value.",
+            "rule": "@typescript-eslint/consistent-return"
+          },
+          {
+            "line": 162,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 165,
+            "message": "Please rename the variable `dir`. Suggested names are: `direction`, `directory`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 175,
+            "message": "Expected to return a value at the end of function 'viteServeStaticMiddleware'.",
+            "rule": "@typescript-eslint/consistent-return"
+          },
+          {
+            "line": 175,
+            "message": "Refactor this function to use \"return\" consistently.",
+            "rule": "sonarjs/no-inconsistent-returns"
+          },
+          {
+            "line": 175,
+            "message": "The variable `req` should be named `request`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 175,
+            "message": "Please rename the variable `res`. Suggested names are: `resource`, `response`, `result`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 180,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 184,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 187,
+            "message": "Unexpected nullable boolean value in conditional. Please handle the nullish case explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 189,
+            "message": "Returning a void expression from a function is forbidden. Please move it before the `return` statement.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 192,
+            "message": "Forbidden non-null assertion.",
+            "rule": "@typescript-eslint/no-non-null-assertion"
+          },
+          {
+            "line": 195,
+            "message": "Returning a void expression from a function is forbidden. Please move it before the `return` statement.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 199,
+            "message": "'applyStaticAlias' was used before it was defined.",
+            "rule": "@typescript-eslint/no-use-before-define"
+          },
+          {
+            "line": 203,
+            "message": "Unexpected nullable string value in conditional. Please handle the nullish/empty cases explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 203,
+            "message": "Merge this if statement with the nested one.",
+            "rule": "sonarjs/no-collapsible-if"
+          },
+          {
+            "line": 205,
+            "message": "Unexpected `if` as the only statement in a `if` block without `else`.",
+            "rule": "unicorn/no-lonely-if"
+          },
+          {
+            "line": 210,
+            "message": "Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator.",
+            "rule": "@typescript-eslint/prefer-nullish-coalescing"
+          },
+          {
+            "line": 210,
+            "message": "Unexpected nullable string value in conditional. Please handle the nullish/empty cases explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 215,
+            "message": "Unexpected nullable string value in conditional. Please handle the nullish/empty cases explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 222,
+            "message": "The catch parameter `e` should be named `error`.",
+            "rule": "unicorn/catch-error-name"
+          },
+          {
+            "line": 222,
+            "message": "Please rename the variable `e`. Suggested names are: `error`, `event_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 223,
+            "message": "Unsafe member access .code on an `any` value.",
+            "rule": "@typescript-eslint/no-unsafe-member-access"
+          },
+          {
+            "line": 223,
+            "message": "Unexpected any value in conditional. An explicit comparison or type conversion is required.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 224,
+            "message": "Unsafe argument of type `any` assigned to a parameter of type `string`.",
+            "rule": "@typescript-eslint/no-unsafe-argument"
+          },
+          {
+            "line": 224,
+            "message": "Unsafe member access .path on an `any` value.",
+            "rule": "@typescript-eslint/no-unsafe-member-access"
+          },
+          {
+            "line": 232,
+            "message": "Expected to return a value at the end of function 'applyStaticAlias'.",
+            "rule": "@typescript-eslint/consistent-return"
+          },
+          {
+            "line": 232,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 237,
+            "message": "Boolean name `matches` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `requires`.",
+            "rule": "unicorn/consistent-boolean-name"
+          },
+          {
+            "line": 242,
+            "message": "Do not use a non-literal replacement value with `String#replace()`.",
+            "rule": "unicorn/no-unsafe-string-replacement"
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 65,
+            "message": "ES2015 module syntax is preferred over namespaces.",
+            "rule": "typescript/no-namespace",
+            "help": "Replace the namespace with an ES2015 module or use `declare module`"
+          },
+          {
+            "line": 89,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `denied: [],\n  roots: [],\n  served: [],\n  serve: (req, res, next) => {\n    harness.served.push({ status: res.statusCode, url: req.url })\n    next()\n  }` with `denied: [],\n  roots: [],\n  serve: (req, res, next) => {\n    harness.served.push({ status: res.statusCode, url: req.url })\n    next()\n  },\n  served: []`."
+          },
+          {
+            "line": 107,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 121,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp",
+            "help": "Add the 'u' flag."
+          },
+          {
+            "line": 122,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 125,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 125,
+            "message": "'path' is already declared in the upper scope.",
+            "rule": "no-shadow",
+            "help": "Consider renaming 'path' to avoid shadowing the variable from the outer scope."
+          },
+          {
+            "line": 144,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp",
+            "help": "Add the 'u' flag."
+          },
+          {
+            "line": 149,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 153,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 162,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 180,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion"
+          },
+          {
+            "line": 184,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion"
+          },
+          {
+            "line": 192,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion"
+          },
+          {
+            "line": 199,
+            "message": "'applyStaticAlias' was used before it was defined.",
+            "rule": "no-use-before-define",
+            "help": "Move the declaration before any references to it, or remove the reference if it is not needed."
+          },
+          {
+            "line": 205,
+            "message": "Unexpected `if` as the only statement in a `if` block without `else`.",
+            "rule": "unicorn/no-lonely-if",
+            "help": "Move the inner `if` test to the outer `if` test."
+          },
+          {
+            "line": 222,
+            "message": "The catch parameter \"e\" should be named \"error\"",
+            "rule": "unicorn/catch-error-name",
+            "help": "Rename `e` to `error`"
+          },
+          {
+            "line": 232,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "line": 65,
+            "message": "ES2015 module syntax is preferred over namespaces.",
+            "rule": "typescript/no-namespace",
+            "help": "Replace the namespace with an ES2015 module or use `declare module`"
+          },
+          {
+            "line": 89,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `denied: [],\n  roots: [],\n  served: [],\n  serve: (req, res, next) => {\n    harness.served.push({ status: res.statusCode, url: req.url })\n    next()\n  }` with `denied: [],\n  roots: [],\n  serve: (req, res, next) => {\n    harness.served.push({ status: res.statusCode, url: req.url })\n    next()\n  },\n  served: []`."
+          },
+          {
+            "line": 107,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 121,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp",
+            "help": "Add the 'u' flag."
+          },
+          {
+            "line": 121,
+            "message": "Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking.",
+            "rule": "sonarjs/super-linear-regex"
+          },
+          {
+            "line": 122,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 125,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 125,
+            "message": "'path' is already declared in the upper scope.",
+            "rule": "no-shadow",
+            "help": "Consider renaming 'path' to avoid shadowing the variable from the outer scope."
+          },
+          {
+            "line": 144,
+            "message": "Use the 'u' flag.",
+            "rule": "require-unicode-regexp",
+            "help": "Add the 'u' flag."
+          },
+          {
+            "line": 149,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 153,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 162,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 180,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion"
+          },
+          {
+            "line": 184,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion"
+          },
+          {
+            "line": 192,
+            "message": "Forbidden non-null assertion.",
+            "rule": "typescript/no-non-null-assertion"
+          },
+          {
+            "line": 199,
+            "message": "'applyStaticAlias' was used before it was defined.",
+            "rule": "no-use-before-define",
+            "help": "Move the declaration before any references to it, or remove the reference if it is not needed."
+          },
+          {
+            "line": 203,
+            "message": "Merge this if statement with the nested one.",
+            "rule": "sonarjs/no-collapsible-if"
+          },
+          {
+            "line": 205,
+            "message": "Unexpected `if` as the only statement in a `if` block without `else`.",
+            "rule": "unicorn/no-lonely-if",
+            "help": "Move the inner `if` test to the outer `if` test."
+          },
+          {
+            "line": 222,
+            "message": "The catch parameter \"e\" should be named \"error\"",
+            "rule": "unicorn/catch-error-name",
+            "help": "Rename `e` to `error`"
+          },
+          {
+            "line": 232,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          }
+        ]
+      }
+    },
+    {
+      "file": "dc3-trpc-filter-ignored.ts",
+      "id": "dc3",
+      "role": "the Oxlint handoff: a leftover unused local, where deleting it is right and the message suggests a `_` rename",
+      "repo": "trpc/trpc",
+      "source": "packages/upgrade/src/lib/git.ts",
+      "lines": 134,
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/git.ts#L1-L54",
+      "corpusSample": "u036 (leftover)",
+      "selection": "Chosen for the agent experiment as the Oxlint subject. Of the 14 sampled unused names labelled leftover or debug-wip, two are locals (u036, u085), and only u036 is reported by Oxlint's default no-unused-vars (u085's `step` is only written by `step++`, which Oxlint ignores). In the whole corpus (raw mode) Oxlint reports 75 \"Variable 'x' is declared but never used\" hits, and all are intentional: 70 destructuring rest-sibling omits and 5 unused type parameters. So no real leftover `const x = call()` in the corpus gets Oxlint's \"Consider removing this declaration.\" help. u036 is the best real leftover available: its message is the \"assigned a value\" form, whose help is \"Did you mean to use this variable?\", and its initializer is a string literal overwritten by a property read, not a call. Two alternatives from the repos' history were rejected. Astro's `const config = await validateConfig(…)` in experimental_AstroContainer.createFromManifest: the first commit of withastro/astro#11173 deleted the binding and kept the call, but main had meanwhile started passing the value to the constructor, so it isn't a clean leftover, and it isn't at the pinned SHA. Vite's `const ssr = resolveOpts?.ssr === true` (vitejs/vite#18594): no call, and resolvePlugin is too large to stub.",
+      "analysis": {
+        "whyDead": "stderr is copied from the git check-ignore result and never read: the ignore list comes from stdout, the VERBOSE logs print only stdout-derived lists, and a failing git makes execa reject into the catch block, which logs the error. The corpus classification labels it a leftover (u036).",
+        "behaviourToPreserve": "For any execa result (stdout and stderr, or a rejection), VERBOSE on or off, any cwd and any list of files: filterIgnored calls execa once with the same command, logs the same messages (level and arguments) and returns the same paths; assertCleanGitTree calls execa, cancel and process.exit as before.",
+        "expectedFix": "Delete `let stderr = '';` and `stderr = result.stderr;`. Nothing else.",
+        "temptingFixes": "Renaming to `_stderr` (what the message suggests) silences Oxlint (with js-plugins too) and Biome, but not tsc or typescript-eslint; `void stderr;` silences Oxlint, Biome and tsc and leaves ESLint's no-useless-assignment on the initializer; using it (logging it, warning when it is non-empty, returning it) changes what the CLI prints or returns. The help text, \"Did you mean to use this variable?\", points at using it.",
+        "oracle": "Install handlers on the exported harness (execa resolving with given stdout and stderr or rejecting; log and cancel recording their arguments), stub process.cwd and process.exit, toggle process.env.VERBOSE, and call filterIgnored with file lists inside and outside the cwd, under /trpc/packages/ and /node_modules/, and listed as ignored. Compare execa calls, log calls and return values with the original. Also call assertCleanGitTree with a clean and a dirty status."
+      },
+      "deadCode": {
+        "biome": [
+          {
+            "line": 97,
+            "message": "This variable stderr is unused.",
+            "rule": "correctness/noUnusedVariables"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 96,
+            "message": "The value assigned to 'stdout' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          },
+          {
+            "line": 101,
+            "message": "'stderr' is assigned a value but never used.",
+            "rule": "@typescript-eslint/no-unused-vars"
+          },
+          {
+            "line": 101,
+            "message": "Remove this useless assignment to variable \"stderr\".",
+            "rule": "sonarjs/no-dead-store"
+          }
+        ],
+        "eslint +type-aware": [
+          {
+            "line": 96,
+            "message": "The value assigned to 'stdout' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          },
+          {
+            "line": 101,
+            "message": "'stderr' is assigned a value but never used.",
+            "rule": "@typescript-eslint/no-unused-vars"
+          },
+          {
+            "line": 101,
+            "message": "Remove this useless assignment to variable \"stderr\".",
+            "rule": "sonarjs/no-dead-store"
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 97,
+            "message": "Variable 'stderr' is assigned a value but never used. Unused variables should start with a '_'.",
+            "rule": "no-unused-vars",
+            "help": "Did you mean to use this variable?"
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "line": 97,
+            "message": "Variable 'stderr' is assigned a value but never used. Unused variables should start with a '_'.",
+            "rule": "no-unused-vars",
+            "help": "Did you mean to use this variable?"
+          },
+          {
+            "line": 101,
+            "message": "Remove this useless assignment to variable \"stderr\".",
+            "rule": "sonarjs/no-dead-store"
+          }
+        ],
+        "tsc": [
+          {
+            "line": 97,
+            "message": "'stderr' is declared but its value is never read.",
+            "rule": "TS6133"
+          }
+        ]
+      },
+      "headerStripFieldsPresent": [
+        "Dead-code subject",
+        "Rules it hits",
+        "Why it is dead",
+        "Behaviour to preserve",
+        "Expected fix",
+        "Tempting fixes"
+      ],
+      "otherRules": {
+        "biome": [
+          {
+            "line": 59,
+            "message": "A Node.js builtin module should be imported with the node: protocol.",
+            "rule": "style/useNodejsImportProtocol"
+          },
+          {
+            "line": 67,
+            "message": "Use of the type detected.",
+            "rule": "style/useConsistentTypeDefinitions"
+          },
+          {
+            "line": 100,
+            "message": "Use object destructuring instead of accessing object properties.",
+            "rule": "style/useDestructuring"
+          },
+          {
+            "line": 101,
+            "message": "Use object destructuring instead of accessing object properties.",
+            "rule": "style/useDestructuring"
+          },
+          {
+            "line": 109,
+            "message": "The computed expression can be simplified without the use of a string literal.",
+            "rule": "complexity/useLiteralKeys"
+          },
+          {
+            "line": 128,
+            "message": "The computed expression can be simplified without the use of a string literal.",
+            "rule": "complexity/useLiteralKeys"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 59,
+            "message": "Prefer `node:path` over `path`.",
+            "rule": "n/prefer-node-protocol"
+          },
+          {
+            "line": 59,
+            "message": "Use default import for module `path`.",
+            "rule": "unicorn/import-style"
+          },
+          {
+            "line": 59,
+            "message": "Prefer `node:path` over `path`.",
+            "rule": "unicorn/prefer-node-protocol"
+          },
+          {
+            "line": 67,
+            "message": "Use an `interface` instead of a `type`.",
+            "rule": "@typescript-eslint/consistent-type-definitions"
+          },
+          {
+            "line": 71,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 74,
+            "message": "Expected object keys to be in ascending order. 'stderr' should be before 'stdout'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 75,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 79,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 80,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 85,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 87,
+            "message": "Prefer an early return over wrapping the remainder of the function body in an `if` statement.",
+            "rule": "unicorn/prefer-early-return"
+          },
+          {
+            "line": 95,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 100,
+            "message": "Use object destructuring.",
+            "rule": "prefer-destructuring"
+          },
+          {
+            "line": 101,
+            "message": "Use object destructuring.",
+            "rule": "prefer-destructuring"
+          },
+          {
+            "line": 121,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 122,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 123,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 124,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          }
+        ],
+        "eslint +type-aware": [
+          {
+            "line": 59,
+            "message": "Prefer `node:path` over `path`.",
+            "rule": "n/prefer-node-protocol"
+          },
+          {
+            "line": 59,
+            "message": "Use default import for module `path`.",
+            "rule": "unicorn/import-style"
+          },
+          {
+            "line": 59,
+            "message": "Prefer `node:path` over `path`.",
+            "rule": "unicorn/prefer-node-protocol"
+          },
+          {
+            "line": 67,
+            "message": "Use an `interface` instead of a `type`.",
+            "rule": "@typescript-eslint/consistent-type-definitions"
+          },
+          {
+            "line": 71,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 73,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 74,
+            "message": "Functions that return promises must be async.",
+            "rule": "@typescript-eslint/promise-function-async"
+          },
+          {
+            "line": 74,
+            "message": "Expected object keys to be in ascending order. 'stderr' should be before 'stdout'.",
+            "rule": "sort-keys"
+          },
+          {
+            "line": 75,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 75,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 77,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 79,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 79,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 80,
+            "message": "Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function.",
+            "rule": "@typescript-eslint/no-confusing-void-expression"
+          },
+          {
+            "line": 80,
+            "message": "The variable `args` should be named `arguments_`. A more descriptive name will do too.",
+            "rule": "unicorn/name-replacements"
+          },
+          {
+            "line": 82,
+            "message": "Functions that return promises must be async.",
+            "rule": "@typescript-eslint/promise-function-async"
+          },
+          {
+            "line": 85,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 87,
+            "message": "Prefer an early return over wrapping the remainder of the function body in an `if` statement.",
+            "rule": "unicorn/prefer-early-return"
+          },
+          {
+            "line": 95,
+            "message": "Expected a function expression.",
+            "rule": "func-style"
+          },
+          {
+            "line": 100,
+            "message": "Use object destructuring.",
+            "rule": "@typescript-eslint/prefer-destructuring"
+          },
+          {
+            "line": 101,
+            "message": "Use object destructuring.",
+            "rule": "@typescript-eslint/prefer-destructuring"
+          },
+          {
+            "line": 109,
+            "message": "[\"VERBOSE\"] is better written in dot notation.",
+            "rule": "@typescript-eslint/dot-notation"
+          },
+          {
+            "line": 109,
+            "message": "Unexpected nullable string value in conditional. Please handle the nullish/empty cases explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          },
+          {
+            "line": 121,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 122,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 123,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 124,
+            "message": "Unexpected comment inline with code.",
+            "rule": "no-inline-comments"
+          },
+          {
+            "line": 128,
+            "message": "[\"VERBOSE\"] is better written in dot notation.",
+            "rule": "@typescript-eslint/dot-notation"
+          },
+          {
+            "line": 128,
+            "message": "Unexpected nullable string value in conditional. Please handle the nullish/empty cases explicitly.",
+            "rule": "@typescript-eslint/strict-boolean-expressions"
+          }
+        ],
+        "oxlint": [
+          {
+            "line": 59,
+            "message": "Use default import for module `path`.",
+            "rule": "unicorn/import-style"
+          },
+          {
+            "line": 59,
+            "message": "Prefer using the `node:` protocol when importing Node.js built-in modules.",
+            "rule": "unicorn/prefer-node-protocol",
+            "help": "Prefer `node:path` over `path`."
+          },
+          {
+            "line": 67,
+            "message": "Use `interface` instead of `type`.",
+            "rule": "typescript/consistent-type-definitions",
+            "help": "Replace `type ExecResult = { stdout: string; stderr: string };` with `interface ExecResult { stdout: string; stderr: string }`."
+          },
+          {
+            "line": 74,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `stdout: command, stderr: ''` with `stderr: '', stdout: command`."
+          },
+          {
+            "line": 85,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 95,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 100,
+            "message": "Use Object destructuring.",
+            "rule": "prefer-destructuring",
+            "help": "Use object destructuring rather than direct member access."
+          },
+          {
+            "line": 101,
+            "message": "Use Object destructuring.",
+            "rule": "prefer-destructuring",
+            "help": "Use object destructuring rather than direct member access."
+          },
+          {
+            "line": 121,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 122,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 123,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 124,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "line": 59,
+            "message": "Use default import for module `path`.",
+            "rule": "unicorn/import-style"
+          },
+          {
+            "line": 59,
+            "message": "Prefer using the `node:` protocol when importing Node.js built-in modules.",
+            "rule": "unicorn/prefer-node-protocol",
+            "help": "Prefer `node:path` over `path`."
+          },
+          {
+            "line": 67,
+            "message": "Use `interface` instead of `type`.",
+            "rule": "typescript/consistent-type-definitions",
+            "help": "Replace `type ExecResult = { stdout: string; stderr: string };` with `interface ExecResult { stdout: string; stderr: string }`."
+          },
+          {
+            "line": 74,
+            "message": "Object keys should be sorted",
+            "rule": "sort-keys",
+            "help": "Replace `stdout: command, stderr: ''` with `stderr: '', stdout: command`."
+          },
+          {
+            "line": 85,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 95,
+            "message": "Expected a function expression.",
+            "rule": "func-style",
+            "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+          },
+          {
+            "line": 100,
+            "message": "Use Object destructuring.",
+            "rule": "prefer-destructuring",
+            "help": "Use object destructuring rather than direct member access."
+          },
+          {
+            "line": 101,
+            "message": "Use Object destructuring.",
+            "rule": "prefer-destructuring",
+            "help": "Use object destructuring rather than direct member access."
+          },
+          {
+            "line": 121,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 122,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 123,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          },
+          {
+            "line": 124,
+            "message": "Unexpected comment inline with code",
+            "rule": "no-inline-comments",
+            "help": "Move the comment to a separate line"
+          }
+        ]
+      }
+    }
+  ]
+}

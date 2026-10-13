@@ -1,0 +1,210 @@
+{
+  "generated": "2026-10-13",
+  "unused names": {
+    "byToolsAndReason": {
+      "eslint": {
+        "underscore-prefixed name": 314,
+        "local only written (assigned or updated, never read)": 3,
+        "local variable": 2,
+        "type parameter": 1,
+        "other": 5
+      },
+      "eslint+oxlint": {
+        "rest sibling (destructuring omit)": 76,
+        "underscore-prefixed name": 76,
+        "import": 5,
+        "last parameter": 4
+      },
+      "biome": {
+        "parameter before a later parameter": 171,
+        "import": 5,
+        "local only written (assigned or updated, never read)": 1
+      },
+      "biome+eslint": {
+        "underscore-prefixed name": 5,
+        "parameter before a later parameter": 5,
+        "last parameter": 5
+      },
+      "biome+oxlint": {
+        "local only written (assigned or updated, never read)": 1
+      }
+    },
+    "examples": {
+      "eslint | underscore-prefixed name": [
+        "astro packages/astro/src/actions/runtime/client.ts:66 _T: export class ActionError<_T extends ErrorInferenceObject = ErrorInferenceObject> extends Error {",
+        "astro packages/astro/src/assets/build/generate.ts:115 _: for (const [_, transform] of transformsAndPath.transforms) {",
+        "astro packages/astro/src/assets/utils/redirectValidation.ts:67 _u: onMaxRedirectsExceeded = (_u) => new Error('Maximum redirect depth exceeded'),"
+      ],
+      "eslint+oxlint | rest sibling (destructuring omit)": [
+        "astro packages/astro/src/assets/services/service.ts:266 src: src,",
+        "astro packages/astro/src/assets/services/service.ts:267 width: width,",
+        "astro packages/astro/src/assets/services/service.ts:268 height: height,"
+      ],
+      "eslint+oxlint | underscore-prefixed name": [
+        "astro packages/astro/src/assets/utils/remoteProbe.ts:73 _err: } catch (_err) {",
+        "astro packages/astro/src/core/cookies/cookies.ts:136 _error: } catch (_error) {",
+        "astro packages/astro/src/core/server-islands/endpoint.ts:158 _e: } catch (_e) {"
+      ],
+      "eslint | local only written (assigned or updated, never read)": [
+        "astro packages/astro/src/core/logger/core.ts:37 AstroLoggerLabels: const AstroLoggerLabels = [",
+        "next.js packages/next/src/lib/metadata/metadata-resolution-primitives.ts:639 commonOgKeys: const commonOgKeys = ['title', 'description', 'images'] as const",
+        "next.js packages/next/src/server/node-environment-extensions/console-dim.external.tsx:11 DIMMED_STYLE: const DIMMED_STYLE = 'dimmed'"
+      ],
+      "biome | parameter before a later parameter": [
+        "excalidraw packages/element/src/binding.ts:1766 arrowElement: arrowElement: ExcalidrawArrowElement,",
+        "excalidraw packages/element/src/binding.ts:1901 arrowElement: arrowElement: ExcalidrawArrowElement,",
+        "excalidraw packages/element/src/zindex.ts:154 point: point: GlobalPoint,"
+      ],
+      "eslint | local variable": [
+        "excalidraw packages/excalidraw/components/App.tsx:3804 setState: const setState = this.setState.bind(this);",
+        "zod packages/zod/src/v4/core/util.ts:102 toZodDummy: declare const toZodDummy: unique symbol;"
+      ],
+      "biome+eslint | underscore-prefixed name": [
+        "next.js packages/next/src/build/analyze/index.ts:2 __ApiPreviewProps: import type { __ApiPreviewProps } from '../../server/api-utils'",
+        "next.js packages/next/src/build/get-static-info-including-layouts.ts:5 __ApiPreviewProps: import type { __ApiPreviewProps } from '../server/api-utils'",
+        "next.js packages/next/src/build/swc/types.ts:2 __ApiPreviewProps: import type { __ApiPreviewProps } from '../../server/api-utils'"
+      ],
+      "eslint+oxlint | import": [
+        "next.js packages/next/src/build/swc/types.ts:18 projectCompilationEventsSubscribe: projectCompilationEventsSubscribe,",
+        "next.js packages/next/src/build/swc/types.ts:19 projectFeatureUsage: projectFeatureUsage,",
+        "next.js packages/next/src/build/swc/types.ts:20 projectInvalidateFileSystemCache: projectInvalidateFileSystemCache,"
+      ],
+      "eslint+oxlint | last parameter": [
+        "next.js packages/next/src/server/base-http/helpers.ts:18 req: export const isWebNextRequest = (req: BaseNextRequest): req is WebNextRequest =>",
+        "next.js packages/next/src/server/base-http/helpers.ts:28 res: res: BaseNextResponse",
+        "next.js packages/next/src/server/base-http/helpers.ts:38 req: req: BaseNextRequest"
+      ],
+      "eslint | type parameter": [
+        "next.js packages/next/src/types.ts:83 T: interface ImgHTMLAttributes<T> {"
+      ],
+      "biome+oxlint | local only written (assigned or updated, never read)": [
+        "trpc packages/upgrade/src/lib/git.ts:18 stderr: let stderr = '';"
+      ],
+      "eslint | other": [
+        "trpc packages/upgrade/src/lib/git.ts:22 stderr: stderr = result.stderr;",
+        "vite packages/vite/src/node/plugins/css.ts:267 PureCssLang: const enum PureCssLang {",
+        "vscode src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/myersDiffAlgorithm.ts:60 step: step++;"
+      ],
+      "biome+eslint | parameter before a later parameter": [
+        "vscode src/vs/editor/common/config/editorOptions.ts:2021 options: public override compute(env: IEnvironmentalOptions, options: IComputedEditorOptions, value: string): string {",
+        "vscode src/vs/editor/common/config/editorOptions.ts:2156 options: public override compute(env: IEnvironmentalOptions, options: IComputedEditorOptions, value: number): number {",
+        "vscode src/vs/editor/common/config/editorOptions.ts:3396 options: public override compute(env: IEnvironmentalOptions, options: IComputedEditorOptions, value: number): number {"
+      ],
+      "biome+eslint | last parameter": [
+        "vscode src/vs/editor/common/config/editorOptions.ts:2021 value: public override compute(env: IEnvironmentalOptions, options: IComputedEditorOptions, value: string): string {",
+        "vscode src/vs/editor/common/config/editorOptions.ts:2156 value: public override compute(env: IEnvironmentalOptions, options: IComputedEditorOptions, value: number): number {",
+        "vscode src/vs/editor/common/config/editorOptions.ts:3396 value: public override compute(env: IEnvironmentalOptions, options: IComputedEditorOptions, value: number): number {"
+      ],
+      "biome | local only written (assigned or updated, never read)": [
+        "vscode src/vs/editor/common/diff/defaultLinesDiffComputer/algorithms/myersDiffAlgorithm.ts:53 step: let step = 0;"
+      ]
+    }
+  },
+  "unused expressions": {
+    "byToolsAndReason": {
+      "biome": {
+        "`x satisfies T;` (exhaustiveness check)": 146
+      }
+    }
+  },
+  "useless assignment vs dead store": {
+    "byToolsAndReason": {
+      "eslint": {
+        "declaration initialised with another value": 3,
+        "declaration initialised with a neutral literal ('' 0 false null [] {})": 86,
+        "other assignment": 12,
+        "increment/decrement": 8
+      },
+      "oxlint": {
+        "other assignment": 2,
+        "declaration initialised with another value": 1
+      }
+    },
+    "examples": {
+      "eslint | declaration initialised with another value": [
+        "astro packages/astro/src/assets/services/service.ts:301: let imageWidth = options.width;",
+        "excalidraw packages/element/src/binding.ts:498: let current: BindingStrategy = { mode: undefined };",
+        "next.js packages/next/src/server/response-cache/index.ts:371: let previousIncrementalCacheEntry: IncrementalResponseCacheEntry | null ="
+      ],
+      "eslint | declaration initialised with a neutral literal ('' 0 false null [] {})": [
+        "astro packages/astro/src/assets/utils/getAssetsPrefix.ts:4: let prefix = '';",
+        "astro packages/astro/src/content/vite-plugin-content-assets.ts:200: let css = '';",
+        "astro packages/astro/src/core/build/index.ts:320: let messages: string[] = [];"
+      ],
+      "eslint | other assignment": [
+        "excalidraw packages/element/src/fractionalIndex.ts:379: [lowerBound, lowerBoundIndex] = [nextLowerBound, nextLowerBoundIndex];",
+        "excalidraw packages/element/src/fractionalIndex.ts:380: [upperBound, upperBoundIndex] = [nextUpperBound, nextUpperBoundIndex];",
+        "excalidraw packages/element/src/transform.ts:792: container = linearElement;"
+      ],
+      "eslint | increment/decrement": [
+        "next.js packages/next/src/lib/metadata/metadata-elements.tsx:72: <meta key={i++} name=\"color-scheme\" content={viewport.colorScheme} />",
+        "next.js packages/next/src/lib/metadata/metadata-elements.tsx:1628: tags.push(<IconMark key={i++} />)",
+        "vscode src/vs/editor/common/core/textChange.ts:322: result[resultLen++] = prev;"
+      ],
+      "oxlint | other assignment": [
+        "next.js packages/next/src/server/base-server.ts:3341: result = await this.findPageComponents({",
+        "trpc packages/upgrade/src/lib/git.ts:22: stderr = result.stderr;"
+      ],
+      "oxlint | declaration initialised with another value": [
+        "next.js packages/next/src/server/route-modules/app-route/module.ts:574: const prospectiveRoutePrerenderStore: PrerenderStore = (prerenderStore ="
+      ]
+    }
+  },
+  "duplicate imports": {
+    "byToolsAndReason": {
+      "eslint": {
+        "the statement mixes inline `type` specifiers": 20,
+        "the statement is `import type`": 25,
+        "value import": 63
+      },
+      "oxlint": {
+        "the statement mixes inline `type` specifiers": 7,
+        "value import": 3
+      }
+    }
+  },
+  "unreachable": {
+    "lines": {
+      "biome+eslint+oxlint": 2
+    },
+    "mismatches": []
+  },
+  "dead stores": {
+    "lines": {
+      "eslint+oxlint": 37
+    },
+    "mismatches": []
+  },
+  "identical functions": {
+    "lines": {
+      "eslint+oxlint": 25
+    },
+    "mismatches": []
+  },
+  "duplicated branches": {
+    "lines": {
+      "eslint+oxlint": 30
+    },
+    "mismatches": []
+  },
+  "duplicate strings": {
+    "lines": {
+      "eslint+oxlint": 342
+    },
+    "mismatches": []
+  },
+  "unused private members": {
+    "lines": {
+      "biome+eslint": 3,
+      "eslint": 3
+    },
+    "mismatches": [
+      "astro packages/astro/src/container/index.ts:465 [biome+eslint] private static async createFromManifest(",
+      "excalidraw packages/excalidraw/components/App.tsx:3778 [biome+eslint] private setDesktopUIMode = (mode: EditorInterface[\"desktopUIMode\"]) => {",
+      "excalidraw packages/excalidraw/fonts/Fonts.ts:475 [biome+eslint] private static getAllFamilies() {",
+      "next.js packages/next/src/server/dev/hot-reloader-webpack.ts:252 [eslint] private watcher: any",
+      "next.js packages/next/src/server/dev/hot-reloader-webpack.ts:260 [eslint] private lockfile: Lockfile | undefined",
+      "next.js packages/next/src/server/web/edge-route-module-wrapper.ts:83 [eslint] private async handler("
+    ]
+  }
+}

@@ -1,0 +1,235 @@
+---
+title: Is dead code worth an error?
+description: Where the checks for unused, unreachable and duplicated code came from, what they find in real codebases, why the rare bug looks exactly like a leftover, and what agents do when the linter flags one.
+date: 2026-10-12
+author: hayden
+rules:
+  - no-unused-vars
+  - noUnusedVariables
+  - no-unreachable
+  - no-useless-assignment
+  - sonarjs/no-dead-store
+  - sonarjs/no-identical-functions
+  - sonarjs/no-duplicated-branches
+---
+
+Some of the oldest checks in programming are about code that does nothing: a variable nobody reads, a statement nobody reaches, a function written twice. Ultracite turns on the rules that find them, from `no-unused-vars` and `no-unreachable` to the rules that flag dead stores, identical functions and duplicated branches.
+
+They're also the rules people argue with least, which makes them easy to underrate. We wanted to know what they actually find. We ran them across eight well-known codebases and classified what they flagged. We searched the projects' history for bugs that started as dead code, built a clone detector to see how much duplication the rules miss, and handed real dead code to coding agents to see what they do with it.
+
+## Set and never used
+
+In 1978, Stephen Johnson's [Lint, a C Program Checker](https://plan9.io/7thEdMan/vol2/lint) already reported most of what these rules do. It flagged unused variables and functions, "local variables which are set and never used", and statements after a `return` or `goto`. His reasoning still holds. Code like this rarely breaks a working program, but it makes programs "harder to understand and change", and a variable that's set and never used "may also be symptomatic of bugs." Lint also had the first way to say "unused on purpose": an `/* ARGSUSED */` comment above a function.
+
+Compilers had drawn the same line a few years earlier. In Frances Allen and John Cocke's 1971 [catalogue of optimizations](https://www.computerhistory.org/collections/catalog/102655328) at IBM, code is dead when it "cannot be reached", or when its results are never used. That's the split between today's `no-unreachable` and the dead-store rules.
+
+JavaScript inherited the checks. ESLint's `no-unused-vars` arrived in [2013](https://eslint.org/docs/latest/rules/no-unused-vars), and TypeScript added `noUnusedLocals` and `noUnusedParameters` as compiler flags in [2016](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html). Go went furthest: an unused import or local variable doesn't compile. Its [FAQ](https://go.dev/doc/faq) explains that an unused variable "may indicate a bug," and that Go has no warnings at all, because "if it's worth complaining about, it's worth fixing in the code."
+
+## Four meanings of unused
+
+Every tool also needed a way to mark code as unused on purpose, and most settled on the underscore. TypeScript exempted `_`-prefixed parameters [a week after the flag was merged](https://github.com/microsoft/TypeScript/pull/9464), after users asked how to skip parameters they didn't need. ESLint has used `^_` as the example ignore pattern in its docs since 2015, but has never made it the default. Oxlint makes it the default, and its docs note that this ["deviates from both ESLint and TypeScript-ESLint"](https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-unused-vars.html). Biome exempts `_` names too, and its own [unsafe fix](https://biomejs.dev/linter/rules/no-unused-variables/) for an unused variable renames it to `_name` rather than deleting it.
+
+So "unused" means something different in each tool. Here's one function, checked in October 2026 by each tool's unused-variable check at its default settings (typescript-eslint's for ESLint):
+
+{/* prettier-ignore */}
+```ts title="render.ts"
+export function render(items: Item[], theme: Theme, options: Options) {
+  const started = performance.now(); // all four
+  const _label = describe(items); // ESLint and tsc
+  const { secret, ...props } = options; // Oxlint and ESLint
+  try {
+    return draw(items, props);
+  } catch (_error) { // Oxlint and ESLint
+    return null;
+  }
+}
+```
+
+`theme`, unused but followed by a used parameter, is reported by Biome and TypeScript and skipped by the other two. On our eight codebases, typescript-eslint reported 735 unused names, Biome 426, Oxlint 396 and TypeScript 361. 314 of ESLint's extra reports were names that already started with an underscore.
+
+The messages differ too, and that matters more than it used to, because an agent fixing lint errors reads them literally. Oxlint's says "Variable 'x' is declared but never used. Unused variables should start with a '\_'." `sonarjs/no-unused-function-argument` suggests renaming the parameter to `_x` "to make intention explicit." A rename silences Oxlint and Biome, but not ESLint or TypeScript. `void x;` silences all four.
+
+## Retired code, and a stray goto
+
+The most expensive dead code on record wasn't unreachable. In 2012, Knight Capital deployed new trading code that reused a flag from a feature called Power Peg, retired nine years earlier. Power Peg had never been deleted. In the words of the [SEC's order](https://www.sec.gov/litigation/admin/2013/34-70694.pdf), it "remained present and callable." Knight meant to delete it as part of the release, but one of its eight servers didn't get the new code, and orders carrying the reused flag ran Power Peg there. In about 45 minutes, Knight made more than 4 million trades and lost over $460 million. No lint rule would have caught it, because the code was reachable behind a flag. The lesson is to delete a feature when you retire it.
+
+Apple's ["goto fail"](https://www.cve.org/CVERecord?id=CVE-2014-1266) bug in 2014 is the opposite case. A duplicated `goto fail;` ran unconditionally and skipped the TLS signature check below it, which became unreachable. Clang had a warning for unreachable code, but as [Adam Langley pointed out](https://www.imperialviolet.org/2014/02/22/applebug.html) at the time, "it's not in -Wall." The JavaScript equivalent, a stray `return`, is exactly what `no-unreachable` reports. It was a duplication bug as well: the hashing sequence it broke appeared [six times in the same file](https://martinfowler.com/articles/testing-culture.html).
+
+## Wrong, not slow
+
+Most research on dead code is about what it costs the people reading it. In four controlled experiments with 83 students, [Romano et al.](https://doi.org/10.1109/TSE.2018.2842781) found that dead code made people understand unfamiliar code significantly less correctly, with a large effect in every experiment. It didn't make them slower. Some participants "unconsciously modify dead code," spending time changing code that never ran.
+
+Dead code also absorbs maintenance. [Eder et al.](https://doi.org/10.1109/ICSE.2012.6227109) profiled a business system at Munich Re in production for two years: 25% of its methods never ran, yet they received 7.6% of all changes, and developers judged about half of those changes unnecessary.
+
+Lint finds only the obvious part. In a [study of 14 systems](https://doi.org/10.1145/3368267), 29% of the code developers confirmed as unnecessary was still reachable, so no reachability check could have found it. The companies that remove dead code at scale use whole-program analysis and production logs instead. Meta's SCARF has [deleted more than 100 million lines](https://engineering.fb.com/2023/10/24/data-infrastructure/automating-dead-code-cleanup/), and Google's Sensenmann [nearly 5% of all C++](https://testing.googleblog.com/2023/04/sensenmann-code-deletion-at-scale.html) at Google.
+
+## Copies that drift
+
+Duplication has the longer argument behind it. Duplicated code has been at or near the top of every list of code smells since Fowler and Beck's _Refactoring_ in 1999. Hunt and Thomas's DRY principle is usually read as "don't copy and paste," though in the [2019 edition](https://media.pragprog.com/titles/tpp20/dry.pdf) they say it "is about the duplication of knowledge," and that two identical functions can be "a coincidence, not a duplication." Sandi Metz argued the other side: ["duplication is far cheaper than the wrong abstraction."](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
+
+The research supports both. [Juergens et al.](https://doi.org/10.1109/ICSE.2009.5070547) studied copied code in five production systems. About half of the groups of copies had differences between them, over a quarter of those differences were unintended, and about half of the unintended ones were bugs: 107, confirmed by the systems' developers. [CP-Miner](https://www.usenix.org/conference/osdi-04/cp-miner-tool-finding-copy-paste-and-related-bugs-operating-system-code) found dozens of copy-paste bugs in Linux and FreeBSD where a programmer had forgotten to rename an identifier in one place. But when [Rahman, Bird and Devanbu](https://doi.org/10.1007/s10664-011-9195-3) looked for bugs in cloned code, they found "the great majority of bugs are not significantly associated with clones," and that clones "may be less defect prone" than the rest. The risk isn't in the copy itself. It's in copies that change apart.
+
+## Leftovers, almost all of them
+
+In October 2026 we measured these rules across the same eight codebases as [our other research](/research/cognitive-complexity): [Zod](https://github.com/colinhacks/zod), [Hono](https://github.com/honojs/hono), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js) (`packages/next/src`) and [VS Code](https://github.com/microsoft/vscode)'s editor core, 694,309 lines in all. The dead-code and duplication rules reported 2,378 times, 34 per 10,000 lines. Only 9 of those had been suppressed. Maintainers fix these rather than argue with them.
+
+Most of what the rules flag is meant to be there. We sampled 96 unused names and classified each by reading the code:
+
+- **79 were intentional:** a parameter a callback's signature requires, a type parameter, a property dropped from an object with destructuring, or a name already marked with an underscore.
+- **13 were leftovers** that could be deleted, 1 was debugging code, and 3 were false positives.
+
+Of 50 dead stores, values assigned and then overwritten or never read, 42 were leftovers, usually an initial value every branch replaces, and 8 deliberately released memory. None of the 146 was a bug.
+
+Bugs that start as dead code do exist. Searching the eight projects' history, we found 18 confirmed, fixed bugs whose symptom was dead code: a value computed and never used, a return value thrown away, or two copies that had drifted apart. We linted each file as it was before its fix. A dead-code rule fired on the buggy lines of 3 of the 18. In VS Code, for example, a [loop grew a column](https://github.com/microsoft/vscode/pull/324523) and the function then returned the original, and no rule saw it, because the grown value was read in its own loop condition. No rule flagged any of the 6 lost return values or the 5 copies that had drifted apart.
+
+That's the uncomfortable pattern for these rules. In maintained code, nearly everything they report is harmless, so the habit they teach is to delete or rename without looking. The rare report that is a bug looks exactly like the leftovers.
+
+## Fifteen percent, mostly out of reach
+
+To see how much duplication the rules miss, we built a token-based clone detector, with the thresholds jscpd uses by default: 50 tokens and 5 lines. In the eight codebases' source, exact copies covered 4.5% of lines, and copies that differ only in names or literals covered 15.2%. Tests were far more repetitive: 54.8% by the second measure.
+
+The duplication rules see a sliver of that. `sonarjs/no-identical-functions` only compares functions in the same file whose bodies are identical and at least three lines long. Of 168 groups of identical functions, it could see 20. Most of the others were in different files, or were callbacks and object methods the rule doesn't check. None of the 534 groups that differed only by a renamed variable or a changed literal was in reach.
+
+We classified 46 clones by hand: 20 accidental copies worth sharing, 13 too trivial to matter, 11 deliberate, like Zod's locale files, which share one shape on purpose, and 2 copies that had drifted apart into bugs. One of those shows why a duplication rule's advice can be wrong. In Zod v3's [English error messages](https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/locales/en.ts#L68-L75), the "too small" message for bigints was copied from the one for numbers, and still says "Number":
+
+{/* prettier-ignore */}
+```ts title="en.ts (Zod v3, reformatted)"
+else if (issue.type === "number")
+  message = `Number must be ${
+    issue.exact
+      ? `exactly equal to `
+      : issue.inclusive
+        ? `greater than or equal to `
+        : `greater than `
+  }${issue.minimum}`;
+else if (issue.type === "bigint")
+  message = `Number must be ${
+    issue.exact
+      ? `exactly equal to `
+      : issue.inclusive
+        ? `greater than or equal to `
+        : `greater than `
+  }${issue.minimum}`;
+```
+
+The "too big" message for bigints says "BigInt". `sonarjs/no-duplicated-branches` flags this one, because the two branches are identical. The fix that clears it, merging them, would lock the wrong word in. In 28 of the 46 clones, the right change wasn't the one the rule suggested, and in 20 of those it was to leave the code alone.
+
+## What one file can't tell you
+
+A lint rule sees one file, so it treats every export as used: whatever imports it is somewhere else. Finding unused exports and files takes a graph of the whole program. We built one for six of the codebases with TypeScript's own module resolution. Of 8,177 exports, 111 had no reference anywhere and weren't reachable from a package's entry points. We checked 89 of them by hand. 47 were dead, including two whole files, and the rest were looked up by name at runtime, registered themselves, or were public API reached some way the analysis couldn't follow. Another 1,794 exports were used only through the packages' entry points: public API that an analysis without the entry points would have called dead. Tools that build that graph, like [knip](https://knip.dev/), can find this kind of dead code. A linter can't.
+
+## Agents write more and reuse less
+
+Two claims about AI and dead code are common: that AI tools write more duplicate code, and that they leave dead code behind. The evidence for the first is weaker than its reputation. The most quoted figures come from [GitClear](https://www.gitclear.com/ai_assistant_code_quality_2025_research), which sells code analytics: in its data, the share of commits containing a duplicated block of five or more lines rose from 0.45% in 2022 to 6.66% in 2024. But none of its commits are labelled as AI-written, and its method changed between years. The two causal studies we found compared repositories before and after they adopted [Cursor](https://arxiv.org/abs/2511.04427) or [coding agents](https://arxiv.org/abs/2601.13597), against matched controls. Warnings and complexity rose, but the effect on duplication was "small and inconsistent", and not significant.
+
+What holds up is narrower: agents write new code instead of reusing what's there. In one Python repository, [Huang et al.](https://arxiv.org/abs/2601.21276) found agent pull requests about 1.87 times as redundant with existing functions as human ones, and reviewers didn't notice. Unused and redundant code is also among the most common smells in generated code. In [a study by Sonar](https://arxiv.org/abs/2508.14727), which sells code analysis, dead, unused or redundant code made up 15% to 43% of each of five models' code smells. Anthropic's own [prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) warns that recent Claude models "have a tendency to overengineer by creating extra files, adding unnecessary abstractions."
+
+The other question is what an agent does when the linter flags dead code it didn't write. The tools offer a quiet exit. Oxlint's message says unused variables "should start with a '\_'". Biome's unsafe fix makes the rename itself. `void x;` silences every linter we tried. Each makes the error go away and leaves the code, and whatever bug it might signal, where it was. We didn't find a study that counts how often agents take that exit, so we ran an experiment.
+
+## The bug they saw and left
+
+In October 2026 we took three pieces of real dead code and handed each one to Claude Code and to Codex four times, using the same prompt and permissions Ultracite uses when it passes lint errors to an agent:
+
+- **A bug.** VS Code's [`resolveConnection`](https://github.com/microsoft/vscode/blob/0204cf08b05ca7425e1758510b673d248a908a5c/src/vs/workbench/contrib/mcp/common/mcpRegistry.ts#L328-L405), as it was before [the fix](https://github.com/microsoft/vscode/pull/247184). It asks an extension how to launch a server and checks the answer for cancellation. Then it fills in variables in the original launch configuration instead, so the extension's answer is thrown away. The only lint signal is ESLint's `no-useless-assignment`, on the variable's initial value, which nothing reads.
+- **A leftover flagged as a dead store.** In Vite's [static file middleware](https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/static.ts#L125-L208), a `fileUrl` variable is left over from a refactor.
+- **A leftover flagged by Oxlint,** with the message that suggests an underscore: a `stderr` variable in tRPC's [upgrade tool](https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/lib/git.ts#L1-L54) that's assigned and never read.
+
+We checked every result against the original: 1,920 scenarios for VS Code's function, 448 requests for Vite's and 66 for tRPC's.
+
+Nobody reached for the underscore. In 23 of 24 runs, the agent deleted the dead code. No run renamed it, suppressed it or found a way to "use" it, though three Codex runs left the expression behind as a `void` statement, in case reading it had side effects. On the two leftovers, every run made the right change, and behavior was identical in every scenario. One Claude run explained why it hadn't renamed `stderr`: that "would only hide the warning on a value that's still never used."
+
+The bug is where it went wrong. Seven of eight runs deleted the initial value, which clears the rule and keeps the bug:
+
+{/* prettier-ignore */}
+```diff title="mcpRegistry.ts (VS Code, seven of eight runs)"
+-let launch: McpServerLaunch | undefined = definition.launch;
++let launch: McpServerLaunch | undefined;
+```
+
+One run fixed it, with the same one-word change as the real fix:
+
+{/* prettier-ignore */}
+```diff title="mcpRegistry.ts (VS Code, one Claude run)"
+-launch = await this._replaceVariablesInLaunch(definition, definition.launch);
++launch = await this._replaceVariablesInLaunch(definition, launch);
+```
+
+The counts hide the interesting part. All four Claude runs found the bug and described it in their final message. Three left it anyway, because Ultracite's instructions say to make the minimal change "while preserving runtime behavior." One wrote: "I left it alone because the rules say not to change runtime behavior, but it's worth checking." The fourth fixed it, and said it was changing behavior. None of the four Codex runs mentioned the bug. Each deleted the initial value and reported that behavior was preserved, which was true, and was the problem.
+
+It's the same conflict the [floating promises experiment](/research/floating-promises#sixteen-runs-three-fixes) found: an instruction that's right for almost every lint error is wrong for the one that marks a bug. On dead code, the result can't tell you which happened. The deletion and the fix both clear the rule and add nothing, so a tool that only re-runs the linter counts all eight as fixed. The difference is in what the agent wrote, which makes its explanation as worth keeping as its diff.
+
+The rename the message suggests did happen, just not by an agent. Linters' own automatic fixes run before an agent sees anything, and in our tests both Oxlint's and Biome's unsafe fixes renamed tRPC's `stderr` to `_stderr`. That clears both linters and leaves the dead code where it was.
+
+## What the rules can't tell apart
+
+**A leftover from a bug.** An unused value is almost always harmless, and the rule reports the rare bug in exactly the same words. Deleting it, renaming it and fixing the bug all clear the error.
+
+**A deliberate copy from an accidental one.** The duplication rules flag identical code, but whether two copies should be one depends on whether they mean the same thing. Zod's bigint message was a copy that should have differed.
+
+**Public API from a dead export.** A single-file linter can't see unused exports or unused files at all. That takes a whole-program graph and the package's entry points.
+
+**Unused from unnecessary.** Much code nobody needs is still reachable, and no reachability check will find it.
+
+**One convention from another.** The underscore means "unused on purpose" in some tools and nothing in others, so the same code passes one linter and fails the next.
+
+**A fix from a silence.** Automatic fixes for unused variables either delete the declaration, along with the call that produced it, or rename it with an underscore. Neither asks why it was unused.
+
+## Delete it, or say why
+
+**Before deleting an unused value, ask why it's unused.** A value that was computed and never read is usually a leftover. Occasionally it's the one that should have been used. Check that the code next to it isn't using the wrong one.
+
+**Use the underscore only where a signature requires the name.** A callback parameter you can't remove is a fair use. A local you could delete isn't. Pick one convention and set it the same way in every tool you run; the [configuration docs](/docs/configuration#overriding-rules) show how.
+
+**Delete retired features, don't leave them behind a flag.** Version control keeps the old code. A flag that can wake it up is a risk Knight Capital paid for.
+
+**Before merging duplicated code, check that the copies really are the same.** When two copies differ, find out why first. When they're identical by coincidence, leave them.
+
+**Find dead exports with a tool that sees the whole program.** A linter can't, and most exports nothing imports are public API.
+
+**Read what an agent says, not just what it changes.** When an agent deletes dead code, check whether the value should have been used, and read its explanation: in our experiment, most of the runs that found the bug said so there, and left it.
+
+Dead code is mostly harmless and occasionally very expensive. The rules that find it are some of the oldest in programming, and in maintained code nearly everything they report is a leftover or a placeholder someone meant to leave. That's an argument for keeping them as errors: fixing every report keeps the noise at zero, so the rare report that matters isn't buried. But the rule can't tell which report that is, and neither can its fix. Agents, it turns out, don't reach for the underscore. They delete. On a leftover that's right, and on a bug it erases the only sign there was one, unless someone reads why the agent thought the code was dead. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+## References
+
+**History**
+
+- Stephen C. Johnson. [Lint, a C Program Checker](https://plan9.io/7thEdMan/vol2/lint). Bell Laboratories Computing Science Technical Report 65, 1978.
+- Frances E. Allen and John Cocke. [A Catalogue of Optimizing Transformations](https://www.computerhistory.org/collections/catalog/102655328). IBM Research Report RC 3548, 1971; in _Design and Optimization of Compilers_, Prentice-Hall, 1972.
+- ESLint. [no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars) rule documentation.
+- Microsoft. [TypeScript 2.0 release notes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html), 2016, and [PR #9464](https://github.com/microsoft/TypeScript/pull/9464).
+- The Go Authors. [Frequently Asked Questions](https://go.dev/doc/faq): "Can I stop these complaints about my unused variable/import?"
+- Oxc. [no-unused-vars](https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-unused-vars.html) rule documentation.
+- Biome. [noUnusedVariables](https://biomejs.dev/linter/rules/no-unused-variables/) rule documentation.
+
+**Incidents**
+
+- U.S. Securities and Exchange Commission. [In the Matter of Knight Capital Americas LLC](https://www.sec.gov/litigation/admin/2013/34-70694.pdf). Release No. 70694, 2013.
+- MITRE. [CVE-2014-1266](https://www.cve.org/CVERecord?id=CVE-2014-1266). 2014.
+- Adam Langley. [Apple's SSL/TLS bug](https://www.imperialviolet.org/2014/02/22/applebug.html). _ImperialViolet_, 2014.
+- Mike Bland. [Goto Fail, Heartbleed, and Unit Testing Culture](https://martinfowler.com/articles/testing-culture.html). martinfowler.com, 2014.
+
+**Dead code**
+
+- Simone Romano, Christopher Vendome, Giuseppe Scanniello and Denys Poshyvanyk. [A Multi-Study Investigation into Dead Code](https://doi.org/10.1109/TSE.2018.2842781). _IEEE Transactions on Software Engineering_, 46(1), 2020.
+- Sebastian Eder, Maximilian Junker, Elmar Jürgens, Benedikt Hauptmann, Rudolf Vaas and Karl-Heinz Prommer. [How Much Does Unused Code Matter for Maintenance?](https://doi.org/10.1109/ICSE.2012.6227109) ICSE 2012.
+- Roman Haas, Rainer Niedermayr, Tobias Roehm and Sven Apel. [Is Static Analysis Able to Identify Unnecessary Source Code?](https://doi.org/10.1145/3368267) _ACM Transactions on Software Engineering and Methodology_, 29(1), 2020.
+- Will Shackleton, Andy Pincombe and Katriel Cohn-Gordon. [Automating dead code cleanup](https://engineering.fb.com/2023/10/24/data-infrastructure/automating-dead-code-cleanup/). Engineering at Meta, 2023.
+- Phil Norman. [Sensenmann: Code Deletion at Scale](https://testing.googleblog.com/2023/04/sensenmann-code-deletion-at-scale.html). Google Testing Blog, 2023.
+
+**Duplication**
+
+- David Thomas and Andrew Hunt. [DRY: The Evils of Duplication](https://media.pragprog.com/titles/tpp20/dry.pdf). _The Pragmatic Programmer_, 20th anniversary edition, Addison-Wesley, 2019.
+- Sandi Metz. [The Wrong Abstraction](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction). 2016.
+- Elmar Juergens, Florian Deissenboeck, Benjamin Hummel and Stefan Wagner. [Do Code Clones Matter?](https://doi.org/10.1109/ICSE.2009.5070547) ICSE 2009.
+- Zhenmin Li, Shan Lu, Suvda Myagmar and Yuanyuan Zhou. [CP-Miner: A Tool for Finding Copy-paste and Related Bugs in Operating System Code](https://www.usenix.org/conference/osdi-04/cp-miner-tool-finding-copy-paste-and-related-bugs-operating-system-code). OSDI 2004.
+- Foyzur Rahman, Christian Bird and Premkumar Devanbu. [Clones: What Is That Smell?](https://doi.org/10.1007/s10664-011-9195-3) _Empirical Software Engineering_, 17(4–5), 2012.
+
+**AI-written code**
+
+- William Harding (GitClear). [AI Copilot Code Quality: Evaluating 2024's Increased Defect Rate via Code Quality Metrics](https://www.gitclear.com/ai_assistant_code_quality_2025_research). 2025.
+- Hao He, Courtney Miller, Shyam Agarwal, Christian Kästner and Bogdan Vasilescu. [Speed at the Cost of Quality: How Cursor AI Increases Short-Term Velocity and Long-Term Complexity in Open-Source Projects](https://arxiv.org/abs/2511.04427). MSR 2026.
+- Shyam Agarwal, Hao He and Bogdan Vasilescu. [AI IDEs or Autonomous Agents? Measuring the Impact of Coding Agents on Software Development](https://arxiv.org/abs/2601.13597). MSR 2026.
+- Haoming Huang, Pongchai Jaisri, Shota Shimizu, Lingfeng Chen, Sota Nakashima and Gema Rodríguez-Pérez. [More Code, Less Reuse: Investigating Code Quality and Reviewer Sentiment towards AI-generated Pull Requests](https://arxiv.org/abs/2601.21276). MSR 2026.
+- Abbas Sabra, Olivier Schmitt and Joseph Tyler. [Assessing the Quality and Security of AI-Generated Code: A Quantitative Analysis](https://arxiv.org/abs/2508.14727). arXiv, 2025.
+- Anthropic. [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).

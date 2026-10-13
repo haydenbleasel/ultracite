@@ -194,18 +194,28 @@ for (const extra of runFiles) {
 const runFileNames = new Set(runFiles.map((f) => f.name));
 
 // The diagnostics the agent sees: the topic's lint (cognitive-complexity: sonarjs at 15,
-// nothing else).
+// nothing else), in the shape Ultracite's adapter for that linter produces. A topic whose lint
+// isn't ESLint supplies its own `toDiagnostics` (added with the dead-code topic, whose dc3 goes
+// through Oxlint).
 const lintResult = await topic.lint(file);
-const diagnostics = lib.toUltraciteDiagnostics(lintResult);
+const diagnostics = (topic.toDiagnostics ?? lib.toUltraciteDiagnostics)(
+  lintResult
+);
 const expected = topic.expectedDiagnostics(subject);
 if (diagnostics.length !== expected)
   throw new Error(
     `expected exactly ${expected} diagnostic(s), got ${diagnostics.length}`
   );
-// Ultracite groups by diagnostic.file and passes that path to both functions.
+// Ultracite groups by diagnostic.file and passes that path to both functions. ESLint reports
+// absolute paths; Oxlint reports them relative to where it ran, which for `ultracite fix` is the
+// project root and its working directory, so buildPrompt's path.resolve() runs from the run dir
+// here (it changes nothing for an absolute path).
 const group = { file: diagnostics[0].file, issues: diagnostics };
+const harnessCwd = process.cwd();
+process.chdir(runDir);
 const jsonPath = writeDiagnosticsFile(runDir, group.file, group.issues);
 const prompt = buildPrompt(group.file, group.issues, jsonPath);
+process.chdir(harnessCwd);
 writeFileSync(join(stagingDir, "prompt.txt"), prompt);
 
 const cliVersion = execFileSync(adapter.command, ["--version"], {
@@ -247,6 +257,12 @@ const lockAll = () => {
     ...LOCK_NAMES.map((n) => join(HERE, n)),
     // Topic-specific files outside this folder, e.g. corpus notes that name the expected fix.
     ...topic.lockPaths,
+    // Machine-specific paths outside the repo for any topic (an orchestrating session's notes or
+    // drafts), colon-separated. Added with the dead-code topic; the security-rules topic's own
+    // SECURITY_RULES_EXTRA_LOCKS still works.
+    ...(process.env.AGENT_EXPERIMENT_EXTRA_LOCKS ?? "")
+      .split(":")
+      .filter(Boolean),
     ...readdirSync(lib.RUN_ROOT)
       .filter((d) => d !== runId && d !== ".staging")
       .map((d) => join(lib.RUN_ROOT, d)),

@@ -1,0 +1,14 @@
+--- a/static.ts
++++ b/static.ts
+@@ -188,11 +188,6 @@
+       }
+     }
+ 
+-    const resolvedPathname = redirectedPathname || pathname
+-    let fileUrl = path.resolve(dir, removeLeadingSlash(resolvedPathname))
+-    if (resolvedPathname.endsWith('/') && fileUrl.at(-1) !== '/') {
+-      fileUrl = withTrailingSlash(fileUrl)
+-    }
+     if (redirectedPathname) {
+       url.pathname = encodeURI(redirectedPathname)
+       req.url = url.href.slice(url.origin.length)

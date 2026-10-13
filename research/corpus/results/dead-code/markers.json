@@ -1,0 +1,809 @@
+{
+  "generated": "2026-10-13",
+  "note": "Syntax only. underscore.unusedByEslint joins ESLint's raw @typescript-eslint/no-unused-vars hits (no ignore pattern) by file, line and name. configLines are lines of each repo's lint and TypeScript configs (depth <= 3, outside test/fixture/example dirs) that mention these rules or their options.",
+  "repos": {
+    "zod": {
+      "bareIdentifierStatements": 0,
+      "configLines": [
+        {
+          "file": ".configs/tsconfig.base.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": ".configs/tsconfig.base.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 32,
+          "text": "\"noUnusedTemplateLiteral\": \"off\", // why is this even a best practice?"
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 39,
+          "text": "\"noUnusedImports\": {"
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 43,
+          "text": "\"noUnusedVariables\": {"
+        },
+        {
+          "file": "packages/bench/tsconfig.json",
+          "line": 11,
+          "text": "\"noUnusedLocals\": false,"
+        },
+        {
+          "file": "packages/bench/tsconfig.json",
+          "line": 12,
+          "text": "\"noUnusedParameters\": false"
+        },
+        {
+          "file": "packages/docs/biome.jsonc",
+          "line": 31,
+          "text": "\"noUnusedTemplateLiteral\": \"off\", // why is this even a best practice?"
+        },
+        {
+          "file": "packages/docs/biome.jsonc",
+          "line": 38,
+          "text": "\"noUnusedImports\": {"
+        },
+        {
+          "file": "packages/docs/biome.jsonc",
+          "line": 42,
+          "text": "\"noUnusedVariables\": {"
+        },
+        {
+          "file": "packages/zod/tsconfig.test.json",
+          "line": 5,
+          "text": "\"noUnusedLocals\": false"
+        }
+      ],
+      "suppressions": {
+        "byRule": {
+          "noUselessEmptyExport": 1
+        },
+        "comments": 1,
+        "tsIgnore": 16
+      },
+      "underscore": {
+        "byKind": {
+          "parameter": 193,
+          "type-parameter": 3,
+          "local": 105,
+          "import": 3,
+          "array-destructured": 4,
+          "catch": 9
+        },
+        "total": 317,
+        "unusedByEslint": 57,
+        "usedOrExempt": 260
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "hono": {
+      "bareIdentifierStatements": 0,
+      "configLines": [
+        {
+          "file": "tsconfig.base.json",
+          "line": 12,
+          "text": "\"noUnusedLocals\": false,"
+        },
+        {
+          "file": "tsconfig.base.json",
+          "line": 13,
+          "text": "\"noUnusedParameters\": false"
+        },
+        {
+          "file": "tsconfig.build.json",
+          "line": 8,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "tsconfig.build.json",
+          "line": 9,
+          "text": "\"noUnusedParameters\": true"
+        }
+      ],
+      "suppressions": {
+        "byRule": {},
+        "comments": 0,
+        "tsIgnore": 21
+      },
+      "underscore": {
+        "byKind": {
+          "parameter": 24,
+          "local": 9,
+          "type-parameter": 16,
+          "array-destructured": 2
+        },
+        "total": 51,
+        "unusedByEslint": 19,
+        "usedOrExempt": 32
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "trpc": {
+      "bareIdentifierStatements": 0,
+      "configLines": [
+        {
+          "file": "eslint.config.js",
+          "line": 65,
+          "text": "'@typescript-eslint/no-unused-vars': ["
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 68,
+          "text": "argsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 69,
+          "text": "varsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 70,
+          "text": "caughtErrorsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 154,
+          "text": "'@typescript-eslint/no-unused-vars': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 156,
+          "text": "'@typescript-eslint/no-unused-expressions': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 169,
+          "text": "'@typescript-eslint/no-unused-vars': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 171,
+          "text": "'@typescript-eslint/no-unused-expressions': 'off',"
+        },
+        {
+          "file": "tsconfig.build.json",
+          "line": 11,
+          "text": "\"noUnusedLocals\": false, // we have eslint for this where it's disabled in tests"
+        },
+        {
+          "file": "tsconfig.build.json",
+          "line": 12,
+          "text": "\"noUnusedParameters\": true,"
+        }
+      ],
+      "suppressions": {
+        "byRule": {},
+        "comments": 0,
+        "tsIgnore": 13
+      },
+      "underscore": {
+        "byKind": {
+          "parameter": 25,
+          "local": 16,
+          "import": 10,
+          "array-destructured": 6,
+          "type-parameter": 10
+        },
+        "total": 67,
+        "unusedByEslint": 20,
+        "usedOrExempt": 47
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "vite": {
+      "bareIdentifierStatements": 0,
+      "configLines": [
+        {
+          "file": "docs/tsconfig.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "docs/tsconfig.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 111,
+          "text": "'@typescript-eslint/no-unused-vars': ["
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 115,
+          "text": "argsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 116,
+          "text": "caughtErrors: 'all',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 117,
+          "text": "caughtErrorsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 118,
+          "text": "destructuredArrayIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 119,
+          "text": "varsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 120,
+          "text": "ignoreRestSiblings: true,"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 154,
+          "text": "'import-x/no-duplicates': 'error',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 232,
+          "text": "'@typescript-eslint/no-unused-expressions': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 233,
+          "text": "'@typescript-eslint/no-unused-vars': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 282,
+          "text": "'@typescript-eslint/no-duplicate-type-constituents': 'off',"
+        },
+        {
+          "file": "packages/create-vite/template-lit-ts/tsconfig.json",
+          "line": 20,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-lit-ts/tsconfig.json",
+          "line": 21,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-preact-ts/tsconfig.app.json",
+          "line": 25,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-preact-ts/tsconfig.app.json",
+          "line": 26,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-preact-ts/tsconfig.node.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-preact-ts/tsconfig.node.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-qwik-ts/tsconfig.app.json",
+          "line": 21,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-qwik-ts/tsconfig.app.json",
+          "line": 22,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-qwik-ts/tsconfig.node.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-qwik-ts/tsconfig.node.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-react-ts/tsconfig.app.json",
+          "line": 20,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-react-ts/tsconfig.app.json",
+          "line": 21,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-react-ts/tsconfig.node.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-react-ts/tsconfig.node.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-solid-ts/tsconfig.app.json",
+          "line": 21,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-solid-ts/tsconfig.app.json",
+          "line": 22,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-solid-ts/tsconfig.node.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-solid-ts/tsconfig.node.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-svelte-ts/tsconfig.node.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-svelte-ts/tsconfig.node.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-vanilla-ts/tsconfig.json",
+          "line": 18,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-vanilla-ts/tsconfig.json",
+          "line": 19,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-vue-ts/tsconfig.app.json",
+          "line": 9,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-vue-ts/tsconfig.app.json",
+          "line": 10,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-vue-ts/tsconfig.node.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "packages/create-vite/template-vue-ts/tsconfig.node.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "packages/create-vite/tsconfig.json",
+          "line": 13,
+          "text": "\"noUnusedLocals\": true"
+        },
+        {
+          "file": "packages/plugin-legacy/tsconfig.json",
+          "line": 14,
+          "text": "\"noUnusedLocals\": true"
+        },
+        {
+          "file": "packages/vite/tsconfig.base.json",
+          "line": 12,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "scripts/tsconfig.json",
+          "line": 13,
+          "text": "\"noUnusedLocals\": true"
+        }
+      ],
+      "suppressions": {
+        "byRule": {
+          "no-unused-vars": 1
+        },
+        "comments": 1,
+        "tsIgnore": 26
+      },
+      "underscore": {
+        "byKind": {
+          "local": 36,
+          "parameter": 67,
+          "import": 6,
+          "array-destructured": 1,
+          "catch": 2
+        },
+        "total": 112,
+        "unusedByEslint": 14,
+        "usedOrExempt": 98
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "astro": {
+      "bareIdentifierStatements": 1,
+      "configLines": [
+        {
+          "file": "biome.jsonc",
+          "line": 63,
+          "text": "\"noDuplicateCase\": \"error\","
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 70,
+          "text": "\"noUnusedVariables\": {"
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 73,
+          "text": "\"ignoreRestSiblings\": true"
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 76,
+          "text": "\"noUnusedFunctionParameters\": \"error\","
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 77,
+          "text": "\"noUnusedImports\": \"error\","
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 78,
+          "text": "\"noUnreachable\": \"error\","
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 131,
+          "text": "\"noUnusedVariables\": \"off\","
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 132,
+          "text": "\"noUnusedImports\": \"off\""
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 176,
+          "text": "\"noUnusedVariables\": \"off\","
+        },
+        {
+          "file": "biome.jsonc",
+          "line": 177,
+          "text": "\"noUnusedImports\": \"off\""
+        },
+        {
+          "file": "configs/tsconfig.base.json",
+          "line": 17,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "configs/tsconfig.base.json",
+          "line": 18,
+          "text": "\"noUnusedParameters\": true,"
+        },
+        {
+          "file": "configs/tsconfig.test.json",
+          "line": 6,
+          "text": "\"noUnusedLocals\": false,"
+        },
+        {
+          "file": "configs/tsconfig.test.json",
+          "line": 7,
+          "text": "\"noUnusedParameters\": false,"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 78,
+          "text": "'@typescript-eslint/no-unused-vars': 'off', // Biome: correctness.noUnusedVariables"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 98,
+          "text": "'@typescript-eslint/no-unused-expressions': 'off',"
+        }
+      ],
+      "suppressions": {
+        "byRule": {},
+        "comments": 0,
+        "tsIgnore": 36
+      },
+      "underscore": {
+        "byKind": {
+          "type-parameter": 1,
+          "parameter": 90,
+          "array-destructured": 5,
+          "local": 25,
+          "import": 12,
+          "catch": 9
+        },
+        "total": 142,
+        "unusedByEslint": 27,
+        "usedOrExempt": 115
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "excalidraw": {
+      "bareIdentifierStatements": 0,
+      "configLines": [],
+      "suppressions": {
+        "byRule": {
+          "no-unused-vars": 3
+        },
+        "comments": 3,
+        "tsIgnore": 16
+      },
+      "underscore": {
+        "byKind": {
+          "local": 57,
+          "parameter": 108,
+          "type-parameter": 2,
+          "array-destructured": 4,
+          "import": 7
+        },
+        "total": 178,
+        "unusedByEslint": 11,
+        "usedOrExempt": 167
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "next.js": {
+      "bareIdentifierStatements": 0,
+      "configLines": [
+        {
+          "file": "eslint.config.mjs",
+          "line": 97,
+          "text": "'no-dupe-args': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 98,
+          "text": "'no-dupe-class-members': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 99,
+          "text": "'no-dupe-keys': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 100,
+          "text": "'no-duplicate-case': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 197,
+          "text": "'no-unreachable': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 199,
+          "text": "'no-unused-expressions': ["
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 208,
+          "text": "'no-unused-labels': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 210,
+          "text": "'no-unused-vars': ["
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 214,
+          "text": "caughtErrors: 'none',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 215,
+          "text": "ignoreRestSiblings: true,"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 253,
+          "text": "'react/jsx-no-duplicate-props': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 367,
+          "text": "'no-unused-expressions': 'off',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 369,
+          "text": "'@typescript-eslint/no-unused-expressions': ["
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 378,
+          "text": "'no-unused-vars': 'off',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 380,
+          "text": "'@typescript-eslint/no-unused-vars': ["
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 384,
+          "text": "ignoreRestSiblings: true,"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 385,
+          "text": "argsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 386,
+          "text": "caughtErrors: 'none',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 387,
+          "text": "caughtErrorsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 388,
+          "text": "destructuredArrayIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 389,
+          "text": "varsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 527,
+          "text": "'@typescript-eslint/no-unused-vars': ["
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 531,
+          "text": "argsIgnorePattern: '^_',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 532,
+          "text": "caughtErrors: 'none',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 533,
+          "text": "ignoreRestSiblings: true,"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 534,
+          "text": "varsIgnorePattern: '^_',"
+        }
+      ],
+      "suppressions": {
+        "byRule": {
+          "no-unused-vars": 9
+        },
+        "comments": 9,
+        "tsIgnore": 147
+      },
+      "underscore": {
+        "byKind": {
+          "import": 27,
+          "parameter": 194,
+          "local": 78,
+          "array-destructured": 12,
+          "catch": 28
+        },
+        "total": 339,
+        "unusedByEslint": 153,
+        "usedOrExempt": 186
+      },
+      "voidIdentifier": 4,
+      "voidIdentifierExamples": [
+        "packages/next/src/lib/metadata/metadata-resolution-primitives.ts:729 void metadataBase",
+        "packages/next/src/lib/metadata/metadata-resolution-primitives.ts:730 void themeColor",
+        "packages/next/src/lib/metadata/metadata-resolution-primitives.ts:731 void colorScheme",
+        "packages/next/src/lib/metadata/metadata-resolution-primitives.ts:732 void viewport"
+      ]
+    },
+    "vscode": {
+      "bareIdentifierStatements": 0,
+      "configLines": [
+        {
+          "file": "eslint.config.js",
+          "line": 70,
+          "text": "'no-duplicate-case': 'warn',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 71,
+          "text": "'no-duplicate-imports': 'warn',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 80,
+          "text": "'no-unused-labels': 'warn',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 224,
+          "text": "'local/code-no-unused-expressions': ["
+        },
+        {
+          "file": "src/tsconfig.base.json",
+          "line": 9,
+          "text": "\"noUnusedLocals\": true,"
+        },
+        {
+          "file": "src/tsconfig.vscode-dts.json",
+          "line": 8,
+          "text": "\"noUnusedLocals\": true,"
+        }
+      ],
+      "suppressions": {
+        "byRule": {},
+        "comments": 0,
+        "tsIgnore": 0
+      },
+      "underscore": {
+        "byKind": {
+          "parameter": 144,
+          "local": 13,
+          "import": 1,
+          "array-destructured": 2
+        },
+        "total": 160,
+        "unusedByEslint": 69,
+        "usedOrExempt": 91
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    },
+    "ultracite": {
+      "bareIdentifierStatements": 0,
+      "configLines": [],
+      "suppressions": {
+        "byRule": {},
+        "comments": 0,
+        "tsIgnore": 0
+      },
+      "underscore": {
+        "byKind": {
+          "parameter": 8
+        },
+        "total": 8,
+        "unusedByEslint": 0,
+        "usedOrExempt": 8
+      },
+      "voidIdentifier": 0,
+      "voidIdentifierExamples": []
+    }
+  }
+}

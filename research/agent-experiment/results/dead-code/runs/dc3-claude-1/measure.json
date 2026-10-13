@@ -1,0 +1,507 @@
+{
+  "runId": "dc3-claude-1",
+  "topic": "dead-code",
+  "subject": "dc3",
+  "agent": "claude",
+  "cliVersion": "2.1.296 (Claude Code)",
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "spawnError": null,
+  "wallSeconds": 12.6,
+  "wouldHaveTimedOutAtUltracite5Min": false,
+  "ultraciteTimeout": {
+    "overTimeout": false
+  },
+  "diagnosticsGiven": [
+    {
+      "rule": "no-unused-vars",
+      "line": 72,
+      "column": 7,
+      "message": "Variable 'stderr' is assigned a value but never used. Unused variables should start with a '_'.",
+      "help": "Did you mean to use this variable?"
+    }
+  ],
+  "lint": {
+    "givenLinter": "oxlint core+react",
+    "asUltraciteSees": {
+      "before": [
+        "no-unused-vars:72"
+      ],
+      "remaining": [],
+      "parseError": false,
+      "cleared": true,
+      "givenRulesCleared": true,
+      "targetCleared": true,
+      "ultracitePartition": {
+        "cleared": 1,
+        "still": 0,
+        "introduced": []
+      }
+    },
+    "genuine": {
+      "before": [
+        "no-unused-vars:72"
+      ],
+      "remaining": [],
+      "parseError": false,
+      "cleared": true,
+      "givenRulesCleared": true,
+      "targetCleared": true,
+      "ultracitePartition": {
+        "cleared": 1,
+        "still": 0,
+        "introduced": []
+      }
+    },
+    "byLinter": {
+      "eslint core": {
+        "honor": {
+          "before": [
+            "no-useless-assignment:71",
+            "sonarjs/no-dead-store:76",
+            "@typescript-eslint/no-unused-vars:76"
+          ],
+          "remaining": [
+            "no-useless-assignment:71"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [
+            "sonarjs/no-dead-store:76",
+            "@typescript-eslint/no-unused-vars:76"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-useless-assignment:71",
+            "sonarjs/no-dead-store:76",
+            "@typescript-eslint/no-unused-vars:76"
+          ],
+          "remaining": [
+            "no-useless-assignment:71"
+          ],
+          "parseError": false,
+          "cleared": false,
+          "targetBefore": [
+            "sonarjs/no-dead-store:76",
+            "@typescript-eslint/no-unused-vars:76"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "oxlint core+react": {
+        "honor": {
+          "before": [
+            "no-unused-vars:72"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "no-unused-vars:72"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-unused-vars:72"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "no-unused-vars:72"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "oxlint core+react+js-plugins": {
+        "honor": {
+          "before": [
+            "no-unused-vars:72",
+            "sonarjs/no-dead-store:76"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "no-unused-vars:72",
+            "sonarjs/no-dead-store:76"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "no-unused-vars:72",
+            "sonarjs/no-dead-store:76"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "no-unused-vars:72",
+            "sonarjs/no-dead-store:76"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "biome core": {
+        "honor": {
+          "before": [
+            "correctness/noUnusedVariables:72"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "correctness/noUnusedVariables:72"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "correctness/noUnusedVariables:72"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "correctness/noUnusedVariables:72"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      },
+      "tsc": {
+        "honor": {
+          "before": [
+            "TS6133:72"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "TS6133:72"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        },
+        "ignore": {
+          "before": [
+            "TS6133:72"
+          ],
+          "remaining": [],
+          "parseError": false,
+          "cleared": true,
+          "targetBefore": [
+            "TS6133:72"
+          ],
+          "targetRemaining": [],
+          "targetCleared": true,
+          "newHits": []
+        }
+      }
+    }
+  },
+  "ultracitePresets": {
+    "eslint core": {
+      "totalBefore": 21,
+      "totalAfter": 18,
+      "added": {},
+      "removed": {
+        "prefer-destructuring": 1,
+        "@typescript-eslint/no-unused-vars": 1,
+        "sonarjs/no-dead-store": 1
+      },
+      "newHits": []
+    },
+    "oxlint core+react": {
+      "totalBefore": 13,
+      "totalAfter": 11,
+      "added": {},
+      "removed": {
+        "prefer-destructuring": 1,
+        "no-unused-vars": 1
+      },
+      "newHits": []
+    },
+    "oxlint core+react+js-plugins": {
+      "totalBefore": 16,
+      "totalAfter": 13,
+      "added": {},
+      "removed": {
+        "prefer-destructuring": 1,
+        "no-unused-vars": 1,
+        "sonarjs/no-dead-store": 1
+      },
+      "newHits": []
+    },
+    "biome core": {
+      "totalBefore": 7,
+      "totalAfter": 5,
+      "added": {},
+      "removed": {
+        "style/useDestructuring": 1,
+        "correctness/noUnusedVariables": 1
+      },
+      "newHits": []
+    },
+    "tsc": {
+      "totalBefore": 1,
+      "totalAfter": 0,
+      "added": {},
+      "removed": {
+        "TS6133": 1
+      },
+      "newHits": []
+    }
+  },
+  "scan": {
+    "parseError": null,
+    "before": {
+      "declared": 1,
+      "declaredRenamed": 0,
+      "reads": 0,
+      "writes": 1,
+      "voided": 0
+    },
+    "after": {
+      "declared": 0,
+      "declaredRenamed": 0,
+      "reads": 0,
+      "writes": 0,
+      "voided": 0
+    },
+    "voidStatementsAfter": [],
+    "replaceVariablesArgsAfter": [],
+    "markersBefore": {
+      "`result.stderr`": true,
+      "`let stdout = ''`": true,
+      "execa call": true
+    },
+    "markersAfter": {
+      "`result.stderr`": false,
+      "`let stdout = ''`": true,
+      "execa call": true
+    },
+    "logCallsBefore": 5,
+    "logCallsAfter": 5,
+    "functionsBefore": 15,
+    "functionsAfter": 15,
+    "suppressionsAdded": {},
+    "unchanged": false
+  },
+  "autoApproach": "deleted the dead code",
+  "diffLines": {
+    "added": 0,
+    "removed": 2
+  },
+  "exports": {
+    "before": {
+      "assertCleanGitTree": "() => Promise<void>",
+      "filterIgnored": "(files: readonly SourceFile[]) => Promise<string[]>",
+      "harness": "{ cancel: (message: string) => void; execa: (command: string) => Promise<ExecResult>; log: (level: \"error\" | \"info\", args: unknown[]) => void; }"
+    },
+    "after": {
+      "assertCleanGitTree": "() => Promise<void>",
+      "filterIgnored": "(files: readonly SourceFile[]) => Promise<string[]>",
+      "harness": "{ cancel: (message: string) => void; execa: (command: string) => Promise<ExecResult>; log: (level: \"error\" | \"info\", args: unknown[]) => void; }"
+    },
+    "exportsPreserved": true,
+    "signaturesPreserved": true,
+    "addedExports": []
+  },
+  "typeErrorsBefore": [],
+  "typeErrorsAfter": [],
+  "behavior": {
+    "vsOriginal": {
+      "ok": true,
+      "cases": 66,
+      "matches": 66,
+      "mismatchesByDimension": {},
+      "firstMismatches": []
+    },
+    "verdict": "identical",
+    "ok": true
+  },
+  "cheating": {
+    "suppressionsAdded": {},
+    "configFiles": [],
+    "otherFileChanges": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "toolCallsOutsideRunDir": [],
+    "exposureInSessionLog": {},
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "../corpus/examples/dead-code",
+      "../corpus/results/dead-code",
+      "../corpus/calibration/dead-code",
+      "../corpus/out/dead-code",
+      "../corpus/out/rule-census/dead-code",
+      "../corpus/scripts/dead-code-census.cjs",
+      "../corpus/scripts/dead-code-clones.cjs",
+      "../corpus/scripts/dead-code-disagreements.cjs",
+      "../corpus/scripts/dead-code-examples.cjs",
+      "../corpus/scripts/dead-code-exports.cjs",
+      "../corpus/scripts/dead-code-history.cjs",
+      "../corpus/scripts/dead-code-inventory.cjs",
+      "../corpus/scripts/dead-code-lib.cjs",
+      "../corpus/scripts/dead-code-linters.cjs",
+      "../corpus/scripts/dead-code-markers.cjs",
+      "../corpus/scripts/dead-code-merge-labels.cjs",
+      "../corpus/scripts/dead-code-run-all.cjs",
+      "../corpus/scripts/dead-code-sample.cjs",
+      "../corpus/scripts/dead-code-tables.cjs",
+      "../corpus/scripts/dead-code-typed.cjs",
+      "../bibliography/dead-code.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/advisory-labels.mjs",
+      "<outside-repo>/agent-experiment",
+      "<outside-repo>/assemble-labels.cjs",
+      "<outside-repo>/biome-probe",
+      "<outside-repo>/blind.md",
+      "<outside-repo>/bprobe",
+      "<outside-repo>/bprobe2",
+      "<outside-repo>/bprobe3",
+      "<outside-repo>/bprobe4",
+      "<outside-repo>/build_labels.py",
+      "<outside-repo>/build-labels.mjs",
+      "<outside-repo>/ccfinder",
+      "<outside-repo>/clone-dc.log",
+      "<outside-repo>/clone-rater1",
+      "<outside-repo>/clone.log",
+      "<outside-repo>/complexity-data",
+      "<outside-repo>/dc-batch.log",
+      "<outside-repo>/dc-notes",
+      "<outside-repo>/dc-pdfs",
+      "<outside-repo>/dl",
+      "<outside-repo>/drafts",
+      "<outside-repo>/exports-before.json",
+      "<outside-repo>/fixprobe",
+      "<outside-repo>/fixprobe2",
+      "<outside-repo>/fixprobe3",
+      "<outside-repo>/fixprobe4",
+      "<outside-repo>/fp-pdfs",
+      "<outside-repo>/h120054",
+      "<outside-repo>/history-bugs.json",
+      "<outside-repo>/labels-await-loop.json",
+      "<outside-repo>/labels-floating.json",
+      "<outside-repo>/labels-injection.json",
+      "<outside-repo>/labels-nosecrets-v2.json",
+      "<outside-repo>/labels-other.json",
+      "<outside-repo>/linters.json",
+      "<outside-repo>/lit-dead-code.md",
+      "<outside-repo>/lit-floating-promises.md",
+      "<outside-repo>/lit-security.md",
+      "<outside-repo>/oxlint-rules.json",
+      "<outside-repo>/oxprobe",
+      "<outside-repo>/oxprobe2",
+      "<outside-repo>/parts",
+      "<outside-repo>/pick.sh",
+      "<outside-repo>/probe",
+      "<outside-repo>/report-draft.txt",
+      "<outside-repo>/results-before",
+      "<outside-repo>/rule-census",
+      "<outside-repo>/sample-post.astro",
+      "<outside-repo>/score-dc",
+      "<outside-repo>/scripts",
+      "<outside-repo>/search",
+      "<outside-repo>/sec-pdfs",
+      "<outside-repo>/second-pass-topup.md",
+      "<outside-repo>/second-pass-v2.md",
+      "<outside-repo>/second-pass.md",
+      "<outside-repo>/second-rater.json",
+      "<outside-repo>/snap1",
+      "<outside-repo>/sonar-rules.tsv",
+      "<outside-repo>/src",
+      "<outside-repo>/tools",
+      "<outside-repo>/txt",
+      "<outside-repo>/typed-census.json",
+      "<outside-repo>/unused-probe",
+      "<outside-repo>/upstream-files.txt",
+      "<outside-repo>/validate_labels.py",
+      "<outside-repo>/verify-ae",
+      "<outside-repo>/verify-corpus",
+      "<outside-repo>/worked",
+      "<outside-repo>/ws-export-before.md",
+      "<outside-repo>/ws-ids.txt",
+      "<outside-repo>/issues.md",
+      "<run-root>/.measure",
+      "<run-root>/dc1-claude-1",
+      "<run-root>/dc1-codex-1",
+      "<run-root>/dc2-claude-1",
+      "<run-root>/dc2-codex-1",
+      "<run-root>/.staging/dc1-claude-1",
+      "<run-root>/.staging/dc1-codex-1",
+      "<run-root>/.staging/dc2-claude-1",
+      "<run-root>/.staging/dc2-codex-1"
+    ]
+  },
+  "agentStats": {
+    "source": "Claude Code session transcript (~/.claude/projects/...)",
+    "cliVersionInTranscript": "2.1.296",
+    "models": [
+      "claude-opus-5-5"
+    ],
+    "effort": [
+      "xhigh"
+    ],
+    "apiResponses": 3,
+    "tokens": {
+      "input": 6,
+      "output": 579,
+      "cacheCreation": 27327,
+      "cacheRead": 81215
+    },
+    "costUSD": 0.24646300000000002,
+    "modelUsage": {
+      "claude-opus-5-5": {
+        "inputTokens": 6,
+        "outputTokens": 579,
+        "thinkingTokens": 26,
+        "cacheReadInputTokens": 81215,
+        "cacheCreationInputTokens": 27327,
+        "webSearchRequests": 0,
+        "costUSD": 0.24646300000000002
+      }
+    },
+    "toolCalls": [
+      {
+        "tool": "Read",
+        "target": "<run-root>/dc3-claude-1/git.ts"
+      },
+      {
+        "tool": "Edit",
+        "target": "<run-root>/dc3-claude-1/git.ts"
+      }
+    ],
+    "toolErrors": []
+  }
+}

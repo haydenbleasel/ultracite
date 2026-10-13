@@ -1,0 +1,1343 @@
+{
+  "generated": "2026-10-13",
+  "note": "Each confirmed bug's files at its parent commit, linted with Ultracite's presets; flaggedBy lists the dead-code/duplication rules (and tsc unused diagnostics) that fire on the buggy lines.",
+  "rows": [
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "no-inline-comments"
+        ],
+        "oxlint +js-plugins": [
+          "no-inline-comments"
+        ],
+        "eslint": [
+          "no-inline-comments",
+          "no-useless-assignment",
+          "prefer-destructuring"
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "sonarjs/no-dead-store",
+          "verdict": "likely",
+          "reason": "the initializer `= definition.launch` on L364 is overwritten on every path before it is read (L366 or L373); this flags the initializer, not the real bug"
+        },
+        {
+          "rule": "no-useless-assignment (ESLint core)",
+          "verdict": "likely",
+          "reason": "same dead initializer on L364"
+        },
+        {
+          "rule": "no-unused-vars / noUnusedLocals",
+          "verdict": "no",
+          "reason": "`launch` is read at L367 and later"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/mcp/common/mcpRegistry.ts",
+          "lines": [
+            364,
+            373
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/247184",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [
+          "no-useless-assignment"
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [
+          {
+            "file": "src/vs/workbench/contrib/mcp/common/mcpRegistry.ts",
+            "line": 364,
+            "message": "The value assigned to 'launch' is not used in subsequent statements.",
+            "rule": "no-useless-assignment"
+          }
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#247184",
+      "kind": "dead-store-should-be-used",
+      "parentSha": "0204cf08b05ca7425e1758510b673d248a908a5c",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "default-case",
+          "func-style",
+          "sort-keys",
+          "unicorn/no-useless-spread",
+          "unicorn/switch-case-braces"
+        ],
+        "oxlint +js-plugins": [
+          "default-case",
+          "func-style",
+          "sonarjs/no-empty-collection",
+          "sort-keys",
+          "unicorn/no-useless-spread",
+          "unicorn/switch-case-braces"
+        ],
+        "eslint": [
+          "default-case",
+          "func-style",
+          "sonarjs/no-empty-collection",
+          "sort-keys",
+          "unicorn/name-replacements",
+          "unicorn/no-useless-spread",
+          "unicorn/prefer-ternary",
+          "unicorn/switch-case-braces"
+        ],
+        "biome": [
+          "complexity/noExcessiveCognitiveComplexity",
+          "style/useDefaultSwitchClause"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "sonarjs/no-empty-collection",
+          "verdict": "likely",
+          "reason": "the WeakMap declared at L114 is never written, and is read at L245"
+        },
+        {
+          "rule": "no-unused-vars / noUnusedLocals",
+          "verdict": "no",
+          "reason": "the cache variable is read"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/renderer/renderElement.ts",
+          "lines": [
+            114,
+            249
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/880",
+      "flaggedBy": {
+        "oxlint": [
+          "unicorn/no-useless-spread"
+        ],
+        "oxlint +js-plugins": [
+          "sonarjs/no-empty-collection",
+          "unicorn/no-useless-spread"
+        ],
+        "eslint": [
+          "sonarjs/no-empty-collection",
+          "unicorn/no-useless-spread"
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [
+          {
+            "file": "src/renderer/renderElement.ts",
+            "line": 228,
+            "message": "Using a spread operator here creates a new array unnecessarily.",
+            "rule": "unicorn/no-useless-spread"
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "file": "src/renderer/renderElement.ts",
+            "line": 228,
+            "message": "Using a spread operator here creates a new array unnecessarily.",
+            "rule": "unicorn/no-useless-spread"
+          },
+          {
+            "file": "src/renderer/renderElement.ts",
+            "line": 245,
+            "message": "Review this usage of \"elementWithCanvasCache\" as it can only be empty here.",
+            "rule": "sonarjs/no-empty-collection"
+          }
+        ],
+        "eslint": [
+          {
+            "file": "src/renderer/renderElement.ts",
+            "line": 228,
+            "message": "Spread an array literal in arguments is unnecessary.",
+            "rule": "unicorn/no-useless-spread"
+          },
+          {
+            "file": "src/renderer/renderElement.ts",
+            "line": 245,
+            "message": "Review this usage of \"elementWithCanvasCache\" as it can only be empty here.",
+            "rule": "sonarjs/no-empty-collection"
+          }
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "excalidraw/excalidraw#880",
+      "kind": "unused-should-be-used",
+      "parentSha": "30434e3e6c2459b24b806469004b950edb2a5212",
+      "repo": "excalidraw/excalidraw"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "func-style",
+          "promise/prefer-await-to-callbacks",
+          "unicorn/consistent-function-scoping"
+        ],
+        "oxlint +js-plugins": [
+          "func-style",
+          "promise/prefer-await-to-callbacks",
+          "sonarjs/no-unused-function-argument",
+          "unicorn/consistent-function-scoping"
+        ],
+        "eslint": [
+          "func-style",
+          "promise/prefer-await-to-callbacks",
+          "sonarjs/no-unused-function-argument",
+          "unicorn/consistent-function-scoping"
+        ],
+        "biome": [
+          "correctness/noUnusedFunctionParameters"
+        ],
+        "tsc": [
+          "TS6133"
+        ]
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "TypeScript noUnusedParameters",
+          "verdict": "likely",
+          "reason": "`text` is never read"
+        },
+        {
+          "rule": "Biome noUnusedFunctionParameters",
+          "verdict": "likely",
+          "reason": "`text` is never read"
+        },
+        {
+          "rule": "no-unused-vars (Oxlint/ESLint default args: after-used)",
+          "verdict": "no",
+          "reason": "a later parameter (`callback`) is used, so after-used skips `text`"
+        },
+        {
+          "rule": "sonarjs/no-unused-function-argument",
+          "verdict": "unverified",
+          "reason": "depends on whether it reports parameters before a used one"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/editor/test/browser/viewModel/modelLineProjection.test.ts",
+          "lines": [
+            96,
+            113
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/282685",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [
+          "sonarjs/no-unused-function-argument"
+        ],
+        "eslint": [
+          "sonarjs/no-unused-function-argument"
+        ],
+        "biome": [
+          "correctness/noUnusedFunctionParameters"
+        ],
+        "tsc": [
+          "TS6133"
+        ]
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [
+          {
+            "file": "src/vs/editor/test/browser/viewModel/modelLineProjection.test.ts",
+            "line": 96,
+            "message": "Remove the unused function parameter \"text\" or rename it to \"_text\" to make intention explicit.",
+            "rule": "sonarjs/no-unused-function-argument"
+          }
+        ],
+        "eslint": [
+          {
+            "file": "src/vs/editor/test/browser/viewModel/modelLineProjection.test.ts",
+            "line": 96,
+            "message": "Remove the unused function parameter \"text\" or rename it to \"_text\" to make intention explicit.",
+            "rule": "sonarjs/no-unused-function-argument"
+          }
+        ],
+        "biome": [
+          {
+            "file": "src/vs/editor/test/browser/viewModel/modelLineProjection.test.ts",
+            "line": 96,
+            "message": "This parameter text is unused.",
+            "rule": "correctness/noUnusedFunctionParameters"
+          }
+        ],
+        "tsc": [
+          {
+            "file": "src/vs/editor/test/browser/viewModel/modelLineProjection.test.ts",
+            "line": 96,
+            "message": "'text' is declared but its value is never read.",
+            "rule": "TS6133"
+          }
+        ]
+      },
+      "id": "microsoft/vscode#282685",
+      "kind": "unused-should-be-used",
+      "parentSha": "c002a5b6e296b4c4bb8350fd782df69e42657f2a",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "func-style",
+          "no-plusplus",
+          "require-unicode-regexp"
+        ],
+        "oxlint +js-plugins": [
+          "func-style",
+          "no-plusplus",
+          "require-unicode-regexp"
+        ],
+        "eslint": [
+          "func-style",
+          "no-plusplus",
+          "require-unicode-regexp",
+          "sonarjs/concise-regex"
+        ],
+        "biome": [
+          "performance/useTopLevelRegex",
+          "style/noIncrementDecrement"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "`startColumn` is read in its own loop condition, which no-unused-vars, noUnusedLocals and no-dead-store all count as a use; the value after the loop is never read, which none of them track"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/editor/contrib/inlineCompletions/browser/view/inlineEdits/inlineEditsViews/longDistanceHint/longDistancePreviewEditor.ts",
+          "lines": [
+            381,
+            407
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/324523",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#324523",
+      "kind": "unused-should-be-used",
+      "parentSha": "93ad71ca816a243f807f008ab68976ed130f9132",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "class-methods-use-this",
+          "jsdoc/require-param-description",
+          "require-await",
+          "sort-keys"
+        ],
+        "oxlint +js-plugins": [
+          "class-methods-use-this",
+          "jsdoc/require-param-description",
+          "require-await",
+          "sort-keys"
+        ],
+        "eslint": [
+          "@typescript-eslint/class-methods-use-this",
+          "@typescript-eslint/member-ordering",
+          "jsdoc/require-param-description",
+          "require-await",
+          "sort-keys",
+          "unicorn/consistent-class-member-order",
+          "unicorn/no-unreadable-new-expression",
+          "unicorn/no-useless-else",
+          "unicorn/prefer-ternary",
+          "unicorn/prefer-url-href"
+        ],
+        "biome": [
+          "style/noUselessElse",
+          "style/useConsistentMemberAccessibility",
+          "suspicious/useAwait"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "the unused input is an object property that is never destructured, so no binding exists for an unused-variable rule to see"
+        }
+      ],
+      "files": [
+        {
+          "path": "packages/astro/src/container/index.ts",
+          "lines": [
+            319,
+            366
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/withastro/astro/pull/17703",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [
+          "unicorn/no-useless-else"
+        ],
+        "biome": [
+          "style/noUselessElse"
+        ],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [
+          {
+            "file": "packages/astro/src/container/index.ts",
+            "line": 324,
+            "message": "Unexpected `else` after a statement that exits.",
+            "rule": "unicorn/no-useless-else"
+          }
+        ],
+        "biome": [
+          {
+            "file": "packages/astro/src/container/index.ts",
+            "line": 324,
+            "message": "This else clause can be omitted because previous branches break early.",
+            "rule": "style/noUselessElse"
+          }
+        ],
+        "tsc": []
+      },
+      "id": "withastro/astro#17703",
+      "kind": "unused-should-be-used",
+      "parentSha": "dcdfd15a9b192f64cc313c65b74fc2d9ce30df9f",
+      "repo": "withastro/astro"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "sort-keys"
+        ],
+        "oxlint +js-plugins": [
+          "sort-keys"
+        ],
+        "eslint": [
+          "sort-keys"
+        ],
+        "biome": [
+          "complexity/useLiteralKeys"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "a property of a tool-call argument bag that is never read; no binding"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/chat/browser/voiceClient/voiceSessionController.ts",
+          "lines": [
+            2091,
+            2110
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/330859",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#330859",
+      "kind": "unused-should-be-used",
+      "parentSha": "cc160c6a6c161eb3004488f7214075ca286d272f",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "sort-keys"
+        ],
+        "oxlint +js-plugins": [
+          "sort-keys"
+        ],
+        "eslint": [
+          "sonarjs/prefer-immediate-return",
+          "sort-keys"
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "an awaited call used as a statement; no-unused-expressions allows calls and awaits, and sonarjs/no-ignored-return (type-aware, ESLint only) only knows side-effect-free built-ins"
+        }
+      ],
+      "files": [
+        {
+          "path": "packages/astro/src/core/build/static-build.ts",
+          "lines": [
+            286,
+            294
+          ],
+          "note": "clientBuild; ssrBuild's correct copy is L226-234",
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/withastro/astro/pull/12763",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [
+          "sonarjs/prefer-immediate-return"
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [
+          {
+            "file": "packages/astro/src/core/build/static-build.ts",
+            "line": 294,
+            "message": "Immediately return this expression instead of assigning it to the temporary variable \"buildResult\".",
+            "rule": "sonarjs/prefer-immediate-return"
+          }
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "withastro/astro#12763",
+      "kind": "lost-return-value",
+      "parentSha": "483da89cf68d68ec792ff8721d469ed10dc14e4a",
+      "repo": "withastro/astro"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "awaited call statement; no rule tracks a discarded non-built-in return value"
+        }
+      ],
+      "files": [
+        {
+          "path": "packages/vite/src/node/ssr/ssrModuleLoader.ts",
+          "lines": [
+            113,
+            120
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/vitejs/vite/pull/5470",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "vitejs/vite#5470",
+      "kind": "lost-return-value",
+      "parentSha": "1846df81b3f40c480a91632a2d02d9d2156d7ada",
+      "repo": "vitejs/vite"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "unicorn/no-useless-switch-case",
+          "unicorn/switch-case-braces"
+        ],
+        "oxlint +js-plugins": [
+          "unicorn/no-useless-switch-case",
+          "unicorn/switch-case-braces"
+        ],
+        "eslint": [
+          "unicorn/no-useless-switch-case",
+          "unicorn/switch-case-braces"
+        ],
+        "biome": [
+          "complexity/noUselessSwitchCase"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "call-expression statements are allowed by no-unused-expressions (all linters); sonarjs/no-ignored-return only covers known built-in methods"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/base/browser/ui/dialog/dialog.ts",
+          "lines": [
+            174,
+            191
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/182995",
+      "flaggedBy": {
+        "oxlint": [
+          "unicorn/no-useless-switch-case"
+        ],
+        "oxlint +js-plugins": [
+          "unicorn/no-useless-switch-case"
+        ],
+        "eslint": [
+          "unicorn/no-useless-switch-case"
+        ],
+        "biome": [
+          "complexity/noUselessSwitchCase"
+        ],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 188,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 187,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 186,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          }
+        ],
+        "oxlint +js-plugins": [
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 188,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 187,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 186,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          }
+        ],
+        "eslint": [
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 186,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 187,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 188,
+            "message": "Useless case in switch statement.",
+            "rule": "unicorn/no-useless-switch-case"
+          }
+        ],
+        "biome": [
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 186,
+            "message": "Useless case clause.",
+            "rule": "complexity/noUselessSwitchCase"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 187,
+            "message": "Useless case clause.",
+            "rule": "complexity/noUselessSwitchCase"
+          },
+          {
+            "file": "src/vs/base/browser/ui/dialog/dialog.ts",
+            "line": 188,
+            "message": "Useless case clause.",
+            "rule": "complexity/noUselessSwitchCase"
+          }
+        ],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#182995",
+      "kind": "lost-return-value",
+      "parentSha": "a89442fbd59082e0d78f7c644844a69551fe0bf4",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "no-negated-condition",
+          "unicorn/no-negated-condition"
+        ],
+        "oxlint +js-plugins": [
+          "no-negated-condition",
+          "unicorn/no-negated-condition"
+        ],
+        "eslint": [
+          "no-negated-condition",
+          "unicorn/no-negated-condition"
+        ],
+        "biome": [
+          "style/noNegationElse"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "method-call statement; the field is read but never written, which no enabled rule reports for class fields"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/scm/browser/dirtydiffDecorator.ts",
+          "lines": [
+            1178,
+            1179
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/194278",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#194278",
+      "kind": "lost-return-value",
+      "parentSha": "2c34b239ca45419760f44bb1191032fe6a299ae5",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "awaited call statement"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/platform/extensionManagement/common/extensionManagementCLIService.ts",
+          "lines": [
+            226,
+            227
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/156422",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#156422",
+      "kind": "lost-return-value",
+      "parentSha": "241c77020385e27ead8398ae02a9aed2ee7fd160",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "no-await-in-loop",
+          "no-negated-condition",
+          "typescript/no-non-null-assertion",
+          "unicorn/no-negated-condition"
+        ],
+        "oxlint +js-plugins": [
+          "no-await-in-loop",
+          "no-negated-condition",
+          "typescript/no-non-null-assertion",
+          "unicorn/no-negated-condition"
+        ],
+        "eslint": [
+          "@typescript-eslint/no-non-null-assertion",
+          "no-await-in-loop",
+          "no-negated-condition",
+          "unicorn/no-negated-condition"
+        ],
+        "biome": [
+          "performance/noAwaitInLoops",
+          "style/noNegationElse",
+          "style/noNonNullAssertion"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "awaited call statement"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/terminal/browser/terminalService.ts",
+          "lines": [
+            423,
+            439
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/136085",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#136085",
+      "kind": "lost-return-value",
+      "parentSha": "ac04bdd298b673f029387d33939a81891d9f2bf9",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": {
+        "rulesAnywhereInFiles": {
+          "oxlint": [],
+          "oxlint +js-plugins": [],
+          "eslint": [],
+          "biome": [],
+          "tsc": []
+        }
+      },
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "one-line arrow properties in an object map; sonarjs/no-identical-functions needs identical bodies of 3+ statements, and the copies differ"
+        }
+      ],
+      "files": [
+        {
+          "path": "packages/react/src/shared/proxy/utilsProxy.ts",
+          "lines": [
+            258,
+            260
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/trpc/trpc/pull/2943",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "trpc/trpc#2943",
+      "kind": "inconsistent-clone",
+      "parentSha": "4e001688fbdd7de848beb431a343a08c9659618a",
+      "repo": "trpc/trpc"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "sort-keys"
+        ],
+        "oxlint +js-plugins": [
+          "sort-keys"
+        ],
+        "eslint": [
+          "sort-keys",
+          "unicorn/no-top-level-side-effects"
+        ],
+        "biome": [],
+        "tsc": [
+          "TS7006"
+        ]
+      },
+      "clone": {
+        "rulesAnywhereInFiles": {
+          "oxlint": [],
+          "oxlint +js-plugins": [],
+          "eslint": [],
+          "biome": [],
+          "tsc": []
+        }
+      },
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "object-literal command registrations, not functions or branches"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/editor/contrib/find/browser/findController.ts",
+          "lines": [
+            1103,
+            1113
+          ],
+          "note": "the guarded sibling is L1010-1020",
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/273452",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#273452",
+      "kind": "inconsistent-clone",
+      "parentSha": "2c1a2eeb2d6171038856b3737af3283ae19295ae",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": {
+        "rulesAnywhereInFiles": {
+          "oxlint": [],
+          "oxlint +js-plugins": [],
+          "eslint": [],
+          "biome": [],
+          "tsc": []
+        }
+      },
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "two option sets for the same glob semantics, not token clones"
+        }
+      ],
+      "files": [
+        {
+          "path": "packages/vite/src/node/plugins/importMetaGlob.ts",
+          "lines": [
+            84,
+            85
+          ],
+          "note": "enumeration's options at L445-451",
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/vitejs/vite/pull/22306",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "vitejs/vite#22306",
+      "kind": "inconsistent-clone",
+      "parentSha": "a19003516951a3710aab0f2646d78c48b2e5d2ad",
+      "repo": "vitejs/vite"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "unicorn/prefer-single-call"
+        ],
+        "oxlint +js-plugins": [
+          "unicorn/prefer-single-call"
+        ],
+        "eslint": [
+          "unicorn/prefer-single-call"
+        ],
+        "biome": [],
+        "tsc": []
+      },
+      "clone": {
+        "rulesAnywhereInFiles": {
+          "oxlint": [],
+          "oxlint +js-plugins": [],
+          "eslint": [],
+          "biome": [],
+          "tsc": []
+        }
+      },
+      "expectedRules": [
+        {
+          "rule": "sonarjs/no-identical-expressions",
+          "verdict": "unverified, probably no",
+          "reason": "the rule skips `+` (and `*`), where identical operands can be intentional"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/performance/browser/perfviewEditor.ts",
+          "lines": [
+            218,
+            218
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/304452",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#304452",
+      "kind": "inconsistent-clone",
+      "parentSha": "e852b5875cca2df1146a9373074ce05553489e48",
+      "repo": "microsoft/vscode"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "typescript/no-empty-object-type"
+        ],
+        "oxlint +js-plugins": [
+          "sonarjs/use-type-alias",
+          "typescript/no-empty-object-type"
+        ],
+        "eslint": [
+          "@typescript-eslint/no-empty-object-type",
+          "@typescript-eslint/no-explicit-any",
+          "sonarjs/use-type-alias"
+        ],
+        "biome": [
+          "complexity/noBannedTypes",
+          "suspicious/noExplicitAny"
+        ],
+        "tsc": []
+      },
+      "clone": {
+        "rulesAnywhereInFiles": {
+          "oxlint": [],
+          "oxlint +js-plugins": [],
+          "eslint": [],
+          "biome": [],
+          "tsc": []
+        }
+      },
+      "expectedRules": [
+        {
+          "rule": "none",
+          "verdict": "no",
+          "reason": "type-level; I4 is still used in the return type, so no unused type parameter"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/types.ts",
+          "lines": [
+            113,
+            127
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/honojs/hono/pull/1721",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "honojs/hono#1721",
+      "kind": "inconsistent-clone",
+      "parentSha": "ae3546e32a533af782eadf0bc7221d2a01c2a81f",
+      "repo": "honojs/hono"
+    },
+    {
+      "allRulesOnLines": {
+        "oxlint": [
+          "no-plusplus",
+          "no-shadow",
+          "prefer-const",
+          "sort-keys"
+        ],
+        "oxlint +js-plugins": [
+          "no-plusplus",
+          "no-shadow",
+          "prefer-const",
+          "sort-keys"
+        ],
+        "eslint": [
+          "@typescript-eslint/no-shadow",
+          "no-plusplus",
+          "prefer-const",
+          "sort-keys",
+          "unicorn/name-replacements"
+        ],
+        "biome": [
+          "style/noIncrementDecrement",
+          "style/useConst",
+          "suspicious/noShadow"
+        ],
+        "tsc": []
+      },
+      "clone": null,
+      "expectedRules": [
+        {
+          "rule": "@typescript-eslint/no-shadow (ESLint core enables every typescript-eslint rule)",
+          "verdict": "likely",
+          "reason": "the inner profileInfo shadows the outer const at L117"
+        },
+        {
+          "rule": "no-unreachable / noUnreachable / no-constant-condition",
+          "verdict": "no",
+          "reason": "the condition is a variable, so the block is not syntactically unreachable"
+        },
+        {
+          "rule": "sonarjs/no-gratuitous-expressions",
+          "verdict": "unverified",
+          "reason": "the condition is always false after `= null`; unclear whether the rule tracks literal assignments"
+        }
+      ],
+      "files": [
+        {
+          "path": "src/vs/workbench/contrib/extensions/browser/abstractRuntimeExtensionsEditor.ts",
+          "lines": [
+            140,
+            160
+          ],
+          "fetched": true,
+          "fetchError": null
+        }
+      ],
+      "fixUrl": "https://github.com/microsoft/vscode/pull/120054",
+      "flaggedBy": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "hits": {
+        "oxlint": [],
+        "oxlint +js-plugins": [],
+        "eslint": [],
+        "biome": [],
+        "tsc": []
+      },
+      "id": "microsoft/vscode#120054",
+      "kind": "unreachable-code",
+      "parentSha": "f4449876e4a9c23b6b45876093e80b57732353b4",
+      "repo": "microsoft/vscode"
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3"
+  }
+}

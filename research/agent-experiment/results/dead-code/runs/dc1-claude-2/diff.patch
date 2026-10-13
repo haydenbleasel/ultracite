@@ -1,0 +1,11 @@
+--- a/mcpRegistry.ts
++++ b/mcpRegistry.ts
+@@ -169,7 +169,7 @@
+ 		}
+ 
+ 		try {
+-			launch = await this._replaceVariablesInLaunch(definition, definition.launch);
++			launch = await this._replaceVariablesInLaunch(definition, launch);
+ 		} catch (e) {
+ 			this._notificationService.notify({
+ 				severity: Severity.Error,

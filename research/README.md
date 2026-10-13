@@ -150,6 +150,40 @@ node research/corpus/scripts/security-tables.cjs --topic $T
 
 The method, findings and caveats are in `corpus/results/security-rules/REPORT.md`.
 
+### Dead code and duplication (fifth post)
+
+The dead-code scripts build on the rule census. They share `dead-code-lib.cjs`, which defines what counts as a dead-code or duplication rule (unused names, dead values, unreachable code, the `no-useless-*` family, duplication) and holds the runners for Ultracite's Oxlint, ESLint and Biome presets and the TypeScript compiler. The runners keep each linter's exact message and help text, because that's what `ultracite fix --claude/--codex` hands an agent.
+
+| Script | What it does |
+| --- | --- |
+| `dead-code-inventory.cjs` | Reads the Oxlint (core, react, js-plugins), ESLint (core, react, type-aware, resolved per file type with `calculateConfigForFile`) and Biome (core, react, plus Biome's recommended set) presets and records every dead-code and duplication rule they turn on, its options, test-file overrides, whether it needs types, and its fix kind. It also lines up each concept across the three linters and TypeScript. `--print-focus` lists the Oxlint names for the census. |
+| `dead-code-census.cjs` | Runs `rule-census.cjs` with core, react and js-plugins, focused on every dead-code and duplication rule they enable. |
+| `dead-code-linters.cjs` | `--calibration` runs `calibration/dead-code/` through Oxlint (as `ultracite init` wires it, and with js-plugins), ESLint (core, untyped and type-aware), Biome (core) and `tsc --noUnusedLocals --noUnusedParameters`, and keeps every message, help text, ESLint suggestion and Biome terminal note. `--autofix` records what each linter's own fix pass changes in each case. That pass is what `ultracite fix` runs before an agent sees anything: `oxlint --fix`, `eslint --fix`, `biome check --write`, and with `--unsafe`, `oxlint --fix-dangerously` and `biome check --write --unsafe`. `--corpus` runs the same rules in ESLint and Biome on the census's raw mirror and records every line where the linters disagree. |
+| `dead-code-disagreements.cjs` | Explains each of those disagreements from the code on the line: a `_` prefix, a parameter before a used one, a rest sibling, a catch binding, `satisfies` statements, initializers, type imports. |
+| `dead-code-typed.cjs` | Type-checks every TypeScript file with its nearest tsconfig plus `noUnusedLocals`, `noUnusedParameters`, `allowUnreachableCode: false` and `allowUnusedLabels: false`, records what each repo's own tsconfigs set, and compares TypeScript's diagnostics with the lint rules by file, line and name. |
+| `dead-code-exports.cjs` | Builds one TypeScript program per repo (the measured package, its tests and sibling packages; no `node_modules`) and resolves every reference to every export. Workspace package names and `dist/` paths are mapped back to source. Classifies each export (used in source, public API from `package.json` entry points, used elsewhere, loaded by name, used only in its own file, unreferenced) and each file. Not run for Next.js and VS Code, whose clones are sparse. |
+| `dead-code-clones.cjs` | A token clone detector on typescript-estree tokens: Type-1 and Type-2 (identifiers and literals normalized), maximal clone classes of at least 50 tokens and 5 lines (jscpd's defaults; 100 tokens as a sensitivity check), plus whole-function and branch clones. It covers source, tests and vendored code, and joins the function and branch clones to the sonarjs rules' hits. |
+| `dead-code-markers.cjs` | Suppression comments naming these rules, `void x;` and `x;` statements, `_`-prefixed bindings by kind, and each repo's own config lines for these rules. |
+| `dead-code-sample.cjs` | `--worksheet` draws the seeded samples (unused names, dead stores, clones, candidate unused exports) and writes worksheets with code context and permalinks. The sample is then frozen in `sample.json`: reruns rewrite the worksheets from it, and `--resample` draws again. `--print` prints the blind second-rater subset, and `--compute` writes agreement into `classifications.json`. |
+| `dead-code-merge-labels.cjs` | Assembles `classifications.json` from the hand classification passes, with the codebooks and shares weighted by repo population. |
+| `dead-code-history.cjs` | For each confirmed historical bug in `history.json`, downloads the files at the fix's parent commit with `gh api` (falling back to `raw.githubusercontent.com` when the API is rate-limited) and lints them with all three linters and `tsc`, recording which rules fire on the buggy lines. |
+| `dead-code-examples.cjs` | Lints the agent-experiment subjects in `examples/dead-code/` and writes what fires to `examples.json`. |
+| `dead-code-tables.cjs` | Generates `results/dead-code/tables.md`. |
+| `dead-code-run-all.cjs` | Runs all of the above in order. |
+
+```sh
+bash research/corpus/scripts/clone.sh
+node research/corpus/scripts/dead-code-run-all.cjs   # ~6 min; --skip-history skips the gh downloads
+```
+
+- **Raw mode matters here.** The census's raw mirror neutralises `eslint-`/`oxlint-disable` comments only. `biome-ignore` and `@ts-expect-error` comments aren't touched, and `dead-code-markers.cjs` counts them instead.
+- **ESLint and Oxlint don't share `no-unused-vars` defaults.** Ultracite sets no options in either. typescript-eslint's defaults have no ignore patterns, while Oxlint's skip `_`-prefixed names, so the two report different sets on the same code (`disagreements.json`).
+- **The unused-export analysis needs no installs.** TypeScript resolves modules from tsconfig `paths` and relative imports. A fallback maps workspace package names through their `package.json` `exports`, and maps relative imports of `dist/` back to `src/`. Each repo's resolution rate is recorded. Imports of third-party packages don't resolve, and that doesn't matter for whether the repo's own exports are used.
+- **The clone detector matches the rule.** Restricted to what `sonarjs/no-identical-functions` looks at (same file, identical bodies of 3 or more lines, its node kinds), it predicts the rule's 25 hits exactly.
+- **Hand inputs.** The label files the classification passes write go to `out/dead-code/labels-*.json` (gitignored). `classifications.json` keeps them all, with both raters, so `tables.md` regenerates without them. `history.json` and `decision-history.json` are hand inputs too.
+
+The method, findings and caveats are in `corpus/results/dead-code/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -251,3 +285,78 @@ Harness changes made with this topic, all backwards-compatible:
 - `lib.redact` also replaces the OS account name as a whole word, which an agent's `ls -l` output can print;
 - `lint-configs/` is gitignored;
 - the cognitive-complexity and floating-promises measurements, tables and `results.json` still reproduce exactly from their committed runs.
+
+### Dead code (fifth post)
+
+Subjects are `dc1`, `dc2` and `dc3`, from `corpus/examples/dead-code/`:
+
+- **dc1.** VS Code's `McpRegistry.resolveConnection` at the parent of microsoft/vscode#247184. A dead initializer, `let launch = definition.launch`, is the symptom of a bug: the extension resolver's `launch` is computed, then discarded, because substitution runs on `definition.launch`. Only ESLint's `no-useless-assignment` reports it. The right fix uses the value.
+- **dc2.** Vite's `serveStaticMiddleware`. `fileUrl` is a refactor leftover, reported by `no-useless-assignment` and `sonarjs/no-dead-store`. The right fix deletes it.
+- **dc3.** tRPC's `filterIgnored` (corpus sample u036). `stderr` is a leftover local that Oxlint's default `no-unused-vars` reports: "Variable 'stderr' is assigned a value but never used. Unused variables should start with a '_'.", help "Did you mean to use this variable?". The right fix deletes it.
+
+`subjects.json` (`selection`) says why dc3 was chosen. In the corpus, every one of Oxlint's 75 "declared but never used" variable hits is a rest-sibling omit or a type parameter, so no real leftover gets the "Consider removing this declaration." help. u036 is the only hand-classified leftover local that Oxlint reports.
+
+- **Lint.** The handoff is what Ultracite's adapter for the subject's linter produces (`packages/cli/src/agent-fix/linters.ts`), filtered to the corpus inventory's dead-code rules (`corpus/results/dead-code/inventory.json`, every category except duplication).
+  - **dc1 and dc2 go through ESLint.** Ultracite's ESLint core preset, unchanged.
+  - **dc3 goes through Oxlint.** The root config `ultracite init` writes, run from the file's directory as `ultracite fix` runs it from the project root, so the filename is relative. It's parsed with a copy of `parseOxlintDiagnostics`, whose source hash the topic checks against `linters.ts`.
+  - **Only diagnostics that survive the safe fix pass** (`eslint --fix`, `oxlint --fix`) are handed over, because `ultracite fix` runs it first. This drops dc2's `no-useless-return`.
+- **Re-lint.** Each result is re-linted with:
+  - the same lint, honoring and ignoring inline config;
+  - Oxlint core + react and core + react + js-plugins (the root config `ultracite init` writes);
+  - ESLint core;
+  - Biome's core preset;
+  - `tsc` with `noUnusedLocals` and `noUnusedParameters`;
+  - every rule of those presets, recording the rules that fire more after the edit.
+
+  "Cleared" in a view means no dead-code diagnostic names the dead binding (`_`-prefixed included). The configs go in the gitignored `lint-configs/dead-code/`.
+
+- **Oracle.** `scripts/topics/dead-code-behavior.ts` imports one file per process and prints a trace per scenario. The topic compares the traces.
+  - **dc1: 1,920 scenarios** with stub services. It crosses collection, delegates, eight trust states, five resolver behaviors, substitution and origin. The verdict is "bug fixed" (identical to the #247184 fix), "bug kept" (identical to the original) or "broken".
+  - **dc2: 448 scenarios.** Seven alias configurations × 64 request URLs, comparing `next()`, the `req.url` rewrite, what reaches `serve`, and 403s.
+  - **dc3: 66 scenarios.** execa results and rejections, `VERBOSE`, and file lists, from a fixed cwd, comparing execa calls, log calls and return values.
+- **Extra measurements.**
+  - A scan of the dead binding (declared, renamed, read, written, `void`), suppressions and subject markers.
+  - What each linter's fix pass does to the pristine subjects (`aggregate`).
+  - A matrix of 22 hand-made mutants through every linter.
+  - Ultracite's own re-lint partition (cleared, still, new: `diff.ts`).
+  - A typecheck with the corpus examples' tsconfig.
+  - The 5-minute timeout replay from the security topic. No run needed it.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=dead-code
+node scripts/prepare-subjects.cjs        # subjects/dead-code/ (examples.json stripFields removed, plus "the parent of the fix")
+node scripts/test-behavior-harness.cjs   # oracle self-test, 23 cases -> results/dead-code/oracle-self-test.json
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs dc1:claude:1 dc1:codex:1 dc2:claude:1 dc2:codex:1 dc3:claude:1 dc3:codex:1   # ...4 of each
+node scripts/aggregate.cjs               # results.json, with the fix pass and the mutant matrix (~2 min)
+node scripts/report-tables.cjs > results/dead-code/tables.md
+```
+
+Pass each spec as its own argument. A spec string with spaces in it becomes one run with a strange id: that happened once here (see REPORT.md).
+
+**Cost and time.** In this post's runs, Claude Code cost $0.21–0.32 a run (median $0.26, $3.22 in all) and Codex used 15.3k–31.2k tokens. Runs took 10–81 s, and measuring one takes about 10 s.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's dead-code examples, results, calibration and output;
+- the `dead-code-*.cjs` corpus scripts;
+- `research/bibliography/dead-code.md`;
+- any post draft or page whose name contains "dead" or "duplicat";
+- `plans/` and `lint-configs/`;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`, the outside-repo paths:
+  - the orchestrating session's scratch files about this topic, including its post-draft folder;
+  - `plans/issues.md` in the main checkout;
+  - the batch log.
+
+The method, numbers and caveats are in `agent-experiment/results/dead-code/REPORT.md`.
+
+Harness changes made with this topic, all backwards-compatible:
+
+- `run-one.mjs` uses a topic's optional `toDiagnostics(lintResult)` hook, falling back to the ESLint adapter's shape.
+- `run-one.mjs` resolves a relative diagnostics path from the run directory, as Ultracite resolves Oxlint's relative filenames from the project root. ESLint's absolute paths are unaffected.
+- `run-one.mjs` locks the paths in `AGENT_EXPERIMENT_EXTRA_LOCKS` (colon-separated) for every topic. The security topic's `SECURITY_RULES_EXTRA_LOCKS` still works.
+- `topics.cjs` documents both changes, and the `.gitignore` comment for `lint-configs/` names this topic.
+- **Earlier topics, re-measured and re-aggregated from their committed runs:**
+  - cognitive-complexity and floating-promises reproduce exactly, apart from `generatedAt`;
+  - security-rules reproduces, except Biome's full-preset counts for the s2 runs and three mutants. Commit c9b606af enabled `noUndeclaredDependencies` in Biome core after those runs were measured, and it fires on the staged files' `react` and `json5` imports. The same difference appears without this topic's harness changes, and the committed files were left as they were.
