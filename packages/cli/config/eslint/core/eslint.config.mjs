@@ -95,8 +95,9 @@ export const scriptConfig = {
     "import-x/parsers": {
       espree: [".js", ".jsx", ".cjs", ".mjs"],
     },
+    // The TypeScript resolver resolves JavaScript too. A `node` resolver
+    // would need eslint-import-resolver-node, which isn't installed.
     "import-x/resolver": {
-      node: true,
       typescript: true,
     },
   },
