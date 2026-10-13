@@ -1,7 +1,7 @@
 // Research posts are MDX files in apps/docs/blog, served under /research. Each
 // one has an .astro page of the same name in pages/research, which renders the post's body into
 // PostLayout. The page exists so every post is a static route: Blume leaves a
-// dynamic [slug].astro route out of the sitemap and gives it no OG card.
+// dynamic [slug].astro route out of the sitemap.
 //
 // To add a post, write blog/<slug>.mdx with the frontmatter below, then add
 // pages/research/<slug>.astro. The index fails the build if a post has no page.

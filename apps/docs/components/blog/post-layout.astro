@@ -32,8 +32,10 @@ const sections = headings.filter((heading) => heading.depth === 2);
 const siteUrl = data.config.site ?? "https://www.ultracite.ai";
 const url = new URL(post.href, siteUrl).href;
 const indexUrl = new URL("/research", siteUrl).href;
+// The post's share card, rendered from its title and description by
+// pages/research/_og-card.png.ts.
+const ogImage = `/research/og/${post.slug}.png`;
 
-// Blume generates the OG card for every static custom page at /og/<route>.png.
 const article: JsonLdNode = {
   "@id": `${url}#article`,
   "@type": "BlogPosting",
@@ -42,7 +44,7 @@ const article: JsonLdNode = {
   datePublished: isoDate(post.date),
   description: post.description,
   headline: post.title,
-  image: new URL(`/og${post.href}.png`, siteUrl).href,
+  image: new URL(ogImage, siteUrl).href,
   inLanguage: "en",
   isPartOf: { "@id": `${indexUrl}#research` },
   mainEntityOfPage: url,
@@ -81,6 +83,8 @@ const jsonLd: JsonLdNode = {
 <BlogLayout
   description={post.description}
   jsonLd={jsonLd}
+  ogImage={ogImage}
+  ogImageAlt={`${post.title}: ${post.description}`}
   title={`${post.title} — Ultracite Research`}
 >
   <article aria-labelledby="post-title">

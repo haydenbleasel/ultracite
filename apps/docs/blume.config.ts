@@ -108,6 +108,26 @@ export default defineConfig({
     repo: "ultracite",
   },
 
+  integrations: [
+    // Each research post's share card (pages/research/_og-card.png.ts),
+    // rendered at build from the post's frontmatter. pages/ only routes .astro
+    // files, so the endpoint is mounted here.
+    {
+      hooks: {
+        "astro:config:setup": ({ injectRoute }) => {
+          injectRoute({
+            entrypoint: new URL(
+              "pages/research/_og-card.png.ts",
+              import.meta.url
+            ),
+            pattern: "/research/og/[slug].png",
+          });
+        },
+      },
+      name: "research-cards",
+    },
+  ],
+
   // "Last updated" on each docs page, from the file's last commit.
   lastModified: "git",
 
@@ -230,22 +250,6 @@ export default defineConfig({
         border: "rgb(19 19 17 / 0.15)",
         foreground: "#131311",
         muted: "rgb(19 19 17 / 0.8)",
-      },
-      // Generated share-card titles for custom pages, which otherwise take the
-      // last URL segment ("Cognitive Complexity"). Each blog post gets its
-      // title.
-      titles: {
-        "/research/cognitive-complexity":
-          "Cognitive complexity and the cost of reading code",
-        "/research/dead-code": "Is dead code worth an error?",
-        "/research/floating-promises":
-          "What happens to a promise nobody awaits",
-        "/research/import-cycles":
-          "The import cycle that works until it doesn't",
-        "/research/security-rules":
-          "Security lint rules find the sink, not the bug",
-        "/research/type-escape-hatches":
-          "Why TypeScript lets you overrule its type checker",
       },
     },
     // JSON-LD: the organization behind the site, and Ultracite as a

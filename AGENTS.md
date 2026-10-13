@@ -188,7 +188,7 @@ The Research section at `/research` publishes long reads on the rules Ultracite 
 
 ### Adding a post
 
-- A post is two files: the MDX at `apps/docs/blog/<slug>.mdx`, and a page at `apps/docs/pages/research/<slug>.astro`. The page template is in the comment at the top of `apps/docs/lib/blog.ts`. Every post needs its own static page, because Blume leaves dynamic `[slug].astro` routes out of the sitemap and generates no OG card for them. The index fails the build if a post has no page.
+- A post is two files: the MDX at `apps/docs/blog/<slug>.mdx`, and a page at `apps/docs/pages/research/<slug>.astro`. The page template is in the comment at the top of `apps/docs/lib/blog.ts`. Every post needs its own static page, because Blume leaves dynamic `[slug].astro` routes out of the sitemap. The index fails the build if a post has no page.
 - Frontmatter: `title`, `description` (used on the index, in meta tags and in search results), `date` (`2026-10-10`; used for ordering and structured data, never shown, so posts read as evergreen), `author` (a key of `authors` in `lib/blog.ts`), `rules` (config names, such as `sonarjs/cognitive-complexity`), and optional `updated`. `lib/blog.ts` validates all of these at build time.
 - Vary the shape of titles. The index reads as a list, so not every title should be `Topic: hook`. A plain claim ("Security lint rules find the sink, not the bug"), a "what happens" or "why" phrase ("What happens to a promise nobody awaits") or "X and the Y" all work. Look at the existing titles before choosing one. Keep the rule's common name or its subject in the title for search, and don't open the description with the title's words.
 - Don't repeat the title in the body. The layout renders the title, description, byline and reading time. `##` headings become the "In this post" rail, so keep them short.
@@ -196,9 +196,8 @@ The Research section at `/research` publishes long reads on the rules Ultracite 
 - Blume's MDX components (callouts with `:::note`, `CodeGroup`, `Tabs`, `Steps` and more) are wired in through `components/blog/post-components.ts`. To use another Blume component, add it there.
 - Oxfmt formats code fences inside MDX: it moves trailing comments onto their own lines and restyles quoted code. Put `{/* prettier-ignore */}` on the line above a fence that has to stay as written, such as code with score annotations or a verbatim excerpt from another project.
 - Shallow-clone repos you measure into the gitignored `research/corpus/repos/`, and never install or run their code. Only parse it with the repo's own tooling. Never commit agent session logs, stdout or stderr; the agent harness gitignores them and redacts what it copies back.
-- Preview with `cd apps/docs && bun run dev --port 4377` (any non-default port), then check `/research` and `/research/<slug>` in light and dark mode and at 390px wide. `bun run build` in `apps/docs` checks routes and generates the OG card at `/og/research/<slug>.png`.
-- Add the post's title under `seo.og.titles` in `blume.config.ts`, keyed by `/research/<slug>`. Without it, Blume titles the generated share card from the slug.
-- Known gaps: there's no RSS feed (Blume only builds feeds from content sources, not custom pages), and the share card always shows the site description, not the post's.
+- Preview with `cd apps/docs && bun run dev --port 4377` (any non-default port), then check `/research` and `/research/<slug>` in light and dark mode and at 390px wide. `bun run build` in `apps/docs` checks routes and renders the share card at `/research/og/<slug>.png` from the post's `title` and `description` (`pages/research/_og-card.png.ts`; Blume's own cards for custom pages can't take a description).
+- Known gap: there's no RSS feed (Blume only builds feeds from content sources, not custom pages).
 
 ## Gotchas
 

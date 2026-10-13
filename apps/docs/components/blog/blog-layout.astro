@@ -14,10 +14,14 @@ import Footer from "../home/footer.astro";
 interface Props {
   description: string;
   jsonLd: JsonLdNode;
+  /** A share card of the page's own. Omit it for Blume's generated card. */
+  ogImage?: string;
+  /** Alt text for `ogImage`. */
+  ogImageAlt?: string;
   title: string;
 }
 
-const { description, jsonLd, title } = Astro.props;
+const { description, jsonLd, ogImage, ogImageAlt, title } = Astro.props;
 const { config } = data;
 
 // `<` can't end the script element early once escaped.
@@ -33,6 +37,9 @@ const jsonLdSource = JSON.stringify(jsonLd).replaceAll("<", "\\u003c");
   logo={config.logo}
   navigation={data.navigation}
   ogEnabled={config.og.enabled}
+  ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
+  ogImageSize={ogImage ? { height: 630, width: 1200 } : undefined}
   page={{ description, title }}
   searchEnabled={config.search.enabled}
   site={{ title: config.title, description: config.description ?? "" }}
