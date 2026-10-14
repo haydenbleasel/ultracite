@@ -44,6 +44,7 @@ describe("VS Code settings", () => {
       .toSorted();
 
     expect(withLegacy).toEqual(["antigravity", "codebuddy", "trae", "void"]);
+
     for (const editor of editors.filter((e) => e.config.extensionClis)) {
       expect(editor.config.getContent("oxlint")).toHaveProperty(
         ["js/ts.tsdk.path"],

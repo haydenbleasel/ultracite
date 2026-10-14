@@ -73,9 +73,11 @@ export const parseWorkspaceFrameworks = (
     }
 
     const frameworks = frameworksByDir.get(dir) ?? [];
+
     if (!frameworks.includes(framework)) {
       frameworks.push(framework);
     }
+
     frameworksByDir.set(dir, frameworks);
   }
 

@@ -66,10 +66,13 @@ export interface ProjectState {
 }
 
 const BIOME_ONE_SCHEMA_RE = /\/schemas\/1\./u;
+
 // An Ultracite preset without a linter segment, as v6 named them.
 const UNSCOPED_PRESET_RE =
   /^ultracite\/(?!(?:biome|eslint|oxlint|oxfmt|prettier|stylelint)(?:\/|$))[a-z-]+$/u;
+
 const REMOVED_COMMAND_RE = /\bultracite\s+(?:lint|format)\b/u;
+
 // The rule v7's ESLint and Stylelint presets loaded Prettier through.
 const PRETTIER_RULE_RE = /["']prettier\/prettier["']/u;
 const TYPE_AWARE_OPTION_RE = /typeAware["']?\s*:\s*true/u;
@@ -258,9 +261,11 @@ const TYPE_CHECKED_RULE_KEY_RE = new RegExp(
   `(?<quote>["'])(?:${typeCheckedRuleIds.join("|")})\\k<quote>\\s*:`,
   "gu"
 );
+
 // A setting that turns the rule off: "off", 0, or a list starting with one.
 const OFF_SETTING_RE =
   /^\s*(?:\[\s*)?(?:(?<quote>["'])off\k<quote>|0(?![\d.]))/u;
+
 // A config that already gives ESLint type information.
 const TYPE_INFORMATION_RE =
   /ultracite\/eslint\/type-aware|\bprojectService\b|\bproject\s*:/u;
@@ -313,6 +318,7 @@ const zedFormatsWithEslint = ({
   }
 
   const parsed = zedSettingsSchema.safeParse(parse(zedSettings));
+
   if (!parsed.success) {
     return false;
   }
@@ -414,10 +420,12 @@ const COMMAND_FILES = [
   ".lefthook.yml",
   ".pre-commit-config.yaml",
 ];
+
 const COMMAND_FOLDERS = [".husky", ".github/workflows"];
 
 const readNearest = (names: readonly string[], cwd: string): string | null => {
   const found = findNearestFile(names, cwd);
+
   return found ? readText(found.path) : null;
 };
 
@@ -442,6 +450,7 @@ const readDependencies = (cwd: string): string[] => {
 /** Reads what the guides check from the project in `cwd`. */
 export const readProjectState = (cwd = process.cwd()): ProjectState => {
   const found = findNearestFile(biomeConfigNames, cwd);
+
   const parsedConfig = biomeConfigSchema.safeParse(
     found ? parse(readText(found.path) ?? "") : undefined
   );
@@ -472,10 +481,14 @@ export const readProjectState = (cwd = process.cwd()): ProjectState => {
 export const findPendingGuides = (
   project: ProjectState = readProjectState()
 ): UpgradeGuide[] =>
-  guideChecks
-    .filter((check) => check.applies(project))
-    .map(({ content, version }) => ({
-      content,
-      path: guidePath(version),
-      version,
-    }));
+  guideChecks.flatMap((check) =>
+    check.applies(project)
+      ? [
+          {
+            content: check.content,
+            path: guidePath(check.version),
+            version: check.version,
+          },
+        ]
+      : []
+  );

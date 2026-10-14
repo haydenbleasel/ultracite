@@ -18,6 +18,7 @@ const featuredAgentIds = [
 const featuredAgents = featuredAgentIds.flatMap((id) => {
   const agent = agents.find((a) => a.id === id);
   const logo = agentLogos[id];
+
   return agent && logo ? [{ ...agent, logo }] : [];
 });
 

@@ -16,6 +16,7 @@ const { version } = Astro.props;
 // `ultracite@7.12.1` becomes /changelog/ultracite-7-12-1). If the release
 // fetch failed and there is no such page, fall back to the changelog index.
 const releasePath = `/changelog/ultracite-${version.replaceAll(".", "-")}`;
+
 const releaseHref = data.routes.some((route) => route.path === releasePath)
   ? releasePath
   : "/changelog";

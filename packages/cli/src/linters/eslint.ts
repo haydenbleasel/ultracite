@@ -22,6 +22,7 @@ const defaultConfigPath = "./eslint.config.mjs";
 
 const ULTRACITE_PRESET_RE =
   /^ultracite\/eslint\/(?<preset>[a-z0-9-]+(?:\/[a-z0-9-]+)?)$/u;
+
 const PRESET_WORD_BREAK_RE = /[-/](?<letter>[a-z0-9])/gu;
 
 const TYPE_AWARE_PRESET = "type-aware";
@@ -66,6 +67,7 @@ const withTypeAwareAddOns = (
 const configIsTypeAware = async (configPath: string): Promise<boolean> => {
   try {
     const content = await readFile(configPath, "utf-8");
+
     return content.includes(`"ultracite/eslint/${TYPE_AWARE_PRESET}"`);
   } catch {
     return false;
@@ -78,6 +80,7 @@ const getEslintConfigPath = (): string | null => {
       return path;
     }
   }
+
   return null;
 };
 
@@ -114,6 +117,7 @@ const generateEslintConfig = (
     ...(typeAware ? [TYPE_AWARE_PRESET] : []),
     ...withTypeAwareAddOns(frameworks.map(validateFrameworkName), typeAware),
   ];
+
   const imports = [
     ...presets.map(
       (preset) =>
@@ -121,7 +125,9 @@ const generateEslintConfig = (
     ),
     ...(extras?.imports ?? []),
   ].join("\n");
+
   const statements = extras?.statements.join("\n\n") ?? "";
+
   const entries = renderEntries(
     [
       ...presets.map((preset) => ({
@@ -134,6 +140,7 @@ const generateEslintConfig = (
   );
 
   let config = `[\n${entries}\n]`;
+
   if (extras?.container === "arguments") {
     config = `${extras.callee ?? ""}(\n${entries}\n)`;
   } else if (extras?.callee) {
@@ -213,6 +220,7 @@ const getWorkspaceDirective = (
     workspacePackage.devDependencies,
     workspacePackage.peerDependencies,
   ].some((dependencies) => dependencies?.ultracite !== undefined);
+
   const rules = [
     ...(declaresUltracite ? [] : ["import-x/no-extraneous-dependencies"]),
     "import-x/no-relative-packages",
@@ -231,12 +239,14 @@ const generateWorkspaceConfig = (
     frameworks.map(validateFrameworkName),
     typeAware
   );
+
   const imports = presets
     .map(
       (preset) =>
         `import ${presetIdentifier(preset)} from "ultracite/eslint/${preset}";`
     )
     .join("\n");
+
   const entries = renderEntries(
     [rootConfigIdentifier, ...presets.map(presetIdentifier)].map((name) => ({
       comment: null,
@@ -262,6 +272,7 @@ export const eslint = {
       opts?.frameworks ?? [],
       opts?.typeAware ?? false
     );
+
     await writeProjectFile(defaultConfigPath, config);
   },
   // ESLint uses the config nearest each file instead of merging it with the
@@ -283,10 +294,12 @@ export const eslint = {
         readWorkspacePackageJson(dir)
       )
     );
+
     return configPath;
   },
   exists: () => {
     const path = getEslintConfigPath();
+
     return path !== null;
   },
   findWorkspaceConfig: (dir: string): string | null =>
@@ -304,6 +317,7 @@ export const eslint = {
       log.warn(
         `Could not parse ${fileName}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
+
       return;
     }
 
@@ -317,11 +331,14 @@ export const eslint = {
     // Keep the presets the config already had; init adds the selected ones.
     // The type-aware presets are regenerated from whether any was there.
     const existingPresets = existing?.presets ?? [];
+
     const frameworks = [
       ...new Set([...existingPresets, ...(opts?.frameworks ?? [])]),
     ].filter((preset) => preset !== "core" && !isTypeAwarePreset(preset));
+
     const typeAware =
       opts?.typeAware === true || existingPresets.some(isTypeAwarePreset);
+
     const config = generateEslintConfig(
       frameworks,
       typeAware,
@@ -335,6 +352,7 @@ export const eslint = {
     const targetPath = canHoldEsmConfig(existingPath)
       ? existingPath
       : defaultConfigPath;
+
     await writeProjectFile(targetPath, config);
 
     if (existingPath !== targetPath) {

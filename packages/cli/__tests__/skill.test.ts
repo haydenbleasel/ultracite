@@ -19,6 +19,7 @@ mock.module("nypm", () => ({
 const mockSpawn = (status: number) => {
   const spawn = mock(() => ({ status, stdout: "" }));
   mock.module("../src/spawn-sync", () => ({ spawnSync: spawn }));
+
   return spawn;
 };
 
@@ -39,6 +40,7 @@ describe("installUltraciteSkill", () => {
       packageManager: "npm",
       quiet: true,
     });
+
     restoreFileSystemMock();
 
     expect(installed).toBe(true);

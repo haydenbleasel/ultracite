@@ -38,13 +38,17 @@ const DEFAULT_GITIGNORE = "node_modules\n";
 
 const findGitRoot = (from: string): string | undefined => {
   let directory = from;
+
   while (!exists(nodePath.join(directory, ".git"))) {
     const parent = nodePath.dirname(directory);
+
     if (parent === directory) {
       return undefined;
     }
+
     directory = parent;
   }
+
   return directory;
 };
 
@@ -53,8 +57,10 @@ const findVcsRoot = (): string | undefined => {
   if (VCS_FILES.some((file) => exists(file))) {
     return undefined;
   }
+
   const cwd = process.cwd();
   const gitRoot = findGitRoot(nodePath.dirname(cwd));
+
   return gitRoot
     ? nodePath.relative(cwd, gitRoot).split(nodePath.sep).join("/")
     : undefined;
@@ -73,6 +79,7 @@ const getBiomeConfigPath = (): string => {
       return `./${file}`;
     }
   }
+
   // Default to biome.jsonc if none found
   return "./biome.jsonc";
 };
@@ -95,13 +102,17 @@ const getUpdatedExtends = (
     if (ext === "ultracite") {
       return biomeCoreConfig;
     }
+
     const legacyMatch = LEGACY_EXTEND_RE.exec(ext);
+
     return legacyMatch ? `ultracite/biome/${legacyMatch[1]}` : ext;
   });
+
   const newExtends = [...new Set(remapped)];
   // Track membership in a Set for constant-time lookups while preserving
   // the array's insertion order.
   const seenExtends = new Set(newExtends);
+
   const addExtend = (ext: string) => {
     if (!seenExtends.has(ext)) {
       seenExtends.add(ext);
@@ -144,10 +155,12 @@ export const biome = {
     }
 
     const vcsRoot = findVcsRoot();
+
     const config: typeof defaultConfig & { vcs?: { root: string } } = {
       ...defaultConfig,
       extends: extendsList,
     };
+
     if (vcsRoot) {
       config.vcs = { root: vcsRoot };
     }
@@ -169,12 +182,14 @@ export const biome = {
   }: WorkspaceFrameworks): Promise<string> => {
     const toRoot = pathToRoot(dir);
     const rootConfigPath = getBiomeConfigPath();
+
     const rootConfig = exists(rootConfigPath)
       ? parseJsoncStrict(
           await readFile(rootConfigPath, "utf-8"),
           biomeConfigSchema
         )
       : null;
+
     // Relative entries are rebased onto the workspace; package specifiers
     // resolve the same from anywhere in the project.
     const rootExtends = [rootConfig?.extends ?? [biomeCoreConfig]]
@@ -184,9 +199,12 @@ export const biome = {
         if (ext.startsWith("./")) {
           return `${toRoot}/${ext.slice(2)}`;
         }
+
         return ext.startsWith("../") ? `${toRoot}/${ext}` : ext;
       });
+
     const configPath = `${dir}/biome.jsonc`;
+
     const config = {
       $schema: `${toRoot}/node_modules/@biomejs/biome/configuration_schema.json`,
       extends: [
@@ -203,10 +221,12 @@ export const biome = {
       `./${configPath}`,
       `${JSON.stringify(config, null, 2)}\n`
     );
+
     return configPath;
   },
   exists: () => {
     const path = getBiomeConfigPath();
+
     return exists(path);
   },
   findWorkspaceConfig: (dir: string): string | null =>
@@ -225,6 +245,7 @@ export const biome = {
       log.warn(
         `Could not parse ${fileName}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\` to add the Ultracite presets.`
       );
+
       return;
     }
 
@@ -234,11 +255,13 @@ export const biome = {
       log.info(
         `${fileName} inherits the root Biome config ("${ROOT_CONFIG_EXTENDS}"), so it was left unchanged. Add the Ultracite presets to the root config instead.`
       );
+
       return;
     }
 
     // Edit the document in place so comments and formatting survive.
     const formattingOptions = detectJsonFormatting(existingContents);
+
     let contents = applyEdits(
       existingContents,
       modify(
@@ -253,6 +276,7 @@ export const biome = {
         }
       )
     );
+
     contents = applyEdits(
       contents,
       modify(contents, ["$schema"], defaultConfig.$schema, {

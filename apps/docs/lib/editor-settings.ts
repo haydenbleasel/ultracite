@@ -39,14 +39,18 @@ const providerFor = (providerId: ProviderId) =>
 export const vscodeToolchains = (): ToolchainSettings[] =>
   toolchainOrder.flatMap((providerId) => {
     const provider = providerFor(providerId);
+
     if (!provider) {
       return [];
     }
+
     const settings = getVscodeConfig(providerId);
+
     const formatter =
       "[typescript]" in settings
         ? settings["[typescript]"]["editor.defaultFormatter"]
         : settings["editor.defaultFormatter"];
+
     return [
       {
         extensions: [
@@ -73,6 +77,7 @@ const zedFormatterName = (
   if (typeof formatter === "string") {
     return formatter === "prettier" ? "Prettier" : formatter;
   }
+
   return `${formatter.language_server.name} language server`;
 };
 
@@ -81,11 +86,14 @@ export const zedToolchains = (): ToolchainSettings[] =>
   toolchainOrder.flatMap((providerId) => {
     const provider = providerFor(providerId);
     const settings = getZedConfig(providerId);
+
     if (!(provider && "languages" in settings)) {
       return [];
     }
+
     const { code_actions_on_format: onSave, formatter } =
       settings.languages.TypeScript;
+
     return [
       {
         extensions: [zedNeeds[providerId]],

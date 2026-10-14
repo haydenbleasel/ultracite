@@ -43,6 +43,7 @@ const mockProjectFiles = (present: (path: string) => boolean) => {
   const mockWriteFile = mock((_path: string, _content: string) =>
     Promise.resolve()
   );
+
   mock.module("node:fs/promises", () => ({
     access: mock(() => Promise.reject(new Error("ENOENT"))),
     readFile: mock(() => Promise.resolve("{}")),
@@ -57,6 +58,7 @@ const mockProjectFiles = (present: (path: string) => boolean) => {
     existsSync: mock(() => false),
     readFileSync: mock(() => "{}"),
   }));
+
   return mockWriteFile;
 };
 
@@ -72,6 +74,7 @@ describe("biome", () => {
           if (path === "./biome.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -83,6 +86,7 @@ describe("biome", () => {
           if (path === "./biome.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -99,6 +103,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -110,6 +115,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -145,6 +151,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -166,6 +173,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -188,6 +196,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -209,6 +218,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -231,6 +241,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -242,6 +253,7 @@ describe("biome", () => {
           if (path === "./.biome.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -269,6 +281,7 @@ describe("biome", () => {
         nodePath.dirname(process.cwd()),
         ".git"
       );
+
       const mockWriteFile = mockProjectFiles((path) => path === gitDirectory);
 
       await biome.create();
@@ -298,11 +311,13 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -316,6 +331,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -335,11 +351,13 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -353,6 +371,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -371,11 +390,13 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -391,6 +412,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -413,11 +435,13 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -433,6 +457,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -455,11 +480,13 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -475,6 +502,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -496,11 +524,13 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./biome.jsonc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -516,6 +546,7 @@ describe("biome", () => {
           if (path === "./biome.jsonc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -537,6 +568,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mockBiomeConfig(
         '{\n  "linter": { "enabled": true },\n  "files": {',
         mockWriteFile
@@ -551,6 +583,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mockBiomeConfig(
         '{\n  "root": false,\n  "extends": "//",\n  "linter": { "rules": { "style": { "noNonNullAssertion": "off" } } }\n}\n',
         mockWriteFile
@@ -565,6 +598,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mockBiomeConfig('{ "extends": "./shared.json" }', mockWriteFile);
 
       await biome.update();
@@ -580,6 +614,7 @@ describe("biome", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mockBiomeConfig(
         [
           "{",

@@ -90,6 +90,7 @@ const findSameLineComment = (
   next: ASTNode | undefined
 ): NonNullable<ASTNode["trailingComments"]>[number] | undefined => {
   const line = endLine(node);
+
   const onLine = (comment: { loc?: { start: { line: number } } | null }) =>
     (comment.loc?.start.line ?? -1) === line;
 
@@ -178,6 +179,7 @@ const readEntries = (
   }
 
   const last = nodes.at(-1);
+
   const danglingComments =
     last?.trailingComments
       ?.filter((comment) => (comment.loc?.start.line ?? 0) > endLine(last))
@@ -197,6 +199,7 @@ const readContainer = (source: string, container: ContainerNode): EntryList => {
       : container.elements.filter((element) => element !== null);
 
   const result = readEntries(source, nodes, startLine(container));
+
   const innerComments =
     container.innerComments?.map((comment) =>
       source.slice(comment.start ?? 0, comment.end ?? comment.start ?? 0)
@@ -233,6 +236,7 @@ const readConfigExport = (
 
   const callee = textOf(source, node.callee);
   const [onlyArgument] = node.arguments;
+
   const argument =
     node.arguments.length === 1 && onlyArgument
       ? unwrapExpression(onlyArgument)
@@ -311,8 +315,10 @@ const readStatement = (
 ): ModuleStatement => {
   const declaration =
     node.type === "ExportNamedDeclaration" ? node.declaration : node;
+
   const declarations =
     declaration?.type === "VariableDeclaration" ? declaration.declarations : [];
+
   const [first] = declarations;
   const init = first?.init ? unwrapExpression(first.init) : null;
 
@@ -377,6 +383,7 @@ export const parseConfigModule = (source: string): ParsedConfigModule => {
 // The text of a node that is an identifier, or null.
 export const identifierName = (node: ASTNode | null): string | null => {
   const unwrapped = node ? unwrapExpression(node) : null;
+
   return unwrapped?.type === "Identifier" ? unwrapped.name : null;
 };
 
@@ -409,6 +416,7 @@ export const stringArrayValues = (node: ASTNode | null): string[] | null => {
     if (element?.type !== "StringLiteral") {
       return null;
     }
+
     values.push(element.value);
   }
 
@@ -451,6 +459,7 @@ export const renderImport = (
 ): string => {
   const named = specifiers.length > 0 ? `{ ${specifiers.join(", ")} }` : "";
   const clause = [defaultLocal, named].filter(Boolean).join(", ");
+
   return `import ${clause} from "${source}";`;
 };
 

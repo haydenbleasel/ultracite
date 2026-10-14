@@ -96,6 +96,7 @@ const createHookScript = (
 const findSectionEnd = (lines: string[], markerIndex: number): number => {
   // Sections written by current versions carry an explicit end marker
   const endIndex = lines.indexOf(ULTRACITE_END_MARKER, markerIndex + 1);
+
   if (endIndex !== -1) {
     return endIndex + 1;
   }
@@ -113,6 +114,7 @@ const findSectionEnd = (lines: string[], markerIndex: number): number => {
     (line, index) =>
       index > markerIndex && line.includes("Files formatted by Ultracite")
   );
+
   if (successIndex !== -1) {
     return successIndex + 1;
   }
@@ -168,6 +170,7 @@ export const husky = {
   },
   update: async (packageManager: PackageManagerName, useLintStaged = false) => {
     const existingContents = await readFile(path, "utf-8");
+
     const section = renderSection(
       createHookScript(packageManager, useLintStaged)
     );
@@ -183,6 +186,7 @@ export const husky = {
     if (markerIndex !== -1) {
       const sectionEnd = findSectionEnd(lines, markerIndex);
       const before = lines.slice(0, markerIndex).join("\n");
+
       const after = lines
         .slice(sectionEnd)
         .join("\n")
@@ -191,6 +195,7 @@ export const husky = {
 
       const parts = [before, section, after].filter((part) => part !== "");
       await writeProjectFile(path, `${parts.join("\n")}\n`);
+
       return;
     }
 

@@ -45,6 +45,7 @@ const findUnrunnableReason = (outcome: RunOutcome): string | undefined => {
   if (outcome.error) {
     return `process error: ${outcome.error.message}`;
   }
+
   if (outcome.signal) {
     return `killed by ${outcome.signal}`;
   }
@@ -78,10 +79,12 @@ export const assertRunnable = (
   command: Command
 ): void => {
   const reason = findUnrunnableReason(outcome);
+
   if (reason) {
     const diagnostics = [outcome.stdout, outcome.stderr]
       .filter(Boolean)
       .join("\n");
+
     throw new Error(
       `${label} ${command} could not run (status ${outcome.status}; ${reason}):\n${diagnostics}`
     );

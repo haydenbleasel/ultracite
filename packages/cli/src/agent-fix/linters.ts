@@ -97,6 +97,7 @@ const toOxlintRuleName = (code: string): string => {
   }
 
   const { plugin, rule } = match.groups;
+
   return plugin === "eslint" ? rule : `${plugin}/${rule}`;
 };
 
@@ -201,12 +202,14 @@ interface BiomeReport {
 
 const BIOME_RULE_CATEGORY_RE =
   /^(?<kind>lint|assist)\/[a-zA-Z]+\/(?<rule>[a-zA-Z]+)$/u;
+
 const UPPERCASE_RE = /[A-Z]/gu;
 
 const parseBiomeRuleCategory = (
   category: string
 ): { kind: string; rule: string } | null => {
   const groups = BIOME_RULE_CATEGORY_RE.exec(category)?.groups;
+
   return groups?.kind && groups.rule
     ? { kind: groups.kind, rule: groups.rule }
     : null;
@@ -225,6 +228,7 @@ const biomeRuleUrl = (category: string): string | undefined => {
     UPPERCASE_RE,
     (letter) => `-${letter.toLowerCase()}`
   );
+
   const section = parsed.kind === "lint" ? "linter/rules" : "assist/actions";
 
   return `https://biomejs.dev/${section}/${slug}`;
@@ -246,6 +250,7 @@ const parseBiomeExplainDescription = (output: string): string | undefined => {
 
   const rest = lines.slice(start + 1);
   const end = rest.findIndex((line) => BIOME_HEADING_RE.test(line));
+
   const description = (end === -1 ? rest : rest.slice(0, end))
     .map((line) => line.trim())
     .join("\n")
@@ -272,6 +277,7 @@ const explainBiomeRule = (category: string): string | undefined => {
   }
 
   const result = spawnSync("biome", ["explain", parsed.rule]);
+
   const help =
     result.status === 0
       ? parseBiomeExplainDescription(String(result.stdout ?? ""))

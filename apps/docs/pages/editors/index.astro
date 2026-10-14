@@ -31,8 +31,10 @@ const pageModules = import.meta.glob<Record<string, EditorPageContent>>(
   "../../lib/editor-pages/*.ts",
   { eager: true }
 );
+
 const contentFor = (id: string): EditorPageContent | undefined =>
   Object.values(pageModules[`../../lib/editor-pages/${id}.ts`] ?? {}).at(0);
+
 const agents = new Map<string, AgentEntry>(Object.entries(agentDirectory));
 
 // The CLI's table decides which editors exist, which settings file each one
@@ -41,6 +43,7 @@ const agents = new Map<string, AgentEntry>(Object.entries(agentDirectory));
 const entries = cliEditors.map((editor) => {
   const details = directory.get(editor.id);
   const launcher = editor.config.extensionClis?.[0];
+
   return {
     agent: details?.agent ? agents.get(details.agent)?.name : undefined,
     hook: editor.hooks?.path,
@@ -63,9 +66,11 @@ const byName = (a: { name: string }, b: { name: string }): number =>
 // VS Code and Zed lead the page: the two settings files every other editor
 // shares one of.
 const featuredIds = ["vscode", "zed"];
+
 const featured = featuredIds.flatMap((featuredId) =>
   entries.filter((entry) => entry.id === featuredId)
 );
+
 const forks = entries
   .filter((entry) => entry.vscodeExtensions && !featuredIds.includes(entry.id))
   .toSorted(byName);
@@ -74,12 +79,14 @@ const vscodeReaders = entries.filter((entry) => entry.vscodeExtensions);
 const hookFiles = entries.filter((entry) => entry.hook);
 const workingHooks = hookFiles.filter((entry) => !contentFor(entry.id)?.hookNote);
 const staleHooks = hookFiles.filter((entry) => contentFor(entry.id)?.hookNote);
+
 const staleHookNote = staleHooks
   .map(
     (entry) =>
       ` In ${entry.name}, the hook \`init\` writes was for an agent it no longer has.`
   )
   .join("");
+
 const STACK_SIZE = 9;
 
 // What each toolchain gets in VS Code and its forks, and in Zed, read from
@@ -95,11 +102,14 @@ const toolchainRows = vscodeToolchains().map((row) => ({
 const launchers = entries.flatMap((entry) =>
   entry.launcher ? [`\`${entry.launcher}\``] : []
 );
+
 const forksWithLauncher = forks.filter((entry) => entry.launcher).length;
+
 const byHand = entries
   .filter((entry) => entry.vscodeExtensions && !entry.launcher)
   .toSorted(byName)
   .map((entry) => entry.name);
+
 const listFormat = new Intl.ListFormat("en", { type: "conjunction" });
 
 const faqs: FaqItem[] = [

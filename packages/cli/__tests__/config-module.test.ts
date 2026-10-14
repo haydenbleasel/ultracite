@@ -83,6 +83,7 @@ describe("parseConfigModule", () => {
 
   test("reads array and argument-list configs", () => {
     const array = parseConfigModule("export default [...core, { rules: {} }];");
+
     const args = parseConfigModule(
       "export default tseslint.config(...core, { rules: {} });"
     );
@@ -130,6 +131,7 @@ describe("rendering", () => {
     const parsed = parseConfigModule(
       'export default { a: ["x", "y"], b: ["x", y] };'
     );
+
     const values =
       parsed.kind === "module"
         ? parsed.module.entries.map((entry) => stringArrayValues(entry.value))

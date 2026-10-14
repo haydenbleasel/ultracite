@@ -21,8 +21,10 @@ const detectJestMajor = () => {
     const projectRequire = createRequire(
       path.join(process.cwd(), "package.json")
     );
+
     const { version } = projectRequire("jest/package.json");
     const [major] = version.split(".");
+
     return Number(major);
   } catch {
     return LATEST_JEST_MAJOR;

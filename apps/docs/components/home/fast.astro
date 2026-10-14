@@ -6,6 +6,7 @@ import SectionHeading from "./section-heading.astro";
 // file is the component from the hero's session; the project is the repo's
 // benchmark fixture at 42 files (lib/benchmarks).
 const project = runFor(42);
+
 const stats = [
   { label: "Check the file your agent just edited", ms: 330 },
   { label: "Check a whole 42-file project", ms: Math.round(project.ms.oxlint) },

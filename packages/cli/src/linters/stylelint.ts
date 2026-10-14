@@ -21,6 +21,7 @@ const ULTRACITE_STYLELINT = "ultracite/stylelint";
 
 const hasStylelintKeyInPackageJson = (): boolean => {
   const packageJson = readPackageJsonSync(packageJsonPath);
+
   return packageJson?.stylelint !== undefined;
 };
 
@@ -71,6 +72,7 @@ export const stylelint = {
   },
   exists: () => {
     const path = getStylelintConfigPath();
+
     return path !== null;
   },
   // A config that already uses Ultracite's (it re-exports or extends
@@ -92,12 +94,14 @@ export const stylelint = {
       await writeProjectFile(defaultConfigPath, generateStylelintConfig());
       await editPackageJson((manifest) => {
         delete manifest.stylelint;
+
         return true;
       });
       warnReplaced(
         'the "stylelint" key in package.json',
         defaultConfigPath.slice(2)
       );
+
       return;
     }
 
@@ -105,6 +109,7 @@ export const stylelint = {
 
     if (contents.trim() === LEGACY_GENERATED_CONFIG) {
       await writeProjectFile(existingPath, generateStylelintConfig());
+
       return;
     }
 
@@ -119,6 +124,7 @@ export const stylelint = {
     const targetPath = canHoldEsmConfig(existingPath)
       ? existingPath
       : defaultConfigPath;
+
     await writeProjectFile(targetPath, generateStylelintConfig());
 
     if (existingPath !== targetPath) {

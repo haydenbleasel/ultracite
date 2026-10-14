@@ -36,26 +36,34 @@ const { highlight, id, stats, title, toolchains } = Astro.props;
 // An axis in whole steps of 1, 2 or 5 times a power of ten, about six ticks
 // long, that the longest bar fits on.
 const TARGET_TICKS = 6;
+
 const longest = Math.max(
   ...benchmarkRuns.flatMap((run) => toolchains.map((key) => run.ms[key]))
 );
+
 const magnitude = 10 ** Math.floor(Math.log10(longest / TARGET_TICKS));
+
 const step =
   [1, 2, 5, 10]
     .map((multiple) => multiple * magnitude)
     .find((candidate) => longest / candidate <= TARGET_TICKS) ?? magnitude * 10;
+
 const axisMax = Math.ceil(longest / step) * step;
+
 const ticks = Array.from(
   { length: axisMax / step + 1 },
   (_, index) => index * step
 );
+
 const tickLabel = (ms: number): string =>
   axisMax >= MS_PER_SECOND ? `${ms / MS_PER_SECOND}s` : `${ms}ms`;
+
 const width = (ms: number): string => `${(ms / axisMax) * 100}%`;
 
 // "A against B", or "A; B; and C" for three toolchains.
 const versions = toolchains.map((key) => toolchainVersions[key]);
 const PAIR = 2;
+
 const versionList =
   versions.length === PAIR
     ? versions.join(" against ")

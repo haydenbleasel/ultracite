@@ -7,7 +7,9 @@ interface Props {
    */
   label?: string;
 }
+
 const { class: className, label } = Astro.props;
+
 const a11y = label
   ? { "aria-label": label, role: "img" }
   : { "aria-hidden": "true" as const };

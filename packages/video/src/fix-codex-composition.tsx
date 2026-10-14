@@ -32,12 +32,14 @@ const { fontFamily: GEIST_SANS } = loadGeistSans("normal", {
   subsets: ["latin"],
   weights: ["400", "500", "600", "700", "800"],
 });
+
 const { fontFamily: GEIST_MONO } = loadGeistMono("normal", {
   subsets: ["latin"],
   weights: ["400", "500", "600"],
 });
 
 const WHITE = "#ffffff";
+
 const SANS =
   "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif";
 
@@ -97,6 +99,7 @@ const WordPopLine = ({
   fontSize: number;
 }) => {
   const frame = useCurrentFrame();
+
   return (
     <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
       <span
@@ -114,6 +117,7 @@ const WordPopLine = ({
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           });
+
           return (
             <span
               key={`${word}-${i}`}
@@ -154,6 +158,7 @@ const Rattle = ({
     </Sequence>
     {lines.slice(1).map((line, i) => {
       const isLast = i === lines.length - 2;
+
       return (
         <Sequence
           key={line}

@@ -67,6 +67,7 @@ const config = Object.assign(baseRules, overrideRules);
 // without a TypeScript program, so they run only with the type-aware preset.
 const needsTypes = (key) => {
   const { docs } = rules[key.slice("unicorn/".length)]?.meta ?? {};
+
   return docs?.requiresTypeChecking === true;
 };
 

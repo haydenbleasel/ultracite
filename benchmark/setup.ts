@@ -50,9 +50,11 @@ const CLI_PACKAGE_JSON = path.join(
  */
 const extraDevDependencies = (provider: Provider) => {
   const result: Record<string, string> = {};
+
   if (provider !== "eslint") {
     return result;
   }
+
   // SAFETY: packages/cli/package.json is a repo-owned npm manifest, so
   // `devDependencies` (when present) is the standard name→version map.
   const cliPackageJson = JSON.parse(
@@ -60,19 +62,24 @@ const extraDevDependencies = (provider: Provider) => {
   ) as {
     devDependencies?: Record<string, string>;
   };
+
   const devDependencies = cliPackageJson.devDependencies ?? {};
+
   const names = [
     "storybook",
     "stylelint-config-standard",
     "stylelint-config-idiomatic-order",
     "stylelint-prettier",
   ];
+
   for (const name of names) {
     const version = devDependencies[name];
+
     if (version) {
       result[name] = version;
     }
   }
+
   return result;
 };
 
@@ -105,6 +112,7 @@ const run = (
     env: { ...process.env, ...env },
     maxBuffer: 64 * 1024 * 1024,
   });
+
   return {
     status: result.status ?? 1,
     stderr: result.stderr ?? "",
@@ -120,6 +128,7 @@ const runOrThrow = (
   env?: NodeJS.ProcessEnv
 ): void => {
   const result = run(command, args, cwd, env);
+
   if (result.status !== 0) {
     throw new Error(
       `${label} failed (exit ${result.status}):\n${result.stdout}\n${result.stderr}`
@@ -131,6 +140,7 @@ const copyFixtures = (projectDir: string): void => {
   const srcDir = path.join(projectDir, "src");
   rmSync(srcDir, { force: true, recursive: true });
   mkdirSync(srcDir, { recursive: true });
+
   for (let copy = 0; copy < FIXTURE_COPIES; copy += 1) {
     cpSync(FIXTURES_SRC, path.join(srcDir, `copy-${copy}`), {
       recursive: true,
@@ -206,6 +216,7 @@ export const prepareProject = (options: {
     "dist",
     "index.js"
   );
+
   runOrThrow(
     "ultracite init",
     "node",
@@ -226,6 +237,7 @@ export const prepareProject = (options: {
   // 3. Keep ultracite pinned to the tarball (init records a version range for
   //    it); then install the provider tools it wrote into package.json.
   const packageJsonPath = path.join(dir, "package.json");
+
   // SAFETY: this package.json was written above and then edited by `ultracite
   // init`, so it is an npm manifest whose dependency fields (when present) are
   // name→version maps.
@@ -233,9 +245,11 @@ export const prepareProject = (options: {
     dependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;
   };
+
   if (packageJson.devDependencies) {
     delete packageJson.devDependencies.ultracite;
   }
+
   packageJson.devDependencies = {
     ...packageJson.devDependencies,
     ...extraDevDependencies(provider),

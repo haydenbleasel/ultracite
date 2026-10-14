@@ -145,6 +145,7 @@ const extendsBiomeRoot = (configPath: string): boolean => {
     const config = biomeConfigSchema.safeParse(
       parse(readFileSync(configPath, "utf-8"))
     );
+
     return config.success && [config.data.extends].flat().includes("//");
   } catch {
     return false;
@@ -156,6 +157,7 @@ const findRootBiomeConfig = (): ReturnType<typeof findNearestFile> => {
 
   while (found && extendsBiomeRoot(found.path)) {
     const parentDir = path.dirname(found.dir);
+
     const rootConfig =
       parentDir === found.dir
         ? null
@@ -256,6 +258,7 @@ const checkEslintConfig = (): DiagnosticCheck => {
 // valid existing config, so doctor must too.
 const hasPackageJsonKey = (key: "prettier" | "stylelint"): boolean => {
   const pkgJson = readPackageJsonSync(path.join(process.cwd(), "package.json"));
+
   return pkgJson?.[key] !== undefined;
 };
 
@@ -269,6 +272,7 @@ const checkPrettierConfig = (): DiagnosticCheck => {
   }
 
   const found = findNearestFile(prettierConfigNames);
+
   if (found) {
     return {
       message: `Prettier configuration found (${found.fileName})`,
@@ -294,6 +298,7 @@ const checkStylelintConfig = (): DiagnosticCheck => {
   }
 
   const found = findNearestFile(stylelintConfigNames);
+
   if (found) {
     return {
       message: `Stylelint configuration found (${found.fileName})`,
@@ -349,6 +354,7 @@ const checkOxcConfig = ({
 
   if (conflicting.length > 1) {
     const hasJsonConfig = conflicting.some((name) => name.endsWith("json"));
+
     return {
       message: `${conflicting.join(" and ")} are both present, so ${tool} won't load either — ${hasJsonConfig ? "run `ultracite init` to migrate the JSON config into the TS one" : "delete one of them"}`,
       name: checkName,
@@ -559,6 +565,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
       );
       break;
     }
+
     case "eslint": {
       checks.push(
         {
@@ -591,6 +598,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
       );
       break;
     }
+
     case "oxlint": {
       checks.push(
         {
@@ -614,6 +622,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
       );
       break;
     }
+
     default: {
       break;
     }
@@ -645,6 +654,7 @@ export const runDiagnostics = (linter: Linter): DiagnosticCheck[] => {
 
   for (const { fn } of getChecksForLinter(linter)) {
     const check = fn();
+
     if (check) {
       checks.push(check);
     }
@@ -721,6 +731,7 @@ export const doctor = (): void => {
       "Some checks have warnings. Run `ultracite init` to update the configuration."
     );
     outro(DOCTOR_COMPLETE);
+
     return;
   }
 

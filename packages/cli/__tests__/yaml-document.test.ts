@@ -49,6 +49,7 @@ describe("renderYamlDocument", () => {
     if (!YAML.isSeq(repos)) {
       throw new Error("expected a sequence");
     }
+
     repos.add(doc.createNode({ repo: "b" }));
 
     expect(renderYamlDocument(doc, original)).toBe(

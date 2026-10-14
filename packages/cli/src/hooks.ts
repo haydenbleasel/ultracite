@@ -37,6 +37,7 @@ const upgradeCommand = (
 
   if (Array.isArray(template) && Array.isArray(existing)) {
     const [entry] = template;
+
     return entry === undefined
       ? existing
       : existing.map((item) => upgradeCommand(item, entry, outdated, command));
@@ -73,6 +74,7 @@ const commandsAt = (
 
   if (Array.isArray(template) && Array.isArray(existing)) {
     const [entry] = template;
+
     return entry === undefined
       ? []
       : existing.flatMap((item) => commandsAt(item, entry, command));
@@ -102,6 +104,7 @@ const removeGeneratedEntries = (
 ): JsonValue => {
   if (Array.isArray(template) && Array.isArray(existing)) {
     const [entry] = template;
+
     return entry === undefined
       ? existing
       : existing.filter(
@@ -124,6 +127,7 @@ const removeGeneratedEntries = (
         command,
         isGenerated
       );
+
       const becameEmpty =
         JSON.stringify(pruned) !== JSON.stringify(value) &&
         (Array.isArray(pruned)
@@ -163,9 +167,11 @@ const scriptFixCommand = (
   args: string[] = []
 ): string => {
   const safePackageManager = assertSupportedPackageManagerName(packageManager);
+
   // npm swallows flags after `npm run <script>` unless they come after `--`
   const scriptArgs =
     safePackageManager === "npm" && args.length > 0 ? ["--", ...args] : args;
+
   return runScriptCommand(safePackageManager, "fix", { args: scriptArgs });
 };
 
@@ -205,6 +211,7 @@ const readJson = async (filePath: string): Promise<JsonObject> => {
   const parsed: JsonValue | undefined = parse(
     await readFile(filePath, "utf-8")
   );
+
   return isJsonObject(parsed) ? parsed : {};
 };
 
@@ -254,6 +261,7 @@ export const createHooks = (
       command,
       isGeneratedCommand
     );
+
     return isJsonObject(pruned) ? pruned : existing;
   };
 
@@ -268,6 +276,7 @@ export const createHooks = (
     }
 
     const existing = await readJson(filePath);
+
     const pruned = removeGeneratedEntries(
       existing,
       template,
@@ -305,6 +314,7 @@ export const createHooks = (
     if (!(seedPath && exists(seedPath))) {
       await writeProjectFile(path, `${JSON.stringify(content, null, 2)}\n`);
       await retireLegacyPath();
+
       return;
     }
 
@@ -329,6 +339,7 @@ export const createHooks = (
     if (!doesExist || JSON.stringify(next) !== JSON.stringify(existingJson)) {
       await writeProjectFile(path, `${JSON.stringify(next, null, 2)}\n`);
     }
+
     await retireLegacyPath();
   };
 

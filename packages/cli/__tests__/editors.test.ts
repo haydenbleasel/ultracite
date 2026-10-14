@@ -26,6 +26,7 @@ describe("getEditorFileTargets", () => {
     const targets = getEditorFileTargets();
 
     expect(targets[0].id).toBe("universal");
+
     for (let i = 1; i < targets.length; i += 1) {
       expect(targets[i].id).not.toBe("universal");
     }

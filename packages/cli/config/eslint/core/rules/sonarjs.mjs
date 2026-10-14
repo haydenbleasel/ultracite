@@ -86,6 +86,7 @@ export const worksWithoutTypes = new Set([
 
 const needsTypes = (key) => {
   const name = key.slice("sonarjs/".length);
+
   return (
     rules[name]?.meta?.docs?.requiresTypeChecking === true &&
     !worksWithoutTypes.has(name)

@@ -109,6 +109,7 @@ export const createRenderer = (
       message = "";
     } else {
       const available = budget - locationWidth - stringWidth(mid);
+
       if (stringWidth(message) > available) {
         message =
           available < MIN_MESSAGE_WIDTH ? "" : cliTruncate(message, available);
@@ -126,6 +127,7 @@ export const createRenderer = (
       if (file === activeFile) {
         continue;
       }
+
       queuedFiles += 1;
       queuedIssues += issues.length;
     }
@@ -144,6 +146,7 @@ export const createRenderer = (
     const lines = activeIssues.map((issue) =>
       issueLine(SPINNER_FRAMES[frame % SPINNER_FRAMES.length], CYAN, issue)
     );
+
     const summary = queuedSummary();
 
     if (summary) {
@@ -168,6 +171,7 @@ export const createRenderer = (
       out.write(
         `Fixing ${file} (${pluralize(activeIssues.length, "issue")}) with ${options.agentLabel}…\n`
       );
+
       return;
     }
 
@@ -194,10 +198,13 @@ export const createRenderer = (
       for (const line of settledLines(settled)) {
         out.write(`  ${line}\n`);
       }
+
       if (note) {
         out.write(`  ${note}\n`);
       }
+
       activeFile = null;
+
       return;
     }
 

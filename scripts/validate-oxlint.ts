@@ -13,12 +13,14 @@ const validateOxlintConfig = async (configPath: string): Promise<boolean> => {
     // oxlint-disable-next-line anti-slop/no-runtime-typeof -- this is the I/O boundary decoding the untyped default export of a dynamically imported config module
     if (typeof mod.default !== "object" || mod.default === null) {
       console.error("  Missing or invalid default export");
+
       return false;
     }
 
     return true;
   } catch (error) {
     console.error(`  Error: ${error instanceof Error ? error.message : error}`);
+
     return false;
   }
 };
@@ -28,6 +30,7 @@ const main = async () => {
     recursive: true,
     withFileTypes: true,
   });
+
   // Presets can nest one level deep (e.g. next/js-plugins); every preset
   // directory is identified by its index.mjs.
   const frameworks = entries
@@ -39,6 +42,7 @@ const main = async () => {
     frameworks.map(async (framework) => {
       const configPath = path.join(configDir, framework, "index.mjs");
       const valid = await validateOxlintConfig(configPath);
+
       return { framework, valid };
     })
   );

@@ -8,15 +8,19 @@ import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 
 const PRESETS = ["core", "react", "next"];
+
 const ruleCounts = new Map([
   ["core", 918],
   ["next", 47],
   ["react", 549],
 ]);
+
 let totalRules = 0;
+
 for (const count of ruleCounts.values()) {
   totalRules += count;
 }
+
 const formatCount = (count: number): string => count.toLocaleString("en-US");
 
 const eslint = providers.find((provider) => provider.id === "eslint");
@@ -31,7 +35,9 @@ const lintNotes = new Map(
     const preset = PRESETS.find((name) =>
       line.includes(`"ultracite/eslint/${name}"`)
     );
+
     const count = preset ? ruleCounts.get(preset) : undefined;
+
     return count ? [[index, `${formatCount(count)} rules`]] : [];
   })
 );
@@ -42,12 +48,15 @@ const noteFor = (code: string, notes: [string, string][]) =>
   new Map(
     code.split("\n").flatMap((line, index): [number, string][] => {
       const match = notes.find(([needle]) => line.includes(needle));
+
       return match ? [[index, match[1]]] : [];
     })
   );
+
 const prettierNotes = noteFor(prettierCode, [
   ["...config", "80 columns, double quotes"],
 ]);
+
 const stylelintNotes = noteFor(stylelintCode, [
   ["ultracite/stylelint", "standard + property order"],
 ]);

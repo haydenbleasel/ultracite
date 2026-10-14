@@ -31,6 +31,7 @@ const defaultPath = "./lefthook.yml";
 // lefthook.yaml would silently replace their config.
 const configNames = ["lefthook", ".lefthook", ".config/lefthook"];
 const configExtensions = [".yml", ".yaml", ".json", ".jsonc", ".toml"];
+
 const configPaths = configExtensions.flatMap((extension) =>
   configNames.map((name) => `./${name}${extension}`)
 );
@@ -90,6 +91,7 @@ const stagedFixCommand = (packageManager: PackageManagerName): string =>
  */
 const isGeneratedJobCommand = (command: string): boolean => {
   const trimmed = command.trim();
+
   const withoutFiles = trimmed.endsWith(` ${STAGED_FILES}`)
     ? trimmed.slice(0, -STAGED_FILES.length)
     : trimmed;
@@ -127,6 +129,7 @@ const warnManualEdit = (file: string, command: string): void => {
 const findUltraciteJob = (hook: YAML.YAMLMap): YAML.YAMLMap | undefined => {
   const jobs = hook.get("jobs", true);
   const commands = hook.get("commands", true);
+
   const candidates = [
     ...(YAML.isSeq(jobs) ? jobs.items : []),
     ...(YAML.isMap(commands) ? commands.items.map((pair) => pair.value) : []),
@@ -161,6 +164,7 @@ const upgradeUltraciteJob = (
   const glob = job.get("glob", true);
   const globList = YAML.isSeq(glob) ? JSON.stringify(glob.toJSON()) : null;
   const currentGlobs = createGlobs(doublestar);
+
   const hasLegacyGlobs =
     globList !== null &&
     globList !== JSON.stringify(currentGlobs) &&
@@ -200,6 +204,7 @@ const addUltraciteJob = (
       "pre-commit",
       doc.createNode({ jobs: [createJobNode(doc, command, doublestar)] })
     );
+
     return true;
   }
 
@@ -223,12 +228,14 @@ const addUltraciteJob = (
   if (YAML.isSeq(jobs)) {
     // First, so files are fixed before other jobs check them.
     jobs.items.unshift(createJobNode(doc, command, doublestar));
+
     return true;
   }
 
   if (jobs === undefined || (YAML.isScalar(jobs) && jobs.value === null)) {
     // `jobs` and `commands` can live side by side; lefthook runs jobs first.
     hook.set("jobs", doc.createNode([createJobNode(doc, command, doublestar)]));
+
     return true;
   }
 
@@ -283,6 +290,7 @@ export const lefthook = {
 
     if (!isYamlPath(file)) {
       warnManualEdit(file, command);
+
       return;
     }
 
@@ -296,11 +304,13 @@ export const lefthook = {
       doc.contents === null
     ) {
       await writeProjectFile(file, createLefthookConfig(packageManager));
+
       return;
     }
 
     if (doc.errors.length > 0) {
       warnManualEdit(file, command);
+
       return;
     }
 
@@ -308,6 +318,7 @@ export const lefthook = {
 
     if (changed === null) {
       warnManualEdit(file, command);
+
       return;
     }
 

@@ -16,6 +16,7 @@ import {
 // The preload mocks node:fs; the real readers are stashed on globalThis.
 const readFile = (filePath: string): string =>
   globalThis.__realReadFileSync(filePath, "utf-8");
+
 const readDir = (dirPath: string): string[] => {
   try {
     return globalThis.__realReaddirSync(dirPath).map(String);
@@ -31,6 +32,7 @@ const IMPORT_SOURCE_RE = /from\s+"(?<source>[^".][^"]*)"/gu;
 // packages, the first segment otherwise.
 const packageName = (specifier: string): string => {
   const segments = specifier.split("/");
+
   return specifier.startsWith("@")
     ? segments.slice(0, 2).join("/")
     : (segments[0] ?? specifier);
@@ -44,16 +46,19 @@ const modulesIn = (dir: string): string[] =>
 // Every package a preset's modules, rule files and type-aware add-on import.
 const presetImports = (preset: string): string[] => {
   const presetDir = path.join(eslintConfigDir, preset);
+
   const files = [
     ...modulesIn(presetDir),
     ...modulesIn(path.join(presetDir, "rules")),
     ...modulesIn(path.join(presetDir, "type-aware")),
   ];
+
   const packages = new Set<string>();
 
   for (const file of files) {
     for (const match of readFile(file).matchAll(IMPORT_SOURCE_RE)) {
       const source = match.groups?.source ?? "";
+
       if (!source.startsWith("node:")) {
         packages.add(packageName(source));
       }
@@ -108,6 +113,7 @@ describe("ESLint dependencies", () => {
     ]) {
       expect(core).not.toContain(name);
     }
+
     expect(Object.keys(eslintFrameworkDevDependencies.cypress)).toEqual([
       "eslint-plugin-cypress",
     ]);
@@ -162,14 +168,17 @@ const installedManifest = (name: string) =>
 describe("eslintPeerOverridePackages", () => {
   test("lists every ESLint plugin whose eslint peer range excludes the ESLint init installs", () => {
     const eslintVersion = installedManifest("eslint").version;
+
     const names = new Set([
       ...Object.keys(eslintCoreDevDependencies),
       ...Object.values(eslintFrameworkDevDependencies).flatMap((deps) =>
         Object.keys(deps)
       ),
     ]);
+
     const behind = [...names].filter((name) => {
       const range = installedManifest(name).peerDependencies?.eslint;
+
       return range !== undefined && !Bun.semver.satisfies(eslintVersion, range);
     });
 

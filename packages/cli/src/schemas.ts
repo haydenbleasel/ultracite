@@ -34,7 +34,7 @@ const inDocumentOrder = (
   documentKeys: string[]
 ): PackageJson => {
   const ordered = Object.fromEntries(
-    documentKeys.filter((key) => key in data).map((key) => [key, data[key]])
+    documentKeys.flatMap((key) => (key in data ? [[key, data[key]]] : []))
   );
 
   // SAFETY: `ordered` holds exactly the entries of `data`, which zod just
@@ -56,6 +56,7 @@ export const readPackageJsonSync = (
 ): PackageJson | undefined => {
   try {
     const content = readFileSync(path, "utf-8");
+
     return parsePackageJson(content);
   } catch {
     return undefined;
@@ -67,6 +68,7 @@ export const readPackageJson = async (
 ): Promise<PackageJson | undefined> => {
   try {
     const content = await readFile(path, "utf-8");
+
     return parsePackageJson(content);
   } catch {
     return undefined;
@@ -109,6 +111,7 @@ export const parseJsoncStrict = <T>(
   }
 
   const result = schema.safeParse(parsed);
+
   return result.success ? result.data : undefined;
 };
 
@@ -133,5 +136,6 @@ export const parseJsonc = <T>(
 ): T | undefined => {
   const parsed = parse(content);
   const result = schema.safeParse(parsed);
+
   return result.success ? result.data : undefined;
 };

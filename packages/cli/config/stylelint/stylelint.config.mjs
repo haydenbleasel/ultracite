@@ -19,6 +19,7 @@ const resolveSyntax = (name) => {
       // Not resolvable from this base; try the next one.
     }
   }
+
   return name;
 };
 

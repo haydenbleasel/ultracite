@@ -7,12 +7,15 @@ import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 
 const PRESETS = ["core", "react", "next"];
+
 const ruleCounts = new Map([
   ["core", 474],
   ["next", 21],
   ["react", 107],
 ]);
+
 let totalRules = 0;
+
 for (const count of ruleCounts.values()) {
   totalRules += count;
 }
@@ -28,7 +31,9 @@ const lintNotes = new Map(
     const preset = PRESETS.find((name) =>
       line.includes(`"ultracite/oxlint/${name}"`)
     );
+
     const count = preset ? ruleCounts.get(preset) : undefined;
+
     return count ? [[index, `${count} rules`]] : [];
   })
 );

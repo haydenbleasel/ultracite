@@ -44,6 +44,7 @@ const mockProject = (files: Record<string, string>) => {
     ),
     writeFile: mock((path: string, content: string) => {
       written.set(path, content);
+
       return Promise.resolve();
     }),
   }));
@@ -64,6 +65,7 @@ describe("lintStaged", () => {
           if (path === "./.lintstagedrc.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -75,6 +77,7 @@ describe("lintStaged", () => {
           if (path === "./.lintstagedrc.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -91,6 +94,7 @@ describe("lintStaged", () => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve('{"lint-staged": {}}')),
@@ -102,6 +106,7 @@ describe("lintStaged", () => {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -156,6 +161,7 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -180,11 +186,13 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -200,6 +208,7 @@ describe("lintStaged", () => {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -222,11 +231,13 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve('{"*.js": ["echo test"]}')),
@@ -238,6 +249,7 @@ describe("lintStaged", () => {
           if (path === "./.lintstagedrc.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -258,6 +270,7 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("{}")),
@@ -283,11 +296,13 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("*.js:\n  - eslint --fix")),
@@ -299,6 +314,7 @@ describe("lintStaged", () => {
           if (path === "./.lintstagedrc.yaml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -318,11 +334,13 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve('{"*.js": ["eslint"]}')),
@@ -334,6 +352,7 @@ describe("lintStaged", () => {
           if (path === "./.lintstagedrc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -349,20 +368,24 @@ describe("lintStaged", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./lint-staged.config.mjs") {
             return Promise.resolve();
           }
+
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve('{"type": "module"}');
           }
+
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
@@ -376,6 +399,7 @@ describe("lintStaged", () => {
           ) {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -391,6 +415,7 @@ describe("lintStaged", () => {
 
     test("preserves comments and function entries when updating ESM configs", async () => {
       const written = new Map<string, string>();
+
       const mjsSource = `// team-specific overrides
 export default {
   "*.py": ["ruff check"],
@@ -411,6 +436,7 @@ export default {
         ),
         writeFile: mock((path: string, content: string) => {
           written.set(path, content);
+
           return Promise.resolve();
         }),
       }));
@@ -423,6 +449,7 @@ export default {
           ) {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -445,11 +472,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./lint-staged.config.cjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -461,6 +490,7 @@ export default {
           if (path === "./lint-staged.config.cjs") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -485,20 +515,24 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./lint-staged.config.js") {
             return Promise.resolve();
           }
+
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve('{"type": "module"}');
           }
+
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
@@ -509,6 +543,7 @@ export default {
           if (path === "./lint-staged.config.js" || path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -524,11 +559,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.js") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -540,6 +577,7 @@ export default {
           if (path === "./.lintstagedrc.js") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -561,11 +599,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("*.js: [eslint, prettier]")),
@@ -577,6 +617,7 @@ export default {
           if (path === "./.lintstagedrc.yaml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -592,11 +633,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("*.js: eslint --fix")),
@@ -608,6 +651,7 @@ export default {
           if (path === "./.lintstagedrc.yml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -625,11 +669,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("invalid json {")),
@@ -641,6 +687,7 @@ export default {
           if (path === "./.lintstagedrc") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -661,11 +708,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("invalid:\n  yaml:\n    - - -")),
@@ -677,6 +726,7 @@ export default {
           if (path === "./.lintstagedrc.yaml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -693,11 +743,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -711,6 +763,7 @@ export default {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -730,11 +783,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -750,6 +805,7 @@ export default {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -765,17 +821,20 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "./.lintstagedrc.json") {
             return Promise.resolve('{"*.js": ["npx ultracite fix"]}');
           }
+
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
@@ -786,6 +845,7 @@ export default {
           if (path === "./.lintstagedrc.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -801,17 +861,20 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json" || path === "./.lintstagedrc.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve('{"name": "test"}');
           }
+
           return Promise.resolve('{"*.css": ["stylelint --fix"]}');
         }),
         writeFile: mockWriteFile,
@@ -822,6 +885,7 @@ export default {
           if (path === "./package.json" || path === "./.lintstagedrc.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -841,17 +905,20 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve('{"name": "test", "type": "module"}');
           }
+
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
@@ -862,6 +929,7 @@ export default {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -877,11 +945,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -895,6 +965,7 @@ export default {
           if (path === "./.lintstagedrc.yaml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -910,11 +981,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
@@ -922,6 +995,7 @@ export default {
             // Return completely invalid JSON that json5 cannot parse
             return Promise.resolve("not json at all { [");
           }
+
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
@@ -932,6 +1006,7 @@ export default {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -948,11 +1023,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("completely broken json content")),
@@ -964,6 +1041,7 @@ export default {
           if (path === "./.lintstagedrc.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -980,11 +1058,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("this is not yaml at all")),
@@ -996,6 +1076,7 @@ export default {
           if (path === "./.lintstagedrc.yaml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -1030,15 +1111,18 @@ export default {
           if (path === "./lint-staged.config.mjs") {
             return Promise.resolve();
           }
+
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve('{"type": "module"}');
           }
+
           return Promise.resolve("{}");
         }),
         writeFile: mockWriteFile,
@@ -1052,6 +1136,7 @@ export default {
           ) {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -1060,16 +1145,19 @@ export default {
 
       // Mock the dynamic import to return our mock module
       type DynamicImport = (path: string) => Promise<typeof mockModule>;
+
       // SAFETY: `import` is a non-standard, test-only hook on globalThis; the
       // intersection only makes that property visible to the type system.
       const globalWithImport = globalThis as typeof globalThis & {
         import?: DynamicImport;
       };
+
       const originalImport = globalWithImport.import;
       globalWithImport.import = (path: string) => {
         if (path.includes("lint-staged.config.mjs")) {
           return Promise.resolve(mockModule);
         }
+
         return originalImport?.(path) ?? Promise.reject(new Error("No import"));
       };
 
@@ -1086,11 +1174,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./.lintstagedrc.yaml") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() =>
@@ -1104,6 +1194,7 @@ export default {
           if (path === "./.lintstagedrc.yaml") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -1119,11 +1210,13 @@ export default {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock((path: string) => {
           if (path === "./package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("null")),
@@ -1135,6 +1228,7 @@ export default {
           if (path === "./package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -1159,16 +1253,19 @@ export default {
           if (path === "./lint-staged.config.mjs") {
             return Promise.resolve();
           }
+
           // For ESM detection, need to check if package.json exists
           if (path === "package.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock((path: string) => {
           if (path === "package.json") {
             return Promise.resolve('{"type": "module"}');
           }
+
           // Syntactically broken config — magicast cannot parse it.
           return Promise.resolve("export default {");
         }),
@@ -1180,6 +1277,7 @@ export default {
           if (path === "./lint-staged.config.mjs" || path === "package.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -1389,6 +1487,7 @@ lint-staged:
       const config = JSON.parse(written.get("./package.json") ?? "{}")[
         "lint-staged"
       ];
+
       expect(Object.keys(config)).toEqual([PATTERN, "*.py"]);
       expect(config[PATTERN]).toEqual(["npx ultracite fix"]);
     });

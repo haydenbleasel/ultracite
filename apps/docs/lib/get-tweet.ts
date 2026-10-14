@@ -61,16 +61,19 @@ const formatText = (
   entities: SyndicationTweet["entities"]
 ): string => {
   let out = text;
+
   for (const entity of entities?.urls ?? []) {
     if (entity.url && entity.display_url) {
       out = out.replaceAll(entity.url, entity.display_url);
     }
   }
+
   for (const media of entities?.media ?? []) {
     if (media.url) {
       out = out.replaceAll(media.url, "");
     }
   }
+
   return out.trim();
 };
 
@@ -94,8 +97,10 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; UltraciteBot/1.0)" },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
+
     if (!response.ok) {
       warn(id, `syndication endpoint answered ${response.status}`);
+
       return null;
     }
 
@@ -104,8 +109,10 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
     // checked before use below.
     const data = (await response.json()) as SyndicationTweet;
     const { user } = data;
+
     if (!(data.text && user?.screen_name)) {
       warn(id, "response has no text or author (deleted or protected?)");
+
       return null;
     }
 
@@ -125,6 +132,7 @@ export const getTweet = async (id: string): Promise<TweetData | null> => {
     };
   } catch (error) {
     warn(id, error instanceof Error ? error.message : String(error));
+
     return null;
   }
 };

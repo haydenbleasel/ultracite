@@ -203,31 +203,39 @@ const editorTiles = editors.map((editor) => ({
       if (tabs.dataset.hpBound) {
         continue;
       }
+
       tabs.dataset.hpBound = "true";
+
       const buttons = [
         ...tabs.querySelectorAll<HTMLButtonElement>("[data-hp-tab]"),
       ];
+
       const select = (button: HTMLButtonElement) => {
         for (const other of buttons) {
           const selected = other === button;
           other.setAttribute("aria-selected", String(selected));
           other.tabIndex = selected ? 0 : -1;
         }
+
         for (const panel of tabs.querySelectorAll<HTMLElement>(
           "[data-hp-panel]"
         )) {
           panel.hidden = panel.dataset.hpPanel !== button.dataset.hpTab;
         }
       };
+
       for (const [index, button] of buttons.entries()) {
         button.addEventListener("click", () => select(button));
         button.addEventListener("keydown", (event) => {
           const step = ARROW_STEPS.get(event.key);
+
           if (step === undefined) {
             return;
           }
+
           event.preventDefault();
           const next = buttons.at((index + step) % buttons.length);
+
           if (next) {
             next.focus();
             select(next);
@@ -238,5 +246,6 @@ const editorTiles = editors.map((editor) => ({
   };
 
   init();
+
   document.addEventListener("astro:page-load", init);
 </script>

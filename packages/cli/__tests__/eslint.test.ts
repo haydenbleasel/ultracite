@@ -16,6 +16,7 @@ describe("eslint linter", () => {
           if (path === "./eslint.config.mjs") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         readFile: mock(() => Promise.resolve("{}")),
@@ -27,6 +28,7 @@ describe("eslint linter", () => {
           if (path === "./eslint.config.mjs") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -132,13 +134,16 @@ const mockProject = (files: Record<string, string>) => {
   const writeFile = mock((_path: string, _content: string) =>
     Promise.resolve()
   );
+
   const rm = mock((_path: string) => Promise.resolve());
   const warn = mock((_message: string) => {});
   const has = (filePath: string) => String(filePath) in files;
+
   const read = (filePath: string) => {
     if (!has(filePath)) {
       throw new Error("ENOENT");
     }
+
     return files[String(filePath)];
   };
 
@@ -253,6 +258,7 @@ describe("eslint config precedence", () => {
   test("updates the config ESLint loads when several exist", async () => {
     const config =
       'import core from "ultracite/eslint/core";\n\nexport default [\n  ...core,\n];\n';
+
     const project = mockProject({
       "./eslint.config.js": config,
       "./eslint.config.mjs": config,
