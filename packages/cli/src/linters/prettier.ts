@@ -30,6 +30,7 @@ const TAILWIND_PLUGIN = "prettier-plugin-tailwindcss";
 
 const hasPrettierKeyInPackageJson = (): boolean => {
   const packageJson = readPackageJsonSync(packageJsonPath);
+
   return packageJson?.prettier !== undefined;
 };
 
@@ -81,6 +82,7 @@ const generatePrettierConfig = (
 
   for (const fw of opts?.frameworks ?? []) {
     const plugin = frameworkPlugins.get(validateFrameworkName(fw));
+
     if (plugin) {
       plugins.push(plugin);
     }
@@ -93,14 +95,18 @@ const generatePrettierConfig = (
       plugins.push(plugin);
     }
   }
+
   plugins.push(TAILWIND_PLUGIN);
 
   const ultraciteLocal = extras?.ultraciteLocal ?? "config";
+
   const imports = [
     `import ${ultraciteLocal} from "${ULTRACITE_PRETTIER}";`,
     ...(extras?.imports ?? []),
   ].join("\n");
+
   const statements = extras?.statements.join("\n\n") ?? "";
+
   const entries = renderEntries(
     [
       { comment: null, text: `...${ultraciteLocal}` },
@@ -112,6 +118,7 @@ const generatePrettierConfig = (
     ],
     extras?.danglingComments
   );
+
   const config = `{\n${entries}\n}`;
 
   return `${imports}
@@ -128,6 +135,7 @@ const readUltraciteConfig = (config: ConfigModule): PrettierExtras | null => {
     (moduleImport) =>
       moduleImport.source === ULTRACITE_PRETTIER && moduleImport.defaultLocal
   );
+
   const ultraciteLocal = ultraciteImport?.defaultLocal;
 
   if (
@@ -158,11 +166,13 @@ const readUltraciteConfig = (config: ConfigModule): PrettierExtras | null => {
 
     if (entry.key === "plugins") {
       const plugins = stringArrayValues(entry.value);
+
       if (plugins) {
         extras.plugins = plugins;
       } else {
         extras.pluginsOverride = { comment: entry.comment, text: entry.text };
       }
+
       continue;
     }
 
@@ -187,6 +197,7 @@ export const prettier = {
   },
   exists: () => {
     const path = getPrettierConfigPath();
+
     return path !== null;
   },
   update: async (opts?: PrettierOptions) => {
@@ -199,11 +210,14 @@ export const prettier = {
       await writeProjectFile(defaultConfigPath, generatePrettierConfig(opts));
       await editPackageJson((manifest) => {
         delete manifest.prettier;
+
         return true;
       });
+
       if (existing !== ULTRACITE_PRETTIER) {
         warnReplaced('the "prettier" key in package.json');
       }
+
       return;
     }
 
@@ -217,9 +231,11 @@ export const prettier = {
     if (!canHoldEsmConfig(existingPath)) {
       await writeProjectFile(defaultConfigPath, generatePrettierConfig(opts));
       await rm(existingPath, { force: true });
+
       if (!contents.includes(ULTRACITE_PRETTIER)) {
         warnReplaced(fileName);
       }
+
       return;
     }
 
@@ -229,6 +245,7 @@ export const prettier = {
       log.warn(
         `Could not parse ${fileName}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
+
       return;
     }
 

@@ -666,6 +666,7 @@ const loadPreset = async (name: string): Promise<Linter.Config[]> => {
   const mod = await import(
     path.join(here, `../config/eslint/${name}/eslint.config.mjs`)
   );
+
   return mod.default;
 };
 
@@ -678,9 +679,11 @@ const writeFixture = async (
   { files, withoutTsconfig = false }: Preset
 ): Promise<void> => {
   await writeFile(path.join(root, "package.json"), packageJson);
+
   if (!withoutTsconfig) {
     await writeFile(path.join(root, "tsconfig.json"), tsconfig);
   }
+
   await Promise.all(
     Object.entries(files).map(async ([relative, file]) => {
       const target = path.join(root, relative);
@@ -701,6 +704,7 @@ const checkPreset = async (
 
   const loaded = await Promise.all(["core", ...preset.presets].map(loadPreset));
   const configs = loaded.flat();
+
   const eslint = new ESLint({
     cwd: root,
     overrideConfig: configs,
@@ -709,6 +713,7 @@ const checkPreset = async (
 
   const failures: string[] = [];
   let results: ESLint.LintResult[] = [];
+
   try {
     // Lint the directory, not a file list: a file no config block matches
     // is then silently skipped, which the coverage check below catches, and
@@ -733,10 +738,12 @@ const checkPreset = async (
 
   for (const [relative, file] of Object.entries(preset.files)) {
     const result = byFile.get(relative);
+
     if (!result) {
       failures.push(`${name}: ${relative} was not linted by any config block`);
       continue;
     }
+
     for (const message of result.messages) {
       // Fatal messages are parse errors; "you need to install" is a plugin
       // reporting a dependency `ultracite init` should have installed.
@@ -747,12 +754,15 @@ const checkPreset = async (
         failures.push(`${name}: ${relative}: ${message.message}`);
       }
     }
+
     const ruleIds = result.messages.map((message) => message.ruleId);
+
     for (const expected of file.expect) {
       if (!ruleIds.some((ruleId) => matches(ruleId, expected))) {
         failures.push(`${name}: ${relative}: expected ${expected} to report`);
       }
     }
+
     for (const forbidden of file.forbid ?? []) {
       if (ruleIds.some((ruleId) => matches(ruleId, forbidden))) {
         failures.push(`${name}: ${relative}: ${forbidden} must not report`);
@@ -765,6 +775,7 @@ const checkPreset = async (
 
 const isEnabled = (entry: Linter.RuleEntry | undefined): boolean => {
   const severity = Array.isArray(entry) ? entry[0] : entry;
+
   return severity !== undefined && severity !== "off" && severity !== 0;
 };
 
@@ -773,14 +784,17 @@ const isEnabled = (entry: Linter.RuleEntry | undefined): boolean => {
 // throws (typescript-eslint's) can't run at all.
 const listenersWithoutTypes = (rule: Rule.RuleModule): number => {
   let count = 0;
+
   const probe: Rule.RuleModule = {
     ...rule,
     create: (context) => {
       const listeners = rule.create(context);
       count = Object.keys(listeners).length;
+
       return listeners;
     },
   };
+
   try {
     new Linter({ configType: "flat" }).verify(
       "export const value = 1;\n",
@@ -797,6 +811,7 @@ const listenersWithoutTypes = (rule: Rule.RuleModule): number => {
   } catch {
     return 0;
   }
+
   return count;
 };
 
@@ -812,6 +827,7 @@ const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
   const core = await loadPreset("core");
   const withTypeAware = [...core, ...(await loadPreset("type-aware"))];
   const plugins = new Map<string, Rule.RuleModule>();
+
   for (const config of withTypeAware) {
     for (const [namespace, plugin] of Object.entries(config.plugins ?? {})) {
       for (const [name, rule] of Object.entries(plugin.rules ?? {})) {
@@ -821,30 +837,37 @@ const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
       }
     }
   }
+
   const rulesFor = async (configs: Linter.Config[]) => {
     const eslint = new ESLint({
       cwd: tempRoot,
       overrideConfig: configs,
       overrideConfigFile: true,
     });
+
     const config: Linter.Config =
       await eslint.calculateConfigForFile("src/probe.ts");
+
     return Object.entries(config.rules ?? {}).filter(([, entry]) =>
       isEnabled(entry)
     );
   };
+
   const needsTypes = (ruleId: string): boolean | undefined => {
     const rule = plugins.get(ruleId);
     const docs = rule?.meta?.docs;
+
     const marked =
       docs !== undefined &&
       "requiresTypeChecking" in docs &&
       docs.requiresTypeChecking === true;
+
     return rule && marked ? listenersWithoutTypes(rule) === 0 : undefined;
   };
 
   const failures: string[] = [];
   const coreRules = await rulesFor(core);
+
   for (const [ruleId] of coreRules) {
     if (needsTypes(ruleId) === true) {
       failures.push(
@@ -852,16 +875,20 @@ const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
       );
     }
   }
+
   const coreIds = new Set(coreRules.map(([ruleId]) => ruleId));
+
   for (const [ruleId] of await rulesFor(withTypeAware)) {
     const added = !coreIds.has(ruleId);
     const ownSplit = ruleId.startsWith("@typescript-eslint/");
+
     if (added && !ownSplit && needsTypes(ruleId) !== true) {
       failures.push(
         `type-aware: ${ruleId} works without type information; keep it in core`
       );
     }
   }
+
   return failures;
 };
 
@@ -888,6 +915,7 @@ const main = async () => {
     const runs = Object.entries(presets).flatMap(([name, preset]) =>
       runsOf(name, preset)
     );
+
     for (const [name, preset] of runs) {
       // oxlint-disable-next-line no-await-in-loop -- see comment above
       const presetFailures = await checkPreset(tempRoot, name, preset);
@@ -907,9 +935,11 @@ const main = async () => {
 
   if (failures.length > 0) {
     console.error(`\n${failures.length} ESLint smoke failure(s):`);
+
     for (const failure of failures) {
       console.error(`  ✗ ${failure}`);
     }
+
     process.exit(1);
   }
 

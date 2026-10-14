@@ -6,8 +6,10 @@ import Speed from "../speed.astro";
 const small = runFor(42);
 const large = runFor(420);
 const speedup = Math.round(large.ms.eslint / large.ms.biome);
+
 // Differences of the rounded times shown, so the figures add up on the page.
 const biomeGrowth = Math.round(large.ms.biome) - Math.round(small.ms.biome);
+
 const eslintGrowth = (
   shownSeconds(large.ms.eslint) - shownSeconds(small.ms.eslint)
 ).toFixed(1);

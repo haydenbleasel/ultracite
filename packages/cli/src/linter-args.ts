@@ -50,6 +50,7 @@ const escapeGlobPath = (dir: string): string =>
 
 const hasExtension = (file: string, extensions: string[]): boolean => {
   const lowered = file.toLowerCase();
+
   return extensions.some((extension) => lowered.endsWith(extension));
 };
 
@@ -336,6 +337,7 @@ const classifyArgs = (args: string[], pathExists: PathExists) => {
     const isValue =
       previousFlag === "yes" ||
       (previousFlag === "maybe" && !looksLikeTarget(arg, pathExists));
+
     previousFlag = "no";
 
     if (isValue) {
@@ -362,6 +364,7 @@ export const splitLinterArgs = ({
     // `ultracite fix src -- other.ts`) are still lint targets — dropping
     // them into passthrough would silently widen formatter runs to `.`.
     const classified = classifyArgs(args.slice(0, separatorIndex), pathExists);
+
     return {
       files: [...classified.files, ...args.slice(separatorIndex + 1)],
       passthrough: classified.passthrough,

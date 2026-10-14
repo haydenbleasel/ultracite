@@ -21,6 +21,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -44,6 +45,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -65,6 +67,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -86,6 +89,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -106,8 +110,10 @@ describe("check", () => {
         status: 0,
       })
     );
+
     const routeGroupFile =
       "/abs/path/apps/app/src/app/(app)/dashboard/page.tsx";
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -163,6 +169,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -183,6 +190,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -193,6 +201,7 @@ describe("check", () => {
     const calls = new Map(
       mockSpawn.mock.calls.map(([command, args]) => [command, args])
     );
+
     expect(calls.get("oxfmt")).toContain("--no-error-on-unmatched-pattern");
     expect(calls.get("oxlint")).toEqual(["src/index.ts"]);
 
@@ -205,6 +214,7 @@ describe("check", () => {
     const prettierArgs = mockSpawn.mock.calls.find(
       ([command]) => command === "prettier"
     )?.[1];
+
     expect(prettierArgs).toContain("--ignore-unknown");
   });
 
@@ -214,6 +224,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -235,6 +246,7 @@ describe("check", () => {
             }
           : { status: 0 }
     );
+
     const warn = spyOn(log, "warn").mockImplementation(() => {});
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
@@ -250,6 +262,7 @@ describe("check", () => {
       (cmd: string, _args: string[], _opts: SpawnSyncOptions) =>
         cmd === "stylelint" ? { status: 1 } : { status: 0 }
     );
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "eslint"),
@@ -269,6 +282,7 @@ describe("check", () => {
             }
           : { status: 0 }
     );
+
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
     mock.module("../src/utils", () => ({
       detectLinter: mock(() => "oxlint"),
@@ -287,6 +301,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -310,6 +325,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -331,6 +347,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -357,6 +374,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -399,13 +417,16 @@ describe("check", () => {
 
   test("eslint check throws on eslint spawn error", () => {
     let callCount = 0;
+
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         callCount += 1;
+
         // prettier succeeds
         if (callCount === 1) {
           return { status: 0 };
         }
+
         return {
           error: new Error("eslint spawn failed"),
           status: null,
@@ -425,13 +446,16 @@ describe("check", () => {
 
   test("eslint check throws on stylelint spawn error", () => {
     let callCount = 0;
+
     const mockSpawn = mock(
       (_cmd: string, _args: string[], _opts: SpawnSyncOptions) => {
         callCount += 1;
+
         // prettier and eslint succeed
         if (callCount <= 2) {
           return { status: 0 };
         }
+
         return {
           error: new Error("stylelint spawn failed"),
           status: null,
@@ -457,6 +481,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -479,6 +504,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -551,6 +577,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -571,6 +598,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -591,6 +619,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -612,6 +641,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -633,9 +663,11 @@ describe("check", () => {
         if (cmd === "oxfmt") {
           return { status: 1 };
         }
+
         return { status: 0 };
       }
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -655,9 +687,11 @@ describe("check", () => {
         if (cmd === "prettier") {
           return { status: 1 };
         }
+
         return { status: 0 };
       }
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));
@@ -678,6 +712,7 @@ describe("check", () => {
         status: 0,
       })
     );
+
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
     }));

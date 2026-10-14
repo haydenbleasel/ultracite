@@ -44,6 +44,7 @@ const getWindowsEnvValue = (
   const key = Object.keys(env)
     .toSorted()
     .find((candidate) => candidate.toUpperCase() === name);
+
   return key === undefined ? undefined : env[key];
 };
 
@@ -56,14 +57,17 @@ const getWindowsEnvValue = (
  */
 const resolveWindowsCommand = (command: string): string | undefined => {
   const cwd = process.cwd();
+
   const env = npmRunPathEnv({
     addExecPath: false,
     cwd,
     env: process.env,
     preferLocal: true,
   });
+
   const envPathExt = getWindowsEnvValue(env, "PATHEXT");
   const extension = path.extname(command);
+
   const pathExt =
     extension === "" ? envPathExt : `${extension};${envPathExt ?? ""}`;
 

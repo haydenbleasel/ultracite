@@ -16,6 +16,7 @@ const LEGACY_RULES_PATH = "ultracite.md";
 
 // The instruction-file and lint keys each take a string or a list of strings.
 const stringsSchema = z.union([z.string(), z.array(z.string())]).nullish();
+
 type Strings = z.infer<typeof stringsSchema>;
 
 const mentionsUltracite = (command: string): boolean =>
@@ -49,6 +50,7 @@ const nextRead = (
     current === undefined || current === null
       ? (settings.defaultRead ?? [])
       : [current].flat();
+
   const kept = loaded.filter((file) => file !== LEGACY_RULES_PATH);
   const next = kept.includes(rulesPath) ? kept : [...kept, rulesPath];
 
@@ -69,6 +71,7 @@ const nextLint = (current: Strings, fixCommand: string): Strings | null => {
   }
 
   const commands = [current].flat();
+
   const next = commands.map((command) =>
     mentionsUltracite(command) ? fixCommand : command
   );
@@ -96,6 +99,7 @@ const mergeYaml = (
 
   const stringsAt = (key: string[]): Strings => {
     const node = document.getIn(key);
+
     return expectStrings(
       stringsSchema.safeParse(isNode(node) ? node.toJSON() : node),
       key,
@@ -111,6 +115,7 @@ const mergeYaml = (
     readNode.items = readNode.items.filter(
       (item) => !(isScalar(item) && item.value === LEGACY_RULES_PATH)
     );
+
     if (
       !readNode.items.some((item) => isScalar(item) && item.value === rulesPath)
     ) {
@@ -118,6 +123,7 @@ const mergeYaml = (
     }
   } else {
     const read = nextRead(stringsAt(settings.readKey), settings, rulesPath);
+
     if (read && isScalar(readNode) && read[0] === readNode.value) {
       // Turn the one file into a list around the user's own node, so a
       // comment on it survives.
@@ -134,6 +140,7 @@ const mergeYaml = (
 
   if (settings.lintKey) {
     const lint = nextLint(stringsAt(settings.lintKey), fixCommand);
+
     if (lint !== null) {
       document.setIn(settings.lintKey, lint);
     }
@@ -166,6 +173,7 @@ const mergeJson = (
 
   const stringsAt = (key: string[]): Strings => {
     const node = findNodeAtLocation(tree, key);
+
     return expectStrings(
       stringsSchema.safeParse(node ? getNodeValue(node) : undefined),
       key,
@@ -175,12 +183,14 @@ const mergeJson = (
 
   let merged = text;
   const read = nextRead(stringsAt(settings.readKey), settings, rulesPath);
+
   if (read) {
     merged = editJson(merged, settings.readKey, read);
   }
 
   if (settings.lintKey) {
     const lint = nextLint(stringsAt(settings.lintKey), fixCommand);
+
     if (lint !== null) {
       merged = editJson(merged, settings.lintKey, lint);
     }

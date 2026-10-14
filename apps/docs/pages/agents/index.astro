@@ -18,6 +18,7 @@ const breadcrumbs: Crumb[] = [{ href: "/agents", name: "Agents" }];
 
 // An agent links to its landing page once pages/agents/<id>.astro exists.
 const landingPages = import.meta.glob("./*.astro");
+
 const hasLandingPage = (id: string): boolean =>
   `./${id}.astro` in landingPages;
 
@@ -39,6 +40,7 @@ const extrasFor = (agent: (typeof cliAgents)[number]) => [
 
 const entries = cliAgents.map((agent) => {
   const details = directory.get(agent.id);
+
   return {
     extras: extrasFor(agent),
     group: details?.group ?? "terminal",
@@ -67,8 +69,10 @@ const featuredFixFlags = new Map([
   ["claude", "--claude"],
   ["codex", "--codex"],
 ]);
+
 const featured = entries.flatMap((entry) => {
   const fixFlag = featuredFixFlags.get(entry.id);
+
   return fixFlag ? [{ ...entry, fixFlag }] : [];
 });
 
@@ -88,9 +92,11 @@ const groups = agentGroups
 const agentsFileReaders = entries
   .filter((entry) => entry.readsAgentsFile)
   .toSorted(byName);
+
 const extraFiles = entries.flatMap((entry) =>
   entry.extras.map((extra) => ({ ...extra, reader: entry }))
 );
+
 const onItsOwn = entries.filter((entry) => entry.readsOnItsOwn).length;
 const STACK_SIZE = 9;
 

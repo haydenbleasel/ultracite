@@ -246,6 +246,7 @@ const diff = [
     for (const timer of timers) {
       clearTimeout(timer);
     }
+
     timers = [];
   };
 
@@ -255,26 +256,34 @@ const diff = [
 
   const play = (loop: HTMLElement) => {
     clearTimers();
+
     const step = (n: number) =>
       loop.querySelector<HTMLElement>(`[data-hp-step="${n}"]`);
+
     const steps = [...loop.querySelectorAll<HTMLElement>("[data-hp-step]")];
+
     const problems = [
       ...loop.querySelectorAll<HTMLElement>("[data-hp-problem]"),
     ];
+
     const count = loop.querySelector<HTMLElement>("[data-hp-count]");
     const show = (n: number) => step(n)?.classList.remove("hp-pending");
+
     const setRunning = (n: number, running: boolean) =>
       step(n)?.classList.toggle("hp-running", running);
 
     for (const element of [...steps, ...problems]) {
       element.classList.add("hp-pending");
     }
+
     for (const problem of problems) {
       problem.classList.remove("hp-fixed");
     }
+
     if (count) {
       count.textContent = "0";
     }
+
     loop.dataset.hpClean = "false";
 
     let t = 300;
@@ -288,14 +297,17 @@ const diff = [
     });
     t += 700;
     at(t, () => setRunning(3, false));
+
     for (const [index, problem] of problems.entries()) {
       at(t + index * 70, () => {
         problem.classList.remove("hp-pending");
+
         if (count) {
           count.textContent = String(index + 1);
         }
       });
     }
+
     t += problems.length * 70 + 900;
     at(t, () => show(4));
     t += 1300;
@@ -307,36 +319,45 @@ const diff = [
     });
     t += 700;
     at(t, () => setRunning(6, false));
+
     for (const [index, problem] of problems.entries()) {
       at(t + index * 60, () => {
         problem.classList.add("hp-fixed");
+
         if (count) {
           count.textContent = String(problems.length - index - 1);
         }
+
         if (index === problems.length - 1) {
           loop.dataset.hpClean = "true";
         }
       });
     }
+
     t += problems.length * 60 + 700;
     at(t, () => show(7));
   };
 
   const init = () => {
     const loop = document.querySelector<HTMLElement>("[data-hp-loop]");
+
     if (!loop || loop.dataset.hpBound) {
       return;
     }
+
     loop.dataset.hpBound = "true";
     loop
       .querySelector("[data-hp-replay]")
       ?.addEventListener("click", () => play(loop));
+
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       play(loop);
     }
   };
 
   init();
+
   document.addEventListener("astro:page-load", init);
+
   document.addEventListener("astro:before-swap", clearTimers);
 </script>

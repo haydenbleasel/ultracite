@@ -33,6 +33,7 @@ interface Props {
 const { content, id } = Astro.props;
 
 const editor = cliEditors.find((candidate) => candidate.id === id);
+
 if (!editor) {
   throw new Error(`No editor "${id}" in the CLI's table`);
 }
@@ -44,6 +45,7 @@ const logo = `/logos/${details?.logo ?? id}.svg`;
 const command = `npx ultracite@latest init --editors ${id}`;
 const settingsPath = editor.config.path;
 const isZed = editor.config.extensionClis === undefined;
+
 const slug = (text: string): string =>
   text.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-").replaceAll(/^-|-$/gu, "");
 
@@ -55,6 +57,7 @@ const breadcrumbs: Crumb[] = [
 // The settings file for a new project on the default toolchain, with a note
 // beside the lines that decide how files get formatted and fixed.
 const settings = JSON.stringify(editor.config.getContent("oxlint"), null, 2);
+
 const lineNotes: [string, string][] = [
   ['"editor.formatOnSave"', "Format on save"],
   ['"format_on_save"', "Format on save"],
@@ -63,12 +66,15 @@ const lineNotes: [string, string][] = [
   ['"name": "oxfmt"', "Oxfmt formats it"],
   ['"source.fixAll.oxc"', "Oxlint’s safe fixes"],
 ];
+
 const settingsNotes = new Map<number, string>();
 const notedNeedles = new Set<string>();
+
 for (const [index, line] of settings.split("\n").entries()) {
   const match = lineNotes.find(
     ([needle]) => line.includes(needle) && !notedNeedles.has(needle)
   );
+
   if (match) {
     notedNeedles.add(match[0]);
     settingsNotes.set(index, match[1]);
@@ -89,6 +95,7 @@ const initSteps: { note: string; title: string }[] = [
     title: `Writes \`${settingsPath}\``,
   },
 ];
+
 if (isZed) {
   initSteps.push({
     note: "Zed extensions install from its own extensions view, so `init` links the one your toolchain needs. ESLint and Prettier are built into Zed.",
@@ -105,11 +112,13 @@ if (isZed) {
     title: `Asks you to install \`${defaultExtensions.join("` and `")}\``,
   });
 }
+
 // The agent page that covers this editor's built-in agent, if any.
 const agentDetails = new Map<string, AgentEntry>(Object.entries(agentDirectory));
 const agentId = details?.agent;
 const agentEntry = agentId ? agentDetails.get(agentId) : undefined;
 const agentPages = import.meta.glob("../../pages/agents/*.astro");
+
 const agentPage =
   agentId && `../../pages/agents/${agentId}.astro` in agentPages
     ? `/agents/${agentId}`
@@ -119,18 +128,23 @@ const agentPage =
 // hook its built-in agent gets from `init --hooks <agent>` (Copilot in VS
 // Code).
 const hookCommand = "npx ultracite fix --hook";
+
 const linkedAgent = agentId
   ? cliAgents.find((candidate) => candidate.id === agentId)
   : undefined;
+
 const findHookSource = () => {
   if (editor.hooks) {
     return { hooks: editor.hooks, id };
   }
+
   return linkedAgent?.hooks
     ? { hooks: linkedAgent.hooks, id: linkedAgent.id }
     : undefined;
 };
+
 const hookSource = findHookSource();
+
 const hookFile = hookSource
   ? {
       code: JSON.stringify(hookSource.hooks.getContent(hookCommand), null, 2),
@@ -138,6 +152,7 @@ const hookFile = hookSource
       path: hookSource.hooks.path,
     }
   : null;
+
 if (hookFile) {
   initSteps.push({
     note: content.hookNote ?? `Runs \`${hookCommand}\` on each file ${name}’s agent edits.`,
@@ -148,6 +163,7 @@ if (hookFile) {
 const relatedSteps: NextStep[] = content.related.slice(0, 3).flatMap((relatedId) => {
   const relatedEditor = cliEditors.find((candidate) => candidate.id === relatedId);
   const relatedDetails = directory.get(relatedId);
+
   return relatedEditor
     ? [
         {
@@ -159,6 +175,7 @@ const relatedSteps: NextStep[] = content.related.slice(0, 3).flatMap((relatedId)
       ]
     : [];
 });
+
 const nextSteps: NextStep[] = [
   ...(agentPage && agentEntry
     ? [
@@ -172,6 +189,7 @@ const nextSteps: NextStep[] = [
     : []),
   ...relatedSteps,
 ].slice(0, 3);
+
 nextSteps.push({
   description: "Every editor `init` configures, and the extension each toolchain needs.",
   href: "/docs/setup#editor-extensions",

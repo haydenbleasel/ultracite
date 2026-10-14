@@ -33,6 +33,7 @@ const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 // The renderer's spinner, advanced every other frame (80ms at 30fps ≈ 2.4f).
 const SPINNER_FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 const SPINNER_STEP = 2;
+
 // clack's spinner glyphs for the autofix phase.
 const CLACK_SPINNER = ["◐", "◓", "◑", "◒"];
 const CLACK_STEP = 4;
@@ -166,7 +167,9 @@ const Row = ({
   if (frame < start) {
     return null;
   }
+
   const landed = interpolate(frame - start, [0, 4], [0, 1], clamp);
+
   return (
     <div style={{ height: LINE_H, opacity: landed, whiteSpace: "pre" }}>
       {children}
@@ -189,11 +192,14 @@ const TransientRow = ({
   if (frame < start) {
     return null;
   }
+
   const landed = interpolate(frame - start, [0, 4], [0, 1], clamp);
+
   const remain = interpolate(frame - end, [0, 6], [1, 0], {
     ...clamp,
     easing: EASE,
   });
+
   return (
     <div
       style={{
@@ -218,11 +224,13 @@ const IssueRow = ({
   frame: number;
 }) => {
   const settled = frame >= group.settle;
+
   const icon = settled
     ? "✓"
     : SPINNER_FRAMES[
         Math.floor((frame - group.start) / SPINNER_STEP) % SPINNER_FRAMES.length
       ];
+
   return (
     <Row start={group.start} frame={frame}>
       <span style={{ color: settled ? GREEN : CYAN }}>{icon}</span>
@@ -235,6 +243,7 @@ const IssueRow = ({
 
 const AutofixRow = ({ frame }: { frame: number }) => {
   const done = frame >= AUTOFIX_DONE;
+
   if (!done) {
     return (
       <Row start={AUTOFIX_START} frame={frame}>
@@ -250,6 +259,7 @@ const AutofixRow = ({ frame }: { frame: number }) => {
       </Row>
     );
   }
+
   return (
     <Row start={AUTOFIX_START} frame={frame}>
       <span style={{ color: GREEN }}>◇</span>
@@ -264,10 +274,12 @@ export const FixCodexTerminal = () => {
   const frame = useCurrentFrame();
 
   const cardOpacity = interpolate(frame, [0, 14], [0, 1], clamp);
+
   const cardScale = interpolate(frame, [0, 20], [0.985, 1], {
     ...clamp,
     easing: EASE,
   });
+
   const cardY = interpolate(frame, [0, 20], [18, 0], {
     ...clamp,
     easing: EASE,
@@ -277,6 +289,7 @@ export const FixCodexTerminal = () => {
     CMD.length,
     Math.max(0, Math.floor((frame - CMD_START) * CHARS_PER_FRAME))
   );
+
   const typing = frame >= CMD_START && revealed < CMD.length;
   const cursorOn = Math.floor(frame / 15) % 2 === 0;
 

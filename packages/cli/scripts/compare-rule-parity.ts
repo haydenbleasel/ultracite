@@ -16,6 +16,7 @@ import path from "node:path";
 import type { Linter } from "eslint";
 
 type Severity = "off" | "warn" | "error";
+
 type OxlintRuleEntry = Severity | [Severity, ...unknown[]];
 
 const here = import.meta.dirname;
@@ -44,6 +45,7 @@ const nonEquivalentTwins = new Set(["require-await"]);
 const twinAliasPairs: [string, string][] = [
   ["no-throw-literal", "typescript/only-throw-error"],
 ];
+
 const twinAliases = new Map([
   ...twinAliasPairs,
   ...twinAliasPairs.map(([base, twin]): [string, string] => [twin, base]),
@@ -51,6 +53,7 @@ const twinAliases = new Map([
 
 /** A rule options value decoded from JSON (options round-trip through JSON). */
 type JsonValue = boolean | number | string | null | JsonValue[] | JsonObject;
+
 interface JsonObject {
   [key: string]: JsonValue;
 }
@@ -73,11 +76,13 @@ const isOptionSubset = (
       isOptionSubset(value, superset[key])
     );
   }
+
   if (Array.isArray(subset) && Array.isArray(superset)) {
     return subset.every((value, index) =>
       isOptionSubset(value, superset[index])
     );
   }
+
   return JSON.stringify(subset) === JSON.stringify(superset);
 };
 
@@ -97,6 +102,7 @@ const toOxlintName = (name: string): string => {
       return `${to}${name.slice(from.length)}`;
     }
   }
+
   return name;
 };
 
@@ -106,6 +112,7 @@ const getNativeOxlintRules = (): Set<string> => {
     ["./node_modules/.bin/oxlint", "--rules", "--format=json"],
     { cwd: path.join(here, "..") }
   );
+
   // SAFETY: decoding trusted `oxlint --rules --format=json` output, which is
   // an array of { scope, value, category } entries.
   const entries = JSON.parse(result.stdout.toString()) as {
@@ -113,14 +120,18 @@ const getNativeOxlintRules = (): Set<string> => {
     value: string;
     category: string;
   }[];
+
   const rules = new Set<string>();
+
   for (const entry of entries) {
     if (entry.category === "nursery") {
       continue;
     }
+
     const plugin = entry.scope.replaceAll("_", "-");
     rules.add(plugin === "eslint" ? entry.value : `${plugin}/${entry.value}`);
   }
+
   return rules;
 };
 
@@ -132,10 +143,13 @@ const loadOxlintRules = async (
       (name) => import(path.join(here, `../config/oxlint/${name}/index.mjs`))
     )
   );
+
   const merged: Record<string, OxlintRuleEntry> = {};
+
   for (const mod of mods) {
     Object.assign(merged, mod.default.rules ?? {});
   }
+
   return merged;
 };
 
@@ -144,23 +158,28 @@ const loadEslintEffectiveRules = async (
   filePath: string
 ): Promise<Record<string, [number, ...unknown[]]>> => {
   const { ESLint } = await import("eslint");
+
   const mods = await Promise.all(
     configNames.map(
       (name) =>
         import(path.join(here, `../config/eslint/${name}/eslint.config.mjs`))
     )
   );
+
   const configs: Linter.Config[] = mods.flatMap((mod) => mod.default);
+
   const eslint = new ESLint({
     cwd: path.join(here, ".."),
     overrideConfig: configs,
     overrideConfigFile: true,
   });
+
   // SAFETY: adapting ESLint's untyped (`Promise<any>`) calculateConfigForFile
   // result; the effective flat config stores rules as severity-first arrays.
   const config = (await eslint.calculateConfigForFile(filePath)) as {
     rules?: Record<string, [number, ...unknown[]]>;
   };
+
   return config.rules ?? {};
 };
 
@@ -168,6 +187,7 @@ const severityOf = (entry: OxlintRuleEntry | undefined): Severity => {
   if (entry === undefined) {
     return "off";
   }
+
   return Array.isArray(entry) ? entry[0] : entry;
 };
 
@@ -222,15 +242,19 @@ const nativeRules = getNativeOxlintRules();
 // react-doctor isn't checked yet: the ESLint react preset enables far more of
 // its rules than the curated list in the js-plugins preset.
 const bridgedPrefixes = ["github/", "sonarjs/"];
+
 // SAFETY: the ESLint preset's sonarjs module exports its type-checked rules
 // as a rule map keyed by prefixed rule name.
 const { typeCheckedRules: sonarjsTypeCheckedRules } = (await import(
   path.join(here, "../config/eslint/core/rules/sonarjs.mjs")
 )) as { typeCheckedRules: Record<string, OxlintRuleEntry> };
+
 const needsTypeInformation = new Set(Object.keys(sonarjsTypeCheckedRules));
+
 const isBridged = (name: string): boolean =>
   bridgedPrefixes.some((prefix) => name.startsWith(prefix)) &&
   !needsTypeInformation.has(name);
+
 const violations: string[] = [];
 const allowlisted = new Set<string>();
 const gaps = new Set<string>();
@@ -252,14 +276,17 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
   // react-hooks, ...) is enabled — mirroring how oxlint applies base rules
   // to TypeScript and JSX natively.
   const eslintState = new Map<string, { enabled: boolean; options: string }>();
+
   for (const [name, entry] of Object.entries(eslintRules)) {
     const key = toOxlintName(name);
     const enabled = entry[0] > 0;
     const options = JSON.stringify(entry.slice(1));
     const existing = eslintState.get(key);
+
     if (existing?.enabled) {
       continue;
     }
+
     if (!existing || enabled) {
       eslintState.set(key, { enabled, options });
     }
@@ -267,56 +294,74 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
 
   // The same base/twin folding for the oxlint side.
   const oxlintState = new Map<string, { enabled: boolean; options: string }>();
+
   for (const [name, entry] of Object.entries(oxlintRules)) {
     const enabled = severityOf(entry) !== "off";
     const existing = oxlintState.get(name);
+
     if (existing?.enabled) {
       continue;
     }
+
     if (!existing || enabled) {
       oxlintState.set(name, { enabled, options: optionsOf(entry) });
     }
   }
+
   for (const [name, state] of oxlintState) {
     if (!(name.startsWith(typescriptPrefix) && state.enabled)) {
       continue;
     }
+
     const base = name.slice(typescriptPrefix.length);
+
     if (oxlintState.has(base) && !oxlintState.get(base)?.enabled) {
       oxlintState.set(base, state);
     }
   }
+
   // Base rules cover their typescript/ twins and vice versa on both sides.
   const twinsOf = (name: string): string[] => {
     const twins = [name];
+
     const base = name.startsWith(typescriptPrefix)
       ? name.slice(typescriptPrefix.length)
       : name;
+
     if (nonEquivalentTwins.has(base)) {
       return twins;
     }
+
     if (name.startsWith(typescriptPrefix)) {
       twins.push(name.slice(typescriptPrefix.length));
     } else {
       twins.push(`typescript/${name}`);
     }
+
     const twinAlias = twinAliases.get(name);
+
     if (twinAlias) {
       twins.push(twinAlias);
     }
+
     return twins;
   };
+
   const oxlintEnabled = (name: string): boolean =>
     twinsOf(name).some((twin) => oxlintState.get(twin)?.enabled === true);
+
   const eslintEnabled = (name: string): boolean =>
     twinsOf(name).some((twin) => eslintState.get(twin)?.enabled === true);
 
   const report = (rule: string, message: string) => {
     const allowReason = allowlist.get(rule);
+
     if (allowReason) {
       allowlisted.add(`${rule} (${allowReason})`);
+
       return;
     }
+
     violations.push(`[${surface.name}] ${rule}: ${message}`);
   };
 
@@ -326,15 +371,19 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     if (!state.enabled) {
       continue;
     }
+
     // oxlint-only implementations
     if (name.startsWith("oxc/") || name.startsWith("react-doctor/")) {
       continue;
     }
+
     // No ESLint counterpart configured (e.g. legacy aliases)
     const eslintEntry = eslintState.get(name);
+
     if (!eslintEntry) {
       continue;
     }
+
     if (!eslintEntry.enabled) {
       if (!eslintEnabled(name)) {
         report(name, "enabled in oxlint, disabled in eslint");
@@ -361,12 +410,15 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     if (!state.enabled) {
       continue;
     }
+
     const runnable =
       nativeRules.has(name) || oxlintState.has(name) || isBridged(name);
+
     if (!runnable) {
       gaps.add(name);
       continue;
     }
+
     if (!oxlintEnabled(name)) {
       report(name, "enabled in eslint, disabled or missing in oxlint");
     }
@@ -374,23 +426,30 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
 }
 
 console.log(`Allowlisted divergences (${allowlisted.size}):`);
+
 for (const entry of [...allowlisted].toSorted()) {
   console.log(`  ~ ${entry}`);
 }
+
 const unusedAllowlist = [...allowlist.keys()].filter(
   (rule) => ![...allowlisted].some((entry) => entry.startsWith(`${rule} (`))
 );
+
 for (const rule of unusedAllowlist) {
   console.warn(`  ! allowlist entry never triggered: ${rule}`);
 }
+
 console.log(
   `\nESLint-only rules with no oxlint implementation: ${gaps.size} (informational)`
 );
+
 const gapsByPlugin = new Map<string, number>();
+
 for (const gap of gaps) {
   const plugin = gap.includes("/") ? gap.slice(0, gap.indexOf("/")) : "eslint";
   gapsByPlugin.set(plugin, (gapsByPlugin.get(plugin) ?? 0) + 1);
 }
+
 for (const [plugin, count] of [...gapsByPlugin].toSorted(
   ([, a], [, b]) => b - a
 )) {
@@ -399,9 +458,11 @@ for (const [plugin, count] of [...gapsByPlugin].toSorted(
 
 if (violations.length > 0) {
   console.error(`\n${violations.length} parity violation(s):`);
+
   for (const violation of violations.toSorted()) {
     console.error(`  ✗ ${violation}`);
   }
+
   process.exit(1);
 }
 

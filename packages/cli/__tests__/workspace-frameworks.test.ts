@@ -26,6 +26,7 @@ const mockProject = (files: Record<string, string>) => {
     ),
     writeFile: mock((path: string, content: string) => {
       written.set(path, content);
+
       return Promise.resolve();
     }),
   }));

@@ -52,8 +52,10 @@ const {
 const showDefaults = rows.some((row) => row.defaults > 0);
 const scale = Math.max(...rows.map((row) => row.available));
 const percent = (count: number, of: number): string => `${(count / of) * 100}%`;
+
 // Four tiles a row from small screens, eight at most on large ones.
 const LARGE_TILE_COLUMNS = 8;
+
 const tileColumns =
   tiles.length >= LARGE_TILE_COLUMNS ? "lg:grid-cols-8" : "lg:grid-cols-4";
 ---

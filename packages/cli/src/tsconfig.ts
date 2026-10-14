@@ -24,6 +24,7 @@ const findTsConfigFiles = async (): Promise<string[]> => {
         "**/.next/**",
       ],
     });
+
     return files;
   } catch {
     return [];
@@ -44,6 +45,7 @@ const ownStrictFlags = (config: TsConfig | undefined): StrictFlags => {
   if (options?.strict !== undefined) {
     flags.strict = options.strict;
   }
+
   if (options?.strictNullChecks !== undefined) {
     flags.strictNullChecks = options.strictNullChecks;
   }
@@ -81,9 +83,11 @@ const resolveExtends = (specifier: string, fromDir: string): string | null => {
     }
 
     const parent = path.dirname(dir);
+
     if (parent === dir) {
       return null;
     }
+
     dir = parent;
   }
 };
@@ -117,6 +121,7 @@ const inheritedStrictFlags = async (
           await readFile(basePath, "utf-8"),
           tsConfigSchema
         );
+
         return {
           ...(await inheritedStrictFlags(base, basePath, depth + 1)),
           ...ownStrictFlags(base),
@@ -153,6 +158,7 @@ const planTsConfigUpdate = async (
       log.warn(
         `Could not parse ${filePath}; skipping the strictNullChecks update for it.`
       );
+
       return null;
     }
 
@@ -168,6 +174,7 @@ const planTsConfigUpdate = async (
       log.warn(
         `${filePath} turns strictNullChecks off, so it was left as is. Some of Ultracite's type-aware rules need it on.`
       );
+
       return null;
     }
 
@@ -198,6 +205,7 @@ const planTsConfigUpdate = async (
     log.warn(
       `Failed to update ${filePath}: ${error instanceof Error ? error.message : error}`
     );
+
     return null;
   }
 };
@@ -225,6 +233,7 @@ export const tsconfig = {
    */
   exists: async (): Promise<boolean> => {
     const files = await findTsConfigFiles();
+
     return files.length > 0;
   },
   /**
@@ -233,9 +242,11 @@ export const tsconfig = {
    */
   plan: async (): Promise<TsConfigUpdate[]> => {
     const files = await findTsConfigFiles();
+
     const updates = await Promise.all(
       files.map((file) => planTsConfigUpdate(file))
     );
+
     return updates.filter((update) => update !== null);
   },
   /**

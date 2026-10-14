@@ -97,6 +97,7 @@ const assertAgentUpgradeSupported = (
 };
 
 type InstallOptions = Parameters<typeof addDevDependency>[1];
+
 type Spinner = ReturnType<typeof spinner>;
 
 /** Installs the packages, stopping the spinner and explaining a failure. */
@@ -138,6 +139,7 @@ const resolvePackageManager = async (
   }
 
   log.info(`Using ${detected.name} (detected from the project)`);
+
   return normalizePackageManager(detected);
 };
 
@@ -166,6 +168,7 @@ export const getConfiguredEslintFrameworks = (): Set<string> => {
 
   try {
     const content = readFileSync(found.path, "utf-8");
+
     return new Set(
       [...content.matchAll(ESLINT_PRESET_RE)].map(
         (match) => match.groups?.preset ?? ""
@@ -195,32 +198,39 @@ export const getToolchainPackages = (
       packages.set("@biomejs/biome", biomeVersion);
       break;
     }
+
     case "eslint": {
       for (const [name, version] of Object.entries(eslintCoreDevDependencies)) {
         packages.set(name, version);
       }
+
       for (const [framework, dependencies] of Object.entries(
         eslintFrameworkDevDependencies
       )) {
         const configured = configuredFrameworks.has(framework);
+
         for (const [name, version] of Object.entries(dependencies)) {
           if (configured || projectDependencies.has(name)) {
             packages.set(name, version);
           }
         }
       }
+
       break;
     }
+
     case "oxlint": {
       // Mirrors init: the ranges this release was verified against.
       packages.set("oxlint", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint);
       packages.set("oxfmt", OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt);
+
       if (projectDependencies.has("oxlint-tsgolint")) {
         packages.set(
           "oxlint-tsgolint",
           OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]
         );
       }
+
       for (const [name, version] of Object.entries(
         OXLINT_JS_PLUGIN_DEV_DEPENDENCIES
       )) {
@@ -228,8 +238,10 @@ export const getToolchainPackages = (
           packages.set(name, version);
         }
       }
+
       break;
     }
+
     default: {
       break;
     }
@@ -246,6 +258,7 @@ const resolveInstalledBin = (installed: InstalledPackage): string | null => {
   }
 
   const binPath = path.join(installed.dir, relativeBin);
+
   return exists(binPath) ? binPath : null;
 };
 
@@ -282,6 +295,7 @@ const updateSelf = async (
 
   if (!current) {
     s.stop("Ultracite updated.");
+
     return null;
   }
 
@@ -336,6 +350,7 @@ const handOffToInstalled = (
 
   if (result.error) {
     log.warn(`Could not run the installed Ultracite: ${result.error.message}`);
+
     return null;
   }
 
@@ -365,6 +380,7 @@ const syncToolchain = async (
     await collectProjectDependencyNames(),
     linter === "eslint" ? getConfiguredEslintFrameworks() : new Set()
   );
+
   await overrideEslintPeers(packageManager, packages);
 
   const s = spinner();
@@ -405,6 +421,7 @@ const updateConfiguration = async (
     log.info(
       "Configuration files are already in this release's format. If the release notes mention preset changes, re-run `ultracite init` to regenerate them."
     );
+
     return true;
   }
 
@@ -412,6 +429,7 @@ const updateConfiguration = async (
     log.warn(
       `This project's configuration predates Ultracite v${pending.at(-1)?.version}. Run \`ultracite upgrade --claude\` or \`--codex\` to have that agent update it, or follow the guides:\n${listGuides(pending)}`
     );
+
     return true;
   }
 
@@ -425,6 +443,7 @@ const updateConfiguration = async (
     log.warn(
       `${failure ?? "Some changes are still missing."} Finish them by following:\n${listGuides(remaining)}`
     );
+
     return false;
   }
 
@@ -457,6 +476,7 @@ export const upgrade = async (
   }
 
   const packageManager = await resolvePackageManager(options.pm);
+
   const installOptions: InstallOptions = {
     corepack: false,
     silent: true,
@@ -472,6 +492,7 @@ export const upgrade = async (
 
   if (!options.skipSelf) {
     const newer = await updateSelf(installOptions, packageManager, version);
+
     const handOffStatus = newer
       ? handOffToInstalled(newer, options.pm, options.agent)
       : null;
@@ -504,5 +525,6 @@ export const upgrade = async (
   }
 
   outro(UPGRADE_COMPLETE);
+
   return 0;
 };

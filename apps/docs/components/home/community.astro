@@ -22,11 +22,14 @@ const entries: {
 // A tweet that fails to load (rate limit, network) is skipped; when none load,
 // the quotes are dropped and only the sponsors remain.
 const fetched = await Promise.all(entries.map((entry) => getTweet(entry.id)));
+
 const quotes = fetched.flatMap((tweet, index) => {
   const entry = entries[index];
+
   if (!(tweet && entry)) {
     return [];
   }
+
   return [
     {
       ...tweet,

@@ -99,6 +99,7 @@ export const createEditorConfig = (
           editor.config.path,
           `${JSON.stringify(content, null, 2)}\n`
         );
+
         return;
       }
 
@@ -111,6 +112,7 @@ export const createEditorConfig = (
         log.warn(
           `Could not parse ${editor.config.path}; fix its syntax and re-run \`ultracite init\` to add the Ultracite settings.`
         );
+
         return;
       }
 
@@ -118,6 +120,7 @@ export const createEditorConfig = (
       // formatting survive.
       const formattingOptions = detectJsonFormatting(existingContents);
       let contents = existingContents;
+
       for (const [settingPath, value] of collectSettings(
         existingConfig,
         content

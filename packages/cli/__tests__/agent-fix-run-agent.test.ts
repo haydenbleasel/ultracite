@@ -33,8 +33,10 @@ const fakeExeca = (result: FakeExecaResult) => {
     (_file: string, _args: readonly string[], _options: Options) =>
       Promise.resolve(result)
   );
+
   // oxlint-disable-next-line anti-slop/no-chained-type-assertions -- SAFETY: runAgent calls execaFn positionally with (command, args, options) and only reads failed/stderr/shortMessage/timedOut, which the fake provides; execa's method type is an intersection of call signatures (bind, template-tag, array forms) that no concrete mock is directly comparable to, so the conversion must pass through unknown.
   const execaFn = execaMock as unknown as ExecaFn;
+
   return { execaFn, execaMock };
 };
 
@@ -113,6 +115,7 @@ describe("runAgent", () => {
     // A `.cmd` shim on Windows would cut an argument at its first newline.
     // The script echoes stdin back on stderr, which runAgent captures.
     const prompt = "line one\nline two\nline three";
+
     const result = await runAgent(
       scriptAdapter("process.exitCode=1;process.stdin.pipe(process.stderr)"),
       prompt

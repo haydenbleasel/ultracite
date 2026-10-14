@@ -116,12 +116,15 @@ export const getVscodeConfig = (linter: ProviderId = "biome") => {
     case "biome": {
       return deepmerge(vscodeBaseConfig, vscodeBiomeConfig);
     }
+
     case "eslint": {
       return deepmerge(vscodeBaseConfig, vscodeEslintConfig);
     }
+
     case "oxlint": {
       return deepmerge(vscodeBaseConfig, vscodeOxlintConfig);
     }
+
     default: {
       return vscodeBaseConfig;
     }
@@ -284,12 +287,15 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
     case "biome": {
       return deepmerge(zedBaseConfig, zedBiomeConfig);
     }
+
     case "eslint": {
       return deepmerge(zedBaseConfig, zedEslintConfig);
     }
+
     case "oxlint": {
       return deepmerge(zedBaseConfig, zedOxcConfig);
     }
+
     default: {
       return zedBaseConfig;
     }

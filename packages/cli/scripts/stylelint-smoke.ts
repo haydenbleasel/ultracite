@@ -220,11 +220,13 @@ const main = async () => {
 
   try {
     await writeFixture(root);
+
     const { results } = await stylelint.lint({
       allowEmptyInput: true,
       cwd: root,
       files: "**/*.{css,scss,less}",
     });
+
     const byFile = new Map(
       results.map((result) => [
         path
@@ -238,25 +240,32 @@ const main = async () => {
     for (const [relative, file] of Object.entries(files)) {
       const result = byFile.get(relative);
       const ignored = result === undefined || result.ignored === true;
+
       if ("ignored" in file && file.ignored) {
         if (!ignored) {
           failures.push(`${relative}: should be ignored`);
         }
+
         continue;
       }
+
       if (!result || ignored) {
         failures.push(`${relative}: was not linted`);
         continue;
       }
+
       for (const warning of result.invalidOptionWarnings) {
         failures.push(`${relative}: ${warning.text}`);
       }
+
       const rules = new Set(result.warnings.map((warning) => warning.rule));
+
       if (file.expect.length === 0) {
         for (const warning of result.warnings) {
           failures.push(`${relative}:${warning.line} ${warning.text}`);
         }
       }
+
       for (const expected of file.expect) {
         if (!rules.has(expected)) {
           failures.push(`${relative}: expected ${expected} to report`);
@@ -269,9 +278,11 @@ const main = async () => {
 
   if (failures.length > 0) {
     console.error(`${failures.length} Stylelint smoke failure(s):`);
+
     for (const failure of failures) {
       console.error(`  ✗ ${failure}`);
     }
+
     process.exit(1);
   }
 

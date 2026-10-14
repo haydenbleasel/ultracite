@@ -58,6 +58,7 @@ const documentationPluginEntries = [
 
 const exportDeclaration =
   ":matches(ExportNamedDeclaration, ExportDefaultDeclaration)";
+
 const publicMember =
   ':not([accessibility="private"], [accessibility="protected"], [key.type="PrivateIdentifier"], [kind="set"])';
 
@@ -683,6 +684,7 @@ export default config;
 export const selectJsPlugins = (pluginNames) => {
   const names = new Set(pluginNames);
   const isSelectedRule = ([ruleName]) => names.has(ruleName.split("/")[0]);
+
   const documentationOverrides =
     names.has("jsdoc-js") || names.has("tsdoc")
       ? [buildDocumentationOverride(names)]

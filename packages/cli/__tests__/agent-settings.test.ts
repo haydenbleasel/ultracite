@@ -7,13 +7,16 @@ const aider = {
   path: ".aider.conf.yml",
   readKey: ["read"],
 };
+
 const gemini = {
   defaultRead: ["GEMINI.md"],
   path: ".gemini/settings.json",
   readKey: ["context", "fileName"],
 };
+
 const mergeJson = (existing: string) =>
   mergeAgentSettings(existing, gemini, "AGENTS.md", "npx ultracite fix");
+
 const merge = (existing: string, fixCommand = "npx ultracite fix") =>
   mergeAgentSettings(existing, aider, "AGENTS.md", fixCommand);
 
@@ -111,6 +114,7 @@ describe("mergeAgentSettings with JSON", () => {
   test("leaves settings that already list AGENTS.md unchanged", () => {
     const existing =
       '{\n  // ours\n  "context": { "fileName": ["AGENTS.md"] }\n}\n';
+
     expect(mergeJson(existing)).toBe(existing);
   });
 

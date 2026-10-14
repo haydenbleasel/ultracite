@@ -52,8 +52,10 @@ export const formatMs = (ms: number): string =>
 /** A run by its file count. */
 export const runFor = (files: number): BenchmarkRun => {
   const run = benchmarkRuns.find((candidate) => candidate.files === files);
+
   if (!run) {
     throw new Error(`No benchmark run for ${files} files`);
   }
+
   return run;
 };

@@ -13,6 +13,7 @@ import { restoreFileSystemMock } from "./mock-fs";
 
 // mock.module is process-wide; put nypm and node:fs back for later suites.
 const realNypm = { ...nypm };
+
 afterAll(() => {
   mock.module("nypm", () => realNypm);
   restoreFileSystemMock();
@@ -115,9 +116,11 @@ const mockYarnProject = (files: Record<string, string>) => {
       const name = Object.keys(files).find((file) =>
         String(filePath).endsWith(file)
       );
+
       if (name === undefined) {
         throw new Error("ENOENT");
       }
+
       return files[name];
     }),
   }));

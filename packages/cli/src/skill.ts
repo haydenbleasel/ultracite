@@ -60,11 +60,12 @@ const ownDirectoryAgents = new Map([
 const skillAgents = (chosenAgents: readonly string[] = []): string[] => [
   ...new Set([
     "universal",
-    ...[...projectAgentDirectories]
-      .filter(([directory]) => exists(directory))
-      .map(([, agent]) => agent),
+    ...[...projectAgentDirectories].flatMap(([directory, agent]) =>
+      exists(directory) ? [agent] : []
+    ),
     ...chosenAgents.flatMap((id) => {
       const agent = ownDirectoryAgents.get(id);
+
       return agent ? [agent] : [];
     }),
   ]),
@@ -108,6 +109,7 @@ const isUltraciteSkillInstalledInScope = (
 ) => {
   const fullCommand = buildUltraciteSkillListCommand(packageManager, global);
   const [command, ...args] = fullCommand.split(" ");
+
   const result = spawnSync(command, args, {
     stdio: "pipe",
   });
@@ -153,6 +155,7 @@ export const installUltraciteSkill = ({
     true,
     agents
   );
+
   const [command, ...args] = fullCommand.split(" ");
   const s = spinner();
 
@@ -163,6 +166,7 @@ export const installUltraciteSkill = ({
   const result = spawnSync(command, args, {
     stdio: "pipe",
   });
+
   const didInstall = !result.error && result.status === 0;
 
   if (!quiet) {

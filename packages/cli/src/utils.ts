@@ -22,6 +22,7 @@ const pnpmWorkspaceFile = "pnpm-workspace.yaml";
 export const exists = (filePath: string): boolean => {
   try {
     accessSync(filePath);
+
     return true;
   } catch {
     return false;
@@ -34,6 +35,7 @@ export const isMonorepo = (): boolean => {
   }
 
   const pkgJson = readPackageJsonSync();
+
   if (!pkgJson) {
     return false;
   }
@@ -43,6 +45,7 @@ export const isMonorepo = (): boolean => {
 
 export const ensureDirectory = (filePath: string): void => {
   const dir = path.dirname(filePath);
+
   if (dir !== ".") {
     const cleanDir = dir.startsWith("./") ? dir.slice(2) : dir;
     mkdirSync(cleanDir, { recursive: true });
@@ -51,6 +54,7 @@ export const ensureDirectory = (filePath: string): void => {
 
 const isInsidePath = (target: string, root: string): boolean => {
   const relativePath = path.relative(root, target);
+
   return (
     relativePath === "" ||
     (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
@@ -81,9 +85,11 @@ const getRealPathOfNearestExistingAncestor = (target: string): string => {
       }
 
       const parent = path.dirname(current);
+
       if (parent === current) {
         return path.resolve(current);
       }
+
       current = parent;
     }
   }
@@ -116,6 +122,7 @@ export const assertWritableProjectPath = (filePath: string): void => {
     }
 
     const realTargetPath = getRealPath(targetPath);
+
     if (!isInsidePath(realTargetPath, projectRoot)) {
       throw new Error(`Refusing to write outside project: ${filePath}`);
     }
@@ -190,12 +197,14 @@ export const editPackageJson = async (
 
   const { eol = "\n", insertSpaces, tabSize } = detectJsonFormatting(content);
   const indent = insertSpaces ? tabSize : "\t";
+
   const serialized = JSON.stringify(packageJson, null, indent).replaceAll(
     "\n",
     eol
   );
 
   await writeProjectFile(packageJsonPath, `${serialized}${eol}`);
+
   return true;
 };
 
@@ -256,7 +265,9 @@ const withEslintPeer = (existing: JsonValue | undefined): JsonObject => {
   if (isJsonObject(existing)) {
     return { ...existing, eslint: ESLINT_PEER_OVERRIDE };
   }
+
   const version = z.string().safeParse(existing);
+
   return version.success
     ? { ".": version.data, eslint: ESLINT_PEER_OVERRIDE }
     : { eslint: ESLINT_PEER_OVERRIDE };
@@ -279,8 +290,10 @@ export const addEslintPeerOverrides = async (
     const overrides: JsonObject = isJsonObject(packageJson.overrides)
       ? { ...packageJson.overrides }
       : {};
+
     const missing = packageNames.filter((name) => {
       const existing = overrides[name];
+
       return !(isJsonObject(existing) && "eslint" in existing);
     });
 
@@ -291,7 +304,9 @@ export const addEslintPeerOverrides = async (
     for (const name of missing) {
       overrides[name] = withEslintPeer(overrides[name]);
     }
+
     packageJson.overrides = overrides;
+
     return true;
   });
 };
@@ -325,6 +340,7 @@ export const validateFrameworkName = (name: string): string => {
       `Invalid framework name "${name}": must match ${SAFE_IDENTIFIER}`
     );
   }
+
   return name;
 };
 
@@ -415,6 +431,7 @@ export const oxlintConfigNames = [
   "oxlint.config.ts",
   "oxlint.config.mts",
 ] as const;
+
 export const oxfmtConfigNames = [
   "oxfmt.config.ts",
   "oxfmt.config.mts",
@@ -509,6 +526,7 @@ const collectDeps = (pkg: DependencyFields | undefined): string[] => {
   if (!pkg) {
     return [];
   }
+
   return [
     ...Object.keys(pkg.dependencies ?? {}),
     ...Object.keys(pkg.devDependencies ?? {}),
@@ -538,6 +556,7 @@ export const detectFrameworks = async (): Promise<Framework[]> => {
 
     for (const dep of deps) {
       const frameworks = FRAMEWORK_DEPENDENCIES.get(dep);
+
       if (frameworks) {
         for (const framework of frameworks) {
           detected.add(framework);

@@ -36,11 +36,13 @@ const mockProject = (
     rm: mock((path: string) => {
       removed.add(path);
       Reflect.deleteProperty(files, path);
+
       return Promise.resolve();
     }),
     writeFile: mock((path: string, content: string) => {
       written.set(path, content);
       files[path] = content;
+
       return Promise.resolve();
     }),
   }));
@@ -61,6 +63,7 @@ const setUp = async (
 
   try {
     const result = await writeAgentFiles(selection, packageManager, linter);
+
     return { result, written };
   } finally {
     restoreFileSystemMock();
@@ -162,6 +165,7 @@ describe("rule file re-runs", () => {
 
   test("replaces the block of a CRLF file and keeps its line endings", async () => {
     const crlf = rules.replaceAll("\n", "\r\n");
+
     const { written } = await setUp(
       { "AGENTS.md": `Intro\r\n\r\n${crlf}` },
       ["codex"],

@@ -22,9 +22,11 @@ const OXLINT_LINE_WIDTH = 80;
 
 const oxlintExtends = (presets: string[]): string => {
   const singleLine = `  extends: [${presets.join(", ")}],`;
+
   if (singleLine.length <= OXLINT_LINE_WIDTH) {
     return singleLine;
   }
+
   return `  extends: [\n${presets.map((preset) => `    ${preset},`).join("\n")}\n  ],`;
 };
 

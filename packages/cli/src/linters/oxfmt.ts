@@ -57,7 +57,9 @@ const generateConfigContent = (extras: OxfmtExtras = emptyExtras()) => {
     `import ${extras.ultraciteLocal} from "${ULTRACITE_OXFMT}";`,
     ...extras.imports,
   ].join("\n");
+
   const statements = extras.statements.join("\n\n");
+
   const entries = renderEntries(
     [
       { comment: null, text: `...${extras.ultraciteLocal}` },
@@ -140,6 +142,7 @@ const mergeRcConfig = (rc: JsonObject, extras: OxfmtExtras): void => {
           `...${extras.ultraciteLocal}.ignorePatterns`,
           ...value.map((item) => renderJsonValue(item, ARRAY_ITEM_INDENT)),
         ];
+
         extras.properties.push({
           comment: null,
           text: `ignorePatterns: [\n${items
@@ -200,13 +203,16 @@ export const oxfmt = {
       log.warn(
         `Both ${fileName(oxfmtTsConfigPath)} and ${fileName(oxfmtMtsConfigPath)} exist, and oxfmt won't load either, so they were left unchanged. Delete one and re-run \`ultracite init\`.`
       );
+
       return;
     }
 
     const rcPaths = oxfmtRcPaths.filter(exists);
+
     const rcContents = await Promise.all(
       rcPaths.map((rcPath) => readFile(rcPath, "utf-8"))
     );
+
     const rcConfigs: JsonObject[] = [];
 
     for (const [index, contents] of rcContents.entries()) {
@@ -219,6 +225,7 @@ export const oxfmt = {
         log.warn(
           `Could not parse ${rcFile}, so the oxfmt config was left unchanged. oxfmt won't run with both ${rcFile} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
         );
+
         return;
       }
 
@@ -231,6 +238,7 @@ export const oxfmt = {
       log.warn(
         `Could not parse ${fileName(paths.existing ?? paths.target)}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
+
       return;
     }
 
@@ -243,6 +251,7 @@ export const oxfmt = {
     // A .ts config in a "commonjs" package can't load, so it moved to .mts.
     const renamed =
       paths.existing && paths.existing !== paths.target ? paths.existing : null;
+
     await Promise.all(
       [...rcPaths, ...(renamed ? [renamed] : [])].map((stalePath) =>
         rm(stalePath, { force: true })

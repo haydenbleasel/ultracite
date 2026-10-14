@@ -25,6 +25,7 @@ export const splitTypeChecked = (prefix, plugin, rules, unmarked = []) => {
       )
       .map(([name]) => `${prefix}/${name}`)
   );
+
   const pick = (typeChecked) =>
     Object.fromEntries(
       Object.entries(rules).filter(

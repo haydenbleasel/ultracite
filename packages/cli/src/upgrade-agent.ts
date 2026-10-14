@@ -62,9 +62,11 @@ export const migrateWithAgent = async (
   assertAgentAvailable(adapter);
 
   const s = spinner();
+
   const versions = context.guides
     .map((guide) => `v${guide.version}`)
     .join(", ");
+
   s.start(`${adapter.label} is applying the ${versions} upgrade guides...`);
 
   const result = await runAgent(adapter, buildUpgradePrompt(context));
@@ -74,7 +76,9 @@ export const migrateWithAgent = async (
     const note = result.timedOut
       ? `${adapter.label} timed out after ${AGENT_TIMEOUT_MS / MS_PER_MINUTE} minutes.`
       : `${adapter.label} exited with an error: ${result.stderr.trim().slice(-STDERR_NOTE_LENGTH)}`;
+
     s.stop(note);
+
     return { failure: note, remaining };
   }
 
@@ -83,5 +87,6 @@ export const migrateWithAgent = async (
       ? `${adapter.label} brought the configuration up to date.`
       : `${adapter.label} finished, but some changes are still missing.`
   );
+
   return { failure: null, remaining };
 };

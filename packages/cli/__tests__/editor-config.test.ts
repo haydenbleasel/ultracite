@@ -206,6 +206,7 @@ const mockSettingsFile = (
   const writeFile = mock((_path: string, _content: string) =>
     Promise.resolve()
   );
+
   const mkdirSync = mock(() => {});
   const warn = mock((_message: string) => {});
 
@@ -307,7 +308,9 @@ const mockSpawn = (results: Record<string, SpawnSyncResult> = {}) => {
       _options: SpawnSyncOptions
     ): SpawnSyncResult => results[command] ?? { status: 0 }
   );
+
   mock.module("../src/spawn-sync", () => ({ spawnSync: spawn }));
+
   return spawn;
 };
 

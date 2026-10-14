@@ -88,9 +88,11 @@ const sources = import.meta.glob<string>("../blog/*.mdx", {
 
 const slugOf = (path: string): string => {
   const slug = SLUG.exec(path)?.groups?.slug;
+
   if (!slug) {
     throw new Error(`Couldn't read a post slug from ${path}.`);
   }
+
   return slug;
 };
 
@@ -102,6 +104,7 @@ const requireText = (
   if (!value?.trim()) {
     throw new Error(`${file}: frontmatter needs a "${key}".`);
   }
+
   return value;
 };
 
@@ -111,11 +114,13 @@ const toDate = (
   value: Date | string | undefined
 ): Date => {
   const date = value instanceof Date ? value : new Date(value ?? "");
+
   if (Number.isNaN(date.getTime())) {
     throw new TypeError(
       `${file}: frontmatter "${key}" must be a date like 2026-10-10.`
     );
   }
+
   return date;
 };
 
@@ -127,6 +132,7 @@ const countMinutes = (source: string): number => {
     .replaceAll(MDX_STATEMENT, "")
     .split(WHITESPACE)
     .filter(Boolean).length;
+
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 };
 
@@ -135,6 +141,7 @@ const toPost = (path: string, data: PostFrontmatter): Post => {
   const file = `blog/${slug}.mdx`;
 
   const authorId = requireText(file, "author", data.author);
+
   if (!isAuthorId(authorId)) {
     throw new Error(
       `${file}: unknown author "${authorId}". Add them to authors in lib/blog.ts.`
@@ -164,9 +171,11 @@ export const posts: Post[] = Object.entries(frontmatters)
 export const postFor = (file: string): Post => {
   const slug = slugOf(file);
   const post = posts.find((candidate) => candidate.slug === slug);
+
   if (!post) {
     throw new Error(`${file} isn't a post in apps/docs/blog.`);
   }
+
   return post;
 };
 

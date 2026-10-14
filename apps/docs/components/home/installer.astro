@@ -15,11 +15,13 @@ const { class: className, command, tone = "default", wide = false } = Astro.prop
 const inverse = tone === "inverse";
 
 const terminal = command ?? "npx ultracite@latest init";
+
 // Pages that preselect an engine, agent or editor pass their own command and
 // keep the plain field. The generic install can also be copied as a prompt to
 // paste into a coding agent, which picks the presets by reading the project.
 // The field shows it on one truncated line; Copy copies it as written.
 const [major] = latestVersion.split(".");
+
 const prompt = command
   ? undefined
   : [
@@ -150,6 +152,7 @@ const modes = [
       tab.setAttribute("aria-selected", String(selected));
       tab.tabIndex = selected ? 0 : -1;
     }
+
     for (const part of el.querySelectorAll<HTMLElement>("[data-hp-only]")) {
       part.hidden = part.dataset.hpOnly !== currentMode;
     }
@@ -157,6 +160,7 @@ const modes = [
 
   const selectMode = (mode: Mode) => {
     currentMode = mode;
+
     for (const el of document.querySelectorAll<HTMLElement>(".hp-installer")) {
       if (el.querySelector("[data-hp-mode]")) {
         showMode(el);
@@ -172,18 +176,22 @@ const modes = [
     if (el.dataset.hpBound) {
       return;
     }
+
     const input = el.querySelector<HTMLInputElement>(".hp-cmd");
     const prompt = el.querySelector<HTMLInputElement>(".hp-prompt");
     const copyBtn = el.querySelector<HTMLButtonElement>(".hp-copy");
     const copyIcon = el.querySelector<SVGElement>(".hp-copy-icon");
     const checkIcon = el.querySelector<SVGElement>(".hp-check-icon");
     const status = el.querySelector<HTMLElement>(".hp-copy-status");
+
     if (!(input && copyBtn && copyIcon && checkIcon && status)) {
       return;
     }
+
     el.dataset.hpBound = "true";
 
     const tabs = [...el.querySelectorAll<HTMLButtonElement>("[data-hp-mode]")];
+
     for (const tab of tabs) {
       tab.addEventListener("click", () => {
         selectMode(tab.dataset.hpMode === "prompt" ? "prompt" : "terminal");
@@ -192,14 +200,17 @@ const modes = [
         if (!ARROW_KEYS.has(event.key)) {
           return;
         }
+
         event.preventDefault();
         const next = tabs.find((other) => other !== tab);
+
         if (next) {
           next.click();
           next.focus();
         }
       });
     }
+
     if (tabs.length > 0) {
       showMode(el);
     }
@@ -208,6 +219,7 @@ const modes = [
     copyBtn.addEventListener("click", async () => {
       clearTimeout(timer);
       const field = prompt && currentMode === "prompt" ? prompt : input;
+
       try {
         // The prompt field shows one flattened line; copy it as written.
         await navigator.clipboard.writeText(field.dataset.hpCopy ?? field.value);
@@ -217,8 +229,10 @@ const modes = [
         // success check for a copy that never happened.
         field.select();
         status.textContent = `Copy failed. The ${field === prompt ? "prompt" : "command"} is selected.`;
+
         return;
       }
+
       copyIcon.classList.add("hidden");
       checkIcon.classList.remove("hidden");
       status.textContent = "Copied to clipboard";
@@ -237,5 +251,6 @@ const modes = [
   };
 
   init();
+
   document.addEventListener("astro:page-load", init);
 </script>

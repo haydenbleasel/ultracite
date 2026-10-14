@@ -135,10 +135,13 @@ const setup = (options: SetupOptions = {}): Harness => {
     projectDependencies = {},
     versions = [],
   } = options;
+
   warn.mockClear();
+
   const migrateWithAgent = mock(() =>
     Promise.resolve({ failure: null, remaining: leftAfterAgent })
   );
+
   mock.module("../src/upgrade-guides", () => ({
     ...realUpgradeGuides,
     findPendingGuides: mock(() => pending),
@@ -149,16 +152,22 @@ const setup = (options: SetupOptions = {}): Harness => {
   }));
   // Records the order of installs and package.json override edits.
   const steps: string[] = [];
+
   const addDevDependency = mock((packages: string[]) => {
     steps.push(`install ${packages.join(" ")}`);
+
     return installError ? Promise.reject(installError) : Promise.resolve();
   });
+
   const addEslintPeerOverrides = mock((names: readonly string[]) => {
     steps.push(`overrides ${names.join(" ")}`);
+
     return Promise.resolve();
   });
+
   const spawnSync = mock(() => ({ status: 0 }));
   const findInstalledPackage = mock((): InstalledPackage | null => null);
+
   for (const version of versions) {
     findInstalledPackage.mockReturnValueOnce(version);
   }
@@ -208,6 +217,7 @@ const setup = (options: SetupOptions = {}): Harness => {
 
 const loadUpgrade = async () => {
   const module = await import("../src/commands/upgrade");
+
   return module;
 };
 
@@ -339,13 +349,16 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed(runningVersion)],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
 
     expect(harness.addDevDependency).toHaveBeenCalledTimes(2);
+
     const [[selfPackages], [toolchainPackages]] =
       harness.addDevDependency.mock.calls;
+
     expect(selfPackages).toEqual(["ultracite@latest"]);
     expect(toolchainPackages).toEqual([`@biomejs/biome@${biomeVersion}`]);
     expect(harness.spawnSync).not.toHaveBeenCalled();
@@ -360,6 +373,7 @@ describe("upgrade", () => {
       },
       versions: [installed(runningVersion), installed(runningVersion)],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
@@ -376,6 +390,7 @@ describe("upgrade", () => {
       projectDependencies: { "eslint-plugin-react": "^7.0.0" },
       versions: [installed(runningVersion), installed(runningVersion)],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "pnpm" })).resolves.toBe(0);
@@ -387,6 +402,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "npm" })).resolves.toBe(0);
@@ -410,6 +426,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade()).resolves.toBe(0);
@@ -426,6 +443,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],
     });
+
     harness.spawnSync.mockReturnValue({ status: 1 });
     const { upgrade } = await loadUpgrade();
 
@@ -436,6 +454,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0", {})],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await upgrade({ pm: "npm" });
@@ -449,6 +468,7 @@ describe("upgrade", () => {
       linter: "eslint",
       projectDependencies: { "eslint-plugin-react": "^7.0.0" },
     });
+
     const { upgrade } = await loadUpgrade();
 
     await upgrade({ pm: "npm", skipSelf: true });
@@ -475,6 +495,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed(runningVersion)],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ pm: "npm", version: "7" })).resolves.toBe(0);
@@ -529,6 +550,7 @@ describe("upgrade", () => {
     const harness = setup({
       versions: [installed("7.4.2"), installed("99.0.0")],
     });
+
     const { upgrade } = await loadUpgrade();
 
     await expect(upgrade({ agent: "codex", pm: "npm" })).resolves.toBe(0);
@@ -536,6 +558,7 @@ describe("upgrade", () => {
     const handOff = harness.spawnSync.mock.calls.find(
       ([command]) => command === process.execPath
     );
+
     expect(handOff?.[1]).toEqual([
       path.join("/project/node_modules/ultracite", "dist/index.js"),
       "upgrade",

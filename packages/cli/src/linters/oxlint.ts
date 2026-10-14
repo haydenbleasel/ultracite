@@ -65,6 +65,7 @@ const oxlintJsPluginNames = [
 ] as const;
 
 type OxlintJsPlugin = (typeof oxlintJsPluginNames)[number];
+
 type OxlintSelectableJsPlugin = (typeof oxlintSelectableJsPluginNames)[number];
 
 const isSelectableJsPlugin = (
@@ -115,6 +116,7 @@ const getOxlintConfigIdentifier = (configPath: string) => {
   const name = configPath
     .replace(/^ultracite\/oxlint\//u, "")
     .replaceAll("/", "-");
+
   return name.replaceAll(/-(?<letter>[a-z])/gu, (_, letter: string) =>
     letter.toUpperCase()
   );
@@ -195,6 +197,7 @@ const generateConfigContent = (
   if (npmJsPlugins.includes("oxlint-plugin-react-doctor")) {
     for (const framework of reactDoctorFrameworkAddOns) {
       const addOn = getOxlintConfigPath(`${framework}/js-plugins`);
+
       if (
         resolvedExtends.includes(getOxlintConfigPath(framework)) &&
         !resolvedExtends.includes(addOn)
@@ -231,7 +234,9 @@ const generateConfigContent = (
   const hasJsPluginSettings =
     npmJsPlugins.includes("oxlint-plugin-react-doctor") ||
     hasFullJsPluginsPreset;
+
   const jsPluginImports = ["selectJsPlugins"];
+
   if (hasJsPluginSettings) {
     jsPluginImports.unshift("jsPluginSettings");
   }
@@ -254,15 +259,18 @@ const generateConfigContent = (
   const pluginNames = npmJsPlugins
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
     .join(", ");
+
   // The selection is bound to a `jsPlugins` const (mirroring the full
   // preset's default-import identifier) so it can be both extended and
   // hoisted onto the root config below.
   const jsPluginsIdentifier = getOxlintConfigIdentifier(
     getOxlintConfigPath("js-plugins")
   );
+
   const selectionBlock = hasJsPlugins
     ? `\nconst ${jsPluginsIdentifier} = selectJsPlugins([${pluginNames}]);\n`
     : "";
+
   const extendsEntries = [
     ...resolvedExtends.map((ext) => getOxlintConfigIdentifier(ext)),
     ...(hasJsPlugins ? [jsPluginsIdentifier] : []),
@@ -281,17 +289,21 @@ const generateConfigContent = (
       ? [getOxlintConfigIdentifier(getOxlintConfigPath(shadcnPreset))]
       : []),
   ];
+
   let jsPluginsValue: string | null = null;
+
   if (hoistedJsPluginIdentifiers.length === 1) {
     jsPluginsValue = `${hoistedJsPluginIdentifiers[0]}.jsPlugins`;
   } else if (hoistedJsPluginIdentifiers.length > 1) {
     const spread = hoistedJsPluginIdentifiers
       .map((identifier) => `...${identifier}.jsPlugins`)
       .join(", ");
+
     jsPluginsValue = `[${spread}]`;
   }
 
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
+
   const extendsBlock =
     singleLineExtends.length <= generatedLineWidth &&
     extras.extendsEntries.length === 0
@@ -309,6 +321,7 @@ const generateConfigContent = (
     hasJsPluginSettings,
     hoistedJsPlugins: hoistedJsPluginIdentifiers,
   };
+
   const generatedProperty = (
     property: OverridableProperty,
     value: string | null
@@ -321,6 +334,7 @@ const generateConfigContent = (
   // no-implied-eval never see `setTimeout("…")` as the global. It goes
   // before `extends` to keep the keys sorted.
   const envProperty = generatedProperty("env", "core.env");
+
   const properties = [
     generatedProperty("ignorePatterns", "core.ignorePatterns"),
     generatedProperty("jsPlugins", jsPluginsValue),
@@ -368,15 +382,18 @@ const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
   const match =
     SELECT_JS_PLUGINS_RE.exec(contents) ??
     SELECTED_JS_PLUGIN_NAMES_RE.exec(contents);
+
   if (!match?.groups?.names) {
     return [];
   }
 
-  return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)]
-    .map((nameMatch) => jsPluginsByConfigName.get(nameMatch.groups?.name ?? ""))
-    .filter(
-      (plugin): plugin is OxlintSelectableJsPlugin => plugin !== undefined
-    );
+  return [...match.groups.names.matchAll(/"(?<name>[^"]+)"/gu)].flatMap(
+    (nameMatch) => {
+      const plugin = jsPluginsByConfigName.get(nameMatch.groups?.name ?? "");
+
+      return plugin === undefined ? [] : [plugin];
+    }
+  );
 };
 
 // Any reference to an Ultracite oxlint preset: an import source
@@ -387,6 +404,7 @@ const ULTRACITE_PRESET_RE =
 
 const toUltracitePreset = (reference: string): string | null => {
   const preset = ULTRACITE_PRESET_RE.exec(reference)?.groups?.preset;
+
   return preset ? getOxlintConfigPath(preset) : null;
 };
 
@@ -460,6 +478,7 @@ const readExistingConfig = (
     const userSpecifiers = moduleImport.namedSpecifiers.filter(
       (specifier) => !generatedNamedImports.has(specifier.local)
     );
+
     if (userSpecifiers.length > 0) {
       extras.imports.push(
         renderImport(
@@ -541,9 +560,7 @@ const findPresetReferences = (contents: string): string[] => {
     ...contents.matchAll(
       /import \w+(?:\s*,\s*\{[^}]*\})?\s+from ["'](?<source>[^"']+)["']/gu
     ),
-  ]
-    .map((match) => toUltracitePreset(match.groups?.source ?? ""))
-    .filter((preset) => preset !== null);
+  ].flatMap((match) => toUltracitePreset(match.groups?.source ?? "") ?? []);
 
   if (presets.length > 0) {
     return presets;
@@ -551,9 +568,9 @@ const findPresetReferences = (contents: string): string[] => {
 
   const body = /extends:\s*\[(?<body>[\s\S]*?)\]/u.exec(contents)?.groups?.body;
 
-  return [...(body ?? "").matchAll(/"(?<value>[^"]+)"/gu)]
-    .map((match) => toUltracitePreset(match.groups?.value ?? ""))
-    .filter((preset) => preset !== null);
+  return [...(body ?? "").matchAll(/"(?<value>[^"]+)"/gu)].flatMap(
+    (match) => toUltracitePreset(match.groups?.value ?? "") ?? []
+  );
 };
 
 const rcSchema = z.record(z.string(), z.json());
@@ -608,6 +625,7 @@ const isJsonObject = (value: JsonValue): value is JsonObject =>
 const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
   const { extras, presets } = existing;
   const unmigrated: string[] = [];
+
   const presentKeys = new Set(
     extras.properties.map((property) => property.text.split(":")[0]?.trim())
   );
@@ -620,6 +638,7 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
     if (key === "extends" && isJsonArray(value)) {
       for (const reference of value) {
         const preset = toUltracitePreset(String(reference));
+
         if (preset) {
           presets.push(preset);
         } else {
@@ -736,11 +755,14 @@ const generateWorkspaceConfigContent = (
         `import ${getOxlintConfigIdentifier(preset)} from "${preset}";`
     ),
   ].join("\n");
+
   const extendsEntries = [
     rootConfigIdentifier,
     ...presets.map(getOxlintConfigIdentifier),
   ];
+
   const singleLineExtends = `  extends: [${extendsEntries.join(", ")}],`;
+
   const extendsBlock =
     singleLineExtends.length <= generatedLineWidth
       ? singleLineExtends
@@ -801,9 +823,11 @@ export const oxlint = {
   }: WorkspaceFrameworks): Promise<string> => {
     const root = resolveOxlintConfigPath();
     const rootConfigPath = root.existing ?? root.target;
+
     const rootContents = exists(rootConfigPath)
       ? await readFile(rootConfigPath, "utf-8")
       : "";
+
     const presets = frameworks.map((framework) =>
       getOxlintConfigPath(validateFrameworkName(framework))
     );
@@ -818,6 +842,7 @@ export const oxlint = {
       findPresetReferences(rootContents).includes(
         getOxlintConfigPath("js-plugins")
       );
+
     if (hasReactDoctor) {
       for (const framework of reactDoctorFrameworkAddOns) {
         if (presets.includes(getOxlintConfigPath(framework))) {
@@ -837,6 +862,7 @@ export const oxlint = {
         presets
       )
     );
+
     return configPath;
   },
   exists: () =>
@@ -855,6 +881,7 @@ export const oxlint = {
       log.warn(
         `Both ${fileName(oxlintTsConfigPath)} and ${fileName(oxlintMtsConfigPath)} exist, and Oxlint won't load either, so they were left unchanged. Delete one and re-run \`ultracite init\`.`
       );
+
       return;
     }
 
@@ -866,6 +893,7 @@ export const oxlint = {
       log.warn(
         `Could not parse ${oxlintRcFile}, so the Oxlint config was left unchanged. Oxlint won't run with both ${oxlintRcFile} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
       );
+
       return;
     }
 
@@ -877,6 +905,7 @@ export const oxlint = {
       log.warn(
         `Could not parse ${fileName(paths.existing ?? paths.target)}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
+
       return;
     }
 
@@ -896,6 +925,7 @@ export const oxlint = {
     // Add framework-specific configs if provided
     for (const framework of opts?.frameworks ?? []) {
       const name = validateFrameworkName(framework);
+
       if (!hasConfig(name)) {
         newExtends.push(getOxlintConfigPath(name));
       }
@@ -905,12 +935,14 @@ export const oxlint = {
     // config had selected.
     const requestedJsPlugins = opts?.jsPlugins ?? [];
     let { jsPlugins } = current;
+
     if (requestedJsPlugins.length > 0) {
       // The full js-plugins preset already enables its plugins, so a
       // selection made on top of it (e.g. adding the documentation plugins)
       // keeps them rather than replacing the preset with just the new ones.
       const extendsFullJsPluginsPreset =
         current.jsPlugins.length === 0 && hasConfig("js-plugins");
+
       jsPlugins =
         extendsFullJsPluginsPreset &&
         requestedJsPlugins.some(isSelectableJsPlugin)
@@ -923,6 +955,7 @@ export const oxlint = {
     const existingOptions = existing.extras.properties.find((property) =>
       OPTIONS_PROPERTY_RE.test(property.text)
     );
+
     const addTypeAware = Boolean(opts?.typeAware) && !existingOptions;
 
     await writeProjectFile(

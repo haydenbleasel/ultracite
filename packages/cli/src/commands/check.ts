@@ -40,6 +40,7 @@ const runBiomeCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("biome", args, {
     stdio: "inherit",
   });
+
   exitOnCommandFailure("Biome", result);
 };
 
@@ -53,6 +54,7 @@ const runEslintCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("eslint", args, {
     stdio: "inherit",
   });
+
   exitOnCommandFailure("ESLint", result);
 };
 
@@ -69,6 +71,7 @@ const runPrettierCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("prettier", args, {
     stdio: "inherit",
   });
+
   exitOnCommandFailure("Prettier", result);
 };
 
@@ -87,6 +90,7 @@ const runStylelintCheck = (files: string[], passthrough: string[]): void => {
 
   if (result.errorCode === "ENOENT") {
     log.warn(STYLELINT_MISSING_MESSAGE);
+
     return;
   }
 
@@ -107,6 +111,7 @@ const runOxlintCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("oxlint", args, {
     stdio: "inherit",
   });
+
   exitOnCommandFailure("Oxlint", result);
 };
 
@@ -123,6 +128,7 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
   const result = spawnSync("oxfmt", args, {
     stdio: "inherit",
   });
+
   exitOnCommandFailure("oxfmt", result);
 };
 
@@ -146,6 +152,7 @@ export const check = (
       ]);
       break;
     }
+
     case "oxlint": {
       runSteps([
         () => runOxfmtCheck(normalizedFiles, []),
@@ -153,6 +160,7 @@ export const check = (
       ]);
       break;
     }
+
     default: {
       runBiomeCheck(normalizedFiles, passthrough);
     }

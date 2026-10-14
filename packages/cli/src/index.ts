@@ -140,6 +140,7 @@ program
         parsedArgs: args,
         rawArgs: getRawArgs(command),
       });
+
       await check(files, passthrough);
     }
   );
@@ -164,6 +165,7 @@ program
         parsedArgs: args,
         rawArgs: getRawArgs(command),
       });
+
       const agentFlags = extractAgentFlags(split.passthrough);
       const { hook, passthrough } = extractHookFlag(agentFlags.passthrough);
       const { agent } = agentFlags;
@@ -184,6 +186,7 @@ program
           hook: true,
           report,
         });
+
         return;
       }
 
@@ -222,11 +225,13 @@ program
   )
   .action(async (opts: UpgradeCommandOptions) => {
     let agent: FixAgent | undefined;
+
     if (opts.claude) {
       agent = "claude";
     } else if (opts.codex) {
       agent = "codex";
     }
+
     process.exitCode = await upgrade({
       agent,
       pm: opts.pm,
@@ -242,13 +247,16 @@ if (!process.env.ULTRACITE_TEST) {
     if (error instanceof LinterExitError) {
       process.exit(error.exitCode);
     }
+
     if (error instanceof UltraciteSetupError) {
       log.error(error.message);
       process.exit(1);
     }
+
     if (error instanceof Error && error.message === DOCTOR_FAILED) {
       process.exit(1);
     }
+
     throw error;
   }
 }

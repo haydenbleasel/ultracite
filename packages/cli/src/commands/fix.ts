@@ -54,6 +54,7 @@ const runTool = (command: string, args: string[], io: FixIo) => {
       (text): text is string => text !== undefined && text.trim() !== ""
     )
   );
+
   return result;
 };
 
@@ -67,6 +68,7 @@ const dropUnsupportedUnsafe = (passthrough: string[]): string[] => {
   log.warn(
     "ESLint has no unsafe fixes, so --unsafe was ignored. It applies Biome's unsafe fixes and Oxlint's dangerous fixes."
   );
+
   return passthrough.filter((arg) => arg !== UNSAFE_FLAG);
 };
 
@@ -147,6 +149,7 @@ const runStylelintFix = (
 
   if (result.errorCode === "ENOENT") {
     log.warn(STYLELINT_MISSING_MESSAGE);
+
     return;
   }
 
@@ -237,6 +240,7 @@ const runLinterFixes = (
       ]);
       break;
     }
+
     case "oxlint": {
       runSteps([
         () => runOxlintFix(files, passthrough, io),
@@ -244,6 +248,7 @@ const runLinterFixes = (
       ]);
       break;
     }
+
     default: {
       runBiomeFix(files, passthrough, io);
     }
@@ -290,11 +295,13 @@ export const fix = (
 
   if (report === "none") {
     runLinterFixes(linter, normalizedFiles, passthrough, { stdio: "inherit" });
+
     return;
   }
 
   if (report === "context") {
     const collected: string[] = [];
+
     try {
       runLinterFixes(linter, normalizedFiles, passthrough, {
         collected,
@@ -304,8 +311,10 @@ export const fix = (
       if (!(error instanceof LinterExitError)) {
         throw error;
       }
+
       process.stdout.write(hookContextOutput(collected));
     }
+
     return;
   }
 
@@ -317,6 +326,7 @@ export const fix = (
     if (error instanceof LinterExitError) {
       throw new LinterExitError(error.commandName, HOOK_FEEDBACK_EXIT_CODE);
     }
+
     throw error;
   }
 };

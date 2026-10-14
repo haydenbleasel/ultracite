@@ -31,6 +31,7 @@ interface Props {
 const { content, id } = Astro.props;
 
 const agent = cliAgents.find((candidate) => candidate.id === id);
+
 if (!agent) {
   throw new Error(`No agent "${id}" in the CLI's table`);
 }
@@ -40,6 +41,7 @@ const details = directory.get(id);
 const name = details?.name ?? agent.name;
 const logo = `/logos/${details?.logo ?? id}.svg`;
 const command = `npx ultracite@latest init --agents ${id}`;
+
 const slug = (text: string): string =>
   text.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-").replaceAll(/^-|-$/gu, "");
 
@@ -51,18 +53,22 @@ const breadcrumbs: Crumb[] = [
 // What init writes for a new npm project on the default linter.
 const ultracite = "npx ultracite";
 const rules = getRules(ultracite, "Oxlint + Oxfmt");
+
 // The rules up to their first divider: the heading, the quick reference
 // and the engine line.
 const rulesLines = rules.split("\n");
+
 const rulesExcerpt = `${rulesLines
   .slice(0, rulesLines.indexOf("---"))
   .join("\n")
   .trimEnd()}\n\n…`;
+
 const hookCommand = `${ultracite} fix --hook`;
 
 const files: { code: string; lang: string; meta?: string; title: string }[] = [
   { code: rulesExcerpt, lang: "md", meta: "Ultracite’s rules", title: "AGENTS.md" },
 ];
+
 if (agent.imports) {
   files.push({
     code: "# Your project notes\n\n@AGENTS.md",
@@ -71,6 +77,7 @@ if (agent.imports) {
     title: agent.imports[0] ?? "CLAUDE.md",
   });
 }
+
 if (agent.rulesCopy) {
   files.push({
     code: rulesExcerpt,
@@ -79,6 +86,7 @@ if (agent.rulesCopy) {
     title: agent.rulesCopy,
   });
 }
+
 if (agent.settings) {
   files.push({
     code: mergeAgentSettings("", agent.settings, "AGENTS.md", `${ultracite} fix`),
@@ -111,6 +119,7 @@ const nextSteps: NextStep[] = [
   ...content.related.slice(0, 3).flatMap((relatedId) => {
     const relatedAgent = cliAgents.find((candidate) => candidate.id === relatedId);
     const relatedDetails = directory.get(relatedId);
+
     return relatedAgent
       ? [
           {

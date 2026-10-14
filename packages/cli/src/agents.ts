@@ -32,9 +32,11 @@ const describeSetup = (agent: Agent): string => {
   if (agent.settings) {
     return `creates ${AGENTS_FILE} and ${agent.settings.path}`;
   }
+
   if (agent.rulesCopy) {
     return `creates ${AGENTS_FILE} and ${agent.rulesCopy}`;
   }
+
   return `creates ${AGENTS_FILE}, imported from your ${agent.imports?.[0] ?? "instructions file"}`;
 };
 
@@ -61,10 +63,12 @@ export const getAgentChoices = (): AgentChoice[] => {
 };
 
 const RULES_HEADER = "# Ultracite Code Standards";
+
 // The last line of every rules block written since the header was
 // introduced, whatever the linter and package manager.
 const RULES_FOOTER_RE =
   /^Most formatting and common issues are automatically fixed by .+ before committing to ensure compliance\.$/u;
+
 const HEADING_RE = /^# /u;
 
 // Where the rules block starting at `start` ends (inclusive): its closing
@@ -152,6 +156,7 @@ const upsertRulesBlock = async (
 ): Promise<boolean> => {
   if (!exists(filePath)) {
     await writeProjectFile(filePath, rules);
+
     return true;
   }
 
@@ -162,6 +167,7 @@ const upsertRulesBlock = async (
     if (replaced !== existing) {
       await writeProjectFile(filePath, replaced);
     }
+
     return false;
   }
 
@@ -173,6 +179,7 @@ const upsertRulesBlock = async (
       ? withLineEndings(rules, eol)
       : `${kept}${eol}${eol}${withLineEndings(rules, eol)}`
   );
+
   return false;
 };
 
@@ -212,6 +219,7 @@ const agentsFileTarget = (): string | null => {
       realpathSync(process.cwd()),
       realpathSync(AGENTS_FILE)
     );
+
     return target === "" || target.startsWith("..") || path.isAbsolute(target)
       ? null
       : target;
@@ -224,7 +232,9 @@ const holdsRules = async (filePath: string): Promise<boolean> => {
   if (!exists(filePath) || isAgentsFile(filePath)) {
     return false;
   }
+
   const contents = await readFile(filePath, "utf-8");
+
   return contents.split(/\r?\n/u).includes(RULES_HEADER);
 };
 
@@ -250,6 +260,7 @@ const removeLegacyRules = async (
     warnings.push(
       `${filePath} is a symbolic link, so Ultracite left the rules an earlier version wrote there. They're in ${AGENTS_FILE} now: remove the "${RULES_HEADER}" section from the file it links to.`
     );
+
     return false;
   }
 
@@ -259,6 +270,7 @@ const removeLegacyRules = async (
   await (nothingLeft
     ? rm(filePath, { force: true })
     : writeProjectFile(filePath, `${rest}${eolOf(existing)}`));
+
   return true;
 };
 
@@ -272,6 +284,7 @@ const importAgentsFile = async (
   const candidates = (agent.imports ?? []).filter((candidate) =>
     exists(candidate)
   );
+
   const [filePath] = candidates;
 
   if (!filePath || candidates.some(isAgentsFile)) {
@@ -281,6 +294,7 @@ const importAgentsFile = async (
   const target = path.posix.relative(path.posix.dirname(filePath), AGENTS_FILE);
   const line = `@${target}`;
   const existing = await readFile(filePath, "utf-8");
+
   const imported = existing
     .split(/\r?\n/u)
     .some((text) => [line, `@./${target}`].includes(text.trim()));
@@ -293,6 +307,7 @@ const importAgentsFile = async (
     warnings.push(
       `${filePath} is a symbolic link, so Ultracite didn't add \`${line}\` to it. Add that import to the file it links to so ${agent.name} reads ${AGENTS_FILE}.`
     );
+
     return null;
   }
 
@@ -302,6 +317,7 @@ const importAgentsFile = async (
     filePath,
     kept === "" ? `${line}${eol}` : `${kept}${eol}${eol}${line}${eol}`
   );
+
   return filePath;
 };
 
@@ -321,10 +337,12 @@ const copyRules = async (
     warnings.push(
       `${filePath} is a symbolic link, so Ultracite didn't copy its rules there. Add the rules from ${AGENTS_FILE} to the file it links to so ${agent.name} sees them.`
     );
+
     return false;
   }
 
   await upsertRulesBlock(filePath, rules);
+
   return true;
 };
 
@@ -340,15 +358,18 @@ const updateSettings = async (
     const lint = settings.lintKey
       ? ` and set \`${settings.lintKey.join(".")}\` to \`${fixCommand}\``
       : "";
+
     warnings.push(
       `${settings.path} is a symbolic link, so Ultracite didn't change it. In the file it links to, add ${AGENTS_FILE} to \`${settings.readKey.join(".")}\`${lint} so ${agent.name} reads the rules.`
     );
+
     return false;
   }
 
   const existing = exists(settings.path)
     ? await readFile(settings.path, "utf-8")
     : "";
+
   const merged = mergeAgentSettings(
     existing,
     settings,
@@ -361,6 +382,7 @@ const updateSettings = async (
   }
 
   await writeProjectFile(settings.path, merged);
+
   return true;
 };
 
@@ -378,9 +400,11 @@ const setUpAgent = async (
 ): Promise<AgentSetup> => {
   const warnings: string[] = [];
   const legacy = agent.legacyRules ?? [];
+
   const cleaned = await Promise.all(
     legacy.map((file) => removeLegacyRules(file, warnings))
   );
+
   const files = legacy.filter((_, index) => cleaned[index]);
 
   if (
@@ -398,6 +422,7 @@ const setUpAgent = async (
   }
 
   const imported = await importAgentsFile(agent, warnings);
+
   if (imported) {
     files.push(imported);
   }
@@ -444,6 +469,7 @@ export const writeAgentFiles = async (
   const rules = getRules(ultracite, provider.name);
   const target = agentsFileTarget();
   const created = target ? await upsertRulesBlock(target, rules) : false;
+
   const warnings = target
     ? []
     : [
@@ -455,9 +481,11 @@ export const writeAgentFiles = async (
       const found = await Promise.all(
         (agent.legacyRules ?? []).map((file) => holdsRules(file))
       );
+
       return found.includes(true);
     })
   );
+
   const toSetUp = agents.filter(
     (agent, index) => selection.includes(agent.id) || legacy[index]
   );

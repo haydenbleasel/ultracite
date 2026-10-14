@@ -51,6 +51,7 @@ const isBrandName = (icon: Props["name"]): icon is keyof typeof brand =>
 
 const isBrand = isBrandName(name);
 const body = isBrand ? `<path d="${brand[name]}"/>` : lucide[name];
+
 const a11y = label
   ? { "aria-label": label, role: "img" }
   : { "aria-hidden": "true" as const };

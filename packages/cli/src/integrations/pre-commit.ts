@@ -14,6 +14,7 @@ import { renderYamlDocument, replaceYamlStrings } from "./yaml-document";
 
 const path = "./.pre-commit-config.yaml";
 const HOOK_ID = "ultracite";
+
 // A `files` pattern rather than `types_or`, because pre-commit's file type
 // tags (from identify) have none for .jsonc, .mts, .cts or .gql.
 const FILES_PATTERN = String.raw`\.(${stagedFileExtensions.join("|")})$`;
@@ -86,6 +87,7 @@ const upgradeFileFilter = (hook: YAML.YAMLMap): boolean => {
   const pair = hook.items.find(
     (item) => YAML.isScalar(item.key) && item.key.value === "types_or"
   );
+
   const types = YAML.isSeq(pair?.value) ? pair.value.toJSON() : null;
 
   if (
@@ -98,6 +100,7 @@ const upgradeFileFilter = (hook: YAML.YAMLMap): boolean => {
 
   pair.key = new YAML.Scalar("files");
   pair.value = new YAML.Scalar(FILES_PATTERN);
+
   return true;
 };
 
@@ -121,6 +124,7 @@ const upgradeUltraciteHook = (hook: YAML.YAMLMap, command: string): boolean => {
     (value) => value === entry,
     command
   );
+
   const fixedWholeProject = hook.get("pass_filenames") === false;
 
   if (fixedWholeProject) {
@@ -158,6 +162,7 @@ export const preCommit = {
     // comments survive.
     if (doc.errors.length > 0) {
       warnManualEdit(command);
+
       return;
     }
 
@@ -169,6 +174,7 @@ export const preCommit = {
 
     if (!YAML.isMap(root)) {
       warnManualEdit(command);
+
       return;
     }
 
@@ -181,6 +187,7 @@ export const preCommit = {
         if (upgradeUltraciteHook(existingHook, command)) {
           await writeProjectFile(path, renderYamlDocument(doc, content));
         }
+
         return;
       }
 
@@ -188,12 +195,14 @@ export const preCommit = {
     } else if (repos === undefined || YAML.isScalar(repos)) {
       if (YAML.isScalar(repos) && repos.value !== null) {
         warnManualEdit(command);
+
         return;
       }
 
       root.set("repos", doc.createNode([createRepoNode(doc, command)]));
     } else {
       warnManualEdit(command);
+
       return;
     }
 

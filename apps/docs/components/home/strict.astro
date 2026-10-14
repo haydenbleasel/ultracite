@@ -5,6 +5,7 @@ import SectionHeading from "./section-heading.astro";
 // Ultracite's Oxlint core + React presets report for it. Each line is a list of
 // [text, kind] tokens; `squiggle` marks the span a diagnostic points at.
 type Token = [string, ("keyword" | "string" | "type" | "tag" | "squiggle")?];
+
 interface Line {
   code: Token[];
   problems?: string;

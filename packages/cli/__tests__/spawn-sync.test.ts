@@ -79,6 +79,7 @@ describe("spawnSync", () => {
       // Windows does not expose POSIX signals through child_process.
       expect(result.status).not.toBe(0);
       expect(result.signal).toBeUndefined();
+
       return;
     }
 
@@ -90,6 +91,7 @@ describe("spawnSync", () => {
   // passed to the executable verbatim, never interpreted by a shell.
   test("passes shell metacharacters through as literal arguments", () => {
     const tricky = "src/my file.ts; echo pwned $HOME";
+
     const result = spawnSync(node, [
       "-e",
       "console.log(process.argv[1])",

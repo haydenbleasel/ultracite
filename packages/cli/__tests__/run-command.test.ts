@@ -73,8 +73,10 @@ describe("runSteps", () => {
     } catch (error) {
       expect(error).toBeInstanceOf(LinterExitError);
       expect(error instanceof LinterExitError && error.exitCode).toBe(1);
+
       return;
     }
+
     throw new Error("runSteps did not throw");
   });
 });

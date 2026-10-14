@@ -10,12 +10,15 @@ import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
 
 const PRESETS = ["core", "react", "next"];
+
 const ruleCounts = new Map([
   ["core", 331],
   ["next", 7],
   ["react", 12],
 ]);
+
 let totalRules = 0;
+
 for (const count of ruleCounts.values()) {
   totalRules += count;
 }
@@ -30,7 +33,9 @@ const notes = new Map(
     const preset = PRESETS.find((name) =>
       line.includes(`"ultracite/biome/${name}"`)
     );
+
     const count = preset ? ruleCounts.get(preset) : undefined;
+
     return count ? [[index, `${count} rules`]] : [];
   })
 );

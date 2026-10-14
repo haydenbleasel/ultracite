@@ -9,12 +9,14 @@ const config = {
 const requireFromCompat = createRequire(
   createRequire(import.meta.url).resolve("eslint-plugin-compat")
 );
+
 const browserslist = requireFromCompat("browserslist");
 
 const projectSetsTargets = () => {
   if (process.env.BROWSERSLIST || process.env.BROWSERSLIST_CONFIG) {
     return true;
   }
+
   try {
     return browserslist.findConfig(process.cwd()) !== undefined;
   } catch {

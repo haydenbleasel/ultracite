@@ -30,6 +30,7 @@ export const localBinCommand = (
   args: string[] = []
 ): string => {
   const target = packageManager === "deno" ? `npm:${bin}` : bin;
+
   return [...localBinRunners[packageManager], target, ...args].join(" ");
 };
 

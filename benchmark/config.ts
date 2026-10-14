@@ -1,26 +1,34 @@
 import process from "node:process";
 
 export const PROVIDERS = ["oxlint", "biome", "eslint"] as const;
+
 export type Provider = (typeof PROVIDERS)[number];
 
 export const COMMANDS = ["check", "fix"] as const;
+
 export type Command = (typeof COMMANDS)[number];
 
 const intFromEnv = (name: string, fallback: number): number => {
   const raw = process.env[name];
+
   if (!raw) {
     return fallback;
   }
+
   const parsed = Math.trunc(Number(raw));
+
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
 const floatFromEnv = (name: string, fallback: number): number => {
   const raw = process.env[name];
+
   if (!raw) {
     return fallback;
   }
+
   const parsed = Number(raw);
+
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
@@ -49,29 +57,35 @@ export const ALPHA = floatFromEnv("BENCH_ALPHA", 0.05);
 /** Commands to run; override with e.g. BENCH_COMMANDS=check to skip fix. */
 export const ACTIVE_COMMANDS: readonly Command[] = (() => {
   const raw = process.env.BENCH_COMMANDS;
+
   if (!raw) {
     return COMMANDS;
   }
+
   const requested = raw
     .split(",")
     .map((value) => value.trim())
     .filter((value): value is Command =>
       COMMANDS.some((command) => command === value)
     );
+
   return requested.length > 0 ? requested : COMMANDS;
 })();
 
 /** Providers to run; override with e.g. BENCH_PROVIDERS=oxlint,biome. */
 export const ACTIVE_PROVIDERS: readonly Provider[] = (() => {
   const raw = process.env.BENCH_PROVIDERS;
+
   if (!raw) {
     return PROVIDERS;
   }
+
   const requested = raw
     .split(",")
     .map((value) => value.trim())
     .filter((value): value is Provider =>
       PROVIDERS.some((provider) => provider === value)
     );
+
   return requested.length > 0 ? requested : PROVIDERS;
 })();

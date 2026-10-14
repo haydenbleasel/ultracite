@@ -326,6 +326,7 @@ describe("hookTargets", () => {
     // macOS resolves `/tmp` to `/private/tmp`.
     const link = path.resolve("/tmp/repo");
     const real = path.resolve("/private/tmp/repo");
+
     const throughSymlink = (target: string) =>
       target.startsWith(link) ? `${real}${target.slice(link.length)}` : target;
 
@@ -579,6 +580,7 @@ describe("hookReport", () => {
       file_path: "/repo/src/b.ts",
       hook_event_name: "afterFileEdit",
     });
+
     expect(hookReport(cursor, { DEVIN_PROJECT_DIR: "/repo" })).toBe("none");
     expect(hookReport("not json", {})).toBe("none");
   });

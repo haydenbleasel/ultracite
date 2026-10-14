@@ -2,6 +2,7 @@ import packageJson from "../package.json" with { type: "json" };
 import type { options } from "./data/options";
 
 type Linter = (typeof options.linters)[number];
+
 type Frameworks = (typeof options.frameworks)[number];
 
 /**
@@ -73,6 +74,7 @@ export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
 // range starts there. @eslint/js is versioned separately from ESLint since 10
 // (its latest is 10.0.x), so it takes its own range.
 const supportedEslintVersion = toolchainPeerRanges.eslint;
+
 export const eslintCoreDevDependencies = {
   "@eslint/js": packageJson.devDependencies["@eslint/js"],
   "@typescript-eslint/eslint-plugin":
@@ -111,6 +113,7 @@ export const eslintCoreDevDependencies = {
   "stylelint-config-standard":
     packageJson.devDependencies["stylelint-config-standard"],
 } satisfies Record<string, string>;
+
 // Extra ESLint devDependencies, keyed by the framework that needs them.
 export const eslintFrameworkDevDependencies = {
   angular: {
@@ -225,6 +228,7 @@ export const eslintPeerOverridePackages: readonly string[] = [
 /** The package name of a `name@version` spec. */
 const specName = (spec: string): string => {
   const versionAt = spec.lastIndexOf("@");
+
   return versionAt > 0 ? spec.slice(0, versionAt) : spec;
 };
 

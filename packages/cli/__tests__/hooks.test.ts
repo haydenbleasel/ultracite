@@ -12,9 +12,11 @@ mock.module("node:fs/promises", () => ({
 
 const npmBiomeCommand =
   "npx ultracite fix --skip=correctness/noUnusedImports --hook";
+
 // The `fix` script command 7.x wrote, before hooks ran ultracite directly.
 const npmScriptBiomeCommand =
   "npm run fix -- --skip=correctness/noUnusedImports --hook";
+
 const npmBiomeCommandWithoutHook =
   "npm run fix -- --skip=correctness/noUnusedImports";
 
@@ -44,6 +46,7 @@ const runUpdate = async (
   await createHooks(hook, packageManager).update();
 
   const [write] = mockWriteFile.mock.calls;
+
   return write ? JSON.parse(write[1]) : undefined;
 };
 
@@ -87,6 +90,7 @@ describe("createHooks", () => {
           if (path === ".cursor/hooks.json") {
             return Promise.resolve();
           }
+
           return Promise.reject(new Error("ENOENT"));
         }),
         mkdir: mock(() => Promise.resolve()),
@@ -99,6 +103,7 @@ describe("createHooks", () => {
           if (path === ".cursor/hooks.json") {
             return;
           }
+
           throw new Error("ENOENT");
         }),
         existsSync: mock(() => false),
@@ -112,6 +117,7 @@ describe("createHooks", () => {
 
     test("create creates directory and hooks.json file", async () => {
       const mockMkdirSync = mock((_path: string) => {});
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -185,6 +191,7 @@ describe("createHooks", () => {
     test("update adds ultracite hook when not present in hooks.json", async () => {
       const existingHooks =
         '{"version": 1, "hooks": {"afterFileEdit": [{"command": "echo test"}]}}';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -215,6 +222,7 @@ describe("createHooks", () => {
 
     test("update skips adding hook when ultracite hook already exists in hooks.json", async () => {
       const existingHooks = `{"version": 1, "hooks": {"afterFileEdit": [{"command": "${npmBiomeCommand}"}]}}`;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -270,6 +278,7 @@ describe("createHooks", () => {
     test("update merges hooks into existing config when ultracite not present", async () => {
       const existingConfig =
         '{"version":1,"hooks":{"postToolUse":[{"type":"command","command":"echo test"}]}}';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -301,6 +310,7 @@ describe("createHooks", () => {
 
     test("update skips when ultracite hook already exists", async () => {
       const existingConfig = `{"hooks":{"postToolUse":[{"type":"command","command":"${npmBiomeCommand}"}]},"version":1}`;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -357,6 +367,7 @@ describe("createHooks", () => {
     test("update merges hooks into existing settings when ultracite is not present", async () => {
       const existingSettings =
         '{"model":"yuanbao-code","permissions":{"bash":true}}';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -392,6 +403,7 @@ describe("createHooks", () => {
 
     test("update skips when ultracite hook already exists in settings", async () => {
       const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommand}"}]}]}}`;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -430,6 +442,7 @@ describe("createHooks", () => {
     test("update leaves a user's own hook alone while upgrading the generated one", async () => {
       const userHook = `{"hooks":[{"type":"command","command":"npm run fix"}]}`;
       const existingSettings = `{"hooks":{"Stop":[${userHook}],"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${npmBiomeCommandWithoutHook}"}]}]}}`;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -463,6 +476,7 @@ describe("createHooks", () => {
     test("update adds the hook next to a user's own hook that runs the fix script", async () => {
       const userHook = `{"hooks":[{"type":"command","command":"npm run fix"}]}`;
       const existingSettings = `{"hooks":{"Stop":[${userHook}]}}`;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -496,6 +510,7 @@ describe("createHooks", () => {
     for (const outdatedCommand of outdatedCommands) {
       test(`update upgrades an outdated hook command (${outdatedCommand})`, async () => {
         const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","timeout":20,"command":"${outdatedCommand}"}]}]}}`;
+
         const mockWriteFile = mock((_path: string, _content: string) =>
           Promise.resolve()
         );
@@ -605,6 +620,7 @@ describe("createHooks", () => {
 
     test("update merges hooks into existing settings when ultracite not present", async () => {
       const existingSettings = '{"model": "claude-3-5-sonnet"}';
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -636,6 +652,7 @@ describe("createHooks", () => {
 
     test("update skips when ultracite hook already exists in settings", async () => {
       const existingSettings = `{"hooks":{"PostToolUse":[{"matcher":"Write|Edit","hooks":[{"type":"command","command":"${npmBiomeCommand}"}]}]}}`;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -792,10 +809,12 @@ const runInProject = async (
     rm: mock((path: string) => {
       removed.add(path);
       Reflect.deleteProperty(files, path);
+
       return Promise.resolve();
     }),
     writeFile: mock((path: string, content: string) => {
       files[path] = content;
+
       return Promise.resolve();
     }),
   }));
@@ -931,6 +950,7 @@ describe("codex hooks", () => {
       hooks: [{ command: "./check-bash.sh", type: "command" }],
       matcher: "Bash",
     };
+
     const { files } = await runInProject("codex", {
       ".codex/hooks.json": JSON.stringify({
         hooks: { PostToolUse: [ownHook], PreToolUse: [ownHook] },

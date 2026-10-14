@@ -147,6 +147,7 @@ describe("findPendingGuides", () => {
   test("needs v8 for Zed formatting with ESLint's language server", () => {
     const eslintConfig =
       'import core from "ultracite/eslint/core";\nexport default [...core];';
+
     const eslintServer = { language_server: { name: "eslint" } };
 
     expect(
@@ -223,6 +224,7 @@ describe("findPendingGuides", () => {
         })
       ).toEqual([]);
     }
+
     // Not a type-checked rule, though its name starts like one.
     expect(
       versionsFor({
@@ -263,6 +265,7 @@ describe("findPendingGuides", () => {
         (framework) => `${framework}/type-aware`
       ),
     ];
+
     const script = `
       const ids = new Set();
       for (const preset of ${JSON.stringify(presets)}) {
@@ -275,6 +278,7 @@ describe("findPendingGuides", () => {
       }
       console.log(JSON.stringify([...ids]));
     `;
+
     const result = Bun.spawnSync([process.execPath, "-e", script], {
       cwd: path.join(import.meta.dir, ".."),
     });
@@ -405,6 +409,7 @@ describe("buildUpgradePrompt", () => {
         commandSources: ["ultracite lint"],
       })
     );
+
     const prompt = buildUpgradePrompt({
       guides,
       linter: "biome",

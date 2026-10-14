@@ -20,6 +20,7 @@ interface Props {
 const { class: className, code, lang, meta, notes, title } = Astro.props;
 
 const LINE_END = /<\/span>$/u;
+
 const escapeHtml = (text: string): string =>
   text
     .replaceAll("&", "&amp;")
@@ -28,12 +29,15 @@ const escapeHtml = (text: string): string =>
 
 const highlighted =
   (await codeBlockHtml({ code, lang, title }, data.config.codeThemes)) ?? "";
+
 const [open = "", body = "", close = ""] =
   highlighted.split(/(?<=<code>)|(?=<\/code>)/u);
+
 const annotated = body
   .split("\n")
   .map((line, index) => {
     const note = notes?.get(index);
+
     return note
       ? line.replace(
           LINE_END,

@@ -74,6 +74,7 @@ const configFiles = [
 type LintStagedFunction = (
   files: string[]
 ) => string | string[] | Promise<string | string[]>;
+
 type ModuleValue =
   | JsonValue
   | LintStagedFunction
@@ -101,26 +102,34 @@ const toJsonValue = (value: ModuleValue): JsonValue | undefined => {
 
   if (Array.isArray(value)) {
     const items: JsonValue[] = [];
+
     for (const item of value) {
       const json = toJsonValue(item);
+
       if (json === undefined) {
         return undefined;
       }
+
       items.push(json);
     }
+
     return items;
   }
 
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- same untyped-module boundary: distinguishes nested config objects from scalars
   if (value !== null && typeof value === "object") {
     const entries: [string, JsonValue][] = [];
+
     for (const [key, entry] of Object.entries(value)) {
       const json = toJsonValue(entry);
+
       if (json === undefined) {
         return undefined;
       }
+
       entries.push([key, json]);
     }
+
     return Object.fromEntries(entries);
   }
 
@@ -144,15 +153,18 @@ const upgradeCommand = (value: JsonValue, command: string): JsonValue => {
   if (typeof value === "string") {
     return isGeneratedUltraciteFixCommand(value) ? command : value;
   }
+
   if (Array.isArray(value)) {
     return value.map((entry) => upgradeCommand(entry, command));
   }
+
   return value;
 };
 
 // Whether a task is nothing but the `ultracite fix` command an init wrote.
 const isGeneratedTask = (task: JsonValue): boolean => {
   const commands = Array.isArray(task) ? task : [task];
+
   return (
     commands.length > 0 &&
     commands.every(
@@ -192,6 +204,7 @@ const mergeUltraciteTask = (
     return Object.fromEntries(
       Object.entries(config).map(([pattern, task]) => {
         const upgradedTask = upgradeCommand(task, command);
+
         return [upgradePattern(pattern, upgradedTask, config), upgradedTask];
       })
     );
@@ -217,11 +230,13 @@ const mergeUltraciteTask = (
 
 const readJsonObject = (content: string): JsonObject | null => {
   const errors: ParseError[] = [];
+
   // jsonc-parser's output is untyped; a JSON document parses to a JSON value,
   // and only a clean parse to an object counts.
   const parsed: JsonValue | undefined = parse(content, errors, {
     allowTrailingComma: true,
   });
+
   return errors.length === 0 && isJsonObject(parsed) ? parsed : null;
 };
 
@@ -229,6 +244,7 @@ const hasPackageJsonLintStaged = async (): Promise<boolean> => {
   try {
     const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
+
     return Boolean(packageJson?.[LINT_STAGED_KEY]);
   } catch {
     return false;
@@ -239,6 +255,7 @@ const hasYamlLintStagedKey = async (file: string): Promise<boolean> => {
   try {
     // YAML.parse is untyped; a YAML document parses to a JSON value.
     const parsed: JsonValue = YAML.parse(await readFile(file, "utf-8"));
+
     return isJsonObject(parsed) && Boolean(parsed[LINT_STAGED_KEY]);
   } catch {
     // An unparseable package.yaml holds no lint-staged config we can use.
@@ -249,6 +266,7 @@ const hasYamlLintStagedKey = async (file: string): Promise<boolean> => {
 const findPackageYamlWithLintStaged = async (): Promise<string | undefined> => {
   const candidates = packageYamlPaths.filter((file) => exists(file));
   const hasKey = await Promise.all(candidates.map(hasYamlLintStagedKey));
+
   return candidates.find((_file, index) => hasKey[index]);
 };
 
@@ -257,6 +275,7 @@ const isProjectEsm = async (): Promise<boolean> => {
   try {
     const content = await readFile(packageJsonPath, "utf-8");
     const packageJson = parsePackageJson(content);
+
     return packageJson?.type === "module";
   } catch {
     return false;
@@ -285,6 +304,7 @@ const updatePackageJson = async (
 
   if (!merged) {
     warnUnmergeableConfig(packageJsonPath, packageManager);
+
     return;
   }
 
@@ -306,6 +326,7 @@ const updateJsonConfig = async (
 
   if (!existingConfig) {
     warnUnmergeableConfig(filename, packageManager);
+
     return;
   }
 
@@ -316,6 +337,7 @@ const updateJsonConfig = async (
 
   if (!merged) {
     warnUnmergeableConfig(filename, packageManager);
+
     return;
   }
 
@@ -354,6 +376,7 @@ const upgradeYamlPattern = (config: YAML.YAMLMap): boolean => {
   }
 
   pair.key.value = ULTRACITE_PATTERN;
+
   return true;
 };
 
@@ -373,6 +396,7 @@ const addUltraciteTaskToYaml = (
       isGeneratedUltraciteFixCommand,
       command
     );
+
     return upgradeYamlPattern(config) || commandChanged;
   }
 
@@ -380,11 +404,13 @@ const addUltraciteTaskToYaml = (
 
   if (existing === undefined) {
     config.set(doc.createNode(ULTRACITE_PATTERN), doc.createNode([command]));
+
     return true;
   }
 
   if (YAML.isSeq(existing)) {
     existing.add(doc.createNode(command));
+
     return true;
   }
 
@@ -393,6 +419,7 @@ const addUltraciteTaskToYaml = (
       doc.createNode(ULTRACITE_PATTERN),
       doc.createNode([existing.value, command])
     );
+
     return true;
   }
 
@@ -413,6 +440,7 @@ const updateYamlConfig = async (
   // left exactly as it is — rewriting it would destroy the user's config.
   if (doc.errors.length > 0 || !YAML.isMap(root)) {
     warnUnmergeableConfig(filename, packageManager);
+
     return;
   }
 
@@ -424,6 +452,7 @@ const updateYamlConfig = async (
 
   if (changed === null) {
     warnUnmergeableConfig(filename, packageManager);
+
     return;
   }
 
@@ -451,6 +480,7 @@ const upgradeCommandLiterals = (content: string, command: string): string => {
     LEGACY_PATTERN_ENTRY_RE,
     (match, quote: string, separator: string, task: string) => {
       const taskCommand = SINGLE_COMMAND_TASK_RE.exec(task)?.groups?.command;
+
       return taskCommand !== undefined &&
         isGeneratedUltraciteFixCommand(taskCommand)
         ? `${quote}${ULTRACITE_PATTERN}${quote}${separator}${task}`
@@ -472,9 +502,11 @@ const updateEsmConfig = async (
 
   if (content.includes("ultracite")) {
     const upgraded = upgradeCommandLiterals(content, command);
+
     if (upgraded !== content) {
       await writeProjectFile(filename, upgraded);
     }
+
     return;
   }
 
@@ -501,11 +533,13 @@ const updateEsmConfig = async (
         // A function or other value owns our pattern; replacing it would
         // delete the user's config.
         warnUnmergeableConfig(filename, packageManager);
+
         return;
       }
     } else {
       // e.g. `export default defineConfig(...)` or a function config.
       warnUnmergeableConfig(filename, packageManager);
+
       return;
     }
 
@@ -529,9 +563,11 @@ const updateCjsConfig = async (
 
   if (content.includes("ultracite")) {
     const upgraded = upgradeCommandLiterals(content, command);
+
     if (upgraded !== content) {
       await writeProjectFile(filename, upgraded);
     }
+
     return;
   }
 
@@ -545,16 +581,19 @@ const updateCjsConfig = async (
     existingConfig = imported.default ?? imported;
   } catch {
     warnUnmergeableConfig(filename, packageManager);
+
     return;
   }
 
   const jsonConfig = toJsonValue(existingConfig);
+
   const merged = isJsonObject(jsonConfig)
     ? mergeUltraciteTask(jsonConfig, command)
     : null;
 
   if (!merged) {
     warnUnmergeableConfig(filename, packageManager);
+
     return;
   }
 
@@ -588,6 +627,7 @@ const handleConfigFileUpdate = async (
 
   if (filename.endsWith(".json")) {
     await updateJsonConfig(filename, content, packageManager);
+
     return;
   }
 
@@ -597,11 +637,13 @@ const handleConfigFileUpdate = async (
     await (readJsonObject(content)
       ? updateJsonConfig(filename, content, packageManager)
       : updateYamlConfig(filename, content, packageManager));
+
     return;
   }
 
   if (isYamlFile(filename)) {
     await updateYamlConfig(filename, content, packageManager);
+
     return;
   }
 
@@ -610,10 +652,12 @@ const handleConfigFileUpdate = async (
     // an ES module.
     if (COMMONJS_EXPORT_RE.test(content)) {
       warnUnmergeableConfig(filename, packageManager);
+
       return;
     }
 
     await updateEsmConfig(filename, content, packageManager);
+
     return;
   }
 
@@ -621,6 +665,7 @@ const handleConfigFileUpdate = async (
 
   if (filename.endsWith(".mjs") || (filename.endsWith(".js") && isEsm)) {
     await updateEsmConfig(filename, content, packageManager);
+
     return;
   }
 
@@ -656,11 +701,13 @@ export const lintStaged = {
 
     if (existingConfigFile) {
       await handleConfigFileUpdate(existingConfigFile, packageManager);
+
       return;
     }
 
     if (await hasPackageJsonLintStaged()) {
       await updatePackageJson(packageManager);
+
       return;
     }
 
@@ -673,6 +720,7 @@ export const lintStaged = {
         packageManager,
         LINT_STAGED_KEY
       );
+
       return;
     }
 

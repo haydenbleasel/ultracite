@@ -90,8 +90,11 @@ const HUSKY_PREPARE_RE = /\bhusky\b/u;
 const LINT_STAGED = "lint-staged";
 
 type Linter = (typeof options.linters)[number];
+
 type Frameworks = (typeof options.frameworks)[number];
+
 type AgentSelection = (typeof options.agents)[number] | "universal";
+
 type EditorSelection = (typeof options.editorConfigs)[number] | "universal";
 
 interface InitializeFlags {
@@ -197,6 +200,7 @@ const resolveRenamedIds = (
     log.warn(
       `${flag} "${value}" is now "${renamed.id}". Pass the new ID; the old one stops working in a future major.`
     );
+
     return renamed.id;
   });
 
@@ -217,6 +221,7 @@ const resolveAgentIds = (
     log.warn(
       `Unknown --agents value "${value}", so the rules go in AGENTS.md, which most agents read. Valid values: ${[UNIVERSAL, ...options.agents].join(", ")}.`
     );
+
     return UNIVERSAL;
   });
 };
@@ -270,16 +275,20 @@ const buildNoInstallDevDependencies = (
   if (linter === "biome") {
     devDependencies["@biomejs/biome"] = biomeVersion;
   }
+
   if (linter === "eslint") {
     Object.assign(devDependencies, buildEslintDevDependencies(frameworks));
   }
+
   if (linter === "oxlint") {
     devDependencies.oxlint = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint;
     devDependencies.oxfmt = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt;
+
     if (typeAware) {
       devDependencies["oxlint-tsgolint"] =
         OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"];
     }
+
     for (const jsPlugin of jsPlugins) {
       if (isOxlintNpmJsPlugin(jsPlugin)) {
         devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
@@ -292,12 +301,14 @@ const buildNoInstallDevDependencies = (
 
 const removeProjectFile = async (filePath: string): Promise<boolean> => {
   const normalizedPath = filePath.startsWith("./") ? filePath : `./${filePath}`;
+
   if (!exists(normalizedPath)) {
     return false;
   }
 
   const { rm } = await import("node:fs/promises");
   await rm(normalizedPath, { force: true });
+
   return true;
 };
 
@@ -305,6 +316,7 @@ const removeProjectFile = async (filePath: string): Promise<boolean> => {
 // selected linter also needs.
 const otherLinterDependencyNames = (linter: Linter): Set<string> => {
   const dependencyNamesToRemove = new Set<string>();
+
   for (const [tool, dependencyNames] of Object.entries(
     dependencyNamesByLinter
   )) {
@@ -314,15 +326,18 @@ const otherLinterDependencyNames = (linter: Linter): Set<string> => {
       }
     }
   }
+
   // Dependencies shared between linters must survive the prune when the
   // selected linter needs them.
   for (const dependencyName of dependencyNamesByLinter[linter]) {
     dependencyNamesToRemove.delete(dependencyName);
   }
+
   // storybook is only in the eslint set as a required peer of
   // eslint-plugin-storybook, but it's a user-facing tool the project may use
   // independently of linting — never prune it.
   dependencyNamesToRemove.delete("storybook");
+
   return dependencyNamesToRemove;
 };
 
@@ -333,6 +348,7 @@ const otherLinterPackageJsonKeys = (linter: Linter): string[] =>
 
 const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
   const packageJsonObject = await readPackageJson();
+
   if (!packageJsonObject) {
     return false;
   }
@@ -346,10 +362,12 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
     // peerDependencies (prettier used at runtime, eslint as the peer of a
     // published plugin) is there for a reason other than linting.
     const { devDependencies } = manifest;
+
     if (isJsonObject(devDependencies)) {
       const kept = Object.entries(devDependencies).filter(
         ([dependencyName]) => !dependencyNamesToRemove.has(dependencyName)
       );
+
       if (kept.length !== Object.keys(devDependencies).length) {
         manifest.devDependencies = Object.fromEntries(kept);
         changed = true;
@@ -363,6 +381,7 @@ const prunePackageJsonForLinter = async (linter: Linter): Promise<boolean> => {
       delete manifest.prettier;
       changed = true;
     }
+
     if (linter !== "eslint" && "stylelint" in manifest) {
       delete manifest.stylelint;
       changed = true;
@@ -440,6 +459,7 @@ export const migrateLinterConfig = async (
     ),
     prunePackageJsonForLinter(linter),
   ]);
+
   const changed = removedFiles.some(Boolean) || prunedPackageJson;
 
   if (!quiet) {
@@ -504,6 +524,7 @@ export const installDependencies = async (
   if (linter === "biome") {
     packages.push(`@biomejs/biome@${biomeVersion}`);
   }
+
   if (linter === "eslint") {
     packages.push(
       ...Object.entries(buildEslintDevDependencies(frameworks)).map(
@@ -511,25 +532,27 @@ export const installDependencies = async (
       )
     );
   }
+
   if (linter === "oxlint") {
     packages.push(
       `oxlint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint}`,
       // Oxlint is only a linter, so we need oxfmt for formatting
       `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`
     );
+
     // Type-aware linting requires oxlint-tsgolint
     if (typeAware) {
       packages.push(
         `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
       );
     }
+
     packages.push(
-      ...jsPlugins
-        .filter(isOxlintNpmJsPlugin)
-        .map(
-          (jsPlugin) =>
-            `${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`
-        )
+      ...jsPlugins.flatMap((jsPlugin) =>
+        isOxlintNpmJsPlugin(jsPlugin)
+          ? [`${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`]
+          : []
+      )
     );
   }
 
@@ -552,12 +575,14 @@ export const installDependencies = async (
       if (!quiet) {
         s.error("Install failed.");
       }
+
       throw installFailedError(
         error instanceof Error ? error.message : String(error),
         packageManager,
         "ultracite init"
       );
     }
+
     // Add ultracite scripts to package.json
     if (scripts) {
       await updatePackageJson({ scripts });
@@ -569,6 +594,7 @@ export const installDependencies = async (
       frameworks,
       jsPlugins
     );
+
     // Batch devDependencies and scripts into a single read/write
     await updatePackageJson({ devDependencies, scripts });
   }
@@ -651,10 +677,13 @@ export const upsertEditorConfig = async (
     if (!quiet) {
       s.message(`${editor.config.path} found, updating...`);
     }
+
     await editorConfig.update();
+
     if (!quiet) {
       s.stop(`${editor.config.path} updated.`);
     }
+
     return;
   }
 
@@ -665,6 +694,7 @@ export const upsertEditorConfig = async (
     if (!quiet) {
       s.message(`${editor.config.path} not found, creating...`);
     }
+
     // create() is a required side effect that must complete before the extension-install branches below
     await editorConfig.create();
   }
@@ -672,6 +702,7 @@ export const upsertEditorConfig = async (
   // Install extension for VS Code-based editors
   if (editorConfig.extension) {
     const { extension } = editorConfig;
+
     const linterExtension = providers.find(
       (provider) => provider.id === linter
     )?.vscodeExtensionId;
@@ -684,6 +715,7 @@ export const upsertEditorConfig = async (
       linterExtension,
       ...(additionalVscodeExtensions[linter] ?? []),
     ];
+
     const extensionList = extensionIds.join(" and ");
 
     if (!quiet) {
@@ -705,6 +737,7 @@ export const upsertEditorConfig = async (
           : `${editor.config.path} created. Install ${extensionList} in ${editor.name} manually.`
       );
     }
+
     return;
   }
 
@@ -735,17 +768,22 @@ export const upsertBiomeConfig = async (
     if (!quiet) {
       s.message("Biome configuration found, updating...");
     }
+
     await biome.update({ frameworks, typeAware });
+
     if (!quiet) {
       s.stop("Biome configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Biome configuration not found, creating...");
   }
+
   await biome.create({ frameworks, typeAware });
+
   if (!quiet) {
     s.stop("Biome configuration created.");
   }
@@ -766,17 +804,22 @@ export const upsertEslintConfig = async (
     if (!quiet) {
       s.message("ESLint configuration found, updating...");
     }
+
     await eslint.update({ frameworks, typeAware });
+
     if (!quiet) {
       s.stop("ESLint configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("ESLint configuration not found, creating...");
   }
+
   await eslint.create({ frameworks, typeAware });
+
   if (!quiet) {
     s.stop("ESLint configuration created.");
   }
@@ -798,17 +841,22 @@ export const upsertOxlintConfig = async (
     if (!quiet) {
       s.message("Oxlint configuration found, updating...");
     }
+
     await oxlint.update({ frameworks, jsPlugins, typeAware });
+
     if (!quiet) {
       s.stop("Oxlint configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Oxlint configuration not found, creating...");
   }
+
   await oxlint.create({ frameworks, jsPlugins, typeAware });
+
   if (!quiet) {
     s.stop("Oxlint configuration created.");
   }
@@ -828,17 +876,22 @@ export const upsertPrettierConfig = async (
     if (!quiet) {
       s.message("Prettier configuration found, updating...");
     }
+
     await prettier.update({ frameworks });
+
     if (!quiet) {
       s.stop("Prettier configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Prettier configuration not found, creating...");
   }
+
   await prettier.create({ frameworks });
+
   if (!quiet) {
     s.stop("Prettier configuration created.");
   }
@@ -870,17 +923,22 @@ export const upsertWorkspaceConfigs = async (
         const presets = workspace.frameworks.map(
           (framework) => `ultracite/${linter}/${framework}`
         );
+
         log.warn(
           `${existing} already exists, so it was left unchanged. Add ${presets.join(", ")} to it yourself.`
         );
+
         return;
       }
 
       const s = spinner();
+
       if (!quiet) {
         s.start(`Creating the ${workspace.dir} configuration...`);
       }
+
       const configPath = await writer.createWorkspace(workspace);
+
       if (!quiet) {
         s.stop(`${configPath} created.`);
       }
@@ -899,17 +957,22 @@ export const upsertStylelintConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("Stylelint configuration found, updating...");
     }
+
     await stylelint.update();
+
     if (!quiet) {
       s.stop("Stylelint configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Stylelint configuration not found, creating...");
   }
+
   await stylelint.create();
+
   if (!quiet) {
     s.stop("Stylelint configuration created.");
   }
@@ -926,17 +989,22 @@ export const upsertOxfmtConfig = async (quiet = false) => {
     if (!quiet) {
       s.message("oxfmt configuration found, updating...");
     }
+
     await oxfmt.update();
+
     if (!quiet) {
       s.stop("oxfmt configuration updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("oxfmt configuration not found, creating...");
   }
+
   await oxfmt.create();
+
   if (!quiet) {
     s.stop("oxfmt configuration created.");
   }
@@ -976,23 +1044,29 @@ export const initializePrecommitHook = async (
   if (!quiet) {
     s.message("Initializing Husky...");
   }
+
   husky.init(packageManager.name);
 
   if (await husky.exists()) {
     if (!quiet) {
       s.message("Pre-commit hook found, updating...");
     }
+
     await husky.update(packageManager.name, useLintStaged);
+
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("Pre-commit hook not found, creating...");
   }
+
   await husky.create(packageManager.name, useLintStaged);
+
   if (!quiet) {
     s.stop("Pre-commit hook created.");
   }
@@ -1025,17 +1099,22 @@ export const initializeLefthook = async (
     if (!quiet) {
       s.message(`${configFile} found, updating...`);
     }
+
     await lefthook.update(packageManager.name);
+
     if (!quiet) {
       s.stop(`${configFile} updated.`);
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(`${configFile} not found, creating...`);
   }
+
   await lefthook.create(packageManager.name);
+
   if (!quiet) {
     s.stop(`${configFile} created.`);
   }
@@ -1064,17 +1143,22 @@ export const initializeLintStaged = async (
     if (!quiet) {
       s.message("lint-staged found, updating...");
     }
+
     await lintStaged.update(packageManager.name);
+
     if (!quiet) {
       s.stop("lint-staged updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message("lint-staged not found, creating...");
   }
+
   await lintStaged.create(packageManager.name);
+
   if (!quiet) {
     s.stop("lint-staged created.");
   }
@@ -1094,17 +1178,22 @@ export const initializePreCommit = async (
     if (!quiet) {
       s.message(".pre-commit-config.yaml found, updating...");
     }
+
     await preCommit.update(packageManager);
+
     if (!quiet) {
       s.stop(".pre-commit-config.yaml updated.");
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(".pre-commit-config.yaml not found, creating...");
   }
+
   await preCommit.create(packageManager);
+
   if (!quiet) {
     s.stop(".pre-commit-config.yaml created.");
   }
@@ -1161,17 +1250,22 @@ export const upsertHooks = async (
     if (!quiet) {
       s.message(`${displayName} hooks found, updating...`);
     }
+
     await hooks.update();
+
     if (!quiet) {
       s.stop(`${displayName} hooks updated.`);
     }
+
     return;
   }
 
   if (!quiet) {
     s.message(`${displayName} hooks not found, creating...`);
   }
+
   await hooks.create();
+
   if (!quiet) {
     s.stop(`${displayName} hooks created.`);
   }
@@ -1211,6 +1305,7 @@ class InitializeCancelledError extends Error {
 
 const cancelInitialize = (): InitializeCancelledError => {
   cancel(OPERATION_CANCELLED);
+
   return new InitializeCancelledError(OPERATION_CANCELLED);
 };
 
@@ -1237,6 +1332,7 @@ const resolvePackageManager = async (
   }
 
   const detected = await detectPackageManager(process.cwd());
+
   if (!detected) {
     throw new UltraciteSetupError(
       "No package manager detected. Pass one with `--pm` (e.g. `ultracite init --pm npm`)."
@@ -1252,6 +1348,7 @@ const resolvePackageManager = async (
   if (!quiet) {
     log.info(`Using ${detected.name} (detected from the project)`);
   }
+
   return normalizePackageManager(detected);
 };
 
@@ -1272,6 +1369,7 @@ const selectLinter = async (
   // to migrate the project.
   if (opts["js-plugins"] !== undefined) {
     assertJsPluginsMatchLinter(defaultLinter, opts["js-plugins"]);
+
     return defaultLinter;
   }
 
@@ -1288,9 +1386,11 @@ const selectLinter = async (
       { label: "ESLint + Prettier + Stylelint", value: "eslint" },
     ],
   });
+
   if (isCancelled(linter)) {
     throw cancelInitialize();
   }
+
   return linter;
 };
 
@@ -1307,6 +1407,7 @@ const selectFrameworks = async (
   }
 
   const detected = await detectFrameworks();
+
   const frameworks = await multiselect<Frameworks>({
     initialValues: detected,
     message: "Which frameworks are you using (optional)?",
@@ -1332,9 +1433,11 @@ const selectFrameworks = async (
     ],
     required: false,
   });
+
   if (isCancelled(frameworks)) {
     throw cancelInitialize();
   }
+
   return frameworks;
 };
 
@@ -1362,9 +1465,11 @@ const selectJsPlugins = async (
     })),
     required: false,
   });
+
   if (isCancelled(jsPlugins)) {
     throw cancelInitialize();
   }
+
   return jsPlugins;
 };
 
@@ -1400,6 +1505,7 @@ const hasTypeAwareSetup = async (linter: Linter): Promise<boolean> => {
   }
 
   const packageJsonObject = await readPackageJson();
+
   return (
     "oxlint-tsgolint" in (packageJsonObject?.devDependencies ?? {}) ||
     TYPE_AWARE_OPTION_RE.test(readFirstConfig(oxlintConfigNames))
@@ -1431,9 +1537,11 @@ const selectTypeAware = async (
     message:
       "Turn on type-aware linting? It adds rules that need type information, such as no-floating-promises, and makes linting slower.",
   });
+
   if (isCancelled(typeAware)) {
     throw cancelInitialize();
   }
+
   return typeAware;
 };
 
@@ -1450,6 +1558,7 @@ const resolveUniversalTarget = <
   const universalTarget = selection.includes(UNIVERSAL)
     ? targets.find((target) => target.id === UNIVERSAL)
     : undefined;
+
   const coveredIds = new Set(
     universalTarget ? getCoveredIds(universalTarget) : []
   );
@@ -1476,6 +1585,7 @@ const promptForTargets = async <
     })),
     required: false,
   });
+
   if (isCancelled(selected)) {
     throw cancelInitialize();
   }
@@ -1495,6 +1605,7 @@ const selectEditors = async (
       targets,
       (target) => target.editorIds
     );
+
     return {
       editorConfig: universal.ids,
       selectedEditorFiles: universal.targets,
@@ -1528,6 +1639,7 @@ const selectAgents = async (
     "Which agents do you use (optional)?",
     getAgentChoices()
   );
+
   return { agents: selected.map((choice) => choice.id) };
 };
 
@@ -1551,9 +1663,11 @@ const selectHooks = async (
     })),
     required: false,
   });
+
   if (isCancelled(hooks)) {
     throw cancelInitialize();
   }
+
   return hooks;
 };
 
@@ -1579,9 +1693,11 @@ const selectIntegrations = async (
     ],
     required: false,
   });
+
   if (isCancelled(integrations)) {
     throw cancelInitialize();
   }
+
   return integrations;
 };
 
@@ -1628,6 +1744,7 @@ const confirmStaleSetupRemoval = async (
 
   const name =
     providers.find((provider) => provider.id === linter)?.name ?? linter;
+
   log.info(
     `Found the setup of other linters:\n${stale.map((item) => `  ${item}`).join("\n")}`
   );
@@ -1636,9 +1753,11 @@ const confirmStaleSetupRemoval = async (
     initialValue: true,
     message: `Remove it, now that the project uses ${name}?`,
   });
+
   if (isCancelled(confirmed)) {
     throw cancelInitialize();
   }
+
   return confirmed;
 };
 
@@ -1662,6 +1781,7 @@ const confirmTsConfigUpdates = async (
     initialValue: true,
     message: `Type-aware rules need strictNullChecks. Turn it on in ${updates.map((update) => update.filePath).join(", ")}?`,
   });
+
   if (isCancelled(confirmed)) {
     throw cancelInitialize();
   }
@@ -1670,8 +1790,10 @@ const confirmTsConfigUpdates = async (
     log.warn(
       "strictNullChecks was left off. Type-aware rules that need it, such as prefer-nullish-coalescing, won't work properly until it's on."
     );
+
     return [];
   }
+
   return updates;
 };
 
@@ -1719,9 +1841,11 @@ const selectSkillInstall = async (
       { label: "No, I'll do it later", value: "skip" },
     ],
   });
+
   if (isCancelled(choice)) {
     throw cancelInitialize();
   }
+
   return choice;
 };
 
@@ -1769,6 +1893,7 @@ const setupLinting = async ({
   );
 
   await upsertTsConfig(changes.tsconfigUpdates, quiet);
+
   if (changes.removeStaleSetup) {
     await migrateLinterConfig(linter, quiet);
   }
@@ -1777,12 +1902,14 @@ const setupLinting = async ({
   if (linter === "biome") {
     await upsertBiomeConfig(frameworks, quiet, typeAware);
   }
+
   if (linter === "eslint") {
     await upsertEslintConfig(frameworks, quiet, typeAware);
     // ESLint is only a linter, so we need Prettier for formatting and Stylelint for CSS
     await upsertPrettierConfig(allFrameworks, quiet);
     await upsertStylelintConfig(quiet);
   }
+
   if (linter === "oxlint") {
     // The Oxlint and oxfmt configs use ES module syntax. Init never changes
     // package.json's "type" to make them load, since that changes how
@@ -1798,6 +1925,7 @@ const setupLinting = async ({
   // check and fix run the linter whose config is nearest, Biome before
   // ESLint before Oxlint in one folder, so a kept config can win.
   const active = changes.removeStaleSetup ? linter : detectLinter();
+
   if (active && active !== linter) {
     log.warn(
       `The other linters' setup was left in place, so \`ultracite check\` will run ${active} instead of ${linter}. Remove its config to switch.`
@@ -1821,6 +1949,7 @@ const setupSelectedFiles = async ({
     ...selectedEditorFiles.map((target) => target.representativeEditorId),
     ...editorConfig,
   ];
+
   const existingSettingsFiles = new Set(
     editors
       .filter((editor) => editorIds.includes(editor.id))
@@ -1831,6 +1960,7 @@ const setupSelectedFiles = async ({
   for (const editorId of editorIds) {
     const settingsPath = editors.find((editor) => editor.id === editorId)
       ?.config.path;
+
     // oxlint-disable-next-line no-await-in-loop -- editors that share a settings file must write it in turn
     await upsertEditorConfig(
       editorId,
@@ -1861,12 +1991,15 @@ const setupIntegrations = async ({
     const useLintStaged = integrations.includes(LINT_STAGED);
     await initializePrecommitHook(pmInfo, install, quiet, useLintStaged);
   }
+
   if (integrations.includes("lefthook")) {
     await initializeLefthook(pmInfo, install, quiet);
   }
+
   if (integrations.includes(LINT_STAGED)) {
     await initializeLintStaged(pmInfo, install, quiet);
   }
+
   if (integrations.includes("pre-commit")) {
     await initializePreCommit(pmInfo.name, quiet);
   }
@@ -1916,17 +2049,22 @@ export const initialize = async (flags?: InitializeFlags) => {
     validateInitializeFlags(opts);
     const workspaces = parseWorkspaceFrameworks(opts["workspace-framework"]);
     const pmInfo = await resolvePackageManager(opts, quiet);
+
     const interactive =
       !opts.yes &&
       nonInteractiveFlags.every((flag) => opts[flag] === undefined);
+
     const selections = await selectInitializeOptions(opts, interactive);
+
     const installSkill = await selectSkillInstall(
       opts,
       pmInfo.name,
       interactive,
       quiet
     );
+
     const changes = await confirmProjectChanges(selections, interactive);
+
     const context: InitializeContext = {
       changes,
       install: !opts.skipInstall,
@@ -1943,11 +2081,13 @@ export const initialize = async (flags?: InitializeFlags) => {
     if (error instanceof InitializeCancelledError) {
       return;
     }
+
     // Setup errors are reported by the CLI entry point as a plain message.
     if (!quiet && !(error instanceof UltraciteSetupError)) {
       const message = error instanceof Error ? error.message : "Unknown error";
       log.error(`Failed to initialize Ultracite configuration: ${message}`);
     }
+
     throw error;
   }
 };

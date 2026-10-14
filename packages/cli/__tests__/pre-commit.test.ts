@@ -27,6 +27,7 @@ const runUpdate = async (
     readFile: mock(() => Promise.resolve(existing)),
     writeFile: mock((_path: string, content: string) => {
       written = content;
+
       return Promise.resolve();
     }),
   }));
@@ -91,6 +92,7 @@ describe("pre-commit", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.reject(new Error("ENOENT"))),
         readFile: mock(() => Promise.resolve("")),
@@ -120,9 +122,11 @@ describe("pre-commit", () => {
         entry: npx ultracite fix
         language: system
 `;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
@@ -147,9 +151,11 @@ describe("pre-commit", () => {
     hooks:
       - id: trailing-whitespace
 `;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
@@ -172,9 +178,11 @@ describe("pre-commit", () => {
 
     test("creates repos section if not present", async () => {
       const existingContent = "# pre-commit configuration\n";
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("node:fs/promises", () => ({
         access: mock(() => Promise.resolve()),
         readFile: mock(() => Promise.resolve(existingContent)),
@@ -326,6 +334,7 @@ repos:
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock((_path: string, content: string) => {
           written = content;
+
           return Promise.resolve();
         }),
       }));
@@ -334,6 +343,7 @@ repos:
 
       const [hook] = YAML.parse(written).repos[0].hooks;
       const pattern = new RegExp(hook.files, "u");
+
       const handled = [
         "a.js",
         "a.jsx",
@@ -359,6 +369,7 @@ repos:
         "a.graphql",
         "a.gql",
       ];
+
       expect(handled.filter((file) => !pattern.test(file))).toEqual([]);
       expect(
         ["Dockerfile", "a.js.map", "a.py"].filter((file) => pattern.test(file))
@@ -387,6 +398,7 @@ repos:
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock((_path: string, content: string) => {
           written = content;
+
           return Promise.resolve();
         }),
       }));
@@ -402,6 +414,7 @@ repos:
         readFile: mock(() => Promise.resolve("")),
         writeFile: mock((_path: string, content: string) => {
           written = content;
+
           return Promise.resolve();
         }),
       }));

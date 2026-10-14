@@ -89,6 +89,7 @@ describe("tsconfig", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("fast-glob", () => ({
         default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
@@ -113,12 +114,14 @@ describe("tsconfig", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const tsconfigWithComments = `{
   // This is a comment
   "compilerOptions": {
     "target": "ES2020"
   }
 }`;
+
       mock.module("fast-glob", () => ({
         default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
@@ -159,6 +162,7 @@ describe("tsconfig", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       mock.module("fast-glob", () => ({
         default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
@@ -179,6 +183,7 @@ describe("tsconfig", () => {
       const mockWriteFile = mock(() =>
         Promise.reject(new Error("Permission denied"))
       );
+
       mock.module("fast-glob", () => ({
         default: mock(() => Promise.resolve(["tsconfig.json"])),
       }));
@@ -222,18 +227,23 @@ const mockTsConfigs = (
   const writeFile = mock((_path: string, _content: string) =>
     Promise.resolve()
   );
+
   const warn = mock((_message: string) => {});
+
   const byPath = new Map(
     Object.entries(files).map(([file, content]) => [
       path.resolve(file),
       content,
     ])
   );
+
   const read = (filePath: string) => {
     const content = byPath.get(path.resolve(String(filePath)));
+
     if (content === undefined) {
       throw new Error("ENOENT");
     }
+
     return content;
   };
 

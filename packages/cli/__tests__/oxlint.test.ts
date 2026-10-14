@@ -439,6 +439,7 @@ describe("oxlint linter", () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -502,6 +503,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -528,6 +530,7 @@ export default defineConfig({
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const [, content] = writeCall;
+
       // Should only appear once
       const coreMatches = content.match(
         new RegExp(
@@ -538,6 +541,7 @@ export default defineConfig({
           "gu"
         )
       );
+
       expect(coreMatches?.length).toBe(1);
     });
 
@@ -545,6 +549,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -578,6 +583,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -612,6 +618,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 import core from "ultracite/oxlint/core";
@@ -654,6 +661,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import next from "ultracite/oxlint/next";
@@ -691,13 +699,17 @@ export default defineConfig({
       expect(content).not.toContain(
         'import jsPlugins from "ultracite/oxlint/js-plugins";'
       );
+
       const selectImports = content.match(
         /import \{ jsPluginSettings, selectJsPlugins \} from "ultracite\/oxlint\/js-plugins";/gu
       );
+
       expect(selectImports?.length).toBe(1);
+
       const nextAddOnImports = content.match(
         /import nextJsPlugins from "ultracite\/oxlint\/next\/js-plugins";/gu
       );
+
       expect(nextAddOnImports?.length).toBe(1);
     });
 
@@ -712,6 +724,7 @@ export default defineConfig({
   jsPlugins: shadcn.jsPlugins,
 });
 `;
+
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -740,6 +753,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import antiSlop from "ultracite/oxlint/anti-slop";
 import core from "ultracite/oxlint/core";
@@ -769,9 +783,11 @@ export default defineConfig({
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       const [, content] = writeCall;
+
       const antiSlopImports = content.match(
         /import antiSlop from "ultracite\/oxlint\/anti-slop";/gu
       );
+
       expect(antiSlopImports?.length).toBe(1);
       const antiSlopExtends = content.match(/antiSlop/gu);
       // One import identifier plus one extends entry.
@@ -782,6 +798,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import jsPlugins from "ultracite/oxlint/js-plugins";
@@ -827,6 +844,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import jsPlugins from "ultracite/oxlint/js-plugins";
@@ -869,6 +887,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       // The documented manual form. Previously the import parser only
       // matched `import x from`, so the preset was silently dropped from
       // extends on update.
@@ -920,6 +939,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
@@ -963,6 +983,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
@@ -999,6 +1020,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";
 import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
@@ -1042,6 +1064,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `// This config references ultracite/oxlint but has no valid imports or extends
 const config = "ultracite/oxlint";
 export default {};
@@ -1072,6 +1095,7 @@ export default {};
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({
@@ -1105,6 +1129,7 @@ export default defineConfig({
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
+
       const existingConfig = `import { defineConfig } from "oxlint";
 
 export default defineConfig({});
@@ -1140,6 +1165,7 @@ const mockProject = (files: Record<string, string>) => {
   const writeFile = mock((_path: string, _content: string) =>
     Promise.resolve()
   );
+
   const rm = mock((_path: string) => Promise.resolve());
   const warn = mock((_message: string) => {});
   const info = mock((_message: string) => {});
@@ -1182,6 +1208,7 @@ const createCombinedJsPluginsConfig = async () => {
     jsPlugins: ["@shadcn/lint", "eslint-plugin-github"],
   });
   const [[configPath, content]] = created.writeFile.mock.calls;
+
   return { [configPath]: content };
 };
 
@@ -1374,6 +1401,7 @@ export default defineConfig({
       "./oxlint.config.ts": config,
       "package.json": '{"name": "app"}',
     });
+
     await oxlint.update();
     expect(typeless.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.ts");
     expect(typeless.rm).not.toHaveBeenCalled();
@@ -1382,6 +1410,7 @@ export default defineConfig({
       "./oxlint.config.mts": config,
       "package.json": '{"type": "module"}',
     });
+
     await oxlint.update();
     expect(esm.writeFile.mock.calls[0]?.[0]).toBe("./oxlint.config.mts");
   });

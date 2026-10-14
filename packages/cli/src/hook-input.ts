@@ -90,6 +90,7 @@ const PATCH_DELETE_RE = /^\*\*\* Delete File: /mu;
 const parseJson = (text: string): JsonValue | null => {
   try {
     const value: JsonValue = JSON.parse(text);
+
     return value;
   } catch {
     return null;
@@ -98,11 +99,13 @@ const parseJson = (text: string): JsonValue | null => {
 
 const pathsIn = (input: JsonValue | null): string[] => {
   const fields = pathFieldsSchema.safeParse(input);
+
   const direct = fields.success
     ? [fields.data.file_path, fields.data.filePath, fields.data.path]
     : [];
 
   const replacements = replacementsSchema.safeParse(input);
+
   const replaced = replacements.success
     ? replacements.data.replacements.flatMap((replacement) => [
         replacement.file_path,
@@ -122,13 +125,16 @@ const stringsIn = (value: JsonValue | null): string[] => {
   if (typeof value === "string") {
     return [value];
   }
+
   if (Array.isArray(value)) {
     return value.flatMap(stringsIn);
   }
+
   // oxlint-disable-next-line anti-slop/no-runtime-typeof -- same JSON walk: nested objects hold more strings
   if (value !== null && typeof value === "object") {
     return Object.values(value).flatMap(stringsIn);
   }
+
   return [];
 };
 
@@ -162,11 +168,13 @@ export const editedFilesFromHookPayload = (
   const parsed = parseJson(payload);
 
   const toolInfo = toolInfoPayloadSchema.safeParse(parsed);
+
   if (toolInfo.success) {
     return [toolInfo.data.tool_info.file_path];
   }
 
   const tool = toolPayloadSchema.safeParse(parsed);
+
   const toolName = tool.success
     ? (tool.data.tool_name ?? tool.data.toolName)
     : undefined;
@@ -187,9 +195,11 @@ export const editedFilesFromHookPayload = (
     // The Copilot CLI sends toolArgs as a JSON string; other versions send
     // an object.
     const argsText = z.string().safeParse(tool.data.toolArgs);
+
     const rawArgs = argsText.success
       ? argsText.data
       : JSON.stringify(tool.data.toolArgs);
+
     input = parseJson(rawArgs) ?? rawArgs;
   }
 
@@ -242,10 +252,12 @@ export const hookReport = (
   if (!hookFeedsAgent(payload)) {
     return "none";
   }
+
   // Devin sets DEVIN_PROJECT_DIR for every hook it runs.
   const fromDevin =
     env.DEVIN_PROJECT_DIR !== undefined &&
     postToolUsePayloadSchema.safeParse(parseJson(payload)).success;
+
   return fromDevin ? "context" : "stderr";
 };
 
@@ -274,6 +286,7 @@ export const readHookStdin = async (
   let text = "";
   const settled = new AbortController();
   const deadline = setTimeout(() => settled.abort(), deadlineMs);
+
   const onData = (chunk: Buffer | string): void => {
     text += chunk.toString();
 
@@ -302,6 +315,7 @@ export const readHookStdin = async (
 
 const isInside = (directory: string, file: string): boolean => {
   const relative = path.relative(directory, file);
+
   // Only a leading `..` segment leaves the directory; a file named `..env`
   // at the root is inside it.
   return (
@@ -351,6 +365,7 @@ const targetsFromPayload = (
   }
 
   const root = resolvePath(cwd) ?? path.resolve(cwd);
+
   const resolved = files
     .map((file) => resolvePath(path.resolve(cwd, file)))
     .filter((file): file is string => file !== null && isInside(root, file));
@@ -422,5 +437,6 @@ export const hookTargets = async (
   options: HookTargetsOptions = {}
 ): Promise<string[] | null> => {
   const { targets } = await readHook(options);
+
   return targets;
 };
