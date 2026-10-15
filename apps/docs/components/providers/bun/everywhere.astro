@@ -1,0 +1,100 @@
+---
+import { agents } from "../../../lib/agents";
+import Everywhere from "../everywhere.astro";
+
+// Excerpts of what `ultracite init --linter bun` writes for editors, which
+// are the Oxlint provider's settings (packages/cli/src/data/editors.ts), and
+// lines from a real `bunx ultracite check` under a coding agent on Bun
+// 1.4.4-canary.1, which prints Oxlint's compact agent format (the benchmark
+// fixture and the button component, help text left out).
+const vscodeSettings = `{
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit"
+  },
+  "editor.formatOnSave": true
+}`;
+
+const zedSettings = `"oxlint": {
+  "initialization_options": {
+    "settings": {
+      "run": "onType",
+      "typeAware": true,
+      "unusedDisableDirectives": "deny"
+    }
+  }
+}`;
+
+const diagnostics = [
+  {
+    location: "components/button.tsx:5:8",
+    message: "Expected a function expression.",
+    rule: "eslint(func-style)",
+  },
+  {
+    location: "src/data.ts:20:14",
+    message: "Use `Array#toSorted()` instead of `Array#sort()`.",
+    rule: "unicorn(no-array-sort)",
+  },
+  {
+    location: "src/store.ts:1:22",
+    message:
+      "Prefer using a top-level type-only import instead of inline type specifiers.",
+    rule: "import(consistent-type-specifier-style)",
+  },
+  {
+    location: "src/utils.ts:5:54",
+    message: "Object keys should be sorted",
+    rule: "eslint(sort-keys)",
+  },
+  {
+    location: "src/utils.ts:59:14",
+    message: "Unexpected `await` inside a loop.",
+    rule: "eslint(no-await-in-loop)",
+  },
+];
+---
+
+<Everywhere
+  cards={[
+    {
+      body: "Bun has no language server, so the Oxc extension lints and formats on save with Oxlint and Oxfmt, reading the same two configs. `init` installs both packages when it sets up an editor.",
+      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      eyebrow: "VS Code, Cursor, Devin Desktop",
+      title: "Your editor runs Oxlint",
+    },
+    {
+      body: "Zed’s Oxc extension checks each keystroke with the type-aware rules on. Keep rule changes in `oxlint.config.ts`: the extension doesn’t read `bunfig.toml`.",
+      code: { lang: "jsonc", path: ".zed/settings.json", text: zedSettings },
+      eyebrow: "Zed",
+      title: "Lint as you type",
+    },
+    {
+      body: `\`bun lint\` prints Oxlint’s compact format when a coding agent runs it, one line per problem. \`init\` also writes the rules into \`AGENTS.md\`, which all ${agents.length} agents read.`,
+      eyebrow: "Coding agents and CI",
+      title: "Output written for agents",
+    },
+  ]}
+  id="bn-everywhere"
+  title="Bun on the command line, Oxlint in the editor"
+>
+  The CLI runs Bun’s tools and your editor runs Oxlint’s, on the same two
+  files. <code class="font-mono text-base">ultracite/bun</code> leaves out
+  the same rules for both, so they check for the same things.
+  <Fragment slot="terminal">
+    <p class="mb-1 truncate text-panel-foreground">
+      <span class="text-signal">$</span> bunx ultracite check
+    </p>
+    {
+      diagnostics.map((line) => (
+        <p class="truncate">
+          {line.location}: <span class="text-signal">error</span>{" "}
+          <span class="text-panel-foreground">{line.rule}</span>:{" "}
+          {line.message}
+        </p>
+      ))
+    }
+  </Fragment>
+</Everywhere>

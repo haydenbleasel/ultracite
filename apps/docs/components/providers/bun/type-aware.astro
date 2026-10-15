@@ -1,0 +1,103 @@
+---
+import { formatMs, typeAware } from "../../../lib/benchmarks";
+import SectionHeading from "../../home/section-heading.astro";
+import AnnotatedCode from "../../landing/annotated-code.astro";
+import Terminal from "../../landing/terminal.astro";
+
+// A file written for the example and what `ultracite check` printed for it
+// on Bun 1.4.4-canary.1, with ultracite/oxlint/core and
+// `options: { typeAware: true }`, in a project with no `typescript` or
+// `oxlint-tsgolint` installed (run for real; the format check's lines left
+// out). Timings are from lib/benchmarks.
+const code = `const save = async (draft: string): Promise<void> => {
+  await fetch("/api/drafts", { body: draft, method: "POST" });
+};
+
+export const onBlur = (draft: string): void => {
+  save(draft);
+};`;
+
+const notes = new Map([[5, "never awaited"]]);
+
+const runs = [
+  {
+    install: "oxlint, oxfmt and oxlint-tsgolint",
+    key: "oxlint",
+    ms: typeAware.ms.oxlint,
+    name: "Oxlint + oxlint-tsgolint",
+  },
+  { install: "nothing", key: "bun", ms: typeAware.ms.bun, name: "Bun" },
+];
+
+const scale = Math.max(...runs.map((run) => run.ms));
+const width = (ms: number): string => `${(ms / scale) * 100}%`;
+---
+
+<section aria-labelledby="bn-types" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="bn-types" title="Type-aware rules, with types from bun check">
+      Rules like <code class="font-mono text-base">no-floating-promises</code>{" "}
+      need to know what a call returns. Oxlint gets that from a separate
+      typescript-go binary. <code class="font-mono text-base">bun lint</code>{" "}
+      gets it from <code class="font-mono text-base">bun check</code>, the
+      type checker built into Bun, so{" "}
+      <code class="whitespace-nowrap font-mono text-base">init --type-aware</code> only sets{" "}
+      <code class="font-mono text-base">typeAware</code> in the config.
+    </SectionHeading>
+    <div
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
+    >
+      <div class="flex min-w-0 flex-col gap-2 bg-muted/60 p-2 sm:gap-4 sm:p-6 lg:p-10">
+        <AnnotatedCode code={code} lang="typescript" notes={notes} title="src/save.ts" />
+        <Terminal>
+          <p class="mb-1 truncate text-panel-foreground">
+            <span class="text-signal">$</span> bunx ultracite check src
+          </p>
+          <p class="whitespace-normal">
+            src/save.ts:6:3: <span class="text-signal">error</span>{" "}
+            <span class="text-panel-foreground">typescript(no-floating-promises)</span>:
+            Promises must be awaited, add void operator to ignore.
+          </p>
+        </Terminal>
+      </div>
+      <div class="flex flex-col bg-background">
+        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">420 files, type-aware</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+            ultracite check
+          </span>
+        </div>
+        <ul class="flex flex-col gap-8 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {
+            runs.map((run) => (
+              <li class="flex flex-col gap-2">
+                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
+                  <span>{run.name}</span>
+                  <span class="font-mono text-sm tabular-nums">{formatMs(run.ms)}</span>
+                </p>
+                <span
+                  class:list={[
+                    "h-2 rounded-r-[2px]",
+                    run.key === "bun" ? "bg-signal" : "bg-foreground/35",
+                  ]}
+                  style={{ width: width(run.ms) }}
+                />
+                <p class="font-mono text-muted-foreground text-xs/5">
+                  installs beside ultracite: {run.install}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-auto text-pretty border-border border-t px-4 py-5 text-[15px]/6 text-muted-foreground sm:px-6 lg:px-10">
+          Both reported the same{" "}
+          {typeAware.problems.toLocaleString("en-US")} problems on the
+          benchmark project, rule for rule. Your editor still runs Oxlint, so{" "}
+          <code class="font-mono text-sm">init</code> installs{" "}
+          <code class="font-mono text-sm">oxlint-tsgolint</code> for it when it
+          sets up an editor.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

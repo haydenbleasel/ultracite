@@ -1,0 +1,88 @@
+---
+// The whole Bun setup `ultracite init --linter bun` writes for a React and
+// Next.js app (rendered by lib/providers.ts, as on the homepage), with the
+// rule count each preset brings as `bun lint` runs it: rules set to "error"
+// in packages/cli/config/oxlint/<preset> once ultracite/bun's defineConfig
+// has passed it on (core loses its 19 jsdoc rules), Ultracite 8.0.1 with the
+// Bun provider.
+import { MIN_BUN_VERSION } from "../../../../../packages/cli/src/dependencies";
+import { providers } from "../../../lib/providers";
+import AnnotatedCode from "../../landing/annotated-code.astro";
+
+const PRESETS = ["core", "react", "next"];
+
+const ruleCounts = new Map([
+  ["core", 455],
+  ["next", 21],
+  ["react", 107],
+]);
+
+let totalRules = 0;
+
+for (const count of ruleCounts.values()) {
+  totalRules += count;
+}
+
+const bun = providers.find((provider) => provider.id === "bun");
+const [lintFile, formatFile] = bun?.configFiles ?? [];
+const lintCode = lintFile?.code(PRESETS) ?? "";
+const formatCode = formatFile?.code(PRESETS) ?? "";
+
+// The import line of each preset gets its rule count, and the defineConfig
+// import what it does.
+const lintNotes = new Map(
+  lintCode.split("\n").flatMap((line, index): [number, string][] => {
+    if (line.includes('"ultracite/bun"')) {
+      return [[index, "skips jsdoc, vue"]];
+    }
+
+    const preset = PRESETS.find((name) =>
+      line.includes(`"ultracite/oxlint/${name}"`)
+    );
+
+    const count = preset ? ruleCounts.get(preset) : undefined;
+
+    return count ? [[index, `${count} rules`]] : [];
+  })
+);
+
+// Who reads which file, and what the project needs for it.
+const setup = [
+  ["bun lint", "reads oxlint.config.ts"],
+  ["bun fmt", "reads oxfmt.config.ts"],
+  ["installs", "ultracite, nothing else"],
+  ["needs", `Bun ${MIN_BUN_VERSION}+`],
+];
+---
+
+<div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
+  <AnnotatedCode
+    class="lp-code-fill lg:col-span-7"
+    code={lintCode}
+    lang={lintFile?.lang ?? "typescript"}
+    meta={`${totalRules} rules, all errors`}
+    notes={lintNotes}
+    title={lintFile?.name ?? "oxlint.config.ts"}
+  />
+  <AnnotatedCode
+    class="lp-code-attached lg:col-span-5"
+    code={formatCode}
+    lang={formatFile?.lang ?? "typescript"}
+    title={formatFile?.name ?? "oxfmt.config.ts"}
+  >
+    {/* The divider color is translucent, so the grid sits on the code
+        background rather than showing the slab through its gaps. */}
+    <div class="overflow-hidden rounded-b-blume border border-border border-t-0 bg-code">
+      <dl class="grid grid-cols-2 gap-px bg-border font-mono text-xs/5">
+        {
+          setup.map(([key, value]) => (
+            <div class="flex flex-col gap-0.5 bg-code px-4 py-2.5">
+              <dt class="text-muted-foreground">{key}</dt>
+              <dd class="text-foreground">{value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </AnnotatedCode>
+</div>

@@ -25,13 +25,17 @@ const breadcrumbs: Crumb[] = [{ href: "/providers", name: "Providers" }];
 
 const hrefFor = (id: ProviderId): string => `/providers/${id}`;
 
-// Rules on in each core preset (Ultracite 8.2.0, recounted 2026-11-11, with Oxlint 1.90.0, Biome
-// 2.6.4 and ESLint 10.14.0): Oxlint's set to "error", Biome's from `biome
-// rage --linter`, and ESLint's from `eslint --print-config` on a TypeScript
-// file. Rules that read types: Oxlint's type-aware rules in core; Biome's
-// type-aware preset; for ESLint, the 101 rules ultracite/eslint/type-aware
-// adds plus the 32 SonarJS rules in core that use types when there are some.
-// Times are from lib/benchmarks.
+// Rules on in each core preset (Ultracite 8.2.0, recounted 2026-11-11, with
+// Oxlint 1.90.0, Biome 2.6.4 and ESLint 10.14.0): Oxlint's set to "error",
+// Biome's from `biome rage --linter`, and ESLint's from `eslint
+// --print-config` on a TypeScript file. Bun's are Oxlint's core as
+// ultracite/bun's defineConfig passes it on, set to "error" (Ultracite 8.0.1
+// with the Bun provider: the 19 jsdoc rules left out, and the same 455 that
+// `bun lint --print-config` reports). Rules that read types: Oxlint's
+// type-aware rules in core, which Bun runs too; Biome's type-aware preset;
+// for ESLint, the 101 rules ultracite/eslint/type-aware adds plus the 32
+// SonarJS rules in core that use types when there are some. Times are from
+// lib/benchmarks.
 const small = runFor(42);
 const large = runFor(420);
 
@@ -63,6 +67,15 @@ const engines = [
     summary:
       "The JavaScript toolchain most projects started on, with every plugin ever written for it.",
   },
+  {
+    check420: formatMs(large.ms.bun),
+    coreRules: 455,
+    id: "bun",
+    name: "Bun",
+    recommended: false,
+    summary:
+      "The linter and formatter built into Bun, which run Oxlint’s rules and Oxfmt’s formatting natively.",
+  },
 ] satisfies {
   check420: string;
   coreRules: number;
@@ -72,18 +85,27 @@ const engines = [
   summary: string;
 }[];
 
-const rows: { label: string; values: [string, string, string] }[] = [
+const rows: { label: string; values: [string, string, string, string] }[] = [
   {
     label: "Runs on",
-    values: ["Native Rust binaries", "One native Rust binary", "Node.js"],
+    values: [
+      "Native Rust binaries",
+      "One native Rust binary",
+      "Node.js",
+      "Bun 1.4.4 or later, with nothing else to install",
+    ],
   },
-  { label: "Rules on in the core preset", values: ["474", "350", "910"] },
+  {
+    label: "Rules on in the core preset",
+    values: ["474", "350", "910", "455"],
+  },
   {
     label: "`ultracite check`, 42 files",
     values: [
       formatMs(small.ms.oxlint),
       formatMs(small.ms.biome),
       formatMs(small.ms.eslint),
+      formatMs(small.ms.bun),
     ],
   },
   {
@@ -92,6 +114,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
       formatMs(large.ms.oxlint),
       formatMs(large.ms.biome),
       formatMs(large.ms.eslint),
+      formatMs(large.ms.bun),
     ],
   },
   {
@@ -100,15 +123,35 @@ const rows: { label: string; values: [string, string, string] }[] = [
       "57, opt-in at setup",
       "5 project-wide rules, opt-in at setup",
       "133, opt-in at setup",
+      "Oxlint’s 56, opt-in at setup, with types from `bun check`",
     ],
   },
   {
     label: "ESLint plugins",
-    values: ["Opt-in, through JS plugins", "No", "Any of them"],
+    values: [
+      "Opt-in, through JS plugins",
+      "No",
+      "Any of them",
+      "Opt-in, through the same JS plugins",
+    ],
   },
   {
     label: "Formatter",
-    values: ["Oxfmt", "Biome", "Prettier, with its plugins"],
+    values: [
+      "Oxfmt",
+      "Biome",
+      "Prettier, with its plugins",
+      "`bun fmt`, which prints what Oxfmt prints",
+    ],
+  },
+  {
+    label: "Editor support",
+    values: [
+      "Oxc extension",
+      "Biome extension",
+      "ESLint, Prettier and Stylelint extensions",
+      "Oxc extension, running Oxlint and Oxfmt on the same configs",
+    ],
   },
   {
     label: "Files `init` writes",
@@ -116,6 +159,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
       "`oxlint.config.ts`, `oxfmt.config.ts`",
       "`biome.jsonc`",
       "`eslint.config.mjs`, `prettier.config.mjs`, `stylelint.config.mjs`",
+      "`oxlint.config.ts`, `oxfmt.config.ts`",
     ],
   },
   {
@@ -124,6 +168,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
       "Speed and breadth together: the default for new projects",
       "One tool and one config file that lints, formats and sorts",
       "Template linting in Vue and Svelte, Prettier plugins, niche ESLint plugins",
+      "Projects on Bun that want Oxlint’s rules without the Oxc packages",
     ],
   },
 ];
@@ -131,18 +176,18 @@ const rows: { label: string; values: [string, string, string] }[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "Start with Oxlint. It’s what `init` recommends: native speed, 474 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want one tool and one config file that lints, formats and sorts. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted.",
+      "Start with Oxlint. It’s what `init` recommends: native speed, 474 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want one tool and one config file that lints, formats and sorts. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted. Pick Bun if your project runs on a Bun that has `bun lint` and `bun fmt` and you’d rather not install the Oxc packages: it runs the same configs as Oxlint.",
     question: "Which engine should I pick?",
   },
   {
     answer:
-      "Yes. Run `npx ultracite init --linter biome` (or `oxlint`, or `eslint`). `init` removes the packages and config files it installed for the old engine, writes the new engine’s config, and merges into your `.vscode/settings.json` instead of replacing it.",
+      "Yes. Run `npx ultracite init --linter biome` (or `oxlint`, `eslint` or `bun`). `init` removes the packages and config files it installed for the old engine, writes the new engine’s config, and merges into your `.vscode/settings.json` instead of replacing it. Oxlint and Bun share their config files, so moving between those two only changes where `defineConfig` is imported from.",
     question: "Can I switch engines later?",
   },
   {
     answer:
-      "They aim at the same standard: type safety, React and hooks, accessibility, async code and imports. Names differ by engine (`noExplicitAny` in Biome, `no-explicit-any` in Oxlint and ESLint), and ESLint turns on the most rules because the most plugins exist for it.",
-    question: "Do all three enforce the same rules?",
+      "They aim at the same standard: type safety, React and hooks, accessibility, async code and imports. Names differ by engine (`noExplicitAny` in Biome, `no-explicit-any` in Oxlint and ESLint), and ESLint turns on the most rules because the most plugins exist for it. Bun runs Oxlint’s presets, minus the `jsdoc/*` and `vue/*` rules it doesn’t implement.",
+    question: "Do all four enforce the same rules?",
   },
   {
     answer: `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files the two were level, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
@@ -153,17 +198,17 @@ const faqs: FaqItem[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description="Ultracite configures Oxlint + Oxfmt, Biome or ESLint + Prettier + Stylelint with the same strict standard. Compare their rules, speed and tradeoffs."
+  description="Ultracite configures Oxlint + Oxfmt, Biome, ESLint + Prettier + Stylelint or Bun with the same strict standard. Compare their rules, speed and tradeoffs."
   faqs={faqs}
   lastModified={lastModified}
-  title="Ultracite Providers — Oxlint, Biome and ESLint Compared"
+  title="Ultracite Providers — Oxlint, Biome, ESLint and Bun Compared"
 >
   <section class="border-border border-y">
     <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
         <p class="text-muted-foreground font-mono text-xs/5">Providers</p>
         <h1 class="mt-10 max-w-[16ch] text-5xl font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:mt-12 lg:text-7xl">
-          One standard, three engines
+          One standard, four engines
         </h1>
         <div class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10">
           <p class="text-muted-foreground max-w-[48ch] text-lg/8 text-pretty lg:col-span-6">
@@ -177,7 +222,10 @@ const faqs: FaqItem[] = [
         </div>
       </div>
       <div class="border-border bg-signal border-t p-2 sm:p-6 lg:p-10">
-        <ul class="grid gap-2 sm:gap-4 lg:grid-cols-3" role="list">
+        <ul
+          class="grid gap-2 sm:gap-4 md:grid-cols-2 xl:grid-cols-4"
+          role="list"
+        >
           {engines.map((engine) => (
             <li class="flex">
               <a
@@ -246,17 +294,17 @@ const faqs: FaqItem[] = [
         preset.
       </SectionHeading>
       <div class="border-border overflow-x-auto border-t">
-        <table class="w-full min-w-[56rem] border-collapse text-left text-[15px]/6">
+        <table class="w-full min-w-[68rem] border-collapse text-left text-[15px]/6">
           <thead>
             <tr class="border-border border-b">
               <th
-                class="text-muted-foreground w-[22%] px-4 py-4 font-normal sm:px-6 lg:px-10"
+                class="text-muted-foreground w-[18%] px-4 py-4 font-normal sm:px-6 lg:px-10"
                 scope="col"
               >
                 <span class="sr-only">Property</span>
               </th>
               {engines.map((engine) => (
-                <th class="w-[26%] px-4 py-4 font-medium sm:px-6" scope="col">
+                <th class="w-[20.5%] px-4 py-4 font-medium sm:px-6" scope="col">
                   <span class="flex items-center gap-2.5">
                     <img
                       alt=""
@@ -291,11 +339,13 @@ const faqs: FaqItem[] = [
         </table>
       </div>
       <p class="border-border text-muted-foreground border-t px-4 py-5 text-sm/6 text-pretty sm:px-6 lg:px-10">
-        Ultracite 8.2.0. Times are medians of five runs of{" "}
+        Ultracite 8.2.0, and 8.0.1 with the Bun provider for Bun’s times. Times
+        are medians of five runs of{" "}
         <code class="font-mono text-[13px]">ultracite check</code> on{" "}
         {benchmarkMachine} over the repo’s benchmark fixture, with{" "}
-        {toolchainVersions.oxlint}; {toolchainVersions.biome}; and{" "}
-        {toolchainVersions.eslint}. They include starting Node and the CLI.
+        {toolchainVersions.oxlint}; {toolchainVersions.biome};{" "}
+        {toolchainVersions.eslint}; and {toolchainVersions.bun}. They include
+        starting Node and the CLI.
       </p>
     </div>
   </section>
