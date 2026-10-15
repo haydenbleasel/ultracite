@@ -868,6 +868,62 @@ describe("initialize", () => {
     );
   });
 
+  test.each([
+    [["husky"], "npx ultracite fix --staged"],
+    [["husky", "lint-staged"], "npx lint-staged"],
+  ] as const)(
+    "a Bun project with %j gets a hook that runs %s",
+    async (integrations, command) => {
+      const written = new Map<string, string>();
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mock((filePath: string, content: string) => {
+          written.set(String(filePath), content);
+
+          return Promise.resolve();
+        }),
+      }));
+      mock.module("@clack/prompts", () => ({
+        cancel: mock(noop),
+        confirm: mock(() => Promise.resolve(false)),
+        intro: mock(noop),
+        isCancel: mock(() => false),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mock(() => Promise.resolve([])),
+        outro: mock(noop),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await initialize({
+        agents: [],
+        editors: [],
+        frameworks: [],
+        hooks: [],
+        integrations: [...integrations],
+        linter: "bun",
+        pm: "npm",
+        skipInstall: true,
+      });
+
+      const hook = written.get("./.husky/pre-commit") ?? "";
+      expect(hook).toContain(`\n${command}\n`);
+      expect(hook).not.toContain("git diff");
+    }
+  );
+
   test("completes successfully with minimal options", async () => {
     const mockLog = {
       error: mock(noop),

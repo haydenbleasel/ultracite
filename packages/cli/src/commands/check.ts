@@ -11,7 +11,11 @@ import {
   toOxlintTargets,
   toStylelintTargets,
 } from "../linter-args";
-import { assertBunCanLint, spawnBun } from "../linters/bun";
+import {
+  assertBunCanLint,
+  bunFileSelectionArgs,
+  spawnBun,
+} from "../linters/bun";
 import {
   exitOnCommandFailure,
   NO_LINTER_CONFIG_MESSAGE,
@@ -194,7 +198,8 @@ export const check = (
     case "bun": {
       assertBunCanLint();
       runSteps([
-        () => runBunFmtCheck(normalizedFiles, []),
+        () =>
+          runBunFmtCheck(normalizedFiles, bunFileSelectionArgs(passthrough)),
         () => runBunLintCheck(normalizedFiles, passthrough),
       ]);
       break;

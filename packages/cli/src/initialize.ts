@@ -39,6 +39,7 @@ import { getEditorFileTargets } from "./editors";
 import type { EditorFileTarget } from "./editors";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
+import type { HuskyHookMode } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
@@ -1061,7 +1062,7 @@ export const initializePrecommitHook = async (
   packageManager: PackageManager,
   install = true,
   quiet = false,
-  useLintStaged = false
+  mode: HuskyHookMode = "script"
 ) => {
   const s = spinner();
 
@@ -1099,7 +1100,7 @@ export const initializePrecommitHook = async (
       s.message("Pre-commit hook found, updating...");
     }
 
-    await husky.update(packageManager.name, useLintStaged);
+    await husky.update(packageManager.name, mode);
 
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
@@ -1112,7 +1113,7 @@ export const initializePrecommitHook = async (
     s.message("Pre-commit hook not found, creating...");
   }
 
-  await husky.create(packageManager.name, useLintStaged);
+  await husky.create(packageManager.name, mode);
 
   if (!quiet) {
     s.stop("Pre-commit hook created.");
@@ -1725,7 +1726,8 @@ const selectHooks = async (
 
 const selectIntegrations = async (
   opts: InitializeFlags,
-  interactive: boolean
+  interactive: boolean,
+  linter: Linter
 ): Promise<(typeof options.integrations)[number][]> => {
   if (opts.integrations !== undefined) {
     return opts.integrations;
@@ -1740,7 +1742,15 @@ const selectIntegrations = async (
     options: [
       { label: "Husky pre-commit hook", value: "husky" },
       { label: "Lefthook pre-commit hook", value: "lefthook" },
-      { label: "Lint-staged", value: LINT_STAGED },
+      {
+        // Bun's own --staged mode does lint-staged's job in the Husky hook.
+        hint:
+          linter === "bun"
+            ? "not needed with Bun: the Husky hook runs ultracite fix --staged"
+            : undefined,
+        label: "Lint-staged",
+        value: LINT_STAGED,
+      },
       { label: "pre-commit (Python framework)", value: "pre-commit" },
     ],
     required: false,
@@ -1764,7 +1774,7 @@ const selectInitializeOptions = async (
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
   const hooks = await selectHooks(opts, interactive);
-  const integrations = await selectIntegrations(opts, interactive);
+  const integrations = await selectIntegrations(opts, interactive, linter);
 
   return {
     ...editorSelections,
@@ -2046,17 +2056,35 @@ const setupSelectedFiles = async ({
   );
 };
 
+// lint-staged runs the hook when it's selected. Otherwise a Bun project
+// lets `bun lint --staged` and `bun fmt --staged` pick the staged files,
+// and the rest use the hook's own script.
+const huskyHookMode = (
+  integrations: readonly (typeof options.integrations)[number][],
+  linter: Linter
+): HuskyHookMode => {
+  if (integrations.includes(LINT_STAGED)) {
+    return "lint-staged";
+  }
+
+  return linter === "bun" ? "bun" : "script";
+};
+
 const setupIntegrations = async ({
   install,
   pmInfo,
   quiet,
   selections,
 }: InitializeContext): Promise<void> => {
-  const { integrations } = selections;
+  const { integrations, linter } = selections;
 
   if (integrations.includes("husky")) {
-    const useLintStaged = integrations.includes(LINT_STAGED);
-    await initializePrecommitHook(pmInfo, install, quiet, useLintStaged);
+    await initializePrecommitHook(
+      pmInfo,
+      install,
+      quiet,
+      huskyHookMode(integrations, linter)
+    );
   }
 
   if (integrations.includes("lefthook")) {
