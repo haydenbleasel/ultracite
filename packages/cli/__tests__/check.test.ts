@@ -798,6 +798,26 @@ describe("check", () => {
     ]);
   });
 
+  // Other flags only reach bun lint, so bun fmt would otherwise check the
+  // whole project.
+  test("checks the same Git-selected files with both Bun tools", () => {
+    const mockSpawn = mockBunSpawn();
+
+    check([], ["--changed=origin/dev", "--type-aware"]);
+
+    expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
+      ["lint", "--help"],
+      [
+        "fmt",
+        "--check",
+        "--no-error-on-unmatched-pattern",
+        "--changed=origin/dev",
+        ".",
+      ],
+      ["lint", "--changed=origin/dev", "--type-aware", "."],
+    ]);
+  });
+
   // `bun lint` runs a package.json "lint" script instead of linting, unless
   // it's already inside one.
   test("runs each Bun tool as if inside its own package.json script", () => {

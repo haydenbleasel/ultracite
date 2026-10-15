@@ -1409,6 +1409,20 @@ describe("fix with Bun", () => {
     }
   });
 
+  // What the Bun provider's husky hook runs: both tools fix only the staged
+  // files and stage them again.
+  test("fixes and formats only the staged files with --staged", () => {
+    const mockSpawn = mockBun();
+
+    fix([], ["--staged"]);
+
+    expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
+      ["lint", "--help"],
+      ["lint", "--fix", "--staged", "."],
+      ["fmt", "--write", "--no-error-on-unmatched-pattern", "--staged", "."],
+    ]);
+  });
+
   test("converts --unsafe to --fix-dangerously for bun lint", () => {
     const mockSpawn = mockBun();
 

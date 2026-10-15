@@ -16,7 +16,11 @@ import {
   toStylelintTargets,
 } from "../linter-args";
 import type { FixAgent } from "../linter-args";
-import { assertBunCanLint, spawnBun } from "../linters/bun";
+import {
+  assertBunCanLint,
+  bunFileSelectionArgs,
+  spawnBun,
+} from "../linters/bun";
 import {
   exitOnCommandFailure,
   LinterExitError,
@@ -303,7 +307,7 @@ const runLinterFixes = (
       assertBunCanLint();
       runSteps([
         () => runBunLintFix(files, passthrough, io),
-        () => runBunFmtFix(files, [], io),
+        () => runBunFmtFix(files, bunFileSelectionArgs(passthrough), io),
       ]);
       break;
     }

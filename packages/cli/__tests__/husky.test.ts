@@ -92,7 +92,7 @@ fi
 // `npx ultracite fix`.
 const createHookRepo = async (dir: string): Promise<void> => {
   const written = mockProject({});
-  await husky.create("npm", false);
+  await husky.create("npm", "script");
   restoreFileSystemMock();
 
   const script = (written.get("./.husky/pre-commit") ?? "").replace(
@@ -252,7 +252,7 @@ describe("husky", () => {
       expect(mockMkdir).toHaveBeenCalledWith(".husky", { recursive: true });
     });
 
-    test("creates standalone hook when useLintStaged is false", async () => {
+    test("creates the standalone hook in script mode", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -264,7 +264,7 @@ describe("husky", () => {
         writeFile: mockWriteFile,
       }));
 
-      await husky.create("npm", false);
+      await husky.create("npm", "script");
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
@@ -274,7 +274,7 @@ describe("husky", () => {
       expect(writeCall[1]).toContain("# ultracite");
     });
 
-    test("creates lint-staged hook when useLintStaged is true", async () => {
+    test("creates the lint-staged hook in lint-staged mode", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()
       );
@@ -292,13 +292,24 @@ describe("husky", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
-      await husky.create("npm", true);
+      await husky.create("npm", "lint-staged");
 
       expect(mockWriteFile).toHaveBeenCalled();
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[0]).toBe("./.husky/pre-commit");
       expect(writeCall[1]).toContain("npx lint-staged");
       expect(writeCall[1]).not.toContain("npx ultracite");
+    });
+
+    test("creates a hook that leaves the staged files to Bun in bun mode", async () => {
+      const written = mockProject({});
+
+      await husky.create("bun", "bun");
+      restoreFileSystemMock();
+
+      expect(written.get("./.husky/pre-commit")).toBe(
+        "# ultracite\n#!/bin/sh\nbunx ultracite fix --staged\n# ultracite end\n"
+      );
     });
 
     test("standalone hook does not use git stash", async () => {
@@ -313,7 +324,7 @@ describe("husky", () => {
         writeFile: mockWriteFile,
       }));
 
-      await husky.create("npm", false);
+      await husky.create("npm", "script");
 
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).not.toContain("git stash");
@@ -331,7 +342,7 @@ describe("husky", () => {
         writeFile: mockWriteFile,
       }));
 
-      await husky.create("npm", false);
+      await husky.create("npm", "script");
 
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain('git add -- "$file"');
@@ -499,7 +510,7 @@ describe("husky", () => {
         writeFile: mockWriteFile,
       }));
 
-      await husky.create("npm", false);
+      await husky.create("npm", "script");
 
       const [writeCall] = mockWriteFile.mock.calls;
       const [, written] = writeCall;
@@ -536,7 +547,7 @@ describe("husky", () => {
         removeDependency: mock(() => Promise.resolve()),
       }));
 
-      await husky.update("npm", true);
+      await husky.update("npm", "lint-staged");
 
       const [writeCall] = mockWriteFile.mock.calls;
       expect(writeCall[1]).toContain("npx lint-staged");
@@ -578,12 +589,12 @@ describe("husky", () => {
     test("runs the project's installed tools with Yarn and pnpm", async () => {
       const written = mockProject({});
 
-      await husky.create("yarn", true);
+      await husky.create("yarn", "lint-staged");
       expect(written.get("./.husky/pre-commit")).toContain(
         "\nyarn lint-staged\n"
       );
 
-      await husky.create("pnpm", false);
+      await husky.create("pnpm", "script");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
@@ -607,7 +618,7 @@ describe("husky", () => {
     test("lets commands after the section run when nothing is staged", async () => {
       const written = mockProject({});
 
-      await husky.create("npm", false);
+      await husky.create("npm", "script");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
@@ -618,7 +629,7 @@ describe("husky", () => {
     test("fixes only the staged files, passed safely through xargs", async () => {
       const written = mockProject({});
 
-      await husky.create("pnpm", false);
+      await husky.create("pnpm", "script");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
@@ -637,7 +648,7 @@ describe("husky", () => {
     test("re-stages only the files that had no unstaged changes", async () => {
       const written = mockProject({});
 
-      await husky.create("npm", false);
+      await husky.create("npm", "script");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
@@ -683,7 +694,7 @@ describe("husky", () => {
         ].join("\n"),
       });
 
-      await husky.update("npm", false);
+      await husky.update("npm", "script");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
@@ -694,13 +705,31 @@ describe("husky", () => {
       expect(script.endsWith("# ultracite end\nnpm test\n")).toBe(true);
     });
 
+    test("swaps the standalone section for Bun's staged mode, keeping user commands", async () => {
+      const written = mockProject({});
+      await husky.create("npm", "script");
+      const standalone = written.get("./.husky/pre-commit") ?? "";
+      restoreFileSystemMock();
+
+      const updated = mockProject({
+        "./.husky/pre-commit": `echo "before"\n${standalone}npm test\n`,
+      });
+
+      await husky.update("npm", "bun");
+      restoreFileSystemMock();
+
+      expect(updated.get("./.husky/pre-commit")).toBe(
+        'echo "before"\n# ultracite\n#!/bin/sh\nnpx ultracite fix --staged\n# ultracite end\nnpm test\n'
+      );
+    });
+
     test("replaces the section of a CRLF hook instead of appending another", async () => {
       const written = mockProject({
         "./.husky/pre-commit":
           "npm test\r\n# ultracite\r\n#!/bin/sh\r\nnpx lint-staged\r\n# ultracite end\r\n",
       });
 
-      await husky.update("npm", true);
+      await husky.update("npm", "lint-staged");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit");
@@ -714,7 +743,7 @@ describe("husky", () => {
         "./.husky/pre-commit": "# ultracite runs below\nnpm test",
       });
 
-      await husky.update("npm", true);
+      await husky.update("npm", "lint-staged");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
@@ -728,7 +757,7 @@ describe("husky", () => {
           "# ultracite\n#!/bin/sh\nyarn dlx lint-staged\nnpm test\n",
       });
 
-      await husky.update("yarn", true);
+      await husky.update("yarn", "lint-staged");
       restoreFileSystemMock();
 
       const script = written.get("./.husky/pre-commit") ?? "";
