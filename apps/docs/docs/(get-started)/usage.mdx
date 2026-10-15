@@ -33,7 +33,7 @@ In many cases, the VS Code extension for your linter provides quick fix suggesti
 
 Ultracite comes with a CLI that wraps your chosen linter. The commands work the same regardless of which toolchain you're using.
 
-Any unknown flags are passed through to the underlying linter, so you can use any flag your linter supports (e.g. `--max-warnings` for ESLint, `--since` for Biome), and flags that take a value keep it (e.g. `--tsconfig tsconfig.json` or `--only lint/suspicious/noDebugger`). If you need to lint a file path that starts with `-`, pass it after `--` so Ultracite treats it as a file instead of a linter flag.
+Any unknown flags are passed through to the underlying linter, so you can use any flag your linter supports (e.g. `--max-warnings` for ESLint, `--since` for Biome; on Bun they go to `bun lint`, which takes Oxlint's and ESLint's flags), and flags that take a value keep it (e.g. `--tsconfig tsconfig.json` or `--only lint/suspicious/noDebugger`). If you need to lint a file path that starts with `-`, pass it after `--` so Ultracite treats it as a file instead of a linter flag.
 
 Both `check` and `fix` accept any file paths: files your tools don't handle, like a `Dockerfile`, `.env`, or `README`, are skipped rather than failing the run, so you can pass a list of changed files as is. With the ESLint toolchain, a missing Stylelint install skips CSS linting with a warning instead of stopping the other tools.
 
@@ -44,6 +44,8 @@ The `check` command runs the linter without modifying files:
 ```bash title="Terminal"
 npx ultracite check
 ```
+
+On Bun, `check` runs `bun fmt --check` and then `bun lint`, and `fix` runs `bun lint --fix` and then `bun fmt`. Both tools read `oxlint.config.ts` and `oxfmt.config.ts`, so running `bun lint` or `bun fmt --check` yourself reports the same problems, with one catch: when `package.json` has a `lint` or `fmt` script, `bun lint` or `bun fmt` runs that script instead. `ultracite check` and `fix` always run Bun's own tools.
 
 ### Fixing Code
 
@@ -59,7 +61,7 @@ You can also apply unsafe fixes (fixes that may change code behavior):
 npx ultracite fix --unsafe
 ```
 
-With Biome, this applies Biome's unsafe fixes; with Oxlint, it runs `oxlint --fix-dangerously`. ESLint has no unsafe tier of fixes, so with the ESLint toolchain the flag is ignored with a warning.
+With Biome, this applies Biome's unsafe fixes; with Oxlint, it runs `oxlint --fix-dangerously`, and with Bun, `bun lint --fix-dangerously`. ESLint has no unsafe tier of fixes, so with the ESLint toolchain the flag is ignored with a warning.
 
 Some Biome fixes are intentionally marked unsafe because they can change runtime behavior. For example, Ultracite already enables Biome's `noSubstr` rule, but rewriting `substring()` or `substr()` to `slice()` only happens when you run `ultracite fix --unsafe`.
 
@@ -111,6 +113,14 @@ For Oxlint, `--type-aware` installs `oxlint-tsgolint` and sets `options: { typeA
 npx ultracite init --linter oxlint --type-aware
 ```
 
+#### Bun
+
+For Bun, `--type-aware` sets `options: { typeAware: true }` in `oxlint.config.ts`, as for Oxlint, and installs nothing for it: `bun lint` gets the types from [`bun check`](https://bun.com/docs/runtime/check), Bun's built-in type checker. The Oxc extension still needs `oxlint-tsgolint` to show those rules in your editor, so `init` installs it when it sets up an editor.
+
+```bash title="Terminal"
+npx ultracite init --linter bun --type-aware
+```
+
 You can also enable TypeScript compiler diagnostics (experimental) at runtime:
 
 ```bash title="Terminal"
@@ -119,7 +129,7 @@ npx ultracite fix --type-check
 ```
 
 :::note
-`--type-check` is an Oxlint flag, passed through to Oxlint. Type-aware rules are set up in the config at init time on every linter and need no runtime flag.
+`--type-check` is an Oxlint flag, passed through to Oxlint or `bun lint`, which takes it too. Type-aware rules are set up in the config at init time on every linter and need no runtime flag.
 :::
 
 ### Validating Setup
@@ -130,9 +140,13 @@ The `doctor` command checks your setup for issues and provides recommendations. 
 npx ultracite doctor
 ```
 
-Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt. A tool that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash). A tool that is newer than the supported range only warns.
+Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt (which a Bun project only has for the editor extension, so for Bun a missing one isn't a problem). A tool that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash). A tool that is newer than the supported range only warns.
 
-For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both. Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's version.
+For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both.
+
+For Bun projects, `doctor` checks that the Bun on your `PATH` has `bun lint` and `bun fmt` (Bun 1.4.4 or later), and that both configs are there. It warns when `package.json` has a `lint` or `fmt` script, which `bun lint` and `bun fmt` would run instead of linting, and when `bunfig.toml` has `[lint]` or `[fmt]` settings: Bun applies them on top of `oxlint.config.ts` and `oxfmt.config.ts`, but the Oxc extension doesn't read them, so your editor and `ultracite check` would disagree. Keep overrides in the two config files.
+
+Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's version.
 
 ### Upgrading
 

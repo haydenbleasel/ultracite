@@ -1,11 +1,11 @@
 ---
 name: ultracite
-description: "Ultracite is a zero-config linting and formatting preset for JavaScript/TypeScript projects. Use when: (1) Setting up or initializing Ultracite in a project, or migrating its existing lint and format config onto Ultracite (ultracite init), (2) Running linting or formatting commands (check, fix, doctor), (3) Writing or reviewing JS/TS code in a project that uses Ultracite — to follow its code standards, (4) Troubleshooting linting/formatting issues, (5) Upgrading Ultracite or bringing its configuration up to a newer release (ultracite upgrade), (6) User mentions 'ultracite', 'lint', 'format', 'code quality', or 'biome/eslint/oxlint' in a project with Ultracite installed."
+description: "Ultracite is a zero-config linting and formatting preset for JavaScript/TypeScript projects. Use when: (1) Setting up or initializing Ultracite in a project, or migrating its existing lint and format config onto Ultracite (ultracite init), (2) Running linting or formatting commands (check, fix, doctor), (3) Writing or reviewing JS/TS code in a project that uses Ultracite — to follow its code standards, (4) Troubleshooting linting/formatting issues, (5) Upgrading Ultracite or bringing its configuration up to a newer release (ultracite upgrade), (6) User mentions 'ultracite', 'lint', 'format', 'code quality', or 'biome/eslint/oxlint/bun lint' in a project with Ultracite installed."
 ---
 
 # Ultracite
 
-Zero-config linting and formatting for JS/TS projects. Supports three linter backends: **Oxlint** + Oxfmt (recommended), **Biome**, and **ESLint** + Prettier + Stylelint.
+Zero-config linting and formatting for JS/TS projects. Supports four linter backends: **Oxlint** + Oxfmt (recommended), **Biome**, **ESLint** + Prettier + Stylelint, and **Bun** (`bun lint` + `bun fmt`, on the Oxlint and Oxfmt presets).
 
 ## Detecting Ultracite
 
@@ -14,6 +14,7 @@ Check if `ultracite` is in `package.json` dependencies or devDependencies. Detec
 - `biome.json` / `biome.jsonc` → Biome
 - `eslint.config.*` (`.mjs`, `.js`, `.cjs`, `.ts`, `.mts`, `.cts`) → ESLint (with Prettier for formatting)
 - `oxlint.config.ts`, `oxlint.config.mts` or `.oxlintrc.json` → Oxlint (with `oxfmt.config.ts` or `oxfmt.config.mts` for formatting; init writes the `.mts` form in a package that isn't an ES module)
+- The same oxlint and oxfmt configs importing `defineConfig` from `ultracite/bun` → Bun, which runs them with `bun lint` and `bun fmt` (Bun 1.4.4 or later). `bunfig.toml` never decides the linter
 
 ## CLI Commands
 
@@ -53,14 +54,14 @@ bunx ultracite init \
 **Flags:**
 
 - `--pm` — `npm` | `yarn` | `pnpm` | `bun` | `deno` | `nub` | `aube`
-- `--linter` — `oxlint` (recommended) | `biome` | `eslint`
+- `--linter` — `oxlint` (recommended) | `biome` | `eslint` | `bun`
 - `--editors` — `universal` (writes `.vscode/settings.json` for every VS Code-based editor) | `vscode` | `cursor` | `devin` | `codebuddy` | `antigravity` | `bob` | `kiro` | `trae` | `void` | `zed`
 - `--agents` — every choice writes the rules to `AGENTS.md`. `universal` writes only that; `claude`, `gemini`, `aider` and `replit` also add the import, settings or copy that agent needs to read them; IDs like `codex`, `copilot`, `cline`, `amp` and `cursor-cli` (40 agents supported) need nothing more
 - `--frameworks` — `react` | `next` | `solid` | `vue` | `svelte` | `qwik` | `remix` | `tanstack` | `angular` | `astro` | `nestjs` | `jest` | `vitest` | `cypress` | `storybook`
 - `--integrations` — `husky` | `lefthook` | `lint-staged` | `pre-commit`
 - `--hooks` — Enable auto-fix hooks: `claude` | `codex` | `copilot` | `cursor` | `devin` | `codebuddy` | `deepagents` | `grok`
-- `--js-plugins` — Opt-in Oxlint JS plugins: `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-jsdoc` | `eslint-plugin-sonarjs` | `eslint-plugin-tsdoc` | `oxlint-plugin-react-doctor`
-- `--type-aware` — Enable type-aware linting (ESLint and Biome: extend their `type-aware` preset; Oxlint: installs `oxlint-tsgolint` and sets `typeAware`), and turn on `strictNullChecks` in tsconfig files
+- `--js-plugins` — Opt-in Oxlint JS plugins (Oxlint or Bun): `@shadcn/lint` | `anti-slop` | `eslint-plugin-github` | `eslint-plugin-jsdoc` | `eslint-plugin-sonarjs` | `eslint-plugin-tsdoc` | `oxlint-plugin-react-doctor`
+- `--type-aware` — Enable type-aware linting (ESLint and Biome: extend their `type-aware` preset; Oxlint: installs `oxlint-tsgolint` and sets `typeAware`; Bun: sets `typeAware`, with types from `bun check`), and turn on `strictNullChecks` in tsconfig files
 - `--install-skill` — Install the reusable Ultracite skill after setup
 - `--skip-install` — Skip dependency installation
 - `--yes`, `-y` — Take the defaults without prompting (automatic when `CI=true` or there's no terminal); defaults to `oxlint` when `--linter` is omitted
@@ -91,7 +92,9 @@ export default defineConfig({
 });
 ```
 
-Presets available per linter (`ultracite/<linter>/<preset>`): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`, `cypress`, `storybook` (`cypress` and `storybook` only have rules on ESLint; on Oxlint and Biome they're empty). ESLint and Biome also have `type-aware`, the rules that need type information, and ESLint has a `<framework>/type-aware` add-on for `angular`, `jest`, `nestjs`, `qwik`, `tanstack` and `vitest`, extended after that framework's preset. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
+A Bun project gets the same `oxlint.config.ts` and `oxfmt.config.ts`, with `import { defineConfig } from "ultracite/bun"` in place of `oxlint` and `oxfmt`. It drops the rules Bun doesn't implement (today `jsdoc/*` and `vue/*`) from the extended presets, and lets the configs load without `oxlint` or `oxfmt` installed. `bun lint` and `bun fmt` run a package.json `lint` or `fmt` script instead when there is one; `ultracite check` and `fix` always run Bun's tools.
+
+Presets available per linter (`ultracite/<linter>/<preset>`, with Bun using Oxlint's): `core`, `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`, `cypress`, `storybook` (`cypress` and `storybook` only have rules on ESLint; on Oxlint and Biome they're empty). ESLint and Biome also have `type-aware`, the rules that need type information, and ESLint has a `<framework>/type-aware` add-on for `angular`, `jest`, `nestjs`, `qwik`, `tanstack` and `vitest`, extended after that framework's preset. Oxlint also has `js-plugins` (`eslint-plugin-github`, `eslint-plugin-sonarjs` and `oxlint-plugin-react-doctor` run through oxlint's JS plugin support, with `next/js-plugins` and `tanstack/js-plugins` adding framework-specific React Doctor rules), `anti-slop` and `shadcn`. These are opt-in: init only adds them when picked in its prompt or passed with `--js-plugins`. Oxlint and ESLint also have `gdp`, for codebases that use gdp-ts authorization proofs (`@gdp-ts/core` ships the plugin); init never adds it, so extend it by hand after `core`.
 
 ## Migrating an Existing Project
 
@@ -139,7 +142,7 @@ Formatting is handled by the project's configured linter/formatter. Respect the 
 
 Run `bunx ultracite doctor` to diagnose. It checks:
 
-1. Linter and formatter installation (Biome; or ESLint + Prettier + Stylelint; or Oxlint + oxfmt)
+1. Linter and formatter installation (Biome; or ESLint + Prettier + Stylelint; or Oxlint + oxfmt; or a Bun with `bun lint` and `bun fmt`)
 2. Config validity (extends the ultracite presets correctly)
 3. Ultracite in package.json dependencies
 4. Conflicting tools when not using the ESLint backend (legacy `.eslintrc.*` files, `.prettierrc.*`/`prettier.config.*`)

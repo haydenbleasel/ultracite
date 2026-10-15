@@ -83,6 +83,8 @@ for (const [index, line] of settings.split("\n").entries()) {
 
 // How each toolchain runs here, read from what `init` writes.
 const toolchainRows = isZed ? zedToolchains() : vscodeToolchains();
+const countWords = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
+const toolchainCount = countWords[toolchainRows.length] ?? String(toolchainRows.length);
 
 const [defaultToolchain] = toolchainRows;
 const defaultExtensions = defaultToolchain?.extensions ?? [];
@@ -294,14 +296,14 @@ const checkedAgainst = content.checked.version
 
   <section aria-labelledby="ed-toolchains" class="border-border border-b">
     <div class="hp-frame mx-auto max-w-7xl border-border border-x">
-      <SectionHeading id="ed-toolchains" title={`Three toolchains, one ${settingsPath.split("/").at(-1)}`}>
+      <SectionHeading id="ed-toolchains" title={`${toolchainCount} toolchains, one ${settingsPath.split("/").at(-1)}`}>
         <code class="font-mono text-base">init</code> writes the settings for
         the toolchain you pick, so {name} formats with the same tool as{" "}
         <code class="font-mono text-base">ultracite fix</code> and applies its
         fixes when you save.
       </SectionHeading>
       <ul
-        class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-3"
+        class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2 xl:grid-cols-4"
         role="list"
       >
         {

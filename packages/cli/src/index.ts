@@ -97,7 +97,7 @@ program
   )
   .option(
     "--type-aware",
-    "Enable type-aware linting and the strictNullChecks it needs (ESLint and Biome: add the type-aware preset; Oxlint: install oxlint-tsgolint and turn it on)"
+    "Enable type-aware linting and the strictNullChecks it needs (ESLint and Biome: add the type-aware preset; Oxlint: install oxlint-tsgolint and turn it on; Bun: turn it on)"
   )
   .option("--skip-install", "Skip installing dependencies")
   .option(

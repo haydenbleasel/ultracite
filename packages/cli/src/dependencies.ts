@@ -48,6 +48,13 @@ export const isOxlintNpmJsPlugin = (
 ): jsPlugin is OxlintNpmJsPlugin => jsPlugin !== "anti-slop";
 
 /**
+ * The first Bun release with `bun lint` and `bun fmt`, which the Bun
+ * provider runs. Bun isn't an npm dependency of the project, so `ultracite
+ * doctor` and the Bun commands check the installed version against this.
+ */
+export const MIN_BUN_VERSION = "1.4.4";
+
+/**
  * The Oxlint toolchain `init` installs and `upgrade` re-syncs, at the ranges
  * the presets were verified against. oxfmt is pre-1.0, so its caret range
  * holds the minor version and formatting doesn't change under a project
@@ -245,8 +252,25 @@ const eslintDevDependencyNames = new Set([
   ),
 ]);
 
+// The Oxlint toolchain and the JS plugins an Oxlint config can load. Bun
+// reads the same configs and runs their JS plugins, and the editor
+// extensions run oxlint, oxfmt and oxlint-tsgolint on them, so switching
+// between Oxlint and Bun prunes nothing either way.
+const oxlintDependencyNames = new Set([
+  "@shadcn/lint",
+  "eslint-plugin-github",
+  "eslint-plugin-jsdoc",
+  "eslint-plugin-sonarjs",
+  "eslint-plugin-tsdoc",
+  "oxfmt",
+  "oxlint",
+  "oxlint-plugin-react-doctor",
+  "oxlint-tsgolint",
+]);
+
 export const dependencyNamesByLinter = {
   biome: new Set(["@biomejs/biome"]),
+  bun: oxlintDependencyNames,
   // Only the Oxlint setup installs eslint-plugin-tsdoc, but it's an ESLint
   // plugin an ESLint config may load too, so ESLint setups don't prune it.
   // eslint-plugin-prettier and stylelint-prettier are what earlier versions
@@ -258,15 +282,5 @@ export const dependencyNamesByLinter = {
     "eslint-plugin-tsdoc",
     "stylelint-prettier",
   ]),
-  oxlint: new Set([
-    "@shadcn/lint",
-    "eslint-plugin-github",
-    "eslint-plugin-jsdoc",
-    "eslint-plugin-sonarjs",
-    "eslint-plugin-tsdoc",
-    "oxfmt",
-    "oxlint",
-    "oxlint-plugin-react-doctor",
-    "oxlint-tsgolint",
-  ]),
+  oxlint: oxlintDependencyNames,
 } satisfies Record<Linter, Set<string>>;

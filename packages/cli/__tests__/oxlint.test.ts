@@ -1370,6 +1370,92 @@ export default defineConfig({
   });
 });
 
+describe("oxlint config for the Bun provider", () => {
+  const oxlintConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, react],
+  ignorePatterns: core.ignorePatterns,
+  rules: {
+    eqeqeq: "off",
+  },
+});
+`;
+
+  test("imports defineConfig from ultracite/bun", async () => {
+    const project = mockProject({ "package.json": '{"type": "module"}' });
+
+    await oxlint.create({ bun: true, frameworks: ["react"] });
+
+    const [[filePath, content]] = project.writeFile.mock.calls;
+    expect(filePath).toBe("./oxlint.config.ts");
+    expect(content).toStartWith(`import { defineConfig } from "ultracite/bun";
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+`);
+    expect(content).not.toContain('from "oxlint"');
+  });
+
+  test("switches an Oxlint config to Bun, keeping what the project added", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": oxlintConfig.replace(
+        "import core",
+        'import type { OxlintConfig } from "oxlint";\nimport core'
+      ),
+      "package.json": '{"type": "module"}',
+    });
+
+    await oxlint.update({ bun: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('import { defineConfig } from "ultracite/bun";');
+    expect(content).toContain('import type { OxlintConfig } from "oxlint";');
+    expect(content).not.toContain('import { defineConfig } from "oxlint";');
+    expect(content).toContain("extends: [core, react],");
+    expect(content).toContain('eqeqeq: "off",');
+  });
+
+  test("switches a Bun config back to Oxlint", async () => {
+    const bunConfig = mockProject({
+      "./oxlint.config.ts": oxlintConfig,
+      "package.json": '{"type": "module"}',
+    });
+
+    await oxlint.update({ bun: true });
+    const [[, bunContent]] = bunConfig.writeFile.mock.calls;
+
+    const project = mockProject({
+      "./oxlint.config.ts": bunContent,
+      "package.json": '{"type": "module"}',
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(oxlintConfig);
+  });
+
+  test("keeps the project's other oxlint imports on their own import", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": oxlintConfig.replace(
+        "import { defineConfig } from",
+        "import { defineConfig, type DummyRule } from"
+      ),
+      "package.json": '{"type": "module"}',
+    });
+
+    await oxlint.update({ bun: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toStartWith(`import { type DummyRule } from "oxlint";
+import { defineConfig } from "ultracite/bun";
+`);
+  });
+});
+
 describe("oxlint config file name", () => {
   const config = `import { defineConfig } from "oxlint";
 import core from "ultracite/oxlint/core";

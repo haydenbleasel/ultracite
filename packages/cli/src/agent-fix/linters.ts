@@ -4,7 +4,9 @@ import {
   UltraciteSetupError,
 } from "../config-resolution";
 import { eslintIgnoredFileArgs, toStylelintTargets } from "../linter-args";
+import { assertBunCanLint, spawnBun } from "../linters/bun";
 import { spawnSync } from "../spawn-sync";
+import type { SpawnSyncResult } from "../spawn-sync";
 import type { Linter } from "../utils";
 import type { Diagnostic, LinterAdapter } from "./types";
 
@@ -18,15 +20,11 @@ const STDERR_TAIL_LENGTH = 500;
 // output buffer and abort the run with ENOBUFS, so raise it explicitly.
 const PIPED_MAX_BUFFER = 512 * 1024 * 1024;
 
-const runPiped = (
+const readPiped = (
   command: string,
-  args: string[],
+  result: SpawnSyncResult,
   { optional = false } = {}
 ): string => {
-  const result = spawnSync(command, args, {
-    maxBuffer: PIPED_MAX_BUFFER,
-  });
-
   // An optional tool that isn't installed is skipped, as in the plain fix flow.
   if (optional && result.errorCode === "ENOENT") {
     return "";
@@ -44,6 +42,17 @@ const runPiped = (
 
   return String(result.stdout ?? "");
 };
+
+const runPiped = (
+  command: string,
+  args: string[],
+  options: { optional?: boolean } = {}
+): string =>
+  readPiped(
+    command,
+    spawnSync(command, args, { maxBuffer: PIPED_MAX_BUFFER }),
+    options
+  );
 
 /**
  * Parse a linter's JSON report. The type argument names the reporter's
@@ -136,12 +145,39 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
   return diagnostics;
 };
 
+// The linter and formatter an Oxlint config pass runs: oxlint and oxfmt, or
+// `bun lint` and `bun fmt`, which read the same configs, take the same flags
+// and print the same JSON report.
+interface OxlintTools {
+  format: (args: string[]) => string;
+  lint: (args: string[]) => string;
+}
+
+const oxlintTools: OxlintTools = {
+  format: (args) => runPiped("oxfmt", args),
+  lint: (args) => runPiped("oxlint", args),
+};
+
+const bunTools: OxlintTools = {
+  format: (args) =>
+    readPiped(
+      "bun fmt",
+      spawnBun("fmt", args, { maxBuffer: PIPED_MAX_BUFFER })
+    ),
+  lint: (args) =>
+    readPiped(
+      "bun lint",
+      spawnBun("lint", args, { maxBuffer: PIPED_MAX_BUFFER })
+    ),
+};
+
 // Lint fixes first, then the formatter, matching the plain `fix` path: a
 // fixer can insert unformatted code and oxfmt is not a diagnostic source, so
 // a formatter-first pass would report "no issues" on a file that still fails
 // `oxfmt --check`. The diagnostics handed to the agent come from a final
 // report-only pass so their line numbers reflect the formatted file.
 const runOxlintPass = (
+  tools: OxlintTools,
   files: string[],
   passthrough: string[]
 ): Diagnostic[] => {
@@ -149,30 +185,39 @@ const runOxlintPass = (
   const filteredPassthrough = passthrough.filter((arg) => arg !== "--unsafe");
   const targets = toTargets(files, ".");
 
-  runPiped("oxlint", [
+  tools.lint([
     hasUnsafe ? "--fix-dangerously" : "--fix",
     ...filteredPassthrough,
     ...targets,
   ]);
 
-  runPiped("oxfmt", ["--write", ...targets]);
+  tools.format(["--write", ...targets]);
 
   // The JSON reporter goes after the passthrough so a user-supplied format
   // flag can't override it and break the parser.
-  const stdout = runPiped("oxlint", [
-    ...filteredPassthrough,
-    "-f",
-    "json",
-    ...targets,
-  ]);
+  const stdout = tools.lint([...filteredPassthrough, "-f", "json", ...targets]);
 
   return parseOxlintDiagnostics(stdout);
 };
 
 const oxlintAdapter: LinterAdapter = {
-  fixAndCollect: runOxlintPass,
+  fixAndCollect: (files, passthrough) =>
+    runOxlintPass(oxlintTools, files, passthrough),
   name: "Oxlint",
-  verify: (file, passthrough) => runOxlintPass([file], passthrough),
+  verify: (file, passthrough) =>
+    runOxlintPass(oxlintTools, [file], passthrough),
+};
+
+const runBunPass = (files: string[], passthrough: string[]): Diagnostic[] => {
+  assertBunCanLint();
+
+  return runOxlintPass(bunTools, files, passthrough);
+};
+
+const bunAdapter: LinterAdapter = {
+  fixAndCollect: runBunPass,
+  name: "Bun",
+  verify: (file, passthrough) => runBunPass([file], passthrough),
 };
 
 interface BiomeDiagnostic {
@@ -454,6 +499,7 @@ const eslintAdapter: LinterAdapter = {
 
 const linterAdapters = {
   biome: biomeAdapter,
+  bun: bunAdapter,
   eslint: eslintAdapter,
   oxlint: oxlintAdapter,
 } satisfies Record<Linter, LinterAdapter>;
