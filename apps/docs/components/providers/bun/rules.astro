@@ -1,0 +1,168 @@
+---
+import { bunParity } from "../../../lib/benchmarks";
+import SectionHeading from "../../home/section-heading.astro";
+
+// Rules set to "error" per Oxlint preset (packages/cli/config/oxlint, counted
+// with overrides for jest and vitest, which scope theirs to test files), and
+// the same count once ultracite/bun's defineConfig has passed the preset on.
+// Ultracite 8.0.1 with the Bun provider. `bun lint --print-config` on a
+// TypeScript file under core alone reports the same 455.
+const native = [
+  { bun: 455, missing: "19 jsdoc", name: "core", oxlint: 474 },
+  { bun: 107, name: "react", oxlint: 107 },
+  { bun: 63, name: "vitest", oxlint: 63 },
+  { bun: 56, name: "jest", oxlint: 56 },
+  { bun: 0, missing: "all 45", name: "vue", oxlint: 45 },
+  { bun: 21, name: "next", oxlint: 21 },
+];
+
+// Presets whose rules come from JS plugins, which Bun loads from
+// node_modules and runs in JavaScript, so ultracite/bun passes them on whole
+// (js-plugins: 234 SonarJS, 149 React Doctor and 21 GitHub rules). The
+// anti-slop, gdp and shadcn fixtures in packages/cli/__tests__/fixtures gave
+// the same diagnostics on Oxlint 1.86.0 and Bun 1.4.4-canary.1.
+const jsPlugins = [
+  { count: 404, description: "SonarJS, React Doctor, GitHub", name: "js-plugins" },
+  { count: 18, description: "anti-slop, vendored", name: "anti-slop" },
+  { count: 6, description: "gdp-ts", name: "gdp" },
+  { count: 6, description: "@shadcn/lint", name: "shadcn" },
+];
+
+// `bun lint --rules -f json` (1,021 rules, 31 of them deprecated; 29 in the
+// `bun` scope and 65 in `bun:test` are Bun's own), and
+// `bun lint --print-config` on a TypeScript file in a project with no config:
+// 75 rules on, 51 of them warnings.
+const stats = [
+  { label: "Rules in bun lint, 94 of them Bun’s own", value: "1,021" },
+  {
+    label: "On with no config, for a TypeScript file. 51 are warnings, which don’t fail a run",
+    value: "75",
+  },
+  {
+    accent: true,
+    label: "On in Ultracite’s core preset under Bun, every one an error",
+    value: "455",
+  },
+];
+
+const scale = Math.max(...native.map((preset) => preset.oxlint));
+const width = (count: number): string => `${(count / scale) * 100}%`;
+---
+
+<section aria-labelledby="bn-rules" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="bn-rules" title="Oxlint’s presets, run by Bun">
+      <code class="font-mono text-base">bun lint</code> reimplements
+      Oxlint’s rules under the same names and reads the same config, so the
+      Bun provider uses Ultracite’s Oxlint presets as they are. Two of
+      Oxlint’s plugins have no Bun version yet, and Ultracite leaves their
+      rules out.
+    </SectionHeading>
+    <dl
+      class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-3"
+    >
+      {
+        stats.map((stat) => (
+          <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
+            <dt class="text-pretty text-[15px]/6 text-muted-foreground">{stat.label}</dt>
+            <dd
+              class:list={[
+                "order-first font-medium text-5xl tracking-[-0.04em] tabular-nums",
+                stat.accent && "text-accent",
+              ]}
+            >
+              {stat.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+    <div
+      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
+    >
+      <div class="flex flex-col bg-background">
+        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">Native, in Bun</h3>
+          <span class="flex items-center gap-4 font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+            <span class="flex items-center gap-1.5">
+              <span aria-hidden="true" class="size-2.5 rounded-[2px] bg-signal"></span>
+              Bun
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span
+                aria-hidden="true"
+                class="hatch size-2.5 rounded-[2px] ring-1 ring-foreground/15 ring-inset"
+              ></span>
+              Oxlint only
+            </span>
+          </span>
+        </div>
+        <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {
+            native.map((preset) => (
+              <li class="flex flex-col gap-2">
+                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
+                  <span>
+                    <code class="font-mono text-sm">{preset.name}</code>
+                    {preset.missing && (
+                      <span class="text-muted-foreground"> · {preset.missing} left out</span>
+                    )}
+                  </span>
+                  <span class="font-mono text-sm tabular-nums">
+                    {preset.bun}
+                    <span class="text-muted-foreground"> / {preset.oxlint}</span>
+                  </span>
+                </p>
+                <span
+                  class="flex h-2 overflow-hidden rounded-r-[2px]"
+                  style={{ width: width(preset.oxlint) }}
+                >
+                  <span class="h-full bg-signal" style={{ width: `${(preset.bun / preset.oxlint) * 100}%` }} />
+                  <span class="hatch h-full flex-1 ring-1 ring-foreground/15 ring-inset" />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-col bg-background">
+        <div class="hatch flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="font-medium text-lg/7">JS plugins, in JavaScript</h3>
+          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">Opt-in</span>
+        </div>
+        <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {
+            jsPlugins.map((preset) => (
+              <li class="flex items-baseline justify-between gap-4 border-border border-b pb-5 text-[15px]/6 last:border-b-0 last:pb-0">
+                <span>
+                  <code class="font-mono text-sm">{preset.name}</code>
+                  <span class="text-muted-foreground"> · {preset.description}</span>
+                </span>
+                <span class="font-mono text-sm tabular-nums">{preset.count}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-auto text-pretty border-border border-t px-4 py-5 text-[15px]/6 text-muted-foreground sm:px-6 lg:px-10">
+          Bun loads the plugins from <code class="font-mono text-sm">node_modules</code>{" "}
+          and runs them in JavaScript, as Oxlint does, so these presets pass
+          through untouched. On Ultracite’s test fixtures for anti-slop,
+          gdp-ts and @shadcn/lint, Bun and Oxlint reported the same problems.
+        </p>
+      </div>
+    </div>
+    <div class="border-border border-t px-4 py-8 sm:px-6 lg:px-10">
+      <p class="max-w-[80ch] text-pretty text-base/7 text-muted-foreground">
+        <span class="font-medium text-foreground">Same rules, same report.</span>{" "}
+        On the benchmark project’s 420 files, Oxlint 1.88 and{" "}
+        <code class="font-mono text-sm">bun lint</code> reported the same{" "}
+        {bunParity.lintProblems} problems, line for line, through the same{" "}
+        <code class="font-mono text-sm">oxlint.config.ts</code>, and Oxfmt and{" "}
+        <code class="font-mono text-sm">bun fmt</code> flagged the same{" "}
+        {bunParity.unformattedFiles} files. The core
+        preset’s 56 type-aware rules are among the 455, and run once{" "}
+        <code class="whitespace-nowrap font-mono text-sm">init --type-aware</code> turns them on.
+      </p>
+    </div>
+  </div>
+</section>

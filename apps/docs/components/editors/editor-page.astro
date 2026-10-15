@@ -86,6 +86,9 @@ for (const [index, line] of settings.split("\n").entries()) {
 
 // How each toolchain runs here, read from what `init` writes.
 const toolchainRows = isZed ? zedToolchains() : vscodeToolchains();
+const countWords = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
+const toolchainCount =
+  countWords[toolchainRows.length] ?? String(toolchainRows.length);
 
 const [defaultToolchain] = toolchainRows;
 const defaultExtensions = defaultToolchain?.extensions ?? [];
@@ -302,7 +305,7 @@ const checkedAgainst = content.checked.version
     <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading
         id="ed-toolchains"
-        title={`Three toolchains, one ${settingsPath.split("/").at(-1)}`}
+        title={`${toolchainCount} toolchains, one ${settingsPath.split("/").at(-1)}`}
       >
         <code class="font-mono text-base">init</code> writes the settings for
         the toolchain you pick, so {name} formats with the same tool as{" "}
@@ -310,7 +313,7 @@ const checkedAgainst = content.checked.version
         fixes when you save.
       </SectionHeading>
       <ul
-        class="border-border bg-border grid gap-px border-t bg-clip-padding lg:grid-cols-3"
+        class="border-border bg-border grid gap-px border-t bg-clip-padding md:grid-cols-2 xl:grid-cols-4"
         role="list"
       >
         {toolchainRows.map((row, index) => (

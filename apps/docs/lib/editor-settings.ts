@@ -20,14 +20,21 @@ export interface ToolchainSettings {
 }
 
 /** The toolchains in the order the pages show them, the default first. */
-export const toolchainOrder: ProviderId[] = ["oxlint", "biome", "eslint"];
+export const toolchainOrder: ProviderId[] = [
+  "oxlint",
+  "biome",
+  "eslint",
+  "bun",
+];
 
 // Zed doesn't run VS Code extensions: the toolchain's language servers come
 // from Zed extensions (Oxc: oxc-project/oxc-zed, Biome: biomejs/biome-zed,
 // both in zed-industries/extensions) or ship with Zed (ESLint, Prettier),
-// checked on 2026-10-10.
+// checked on 2026-10-10. Bun has no language server, so a Bun project uses
+// the Oxc extension, which runs oxlint and oxfmt on the same configs.
 export const zedNeeds: Record<ProviderId, string> = {
   biome: "Biome extension",
+  bun: "Oxc extension",
   eslint: "Built in",
   oxlint: "Oxc extension",
 };

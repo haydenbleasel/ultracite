@@ -10,6 +10,15 @@
 // 254.0, so the 2026-11-11 figure stands), ESLint 3099.2 to 3232.0. 420
 // files: Oxlint 335.0 to 339.3, Biome 318.8 to 328.3, ESLint 10,227.7 to
 // 10,384.3.
+//
+// The Bun numbers (`bun` below, and typeAware, bunParity and toolOnlyMs) are
+// older: Ultracite 8.0.1 packed from main at 367d9085 with the Bun provider
+// added, on Bun 1.4.4-canary.1, from one session on the evening of
+// 2026-10-14 (machine load average about 4 from other apps) with TMPDIR
+// pointed at a near-empty directory, since `bun lint` slows down under a
+// parent directory with tens of thousands of entries, which macOS's own
+// TMPDIR had. Re-run all four engines in one session on the first stable Bun
+// with `bun lint` before the Bun provider ships.
 import type { ProviderId } from "./providers";
 
 export interface BenchmarkRun {
@@ -18,8 +27,14 @@ export interface BenchmarkRun {
 }
 
 export const benchmarkRuns: BenchmarkRun[] = [
-  { files: 42, ms: { biome: 260.4, eslint: 3122.6, oxlint: 321.8 } },
-  { files: 420, ms: { biome: 323.3, eslint: 10_361, oxlint: 336 } },
+  {
+    files: 42,
+    ms: { biome: 260.4, bun: 362.5, eslint: 3122.6, oxlint: 321.8 },
+  },
+  {
+    files: 420,
+    ms: { biome: 323.3, bun: 370.1, eslint: 10_361, oxlint: 336 },
+  },
 ];
 
 // Two more ESLint timings from the same session, invoked as the harness does
@@ -32,16 +47,43 @@ export const benchmarkRuns: BenchmarkRun[] = [
 export const eslintSingleFileMs = 2058.8;
 export const eslintTypeAwareMs = 15_113.2;
 
+// The same 420-file project with `options: { typeAware: true }`, as
+// `init --type-aware` writes it, in the Bun session: Oxlint with
+// oxlint-tsgolint 7.0.2004 against Bun, interleaved, median of five. Both
+// reported the same problems, rule for rule.
+export const typeAware = {
+  ms: { bun: 431.5, oxlint: 623.1 },
+  problems: 2760,
+};
+
+// Oxlint and Oxfmt against `bun lint` and `bun fmt` through the same configs
+// on the 420-file project, Bun session: the lint problems matched line for
+// line, and the format checks flagged the same files.
+export const bunParity = { lintProblems: 540, unformattedFiles: 240 };
+
+// The linters and formatters on their own on the 420-file project, without
+// Node or the CLI around them (median of ten runs after two warmups), and
+// starting Node and the CLI alone (`ultracite --version`), Bun session.
+export const toolOnlyMs = {
+  bunFmt: 64.3,
+  bunLint: 58.6,
+  cliStartup: 230.3,
+  oxfmt: 91.4,
+  oxlint: 99.8,
+};
+
 export const benchmarkMachine = "an Apple M1 Pro";
 
 export const toolchainVersions: Record<ProviderId, string> = {
   biome: "Biome 2.6.8",
+  bun: "Bun 1.4.4-canary.1",
   eslint: "ESLint 10.15.0, Prettier 3.10.1 and Stylelint 18.0.0",
   oxlint: "Oxlint 1.94.0 and Oxfmt 0.79.0",
 };
 
 export const toolchainNames: Record<ProviderId, string> = {
   biome: "Biome",
+  bun: "Bun",
   eslint: "ESLint + Prettier + Stylelint",
   oxlint: "Oxlint + Oxfmt",
 };

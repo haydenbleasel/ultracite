@@ -23,19 +23,35 @@ const SETUP_FAILURE_PATTERNS = [
   // Biome: a config it can't load, such as `vcs.useIgnoreFile` with no
   // .gitignore in the project.
   "the configuration resulted in errors",
+  // Bun: rules it doesn't implement (`1 rule in oxlint.config.ts is not
+  // supported: ...`). It lints with the rest and exits 2, but `ultracite
+  // check` reports the format step's status first, so the status can hide it.
+  "is not supported:",
+  "are not supported:",
+];
+
+// The linter couldn't load its config. Bun prints these on stdout, and they
+// name the config file, so code quoted from the fixtures can't match them.
+const CONFIG_FAILURE_PATTERNS = [
+  "Cannot use the configuration file",
+  "Cannot load the configuration file",
+  // Ultracite's own error when the Bun on PATH has no `bun lint`.
+  "The Bun provider runs `bun lint`",
 ];
 
 // The linter started but couldn't parse the files, so no rule ran on them:
 // ESLint's typed rules reject a TypeScript file outside every tsconfig.json.
 const PARSE_FAILURE_PATTERNS = ["was not found by the project service"];
 
-// The linter started but had nothing to lint. Oxlint and Oxfmt print these on
-// either stream, and such a run would time as a meaningless fast result.
+// The linter started but had nothing to lint. Oxlint, Oxfmt and Bun print
+// these on either stream, and such a run would time as a meaningless fast
+// result.
 const NO_INPUT_PATTERNS = [
   "No files found to lint",
   "No files found matching the given patterns",
   "Expected at least one target file",
   "All matched files may have been excluded by ignore rules",
+  "No files matching the pattern",
 ];
 
 const findUnrunnableReason = (outcome: RunOutcome): string | undefined => {
@@ -64,7 +80,11 @@ const findUnrunnableReason = (outcome: RunOutcome): string | undefined => {
     SETUP_FAILURE_PATTERNS.find((pattern) =>
       outcome.stderr.includes(pattern)
     ) ??
-    [...PARSE_FAILURE_PATTERNS, ...NO_INPUT_PATTERNS].find(
+    [
+      ...CONFIG_FAILURE_PATTERNS,
+      ...PARSE_FAILURE_PATTERNS,
+      ...NO_INPUT_PATTERNS,
+    ].find(
       (pattern) =>
         outcome.stdout.includes(pattern) || outcome.stderr.includes(pattern)
     )

@@ -5,21 +5,25 @@ description: Find answers to common questions about Ultracite, including setup, 
 
 ## Q: What exactly is Ultracite, and how is it different from Oxlint, Biome, or ESLint?
 
-Ultracite is essentially a preset configuration built on top of an existing toolchain. Think of Ultracite as a curated bundle of rules and settings, whereas the underlying engine — [Biome](/providers/biome), [ESLint + Prettier + Stylelint](/providers/eslint), or [Oxlint + Oxfmt](/providers/oxlint) — is what actually formats / lints code. You can use any of those tools by themselves, but you'd have to decide which rules to enable and configure their options manually. Ultracite saves you that effort by providing a ready-to-go setup that uses best practices from across the ecosystem.
+Ultracite is essentially a preset configuration built on top of an existing toolchain. Think of Ultracite as a curated bundle of rules and settings, whereas the underlying engine — [Biome](/providers/biome), [ESLint + Prettier + Stylelint](/providers/eslint), [Oxlint + Oxfmt](/providers/oxlint), or [Bun](/providers/bun)'s built-in `bun lint` and `bun fmt` — is what actually formats / lints code. You can use any of those tools by themselves, but you'd have to decide which rules to enable and configure their options manually. Ultracite saves you that effort by providing a ready-to-go setup that uses best practices from across the ecosystem.
 
 Compared to ESLint + Prettier, Oxlint and Biome are faster thanks to their Rust implementations, and Biome is unified (one tool instead of two or three). If you already love tweaking every ESLint rule, Ultracite might feel restrictive; but it aims to eliminate the need for that and adopt sensible defaults.
 
-In short: Oxlint / Biome / ESLint is the engine (linter / formatter), Ultracite is the configuration.
+In short: Oxlint / Biome / ESLint / Bun is the engine (linter / formatter), Ultracite is the configuration.
 
 ## Q: Do I still need ESLint or Prettier if I use Ultracite?
 
-It depends on which provider you choose. With the default Oxlint + Oxfmt provider (or the Biome provider), Ultracite replaces the functionality of ESLint and Prettier for your JavaScript / TypeScript code — you do not need to run them at all, and it's recommended to remove those configs to avoid conflicts (init does this automatically). Ultracite's output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
+It depends on which provider you choose. With the default Oxlint + Oxfmt provider (or the Biome or Bun provider), Ultracite replaces the functionality of ESLint and Prettier for your JavaScript / TypeScript code — you do not need to run them at all, and it's recommended to remove those configs to avoid conflicts (init does this automatically). Ultracite's output will cover most of the formatting and linting that those tools did, usually with equivalent or stricter rules.
 
 If you prefer to stay in the ESLint ecosystem — for example, because you rely on a specialized ESLint plugin — you can choose Ultracite's [ESLint + Prettier + Stylelint provider](/providers/eslint) instead, which gives you the same curated preset on top of those tools.
 
 ## Q: What about my non-JS/TS files? Does Ultracite handle those?
 
-It depends on the provider. With the default Oxlint + Oxfmt, Oxlint lints JavaScript and TypeScript (including JSX/TSX and the scripts in Vue, Svelte, and Astro files) and Oxfmt formats a much wider set, including JSON, CSS, SCSS, Less, HTML, Markdown, YAML, and GraphQL. Biome lints and formats JavaScript, TypeScript, JSON, CSS, GraphQL, and HTML. With ESLint, Prettier formats most file types and Stylelint lints CSS, SCSS, and Less. See the [Languages](/docs/languages) page for a full breakdown per provider.
+It depends on the provider. With the default Oxlint + Oxfmt, Oxlint lints JavaScript and TypeScript (including JSX/TSX and the scripts in Vue, Svelte, and Astro files) and Oxfmt formats a much wider set, including JSON, CSS, SCSS, Less, HTML, Markdown, YAML, and GraphQL. Bun's `bun lint` and `bun fmt` cover the same ground as Oxlint and Oxfmt. Biome lints and formats JavaScript, TypeScript, JSON, CSS, GraphQL, and HTML. With ESLint, Prettier formats most file types and Stylelint lints CSS, SCSS, and Less. See the [Languages](/docs/languages) page for a full breakdown per provider.
+
+## Q: Should I use Bun or Oxlint?
+
+They run the same configs. `bun lint` is a native reimplementation of Oxlint and `bun fmt` of Oxfmt, both built into Bun, so the Bun provider uses Ultracite's Oxlint presets and Oxfmt settings and installs nothing but `ultracite`. Pick Bun if your project already runs on a Bun that has them (1.4.4 or later) and you'd rather not install the Oxc toolchain. Pick Oxlint if you need the `jsdoc/*` or `vue/*` rules, which Bun doesn't have, or want new Oxlint rules as soon as Ultracite turns them on: Bun's rules are a snapshot of one Oxlint release, so it can lag behind. Either way, your editor runs Oxlint and Oxfmt, because Bun has no language server. See [Bun](/providers/bun) for the details.
 
 ## Q: How often is Ultracite updated?
 
@@ -45,7 +49,7 @@ In that case, you could build your own linter config from scratch, but you'd los
 
 Yes. We focus on VS Code and its forks as they're the most popular IDEs for modern web development, but `init` can also write Zed settings (`--editors zed`), and every toolchain runs from the command line with `ultracite check` and `ultracite fix`, so it works in any editor or CI.
 
-Oxlint, Biome, and ESLint each publish integrations for other editors. For Biome, see its [first-party](https://biomejs.dev/guides/editors/first-party-extensions/) and [third-party](https://biomejs.dev/guides/editors/third-party-extensions/) editor integrations.
+Oxlint, Biome, and ESLint each publish integrations for other editors (a Bun project uses Oxlint's). For Biome, see its [first-party](https://biomejs.dev/guides/editors/first-party-extensions/) and [third-party](https://biomejs.dev/guides/editors/third-party-extensions/) editor integrations.
 
 ## Q: How do I know what rules Ultracite is enforcing? Is there a list?
 
@@ -73,7 +77,7 @@ No. The unused-variable rules report locals and imports, but not an export anoth
 
 ## Q: Where can I learn more about the tools Ultracite uses?
 
-Each toolchain has its own documentation: [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html), [Biome](https://biomejs.dev/), and [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), and [Stylelint](https://stylelint.io/). If you're curious about how your linter formats code or the philosophy behind certain choices, its docs are the best resource.
+Each toolchain has its own documentation: [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html), [Biome](https://biomejs.dev/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/), and [Stylelint](https://stylelint.io/), and Bun's [`bun lint`](https://bun.com/docs/lint) and [`bun fmt`](https://bun.com/docs/format). If you're curious about how your linter formats code or the philosophy behind certain choices, its docs are the best resource.
 
 Understanding the underlying tool can help you better understand Ultracite's capabilities. However, you don't need to learn it in depth to use Ultracite effectively; Ultracite's goal is to abstract those details away for most users.
 
