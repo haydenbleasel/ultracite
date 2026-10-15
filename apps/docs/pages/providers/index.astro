@@ -42,6 +42,7 @@ const engines = [
     id: "oxlint",
     name: "Oxlint + Oxfmt",
     recommended: true,
+    shortName: "Oxlint",
     summary:
       "The Oxc project’s Rust linter and formatter, with ESLint’s rule names and an API for ESLint plugins.",
   },
@@ -51,17 +52,9 @@ const engines = [
     id: "biome",
     name: "Biome",
     recommended: false,
+    shortName: "Biome",
     summary:
       "One Rust binary that lints and formats from a single config file, with its own rule set.",
-  },
-  {
-    check420: formatMs(large.ms.eslint),
-    coreRules: 918,
-    id: "eslint",
-    name: "ESLint + Prettier + Stylelint",
-    recommended: false,
-    summary:
-      "The JavaScript toolchain most projects started on, with every plugin ever written for it.",
   },
   {
     check420: formatMs(large.ms.bun),
@@ -69,8 +62,19 @@ const engines = [
     id: "bun",
     name: "Bun",
     recommended: false,
+    shortName: "Bun",
     summary:
       "The linter and formatter built into Bun, which run Oxlint’s rules and Oxfmt’s formatting natively.",
+  },
+  {
+    check420: formatMs(large.ms.eslint),
+    coreRules: 918,
+    id: "eslint",
+    name: "ESLint + Prettier + Stylelint",
+    recommended: false,
+    shortName: "ESLint",
+    summary:
+      "The JavaScript toolchain most projects started on, with every plugin ever written for it.",
   },
 ] satisfies {
   check420: string;
@@ -78,86 +82,97 @@ const engines = [
   id: ProviderId;
   name: string;
   recommended: boolean;
+  shortName: string;
   summary: string;
 }[];
 
-const rows: { label: string; values: [string, string, string, string] }[] = [
+const rows: { label: string; values: Record<ProviderId, string> }[] = [
   {
     label: "Runs on",
-    values: [
-      "Native Rust binaries",
-      "One native Rust binary",
-      "Node.js",
-      "Bun 1.4.4 or later, with nothing else to install",
-    ],
+    values: {
+      biome: "One native Rust binary",
+      bun: "Bun 1.4.4 or later, with nothing else to install",
+      eslint: "Node.js",
+      oxlint: "Native Rust binaries",
+    },
   },
-  { label: "Rules on in the core preset", values: ["474", "331", "918", "455"] },
+  { label: "Rules on in the core preset", values: {
+      biome: "331",
+      bun: "455",
+      eslint: "918",
+      oxlint: "474",
+    } },
   {
     label: "`ultracite check`, 42 files",
-    values: [
-      formatMs(small.ms.oxlint),
-      formatMs(small.ms.biome),
-      formatMs(small.ms.eslint),
-      formatMs(small.ms.bun),
-    ],
+    values: {
+      biome: formatMs(small.ms.biome),
+      bun: formatMs(small.ms.bun),
+      eslint: formatMs(small.ms.eslint),
+      oxlint: formatMs(small.ms.oxlint),
+    },
   },
   {
     label: "`ultracite check`, 420 files",
-    values: [
-      formatMs(large.ms.oxlint),
-      formatMs(large.ms.biome),
-      formatMs(large.ms.eslint),
-      formatMs(large.ms.bun),
-    ],
+    values: {
+      biome: formatMs(large.ms.biome),
+      bun: formatMs(large.ms.bun),
+      eslint: formatMs(large.ms.eslint),
+      oxlint: formatMs(large.ms.oxlint),
+    },
   },
   {
     label: "Rules that read types",
-    values: [
-      "56, opt-in at setup",
-      "7 project-wide rules, opt-in at setup",
-      "132, opt-in at setup",
-      "Oxlint’s 56, opt-in at setup, with types from `bun check`",
-    ],
+    values: {
+      biome: "7 project-wide rules, opt-in at setup",
+      bun: "Oxlint’s 56, opt-in at setup, with types from `bun check`",
+      eslint: "132, opt-in at setup",
+      oxlint: "56, opt-in at setup",
+    },
   },
   {
     label: "ESLint plugins",
-    values: [
-      "Opt-in, through JS plugins",
-      "No",
-      "Any of them",
-      "Opt-in, through the same JS plugins",
-    ],
+    values: {
+      biome: "No",
+      bun: "Opt-in, through the same JS plugins",
+      eslint: "Any of them",
+      oxlint: "Opt-in, through JS plugins",
+    },
   },
   {
     label: "Formatter",
-    values: ["Oxfmt", "Biome", "Prettier, with its plugins", "`bun fmt`, which prints what Oxfmt prints"],
+    values: {
+      biome: "Biome",
+      bun: "`bun fmt`, which prints what Oxfmt prints",
+      eslint: "Prettier, with its plugins",
+      oxlint: "Oxfmt",
+    },
   },
   {
     label: "Editor support",
-    values: [
-      "Oxc extension",
-      "Biome extension",
-      "ESLint, Prettier and Stylelint extensions",
-      "Oxc extension, running Oxlint and Oxfmt on the same configs",
-    ],
+    values: {
+      biome: "Biome extension",
+      bun: "Oxc extension, running Oxlint and Oxfmt on the same configs",
+      eslint: "ESLint, Prettier and Stylelint extensions",
+      oxlint: "Oxc extension",
+    },
   },
   {
     label: "Files `init` writes",
-    values: [
-      "`oxlint.config.ts`, `oxfmt.config.ts`",
-      "`biome.jsonc`",
-      "`eslint.config.mjs`, `prettier.config.mjs`, `stylelint.config.mjs`",
-      "`oxlint.config.ts`, `oxfmt.config.ts`",
-    ],
+    values: {
+      biome: "`biome.jsonc`",
+      bun: "`oxlint.config.ts`, `oxfmt.config.ts`",
+      eslint: "`eslint.config.mjs`, `prettier.config.mjs`, `stylelint.config.mjs`",
+      oxlint: "`oxlint.config.ts`, `oxfmt.config.ts`",
+    },
   },
   {
     label: "Pick it for",
-    values: [
-      "Speed and breadth together: the default for new projects",
-      "One tool and one config file that lints, formats and sorts",
-      "Template linting in Vue and Svelte, Prettier plugins, niche ESLint plugins",
-      "Projects on Bun that want Oxlint’s rules without the Oxc packages",
-    ],
+    values: {
+      biome: "One tool and one config file that lints, formats and sorts",
+      bun: "Projects on Bun that want Oxlint’s rules without the Oxc packages",
+      eslint: "Template linting in Vue and Svelte, Prettier plugins, niche ESLint plugins",
+      oxlint: "Speed and breadth together: the default for new projects",
+    },
   },
 ];
 
@@ -262,7 +277,7 @@ const faqs: FaqItem[] = [
                     </span>
                   </span>
                   <span class="flex items-center gap-2 font-medium text-[15px]/6">
-                    Ultracite for {engine.name.split(" ")[0]}
+                    Ultracite for {engine.shortName}
                     <Icon
                       class="size-4 transition-transform group-hover:translate-x-0.5"
                       name="arrow-right"
@@ -293,9 +308,9 @@ const faqs: FaqItem[] = [
               {
                 engines.map((engine) => (
                   <th class="w-[20.5%] px-4 py-4 font-medium sm:px-6" scope="col">
-                    <span class="flex items-center gap-2.5">
+                    <span class="flex items-center gap-2.5 whitespace-nowrap">
                       <img alt="" class="size-5 rounded-[3px]" height="20" src={providerLogos[engine.id]} width="20" />
-                      {engine.name}
+                      {engine.shortName}
                     </span>
                   </th>
                 ))
@@ -309,9 +324,9 @@ const faqs: FaqItem[] = [
                   <th class="px-4 py-4 align-top font-normal text-muted-foreground sm:px-6 lg:px-10" scope="row">
                     <RichText text={row.label} />
                   </th>
-                  {row.values.map((value) => (
+                  {engines.map((engine) => (
                     <td class="text-pretty px-4 py-4 align-top tabular-nums sm:px-6">
-                      <RichText text={value} />
+                      <RichText text={row.values[engine.id]} />
                     </td>
                   ))}
                 </tr>
@@ -327,7 +342,7 @@ const faqs: FaqItem[] = [
         of <code class="font-mono text-[13px]">ultracite check</code> on{" "}
         {benchmarkMachine} over the repo’s benchmark fixture, with{" "}
         {toolchainVersions.oxlint}; {toolchainVersions.biome};{" "}
-        {toolchainVersions.eslint}; and {toolchainVersions.bun}. They include
+        {toolchainVersions.bun}; and {toolchainVersions.eslint}. They include
         starting Node and the CLI.
       </p>
     </div>
