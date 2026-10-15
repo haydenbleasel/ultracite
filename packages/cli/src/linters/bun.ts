@@ -17,7 +17,9 @@ type BunTool = "fmt" | "lint";
  * Run `bun lint` or `bun fmt`. Each runs the package.json script of the same
  * name instead, when the project has one ("lint": "next lint"), unless it's
  * already running inside that script. Bun tells that from
- * npm_lifecycle_event, so it's set to the tool's own name.
+ * npm_lifecycle_event, so it's set to the tool's own name. That's
+ * undocumented; https://github.com/oven-sh/bun/issues/45405 asks for a
+ * supported way.
  */
 export const spawnBun = (
   tool: BunTool,

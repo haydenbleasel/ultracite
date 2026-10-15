@@ -79,8 +79,9 @@ const forBun = (config) => {
 
 // `bun fmt` takes Tailwind's class order from the `tailwindcss` package, and
 // leaves a file with classes to sort unformatted (exiting 2) when the file
-// can't resolve one, where Oxfmt falls back to its own copy of the order.
-// Bun runs from the project root, so that's where to look.
+// can't resolve one, where Oxfmt falls back to its own copy of the order
+// (https://github.com/oven-sh/bun/issues/45406). Bun runs from the project
+// root, so that's where to look.
 const hasTailwindcss = () => {
   const require = createRequire(path.join(process.cwd(), "package.json"));
 
