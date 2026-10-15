@@ -275,6 +275,48 @@ export default defineConfig({
   });
 });
 
+describe("oxfmt config for the Bun provider", () => {
+  const oxfmtConfig = `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+  printWidth: 100,
+});
+`;
+
+  const bunConfig = oxfmtConfig.replace('"oxfmt"', '"ultracite/bun"');
+
+  test("imports defineConfig from ultracite/bun", async () => {
+    const project = mockOxfmtProject({ "package.json": '{"type": "module"}' });
+
+    await oxfmt.create({ bun: true });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(`import { defineConfig } from "ultracite/bun";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+});
+`);
+  });
+
+  test("switches an oxfmt config to Bun and back, keeping its options", async () => {
+    const toBun = mockOxfmtProject({ "./oxfmt.config.ts": oxfmtConfig });
+
+    await oxfmt.update({ bun: true });
+
+    expect(toBun.writeFile.mock.calls[0]?.[1]).toBe(bunConfig);
+
+    const toOxfmt = mockOxfmtProject({ "./oxfmt.config.ts": bunConfig });
+
+    await oxfmt.update();
+
+    expect(toOxfmt.writeFile.mock.calls[0]?.[1]).toBe(oxfmtConfig);
+  });
+});
+
 describe("oxfmt config file name", () => {
   const config = `import { defineConfig } from "oxfmt";
 import ultracite from "ultracite/oxfmt";

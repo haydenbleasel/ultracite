@@ -203,6 +203,78 @@ export default defineConfig({
     );
   });
 
+  test("imports defineConfig from ultracite/bun for the Bun provider", async () => {
+    const written = mockProject({
+      "./oxlint.config.ts": "export default {};",
+      "package.json": '{ "type": "module" }',
+    });
+
+    await oxlint.createWorkspace(
+      { dir: "apps/web", frameworks: ["react"] },
+      { bun: true }
+    );
+
+    expect(written.get("./apps/web/oxlint.config.ts")).toStartWith(
+      `import { defineConfig } from "ultracite/bun";
+import react from "ultracite/oxlint/react";
+
+import root from "../../oxlint.config.ts";
+`
+    );
+  });
+
+  test("points a kept workspace config at Bun's defineConfig, and back", async () => {
+    const oxlintConfig = `import { defineConfig } from "oxlint";
+import react from "ultracite/oxlint/react";
+
+import root from "../../oxlint.config.ts";
+
+export default defineConfig({ extends: [root, react], rules: { eqeqeq: "off" } });
+`;
+
+    const written = mockProject({
+      "./apps/web/oxlint.config.ts": oxlintConfig,
+    });
+
+    expect(
+      await oxlint.retargetWorkspaceConfig("apps/web/oxlint.config.ts", {
+        bun: true,
+      })
+    ).toBe(true);
+
+    const bunConfig = written.get("./apps/web/oxlint.config.ts");
+    expect(bunConfig).toBe(oxlintConfig.replace('"oxlint"', '"ultracite/bun"'));
+
+    const writtenBack = mockProject({
+      "./apps/web/oxlint.config.ts": bunConfig ?? "",
+    });
+
+    expect(
+      await oxlint.retargetWorkspaceConfig("apps/web/oxlint.config.ts")
+    ).toBe(true);
+    expect(writtenBack.get("./apps/web/oxlint.config.ts")).toBe(oxlintConfig);
+  });
+
+  test("leaves a workspace config that already targets the provider alone", async () => {
+    const written = mockProject({
+      "./apps/web/.oxlintrc.json": "{}",
+      "./apps/web/oxlint.config.ts":
+        'import { defineConfig } from "ultracite/bun";\nexport default defineConfig({});\n',
+    });
+
+    expect(
+      await oxlint.retargetWorkspaceConfig("apps/web/oxlint.config.ts", {
+        bun: true,
+      })
+    ).toBe(false);
+    expect(
+      await oxlint.retargetWorkspaceConfig("apps/web/.oxlintrc.json", {
+        bun: true,
+      })
+    ).toBe(false);
+    expect(written.size).toBe(0);
+  });
+
   test("adds react-doctor add-ons when the root config selects it", async () => {
     const written = mockProject({
       "./oxlint.config.ts":

@@ -242,6 +242,23 @@ export const getToolchainPackages = (
       break;
     }
 
+    case "bun": {
+      // Bun itself isn't an npm dependency. oxlint and oxfmt are there only
+      // for the editor extensions, so they're refreshed when the project
+      // has them, like the JS plugins Bun runs.
+      for (const [name, version] of Object.entries({
+        oxfmt: OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt,
+        oxlint: OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint,
+        ...OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
+      })) {
+        if (projectDependencies.has(name)) {
+          packages.set(name, version);
+        }
+      }
+
+      break;
+    }
+
     default: {
       break;
     }
@@ -382,6 +399,11 @@ const syncToolchain = async (
   );
 
   await overrideEslintPeers(packageManager, packages);
+
+  // A Bun project may have no toolchain packages at all.
+  if (packages.length === 0) {
+    return;
+  }
 
   const s = spinner();
   s.start(

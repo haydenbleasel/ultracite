@@ -326,6 +326,24 @@ describe("getToolchainPackages", () => {
       packages.some((pkg) => pkg.startsWith("eslint-plugin-github@"))
     ).toBe(false);
   });
+
+  // Bun isn't an npm package, and oxlint and oxfmt are only there for the
+  // editor extensions, so nothing is added that the project doesn't have.
+  test("bun refreshes only the packages the project already has", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    expect(getToolchainPackages("bun", new Set())).toEqual([]);
+    expect(
+      getToolchainPackages(
+        "bun",
+        new Set(["eslint-plugin-sonarjs", "oxfmt", "oxlint"])
+      )
+    ).toEqual([
+      `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`,
+      `oxlint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint}`,
+      expect.stringMatching(/^eslint-plugin-sonarjs@/u),
+    ]);
+  });
 });
 
 describe("upgrade", () => {

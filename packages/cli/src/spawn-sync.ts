@@ -10,6 +10,8 @@ import { whichCommandSync } from "which-command";
 export type StdoutToStderr = readonly ["inherit", 2, "inherit"];
 
 export interface SpawnSyncOptions {
+  /** Variables to set on top of the current environment. */
+  env?: Record<string, string>;
   maxBuffer?: number;
   stdio?: "ignore" | "inherit" | "pipe" | StdoutToStderr;
   /** Milliseconds before the command is killed; it then has no exit code. */

@@ -14,6 +14,7 @@ mock.module("../src/spawn-sync", () => ({
 const ULTRACITE_PACKAGE_JSON = JSON.stringify({
   exports: {
     "./biome/*": "./config/biome/*/biome.jsonc",
+    "./bun": { default: "./config/bun/index.mjs" },
     "./eslint/*": "./config/eslint/*/eslint.config.mjs",
     "./oxlint/*": { default: "./config/oxlint/*/index.mjs" },
   },
@@ -1264,5 +1265,187 @@ describe("doctor", () => {
       message: expect.stringContaining("oxlint 1.85.0 is older"),
       status: "fail",
     });
+  });
+});
+
+// A Bun project: `files` maps the project files that exist (relative to the
+// project root) to their contents, and `bunLint` is whether the Bun on PATH
+// has `bun lint`. node_modules holds ultracite and `installed`.
+const mockBunProject = ({
+  bunLint = true,
+  files,
+  installed = {},
+}: {
+  bunLint?: boolean;
+  files: Record<string, string>;
+  installed?: Record<string, string>;
+}) => {
+  mock.module("../src/spawn-sync", () => ({
+    spawnSync: mock((_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
+      if (args[0] === "--version") {
+        return { status: 0, stdout: "1.4.4\n" };
+      }
+
+      return bunLint
+        ? { status: 0, stdout: "Usage: bun lint [flags]" }
+        : { status: 1, stderr: 'error: Script not found "lint"' };
+    }),
+  }));
+
+  const projectFile = (path: string): string | undefined => {
+    const p = toPosixPath(path);
+
+    const name = Object.keys(files).find(
+      (file) => p === toPosixPath(nodePath.join(process.cwd(), file))
+    );
+
+    return name === undefined ? undefined : files[name];
+  };
+
+  const installedManifest = (path: string): string | undefined => {
+    const p = toPosixPath(path);
+
+    for (const [name, version] of Object.entries(installed)) {
+      if (p.endsWith(`node_modules/${name}/package.json`)) {
+        return JSON.stringify({ name, version });
+      }
+    }
+
+    return p.endsWith("node_modules/ultracite/package.json")
+      ? ULTRACITE_PACKAGE_JSON
+      : undefined;
+  };
+
+  // The installed ultracite has every file its exports point at.
+  const exists = (path: string): boolean =>
+    projectFile(path) !== undefined ||
+    installedManifest(path) !== undefined ||
+    toPosixPath(path).includes("node_modules/ultracite/");
+
+  mock.module("node:fs", () => ({
+    accessSync: mock((path: string) => {
+      if (!exists(path)) {
+        throw new Error("ENOENT");
+      }
+    }),
+    existsSync: mock(exists),
+    readFileSync: mock((path: string) => {
+      const contents = projectFile(path) ?? installedManifest(path);
+
+      if (contents === undefined) {
+        throw new Error("ENOENT");
+      }
+
+      return contents;
+    }),
+  }));
+};
+
+const bunOxlintConfig = `import { defineConfig } from "ultracite/bun";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({ extends: [core] });
+`;
+
+const bunOxfmtConfig = `import { defineConfig } from "ultracite/bun";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({ ...ultracite });
+`;
+
+const bunProjectFiles = {
+  "oxfmt.config.ts": bunOxfmtConfig,
+  "oxlint.config.ts": bunOxlintConfig,
+  "package.json": JSON.stringify({
+    devDependencies: { ultracite: "1.0.0" },
+    scripts: { check: "ultracite check" },
+    type: "module",
+  }),
+};
+
+const checkNamed = (name: string) =>
+  runDiagnostics("bun").find((check) => check.name === name);
+
+describe("doctor for Bun", () => {
+  test("passes a Bun project set up by init", () => {
+    mockBunProject({ files: bunProjectFiles });
+
+    const checks = runDiagnostics("bun");
+
+    expect(checks.filter((check) => check.status !== "pass")).toEqual([]);
+    expect(checks.map((check) => check.name)).toEqual([
+      "Bun installation",
+      "Oxlint configuration",
+      "oxfmt configuration",
+      "Bun formatter configuration",
+      "Ultracite dependency",
+      "Conflicting tools",
+    ]);
+  });
+
+  test("fails a Bun without bun lint", () => {
+    mockBunProject({ bunLint: false, files: bunProjectFiles });
+
+    expect(checkNamed("Bun installation")).toMatchObject({
+      message: expect.stringContaining("Bun 1.4.4 has no `bun lint`"),
+      status: "fail",
+    });
+  });
+
+  test("warns when the oxfmt config still needs oxfmt installed", () => {
+    mockBunProject({
+      files: {
+        ...bunProjectFiles,
+        "oxfmt.config.ts": bunOxfmtConfig.replace("ultracite/bun", "oxfmt"),
+      },
+    });
+
+    expect(checkNamed("Bun formatter configuration")).toMatchObject({
+      status: "warn",
+    });
+  });
+
+  test("warns about bunfig.toml settings the editors don't see", () => {
+    mockBunProject({
+      files: {
+        ...bunProjectFiles,
+        "bunfig.toml":
+          '[install]\nexact = true\n\n[lint.rules]\n"no-console" = "off"\n\n[fmt]\nsemi = false\n',
+      },
+    });
+
+    expect(checkNamed("bunfig.toml")).toMatchObject({
+      message: expect.stringContaining("[lint] and [fmt]"),
+      status: "warn",
+    });
+  });
+
+  test("warns about a lint script that bun lint would run instead", () => {
+    mockBunProject({
+      files: {
+        ...bunProjectFiles,
+        "package.json": JSON.stringify({
+          devDependencies: { ultracite: "1.0.0" },
+          scripts: { fmt: "bun fmt", lint: "next lint" },
+        }),
+      },
+    });
+
+    expect(checkNamed("Bun scripts")).toMatchObject({
+      message: expect.stringContaining(
+        '`bun lint` runs the package.json "lint" script (`next lint`) instead'
+      ),
+      status: "warn",
+    });
+  });
+
+  test("checks the oxlint and oxfmt the editors use only when installed", () => {
+    mockBunProject({
+      files: bunProjectFiles,
+      installed: { oxlint: "1.85.0" },
+    });
+
+    expect(checkNamed("oxlint version")).toMatchObject({ status: "fail" });
+    expect(checkNamed("oxfmt version")).toBeUndefined();
   });
 });

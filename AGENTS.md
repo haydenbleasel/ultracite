@@ -6,7 +6,7 @@ Guide for coding agents working in this repository. The generated code standards
 
 Ultracite is a zero-config linting and formatting preset for JS/TS projects, published to npm as `ultracite`. It ships:
 
-- **Presets** for three linter backends: Oxlint + Oxfmt (recommended), Biome, and ESLint + Prettier + Stylelint, each with core and per-framework variants.
+- **Presets** for three linter backends: Oxlint + Oxfmt (recommended), Biome, and ESLint + Prettier + Stylelint, each with core and per-framework variants. A fourth provider, Bun, runs the Oxlint and Oxfmt presets with `bun lint` and `bun fmt`.
 - **A CLI** (`ultracite init | check | fix | doctor | upgrade`) that installs the toolchain, writes config files, wires editors, git hooks, and AI agent rules, and shells out to the chosen linter.
 - **An agent skill** (`skills/ultracite`) that ships inside the npm package.
 
@@ -19,14 +19,14 @@ packages/cli/                 The published `ultracite` package
   src/index.ts                Commander entry; every subcommand is registered here
   src/commands/               check, fix, doctor, upgrade
   src/initialize.ts           `ultracite init` orchestration (prompts + flags)
-  src/linters/                One adapter per tool: biome, eslint, oxlint, oxfmt, prettier, stylelint
+  src/linters/                One adapter per tool: biome, eslint, oxlint, oxfmt, prettier, stylelint; bun.ts spawns `bun lint`/`bun fmt`
   src/integrations/           husky, lefthook, lint-staged, pre-commit
   src/agent-fix/              `fix --claude` / `fix --codex`: hand remaining diagnostics to an agent CLI
   src/data/                   Static tables: agents, editors, hooks, options, providers, rules (AGENTS.md template)
   src/dependencies.ts         Toolchain versions + peer ranges read from package.json; what `init` installs
   config/                     The presets (see "Presets" below)
   __tests__/                  bun:test suite, one file per source module, plus lint-for-real fixtures
-  scripts/                    generate-dts, copy-skill, compare-rule-parity, vendor-anti-slop
+  scripts/                    generate-dts, copy-skill, compare-rule-parity, vendor-anti-slop, sync-bun-rules
   build.ts                    Bun.build -> dist/index.js (single minified ESM file, deps external)
 apps/docs/                    Docs + marketing site (blume on Astro, deployed to Cloudflare Workers)
   docs/**/*.mdx               Documentation content; meta.ts files order the sidebar
@@ -92,10 +92,15 @@ config/biome/<preset>/biome.jsonc     ->  "extends": ["ultracite/biome/<preset>"
 config/oxfmt/index.mjs                ->  "ultracite/oxfmt"
 config/prettier/prettier.config.mjs   ->  "ultracite/prettier"
 config/stylelint/stylelint.config.mjs ->  "ultracite/stylelint"
+config/bun/index.mjs                  ->  "ultracite/bun" (the Bun provider's defineConfig)
 config/shared/ignores.mjs             ->  canonical ignore list for every tool
 ```
 
 Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `jest`, `nestjs`, `next`, `qwik`, `react`, `remix`, `solid`, `storybook`, `svelte`, `tanstack`, `vitest`, `vue`; `cypress` and `storybook` only have rules on ESLint), for oxlint and eslint also `gdp` (opt-in, never added by init), for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for eslint and biome `type-aware`, plus `<framework>/type-aware` add-ons on eslint for frameworks whose plugins have type-aware rules.
+
+### The Bun provider
+
+`bun lint` and `bun fmt` reimplement oxlint and oxfmt and read their configs, so Bun has no presets of its own. Its configs are the Oxlint provider's, with `defineConfig` imported from `ultracite/bun`, which is also how `detectLinter` tells the two apart. That `defineConfig` drops the rules Bun doesn't implement from extended presets, using the rule list in `config/bun/rules.mjs`. Bun's rules are a fixed snapshot of oxlint's, so a toolchain bump that enables a rule Bun lacks shows up in the dropped-rules snapshot in `__tests__/bun-config.test.ts`; re-run `bun run packages/cli/scripts/sync-bun-rules.ts [path-to-bun]` after a Bun upgrade. For a format config it drops `sortTailwindcss` when `tailwindcss` doesn't resolve from the working directory, because `bun fmt` takes the class order from that package and won't format a file it can't sort (Oxfmt has its own copy). `bun lint`/`bun fmt` run a package.json `lint`/`fmt` script instead when there is one, so spawn them through `spawnBun` in `src/linters/bun.ts`, never `spawnSync("bun", ...)`.
 
 ### Rules for changing rules
 
@@ -110,6 +115,7 @@ Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `jest`, 
 
 - `config/oxlint/**/index.d.mts` and `config/oxfmt/index.d.mts`: written by `packages/cli/scripts/generate-dts.ts` on every build (`prebuild`).
 - `config/biome/core/biome.jsonc` -> `files.includes`: synced from `shared/ignores.mjs` by the same script.
+- `config/bun/rules.mjs` and `rules.d.mts`: every rule name `bun lint` knows, written by `packages/cli/scripts/sync-bun-rules.ts`.
 - `config/oxlint/anti-slop/plugin.mjs` and `plugin.d.mts`: a vendored bundle of https://github.com/dmmulroy/anti-slop. Re-vendor with `bun run packages/cli/scripts/vendor-anti-slop.ts [ref]` and bump `PINNED_REF`; then update the rule list in `anti-slop/index.mjs`.
 - `packages/cli/skills/`: gitignored copy of `skills/ultracite`, refreshed by `prepack`. Edit `skills/ultracite` at the repo root.
 

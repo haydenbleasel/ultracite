@@ -264,12 +264,20 @@ const valueFlags = new Set([
   "--threads",
   "--tsconfig",
   "--warn",
+  // Bun (on top of the Oxlint and ESLint flags it accepts)
+  "-p",
+  "--explain",
+  "--flavor",
+  "--native-plugin-rules",
+  "--print-config",
+  "--project",
 ]);
 
 // Flags known to take no value, including Ultracite's own. The token after
 // one is never its value, so `fix --hook app` lints `app` even when `app`
 // doesn't exist yet.
 const booleanFlags = new Set([
+  "--allow-unsupported",
   "--cache",
   "--changed",
   "--claude",
@@ -279,6 +287,7 @@ const booleanFlags = new Set([
   "--error-on-warnings",
   "--fix",
   "--fix-dangerously",
+  "--fix-dry-run",
   "--fix-suggestions",
   "--hook",
   "--no-warn-ignored",
@@ -286,6 +295,7 @@ const booleanFlags = new Set([
   "--report-unused-disable-directives",
   "--silent",
   "--staged",
+  "--timing",
   "--type-aware",
   "--type-check",
   "--unsafe",

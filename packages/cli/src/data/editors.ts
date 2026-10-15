@@ -121,6 +121,9 @@ export const getVscodeConfig = (linter: ProviderId = "biome") => {
       return deepmerge(vscodeBaseConfig, vscodeEslintConfig);
     }
 
+    // Bun has no language server; the oxc extension runs oxlint and oxfmt
+    // on the same configs.
+    case "bun":
     case "oxlint": {
       return deepmerge(vscodeBaseConfig, vscodeOxlintConfig);
     }
@@ -292,6 +295,7 @@ export const getZedConfig = (linter: ProviderId = "biome") => {
       return deepmerge(zedBaseConfig, zedEslintConfig);
     }
 
+    case "bun":
     case "oxlint": {
       return deepmerge(zedBaseConfig, zedOxcConfig);
     }
