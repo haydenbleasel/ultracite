@@ -69,6 +69,11 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
+      "No. `bun lint --staged` and `bun fmt --staged` fix only the staged files and stage them again, so with `init --integrations husky` the hook runs `ultracite fix --staged` and nothing else. A file with both staged and unstaged changes stops the commit until you stage the rest or set it aside with `git stash --keep-index`.",
+    question: "Do I still need lint-staged?",
+  },
+  {
+    answer:
       "Set it in `rules` in `oxlint.config.ts`, after the presets in `extends`: `rules: { \"no-console\": \"off\" }`. Bun would also read a `[lint.rules]` table in `bunfig.toml`, but your editor’s Oxc extension doesn’t, so the two would disagree. For a single line, `// oxlint-disable-next-line no-console` works in both.",
     question: "How do I turn off a rule?",
   },

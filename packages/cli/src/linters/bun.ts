@@ -31,6 +31,19 @@ export const spawnBun = (
     env: { ...options.env, npm_lifecycle_event: tool },
   });
 
+/**
+ * The flags in `passthrough` that pick files from Git: `--staged`, and
+ * `--changed` with or without a ref. `ultracite check` and `fix` pass the
+ * other flags to `bun lint` alone, but these go to `bun fmt` as well, so
+ * both tools work on the same files. With `--staged`, each also stages the
+ * files it fixes again, which is what a pre-commit hook needs.
+ */
+export const bunFileSelectionArgs = (passthrough: string[]): string[] =>
+  passthrough.filter(
+    (arg) =>
+      arg === "--staged" || arg === "--changed" || arg.startsWith("--changed=")
+  );
+
 const BUN_LINT_USAGE = "Usage: bun lint";
 
 /**
