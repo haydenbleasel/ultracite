@@ -78,6 +78,21 @@ Anything you've added to the hook outside the `# ultracite` markers is preserved
 
 Ultracite also adds `husky` to your `prepare` script so hooks are installed on `npm install`. An existing `prepare` script is kept, with `&& husky` appended.
 
+#### On Bun
+
+With the [Bun provider](/providers/bun), the section is one line instead of the script above, because `bun lint` and `bun fmt` have a `--staged` mode that does the same job:
+
+```bash title=".husky/pre-commit"
+# ultracite
+#!/bin/sh
+npx ultracite fix --staged
+# ultracite end
+```
+
+`ultracite fix --staged` runs `bun lint --fix --staged` and `bun fmt --staged`, which fix only the staged files and stage them again. A file you staged only part of is different: Bun leaves it alone and stops the commit, naming the file, so stage the rest of it or set it aside with `git stash --keep-index` and commit again. If you also select lint-staged, the section runs lint-staged as it does for the other linters, but on Bun you don't need it.
+
+`--staged` works outside the hook too, as does `--changed`, which picks the files that differ from your default branch (or `--changed=<ref>`): `npx ultracite check --changed` checks just those files with both Bun tools.
+
 ### Lefthook
 
 [Lefthook](https://lefthook.dev/) is a fast Git hooks manager written in Go. If your project has no Lefthook config, Ultracite creates a `lefthook.yml`:
@@ -158,7 +173,7 @@ The `files` pattern covers the same file types as the Lefthook globs. It's a pat
 1. You make changes and stage files with `git add`
 2. You run `git commit`
 3. The pre-commit hook runs `ultracite fix` on the files you staged
-4. Code is formatted, auto-fixable issues are resolved, and the fixed files are re-staged (Husky, Lefthook, and lint-staged; pre-commit asks you to stage them)
+4. Code is formatted, auto-fixable issues are resolved, and the fixed files are re-staged (Husky, Lefthook, lint-staged, and Bun's `--staged` mode; pre-commit asks you to stage them)
 5. The commit proceeds, or stops if issues remain that couldn't be auto-fixed
 
 ## Benefits

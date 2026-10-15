@@ -82,16 +82,46 @@ const LINT_STAGED_LINE_RE = /\blint-staged$/u;
 const renderSection = (hookScript: string): string =>
   `${ULTRACITE_MARKER}\n${hookScript}${ULTRACITE_END_MARKER}`;
 
+// `bun lint --staged` and `bun fmt --staged` find the staged files and stage
+// the ones they fix again themselves. A staged file with unstaged changes too
+// isn't fixed: Bun names it and exits 2, which stops the commit.
+const createBunStagedHookScript = (fixCommand: string) => `#!/bin/sh
+${fixCommand} --staged
+`;
+
+/**
+ * How the hook finds the staged files: through lint-staged, through Bun's own
+ * `--staged` mode (the Bun provider), or with the shell script above.
+ */
+export type HuskyHookMode = "bun" | "lint-staged" | "script";
+
 // Hooks run the project's installed tools: `yarn dlx` does not exist in
 // Yarn 1 (so every commit failed there) and `pnpm dlx` downloads the latest
 // release instead of the version the project pins.
 const createHookScript = (
   packageManager: PackageManagerName,
-  useLintStaged: boolean
-): string =>
-  useLintStaged
-    ? createLintStagedHookScript(localBinCommand(packageManager, "lint-staged"))
-    : createStandaloneHookScript(ultraciteFixCommand(packageManager));
+  mode: HuskyHookMode
+): string => {
+  switch (mode) {
+    case "bun": {
+      return createBunStagedHookScript(ultraciteFixCommand(packageManager));
+    }
+
+    case "lint-staged": {
+      return createLintStagedHookScript(
+        localBinCommand(packageManager, "lint-staged")
+      );
+    }
+
+    case "script": {
+      return createStandaloneHookScript(ultraciteFixCommand(packageManager));
+    }
+
+    default: {
+      throw new Error(`Unknown hook mode: ${String(mode satisfies never)}`);
+    }
+  }
+};
 
 const findSectionEnd = (lines: string[], markerIndex: number): number => {
   // Sections written by current versions carry an explicit end marker
@@ -124,12 +154,15 @@ const findSectionEnd = (lines: string[], markerIndex: number): number => {
 };
 
 export const husky = {
-  create: async (packageManager: PackageManagerName, useLintStaged = false) => {
+  create: async (
+    packageManager: PackageManagerName,
+    mode: HuskyHookMode = "script"
+  ) => {
     await mkdir(".husky", { recursive: true });
 
     await writeProjectFile(
       path,
-      `${renderSection(createHookScript(packageManager, useLintStaged))}\n`
+      `${renderSection(createHookScript(packageManager, mode))}\n`
     );
   },
   exists: () => exists(path),
@@ -168,12 +201,13 @@ export const husky = {
       },
     });
   },
-  update: async (packageManager: PackageManagerName, useLintStaged = false) => {
+  update: async (
+    packageManager: PackageManagerName,
+    mode: HuskyHookMode = "script"
+  ) => {
     const existingContents = await readFile(path, "utf-8");
 
-    const section = renderSection(
-      createHookScript(packageManager, useLintStaged)
-    );
+    const section = renderSection(createHookScript(packageManager, mode));
 
     // CRLF line endings would break the shell script anyway; splitting on
     // both lets the marker be found so a re-run replaces the section instead
