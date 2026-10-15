@@ -22,7 +22,7 @@ PATH="/path/to/newer-bun-dir:$PATH" BENCH_PROVIDERS=bun \
   /path/to/your/bun ./benchmark/index.ts --head packages/cli/ultracite-*.tgz
 ```
 
-`bun lint` slows down when a directory above the project holds tens of thousands of entries, as macOS's `$TMPDIR` often does. On Bun 1.4.4-canary.1, with only `import/default` turned on, 80 files under a parent holding 50,000 files took 0.33 s to lint, against 0.01 s under an empty parent; Oxlint wasn't affected. Point `TMPDIR` at a near-empty directory when you compare Bun with the other providers.
+`bun lint` slows down when a directory above the project holds tens of thousands of entries, as macOS's `$TMPDIR` often does. On Bun 1.4.4-canary.1, with only `import/default` turned on, 80 files under a parent holding 50,000 files took 0.33 s to lint, against 0.01 s under an empty parent; Oxlint wasn't affected ([oven-sh/bun#45407](https://github.com/oven-sh/bun/issues/45407)). Point `TMPDIR` at a near-empty directory when you compare Bun with the other providers.
 
 ### The regression gate (CI)
 
