@@ -83,6 +83,12 @@ export const providers: Provider[] = [
     name: "Biome",
   },
   {
+    // Bun reads the same two files; only defineConfig comes from Ultracite.
+    configFiles: oxcConfigFiles("ultracite/bun", "ultracite/bun"),
+    id: "bun",
+    name: "Bun",
+  },
+  {
     configFiles: [
       {
         code: (presets: string[]) => `${presets
@@ -122,11 +128,5 @@ export default { ...config };`,
     configFiles: oxcConfigFiles("oxlint", "oxfmt"),
     id: "oxlint",
     name: "Oxlint + Oxfmt",
-  },
-  {
-    // Bun reads the same two files; only defineConfig comes from Ultracite.
-    configFiles: oxcConfigFiles("ultracite/bun", "ultracite/bun"),
-    id: "bun",
-    name: "Bun",
   },
 ];

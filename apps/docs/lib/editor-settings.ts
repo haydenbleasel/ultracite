@@ -23,8 +23,8 @@ export interface ToolchainSettings {
 export const toolchainOrder: ProviderId[] = [
   "oxlint",
   "biome",
-  "eslint",
   "bun",
+  "eslint",
 ];
 
 // Zed doesn't run VS Code extensions: the toolchain's language servers come
