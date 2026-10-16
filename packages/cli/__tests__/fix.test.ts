@@ -15,6 +15,7 @@ import { log } from "@clack/prompts";
 import type { AgentAdapter } from "../src/agent-fix/agents";
 import * as runAgentModule from "../src/agent-fix/run-agent";
 import { fix, HOOK_FEEDBACK_EXIT_CODE } from "../src/commands/fix";
+import { resetBunCapabilityCache } from "../src/linters/bun";
 import { LinterExitError, STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
@@ -1352,5 +1353,130 @@ describe("fix reporting to Devin", () => {
 
     expect(write).not.toHaveBeenCalled();
     write.mockRestore();
+  });
+});
+
+// A Bun with `bun lint`, whose `bun lint` exits with `lintStatus` and prints
+// what it couldn't fix.
+const mockBun = (lintStatus = 0) => {
+  resetBunCapabilityCache();
+
+  const mockSpawn = mock(
+    (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
+      if (args[1] === "--help") {
+        return {
+          status: 0,
+          stdout:
+            "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+        };
+      }
+
+      return args[0] === "lint"
+        ? { status: lintStatus, stderr: "", stdout: "src/a.ts:3:7 no-var\n" }
+        : { status: 0, stderr: "", stdout: "Finished\n" };
+    }
+  );
+
+  mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+  mock.module("../src/utils", () => ({
+    detectLinter: mock(() => "bun"),
+  }));
+
+  return mockSpawn;
+};
+
+describe("fix with Bun", () => {
+  afterEach(() => {
+    mock.restore();
+  });
+
+  test("runs bun lint --fix, then bun fmt, like Oxlint and oxfmt", () => {
+    const mockSpawn = mockBun();
+
+    fix(["src/a.ts", "Dockerfile"], ["--type-aware"]);
+
+    expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "lint", "--help", "--all"],
+      ["bun", "lint", "--no-script", "--fix", "--type-aware", "src/a.ts"],
+      [
+        "bun",
+        "fmt",
+        "--no-script",
+        "--write",
+        "--no-error-on-unmatched-pattern",
+        "src/a.ts",
+        "Dockerfile",
+      ],
+    ]);
+  });
+
+  // What the Bun provider's husky hook runs: both tools fix only the staged
+  // files and stage them again.
+  test("fixes and formats only the staged files with --staged", () => {
+    const mockSpawn = mockBun();
+
+    fix([], ["--staged"]);
+
+    expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
+      ["lint", "--help", "--all"],
+      ["lint", "--no-script", "--fix", "--staged", "."],
+      [
+        "fmt",
+        "--no-script",
+        "--write",
+        "--no-error-on-unmatched-pattern",
+        "--staged",
+        ".",
+      ],
+    ]);
+  });
+
+  test("converts --unsafe to --fix-dangerously for bun lint", () => {
+    const mockSpawn = mockBun();
+
+    fix([], ["--unsafe"]);
+
+    const [, lintCall] = mockSpawn.mock.calls;
+    expect(lintCall[1]).toEqual([
+      "lint",
+      "--no-script",
+      "--fix-dangerously",
+      ".",
+    ]);
+  });
+
+  test("still formats when bun lint leaves problems behind", () => {
+    const mockSpawn = mockBun(1);
+
+    expect(() => fix([])).toThrow("bun lint exited with code 1");
+    expect(mockSpawn.mock.calls.at(-1)?.[1][0]).toBe("fmt");
+  });
+
+  test("hands what bun lint left to the agent from a hook", () => {
+    mockBun(1);
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    expect(() => fix(["src/a.ts"], [], { report: "context" })).not.toThrow();
+
+    const [[printed]] = write.mock.calls;
+    expect(
+      JSON.parse(String(printed)).hookSpecificOutput.additionalContext
+    ).toContain("src/a.ts:3:7 no-var");
+    write.mockRestore();
+  });
+
+  test("exits with the hook feedback code when bun lint fails in a hook", () => {
+    mockBun(1);
+
+    let thrown: unknown;
+
+    try {
+      fix(["src/a.ts"], [], { report: "stderr" });
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(LinterExitError);
+    expect(thrown).toHaveProperty("exitCode", HOOK_FEEDBACK_EXIT_CODE);
   });
 });

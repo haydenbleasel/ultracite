@@ -81,6 +81,49 @@ const noop = () => {
   // intentionally empty mock
 };
 
+// Run installDependencies for the Bun provider and return the names of the
+// packages it installed.
+const installBun = async (
+  typeAware: boolean,
+  jsPlugins: Parameters<typeof installDependencies>[6],
+  withEditors: boolean
+): Promise<string[]> => {
+  const installedPackages: string[] = [];
+
+  mock.module("nypm", () => ({
+    addDevDependency: mock((pkg: string | string[]) => {
+      installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
+      return Promise.resolve();
+    }),
+    detectPackageManager: mock(() =>
+      Promise.resolve({ name: "npm", warnings: [] })
+    ),
+    dlxCommand: mock(() => "npx ultracite fix"),
+    removeDependency: mock(() => Promise.resolve()),
+  }));
+  mock.module("@clack/prompts", () => ({
+    spinner: mock(() => ({
+      message: mock(noop),
+      start: mock(noop),
+      stop: mock(noop),
+    })),
+  }));
+
+  await installDependencies(
+    npmPm,
+    "bun",
+    true,
+    true,
+    typeAware,
+    [],
+    jsPlugins,
+    withEditors
+  );
+
+  return installedPackages.map((pkg) => pkg.slice(0, pkg.lastIndexOf("@")));
+};
+
 mock.module("@clack/prompts", () => ({
   cancel: mock(noop),
   confirm: mock(() => Promise.resolve(false)),
@@ -750,6 +793,136 @@ describe("initialize", () => {
       `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
     );
   });
+
+  test("sets up the Bun provider on the Oxlint and oxfmt configs", async () => {
+    const installedPackages: string[] = [];
+    const written = new Map<string, string>();
+    const warn = mock((_message: string) => {});
+
+    mock.module("node:fs/promises", () => ({
+      access: mock(() => Promise.reject(new Error("ENOENT"))),
+      mkdir: mock(() => Promise.resolve()),
+      readFile: mock(() => Promise.resolve('{"name": "test"}')),
+      rm: mock(() => Promise.resolve()),
+      writeFile: mock((filePath: string, content: string) => {
+        written.set(String(filePath), content);
+
+        return Promise.resolve();
+      }),
+    }));
+    mock.module("@clack/prompts", () => ({
+      cancel: mock(noop),
+      confirm: mock(() => Promise.resolve(false)),
+      intro: mock(noop),
+      isCancel: mock(() => false),
+      log: { error: mock(noop), info: mock(noop), success: mock(noop), warn },
+      multiselect: mock(() => Promise.resolve([])),
+      outro: mock(noop),
+      select: mock(() => Promise.resolve("bun")),
+      spinner: mock(() => ({
+        message: mock(noop),
+        start: mock(noop),
+        stop: mock(noop),
+      })),
+    }));
+    mock.module("nypm", () => ({
+      addDevDependency: mock((pkg: string | string[]) => {
+        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
+        return Promise.resolve();
+      }),
+      detectPackageManager: mock(() =>
+        Promise.resolve({ name: "npm", warnings: [] })
+      ),
+      dlxCommand: mock(() => "npx ultracite fix"),
+      removeDependency: mock(() => Promise.resolve()),
+    }));
+
+    await initialize({
+      agents: [],
+      editors: [],
+      frameworks: ["vue"],
+      hooks: [],
+      integrations: [],
+      linter: "bun",
+      pm: "npm",
+      skipInstall: false,
+      "type-aware": true,
+    });
+
+    expect(installedPackages).toEqual([expect.stringMatching(/^ultracite@/u)]);
+    expect(written.get("./oxlint.config.mts")).toContain(
+      'import { defineConfig } from "ultracite/bun";'
+    );
+    expect(written.get("./oxlint.config.mts")).toContain(
+      'import vue from "ultracite/oxlint/vue";'
+    );
+    expect(written.get("./oxlint.config.mts")).toContain(
+      "options: { typeAware: true },"
+    );
+    expect(written.get("./oxfmt.config.mts")).toContain(
+      'import { defineConfig } from "ultracite/bun";'
+    );
+    expect(warn.mock.calls.flat()).toContainEqual(
+      expect.stringContaining("Bun has no Vue rules")
+    );
+  });
+
+  test.each([
+    [["husky"], "npx ultracite fix --staged"],
+    [["husky", "lint-staged"], "npx lint-staged"],
+  ] as const)(
+    "a Bun project with %j gets a hook that runs %s",
+    async (integrations, command) => {
+      const written = new Map<string, string>();
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.reject(new Error("ENOENT"))),
+        mkdir: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve('{"name": "test"}')),
+        rm: mock(() => Promise.resolve()),
+        writeFile: mock((filePath: string, content: string) => {
+          written.set(String(filePath), content);
+
+          return Promise.resolve();
+        }),
+      }));
+      mock.module("@clack/prompts", () => ({
+        cancel: mock(noop),
+        confirm: mock(() => Promise.resolve(false)),
+        intro: mock(noop),
+        isCancel: mock(() => false),
+        log: {
+          error: mock(noop),
+          info: mock(noop),
+          success: mock(noop),
+          warn: mock(noop),
+        },
+        multiselect: mock(() => Promise.resolve([])),
+        outro: mock(noop),
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      await initialize({
+        agents: [],
+        editors: [],
+        frameworks: [],
+        hooks: [],
+        integrations: [...integrations],
+        linter: "bun",
+        pm: "npm",
+        skipInstall: true,
+      });
+
+      const hook = written.get("./.husky/pre-commit") ?? "";
+      expect(hook).toContain(`\n${command}\n`);
+      expect(hook).not.toContain("git diff");
+    }
+  );
 
   test("completes successfully with minimal options", async () => {
     const mockLog = {
@@ -2318,6 +2491,27 @@ describe("helper functions", () => {
       expect(installedPackages).not.toContain(
         `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
       );
+    });
+
+    // Bun lints and formats with its own tools, so it needs oxlint and oxfmt
+    // (and oxlint-tsgolint, for type-aware rules) only for the editor
+    // extensions, but the JS plugins it loads from node_modules.
+    test("installs only what the Bun provider uses", async () => {
+      expect(await installBun(true, [], false)).toEqual(["ultracite"]);
+      expect(await installBun(false, [], true)).toEqual([
+        "ultracite",
+        "oxlint",
+        "oxfmt",
+      ]);
+      expect(await installBun(true, [], true)).toEqual([
+        "ultracite",
+        "oxlint",
+        "oxfmt",
+        "oxlint-tsgolint",
+      ]);
+      expect(
+        await installBun(false, ["anti-slop", "eslint-plugin-sonarjs"], false)
+      ).toEqual(["ultracite", "eslint-plugin-sonarjs"]);
     });
 
     test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
@@ -4020,7 +4214,7 @@ describe("init flag validation", () => {
 
     await expect(result).rejects.toBeInstanceOf(UltraciteSetupError);
     await expect(result).rejects.toThrow(
-      'Unknown --linter value "Biome". Valid values: biome, eslint, oxlint.'
+      'Unknown --linter value "Biome". Valid values: biome, bun, eslint, oxlint.'
     );
     expect(mockAddDep).not.toHaveBeenCalled();
     expect(mockRm).not.toHaveBeenCalled();
@@ -4070,14 +4264,20 @@ describe("init flag validation", () => {
     ).not.toThrow();
   });
 
-  test("rejects --js-plugins with a linter other than Oxlint", () => {
+  test("rejects --js-plugins with a linter other than Oxlint or Bun", () => {
     for (const linter of ["biome", "eslint"]) {
       expect(() =>
         validateInitializeFlags({ "js-plugins": ["anti-slop"], linter })
       ).toThrow(
-        `--js-plugins only works with Oxlint, but the linter is "${linter}". Pass --linter oxlint to use JS plugins.`
+        `--js-plugins only works with Oxlint or Bun, but the linter is "${linter}". Pass --linter oxlint or --linter bun to use JS plugins.`
       );
     }
+  });
+
+  test("accepts --js-plugins with Bun, which runs the Oxlint config", () => {
+    expect(() =>
+      validateInitializeFlags({ "js-plugins": ["anti-slop"], linter: "bun" })
+    ).not.toThrow();
   });
 
   test("rejects --js-plugins on a project that keeps another linter", async () => {
@@ -4112,7 +4312,7 @@ describe("init flag validation", () => {
 
       await expect(result).rejects.toBeInstanceOf(UltraciteSetupError);
       await expect(result).rejects.toThrow(
-        '--js-plugins only works with Oxlint, but the linter is "biome".'
+        '--js-plugins only works with Oxlint or Bun, but the linter is "biome".'
       );
     } finally {
       mockDetectLinter.mockImplementation(() => null);
@@ -4544,6 +4744,40 @@ describe("init questions", () => {
     }
 
     expect(removed).toContain("./.eslintrc.json");
+  });
+
+  // Bun reads the Oxlint and oxfmt configs, and bunfig.toml holds Bun's
+  // install and test settings, so none of them is another linter's setup.
+  test("keeps the Oxlint setup and bunfig.toml when switching to Bun", async () => {
+    recordingPrompts();
+
+    const { removed, written } = mockProject({
+      "biome.jsonc": "{}",
+      "bunfig.toml": "[install]\nexact = true\n",
+      "oxfmt.config.ts": "export default {};",
+      "oxlint.config.ts": "export default {};",
+      "package.json": JSON.stringify({
+        devDependencies: {
+          "@biomejs/biome": "2.0.0",
+          oxfmt: "0.71.0",
+          oxlint: "1.86.0",
+          "oxlint-tsgolint": "7.0.0",
+        },
+      }),
+    });
+
+    try {
+      await migrateLinterConfig("bun", true);
+    } finally {
+      restoreProject();
+    }
+
+    expect(removed).toEqual(["./biome.jsonc"]);
+    expect(
+      Object.keys(
+        JSON.parse(written.get("package.json") ?? "{}").devDependencies
+      )
+    ).toEqual(["oxfmt", "oxlint", "oxlint-tsgolint"]);
   });
 
   test("leaves tsconfig files alone without type-aware linting", async () => {

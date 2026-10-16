@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { editors, getZedConfig } from "../src/data/editors";
 
 describe("getZedConfig", () => {
-  test.each(["biome", "eslint", "oxlint"] as const)(
+  test.each(["biome", "bun", "eslint", "oxlint"] as const)(
     "sets TypeScript preferences on vtsls, Zed's default server (%s)",
     (linter) => {
       const { lsp } = getZedConfig(linter);
@@ -30,6 +30,20 @@ describe("getZedConfig", () => {
       });
     }
   );
+});
+
+// Bun has no language server, so editors lint and format a Bun project with
+// the oxc extension, on the same configs.
+describe("editor settings for Bun", () => {
+  test("are the Oxlint provider's", () => {
+    expect(getZedConfig("bun")).toEqual(getZedConfig("oxlint"));
+
+    for (const editor of editors) {
+      expect(editor.config.getContent("bun")).toEqual(
+        editor.config.getContent("oxlint")
+      );
+    }
+  });
 });
 
 describe("VS Code settings", () => {

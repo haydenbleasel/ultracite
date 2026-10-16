@@ -19,6 +19,7 @@ export const BIOME_EXTENDS_SPECIFIER = "ultracite/biome/core";
 // Ultracite has no "." export, so resolution always goes through a subpath.
 const linterSpecifiers = {
   biome: BIOME_EXTENDS_SPECIFIER,
+  bun: "ultracite/bun",
   eslint: "ultracite/eslint/core",
   oxlint: "ultracite/oxlint/core",
 } satisfies Record<Linter, string>;

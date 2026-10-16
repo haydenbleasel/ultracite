@@ -1,12 +1,28 @@
 # Ultracite performance benchmarks
 
-Guards against performance regressions in `ultracite check` / `ultracite fix` across all three providers — **oxlint**, **biome**, and **eslint**. It exists because [#741](https://github.com/haydenbleasel/ultracite/issues/741) shipped a ~40x oxlint slowdown (JS plugins folded into the core preset) that no automated check caught.
+Guards against performance regressions in `ultracite check` / `ultracite fix` across the providers — **oxlint**, **biome**, **eslint** and **bun**. It exists because [#741](https://github.com/haydenbleasel/ultracite/issues/741) shipped a ~40x oxlint slowdown (JS plugins folded into the core preset) that no automated check caught.
 
 ## How it works
 
 For each provider the harness builds a self-contained project in the OS temp directory (`ultracite-benchmark`, cleared at the start of each run), installs the provider's real tools, runs `ultracite init` to generate the actual config, and copies in a fixed fixture tree (`fixtures/`). It then times the real `ultracite check` / `ultracite fix` command many times and reports the median.
 
 Only the lint invocations are timed — all setup (installs, `init`, fixture copies) happens up front and is excluded.
+
+### The Bun provider
+
+`bun lint` and `bun fmt` ship with Bun itself, so the Bun project installs nothing but `ultracite`, and its runs use whichever `bun` is first on `PATH`. The harness prints that Bun's version, and skips the provider, with the reason in the output and the Step Summary, when:
+
+- the Bun on `PATH` has no linter Ultracite can run (`bun lint --help --all` doesn't list `--no-script`), as in Bun 1.4.3 and earlier, which includes the Bun CI uses;
+- the build under test has no `--linter bun`, or in compare mode the base build doesn't, since there's nothing to compare against.
+
+To benchmark it locally on a Bun that's older than that, put a newer build first on `PATH` and run the harness with the Bun you have:
+
+```bash
+PATH="/path/to/newer-bun-dir:$PATH" BENCH_PROVIDERS=bun \
+  /path/to/your/bun ./benchmark/index.ts --head packages/cli/ultracite-*.tgz
+```
+
+On macOS and Windows, `bun lint` still reads the listing of each directory above the project once ([oven-sh/bun#45482](https://github.com/oven-sh/bun/pull/45482)), so a `$TMPDIR` with tens of thousands of entries, as macOS's often has, adds a little to every Bun run. Point `TMPDIR` at a near-empty directory when you compare Bun with the other providers.
 
 ### The regression gate (CI)
 
@@ -40,7 +56,7 @@ bun ./benchmark/index.ts --base base.tgz --head head.tgz
 | `BENCH_FIXTURE_COPIES` | `6` | Times the fixture tree is duplicated (amplifies the signal) |
 | `BENCH_REGRESSION_RATIO` | `1.25` | Head/base median ratio that counts as a regression |
 | `BENCH_ALPHA` | `0.05` | Significance level for the U test |
-| `BENCH_PROVIDERS` | `oxlint,biome,eslint` | Subset of providers to run |
+| `BENCH_PROVIDERS` | `oxlint,biome,eslint,bun` | Subset of providers to run |
 | `BENCH_COMMANDS` | `check,fix` | Subset of commands to run |
 
 Example — a quick oxlint-only smoke test:

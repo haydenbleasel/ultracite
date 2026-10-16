@@ -6,9 +6,38 @@ import { log } from "@clack/prompts";
 
 import { check } from "../src/commands/check";
 import { UltraciteSetupError } from "../src/config-resolution";
+import { resetBunCapabilityCache } from "../src/linters/bun";
 import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
+
+// A Bun with `bun lint` prints its usage, `--no-script` among its flags, for
+// `bun lint --help --all`; an older one reports a missing "lint" script.
+const mockBunSpawn = (
+  run: (args: string[]) => { status: number } = () => ({ status: 0 })
+) => {
+  resetBunCapabilityCache();
+
+  const mockSpawn = mock(
+    (_cmd: string, args: string[], _opts: SpawnSyncOptions) =>
+      args[1] === "--help"
+        ? {
+            status: 0,
+            stdout:
+              "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+          }
+        : run(args)
+  );
+
+  mock.module("../src/spawn-sync", () => ({
+    spawnSync: mockSpawn,
+  }));
+  mock.module("../src/utils", () => ({
+    detectLinter: mock(() => "bun"),
+  }));
+
+  return mockSpawn;
+};
 
 describe("check", () => {
   afterEach(() => {
@@ -751,5 +780,108 @@ describe("check", () => {
     } finally {
       restoreFileSystemMock();
     }
+  });
+
+  test("runs bun fmt --check, then bun lint, when the linter is bun", () => {
+    const mockSpawn = mockBunSpawn();
+
+    check(["src/index.ts", "README.md"], ["--type-aware"]);
+
+    expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "lint", "--help", "--all"],
+      [
+        "bun",
+        "fmt",
+        "--no-script",
+        "--check",
+        "--no-error-on-unmatched-pattern",
+        "src/index.ts",
+        "README.md",
+      ],
+      // Like Oxlint, bun lint fails on a file it doesn't lint.
+      ["bun", "lint", "--no-script", "--type-aware", "src/index.ts"],
+    ]);
+  });
+
+  // Other flags only reach bun lint, so bun fmt would otherwise check the
+  // whole project.
+  test("checks the same Git-selected files with both Bun tools", () => {
+    const mockSpawn = mockBunSpawn();
+
+    check([], ["--changed=origin/dev", "--type-aware"]);
+
+    expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
+      ["lint", "--help", "--all"],
+      [
+        "fmt",
+        "--no-script",
+        "--check",
+        "--no-error-on-unmatched-pattern",
+        "--changed=origin/dev",
+        ".",
+      ],
+      ["lint", "--no-script", "--changed=origin/dev", "--type-aware", "."],
+    ]);
+  });
+
+  // Without --no-script, `bun lint` runs a package.json "lint" script
+  // instead of linting.
+  test("runs Bun's own tools whatever scripts the project has", () => {
+    const mockSpawn = mockBunSpawn();
+
+    check();
+
+    const [, ...toolCalls] = mockSpawn.mock.calls;
+    expect(toolCalls.map(([, args]) => args.slice(0, 2))).toEqual([
+      ["fmt", "--no-script"],
+      ["lint", "--no-script"],
+    ]);
+  });
+
+  test("bun check still runs bun lint when bun fmt reports issues", () => {
+    const mockSpawn = mockBunSpawn((args) => ({
+      status: args[0] === "fmt" ? 1 : 0,
+    }));
+
+    expect(() => check()).toThrow("bun fmt exited with code 1");
+    expect(mockSpawn.mock.calls.at(-1)?.[1][0]).toBe("lint");
+  });
+
+  // spawnBun relies on --no-script, which came after bun lint itself.
+  test("fails with a setup error when Bun's bun lint has no --no-script", () => {
+    resetBunCapabilityCache();
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({
+        status: 0,
+        stdout: "Usage: bun lint [flags]\n      --threads <n>",
+      })),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "bun"),
+    }));
+
+    expect(() => check()).toThrow(UltraciteSetupError);
+  });
+
+  test("fails with a setup error when Bun has no bun lint", () => {
+    resetBunCapabilityCache();
+
+    const mockSpawn = mock(() => ({
+      status: 1,
+      stderr: 'error: Script not found "lint"',
+    }));
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mockSpawn,
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "bun"),
+    }));
+
+    expect(() => check()).toThrow(UltraciteSetupError);
+    expect(() => check()).toThrow(/need Bun \d+\.\d+\.\d+ or later/u);
+    // Only the capability probe ran, once: the answer is cached.
+    expect(mockSpawn).toHaveBeenCalledTimes(1);
   });
 });

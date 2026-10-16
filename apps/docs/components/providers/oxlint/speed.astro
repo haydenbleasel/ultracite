@@ -8,7 +8,15 @@ const large = runFor(420);
 const speedup = Math.round(large.ms.eslint / large.ms.oxlint);
 
 // Differences of the rounded times shown, so the figures add up on the page.
+// Oxlint's can come out at zero or below: at these sizes, starting Node and
+// the CLI takes longer than the linting, and runs vary by a few ms.
 const oxlintGrowth = Math.round(large.ms.oxlint) - Math.round(small.ms.oxlint);
+const signed = (ms: number): string => (ms < 0 ? `−${-ms}` : `+${ms}`);
+
+const title =
+  oxlintGrowth > 0
+    ? `Ten times the files, ${oxlintGrowth} more milliseconds`
+    : "Ten times the files, no slower";
 
 const eslintGrowth = (
   shownSeconds(large.ms.eslint) - shownSeconds(small.ms.eslint)
@@ -24,9 +32,9 @@ const eslintGrowth = (
       value: `${speedup}×`,
     },
     {
-      label: "Added on Oxlint going from 42 to 420 files",
+      label: "Change on Oxlint going from 42 to 420 files",
       unit: "ms",
-      value: `+${oxlintGrowth}`,
+      value: signed(oxlintGrowth),
     },
     {
       label: "Added on ESLint for the same growth",
@@ -34,7 +42,7 @@ const eslintGrowth = (
       value: `+${eslintGrowth}`,
     },
   ]}
-  title={`Ten times the files, ${oxlintGrowth} more milliseconds`}
+  title={title}
   toolchains={["oxlint", "eslint"]}
 >
   Oxlint and Oxfmt are native binaries that spread the work across every

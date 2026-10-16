@@ -132,6 +132,13 @@ describe("ESLint dependencies", () => {
     }
   });
 
+  // Bun runs the Oxlint config's JS plugins and the editors run oxlint,
+  // oxfmt and oxlint-tsgolint on it, so switching between the two prunes
+  // nothing either way.
+  test("keeps the Oxlint packages when switching to Bun and back", () => {
+    expect(dependencyNamesByLinter.bun).toEqual(dependencyNamesByLinter.oxlint);
+  });
+
   test("pins every package instead of installing latest", () => {
     const versions = [
       ...Object.values(eslintCoreDevDependencies),

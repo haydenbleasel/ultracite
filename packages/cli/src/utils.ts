@@ -1,4 +1,10 @@
-import { accessSync, lstatSync, mkdirSync, realpathSync } from "node:fs";
+import {
+  accessSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  realpathSync,
+} from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -344,7 +350,7 @@ export const validateFrameworkName = (name: string): string => {
   return name;
 };
 
-export type Linter = "biome" | "eslint" | "oxlint";
+export type Linter = "biome" | "bun" | "eslint" | "oxlint";
 
 // Canonical config file-name lists for each tool. These are the single source
 // of truth shared by the linter writers, the init migration step, and doctor.ts
@@ -594,10 +600,25 @@ export const findNearestFile = (
   };
 };
 
+// The Bun provider writes the same oxlint.config.ts and oxfmt.config.ts as
+// the Oxlint one, but imports `defineConfig` from ultracite/bun (see
+// config/bun/index.mjs), which is what tells the two apart.
+const BUN_CONFIG_IMPORT_RE = /\bfrom\s*["']ultracite\/bun["']/u;
+
+/** Whether an Oxlint or oxfmt config file was written for the Bun provider. */
+export const isBunConfig = (configPath: string): boolean => {
+  try {
+    return BUN_CONFIG_IMPORT_RE.test(readFileSync(configPath, "utf-8"));
+  } catch {
+    return false;
+  }
+};
+
 export const detectLinter = (startDir = process.cwd()): Linter | null => {
   // Precedence is per-directory: the nearest directory wins, and within a
   // directory Biome beats ESLint beats Oxlint — the concatenated name list
-  // preserves that order at every level of the walk.
+  // preserves that order at every level of the walk. Bun shares Oxlint's
+  // config files and is told apart by their contents.
   const found = findNearestFile(
     [...biomeConfigNames, ...eslintConfigNames, ...oxlintConfigNames],
     startDir
@@ -615,5 +636,5 @@ export const detectLinter = (startDir = process.cwd()): Linter | null => {
     return "eslint";
   }
 
-  return "oxlint";
+  return isBunConfig(found.path) ? "bun" : "oxlint";
 };
