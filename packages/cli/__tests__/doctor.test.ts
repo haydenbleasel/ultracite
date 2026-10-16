@@ -1287,7 +1287,11 @@ const mockBunProject = ({
       }
 
       return bunLint
-        ? { status: 0, stdout: "Usage: bun lint [flags]" }
+        ? {
+            status: 0,
+            stdout:
+              "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+          }
         : { status: 1, stderr: 'error: Script not found "lint"' };
     }),
   }));
@@ -1387,7 +1391,9 @@ describe("doctor for Bun", () => {
     mockBunProject({ bunLint: false, files: bunProjectFiles });
 
     expect(checkNamed("Bun installation")).toMatchObject({
-      message: expect.stringContaining("Bun 1.4.4 has no `bun lint`"),
+      message: expect.stringContaining(
+        "Bun 1.4.4 is too old for the Bun provider"
+      ),
       status: "fail",
     });
   });

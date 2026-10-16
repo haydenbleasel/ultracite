@@ -29,13 +29,13 @@ If the versions already line up, the stale rule usually comes from your own over
 
 ## "The Bun provider runs `bun lint` and `bun fmt`, which need Bun 1.4.4 or later."
 
-`bun lint` and `bun fmt` are new in Bun 1.4.4. An older Bun takes `lint` for a `package.json` script and fails with `Script not found "lint"`, so Ultracite stops with this message before running it. Upgrade Bun with `bun upgrade` (or the installer you used), then check with `npx ultracite doctor`, which reports the Bun it finds. In CI, raise the Bun version in your setup step, such as `bun-version` for `oven-sh/setup-bun`.
+`bun lint` and `bun fmt` are new in Bun 1.4.4. An older Bun takes `lint` for a `package.json` script and fails with `Script not found "lint"`, and Ultracite runs them with `--no-script`, which some early builds of `bun lint` don't have, so Ultracite checks first and stops with this message. Upgrade Bun with `bun upgrade` (or the installer you used), then check with `npx ultracite doctor`, which reports the Bun it finds. In CI, raise the Bun version in your setup step, such as `bun-version` for `oven-sh/setup-bun`.
 
 ## "`bun lint` runs my `lint` script instead of linting."
 
 When `package.json` has a `lint` script, `bun lint` runs that script, and the same goes for `bun fmt` and a `fmt` script. That's Bun's behavior, so a `"lint": "next lint"` script means typing `bun lint` runs Next.js's linter. `ultracite check` and `ultracite fix` aren't affected: they always run Bun's own tools. `ultracite doctor` warns about such scripts.
 
-To run Bun's linter yourself, use `npx ultracite check`, rename the script, or point it at Bun's tool: inside a `lint` script, `bun lint` is the linter, so `"lint": "bun lint"` works.
+To run Bun's linter yourself, add `--no-script` (`bun lint --no-script`), use `npx ultracite check`, or point the script at Bun's tool: inside a `lint` script, `bun lint` is the linter, so `"lint": "bun lint"` works.
 
 ## "I changed a rule in `bunfig.toml`, but my editor still reports it."
 

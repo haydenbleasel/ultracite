@@ -45,7 +45,7 @@ The `check` command runs the linter without modifying files:
 npx ultracite check
 ```
 
-On Bun, `check` runs `bun fmt --check` and then `bun lint`, and `fix` runs `bun lint --fix` and then `bun fmt`. Both tools read `oxlint.config.ts` and `oxfmt.config.ts`, so running `bun lint` or `bun fmt --check` yourself reports the same problems, with one catch: when `package.json` has a `lint` or `fmt` script, `bun lint` or `bun fmt` runs that script instead. `ultracite check` and `fix` always run Bun's own tools.
+On Bun, `check` runs `bun fmt --check` and then `bun lint`, and `fix` runs `bun lint --fix` and then `bun fmt`. Both tools read `oxlint.config.ts` and `oxfmt.config.ts`, so running `bun lint` or `bun fmt --check` yourself reports the same problems, with one catch: when `package.json` has a `lint` or `fmt` script, `bun lint` or `bun fmt` runs that script instead, unless you add `--no-script`. `ultracite check` and `fix` always run Bun's own tools.
 
 ### Fixing Code
 

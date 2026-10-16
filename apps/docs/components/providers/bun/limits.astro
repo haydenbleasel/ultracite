@@ -7,7 +7,9 @@ import Terminal from "../../landing/terminal.astro";
 // What the Bun provider can't do, each with what Bun or Ultracite printed
 // for it, run for real on 2026-10-14 and 15: Bun 1.4.2 for the old-Bun lines, Bun
 // 1.4.4-canary.1 for the rest, and `ultracite doctor` from Ultracite 8.0.1
-// with the Bun provider.
+// with the Bun provider. The Tailwind card and the scripts warning follow
+// oven-sh/bun#45482 and doctor.ts as of 2026-10-16, ahead of a canary that
+// has that PR: rerun them when one does.
 const limits: { body: string; output?: string; title: string; topic: string }[] = [
   {
     body: "Bun has no version of Oxlint’s `jsdoc` and `vue` plugins. `ultracite/bun` leaves their rules out of the presets you extend, which is core’s 19 `jsdoc` rules and all of the Vue preset. One you turn on yourself doesn’t run, and with the plugin in `plugins`, `bun lint` exits with code 2.",
@@ -29,13 +31,13 @@ error: bun lint does not support --lsp`,
     topic: "Editors",
   },
   {
-    body: "Bun reads Tailwind’s class order from the `tailwindcss` package, where Oxfmt has its own copy, and won’t format a file with classes to sort when it can’t find one. So `ultracite/bun` turns class sorting off when `tailwindcss` isn’t installed at the project root. In a monorepo that installs it in one workspace, add it to the root as well to keep classes sorted.",
+    body: "Bun reads Tailwind’s class order from the `tailwindcss` package in your project, where Oxfmt has its own copy. Without the package, `bun fmt` still formats the file but leaves its classes in the order you wrote them, and `bun fmt --doctor` says why.",
     title: "Class sorting needs tailwindcss",
     topic: "Formatting",
   },
   {
-    body: "With a `lint` script in `package.json`, `bun lint` runs the script, and the same goes for `bun fmt` and a `fmt` script. `ultracite check` and `fix` always run Bun’s own tools, and `ultracite doctor` warns about the scripts.",
-    output: "▲  `bun lint` runs the package.json \"lint\" script (`next lint`) instead of Bun's own tool",
+    body: "With a `lint` script in `package.json`, `bun lint` runs the script, and the same goes for `bun fmt` and a `fmt` script. Add `--no-script` to run Bun’s own tool. `ultracite check` and `fix` always do, and `ultracite doctor` warns about the scripts.",
+    output: "▲  `bun lint` runs the package.json \"lint\" script (`next lint`) instead of Bun's own tool, unless you pass `--no-script`",
     title: "A lint script runs instead",
     topic: "Scripts",
   },

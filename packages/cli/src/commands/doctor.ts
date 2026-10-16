@@ -440,7 +440,8 @@ const checkOxfmtConfig = (): DiagnosticCheck =>
 // ---------------------------------------------------------------------------
 
 // Bun isn't a dependency of the project, so it's checked by what it can do:
-// an older Bun has no `bun lint` and reports a missing "lint" script.
+// an older Bun has no `bun lint` (it reports a missing "lint" script), or
+// one without the `--no-script` flag Ultracite runs it with.
 const checkBunInstallation = (): DiagnosticCheck => {
   const version = spawnSync("bun", ["--version"]);
 
@@ -456,7 +457,7 @@ const checkBunInstallation = (): DiagnosticCheck => {
 
   if (!hasBunLint()) {
     return {
-      message: `Bun ${installed} has no \`bun lint\` or \`bun fmt\` — upgrade to Bun ${MIN_BUN_VERSION} or later with \`bun upgrade\``,
+      message: `Bun ${installed} is too old for the Bun provider, which needs Bun ${MIN_BUN_VERSION} or later — upgrade with \`bun upgrade\``,
       name: BUN_CHECK,
       status: "fail",
     };
@@ -552,7 +553,7 @@ const checkBunScripts = (): DiagnosticCheck | null => {
   );
 
   return {
-    message: `${runs.join(" and ")} instead of Bun's own tool — \`ultracite check\` and \`ultracite fix\` still run Bun`,
+    message: `${runs.join(" and ")} instead of Bun's own tool, unless you pass \`--no-script\` — \`ultracite check\` and \`ultracite fix\` always run Bun's`,
     name: BUN_SCRIPTS_CHECK,
     status: "warn",
   };

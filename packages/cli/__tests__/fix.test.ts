@@ -1364,7 +1364,11 @@ const mockBun = (lintStatus = 0) => {
   const mockSpawn = mock(
     (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
       if (args[1] === "--help") {
-        return { status: 0, stdout: "Usage: bun lint [flags]" };
+        return {
+          status: 0,
+          stdout:
+            "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+        };
       }
 
       return args[0] === "lint"
@@ -1392,21 +1396,18 @@ describe("fix with Bun", () => {
     fix(["src/a.ts", "Dockerfile"], ["--type-aware"]);
 
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
-      ["bun", "lint", "--help"],
-      ["bun", "lint", "--fix", "--type-aware", "src/a.ts"],
+      ["bun", "lint", "--help", "--all"],
+      ["bun", "lint", "--no-script", "--fix", "--type-aware", "src/a.ts"],
       [
         "bun",
         "fmt",
+        "--no-script",
         "--write",
         "--no-error-on-unmatched-pattern",
         "src/a.ts",
         "Dockerfile",
       ],
     ]);
-
-    for (const [, args, opts] of mockSpawn.mock.calls) {
-      expect(opts.env).toEqual({ npm_lifecycle_event: args[0] });
-    }
   });
 
   // What the Bun provider's husky hook runs: both tools fix only the staged
@@ -1417,9 +1418,16 @@ describe("fix with Bun", () => {
     fix([], ["--staged"]);
 
     expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
-      ["lint", "--help"],
-      ["lint", "--fix", "--staged", "."],
-      ["fmt", "--write", "--no-error-on-unmatched-pattern", "--staged", "."],
+      ["lint", "--help", "--all"],
+      ["lint", "--no-script", "--fix", "--staged", "."],
+      [
+        "fmt",
+        "--no-script",
+        "--write",
+        "--no-error-on-unmatched-pattern",
+        "--staged",
+        ".",
+      ],
     ]);
   });
 
@@ -1429,7 +1437,12 @@ describe("fix with Bun", () => {
     fix([], ["--unsafe"]);
 
     const [, lintCall] = mockSpawn.mock.calls;
-    expect(lintCall[1]).toEqual(["lint", "--fix-dangerously", "."]);
+    expect(lintCall[1]).toEqual([
+      "lint",
+      "--no-script",
+      "--fix-dangerously",
+      ".",
+    ]);
   });
 
   test("still formats when bun lint leaves problems behind", () => {
