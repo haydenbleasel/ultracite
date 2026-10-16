@@ -1,0 +1,20 @@
+{
+  "generated": "2026-10-15",
+  "method": "Hand input. For every site rater 1 labelled real-barrier (classifications.json, hit and hidden samples), whether a rule that fires there names the barrier the rater describes (yes), names it for the wrong reason, e.g. a rule that fires on every input (byAccident), points near it (partly), or objects to something else (no); and which linter's rule does. Read from the rater's note and the rules at the site.",
+  "sites": {
+    "a004": { "match": "no", "linters": [], "note": "The rules want a role on the hover wrapper; the barrier is that the inner click target isn't focusable or keyboard-operable." },
+    "a008": { "match": "yes", "linters": ["eslint"], "note": "control-has-associated-label on the unlabelled file-name input; Oxlint's version skips inputs by default." },
+    "a009": { "match": "no", "linters": [], "note": "prefer-tag-over-role / useSemanticElements object to role=checkbox, which works; the barrier is the missing name." },
+    "a011": { "match": "byAccident", "linters": ["eslint"], "note": "ESLint's control-has-associated-label fires on every input under this config; here the label's htmlFor points at an id that doesn't exist." },
+    "a022": { "match": "yes", "linters": ["biome"], "note": "noSvgWithoutTitle on the only content of an unnamed menu button; Oxlint and ESLint don't see it through the spread." },
+    "a024": { "match": "yes", "linters": ["oxlint", "eslint", "biome"], "note": "A label tied to no control." },
+    "a033": { "match": "partly", "linters": ["eslint"], "note": "prefer-tag-over-role on role=list suggests <ul>; the barrier is that the items have no listitem role." },
+    "a064": { "match": "yes", "linters": ["biome"], "note": "useValidAnchor on <a onClick> without href (latent: no caller passes breadcrumbs today)." },
+    "a066": { "match": "no", "linters": [], "note": "prefer-tag-over-role objects to role=combobox; the barrier is the icon-only trigger's missing name." },
+    "a067": { "match": "yes", "linters": ["eslint"], "note": "label-has-associated-control on a Label with no htmlFor; only ESLint, because of its labelComponents option." },
+    "h005": { "match": "yes", "linters": [], "note": "Hidden set: control-has-associated-label would name the unnamed clear button once told what the component renders." },
+    "h013": { "match": "partly", "linters": [], "note": "Hidden set: anchor-ambiguous-text on 'Learn more'; meets WCAG 2.4.4 in context." },
+    "h018": { "match": "no", "linters": [], "note": "Hidden set: the mapped rules complain about a missing role and key handler that the component supplies; the real problem is an extra do-nothing tab stop." },
+    "h024": { "match": "yes", "linters": [], "note": "Hidden set: control-has-associated-label on an icon-only menu button with no name." }
+  }
+}

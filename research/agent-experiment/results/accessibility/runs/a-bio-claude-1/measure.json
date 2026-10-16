@@ -1,0 +1,767 @@
+{
+  "runId": "a-bio-claude-1",
+  "topic": "accessibility",
+  "subject": "a-bio",
+  "arm": "A via Biome",
+  "linter": "biome",
+  "rulesFile": false,
+  "agent": "claude",
+  "cliVersion": "2.1.301 (Claude Code)",
+  "wallSeconds": 34.2,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "given": [
+      {
+        "rule": "lint/a11y/noNoninteractiveElementInteractions",
+        "line": 122,
+        "message": "Unexpected event handler on non-interactive element.",
+        "help": null,
+        "url": null
+      },
+      {
+        "rule": "lint/a11y/noStaticElementInteractions",
+        "line": 122,
+        "message": "Unexpected event handler on static element.",
+        "help": null,
+        "url": null
+      },
+      {
+        "rule": "lint/a11y/useKeyWithClickEvents",
+        "line": 122,
+        "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+        "help": null,
+        "url": null
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "e325c5af674a85e243a37081fb8f5700dfbcda4cb2a481378f18998e3c4d5cfc",
+    "parseError": false,
+    "views": {
+      "oxlint core+react": {
+        "a11yHonor": [
+          "jsx-a11y/click-events-have-key-events:122",
+          "jsx-a11y/no-static-element-interactions:122"
+        ],
+        "a11yIgnore": [
+          "jsx-a11y/click-events-have-key-events:122",
+          "jsx-a11y/no-static-element-interactions:122"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      },
+      "oxlint core+react+js-plugins": {
+        "a11yHonor": [
+          "jsx-a11y/click-events-have-key-events:122",
+          "jsx-a11y/no-static-element-interactions:122"
+        ],
+        "a11yIgnore": [
+          "jsx-a11y/click-events-have-key-events:122",
+          "jsx-a11y/no-static-element-interactions:122"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      },
+      "eslint core+react": {
+        "a11yHonor": [
+          "jsx-a11y/click-events-have-key-events:122",
+          "jsx-a11y/no-static-element-interactions:122"
+        ],
+        "a11yIgnore": [
+          "jsx-a11y/click-events-have-key-events:122",
+          "jsx-a11y/no-static-element-interactions:122"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      },
+      "biome core": {
+        "a11yHonor": [
+          "a11y/noNoninteractiveElementInteractions:122",
+          "a11y/noStaticElementInteractions:122",
+          "a11y/useKeyWithClickEvents:122"
+        ],
+        "a11yIgnore": [
+          "a11y/noNoninteractiveElementInteractions:122",
+          "a11y/noStaticElementInteractions:122",
+          "a11y/useKeyWithClickEvents:122"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      }
+    },
+    "givenCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "fullPresets": {
+      "oxlint core+react": {
+        "jsx-a11y/click-events-have-key-events": 1,
+        "jsx-a11y/no-static-element-interactions": 1
+      },
+      "oxlint core+react+js-plugins": {
+        "jsx-a11y/click-events-have-key-events": 1,
+        "jsx-a11y/no-static-element-interactions": 1
+      },
+      "eslint core+react": {
+        "jsx-a11y/click-events-have-key-events": 1,
+        "jsx-a11y/no-static-element-interactions": 1,
+        "react/jsx-no-leaked-render": 2,
+        "react/prefer-read-only-props": 9,
+        "unicorn/consistent-arrow-return-style": 2,
+        "unicorn/name-replacements": 1
+      },
+      "biome core": {
+        "a11y/noNoninteractiveElementInteractions": 1,
+        "a11y/noStaticElementInteractions": 1,
+        "a11y/useKeyWithClickEvents": 1
+      }
+    },
+    "typeErrors": [],
+    "oracle": {
+      "verdict": {
+        "barrierFixed": false,
+        "behaviourPreserved": true,
+        "statePresent": false
+      },
+      "diagnosis": {
+        "behaviourPreserved": true,
+        "childrenRendered": {
+          "closed": false,
+          "open": true
+        },
+        "clickCalls": 1,
+        "element": "div",
+        "flags": {
+          "exposedAsControl": false,
+          "focusable": false,
+          "hidden": false,
+          "keyHandler": false,
+          "keyHandling": "no key handler",
+          "native": false,
+          "role": null,
+          "tabIndex": null
+        },
+        "fixed": false,
+        "notes": [
+          "the label's heading is inside the control"
+        ],
+        "reason": "no role (no key handler)",
+        "statePresent": false
+      },
+      "control": {
+        "element": "div",
+        "role": null,
+        "tabIndex": null,
+        "native": false,
+        "focusable": false,
+        "hidden": false,
+        "name": "General stats",
+        "ariaExpanded": {
+          "closed": null,
+          "open": null
+        },
+        "keys": {
+          "Enter": 0,
+          "Space": 0
+        },
+        "keyHandlers": [],
+        "buttonType": null,
+        "className": "oracle-section",
+        "classNameRendered": true,
+        "styleKeys": [
+          "alignItems",
+          "cursor",
+          "display",
+          "justifyContent"
+        ],
+        "style": {
+          "alignItems": "center",
+          "cursor": "pointer",
+          "display": "flex",
+          "justifyContent": "space-between"
+        },
+        "headingInsideControl": true,
+        "ariaControls": null
+      }
+    },
+    "scan": {
+      "parseErrors": 0,
+      "suppressions": {
+        "eslint-disable": 0,
+        "eslint inline config": 0,
+        "oxlint-disable": 0,
+        "biome-ignore": 0,
+        "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+      },
+      "controls": 1,
+      "control": {
+        "tag": "div",
+        "attrs": [
+          "className",
+          "onClick",
+          "style"
+        ],
+        "role": null,
+        "tabIndex": null,
+        "ariaHidden": null,
+        "ariaExpanded": null,
+        "type": null,
+        "keyHandlers": [],
+        "spreads": [],
+        "onClickInSpread": false,
+        "className": true
+      },
+      "buttons": 0,
+      "roles": []
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "given": [
+        "a11y/noNoninteractiveElementInteractions L122",
+        "a11y/noStaticElementInteractions L122",
+        "a11y/useKeyWithClickEvents L122"
+      ],
+      "wallSeconds": 34.2,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "agent": {
+        "exists": true,
+        "sha256": "1cc9c6fd5dc74021b2215cf286e7b1f7062fc1dc65a99f7c8fcaf9ddd72ce216",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "eslint core+react": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "biome core": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          }
+        },
+        "givenCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "fullPresets": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {
+            "react-doctor/no-inline-exhaustive-style": 1
+          },
+          "eslint core+react": {
+            "react-doctor/no-inline-exhaustive-style": 1,
+            "react/jsx-no-leaked-render": 2,
+            "react/prefer-read-only-props": 9,
+            "unicorn/consistent-arrow-return-style": 2,
+            "unicorn/name-replacements": 1
+          },
+          "biome core": {}
+        },
+        "typeErrors": [],
+        "oracle": {
+          "verdict": {
+            "barrierFixed": true,
+            "behaviourPreserved": true,
+            "statePresent": true
+          },
+          "diagnosis": {
+            "behaviourPreserved": true,
+            "childrenRendered": {
+              "closed": false,
+              "open": true
+            },
+            "clickCalls": 1,
+            "element": "button",
+            "flags": {
+              "exposedAsControl": true,
+              "focusable": true,
+              "hidden": false,
+              "keyHandler": false,
+              "keyHandling": "no key handler",
+              "native": true,
+              "role": null,
+              "tabIndex": null
+            },
+            "fixed": true,
+            "notes": [
+              "the label's heading is inside the control"
+            ],
+            "reason": "native control",
+            "statePresent": true
+          },
+          "control": {
+            "element": "button",
+            "role": null,
+            "tabIndex": null,
+            "native": true,
+            "focusable": true,
+            "hidden": false,
+            "name": "General stats",
+            "ariaExpanded": {
+              "closed": "false",
+              "open": "true"
+            },
+            "keys": {
+              "Enter": 0,
+              "Space": 0
+            },
+            "keyHandlers": [],
+            "buttonType": "button",
+            "className": "oracle-section",
+            "classNameRendered": true,
+            "styleKeys": [
+              "alignItems",
+              "background",
+              "border",
+              "color",
+              "cursor",
+              "display",
+              "font",
+              "justifyContent",
+              "padding",
+              "textAlign",
+              "width"
+            ],
+            "style": {
+              "alignItems": "center",
+              "background": "none",
+              "border": "none",
+              "color": "inherit",
+              "cursor": "pointer",
+              "display": "flex",
+              "font": "inherit",
+              "justifyContent": "space-between",
+              "padding": 0,
+              "textAlign": "inherit",
+              "width": "100%"
+            },
+            "headingInsideControl": true,
+            "ariaControls": null
+          }
+        },
+        "scan": {
+          "parseErrors": 0,
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          },
+          "controls": 1,
+          "control": {
+            "tag": "button",
+            "attrs": [
+              "aria-expanded",
+              "className",
+              "onClick",
+              "style",
+              "type"
+            ],
+            "role": null,
+            "tabIndex": null,
+            "ariaHidden": null,
+            "ariaExpanded": "{open}",
+            "type": "\"button\"",
+            "keyHandlers": [],
+            "spreads": [],
+            "onClickInSpread": false,
+            "className": true
+          },
+          "buttons": 1,
+          "roles": []
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {
+            "react-doctor/no-inline-exhaustive-style": 1
+          },
+          "eslint core+react": {
+            "react-doctor/no-inline-exhaustive-style": 1
+          },
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "classification": [
+          "native button"
+        ],
+        "outcome": "right fix"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "1cc9c6fd5dc74021b2215cf286e7b1f7062fc1dc65a99f7c8fcaf9ddd72ce216",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "eslint core+react": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "biome core": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          }
+        },
+        "givenCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "fullPresets": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {
+            "react-doctor/no-inline-exhaustive-style": 1
+          },
+          "eslint core+react": {
+            "react-doctor/no-inline-exhaustive-style": 1,
+            "react/jsx-no-leaked-render": 2,
+            "react/prefer-read-only-props": 9,
+            "unicorn/consistent-arrow-return-style": 2,
+            "unicorn/name-replacements": 1
+          },
+          "biome core": {}
+        },
+        "typeErrors": [],
+        "oracle": {
+          "verdict": {
+            "barrierFixed": true,
+            "behaviourPreserved": true,
+            "statePresent": true
+          },
+          "diagnosis": {
+            "behaviourPreserved": true,
+            "childrenRendered": {
+              "closed": false,
+              "open": true
+            },
+            "clickCalls": 1,
+            "element": "button",
+            "flags": {
+              "exposedAsControl": true,
+              "focusable": true,
+              "hidden": false,
+              "keyHandler": false,
+              "keyHandling": "no key handler",
+              "native": true,
+              "role": null,
+              "tabIndex": null
+            },
+            "fixed": true,
+            "notes": [
+              "the label's heading is inside the control"
+            ],
+            "reason": "native control",
+            "statePresent": true
+          },
+          "control": {
+            "element": "button",
+            "role": null,
+            "tabIndex": null,
+            "native": true,
+            "focusable": true,
+            "hidden": false,
+            "name": "General stats",
+            "ariaExpanded": {
+              "closed": "false",
+              "open": "true"
+            },
+            "keys": {
+              "Enter": 0,
+              "Space": 0
+            },
+            "keyHandlers": [],
+            "buttonType": "button",
+            "className": "oracle-section",
+            "classNameRendered": true,
+            "styleKeys": [
+              "alignItems",
+              "background",
+              "border",
+              "color",
+              "cursor",
+              "display",
+              "font",
+              "justifyContent",
+              "padding",
+              "textAlign",
+              "width"
+            ],
+            "style": {
+              "alignItems": "center",
+              "background": "none",
+              "border": "none",
+              "color": "inherit",
+              "cursor": "pointer",
+              "display": "flex",
+              "font": "inherit",
+              "justifyContent": "space-between",
+              "padding": 0,
+              "textAlign": "inherit",
+              "width": "100%"
+            },
+            "headingInsideControl": true,
+            "ariaControls": null
+          }
+        },
+        "scan": {
+          "parseErrors": 0,
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          },
+          "controls": 1,
+          "control": {
+            "tag": "button",
+            "attrs": [
+              "aria-expanded",
+              "className",
+              "onClick",
+              "style",
+              "type"
+            ],
+            "role": null,
+            "tabIndex": null,
+            "ariaHidden": null,
+            "ariaExpanded": "{open}",
+            "type": "\"button\"",
+            "keyHandlers": [],
+            "spreads": [],
+            "onClickInSpread": false,
+            "className": true
+          },
+          "buttons": 1,
+          "roles": []
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {
+            "react-doctor/no-inline-exhaustive-style": 1
+          },
+          "eslint core+react": {
+            "react-doctor/no-inline-exhaustive-style": 1
+          },
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "classification": [
+          "native button"
+        ],
+        "outcome": "right fix"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "a11y/noNoninteractiveElementInteractions",
+            "a11y/noStaticElementInteractions",
+            "a11y/useKeyWithClickEvents"
+          ],
+          "still": [],
+          "introduced": 0
+        },
+        "vsHandoff": {
+          "cleared": [
+            "a11y/noNoninteractiveElementInteractions",
+            "a11y/noStaticElementInteractions",
+            "a11y/useKeyWithClickEvents"
+          ],
+          "still": [],
+          "introduced": 0
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "edits": [
+          "<button>"
+        ],
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 4,
+        "costUSD": 0.103773,
+        "tokens": {
+          "input": 8,
+          "output": 2687,
+          "cacheCreation": 2274,
+          "cacheRead": 159045
+        },
+        "tokensUsedReportedOnStderr": null,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Bash",
+          "Edit"
+        ],
+        "toolCallTargets": [
+          "<run-root>/a-bio-claude-1/collapsible.tsx",
+          "<run-root>/a-bio-claude-1/collapsible.tsx.51fa437f.json",
+          "ls -la <run-root>/a-bio-claude-1/ <run-root>/ 2>&1 | head -50; which biome npx",
+          "<run-root>/a-bio-claude-1/collapsible.tsx"
+        ],
+        "toolErrors": [
+          "This Bash command contains multiple operations. The following part requires approval: ls -la <run-root>/a-bio-claude-1/ <tmp>/ultracite-agent-experiment/accessibi"
+        ],
+        "ranLinterOrTests": [],
+        "triedShellInClaude": true,
+        "refusedCommands": [
+          "ls -la <run-root>/a-bio-claude-1/ <tmp>/ultracite-agent-experi"
+        ],
+        "triedToRunLinterOrTests": true,
+        "projectInstructionsLoaded": [],
+        "finalMessage": "I changed the clickable header `div` in `collapsible.tsx:122` to a `<button type=\"button\">`, which should clear all three warnings. I couldn't re-run the linter because the shell command to look at the directory needed approval, so this isn't checked yet.\n\n- **Why a button:** a button can get keyboard focus and responds to Enter and Space on its own. So the click handler is no longer on a plain element, and it no longer needs a separate key handler.\n- **Same behavior:** clicking still calls `openTrigger`. I also added `aria-expanded={open}` so screen readers announce whether the section is open.\n- **Same look:** I removed the browser's default button styling (background, border, padding, font, color, text alignment) and set `width: \"100%\"`, so it still fills the row like the old `div`.\n\nI didn't use `role=\"button\"` with `tabIndex` and a key handler on the `div`. That usually triggers a different Biome rule telling you to use a real `<button>` instead.\n\n**One limitation:** the caller in `Stats/index.tsx` passes `label={<h3>…</h3>}`, so there's now a heading inside a button. Browsers render this fine, but it isn't valid HTML, and screen readers drop the heading because a button's contents aren't read as separate elements. The proper fix is to wrap the button in the heading in the calling file, which I couldn't edit here.",
+        "styleMentions": [
+          "I also added `aria-expanded={open}` so screen readers announce whether the section is open. - **Same look:** I removed the browser's default button styling (background, border, padding, font, color, text alignment) and set `width: \"100%\"`, so it still fills the row like the old `div`."
+        ],
+        "behaviourMentions": [],
+        "exposure": {},
+        "exposureInToolCalls": {},
+        "outsideRunDir": [
+          {
+            "tool": "Bash",
+            "target": "ls -la <run-root>/a-bio-claude-1/ <run-root>/ 2>&1 | head -50; which biome npx"
+          }
+        ]
+      }
+    }
+  ],
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 3,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true,
+      true
+    ],
+    "outro": "Fixed 3 of 3 issues with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 0.103773,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 164014
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {},
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "ls -la <run-root>/a-bio-claude-1/ <run-root>/ 2>&1 | head -50; which biome npx"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/a-bio-claude-1/handoff",
+      "../corpus/examples/accessibility",
+      "../corpus/results/accessibility",
+      "../corpus/calibration/accessibility",
+      "../corpus/out/accessibility",
+      "../corpus/out/rule-census/accessibility",
+      "../corpus/scripts/a11y-census.cjs",
+      "../corpus/scripts/a11y-disagreements.cjs",
+      "../corpus/scripts/a11y-examples.cjs",
+      "../corpus/scripts/a11y-history.cjs",
+      "../corpus/scripts/a11y-inventory.cjs",
+      "../corpus/scripts/a11y-jsx-census.cjs",
+      "../corpus/scripts/a11y-lib.cjs",
+      "../corpus/scripts/a11y-linters.cjs",
+      "../corpus/scripts/a11y-markers.cjs",
+      "../corpus/scripts/a11y-run-all.cjs",
+      "../corpus/scripts/a11y-sample.cjs",
+      "../corpus/scripts/a11y-tables.cjs",
+      "../bibliography/accessibility.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-a11y-batch-logs",
+      "<run-root>/.measure",
+      "<run-root>/.superseded",
+      "<run-root>/a-ox-claude-1",
+      "<run-root>/b-ox-codex-1",
+      "<run-root>/.staging/a-ox-claude-1",
+      "<run-root>/.staging/b-ox-codex-1"
+    ]
+  }
+}

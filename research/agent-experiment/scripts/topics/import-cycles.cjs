@@ -842,6 +842,23 @@ function checkAdapters() {
   return out;
 }
 
+/**
+ * The adapter hashes this topic's runs were made with, for results.json. The CLI's parsers and
+ * groupByFile have changed since (40d646a4), so a new run fails in handoff, but re-aggregating the
+ * committed runs reports the hashes they used and says which changed. (Made per topic with the
+ * accessibility topic, whose own copies are in scripts/ultracite-adapters.cjs.)
+ */
+function recordedAdapters() {
+  const changed = Object.entries(PARSER_SOURCES)
+    .filter(([k, f]) => sha256(f()) !== PARSER_SHA256[k])
+    .map(([k]) => k);
+  if (changed.length > 0)
+    console.warn(
+      `note: packages/cli/src/agent-fix ${changed.join(", ")} changed since this topic's runs; results.json records the hashes the runs used`
+    );
+  return { ...PARSER_SHA256 };
+}
+
 // packages/cli/src/agent-fix/linters.ts parseOxlintDiagnostics and parseBiomeDiagnostics, and
 // index.ts groupByFile, reproduced here because the CLI's modules can't be imported outside its
 // build. checkAdapters() hashes the originals.
@@ -2798,7 +2815,7 @@ function driftCheck(ids) {
     sameAsEarlierTopics:
       promptNow.join() === uniq(earlier.map((e) => e.prompt)).join() &&
       agentsNow.join() === uniq(earlier.map((e) => e.agents)).join(),
-    adapterSha256: checkAdapters(),
+    adapterSha256: recordedAdapters(),
     argsCheckedAgainstAgentsTs:
       "run-one.mjs reads the adapter args from packages/cli/src/agent-fix/agents.ts and fails the run if they differ from the experiment spec",
     agentArgs: Object.fromEntries(

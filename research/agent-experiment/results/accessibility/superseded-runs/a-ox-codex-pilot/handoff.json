@@ -1,0 +1,77 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "the root config `ultracite init` writes for React (env, extends [core, react], ignorePatterns) and its oxfmt.config (...ultracite)",
+  "filter": "none: the subject lints clean apart from the barrier, so every diagnostic is handed over",
+  "diagnosticsReported": 2,
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "fe698aa5e07dc7c6bd77bb7327d1f52c60ded6ee112eab1851028d3dd4995f2d",
+    "linters.ts biome": "8c55adac2bf579da5fb3b0486f6fcd1d0e909384988c0e4ec62abea7571aaa50",
+    "index.ts fixFileGroup": "d90ea5c8b41d29612714ab1d515d8a97f08d39e1d9ac8a73e2f89f8c354e6a3a",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "2bb0ba8d2bb36173a51d59944d48800f58b17d73d72fdcdd54edb3d59e616177",
+    "diff.ts": "3c6ce0e339024d72ae459696c9a956c5ecb625953046f3b8af2e3d86196a3140"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 5,
+      "fatal": false,
+      "file": "collapsible.tsx",
+      "help": "Visible, non-interactive elements with click handlers must have one of `keyup`, `keydown`, or `keypress` listener.",
+      "line": 122,
+      "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+      "raw": {
+        "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+        "code": "jsx-a11y(click-events-have-key-events)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/click-events-have-key-events.html",
+        "help": "Visible, non-interactive elements with click handlers must have one of `keyup`, `keydown`, or `keypress` listener.",
+        "filename": "collapsible.tsx",
+        "labels": [
+          {
+            "span": {
+              "offset": 4081,
+              "length": 213,
+              "line": 122,
+              "column": 5
+            }
+          }
+        ]
+      },
+      "rule": "jsx-a11y/click-events-have-key-events",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/click-events-have-key-events.html"
+    },
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "collapsible.tsx",
+      "help": "Add a role attribute to this element, or use a semantic HTML element instead.",
+      "line": 122,
+      "message": "Static HTML elements with event handlers require a role.",
+      "raw": {
+        "message": "Static HTML elements with event handlers require a role.",
+        "code": "jsx-a11y(no-static-element-interactions)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/no-static-element-interactions.html",
+        "help": "Add a role attribute to this element, or use a semantic HTML element instead.",
+        "filename": "collapsible.tsx",
+        "labels": [
+          {
+            "span": {
+              "offset": 4082,
+              "length": 3,
+              "line": 122,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "jsx-a11y/no-static-element-interactions",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/no-static-element-interactions.html"
+    }
+  ]
+}

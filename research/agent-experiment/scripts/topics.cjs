@@ -45,6 +45,21 @@
 //                                   another in the same run dir, and records every file's changes
 //                                   per step (see runMultiFile there). `lint` and `toDiagnostics`
 //                                   aren't used for these subjects.
+//
+// Ultracite's retry loop (added with the accessibility topic, opt-in). A topic that exports both
+// of these runs its single-file subjects the way packages/cli/src/agent-fix/index.ts runs one
+// file: up to MAX_AGENT_ATTEMPTS agent runs, retrying with buildRetryPrompt while the re-lint
+// still reports something (see runWithRetries in run-one.mjs and scripts/ultracite-adapters.cjs):
+//   collect(subject, runDir, { runId })
+//                                   runs the subject's linter adapter's fixAndCollect on the run
+//                                   dir (fix pass, formatter, lint, in place) and returns
+//                                   { diagnostics, info }: Ultracite's Diagnostic shape, and facts
+//                                   about the handoff for handoff.json
+//   verify(subject, runDir, file)   runs the adapter's verify on one file (fix pass, formatter,
+//                                   lint, in place) and returns every diagnostic it reports
+// and `expectedDiagnostics(subject)` returns the rule names the handoff must hand over. `lint`
+// and `toDiagnostics` aren't used for these subjects. Topics without `verify` run one attempt,
+// exactly as before.
 "use strict";
 
 const { existsSync } = require("node:fs");

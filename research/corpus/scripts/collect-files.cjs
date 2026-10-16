@@ -10,7 +10,21 @@ const { readdirSync, readFileSync, statSync } = require("node:fs");
 const { join, relative, resolve, sep } = require("node:path");
 
 const ROOT = resolve(__dirname, "..");
-const config = require("./repos.json");
+// repos.json is the corpus. A topic that extends it for itself (the accessibility post adds React
+// codebases in repos-accessibility.json) sets CORPUS_REPO_LISTS to a comma-separated list of extra
+// files next to this script. They're appended, so repos.json and every earlier topic's file lists
+// stay exactly the same, and with the variable unset nothing changes.
+const EXTRA_LISTS = (process.env.CORPUS_REPO_LISTS ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter((s) => s && s !== "repos.json");
+const config = {
+  ...require("./repos.json"),
+  repos: [
+    ...require("./repos.json").repos,
+    ...EXTRA_LISTS.flatMap((file) => require(`./${file}`).repos),
+  ],
+};
 
 const SOURCE_EXT = /\.(?:ts|tsx|mts|cts|js|jsx|mjs|cjs)$/;
 
@@ -194,6 +208,7 @@ function headerFlags(repo, files) {
 
 module.exports = {
   collect,
+  config,
   getRepo,
   headerFlags,
   EXCLUDED_DIR_NAMES,

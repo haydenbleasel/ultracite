@@ -1,0 +1,765 @@
+{
+  "runId": "b-ox-claude-1",
+  "topic": "accessibility",
+  "subject": "b-ox",
+  "arm": "B via Oxlint",
+  "linter": "oxlint",
+  "rulesFile": false,
+  "agent": "claude",
+  "cliVersion": "2.1.301 (Claude Code)",
+  "wallSeconds": 16.3,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "given": [
+      {
+        "rule": "jsx-a11y/control-has-associated-label",
+        "line": 327,
+        "message": "A control must be associated with a text label.",
+        "help": "Add a text label to the control element. This can be done by adding text content, an `aria-label` attribute, or an `aria-labelledby` attribute.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/control-has-associated-label.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "d3a1d458b47ddec6cc52b85a252afb91663ebd457d5cb69d62e09ff2b8cf9900",
+    "parseError": false,
+    "views": {
+      "oxlint core+react": {
+        "a11yHonor": [
+          "jsx-a11y/control-has-associated-label:327"
+        ],
+        "a11yIgnore": [
+          "jsx-a11y/control-has-associated-label:327"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      },
+      "oxlint core+react+js-plugins": {
+        "a11yHonor": [
+          "github/a11y-no-title-attribute:327",
+          "jsx-a11y/control-has-associated-label:327"
+        ],
+        "a11yIgnore": [
+          "github/a11y-no-title-attribute:327",
+          "jsx-a11y/control-has-associated-label:327"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      },
+      "eslint core+react": {
+        "a11yHonor": [
+          "github/a11y-no-title-attribute:327",
+          "jsx-a11y/control-has-associated-label:327"
+        ],
+        "a11yIgnore": [
+          "github/a11y-no-title-attribute:327",
+          "jsx-a11y/control-has-associated-label:327"
+        ],
+        "parseError": false,
+        "a11yCleared": false
+      },
+      "biome core": {
+        "a11yHonor": [],
+        "a11yIgnore": [],
+        "parseError": false,
+        "a11yCleared": true
+      }
+    },
+    "givenCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "fullPresets": {
+      "oxlint core+react": {
+        "jsx-a11y/control-has-associated-label": 1
+      },
+      "oxlint core+react+js-plugins": {
+        "github/a11y-no-title-attribute": 1,
+        "jsx-a11y/control-has-associated-label": 1,
+        "react-doctor/js-combine-iterations": 1,
+        "sonarjs/function-name": 2
+      },
+      "eslint core+react": {
+        "@typescript-eslint/no-unused-vars": 2,
+        "github/a11y-no-title-attribute": 1,
+        "jsx-a11y/control-has-associated-label": 1,
+        "react-doctor/js-combine-iterations": 1,
+        "react/jsx-no-leaked-render": 1,
+        "react/prefer-read-only-props": 7,
+        "sonarjs/function-name": 2,
+        "unicorn/consistent-arrow-return-style": 1,
+        "unicorn/consistent-boolean-name": 1,
+        "unicorn/iteration-fallback-style": 1,
+        "unicorn/name-replacements": 4,
+        "unicorn/no-manually-wrapped-comments": 1,
+        "unicorn/no-unreadable-for-of-expression": 1,
+        "unicorn/no-unsafe-string-replacement": 1,
+        "unicorn/prefer-else-if": 2,
+        "unicorn/single-line-block-comment-style": 1
+      },
+      "biome core": {
+        "correctness/noUndeclaredDependencies": 1,
+        "performance/noJsxPropsBind": 1,
+        "suspicious/noEvolvingTypes": 1,
+        "suspicious/noImplicitAnyLet": 1
+      }
+    },
+    "typeErrors": [],
+    "oracle": {
+      "verdict": {
+        "barrierFixed": false,
+        "canvasPicker": [
+          "#ffffff",
+          "#f8f9fa",
+          "#f5faff",
+          "#fffce8",
+          "#fdf8f6"
+        ],
+        "behaviourPreserved": true,
+        "titleKept": true,
+        "worst": "named by colour code"
+      },
+      "diagnosis": {
+        "behaviourPreserved": true,
+        "canvasPicker": [
+          "#ffffff",
+          "#f8f9fa",
+          "#f5faff",
+          "#fffce8",
+          "#fdf8f6"
+        ],
+        "crashed": [],
+        "fixed": false,
+        "names": [
+          "#1e1e1e",
+          "#e03131",
+          "#2f9e44",
+          "#1971c2",
+          "#f08c00",
+          "transparent",
+          "#ffc9c9",
+          "#b2f2bb",
+          "#a5d8ff",
+          "#ffec99"
+        ],
+        "notes": [
+          "a colour code is part of the name"
+        ],
+        "reason": "hex name",
+        "titleKept": true
+      },
+      "names": {
+        "elementStroke": [
+          "#1e1e1e",
+          "#e03131",
+          "#2f9e44",
+          "#1971c2",
+          "#f08c00"
+        ],
+        "elementBackground": [
+          "transparent",
+          "#ffc9c9",
+          "#b2f2bb",
+          "#a5d8ff",
+          "#ffec99"
+        ],
+        "canvasBackground": [
+          "#ffffff",
+          "#f8f9fa",
+          "#f5faff",
+          "#fffce8",
+          "#fdf8f6"
+        ]
+      },
+      "nameSources": [
+        "title"
+      ]
+    },
+    "scan": {
+      "parseErrors": 0,
+      "suppressions": {
+        "eslint-disable": 0,
+        "eslint inline config": 0,
+        "oxlint-disable": 0,
+        "biome-ignore": 0,
+        "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+      },
+      "swatch": {
+        "tag": "button",
+        "attrs": [
+          "className",
+          "data-testid",
+          "data-top-pick-index",
+          "key",
+          "onClick",
+          "onPointerDown",
+          "style",
+          "title",
+          "type"
+        ],
+        "ariaLabel": null,
+        "ariaLabelledby": null,
+        "ariaHidden": null,
+        "title": "{color}",
+        "spreads": []
+      },
+      "srOnlySpans": 0,
+      "paletteLookups": 0,
+      "colorTranslations": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "given": [
+        "jsx-a11y/control-has-associated-label L327"
+      ],
+      "wallSeconds": 16.3,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "agent": {
+        "exists": true,
+        "sha256": "7498d48027f29686a2b788733f36159d9da25b35090cab0e279c643d73af210e",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "a11yHonor": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "a11yIgnore": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "parseError": false,
+            "a11yCleared": false
+          },
+          "eslint core+react": {
+            "a11yHonor": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "a11yIgnore": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "parseError": false,
+            "a11yCleared": false
+          },
+          "biome core": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          }
+        },
+        "givenCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "fullPresets": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {
+            "github/a11y-no-title-attribute": 1,
+            "react-doctor/js-combine-iterations": 1,
+            "sonarjs/function-name": 2
+          },
+          "eslint core+react": {
+            "@typescript-eslint/no-unused-vars": 2,
+            "github/a11y-no-title-attribute": 1,
+            "react-doctor/js-combine-iterations": 1,
+            "react/jsx-no-leaked-render": 1,
+            "react/prefer-read-only-props": 7,
+            "sonarjs/function-name": 2,
+            "unicorn/consistent-arrow-return-style": 1,
+            "unicorn/consistent-boolean-name": 1,
+            "unicorn/iteration-fallback-style": 1,
+            "unicorn/name-replacements": 4,
+            "unicorn/no-manually-wrapped-comments": 1,
+            "unicorn/no-unreadable-for-of-expression": 1,
+            "unicorn/no-unsafe-string-replacement": 1,
+            "unicorn/prefer-else-if": 2,
+            "unicorn/single-line-block-comment-style": 1
+          },
+          "biome core": {
+            "correctness/noUndeclaredDependencies": 1,
+            "performance/noJsxPropsBind": 1,
+            "suspicious/noEvolvingTypes": 1,
+            "suspicious/noImplicitAnyLet": 1
+          }
+        },
+        "typeErrors": [],
+        "oracle": {
+          "verdict": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "named by colour code"
+          },
+          "diagnosis": {
+            "behaviourPreserved": true,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "crashed": [],
+            "fixed": false,
+            "names": [
+              "#1e1e1e",
+              "#e03131",
+              "#2f9e44",
+              "#1971c2",
+              "#f08c00",
+              "transparent",
+              "#ffc9c9",
+              "#b2f2bb",
+              "#a5d8ff",
+              "#ffec99"
+            ],
+            "notes": [
+              "a colour code is part of the name"
+            ],
+            "reason": "hex name",
+            "titleKept": true
+          },
+          "names": {
+            "elementStroke": [
+              "#1e1e1e",
+              "#e03131",
+              "#2f9e44",
+              "#1971c2",
+              "#f08c00"
+            ],
+            "elementBackground": [
+              "transparent",
+              "#ffc9c9",
+              "#b2f2bb",
+              "#a5d8ff",
+              "#ffec99"
+            ],
+            "canvasBackground": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ]
+          },
+          "nameSources": [
+            "aria-label"
+          ]
+        },
+        "scan": {
+          "parseErrors": 0,
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          },
+          "swatch": {
+            "tag": "button",
+            "attrs": [
+              "aria-label",
+              "className",
+              "data-testid",
+              "data-top-pick-index",
+              "key",
+              "onClick",
+              "onPointerDown",
+              "style",
+              "title",
+              "type"
+            ],
+            "ariaLabel": "{color}",
+            "ariaLabelledby": null,
+            "ariaHidden": null,
+            "title": "{color}",
+            "spreads": []
+          },
+          "srOnlySpans": 0,
+          "paletteLookups": 0,
+          "colorTranslations": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core+react": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "classification": [
+          "hex aria-label"
+        ],
+        "outcome": "rule-only fix"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "7498d48027f29686a2b788733f36159d9da25b35090cab0e279c643d73af210e",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "a11yHonor": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "a11yIgnore": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "parseError": false,
+            "a11yCleared": false
+          },
+          "eslint core+react": {
+            "a11yHonor": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "a11yIgnore": [
+              "github/a11y-no-title-attribute:327"
+            ],
+            "parseError": false,
+            "a11yCleared": false
+          },
+          "biome core": {
+            "a11yHonor": [],
+            "a11yIgnore": [],
+            "parseError": false,
+            "a11yCleared": true
+          }
+        },
+        "givenCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "fullPresets": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {
+            "github/a11y-no-title-attribute": 1,
+            "react-doctor/js-combine-iterations": 1,
+            "sonarjs/function-name": 2
+          },
+          "eslint core+react": {
+            "@typescript-eslint/no-unused-vars": 2,
+            "github/a11y-no-title-attribute": 1,
+            "react-doctor/js-combine-iterations": 1,
+            "react/jsx-no-leaked-render": 1,
+            "react/prefer-read-only-props": 7,
+            "sonarjs/function-name": 2,
+            "unicorn/consistent-arrow-return-style": 1,
+            "unicorn/consistent-boolean-name": 1,
+            "unicorn/iteration-fallback-style": 1,
+            "unicorn/name-replacements": 4,
+            "unicorn/no-manually-wrapped-comments": 1,
+            "unicorn/no-unreadable-for-of-expression": 1,
+            "unicorn/no-unsafe-string-replacement": 1,
+            "unicorn/prefer-else-if": 2,
+            "unicorn/single-line-block-comment-style": 1
+          },
+          "biome core": {
+            "correctness/noUndeclaredDependencies": 1,
+            "performance/noJsxPropsBind": 1,
+            "suspicious/noEvolvingTypes": 1,
+            "suspicious/noImplicitAnyLet": 1
+          }
+        },
+        "typeErrors": [],
+        "oracle": {
+          "verdict": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "named by colour code"
+          },
+          "diagnosis": {
+            "behaviourPreserved": true,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "crashed": [],
+            "fixed": false,
+            "names": [
+              "#1e1e1e",
+              "#e03131",
+              "#2f9e44",
+              "#1971c2",
+              "#f08c00",
+              "transparent",
+              "#ffc9c9",
+              "#b2f2bb",
+              "#a5d8ff",
+              "#ffec99"
+            ],
+            "notes": [
+              "a colour code is part of the name"
+            ],
+            "reason": "hex name",
+            "titleKept": true
+          },
+          "names": {
+            "elementStroke": [
+              "#1e1e1e",
+              "#e03131",
+              "#2f9e44",
+              "#1971c2",
+              "#f08c00"
+            ],
+            "elementBackground": [
+              "transparent",
+              "#ffc9c9",
+              "#b2f2bb",
+              "#a5d8ff",
+              "#ffec99"
+            ],
+            "canvasBackground": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ]
+          },
+          "nameSources": [
+            "aria-label"
+          ]
+        },
+        "scan": {
+          "parseErrors": 0,
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          },
+          "swatch": {
+            "tag": "button",
+            "attrs": [
+              "aria-label",
+              "className",
+              "data-testid",
+              "data-top-pick-index",
+              "key",
+              "onClick",
+              "onPointerDown",
+              "style",
+              "title",
+              "type"
+            ],
+            "ariaLabel": "{color}",
+            "ariaLabelledby": null,
+            "ariaHidden": null,
+            "title": "{color}",
+            "spreads": []
+          },
+          "srOnlySpans": 0,
+          "paletteLookups": 0,
+          "colorTranslations": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core+react": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "classification": [
+          "hex aria-label"
+        ],
+        "outcome": "rule-only fix"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "jsx-a11y/control-has-associated-label"
+          ],
+          "still": [],
+          "introduced": 0
+        },
+        "vsHandoff": {
+          "cleared": [
+            "jsx-a11y/control-has-associated-label"
+          ],
+          "still": [],
+          "introduced": 0
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 5,
+        "costUSD": 0.27808399999999994,
+        "tokens": {
+          "input": 10,
+          "output": 1242,
+          "cacheCreation": 27646,
+          "cacheRead": 160180
+        },
+        "tokensUsedReportedOnStderr": null,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Read",
+          "Edit",
+          "Bash"
+        ],
+        "toolCallTargets": [
+          "<run-root>/b-ox-claude-1/top-picks.tsx",
+          "<run-root>/b-ox-claude-1/top-picks.tsx.d6f0c352.json",
+          "<run-root>/b-ox-claude-1/top-picks.tsx",
+          "<run-root>/b-ox-claude-1/top-picks.tsx",
+          "ls; (command -v oxlint || ls node_modules/.bin 2>/dev/null | grep -i oxlint)"
+        ],
+        "toolErrors": [
+          "This command uses shell operators that require approval for safety"
+        ],
+        "ranLinterOrTests": [
+          "ls; (command -v oxlint || ls node_modules/.bin 2>/dev/null | grep -i oxlint)"
+        ],
+        "triedShellInClaude": true,
+        "projectInstructionsLoaded": [],
+        "finalMessage": "I fixed the lint issue in `top-picks.tsx`. I couldn't confirm it with the linter: my attempt to look for a local `oxlint` was blocked by a permission prompt, so the re-lint is the real check.\n\nThe button at line 327 is a color swatch. Its only child is an empty outline `<div>`, so it had no text a screen reader could announce. I added `aria-label={color}` to the button. It now has an accessible name, which is what the rule's help text asks for. The label matches the button's existing `title={color}`, so screen readers announce the same color value sighted users see on hover. This is an attribute-only change and doesn't affect how the button behaves.",
+        "styleMentions": [],
+        "behaviourMentions": [],
+        "exposure": {},
+        "exposureInToolCalls": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 1,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true
+    ],
+    "outro": "Fixed 1 of 1 issue with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 0.278084,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 189078
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {},
+    "toolCallsOutsideRunDir": [],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/b-ox-claude-1/handoff",
+      "../corpus/examples/accessibility",
+      "../corpus/results/accessibility",
+      "../corpus/calibration/accessibility",
+      "../corpus/out/accessibility",
+      "../corpus/out/rule-census/accessibility",
+      "../corpus/scripts/a11y-census.cjs",
+      "../corpus/scripts/a11y-disagreements.cjs",
+      "../corpus/scripts/a11y-examples.cjs",
+      "../corpus/scripts/a11y-history.cjs",
+      "../corpus/scripts/a11y-inventory.cjs",
+      "../corpus/scripts/a11y-jsx-census.cjs",
+      "../corpus/scripts/a11y-lib.cjs",
+      "../corpus/scripts/a11y-linters.cjs",
+      "../corpus/scripts/a11y-markers.cjs",
+      "../corpus/scripts/a11y-run-all.cjs",
+      "../corpus/scripts/a11y-sample.cjs",
+      "../corpus/scripts/a11y-tables.cjs",
+      "../bibliography/accessibility.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-a11y-batch-logs",
+      "<run-root>/.measure",
+      "<run-root>/a-bio-claude-1",
+      "<run-root>/a-ox-claude-1",
+      "<run-root>/a-ox-codex-1",
+      "<run-root>/a-ox-codex-pilot",
+      "<run-root>/a-rules-codex-1",
+      "<run-root>/b-ox-codex-1",
+      "<run-root>/.staging/a-bio-claude-1",
+      "<run-root>/.staging/a-ox-claude-1",
+      "<run-root>/.staging/a-ox-codex-1",
+      "<run-root>/.staging/a-ox-codex-pilot",
+      "<run-root>/.staging/a-rules-codex-1",
+      "<run-root>/.staging/b-ox-codex-1"
+    ]
+  }
+}

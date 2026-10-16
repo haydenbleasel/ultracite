@@ -22,6 +22,14 @@
 // diagnostics JSON, locks and session log, and every file's change, creation or deletion is
 // recorded per step. The artifacts are laid out by step (see runMultiFile below). Single-file
 // subjects run exactly as before.
+//
+// Ultracite's retry loop (added with the accessibility topic, opt-in): for a topic that exports
+// `collect` and `verify` hooks, the run does what packages/cli/src/agent-fix/index.ts does for one
+// file. The run dir first gets Ultracite's fix pass and lint (`collect`), then the agent runs with
+// buildPrompt; after it, `verify` runs the linter's fix pass, the formatter and the lint on the file
+// in place, and while diagnostics remain and the agent didn't time out, the agent runs again with
+// buildRetryPrompt and those diagnostics, up to MAX_AGENT_ATTEMPTS, each attempt under Ultracite's
+// own timeout (see runWithRetries below). Topics without the hooks run as before, one attempt.
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
@@ -211,9 +219,12 @@ const LOCK_NAMES = [
   "results",
 ];
 const locked = [];
-function lockAll() {
+// `extra`: more paths to lock for this agent run (the retry loop's earlier attempts' staging, which
+// holds their session logs). Every other caller passes none.
+function lockAll(extra = []) {
   const targets = [
     ...LOCK_NAMES.map((n) => join(HERE, n)),
+    ...extra,
     // Topic-specific files outside this folder, e.g. corpus notes that name the expected fix.
     ...topic.lockPaths,
     // Machine-specific paths outside the repo for any topic (an orchestrating session's notes or
@@ -270,9 +281,15 @@ const lockedPathsOf = (entries) =>
 
 /**
  * Runs the agent CLI once in the run dir, prompt on stdin, stdout and stderr streamed to the
- * given files, with this harness's timeout and kill grace. Resolves when the logs are closed.
+ * given files, with this harness's timeout and kill grace (or the ones given: the retry loop
+ * passes Ultracite's own). Resolves when the logs are closed.
  */
-async function runAgentProcess(prompt, stdoutPath, stderrPath) {
+async function runAgentProcess(
+  prompt,
+  stdoutPath,
+  stderrPath,
+  { timeoutMs = TIMEOUT_MS, killGraceMs = KILL_GRACE_MS } = {}
+) {
   const stdout = createWriteStream(stdoutPath);
   const stderr = createWriteStream(stderrPath);
   await Promise.all([
@@ -291,8 +308,8 @@ async function runAgentProcess(prompt, stdoutPath, stderrPath) {
     const timer = setTimeout(() => {
       timedOut = true;
       child.kill("SIGTERM");
-      killTimer = setTimeout(() => child.kill("SIGKILL"), KILL_GRACE_MS);
-    }, TIMEOUT_MS);
+      killTimer = setTimeout(() => child.kill("SIGKILL"), killGraceMs);
+    }, timeoutMs);
     child.stdout.pipe(stdout);
     child.stderr.pipe(stderr);
     child.on("error", (error) => {
@@ -322,7 +339,7 @@ async function runAgentProcess(prompt, stdoutPath, stderrPath) {
 
 // ---------------------------------------------------------------- main
 
-const { buildPrompt, writeDiagnosticsFile } = await import(
+const { buildPrompt, buildRetryPrompt, writeDiagnosticsFile } = await import(
   join(AGENT_FIX, "prompt.ts")
 );
 const adapter = adapterFromSource(agent);
@@ -332,6 +349,12 @@ mkdirSync(stagingDir, { recursive: true });
 
 if (Array.isArray(subject.files)) {
   await runMultiFile();
+  process.exit(0);
+}
+
+// A topic with `collect` and `verify` hooks runs Ultracite's retry loop (see runWithRetries).
+if (topic.verify) {
+  await runWithRetries();
   process.exit(0);
 }
 
@@ -902,5 +925,436 @@ async function runMultiFile() {
   );
   console.log(
     `[${runId}] ${steps.length} step(s), wall=${(meta.wallMs / 1000).toFixed(1)}s, other-file changes=${meta.fileChecks.otherFileChanges.length}`
+  );
+}
+
+// ---------------------------------------------------------------- Ultracite's retry loop
+
+/** A unified diff of two files (either may be missing), with a/ and b/ labels. */
+function fileDiff(fromPath, toPath, name) {
+  try {
+    execFileSync(
+      "diff",
+      [
+        "-u",
+        "--label",
+        fromPath ? `a/${name}` : "/dev/null",
+        "--label",
+        toPath ? `b/${name}` : "/dev/null",
+        fromPath ?? "/dev/null",
+        toPath ?? "/dev/null",
+      ],
+      { encoding: "utf8" }
+    );
+    return "";
+  } catch (error) {
+    return error.stdout ?? "";
+  }
+}
+
+/**
+ * Ultracite's retry loop for one file (added with the accessibility topic, for topics that export
+ * `collect` and `verify`). It mirrors packages/cli/src/agent-fix/index.ts; the parts that had to be
+ * copied are in scripts/ultracite-adapters.cjs, which checks their hashes against the CLI source and
+ * reads MAX_AGENT_ATTEMPTS, AGENT_TIMEOUT_MS and KILL_GRACE_MS from it.
+ *
+ *   1. runAgentFix: `collect` runs the subject's linter fix pass, the formatter and the lint on the
+ *      whole run dir (the project), as fixAndCollect does, and groupByFile makes the handoff. The
+ *      subject must be the only file with diagnostics, with exactly the rules the topic expects.
+ *   2. attemptFileFix: the diagnostics JSON is written (writeDiagnosticsFile, the same path every
+ *      attempt) and the agent runs with buildPrompt on attempt 1 and buildRetryPrompt after, under
+ *      Ultracite's agent timeout and kill grace. verifySafely then runs the topic's `verify` (the
+ *      adapter's verify: fix pass, formatter and lint on the file, in place), even after a failed
+ *      run, and keeps the file's own diagnostics. While any remain and the agent didn't time out,
+ *      the next attempt gets them, up to MAX_AGENT_ATTEMPTS.
+ *   3. fixFileGroup's tally (what Ultracite prints) is computed by the topic's measure from the
+ *      committed files (ultracite-adapters.cjs fileOutcome).
+ *
+ * Artifacts in results/<topic>/runs/<id>/:
+ *   meta.json                       run-level facts, and per attempt its prompt, outcome, fileChecks,
+ *                                   verify summary and whether Ultracite retried
+ *   handoff.json                    the handoff: the diagnostics as Ultracite hands them over, and
+ *                                   which files the fix pass changed
+ *   before.<ext>, after.<ext>       the file as handed over (after the fix pass) and at the end
+ *   diff.patch                      before -> after
+ *   attempt<k>/prompt.txt           the prompt
+ *   attempt<k>/<name>.<hash>.json   the diagnostics JSON the agent got
+ *   attempt<k>/agent.<ext>          the file when the agent exited (absent if it was deleted)
+ *   attempt<k>/verified.<ext>       the file after verify's fix pass and formatter: the next
+ *                                   attempt's input, or the final file
+ *   attempt<k>/agent.patch          input -> agent;  attempt<k>/verify.patch  agent -> verified
+ *   attempt<k>/verify.json          what verifySafely returned
+ *   attempt<k>/stdout.txt, stderr.txt and transcript.jsonl   gitignored
+ *   handoff/<name>                  a run file the fix pass changed, as the agent got it
+ *   <name>                          a run file the agent changed, at the end
+ */
+async function runWithRetries() {
+  const mirror = require("./ultracite-adapters.cjs");
+  // Fails the run when the CLI's agent-fix code that the mirror copies has changed.
+  const sources = mirror.checkSources();
+  const loop = mirror.contract();
+  const ext = extname(subject.basename) || ".ts";
+  const file = join(runDir, subject.basename);
+  copyFileSync(lib.subjectPath(subject), file);
+  chmodSync(file, 0o644);
+  const runFiles = topic.runFiles(subject);
+  for (const extra of runFiles) {
+    copyFileSync(extra.from, join(runDir, extra.name));
+    chmodSync(join(runDir, extra.name), 0o644);
+  }
+  const runFileNames = new Set(runFiles.map((f) => f.name));
+
+  // 1. Ultracite's fix pass and lint over the project, then groupByFile.
+  const laidOut = snapshot(runDir);
+  const collected = await topic.collect(subject, runDir, { runId });
+  const handedOver = snapshot(runDir);
+  const fixPassChanged = Object.keys(laidOut)
+    .filter((k) => laidOut[k] !== handedOver[k])
+    .sort();
+  const groups = mirror.groupByFile(collected.diagnostics);
+  const want = [
+    {
+      file: subject.basename,
+      rules: [...topic.expectedDiagnostics(subject)].sort(),
+    },
+  ];
+  const got = groups.map((g) => ({
+    file: g.file,
+    rules: g.issues.map((d) => d.rule).sort(),
+  }));
+  if (JSON.stringify(got) !== JSON.stringify(want))
+    throw new Error(
+      `expected handoff ${JSON.stringify(want)}, got ${JSON.stringify(got)}`
+    );
+  const [group] = groups;
+  const handoffState = join(stagingDir, "handoff");
+  copyTree(runDir, handoffState);
+
+  const cliVersion = execFileSync(adapter.command, ["--version"], {
+    encoding: "utf8",
+  }).trim();
+  const attempts = [];
+  const claimed = new Set();
+  const harnessCwd = process.cwd();
+  let issues = group.issues;
+  let jsonName = null;
+  for (let attempt = 1; ; attempt++) {
+    const attemptDir = join(stagingDir, `attempt${attempt}`);
+    mkdirSync(attemptDir, { recursive: true });
+    if (existsSync(file)) copyFileSync(file, join(attemptDir, `input${ext}`));
+    // attemptFileFix: the JSON goes to the same path every attempt (Ultracite: its temp dir; here,
+    // as in every topic, the run dir).
+    process.chdir(runDir);
+    const jsonPath = writeDiagnosticsFile(runDir, group.file, issues);
+    const prompt =
+      attempt === 1
+        ? buildPrompt(group.file, issues, jsonPath)
+        : buildRetryPrompt(group.file, issues, jsonPath, attempt);
+    process.chdir(harnessCwd);
+    jsonName = basename(jsonPath);
+    writeFileSync(join(attemptDir, "prompt.txt"), prompt);
+    copyFileSync(jsonPath, join(attemptDir, jsonName));
+
+    const preRun = snapshot(runDir);
+    const preRunsTop = topLevel(lib.RUN_ROOT);
+    const preSubjects = snapshot(join(HERE, "subjects"));
+    const preRoot = topLevel(HERE);
+
+    // This attempt's staging stays open (its logs stream there); the handoff copy and earlier
+    // attempts' files, session logs included, are locked like other runs'.
+    lockAll([
+      handoffState,
+      ...attempts.map((a) => join(stagingDir, `attempt${a.attempt}`)),
+    ]);
+    const lockedPaths = lockedPathsOf(locked);
+    const startedAt = new Date();
+    const startMs = Date.now();
+    console.log(
+      `[${runId} attempt ${attempt}/${loop.maxAttempts}] ${adapter.command} ${adapter.args.join(" ")}  (cwd ${runDir})`
+    );
+    const { outcome, wallMs } = await runAgentProcess(
+      prompt,
+      join(attemptDir, "stdout.txt"),
+      join(attemptDir, "stderr.txt"),
+      { timeoutMs: loop.timeoutMs, killGraceMs: loop.killGraceMs }
+    );
+    unlockAll();
+
+    const postRun = snapshot(runDir);
+    const postRunsTop = topLevel(lib.RUN_ROOT);
+    const postSubjects = snapshot(join(HERE, "subjects"));
+    const postRoot = topLevel(HERE);
+    const configFilesNearRun = [];
+    for (let d = runDir; d.startsWith(lib.RUN_ROOT); d = dirname(d)) {
+      for (const name of readdirSync(d)) {
+        const unchangedRunFile =
+          d === runDir &&
+          runFileNames.has(name) &&
+          preRun[name] === postRun[name];
+        if (lib.CONFIG_FILE.test(name) && !unchangedRunFile)
+          configFilesNearRun.push(join(d, name));
+      }
+      if (d === lib.RUN_ROOT) break;
+    }
+    const otherFileChanges = [];
+    for (const k of new Set([
+      ...Object.keys(preRun),
+      ...Object.keys(postRun),
+    ])) {
+      if (k === subject.basename) continue;
+      if (preRun[k] !== postRun[k]) {
+        otherFileChanges.push({
+          path: k,
+          change: !preRun[k] ? "created" : !postRun[k] ? "deleted" : "modified",
+        });
+      }
+    }
+    if (existsSync(file)) copyFileSync(file, join(attemptDir, `agent${ext}`));
+
+    // verifySafely, even after a failed or timed-out run (index.ts attemptFileFix).
+    const verified = mirror.verifySafely(
+      (f) => topic.verify(subject, runDir, f),
+      group.file,
+      runDir
+    );
+    if (existsSync(file))
+      copyFileSync(file, join(attemptDir, `verified${ext}`));
+    writeFileSync(
+      join(attemptDir, "verify.json"),
+      `${JSON.stringify(verified, null, 2)}\n`
+    );
+
+    const transcripts =
+      agent === "claude"
+        ? findClaudeTranscript(startMs - 1000, claimed)
+        : findCodexTranscript(startMs - 1000, claimed);
+    if (transcripts[0]) {
+      claimed.add(transcripts[0]);
+      copyFileSync(transcripts[0], join(attemptDir, "transcript.jsonl"));
+    }
+    // runAgent's `ok` is execa's `!failed`: a non-zero exit, a signal, a timeout or a spawn error
+    // fails it. Its stderr feeds fixFileGroup's failure note, so the tail is kept when it failed.
+    const ok =
+      outcome.exitCode === 0 &&
+      outcome.signal === null &&
+      !outcome.timedOut &&
+      !outcome.spawnError;
+    const stderrText = readFileSync(join(attemptDir, "stderr.txt"), "utf8");
+    const retried = mirror.shouldRetry({
+      remaining: verified.remaining,
+      timedOut: outcome.timedOut,
+      attempt,
+      maxAttempts: loop.maxAttempts,
+    });
+    attempts.push({
+      attempt,
+      prompt: attempt === 1 ? "buildPrompt" : "buildRetryPrompt",
+      promptSha256: sha256(prompt),
+      diagnosticsFile: jsonName,
+      issues: issues.map((d) => `${d.rule} L${d.line}`),
+      startedAt: startedAt.toISOString(),
+      wallMs,
+      ...outcome,
+      ok,
+      stderrTail: ok ? null : stderrText.trim().slice(-200),
+      isolation: { lockedDuringRun: lockedPaths },
+      fileChecks: {
+        subjectDeleted: !postRun[subject.basename],
+        otherFileChanges,
+        diagnosticsJsonUnchanged: preRun[jsonName] === postRun[jsonName],
+        newRunsEntries: postRunsTop.filter(
+          (x) => !preRunsTop.includes(x) && x !== runId
+        ),
+        newExperimentRootEntries: postRoot.filter((x) => !preRoot.includes(x)),
+        pristineSubjectsUnchanged:
+          JSON.stringify(preSubjects) === JSON.stringify(postSubjects),
+        configFilesNearRun,
+      },
+      verify: {
+        error: verified.error,
+        remaining:
+          verified.remaining === null
+            ? null
+            : verified.remaining.map((d) => `${d.rule} L${d.line}`),
+      },
+      retried,
+      transcriptSource: transcripts
+        .slice(0, 1)
+        .map((p) =>
+          p.startsWith(join(homedir(), ".codex"))
+            ? "~/.codex/sessions/<session-log>.jsonl"
+            : "~/.claude/projects/<session-log>.jsonl"
+        ),
+      transcriptCandidates: transcripts.length,
+    });
+    console.log(
+      `[${runId} attempt ${attempt}] exit=${outcome.exitCode} signal=${outcome.signal} timedOut=${outcome.timedOut} wall=${(wallMs / 1000).toFixed(1)}s transcript=${transcripts.length} remaining=${verified.remaining === null ? `error: ${verified.error}` : verified.remaining.map((d) => d.rule).join(", ") || "none"}${retried ? " -> retry" : ""}`
+    );
+    if (!retried) break;
+    issues = verified.remaining;
+  }
+  const last = attempts.at(-1);
+  let stoppedBecause = "no diagnostics left";
+  if (last.verify.remaining === null)
+    stoppedBecause = `verification failed: ${last.verify.error}`;
+  else if (last.verify.remaining.length > 0)
+    stoppedBecause = last.timedOut
+      ? "the agent timed out (no retry after a timeout)"
+      : "attempt limit";
+
+  // Copy the run into the repo. Text is redacted, as in every topic; the session logs, stdout and
+  // stderr are copied as they are and gitignored.
+  mkdirSync(resultDir, { recursive: true });
+  const redactedFiles = [];
+  const putText = (from, rel) => {
+    const text = readFileSync(from, "utf8");
+    const redacted = lib.redact(text);
+    if (redacted !== text) redactedFiles.push(rel);
+    mkdirSync(dirname(join(resultDir, rel)), { recursive: true });
+    writeFileSync(join(resultDir, rel), redacted);
+  };
+  const handedFile = join(handoffState, subject.basename);
+  putText(handedFile, `before${ext}`);
+  if (existsSync(file)) putText(file, `after${ext}`);
+  writeFileSync(
+    join(resultDir, "diff.patch"),
+    lib.redact(
+      fileDiff(handedFile, existsSync(file) ? file : null, subject.basename)
+    )
+  );
+  for (const name of fixPassChanged) {
+    if (name !== subject.basename)
+      putText(join(handoffState, name), join("handoff", name));
+  }
+  const finalRun = snapshot(runDir);
+  for (const name of runFileNames) {
+    if (existsSync(join(runDir, name)) && finalRun[name] !== handedOver[name])
+      putText(join(runDir, name), name);
+  }
+  writeFileSync(
+    join(resultDir, "handoff.json"),
+    `${JSON.stringify(
+      lib.redact({
+        ...collected.info,
+        fixPassChanged,
+        diagnostics: group.issues,
+      }),
+      null,
+      2
+    )}\n`
+  );
+  for (const a of attempts) {
+    const from = join(stagingDir, `attempt${a.attempt}`);
+    const rel = (name) => join(`attempt${a.attempt}`, name);
+    const input = join(from, `input${ext}`);
+    const agentFile = join(from, `agent${ext}`);
+    const verifiedFile = join(from, `verified${ext}`);
+    mkdirSync(join(resultDir, `attempt${a.attempt}`), { recursive: true });
+    putText(join(from, "prompt.txt"), rel("prompt.txt"));
+    putText(join(from, a.diagnosticsFile), rel(a.diagnosticsFile));
+    putText(join(from, "verify.json"), rel("verify.json"));
+    if (existsSync(agentFile)) putText(agentFile, rel(`agent${ext}`));
+    if (existsSync(verifiedFile)) putText(verifiedFile, rel(`verified${ext}`));
+    writeFileSync(
+      join(resultDir, rel("agent.patch")),
+      lib.redact(
+        fileDiff(
+          existsSync(input) ? input : null,
+          existsSync(agentFile) ? agentFile : null,
+          subject.basename
+        )
+      )
+    );
+    writeFileSync(
+      join(resultDir, rel("verify.patch")),
+      lib.redact(
+        fileDiff(
+          existsSync(agentFile) ? agentFile : null,
+          existsSync(verifiedFile) ? verifiedFile : null,
+          subject.basename
+        )
+      )
+    );
+    for (const f of ["stdout.txt", "stderr.txt", "transcript.jsonl"]) {
+      if (existsSync(join(from, f)))
+        copyFileSync(join(from, f), join(resultDir, rel(f)));
+    }
+  }
+
+  const uniq = (xs) => [...new Set(xs)];
+  const meta = {
+    runId,
+    topic: lib.TOPIC,
+    subject: subjectId,
+    agent,
+    command: adapter.command,
+    args: adapter.args,
+    cwd: runDir,
+    cliVersion,
+    startedAt: attempts[0].startedAt,
+    wallMs: attempts.reduce((sum, a) => sum + a.wallMs, 0),
+    retryLoop: {
+      ...loop,
+      source:
+        "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS",
+    },
+    timeoutMs: loop.timeoutMs,
+    exitCode: last.exitCode,
+    signal: last.signal,
+    timedOut: attempts.some((a) => a.timedOut),
+    spawnError: attempts.find((a) => a.spawnError)?.spawnError ?? null,
+    attemptCount: attempts.length,
+    stoppedBecause,
+    strippedEnv,
+    isolation: {
+      lockedDuringRun: uniq(
+        attempts.flatMap((a) => a.isolation.lockedDuringRun)
+      ),
+    },
+    runFiles: [...runFileNames],
+    handoff: { fixPassChanged, rules: want[0].rules, file: group.file },
+    attempts,
+    ultracite: {
+      head: execFileSync("git", ["rev-parse", "HEAD"], {
+        cwd: ULTRACITE,
+        encoding: "utf8",
+      }).trim(),
+      promptTsSha256: sources.promptTsSha256,
+      agentsTsSha256: sources.agentsTsSha256,
+      indexTsSha256: sources.indexTsSha256,
+      lintersTsSha256: sources.lintersTsSha256,
+      runAgentTsSha256: sources.runAgentTsSha256,
+      diffTsSha256: sources.diffTsSha256,
+      mirroredSlicesSha256: sources.hashes,
+    },
+    fileChecks: {
+      subjectDeleted: attempts.some((a) => a.fileChecks.subjectDeleted),
+      otherFileChanges: attempts.flatMap((a) =>
+        a.fileChecks.otherFileChanges.map((c) => ({ attempt: a.attempt, ...c }))
+      ),
+      diagnosticsJsonUnchanged: attempts.every(
+        (a) => a.fileChecks.diagnosticsJsonUnchanged
+      ),
+      newRunsEntries: uniq(
+        attempts.flatMap((a) => a.fileChecks.newRunsEntries)
+      ),
+      newExperimentRootEntries: uniq(
+        attempts.flatMap((a) => a.fileChecks.newExperimentRootEntries)
+      ),
+      pristineSubjectsUnchanged: attempts.every(
+        (a) => a.fileChecks.pristineSubjectsUnchanged
+      ),
+      configFilesNearRun: uniq(
+        attempts.flatMap((a) => a.fileChecks.configFilesNearRun)
+      ),
+    },
+    redactedFiles,
+  };
+  writeFileSync(
+    join(resultDir, "meta.json"),
+    `${JSON.stringify(lib.redact(meta), null, 2)}\n`
+  );
+  console.log(
+    `[${runId}] ${attempts.length} attempt(s), wall=${(meta.wallMs / 1000).toFixed(1)}s, stopped: ${stoppedBecause}`
   );
 }

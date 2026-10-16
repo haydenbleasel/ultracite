@@ -1,0 +1,3834 @@
+{
+  "generated": "2026-10-15",
+  "method": "All searching used gh read-only against the seven upstream repos (search API for PRs, issues and commits; REST for PR metadata, PR file lists and patches, commit parents and file contents at a ref; GraphQL only to read closedByPullRequestsReferences for a11y issues). Pass 1: the 28 terms (a11y, accessibility, accessible, \"screen reader\", VoiceOver, NVDA, JAWS, aria-label, aria, \"alt text\", alt, label, keyboard, \"keyboard navigation\", focus, \"focus trap\", \"focus ring\", \"focus visible\", tabindex, \"tab order\", role, contrast, WCAG, axe, \"accessible name\", announce, \"live region\", \"reduced motion\") against merged PRs in every repo (title and body), plus closed issues with a linked PR for a11y, accessibility, \"screen reader\" and keyboard; the closing PRs of promising issues were read through GraphQL. Pass 2: because the react-spectrum PR template and the supabase bot summaries mention accessibility, body search was saturated there, so 18 react-spectrum and 17 supabase terms were re-run with in:title; commit search was run for shadcn-ui/ui, radix-ui/primitives, excalidraw and next.js (shadcn often lands fixes as direct commits), and the REST commit list for packages/react-aria-components/src (544 commits) was grepped for a11y words. Pass 3: a few extra terms (sr-only, aria-hidden, aria-describedby, DialogTitle, focus-visible, \"screen readers\"). Every candidate's diff was read. A fix was confirmed only if it was merged, changed UI code in the in-scope paths, and removed a barrier for screen reader, keyboard or low-vision users. For each confirmed fix, merged_at, merge_commit_sha and the merge commit's parent were read from the REST API (all confirmed PRs were squash or rebase merges with one parent, so parentSha is the pre-fix state of the base branch); the pre-fix file was downloaded at parentSha with the contents API, the barrier lines were located in it, and the code excerpts in `files` are copied verbatim from those downloads by script. Line numbers are at parentSha. expectedRules are judgments from reading the pre-fix code, not lint runs; jsx-a11y names follow oxlint's jsx-a11y plugin (as enabled in Ultracite's oxlint react preset) and Biome names are lint/a11y/*.",
+  "searched": [
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 15
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 3
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 4
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 5
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 3
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 4
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 0
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 3
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 12
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 29
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 503
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 13
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 16
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "aria-hidden",
+      "hits": 4
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 11
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 5
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 10
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 121
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "focus-visible",
+      "hits": 16
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 101
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "label",
+      "hits": 424
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "role",
+      "hits": 11
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 3
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 3
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 2
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 9
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 44
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "commits",
+      "term": "a11y",
+      "hits": 1
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "commits",
+      "term": "accessibility",
+      "hits": 5
+    },
+    {
+      "repo": "excalidraw/excalidraw",
+      "kind": "commits",
+      "term": "aria",
+      "hits": 6
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 3
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 21
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 5
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 7
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 7
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 5
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 1
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 3
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 26
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 3
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 0
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 0
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 3
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 7
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 42
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 44
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 126
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 7945
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 43
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 159
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "aria-hidden",
+      "hits": 126
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 19
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 13
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 37
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 510
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 25
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "label",
+      "hits": 418
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "role",
+      "hits": 162
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 9
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 6
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 16
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 6
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 4
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "commits",
+      "term": "a11y",
+      "hits": 23
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "commits",
+      "term": "accessibility",
+      "hits": 42
+    },
+    {
+      "repo": "vercel/next.js",
+      "kind": "commits",
+      "term": "aria-label",
+      "hits": 9
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 2
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 5
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 1
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 1
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 2
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 2
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 3
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 2
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 5
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 8
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 31
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 305
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 44
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 9
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 4
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 1
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 6
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 283
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 19
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "label",
+      "hits": 163
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "role",
+      "hits": 20
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 4
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 1
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 0
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 2
+    },
+    {
+      "repo": "trpc/trpc",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 8
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 2
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 4
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 7
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 7
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"screen readers\"",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "DialogTitle",
+      "hits": 1
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 4
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 11
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 63
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 487
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 4
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 20
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "aria-describedby",
+      "hits": 1
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "aria-hidden",
+      "hits": 1
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 9
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 31
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "focus-visible",
+      "hits": 7
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 14
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "label",
+      "hits": 32
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "role",
+      "hits": 4
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "sr-only",
+      "hits": 2
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 1
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 4
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 11
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 15
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "\"screen reader\"",
+      "hits": 0
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "a11y",
+      "hits": 5
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "accessibility",
+      "hits": 1
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "aria",
+      "hits": 12
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "contrast",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "focus",
+      "hits": 9
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "keyboard",
+      "hits": 3
+    },
+    {
+      "repo": "shadcn-ui/ui",
+      "kind": "commits",
+      "term": "sr-only",
+      "hits": 0
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 4
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 0
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 1
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 17
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 7
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 8
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 4
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 1
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 19
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 6
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 1
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 10
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 6
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 0
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 19
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 39
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 91
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 23
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 67
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 65
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 21
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 4
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 1
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 194
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 41
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "label",
+      "hits": 79
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "role",
+      "hits": 34
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 12
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 9
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 14
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 24
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 46
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "commits",
+      "term": "\"screen reader\"",
+      "hits": 1
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "commits",
+      "term": "a11y",
+      "hits": 2
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "commits",
+      "term": "aria",
+      "hits": 17
+    },
+    {
+      "repo": "radix-ui/primitives",
+      "kind": "commits",
+      "term": "focus",
+      "hits": 55
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 20
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 25
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 192
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 5
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 72
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 94
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 16
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 8
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 147
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 19
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 19
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 44
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 106
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 7
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 41
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 3484
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 3498
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 412
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 150
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 3890
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 626
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 25
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 99
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 848
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title \"live region\"",
+      "hits": 1
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title \"reduced motion\"",
+      "hits": 1
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title \"screen reader\"",
+      "hits": 8
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title JAWS",
+      "hits": 1
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title NVDA",
+      "hits": 3
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title VoiceOver",
+      "hits": 8
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title a11y",
+      "hits": 14
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title accessibility",
+      "hits": 33
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title accessible",
+      "hits": 38
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title announce",
+      "hits": 14
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title aria",
+      "hits": 232
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title aria-label",
+      "hits": 28
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title contrast",
+      "hits": 7
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title focus",
+      "hits": 196
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title keyboard",
+      "hits": 70
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title label",
+      "hits": 102
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title role",
+      "hits": 9
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "in:title tabindex",
+      "hits": 6
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 474
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "label",
+      "hits": 738
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "role",
+      "hits": 213
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 89
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 65
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 28
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 154
+    },
+    {
+      "repo": "adobe/react-spectrum",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 199
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"accessible name\"",
+      "hits": 123
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"alt text\"",
+      "hits": 105
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"focus ring\"",
+      "hits": 40
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"focus trap\"",
+      "hits": 8
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"focus visible\"",
+      "hits": 57
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"keyboard navigation\"",
+      "hits": 119
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"live region\"",
+      "hits": 121
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"reduced motion\"",
+      "hits": 73
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"screen reader\"",
+      "hits": 257
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "\"tab order\"",
+      "hits": 34
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "JAWS",
+      "hits": 1
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "NVDA",
+      "hits": 3
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "VoiceOver",
+      "hits": 13
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "WCAG",
+      "hits": 16
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "a11y",
+      "hits": 96
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "accessibility",
+      "hits": 435
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "accessible",
+      "hits": 669
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "alt",
+      "hits": 7063
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "announce",
+      "hits": 261
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "aria",
+      "hits": 366
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "aria-label",
+      "hits": 266
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "axe",
+      "hits": 34
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "contrast",
+      "hits": 113
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "focus",
+      "hits": 881
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title \"alt text\"",
+      "hits": 3
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title \"focus ring\"",
+      "hits": 4
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title \"reduced motion\"",
+      "hits": 0
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title \"screen reader\"",
+      "hits": 2
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title a11y",
+      "hits": 19
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title accessibility",
+      "hits": 23
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title accessible",
+      "hits": 34
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title announce",
+      "hits": 4
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title aria",
+      "hits": 5
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title aria-hidden",
+      "hits": 0
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title aria-label",
+      "hits": 3
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title axe",
+      "hits": 0
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title contrast",
+      "hits": 14
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title focus",
+      "hits": 39
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title keyboard",
+      "hits": 38
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title label",
+      "hits": 94
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title role",
+      "hits": 120
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "in:title tabindex",
+      "hits": 3
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "keyboard",
+      "hits": 383
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "label",
+      "hits": 1909
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "role",
+      "hits": 1120
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "prs",
+      "term": "tabindex",
+      "hits": 72
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "issues",
+      "term": "\"screen reader\"",
+      "hits": 2
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "issues",
+      "term": "a11y",
+      "hits": 0
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "issues",
+      "term": "accessibility",
+      "hits": 7
+    },
+    {
+      "repo": "supabase/supabase",
+      "kind": "issues",
+      "term": "keyboard",
+      "hits": 11
+    }
+  ],
+  "confirmed": [
+    {
+      "id": "excalidraw/excalidraw#3310",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3310",
+      "issueUrl": "https://github.com/excalidraw/excalidraw/issues/3287",
+      "date": "2021-03-23",
+      "title": "fix: Make help toggle tabbable",
+      "description": "The help '?' toggle was a <div onClick> holding an SVG icon inside a <label>, so it was not in the Tab order, could not be activated from the keyboard, and was not exposed to screen readers as a button with a name. Keyboard and screen reader users could not open the help dialog from the UI.",
+      "barrierKind": "focusability",
+      "fixKind": "div with onClick -> <button type=\"button\"> with aria-label",
+      "fixSha": "40656c70d15b4451e18e11a084e873e309a18bf1",
+      "parentSha": "c5b4b04d6b982b56fb08a93b1fc4fa4a93672bcf",
+      "files": [
+        {
+          "path": "src/components/HelpIcon.tsx",
+          "lines": [
+            12,
+            14
+          ],
+          "element": "<div onClick> wrapping the questionCircle SVG, inside a <label> with only a title",
+          "code": "  <label title={`${props.title} — ?`} className=\"help-icon\">\n    <div onClick={props.onClick}>{questionCircle}</div>\n  </label>"
+        }
+      ],
+      "staticallyVisible": "yes",
+      "staticReason": "yes: a plain <div> with onClick and no role, tabIndex or key handler, all in one JSX element",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/click-events-have-key-events",
+          "verdict": "likely",
+          "reason": "<div onClick> with no onKeyDown/onKeyUp/onKeyPress"
+        },
+        {
+          "rule": "jsx-a11y/no-static-element-interactions",
+          "verdict": "likely",
+          "reason": "static <div> with a click handler and no role"
+        },
+        {
+          "rule": "biome lint/a11y/useKeyWithClickEvents",
+          "verdict": "likely",
+          "reason": "same <div onClick> without a key handler"
+        },
+        {
+          "rule": "biome lint/a11y/noStaticElementInteractions",
+          "verdict": "likely",
+          "reason": "same static <div> with onClick"
+        },
+        {
+          "rule": "jsx-a11y/label-has-associated-control",
+          "verdict": "possible",
+          "reason": "the <label> has no htmlFor and no nested form control; whether it fires depends on how the rule treats the title attribute and the {questionCircle} expression"
+        },
+        {
+          "rule": "biome lint/a11y/noLabelWithoutControl",
+          "verdict": "possible",
+          "reason": "same <label> without an associated control"
+        },
+        {
+          "rule": "jsx-a11y/interactive-supports-focus",
+          "verdict": "no",
+          "reason": "only checks elements with an interactive role; the div has none"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "excalidraw/excalidraw#556",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/556",
+      "issueUrl": null,
+      "date": "2020-01-25",
+      "title": "Make color selection accessible",
+      "description": "Color picker swatches were <div tabIndex={0} onClick>. Keyboard users could Tab to a swatch, but Space did not select it (the PR's stated reason for the change), and screen readers got a generic element rather than a button.",
+      "barrierKind": "keyboard-operability",
+      "fixKind": "div -> button",
+      "fixSha": "5b19aeafe96d8a5729290698c019e256f1aaaacb",
+      "parentSha": "1bae203a78b3fd4a51bc800efb2a8960fac28fe7",
+      "files": [
+        {
+          "path": "src/components/ColorPicker.tsx",
+          "lines": [
+            27,
+            42
+          ],
+          "element": "<div className=\"color-picker-swatch\"> with onClick and tabIndex={0}, no role or key handler",
+          "code": "            <div\n              className=\"color-picker-swatch\"\n              onClick={() => {\n                onChange(color);\n              }}\n              title={color}\n              tabIndex={0}\n              style={{ backgroundColor: color }}\n              key={color}\n            >"
+        }
+      ],
+      "staticallyVisible": "yes",
+      "staticReason": "yes: a <div> with onClick and tabIndex={0} but no role and no onKeyDown",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/click-events-have-key-events",
+          "verdict": "likely",
+          "reason": "<div onClick> with no key handler"
+        },
+        {
+          "rule": "jsx-a11y/no-static-element-interactions",
+          "verdict": "likely",
+          "reason": "static <div> with onClick and no role"
+        },
+        {
+          "rule": "jsx-a11y/no-noninteractive-tabindex",
+          "verdict": "possible",
+          "reason": "tabIndex={0} on a <div> with no interactive role"
+        },
+        {
+          "rule": "biome lint/a11y/useKeyWithClickEvents",
+          "verdict": "likely",
+          "reason": "same <div onClick>"
+        },
+        {
+          "rule": "biome lint/a11y/noStaticElementInteractions",
+          "verdict": "likely",
+          "reason": "same static <div> with onClick"
+        },
+        {
+          "rule": "biome lint/a11y/noNoninteractiveTabindex",
+          "verdict": "possible",
+          "reason": "tabIndex={0} on a non-interactive <div>"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "excalidraw/excalidraw#3367",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3367",
+      "issueUrl": null,
+      "date": "2021-03-31",
+      "title": "fix: Add aria-label to end-to-end encryption blog link",
+      "description": "The end-to-end encryption shield in the footer was a link whose only content was the {shield} SVG wrapped in a <Tooltip>. Tooltip renders its label in a span that Tooltip.scss sets to visibility: hidden until hover, which removes it from the accessible name, so screen readers announced an unnamed link.",
+      "barrierKind": "name-or-label",
+      "fixKind": "added aria-label to the <a>",
+      "fixSha": "bdf6e53289c63735569d229a93b87dabf637ae5c",
+      "parentSha": "a6706cff20890d45e31b687ad0c3e502a31af0dc",
+      "files": [
+        {
+          "path": "src/components/LayerUI.tsx",
+          "lines": [
+            346,
+            357
+          ],
+          "element": "<a href target=\"_blank\"> whose only child is <Tooltip label=...> wrapping the {shield} SVG constant",
+          "code": "    <a\n      className={clsx(\"encrypted-icon tooltip zen-mode-visibility\", {\n        \"zen-mode-visibility--hidden\": zenModeEnabled,\n      })}\n      href=\"https://blog.excalidraw.com/end-to-end-encryption/\"\n      target=\"_blank\"\n      rel=\"noopener noreferrer\"\n    >\n      <Tooltip label={t(\"encrypted.tooltip\")} position=\"above\" long={true}>\n        {shield}\n      </Tooltip>\n    </a>"
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: the link holds only a component (<Tooltip>) around an expression ({shield}); a rule cannot tell that this renders an icon plus a visibility:hidden label, so it counts the link as having content",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/anchor-has-content",
+          "verdict": "no",
+          "reason": "the <a> has a child element and an expression, which the rule accepts as content"
+        },
+        {
+          "rule": "biome lint/a11y/useAnchorContent",
+          "verdict": "no",
+          "reason": "same: the anchor has a child element"
+        },
+        {
+          "rule": "jsx-a11y/control-has-associated-label",
+          "verdict": "no",
+          "reason": "the nested {shield} expression container is assumed to render a label"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "excalidraw/excalidraw#3871",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3871",
+      "issueUrl": null,
+      "date": "2021-08-02",
+      "title": "feat: Make color ARIA labels better",
+      "description": "Each color swatch's accessible name was its hex code (aria-label=\"#be4bdb\"), which screen readers read out character by character, so blind users could not tell which color they were choosing. The fix names swatches with Open Color names such as 'Grape 6'.",
+      "barrierKind": "name-or-label",
+      "fixKind": "replaced the hex-code aria-label with a human color name",
+      "fixSha": "621812d0eb99a8b9003d08a822c4b43ef815189c",
+      "parentSha": "d60724920531c904d5cf74ec39a4dc25903578dd",
+      "files": [
+        {
+          "path": "src/components/ColorPicker.tsx",
+          "lines": [
+            141,
+            151
+          ],
+          "element": "swatch <button> with aria-label={_color} (a hex string)",
+          "code": "          <button\n            className=\"color-picker-swatch\"\n            onClick={(event) => {\n              (event.currentTarget as HTMLButtonElement).focus();\n              onChange(_color);\n            }}\n            title={`${_color} — ${keyBindings[i].toUpperCase()}`}\n            aria-label={_color}\n            aria-keyshortcuts={keyBindings[i]}\n            style={{ color: _color }}\n            key={_color}"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the button has an aria-label; whether its value is meaningful depends on runtime data",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/control-has-associated-label",
+          "verdict": "no",
+          "reason": "aria-label is present"
+        },
+        {
+          "rule": "biome lint/a11y/useButtonType",
+          "verdict": "likely",
+          "reason": "the swatch <button> has no type attribute; unrelated to the barrier"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "excalidraw/excalidraw#3447",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3447",
+      "issueUrl": null,
+      "date": "2021-04-15",
+      "title": "fix: focus on last active element when dialog closes",
+      "description": "Closing a dialog did not return keyboard focus to the control that opened it; the Dialog component passed onCloseRequest straight through and only some callers patched focus back with querySelector. Keyboard and screen reader users lost their place after closing help, export or error dialogs.",
+      "barrierKind": "focus-management",
+      "fixKind": "Dialog records document.activeElement on open and restores focus on close",
+      "fixSha": "c0047269c1c865e3e2a819a05b01c2320f60d645",
+      "parentSha": "793b69e592423c0c786e5bd0d205e985c35ea31e",
+      "files": [
+        {
+          "path": "src/components/Dialog.tsx",
+          "lines": [
+            70,
+            86
+          ],
+          "element": "<Modal onCloseRequest={props.onCloseRequest}> and the close <button onClick={props.onCloseRequest}>, with no focus restore",
+          "code": "      maxWidth={props.small ? 550 : 800}\n      onCloseRequest={props.onCloseRequest}\n      theme={props.theme}\n    >\n      <Island ref={setIslandNode}>\n        <h2 id=\"dialog-title\" className=\"Dialog__title\">\n          <span className=\"Dialog__titleContent\">{props.title}</span>\n          <button\n            className=\"Modal__close\"\n            onClick={props.onCloseRequest}\n            aria-label={t(\"buttons.close\")}\n          >"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: focus restoration is runtime behaviour (remember the active element, .focus() it on close); nothing in the JSX shows it is missing",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no jsx-a11y rule checks where focus goes when an overlay closes"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same for Biome"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "excalidraw/excalidraw#5317",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/5317",
+      "issueUrl": null,
+      "date": "2022-06-23",
+      "title": "fix: focus traps inside popovers",
+      "description": "Popovers had no focus trap: Tab moved focus out of an open popover into the UI behind it, and the color picker's own Tab handling was buggy. Keyboard users could lose an open popover entirely.",
+      "barrierKind": "focus-management",
+      "fixKind": "added a Tab/Shift+Tab focus-trap keydown handler to Popover",
+      "fixSha": "af31e9dcc2a0851b5e988e69e5743183a4b6ba0f",
+      "parentSha": "50bc7e099ae5ecc75d449d2e16bf783f6b4acd17",
+      "files": [
+        {
+          "path": "src/components/Popover.tsx",
+          "lines": [
+            56,
+            60
+          ],
+          "element": "popover container <div> with no keydown or focus containment",
+          "code": "  return (\n    <div className=\"popover\" style={{ top, left }} ref={popoverRef}>\n      {children}\n    </div>\n  );"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: a missing focus trap is the absence of a runtime keydown handler; the JSX is valid",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no rule requires focus containment"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "no rule requires focus containment"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "excalidraw/excalidraw#2724",
+      "repo": "excalidraw/excalidraw",
+      "corpusRepo": "excalidraw",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/2724",
+      "issueUrl": "https://github.com/excalidraw/excalidraw/issues/2719",
+      "date": "2021-01-05",
+      "title": "improvement: Make arrowheads keybinds color accessible on dark mode",
+      "description": "The keyboard-shortcut hints on the arrowhead picker had no color of their own, so in dark mode they inherited a color that was hard to read against the dark background (issue: 'Arrowheads key color difficult to read in dark mode'). Low-vision users could not read the shortcuts.",
+      "barrierKind": "contrast",
+      "fixKind": "set color: var(--keybinding-color) on .picker-keybinding (SCSS)",
+      "fixSha": "b6708fb73fbb6cbe067b90c3248be535b530bbf3",
+      "parentSha": "cdffed285de3944b8535b7da5f9f035c8c8411e0",
+      "files": [
+        {
+          "path": "src/components/IconPicker.scss",
+          "lines": [
+            101,
+            104
+          ],
+          "element": ".picker-keybinding SCSS rule with no color",
+          "code": "  .picker-keybinding {\n    position: absolute;\n    bottom: 2px;\n    font-size: 0.7em;"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the barrier is in SCSS and depends on theme colors at runtime; JSX a11y rules do not read stylesheets",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "the file is SCSS"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "no Biome rule computes color contrast"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#62723",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/62723",
+      "issueUrl": null,
+      "date": "2024-03-01",
+      "title": "fix(error-overlay): improve a11y, minor refactors",
+      "description": "The collapse toggle on the error overlay's hydration diff was a <span onClick> containing only a chevron icon, so keyboard users could not reach or operate it and screen readers saw no control.",
+      "barrierKind": "keyboard-operability",
+      "fixKind": "span -> button (the new button got tabIndex={10} and still no name; see #80289 and #80290)",
+      "fixSha": "7593039b4c3539bc3c7e81ee51112b48dc985d71",
+      "parentSha": "2dab0b6ec804df07b66dc376f57e0e8aee21a6fb",
+      "files": [
+        {
+          "path": "packages/next/src/client/components/react-dev-overlay/internal/container/RuntimeError/component-stack-pseudo-html.tsx",
+          "lines": [
+            160,
+            165
+          ],
+          "element": "<span onClick> whose only child is <CollapseIcon/>",
+          "code": "      <span\n        data-nextjs-container-errors-pseudo-html-collapse\n        onClick={() => toggleCollapseHtml(!isHtmlCollapsed)}\n      >\n        <CollapseIcon collapsed={isHtmlCollapsed} />\n      </span>"
+        }
+      ],
+      "staticallyVisible": "yes",
+      "staticReason": "yes: a <span> with onClick and no role, tabIndex or key handler",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/click-events-have-key-events",
+          "verdict": "likely",
+          "reason": "<span onClick> with no key handler"
+        },
+        {
+          "rule": "jsx-a11y/no-static-element-interactions",
+          "verdict": "likely",
+          "reason": "static <span> with onClick"
+        },
+        {
+          "rule": "biome lint/a11y/useKeyWithClickEvents",
+          "verdict": "likely",
+          "reason": "same element"
+        },
+        {
+          "rule": "biome lint/a11y/noStaticElementInteractions",
+          "verdict": "likely",
+          "reason": "same element"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#80289",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/80289",
+      "issueUrl": null,
+      "date": "2025-06-10",
+      "title": "[dev-overlay] Remove positive tab-index",
+      "description": "Two dev overlay controls carried tabIndex={10}, which pulls them ahead of everything else in the document's Tab order. Keyboard users jumped to them out of visual order, and any focusable content added later would be reached in a confusing sequence.",
+      "barrierKind": "focus-order",
+      "fixKind": "removed the positive tabIndex",
+      "fixSha": "9fd385a85e17400932038b9c1c6d8b95bb5a120a",
+      "parentSha": "2725973823b8b750e688cd6092dd77fdef57e71d",
+      "files": [
+        {
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/terminal/editor-link.tsx",
+          "lines": [
+            19,
+            26
+          ],
+          "element": "<div role={'link'} tabIndex={10} onClick={open}> with no key handler",
+          "code": "    <div\n      data-with-open-in-editor-link\n      data-with-open-in-editor-link-import-trace\n      tabIndex={10}\n      role={'link'}\n      onClick={open}\n      title={'Click to open in your editor'}\n    >"
+        },
+        {
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/hydration-diff/diff-view.tsx",
+          "lines": [
+            122,
+            128
+          ],
+          "element": "<button tabIndex={10}> whose only child is <CollapseIcon/>",
+          "code": "      <button\n        tabIndex={10} // match CallStackFrame\n        data-nextjs-container-errors-pseudo-html-collapse-button\n        onClick={() => toggleCollapseHtml(!isDiffCollapsed)}\n      >\n        <CollapseIcon collapsed={isDiffCollapsed} />\n      </button>"
+        }
+      ],
+      "staticallyVisible": "yes",
+      "staticReason": "yes: tabIndex={10} is a literal positive value on both elements",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/tabindex-no-positive",
+          "verdict": "likely",
+          "reason": "literal tabIndex={10} on both elements"
+        },
+        {
+          "rule": "biome lint/a11y/noPositiveTabindex",
+          "verdict": "likely",
+          "reason": "same literal"
+        },
+        {
+          "rule": "jsx-a11y/click-events-have-key-events",
+          "verdict": "likely",
+          "reason": "the role=link <div> has onClick and no key handler; the fix left that in place, so Enter may still do nothing (not checked at runtime)"
+        },
+        {
+          "rule": "jsx-a11y/prefer-tag-over-role",
+          "verdict": "possible",
+          "reason": "role=\"link\" on a <div> instead of <a>"
+        },
+        {
+          "rule": "biome lint/a11y/useSemanticElements",
+          "verdict": "possible",
+          "reason": "same role=link <div>"
+        },
+        {
+          "rule": "biome lint/a11y/useButtonType",
+          "verdict": "likely",
+          "reason": "the diff-view <button> has no type; unrelated to the barrier"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#80290",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/80290",
+      "issueUrl": null,
+      "date": "2025-06-10",
+      "title": "[dev-overlay] Fix outstanding a11y issues reported by Axe",
+      "description": "Two icon-only buttons in the error overlay, 'open in editor' beside each stack frame and the component-stack collapse toggle, contained only an SVG icon component, so screen readers announced unnamed buttons (axe button-name).",
+      "barrierKind": "name-or-label",
+      "fixKind": "added aria-label (and aria-expanded on the toggle)",
+      "fixSha": "cf0ad333c3799dd0ab6e121d8893b6928bada51e",
+      "parentSha": "c151f8968184e4fcc9b11dd6be414dfc46d77dd8",
+      "files": [
+        {
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/call-stack-frame/call-stack-frame.tsx",
+          "lines": [
+            47,
+            49
+          ],
+          "element": "<button onClick={open}> whose only child is <ExternalIcon/>",
+          "code": "          <button onClick={open} className=\"open-in-editor-button\">\n            <ExternalIcon width={16} height={16} />\n          </button>"
+        },
+        {
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/hydration-diff/diff-view.tsx",
+          "lines": [
+            122,
+            127
+          ],
+          "element": "<button> whose only child is <CollapseIcon/>",
+          "code": "      <button\n        data-nextjs-container-errors-pseudo-html-collapse-button\n        onClick={() => toggleCollapseHtml(!isDiffCollapsed)}\n      >\n        <CollapseIcon collapsed={isDiffCollapsed} />\n      </button>"
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: the buttons contain only a childless custom icon component with no text or labelling prop; a rule that inspects children can flag that, but cannot know the component renders an SVG",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/control-has-associated-label",
+          "verdict": "likely",
+          "reason": "the only child is a component with no children and no labelling prop, so no possible label is found"
+        },
+        {
+          "rule": "biome lint/a11y/useButtonType",
+          "verdict": "likely",
+          "reason": "neither <button> has a type attribute; unrelated to the barrier"
+        },
+        {
+          "rule": "biome lint/a11y (button name)",
+          "verdict": "no",
+          "reason": "Biome has no rule for a button's accessible name"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#92608",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/92608",
+      "issueUrl": null,
+      "date": "2026-04-11",
+      "title": "Fix segment explorer file pill accessibility",
+      "description": "In the dev tools segment explorer, file pills that open a file in the editor were <span onClick>, so keyboard users could not reach or activate them and screen readers did not expose them as controls.",
+      "barrierKind": "keyboard-operability",
+      "fixKind": "span -> button with aria-label; decorative icons aria-hidden; focus-visible style",
+      "fixSha": "8e5a36f6347528d8968da97262f372f908897bac",
+      "parentSha": "9a2e02b97d7ff87ad2ff1926374d86ffd3dbd575",
+      "files": [
+        {
+          "path": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx",
+          "lines": [
+            116,
+            129
+          ],
+          "element": "<span onClick> file pill with text and an icon",
+          "code": "    <span\n      className={cx(\n        'segment-explorer-file-label',\n        `segment-explorer-file-label--${type}`,\n        isBuiltin && 'segment-explorer-file-label--builtin',\n        isOverridden && 'segment-explorer-file-label--overridden'\n      )}\n      onClick={() => {\n        openInEditor({ filePath })\n      }}\n    >\n      <span className=\"segment-explorer-file-label-text\">{fileName}</span>"
+        }
+      ],
+      "staticallyVisible": "yes",
+      "staticReason": "yes: a <span> with onClick and no role, tabIndex or key handler",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/click-events-have-key-events",
+          "verdict": "likely",
+          "reason": "<span onClick> with no key handler"
+        },
+        {
+          "rule": "jsx-a11y/no-static-element-interactions",
+          "verdict": "likely",
+          "reason": "static <span> with onClick"
+        },
+        {
+          "rule": "biome lint/a11y/useKeyWithClickEvents",
+          "verdict": "likely",
+          "reason": "same element"
+        },
+        {
+          "rule": "biome lint/a11y/noStaticElementInteractions",
+          "verdict": "likely",
+          "reason": "same element"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#74074",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/74074",
+      "issueUrl": null,
+      "date": "2024-12-18",
+      "title": "fix: aria attribute typo for error overlay",
+      "description": "The build error dialog's aria-labelledby and aria-describedby pointed at ids 'nextjs__container_error_label' and '..._error_desc', but the heading's id was 'nextjs__container_errors_label'. The dialog had no accessible name or description for screen reader users. The same typo was in the _experimental copy.",
+      "barrierKind": "role-or-aria",
+      "fixKind": "fixed the id typo in aria-labelledby/aria-describedby",
+      "fixSha": "b76659983d1d9c313afc3449b4c60587b37401c3",
+      "parentSha": "58700912b60cac9481b18069b465ab6d013211ba",
+      "files": [
+        {
+          "path": "packages/next/src/client/components/react-dev-overlay/internal/container/BuildError.tsx",
+          "lines": [
+            23,
+            33
+          ],
+          "element": "<Dialog aria-labelledby=\"nextjs__container_error_label\"> vs <h1 id=\"nextjs__container_errors_label\">",
+          "code": "      <Dialog\n        type=\"error\"\n        aria-labelledby=\"nextjs__container_error_label\"\n        aria-describedby=\"nextjs__container_error_desc\"\n        onClose={noop}\n      >\n        <DialogContent>\n          <DialogHeader className=\"nextjs-container-errors-header\">\n            <h1\n              id=\"nextjs__container_errors_label\"\n              className=\"nextjs__container_errors_label\""
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: both ids are string literals in the same file, so the mismatch is visible, but no jsx-a11y or Biome rule resolves id references",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/aria-props",
+          "verdict": "no",
+          "reason": "the attribute names are valid; only the referenced ids are wrong"
+        },
+        {
+          "rule": "biome lint/a11y/useValidAriaValues",
+          "verdict": "no",
+          "reason": "IDREF values are not resolved against the document"
+        },
+        {
+          "rule": "biome lint/a11y/useValidAriaProps",
+          "verdict": "no",
+          "reason": "attribute names are valid"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#23278",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/23278",
+      "issueUrl": "https://github.com/vercel/next.js/issues/23201",
+      "date": "2021-03-22",
+      "title": "Remove `visibility: hidden` from the image component",
+      "description": "next/image styled lazy images with visibility: hidden until they had loaded. Screen readers skip visibility:hidden content, so VoiceOver users never heard those images or their alt text (issue: 'VoiceOver support in next/image').",
+      "barrierKind": "other",
+      "fixKind": "removed visibility from the <img> inline style",
+      "fixSha": "c8680a344f2872e4640c4096c2ddaf6cb8581e5f",
+      "parentSha": "f384cd103b6031e6555237ae9f4eddf67004adbe",
+      "files": [
+        {
+          "path": "packages/next/client/image.tsx",
+          "lines": [
+            297,
+            298
+          ],
+          "element": "imgStyle object passed to <img style> with visibility: isVisible ? 'inherit' : 'hidden'",
+          "code": "  let imgStyle: ImgElementStyle | undefined = {\n    visibility: isVisible ? 'inherit' : 'hidden',\n\n    position: 'absolute',\n    top: 0,\n    left: 0,\n    bottom: 0,\n    right: 0,"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the hiding is a computed inline style value toggled at runtime; no a11y rule reasons about visibility in style objects",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/alt-text",
+          "verdict": "no",
+          "reason": "the <img> has an alt prop"
+        },
+        {
+          "rule": "biome lint/a11y/useAltText",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "vercel/next.js#34338",
+      "repo": "vercel/next.js",
+      "corpusRepo": "next.js",
+      "fixUrl": "https://github.com/vercel/next.js/pull/34338",
+      "issueUrl": null,
+      "date": "2022-02-14",
+      "title": "Fix `<RouteAnnouncer/>` shouldn't announce initial path under strict mode and React 18",
+      "description": "Under React 18 Strict Mode the route announcer's effect ran twice on mount, which used up the 'skip the first load' guard and made the live region announce the initial page. Screen reader users heard the page title announced on top of the browser's own page-load announcement.",
+      "barrierKind": "live-region",
+      "fixKind": "made the initial-load guard survive a double effect invocation",
+      "fixSha": "468833e0b4cfd395dd163ab5c755ebaa70e83a34",
+      "parentSha": "41ecd5e6e251c8650c253616a8fa8826b8eece5a",
+      "files": [
+        {
+          "path": "packages/next/client/route-announcer.tsx",
+          "lines": [
+            18,
+            23
+          ],
+          "element": "useEffect with an initialPathLoaded ref guard, feeding a <p aria-live=\"assertive\" role=\"alert\">",
+          "code": "  React.useEffect(\n    () => {\n      if (!initialPathLoaded.current) {\n        initialPathLoaded.current = true\n        return\n      }"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the bug is effect timing under Strict Mode; the live region markup is valid",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no rule models when a live region's content changes"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "shadcn-ui/ui#2163",
+      "repo": "shadcn-ui/ui",
+      "corpusRepo": "shadcn",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/2163",
+      "issueUrl": null,
+      "date": "2024-01-07",
+      "title": "fix(www): incorrect toggle aria labels and values",
+      "description": "Several Toggle and ToggleGroup registry examples gave icon buttons the wrong name: the Bold toggle was labelled 'Toggle italic' and the Underline item 'Toggle strikethrough'. Screen reader users heard the wrong action, and these examples are copied into apps.",
+      "barrierKind": "name-or-label",
+      "fixKind": "corrected aria-label (and value) strings",
+      "fixSha": "5d37bae1b8e01c0f9b5d57975a5b27b50c425276",
+      "parentSha": "4b59cb812e9e215243d0f756359685d536284950",
+      "files": [
+        {
+          "path": "apps/www/registry/default/example/toggle-demo.tsx",
+          "lines": [
+            7,
+            9
+          ],
+          "element": "<Toggle aria-label=\"Toggle italic\"> with a <Bold/> icon",
+          "code": "    <Toggle aria-label=\"Toggle italic\">\n      <Bold className=\"h-4 w-4\" />\n    </Toggle>"
+        },
+        {
+          "path": "apps/www/registry/default/example/toggle-group-demo.tsx",
+          "lines": [
+            17,
+            19
+          ],
+          "element": "<ToggleGroupItem aria-label=\"Toggle strikethrough\"> with an <Underline/> icon",
+          "code": "      <ToggleGroupItem value=\"strikethrough\" aria-label=\"Toggle strikethrough\">\n        <Underline className=\"h-4 w-4\" />\n      </ToggleGroupItem>"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: a label is present; no rule can tell it contradicts the icon",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/control-has-associated-label",
+          "verdict": "no",
+          "reason": "aria-label is present (and Toggle is a custom component)"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "nothing invalid in the markup"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "shadcn-ui/ui#7611",
+      "repo": "shadcn-ui/ui",
+      "corpusRepo": "shadcn",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/7611",
+      "issueUrl": "https://github.com/shadcn-ui/ui/issues/7561",
+      "date": "2025-06-16",
+      "title": "fix(components): resolve duplicate id conflict in calendar-24 component",
+      "description": "The calendar-24 date and time picker block used id=\"date\" and id=\"time\", which another calendar example on the same docs page also used. Its labels pointed at the wrong control: clicking 'Date' focused the previous example, and screen readers got the wrong label or none.",
+      "barrierKind": "name-or-label",
+      "fixKind": "unique ids for each label/control pair",
+      "fixSha": "20a88e1f1585e610406d18201ce635718462a0db",
+      "parentSha": "cb19ab84646fc017c15fadc81fc47b695560a04c",
+      "files": [
+        {
+          "path": "apps/v4/registry/new-york-v4/blocks/calendar-24.tsx",
+          "lines": [
+            23,
+            30
+          ],
+          "element": "<Label htmlFor=\"date\"> and <Button id=\"date\">",
+          "code": "        <Label htmlFor=\"date\" className=\"px-1\">\n          Date\n        </Label>\n        <Popover open={open} onOpenChange={setOpen}>\n          <PopoverTrigger asChild>\n            <Button\n              variant=\"outline\"\n              id=\"date\""
+        },
+        {
+          "path": "apps/v4/registry/new-york-v4/blocks/calendar-24.tsx",
+          "lines": [
+            51,
+            56
+          ],
+          "element": "<Label htmlFor=\"time\"> and <Input id=\"time\">",
+          "code": "        <Label htmlFor=\"time\" className=\"px-1\">\n          Time\n        </Label>\n        <Input\n          type=\"time\"\n          id=\"time\""
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: inside the file every htmlFor matches an id; the collision only exists when several blocks render on one page",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/label-has-associated-control",
+          "verdict": "no",
+          "reason": "Label is a component and has htmlFor"
+        },
+        {
+          "rule": "biome lint/a11y/noLabelWithoutControl",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "shadcn-ui/ui#224",
+      "repo": "shadcn-ui/ui",
+      "corpusRepo": "shadcn",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/224",
+      "issueUrl": "https://github.com/shadcn-ui/ui/issues/223",
+      "date": "2023-05-08",
+      "title": "fix(checkbox,radio-group): Increase contrast ratio of checkboxes and radio buttons",
+      "description": "Unchecked checkboxes (and radio buttons) drew their border with the faint border-input token, measured at about 1.23:1 in light mode and 1.36:1 in dark mode in the issue, so low-vision users could barely see the control.",
+      "barrierKind": "contrast",
+      "fixKind": "border-input -> border-primary (checked state uses bg-primary)",
+      "fixSha": "b3247d90a6ecf2ca067503c98f6cc102a1650a54",
+      "parentSha": "0c31f60bb0ea7ec32ea0b9d8dac0b2c4ed8d2fc8",
+      "files": [
+        {
+          "path": "apps/www/components/ui/checkbox.tsx",
+          "lines": [
+            13,
+            18
+          ],
+          "element": "<CheckboxPrimitive.Root className=\"... border border-input ...\">",
+          "code": "  <CheckboxPrimitive.Root\n    ref={ref}\n    className={cn(\n      \"peer h-4 w-4 shrink-0 rounded-sm border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary\",\n      className\n    )}"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: contrast depends on the theme's CSS variables behind Tailwind class names",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no rule computes contrast"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "no rule computes contrast"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "shadcn-ui/ui#12061",
+      "repo": "shadcn-ui/ui",
+      "corpusRepo": "shadcn",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/12061",
+      "issueUrl": null,
+      "date": "2026-09-30",
+      "title": "fix(shadcn): apply shimmer reduced motion to variants",
+      "description": "The shimmer text effect stopped animating under prefers-reduced-motion only for the plain .shimmer class. Variant-prefixed uses such as hover:shimmer kept the infinite animation, so users who asked for reduced motion still got it. The file is the stylesheet shadcn's registry styles import (packages/shadcn/src/tailwind.css), not a registry component.",
+      "barrierKind": "reduced-motion",
+      "fixKind": "moved the prefers-reduced-motion override into the @utility so every variant gets it",
+      "fixSha": "a9c1da49ec4eab488dc99c69ae20a7ffaa4897d4",
+      "parentSha": "71f0e497e6e2a8e5a6584546c938a2db5329637e",
+      "files": [
+        {
+          "path": "packages/shadcn/src/tailwind.css",
+          "lines": [
+            623,
+            629
+          ],
+          "element": "@media (prefers-reduced-motion: reduce) rule that targets only the .shimmer class",
+          "code": "@media (prefers-reduced-motion: reduce) {\n  .shimmer {\n    animation: none;\n    background-image: none;\n    -webkit-text-fill-color: currentColor;\n  }\n}"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the barrier is in CSS and in how Tailwind expands variants",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "the file is CSS"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "no Biome CSS rule checks reduced-motion coverage"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "shadcn-ui/ui@961e0b62d770",
+      "repo": "shadcn-ui/ui",
+      "corpusRepo": "shadcn",
+      "fixUrl": "https://github.com/shadcn-ui/ui/commit/961e0b62d770f9f7e1d5c6c0c62ba510f3964d26",
+      "issueUrl": null,
+      "date": "2024-11-03",
+      "title": "fix: a11y for card and calendar",
+      "description": "Calendar days outside the current month combined text-muted-foreground with opacity-50, so their numbers were too faint for low-vision users; the changelog added in the same commit says the class changed 'to improve contrast'. The commit also changed CardTitle from a fixed <h3> (and CardDescription from <p>) to <div> 'to improve accessibility', without recording why; a fixed h3 imposes one heading level on every card wherever it sits in the page outline.",
+      "barrierKind": "contrast",
+      "fixKind": "dropped opacity-50 (and aria-selected:opacity-30) from day_outside; CardTitle/CardDescription h3/p -> div",
+      "fixSha": "961e0b62d770f9f7e1d5c6c0c62ba510f3964d26",
+      "parentSha": "500a353816969e3cce2b3f4f0699ce4e6ad06f0b",
+      "files": [
+        {
+          "path": "apps/www/registry/new-york/ui/calendar.tsx",
+          "lines": [
+            54,
+            55
+          ],
+          "element": "day_outside classNames with text-muted-foreground opacity-50",
+          "code": "        day_outside:\n          \"day-outside text-muted-foreground opacity-50  aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30\","
+        },
+        {
+          "path": "apps/www/registry/new-york/ui/card.tsx",
+          "lines": [
+            32,
+            41
+          ],
+          "element": "CardTitle forwardRef rendering a fixed <h3 {...props} />",
+          "code": "const CardTitle = React.forwardRef<\n  HTMLParagraphElement,\n  React.HTMLAttributes<HTMLHeadingElement>\n>(({ className, ...props }, ref) => (\n  <h3\n    ref={ref}\n    className={cn(\"font-semibold leading-none tracking-tight\", className)}\n    {...props}\n  />\n))"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: contrast depends on theme variables behind Tailwind classes, and a fixed heading level is wrong only in the context of the page outline",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (contrast)",
+          "verdict": "no",
+          "reason": "no rule computes contrast from class names"
+        },
+        {
+          "rule": "jsx-a11y/heading-has-content",
+          "verdict": "possible",
+          "reason": "card.tsx: self-closing <h3> whose children arrive only through {...props}; it may fire for 'no content', which is not the barrier"
+        },
+        {
+          "rule": "biome lint/a11y/useHeadingContent",
+          "verdict": "possible",
+          "reason": "same self-closing heading with spread props"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true,
+      "mergeNote": "Direct commit on main by the maintainer (no pull request); verified reachable from main via the compare API."
+    },
+    {
+      "id": "shadcn-ui/ui#2190",
+      "repo": "shadcn-ui/ui",
+      "corpusRepo": "shadcn",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/2190",
+      "issueUrl": null,
+      "date": "2024-01-18",
+      "title": "fix(pagination): remove incorrect nested li from pagination link",
+      "description": "PaginationLink wrapped its <a> in a PaginationItem (<li>), but the documented usage already puts PaginationLink inside a PaginationItem, producing <li><li><a>. Nested list items break the list structure, so screen readers announce wrong list and item counts (React also warned about invalid DOM nesting).",
+      "barrierKind": "role-or-aria",
+      "fixKind": "removed the inner PaginationItem from PaginationLink",
+      "fixSha": "578d2c182317cf13d8b354288a95e623d0779da6",
+      "parentSha": "29de71d77fd3db93c33cc3886c64a32ad889278f",
+      "files": [
+        {
+          "path": "apps/www/registry/new-york/ui/pagination.tsx",
+          "lines": [
+            45,
+            64
+          ],
+          "element": "PaginationLink rendering <PaginationItem> (an <li>) around the <a>",
+          "code": "  <PaginationItem>\n    <a\n      aria-current={isActive ? \"page\" : undefined}\n      className={cn(\n        buttonVariants({\n          variant: isActive ? \"outline\" : \"ghost\",\n          size,\n        }),\n        className\n      )}\n      {...props}\n    />"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the nesting comes from composing components (PaginationItem > PaginationLink > PaginationItem); no single JSX element is invalid",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no rule checks list nesting across components"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#4210",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/4210",
+      "issueUrl": "https://github.com/radix-ui/primitives/issues/3007",
+      "date": "2026-10-13",
+      "title": "dialog: Fix broken aria attribute references for elements with custom ids",
+      "description": "If a consumer passed an id to Dialog.Title (or Description or Content), the element used the custom id but Dialog.Content still pointed aria-labelledby and aria-describedby at the internally generated id. The dialog lost its accessible name and description for screen reader users.",
+      "barrierKind": "role-or-aria",
+      "fixKind": "custom ids are registered in context so aria-labelledby/aria-describedby follow them",
+      "fixSha": "1f8ef1482ab675315ac2362d56122dc3c3d4881a",
+      "parentSha": "38a78e2084dc3ca0e7cac42eb1f3519b34a07936",
+      "files": [
+        {
+          "path": "packages/react/dialog/src/dialog.tsx",
+          "lines": [
+            500,
+            500
+          ],
+          "element": "<Primitive.h2 id={context.titleId} {...titleProps}>: a user id in titleProps overrides the id the content references",
+          "code": "  function DialogTitle(props: ScopedProps<DialogTitleProps>, forwardedRef) {\n    const { __scopeDialog, ...titleProps } = props;\n    const context = useDialogContext('DialogTitle', __scopeDialog);\n    const { setTitleCount } = context;\n    useLayoutEffect(() => {\n      setTitleCount((count) => count + 1);\n      return () => setTitleCount((count) => count - 1);\n    }, [setTitleCount]);\n    return <Primitive.h2 id={context.titleId} {...titleProps} ref={forwardedRef} />;\n  },"
+        },
+        {
+          "path": "packages/react/dialog/src/dialog.tsx",
+          "lines": [
+            460,
+            466
+          ],
+          "element": "<DismissableLayer role=\"dialog\" aria-labelledby={context.titleId}>",
+          "code": "          <DismissableLayer\n            role=\"dialog\"\n            id={context.contentId}\n            aria-labelledby={context.titlePresent ? context.titleId : undefined}\n            aria-describedby={\n              context.descriptionPresent\n                ? concatAriaDescribedby(ariaDescribedby, context.descriptionId)"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the break comes from prop spread order and a context id shared between two components; each element is valid on its own",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/aria-props",
+          "verdict": "no",
+          "reason": "valid attribute names"
+        },
+        {
+          "rule": "biome lint/a11y/useValidAriaValues",
+          "verdict": "no",
+          "reason": "id references are not resolved"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#3801",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/3801",
+      "issueUrl": null,
+      "date": "2026-10-13",
+      "title": "Add explicit role to child div of ScrollAreaViewport",
+      "description": "ScrollArea's content wrapper is a <div> with display: table, and Chrome infers a layout-table role from that, adding table semantics around whatever the scroll area contains.",
+      "barrierKind": "role-or-aria",
+      "fixKind": "added role=\"presentation\" to the wrapper",
+      "fixSha": "155eff68f5ef43edaea52fcb5224eee904af952a",
+      "parentSha": "68c1f609d466fccf0a9899c4c8afff9118a42010",
+      "files": [
+        {
+          "path": "packages/react/scroll-area/src/scroll-area.tsx",
+          "lines": [
+            304,
+            310
+          ],
+          "element": "<Primitive.div style={{ minWidth: '100%', display: 'table' }}>",
+          "code": "    <Primitive.div\n      {...contentProps}\n      ref={composedRefs}\n      style={{ minWidth: '100%', display: 'table', ...props.style }}\n    >\n      {children}\n    </Primitive.div>"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the role comes from a browser heuristic on CSS display, not from the markup",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no rule infers roles from inline style"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#1644",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/1644",
+      "issueUrl": "https://github.com/radix-ui/primitives/issues/1633",
+      "date": "2022-09-06",
+      "title": "[DropdownMenu] Set aria-expanded according to Dropdown state",
+      "description": "The DropdownMenu trigger set aria-expanded to true when open and removed it when closed, so screen readers could not announce the menu button as collapsed.",
+      "barrierKind": "role-or-aria",
+      "fixKind": "aria-expanded={context.open} (explicit false when closed)",
+      "fixSha": "d41b775e96e51ef74a1e11495f30e96e4f86d536",
+      "parentSha": "8f75e5be679b9c269638bddf532a166d80edecb4",
+      "files": [
+        {
+          "path": "packages/react/dropdown-menu/src/DropdownMenu.tsx",
+          "lines": [
+            106,
+            113
+          ],
+          "element": "<Primitive.button aria-haspopup=\"menu\" aria-expanded={context.open ? true : undefined}>",
+          "code": "        <Primitive.button\n          type=\"button\"\n          id={context.triggerId}\n          aria-haspopup=\"menu\"\n          aria-expanded={context.open ? true : undefined}\n          aria-controls={context.open ? context.contentId : undefined}\n          data-state={context.open ? 'open' : 'closed'}\n          data-disabled={disabled ? '' : undefined}\n          disabled={disabled}"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: aria-expanded is present and valid; the problem is the runtime value undefined instead of false",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/aria-proptypes",
+          "verdict": "no",
+          "reason": "the value is an expression, not a literal"
+        },
+        {
+          "rule": "jsx-a11y/role-supports-aria-props",
+          "verdict": "no",
+          "reason": "button supports aria-expanded"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#731",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/731",
+      "issueUrl": "https://github.com/radix-ui/primitives/issues/730",
+      "date": "2021-06-22",
+      "title": "[Slider] Move focus to correct thumb when using keyboard",
+      "description": "In a range slider, moving one thumb past another with the keyboard (arrows, Home, End) swapped the values but left focus on the original thumb, so keyboard users went on moving the wrong thumb.",
+      "barrierKind": "focus-management",
+      "fixKind": "focus the thumb whose value changed, from the value change handler",
+      "fixSha": "fda73e4c3c0855b75d51b1f11e8ef0219c3b843f",
+      "parentSha": "e7a22914c7de6961fb54667f5a046525d26dde1c",
+      "files": [
+        {
+          "path": "packages/react/slider/src/Slider.tsx",
+          "lines": [
+            163,
+            173
+          ],
+          "element": "<SliderImpl> keyboard handlers (onHomeKeyDown, onEndKeyDown, onStepKeyDown) that call updateValues without moving focus",
+          "code": "          onSlideStart={disabled ? undefined : handleSlideStart}\n          onSlideMove={disabled ? undefined : handleSlideMove}\n          onHomeKeyDown={() => !disabled && updateValues(min, 0)}\n          onEndKeyDown={() => !disabled && updateValues(max, values.length - 1)}\n          onStepKeyDown={({ event, direction: stepDirection }) => {\n            if (!disabled) {\n              const isPageKey = PAGE_KEYS.includes(event.key);\n              const isSkipKey = isPageKey || (event.shiftKey && ARROW_KEYS.includes(event.key));\n              const multiplier = isSkipKey ? 10 : 1;\n              const atIndex = valueIndexToChangeRef.current;\n              const value = values[atIndex];"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: focus following the changed value is runtime state; nothing in the JSX is invalid",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no rule models focus after a value change"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#2595",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/2595",
+      "issueUrl": "https://github.com/radix-ui/primitives/issues/1750",
+      "date": "2025-07-02",
+      "title": "fix toast a11y issues",
+      "description": "Toast's focus proxy was a VisuallyHidden element with tabIndex={0} and aria-hidden, a focusable element hidden from screen readers, so keyboard focus could land on something assistive tech could not see. Each toast <li> also carried role=\"status\", which is not allowed on a list item and breaks the list (axe violations).",
+      "barrierKind": "aria-hidden",
+      "fixKind": "removed aria-hidden from the focus proxies; removed role=status, aria-live and aria-atomic from the <li>",
+      "fixSha": "1aec62ae287add1039b11585da8ee15ee8c74c0b",
+      "parentSha": "54f452b247b34e1f5f82c5997df5bcf5938292fb",
+      "files": [
+        {
+          "path": "packages/react/toast/src/toast.tsx",
+          "lines": [
+            342,
+            346
+          ],
+          "element": "<VisuallyHidden aria-hidden tabIndex={0}> focus proxy",
+          "code": "      <VisuallyHidden\n        aria-hidden\n        tabIndex={0}\n        {...proxyProps}\n        ref={forwardedRef}"
+        },
+        {
+          "path": "packages/react/toast/src/toast.tsx",
+          "lines": [
+            574,
+            579
+          ],
+          "element": "<Primitive.li role=\"status\" aria-live=\"off\" aria-atomic tabIndex={0}>",
+          "code": "                <Primitive.li\n                  // Ensure toasts are announced as status list or status when focused\n                  role=\"status\"\n                  aria-live=\"off\"\n                  aria-atomic\n                  tabIndex={0}"
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: the attributes are literals in JSX, but both sit on components (VisuallyHidden, Primitive.li), which DOM-element rules skip unless they are mapped to elements",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/no-aria-hidden-on-focusable",
+          "verdict": "possible",
+          "reason": "aria-hidden with tabIndex={0}, but on a component; fires only with a component mapping"
+        },
+        {
+          "rule": "biome lint/a11y/noAriaHiddenOnFocusable",
+          "verdict": "possible",
+          "reason": "same pattern, same component caveat"
+        },
+        {
+          "rule": "jsx-a11y/no-noninteractive-element-to-interactive-role",
+          "verdict": "no",
+          "reason": "status is not an interactive role, and Primitive.li is a component"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#1422",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/1422",
+      "issueUrl": null,
+      "date": "2022-05-25",
+      "title": "[RadioGroup] Add `aria-required`",
+      "description": "RadioGroup accepted a required prop but did not expose it, so screen readers never announced the group as required. The PR notes that jsx-a11y's role-supports-aria-props is why the attribute went on the radiogroup rather than on each radio.",
+      "barrierKind": "role-or-aria",
+      "fixKind": "added aria-required={required} to the radiogroup",
+      "fixSha": "0ccfe2df3f8ed720590a6cfa53f9212a1a6dbc7b",
+      "parentSha": "1d3e98def6fc157820a8dd22a05e071bbaa004b6",
+      "files": [
+        {
+          "path": "packages/react/radio-group/src/RadioGroup.tsx",
+          "lines": [
+            95,
+            102
+          ],
+          "element": "<Primitive.div role=\"radiogroup\"> without aria-required",
+          "code": "          <Primitive.div\n            role=\"radiogroup\"\n            aria-orientation={orientation}\n            aria-labelledby={labelledBy}\n            dir={direction}\n            {...groupProps}\n            ref={forwardedRef}\n          />"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: nothing tells a rule that the component's required prop should be mirrored to ARIA",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/role-has-required-aria-props",
+          "verdict": "no",
+          "reason": "aria-required is not a required property of radiogroup"
+        },
+        {
+          "rule": "biome lint/a11y/useAriaPropsForRole",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "radix-ui/primitives#902",
+      "repo": "radix-ui/primitives",
+      "corpusRepo": "radix",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/902",
+      "issueUrl": "https://github.com/radix-ui/primitives/issues/898",
+      "date": "2021-10-11",
+      "title": "[HoverCard] Open on focus",
+      "description": "HoverCard content opened only on pointer enter, so keyboard users who tabbed to the trigger never saw it (WCAG 1.4.13, content on hover or focus). The fix opens it on focus and closes it on blur and Escape.",
+      "barrierKind": "keyboard-operability",
+      "fixKind": "added onFocus/onBlur open and close plus Escape dismissal",
+      "fixSha": "064ef10ed14ce65fb9a8597ffdcca55cc88a4fff",
+      "parentSha": "8c7956e5774154bbd7ae4505ad2129472d61d379",
+      "files": [
+        {
+          "path": "packages/react/hover-card/src/HoverCard.tsx",
+          "lines": [
+            95,
+            101
+          ],
+          "element": "<Primitive.a onPointerEnter onPointerLeave> trigger with no focus handlers",
+          "code": "        <Primitive.a\n          data-state={context.open ? 'open' : 'closed'}\n          {...props}\n          ref={forwardedRef}\n          onPointerEnter={composeEventHandlers(props.onPointerEnter, excludeTouch(context.onOpen))}\n          onPointerLeave={composeEventHandlers(props.onPointerLeave, excludeTouch(context.onClose))}\n        />"
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: the missing focus handlers are visible, but they are pointer events on a component; the mouse/key pairing rules only look at onMouseOver/onMouseOut on DOM elements",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/mouse-events-have-key-events",
+          "verdict": "no",
+          "reason": "checks onMouseOver/onMouseOut, not onPointerEnter/onPointerLeave"
+        },
+        {
+          "rule": "biome lint/a11y/useKeyWithMouseEvents",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#5796",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "react-aria-components",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/5796",
+      "issueUrl": "https://github.com/adobe/react-spectrum/issues/5795",
+      "date": "2024-02-05",
+      "title": "Add missing aria-labels to ListBox, Menu, Tabs items in RAC",
+      "description": "An aria-label passed to ListBoxItem, MenuItem or Tab was never forwarded to the underlying hooks, so items whose content is an icon or other non-text had no accessible name even when the developer supplied one.",
+      "barrierKind": "name-or-label",
+      "fixKind": "forwarded item aria-label props to useOption, useMenuItem and useTab",
+      "fixSha": "4a7872d8a0b2dd0fa0bd43eea0016592956cd642",
+      "parentSha": "bcb5cc0721db1f24237abaaea1d1b8d66ac746c5",
+      "files": [
+        {
+          "path": "packages/react-aria-components/src/ListBox.tsx",
+          "lines": [
+            364,
+            368
+          ],
+          "element": "useOption({key: item.key}, ...) with no aria-label",
+          "code": "  let {optionProps, labelProps, descriptionProps, ...states} = useOption(\n    {key: item.key},\n    state,\n    ref\n  );"
+        },
+        {
+          "path": "packages/react-aria-components/src/Menu.tsx",
+          "lines": [
+            290,
+            290
+          ],
+          "element": "useMenuItem({key: item.key}, ...) with no aria-label",
+          "code": "  let {menuItemProps, labelProps, descriptionProps, keyboardShortcutProps, ...states} = useMenuItem({key: item.key}, state, ref);"
+        },
+        {
+          "path": "packages/react-aria-components/src/Tabs.tsx",
+          "lines": [
+            266,
+            268
+          ],
+          "element": "useTab({key}, ...) dropping item props",
+          "code": "  let {key} = item;\n  let ref = useObjectRef<any>(item.props.ref);\n  let {tabProps, isSelected, isDisabled, isPressed} = useTab({key}, state, ref);"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the label is dropped in a hook call; the rendered JSX spreads computed props",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "no JSX element is missing anything visible"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#6423",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "react-aria-components",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/6423",
+      "issueUrl": "https://github.com/adobe/react-spectrum/issues/6422",
+      "date": "2024-05-23",
+      "title": "Fix Menu Section aria-label",
+      "description": "MenuSection read aria-label from the collection node instead of from its props, so a labelled Section rendered as an unnamed group and screen reader users could not tell menu groups apart.",
+      "barrierKind": "name-or-label",
+      "fixKind": "read aria-label from section.props",
+      "fixSha": "8d4f4073317363e28fb98e1b9721302273a45371",
+      "parentSha": "c57671e7f57c4ffe59640a174f084cf660968913",
+      "files": [
+        {
+          "path": "packages/react-aria-components/src/Menu.tsx",
+          "lines": [
+            230,
+            233
+          ],
+          "element": "useMenuSection({'aria-label': section['aria-label']}) reading the wrong object",
+          "code": "  let {headingProps, groupProps} = useMenuSection({\n    heading,\n    'aria-label': section['aria-label'] ?? undefined\n  });"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: a wrong property path in a hook argument",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "not JSX"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "not JSX"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#7881",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "react-aria-components",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/7881",
+      "issueUrl": "https://github.com/adobe/react-spectrum/issues/7860",
+      "date": "2025-03-11",
+      "title": "fix: pass aria labeling props in RAC Separator",
+      "description": "Separator dropped aria-label and aria-labelledby: they were not passed to useSeparator and filterDOMProps does not keep labelling props, so a labelled separator rendered without its name.",
+      "barrierKind": "name-or-label",
+      "fixKind": "pass the remaining props to useSeparator",
+      "fixSha": "7c830d73d33afdd8d51c8eb7dc7e3a1de89a81ad",
+      "parentSha": "51c02936077804f34622319fe8b423c48e71779f",
+      "files": [
+        {
+          "path": "packages/react-aria-components/src/Separator.tsx",
+          "lines": [
+            26,
+            44
+          ],
+          "element": "useSeparator({elementType, orientation}) and <Element {...filterDOMProps(props)}> dropping labelling props",
+          "code": "  let {separatorProps} = useSeparator({\n    elementType,\n    orientation\n  });\n\n  return (\n    <Element\n      {...filterDOMProps(props)}\n      {...separatorProps}\n      style={style}\n      className={className ?? 'react-aria-Separator'}\n      ref={ref}"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the props are dropped by destructuring and a filter function, not by anything in the JSX",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "the element's attributes are spreads"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#4703",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "react-aria-components",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/4703",
+      "issueUrl": null,
+      "date": "2023-07-19",
+      "title": "RAC DropZone - fix aria violation + make aria-label more customizable",
+      "description": "DropZone's visually hidden button set aria-label=\"DropZone\" after spreading the user's props, so a developer's aria-label was overwritten, and its aria-labelledby pointed at a Text id that did not exist when no Text child rendered (the PR calls this an aria violation).",
+      "barrierKind": "name-or-label",
+      "fixKind": "use the user's aria-label with a default; slot id so aria-labelledby only references a rendered element",
+      "fixSha": "9d8067cb56da204d164fadeecc32913ee1dc5b56",
+      "parentSha": "84a1f0fc20d4494430e8acda8e244ff087e1e5e0",
+      "files": [
+        {
+          "path": "packages/react-aria-components/src/DropZone.tsx",
+          "lines": [
+            55,
+            56
+          ],
+          "element": "useLabels({'aria-labelledby': textId}) with textId always generated",
+          "code": "  let textId = useId();\n  let labelProps = useLabels({'aria-labelledby': textId});"
+        },
+        {
+          "path": "packages/react-aria-components/src/DropZone.tsx",
+          "lines": [
+            92,
+            96
+          ],
+          "element": "<button {...mergeProps(...labelProps)} aria-label=\"DropZone\"> inside <VisuallyHidden>",
+          "code": "        <VisuallyHidden>\n          <button\n            {...mergeProps(dropButtonProps, focusProps, clipboardProps, labelProps)}\n            aria-label=\"DropZone\" // will need to update with string formatter\n            ref={buttonRef} />   "
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: the hard-coded aria-label after the spread is visible, but whether aria-labelledby resolves depends on whether a Text child renders",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/control-has-associated-label",
+          "verdict": "no",
+          "reason": "aria-label is present"
+        },
+        {
+          "rule": "biome lint/a11y/useButtonType",
+          "verdict": "possible",
+          "reason": "the <button> has no literal type (it may come from the spread); unrelated to the barrier"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#4943",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "react-aria-components",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/4943",
+      "issueUrl": "https://github.com/adobe/react-spectrum/issues/4902",
+      "date": "2023-08-24",
+      "title": "Hidden text field is focusable and editable with Select with isDisabled=true",
+      "description": "RAC Select did not pass isDisabled to its HiddenSelect, so with the Select disabled the hidden native input stayed focusable and editable. Keyboard and assistive tech users could reach and change a control that was meant to be disabled.",
+      "barrierKind": "focusability",
+      "fixKind": "pass isDisabled to HiddenSelect",
+      "fixSha": "13a27928ff4fa91e67e15a9eade8208789821935",
+      "parentSha": "5f69479a0f56ed2c5ce6b8ff1adec07a6f551fff",
+      "files": [
+        {
+          "path": "packages/react-aria-components/src/Select.tsx",
+          "lines": [
+            168,
+            172
+          ],
+          "element": "<HiddenSelect state triggerRef label name> without isDisabled",
+          "code": "        <HiddenSelect\n          state={state}\n          triggerRef={buttonRef}\n          label={label}\n          name={props.name} />"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: a missing prop on a component; nothing marks it as required",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "component prop"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "component prop"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#5867",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "react-aria-components",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/5867",
+      "issueUrl": null,
+      "date": "2024-02-20",
+      "title": "Fix focus going to the DropZone after closing FileTrigger",
+      "description": "Clicking a FileTrigger inside a DropZone also hit the DropZone's onClick, which focused DropZone's hidden button, so after the file dialog closed focus sat on the wrong element. The <div onClick> already carried an eslint-disable-next-line comment.",
+      "barrierKind": "focus-management",
+      "fixKind": "skip focusing the drop button when the click target is the file input",
+      "fixSha": "b5f4f6da7954da11b0dd6a05a19ed137a52ad145",
+      "parentSha": "acb735219363935fd4f798c78fcba5dec4842af4",
+      "files": [
+        {
+          "path": "packages/react-aria-components/src/DropZone.tsx",
+          "lines": [
+            88,
+            94
+          ],
+          "element": "{/* eslint-disable-next-line */} above <div ... onClick={() => buttonRef.current?.focus()}>",
+          "code": "      {/* eslint-disable-next-line */}\n      <div\n        {...mergeProps(dropProps, hoverProps, DOMProps)}\n        {...renderProps}\n        slot={props.slot || undefined}\n        ref={ref}\n        onClick={() => buttonRef.current?.focus()}\n        data-hovered={isHovered || undefined}\n        data-focused={isFocused || undefined}\n        data-focus-visible={isFocusVisible || undefined}\n        data-drop-target={isDropTarget || undefined} >"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the wrong focus target only appears at runtime when a nested input is clicked; the click-handler rules flag the div for a different reason (no key handler) and are suppressed on that line",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/click-events-have-key-events",
+          "verdict": "possible",
+          "reason": "the <div onClick> has no key handler, but an eslint-disable-next-line comment sits on line 88 and oxlint honours it; the finding would be about keyboard parity, not the focus bug"
+        },
+        {
+          "rule": "jsx-a11y/no-static-element-interactions",
+          "verdict": "possible",
+          "reason": "same <div>, same suppression"
+        },
+        {
+          "rule": "biome lint/a11y/useKeyWithClickEvents",
+          "verdict": "likely",
+          "reason": "Biome ignores eslint-disable comments; fires on the div, not on the focus bug"
+        },
+        {
+          "rule": "biome lint/a11y/noStaticElementInteractions",
+          "verdict": "likely",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "adobe/react-spectrum#9888",
+      "repo": "adobe/react-spectrum",
+      "corpusRepo": "react-aria",
+      "package": "@adobe/react-spectrum (v3 StepList, not React Aria Components)",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/9888",
+      "issueUrl": "https://github.com/adobe/react-spectrum/issues/9881",
+      "date": "2026-04-21",
+      "title": "fix: announce step state in StepList's accessible name",
+      "description": "Each StepList link was named by aria-labelledby pointing at the step number and the label only. The visually hidden state text ('Completed', 'Current', 'Not completed') was not part of the name, so screen reader users moving through links did not hear each step's status.",
+      "barrierKind": "name-or-label",
+      "fixKind": "gave the state text an id and added it to aria-labelledby",
+      "fixSha": "670b571bb77913614d777cb802c87869c24b744b",
+      "parentSha": "abb9082219b46e7f6c80c09b8a71644e4e052a83",
+      "files": [
+        {
+          "path": "packages/@adobe/react-spectrum/src/steplist/StepListItem.tsx",
+          "lines": [
+            79,
+            81
+          ],
+          "element": "<a aria-labelledby={`${markerId} ${labelId}`}>",
+          "code": "        <a\n          {...mergeProps(hoverProps, stepProps)}\n          aria-labelledby={`${markerId} ${labelId}`}"
+        },
+        {
+          "path": "packages/@adobe/react-spectrum/src/steplist/StepListItem.tsx",
+          "lines": [
+            94,
+            94
+          ],
+          "element": "<VisuallyHidden {...stepStateProps}>{stepStateText}</VisuallyHidden> with no id",
+          "code": "          <VisuallyHidden {...stepStateProps}>{stepStateText}</VisuallyHidden>"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the link has a valid name; which ids it should include is a design decision",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "valid markup"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "valid markup"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "supabase/supabase#51055",
+      "repo": "supabase/supabase",
+      "corpusRepo": "supabase",
+      "fixUrl": "https://github.com/supabase/supabase/pull/51055",
+      "issueUrl": null,
+      "date": "2026-10-07",
+      "title": "fix(studio): keep project sidebar navigation accessible",
+      "description": "The mobile project menu opened in a sheet with no title, so screen readers announced an unnamed dialog. On fixed-width pages the project sidebar also sat inside a ResizablePanel with disabled={!resizableSidebar}, which gave every navigation link a disabled ancestor.",
+      "barrierKind": "name-or-label",
+      "fixKind": "added a screen-reader-only SheetTitle ('Project menu'); removed disabled from the sidebar panel",
+      "fixSha": "55c297655eab5a8f4f23a748ecec2e5067043398",
+      "parentSha": "46b7382d504d3ad254d095861ad25d9c16f639aa",
+      "files": [
+        {
+          "path": "apps/studio/components/layouts/ProjectLayout/LayoutHeader/MobileMenuContent/MobileMenuContent.tsx",
+          "lines": [
+            134,
+            136
+          ],
+          "element": "sheet body root <div> with no SheetTitle",
+          "code": "  return (\n    <div className=\"flex flex-col h-full bg-background\">\n      {viewLevel === 'section' && sectionLabel && ("
+        },
+        {
+          "path": "apps/studio/components/layouts/ProjectLayout/index.tsx",
+          "lines": [
+            308,
+            315
+          ],
+          "element": "<ResizablePanel ... disabled={!resizableSidebar}> wrapping the sidebar navigation",
+          "code": "              <ResizablePanel\n                panelRef={panelRef}\n                minSize={256}\n                maxSize={resizableSidebar ? 512 : 256}\n                defaultSize={256}\n                id=\"panel-left\"\n                disabled={!resizableSidebar}\n              >"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the dialog title requirement belongs to the Sheet component rendered elsewhere, and disabled is a library prop whose ARIA effect is not visible here",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "components only"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "components only"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "supabase/supabase#50083",
+      "repo": "supabase/supabase",
+      "corpusRepo": "supabase",
+      "fixUrl": "https://github.com/supabase/supabase/pull/50083",
+      "issueUrl": null,
+      "date": "2026-09-10",
+      "title": "fix(ui-patterns): reveal hover-only copy controls on keyboard focus",
+      "description": "Copy buttons in CodeBlock sat in an opacity-0 wrapper revealed only on hover, so keyboard users tabbed onto an invisible button. In DataInputs Input with showCopyOnHover, group-hover targeted an unnamed group that did not exist, so the button never appeared at all.",
+      "barrierKind": "other",
+      "fixKind": "added group-focus-within:opacity-100 and named group variants",
+      "fixSha": "c708e1128f3d34901548168e19df39c2f5045424",
+      "parentSha": "c33d255eba8ba9ff7c7a2a01a93dce80cb685708",
+      "files": [
+        {
+          "path": "packages/ui-patterns/src/CodeBlock/CodeBlock.tsx",
+          "lines": [
+            269,
+            275
+          ],
+          "element": "<div> wrapper with 'opacity-0 group-hover:opacity-100 transition' around the copy <Button>",
+          "code": "            <div\n              className={[\n                'absolute right-2 top-2',\n                'opacity-0 group-hover:opacity-100 transition',\n                `${isDarkTheme ? 'dark' : ''}`,\n              ].join(' ')}\n            >"
+        },
+        {
+          "path": "packages/ui-patterns/src/DataInputs/Input.tsx",
+          "lines": [
+            91,
+            99
+          ],
+          "element": "<InputGroupButton className={cn(showCopyOnHover && 'opacity-0 group-hover:opacity-100 transition')}>",
+          "code": "              <InputGroupButton\n                size=\"tiny\"\n                variant=\"default\"\n                className={cn(showCopyOnHover && 'opacity-0 group-hover:opacity-100 transition')}\n                icon={<Copy size={16} className=\"text-foreground-muted\" />}\n                onClick={() => _onCopy(props.value)}\n              >\n                {copyLabel}\n              </InputGroupButton>"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: visibility depends on Tailwind classes and :hover/:focus-within state",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "class names are not analysed"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "supabase/supabase#48527",
+      "repo": "supabase/supabase",
+      "corpusRepo": "supabase",
+      "fixUrl": "https://github.com/supabase/supabase/pull/48527",
+      "issueUrl": null,
+      "date": "2026-08-31",
+      "title": "Fix: RadioGroupCard accessibility issues",
+      "description": "Each RadioGroupCardItem rendered <label id={props.id} htmlFor={props.value}> inside the radio button, duplicating the radio's id and pointing htmlFor at the option value instead of an element id. Radios were not reliably named and ids collided.",
+      "barrierKind": "name-or-label",
+      "fixKind": "generated unique id; aria-labelledby to a <div> label; removed the nested <label>",
+      "fixSha": "6cb08304d9d884e58625a05266d244a2fce2f743",
+      "parentSha": "7a399d78794a4e2d754c37a8fedd72013473ca31",
+      "files": [
+        {
+          "path": "packages/ui/src/components/radio-group-card.tsx",
+          "lines": [
+            32,
+            36
+          ],
+          "element": "<RadioGroupPrimitive.Item {...props}> receiving the same id as the inner label",
+          "code": ">(({ image, label, showIndicator = true, ...props }, ref) => {\n  return (\n    <RadioGroupPrimitive.Item\n      ref={ref}\n      {...props}"
+        },
+        {
+          "path": "packages/ui/src/components/radio-group-card.tsx",
+          "lines": [
+            54,
+            55
+          ],
+          "element": "<label id={props.id} htmlFor={props.value}> inside the radio <button>",
+          "code": "      {props.children}\n      <label className=\"flex gap-2 w-full\" id={props.id} htmlFor={props.value}>"
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: id={props.id} and htmlFor={props.value} are visible, but a rule cannot know value is not an element id, and any htmlFor satisfies the label rules",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/label-has-associated-control",
+          "verdict": "no",
+          "reason": "htmlFor is present, which satisfies the rule even though it points at the wrong thing"
+        },
+        {
+          "rule": "biome lint/a11y/noLabelWithoutControl",
+          "verdict": "no",
+          "reason": "same: htmlFor is present"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "supabase/supabase#49345",
+      "repo": "supabase/supabase",
+      "corpusRepo": "supabase",
+      "fixUrl": "https://github.com/supabase/supabase/pull/49345",
+      "issueUrl": null,
+      "date": "2026-08-24",
+      "title": "fix(ui-patterns): give the shared InfoTooltip trigger an accessible name",
+      "description": "The shared InfoTooltip trigger was a button whose only child was an SVG, with no accessible name, so screen readers announced just 'button' and the tooltip's information was unreachable; /pricing rendered 34 of them.",
+      "barrierKind": "name-or-label",
+      "fixKind": "added sr-only label text with a fallback; dropped the redundant role=\"button\"",
+      "fixSha": "932180541e3c2a1388245ed14d2578235b964135",
+      "parentSha": "235488e66b331d66084fdcdd3f037dbebb276a03",
+      "files": [
+        {
+          "path": "packages/ui-patterns/src/info-tooltip.tsx",
+          "lines": [
+            29,
+            35
+          ],
+          "element": "<TooltipTrigger type=\"button\" role=\"button\"> whose only child is <SVG/>",
+          "code": "      <TooltipTrigger\n        type=\"button\"\n        role=\"button\"\n        className=\"flex [&_svg]:data-[state=delayed-open]:fill-foreground-lighter [&_svg]:data-[state=instant-open]:fill-foreground-lighter\"\n      >\n        <SVG strokeWidth={2} className=\"transition-colors fill-foreground-muted w-4 h-4\" />\n      </TooltipTrigger>"
+        }
+      ],
+      "staticallyVisible": "partly",
+      "staticReason": "partly: TooltipTrigger and SVG are components, so DOM-element rules do not inspect the button; the inline <svg> at line 8 has no <title>",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y/control-has-associated-label",
+          "verdict": "no",
+          "reason": "TooltipTrigger is not a DOM element unless mapped as a control component"
+        },
+        {
+          "rule": "biome lint/a11y/noSvgWithoutTitle",
+          "verdict": "likely",
+          "reason": "fires on the inline <svg> at line 8; a <title> there would in fact have named the button"
+        },
+        {
+          "rule": "jsx-a11y/no-redundant-roles",
+          "verdict": "no",
+          "reason": "role=\"button\" is on a component"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "supabase/supabase#47731",
+      "repo": "supabase/supabase",
+      "corpusRepo": "supabase",
+      "fixUrl": "https://github.com/supabase/supabase/pull/47731",
+      "issueUrl": null,
+      "date": "2026-07-08",
+      "title": "fix: make status hovercard trigger on focus",
+      "description": "The project home's service status list was a HoverCard shown only on mouse hover. Its trigger was not focusable, so keyboard users could never open it (and it vanished when panning at 200% zoom).",
+      "barrierKind": "keyboard-operability",
+      "fixKind": "added tabIndex={0} to HoverCardTrigger",
+      "fixSha": "62160939a8f586660bccf39f415fecaefd8635c4",
+      "parentSha": "6e4dc5df754fb748858de065411df400f36e1fba",
+      "files": [
+        {
+          "path": "apps/studio/components/interfaces/ProjectHome/ServiceStatus.tsx",
+          "lines": [
+            309,
+            311
+          ],
+          "element": "<HoverCard> with a <HoverCardTrigger> that renders no focusable element",
+          "code": "    <HoverCard openDelay={200} closeDelay={100}>\n      <HoverCardTrigger>\n        <SingleStat"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: HoverCardTrigger is a library component; whether it renders something focusable is not visible here",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "components only"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "components only"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    },
+    {
+      "id": "supabase/supabase#45083",
+      "repo": "supabase/supabase",
+      "corpusRepo": "supabase",
+      "fixUrl": "https://github.com/supabase/supabase/pull/45083",
+      "issueUrl": null,
+      "date": "2026-04-21",
+      "title": "fix: switch fields aren't accessible with tab on Safari",
+      "description": "Safari's default Tab behaviour skips <button> elements, and the Switch renders a Radix button, so Safari keyboard users could not Tab to switches such as High Availability in project creation.",
+      "barrierKind": "focusability",
+      "fixKind": "explicit tabIndex={0} on the Switch and Toggle roots",
+      "fixSha": "cf3569c16dea69558264e96ddfd406965906e6ca",
+      "parentSha": "f5933ad87f7ef66225b7f3f7fe352a27f374aadb",
+      "files": [
+        {
+          "path": "packages/ui/src/components/shadcn/ui/switch.tsx",
+          "lines": [
+            51,
+            55
+          ],
+          "element": "<SwitchPrimitives.Root> (renders a <button>) without an explicit tabIndex",
+          "code": "    <SwitchPrimitives.Root\n      className={cn(switchRootVariants({ size }), className)}\n      {...props}\n      ref={ref}\n    >"
+        }
+      ],
+      "staticallyVisible": "no",
+      "staticReason": "no: the barrier is a browser default (Safari) for native buttons; the markup is valid",
+      "expectedRules": [
+        {
+          "rule": "jsx-a11y (any)",
+          "verdict": "no",
+          "reason": "a native button needs no tabIndex"
+        },
+        {
+          "rule": "biome lint/a11y (any)",
+          "verdict": "no",
+          "reason": "same"
+        }
+      ],
+      "verifiedDiff": true,
+      "merged": true
+    }
+  ],
+  "rejected": [
+    {
+      "id": "vercel/next.js#96334",
+      "url": "https://github.com/vercel/next.js/pull/96334",
+      "reason": "real icon-only link fix, but in examples/with-ant-design, outside packages/next/src"
+    },
+    {
+      "id": "vercel/next.js#63852",
+      "url": "https://github.com/vercel/next.js/pull/63852",
+      "reason": "docs-only: aria-disabled -> disabled in an MDX code sample"
+    },
+    {
+      "id": "vercel/next.js#44853",
+      "url": "https://github.com/vercel/next.js/pull/44853",
+      "reason": "adds top: 0 to the route announcer to stop a layout shift; not an accessibility barrier"
+    },
+    {
+      "id": "vercel/next.js#53693",
+      "url": "https://github.com/vercel/next.js/pull/53693",
+      "reason": "drops role=dialog while the document is unfocused so Safari stops stealing app focus on HMR reload; a focus-hijack bug for every user, not an assistive-tech barrier"
+    },
+    {
+      "id": "vercel/next.js#74568",
+      "url": "https://github.com/vercel/next.js/pull/74568",
+      "reason": "adds aria-hidden to thumb icons inside buttons that already had aria-labels; the icons did not contribute to the name, so nothing changed for users"
+    },
+    {
+      "id": "vercel/next.js#49460",
+      "url": "https://github.com/vercel/next.js/pull/49460",
+      "reason": "real fix (unnamed buttons, h5/h6 heading levels) but in packages/react-dev-overlay/src, outside packages/next/src"
+    },
+    {
+      "id": "vercel/next.js#75268",
+      "url": "https://github.com/vercel/next.js/pull/75268",
+      "reason": "real keyboard and role=menu fix for the dev tools menu, but a 300-line rewrite whose barrier cannot be pinned to specific pre-fix lines"
+    },
+    {
+      "id": "trpc/trpc#7302",
+      "url": "https://github.com/trpc/trpc/pull/7302",
+      "reason": "accessible text for icon links, but in the www docs site, not packages/*/src"
+    },
+    {
+      "id": "trpc/trpc#6440",
+      "url": "https://github.com/trpc/trpc/pull/6440",
+      "reason": "link contrast in the docs site CSS (www/src/css), not packages/*/src"
+    },
+    {
+      "id": "shadcn-ui/ui#9654",
+      "url": "https://github.com/shadcn-ui/ui/pull/9654",
+      "reason": "moves Base UI accordion disabled styling from disabled: to aria-disabled: variants; visual only"
+    },
+    {
+      "id": "shadcn-ui/ui#5593",
+      "url": "https://github.com/shadcn-ui/ui/pull/5593",
+      "reason": "sidebar state and cookie refactor; matched a11y terms only through docs text"
+    },
+    {
+      "id": "shadcn-ui/ui#7030",
+      "url": "https://github.com/shadcn-ui/ui/pull/7030",
+      "reason": "focus ring style tweaks (ring opacity, outline) with no barrier described"
+    },
+    {
+      "id": "shadcn-ui/ui#9273",
+      "url": "https://github.com/shadcn-ui/ui/pull/9273",
+      "reason": "Alt+D no longer toggles the theme (it overrode the browser's address-bar shortcut); real keyboard conflict, but in the docs site (apps/v4/components), not the registry"
+    },
+    {
+      "id": "shadcn-ui/ui#6798",
+      "url": "https://github.com/shadcn-ui/ui/pull/6798",
+      "reason": "not merged (keyboard and screen reader close button for the mobile Sidebar, issue #6761)"
+    },
+    {
+      "id": "shadcn-ui/ui#10078",
+      "url": "https://github.com/shadcn-ui/ui/pull/10078",
+      "reason": "not merged (BreadcrumbEllipsis accessible name, issue #8074)"
+    },
+    {
+      "id": "shadcn-ui/ui#524",
+      "url": "https://github.com/shadcn-ui/ui/pull/524",
+      "reason": "not merged (aria-hidden on the accordion chevron, issue #523)"
+    },
+    {
+      "id": "shadcn-ui/ui#1222",
+      "url": "https://github.com/shadcn-ui/ui/pull/1222",
+      "reason": "not merged (motion-safe animations, issue #1029)"
+    },
+    {
+      "id": "radix-ui/primitives#3189",
+      "url": "https://github.com/radix-ui/primitives/pull/3189",
+      "reason": "single-select ToggleGroup role group -> radiogroup; contested (issue #4119 says the radiogroup role now conflicts with the toolbar-style keyboard model), and a group of aria-pressed toggles was not a clear barrier"
+    },
+    {
+      "id": "radix-ui/primitives#981",
+      "url": "https://github.com/radix-ui/primitives/pull/981",
+      "reason": "triggers moved to <button> with onClick; keyboard activation already worked through keydown handlers, so this is a refactor"
+    },
+    {
+      "id": "adobe/react-spectrum#10573",
+      "url": "https://github.com/adobe/react-spectrum/pull/10573",
+      "reason": "type-only change to allow aria-current in LinkContext; the PR says runtime behaviour was preserved"
+    },
+    {
+      "id": "adobe/react-spectrum#8908",
+      "url": "https://github.com/adobe/react-spectrum/pull/8908",
+      "reason": "real VoiceOver naming fix (ComboBox ignoring ListBoxItem aria-label), but in packages/@react-aria/collections/src/Document.ts, not a .tsx file"
+    },
+    {
+      "id": "adobe/react-spectrum#7859",
+      "url": "https://github.com/adobe/react-spectrum/pull/7859",
+      "reason": "real NVDA toast announcement fix, but the barrier is in useToast.ts (hook), not a .tsx file"
+    },
+    {
+      "id": "adobe/react-spectrum#9615",
+      "url": "https://github.com/adobe/react-spectrum/pull/9615",
+      "reason": "0-based aria-posinset fixed in useMenuItem.ts; the RAC Menu.tsx change only passes isVirtualized"
+    },
+    {
+      "id": "adobe/react-spectrum#8723",
+      "url": "https://github.com/adobe/react-spectrum/pull/8723",
+      "reason": "empty TagGroup role fixed in useTagGroup.ts (hook); the PR reports no change in VoiceOver output"
+    },
+    {
+      "id": "adobe/react-spectrum#8277",
+      "url": "https://github.com/adobe/react-spectrum/pull/8277",
+      "reason": "TreeView focus trap fixed in useTreeItem.ts (hook)"
+    },
+    {
+      "id": "adobe/react-spectrum#9924",
+      "url": "https://github.com/adobe/react-spectrum/pull/9924",
+      "reason": "alertdialog aria-describedby wired in useDialog.ts; RAC Dialog.tsx only exposes contentProps"
+    },
+    {
+      "id": "adobe/react-spectrum#4590",
+      "url": "https://github.com/adobe/react-spectrum/pull/4590",
+      "reason": "VisuallyHidden div -> span inside <label> for HTML validation; no user-facing barrier"
+    },
+    {
+      "id": "supabase/supabase#50226",
+      "url": "https://github.com/supabase/supabase/pull/50226",
+      "reason": "merged into a feature branch (fix/docs-youtube-iframe-titles), and most of the change is in apps/docs"
+    },
+    {
+      "id": "excalidraw/excalidraw#3696",
+      "url": "https://github.com/excalidraw/excalidraw/pull/3696",
+      "reason": "unique element ids in exported SVG (issue #3683); an HTML validity fix, not an assistive-tech barrier"
+    }
+  ],
+  "lintDrivenCleanups": [
+    {
+      "id": "supabase/supabase#47582",
+      "url": "https://github.com/supabase/supabase/pull/47582",
+      "note": "Added 13 jsx-a11y rules to Studio's ESLint config as ratcheted warnings, after an axe-core audit found 1,733 failing elements across 126 Studio surfaces in 12 root-cause families. Initial baselines were mostly control-has-associated-label (274, with controlComponents Button and Switch) and label-has-associated-control (37). Config only, no .tsx changes."
+    },
+    {
+      "id": "supabase/supabase#48186",
+      "url": "https://github.com/supabase/supabase/pull/48186",
+      "note": "'fix: ESLint errors relating to accessibility (alt attribute and tableEditor components)': clears ratchet findings in 5 .tsx files. The fixes are real (alt text, names) but were found and described as lint errors."
+    },
+    {
+      "id": "supabase/supabase#48479",
+      "url": "https://github.com/supabase/supabase/pull/48479",
+      "note": "'fix: ESLint errors relating to accessibility in table editor, API Key and Access Token': aria-label and Tooltip on icon-only buttons, 6 .tsx files, driven by the ratchet."
+    },
+    {
+      "id": "supabase/supabase#49301",
+      "url": "https://github.com/supabase/supabase/pull/49301",
+      "note": "'fix: ESLint errors relating to accessibility in account preferences': toggle labelling and aria-label, 4 .tsx files."
+    },
+    {
+      "id": "supabase/supabase#49638",
+      "url": "https://github.com/supabase/supabase/pull/49638",
+      "note": "'fix: ESLint errors relating to accessibility in database section': aria-label and switch-to-label association, 7 .tsx files."
+    },
+    {
+      "id": "supabase/supabase#50224",
+      "url": "https://github.com/supabase/supabase/pull/50224",
+      "note": "'fix: ESLint errors relating to accessibility in integration section': aria-label additions, 8 .tsx files."
+    },
+    {
+      "id": "supabase/supabase#50848",
+      "url": "https://github.com/supabase/supabase/pull/50848",
+      "note": "'fix: ESLint errors relating to accessibility in project settings': aria-label and Tooltip for icon-only buttons, 5 .tsx files."
+    },
+    {
+      "id": "supabase/supabase#47984",
+      "url": "https://github.com/supabase/supabase/pull/47984",
+      "note": "Baked an explicit tabIndex={0} into interactive primitives (Checkbox, bare triggers) for Safari's Tab behaviour and added a custom lint rule, supabase/require-explicit-tabindex, to keep raw <button> call sites from regressing. Follows the confirmed Switch fix #45083."
+    },
+    {
+      "id": "supabase/supabase#48170",
+      "url": "https://github.com/supabase/supabase/pull/48170",
+      "note": "Promoted supabase/require-explicit-tabindex to error and added explicit tabIndex across www, docs and design-system (87 .tsx files). A repo-specific rule for a browser default that jsx-a11y and Biome do not model."
+    }
+  ],
+  "notes": [
+    "trpc/trpc has no confirmed fixes: its packages/*/src .tsx files are hooks and providers (createTRPCReact, withTRPC, context) with no UI, and the two accessibility PRs found (#7302 link text, #6440 link contrast) are in the www docs site.",
+    "Body search was saturated where templates mention accessibility: in adobe/react-spectrum 'accessibility' matched 3,484 merged PRs and 'aria' 3,890 (the PR template links Aria Practices); title-only search cut those to 33 and 232. Supabase's CodeRabbit summaries add 'accessibility' to many bodies (435 body hits vs 23 in titles). Other noisy terms: alt (Alt-key and alt-drag features in excalidraw, 503 hits), label (GitHub labels and form labels everywhere), role (database roles in supabase, 1,120 hits), focus (binding focus points in excalidraw), announce (release announcements), axe (font axes in next.js).",
+    "shadcn-ui/ui: community accessibility PRs are often closed unmerged (#6798, #10078, #524, #1222 in `rejected`), and the maintainer lands fixes as direct commits. One direct commit is confirmed (shadcn-ui/ui@961e0b62d770, id uses @sha); it is on main (compare API: main ahead, behind_by 0) but has no PR, and only its calendar change has a recorded reason (contrast); the CardTitle h3 -> div change says only 'to improve accessibility'. Two shadcn fixes are outside today's corpus include paths: #12061 is in packages/shadcn/src/tailwind.css (the stylesheet the registry styles import) and #224/#2163/#2190/961e0b6 are in the older apps/www/components/ui and apps/www/registry paths.",
+    "Scope versus corpus: supabase fixes in packages/ui and packages/ui-patterns (#50083, #48527, #49345, #45083) are outside the corpus include list in repos-accessibility.json (apps/studio/components and pages only); react-spectrum #9888 is in @adobe/react-spectrum (v3), marked in `package`. The later lint script should fetch these files directly.",
+    "Chains worth telling: next.js #62723 turned a <span onClick> into a <button> but gave it tabIndex={10} and no name; #80289 removed the positive tabIndex and #80290 added the name, fifteen months later. next.js #76558 replaced unassociated <h2> captions with <label htmlFor>, including one on a <button>, which #77072 changed to aria-describedby. supabase #45083 (tabIndex on Switch for Safari) led to #47984 and #48170, a custom lint rule requiring explicit tabIndex on buttons.",
+    "Cheap attributes that satisfy a rule without fixing the barrier: supabase #48527's <label id={props.id} htmlFor={props.value}> passes label-has-associated-control because any htmlFor counts, though it pointed at an option value, not an element id. excalidraw #3871 and shadcn #2163 had aria-labels present but wrong (a hex code; 'Toggle italic' on a Bold button), which every name rule accepts. react-spectrum #5867's <div onClick> carried an eslint-disable-next-line on exactly the element whose click handler caused the focus bug; the suppressed rules were about key handlers, not focus. Conversely, supabase #49345's unnamed icon button would trip Biome's noSvgWithoutTitle on the inline <svg>, and a <title> there would have named the button.",
+    "Statically visible barriers were the minority (5 of 40 yes, 8 partly, 27 no). The 'yes' cases are all the same two patterns: a static element with onClick (excalidraw #3310 and #556, next.js #62723 and #92608) and a literal positive tabIndex (next.js #80289). Library code (radix, react-aria, shadcn primitives) almost never shows the barrier in JSX: props are spread, ids come from context, and names are dropped in hook arguments.",
+    "Valid fixes seen but not recorded in detail (to keep 30-40 entries spread across repos): next.js #76558/#77072 (preference selects without labels), #76525, #75736, #76490 (dev overlay contrast), #74563 (aria-live for feedback thanks), #70612 and #71420 (static indicator name and role), #75790 (outline: none on pagination buttons), #31147 (route announcer prefers document.title), #7693 (focus after Link navigation), #20428 (route announcer added); excalidraw #2341 (dialog focus trap ref), #644 (focus outline on radio labels), #12188 (zen mode stripped the focus-visible ring); radix #1469 (toast tab order), #3922 (aria-controls pointing at unmounted content), #4031 (broken ARIA references in dialogs); react-aria #9746 (TreeSection rendered as <section> with a row-group role), #8932; supabase #49637 and #50080 (FormItemLayout label for and description ids), #48303 (skip link invisible on focus), #50834, #50828, #47828, #40691, #42668 (contrast), #47214, #47531, #47639, #47674, #45981, #45790 (icon-button names from the axe audit), #43058 (heading anchors not focusable), #45064 (select fields skipped by Tab in Safari).",
+    "API use: 287 searches in all (224 in pass 1, 53 in pass 2, 10 in pass 3), paced at about one every 2.5 to 4 seconds. One search in pass 1 (adobe/react-spectrum 'accessibility') got a 403 secondary rate limit at 21:46 UTC on 2026-10-15, probably from another agent sharing the token; the script waited 30 seconds and retried successfully. The REST core quota was not exhausted. search/issues caps results at 100 per query, so for terms with more hits only the 100 best matches were read."
+  ]
+}

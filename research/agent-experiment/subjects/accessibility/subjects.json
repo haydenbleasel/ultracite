@@ -1,0 +1,359 @@
+[
+  {
+    "id": "a-ox",
+    "arm": "A via Oxlint",
+    "example": "a11y-a-excalidraw-collapsible.tsx",
+    "basename": "collapsible.tsx",
+    "kind": "collapsible",
+    "linter": "oxlint",
+    "rulesFile": false,
+    "expected": [
+      "jsx-a11y/click-events-have-key-events",
+      "jsx-a11y/no-static-element-interactions"
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/components/Stats/Collapsible.tsx @ 4c00f31d, L1-L51; InlineIcon and the two icons as a STUB",
+    "path": "subjects/accessibility/a-ox/collapsible.tsx",
+    "sha256": "e325c5af674a85e243a37081fb8f5700dfbcda4cb2a481378f18998e3c4d5cfc",
+    "originalSha256": "9b7a8b9cf7025ff484feca8b492f48bde6a42d1809476949d746c44a2f9c5da8",
+    "headerLinesRemoved": 23,
+    "textEdits": [
+      {
+        "from": " * Lines 3-51 are copied verbatim. The two imports (../InlineIcon and ../icons) are replaced by the\n * STUB block below the license: InlineIcon is copied verbatim from components/InlineIcon.tsx, and\n * the two icons are what createIcon (components/icons.tsx) returns for them, written out, without\n * its role=\"img\" (which would trip prefer-tag-over-role here, though it lives in icons.tsx upstream).",
+        "to": " * Lines 3-51 are copied, with their formatting and the order of keys and attributes changed. The\n * two imports (../InlineIcon and ../icons) are replaced by the STUB block below the license:\n * InlineIcon is copied from components/InlineIcon.tsx, and the two icons are written out from\n * createIcon (components/icons.tsx).",
+        "why": "named a lint rule, and said 'verbatim'"
+      }
+    ],
+    "normalisation": {
+      "steps": "oxlint --fix, oxfmt --write, biome check --write, oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 41,
+        "added": 32
+      }
+    },
+    "checks": {
+      "oxlint": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "jsx-a11y/click-events-have-key-events L122",
+          "jsx-a11y/no-static-element-interactions L122"
+        ]
+      },
+      "biome": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "lint/a11y/noNoninteractiveElementInteractions L122",
+          "lint/a11y/noStaticElementInteractions L122",
+          "lint/a11y/useKeyWithClickEvents L122"
+        ]
+      },
+      "oracle": {
+        "verdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        },
+        "reason": "no role (no key handler)"
+      },
+      "typeErrors": 0
+    },
+    "rulesFileSha256": null,
+    "packageJsonSha256": "d370ab7d11ec72693eac06a2442267a00714c45fb54f7485d23ace5cbdb3d843",
+    "corpusLint": {
+      "oxlint": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "oxlint +js-plugins": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "eslint": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "biome": [
+        "a11y/noNoninteractiveElementInteractions",
+        "a11y/noStaticElementInteractions",
+        "a11y/useKeyWithClickEvents"
+      ]
+    },
+    "corpusOracle": {
+      "barrierFixed": false,
+      "behaviourPreserved": true,
+      "statePresent": false
+    }
+  },
+  {
+    "id": "b-ox",
+    "arm": "B via Oxlint",
+    "example": "a11y-b-excalidraw-top-picks.tsx",
+    "basename": "top-picks.tsx",
+    "kind": "topPicks",
+    "linter": "oxlint",
+    "rulesFile": false,
+    "expected": [
+      "jsx-a11y/control-has-associated-label"
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/components/ColorPicker/TopPicks.tsx @ 4c00f31d, L26-L132; palette, picks, helper and English strings copied, dark-mode filter, drag-and-drop and context menu STUBs",
+    "path": "subjects/accessibility/b-ox/top-picks.tsx",
+    "sha256": "d3a1d458b47ddec6cc52b85a252afb91663ebd457d5cb69d62e09ff2b8cf9900",
+    "originalSha256": "863e2844841a7dcf43c9f25b041ef521304f56f09774f7cf28fcab37805625a7",
+    "headerLinesRemoved": 26,
+    "textEdits": [
+      {
+        "from": " * Lines 26-132 are copied verbatim. The imports of the original file (clsx, @excalidraw/common,\n * ../../i18n, the top-picks drag-and-drop helpers and colorPickerUtils) are replaced by the STUB\n * block below the license. COLOR_PALETTE, the default picks, COLOR_OUTLINE_CONTRAST_THRESHOLD, THEME,\n * getColorNameAndShadeFromColor and the English colour strings are copied verbatim from\n * packages/common/src/colors.ts, packages/common/src/constants.ts,\n * packages/excalidraw/components/ColorPicker/colorPickerUtils.ts and packages/excalidraw/locales/en.json;\n * the rest are marked STUB.",
+        "to": " * Lines 26-132 are copied, with their formatting and the order of keys and attributes changed. The\n * imports of the original file (clsx, @excalidraw/common, ../../i18n, the top-picks drag-and-drop\n * helpers and colorPickerUtils) are replaced by the STUB block below the license. COLOR_PALETTE,\n * the default picks, COLOR_OUTLINE_CONTRAST_THRESHOLD, THEME, getColorNameAndShadeFromColor and the\n * English colour strings are copied from packages/common/src/colors.ts,\n * packages/common/src/constants.ts, packages/excalidraw/components/ColorPicker/colorPickerUtils.ts\n * and packages/excalidraw/locales/en.json; the rest are marked STUB.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// From packages/common/src/constants.ts (verbatim).",
+        "to": "// From packages/common/src/constants.ts.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// From packages/common/src/colors.ts (verbatim).",
+        "to": "// From packages/common/src/colors.ts.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// From packages/excalidraw/components/ColorPicker/colorPickerUtils.ts (verbatim).",
+        "to": "// From packages/excalidraw/components/ColorPicker/colorPickerUtils.ts.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "normalisation": {
+      "steps": "oxlint --fix, oxfmt --write, biome check --write, oxfmt --write, repeated until nothing changes",
+      "passes": 3,
+      "linesChanged": {
+        "removed": 5,
+        "added": 8
+      }
+    },
+    "checks": {
+      "oxlint": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "jsx-a11y/control-has-associated-label L327"
+        ]
+      },
+      "oracle": {
+        "verdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "named by colour code"
+        },
+        "reason": "hex name"
+      },
+      "typeErrors": 0
+    },
+    "rulesFileSha256": null,
+    "packageJsonSha256": "d370ab7d11ec72693eac06a2442267a00714c45fb54f7485d23ace5cbdb3d843",
+    "corpusLint": {
+      "oxlint": [
+        "jsx-a11y/control-has-associated-label"
+      ],
+      "oxlint +js-plugins": [
+        "github/a11y-no-title-attribute",
+        "jsx-a11y/control-has-associated-label"
+      ],
+      "eslint": [
+        "github/a11y-no-title-attribute",
+        "jsx-a11y/control-has-associated-label"
+      ],
+      "biome": []
+    },
+    "corpusOracle": {
+      "barrierFixed": false,
+      "canvasPicker": [
+        "#ffffff",
+        "#f8f9fa",
+        "#f5faff",
+        "#fffce8",
+        "#fdf8f6"
+      ],
+      "behaviourPreserved": true,
+      "titleKept": true,
+      "worst": "named by colour code"
+    }
+  },
+  {
+    "id": "a-bio",
+    "arm": "A via Biome",
+    "example": "a11y-a-excalidraw-collapsible.tsx",
+    "basename": "collapsible.tsx",
+    "kind": "collapsible",
+    "linter": "biome",
+    "rulesFile": false,
+    "expected": [
+      "lint/a11y/noNoninteractiveElementInteractions",
+      "lint/a11y/noStaticElementInteractions",
+      "lint/a11y/useKeyWithClickEvents"
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/components/Stats/Collapsible.tsx @ 4c00f31d, L1-L51; InlineIcon and the two icons as a STUB",
+    "path": "subjects/accessibility/a-bio/collapsible.tsx",
+    "sha256": "e325c5af674a85e243a37081fb8f5700dfbcda4cb2a481378f18998e3c4d5cfc",
+    "originalSha256": "9b7a8b9cf7025ff484feca8b492f48bde6a42d1809476949d746c44a2f9c5da8",
+    "headerLinesRemoved": 23,
+    "textEdits": [
+      {
+        "from": " * Lines 3-51 are copied verbatim. The two imports (../InlineIcon and ../icons) are replaced by the\n * STUB block below the license: InlineIcon is copied verbatim from components/InlineIcon.tsx, and\n * the two icons are what createIcon (components/icons.tsx) returns for them, written out, without\n * its role=\"img\" (which would trip prefer-tag-over-role here, though it lives in icons.tsx upstream).",
+        "to": " * Lines 3-51 are copied, with their formatting and the order of keys and attributes changed. The\n * two imports (../InlineIcon and ../icons) are replaced by the STUB block below the license:\n * InlineIcon is copied from components/InlineIcon.tsx, and the two icons are written out from\n * createIcon (components/icons.tsx).",
+        "why": "named a lint rule, and said 'verbatim'"
+      }
+    ],
+    "normalisation": {
+      "steps": "oxlint --fix, oxfmt --write, biome check --write, oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 41,
+        "added": 32
+      }
+    },
+    "checks": {
+      "oxlint": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "jsx-a11y/click-events-have-key-events L122",
+          "jsx-a11y/no-static-element-interactions L122"
+        ]
+      },
+      "biome": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "lint/a11y/noNoninteractiveElementInteractions L122",
+          "lint/a11y/noStaticElementInteractions L122",
+          "lint/a11y/useKeyWithClickEvents L122"
+        ]
+      },
+      "oracle": {
+        "verdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        },
+        "reason": "no role (no key handler)"
+      },
+      "typeErrors": 0
+    },
+    "rulesFileSha256": null,
+    "packageJsonSha256": "f8ddfdca6244e545721cd390d49858a39adfa45d0d4627049f204c72728ab4dd",
+    "corpusLint": {
+      "oxlint": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "oxlint +js-plugins": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "eslint": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "biome": [
+        "a11y/noNoninteractiveElementInteractions",
+        "a11y/noStaticElementInteractions",
+        "a11y/useKeyWithClickEvents"
+      ]
+    },
+    "corpusOracle": {
+      "barrierFixed": false,
+      "behaviourPreserved": true,
+      "statePresent": false
+    }
+  },
+  {
+    "id": "a-rules",
+    "arm": "A via Oxlint, with AGENTS.md",
+    "example": "a11y-a-excalidraw-collapsible.tsx",
+    "basename": "collapsible.tsx",
+    "kind": "collapsible",
+    "linter": "oxlint",
+    "rulesFile": true,
+    "expected": [
+      "jsx-a11y/click-events-have-key-events",
+      "jsx-a11y/no-static-element-interactions"
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/components/Stats/Collapsible.tsx @ 4c00f31d, L1-L51; InlineIcon and the two icons as a STUB",
+    "path": "subjects/accessibility/a-rules/collapsible.tsx",
+    "sha256": "e325c5af674a85e243a37081fb8f5700dfbcda4cb2a481378f18998e3c4d5cfc",
+    "originalSha256": "9b7a8b9cf7025ff484feca8b492f48bde6a42d1809476949d746c44a2f9c5da8",
+    "headerLinesRemoved": 23,
+    "textEdits": [
+      {
+        "from": " * Lines 3-51 are copied verbatim. The two imports (../InlineIcon and ../icons) are replaced by the\n * STUB block below the license: InlineIcon is copied verbatim from components/InlineIcon.tsx, and\n * the two icons are what createIcon (components/icons.tsx) returns for them, written out, without\n * its role=\"img\" (which would trip prefer-tag-over-role here, though it lives in icons.tsx upstream).",
+        "to": " * Lines 3-51 are copied, with their formatting and the order of keys and attributes changed. The\n * two imports (../InlineIcon and ../icons) are replaced by the STUB block below the license:\n * InlineIcon is copied from components/InlineIcon.tsx, and the two icons are written out from\n * createIcon (components/icons.tsx).",
+        "why": "named a lint rule, and said 'verbatim'"
+      }
+    ],
+    "normalisation": {
+      "steps": "oxlint --fix, oxfmt --write, biome check --write, oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 41,
+        "added": 32
+      }
+    },
+    "checks": {
+      "oxlint": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "jsx-a11y/click-events-have-key-events L122",
+          "jsx-a11y/no-static-element-interactions L122"
+        ]
+      },
+      "biome": {
+        "fixPassUnchanged": true,
+        "reports": [
+          "lint/a11y/noNoninteractiveElementInteractions L122",
+          "lint/a11y/noStaticElementInteractions L122",
+          "lint/a11y/useKeyWithClickEvents L122"
+        ]
+      },
+      "oracle": {
+        "verdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        },
+        "reason": "no role (no key handler)"
+      },
+      "typeErrors": 0
+    },
+    "rulesFileSha256": "8ec1b70354e2f1a89ef940b5153ed82bc4f7e0ebf13197d51f5e4b6af113d645",
+    "packageJsonSha256": "d370ab7d11ec72693eac06a2442267a00714c45fb54f7485d23ace5cbdb3d843",
+    "corpusLint": {
+      "oxlint": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "oxlint +js-plugins": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "eslint": [
+        "jsx-a11y/click-events-have-key-events",
+        "jsx-a11y/no-static-element-interactions"
+      ],
+      "biome": [
+        "a11y/noNoninteractiveElementInteractions",
+        "a11y/noStaticElementInteractions",
+        "a11y/useKeyWithClickEvents"
+      ]
+    },
+    "corpusOracle": {
+      "barrierFixed": false,
+      "behaviourPreserved": true,
+      "statePresent": false
+    }
+  }
+]

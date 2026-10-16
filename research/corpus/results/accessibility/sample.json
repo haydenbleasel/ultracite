@@ -1,0 +1,2686 @@
+{
+  "codebook": {
+    "labels": {
+      "real-barrier": "A user would be affected as the code stands: a screen-reader, keyboard, voice-control or low-vision user can't perceive, name or operate something, or is told something wrong. Judge the rendered result, including what the component or its props supply.",
+      "false-positive": "The rule is wrong here: the component, a spread, a parent, context or the platform already handles it (the control is labelled elsewhere, the element is natively interactive underneath, the handler is a bubbling catch for a real control inside, the rule misreads the code).",
+      "intentional-or-decorative": "The pattern is deliberate and acceptable: a decorative image or icon, a presentational wrapper, a mouse-only convenience that duplicates a keyboard path, an example or demo, a role chosen on purpose for a composite widget.",
+      "unclear": "Can't tell from the code and its definitions in the repo."
+    },
+    "suppressionLabels": {
+      "right": "The suppression is justified: the rule is wrong here or the pattern is deliberate, and the reason (if any) says so.",
+      "wrong": "The suppression hides a real barrier.",
+      "unclear": "Can't tell."
+    },
+    "fields": {
+      "cheapFix": "The smallest edit that would silence the rule(s) here (for real barriers and false positives).",
+      "rightFix": "What the code should do instead, or 'leave it'."
+    }
+  },
+  "generated": "2026-10-15",
+  "population": {
+    "hidden": {
+      "excalidraw": 42,
+      "next.js": 30,
+      "shadcn": 91,
+      "radix": 12,
+      "react-aria": 4,
+      "supabase": 765
+    },
+    "hit": {
+      "trpc": 0,
+      "excalidraw": 122,
+      "next.js": 107,
+      "shadcn": 105,
+      "radix": 37,
+      "react-aria": 73,
+      "supabase": 480
+    }
+  },
+  "quota": {
+    "excalidraw": 2,
+    "next.js": 2,
+    "shadcn": 3,
+    "radix": 2,
+    "react-aria": 2,
+    "supabase": 19
+  },
+  "sample": [
+    {
+      "file": "packages/excalidraw/components/Dialog.tsx",
+      "line": 123,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a001",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Dialog.tsx#L123"
+    },
+    {
+      "file": "packages/excalidraw/components/RadioGroup.tsx",
+      "line": 27,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a002",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/RadioGroup.tsx#L27"
+    },
+    {
+      "file": "packages/excalidraw/components/ExcalidrawLogo.tsx",
+      "line": 18,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a003",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ExcalidrawLogo.tsx#L18"
+    },
+    {
+      "file": "packages/excalidraw/components/LibraryUnit.tsx",
+      "line": 53,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Unexpected event handler on non-interactive element.",
+            "rule": "a11y/noNoninteractiveElementInteractions"
+          },
+          {
+            "help": null,
+            "message": "Unexpected event handler on static element.",
+            "rule": "a11y/noStaticElementInteractions"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a004",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryUnit.tsx#L53"
+    },
+    {
+      "file": "packages/excalidraw/components/Toast.tsx",
+      "line": 59,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Non-interactive elements should not be assigned mouse or keyboard event listeners.",
+            "rule": "jsx-a11y/no-noninteractive-element-interactions"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Non-interactive elements should not be assigned mouse or keyboard event listeners.",
+            "rule": "jsx-a11y/no-noninteractive-element-interactions"
+          },
+          {
+            "help": null,
+            "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Unexpected event handler on non-interactive element.",
+            "rule": "a11y/noNoninteractiveElementInteractions"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a005",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Toast.tsx#L59"
+    },
+    {
+      "file": "packages/excalidraw/components/dropdownMenu/DropdownMenuItemLink.tsx",
+      "line": 42,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a006",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/dropdownMenu/DropdownMenuItemLink.tsx#L42"
+    },
+    {
+      "file": "packages/excalidraw/components/ColorPicker/Picker.tsx",
+      "line": 153,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Static HTML elements with event handlers require a role.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Unexpected event handler on non-interactive element.",
+            "rule": "a11y/noNoninteractiveElementInteractions"
+          },
+          {
+            "help": null,
+            "message": "Unexpected event handler on static element.",
+            "rule": "a11y/noStaticElementInteractions"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a007",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/Picker.tsx#L153"
+    },
+    {
+      "file": "packages/excalidraw/components/ImageExportDialog.tsx",
+      "line": 201,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a008",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ImageExportDialog.tsx#L201"
+    },
+    {
+      "file": "packages/excalidraw/components/CheckboxItem.tsx",
+      "line": 29,
+      "repo": "excalidraw",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `input` over `role` attribute `checkbox`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The elements with this role can be changed to the following elements:\n<input type=\"checkbox\">",
+            "rule": "a11y/useSemanticElements"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a009",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/CheckboxItem.tsx#L29"
+    },
+    {
+      "file": "packages/excalidraw/components/Range.tsx",
+      "line": 37,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a010",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Range.tsx#L37"
+    },
+    {
+      "file": "packages/excalidraw/components/ProjectName.tsx",
+      "line": 46,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a011",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ProjectName.tsx#L46"
+    },
+    {
+      "file": "packages/excalidraw/components/PublishLibrary.tsx",
+      "line": 446,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a012",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/PublishLibrary.tsx#L446"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/icons/gear-icon.tsx",
+      "line": 3,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a013",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/gear-icon.tsx#L3"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-toolbar/nodejs-inspector-button.tsx",
+      "line": 122,
+      "repo": "next.js",
+      "rules": {
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a014",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-toolbar/nodejs-inspector-button.tsx#L122"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/terminal/editor-link.tsx",
+      "line": 28,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a015",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/terminal/editor-link.tsx#L28"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx",
+      "line": 153,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a016",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx#L153"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx",
+      "line": 99,
+      "repo": "next.js",
+      "rules": {
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a017",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx#L99"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/call-stack-frame/call-stack-frame.tsx",
+      "line": 51,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`button` elements must have an explicit `type` attribute.",
+            "rule": "react/button-has-type"
+          },
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          },
+          {
+            "help": null,
+            "message": "Missing an explicit type attribute for button",
+            "rule": "react/button-has-type"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide an explicit type prop for the button element.",
+            "rule": "a11y/useButtonType"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a018",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/call-stack-frame/call-stack-frame.tsx#L51"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx",
+      "line": 210,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a019",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx#L210"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx",
+      "line": 276,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a020",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx#L276"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx",
+      "line": 488,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a021",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx#L488"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx",
+      "line": 312,
+      "repo": "next.js",
+      "rules": {
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a022",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx#L312"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/shortcut-recorder.tsx",
+      "line": 163,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `button` over `role` attribute `button`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The elements with this role can be changed to the following elements:\n<button>",
+            "rule": "a11y/useSemanticElements"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a023",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/shortcut-recorder.tsx#L163"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/user-preferences.tsx",
+      "line": 155,
+      "repo": "next.js",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "A form label must be associated with a control.",
+            "rule": "jsx-a11y/label-has-associated-control"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "A form label must be associated with a control.",
+            "rule": "jsx-a11y/label-has-associated-control"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "A form label must be associated with an input.",
+            "rule": "a11y/noLabelWithoutControl"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a024",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/user-preferences.tsx#L155"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/ui/breadcrumb.tsx",
+      "line": 53,
+      "repo": "shadcn",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <a href=...>, or <area href=...> instead of the \"link\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The HTML element with the interactive role \"link\" is not focusable.",
+            "rule": "a11y/useFocusableInteractive"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a025",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/breadcrumb.tsx#L53"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/login-04/components/login-form.tsx",
+      "line": 94,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Redundant `alt` attribute.",
+            "rule": "jsx-a11y/img-redundant-alt"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Avoid the words \"image\", \"picture\", or \"photo\" in img element alt text.",
+            "rule": "a11y/noRedundantAlt"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a026",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-04/components/login-form.tsx#L94"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx",
+      "line": 96,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide a valid value for the attribute href.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a027",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx#L96"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/login-03/components/login-form.tsx",
+      "line": 83,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide a valid value for the attribute href.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a028",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-03/components/login-form.tsx#L83"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx",
+      "line": 52,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a029",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx#L52"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/signup-03/components/signup-form.tsx",
+      "line": 77,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide a valid value for the attribute href.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a030",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-03/components/signup-form.tsx#L77"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/ui/breadcrumb.tsx",
+      "line": 7,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "[aria-label] text should be formatted the same as you would visual text. Use sentence case.",
+            "rule": "github/a11y-aria-label-is-well-formatted"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "[aria-label] text should be formatted the same as you would visual text. Use sentence case.",
+            "rule": "github/a11y-aria-label-is-well-formatted"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a031",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/breadcrumb.tsx#L7"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/login-02/components/login-form.tsx",
+      "line": 58,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide a valid value for the attribute href.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a032",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-02/components/login-form.tsx#L58"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/ui/item.tsx",
+      "line": 10,
+      "repo": "shadcn",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <menu>, <ol>, or <ul> instead of the \"list\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a033",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/item.tsx#L10"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx",
+      "line": 34,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide a valid value for the attribute href.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a034",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx#L34"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx",
+      "line": 86,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+            "rule": "github/a11y-svg-has-accessible-name"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Alternative text title element cannot be empty",
+            "rule": "a11y/noSvgWithoutTitle"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a035",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx#L86"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/sidebar-16/components/app-sidebar.tsx",
+      "line": 165,
+      "repo": "shadcn",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "Provide a valid value for the attribute href.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a036",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-16/components/app-sidebar.tsx#L165"
+    },
+    {
+      "file": "packages/react/select/src/select.tsx",
+      "line": 377,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `input, select` over `role` attribute `combobox`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a037",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L377"
+    },
+    {
+      "file": "packages/react/menu/src/menu.tsx",
+      "line": 640,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `address, details, fieldset, hgroup, optgroup` over `role` attribute `group`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <details>, <fieldset>, <optgroup>, or <address> instead of the \"group\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a038",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/menu/src/menu.tsx#L640"
+    },
+    {
+      "file": "packages/react/accordion/src/accordion.tsx",
+      "line": 534,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `section` over `role` attribute `region`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a039",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/accordion/src/accordion.tsx#L534"
+    },
+    {
+      "file": "packages/react/select/src/select.tsx",
+      "line": 1452,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `option` over `role` attribute `option`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a040",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L1452"
+    },
+    {
+      "file": "packages/react/radio-group/src/radio.tsx",
+      "line": 136,
+      "repo": "radix",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <input type=\"radio\"> instead of the \"radio\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a041",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/radio-group/src/radio.tsx#L136"
+    },
+    {
+      "file": "packages/react/toast/src/toast.tsx",
+      "line": 330,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `section` over `role` attribute `region`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a042",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/toast/src/toast.tsx#L330"
+    },
+    {
+      "file": "packages/react/slider/src/slider.tsx",
+      "line": 752,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `input` over `role` attribute `slider`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a043",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/slider/src/slider.tsx#L752"
+    },
+    {
+      "file": "packages/react/popover/src/popover.tsx",
+      "line": 496,
+      "repo": "radix",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `dialog` over `role` attribute `dialog`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a044",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/popover/src/popover.tsx#L496"
+    },
+    {
+      "file": "packages/react/select/src/select.tsx",
+      "line": 1287,
+      "repo": "radix",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a045",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L1287"
+    },
+    {
+      "file": "packages/react/toast/src/toast.tsx",
+      "line": 328,
+      "repo": "radix",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <section aria-label=...>, or <section aria-labelledby=...> instead of the \"region\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a046",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/toast/src/toast.tsx#L328"
+    },
+    {
+      "file": "packages/react/menu/src/menu.tsx",
+      "line": 984,
+      "repo": "radix",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <hr> instead of the \"separator\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a047",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/menu/src/menu.tsx#L984"
+    },
+    {
+      "file": "packages/react/label/src/label.tsx",
+      "line": 15,
+      "repo": "radix",
+      "rules": {
+        "biome": [
+          {
+            "help": null,
+            "message": "A form label must be associated with an input.",
+            "rule": "a11y/noLabelWithoutControl"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a048",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/label/src/label.tsx#L15"
+    },
+    {
+      "file": "packages/react-aria-components/src/Table.tsx",
+      "line": 2292,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `button` over `role` attribute `button`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The HTML element with the interactive role \"button\" is not focusable.",
+            "rule": "a11y/useFocusableInteractive"
+          },
+          {
+            "help": null,
+            "message": "The elements with this role can be changed to the following elements:\n<button>",
+            "rule": "a11y/useSemanticElements"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a049",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L2292"
+    },
+    {
+      "file": "packages/react-aria-components/src/ListBox.tsx",
+      "line": 797,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `option` over `role` attribute `option`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          },
+          {
+            "help": null,
+            "message": "`option` role is missing required aria props `aria-selected`.",
+            "rule": "jsx-a11y/role-has-required-aria-props"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a050",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L797"
+    },
+    {
+      "file": "packages/react-aria-components/src/Tree.tsx",
+      "line": 1229,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `button` over `role` attribute `button`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The elements with this role can be changed to the following elements:\n<button>",
+            "rule": "a11y/useSemanticElements"
+          },
+          {
+            "help": null,
+            "message": "The HTML element with the interactive role \"button\" is not focusable.",
+            "rule": "a11y/useFocusableInteractive"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a051",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L1229"
+    },
+    {
+      "file": "packages/react-aria-components/src/DropZone.tsx",
+      "line": 144,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+            "rule": "github/a11y-no-visually-hidden-interactive-element"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+            "rule": "github/a11y-no-visually-hidden-interactive-element"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a052",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DropZone.tsx#L144"
+    },
+    {
+      "file": "packages/react-aria-components/src/Table.tsx",
+      "line": 2326,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `td, th` over `role` attribute `gridcell`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a053",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L2326"
+    },
+    {
+      "file": "packages/react-aria-components/src/Calendar.tsx",
+      "line": 297,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+            "rule": "github/a11y-no-visually-hidden-interactive-element"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+            "rule": "github/a11y-no-visually-hidden-interactive-element"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a054",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Calendar.tsx#L297"
+    },
+    {
+      "file": "packages/react-aria-components/src/GridList.tsx",
+      "line": 415,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `tr` over `role` attribute `row`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <tr> instead of the \"row\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The HTML element with the interactive role \"row\" is not focusable.",
+            "rule": "a11y/useFocusableInteractive"
+          },
+          {
+            "help": null,
+            "message": "The elements with this role can be changed to the following elements:\n<tr>",
+            "rule": "a11y/useSemanticElements"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a055",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L415"
+    },
+    {
+      "file": "packages/react-aria-components/src/DropZone.tsx",
+      "line": 168,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "`button` elements must have an explicit `type` attribute.",
+            "rule": "react/button-has-type"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Missing an explicit type attribute for button",
+            "rule": "react/button-has-type"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a056",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DropZone.tsx#L168"
+    },
+    {
+      "file": "packages/react-aria-components/src/Table.tsx",
+      "line": 1450,
+      "repo": "react-aria",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a057",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L1450"
+    },
+    {
+      "file": "packages/react-aria-components/src/GridList.tsx",
+      "line": 639,
+      "repo": "react-aria",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The HTML element with the interactive role \"button\" is not focusable.",
+            "rule": "a11y/useFocusableInteractive"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a058",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L639"
+    },
+    {
+      "file": "packages/react-aria-components/src/ListBox.tsx",
+      "line": 389,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `option` over `role` attribute `option`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          },
+          {
+            "help": null,
+            "message": "`option` role is missing required aria props `aria-selected`.",
+            "rule": "jsx-a11y/role-has-required-aria-props"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Elements with the ARIA role \"option\" must have the following attributes defined: aria-selected",
+            "rule": "jsx-a11y/role-has-required-aria-props"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a059",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L389"
+    },
+    {
+      "file": "packages/react-aria-components/src/Calendar.tsx",
+      "line": 332,
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+            "rule": "github/a11y-no-visually-hidden-interactive-element"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+            "rule": "github/a11y-no-visually-hidden-interactive-element"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a060",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Calendar.tsx#L332"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Organization/OAuthApps/PublishAppSidePanel/index.tsx",
+      "line": 367,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a061",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/PublishAppSidePanel/index.tsx#L367"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Integrations/Warehouse/WarehouseConnectSection.tsx",
+      "line": 292,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a062",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/Warehouse/WarehouseConnectSection.tsx#L292"
+    },
+    {
+      "file": "apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/OperationQueueSidePanel/OperationItem.tsx",
+      "line": 79,
+      "repo": "supabase",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a063",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/OperationQueueSidePanel/OperationItem.tsx#L79"
+    },
+    {
+      "file": "apps/studio/components/layouts/Navigation/LayoutHeader/BreadcrumbsView.tsx",
+      "line": 32,
+      "repo": "supabase",
+      "rules": {
+        "biome": [
+          {
+            "help": null,
+            "message": "Use a button element instead of an a element.",
+            "rule": "a11y/useValidAnchor"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a064",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/Navigation/LayoutHeader/BreadcrumbsView.tsx#L32"
+    },
+    {
+      "file": "apps/studio/components/interfaces/ProjectHome/PlanUsageCard.tsx",
+      "line": 79,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a065",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectHome/PlanUsageCard.tsx#L79"
+    },
+    {
+      "file": "apps/studio/components/ui/EditorPanel/EditorPanel.tsx",
+      "line": 364,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, or <select multiple=...> instead of the \"combobox\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a066",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/EditorPanel/EditorPanel.tsx#L364"
+    },
+    {
+      "file": "apps/studio/components/interfaces/SQLEditor/UtilityPanel/ChartConfig.tsx",
+      "line": 216,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "A form label must be associated with a control.",
+            "rule": "jsx-a11y/label-has-associated-control"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a067",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/UtilityPanel/ChartConfig.tsx#L216"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Platform/Webhooks/PlatformWebhooksEndpointDetails.tsx",
+      "line": 363,
+      "repo": "supabase",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The attribute aria-label is not supported by the role generic.",
+            "rule": "github/a11y-role-supports-aria-props"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The attribute aria-label is not supported by the role generic.",
+            "rule": "github/a11y-role-supports-aria-props"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The ARIA attribute 'aria-label' is not supported by this element.",
+            "rule": "a11y/useAriaPropsSupportedByRole"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a068",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Platform/Webhooks/PlatformWebhooksEndpointDetails.tsx#L363"
+    },
+    {
+      "file": "apps/studio/components/interfaces/RoleImpersonationSelector/UserImpersonationSelector.tsx",
+      "line": 426,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, or <select multiple=...> instead of the \"combobox\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a069",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/RoleImpersonationSelector/UserImpersonationSelector.tsx#L426"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Organization/TeamSettings/MemberRow.tsx",
+      "line": 124,
+      "repo": "supabase",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "Prefer `td` over `role` attribute `cell`.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "Use <td> instead of the \"cell\" role to ensure accessibility across all devices.",
+            "rule": "jsx-a11y/prefer-tag-over-role"
+          }
+        ],
+        "biome": [
+          {
+            "help": null,
+            "message": "The elements with this role can be changed to the following elements:\n<td>",
+            "rule": "a11y/useSemanticElements"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a070",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/TeamSettings/MemberRow.tsx#L124"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Database/Indexes/Indexes.tsx",
+      "line": 250,
+      "repo": "supabase",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a071",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Indexes/Indexes.tsx#L250"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppsAuthorizedRow.tsx",
+      "line": 50,
+      "repo": "supabase",
+      "rules": {
+        "oxlint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ],
+        "eslint": [
+          {
+            "help": null,
+            "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+            "rule": "github/a11y-no-title-attribute"
+          }
+        ]
+      },
+      "kind": "hit",
+      "id": "a072",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppsAuthorizedRow.tsx#L50"
+    },
+    {
+      "file": "packages/excalidraw/components/SearchMenu.tsx",
+      "line": 522,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+            "rule": "jsx-a11y/click-events-have-key-events"
+          },
+          {
+            "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+            "rule": "jsx-a11y/click-events-have-key-events"
+          },
+          {
+            "message": "Static HTML elements with event handlers require a role.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "div",
+        "tag": "ListItem"
+      },
+      "kind": "hidden",
+      "id": "h001",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SearchMenu.tsx#L522"
+    },
+    {
+      "file": "packages/excalidraw/components/App.tsx",
+      "line": 2658,
+      "repo": "excalidraw",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "canvas",
+        "tag": "NewElementCanvas"
+      },
+      "kind": "hidden",
+      "id": "h002",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.tsx#L2658"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance.tsx",
+      "line": 219,
+      "repo": "next.js",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "CopyPromptButton"
+      },
+      "kind": "hidden",
+      "id": "h003",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance.tsx#L219"
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-pagination/error-overlay-pagination.tsx",
+      "line": 140,
+      "repo": "next.js",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": null,
+      "kind": "hidden",
+      "id": "h004",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-pagination/error-overlay-pagination.tsx#L140"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/ui/combobox.tsx",
+      "line": 46,
+      "repo": "shadcn",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "InputGroupButton"
+      },
+      "kind": "hidden",
+      "id": "h005",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/combobox.tsx#L46"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/sidebar-07/page.tsx",
+      "line": 32,
+      "repo": "shadcn",
+      "rules": {
+        "eslint": [
+          {
+            "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "Use of incorrect `href` for the 'a' element.",
+            "rule": "jsx-a11y/anchor-is-valid"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "a",
+        "tag": "BreadcrumbLink"
+      },
+      "kind": "hidden",
+      "id": "h006",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-07/page.tsx#L32"
+    },
+    {
+      "file": "apps/v4/registry/new-york-v4/blocks/sidebar-12/page.tsx",
+      "line": 21,
+      "repo": "shadcn",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "SidebarTrigger"
+      },
+      "kind": "hidden",
+      "id": "h007",
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-12/page.tsx#L21"
+    },
+    {
+      "file": "packages/react/radio-group/src/radio-group.tsx",
+      "line": 275,
+      "repo": "radix",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "input",
+        "tag": "RadioGroupItemBubbleInput"
+      },
+      "kind": "hidden",
+      "id": "h008",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/radio-group/src/radio-group.tsx#L275"
+    },
+    {
+      "file": "packages/react/slider/src/slider.tsx",
+      "line": 803,
+      "repo": "radix",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "input",
+        "tag": "SliderBubbleInput"
+      },
+      "kind": "hidden",
+      "id": "h009",
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/slider/src/slider.tsx#L803"
+    },
+    {
+      "file": "packages/react-aria-components/src/Checkbox.tsx",
+      "line": 481,
+      "repo": "react-aria",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A form label must be associated with a control.",
+            "rule": "jsx-a11y/label-has-associated-control"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A form label must be associated with a control.",
+            "rule": "jsx-a11y/label-has-associated-control"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "label",
+        "tag": "CheckboxButton"
+      },
+      "kind": "hidden",
+      "id": "h010",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Checkbox.tsx#L481"
+    },
+    {
+      "file": "packages/react-aria-components/src/DateField.tsx",
+      "line": 425,
+      "repo": "react-aria",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "input",
+        "tag": "Input"
+      },
+      "kind": "hidden",
+      "id": "h011",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DateField.tsx#L425"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaRow.tsx",
+      "line": 109,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "td",
+        "tag": "TableCell"
+      },
+      "kind": "hidden",
+      "id": "h012",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaRow.tsx#L109"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Settings/Integrations/GithubIntegration/GitHubIntegrationConnectionForm.tsx",
+      "line": 552,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "Ambiguous text within anchor. Screen reader users rely on link text for context; the words \"click here\", \"here\", \"link\", \"a link\", \"learn more\" are ambiguous and do not provide enough context.",
+            "rule": "jsx-a11y/anchor-ambiguous-text"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "Ambiguous text within anchor, screen reader users rely on link text for context.",
+            "rule": "jsx-a11y/anchor-ambiguous-text"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "a",
+        "tag": "InlineLink"
+      },
+      "kind": "hidden",
+      "id": "h013",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Integrations/GithubIntegration/GitHubIntegrationConnectionForm.tsx#L552"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Settings/Database/SSLConfiguration.tsx",
+      "line": 144,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "DocsButton"
+      },
+      "kind": "hidden",
+      "id": "h014",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Database/SSLConfiguration.tsx#L144"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Settings/Logs/LogsFormatters.tsx",
+      "line": 45,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "CopyButton"
+      },
+      "kind": "hidden",
+      "id": "h015",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/LogsFormatters.tsx#L45"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Home/ProjectList/LoadMoreRow.tsx",
+      "line": 43,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "td",
+        "tag": "TableCell"
+      },
+      "kind": "hidden",
+      "id": "h016",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Home/ProjectList/LoadMoreRow.tsx#L43"
+    },
+    {
+      "file": "apps/studio/components/interfaces/ProjectAPIDocs/Content/Entities.tsx",
+      "line": 46,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "DocsButton"
+      },
+      "kind": "hidden",
+      "id": "h017",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectAPIDocs/Content/Entities.tsx#L46"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Functions/FunctionsEmptyState.tsx",
+      "line": 157,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+            "rule": "jsx-a11y/click-events-have-key-events"
+          },
+          {
+            "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+            "rule": "jsx-a11y/click-events-have-key-events"
+          },
+          {
+            "message": "Static HTML elements with event handlers require a role.",
+            "rule": "jsx-a11y/no-static-element-interactions"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "div",
+        "tag": "ResourceItem"
+      },
+      "kind": "hidden",
+      "id": "h018",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Functions/FunctionsEmptyState.tsx#L157"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Storage/FilesBuckets/BucketTable.tsx",
+      "line": 87,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "tr",
+        "tag": "TableRowNoResults"
+      },
+      "kind": "hidden",
+      "id": "h019",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/FilesBuckets/BucketTable.tsx#L87"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Database/Publications/PublicationSkeleton.tsx",
+      "line": 11,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "td",
+        "tag": "TableCell"
+      },
+      "kind": "hidden",
+      "id": "h020",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Publications/PublicationSkeleton.tsx#L11"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Settings/General/ComplianceConfig/ProjectComplianceMode.tsx",
+      "line": 78,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "DocsButton"
+      },
+      "kind": "hidden",
+      "id": "h021",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/General/ComplianceConfig/ProjectComplianceMode.tsx#L78"
+    },
+    {
+      "file": "apps/studio/components/interfaces/ProjectHome/ActivityStats.tsx",
+      "line": 160,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "SingleStat"
+      },
+      "kind": "hidden",
+      "id": "h022",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectHome/ActivityStats.tsx#L160"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx",
+      "line": 442,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "td",
+        "tag": "TableCell"
+      },
+      "kind": "hidden",
+      "id": "h023",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx#L442"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppRow.tsx",
+      "line": 71,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "Button"
+      },
+      "kind": "hidden",
+      "id": "h024",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppRow.tsx#L71"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaDetails.tsx",
+      "line": 154,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.",
+            "rule": "jsx-a11y/alt-text"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "Missing `alt` attribute.",
+            "rule": "jsx-a11y/alt-text"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "img",
+        "tag": "RegionFlag"
+      },
+      "kind": "hidden",
+      "id": "h025",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaDetails.tsx#L154"
+    },
+    {
+      "file": "apps/studio/pages/project/[ref]/observability/api-overview.tsx",
+      "line": 119,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "DocsButton"
+      },
+      "kind": "hidden",
+      "id": "h026",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/observability/api-overview.tsx#L119"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx",
+      "line": 487,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "tr",
+        "tag": "TableRow"
+      },
+      "kind": "hidden",
+      "id": "h027",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx#L487"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Database/Indexes/Indexes.tsx",
+      "line": 229,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "th",
+        "tag": "TableHead"
+      },
+      "kind": "hidden",
+      "id": "h028",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Indexes/Indexes.tsx#L229"
+    },
+    {
+      "file": "apps/studio/pages/project/[ref]/observability/realtime.tsx",
+      "line": 152,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "DocsButton"
+      },
+      "kind": "hidden",
+      "id": "h029",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/observability/realtime.tsx#L152"
+    },
+    {
+      "file": "apps/studio/pages/project/[ref]/auth/overview.tsx",
+      "line": 57,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ],
+        "oxlint": [
+          {
+            "message": "A control must be associated with a text label.",
+            "rule": "jsx-a11y/control-has-associated-label"
+          }
+        ]
+      },
+      "component": {
+        "mappedTo": "button",
+        "tag": "DocsButton"
+      },
+      "kind": "hidden",
+      "id": "h030",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/auth/overview.tsx#L57"
+    },
+    {
+      "file": "packages/react-aria-components/src/ListBox.tsx",
+      "kind": "suppression",
+      "line": 704,
+      "reason": "drop indicator is not selectable",
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "rule": "jsx-a11y/role-has-required-aria-props"
+          }
+        ]
+      },
+      "stillFires": {
+        "eslint": false,
+        "oxlint": true
+      },
+      "text": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- drop indicator is not selectable */}",
+      "id": "s001",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L704"
+    },
+    {
+      "file": "packages/react-aria-components/src/ListBox.tsx",
+      "kind": "suppression",
+      "line": 792,
+      "reason": "loader row is not selectable",
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "rule": "jsx-a11y/role-has-required-aria-props"
+          }
+        ]
+      },
+      "stillFires": {
+        "eslint": false,
+        "oxlint": true
+      },
+      "text": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}",
+      "id": "s002",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L792"
+    },
+    {
+      "file": "packages/react-aria-components/src/Menu.tsx",
+      "kind": "suppression",
+      "line": 712,
+      "reason": "loader row is not selectable",
+      "repo": "react-aria",
+      "rules": {
+        "oxlint": [
+          {
+            "rule": "jsx-a11y/role-has-required-aria-props"
+          }
+        ]
+      },
+      "stillFires": {
+        "eslint": false,
+        "oxlint": false
+      },
+      "text": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}",
+      "id": "s003",
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Menu.tsx#L712"
+    },
+    {
+      "file": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenSuccess.tsx",
+      "kind": "suppression",
+      "line": 70,
+      "reason": null,
+      "repo": "supabase",
+      "rules": {
+        "eslint": [
+          {
+            "rule": "jsx-a11y/label-has-associated-control"
+          }
+        ]
+      },
+      "stillFires": {
+        "eslint": false,
+        "oxlint": true
+      },
+      "text": "{/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}",
+      "id": "s004",
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenSuccess.tsx#L70"
+    }
+  ],
+  "seed": 20261015,
+  "blind": {
+    "hit": [
+      "a005",
+      "a015",
+      "a018",
+      "a021",
+      "a024",
+      "a027",
+      "a031",
+      "a033",
+      "a035",
+      "a044",
+      "a045",
+      "a046",
+      "a047",
+      "a054",
+      "a059",
+      "a061",
+      "a063",
+      "a069",
+      "a070",
+      "a071"
+    ],
+    "hidden": [
+      "h001",
+      "h005",
+      "h006",
+      "h007",
+      "h008",
+      "h010",
+      "h011",
+      "h014",
+      "h017",
+      "h018",
+      "h019",
+      "h020",
+      "h021",
+      "h022",
+      "h024",
+      "h025",
+      "h026",
+      "h027",
+      "h029",
+      "h030"
+    ],
+    "suppression": [
+      "s001",
+      "s002",
+      "s003",
+      "s004"
+    ]
+  }
+}

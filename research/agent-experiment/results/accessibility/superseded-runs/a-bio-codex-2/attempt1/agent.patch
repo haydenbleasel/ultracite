@@ -1,0 +1,78 @@
+--- a/collapsible.tsx
++++ b/collapsible.tsx
+@@ -35,6 +35,8 @@
+  * SOFTWARE.
+  */
+ 
++import { useId } from "react";
++
+ // ── STUB: the imports of the original file ─────────────────────────────
+ const InlineIcon = ({
+   className,
+@@ -117,27 +119,45 @@
+   children,
+   className,
+   showCollapsedIcon = true,
+-}: CollapsibleProps) => (
+-  <>
+-    <div
+-      className={className}
+-      onClick={openTrigger}
+-      style={{
+-        alignItems: "center",
+-        cursor: "pointer",
+-        display: "flex",
+-        justifyContent: "space-between",
+-      }}
+-    >
+-      {label}
+-      {showCollapsedIcon && (
+-        <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />
++}: CollapsibleProps) => {
++  const labelId = useId();
++
++  return (
++    <>
++      <div
++        className={className}
++        style={{
++          alignItems: "center",
++          cursor: "pointer",
++          display: "flex",
++          justifyContent: "space-between",
++          position: "relative",
++        }}
++      >
++        <div id={labelId}>{label}</div>
++        {showCollapsedIcon && (
++          <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />
++        )}
++        <button
++          aria-expanded={open}
++          aria-labelledby={labelId}
++          onClick={openTrigger}
++          style={{
++            background: "transparent",
++            border: 0,
++            cursor: "pointer",
++            inset: 0,
++            padding: 0,
++            position: "absolute",
++          }}
++          type="button"
++        />
++      </div>
++      {open && (
++        <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
+       )}
+-    </div>
+-    {open && (
+-      <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
+-    )}
+-  </>
+-);
++    </>
++  );
++};
+ 
+ export default Collapsible;

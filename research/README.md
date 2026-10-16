@@ -213,6 +213,53 @@ node research/corpus/scripts/import-cycles-run-all.cjs   # ~6 min; --skip-histor
 
 The method, findings and caveats are in `corpus/results/import-cycles/REPORT.md`.
 
+### Accessibility rules (seventh post)
+
+Only three of the eight corpus repos have JSX (Excalidraw, Next.js, tRPC: about 100,000 lines), so this topic extends the corpus for itself. `scripts/repos-accessibility.json` adds four React codebases, cloned shallow and sparse by `scripts/a11y-clone.sh` at pinned SHAs:
+
+| Repo | What it is | Measured | License |
+| --- | --- | --- | --- |
+| shadcn-ui/ui | the copy-paste component registry | `apps/v4/registry/new-york-v4/{ui,blocks}` | MIT |
+| radix-ui/primitives | accessibility-focused primitives | `packages/react` | MIT |
+| adobe/react-spectrum | React Aria Components (hooks and spread props) | `packages/react-aria-components/src` | Apache-2.0 |
+| supabase/supabase | Supabase Studio, an app on a shadcn-derived design system | `apps/studio/{components,pages}` | Apache-2.0 |
+
+`repos.json` and every earlier topic's numbers are unchanged. The extra list is loaded only when `CORPUS_REPO_LISTS=repos-accessibility.json` is set (`a11y-lib.cjs` sets it). Two backwards-compatible changes make the shared scripts work with it:
+
+- `collect-files.cjs` appends the repos of any list named in `CORPUS_REPO_LISTS` and exports the merged `config`.
+- `rule-census.cjs` reads that `config` and takes `--files jsx`, which keeps only `.tsx`/`.jsx` files so that rates are per JSX line. No `.js`, `.mjs` or `.cjs` file in the corpus contains JSX (checked by parsing).
+
+With the variable unset and no `--files`, both scripts produce identical results: an earlier topic's census was rerun with the old and new scripts on the same inputs, and only the order of per-hit rows differed, because Oxlint lints in parallel.
+
+The scripts are prefixed `a11y-` and share `a11y-lib.cjs`. It defines the topic's accessibility rules: `jsx-a11y/*`, `astro/jsx-a11y/*`, Biome's `a11y` group, `github/a11y-*`, four sonarjs table/object rules, `react/button-has-type` (and Svelte's), the 102 rules react-doctor files under "Accessibility" in its own registry, and `svelte/valid-compile`. It also holds the concepts the linters share and runners for Ultracite's presets. The ESLint runner survives a rule crash: eslint-plugin-jsx-a11y's `prefer-tag-over-role` throws on one Supabase file.
+
+| Script | What it does |
+| --- | --- |
+| `a11y-inventory.cjs` | Every accessibility rule per linter, preset and file type. Covers Oxlint's presets, ESLint resolved with `calculateConfigForFile` for `.tsx`, `.jsx`, `.js`, `.astro`, `.vue`, `.svelte`, Angular `.ts` and `.html`, and Biome's a11y group with `biome explain`. Records options, the concept table and the gaps. `--print-focus` lists the census's focus rules. |
+| `a11y-census.cjs` | `rule-census.cjs` with core, react and js-plugins, `--files jsx`, over the seven repos with JSX. |
+| `a11y-linters.cjs` | `--calibration`: `calibration/accessibility/cases.tsx` (87 cases and 42 cheap or right edits, each marked with its base case and whether it fixes the barrier), the same ten barriers in `.js`, `.jsx`, `.html`, `.vue`, `.svelte`, `.astro` and an Angular template, and the crash case. Each runs through Oxlint (init's root config, then with js-plugins), ESLint and Biome, with every message and the help the agent handoff carries. `--autofix`: what each fix pass does to each case, including Biome's unsafe-fix loop and a broken `<marquee>` fix. `--corpus`: ESLint and Biome on every JSX file, raw and reported. |
+| `a11y-disagreements.cjs` | Maps every corpus report to its JSX element and describes the elements the linters disagree on: tag, role, spread, aria-hidden, labels. |
+| `a11y-markers.cjs` | Suppression comments that name accessibility rules, with reasons, whether the rule still fires there, and each repo's own lint config lines. |
+| `a11y-jsx-census.cjs` | What JSX rules can't see. Counts custom components against DOM elements, literal against dynamic accessibility props, spreads, and onClick on non-interactive elements and on components. Resolves interactive and labelled components to their definitions in the same repo. `--lint` runs two counterfactual lints: telling jsx-a11y what each component renders (`settings["jsx-a11y"].components`), and blanking spreads on DOM elements. |
+| `a11y-sample.cjs` | The seeded sample (hit sites, counterfactual sites, every suppression), frozen in `sample.json`. `--worksheet`, `--print` (blind subset) and `--compute` (both raters, weighted shares, κ). |
+| `a11y-history.cjs` | Downloads each confirmed fix's files at the parent commit (`gh api`, falling back to `raw.githubusercontent.com`) and lints them, raw and reported, with all three linters. |
+| `a11y-examples.cjs` | Lints and type-checks the two agent-experiment subjects and runs their behaviour oracle on the subjects and on 20 hand-made variants (the evasion matrix on real code). The oracle uses React from the Bun store, a wrapped JSX runtime and synthetic key events; it needs no DOM. |
+| `a11y-tables.cjs` | Generates `results/accessibility/tables.md`. |
+| `a11y-run-all.cjs` | Runs all of the above in order. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+node research/corpus/scripts/a11y-run-all.cjs   # about 6 min; --skip-history skips the gh downloads
+```
+
+- **Copies outside `out/`.** Ultracite's Oxlint and Biome presets ignore `**/out`, so fix-pass and history copies are linted under the system temp directory (`ultracite-research-accessibility/`). Their Oxlint configs stay in the repo, so the js-plugins specifiers resolve.
+- **Biome on the corpus** runs a dedicated config with exactly the a11y rules core sets, for the same reason. Calibration uses the presets themselves.
+- **Astro.** eslint-plugin-astro loads eslint-plugin-jsx-a11y from `process.cwd()` when it is imported. The calibration loads the Astro preset from `packages/cli`, as it would load from a project where `ultracite init` installed it.
+- **Biome's `--write --unsafe` can hang.** Biome 2.5.15 loops on `<div aria-activedescendant>`, so every Biome write takes a timeout, and the hang is recorded.
+- **Hand inputs:** `history.json`, `history-verdicts.json`, `decision-history.json`, `barrier-match.json`, and the rater labels (`out/accessibility/labels-*.json`, kept in `classifications.json`).
+
+The method, findings and caveats are in `corpus/results/accessibility/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -467,3 +514,95 @@ Harness changes made with this topic, all backwards-compatible:
 - **Earlier topics, re-measured and re-aggregated from their committed runs:**
   - cognitive-complexity and floating-promises reproduce exactly, apart from `generatedAt`;
   - security-rules and dead-code: see `REPORT.md`, "Reproduce".
+
+### Accessibility (seventh post)
+
+Ultracite re-lints a file after the agent's edit, and hands it back while anything is still reported. For accessibility that loop matters: the correct ARIA button pattern trips `jsx-a11y/prefer-tag-over-role` (Biome: `useSemanticElements`). So this topic runs every file through Ultracite's retry loop, not one attempt.
+
+Subjects are two Excalidraw components from `corpus/examples/accessibility/`. Each arm is a subject entry:
+
+- **a-ox:** `Stats/Collapsible`, a `<div onClick>` section header, handed over through Ultracite's Oxlint adapter (`click-events-have-key-events`, `no-static-element-interactions`).
+- **b-ox:** `ColorPicker/TopPicks`, swatch buttons named only by a hex `title`, through Oxlint (`control-has-associated-label`).
+- **a-bio:** subject A through Ultracite's Biome adapter (`useKeyWithClickEvents`, `noStaticElementInteractions`, `noNoninteractiveElementInteractions`).
+- **a-rules:** subject A through Oxlint, with the `AGENTS.md` that `ultracite init` writes (the CLI's own `writeAgentFiles`, run under Bun). Both agents get `AGENTS.md` alone. Claude Code loads it when there's no `CLAUDE.md`, and every run's session log confirms it was loaded.
+
+**Subjects.** `prepareSubjects` gets each subject ready:
+
+- It removes the `stripFields` fields, and `TEXT_EDITS` rewrite a paragraph that named a rule and the "copied verbatim" claims.
+- It checks every comment against 27 patterns that would name the analysis.
+- It names the files in kebab-case (`collapsible.tsx`), because Ultracite's core preset reports `unicorn/filename-case`.
+- It runs both linters' fix passes until nothing changes, so each subject lints clean apart from the barrier. Neither the handoff nor any re-lint is filtered.
+
+The run dir also gets `tsconfig.json` and a `package.json` with React and what init adds.
+
+**Retry loop.** `run-one.mjs`'s `runWithRetries` does for one file what `packages/cli/src/agent-fix/index.ts` does:
+
+- `collect` runs the adapter's fix pass, formatter and lint on the project.
+- The agent then gets `buildPrompt`, and `buildRetryPrompt` after the first attempt. Each attempt runs under Ultracite's 300 s timeout and 10 s kill grace.
+- After each attempt, verify runs the fix pass, the formatter and the lint on the file in place. While anything is reported and the agent didn't time out, the agent gets another attempt, up to three in all.
+
+The copied CLI code is in `scripts/ultracite-adapters.cjs`, hash-checked against the source. The self-test also runs Ultracite's real `linters.ts` adapters in a scratch project laid out as init leaves one, and compares them with the mirror: all 55 comparisons match.
+
+Biome runs on a copy of the run dir with its config at the root. With `--config-path`, Biome looks for `package.json` next to the config, and `noUndeclaredDependencies` reports any `react` import.
+
+**Measurement.** Each attempt is measured twice: as the agent left the file and as verify left it. Each measurement covers:
+
+- Oxlint core + react (init's config) and with js-plugins, ESLint core + react and Biome core, honouring and ignoring inline config;
+- `tsc`;
+- the oracle;
+- a scan of the control;
+- Ultracite's partition, and verify run again, which reproduced every committed file;
+- from the session log: tools, commands run or refused, project instructions loaded, the final message, and what the agent said about styling.
+
+At the end it computes what Ultracite would print, from a copy of `fixFileGroup`'s tally.
+
+**Oracle.** `scripts/topics/accessibility-behavior.cjs` is the corpus oracle moved here; `corpus/scripts/a11y-examples.cjs` imports it, and `examples.json` regenerates unchanged. It needs no DOM: it renders with React 19's `renderToStaticMarkup`, records host props, and calls handlers with synthetic click and key events (`currentTarget.click()` included).
+
+- **Subject A.** It checks for a native control, or role + `tabIndex` + Enter and Space. It also checks that the control isn't hidden, its name, `aria-expanded`, and clicks and children, and flags keys or clicks that toggle twice and a heading inside the control.
+- **Subject B.** It checks every swatch's name (hex, generic, palette name), whether it's hidden, and render errors per picker.
+- **Self-test.** 55 cases (the corpus subjects and 20 variants, the two prepared subjects, 31 mutants in `harness-tests/accessibility/`), all as expected.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=accessibility
+node scripts/prepare-subjects.cjs        # subjects/accessibility/ (stripped, normalised and checked; init's AGENTS.md; package.json per linter)
+node scripts/test-behavior-harness.cjs   # oracle self-test (55) and the mirror against the CLI's adapters (55) -> results/accessibility/oracle-self-test.json
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a-ox:claude:1 b-ox:codex:1 a-bio:claude:1 a-rules:codex:1   # ...4 of each arm and agent
+node scripts/aggregate.cjs               # results.json, with the mutant matrix (~4 min)
+node scripts/report-tables.cjs > results/accessibility/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.08–0.63 a run (median $0.35, $5.89 for 16 runs).
+- Codex used 18.3k–55.7k tokens a run (median 31.9k).
+- Runs took 17–106 s (39 attempts in all), and measuring one takes about 25 s.
+- The pilot and 17 superseded runs, made before the run dir had a `package.json` (and one with Biome's `--config-path`), are kept in `results/accessibility/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's accessibility examples, results, calibration and output;
+- every `a11y-*.cjs` corpus script;
+- `research/bibliography/accessibility.md` and the bibliography README;
+- any post draft or page whose name contains "a11y" or "accessib";
+- `plans/` and `lint-configs/`;
+- the corpus scripts' temp copies;
+- during a retry, earlier attempts' staging, which holds their session logs;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`, the orchestrating session's scratchpad and the batch-log folder.
+
+The method, numbers and caveats are in `agent-experiment/results/accessibility/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- **`run-one.mjs`:**
+  - `runWithRetries`, used only when a topic exports `verify`. Its artifacts: `handoff.json`, `before`/`after`, and `attempt<k>/` with the prompt, diagnostics JSON, the agent's file, the verified file, both patches and `verify.json`.
+  - `runAgentProcess` takes an optional timeout and kill grace; the defaults are unchanged.
+  - `lockAll(extra)` locks more paths for one agent run; other callers pass none.
+- **`scripts/ultracite-adapters.cjs`** (new): the mirror of Ultracite's adapters, retry condition and tally, reusable by later topics.
+- **`topics.cjs`** documents the `collect` and `verify` hooks.
+- **`.gitignore`** ignores the per-attempt and superseded runs' session logs, stdout and stderr.
+- **dead-code and import-cycles** record the parser hashes their runs were made with, instead of failing aggregation. 40d646a4 changed those parsers, so their aggregation already failed at HEAD. New runs of those topics still fail the check.
+- **Earlier topics, re-measured and re-aggregated from their committed runs**, before and after these changes. Before and after match exactly for all five.
+  - cognitive-complexity, floating-promises and import-cycles reproduce exactly, apart from `generatedAt`.
+  - security-rules and dead-code differ from their committed files only where the presets changed after their runs: Biome's `noUndeclaredDependencies` (c9b606af), and Oxlint js-plugins' sonarjs rules (`sonarjs/void-use`, `sonarjs/regex-complexity`; 7984c6e9). See `REPORT.md`, "Harness changes".

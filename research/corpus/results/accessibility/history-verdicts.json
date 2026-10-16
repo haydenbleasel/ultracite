@@ -1,0 +1,286 @@
+{
+  "generated": "2026-10-15",
+  "method": "Hand judgement of history-lint.json, one fix at a time, reading the barrier description in history.json and every accessibility rule that fires on the barrier's lines at the parent commit (Oxlint core + react and + js-plugins on the file with disable comments neutralised, ESLint core + react, Biome core). flagged: yes = a rule there names the barrier the fix removed; adjacent = rules fire on those lines, but about something else; no = nothing fires. blindSpot says why the barrier is out of reach when it isn't flagged.",
+  "verdicts": {
+    "excalidraw/excalidraw#3310": {
+      "blindSpot": null,
+      "flagged": "yes",
+      "linters": "all three",
+      "note": "The <div onClick> is the barrier, and every linter names it.",
+      "rules": "jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions; Biome useKeyWithClickEvents, noStaticElementInteractions"
+    },
+    "excalidraw/excalidraw#556": {
+      "blindSpot": null,
+      "flagged": "yes",
+      "linters": "all three",
+      "note": "A <div tabIndex={0} onClick> with no key handler: the rules point at the missing Space and Enter handling the PR fixed.",
+      "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions, no-noninteractive-tabindex; Biome equivalents"
+    },
+    "excalidraw/excalidraw#3367": {
+      "blindSpot": "component content",
+      "flagged": "no",
+      "linters": null,
+      "note": "The link's content is a <Tooltip> element, so anchor-has-content assumes it has text. The name was lost because Tooltip.scss hides the label with visibility: hidden.",
+      "rules": null
+    },
+    "excalidraw/excalidraw#3871": {
+      "blindSpot": "meaning",
+      "flagged": "adjacent",
+      "linters": "all three",
+      "note": "The aria-label is present, but it's a hex code. No rule judges what a name says.",
+      "rules": "react/button-has-type, github/a11y-no-title-attribute"
+    },
+    "excalidraw/excalidraw#3447": {
+      "blindSpot": "runtime focus",
+      "flagged": "adjacent",
+      "linters": "all three",
+      "note": "Whether focus returns when a dialog closes is decided at runtime.",
+      "rules": "react/button-has-type"
+    },
+    "excalidraw/excalidraw#5317": {
+      "blindSpot": "runtime focus",
+      "flagged": "no",
+      "linters": null,
+      "note": "A missing focus trap is behaviour, not markup.",
+      "rules": null
+    },
+    "excalidraw/excalidraw#2724": {
+      "blindSpot": "CSS",
+      "flagged": "no",
+      "linters": null,
+      "note": "The color is set in SCSS, which no linter here reads.",
+      "rules": null
+    },
+    "vercel/next.js#62723": {
+      "blindSpot": null,
+      "flagged": "yes",
+      "linters": "all three",
+      "note": "A <span onClick> holding an icon. The rules name it. The fix then gave the new button tabIndex={10} (next.js#80289) and no name (#80290).",
+      "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions; Biome equivalents"
+    },
+    "vercel/next.js#80289": {
+      "blindSpot": null,
+      "flagged": "yes",
+      "linters": "all three",
+      "note": "A literal positive tabIndex, in both files.",
+      "rules": "jsx-a11y/tabindex-no-positive; Biome noPositiveTabindex"
+    },
+    "vercel/next.js#80290": {
+      "blindSpot": "component content",
+      "flagged": "adjacent",
+      "linters": "all three",
+      "note": "Icon-only buttons whose only child is an icon component. control-has-associated-label assumes a component child supplies text.",
+      "rules": "react/button-has-type"
+    },
+    "vercel/next.js#92608": {
+      "blindSpot": null,
+      "flagged": "yes",
+      "linters": "all three",
+      "note": "<span onClick> file pills.",
+      "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions; Biome equivalents"
+    },
+    "vercel/next.js#74074": {
+      "blindSpot": "id reference",
+      "flagged": "no",
+      "linters": null,
+      "note": "aria-labelledby pointed at an id no element had. No rule checks that id references resolve, even within one file.",
+      "rules": null
+    },
+    "vercel/next.js#23278": {
+      "blindSpot": "CSS",
+      "flagged": "no",
+      "linters": null,
+      "note": "visibility: hidden in a style object hid lazy images from screen readers.",
+      "rules": null
+    },
+    "vercel/next.js#34338": {
+      "blindSpot": "runtime state",
+      "flagged": "no",
+      "linters": null,
+      "note": "A Strict Mode double effect made the live region announce the first page.",
+      "rules": null
+    },
+    "shadcn-ui/ui#2163": {
+      "blindSpot": "meaning",
+      "flagged": "no",
+      "linters": null,
+      "note": "The aria-labels are present but name the wrong action.",
+      "rules": null
+    },
+    "shadcn-ui/ui#7611": {
+      "blindSpot": "cross-file",
+      "flagged": "no",
+      "linters": null,
+      "note": "Duplicate ids across two examples rendered on one page.",
+      "rules": null
+    },
+    "shadcn-ui/ui#224": {
+      "blindSpot": "CSS",
+      "flagged": "no",
+      "linters": null,
+      "note": "Border contrast comes from a Tailwind token.",
+      "rules": null
+    },
+    "shadcn-ui/ui#12061": {
+      "blindSpot": "CSS",
+      "flagged": "no",
+      "linters": null,
+      "note": "Reduced motion is handled in a stylesheet.",
+      "rules": null
+    },
+    "shadcn-ui/ui@961e0b62d770": {
+      "blindSpot": "meaning",
+      "flagged": "adjacent",
+      "linters": "Oxlint, ESLint",
+      "note": "heading-has-content fires on CardTitle's <h3 {...props} /> because the content arrives through props (a false positive). The commit changed the fixed <h3> to a <div> for heading structure, which also silences the rule.",
+      "rules": "jsx-a11y/heading-has-content"
+    },
+    "shadcn-ui/ui#2190": {
+      "blindSpot": "cross-component",
+      "flagged": "adjacent",
+      "linters": "Oxlint, ESLint",
+      "note": "The barrier is <li><li><a>, produced by how two components nest. anchor-has-content fires because the anchor's content comes through props.",
+      "rules": "jsx-a11y/anchor-has-content"
+    },
+    "radix-ui/primitives#4210": {
+      "blindSpot": "runtime state",
+      "flagged": "adjacent",
+      "linters": "Oxlint, ESLint",
+      "note": "aria-labelledby used the generated id while the title used the consumer's id. The ids come from context at runtime.",
+      "rules": "jsx-a11y/prefer-tag-over-role (role=\"dialog\")"
+    },
+    "radix-ui/primitives#3801": {
+      "blindSpot": "CSS",
+      "flagged": "no",
+      "linters": null,
+      "note": "display: table made Chrome infer a layout table.",
+      "rules": null
+    },
+    "radix-ui/primitives#1644": {
+      "blindSpot": "runtime state",
+      "flagged": "no",
+      "linters": null,
+      "note": "aria-expanded={open ? true : undefined} is a dynamic value no rule evaluates.",
+      "rules": null
+    },
+    "radix-ui/primitives#731": {
+      "blindSpot": "runtime focus",
+      "flagged": "no",
+      "linters": null,
+      "note": "Which slider thumb keeps focus after a keyboard swap.",
+      "rules": null
+    },
+    "radix-ui/primitives#2595": {
+      "blindSpot": null,
+      "flagged": "yes",
+      "linters": "Oxlint, ESLint",
+      "note": "The focusable, aria-hidden focus proxy is exactly what no-aria-hidden-on-focusable reports. Biome's noAriaHiddenOnFocusable doesn't fire: the element is the VisuallyHidden component. The second barrier in the same fix, role=\"status\" on an <li>, only gets prefer-tag-over-role's suggestion to use <output>.",
+      "rules": "jsx-a11y/no-aria-hidden-on-focusable (and prefer-tag-over-role, adjacent)"
+    },
+    "radix-ui/primitives#1422": {
+      "blindSpot": "missing state",
+      "flagged": "no",
+      "linters": null,
+      "note": "aria-required isn't a required prop of radiogroup, so nothing asks for it.",
+      "rules": null
+    },
+    "radix-ui/primitives#902": {
+      "blindSpot": "runtime behaviour",
+      "flagged": "no",
+      "linters": null,
+      "note": "The card opened on pointer enter only. The handlers exist; the focus path doesn't.",
+      "rules": null
+    },
+    "adobe/react-spectrum#5796": {
+      "blindSpot": "props plumbing",
+      "flagged": "no",
+      "linters": null,
+      "note": "An aria-label passed to the component was never forwarded to the hook.",
+      "rules": null
+    },
+    "adobe/react-spectrum#6423": {
+      "blindSpot": "props plumbing",
+      "flagged": "no",
+      "linters": null,
+      "note": "aria-label was read from the wrong object.",
+      "rules": null
+    },
+    "adobe/react-spectrum#7881": {
+      "blindSpot": "props plumbing",
+      "flagged": "no",
+      "linters": null,
+      "note": "filterDOMProps dropped the labelling props.",
+      "rules": null
+    },
+    "adobe/react-spectrum#4703": {
+      "blindSpot": "props plumbing",
+      "flagged": "adjacent",
+      "linters": "all three",
+      "note": "aria-label set after the spread overwrote the developer's, and aria-labelledby pointed at a Text id that might not render.",
+      "rules": "react/button-has-type, github/a11y-no-visually-hidden-interactive-element"
+    },
+    "adobe/react-spectrum#4943": {
+      "blindSpot": "runtime state",
+      "flagged": "no",
+      "linters": null,
+      "note": "isDisabled wasn't passed to the hidden select.",
+      "rules": null
+    },
+    "adobe/react-spectrum#5867": {
+      "blindSpot": "runtime focus",
+      "flagged": "adjacent",
+      "linters": "all three (suppressed in the source)",
+      "note": "The rules flag the <div onClick> whose handler caused the bug, but for a missing key handler. The bug was focus moving to a hidden button. The maintainers had suppressed both rules with eslint-disable-next-line.",
+      "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions; Biome equivalents"
+    },
+    "adobe/react-spectrum#9888": {
+      "blindSpot": "meaning",
+      "flagged": "adjacent",
+      "linters": "Biome",
+      "note": "Which text is part of the accessible name is a question of meaning.",
+      "rules": "a11y/useAriaPropsSupportedByRole on a <span aria-labelledby>"
+    },
+    "supabase/supabase#51055": {
+      "blindSpot": "component content",
+      "flagged": "no",
+      "linters": null,
+      "note": "A Sheet without a title renders an unnamed dialog. The dialog is a component, so no rule sees a role=\"dialog\".",
+      "rules": null
+    },
+    "supabase/supabase#50083": {
+      "blindSpot": "CSS",
+      "flagged": "no",
+      "linters": null,
+      "note": "opacity-0 and group-hover classes hid the copy buttons from sighted keyboard users.",
+      "rules": null
+    },
+    "supabase/supabase#48527": {
+      "blindSpot": "id reference",
+      "flagged": "no",
+      "linters": null,
+      "note": "htmlFor={props.value} satisfies label-has-associated-control: any htmlFor counts, even one that matches no id.",
+      "rules": null
+    },
+    "supabase/supabase#49345": {
+      "blindSpot": "component content",
+      "flagged": "adjacent",
+      "linters": "Oxlint, ESLint",
+      "note": "The unnamed icon trigger. The rules point at role=\"button\", not at the missing name.",
+      "rules": "jsx-a11y/prefer-tag-over-role"
+    },
+    "supabase/supabase#47731": {
+      "blindSpot": "runtime behaviour",
+      "flagged": "no",
+      "linters": null,
+      "note": "The HoverCard opened on hover only.",
+      "rules": null
+    },
+    "supabase/supabase#45083": {
+      "blindSpot": "platform",
+      "flagged": "no",
+      "linters": null,
+      "note": "Safari skips buttons in the Tab order by default.",
+      "rules": null
+    }
+  }
+}

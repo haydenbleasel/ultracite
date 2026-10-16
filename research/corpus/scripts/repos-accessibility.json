@@ -1,0 +1,49 @@
+{
+  "_comment": "Extra React codebases for the accessibility post only, in the same shape as repos.json. Loaded alongside repos.json when CORPUS_REPO_LISTS=repos-accessibility.json is set (see collect-files.cjs), so repos.json, its SHAs and every earlier topic's numbers don't change. Cloned by a11y-clone.sh (shallow, sparse). Global exclusions (tests, stories, fixtures, examples, vendored dirs, *.d.ts, third-party license headers) come from collect-files.cjs. Chosen to contrast: shadcn/ui is the copy-paste component layer (MIT), Radix Primitives and React Aria Components are accessibility-focused libraries with different designs (MIT; Apache-2.0), and Supabase Studio is a large real-world app built on a shadcn-derived design system (Apache-2.0).",
+  "repos": [
+    {
+      "name": "shadcn",
+      "github": "shadcn-ui/ui",
+      "license": "LICENSE.md",
+      "spdx": "MIT",
+      "dir": "repos/shadcn",
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+      "include": [
+        "apps/v4/registry/new-york-v4/ui",
+        "apps/v4/registry/new-york-v4/blocks"
+      ],
+      "exclude": []
+    },
+    {
+      "name": "radix",
+      "github": "radix-ui/primitives",
+      "license": "LICENSE",
+      "spdx": "MIT",
+      "dir": "repos/radix",
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "include": ["packages/react"],
+      "exclude": []
+    },
+    {
+      "name": "react-aria",
+      "github": "adobe/react-spectrum",
+      "license": "LICENSE",
+      "spdx": "Apache-2.0",
+      "dir": "repos/react-aria",
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+      "ownCopyright": "Copyright \\d{4} Adobe",
+      "include": ["packages/react-aria-components/src"],
+      "exclude": []
+    },
+    {
+      "name": "supabase",
+      "github": "supabase/supabase",
+      "license": "LICENSE",
+      "spdx": "Apache-2.0",
+      "dir": "repos/supabase",
+      "sha": "09f80f528ec47569841408a81668dff90525c48a",
+      "include": ["apps/studio/components", "apps/studio/pages"],
+      "exclude": []
+    }
+  ]
+}

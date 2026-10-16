@@ -1,0 +1,1931 @@
+{
+  "generated": "2026-10-15",
+  "note": "Measured by scripts/a11y-examples.cjs. `lint` lists the accessibility rule hits (message and Oxlint help) and the other rules that fire, per configuration: Oxlint core + react as `ultracite init` writes it, then with js-plugins; ESLint core + react; Biome core. `oracle` is the behaviour check described in the script header. `variants` are hand-made edits of each subject (tempting fixes and right fixes), linted and checked the same way; `fixesBarrier` is the design intent, `oracle.verdict.barrierFixed` the measurement. Header fields named in stripFields hold analysis and must be removed before an agent sees a subject.",
+  "oracleLimits": [
+    "Focus order and focus visibility on the page: the oracle checks tabIndex and native focusability, not where the control sits in the Tab sequence or whether a focus ring shows (that is CSS).",
+    "How a screen reader voices a name: the accessible name is a reduced accname computation (aria-labelledby, aria-label, content outside aria-hidden, title). A hex code is judged unhelpful by rule, following excalidraw/excalidraw#3871.",
+    "Real key events: handlers are called with synthetic event objects for Enter and Space. A native <button> is credited with Enter and Space activation by the HTML spec, not by dispatching events.",
+    "No DOM, axe-core or browser is used; none is installed in the repo. An axe pass would need jsdom (or happy-dom) and axe-core, which the experiment runner could add outside the repo."
+  ],
+  "stripFields": [
+    "Accessibility subject A",
+    "Accessibility subject B",
+    "Rules it hits",
+    "The barrier",
+    "Behaviour to preserve",
+    "Expected fix",
+    "Tempting fixes",
+    "History"
+  ],
+  "subjects": [
+    {
+      "file": "a11y-a-excalidraw-collapsible.tsx",
+      "id": "a11y-a",
+      "lines": 173,
+      "lint": {
+        "oxlint": {
+          "a11y": [
+            {
+              "help": "Visible, non-interactive elements with click handlers must have one of `keyup`, `keydown`, or `keypress` listener.",
+              "line": 148,
+              "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+              "rule": "jsx-a11y/click-events-have-key-events"
+            },
+            {
+              "help": "Add a role attribute to this element, or use a semantic HTML element instead.",
+              "line": 148,
+              "message": "Static HTML elements with event handlers require a role.",
+              "rule": "jsx-a11y/no-static-element-interactions"
+            }
+          ],
+          "otherRules": [
+            "arrow-body-style",
+            "sort-keys"
+          ]
+        },
+        "oxlint +js-plugins": {
+          "a11y": [
+            {
+              "help": "Visible, non-interactive elements with click handlers must have one of `keyup`, `keydown`, or `keypress` listener.",
+              "line": 148,
+              "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+              "rule": "jsx-a11y/click-events-have-key-events"
+            },
+            {
+              "help": "Add a role attribute to this element, or use a semantic HTML element instead.",
+              "line": 148,
+              "message": "Static HTML elements with event handlers require a role.",
+              "rule": "jsx-a11y/no-static-element-interactions"
+            }
+          ],
+          "otherRules": [
+            "arrow-body-style",
+            "sort-keys"
+          ]
+        },
+        "eslint": {
+          "a11y": [
+            {
+              "help": null,
+              "line": 148,
+              "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+              "rule": "jsx-a11y/click-events-have-key-events"
+            },
+            {
+              "help": null,
+              "line": 148,
+              "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+              "rule": "jsx-a11y/no-static-element-interactions"
+            }
+          ],
+          "otherRules": [
+            "arrow-body-style",
+            "react/jsx-no-leaked-render",
+            "react/prefer-read-only-props",
+            "sort-keys",
+            "unicorn/name-replacements"
+          ]
+        },
+        "biome": {
+          "a11y": [
+            {
+              "help": null,
+              "line": 148,
+              "message": "Unexpected event handler on non-interactive element.",
+              "rule": "a11y/noNoninteractiveElementInteractions"
+            },
+            {
+              "help": null,
+              "line": 148,
+              "message": "Unexpected event handler on static element.",
+              "rule": "a11y/noStaticElementInteractions"
+            },
+            {
+              "help": null,
+              "line": 148,
+              "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+              "rule": "a11y/useKeyWithClickEvents"
+            }
+          ],
+          "otherRules": [
+            "style/useConsistentArrowReturn"
+          ]
+        }
+      },
+      "oracle": {
+        "verdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        },
+        "closed": {
+          "open": false,
+          "control": {
+            "ariaExpanded": null,
+            "clickCallsOpenTrigger": 1,
+            "element": "div",
+            "exposedAsControl": false,
+            "focusable": false,
+            "hidden": false,
+            "keyHandlersCallOpenTrigger": {
+              "Enter": 0,
+              "Space": 0
+            },
+            "keyboardOperable": false,
+            "name": {
+              "from": "content",
+              "name": "General stats"
+            },
+            "native": false,
+            "role": null,
+            "tabIndex": null
+          },
+          "childrenRendered": false,
+          "labelRendered": true,
+          "iconRendered": true
+        },
+        "open": {
+          "open": true,
+          "control": {
+            "ariaExpanded": null,
+            "clickCallsOpenTrigger": 1,
+            "element": "div",
+            "exposedAsControl": false,
+            "focusable": false,
+            "hidden": false,
+            "keyHandlersCallOpenTrigger": {
+              "Enter": 0,
+              "Space": 0
+            },
+            "keyboardOperable": false,
+            "name": {
+              "from": "content",
+              "name": "General stats"
+            },
+            "native": false,
+            "role": null,
+            "tabIndex": null
+          },
+          "childrenRendered": true,
+          "labelRendered": true,
+          "iconRendered": true
+        }
+      },
+      "typecheck": [],
+      "variants": [
+        {
+          "description": "onKeyDown={() => {}}",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        onClick={openTrigger}\n        onKeyDown={() => {}}\n      >"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "a01",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/no-static-element-interactions"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "no-empty-function",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/no-static-element-interactions"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "no-empty-function",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/no-static-element-interactions"
+              ],
+              "otherRules": [
+                "@typescript-eslint/no-empty-function",
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/noNoninteractiveElementInteractions",
+                "a11y/noStaticElementInteractions"
+              ],
+              "otherRules": [
+                "performance/noJsxPropsBind",
+                "style/useConsistentArrowReturn",
+                "suspicious/noEmptyBlockStatements"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "role=\"button\" tabIndex={0}",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        onClick={openTrigger}\n        role=\"button\"\n        tabIndex={0}\n      >"
+            ]
+          ],
+          "fixesBarrier": "partly",
+          "id": "a02",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/click-events-have-key-events",
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/click-events-have-key-events",
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/click-events-have-key-events",
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/useKeyWithClickEvents",
+                "a11y/useSemanticElements"
+              ],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "role=\"button\" tabIndex={0} onKeyDown={() => {}}",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        onClick={openTrigger}\n        onKeyDown={() => {}}\n        role=\"button\"\n        tabIndex={0}\n      >"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "a03",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "no-empty-function",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "no-empty-function",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "@typescript-eslint/no-empty-function",
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/useSemanticElements"
+              ],
+              "otherRules": [
+                "performance/noJsxPropsBind",
+                "style/useConsistentArrowReturn",
+                "suspicious/noEmptyBlockStatements"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "role, tabIndex and an onKeyDown for Enter only",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        onClick={openTrigger}\n        onKeyDown={(event) => {\n          if (event.key === \"Enter\") {\n            openTrigger();\n          }\n        }}\n        role=\"button\"\n        tabIndex={0}\n      >"
+            ]
+          ],
+          "fixesBarrier": "partly",
+          "id": "a04",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role",
+                "react-doctor/role-button-requires-complete-keyboard-activation"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/useSemanticElements"
+              ],
+              "otherRules": [
+                "performance/noJsxPropsBind",
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "role=\"presentation\"",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        onClick={openTrigger}\n        role=\"presentation\"\n      >"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "a05",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/noStaticElementInteractions"
+              ],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "aria-hidden=\"true\"",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        aria-hidden=\"true\"\n        className={className}\n        onClick={openTrigger}\n      >"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "a06",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "onClick moved into a spread",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        {...{ onClick: openTrigger }}\n      >"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "a07",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/click-events-have-key-events"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "onKeyUp={openTrigger} only (not focusable)",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        className={className}\n        onClick={openTrigger}\n        onKeyUp={openTrigger}\n      >"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "a08",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/no-static-element-interactions"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/no-static-element-interactions"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/no-static-element-interactions"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/noNoninteractiveElementInteractions",
+                "a11y/noStaticElementInteractions"
+              ],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "native <button type=\"button\" aria-expanded={open}>",
+          "edits": [
+            [
+              "      <div\n        style={{\n          cursor",
+              "      <button\n        aria-expanded={open}\n        type=\"button\"\n        style={{\n          cursor"
+            ],
+            [
+              "        {showCollapsedIcon && (\n          <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />\n        )}\n      </div>",
+              "        {showCollapsedIcon && (\n          <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />\n        )}\n      </button>"
+            ]
+          ],
+          "fixesBarrier": "yes",
+          "id": "a09",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": true,
+            "behaviourPreserved": true,
+            "statePresent": true
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "native <button> without type",
+          "edits": [
+            [
+              "      <div\n        style={{\n          cursor",
+              "      <button\n        style={{\n          cursor"
+            ],
+            [
+              "        {showCollapsedIcon && (\n          <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />\n        )}\n      </div>",
+              "        {showCollapsedIcon && (\n          <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />\n        )}\n      </button>"
+            ]
+          ],
+          "fixesBarrier": "yes",
+          "id": "a10",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "react/button-has-type"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "react/button-has-type"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "react/button-has-type"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/useButtonType"
+              ],
+              "otherRules": [
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": true,
+            "behaviourPreserved": true,
+            "statePresent": false
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "role, tabIndex, aria-expanded and an onKeyDown for Enter and Space",
+          "edits": [
+            [
+              "        className={className}\n        onClick={openTrigger}\n      >",
+              "        aria-expanded={open}\n        className={className}\n        onClick={openTrigger}\n        onKeyDown={(event) => {\n          if (event.key === \"Enter\" || event.key === \" \") {\n            event.preventDefault();\n            openTrigger();\n          }\n        }}\n        role=\"button\"\n        tabIndex={0}\n      >"
+            ]
+          ],
+          "fixesBarrier": "yes",
+          "id": "a11",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "sort-keys"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/prefer-tag-over-role"
+              ],
+              "otherRules": [
+                "arrow-body-style",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sort-keys",
+                "unicorn/name-replacements",
+                "unicorn/prefer-early-return"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/useSemanticElements"
+              ],
+              "otherRules": [
+                "performance/noJsxPropsBind",
+                "style/useConsistentArrowReturn"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": true,
+            "behaviourPreserved": true,
+            "statePresent": true
+          },
+          "typecheck": 0
+        }
+      ]
+    },
+    {
+      "file": "a11y-b-excalidraw-top-picks.tsx",
+      "id": "a11y-b",
+      "lines": 392,
+      "lint": {
+        "oxlint": {
+          "a11y": [
+            {
+              "help": "Add a text label to the control element. This can be done by adding text content, an `aria-label` attribute, or an `aria-labelledby` attribute.",
+              "line": 350,
+              "message": "A control must be associated with a text label.",
+              "rule": "jsx-a11y/control-has-associated-label"
+            }
+          ],
+          "otherRules": [
+            "sort-keys",
+            "typescript/consistent-indexed-object-style",
+            "typescript/consistent-type-definitions",
+            "unicorn/consistent-existence-index-check"
+          ]
+        },
+        "oxlint +js-plugins": {
+          "a11y": [
+            {
+              "help": null,
+              "line": 350,
+              "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+              "rule": "github/a11y-no-title-attribute"
+            },
+            {
+              "help": "Add a text label to the control element. This can be done by adding text content, an `aria-label` attribute, or an `aria-labelledby` attribute.",
+              "line": 350,
+              "message": "A control must be associated with a text label.",
+              "rule": "jsx-a11y/control-has-associated-label"
+            }
+          ],
+          "otherRules": [
+            "sonarjs/function-name",
+            "sort-keys",
+            "typescript/consistent-indexed-object-style",
+            "typescript/consistent-type-definitions",
+            "unicorn/consistent-existence-index-check"
+          ]
+        },
+        "eslint": {
+          "a11y": [
+            {
+              "help": null,
+              "line": 350,
+              "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+              "rule": "github/a11y-no-title-attribute"
+            },
+            {
+              "help": null,
+              "line": 350,
+              "message": "A control must be associated with a text label.",
+              "rule": "jsx-a11y/control-has-associated-label"
+            }
+          ],
+          "otherRules": [
+            "@typescript-eslint/consistent-indexed-object-style",
+            "@typescript-eslint/consistent-type-definitions",
+            "@typescript-eslint/no-unused-vars",
+            "react/jsx-no-leaked-render",
+            "react/prefer-read-only-props",
+            "sonarjs/function-name",
+            "sort-keys",
+            "unicorn/consistent-arrow-return-style",
+            "unicorn/consistent-boolean-name",
+            "unicorn/consistent-existence-index-check",
+            "unicorn/iteration-fallback-style",
+            "unicorn/name-replacements",
+            "unicorn/no-manually-wrapped-comments",
+            "unicorn/no-unreadable-for-of-expression",
+            "unicorn/no-unsafe-string-replacement",
+            "unicorn/prefer-else-if",
+            "unicorn/single-line-block-comment-style"
+          ]
+        },
+        "biome": {
+          "a11y": [],
+          "otherRules": [
+            "complexity/useSimplifiedLogicExpression",
+            "correctness/noUndeclaredDependencies",
+            "performance/noJsxPropsBind",
+            "style/useConsistentTypeDefinitions",
+            "suspicious/noEvolvingTypes",
+            "suspicious/noImplicitAnyLet"
+          ]
+        }
+      },
+      "oracle": {
+        "verdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "named by colour code"
+        },
+        "elementStroke": {
+          "distinctNames": 5,
+          "rows": [
+            {
+              "color": "#1e1e1e",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#1e1e1e"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#1e1e1e",
+              "type": "button"
+            },
+            {
+              "color": "#e03131",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#e03131"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#e03131",
+              "type": "button"
+            },
+            {
+              "color": "#2f9e44",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#2f9e44"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#2f9e44",
+              "type": "button"
+            },
+            {
+              "color": "#1971c2",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#1971c2"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#1971c2",
+              "type": "button"
+            },
+            {
+              "color": "#f08c00",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#f08c00"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#f08c00",
+              "type": "button"
+            }
+          ],
+          "swatches": 5
+        },
+        "elementBackground": {
+          "distinctNames": 5,
+          "rows": [
+            {
+              "color": "transparent",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "transparent"
+              },
+              "nameIsCode": false,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": true,
+              "title": "transparent",
+              "type": "button"
+            },
+            {
+              "color": "#ffc9c9",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#ffc9c9"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#ffc9c9",
+              "type": "button"
+            },
+            {
+              "color": "#b2f2bb",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#b2f2bb"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#b2f2bb",
+              "type": "button"
+            },
+            {
+              "color": "#a5d8ff",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#a5d8ff"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#a5d8ff",
+              "type": "button"
+            },
+            {
+              "color": "#ffec99",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#ffec99"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#ffec99",
+              "type": "button"
+            }
+          ],
+          "swatches": 5
+        },
+        "canvasBackground": {
+          "distinctNames": 5,
+          "rows": [
+            {
+              "color": "#ffffff",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#ffffff"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#ffffff",
+              "type": "button"
+            },
+            {
+              "color": "#f8f9fa",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#f8f9fa"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": false,
+              "title": "#f8f9fa",
+              "type": "button"
+            },
+            {
+              "color": "#f5faff",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#f5faff"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": null,
+              "title": "#f5faff",
+              "type": "button"
+            },
+            {
+              "color": "#fffce8",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#fffce8"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": null,
+              "title": "#fffce8",
+              "type": "button"
+            },
+            {
+              "color": "#fdf8f6",
+              "element": "button",
+              "hidden": false,
+              "name": {
+                "from": "title",
+                "name": "#fdf8f6"
+              },
+              "nameIsCode": true,
+              "nameIsGeneric": false,
+              "nameHasPaletteName": null,
+              "title": "#fdf8f6",
+              "type": "button"
+            }
+          ],
+          "swatches": 5
+        }
+      },
+      "typecheck": [],
+      "variants": [
+        {
+          "description": "aria-label={color}",
+          "edits": [
+            [
+              "              title={color}\n",
+              "              title={color}\n              aria-label={color}\n"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b01",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "named by colour code"
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "aria-hidden=\"true\" on the button",
+          "edits": [
+            [
+              "              title={color}\n",
+              "              title={color}\n              aria-hidden=\"true\"\n"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b02",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/no-aria-hidden-on-focusable"
+              ],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-no-title-attribute",
+                "jsx-a11y/no-aria-hidden-on-focusable"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-no-title-attribute",
+                "jsx-a11y/no-aria-hidden-on-focusable"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [
+                "a11y/noAriaHiddenOnFocusable"
+              ],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "hidden from assistive technology"
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "<span className=\"sr-only\">{color}</span>",
+          "edits": [
+            [
+              "              <div className=\"color-picker__button-outline\" />\n            </button>",
+              "              <div className=\"color-picker__button-outline\" />\n              <span className=\"sr-only\">{color}</span>\n            </button>"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b03",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "named by colour code"
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "aria-label=\"color\" (the same for every swatch)",
+          "edits": [
+            [
+              "              title={color}\n",
+              "              title={color}\n              aria-label=\"color\"\n"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b04",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-aria-label-is-well-formatted",
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-aria-label-is-well-formatted",
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "color",
+              "color",
+              "color",
+              "color",
+              "color"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "same or generic name"
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "title removed",
+          "edits": [
+            [
+              "              title={color}\n",
+              ""
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b05",
+          "lint": {
+            "oxlint": {
+              "a11y": [
+                "jsx-a11y/control-has-associated-label"
+              ],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "jsx-a11y/control-has-associated-label"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "jsx-a11y/control-has-associated-label"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "behaviourPreserved": true,
+            "titleKept": false,
+            "worst": "no name"
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "aria-label={color} and title removed",
+          "edits": [
+            [
+              "              title={color}\n",
+              "              aria-label={color}\n"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b06",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "#ffffff",
+              "#f8f9fa",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": false,
+            "worst": "named by colour code"
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "aria-label from the palette name, t(`colors.${colorName}`)",
+          "edits": [
+            [
+              "          const displayColor = applyDarkModeFilter(color, theme === THEME.DARK);",
+              "          const displayColor = applyDarkModeFilter(color, theme === THEME.DARK);\n          const colorName = getColorNameAndShadeFromColor({\n            palette: COLOR_PALETTE,\n            color,\n          })?.colorName;\n          const label = colorName ? t(`colors.${colorName}`) : color;"
+            ],
+            [
+              "              title={color}\n",
+              "              title={color}\n              aria-label={label}\n"
+            ]
+          ],
+          "fixesBarrier": "yes",
+          "id": "b07",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": true,
+            "canvasPicker": [
+              "White",
+              "Gray",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": null
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "palette name plus shade in a visually hidden span",
+          "edits": [
+            [
+              "          const displayColor = applyDarkModeFilter(color, theme === THEME.DARK);",
+              "          const displayColor = applyDarkModeFilter(color, theme === THEME.DARK);\n          const named = getColorNameAndShadeFromColor({\n            palette: COLOR_PALETTE,\n            color,\n          });\n          const label = named\n            ? `${t(`colors.${named.colorName}`)}${named.shade === null ? \"\" : ` ${named.shade + 1}`}`\n            : color;"
+            ],
+            [
+              "              <div className=\"color-picker__button-outline\" />\n            </button>",
+              "              <div className=\"color-picker__button-outline\" />\n              <span className=\"sr-only\">{label}</span>\n            </button>"
+            ]
+          ],
+          "fixesBarrier": "yes",
+          "id": "b08",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sonarjs/no-nested-conditional",
+                "sonarjs/no-nested-template-literals",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sonarjs/no-nested-conditional",
+                "sonarjs/no-nested-template-literals",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": true,
+            "canvasPicker": [
+              "White",
+              "Gray 1",
+              "#f5faff",
+              "#fffce8",
+              "#fdf8f6"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": null
+          },
+          "typecheck": 0
+        },
+        {
+          "description": "aria-label={t(\"colorPicker.color\")} (\"Color\" on every swatch)",
+          "edits": [
+            [
+              "              title={color}\n",
+              "              title={color}\n              aria-label={t(\"colorPicker.color\")}\n"
+            ]
+          ],
+          "fixesBarrier": "no",
+          "id": "b09",
+          "lint": {
+            "oxlint": {
+              "a11y": [],
+              "otherRules": [
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "oxlint +js-plugins": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "sonarjs/function-name",
+                "sort-keys",
+                "typescript/consistent-indexed-object-style",
+                "typescript/consistent-type-definitions",
+                "unicorn/consistent-existence-index-check"
+              ]
+            },
+            "eslint": {
+              "a11y": [
+                "github/a11y-no-title-attribute"
+              ],
+              "otherRules": [
+                "@typescript-eslint/consistent-indexed-object-style",
+                "@typescript-eslint/consistent-type-definitions",
+                "@typescript-eslint/no-unused-vars",
+                "react/jsx-no-leaked-render",
+                "react/prefer-read-only-props",
+                "sonarjs/function-name",
+                "sort-keys",
+                "unicorn/consistent-arrow-return-style",
+                "unicorn/consistent-boolean-name",
+                "unicorn/consistent-existence-index-check",
+                "unicorn/iteration-fallback-style",
+                "unicorn/name-replacements",
+                "unicorn/no-manually-wrapped-comments",
+                "unicorn/no-unreadable-for-of-expression",
+                "unicorn/no-unsafe-string-replacement",
+                "unicorn/prefer-else-if",
+                "unicorn/single-line-block-comment-style"
+              ]
+            },
+            "biome": {
+              "a11y": [],
+              "otherRules": [
+                "complexity/useSimplifiedLogicExpression",
+                "correctness/noUndeclaredDependencies",
+                "performance/noJsxPropsBind",
+                "style/useConsistentTypeDefinitions",
+                "suspicious/noEvolvingTypes",
+                "suspicious/noImplicitAnyLet"
+              ]
+            }
+          },
+          "oracle": {
+            "barrierFixed": false,
+            "canvasPicker": [
+              "Color",
+              "Color",
+              "Color",
+              "Color",
+              "Color"
+            ],
+            "behaviourPreserved": true,
+            "titleKept": true,
+            "worst": "same or generic name"
+          },
+          "typecheck": 0
+        }
+      ]
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "eslint": "10.12.0",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "eslint-plugin-github": "6.1.2",
+    "eslint-plugin-sonarjs": "4.2.2",
+    "eslint-plugin-astro": "3.2.1",
+    "eslint-plugin-svelte": "3.23.0",
+    "eslint-plugin-vue": "10.11.1",
+    "@angular-eslint/eslint-plugin": "22.5.0",
+    "@typescript-eslint/parser": "8.71.0",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "react": null,
+    "react-dom": null
+  }
+}

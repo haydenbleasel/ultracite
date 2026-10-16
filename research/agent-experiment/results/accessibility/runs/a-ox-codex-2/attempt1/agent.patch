@@ -1,0 +1,26 @@
+--- a/collapsible.tsx
++++ b/collapsible.tsx
+@@ -120,14 +120,23 @@
+ }: CollapsibleProps) => (
+   <>
+     <div
++      aria-expanded={open}
+       className={className}
+       onClick={openTrigger}
++      onKeyDown={(event) => {
++        if (event.key === "Enter" || event.key === " ") {
++          event.preventDefault();
++          openTrigger();
++        }
++      }}
++      role="button"
+       style={{
+         alignItems: "center",
+         cursor: "pointer",
+         display: "flex",
+         justifyContent: "space-between",
+       }}
++      tabIndex={0}
+     >
+       {label}
+       {showCollapsedIcon && (

@@ -1,0 +1,13 @@
+--- a/collapsible.tsx
++++ b/collapsible.tsx
+@@ -155,7 +155,9 @@
+         />
+       </div>
+       {open && (
+-        <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
++        <div style={{ display: "flex", flexDirection: "column" }}>
++          {children}
++        </div>
+       )}
+     </>
+   );

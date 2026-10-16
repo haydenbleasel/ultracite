@@ -1,0 +1,33 @@
+{
+  "error": null,
+  "remaining": [
+    {
+      "column": 23,
+      "fatal": false,
+      "file": "collapsible.tsx",
+      "help": "Disallow the use of dependencies that aren't specified in the `package.json`.\n\nIndirect dependencies will trigger the rule because they aren't declared in the `package.json`.\nThis means that if the package `@org/foo` has a dependency on `lodash`, and then you use\n`import \"lodash\"` somewhere in your project, the rule will trigger a diagnostic for this import.\n\nThe rule is meant to catch those dependencies that aren't declared inside the closest `package.json`, and\nisn't meant to detect dependencies declared in other manifest files, e.g. the root `package.json` in a monorepo setting.\n\nThe rule ignores imports that are not valid package names.\nThis includes internal imports that start with `#` and `@/` and imports with a protocol such as `node:`, `bun:`, `jsr:`, `https:`.\n\nTo ensure that Visual Studio Code uses relative imports when it automatically imports a variable,\nyou may set [`javascript.preferences.importModuleSpecifier` and `typescript.preferences.importModuleSpecifier`](https://code.visualstudio.com/docs/getstarted/settings) to `relative`.",
+      "line": 38,
+      "message": "Dependency react cannot be verified because no package.json file was found.",
+      "raw": {
+        "severity": "error",
+        "message": "Dependency react cannot be verified because no package.json file was found.",
+        "category": "lint/correctness/noUndeclaredDependencies",
+        "location": {
+          "path": "collapsible.tsx",
+          "start": {
+            "line": 38,
+            "column": 23
+          },
+          "end": {
+            "line": 38,
+            "column": 30
+          }
+        },
+        "advices": []
+      },
+      "rule": "lint/correctness/noUndeclaredDependencies",
+      "severity": "error",
+      "url": "https://biomejs.dev/linter/rules/no-undeclared-dependencies"
+    }
+  ]
+}

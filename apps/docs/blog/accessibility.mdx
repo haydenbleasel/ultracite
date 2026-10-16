@@ -1,0 +1,325 @@
+---
+title: How much of accessibility a linter can see
+description: Where the rules for alt text, labels, roles and keyboard handlers came from, what automated checks can and can't find, what they catch in seven React codebases and their history, and what agents do with a clickable div.
+date: 2026-10-16
+author: hayden
+rules:
+  - jsx-a11y/click-events-have-key-events
+  - jsx-a11y/no-static-element-interactions
+  - jsx-a11y/prefer-tag-over-role
+  - jsx-a11y/control-has-associated-label
+  - jsx-a11y/alt-text
+  - useSemanticElements
+---
+
+A `<div>` with an `onClick` works fine with a mouse. With a keyboard you can't reach it, and a screen reader doesn't announce it as something you can press. Accessibility lint rules exist to catch mistakes like that while the code is still being written: images with no text alternative, inputs with no label, roles with no keyboard support, clickable elements that aren't controls.
+
+Ultracite turns these rules on. We wanted to know what they actually find, and what they can't. We read the standards and the research on automated testing, ran every accessibility rule over seven React codebases, checked 40 real accessibility fixes from those projects' history against what the rules would have said beforehand, and gave agents two real components to fix.
+
+## Standards that only grow
+
+The rules come from a standard that has mostly grown by addition. Section 508 of the US Rehabilitation Act was rewritten in [1998](https://www.govinfo.gov/content/pkg/PLAW-105publ220/html/PLAW-105publ220.htm) to cover federal websites. [WCAG 1.0](https://www.w3.org/TR/1999/WAI-WEBCONTENT-19990505) followed in 1999, with checkpoints written for HTML, scripts and applets. [WCAG 2.0](https://www.w3.org/TR/2008/REC-WCAG20-20081211/) replaced them in 2008 with 61 success criteria "written as testable statements that are not technology-specific." [WCAG 2.1](https://www.w3.org/TR/WCAG21/) added 17 more in 2018, and [WCAG 2.2](https://www.w3.org/TR/WCAG22/) nine more in 2023.
+
+WCAG 2.2 is also the first version to remove a criterion. It dropped 4.1.1 Parsing, the requirement that markup be well formed, because "Assistive technology no longer has any need to directly parse HTML." That was the criterion closest to what a linter checks. The ones that matter for lint now are about meaning: does every control have a name and a role (4.1.2), can it be operated from a keyboard (2.1.1), does every image have a text alternative (1.1.1)?
+
+The pressure to meet them is mostly legal. In 2024 the US Department of Justice made [WCAG 2.1 AA the standard](https://www.federalregister.gov/documents/2024/04/24/2024-07758/nondiscrimination-on-the-basis-of-disability-accessibility-of-web-information-and-services-of-state) for state and local government websites. Four days before the first deadline, in April 2026, it [pushed the deadlines back](https://www.federalregister.gov/documents/2026/04/20/2026-07663/extension-of-compliance-dates-for-nondiscrimination-on-the-basis-of-disability-accessibility-of-web) by a year. One of the reasons it gave was that "generative AI, does not yet reliably automate the remediation of inaccessible content at scale." The [European Accessibility Act](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019L0882) has applied to many private products and services since June 2025, and one law firm counted [3,117 website accessibility lawsuits](https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/) in US federal courts in 2025 alone.
+
+## A role is a promise
+
+Most of the rules are about ARIA, the W3C vocabulary of roles, states and properties that tells assistive technology what an element is. [ARIA 1.0](https://www.w3.org/TR/2014/REC-wai-aria-20140320/) became a standard in 2014. The W3C draft on how to use it, [_Using ARIA_](https://www.w3.org/TR/2018/WD-using-aria-20180927/), opened with what's now called the first rule of ARIA: if a native HTML element has "the semantics and behavior you require already built in," use it "instead of re-purposing an element and adding an ARIA role." W3C [discontinued that draft](https://www.w3.org/TR/using-aria/) in 2026 and points to the [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/) instead, which puts the same idea more bluntly: "A role is a promise."
+
+The promise is behavior. `role="button"` tells a screen reader the element is a button, but "ARIA roles do not cause browsers to provide keyboard behaviors or styling." A real `<button>` is focusable and responds to Enter and Space for free. A `<div role="button">` does neither until someone writes the code. Pages that use more ARIA tend to have more detected errors: in the [2026 WebAIM Million](https://webaim.org/projects/million/), home pages with ARIA averaged 59.1 errors against 42 for pages without. WebAIM is careful to say this "does not necessarily mean that ARIA introduced these errors," since those pages are also more complex, but the gap has been there every year since 2019.
+
+The lint rules follow the same ideas closely:
+
+- **Use the native element.** `jsx-a11y/prefer-tag-over-role` and Biome's `useSemanticElements` flag a role that a native element already has, such as `role="button"`.
+- **Keep the role's promise.** `click-events-have-key-events` and `no-static-element-interactions` flag click handlers on elements that aren't controls; `interactive-supports-focus` flags interactive roles that can't take focus.
+- **Don't hide what can be focused.** `no-aria-hidden-on-focusable` flags `aria-hidden="true"` on an element you can tab to.
+- **Give it a name.** `alt-text`, `control-has-associated-label`, `label-has-associated-control` and `anchor-has-content` check that images, controls, labels and links have text.
+
+## The static half of a runtime tool
+
+The rules started as a companion to tools that check the rendered page. Ryan Florence's [react-a11y](https://github.com/reactjs/react-a11y) (January 2015) patched React's render functions to warn about problems in the browser console. Deque open-sourced [axe-core](https://www.deque.com/blog/axe-accessibility-engine-launch/) that June, promising "zero false positive results." axe now runs inside Lighthouse, and its Playwright integration alone is downloaded about 14 million times a week.
+
+Ethan Cohen started [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) in February 2016, with a single rule for alt text. Its early rule names mirrored react-a11y's, and its README said it was meant to be "used in conjunction with" it, because static tools "cannot determine values of variables that are being placed in props before runtime." Airbnb's ESLint config adopted it two months later, which is how most React projects first got it. Rome built its own accessibility group in 2022, which Biome inherited, and Oxlint reimplemented every jsx-a11y rule starting in 2023. Biome documents 35 of its 37 JSX accessibility rules as having the "same logic" as jsx-a11y's.
+
+jsx-a11y is downloaded about 50 million times a week, but most projects that have it run only a few of its rules. Next.js's default ESLint config [turns on six](https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/src/index.ts), all as warnings. Create React App's turned on 17, also as warnings, and none of the keyboard rules. The two large studies of how JavaScript developers use ESLint ([2017](https://doi.org/10.1109/ASE.2017.8115668), [2020](https://doi.org/10.1109/TSE.2018.2871058)) never mention accessibility, and we found no study of whether accessibility lint rules change what ships.
+
+## A ceiling on automation
+
+Even tools that see the rendered page find a minority of problems. In 2017, the UK Government Digital Service built [a page with 143 deliberate barriers](https://accessibility.blog.gov.uk/2017/02/24/what-we-found-when-we-tested-tools-on-the-worlds-least-accessible-webpage/) and ran ten tools over it; 29% of the barriers were "missed by all of the tools." In the [final version of the audit](https://alphagov.github.io/accessibility-tool-audit/), with 13 tools, the best single tool found 40%. A [2013 study](https://doi.org/10.1145/2461121.2461124) found the tools it tested covered "at most, 50% of the success criteria." A [2025 study](https://doi.org/10.1007/s10209-025-01263-x) of six open source engines on 550 Swedish public sector pages found each covered about a sixth of WCAG's criteria, and all six together 39%.
+
+The best-known number is higher. Deque's [2021 coverage report](https://accessibility.deque.com/hubfs/Accessibility-Coverage-Report.pdf) says axe found 57% of the issues in its own audits. That counts issues, not criteria: automated checks found issues under only 16 of the 50 criteria in WCAG 2.1 AA, and color contrast alone was 30% of all issues. Take out 4.1.1 Parsing, which WCAG has since removed, and the share is 53%; take out contrast as well and it's 37.5% (our arithmetic on Deque's table). The commonly quoted "30 to 40 percent" has no primary source that we could find.
+
+A linter sees less than any of these, because it reads source code before anything renders. It can't measure contrast, follow focus, or see what a component turns into. But it can see the problems that turn up most often. In the WebAIM Million, 95.9% of the top million home pages had detected failures, and six kinds of failure made up 96% of them: low contrast (on 83.9% of pages), missing alt text (53.1%), missing form labels (51%), empty links (46.3%), empty buttons (30.6%) and a missing document language (13.5%). Five of the six are facts about markup that lint rules target.
+
+## Nobody asks for it
+
+Research on developers points to knowledge more than tools. In a [survey of Android developers](https://doi.org/10.1145/3377811.3380392), lack of awareness was the most common reason given for inaccessible apps (48.5%), and lack of tools one of the least (9.7%). In Stack Overflow threads [studied in 2019](https://doi.org/10.1109/ICSME.2019.00014), some Android developers wanted "to just remove the warnings when displayed by the IDE." Android Lint's own accessibility check [refuses `TODO`](https://googlesamples.github.io/android-custom-lint-rules/api-guide.html) as a content description, so the placeholder its quick fix inserts can't be left in to silence it.
+
+Models trained on that code inherit it. In a [2024 study](https://doi.org/10.1145/3677846.3677854), 84% of the websites 88 developers built with ChatGPT had accessibility problems. A [2025 comparison](https://arxiv.org/abs/2503.15885) found GPT-4o's regenerated UI code slightly more accessible than the human originals it was regenerated from, better on contrast and alt text and worse on ARIA, and found that generic "make it accessible" prompting made things worse. In [CodeA11y](https://doi.org/10.1145/3706598.3713335) (CHI 2025), none of 16 developers using Copilot "prompted with accessibility in mind," and they pasted Copilot's empty `alt=""` placeholders as they were. Empty alt text on an informative image "were not even flagged by automated accessibility checkers," which treat it as decorative.
+
+What the agent is told matters a lot. Microsoft's [accessibility eval](https://github.com/microsoft/a11y-llm-eval-report) (May 2026) had eight models build 32 kinds of page in agentic Copilot sessions, then checked them with axe and hand-written assertions. Only 12% passed with no instructions. A one-line instruction file, "All output MUST be accessible.", raised that to 37%. An 839-word file that put native elements before ARIA reached 60%, and a skill that had the model review its own output reached 86%.
+
+Checker output in the loop helps less than you might expect. When the authors of [A11yn](https://arxiv.org/abs/2510.13914) trained a model with a reward based on raw axe violation counts, it learned to shrink its pages, from 37 elements to 15: "clear reward-hacking behavior." A [study of 300 generated UIs](https://doi.org/10.1145/3772363.3799364) found 541 problems that pass automated checks, such as `alt="image"`, which "passes every check yet conveys nothing to screen reader users." And when an agent's job is to make the linter quiet, it can make the page worse. In one [public pull request](https://github.com/liam-hq/liam/pull/2085), asked to turn on disabled Biome rules, Devin added `role="button"` and `tabIndex={0}` to a drag-and-drop `div`, then suppressed `useSemanticElements` when it flagged the role, then turned that rule down to a warning in the shared config, all within 14 minutes.
+
+## Seven React codebases
+
+Most of the codebases we've used for earlier posts have little JSX, so for this one we added four React codebases to Excalidraw, Next.js and tRPC: [shadcn/ui's](https://github.com/shadcn-ui/ui) component registry, [Radix Primitives](https://github.com/radix-ui/primitives), [React Aria Components](https://github.com/adobe/react-spectrum) and [Supabase Studio](https://github.com/supabase/supabase). That's 2,793 `.tsx` and `.jsx` files and 476,153 lines, pinned to commits, linted with each linter's accessibility rules as Ultracite configures them in October 2026.
+
+The rules fire about 11 to 18 times per 10,000 lines, depending on the linter. The most common is `prefer-tag-over-role`, followed by rules about `title` attributes, clickable elements and SVGs without names. Twenty-two of the 52 rules we measured never fired at all.
+
+Most of what they flag is deliberate. We sampled 72 flagged sites, 12 from each codebase with hits, and classified each by hand; a second, blind rater agreed on 19 of 20. Fifty-two were intentional or decorative, such as Radix's select trigger, a `<button role="combobox">` that follows the ARIA combobox pattern to the letter, or a logo SVG inside a button labeled "Continue with Apple". Ten were false positives. Ten were real barriers, and for only five of them did a rule name the actual problem. In the other five, the rule complained about something else on the same element, such as the role on a working custom checkbox whose real problem was that it had no name.
+
+The maintainers rarely argue with the rules. Across all seven codebases, four suppression comments name an accessibility rule, and both raters judged all four justified.
+
+## Two-thirds components
+
+Most of a React codebase is invisible to these rules. Of 45,570 JSX elements, 64% are custom components, like `<Button>` or `<DialogTrigger>`, and jsx-a11y's rules only check DOM elements unless you tell them what each component renders. `onClick` is passed to components 1,743 times, and appears on a non-interactive DOM element only 85 times. In Radix, 89% of DOM elements get some of their props from a spread, and in React Aria 77%, because that's how both libraries pass roles, tab stops and key handlers through.
+
+What rules can see, they mostly take on trust. 44% of `aria-label`s and 35% of `alt`s are expressions, and the rules accept any expression: `alt={src}` passes.
+
+Telling the rules what each component renders doesn't fix this. We mapped 1,832 component names to the DOM element they render, which added 798 Oxlint diagnostics to a baseline of 516. In a sample of 30 of them, 23 were false positives, because the component adds the role, label or key handling the rule is looking for.
+
+## Forty real fixes
+
+To see what the rules would have caught in practice, we searched the seven projects' histories for merged fixes to real accessibility barriers, found 40, and linted each file as it was just before the fix.
+
+| What was broken | Fixes | A rule named it | A rule fired nearby | Nothing fired |
+| --- | --: | --: | --: | --: |
+| Name or label | 13 | 0 | 5 | 8 |
+| Role or ARIA | 6 | 0 | 2 | 4 |
+| Keyboard operability | 5 | 3 | 0 | 2 |
+| Focus, focusability and order | 8 | 2 | 2 | 4 |
+| Contrast | 3 | 0 | 1 | 2 |
+| Other | 5 | 1 | 0 | 4 |
+| **All** | **40** | **6** | **10** | **24** |
+
+The six the rules would have caught are the kind they're built for: a clickable `<div>` or `<span>` (four times), a `tabIndex={10}`, and a hidden element that could take focus. None of the 13 fixes to names or labels was flagged. The labels were missing inside components, present but wrong (a hex code as a color's name), or lost on the way through props. In Radix and React Aria, the two libraries built for accessibility, one of 14 fixes was flagged.
+
+One fix shows how a repair can bring its own barriers. A [2024 Next.js change](https://github.com/vercel/next.js/pull/62723) turned the error overlay's clickable `<span>` into a `<button>`, which is the right fix, but gave it `tabIndex={10}` and no accessible name. Fifteen months later, one pull request [removed the tab index](https://github.com/vercel/next.js/pull/80289) and [another](https://github.com/vercel/next.js/pull/80290), titled "Fix outstanding a11y issues reported by Axe," named the button. A lint rule flags the positive `tabIndex`. The missing name was inside an icon component, where no rule could see it.
+
+## Fake buttons look real
+
+The rules check that attributes exist, not what they do. We wrote 129 calibration cases, barriers and edits to them, and ran each through all three linters. Here are three ways to handle the same clickable `<div>`:
+
+{/* prettier-ignore */}
+```tsx
+// The barrier: not focusable, no role, Enter and Space do nothing
+<div onClick={open}>Open</div>
+
+// A fake: focusable and announced as a button, but its key handler only handles Escape
+<div onClick={open} onKeyDown={closeOnEscape} role="button" tabIndex={0}>Open</div>
+
+// The ARIA button pattern, done properly
+<div onClick={open} onKeyDown={openOnEnterOrSpace} role="button" tabIndex={0}>Open</div>
+```
+
+All three linters flag the first. The fake and the real ARIA button then get exactly the same diagnostic, `prefer-tag-over-role` in Oxlint and ESLint and `useSemanticElements` in Biome, telling you to use a `<button>`. No rule can tell a key handler that works from one that doesn't. An empty `onKeyDown={() => {}}` is only caught because it's an empty function, by a rule that has nothing to do with accessibility. Other edits quiet the linters entirely without fixing anything:
+
+- **`aria-hidden="true"`** on the clickable `<div>` silences every rule in all three linters, and hides the control from screen readers.
+- **`alt=""`, a file name, or `alt={src}`** on an informative image passes everywhere.
+- **A `<label htmlFor>` pointing at an id that doesn't exist** passes in Oxlint and Biome.
+
+The linters also disagree about rules with the same name. `control-has-associated-label` runs with different defaults in Oxlint and ESLint, so ESLint reports inputs that already have a label, and Oxlint never reports inputs at all. Compared element by element across the corpus, Oxlint and ESLint flagged 112 roles that Biome's equivalent rule didn't, and Biome flagged 87 `div`s and `span`s twice, once as static elements and again as non-interactive ones.
+
+## Every header became a button
+
+In October 2026 we took two components from Excalidraw, each with a real barrier, and handed them to Claude Code and to Codex. Each run got the prompt and permissions Ultracite uses when it passes lint errors to an agent, one file at a time. Our earlier experiments stopped after the agent's first edit. This one kept going the way Ultracite does: after each edit, the file is fixed, formatted and linted again, and if anything is still reported, it goes back to the agent with a note saying the last approach didn't work.
+
+- **A header you can only click.** [`Collapsible`](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Stats/Collapsible.tsx) is the row that opens each section of Excalidraw's Stats panel. It's a `<div>` with an `onClick`, so Tab never reaches it, Enter and Space do nothing, and a screen reader hears a heading, not a button. We handed it over three ways, four times to each agent: with Oxlint's diagnostics (`click-events-have-key-events` and `no-static-element-interactions`), with Biome's, and with Oxlint's plus the `AGENTS.md` file that `ultracite init` writes into a project.
+- **Swatches named by their hex code.** [`TopPicks`](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/TopPicks.tsx) is a row of color buttons in the color picker. They have no text, and their only name is a `title` like `#e03131`. Oxlint reports each one with `control-has-associated-label`. We handed it over four times to each agent.
+
+That's 32 runs. We checked each result by rendering it with React, firing clicks and key presses at it, and working out the name each control would be announced with.
+
+The header was fixed in all 24 of its runs. Every one ended with a native `<button type="button">` that takes focus, opens on Enter and Space, is announced as "General stats" and says whether it's open with `aria-expanded`. Twenty-one wrapped the label in the button. Three Codex runs left the row a `<div>` and laid an empty button over it, named by the label. None of the cheap edits from our calibration cases turned up: no key handler that does nothing, no `aria-hidden`, no suppression comment, no change to another file.
+
+Changing the element changed how it looks, and every run dealt with that. A `<button>` comes with its own border, background, padding and font, and this row's CSS isn't in the file. All 24 runs added inline styles to undo it. The 21 wrapping buttons all reset `background`, `border`, `color`, `font`, `padding` and `width`, and the three overlays positioned themselves over the row. In 23 of the 24, the agent said why: to "reset its default styling to preserve the header's appearance," as one Codex run put it, or because "a button doesn't stretch to full width the way a div does." Four Claude runs added a warning that inline styles beat class styles, so the reset might now override whatever the component's `className` sets.
+
+{/* prettier-ignore */}
+```diff title="collapsible.tsx (Excalidraw, attributes sorted), one Claude run"
+-<div
++<button
++  aria-expanded={open}
+   className={className}
+   onClick={openTrigger}
+   style={{
+     alignItems: "center",
++    background: "none",
++    border: "none",
++    color: "inherit",
+     cursor: "pointer",
+     display: "flex",
++    font: "inherit",
+     justifyContent: "space-between",
++    margin: 0,
++    padding: 0,
++    textAlign: "inherit",
++    width: "100%",
+   }}
++  type="button"
+ >
+   {label}
+   {showCollapsedIcon && (
+     <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />
+   )}
+-</div>
++</button>
+```
+
+Most of these fixes broke something no rule could see. Excalidraw passes the label in as an `<h3>`, so 21 of the 24 runs put a heading inside a button. HTML allows only [phrasing content](https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element) in a button, and a [heading](https://html.spec.whatwg.org/multipage/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements) isn't phrasing content. ARIA makes a button's [children presentational](https://www.w3.org/TR/wai-aria-1.2/#button), so browsers shouldn't expose the heading to a screen reader at all. All 12 Claude runs on this component said so, and named the pattern the [APG uses for accordions](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/): a button inside the heading, `<h3><button aria-expanded>…</button></h3>`. That needs a change in the file that calls the component, which the agents weren't allowed to edit. Codex didn't mention it in any of the nine runs where it happened. No linter could have caught it from this file, because the heading is in another one.
+
+## The help text writes the first draft
+
+The runs ended in the same place, but how they got there depended on what they were handed:
+
+| Handoff | Role first | ARIA after attempt 1 | Button at the end |
+| --- | --: | --: | --: |
+| Oxlint | 8 of 8 | 7 of 8 | 8 of 8 |
+| Biome | 1 of 8 | 0 of 8 | 8 of 8 |
+| Oxlint and `AGENTS.md` | 4 of 8 | 0 of 8 | 8 of 8 |
+
+With Oxlint's diagnostics, every run started by adding a role. That's the first fix in the help text for `no-static-element-interactions`: "Add a role attribute to this element, or use a semantic HTML element instead." Ultracite's prompt tells the agent to follow the rule's help text, and one Claude run said that's what it had done. Seven of the eight finished their first attempt with the complete ARIA button pattern:
+
+{/* prettier-ignore */}
+```diff title="collapsible.tsx (Excalidraw), the same Claude run's first attempt"
+ <div
++  aria-expanded={open}
+   className={className}
+   onClick={openTrigger}
++  onKeyDown={(event) => {
++    if (event.key === "Enter" || event.key === " ") {
++      event.preventDefault();
++      openTrigger();
++    }
++  }}
++  role="button"
+   style={{ … }}
++  tabIndex={0}
+ >
+```
+
+That's a correct fix. It takes focus, is announced as a button, opens on Enter and Space without scrolling the page, and reports its state, and our check found it worked. It's also exactly what `prefer-tag-over-role` exists to flag, and the re-lint flagged it. The file went back with Ultracite's retry note, which said the last edit "did not resolve" the issues and asked for "a structurally different approach." All seven switched to a `<button>` on the second attempt, and none needed a third.
+
+The Claude runs had kept the `<div>` on purpose. All four said why after the first attempt: the label is an `<h3>`, and a heading isn't allowed inside a button. Three added that a button's default browser styles would change how the header looks. Two predicted the next rule, and one left it as "your call." The retry note listed the new diagnostic, and nothing the agent had said. After it, every one made the change, and listed the heading as an open problem: "a call for someone to make," as one put it.
+
+So the loop ended at the fix the first rule of ARIA prefers, which is a good result. But it got there by telling agents that a correct edit had failed, and by overriding a decision they'd explained. The two rules disagree about the fix: `no-static-element-interactions` suggests a role first, and `prefer-tag-over-role` flags the role. An agent only finds that out when the second diagnostic arrives.
+
+Codex often found the conflict on its own. It can run commands, and in every run it found linter binaries elsewhere on the machine and ran them on the file. In seven runs it wrote `role="button"` at some point, saw the next rule, and replaced it before finishing. In two it saw `prefer-tag-over-role` and kept the role anyway. One called it "a separate advisory." Claude Code wasn't allowed to run commands, and was refused each time it tried.
+
+With Biome's diagnostics, no run finished its first attempt with a role. Biome's messages name the problem, not a fix: "Unexpected event handler on static element." In these runs they arrived without Biome's longer rule descriptions, because of a bug in Ultracite's handoff that we found while running them. Those descriptions point at a role too: `noStaticElementInteractions` says static elements with click handlers should "use the valid role attribute." Left to choose, all four Claude runs went straight to a `<button>` and said a role would only trip another rule. The Codex runs that tried a role replaced it.
+
+With `AGENTS.md`, the same Oxlint diagnostics went another way. The file was loaded in all eight runs, no run finished its first attempt with the ARIA pattern, and none needed a retry. Three Claude runs cited it: "`AGENTS.md` says to prefer `<button>` over divs with roles." Four runs still tried a role first, three of them Codex, and replaced it within the same attempt.
+
+It's the same lesson as the [floating promises](/research/floating-promises#sixteen-runs-three-fixes) and [dead code](/research/dead-code#the-bug-they-saw-and-left) experiments: what the agent is handed decides its first move. Here the help text suggested the role, and one line in a rules file was enough to skip it.
+
+## A name Excalidraw replaced in 2021
+
+In 2021, an Excalidraw contributor tested the color picker with assistive technology and found the swatches labeled with their hex codes. [The fix](https://github.com/excalidraw/excalidraw/pull/3871) replaced labels like `aria-label="#be4bdb"` with color names. At the commit we used, the main palette names its swatches with the [color's name and its keyboard shortcut](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/PickerColorList.tsx#L87-L116). The top picks don't. Their only name is the hex code in `title`.
+
+Every run gave the swatches the name Excalidraw had replaced: the hex code. Five added `aria-label={color}`, and three Codex runs added the same with a fallback for an empty color:
+
+{/* prettier-ignore */}
+```diff title="top-picks.tsx (Excalidraw, attributes sorted), five of eight runs"
+ <button
++  aria-label={color}
+   className={clsx("color-picker__button top-picks-dnd__pick", { … })}
+   …
+   title={color}
+```
+
+Oxlint stopped reporting, and Ultracite counted the issue as fixed in all eight runs. A screen reader still hears "#e03131". No run looked up the color's name, though the file we handed over included the helper Excalidraw uses to find it, and the English names. Claude described its own fix accurately: "screen readers read the same name they did before."
+
+This is what the history sample showed, happening in front of us. None of the 13 historical fixes to names and labels was flagged, and Excalidraw's color fix is one of them: there was a label before the fix, so no name rule fired. The help text lists ways to add a label, and `aria-label` is the easiest. Nothing in it, or in the prompt, says what the label should say.
+
+Our experiment is small: two components, four runs per agent for each setup, checked by rendering markup rather than in a browser or with a screen reader. The scripts, every run's edits and the full report are in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research) for anyone who wants to check them or run more.
+
+## What a linter can't hear
+
+Some of what makes a page accessible isn't in the source at all. Contrast depends on computed CSS, themes and whatever is behind the text. Focus order, where focus goes when a dialog opens, and whether `aria-expanded` actually changes when a section opens all happen at runtime. [Lighthouse](https://github.com/GoogleChrome/lighthouse/blob/main/core/config/default-config.js) lists ten checks that "an automated testing tool cannot cover," from logical tab order to focus traps, and in Deque's data automated tests found none of the 9,553 focus order issues. A linter sees even less than those tools, because it sees one file before it renders. The heading our agents put inside a button came from another file. Neither jsx-a11y nor Biome has a rule that headings go in order, though the WebAIM Million finds skipped heading levels on 41.8% of home pages.
+
+Within what it can see, a rule checks that something is there, not that it means anything. `alt` must exist, but `alt={src}` passes. A label must exist, but "#e03131" counts, and it's what every agent we handed the swatches to wrote. A key handler must exist, but it doesn't have to do anything. That's the gap the research on generated UIs keeps finding.
+
+The rules also make noise exactly where accessibility has been done carefully. In our sample, 26 of the 29 sites `prefer-tag-over-role` flagged were deliberate: ARIA widgets in Radix and React Aria that follow the patterns to the letter, and the shadcn and Supabase components built on them. In our experiment, seven agents implemented the ARIA button pattern correctly and were sent back to change it. And the rules don't agree on the fix: one suggests adding a role, and the next flags it.
+
+Automatic fixes can make things worse. One linter's unsafe fix adds `tabIndex={0}` to a `<div role="button" onClick>` with no key handler, which makes it focusable but still impossible to operate from the keyboard. And the evidence for the rules themselves is thin. We found no study that measures whether accessibility lint changes what ships, and our own history sample says the rules would have caught six of 40 real barriers before they were fixed.
+
+## Reach for the element
+
+**Start with the element, not the role.** `<button>`, `<a href>`, `<input>`, `<select>` and `<details>` come with focus, keyboard handling and a role. When a rule asks for a key handler on a `<div>`, the real question is usually whether it should be a `<button>`.
+
+**If you need the ARIA pattern, write all of it.** That's the role, `tabIndex`, Enter and Space, and the state, as the [APG](https://www.w3.org/WAI/ARIA/apg/) describes them. A role without the behavior gets the same diagnostic as a role with it, so the linter won't tell you which one you wrote.
+
+**Read the names.** The rules only check that a name exists. Read each one as a screen reader would announce it, and use the words people see: a color's name, not its hex code, and what a button does, not "icon".
+
+**Put the heading around the button.** For a section that opens and closes, the accordion pattern is `<h3><button aria-expanded>…</button></h3>`. That can mean changing how a component takes its label.
+
+**Reset button styles once.** A shared class that removes a button's default border, background and padding keeps the reset out of every component, and leaves the component's own classes in charge.
+
+**Test the rest in a browser.** Tab through the page, try it with a screen reader, and run axe against rendered pages in your tests. Contrast, focus order and whether `aria-expanded` changes are facts about the running page.
+
+**Tell agents what you expect, and read what they say.** In our runs, one line in `AGENTS.md` changed the first edit, and in Microsoft's eval, instructions raised the pass rate from 12% to 60%. The warnings about the heading were in the agents' final messages, not in the diff.
+
+Accessibility lint rules are good at the mistakes that show up in markup: a clickable `<div>`, an image with no `alt`, a button with no text. Those are among the most common failures on the web, and none of our agents reached for a trick to silence them. What the rules can't do is judge what a name says or what a key handler does, see inside components, or see anything that happens at runtime, and that's most of accessibility. On the swatches, the agents satisfied the rule and left the barrier exactly where it was. Keep the rules on, treat a clean run as the start of testing rather than the end, and when a rule suggests a role, try the element first. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+## References
+
+**Standards and law**
+
+- Workforce Investment Act of 1998, [Pub. L. 105-220](https://www.govinfo.gov/content/pkg/PLAW-105publ220/html/PLAW-105publ220.htm), §408(b) (Section 508 of the Rehabilitation Act). 1998.
+- W3C. [Web Content Accessibility Guidelines 1.0](https://www.w3.org/TR/1999/WAI-WEBCONTENT-19990505). W3C Recommendation, 1999.
+- W3C. [Web Content Accessibility Guidelines (WCAG) 2.0](https://www.w3.org/TR/2008/REC-WCAG20-20081211/). W3C Recommendation, 2008.
+- W3C. [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/). W3C Recommendation, 2018.
+- W3C. [Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/). W3C Recommendation, 2023.
+- W3C. [Accessible Rich Internet Applications (WAI-ARIA) 1.0](https://www.w3.org/TR/2014/REC-wai-aria-20140320/). W3C Recommendation, 2014.
+- W3C. [Accessible Rich Internet Applications (WAI-ARIA) 1.2](https://www.w3.org/TR/wai-aria-1.2/). W3C Recommendation, 2023.
+- W3C. [Using ARIA](https://www.w3.org/TR/2018/WD-using-aria-20180927/). W3C Working Draft, 2018; [discontinued](https://www.w3.org/TR/using-aria/) 2026.
+- W3C WAI. ARIA Authoring Practices Guide: [Read Me First](https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/) and [Accordion Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/).
+- WHATWG. HTML Living Standard: [the button element](https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element) and [the h1–h6 elements](https://html.spec.whatwg.org/multipage/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements).
+- U.S. Department of Justice. [Nondiscrimination on the Basis of Disability; Accessibility of Web Information and Services of State and Local Government Entities](https://www.federalregister.gov/documents/2024/04/24/2024-07758/nondiscrimination-on-the-basis-of-disability-accessibility-of-web-information-and-services-of-state). 89 FR 31320, 2024.
+- U.S. Department of Justice. [Extension of Compliance Dates](https://www.federalregister.gov/documents/2026/04/20/2026-07663/extension-of-compliance-dates-for-nondiscrimination-on-the-basis-of-disability-accessibility-of-web) for the same rule. Interim final rule, 91 FR 20902, 2026.
+- [Directive (EU) 2019/882](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019L0882) on the accessibility requirements for products and services (European Accessibility Act). 2019.
+- Kristina M. Launey and Minh N. Vu. [Federal Court Website Accessibility Lawsuit Filings Bounce Back in 2025](https://www.adatitleiii.com/2026/03/federal-court-website-accessibility-lawsuit-filings-bounce-back-in-2025/). Seyfarth Shaw, _ADA Title III News & Insights_, 2026.
+
+**Tools and rules**
+
+- Ryan Florence et al. [react-a11y](https://github.com/reactjs/react-a11y). 2015.
+- Deque Systems. [Accessibility Testing Goes Open Source and Mainstream](https://www.deque.com/blog/axe-accessibility-engine-launch/). 2015.
+- Ethan Cohen et al. [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y). 2016.
+- Vercel. [eslint-config-next](https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/src/index.ts).
+- Google. [Lighthouse default configuration](https://github.com/GoogleChrome/lighthouse/blob/main/core/config/default-config.js), accessibility category and manual audits.
+- Oxc. [no-static-element-interactions](https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/no-static-element-interactions.html) and [prefer-tag-over-role](https://oxc.rs/docs/guide/usage/linter/rules/jsx_a11y/prefer-tag-over-role.html) rule documentation.
+- Biome. [useSemanticElements](https://biomejs.dev/linter/rules/use-semantic-elements/) rule documentation.
+
+**What automated checks find**
+
+- Mehmet Duran. [What we found when we tested tools on the world's least-accessible webpage](https://accessibility.blog.gov.uk/2017/02/24/what-we-found-when-we-tested-tools-on-the-worlds-least-accessible-webpage/). GOV.UK Accessibility blog, 2017.
+- Government Digital Service. [Accessibility tool audit](https://alphagov.github.io/accessibility-tool-audit/). 2018.
+- Markel Vigo, Justin Brown and Vivienne Conway. [Benchmarking Web Accessibility Evaluation Tools: Measuring the Harm of Sole Reliance on Automated Tests](https://doi.org/10.1145/2461121.2461124). W4A 2013.
+- Thomas Fischer, Björn Lundell and Jonas Gamalielsson. [Coverage of web accessibility guidelines provided by automated checking tools](https://doi.org/10.1007/s10209-025-01263-x). _Universal Access in the Information Society_, 24(4), 2025.
+- Deque Systems. [The Automated Accessibility Coverage Report](https://accessibility.deque.com/hubfs/Accessibility-Coverage-Report.pdf). 2021.
+- WebAIM. [The WebAIM Million](https://webaim.org/projects/million/). 2026 report.
+
+**Developers and accessibility**
+
+- Kristín Fjóla Tómasdóttir, Maurício Aniche and Arie van Deursen. [Why and How JavaScript Developers Use Linters](https://doi.org/10.1109/ASE.2017.8115668). ASE 2017.
+- Kristín Fjóla Tómasdóttir, Maurício Aniche and Arie van Deursen. [The Adoption of JavaScript Linters in Practice: A Case Study on ESLint](https://doi.org/10.1109/TSE.2018.2871058). _IEEE Transactions on Software Engineering_, 46(8), 2020.
+- Abdulaziz Alshayban, Iftekhar Ahmed and Sam Malek. [Accessibility Issues in Android Apps: State of Affairs, Sentiments, and Ways Forward](https://doi.org/10.1145/3377811.3380392). ICSE 2020.
+- Christopher Vendome, Diana Solano, Santiago Liñán and Mario Linares-Vásquez. [Can Everyone use my app? An Empirical Study on Accessibility in Android Apps](https://doi.org/10.1109/ICSME.2019.00014). ICSME 2019.
+- Google. [Android Lint API guide](https://googlesamples.github.io/android-custom-lint-rules/api-guide.html).
+
+**AI-generated code**
+
+- Wajdi Aljedaani, Abdulrahman Habib, Ahmed Aljohani, Marcelo Eler and Yunhe Feng. [Does ChatGPT Generate Accessible Code? Investigating Accessibility Challenges in LLM-Generated Source Code](https://doi.org/10.1145/3677846.3677854). W4A 2024.
+- Hyunjae Suh, Mahan Tafreshipour, Sam Malek and Iftekhar Ahmed. [Human or LLM? A Comparative Study on Accessible Code Generation Capability](https://arxiv.org/abs/2503.15885). arXiv, 2025.
+- Peya Mowar, Yi-Hao Peng, Jason Wu, Aaron Steinfeld and Jeffrey P. Bigham. [CodeA11y: Making AI Coding Assistants Useful for Accessible Web Development](https://doi.org/10.1145/3706598.3713335). CHI 2025.
+- Microsoft. [A11y LLM Eval report](https://github.com/microsoft/a11y-llm-eval-report). May 2026.
+- Janghan Yoon, Jaegwan Cho, Junhyeok Kim, Jiwan Chung, Jaehyun Jeon, Seungwon Lim and Youngjae Yu. [A11yn: Aligning LLMs for Web Accessibility-Aware UI Generation](https://arxiv.org/abs/2510.13914). COLM 2026.
+- Tommaso Calò, Alexandra-Elena Guriță and Luigi De Russis. [Measuring the Semantic Accessibility Gap in LLM-Generated Web UIs](https://doi.org/10.1145/3772363.3799364). CHI EA 2026.
+- liam-hq/liam. [Pull request #2085](https://github.com/liam-hq/liam/pull/2085). 2025.
+
+**Codebases and fixes**
+
+- [Excalidraw](https://github.com/excalidraw/excalidraw), [Next.js](https://github.com/vercel/next.js), [tRPC](https://github.com/trpc/trpc), [shadcn/ui](https://github.com/shadcn-ui/ui), [Radix Primitives](https://github.com/radix-ui/primitives), [React Aria Components](https://github.com/adobe/react-spectrum) and [Supabase](https://github.com/supabase/supabase), at the commits listed in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research).
+- Excalidraw. [#3871: Make color ARIA labels better](https://github.com/excalidraw/excalidraw/pull/3871). 2021.
+- Next.js. [#62723](https://github.com/vercel/next.js/pull/62723) (2024), [#80289](https://github.com/vercel/next.js/pull/80289) and [#80290](https://github.com/vercel/next.js/pull/80290) (2025).

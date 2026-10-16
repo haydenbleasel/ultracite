@@ -1,0 +1,2493 @@
+{
+  "fixes": [
+    {
+      "barrierKind": "focusability",
+      "date": "2021-03-23",
+      "files": [
+        {
+          "lines": [
+            12,
+            14
+          ],
+          "path": "src/components/HelpIcon.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 12,
+                "message": "A form label must be associated with an input.",
+                "rule": "a11y/noLabelWithoutControl"
+              },
+              {
+                "line": 13,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              },
+              {
+                "line": 13,
+                "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+                "rule": "a11y/useKeyWithClickEvents"
+              },
+              {
+                "line": 13,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 12,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              },
+              {
+                "line": 13,
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 13,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 13,
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 13,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint +js-plugins": [
+              {
+                "line": 12,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "inFile": {
+            "biome": 4,
+            "eslint": 3,
+            "oxlint": 2,
+            "oxlint +js-plugins": 3
+          }
+        }
+      ],
+      "fixKind": "div with onClick -> <button type=\"button\"> with aria-label",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3310",
+      "id": "excalidraw/excalidraw#3310",
+      "parentSha": "c5b4b04d6b982b56fb08a93b1fc4fa4a93672bcf",
+      "repo": "excalidraw",
+      "staticallyVisible": "yes",
+      "title": "fix: Make help toggle tabbable",
+      "verdict": {
+        "blindSpot": null,
+        "flagged": "yes",
+        "linters": "all three",
+        "note": "The <div onClick> is the barrier, and every linter names it.",
+        "rules": "jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions; Biome useKeyWithClickEvents, noStaticElementInteractions"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "keyboard-operability",
+      "date": "2020-01-25",
+      "files": [
+        {
+          "lines": [
+            27,
+            42
+          ],
+          "path": "src/components/ColorPicker.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 27,
+                "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+                "rule": "a11y/useKeyWithClickEvents"
+              },
+              {
+                "line": 27,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              },
+              {
+                "line": 27,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              },
+              {
+                "line": 33,
+                "message": "The HTML element div is non-interactive. Do not use tabIndex.",
+                "rule": "a11y/noNoninteractiveTabindex"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 27,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              },
+              {
+                "line": 27,
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 27,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              },
+              {
+                "line": 33,
+                "message": "`tabIndex` should only be declared on interactive elements.",
+                "rule": "jsx-a11y/no-noninteractive-tabindex"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 27,
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 33,
+                "message": "`tabIndex` should only be declared on interactive elements.",
+                "rule": "jsx-a11y/no-noninteractive-tabindex"
+              },
+              {
+                "line": 27,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint +js-plugins": [
+              {
+                "line": 27,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "inFile": {
+            "biome": 5,
+            "eslint": 5,
+            "oxlint": 4,
+            "oxlint +js-plugins": 5
+          }
+        }
+      ],
+      "fixKind": "div -> button",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/556",
+      "id": "excalidraw/excalidraw#556",
+      "parentSha": "1bae203a78b3fd4a51bc800efb2a8960fac28fe7",
+      "repo": "excalidraw",
+      "staticallyVisible": "yes",
+      "title": "Make color selection accessible",
+      "verdict": {
+        "blindSpot": null,
+        "flagged": "yes",
+        "linters": "all three",
+        "note": "A <div tabIndex={0} onClick> with no key handler: the rules point at the missing Space and Enter handling the PR fixed.",
+        "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions, no-noninteractive-tabindex; Biome equivalents"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2021-03-31",
+      "files": [
+        {
+          "lines": [
+            346,
+            357
+          ],
+          "path": "src/components/LayerUI.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 2,
+            "oxlint": 2,
+            "oxlint +js-plugins": 2
+          }
+        }
+      ],
+      "fixKind": "added aria-label to the <a>",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3367",
+      "id": "excalidraw/excalidraw#3367",
+      "parentSha": "a6706cff20890d45e31b687ad0c3e502a31af0dc",
+      "repo": "excalidraw",
+      "staticallyVisible": "partly",
+      "title": "fix: Add aria-label to end-to-end encryption blog link",
+      "verdict": {
+        "blindSpot": "component content",
+        "flagged": "no",
+        "linters": null,
+        "note": "The link's content is a <Tooltip> element, so anchor-has-content assumes it has text. The name was lost because Tooltip.scss hides the label with visibility: hidden.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2021-08-02",
+      "files": [
+        {
+          "lines": [
+            141,
+            151
+          ],
+          "path": "src/components/ColorPicker.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 141,
+                "message": "Provide an explicit type prop for the button element.",
+                "rule": "a11y/useButtonType"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 141,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              },
+              {
+                "line": 141,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 141,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint +js-plugins": [
+              {
+                "line": 141,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "inFile": {
+            "biome": 4,
+            "eslint": 7,
+            "oxlint": 5,
+            "oxlint +js-plugins": 7
+          }
+        }
+      ],
+      "fixKind": "replaced the hex-code aria-label with a human color name",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3871",
+      "id": "excalidraw/excalidraw#3871",
+      "parentSha": "d60724920531c904d5cf74ec39a4dc25903578dd",
+      "repo": "excalidraw",
+      "staticallyVisible": "no",
+      "title": "feat: Make color ARIA labels better",
+      "verdict": {
+        "blindSpot": "meaning",
+        "flagged": "adjacent",
+        "linters": "all three",
+        "note": "The aria-label is present, but it's a hex code. No rule judges what a name says.",
+        "rules": "react/button-has-type, github/a11y-no-title-attribute"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "focus-management",
+      "date": "2021-04-15",
+      "files": [
+        {
+          "lines": [
+            70,
+            86
+          ],
+          "path": "src/components/Dialog.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 80,
+                "message": "Provide an explicit type prop for the button element.",
+                "rule": "a11y/useButtonType"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 80,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 80,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 1,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "Dialog records document.activeElement on open and restores focus on close",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/3447",
+      "id": "excalidraw/excalidraw#3447",
+      "parentSha": "793b69e592423c0c786e5bd0d205e985c35ea31e",
+      "repo": "excalidraw",
+      "staticallyVisible": "no",
+      "title": "fix: focus on last active element when dialog closes",
+      "verdict": {
+        "blindSpot": "runtime focus",
+        "flagged": "adjacent",
+        "linters": "all three",
+        "note": "Whether focus returns when a dialog closes is decided at runtime.",
+        "rules": "react/button-has-type"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "focus-management",
+      "date": "2022-06-23",
+      "files": [
+        {
+          "lines": [
+            56,
+            60
+          ],
+          "path": "src/components/Popover.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added a Tab/Shift+Tab focus-trap keydown handler to Popover",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/5317",
+      "id": "excalidraw/excalidraw#5317",
+      "parentSha": "50bc7e099ae5ecc75d449d2e16bf783f6b4acd17",
+      "repo": "excalidraw",
+      "staticallyVisible": "no",
+      "title": "fix: focus traps inside popovers",
+      "verdict": {
+        "blindSpot": "runtime focus",
+        "flagged": "no",
+        "linters": null,
+        "note": "A missing focus trap is behaviour, not markup.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "contrast",
+      "date": "2021-01-05",
+      "files": [
+        {
+          "lines": [
+            101,
+            104
+          ],
+          "path": "src/components/IconPicker.scss",
+          "excerptMatches": true,
+          "linted": false,
+          "note": "not a script file (.scss): no JSX rule can read it"
+        }
+      ],
+      "fixKind": "set color: var(--keybinding-color) on .picker-keybinding (SCSS)",
+      "fixUrl": "https://github.com/excalidraw/excalidraw/pull/2724",
+      "id": "excalidraw/excalidraw#2724",
+      "parentSha": "cdffed285de3944b8535b7da5f9f035c8c8411e0",
+      "repo": "excalidraw",
+      "staticallyVisible": "no",
+      "title": "improvement: Make arrowheads keybinds color accessible on dark mode",
+      "verdict": {
+        "blindSpot": "CSS",
+        "flagged": "no",
+        "linters": null,
+        "note": "The color is set in SCSS, which no linter here reads.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "keyboard-operability",
+      "date": "2024-03-01",
+      "files": [
+        {
+          "lines": [
+            160,
+            165
+          ],
+          "path": "packages/next/src/client/components/react-dev-overlay/internal/container/RuntimeError/component-stack-pseudo-html.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 160,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              },
+              {
+                "line": 160,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              },
+              {
+                "line": 160,
+                "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+                "rule": "a11y/useKeyWithClickEvents"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 160,
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 160,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 160,
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 160,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 3,
+            "eslint": 2,
+            "oxlint": 2,
+            "oxlint +js-plugins": 2
+          }
+        }
+      ],
+      "fixKind": "span -> button (the new button got tabIndex={10} and still no name; see #80289 and #80290)",
+      "fixUrl": "https://github.com/vercel/next.js/pull/62723",
+      "id": "vercel/next.js#62723",
+      "parentSha": "2dab0b6ec804df07b66dc376f57e0e8aee21a6fb",
+      "repo": "next.js",
+      "staticallyVisible": "yes",
+      "title": "fix(error-overlay): improve a11y, minor refactors",
+      "verdict": {
+        "blindSpot": null,
+        "flagged": "yes",
+        "linters": "all three",
+        "note": "A <span onClick> holding an icon. The rules name it. The fix then gave the new button tabIndex={10} (next.js#80289) and no name (#80290).",
+        "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions; Biome equivalents"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "focus-order",
+      "date": "2025-06-10",
+      "files": [
+        {
+          "lines": [
+            19,
+            26
+          ],
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/terminal/editor-link.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 23,
+                "message": "The elements with this role can be changed to the following elements:\n<a>\n<link>",
+                "rule": "a11y/useSemanticElements"
+              },
+              {
+                "line": 19,
+                "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+                "rule": "a11y/useKeyWithClickEvents"
+              },
+              {
+                "line": 22,
+                "message": "Avoid positive values for the tabIndex prop.",
+                "rule": "a11y/noPositiveTabindex"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 19,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              },
+              {
+                "line": 19,
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 19,
+                "message": "Use <a href=...>, or <area href=...> instead of the \"link\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              },
+              {
+                "line": 22,
+                "message": "Avoid positive integer values for tabIndex.",
+                "rule": "jsx-a11y/tabindex-no-positive"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 19,
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 19,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              },
+              {
+                "line": 22,
+                "message": "Avoid positive integer values for `tabIndex`.",
+                "rule": "jsx-a11y/tabindex-no-positive"
+              }
+            ],
+            "oxlint +js-plugins": [
+              {
+                "line": 19,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "inFile": {
+            "biome": 4,
+            "eslint": 5,
+            "oxlint": 3,
+            "oxlint +js-plugins": 5
+          }
+        },
+        {
+          "lines": [
+            122,
+            128
+          ],
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/hydration-diff/diff-view.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 123,
+                "message": "Avoid positive values for the tabIndex prop.",
+                "rule": "a11y/noPositiveTabindex"
+              },
+              {
+                "line": 122,
+                "message": "Provide an explicit type prop for the button element.",
+                "rule": "a11y/useButtonType"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 122,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              },
+              {
+                "line": 123,
+                "message": "Avoid positive integer values for tabIndex.",
+                "rule": "jsx-a11y/tabindex-no-positive"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 122,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              },
+              {
+                "line": 123,
+                "message": "Avoid positive integer values for `tabIndex`.",
+                "rule": "jsx-a11y/tabindex-no-positive"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 2,
+            "oxlint": 2,
+            "oxlint +js-plugins": 2
+          }
+        }
+      ],
+      "fixKind": "removed the positive tabIndex",
+      "fixUrl": "https://github.com/vercel/next.js/pull/80289",
+      "id": "vercel/next.js#80289",
+      "parentSha": "2725973823b8b750e688cd6092dd77fdef57e71d",
+      "repo": "next.js",
+      "staticallyVisible": "yes",
+      "title": "[dev-overlay] Remove positive tab-index",
+      "verdict": {
+        "blindSpot": null,
+        "flagged": "yes",
+        "linters": "all three",
+        "note": "A literal positive tabIndex, in both files.",
+        "rules": "jsx-a11y/tabindex-no-positive; Biome noPositiveTabindex"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2025-06-10",
+      "files": [
+        {
+          "lines": [
+            47,
+            49
+          ],
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/call-stack-frame/call-stack-frame.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 47,
+                "message": "Provide an explicit type prop for the button element.",
+                "rule": "a11y/useButtonType"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 47,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 47,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 3,
+            "oxlint": 2,
+            "oxlint +js-plugins": 3
+          }
+        },
+        {
+          "lines": [
+            122,
+            127
+          ],
+          "path": "packages/next/src/client/components/react-dev-overlay/ui/components/hydration-diff/diff-view.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 122,
+                "message": "Provide an explicit type prop for the button element.",
+                "rule": "a11y/useButtonType"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 122,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 122,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 1,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "added aria-label (and aria-expanded on the toggle)",
+      "fixUrl": "https://github.com/vercel/next.js/pull/80290",
+      "id": "vercel/next.js#80290",
+      "parentSha": "c151f8968184e4fcc9b11dd6be414dfc46d77dd8",
+      "repo": "next.js",
+      "staticallyVisible": "partly",
+      "title": "[dev-overlay] Fix outstanding a11y issues reported by Axe",
+      "verdict": {
+        "blindSpot": "component content",
+        "flagged": "adjacent",
+        "linters": "all three",
+        "note": "Icon-only buttons whose only child is an icon component. control-has-associated-label assumes a component child supplies text.",
+        "rules": "react/button-has-type"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "keyboard-operability",
+      "date": "2026-04-11",
+      "files": [
+        {
+          "lines": [
+            116,
+            129
+          ],
+          "path": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 116,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              },
+              {
+                "line": 116,
+                "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+                "rule": "a11y/useKeyWithClickEvents"
+              },
+              {
+                "line": 116,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 116,
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 116,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 116,
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 116,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 6,
+            "eslint": 3,
+            "oxlint": 2,
+            "oxlint +js-plugins": 3
+          }
+        }
+      ],
+      "fixKind": "span -> button with aria-label; decorative icons aria-hidden; focus-visible style",
+      "fixUrl": "https://github.com/vercel/next.js/pull/92608",
+      "id": "vercel/next.js#92608",
+      "parentSha": "9a2e02b97d7ff87ad2ff1926374d86ffd3dbd575",
+      "repo": "next.js",
+      "staticallyVisible": "yes",
+      "title": "Fix segment explorer file pill accessibility",
+      "verdict": {
+        "blindSpot": null,
+        "flagged": "yes",
+        "linters": "all three",
+        "note": "<span onClick> file pills.",
+        "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions; Biome equivalents"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "role-or-aria",
+      "date": "2024-12-18",
+      "files": [
+        {
+          "lines": [
+            23,
+            33
+          ],
+          "path": "packages/next/src/client/components/react-dev-overlay/internal/container/BuildError.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "fixed the id typo in aria-labelledby/aria-describedby",
+      "fixUrl": "https://github.com/vercel/next.js/pull/74074",
+      "id": "vercel/next.js#74074",
+      "parentSha": "58700912b60cac9481b18069b465ab6d013211ba",
+      "repo": "next.js",
+      "staticallyVisible": "partly",
+      "title": "fix: aria attribute typo for error overlay",
+      "verdict": {
+        "blindSpot": "id reference",
+        "flagged": "no",
+        "linters": null,
+        "note": "aria-labelledby pointed at an id no element had. No rule checks that id references resolve, even within one file.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "other",
+      "date": "2021-03-22",
+      "files": [
+        {
+          "lines": [
+            297,
+            298
+          ],
+          "path": "packages/next/client/image.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "removed visibility from the <img> inline style",
+      "fixUrl": "https://github.com/vercel/next.js/pull/23278",
+      "id": "vercel/next.js#23278",
+      "parentSha": "f384cd103b6031e6555237ae9f4eddf67004adbe",
+      "repo": "next.js",
+      "staticallyVisible": "no",
+      "title": "Remove `visibility: hidden` from the image component",
+      "verdict": {
+        "blindSpot": "CSS",
+        "flagged": "no",
+        "linters": null,
+        "note": "visibility: hidden in a style object hid lazy images from screen readers.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "live-region",
+      "date": "2022-02-14",
+      "files": [
+        {
+          "lines": [
+            18,
+            23
+          ],
+          "path": "packages/next/client/route-announcer.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "made the initial-load guard survive a double effect invocation",
+      "fixUrl": "https://github.com/vercel/next.js/pull/34338",
+      "id": "vercel/next.js#34338",
+      "parentSha": "41ecd5e6e251c8650c253616a8fa8826b8eece5a",
+      "repo": "next.js",
+      "staticallyVisible": "no",
+      "title": "Fix `<RouteAnnouncer/>` shouldn't announce initial path under strict mode and React 18",
+      "verdict": {
+        "blindSpot": "runtime state",
+        "flagged": "no",
+        "linters": null,
+        "note": "A Strict Mode double effect made the live region announce the first page.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2024-01-07",
+      "files": [
+        {
+          "lines": [
+            7,
+            9
+          ],
+          "path": "apps/www/registry/default/example/toggle-demo.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            17,
+            19
+          ],
+          "path": "apps/www/registry/default/example/toggle-group-demo.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "corrected aria-label (and value) strings",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/2163",
+      "id": "shadcn-ui/ui#2163",
+      "parentSha": "4b59cb812e9e215243d0f756359685d536284950",
+      "repo": "shadcn",
+      "staticallyVisible": "no",
+      "title": "fix(www): incorrect toggle aria labels and values",
+      "verdict": {
+        "blindSpot": "meaning",
+        "flagged": "no",
+        "linters": null,
+        "note": "The aria-labels are present but name the wrong action.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2025-06-16",
+      "files": [
+        {
+          "lines": [
+            23,
+            30
+          ],
+          "path": "apps/v4/registry/new-york-v4/blocks/calendar-24.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            51,
+            56
+          ],
+          "path": "apps/v4/registry/new-york-v4/blocks/calendar-24.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "unique ids for each label/control pair",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/7611",
+      "id": "shadcn-ui/ui#7611",
+      "parentSha": "cb19ab84646fc017c15fadc81fc47b695560a04c",
+      "repo": "shadcn",
+      "staticallyVisible": "no",
+      "title": "fix(components): resolve duplicate id conflict in calendar-24 component",
+      "verdict": {
+        "blindSpot": "cross-file",
+        "flagged": "no",
+        "linters": null,
+        "note": "Duplicate ids across two examples rendered on one page.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "contrast",
+      "date": "2023-05-08",
+      "files": [
+        {
+          "lines": [
+            13,
+            18
+          ],
+          "path": "apps/www/components/ui/checkbox.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "border-input -> border-primary (checked state uses bg-primary)",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/224",
+      "id": "shadcn-ui/ui#224",
+      "parentSha": "0c31f60bb0ea7ec32ea0b9d8dac0b2c4ed8d2fc8",
+      "repo": "shadcn",
+      "staticallyVisible": "no",
+      "title": "fix(checkbox,radio-group): Increase contrast ratio of checkboxes and radio buttons",
+      "verdict": {
+        "blindSpot": "CSS",
+        "flagged": "no",
+        "linters": null,
+        "note": "Border contrast comes from a Tailwind token.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "reduced-motion",
+      "date": "2026-09-30",
+      "files": [
+        {
+          "lines": [
+            623,
+            629
+          ],
+          "path": "packages/shadcn/src/tailwind.css",
+          "excerptMatches": true,
+          "linted": false,
+          "note": "not a script file (.css): no JSX rule can read it"
+        }
+      ],
+      "fixKind": "moved the prefers-reduced-motion override into the @utility so every variant gets it",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/12061",
+      "id": "shadcn-ui/ui#12061",
+      "parentSha": "71f0e497e6e2a8e5a6584546c938a2db5329637e",
+      "repo": "shadcn",
+      "staticallyVisible": "no",
+      "title": "fix(shadcn): apply shimmer reduced motion to variants",
+      "verdict": {
+        "blindSpot": "CSS",
+        "flagged": "no",
+        "linters": null,
+        "note": "Reduced motion is handled in a stylesheet.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "contrast",
+      "date": "2024-11-03",
+      "files": [
+        {
+          "lines": [
+            54,
+            55
+          ],
+          "path": "apps/www/registry/new-york/ui/calendar.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            32,
+            41
+          ],
+          "path": "apps/www/registry/new-york/ui/card.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 36,
+                "message": "Headings must have content and the content must be accessible by a screen reader.",
+                "rule": "jsx-a11y/heading-has-content"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 36,
+                "message": "Headings must have content and the content must be accessible by a screen reader.",
+                "rule": "jsx-a11y/heading-has-content"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "dropped opacity-50 (and aria-selected:opacity-30) from day_outside; CardTitle/CardDescription h3/p -> div",
+      "fixUrl": "https://github.com/shadcn-ui/ui/commit/961e0b62d770f9f7e1d5c6c0c62ba510f3964d26",
+      "id": "shadcn-ui/ui@961e0b62d770",
+      "parentSha": "500a353816969e3cce2b3f4f0699ce4e6ad06f0b",
+      "repo": "shadcn",
+      "staticallyVisible": "no",
+      "title": "fix: a11y for card and calendar",
+      "verdict": {
+        "blindSpot": "meaning",
+        "flagged": "adjacent",
+        "linters": "Oxlint, ESLint",
+        "note": "heading-has-content fires on CardTitle's <h3 {...props} /> because the content arrives through props (a false positive). The commit changed the fixed <h3> to a <div> for heading structure, which also silences the rule.",
+        "rules": "jsx-a11y/heading-has-content"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "role-or-aria",
+      "date": "2024-01-18",
+      "files": [
+        {
+          "lines": [
+            45,
+            64
+          ],
+          "path": "apps/www/registry/new-york/ui/pagination.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 52,
+                "message": "Anchors must have content and the content must be accessible by a screen reader.",
+                "rule": "jsx-a11y/anchor-has-content"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 52,
+                "message": "Missing accessible content when using `a` elements.",
+                "rule": "jsx-a11y/anchor-has-content"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 1,
+            "eslint": 2,
+            "oxlint": 1,
+            "oxlint +js-plugins": 2
+          }
+        }
+      ],
+      "fixKind": "removed the inner PaginationItem from PaginationLink",
+      "fixUrl": "https://github.com/shadcn-ui/ui/pull/2190",
+      "id": "shadcn-ui/ui#2190",
+      "parentSha": "29de71d77fd3db93c33cc3886c64a32ad889278f",
+      "repo": "shadcn",
+      "staticallyVisible": "no",
+      "title": "fix(pagination): remove incorrect nested li from pagination link",
+      "verdict": {
+        "blindSpot": "cross-component",
+        "flagged": "adjacent",
+        "linters": "Oxlint, ESLint",
+        "note": "The barrier is <li><li><a>, produced by how two components nest. anchor-has-content fires because the anchor's content comes through props.",
+        "rules": "jsx-a11y/anchor-has-content"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "role-or-aria",
+      "date": "2026-10-13",
+      "files": [
+        {
+          "lines": [
+            500,
+            500
+          ],
+          "path": "packages/react/dialog/src/dialog.tsx",
+          "excerptMatches": false,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        },
+        {
+          "lines": [
+            460,
+            466
+          ],
+          "path": "packages/react/dialog/src/dialog.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 460,
+                "message": "Use <dialog> instead of the \"dialog\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 461,
+                "message": "Prefer `dialog` over `role` attribute `dialog`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "custom ids are registered in context so aria-labelledby/aria-describedby follow them",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/4210",
+      "id": "radix-ui/primitives#4210",
+      "parentSha": "38a78e2084dc3ca0e7cac42eb1f3519b34a07936",
+      "repo": "radix",
+      "staticallyVisible": "no",
+      "title": "dialog: Fix broken aria attribute references for elements with custom ids",
+      "verdict": {
+        "blindSpot": "runtime state",
+        "flagged": "adjacent",
+        "linters": "Oxlint, ESLint",
+        "note": "aria-labelledby used the generated id while the title used the consumer's id. The ids come from context at runtime.",
+        "rules": "jsx-a11y/prefer-tag-over-role (role=\"dialog\")"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "role-or-aria",
+      "date": "2026-10-13",
+      "files": [
+        {
+          "lines": [
+            304,
+            310
+          ],
+          "path": "packages/react/scroll-area/src/scroll-area.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added role=\"presentation\" to the wrapper",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/3801",
+      "id": "radix-ui/primitives#3801",
+      "parentSha": "68c1f609d466fccf0a9899c4c8afff9118a42010",
+      "repo": "radix",
+      "staticallyVisible": "no",
+      "title": "Add explicit role to child div of ScrollAreaViewport",
+      "verdict": {
+        "blindSpot": "CSS",
+        "flagged": "no",
+        "linters": null,
+        "note": "display: table made Chrome infer a layout table.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "role-or-aria",
+      "date": "2022-09-06",
+      "files": [
+        {
+          "lines": [
+            106,
+            113
+          ],
+          "path": "packages/react/dropdown-menu/src/DropdownMenu.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "aria-expanded={context.open} (explicit false when closed)",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/1644",
+      "id": "radix-ui/primitives#1644",
+      "parentSha": "8f75e5be679b9c269638bddf532a166d80edecb4",
+      "repo": "radix",
+      "staticallyVisible": "no",
+      "title": "[DropdownMenu] Set aria-expanded according to Dropdown state",
+      "verdict": {
+        "blindSpot": "runtime state",
+        "flagged": "no",
+        "linters": null,
+        "note": "aria-expanded={open ? true : undefined} is a dynamic value no rule evaluates.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "focus-management",
+      "date": "2021-06-22",
+      "files": [
+        {
+          "lines": [
+            163,
+            173
+          ],
+          "path": "packages/react/slider/src/Slider.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "focus the thumb whose value changed, from the value change handler",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/731",
+      "id": "radix-ui/primitives#731",
+      "parentSha": "e7a22914c7de6961fb54667f5a046525d26dde1c",
+      "repo": "radix",
+      "staticallyVisible": "no",
+      "title": "[Slider] Move focus to correct thumb when using keyboard",
+      "verdict": {
+        "blindSpot": "runtime focus",
+        "flagged": "no",
+        "linters": null,
+        "note": "Which slider thumb keeps focus after a keyboard swap.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "aria-hidden",
+      "date": "2025-07-02",
+      "files": [
+        {
+          "lines": [
+            342,
+            346
+          ],
+          "path": "packages/react/toast/src/toast.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 342,
+                "message": "aria-hidden=\"true\" must not be set on focusable elements.",
+                "rule": "jsx-a11y/no-aria-hidden-on-focusable"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 343,
+                "message": "`aria-hidden` must not be true on focusable elements.",
+                "rule": "jsx-a11y/no-aria-hidden-on-focusable"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 4,
+            "oxlint": 4,
+            "oxlint +js-plugins": 4
+          }
+        },
+        {
+          "lines": [
+            574,
+            579
+          ],
+          "path": "packages/react/toast/src/toast.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 574,
+                "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 576,
+                "message": "Prefer `output` over `role` attribute `status`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 4,
+            "oxlint": 4,
+            "oxlint +js-plugins": 4
+          }
+        }
+      ],
+      "fixKind": "removed aria-hidden from the focus proxies; removed role=status, aria-live and aria-atomic from the <li>",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/2595",
+      "id": "radix-ui/primitives#2595",
+      "parentSha": "54f452b247b34e1f5f82c5997df5bcf5938292fb",
+      "repo": "radix",
+      "staticallyVisible": "partly",
+      "title": "fix toast a11y issues",
+      "verdict": {
+        "blindSpot": null,
+        "flagged": "yes",
+        "linters": "Oxlint, ESLint",
+        "note": "The focusable, aria-hidden focus proxy is exactly what no-aria-hidden-on-focusable reports. Biome's noAriaHiddenOnFocusable doesn't fire: the element is the VisuallyHidden component. The second barrier in the same fix, role=\"status\" on an <li>, only gets prefer-tag-over-role's suggestion to use <output>.",
+        "rules": "jsx-a11y/no-aria-hidden-on-focusable (and prefer-tag-over-role, adjacent)"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "role-or-aria",
+      "date": "2022-05-25",
+      "files": [
+        {
+          "lines": [
+            95,
+            102
+          ],
+          "path": "packages/react/radio-group/src/RadioGroup.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added aria-required={required} to the radiogroup",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/1422",
+      "id": "radix-ui/primitives#1422",
+      "parentSha": "1d3e98def6fc157820a8dd22a05e071bbaa004b6",
+      "repo": "radix",
+      "staticallyVisible": "no",
+      "title": "[RadioGroup] Add `aria-required`",
+      "verdict": {
+        "blindSpot": "missing state",
+        "flagged": "no",
+        "linters": null,
+        "note": "aria-required isn't a required prop of radiogroup, so nothing asks for it.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "keyboard-operability",
+      "date": "2021-10-11",
+      "files": [
+        {
+          "lines": [
+            95,
+            101
+          ],
+          "path": "packages/react/hover-card/src/HoverCard.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added onFocus/onBlur open and close plus Escape dismissal",
+      "fixUrl": "https://github.com/radix-ui/primitives/pull/902",
+      "id": "radix-ui/primitives#902",
+      "parentSha": "8c7956e5774154bbd7ae4505ad2129472d61d379",
+      "repo": "radix",
+      "staticallyVisible": "partly",
+      "title": "[HoverCard] Open on focus",
+      "verdict": {
+        "blindSpot": "runtime behaviour",
+        "flagged": "no",
+        "linters": null,
+        "note": "The card opened on pointer enter only. The handlers exist; the focus path doesn't.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2024-02-05",
+      "files": [
+        {
+          "lines": [
+            364,
+            368
+          ],
+          "path": "packages/react-aria-components/src/ListBox.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 4,
+            "oxlint": 4,
+            "oxlint +js-plugins": 4
+          }
+        },
+        {
+          "lines": [
+            290,
+            290
+          ],
+          "path": "packages/react-aria-components/src/Menu.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            266,
+            268
+          ],
+          "path": "packages/react-aria-components/src/Tabs.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "forwarded item aria-label props to useOption, useMenuItem and useTab",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/5796",
+      "id": "adobe/react-spectrum#5796",
+      "parentSha": "bcb5cc0721db1f24237abaaea1d1b8d66ac746c5",
+      "repo": "react-aria",
+      "staticallyVisible": "no",
+      "title": "Add missing aria-labels to ListBox, Menu, Tabs items in RAC",
+      "verdict": {
+        "blindSpot": "props plumbing",
+        "flagged": "no",
+        "linters": null,
+        "note": "An aria-label passed to the component was never forwarded to the hook.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2024-05-23",
+      "files": [
+        {
+          "lines": [
+            230,
+            233
+          ],
+          "path": "packages/react-aria-components/src/Menu.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "read aria-label from section.props",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/6423",
+      "id": "adobe/react-spectrum#6423",
+      "parentSha": "c57671e7f57c4ffe59640a174f084cf660968913",
+      "repo": "react-aria",
+      "staticallyVisible": "no",
+      "title": "Fix Menu Section aria-label",
+      "verdict": {
+        "blindSpot": "props plumbing",
+        "flagged": "no",
+        "linters": null,
+        "note": "aria-label was read from the wrong object.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2025-03-11",
+      "files": [
+        {
+          "lines": [
+            26,
+            44
+          ],
+          "path": "packages/react-aria-components/src/Separator.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "pass the remaining props to useSeparator",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/7881",
+      "id": "adobe/react-spectrum#7881",
+      "parentSha": "51c02936077804f34622319fe8b423c48e71779f",
+      "repo": "react-aria",
+      "staticallyVisible": "no",
+      "title": "fix: pass aria labeling props in RAC Separator",
+      "verdict": {
+        "blindSpot": "props plumbing",
+        "flagged": "no",
+        "linters": null,
+        "note": "filterDOMProps dropped the labelling props.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2023-07-19",
+      "files": [
+        {
+          "lines": [
+            55,
+            56
+          ],
+          "path": "packages/react-aria-components/src/DropZone.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 3,
+            "eslint": 6,
+            "oxlint": 3,
+            "oxlint +js-plugins": 6
+          }
+        },
+        {
+          "lines": [
+            92,
+            96
+          ],
+          "path": "packages/react-aria-components/src/DropZone.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 92,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              },
+              {
+                "line": 93,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 93,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "oxlint +js-plugins": [
+              {
+                "line": 92,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ]
+          },
+          "inFile": {
+            "biome": 3,
+            "eslint": 6,
+            "oxlint": 3,
+            "oxlint +js-plugins": 6
+          }
+        }
+      ],
+      "fixKind": "use the user's aria-label with a default; slot id so aria-labelledby only references a rendered element",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/4703",
+      "id": "adobe/react-spectrum#4703",
+      "parentSha": "84a1f0fc20d4494430e8acda8e244ff087e1e5e0",
+      "repo": "react-aria",
+      "staticallyVisible": "partly",
+      "title": "RAC DropZone - fix aria violation + make aria-label more customizable",
+      "verdict": {
+        "blindSpot": "props plumbing",
+        "flagged": "adjacent",
+        "linters": "all three",
+        "note": "aria-label set after the spread overwrote the developer's, and aria-labelledby pointed at a Text id that might not render.",
+        "rules": "react/button-has-type, github/a11y-no-visually-hidden-interactive-element"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "focusability",
+      "date": "2023-08-24",
+      "files": [
+        {
+          "lines": [
+            168,
+            172
+          ],
+          "path": "packages/react-aria-components/src/Select.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "pass isDisabled to HiddenSelect",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/4943",
+      "id": "adobe/react-spectrum#4943",
+      "parentSha": "5f69479a0f56ed2c5ce6b8ff1adec07a6f551fff",
+      "repo": "react-aria",
+      "staticallyVisible": "no",
+      "title": "Hidden text field is focusable and editable with Select with isDisabled=true",
+      "verdict": {
+        "blindSpot": "runtime state",
+        "flagged": "no",
+        "linters": null,
+        "note": "isDisabled wasn't passed to the hidden select.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "focus-management",
+      "date": "2024-02-20",
+      "files": [
+        {
+          "lines": [
+            88,
+            94
+          ],
+          "path": "packages/react-aria-components/src/DropZone.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 89,
+                "message": "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+                "rule": "a11y/useKeyWithClickEvents"
+              },
+              {
+                "line": 89,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              },
+              {
+                "line": 89,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              }
+            ],
+            "eslint": [
+              {
+                "line": 89,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              },
+              {
+                "line": 89,
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 89,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 89,
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "line": 89,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint +js-plugins": [
+              {
+                "line": 89,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ]
+          },
+          "suppressedInFile": [
+            {
+              "line": 89,
+              "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+              "rule": "jsx-a11y/click-events-have-key-events"
+            },
+            {
+              "line": 89,
+              "message": "Static HTML elements with event handlers require a role.",
+              "rule": "jsx-a11y/no-static-element-interactions"
+            }
+          ],
+          "inFile": {
+            "biome": 3,
+            "eslint": 6,
+            "oxlint": 3,
+            "oxlint +js-plugins": 6
+          }
+        }
+      ],
+      "fixKind": "skip focusing the drop button when the click target is the file input",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/5867",
+      "id": "adobe/react-spectrum#5867",
+      "parentSha": "acb735219363935fd4f798c78fcba5dec4842af4",
+      "repo": "react-aria",
+      "staticallyVisible": "no",
+      "title": "Fix focus going to the DropZone after closing FileTrigger",
+      "verdict": {
+        "blindSpot": "runtime focus",
+        "flagged": "adjacent",
+        "linters": "all three (suppressed in the source)",
+        "note": "The rules flag the <div onClick> whose handler caused the bug, but for a missing key handler. The bug was focus moving to a hidden button. The maintainers had suppressed both rules with eslint-disable-next-line.",
+        "rules": "jsx-a11y/click-events-have-key-events, no-static-element-interactions; Biome equivalents"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2026-04-21",
+      "files": [
+        {
+          "lines": [
+            79,
+            81
+          ],
+          "path": "packages/@adobe/react-spectrum/src/steplist/StepListItem.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [
+              {
+                "line": 79,
+                "message": "The ARIA attribute 'aria-labelledby' is not supported by this element.",
+                "rule": "a11y/useAriaPropsSupportedByRole"
+              }
+            ],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 1,
+            "oxlint": 0,
+            "oxlint +js-plugins": 1
+          }
+        },
+        {
+          "lines": [
+            94,
+            94
+          ],
+          "path": "packages/@adobe/react-spectrum/src/steplist/StepListItem.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 2,
+            "eslint": 1,
+            "oxlint": 0,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "gave the state text an id and added it to aria-labelledby",
+      "fixUrl": "https://github.com/adobe/react-spectrum/pull/9888",
+      "id": "adobe/react-spectrum#9888",
+      "parentSha": "abb9082219b46e7f6c80c09b8a71644e4e052a83",
+      "repo": "react-aria",
+      "staticallyVisible": "no",
+      "title": "fix: announce step state in StepList's accessible name",
+      "verdict": {
+        "blindSpot": "meaning",
+        "flagged": "adjacent",
+        "linters": "Biome",
+        "note": "Which text is part of the accessible name is a question of meaning.",
+        "rules": "a11y/useAriaPropsSupportedByRole on a <span aria-labelledby>"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2026-10-07",
+      "files": [
+        {
+          "lines": [
+            134,
+            136
+          ],
+          "path": "apps/studio/components/layouts/ProjectLayout/LayoutHeader/MobileMenuContent/MobileMenuContent.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            308,
+            315
+          ],
+          "path": "apps/studio/components/layouts/ProjectLayout/index.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added a screen-reader-only SheetTitle ('Project menu'); removed disabled from the sidebar panel",
+      "fixUrl": "https://github.com/supabase/supabase/pull/51055",
+      "id": "supabase/supabase#51055",
+      "parentSha": "46b7382d504d3ad254d095861ad25d9c16f639aa",
+      "repo": "supabase",
+      "staticallyVisible": "no",
+      "title": "fix(studio): keep project sidebar navigation accessible",
+      "verdict": {
+        "blindSpot": "component content",
+        "flagged": "no",
+        "linters": null,
+        "note": "A Sheet without a title renders an unnamed dialog. The dialog is a component, so no rule sees a role=\"dialog\".",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "other",
+      "date": "2026-09-10",
+      "files": [
+        {
+          "lines": [
+            269,
+            275
+          ],
+          "path": "packages/ui-patterns/src/CodeBlock/CodeBlock.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            91,
+            99
+          ],
+          "path": "packages/ui-patterns/src/DataInputs/Input.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added group-focus-within:opacity-100 and named group variants",
+      "fixUrl": "https://github.com/supabase/supabase/pull/50083",
+      "id": "supabase/supabase#50083",
+      "parentSha": "c33d255eba8ba9ff7c7a2a01a93dce80cb685708",
+      "repo": "supabase",
+      "staticallyVisible": "no",
+      "title": "fix(ui-patterns): reveal hover-only copy controls on keyboard focus",
+      "verdict": {
+        "blindSpot": "CSS",
+        "flagged": "no",
+        "linters": null,
+        "note": "opacity-0 and group-hover classes hid the copy buttons from sighted keyboard users.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2026-08-31",
+      "files": [
+        {
+          "lines": [
+            32,
+            36
+          ],
+          "path": "packages/ui/src/components/radio-group-card.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        },
+        {
+          "lines": [
+            54,
+            55
+          ],
+          "path": "packages/ui/src/components/radio-group-card.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "generated unique id; aria-labelledby to a <div> label; removed the nested <label>",
+      "fixUrl": "https://github.com/supabase/supabase/pull/48527",
+      "id": "supabase/supabase#48527",
+      "parentSha": "7a399d78794a4e2d754c37a8fedd72013473ca31",
+      "repo": "supabase",
+      "staticallyVisible": "partly",
+      "title": "Fix: RadioGroupCard accessibility issues",
+      "verdict": {
+        "blindSpot": "id reference",
+        "flagged": "no",
+        "linters": null,
+        "note": "htmlFor={props.value} satisfies label-has-associated-control: any htmlFor counts, even one that matches no id.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "name-or-label",
+      "date": "2026-08-24",
+      "files": [
+        {
+          "lines": [
+            29,
+            35
+          ],
+          "path": "packages/ui-patterns/src/info-tooltip.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [
+              {
+                "line": 29,
+                "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "oxlint": [
+              {
+                "line": 31,
+                "message": "Prefer `button` over `role` attribute `button`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 1,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlint +js-plugins": 1
+          }
+        }
+      ],
+      "fixKind": "added sr-only label text with a fallback; dropped the redundant role=\"button\"",
+      "fixUrl": "https://github.com/supabase/supabase/pull/49345",
+      "id": "supabase/supabase#49345",
+      "parentSha": "235488e66b331d66084fdcdd3f037dbebb276a03",
+      "repo": "supabase",
+      "staticallyVisible": "partly",
+      "title": "fix(ui-patterns): give the shared InfoTooltip trigger an accessible name",
+      "verdict": {
+        "blindSpot": "component content",
+        "flagged": "adjacent",
+        "linters": "Oxlint, ESLint",
+        "note": "The unnamed icon trigger. The rules point at role=\"button\", not at the missing name.",
+        "rules": "jsx-a11y/prefer-tag-over-role"
+      },
+      "anyRuleOnBarrierLines": true
+    },
+    {
+      "barrierKind": "keyboard-operability",
+      "date": "2026-07-08",
+      "files": [
+        {
+          "lines": [
+            309,
+            311
+          ],
+          "path": "apps/studio/components/interfaces/ProjectHome/ServiceStatus.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "added tabIndex={0} to HoverCardTrigger",
+      "fixUrl": "https://github.com/supabase/supabase/pull/47731",
+      "id": "supabase/supabase#47731",
+      "parentSha": "6e4dc5df754fb748858de065411df400f36e1fba",
+      "repo": "supabase",
+      "staticallyVisible": "no",
+      "title": "fix: make status hovercard trigger on focus",
+      "verdict": {
+        "blindSpot": "runtime behaviour",
+        "flagged": "no",
+        "linters": null,
+        "note": "The HoverCard opened on hover only.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    },
+    {
+      "barrierKind": "focusability",
+      "date": "2026-04-21",
+      "files": [
+        {
+          "lines": [
+            51,
+            55
+          ],
+          "path": "packages/ui/src/components/shadcn/ui/switch.tsx",
+          "excerptMatches": true,
+          "linted": true,
+          "onBarrierLines": {
+            "biome": [],
+            "eslint": [],
+            "oxlint": [],
+            "oxlint +js-plugins": []
+          },
+          "inFile": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlint +js-plugins": 0
+          }
+        }
+      ],
+      "fixKind": "explicit tabIndex={0} on the Switch and Toggle roots",
+      "fixUrl": "https://github.com/supabase/supabase/pull/45083",
+      "id": "supabase/supabase#45083",
+      "parentSha": "f5933ad87f7ef66225b7f3f7fe352a27f374aadb",
+      "repo": "supabase",
+      "staticallyVisible": "no",
+      "title": "fix: switch fields aren't accessible with tab on Safari",
+      "verdict": {
+        "blindSpot": "platform",
+        "flagged": "no",
+        "linters": null,
+        "note": "Safari skips buttons in the Tab order by default.",
+        "rules": null
+      },
+      "anyRuleOnBarrierLines": false
+    }
+  ],
+  "generated": "2026-10-15",
+  "note": "Rules on the barrier's lines (at the parent commit) per linter. `verdict` is the hand judgement from history-verdicts.json: whether a rule that fires points at the barrier that was fixed.",
+  "totals": {
+    "anyRuleOnBarrierLines": 16,
+    "fixes": 40
+  }
+}

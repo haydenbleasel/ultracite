@@ -1,0 +1,36 @@
+--- a/collapsible.tsx
++++ b/collapsible.tsx
+@@ -119,21 +119,31 @@
+   showCollapsedIcon = true,
+ }: CollapsibleProps) => (
+   <>
+-    <div
++    <button
++      aria-expanded={open}
+       className={className}
+       onClick={openTrigger}
+       style={{
+         alignItems: "center",
++        background: "transparent",
++        border: 0,
++        color: "inherit",
+         cursor: "pointer",
+         display: "flex",
++        font: "inherit",
+         justifyContent: "space-between",
++        padding: 0,
++        position: "relative",
++        textAlign: "inherit",
++        width: "100%",
+       }}
++      type="button"
+     >
+       {label}
+       {showCollapsedIcon && (
+         <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />
+       )}
+-    </div>
++    </button>
+     {open && (
+       <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
+     )}

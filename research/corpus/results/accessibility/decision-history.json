@@ -1,0 +1,471 @@
+{
+  "generated": "2026-10-15",
+  "method": "Read-only, in the research/accessibility worktree. git log --all -S and -G over every path the published configs have lived at (src/eslint.js and eslint.js 2022, eslint-next.js/eslint-expo.js 2022, eslint.config.mjs + rules/*.mjs 2023, src/eslint.config.mjs + src/rules/*.mjs 2024, biome.json 2024-2025, biome.jsonc 2025, packages/cli/biome.jsonc, packages/cli/config/core|ultracite|<framework>/biome.jsonc and packages/cli/config/{biome,eslint,oxlint}/** from 2025-10) for: no-autofocus, noAutofocus, autoFocus, jsx-a11y, jsx-a11y/<rule>: off, github/a11y*: off, astro/jsx-a11y*: off, every Biome a11y rule name set to \"off\", label-has-associated-control, controlComponents, labelComponents, inputComponents, labelAttributes, ignoreNonDOM, depth: 3, useValidLang, app.html, \"Every non-nursery react\", \"jsx-a11y/alt-text\", github/a11y-svg-has-accessible-name, sonarjs/table-header, react-doctor/dialog-has-accessible-name, and commit messages (--grep a11y|accessib|autofocus|aria|label). Template history: -S on each accessibility line of packages/cli/src/data/rules.ts plus predecessor strings ('Accessibility (a11y)', 'accessKey', 'Label els need text and associated input', 'Make sure label elements have text content...', 'Use semantic elements instead of role attributes in JSX', 'Validate accessibility requirements', 'enforces strict type safety, accessibility standards', 'generic font family') across .cursor/rules/ultracite.mdc, docs/lib/rules.ts, scripts/consts/rules.ts, packages/cli/src/editor-rules/rules.ts, packages/cli/src/agents/rules.ts, packages/data/src/rules.ts, packages/cli/src/data/rules.ts, skills/ultracite/references/code-standards.md and .claude/CLAUDE.md; git show of each hit. packages/cli/CHANGELOG.md (current text and the pre-7748b21d text, since that 2026-04-23 commit rewrote older entries), root CHANGELOG.md (auto/shipit era) and .changeset/ via git show. compare-rule-parity.ts: every revision read for allowlist keys and any a11y/autofocus/label mention. gh (read-only): issue list and pr list --state all --limit 100 for the 21 requested terms plus controlComponents, labelComponents, 'custom associated controls', useValidLang, 'lang attribute', keyboard, focus, useHtmlLang, noNoninteractiveElementInteractions, control-has-associated-label; bodies and comments of issues #139, #189, #274, #343, #437, #451, #457, #498, #572, #615, #660, #690 and PRs #31, #83, #87, #115, #128, #140, #162, #181, #182, #183, #245, #299, #319, #323, #325, #466, #595, #607, #651, #705, #736, #800, #819, #836, #840; gh api GET for PR #140's unsquashed commits (cdef1f91, ded632a1, 19a40d87), upstream biomejs/biome#9304 and its comments, and ota-meshi/eslint-plugin-astro's v1.5.0 tree. Option schemas: node_modules oxlint 1.86.0 configuration_schema.json (LabelHasAssociatedControlConfig, NoAutofocus, ControlHasAssociatedLabelConfig), @biomejs/biome 2.5.15 configuration_schema.json (NoLabelWithoutControlOptions, NoAutofocusOptions, UseValidLangOptions, A11y group), eslint-plugin-jsx-a11y 6.10.2 (configs.recommended/strict, CHANGELOG, lib/rules/control-has-associated-label.js), eslint-plugin-astro 3.2.1 rule keys, eslint-plugin-react-doctor 0.9.16 rule meta.docs.recommended, svelte 5.55.7 compiler warnings. Effective ESLint state computed with ESLint 10.12.0 calculateConfigForFile and lintText (no files written) for core+react (.tsx), core+astro (.astro) and core+svelte (.svelte). Small Oxlint 1.86.0 and Biome 2.5.15 runs on a two-file sample in the session scratchpad (outside the repo) with the react and core presets. Pickaxe hits that are not decisions were discarded: file moves and reformatting (d6043884, 5b7d6da3, 27b6dce2, 762ef70c, 85697b01, 86ee61e3, c4a205f8 for the Biome move, 43166b14 key reorder, 014a687e/7861cf73/66999e0c Oxlint JSON->TS, 581ea40a then 984d9541 duplicate typed export, 2df05bc8 and 69ddb02e repo .mdc syncs, 361f5d7d template move), website/docs/translation commits (0415979b inspector bundle, 4347b410, 6c27c6e9, 80539875, 6d960155, 0a525d93, 065b9b50, c1b7f6d2, 32089867, 1255cae2, f74d5364, 221ece79), research-post and corpus-data commits (8d62c6a0, 76395b86, 99358e3a, 3cb763d5, 2752cddb, ab9196a6, 2419264b), lockfile/dependency/README bumps (ecb1647c, 67ec6580, 5693737d, 2b95b911, a6fe3492, 27d06f27, #31, #87, and the remaining -S jsx-a11y hits; git log -G 'jsx-a11y/' restricted to the config paths returns only e403fb15, d6043884, 5b7d6da3, c52fef07, 7a6aa5fc, 27b6dce2, c4a205f8, 43166b14, 014a687e, 7861cf73, 66999e0c, aba89bb7, bd27fd4c, e6cf2627 and f7025b12, all read), Version Packages PRs, 2a1d79c7 (bun-provider branch, not on main; a generated list of rules Bun supports) and e6cf2627 (refs/codex/snapshots, not on main).",
+  "eras": [
+    { "linter": "ESLint", "from": "2022-03-18", "to": "2023-06-08", "sha": "e403fb15", "what": "eslint-config-harmony: hand-written src/eslint.js (eslint-plugin-jsx-a11y ^6.5.1) listing 32 jsx-a11y rules under '// JSX a11y', all \"error\" except \"jsx-a11y/no-autofocus\": \"off\". control-has-associated-label (in jsx-a11y since 6.2.0) and lang (since 1.5.0) were not listed, so they did not run. No `extends` of plugin:jsx-a11y/*. Moved to rules/jsx-a11y.mjs by Harmony V2 (5b7d6da3, 2023-01-14, #83) unchanged." },
+    { "linter": "ESLint", "from": "2023-06-08", "to": "2024-07-18", "sha": "c52fef07", "what": "Migrate to opt-in config (#115), bullet 'Switch jsx-a11y to opt-in method': every non-deprecated eslint-plugin-jsx-a11y rule at \"error\" (Object.keys(rules).filter(!deprecated)), overrideRules { 'jsx-a11y/no-autofocus': 'off' }. 7a6aa5fc (2023-08-28) added label-has-associated-control options. eslint-plugin-github (5.0.0-2) with its a11y-* rules joined on 2024-05-28 (6c7778c4, #136), also as 'every non-deprecated rule'." },
+    { "linter": "ESLint", "from": "2024-07-18", "to": "2025-12-28", "sha": "c92a9d2e", "what": "No ESLint preset: Switch from ESLint, Prettier and Stylelint to Biome (#140) deleted src/rules/jsx-a11y.mjs and the eslint-plugin-jsx-a11y dependency." },
+    { "linter": "ESLint", "from": "2025-12-28", "to": null, "sha": "c4a205f8", "what": "V7 (#466): packages/cli/config/eslint/react/rules/jsx-a11y.mjs restored verbatim (every non-deprecated jsx-a11y ^6.10.2 rule, no-autofocus off, same label options); react preset scoped to **/*.jsx and **/*.tsx. ESLint core turns on every non-deprecated eslint-plugin-github rule (5 a11y-* rules effective today) and every eslint-plugin-sonarjs rule (sonarjs/table-header, table-header-reference, no-table-as-layout, object-alt-content effective [2]). ESLint astro preset turns on every eslint-plugin-astro rule (36 astro/jsx-a11y/* in 3.2.1, 36 rule docs already in v1.5.0) with no a11y overrides; those rules could not run until .astro files were parsed (d6ee272c, 2026-09-28) and eslint-plugin-jsx-a11y was installed for Astro (9ae95d16, 2026-09-28). React Doctor joined 2026-07-04 (223233f7, #730) with its jsx-a11y ports left off; ESLint's list grew to 417 rules on 2026-08-01 (477cd6eb)." },
+    { "linter": "Biome", "from": "2024-07-18", "to": "2025-06-22", "sha": "c92a9d2e", "what": "biome.json, Biome 1.8.3 (1.9.x from c5abf329, 2024-09-16, #141; 1.9.4 by 871ee738^): \"all\": true with a11y { \"noAutofocus\": \"off\" } as the only a11y exception. PR #140's first commit cdef1f91 ('Install biome, run initial migration', 2024-07-19 UTC) carried an explicit migrated a11y list that already had \"noAutofocus\": \"off\"; 19a40d87 ('Replace excess rules with \"all\"') collapsed it to all:true keeping noAutofocus off." },
+    { "linter": "Biome", "from": "2025-06-22", "to": null, "sha": "871ee738", "what": "Ultracite v5 (#162, bullets 'remove all:true', 'Add a11y rules'): biome.jsonc lists every Biome 2.0 a11y rule explicitly with a description comment (34 JS rules at error + useGenericFontNames CSS), and \"noAutofocus\": \"off\" placed apart at the end of the JS block. Later additions: noNoninteractiveElementInteractions promoted from nursery (1c34286e, 2025-08-14, Biome 2.2.0 #245); noAmbiguousAnchorText as a nursery rule (7573ddc2, 2025-12-17), removed with all nursery rules (628a5c39, 2025-12-21, #457), back in the a11y group (aea7fc06, 2026-07-04, Biome 2.5.2). Comments dropped 2025-10-18 (85697b01). Today 37 of 38 Biome 2.5.15 a11y rules are on; noAutofocus is the only one off. Svelte preset adds an app.html override (83bafe4a, 2026-03-04, #595)." },
+    { "linter": "Oxlint", "from": "2025-12-28", "to": "2026-04-13", "sha": "c4a205f8", "what": "V7 (#466): config/oxlint/react/.oxlintrc.json enables plugins [react, react-perf, jsx-a11y] and lists one jsx-a11y rule, \"jsx-a11y/no-autofocus\": \"off\"; core sets categories correctness/perf/restriction/suspicious/pedantic/style to error. Whether core's categories actually turned on jsx-a11y rules enabled by the separately extended react preset was not verified." },
+    { "linter": "Oxlint", "from": "2026-04-13", "to": "2026-07-04", "sha": "a63d9c57", "what": "Resolves #660 ('Fix cross-config leaking rules'): core's categories replaced by an explicit rule list. The react preset still listed only no-autofocus off, plus jsx-a11y/interactive-supports-focus from 2026-05-07 (aba89bb7) and four more from 2026-05-25 (bd27fd4c). The f7025b12 changeset says that before 2026-07-04 'only ~20 were configured, so most a11y and correctness rules silently never ran'." },
+    { "linter": "Oxlint", "from": "2026-07-04", "to": null, "sha": "f7025b12", "what": "Extend cross-linter parity to framework presets: the react preset lists every non-nursery react, react-perf and jsx-a11y rule (comment 'Every non-nursery react, react-perf, and jsx-a11y rule oxlint implements'); 35 jsx-a11y rules at error, no-autofocus off, no options. An exhaustiveness test and a test that no-autofocus stays off ('Rules turned off in config/eslint/react/rules — keep in sync.') were added. github/a11y-* came to Oxlint through JS plugins on 2026-07-04 (44403937), were folded into core 2026-07-05 (29e30ce9) and moved to the opt-in js-plugins preset 2026-07-07 (d186c53c, #742); react-doctor moved there the same day (5da879b3)." }
+  ],
+  "rules": [
+    {
+      "rule": "jsx-a11y/no-autofocus",
+      "linters": ["ESLint"],
+      "current": "\"off\" in packages/cli/config/eslint/react/rules/jsx-a11y.mjs overrideRules (effective [0] on .tsx with core+react, ESLint 10.12.0). eslint-plugin-jsx-a11y 6.10.2's own recommended and strict configs set it to \"error\".",
+      "history": [
+        { "date": "2022-03-18", "sha": "e403fb15", "what": "First ESLint config (src/eslint.js). Off from the first commit; every neighbouring jsx-a11y rule is \"error\". No comment.", "quote": "\"jsx-a11y/no-autofocus\": \"off\"," },
+        { "date": "2023-01-14", "sha": "5b7d6da3", "what": "Harmony V2 (#83): moved to rules/jsx-a11y.mjs, unchanged.", "quote": "'jsx-a11y/no-autofocus': 'off'," },
+        { "date": "2023-06-08", "sha": "c52fef07", "what": "Migrate to opt-in config (#115): the only entry kept in overrideRules when every other jsx-a11y rule moved to the generated 'every non-deprecated rule' map.", "quote": "const overrideRules = {\n  'jsx-a11y/no-autofocus': 'off',\n};" },
+        { "date": "2024-07-18", "sha": "c92a9d2e", "what": "ESLint config deleted (Switch to Biome, #140); the decision continued as Biome noAutofocus off." },
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "V7 (#466): file restored with the same override." },
+        { "date": "2026-03-13", "sha": "43166b14", "what": "Oxlint (#607): keys reordered alphabetically only." }
+      ],
+      "neverOn": "Never on under the jsx-a11y/ prefix in any ESLint preset (git log -G \"jsx-a11y/[a-z-]+['\\\"]?: *['\\\"]off\" finds only no-autofocus in every hit).",
+      "rationaleRecorded": false,
+      "rationale": "None recorded. No code comment, commit message, changeset, CHANGELOG entry, issue or PR gives a reason. The closest maintainer statement is on #437 (2026-01-08), which only confirms the deviation: 'Ultracite turns OFF several rules that `recommended` would enable (like `noAutofocus`, `noSecrets`, etc.)'."
+    },
+    {
+      "rule": "jsx-a11y/no-autofocus",
+      "linters": ["Oxlint"],
+      "current": "\"off\" in packages/cli/config/oxlint/react/index.mjs L32, no options. Oxlint 1.86.0 supports [level, { ignoreNonDOM }] (default false). Sample run (Oxlint 1.86.0, react preset): <input autoFocus aria-label=\"Name\" /> produced no a11y diagnostic.",
+      "history": [
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "V7 (#466): the only jsx-a11y entry in the first Oxlint react preset (.oxlintrc.json).", "quote": "\"jsx-a11y/no-autofocus\": \"off\"" },
+        { "date": "2026-04-10", "sha": "7861cf73", "what": "Migrate to TS configs for Oxlint (#651): carried into index.mjs (014a687e, 66999e0c are the same migration)." },
+        { "date": "2026-07-04", "sha": "f7025b12", "what": "Kept off when every non-nursery jsx-a11y rule was listed; a test now asserts it, naming ESLint as the source of the decision.", "quote": "// Rules turned off in config/eslint/react/rules — keep in sync. ... \"jsx-a11y/no-autofocus\"," }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "None recorded. The f7025b12 test (packages/cli/__tests__/oxlint-config.test.ts L1312-1324, 'mirrors the ESLint react preset's off decisions') shows the Oxlint value copies the ESLint one, the reverse of the 'Oxlint is the benchmark' rule in AGENTS.md; it does not give a reason."
+    },
+    {
+      "rule": "noAutofocus",
+      "linters": ["Biome"],
+      "current": "\"off\" in packages/cli/config/biome/core/biome.jsonc L148; the only Biome a11y rule off. Biome 2.5.15 noAutofocus takes no options. apps/docs/components/providers/biome/coverage.astro L9 and pages/providers/biome.astro L36 (32089867, 2026-10-10) say core keeps every Biome default except noAutofocus and noImportantStyles.",
+      "history": [
+        { "date": "2024-07-19 (UTC; precedes the squash merge c92a9d2e, authored 2024-07-18 -0400)", "sha": "cdef1f91", "what": "PR #140 commit 'Install biome, run initial migration' (unsquashed, read via gh api): the migrated a11y block already sets it off, matching the ESLint jsx-a11y/no-autofocus off it was migrated from.", "quote": "\"noAutofocus\": \"off\"," },
+        { "date": "2024-07-18", "sha": "c92a9d2e", "what": "Squash merge of #140: \"all\": true with noAutofocus as the only a11y exception. README added an override example whose sentence and snippet disagree.", "quote": "For example, to enable the `noAutofocus` rule, you can do the following: ... \"a11y\": { \"noAutofocus\": \"off\" }" },
+        { "date": "2025-05-02", "sha": "8cab3bcc", "what": "New website (#158): docs example to 'disable' a rule the preset already disables.", "quote": "For example, to disable the `noAutofocus` rule, you can do the following:" },
+        { "date": "2025-06-22", "sha": "871ee738", "what": "Ultracite v5 (#162): explicit list; noAutofocus set off with Biome's description as its only comment, separated from the error rules.", "quote": "// Enforce that autoFocus prop is not used on elements.\n\"noAutofocus\": \"off\"," },
+        { "date": "2025-10-18", "sha": "d1679ede", "what": "configuration.mdx rule table lists it as off.", "quote": "| `noAutofocus` | `off` | Enforce that `autoFocus` prop is not used on elements. |" },
+        { "date": "2026-07-04", "sha": "6d490cc0", "what": "Misc docs fixes: the override example in configuration.mdx switched from noAutofocus to useButtonType (docs only).", "quote": "-For example, to disable the `noAutofocus` rule ... +For example, to disable the `useButtonType` rule" }
+      ],
+      "neverOn": "Never on in any Biome preset: off in the first migrated config (cdef1f91) and in every later one. No rome.json ever existed (git log finds none).",
+      "rationaleRecorded": false,
+      "rationale": "None recorded beyond inheritance from the ESLint decision through `biome migrate` (cdef1f91) and the #437 acknowledgement. No issue asks for it on or off."
+    },
+    {
+      "rule": "astro/jsx-a11y/no-autofocus (and the other 35 astro/jsx-a11y/* rules)",
+      "linters": ["ESLint astro preset"],
+      "current": "ON at error. packages/cli/config/eslint/astro/rules/astro.mjs enables every non-deprecated eslint-plugin-astro rule and overrides only astro/semi. Effective [2] on .astro (core+astro, ESLint 10.12.0, eslint-plugin-astro 3.2.1); lintText of <input autofocus /> in an .astro file reports 'astro/jsx-a11y/no-autofocus: The autoFocus prop should not be used, as it can reduce usability and accessibility for users.' astro/jsx-a11y/label-has-associated-control is [2] with no options.",
+      "history": [
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "V7 (#466): astro.mjs created with 'every non-deprecated rule' and an empty overrideRules. eslint-plugin-astro ^1.5.0; its v1.5.0 tree has 36 docs/rules/jsx-a11y/*.md including no-autofocus.md (gh api)." },
+        { "date": "2026-07-04", "sha": "f7025b12", "what": "Only change to overrides: astro/semi off ('Prettier owns formatting')." },
+        { "date": "2026-09-28", "sha": "d6ee272c", "what": "Parse Vue, Svelte and Astro files: before this, .astro files 'failed with \"Unexpected token <\" instead of being linted', so no astro rule ran.", "quote": "every .vue, .svelte and .astro file was read by espree and failed with \"Unexpected token <\" instead of being linted." },
+        { "date": "2026-09-28", "sha": "9ae95d16", "what": "init installs eslint-plugin-jsx-a11y for Astro, because the astro/jsx-a11y/* rules load it.", "quote": "The preset enables `eslint-plugin-astro`'s `astro/jsx-a11y/*` rules, which load that package and reported \"you need to install eslint-plugin-jsx-a11y\" on every `.astro` file when it was missing." }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "No decision about astro/jsx-a11y/no-autofocus was recorded; it is on as a side effect of 'every non-deprecated astro rule'. The 9ae95d16 commit and changeset name the astro/jsx-a11y/* rules but not the autofocus divergence."
+    },
+    {
+      "rule": "svelte/valid-compile (Svelte compiler warning a11y_autofocus)",
+      "linters": ["ESLint svelte preset"],
+      "current": "svelte/valid-compile is at error via 'every non-deprecated eslint-plugin-svelte rule' (config/eslint/svelte/rules/svelte.mjs). lintText of <input autofocus bind:value={v} /> in a .svelte file (eslint-plugin-svelte 3.23.0, svelte 5.55.7) reports 'svelte/valid-compile: Avoid using autofocus https://svelte.dev/e/a11y_autofocus'. The other Svelte compiler a11y_* warnings surface the same way.",
+      "history": [
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "V7: svelte preset enables every non-deprecated eslint-plugin-svelte rule." },
+        { "date": "2026-09-28", "sha": "d6ee272c", "what": "Svelte files parsed for the first time, so valid-compile could report." }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "Not discussed anywhere; found by measurement."
+    },
+    {
+      "rule": "jsx-a11y/label-has-associated-control options",
+      "linters": ["ESLint"],
+      "current": "[\"error\", { controlComponents: [\"Input\",\"Select\",\"Textarea\",\"Checkbox\",\"Radio\"], depth: 3, labelComponents: [\"Label\"] }] (effective, core+react, .tsx). lintText: <Label>Name</Label> is reported; <Label>Name<Input /></Label> is not; <label>Name</label> is reported.",
+      "history": [
+        { "date": "2022-03-18", "sha": "e403fb15", "what": "Plain \"error\" with plugin defaults.", "quote": "\"jsx-a11y/label-has-associated-control\": \"error\"," },
+        { "date": "2023-08-28", "sha": "7a6aa5fc", "what": "'Tweak jsx-a11y to support custom associated controls': options added. Released as v2.5.2 (f607ced8 CHANGELOG: 'Tweak jsx-a11y to support custom associated controls').", "quote": "labelComponents: ['Label'],\ncontrolComponents: ['Input', 'Select', 'Textarea', 'Checkbox', 'Radio'],\ndepth: 3," },
+        { "date": "2024-07-18", "sha": "c92a9d2e", "what": "Deleted with the ESLint config; no Biome equivalent options were set (noLabelWithoutControl options never configured)." },
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "V7: restored with identical values." },
+        { "date": "2026-03-13", "sha": "43166b14", "what": "Keys alphabetised; values unchanged." },
+        { "date": "2026-04-23", "sha": "7748b21d", "what": "'Improve changelog content' rewrote the 2.5.2 entry. The added explanation is a 2026 retrospective, not the 2023 rationale.", "quote": "Configure `jsx-a11y/label-has-associated-control` to recognize custom component names (`Label`, `Input`, `Select`, `Textarea`, `Checkbox`, `Radio`) with a depth of 3; the rule previously only matched native HTML elements" }
+      ],
+      "changedOverTime": "Values never changed since 2023-08-28; only key order (43166b14).",
+      "rationaleRecorded": true,
+      "rationale": "Only the commit subject: 'Tweak jsx-a11y to support custom associated controls' (7a6aa5fc). The component names match shadcn/ui-style Label/Input/Select/Textarea/Checkbox/RadioGroup components, but no source says that; why depth 3 (plugin default 2) was chosen is not recorded."
+    },
+    {
+      "rule": "jsx-a11y/label-has-associated-control",
+      "linters": ["Oxlint"],
+      "current": "\"error\", no options (react/index.mjs L26). Oxlint 1.86.0 supports the same options: LabelHasAssociatedControlConfig { assert (default \"either\"), controlComponents (default []), depth (default 2), labelAttributes (default [alt, aria-label, aria-labelledby]), labelComponents (default [\"label\"]) }. Sample run: <Label>Name</Label> not reported, <label>Name</label> reported.",
+      "history": [
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "Not listed; plugin enabled." },
+        { "date": "2026-07-04", "sha": "f7025b12", "what": "Listed as plain \"error\". The commit says decisions match the ESLint presets, but the ESLint options were not carried over.", "quote": "with decisions matching the ESLint presets" }
+      ],
+      "optionsDiscussed": "Never. git log -S controlComponents/labelComponents finds only ESLint commits (7a6aa5fc, c92a9d2e, c4a205f8) and the 2024 website inspector bundle (0415979b); gh search for controlComponents, labelComponents and 'custom associated controls' returns 0 issues and 0 PRs.",
+      "rationaleRecorded": false,
+      "rationale": "No record of why Oxlint has no options. compare-rule-parity.ts compares options only when both sides specify them (L391-396: state.options !== \"[]\" && eslintEntry.options !== \"[]\"), so this gap cannot be flagged."
+    },
+    {
+      "rule": "noLabelWithoutControl",
+      "linters": ["Biome"],
+      "current": "\"error\", no options (core L118). Biome 2.5.15 options: inputComponents, labelAttributes, labelComponents (no depth). Sample run: <Label>Name</Label> not reported, <label>Name</label> reported.",
+      "history": [
+        { "date": "2025-06-22", "sha": "871ee738", "what": "Listed explicitly (it was on via all:true before).", "quote": "// Enforce that a label element or component has a text label and an associated input.\n\"noLabelWithoutControl\": \"error\"," }
+      ],
+      "optionsDiscussed": "Never; git log -S inputComponents and -S labelAttributes find nothing.",
+      "rationaleRecorded": false,
+      "rationale": "None."
+    },
+    {
+      "rule": "jsx-a11y plugin in the Oxlint react preset",
+      "linters": ["Oxlint"],
+      "current": "plugins [react, react-perf, jsx-a11y]; all 36 non-nursery jsx-a11y rules listed (35 error, no-autofocus off), no options on any.",
+      "history": [
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "Plugin enabled; only no-autofocus listed." },
+        { "date": "2026-04-13", "sha": "a63d9c57", "what": "Core categories removed (Resolves #660). Maintainer on #660: 'turns out the way oxlint was setup, rules leaked when importing configs.'" },
+        { "date": "2026-05-07", "sha": "aba89bb7", "what": "jsx-a11y/interactive-supports-focus added.", "quote": "`jsx-a11y/interactive-supports-focus` → `\"error\"` — interactive elements (click handlers, `role=\"button\"`, etc.) must be keyboard-focusable; matches the rest of the a11y baseline." },
+        { "date": "2026-05-25", "sha": "bd27fd4c", "what": "control-has-associated-label, no-interactive-element-to-noninteractive-role, no-noninteractive-element-interactions, no-noninteractive-element-to-interactive-role added.", "quote": "Add newly supported Oxlint rules from the latest release to the core, React, and Vitest presets" },
+        { "date": "2026-07-04", "sha": "f7025b12", "what": "Every non-nursery jsx-a11y rule listed; comment 'Every non-nursery react, react-perf, and jsx-a11y rule oxlint implements' added.", "quote": "The oxlint react preset now explicitly lists all 102 non-nursery react/react-perf/jsx-a11y rules (previously only ~20 were configured, so most a11y and correctness rules silently never ran)" }
+      ],
+      "rationaleRecorded": true,
+      "rationale": "Coverage and parity with ESLint (f7025b12 changeset); the 2026-05-07 entry for interactive-supports-focus gives a per-rule reason."
+    },
+    {
+      "rule": "Biome a11y group",
+      "linters": ["Biome"],
+      "current": "37 of 38 Biome 2.5.15 a11y rules at error (36 JS/JSX/HTML + useGenericFontNames CSS), noAutofocus off.",
+      "history": [
+        { "date": "2024-07-18", "sha": "c92a9d2e", "what": "\"all\": true (Biome 1.8.3)." },
+        { "date": "2025-06-22", "sha": "871ee738", "what": "Explicit list (PR bullets 'remove all:true', 'Add a11y rules'). noNoninteractiveElementInteractions was in nursery then." },
+        { "date": "2025-08-14", "sha": "1c34286e", "what": "noNoninteractiveElementInteractions moved from nursery to a11y (Biome 2.2.0, #245)." },
+        { "date": "2025-12-17", "sha": "7573ddc2", "what": "noAmbiguousAnchorText enabled as a nursery rule (Biome 2.3.10)." },
+        { "date": "2025-12-21", "sha": "628a5c39", "what": "Resolves #457 ('Don't turn on nursery rules by default'), changeset 'Disable nursery rules': noAmbiguousAnchorText removed with the rest of nursery." },
+        { "date": "2026-07-04", "sha": "aea7fc06", "what": "noAmbiguousAnchorText back in the a11y group (Biome 2.5.2 promoted it)." }
+      ],
+      "rationaleRecorded": true,
+      "rationale": "Explicit listing: maintainer on #437 (2026-01-08): 'Explicit config is kind of the point ... By listing everything explicitly, I control when new rules get adopted'. Nursery removal: #457."
+    },
+    {
+      "rule": "useValidLang override for **/app.html",
+      "linters": ["Biome svelte preset"],
+      "current": "packages/cli/config/biome/svelte/biome.jsonc: overrides [{ includes: [\"**/app.html\"], linter.rules.a11y.useValidLang: \"off\" }]. useValidLang stays on everywhere else; useHtmlLang stays on.",
+      "history": [
+        { "date": "2026-03-01", "sha": null, "issue": "#498", "what": "Reporter (bennajah) lists the false positive on SvelteKit's app.html in a comment on an unrelated Svelte formatting issue.", "quote": "src/app.html ... %lang% Provide a valid value for the lang attribute." },
+        { "date": "2026-03-02", "sha": null, "issue": "biomejs/biome#9304", "what": "Upstream issue 'Biome useValidLang Rule Does Not Accept SvelteKit %lang% Placeholder', closed not_planned. Biome maintainer dyc3 recommended disabling the rule.", "quote": "IMO, I would say you should just disable the rule if you are already setting `lang` dynamically. This rule's value is really only applicable to projects that have multiple `.html` documents." },
+        { "date": "2026-03-04", "sha": "83bafe4a", "pr": "#595", "what": "Contributor PR 'fix(svelte): disable useValidLang due to SvelteKit %lang% placeholder', merged by the maintainer ('Thanks @bennajah'). Second commit narrowed it from Svelte files to app.html ('Add linter rules for app.html insread svelte files').", "quote": "Disables the useValidLang rule, which conflicts with SvelteKit’s %lang% placeholder in app.html." }
+      ],
+      "rationaleRecorded": true,
+      "rationale": "Changeset (83bafe4a): 'Disable useValidLang rule for SvelteKit app.html to prevent false positives from %lang% placeholder'."
+    },
+    {
+      "rule": "jsx-a11y/control-has-associated-label",
+      "linters": ["ESLint", "Oxlint"],
+      "current": "ESLint: [2] with no options (plugin recommended ships it \"off\" with ignoreElements/ignoreRoles). Oxlint: \"error\" with no options, but Oxlint's defaults ignore audio/canvas/embed/input/textarea/tr/video and roles grid/listbox/menu/menubar/radiogroup/row/tablist/toolbar/tree/treegrid, while eslint-plugin-jsx-a11y 6.10.2 defaults to empty lists (plus 'link'). Measured: <input type=\"text\" /> and <div role=\"listbox\" tabIndex={0} /> are reported by ESLint, not by Oxlint 1.86.0. Biome has no equivalent rule.",
+      "history": [
+        { "date": "2022-03-18", "sha": "e403fb15", "what": "Not in the hand-written list (rule exists since jsx-a11y 6.2.0), so it did not run." },
+        { "date": "2023-06-08", "sha": "c52fef07", "what": "On via 'every non-deprecated rule'." },
+        { "date": "2026-05-25", "sha": "bd27fd4c", "what": "Added to Oxlint react preset ('newly supported Oxlint rules')." }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "No discussion of options or of the 2022 omission."
+    },
+    {
+      "rule": "jsx-a11y/lang",
+      "linters": ["ESLint"],
+      "current": "On ([2]) via 'every non-deprecated rule'; Oxlint lists it at error.",
+      "history": [
+        { "date": "2022-03-18", "sha": "e403fb15", "what": "Not listed (rule exists since jsx-a11y 1.5.0), so it did not run until 2023-06-08." },
+        { "date": "2023-06-08", "sha": "c52fef07", "what": "On via 'every non-deprecated rule'." }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "Omission not explained; likely an incomplete list, but nothing says so."
+    },
+    {
+      "rule": "noSvgWithoutTitle, useSemanticElements, noNoninteractiveElementInteractions, useKeyWithClickEvents, noStaticElementInteractions, useFocusableInteractive, useButtonType, noRedundantRoles (Biome); click-events-have-key-events, no-static-element-interactions, anchor-is-valid, control-has-associated-label (jsx-a11y)",
+      "linters": ["Biome", "ESLint", "Oxlint"],
+      "current": "All on at error in every linter that has them.",
+      "history": [
+        { "date": "2022-03-18", "sha": "e403fb15", "what": "click-events-have-key-events, no-static-element-interactions, anchor-is-valid at error from the first commit." },
+        { "date": "2024-07-18", "sha": "c92a9d2e", "what": "Biome rules on via all:true." },
+        { "date": "2025-06-22", "sha": "871ee738", "what": "Biome rules listed explicitly at error." }
+      ],
+      "neverOff": "Never off in any preset. git log -G '\"<Biome a11y rule>\": *\"off\"' over all history hits only noAutofocus, useValidLang (83bafe4a, app.html only) and useButtonType in a docs example (6d490cc0, c1b7f6d2: configuration.mdx override sample, not a preset). git log -G for jsx-a11y/*: off hits only no-autofocus; github/a11y*: off and astro/jsx-a11y/*: off have no hits. The only user-side complaint found is a user's own config on #274 (2025-09-02) that turns off useKeyWithClickEvents and noStaticElementInteractions while debugging an unrelated files.includes problem; nobody asked Ultracite to change them.",
+      "rationaleRecorded": false,
+      "rationale": "No per-rule decision recorded; they are on by the 'everything on, explicit exceptions' policy (#437)."
+    },
+    {
+      "rule": "noAmbiguousAnchorText",
+      "linters": ["Biome"],
+      "current": "error (a11y group).",
+      "history": [
+        { "date": "2025-12-17", "sha": "7573ddc2", "what": "Enabled in nursery (Bump Biome to 2.3.10)." },
+        { "date": "2025-12-21", "sha": "628a5c39", "what": "Removed with all nursery rules (Resolves #457)." },
+        { "date": "2026-07-04", "sha": "aea7fc06", "what": "Re-added in a11y after promotion (Upgrade Biome to 2.5.2)." }
+      ],
+      "rationaleRecorded": true,
+      "rationale": "#457: nursery rules 'don't follow semantic versioning', 'can be deleted or renamed'; maintainer: 'Anyway I'll disable them and cut a new release'."
+    },
+    {
+      "rule": "github/a11y-* (aria-label-is-well-formatted, no-title-attribute, no-visually-hidden-interactive-element, role-supports-aria-props, svg-has-accessible-name)",
+      "linters": ["ESLint core", "Oxlint js-plugins (opt-in)"],
+      "current": "ESLint core: every non-deprecated eslint-plugin-github rule (6.1.2), these five effective [2] on .tsx. Oxlint: listed in the opt-in js-plugins preset (L211-215); not in Oxlint core.",
+      "history": [
+        { "date": "2024-05-28", "sha": "6c7778c4", "what": "Add eslint-plugin-github (#136), every non-deprecated rule, overrideRules {}." },
+        { "date": "2025-12-28", "sha": "c4a205f8", "what": "Back in ESLint core with V7." },
+        { "date": "2026-07-04", "sha": "44403937", "what": "Run via Oxlint JS plugins." },
+        { "date": "2026-07-05", "sha": "29e30ce9", "what": "Folded into Oxlint core." },
+        { "date": "2026-07-07", "sha": "d186c53c", "what": "Moved to opt-in js-plugins (Resolves #742 'Plugins should be opt-in')." }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "No a11y-specific reason; moved for JS-plugin speed (#742)."
+    },
+    {
+      "rule": "react-doctor a11y rules and jsx-a11y ports",
+      "linters": ["ESLint react", "Oxlint js-plugins"],
+      "current": "React Doctor's ports of jsx-a11y rules (e.g. react-doctor/no-autofocus, react-doctor/alt-text, both recommended:true in 0.9.16) are not enabled. react-doctor/no-skipped-heading-level ('Heading hierarchy skips a level', recommended:false) is not enabled in either linter. ESLint enables html-label-has-single-control, no-uninformative-aria-label, role-button-requires-complete-keyboard-activation and no-multiple-unlabeled-navigation-landmarks; the Oxlint js-plugins preset does not, although oxlint-plugin-react-doctor 0.9.16 has them. Both enable dialog-has-accessible-name, no-outline-none, no-disabled-zoom, no-tiny-text, no-gray-on-colored-background, html-no-nested-interactive, prefer-html-dialog.",
+      "history": [
+        { "date": "2026-07-04", "sha": "223233f7", "what": "Resolves #730.", "quote": "Rules that React Doctor ports from `eslint-plugin-react`, `eslint-plugin-react-hooks`, and `eslint-plugin-jsx-a11y` are intentionally left off to avoid duplicate diagnostics with the plugins Ultracite already ships." },
+        { "date": "2026-08-01", "sha": "477cd6eb", "what": "ESLint react-doctor list grows from 149 to 417 by adopting upstream recommended.", "quote": "while excluding rules that duplicate already-enabled `react`, `react-hooks`, and `jsx-a11y` rules" }
+      ],
+      "rationaleRecorded": true,
+      "rationale": "Duplicate diagnostics (223233f7, 477cd6eb). The ESLint/Oxlint subset gap is acknowledged in compare-rule-parity.ts L242-243: 'react-doctor isn't checked yet: the ESLint react preset enables far more of its rules than the curated list in the js-plugins preset.'"
+    },
+    {
+      "rule": "sonarjs/table-header, table-header-reference, no-table-as-layout, object-alt-content",
+      "linters": ["ESLint core", "Oxlint js-plugins (opt-in)"],
+      "current": "ESLint core [2] on .tsx (every sonarjs rule); Oxlint js-plugins L433, L453, L487-488 at error.",
+      "history": [
+        { "date": "2026-07-04", "sha": "44403937", "what": "First listed for Oxlint through JS plugins; then 29e30ce9 (core) and d186c53c (opt-in js-plugins)." }
+      ],
+      "rationaleRecorded": false,
+      "rationale": "None specific to accessibility."
+    }
+  ],
+  "templateLines": [
+    {
+      "line": "Write code that is **accessible, performant, type-safe, and maintainable**. Focus on clarity and explicit intent over brevity.",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343", "path": "packages/cli/src/agents/rules.ts" },
+      "issue": "#343 'Rules improvements' ('Tell agent to run rules file', 'Notes from cursor team'); changeset sixty-wings-ring.md: 'Refactor rules based on hooks and feedback from Cursor team'.",
+      "predecessors": [
+        { "date": "2025-07-13", "sha": "2d8e2bcf", "pr": "#183 (lnittman)", "text": "Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter." }
+      ],
+      "removedLines": [
+        { "text": "Ultracite enforces strict type safety, accessibility standards, and consistent code quality ...", "removed": { "date": "2025-10-20", "sha": "d0ba90bc", "subject": "Composable rules (#322)" } }
+      ],
+      "movedTo": "packages/data/src/rules.ts (c4a205f8, 2025-12-28), packages/cli/src/data/rules.ts (361f5d7d, 2026-07-04); unchanged text. Copied to .claude/CLAUDE.md (d9ddbe96, 2026-01-08) and skills/ultracite/references/code-standards.md (d1e8490b, 2026-02-18)."
+    },
+    {
+      "line": "- Use semantic HTML and ARIA attributes for accessibility:",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343" },
+      "placement": "Under '### React & JSX', not a section of its own.",
+      "predecessors": [
+        { "date": "2025-06-22", "sha": "871ee738", "text": "34 a11y lines at the top of .cursor/rules/ultracite.mdc and docs/lib/rules.ts (no heading)." },
+        { "date": "2025-07-13", "sha": "2d8e2bcf", "text": "'### Accessibility (a11y)' section heading over the accessibilityRules array (#183)." },
+        { "date": "2025-10-20", "sha": "d0ba90bc", "text": "'// Accessibility (a11y)' group in the `core` rules array (applied to every framework), terser wording ('Make rules terser')." },
+        { "date": "2025-10-20", "sha": "ff83b527", "text": "Compressed for Windsurf's 12,000-character limit (#323: 'Condense \"don't use\"', 'Merge similar related patterns')." }
+      ],
+      "removedLines": "See the last templateLines entry."
+    },
+    {
+      "line": "  - Provide meaningful alt text for images",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343" },
+      "predecessors": [
+        { "date": "2025-06-22", "sha": "871ee738", "text": "Give all elements requiring alt text meaningful information for screen readers.", "mirrors": "Biome useAltText ('Enforce that all elements that require alternative text have meaningful information to relay back to the end user.')" },
+        { "date": "2025-10-20", "sha": "d0ba90bc", "text": "Provide meaningful alternative text for all elements that require it." },
+        { "date": "2025-10-20", "sha": "ff83b527", "text": "Provide meaningful alt text for all els requiring it" }
+      ],
+      "enforcedBy": "jsx-a11y/alt-text, img-redundant-alt; Biome useAltText, noRedundantAlt; github/a11y-svg-has-accessible-name; sonarjs/object-alt-content."
+    },
+    {
+      "line": "  - Use proper heading hierarchy",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343" },
+      "predecessors": [
+        { "date": "2025-06-22", "sha": "871ee738", "text": "Give heading elements content that's accessible to screen readers (not hidden with `aria-hidden`).", "mirrors": "Biome useHeadingContent; checks content, not hierarchy" }
+      ],
+      "enforcedBy": "No enabled rule in any linter checks heading order. jsx-a11y/heading-has-content and Biome useHeadingContent check content only. react-doctor/no-skipped-heading-level exists in 0.9.16 but is recommended:false and not enabled in ESLint or Oxlint. Guidance only."
+    },
+    {
+      "line": "  - Add labels for form inputs",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343" },
+      "predecessors": [
+        { "date": "2025-06-22", "sha": "871ee738", "text": "Make sure label elements have text content and are associated with an input.", "mirrors": "Biome noLabelWithoutControl ('Enforce that a label element or component has a text label and an associated input.')" },
+        { "date": "2025-10-20", "sha": "d0ba90bc", "text": "Ensure label elements have text and an associated input." },
+        { "date": "2025-10-20", "sha": "ff83b527", "text": "Label els need text and associated input" }
+      ],
+      "enforcedBy": "jsx-a11y/label-has-associated-control, control-has-associated-label; Biome noLabelWithoutControl. Custom Label/Input components are checked only by ESLint (options above)."
+    },
+    {
+      "line": "  - Include keyboard event handlers alongside mouse events",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343" },
+      "predecessors": [
+        { "date": "2025-06-22", "sha": "871ee738", "text": "Accompany `onClick` with at least one of: `onKeyUp`, `onKeyDown`, or `onKeyPress`. / Accompany `onMouseOver`/`onMouseOut` with `onFocus`/`onBlur`.", "mirrors": "Biome useKeyWithClickEvents, useKeyWithMouseEvents" },
+        { "date": "2025-10-20", "sha": "ff83b527", "text": "Pair `onClick` w/ `onKeyUp`, `onKeyDown`, or `onKeyPress` / Pair `onMouseOver`/`onMouseOut` w/ `onFocus`/`onBlur`" }
+      ],
+      "enforcedBy": "jsx-a11y/click-events-have-key-events, mouse-events-have-key-events; Biome useKeyWithClickEvents, useKeyWithMouseEvents."
+    },
+    {
+      "line": "  - Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343" },
+      "predecessors": [
+        { "date": "2025-06-22", "sha": "871ee738", "text": "Use semantic elements instead of role attributes in JSX.", "mirrors": "Biome useSemanticElements ('It detects the use of role attributes in JSX elements and suggests using semantic elements instead.')" },
+        { "date": "2025-10-20", "sha": "d0ba90bc", "text": "Use semantic elements instead of role attributes." },
+        { "date": "2025-10-20", "sha": "ff83b527", "text": "Use semantic els vs role attrs" }
+      ],
+      "enforcedBy": "jsx-a11y/prefer-tag-over-role; Biome useSemanticElements."
+    },
+    {
+      "line": "5. **User experience** - Accessibility, performance, and usability considerations",
+      "entered": { "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343", "originalText": "Biome's linter will catch most issues automatically. Focus your attention on: ... 5. **User experience** - Accessibility, performance, and usability considerations" },
+      "predecessors": [
+        { "date": "2025-07-13", "sha": "2d8e2bcf", "text": "## Before Writing Code ... 4. Validate accessibility requirements" }
+      ],
+      "removedLines": [
+        { "text": "4. Validate accessibility requirements", "removed": { "date": "2025-10-20", "sha": "d0ba90bc", "subject": "Composable rules (#322)" } }
+      ],
+      "skillMirror": "skills/ultracite/references/code-standards.md has '5. User experience' with no explanation (added fb8b5392, 2026-03-28, Resolves #615); the original skill (d1e8490b) had no such item."
+    },
+    {
+      "line": "(removed) the Biome-derived accessibility list",
+      "entered": { "date": "2025-06-22", "sha": "871ee738", "subject": "Ultracite v5 (#162)", "paths": [".cursor/rules/ultracite.mdc", "docs/lib/rules.ts"] },
+      "mirroredRuleList": true,
+      "mirrorNote": "The 34 lines are paraphrases of Biome 2.0's a11y rule descriptions in the exact order of the v5 biome.jsonc a11y block (noAccessKey, noAriaHiddenOnFocusable, noAriaUnsupportedElements, noDistractingElements, noHeaderScope, ... useValidAutocomplete, useValidLang). noAutofocus, the one off rule, has no line in any template version (git log -i -G autofocus over every template path finds nothing). noNoninteractiveElementInteractions appeared as 'Don't use event handlers on non-interactive elements.' in the nursery part of the list until d0ba90bc moved it into the a11y group; d0ba90bc also added 'Include a generic font family in font families (CSS).' for useGenericFontNames.",
+      "removedLines": {
+        "date": "2025-11-02", "sha": "18ed1f31", "subject": "Resolves #343",
+        "lines": [
+          "Avoid `accessKey` attr and distracting els",
+          "No `aria-hidden=\"true\"` on focusable els",
+          "No ARIA roles, states, props on unsupported els",
+          "Use `scope` prop only on `<th>` els",
+          "No non-interactive ARIA roles on interactive els",
+          "Label els need text and associated input",
+          "No event handlers on non-interactive els",
+          "No interactive ARIA roles on non-interactive els",
+          "No `tabIndex` on non-interactive els",
+          "No positive integers on `tabIndex` prop",
+          "No `image`, `picture`, or `photo` in img alt props",
+          "No explicit role matching implicit role",
+          "Valid role attrs on static, visible els w/ click handlers",
+          "Use `title` el for `svg` els",
+          "Provide meaningful alt text for all els requiring it",
+          "Anchors need accessible content",
+          "Assign `tabIndex` to non-interactive els w/ `aria-activedescendant`",
+          "Include all required ARIA attrs for els w/ ARIA roles",
+          "Use valid ARIA props for the el's role",
+          "Use `type` attr on `button` els",
+          "Make els w/ interactive roles and handlers focusable",
+          "Heading els need accessible content",
+          "Add `lang` attr to `html` el",
+          "Use `title` attr on `iframe` els",
+          "Pair `onClick` w/ `onKeyUp`, `onKeyDown`, or `onKeyPress`",
+          "Pair `onMouseOver`/`onMouseOut` w/ `onFocus`/`onBlur`",
+          "Add caption tracks to audio and video els",
+          "Use semantic els vs role attrs",
+          "All anchors must be valid and navigable",
+          "Use valid, non-abstract ARIA props, roles, states, and values",
+          "Use valid values for `autocomplete` attr",
+          "Use correct ISO language codes in `lang` attr",
+          "Include generic font family in font families"
+        ],
+        "note": "Text as of 18ed1f31^ (ff83b527 compression plus d704b5c4). Five survived as the 18ed1f31 sub-bullets in reworded form; the rest (aria-hidden, scope, tabIndex, svg title, button type, html lang, iframe title, captions, autocomplete, lang codes, accessKey) have no template line today. The repo's own .cursor/rules/ultracite.mdc copy was deleted 2026-07-04 (c5ac4d18)."
+      }
+    }
+  ],
+  "issues": {
+    "searches": [
+      { "term": "a11y", "issues": 6, "prs": 10 },
+      { "term": "accessibility", "issues": 2, "prs": 11 },
+      { "term": "jsx-a11y", "issues": 2, "prs": 9 },
+      { "term": "autofocus", "issues": 0, "prs": 0 },
+      { "term": "noAutofocus", "issues": 1, "prs": 0 },
+      { "term": "aria", "issues": 0, "prs": 0 },
+      { "term": "alt text", "issues": 0, "prs": 30 },
+      { "term": "useAltText", "issues": 0, "prs": 0 },
+      { "term": "label", "issues": 4, "prs": 12 },
+      { "term": "noLabelWithoutControl", "issues": 0, "prs": 0 },
+      { "term": "label-has-associated-control", "issues": 0, "prs": 1 },
+      { "term": "useKeyWithClickEvents", "issues": 1, "prs": 0 },
+      { "term": "click-events-have-key-events", "issues": 0, "prs": 0 },
+      { "term": "noStaticElementInteractions", "issues": 1, "prs": 0 },
+      { "term": "useSemanticElements", "issues": 0, "prs": 0 },
+      { "term": "noSvgWithoutTitle", "issues": 0, "prs": 0 },
+      { "term": "useButtonType", "issues": 0, "prs": 1 },
+      { "term": "button type", "issues": 0, "prs": 5 },
+      { "term": "tabindex", "issues": 0, "prs": 2 },
+      { "term": "role", "issues": 0, "prs": 4 },
+      { "term": "screen reader", "issues": 0, "prs": 0 },
+      { "term": "controlComponents", "issues": 0, "prs": 0 },
+      { "term": "labelComponents", "issues": 0, "prs": 0 },
+      { "term": "custom associated controls", "issues": 0, "prs": 0 },
+      { "term": "useValidLang", "issues": 1, "prs": 3, "note": "#498; #595 and two Version Packages PRs" },
+      { "term": "useHtmlLang", "issues": 0, "prs": 0 },
+      { "term": "noNoninteractiveElementInteractions", "issues": 0, "prs": 0 },
+      { "term": "control-has-associated-label", "issues": 0, "prs": 1, "note": "#705 Version Packages" }
+    ],
+    "searchNote": "Most hits are incidental: Version Packages PRs (#697, #705, #734, #756, #823, #846), dependabot bumps (#4, #31, #38, #40, #87, #364, #418, #479), and 'alt text'/'role'/'button type' matching unrelated PR text. No issue or PR anywhere asks to turn an accessibility rule on or off, reports a jsx-a11y/Biome a11y false positive in React code, or discusses no-autofocus or the label options.",
+    "relevant": [
+      { "number": 437, "type": "issue", "title": "Explain difference between Ultracite and Biome recommended rules", "url": "https://github.com/haydenbleasel/ultracite/issues/437", "state": "CLOSED", "quote": "Reporter (2025-12-14): 'a11y | 34 of 35 rules (all except noAutofocus which they turn off)'. Maintainer (2026-01-08): 'Ultracite turns OFF several rules that `recommended` would enable (like `noAutofocus`, `noSecrets`, etc.)' and 'Explicit config is kind of the point'." },
+      { "number": 498, "type": "issue", "title": "Biome removes self-closing slash from void elements in Svelte, causing warnings with @sveltejs/enhanced-img", "url": "https://github.com/haydenbleasel/ultracite/issues/498", "state": "CLOSED", "quote": "Comment 2026-03-01: 'src/app.html %lang% Provide a valid value for the lang attribute.' (the useValidLang false positive that led to #595)." },
+      { "number": 595, "type": "pr", "title": "fix(svelte): disable useValidLang due to SvelteKit %lang% placeholder", "url": "https://github.com/haydenbleasel/ultracite/pull/595", "state": "MERGED", "quote": "'Disables the useValidLang rule, which conflicts with SvelteKit’s %lang% placeholder in app.html.' Body links biomejs/biome#9304." },
+      { "number": 9304, "type": "upstream issue (biomejs/biome)", "title": "Biome useValidLang Rule Does Not Accept SvelteKit %lang% Placeholder", "url": "https://github.com/biomejs/biome/issues/9304", "state": "CLOSED (not_planned, 2026-03-02)", "quote": "dyc3: 'I would say you should just disable the rule if you are already setting `lang` dynamically.'" },
+      { "number": 457, "type": "issue", "title": "Don't turn on nursery rules by default", "url": "https://github.com/haydenbleasel/ultracite/issues/457", "state": "CLOSED", "quote": "Removed nursery noAmbiguousAnchorText among others (628a5c39). Maintainer: 'Anyway I'll disable them and cut a new release'." },
+      { "number": 343, "type": "issue", "title": "Rules improvements", "url": "https://github.com/haydenbleasel/ultracite/issues/343", "state": "CLOSED", "quote": "'Tell agent to run rules file' / 'Notes from cursor team'. Resolved by 18ed1f31, which introduced every current a11y template line. No a11y-specific discussion." },
+      { "number": 183, "type": "pr", "title": "feat: Optimize AI assistant rules with structured markdown format", "url": "https://github.com/haydenbleasel/ultracite/pull/183", "state": "MERGED", "quote": "'Categorized rules for accessibility, complexity, React/JSX, TypeScript, style, Next.js, and testing'. Added the '### Accessibility (a11y)' heading, 'Validate accessibility requirements' and 'accessibility standards' lines (2d8e2bcf). #181 and #182 are closed earlier versions." },
+      { "number": 323, "type": "pr", "title": "fix: windsurf context is too long max 12000 chars but there are around 16700", "url": "https://github.com/haydenbleasel/ultracite/pull/323", "state": "MERGED", "quote": "Compressed the a11y lines ('Condense \"don't use\"', 'Merge similar related patterns'); empty PR body." },
+      { "number": 322, "type": "pr", "title": "Composable rules", "url": "https://github.com/haydenbleasel/ultracite/pull/322", "state": "MERGED", "quote": "'Make rules terser'; removed 'Validate accessibility requirements' and 'accessibility standards' lines." },
+      { "number": 660, "type": "issue", "title": "Conflict on test title descriptions", "url": "https://github.com/haydenbleasel/ultracite/issues/660", "state": "CLOSED", "quote": "Maintainer: 'turns out the way oxlint was setup, rules leaked when importing configs.' Its fix (a63d9c57) left the Oxlint react preset with almost no jsx-a11y rules until f7025b12." },
+      { "number": 730, "type": "issue", "title": "Oxlint React Doctor", "url": "https://github.com/haydenbleasel/ultracite/issues/730", "state": "CLOSED", "quote": "Resolved by 223233f7, which left React Doctor's jsx-a11y ports off." },
+      { "number": 274, "type": "issue", "title": "Failed to run Ultracite: Command failed: npx @biomejs/biome check --write \"path/src/test.js\"", "url": "https://github.com/haydenbleasel/ultracite/issues/274", "state": "CLOSED", "quote": "A user's own biome.json (2025-09-02) sets \"useKeyWithClickEvents\": \"off\" and \"noStaticElementInteractions\": \"off\"; incidental to a files.includes question, not raised with the maintainer." },
+      { "number": 128, "type": "pr", "title": "Upgrade to ESLint 9", "url": "https://github.com/haydenbleasel/ultracite/pull/128", "state": "CLOSED", "quote": "Tracking list includes https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/978 (ESLint 9 support); no rule decision." }
+    ]
+  },
+  "parityAllowlist": {
+    "file": "packages/cli/scripts/compare-rule-parity.ts",
+    "everHeldA11yRule": false,
+    "evidence": "All 15 revisions (f7025b12 2026-07-04 through 25438598 2026-10-13) checked: no revision mentions a11y, autofocus, label-has or noLabel anywhere in the file. Allowlist keys over time: {sonarjs/no-reference-error, unicorn/number-literal-case} from f7025b12 (2026-07-04) to bffb8dd8; {unicorn/number-literal-case} at efa80e8c (2026-09-28); empty (new Map<string, string>()) at f7599efd, 1cdaf877 and ed5ed04d; {require-await, typescript/require-await} at 7984c6e9 and 25438598 (2026-10-13).",
+    "blindSpots": "Surfaces are core, react (.tsx), next and gdp only (L209-233), so the astro, svelte and vue presets are never compared; Biome is 'aligned manually — it is not covered here' (L11-12); options are compared only when both linters specify some (L391-396), so ESLint-only label-has-associated-control options pass; react-doctor is skipped (L242-243, L376)."
+  },
+  "docsMentions": [
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 34, "text": "'**Accessibility**: ARIA attributes, semantic HTML, keyboard navigation, and other a11y rules are enabled by default.' (under 'When you include the `core` preset'; wording from c4a205f8, earlier 'Rules equivalent to accessibility standards are on by default')" },
+    { "file": "apps/docs/docs/(get-started)/configuration.mdx", "line": 86, "text": "'to disable the `useButtonType` rule for Biome' override example with \"a11y\": { \"useButtonType\": \"off\" } (L93-94). Was noAutofocus until 6d490cc0 (2026-07-04)." },
+    { "file": "apps/docs/docs/(help)/troubleshooting.mdx", "line": 80, "text": "'For instance, if you find the accessibility rules too noisy for an internal tool, you might disable some of them.'" },
+    { "file": "apps/docs/docs/ai/rules.mdx", "line": 79, "text": "'**Accessibility**: Built-in accessibility guidelines ensure inclusive code'" },
+    { "file": "apps/docs/docs/ai/skills.mdx", "line": 43, "text": "'follow Ultracite's code quality, accessibility, performance, and testing standards'" },
+    { "file": "apps/docs/pages/providers/biome.astro", "line": 36, "text": "'it keeps every default except `noAutofocus` and `noImportantStyles`' (32089867)" },
+    { "file": "apps/docs/components/providers/biome/coverage.astro", "line": 9, "text": "comment 'it turns off two, a11y/noAutofocus and complexity/noImportantStyles'; L46-50 A11y row: available 39, defaults 36, enabled 37, 'Accessibility problems in JSX and HTML'" },
+    { "file": "apps/docs/components/providers/oxlint/plugins.astro", "line": 11, "text": "react preset: count 107, 'React, hooks and jsx-a11y'" },
+    { "file": "apps/docs/components/providers/eslint/frameworks.astro", "line": 20, "text": "react: count 549, 'React, hooks, jsx-a11y, React Doctor'" },
+    { "file": "apps/docs/components/providers/oxlint/coverage.astro", "line": 8, "text": "'the other plugins (react, jsx-a11y, nextjs, vue, jest, vitest) belong to the framework presets'" },
+    { "file": "apps/docs/pages/providers/oxlint.astro", "line": 35, "text": "lists jsx-a11y among Oxlint's ported plugins" },
+    { "file": "apps/docs/pages/providers/index.astro", "line": 126, "text": "'They aim at the same standard: type safety, React and hooks, accessibility, async code and imports.'" },
+    { "file": "apps/docs/components/home/strict.astro", "line": 125, "text": "{ name: \"Accessibility\", rules: [\"alt-text\", \"anchor-is-valid\", \"aria-role\"] }; L86 problems: \"jsx-a11y/alt-text\"; L139-141 'Models write confident code with loose types, stale effect dependencies and missing alt text. Ultracite turns on hundreds of rules across type safety, React, accessibility and async code'" },
+    { "file": "apps/docs/components/home/agent-session.astro", "line": 19, "text": "{ at: \"16:11\", rule: \"jsx-a11y/alt-text\" }; L176 'UserList is typed, accessible'" },
+    { "file": "apps/docs/blog/*.mdx", "line": null, "text": "No research post mentions accessibility or a11y." }
+  ],
+  "inconsistencies": [
+    { "topic": "Autofocus is off in React/JSX but on in Astro and Svelte", "detail": "jsx-a11y/no-autofocus (ESLint react, Oxlint react) and Biome noAutofocus are off, but the ESLint astro preset reports astro/jsx-a11y/no-autofocus at error and the ESLint svelte preset reports Svelte's a11y_autofocus through svelte/valid-compile (both measured with lintText). Neither was a recorded decision; both come from 'every non-deprecated rule' and became live on 2026-09-28 (d6ee272c, 9ae95d16)." },
+    { "topic": "Label options exist only in ESLint", "detail": "ESLint label-has-associated-control checks Label/Input/Select/Textarea/Checkbox/Radio at depth 3 (7a6aa5fc); Oxlint (same option names supported, defaults labelComponents [\"label\"], depth 2) and Biome noLabelWithoutControl (labelComponents/inputComponents supported) run with defaults. Measured: <Label>Name</Label> is reported by ESLint only. astro/jsx-a11y/label-has-associated-control also runs without options. f7025b12 claims 'decisions matching the ESLint presets'; the parity script cannot see option-only gaps (L391-396)." },
+    { "topic": "control-has-associated-label behaves differently with no options", "detail": "Both ESLint and Oxlint enable it with no options, but defaults differ: Oxlint ignores input/textarea/audio/... and listbox/menu/grid/... roles; eslint-plugin-jsx-a11y ignores only 'link'. Measured: <input type=\"text\" /> and <div role=\"listbox\" tabIndex={0} /> fail in ESLint and pass in Oxlint. jsx-a11y's recommended config ships the rule off." },
+    { "topic": "Oxlint copies ESLint on no-autofocus", "detail": "AGENTS.md says Oxlint is the benchmark, but the Oxlint test (oxlint-config.test.ts L1312-1324) says the off decision comes from 'config/eslint/react/rules — keep in sync.'" },
+    { "topic": "Docs say core enables a11y rules", "detail": "configuration.mdx L34 says that with the `core` preset 'ARIA attributes, semantic HTML, keyboard navigation, and other a11y rules are enabled by default.' True for Biome core; Oxlint core has no a11y rule (jsx-a11y is only in the react preset, github/a11y-* only in opt-in js-plugins); ESLint core has only five github/a11y-* rules and four sonarjs table/alt rules, with jsx-a11y in the react preset." },
+    { "topic": "Template places a11y under React & JSX", "detail": "rules.ts L58-63 puts the a11y bullet under '### React & JSX', while Biome core applies its a11y group to every project (including HTML/Vue/Svelte/Astro templates in the framework presets). The ESLint vue and angular presets ship no a11y plugin (no eslint-plugin-vuejs-accessibility, no @angular-eslint/template), and Oxlint has no a11y rules outside react." },
+    { "topic": "Template line with no rule behind it", "detail": "'Use proper heading hierarchy' (18ed1f31) is not enforced by any enabled rule; react-doctor/no-skipped-heading-level exists but is off in both ESLint and Oxlint (recommended:false). The other four sub-bullets map to enabled rules." },
+    { "topic": "Template and skill drift", "detail": "AGENTS.md says rules.ts and skills/ultracite/references/code-standards.md must change together. The skill's 'When Your Linter Can't Help' item is '5. User experience' without 'Accessibility, performance, and usability considerations' (fb8b5392)." },
+    { "topic": "React Doctor a11y subset differs", "detail": "ESLint react enables react-doctor html-label-has-single-control, no-uninformative-aria-label, role-button-requires-complete-keyboard-activation, no-multiple-unlabeled-navigation-landmarks; Oxlint js-plugins does not, though oxlint-plugin-react-doctor 0.9.16 implements them. Acknowledged in compare-rule-parity.ts L242-243." },
+    { "topic": "jsx-a11y file scope", "detail": "ESLint applies jsx-a11y only to **/*.jsx and **/*.tsx (react/eslint.config.mjs); the Oxlint react preset has no file restriction, so JSX in .js files gets a11y checks only from Oxlint and Biome." },
+    { "topic": "Self-contradicting autofocus examples (historical, fixed)", "detail": "c92a9d2e README: 'to enable the `noAutofocus` rule' over a snippet that sets it \"off\"; 8cab3bcc docs: 'to disable the `noAutofocus` rule' though the preset already disabled it. Replaced by a useButtonType example in 6d490cc0 (2026-07-04)." },
+    { "topic": "Biome coverage counts", "detail": "coverage.astro A11y 'available: 39'; the Biome 2.5.15 schema's A11y group has 38 rules plus a `preset` key. Every group in that component is one higher than its rule count (catalogSize 565 = 557 rules + 8 presets), so the counts look like they include `preset`. Docs only; raise, not fixed." }
+  ],
+  "notes": [
+    "No question about no-autofocus has a recorded rationale in any linter. It was off from the first ESLint commit (e403fb15, 2022-03-18) and carried forward: to Biome by `biome migrate` (cdef1f91, PR #140), to Oxlint in V7 (c4a205f8), and locked to ESLint by a test (f7025b12). It was never on under jsx-a11y/ or Biome. If the post needs the reason, ask Hayden.",
+    "The label-has-associated-control options have only a commit subject as rationale (7a6aa5fc). Why depth 3, and why the options never reached Oxlint or Biome, was not recorded.",
+    "Effective a11y coverage in Oxlint was thin from 2026-04-13 (a63d9c57) to 2026-07-04 (f7025b12): the f7025b12 changeset says most a11y rules 'silently never ran'. Whether V7's core categories reached jsx-a11y rules between 2025-12-28 and 2026-04-13 was not tested.",
+    "From 2022-03-18 to 2023-06-08 the ESLint list omitted jsx-a11y/control-has-associated-label and jsx-a11y/lang (both existed in 6.5.1); c52fef07 turned them on by switching to 'every non-deprecated rule'. No reason for the omission was recorded.",
+    "5838b11c (2026-09-28, 'Fix homepage accessibility issues') fixed by hand issues on the repo's own Astro site (aria-selected on buttons, 22 extra tab stops on non-interactive spans, unnamed icons, an untitled iframe). The repo lints itself with Oxlint, whose astro preset has no rules; whether any shipped rule would have caught these was not tested.",
+    "Ultracite's own docs code used `autoFocus` on a textarea while the rule was off (6c27c6e9, 2025-10-20; removed with the Mintlify migration 80539875). Only an observation; nothing links it to the decision.",
+    "Commit e6cf2627 (refs/codex/snapshots) and 2a1d79c7 (bun-provider branch, draft PR #850) are not on main and were excluded."
+  ]
+}

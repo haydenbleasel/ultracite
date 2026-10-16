@@ -1,0 +1,3462 @@
+{
+  "codebook": {
+    "labels": {
+      "real-barrier": "A user would be affected as the code stands: a screen-reader, keyboard, voice-control or low-vision user can't perceive, name or operate something, or is told something wrong. Judge the rendered result, including what the component or its props supply.",
+      "false-positive": "The rule is wrong here: the component, a spread, a parent, context or the platform already handles it (the control is labelled elsewhere, the element is natively interactive underneath, the handler is a bubbling catch for a real control inside, the rule misreads the code).",
+      "intentional-or-decorative": "The pattern is deliberate and acceptable: a decorative image or icon, a presentational wrapper, a mouse-only convenience that duplicates a keyboard path, an example or demo, a role chosen on purpose for a composite widget.",
+      "unclear": "Can't tell from the code and its definitions in the repo."
+    },
+    "suppressionLabels": {
+      "right": "The suppression is justified: the rule is wrong here or the pattern is deliberate, and the reason (if any) says so.",
+      "wrong": "The suppression hides a real barrier.",
+      "unclear": "Can't tell."
+    },
+    "fields": {
+      "cheapFix": "The smallest edit that would silence the rule(s) here (for real barriers and false positives).",
+      "rightFix": "What the code should do instead, or 'leave it'."
+    }
+  },
+  "generated": "2026-10-15",
+  "kinds": {
+    "hit": {
+      "agreement": {
+        "kappa": 0.88,
+        "pairs": 20,
+        "same": 19,
+        "disagreements": [
+          {
+            "id": "a061",
+            "r1": "false-positive",
+            "r2": "real-barrier"
+          }
+        ]
+      },
+      "counts": {
+        "intentional-or-decorative": 52,
+        "real-barrier": 10,
+        "false-positive": 10
+      },
+      "n": 72,
+      "population": {
+        "trpc": 0,
+        "excalidraw": 122,
+        "next.js": 107,
+        "shadcn": 105,
+        "radix": 37,
+        "react-aria": 73,
+        "supabase": 480
+      },
+      "rows": [
+        {
+          "id": "a001",
+          "file": "packages/excalidraw/components/Dialog.tsx",
+          "line": 123,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Dialog.tsx#L123",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a001",
+            "label": "intentional-or-decorative",
+            "note": "Icon-only fullscreen close button is already named by aria-label (the same t('buttons.close') string); title only adds a hover tooltip that repeats the name, so no user loses anything. Judgment call: intentional-or-decorative vs false-positive.",
+            "cheapFix": "remove title",
+            "rightFix": "leave it (or use a tooltip that also shows on focus)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a002",
+          "file": "packages/excalidraw/components/RadioGroup.tsx",
+          "line": 27,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/RadioGroup.tsx#L27",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a002",
+            "label": "intentional-or-decorative",
+            "note": "The wrapper div's title repeats choice.ariaLabel, which is already the radio input's aria-label; it is a hover tooltip for icon-only choices. Screen readers get the name from aria-label, so nothing depends on title.",
+            "cheapFix": "remove title from the wrapper div",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a003",
+          "file": "packages/excalidraw/components/ExcalidrawLogo.tsx",
+          "line": 18,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ExcalidrawLogo.tsx#L18",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a003",
+            "label": "intentional-or-decorative",
+            "note": "LogoText is the Excalidraw wordmark SVG, rendered inside the 'welcome-screen-decor' logo block of WelcomeScreen.Center. It is decorative branding, and unnamed inline SVGs are generally skipped by screen readers. All three linters agree that it should be hidden, which is fine hygiene, but nothing is lost.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\" (or role=\"img\" aria-label=\"Excalidraw\" on the logo wrapper if the brand should be announced)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a004",
+          "file": "packages/excalidraw/components/LibraryUnit.tsx",
+          "line": 53,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryUnit.tsx#L53",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              },
+              {
+                "help": null,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a004",
+            "label": "real-barrier",
+            "note": "The flagged outer div only has hover and pointer handlers (hover styling, name tooltip), which would be fine as mouse conveniences. But the hover state is what reveals the selection CheckboxItem, and the item's click target (the inner .library-unit__dragger div) has no role, tabIndex or key handler, so keyboard users can't select or insert library items. Adding a role (the rules' advice) wouldn't help. Judgment call: real-barrier vs intentional-or-decorative.",
+            "cheapFix": "add role=\"presentation\" to the outer div",
+            "rightFix": "make each library item a focusable button that inserts on Enter/Space, and show the selection checkbox on focus-within as well as hover"
+          },
+          "r2": null
+        },
+        {
+          "id": "a005",
+          "file": "packages/excalidraw/components/Toast.tsx",
+          "line": 59,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Toast.tsx#L59",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Non-interactive elements should not be assigned mouse or keyboard event listeners.",
+                "rule": "jsx-a11y/no-noninteractive-element-interactions"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Non-interactive elements should not be assigned mouse or keyboard event listeners.",
+                "rule": "jsx-a11y/no-noninteractive-element-interactions"
+              },
+              {
+                "help": null,
+                "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a005",
+            "label": "intentional-or-decorative",
+            "note": "The toast is a role=status live region. onMouseEnter/onMouseLeave only pause the 5-second auto-dismiss while hovered, a mouse convenience; the message is still announced. Keyboard users can't pause it, a timing concern no rule here names. ESLint's prefer-tag-over-role (use <output>) is noise: role=status on a div is the standard toast pattern.",
+            "cheapFix": "move the mouse handlers to a wrapper div with role=\"presentation\" (or add a lint-disable comment)",
+            "rightFix": "leave it; optionally also pause on focus-within"
+          },
+          "r2": {
+            "id": "a005",
+            "label": "intentional-or-decorative",
+            "note": "The onMouseEnter/onMouseLeave pair only pauses the auto-dismiss timer while the pointer is over the toast. The message is exposed through role=\"status\" and the optional close control is a labelled IconButton, so the handlers create no barrier, and <output> would be no better than role=\"status\". Keyboard and screen-reader users cannot pause the 5 s timer, but that is a separate timing issue these rules don't target."
+          }
+        },
+        {
+          "id": "a006",
+          "file": "packages/excalidraw/components/dropdownMenu/DropdownMenuItemLink.tsx",
+          "line": 42,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/dropdownMenu/DropdownMenuItemLink.tsx#L42",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a006",
+            "label": "intentional-or-decorative",
+            "note": "The menu-item link has visible children text, and its title just mirrors rest.title or the aria-label as a hover tooltip, so the accessible name never depends on title.",
+            "cheapFix": "drop the title fallback",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a007",
+          "file": "packages/excalidraw/components/ColorPicker/Picker.tsx",
+          "line": 153,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/Picker.tsx#L153",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Unexpected event handler on non-interactive element.",
+                "rule": "a11y/noNoninteractiveElementInteractions"
+              },
+              {
+                "help": null,
+                "message": "Unexpected event handler on static element.",
+                "rule": "a11y/noStaticElementInteractions"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a007",
+            "label": "false-positive",
+            "note": "The keydown handler on the picker content div is a bubbling catch for arrow-key and hotkey navigation among the swatch buttons inside it (colorPickerKeyNavHandler). The div is tabIndex=-1 and focused on mount inside a labelled role=dialog. The real controls are the buttons, and nothing is mouse-only. Biome also fires noNoninteractiveElementInteractions on a plain div here.",
+            "cheapFix": "add a lint-disable comment (adding a role only moves the report to no-noninteractive-element-interactions)",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a008",
+          "file": "packages/excalidraw/components/ImageExportDialog.tsx",
+          "line": 201,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ImageExportDialog.tsx#L201",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a008",
+            "label": "real-barrier",
+            "note": "The project-name text field, shown when the native file-system API is unavailable, has no label, aria-label, placeholder or title. A screen-reader user hears only 'edit text' next to the export preview. ESLint is right here.",
+            "cheapFix": "add aria-label=\"File name\"",
+            "rightFix": "add a visible <label> (or an aria-label from the i18n strings) for the file-name field"
+          },
+          "r2": null
+        },
+        {
+          "id": "a009",
+          "file": "packages/excalidraw/components/CheckboxItem.tsx",
+          "line": 29,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/CheckboxItem.tsx#L29",
+          "repo": "excalidraw",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `input` over `role` attribute `checkbox`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The elements with this role can be changed to the following elements:\n<input type=\"checkbox\">",
+                "rule": "a11y/useSemanticElements"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a009",
+            "label": "real-barrier",
+            "note": "CheckboxItem renders <button role=checkbox aria-checked> whose only content is an aria-hidden check icon. The label text sits in a sibling div with no aria-labelledby, so every use ('With background', 'Embed scene' in the export dialog, library selection) is announced as an unnamed checkbox. The role is a working ARIA pattern (Space/Enter clicks the button, which bubbles to the div's onClick), so the prefer-tag-over-role/useSemanticElements advice is noise; a native <input type=checkbox> placed like this would be just as unnamed. Judgment call: real-barrier (site) vs intentional-or-decorative (rule's point).",
+            "cheapFix": "replace the button with <input type=\"checkbox\"> (silences the rule, still unnamed)",
+            "rightFix": "keep role=checkbox and add aria-labelledby pointing at the .Checkbox-label div (give it an id)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a010",
+          "file": "packages/excalidraw/components/Range.tsx",
+          "line": 37,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Range.tsx#L37",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a010",
+            "label": "false-positive",
+            "note": "The range input is wrapped by a <label> containing the visible {label} text, so it is named. The name also picks up the value-bubble and min-label text, which is noisy but not missing. ESLint's control-has-associated-label reports wrapped inputs anyway.",
+            "cheapFix": "add an aria-label duplicating the label text",
+            "rightFix": "leave it (optionally aria-hide the value bubble and zero label so the name is just the label)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a011",
+          "file": "packages/excalidraw/components/ProjectName.tsx",
+          "line": 46,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ProjectName.tsx#L46",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a011",
+            "label": "real-barrier",
+            "note": "<label htmlFor=\"filename\"> points at an id that doesn't exist: the input's id is `${id}-filename`, and nothing else in the repo has id=filename. The file-name input in the export dialog is therefore unnamed, and clicking the label does nothing. ESLint fires on every input under this config, but here it is right.",
+            "cheapFix": "add aria-label={props.label} to the input",
+            "rightFix": "set htmlFor={`${id}-filename`} on the label"
+          },
+          "r2": null
+        },
+        {
+          "id": "a012",
+          "file": "packages/excalidraw/components/PublishLibrary.tsx",
+          "line": 446,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/PublishLibrary.tsx#L446",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a012",
+            "label": "false-positive",
+            "note": "The textarea is wrapped by a <label> containing the visible 'Library description' text (the asterisk is aria-hidden), so it is named. ESLint's control-has-associated-label reports wrapped controls anyway.",
+            "cheapFix": "add an aria-label to the textarea",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a013",
+          "file": "packages/next/src/next-devtools/dev-overlay/icons/gear-icon.tsx",
+          "line": 3,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/gear-icon.tsx#L3",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a013",
+            "label": "intentional-or-decorative",
+            "note": "GearIcon is decorative in both places it's used: inside a Menu.Trigger with aria-label='Request list settings', and as the trailing value next to the visible 'Preferences' menu label. An unnamed inline SVG is skipped by most screen readers, so nothing is announced wrongly.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\" (hygiene, not a barrier fix)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a014",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-toolbar/nodejs-inspector-button.tsx",
+          "line": 122,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-toolbar/nodejs-inspector-button.tsx#L122",
+          "repo": "next.js",
+          "rules": {
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a014",
+            "label": "intentional-or-decorative",
+            "note": "NodeJsDisabledIcon is decorative inside the inspector <button>, which its title ('Attach Node.js inspector') names. Only Biome fires; the others skip it because of the {...props} spread, and the caller passes only className, width and height.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "aria-hide the icon and give the button an aria-label rather than relying on title"
+          },
+          "r2": null
+        },
+        {
+          "id": "a015",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/terminal/editor-link.tsx",
+          "line": 28,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/terminal/editor-link.tsx#L28",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a015",
+            "label": "intentional-or-decorative",
+            "note": "The external-link SVG is decorative inside an element whose text is the file path and location, so the SVG rules' point is moot. The parent div with role='link' has onClick but no tabIndex or key handler, a keyboard barrier none of these rules names.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "aria-hide the svg; make the parent a real <button> (or add tabIndex=0 and Enter handling)"
+          },
+          "r2": {
+            "id": "a015",
+            "label": "intentional-or-decorative",
+            "note": "The SVG is a decorative external-link glyph after the file:line text, which names the role=\"link\" wrapper, so leaving the SVG unnamed loses nothing (aria-hidden would be tidier). The real problem here goes unflagged: that div role=\"link\" has no tabIndex and no key handler, so keyboard users cannot open the file."
+          }
+        },
+        {
+          "id": "a016",
+          "file": "packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx",
+          "line": 153,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx#L153",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a016",
+            "label": "intentional-or-decorative",
+            "note": "FixCardRouteIcon is exported but not used anywhere in the clone. Its sibling fix-card icons render next to a visible group label inside a link that has its own aria-label, so this one would be decorative too.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "aria-hide it, or delete the unused export"
+          },
+          "r2": null
+        },
+        {
+          "id": "a017",
+          "file": "packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx",
+          "line": 99,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx#L99",
+          "repo": "next.js",
+          "rules": {
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a017",
+            "label": "intentional-or-decorative",
+            "note": "FixCardCheckIcon renders next to the visible group label ('Mark') in the fix card, so it is decorative. Only Biome fires, because ICON_PROPS is spread and oxlint/ESLint don't look through it; ICON_PROPS has no aria-hidden.",
+            "cheapFix": "add 'aria-hidden': true to ICON_PROPS",
+            "rightFix": "add 'aria-hidden': true to ICON_PROPS"
+          },
+          "r2": null
+        },
+        {
+          "id": "a018",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/call-stack-frame/call-stack-frame.tsx",
+          "line": 51,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/call-stack-frame/call-stack-frame.tsx#L51",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              },
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              },
+              {
+                "help": null,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide an explicit type prop for the button element.",
+                "rule": "a11y/useButtonType"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a018",
+            "label": "false-positive",
+            "note": "The icon-only button gets its accessible name from its title ('Sourcemapping failed. Click to log cause of error.'), a valid fallback that screen readers announce. It isn't inside a form (the dev overlay has no <form>), so the missing type changes nothing. Both rules are noise here, though an aria-label would be more robust than title.",
+            "cheapFix": "add type=\"button\" and rename title to aria-label",
+            "rightFix": "leave it, or add type=\"button\" and an aria-label for robustness"
+          },
+          "r2": {
+            "id": "a018",
+            "label": "false-positive",
+            "note": "The icon-only native button takes its accessible name from the title ('Sourcemapping failed. Click to log cause of error.') because the SVG has no text, so screen-reader and keyboard users can reach and identify it. The dev overlay has no <form>, so a missing type can't cause a submit. Only hover shows the tooltip, but the warning-triangle glyph shows the state."
+          }
+        },
+        {
+          "id": "a019",
+          "file": "packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx",
+          "line": 210,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/icons/fix-card-icons.tsx#L210",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a019",
+            "label": "intentional-or-decorative",
+            "note": "FixCardPointerClickIcon is the card icon next to the visible group label ('Defer') inside a link that has its own aria-label, so it is decorative.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\""
+          },
+          "r2": null
+        },
+        {
+          "id": "a020",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx",
+          "line": 276,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx#L276",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a020",
+            "label": "intentional-or-decorative",
+            "note": "NotFoundIcon is the leading icon of a Menu.Item whose visible label is the not-found file name, so it is decorative.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\""
+          },
+          "r2": null
+        },
+        {
+          "id": "a021",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx",
+          "line": 488,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx#L488",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a021",
+            "label": "intentional-or-decorative",
+            "note": "BackArrowIcon precedes the route path text in a non-interactive bar (PageRouteBar), so it is decorative.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\""
+          },
+          "r2": {
+            "id": "a021",
+            "label": "intentional-or-decorative",
+            "note": "BackArrowIcon is a decorative arrow in PageRouteBar beside the span holding the route path. It adds no information, so an unnamed SVG has no user impact (aria-hidden would be tidier)."
+          }
+        },
+        {
+          "id": "a022",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx",
+          "line": 312,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx#L312",
+          "repo": "next.js",
+          "rules": {
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a022",
+            "label": "real-barrier",
+            "note": "SwitchIcon is the only content of the segment-boundary Menu.Trigger button (Trigger renders <button><span><SwitchIcon/></span></button>), and neither the trigger nor the SVG has a name. Screen-reader and voice-control users get an unnamed menu button. Only Biome fires, because the spread hides it from the others; naming the SVG would name the button.",
+            "cheapFix": "add <title>Toggle overrides</title> inside the svg",
+            "rightFix": "add an aria-label (e.g. 'Segment boundary overrides') to Menu.Trigger and aria-hide the svg"
+          },
+          "r2": null
+        },
+        {
+          "id": "a023",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/shortcut-recorder.tsx",
+          "line": 163,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/shortcut-recorder.tsx#L163",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `button` over `role` attribute `button`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The elements with this role can be changed to the following elements:\n<button>",
+                "rule": "a11y/useSemanticElements"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a023",
+            "label": "intentional-or-decorative",
+            "note": "The clear-shortcut control is a div with role=button, tabIndex=0, Enter/Space handling and an aria-label, nested inside the shortcut-recorder <button>; a native <button> was avoided because buttons can't nest. Its keyboard operation and name are fine. What remains is nested interactive content (button children are presentational to some screen readers), which the rule doesn't name. Judgment call: intentional-or-decorative vs real-barrier.",
+            "cheapFix": "replace the div with <button type=\"button\"> (invalid nesting)",
+            "rightFix": "render the clear button as a sibling of the recorder button instead of inside it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a024",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/user-preferences.tsx",
+          "line": 155,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/user-preferences.tsx#L155",
+          "repo": "next.js",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "A form label must be associated with a control.",
+                "rule": "jsx-a11y/label-has-associated-control"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "A form label must be associated with a control.",
+                "rule": "jsx-a11y/label-has-associated-control"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "A form label must be associated with an input.",
+                "rule": "a11y/noLabelWithoutControl"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a024",
+            "label": "real-barrier",
+            "note": "<label id='hide-dev-tools'> isn't tied to the ShortcutRecorder button: it has no htmlFor, the button has no aria-labelledby, and the id duplicates the label two sections above. Tabbing in, a screen-reader user hears 'Record Shortcut, button' with no hint that it sets the hide shortcut. All three linters agree, and they're right.",
+            "cheapFix": "change the <label> to a <span>",
+            "rightFix": "give the label a unique id and pass aria-labelledby through ShortcutRecorder to its button"
+          },
+          "r2": {
+            "id": "a024",
+            "label": "real-barrier",
+            "note": "The <label> has no htmlFor and ShortcutRecorder's <button> doesn't reference it, so the button is announced only as 'Record Shortcut' or, once a shortcut is set, as bare key names, never as 'Hide Dev Tools shortcut'. Its id also duplicates the earlier label's 'hide-dev-tools', so it couldn't be referenced cleanly either."
+          }
+        },
+        {
+          "id": "a025",
+          "file": "apps/v4/registry/new-york-v4/ui/breadcrumb.tsx",
+          "line": 53,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/breadcrumb.tsx#L53",
+          "repo": "shadcn",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <a href=...>, or <area href=...> instead of the \"link\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The HTML element with the interactive role \"link\" is not focusable.",
+                "rule": "a11y/useFocusableInteractive"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a025",
+            "label": "intentional-or-decorative",
+            "note": "BreadcrumbPage is a span with role=link, aria-disabled and aria-current=page, a deliberate imitation of the current-page link in the WAI breadcrumb pattern. Screen readers announce 'link, dimmed, current page', and it isn't focusable, which matches 'disabled'. Debatable but not blocking; both Biome's focusable complaint and ESLint's <a href> advice target the deliberate choice. Judgment call: intentional-or-decorative vs real-barrier (it announces a link that can't be followed).",
+            "cheapFix": "remove role=\"link\" and aria-disabled",
+            "rightFix": "leave it, or drop role/aria-disabled and keep aria-current=\"page\" on a plain span"
+          },
+          "r2": null
+        },
+        {
+          "id": "a026",
+          "file": "apps/v4/registry/new-york-v4/blocks/login-04/components/login-form.tsx",
+          "line": 94,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-04/components/login-form.tsx#L94",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Redundant `alt` attribute.",
+                "rule": "jsx-a11y/img-redundant-alt"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Avoid the words \"image\", \"picture\", or \"photo\" in img element alt text.",
+                "rule": "a11y/noRedundantAlt"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a026",
+            "label": "intentional-or-decorative",
+            "note": "This is the placeholder cover image (/placeholder.svg, hidden below md) in the login-04 demo block, and alt='Image' is template filler. As shipped it announces a meaningless 'Image', and copied verbatim into an app it stays noise. Both linters agree. Judgment call: intentional-or-decorative (demo) vs real-barrier.",
+            "cheapFix": "change alt to \"\"",
+            "rightFix": "alt=\"\" for a decorative cover image, or describe the real image once it is replaced"
+          },
+          "r2": null
+        },
+        {
+          "id": "a027",
+          "file": "apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx",
+          "line": 96,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx#L96",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide a valid value for the attribute href.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a027",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on the 'Sign in' link in the signup-04 demo block, meant to be replaced with a real route. It is a real, named, focusable link; it just goes nowhere in the demo.",
+            "cheapFix": "href=\"/login\"",
+            "rightFix": "leave it in the demo; a real app points it at its sign-in route"
+          },
+          "r2": {
+            "id": "a027",
+            "label": "intentional-or-decorative",
+            "note": "'Sign in' is a placeholder href=\"#\" in a copy-paste registry demo block (signup-04). The anchor has text and behaves as a link; it just has no destination until the consumer wires one up."
+          }
+        },
+        {
+          "id": "a028",
+          "file": "apps/v4/registry/new-york-v4/blocks/login-03/components/login-form.tsx",
+          "line": 83,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-03/components/login-form.tsx#L83",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide a valid value for the attribute href.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a028",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on the 'Sign up' link in the login-03 demo block. It is named and focusable, with no destination yet.",
+            "cheapFix": "href=\"/signup\"",
+            "rightFix": "leave it in the demo; a real app points it at its sign-up route"
+          },
+          "r2": null
+        },
+        {
+          "id": "a029",
+          "file": "apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx",
+          "line": 52,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx#L52",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a029",
+            "label": "intentional-or-decorative",
+            "note": "The Apple logo SVG sits inside a Button whose visible text is 'Continue with Apple', so it is decorative.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\""
+          },
+          "r2": null
+        },
+        {
+          "id": "a030",
+          "file": "apps/v4/registry/new-york-v4/blocks/signup-03/components/signup-form.tsx",
+          "line": 77,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-03/components/signup-form.tsx#L77",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide a valid value for the attribute href.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a030",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on the 'Privacy Policy' link in the signup-03 demo block. It is named and focusable, with no destination yet.",
+            "cheapFix": "href=\"/privacy\"",
+            "rightFix": "leave it in the demo; a real app points it at its policy page"
+          },
+          "r2": null
+        },
+        {
+          "id": "a031",
+          "file": "apps/v4/registry/new-york-v4/ui/breadcrumb.tsx",
+          "line": 7,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/breadcrumb.tsx#L7",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "[aria-label] text should be formatted the same as you would visual text. Use sentence case.",
+                "rule": "github/a11y-aria-label-is-well-formatted"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "[aria-label] text should be formatted the same as you would visual text. Use sentence case.",
+                "rule": "github/a11y-aria-label-is-well-formatted"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a031",
+            "label": "false-positive",
+            "note": "aria-label='breadcrumb' on the nav, where the github rule wants sentence case. Screen readers say 'breadcrumb navigation' either way, and only braille users would see the lowercase. No barrier.",
+            "cheapFix": "aria-label=\"Breadcrumb\"",
+            "rightFix": "optional: aria-label=\"Breadcrumb\""
+          },
+          "r2": {
+            "id": "a031",
+            "label": "false-positive",
+            "note": "A lowercase 'breadcrumb' is announced exactly like 'Breadcrumb' ('breadcrumb, navigation'), and consumers can override it through the props spread. The casing of a one-word landmark label affects no user."
+          }
+        },
+        {
+          "id": "a032",
+          "file": "apps/v4/registry/new-york-v4/blocks/login-02/components/login-form.tsx",
+          "line": 58,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-02/components/login-form.tsx#L58",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide a valid value for the attribute href.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a032",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on the 'Sign up' link in the login-02 demo block. It is named and focusable, with no destination yet.",
+            "cheapFix": "href=\"/signup\"",
+            "rightFix": "leave it in the demo; a real app points it at its sign-up route"
+          },
+          "r2": null
+        },
+        {
+          "id": "a033",
+          "file": "apps/v4/registry/new-york-v4/ui/item.tsx",
+          "line": 10,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/item.tsx#L10",
+          "repo": "shadcn",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <menu>, <ol>, or <ul> instead of the \"list\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a033",
+            "label": "real-barrier",
+            "note": "ItemGroup is a div with role=list, but Item renders a plain div without role=listitem. In the default composition (examples/item-group.tsx) the list owns no list items, so screen readers announce a list with no or miscounted items before reading the content; only the item-image example adds role='listitem' by hand. ESLint's advice (use <ul>) wouldn't fix this and would make the div children invalid. Judgment call: real-barrier (mild) vs intentional-or-decorative.",
+            "cheapFix": "replace the div with <ul>",
+            "rightFix": "give Item role=\"listitem\" when it's inside ItemGroup (or drop role=\"list\")"
+          },
+          "r2": {
+            "id": "a033",
+            "label": "real-barrier",
+            "note": "role=\"list\" on the div is valid ARIA, but Item renders a plain div without role=\"listitem\" (only the item-image example adds one), so the default ItemGroup exposes a list with zero list items, with separators as direct children. Screen readers announce a wrong item count. Switching to <ul> as the rule suggests would not fix this; the missing listitem role on Item is the actual defect."
+          }
+        },
+        {
+          "id": "a034",
+          "file": "apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx",
+          "line": 34,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/login-05/components/login-form.tsx#L34",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide a valid value for the attribute href.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a034",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on the 'Sign up' link in the login-05 demo block. It is named and focusable, with no destination yet.",
+            "cheapFix": "href=\"/signup\"",
+            "rightFix": "leave it in the demo; a real app points it at its sign-up route"
+          },
+          "r2": null
+        },
+        {
+          "id": "a035",
+          "file": "apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx",
+          "line": 86,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx#L86",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "`<svg>` must have an accessible name. Set `aria-label` or `aria-labelledby`, or nest a `<title>` element. However, if the `<svg>` is purely decorative, hide it with `aria-hidden=\"true\"` or `role=\"presentation\"`.",
+                "rule": "github/a11y-svg-has-accessible-name"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Alternative text title element cannot be empty",
+                "rule": "a11y/noSvgWithoutTitle"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a035",
+            "label": "intentional-or-decorative",
+            "note": "The Meta logo SVG sits inside a Button that also has an sr-only 'Sign up with Meta' span, so the button is named and the icon is decorative.",
+            "cheapFix": "add aria-hidden=\"true\" to the svg",
+            "rightFix": "add aria-hidden=\"true\""
+          },
+          "r2": {
+            "id": "a035",
+            "label": "intentional-or-decorative",
+            "note": "The Meta logo SVG is decorative inside a Button that the sr-only span 'Sign up with Meta' names. The control is correctly named, and the unnamed SVG adds nothing (aria-hidden would be tidier)."
+          }
+        },
+        {
+          "id": "a036",
+          "file": "apps/v4/registry/new-york-v4/blocks/sidebar-16/components/app-sidebar.tsx",
+          "line": 165,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-16/components/app-sidebar.tsx#L165",
+          "repo": "shadcn",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "Provide a valid value for the attribute href.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a036",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on the brand link ('Acme Inc / Enterprise') in the sidebar-16 demo block. It is named and focusable, with no destination yet.",
+            "cheapFix": "href=\"/\"",
+            "rightFix": "leave it in the demo; a real app points it at its home route"
+          },
+          "r2": null
+        },
+        {
+          "id": "a037",
+          "file": "packages/react/select/src/select.tsx",
+          "line": 377,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L377",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `input, select` over `role` attribute `combobox`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a037",
+            "label": "intentional-or-decorative",
+            "note": "The Radix Select trigger is a <button role=combobox> following the WAI-ARIA select-only combobox pattern, with aria-controls and aria-expanded. A native <select>/<input> can't host the custom listbox. The role is deliberate.",
+            "cheapFix": "remove role=\"combobox\" (breaks the pattern) or add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a038",
+          "file": "packages/react/menu/src/menu.tsx",
+          "line": 640,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/menu/src/menu.tsx#L640",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `address, details, fieldset, hgroup, optgroup` over `role` attribute `group`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <details>, <fieldset>, <optgroup>, or <address> instead of the \"group\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a038",
+            "label": "intentional-or-decorative",
+            "note": "MenuGroup is role=group inside role=menu, as the menu pattern requires; <fieldset>, <details> and the other suggested tags would be wrong there. Both linters target the deliberate choice.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a039",
+          "file": "packages/react/accordion/src/accordion.tsx",
+          "line": 534,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/accordion/src/accordion.tsx#L534",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `section` over `role` attribute `region`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a039",
+            "label": "intentional-or-decorative",
+            "note": "AccordionContent is role=region, labelled by the trigger via aria-labelledby, per the WAI accordion pattern. A <section> would need the same attributes, and Radix renders it through a Primitive.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a040",
+          "file": "packages/react/select/src/select.tsx",
+          "line": 1452,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L1452",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `option` over `role` attribute `option`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a040",
+            "label": "intentional-or-decorative",
+            "note": "The Select item is role=option inside Radix's custom listbox, labelled by its text and carrying aria-selected; a native <option> only works inside <select>.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a041",
+          "file": "packages/react/radio-group/src/radio.tsx",
+          "line": 136,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/radio-group/src/radio.tsx#L136",
+          "repo": "radix",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <input type=\"radio\"> instead of the \"radio\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a041",
+            "label": "intentional-or-decorative",
+            "note": "The Radix Radio trigger is a <button role=radio aria-checked> with roving focus, plus a hidden bubble input for forms. It is a deliberate custom radio and fully operable.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a042",
+          "file": "packages/react/toast/src/toast.tsx",
+          "line": 330,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/toast/src/toast.tsx#L330",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `section` over `role` attribute `region`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a042",
+            "label": "intentional-or-decorative",
+            "note": "The toast viewport wrapper (DismissableLayer.Branch) is role=region with an aria-label such as 'Notifications (F8)', a landmark users can jump to. It's deliberate, and it's the same element as a046 (oxlint reports the role attribute line).",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a043",
+          "file": "packages/react/slider/src/slider.tsx",
+          "line": 752,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/slider/src/slider.tsx#L752",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `input` over `role` attribute `slider`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a043",
+            "label": "intentional-or-decorative",
+            "note": "The slider thumb is a span with role=slider, aria-valuemin/now/max, aria-label and tabIndex, per the WAI slider pattern. A native range input can't provide the multi-thumb, styled control.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a044",
+          "file": "packages/react/popover/src/popover.tsx",
+          "line": 496,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/popover/src/popover.tsx#L496",
+          "repo": "radix",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `dialog` over `role` attribute `dialog`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a044",
+            "label": "intentional-or-decorative",
+            "note": "The popover content is role=dialog with aria-labelledby and aria-describedby. The native <dialog> element has different modal and top-layer behaviour, so the role is deliberate.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a044",
+            "label": "intentional-or-decorative",
+            "note": "Radix deliberately puts role=\"dialog\" on a Popper-positioned div, wires aria-labelledby and aria-describedby to Title and Description, and manages focus itself. The native <dialog> element's top-layer and modal behaviour would conflict with anchored positioning and non-modal popovers."
+          }
+        },
+        {
+          "id": "a045",
+          "file": "packages/react/select/src/select.tsx",
+          "line": 1287,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L1287",
+          "repo": "radix",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a045",
+            "label": "intentional-or-decorative",
+            "note": "The Select viewport is a div with role=presentation, so the scroll wrapper doesn't break listbox-to-option ownership. It is a deliberate presentational wrapper, and ESLint's suggestion (<img alt>) makes no sense for one.",
+            "cheapFix": "remove role=\"presentation\"",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a045",
+            "label": "intentional-or-decorative",
+            "note": "The select viewport is a scroll wrapper sitting between the listbox content and its options, and role=\"presentation\" on it is a deliberate, harmless choice for a presentational wrapper. The rule's suggested <img alt> replacement makes no sense for a scroll container."
+          }
+        },
+        {
+          "id": "a046",
+          "file": "packages/react/toast/src/toast.tsx",
+          "line": 328,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/toast/src/toast.tsx#L328",
+          "repo": "radix",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <section aria-label=...>, or <section aria-labelledby=...> instead of the \"region\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a046",
+            "label": "intentional-or-decorative",
+            "note": "This is the same toast viewport region as a042, reported by ESLint on the element line. It's a deliberate, labelled region landmark.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a046",
+            "label": "intentional-or-decorative",
+            "note": "DismissableLayer.Branch renders a Primitive.div with role=\"region\" and an aria-label built from the hotkey label, which is exposed exactly like <section aria-label>. It is a deliberate landmark that lets users jump to the toasts, and tabIndex=-1 supports the hotkey focus."
+          }
+        },
+        {
+          "id": "a047",
+          "file": "packages/react/menu/src/menu.tsx",
+          "line": 984,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/menu/src/menu.tsx#L984",
+          "repo": "radix",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <hr> instead of the \"separator\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a047",
+            "label": "intentional-or-decorative",
+            "note": "MenuSeparator is a div with role=separator inside role=menu. An <hr> would also work, but the div keeps Primitive/asChild styling; there's no user impact.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a047",
+            "label": "intentional-or-decorative",
+            "note": "MenuSeparator is an asChild-capable Primitive.div with role=\"separator\" and aria-orientation inside role=\"menu\". It is exposed the same as an <hr>, and the role is chosen deliberately for the menu composite."
+          }
+        },
+        {
+          "id": "a048",
+          "file": "packages/react/label/src/label.tsx",
+          "line": 15,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/label/src/label.tsx#L15",
+          "repo": "radix",
+          "rules": {
+            "biome": [
+              {
+                "help": null,
+                "message": "A form label must be associated with an input.",
+                "rule": "a11y/noLabelWithoutControl"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a048",
+            "label": "false-positive",
+            "note": "This is the Radix Label primitive's definition: it renders <label> and spreads {...props}, so htmlFor and children come from the consumer. Biome can't see them in the component definition.",
+            "cheapFix": "add a biome-ignore comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a049",
+          "file": "packages/react-aria-components/src/Table.tsx",
+          "line": 2292,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L2292",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `button` over `role` attribute `button`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The HTML element with the interactive role \"button\" is not focusable.",
+                "rule": "a11y/useFocusableInteractive"
+              },
+              {
+                "help": null,
+                "message": "The elements with this role can be changed to the following elements:\n<button>",
+                "rule": "a11y/useSemanticElements"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a049",
+            "label": "intentional-or-decorative",
+            "note": "The visually hidden div with role=button in the table drop-indicator row is the target that screen-reader and keyboard users move to during accessible drag and drop. dropIndicatorProps comes from @react-aria/dnd, which isn't in this sparse clone; as far as I know it supplies the label, roledescription, aria-hidden outside a drag and tabIndex=-1, so Biome's focusable complaint misses the spread. A <button> would need the same props.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a050",
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "line": 797,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L797",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `option` over `role` attribute `option`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              },
+              {
+                "help": null,
+                "message": "`option` role is missing required aria props `aria-selected`.",
+                "rule": "jsx-a11y/role-has-required-aria-props"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a050",
+            "label": "intentional-or-decorative",
+            "note": "The ListBox loading row is role=option without aria-selected because it isn't selectable, which keeps the listbox's children valid options; a missing aria-selected reads as not selectable, which is true. The code carries an oxlint-disable for exactly this (see s002). prefer-tag-over-role (<option>) is noise.",
+            "cheapFix": "add aria-selected={false}",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a051",
+          "file": "packages/react-aria-components/src/Tree.tsx",
+          "line": 1229,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L1229",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `button` over `role` attribute `button`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The elements with this role can be changed to the following elements:\n<button>",
+                "rule": "a11y/useSemanticElements"
+              },
+              {
+                "help": null,
+                "message": "The HTML element with the interactive role \"button\" is not focusable.",
+                "rule": "a11y/useFocusableInteractive"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a051",
+            "label": "intentional-or-decorative",
+            "note": "The visually hidden role=button drop target in the Tree drop indicator, the same pattern as a049. Its props come from the dnd hooks, so the rules' complaints are about a deliberate choice.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a052",
+          "file": "packages/react-aria-components/src/DropZone.tsx",
+          "line": 144,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DropZone.tsx#L144",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a052",
+            "label": "false-positive",
+            "note": "DropZone's control is a visually hidden <button> (the paste and drop target). focusProps on that button feed isFocusVisible into data-focus-visible on the visible dropzone div, so any styled consumer shows focus on the visible area and focus isn't 'lost' for sighted keyboard users. The rule fires at the Provider that wraps it.",
+            "cheapFix": "remove the VisuallyHidden wrapper",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a053",
+          "file": "packages/react-aria-components/src/Table.tsx",
+          "line": 2326,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L2326",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `td, th` over `role` attribute `gridcell`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a053",
+            "label": "intentional-or-decorative",
+            "note": "The root drop-indicator row's cell is TableCellElementType with role=gridcell, which keeps the grid structure valid whether it renders as td or as a div (virtualized). Deliberate.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a054",
+          "file": "packages/react-aria-components/src/Calendar.tsx",
+          "line": 297,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Calendar.tsx#L297",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a054",
+            "label": "intentional-or-decorative",
+            "note": "This fires at RangeCalendar's Provider, which wraps a VisuallyHidden next-page <button tabIndex={-1}> that the code comment says is for touch screen readers. tabIndex=-1 keeps it out of the Tab order, so sighted keyboard users never land on an invisible control. It's the same button as a060.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a054",
+            "label": "intentional-or-decorative",
+            "note": "The flagged pattern is RangeCalendar's VisuallyHidden next-page button. The code comment says it exists for touch screen readers, it gets an aria-label from nextButtonProps, and it has tabIndex=-1, so sighted keyboard users never tab onto it and the rule's concern about focus seeming to vanish doesn't arise."
+          }
+        },
+        {
+          "id": "a055",
+          "file": "packages/react-aria-components/src/GridList.tsx",
+          "line": 415,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L415",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `tr` over `role` attribute `row`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <tr> instead of the \"row\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The HTML element with the interactive role \"row\" is not focusable.",
+                "rule": "a11y/useFocusableInteractive"
+              },
+              {
+                "help": null,
+                "message": "The elements with this role can be changed to the following elements:\n<tr>",
+                "rule": "a11y/useSemanticElements"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a055",
+            "label": "intentional-or-decorative",
+            "note": "The GridList empty state is wrapped in role=row and role=gridcell (display: contents) so the grid stays structurally valid. Deliberate.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a056",
+          "file": "packages/react-aria-components/src/DropZone.tsx",
+          "line": 168,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DropZone.tsx#L168",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "`button` elements must have an explicit `type` attribute.",
+                "rule": "react/button-has-type"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Missing an explicit type attribute for button",
+                "rule": "react/button-has-type"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a056",
+            "label": "false-positive",
+            "note": "The hidden DropZone button's props come from useButton (@react-aria/button, not in this clone), which sets type='button' on button elements by default. The rule can't see through mergeProps.",
+            "cheapFix": "add type=\"button\"",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a057",
+          "file": "packages/react-aria-components/src/Table.tsx",
+          "line": 1450,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L1450",
+          "repo": "react-aria",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a057",
+            "label": "intentional-or-decorative",
+            "note": "The column-resizer wrapper is a div with role=presentation around the real control, an <input> that the resize hooks turn into a slider. It is deliberate, and ESLint's <img alt> suggestion is meaningless here.",
+            "cheapFix": "remove role=\"presentation\"",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a058",
+          "file": "packages/react-aria-components/src/GridList.tsx",
+          "line": 639,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L639",
+          "repo": "react-aria",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The HTML element with the interactive role \"button\" is not focusable.",
+                "rule": "a11y/useFocusableInteractive"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a058",
+            "label": "intentional-or-decorative",
+            "note": "The visually hidden role=button drop target in the GridList drop indicator, the same pattern as a049. Its props come from dropIndicatorProps.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a059",
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "line": 389,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L389",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `option` over `role` attribute `option`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              },
+              {
+                "help": null,
+                "message": "`option` role is missing required aria props `aria-selected`.",
+                "rule": "jsx-a11y/role-has-required-aria-props"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Elements with the ARIA role \"option\" must have the following attributes defined: aria-selected",
+                "rule": "jsx-a11y/role-has-required-aria-props"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a059",
+            "label": "intentional-or-decorative",
+            "note": "The ListBox empty state is rendered as role=option (display: contents) so the listbox has a valid child that screen readers can read. It isn't selectable, so aria-selected isn't needed. The author already put an eslint-disable on this line; both rules target the deliberate choice.",
+            "cheapFix": "add aria-selected={false}",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a059",
+            "label": "intentional-or-decorative",
+            "note": "The empty-state wrapper gets role=\"option\" on purpose, so the listbox still owns a valid child while renderEmptyState is shown. It isn't selectable, so leaving out aria-selected (which defaults to false) is fine, and a native <option> outside a <select> isn't a real alternative. A bare eslint-disable-next-line already sits above it."
+          }
+        },
+        {
+          "id": "a060",
+          "file": "packages/react-aria-components/src/Calendar.tsx",
+          "line": 332,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Calendar.tsx#L332",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Avoid visually hidding interactive elements. Visually hiding interactive elements can be confusing to sighted keyboard users as it appears their focus has been lost when they navigate to the hidden element.",
+                "rule": "github/a11y-no-visually-hidden-interactive-element"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a060",
+            "label": "intentional-or-decorative",
+            "note": "The VisuallyHidden next-page button with tabIndex=-1 exists for touch screen-reader users, as the code comment documents. It isn't in the Tab order, so the lost-focus concern doesn't arise; it's the same element as a054. Separately, the button has no type, so it would submit an enclosing form; this rule doesn't report that.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it (and add type=\"button\")"
+          },
+          "r2": null
+        },
+        {
+          "id": "a061",
+          "file": "apps/studio/components/interfaces/Organization/OAuthApps/PublishAppSidePanel/index.tsx",
+          "line": 367,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/PublishAppSidePanel/index.tsx#L367",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a061",
+            "label": "false-positive",
+            "note": "The flagged <input type=file> has className='hidden' (display:none), so it isn't in the accessibility tree and needs no label. The real barrier is beside it: the 'Upload logo' trigger is a div with only onClick (no role, tabIndex or key handler), so keyboard users can't add a logo when none exists yet.",
+            "cheapFix": "add aria-label=\"Upload logo\" to the input",
+            "rightFix": "leave the input; make the 'Upload logo' trigger a <button type=\"button\">"
+          },
+          "r2": {
+            "id": "a061",
+            "label": "real-barrier",
+            "note": "The flagged file input is display:none, so its missing label alone affects no one. But with no logo set, the only way to trigger it is a div with onClick and no role, tabIndex or key handler ('Upload logo'), so keyboard and screen-reader users can't upload a logo. When a logo exists, the edit Button leading to 'Upload image' contains only an icon and has no accessible name."
+          }
+        },
+        {
+          "id": "a062",
+          "file": "apps/studio/components/interfaces/Integrations/Warehouse/WarehouseConnectSection.tsx",
+          "line": 292,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/Warehouse/WarehouseConnectSection.tsx#L292",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a062",
+            "label": "intentional-or-decorative",
+            "note": "A visually hidden span with role=status serves as a polite live region for 'Updating DuckDB catalog access', which is deliberate and correct. <output> would work too but adds nothing. The aria-label duplicates the text content, which is harmless.",
+            "cheapFix": "change the span to <output>",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a063",
+          "file": "apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/OperationQueueSidePanel/OperationItem.tsx",
+          "line": 79,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/OperationQueueSidePanel/OperationItem.tsx#L79",
+          "repo": "supabase",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a063",
+            "label": "intentional-or-decorative",
+            "note": "title on a truncated value span repeats the full text as a hover tooltip, and screen readers read the full DOM text anyway. Sighted keyboard and touch users can't see truncated text, but that comes from the truncation; removing title (the rule's fix) would make it worse for mouse users.",
+            "cheapFix": "remove title",
+            "rightFix": "leave it (or wrap long values instead of truncating)"
+          },
+          "r2": {
+            "id": "a063",
+            "label": "intentional-or-decorative",
+            "note": "The title repeats the span's own text so mouse users can read a value hidden by the truncate class. Screen readers already get the full text from the DOM, so the title takes nothing from anyone. Sighted keyboard users can't see the truncated part, but the title doesn't cause that."
+          }
+        },
+        {
+          "id": "a064",
+          "file": "apps/studio/components/layouts/Navigation/LayoutHeader/BreadcrumbsView.tsx",
+          "line": 32,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/Navigation/LayoutHeader/BreadcrumbsView.tsx#L32",
+          "repo": "supabase",
+          "rules": {
+            "biome": [
+              {
+                "help": null,
+                "message": "Use a button element instead of an a element.",
+                "rule": "a11y/useValidAnchor"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a064",
+            "label": "real-barrier",
+            "note": "Breadcrumb items render <a onClick> without href: not focusable and exposed as generic, so keyboard and screen-reader users can't activate a breadcrumb that has onClick. The barrier is latent: the only caller (LayoutHeader via DefaultLayout) passes no breadcrumbs today, so nothing renders. Judgment call: real-barrier vs unclear.",
+            "cheapFix": "change the <a> to <button type=\"button\">",
+            "rightFix": "use <button type=\"button\"> when onClick is set, a Link with href when there is a route, and plain text otherwise"
+          },
+          "r2": null
+        },
+        {
+          "id": "a065",
+          "file": "apps/studio/components/interfaces/ProjectHome/PlanUsageCard.tsx",
+          "line": 79,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectHome/PlanUsageCard.tsx#L79",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a065",
+            "label": "intentional-or-decorative",
+            "note": "The decorative usage-ring SVG already has aria-hidden='true' and role='presentation'. ESLint's prefer-tag-over-role suggests <img alt> for the presentation role, which is meaningless for an inline SVG. Nothing to fix.",
+            "cheapFix": "remove role=\"presentation\" (aria-hidden already hides it)",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a066",
+          "file": "apps/studio/components/ui/EditorPanel/EditorPanel.tsx",
+          "line": 364,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/EditorPanel/EditorPanel.tsx#L364",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, or <select multiple=...> instead of the \"combobox\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a066",
+            "label": "real-barrier",
+            "note": "The snippet-picker trigger is an icon-only ButtonTooltip with role=combobox. The ui Button aria-hides the icon and no aria-label is passed, so the combobox has no accessible name; 'Open snippet' is a Radix tooltip, a description on hover or focus rather than a name. Voice-control users can't target it, and screen readers announce an unnamed combobox. The rule's own point (use <input list>/<select>) is noise for a popover trigger. Judgment call: real-barrier (site) vs intentional-or-decorative (role).",
+            "cheapFix": "remove role=\"combobox\"",
+            "rightFix": "add aria-label=\"Open snippet\" (and consider aria-haspopup instead of role=combobox)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a067",
+          "file": "apps/studio/components/interfaces/SQLEditor/UtilityPanel/ChartConfig.tsx",
+          "line": 216,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/UtilityPanel/ChartConfig.tsx#L216",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "A form label must be associated with a control.",
+                "rule": "jsx-a11y/label-has-associated-control"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a067",
+            "label": "real-barrier",
+            "note": "The 'X Axis' Label (Radix label) has no htmlFor, and the Radix SelectTrigger has no id or aria-labelledby. The combobox is announced only by its current value (e.g. 'created_at, combobox'), without 'X Axis'; the same holds for Y Axis below. ESLint is right.",
+            "cheapFix": "add htmlFor=\"x-axis\" to the Label and id=\"x-axis\" to SelectTrigger",
+            "rightFix": "associate each Label with its SelectTrigger via htmlFor/id (the trigger is a labelable button)"
+          },
+          "r2": null
+        },
+        {
+          "id": "a068",
+          "file": "apps/studio/components/interfaces/Platform/Webhooks/PlatformWebhooksEndpointDetails.tsx",
+          "line": 363,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Platform/Webhooks/PlatformWebhooksEndpointDetails.tsx#L363",
+          "repo": "supabase",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The attribute aria-label is not supported by the role generic.",
+                "rule": "github/a11y-role-supports-aria-props"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The attribute aria-label is not supported by the role generic.",
+                "rule": "github/a11y-role-supports-aria-props"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The ARIA attribute 'aria-label' is not supported by this element.",
+                "rule": "a11y/useAriaPropsSupportedByRole"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a068",
+            "label": "false-positive",
+            "note": "Browsers drop aria-label='Pagination' on a plain div (generic role), so the label does nothing, and all three rules are factually right about that. But nothing a user needs is lost: the two buttons are named 'Previous page' and 'Next page', and the range text precedes them. Judgment call: false-positive (no user impact) vs real-barrier.",
+            "cheapFix": "add role=\"group\"",
+            "rightFix": "use <nav aria-label=\"Pagination\"> (or role=\"group\") if the label is wanted, otherwise remove it"
+          },
+          "r2": null
+        },
+        {
+          "id": "a069",
+          "file": "apps/studio/components/interfaces/RoleImpersonationSelector/UserImpersonationSelector.tsx",
+          "line": 426,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/RoleImpersonationSelector/UserImpersonationSelector.tsx#L426",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, <input list=...>, or <select multiple=...> instead of the \"combobox\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a069",
+            "label": "intentional-or-decorative",
+            "note": "A popover trigger Button with role=combobox, aria-expanded and aria-label='Find user', following the shadcn combobox pattern. It is deliberate, and the rule's advice (<input list>/<select>) doesn't fit a popover search. A minor separate issue: the aria-label replaces the visible text 'Email, name, or ID', so voice users who say that text may not hit it (label in name).",
+            "cheapFix": "remove role=\"combobox\"",
+            "rightFix": "leave the role; use an aria-label that includes the visible text"
+          },
+          "r2": {
+            "id": "a069",
+            "label": "intentional-or-decorative",
+            "note": "This is the shadcn/APG select-only combobox pattern: a button with role=\"combobox\" and aria-expanded that opens a Command list, which <input list> or <select> can't reproduce. A minor separate issue: the aria-label 'Find user' doesn't contain the visible text 'Email, name, or ID', which can trip up voice-control users."
+          }
+        },
+        {
+          "id": "a070",
+          "file": "apps/studio/components/interfaces/Organization/TeamSettings/MemberRow.tsx",
+          "line": 124,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/TeamSettings/MemberRow.tsx#L124",
+          "repo": "supabase",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "Prefer `td` over `role` attribute `cell`.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "Use <td> instead of the \"cell\" role to ensure accessibility across all devices.",
+                "rule": "jsx-a11y/prefer-tag-over-role"
+              }
+            ],
+            "biome": [
+              {
+                "help": null,
+                "message": "The elements with this role can be changed to the following elements:\n<td>",
+                "rule": "a11y/useSemanticElements"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a070",
+            "label": "intentional-or-decorative",
+            "note": "The members list is a complete div-based ARIA table: role=table with aria-label='Members', plus row, columnheader and cell roles across MembersView and MemberRow. It is deliberate and structurally valid. Separately, the MFA cell's TooltipTrigger is an icon-only button with no name (the status lives only in the tooltip), which this rule doesn't target.",
+            "cheapFix": "change the div to <td> (would need real table markup throughout)",
+            "rightFix": "leave the roles; give the MFA tooltip trigger an aria-label such as 'MFA enabled'"
+          },
+          "r2": {
+            "id": "a070",
+            "label": "intentional-or-decorative",
+            "note": "The members list is an ARIA table (role=table > row > cell, with aria-rowcount and aria-rowindex) built on CSS grid and virtualization, where <td> can't be used, so the cell role is deliberate and correctly nested. A separate issue: this cell's TooltipTrigger wraps only the check/X icon, so it's an unnamed button whose MFA status arrives only as a description once the tooltip opens."
+          }
+        },
+        {
+          "id": "a071",
+          "file": "apps/studio/components/interfaces/Database/Indexes/Indexes.tsx",
+          "line": 250,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Indexes/Indexes.tsx#L250",
+          "repo": "supabase",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a071",
+            "label": "intentional-or-decorative",
+            "note": "<p title={index.table}> repeats the visible cell text as a hover tooltip for long names, and screen readers read the text itself. Nothing depends on title.",
+            "cheapFix": "remove title",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "a071",
+            "label": "intentional-or-decorative",
+            "note": "The <p> title duplicates its visible text (index.table) as a hover aid for long names. Screen readers read the text itself, so the title hides nothing from anyone."
+          }
+        },
+        {
+          "id": "a072",
+          "file": "apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppsAuthorizedRow.tsx",
+          "line": 50,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppsAuthorizedRow.tsx#L50",
+          "repo": "supabase",
+          "rules": {
+            "oxlint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ],
+            "eslint": [
+              {
+                "help": null,
+                "message": "The title attribute is not accessible and should never be used unless for an `<iframe>`.",
+                "rule": "github/a11y-no-title-attribute"
+              }
+            ]
+          },
+          "r1": {
+            "id": "a072",
+            "label": "intentional-or-decorative",
+            "note": "The truncated app name has a title that repeats it as a hover tooltip, and screen readers get the full text from the DOM. Nothing depends on title.",
+            "cheapFix": "remove title",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        }
+      ],
+      "weightedShares": {
+        "intentional-or-decorative": 64.2,
+        "real-barrier": 20.3,
+        "false-positive": 15.5
+      }
+    },
+    "hidden": {
+      "agreement": {
+        "kappa": 0.87,
+        "pairs": 20,
+        "same": 19,
+        "disagreements": [
+          {
+            "id": "h018",
+            "r1": "real-barrier",
+            "r2": "false-positive"
+          }
+        ]
+      },
+      "counts": {
+        "intentional-or-decorative": 3,
+        "false-positive": 23,
+        "real-barrier": 4
+      },
+      "n": 30,
+      "population": {
+        "excalidraw": 42,
+        "next.js": 30,
+        "shadcn": 91,
+        "radix": 12,
+        "react-aria": 4,
+        "supabase": 765
+      },
+      "rows": [
+        {
+          "id": "h001",
+          "file": "packages/excalidraw/components/SearchMenu.tsx",
+          "line": 522,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SearchMenu.tsx#L522",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h001",
+            "label": "intentional-or-decorative",
+            "note": "ListItem renders <div tabIndex={-1} onClick> for each search result. Clicking is a shortcut: the search input already moves through matches with Enter, ArrowUp and ArrowDown, offers next/previous buttons and shows 'n / count'. The divs are deliberately kept out of the Tab order. The highlighted match isn't exposed via aria-activedescendant, a separate gap.",
+            "cheapFix": "add role=\"presentation\" to the ListItem div",
+            "rightFix": "leave it (optionally expose results as options with aria-activedescendant on the input)"
+          },
+          "r2": {
+            "id": "h001",
+            "label": "intentional-or-decorative",
+            "note": "ListItem is a tabIndex=-1 div whose click only sets the active result. The same navigation works from the search input with ArrowUp/ArrowDown/Enter (via the window keydown handler) and from the next/previous buttons, so the click is a mouse convenience. Two separate issues: screen readers get no feedback on the active result (no aria-activedescendant or live region), and the next/previous icon buttons are unlabelled."
+          }
+        },
+        {
+          "id": "h002",
+          "file": "packages/excalidraw/components/App.tsx",
+          "line": 2658,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.tsx#L2658",
+          "repo": "excalidraw",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h002",
+            "label": "false-positive",
+            "note": "NewElementCanvas is a <canvas> that paints the element being drawn. It takes no input (events go to the interactive canvas), and an unnamed canvas has no role, so screen readers skip it. A canvas isn't a control; the rule fires only because the census mapped the component to <canvas>.",
+            "cheapFix": "add aria-hidden=\"true\" to the canvas",
+            "rightFix": "leave it (aria-hidden would be harmless)"
+          },
+          "r2": null
+        },
+        {
+          "id": "h003",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance.tsx",
+          "line": 219,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance.tsx#L219",
+          "repo": "next.js",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h003",
+            "label": "false-positive",
+            "note": "CopyPromptButton renders next.js CopyButton with actionLabel 'Copy prompt' and showLabel. That sets aria-label={label} on the <button> and shows the label text, so it is named.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "h004",
+          "file": "packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-pagination/error-overlay-pagination.tsx",
+          "line": 140,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-pagination/error-overlay-pagination.tsx#L140",
+          "repo": "next.js",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h004",
+            "label": "false-positive",
+            "note": "The pagination <button> contains LeftArrow, which renders <svg aria-label={title}> with the value 'previous'. The SVG's aria-label contributes to the button's name, so it is announced 'previous, button'. The rule can't see inside the component. (No census mapping is involved; the native button has a component child.)",
+            "cheapFix": "add aria-label=\"Previous error\" to the button",
+            "rightFix": "leave it (an aria-label on the button would be more robust)"
+          },
+          "r2": null
+        },
+        {
+          "id": "h005",
+          "file": "apps/v4/registry/new-york-v4/ui/combobox.tsx",
+          "line": 46,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/combobox.tsx#L46",
+          "repo": "shadcn",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h005",
+            "label": "real-barrier",
+            "note": "ComboboxClear renders Base UI's Combobox.Clear as an InputGroupButton containing only an XIcon, and neither the wrapper nor its one caller (ComboboxInput with showClear) passes an aria-label. Base UI isn't in the clone; as far as I know Clear supplies no default label (its documented examples pass aria-label explicitly), so the clear button is unnamed. Judgment call: real-barrier vs unclear.",
+            "cheapFix": "add aria-label=\"Clear\"",
+            "rightFix": "add aria-label=\"Clear selection\" in ComboboxClear, overridable via props"
+          },
+          "r2": {
+            "id": "h005",
+            "label": "real-barrier",
+            "note": "Base UI's Combobox.Clear (checked in @base-ui/react 1.3.0 source) renders a <button> with tabIndex=-1 and no default aria-label, and here its only child is the XIcon, so the clear button has no accessible name. Keyboard users can still clear by deleting the input text, but screen-reader browse and touch users hear an unnamed 'button', and voice-control users can't target it by name."
+          }
+        },
+        {
+          "id": "h006",
+          "file": "apps/v4/registry/new-york-v4/blocks/sidebar-07/page.tsx",
+          "line": 32,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-07/page.tsx#L32",
+          "repo": "shadcn",
+          "rules": {
+            "eslint": [
+              {
+                "message": "The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "Use of incorrect `href` for the 'a' element.",
+                "rule": "jsx-a11y/anchor-is-valid"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h006",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href='#' on BreadcrumbLink ('Build Your Application') in the sidebar-07 demo block. It renders a named, focusable <a> that just has no destination yet.",
+            "cheapFix": "href=\"/\"",
+            "rightFix": "leave it in the demo; a real app points it at its route"
+          },
+          "r2": {
+            "id": "h006",
+            "label": "intentional-or-decorative",
+            "note": "Placeholder href=\"#\" on a breadcrumb in a copy-paste registry demo page (sidebar-07). The link has text and is focusable; it just isn't wired to a destination."
+          }
+        },
+        {
+          "id": "h007",
+          "file": "apps/v4/registry/new-york-v4/blocks/sidebar-12/page.tsx",
+          "line": 21,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-12/page.tsx#L21",
+          "repo": "shadcn",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h007",
+            "label": "false-positive",
+            "note": "SidebarTrigger renders a Button containing PanelLeftIcon plus <span className='sr-only'>Toggle Sidebar</span>, so it is named.",
+            "cheapFix": "add aria-label=\"Toggle Sidebar\" at the call site",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h007",
+            "label": "false-positive",
+            "note": "SidebarTrigger renders a Button containing <span className=\"sr-only\">Toggle Sidebar</span>, so it has an accessible name. The rule only sees the bare component call."
+          }
+        },
+        {
+          "id": "h008",
+          "file": "packages/react/radio-group/src/radio-group.tsx",
+          "line": 275,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/radio-group/src/radio-group.tsx#L275",
+          "repo": "radix",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h008",
+            "label": "false-positive",
+            "note": "Radix RadioBubbleInput is a native radio with aria-hidden, tabIndex=-1 and opacity 0, used only to bubble form events. It isn't exposed to assistive tech; the visible Radio trigger carries the name.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h008",
+            "label": "false-positive",
+            "note": "RadioGroupItemBubbleInput renders RadioBubbleInput: a radio input with aria-hidden, tabIndex=-1, opacity 0 and pointer-events none that exists only to bubble form events. The user-facing control is the role=\"radio\" button trigger, so this hidden input needs no label."
+          }
+        },
+        {
+          "id": "h009",
+          "file": "packages/react/slider/src/slider.tsx",
+          "line": 803,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/slider/src/slider.tsx#L803",
+          "repo": "radix",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h009",
+            "label": "false-positive",
+            "note": "SliderBubbleInput renders <input style={{display: 'none'}}> for form submission only, so it isn't in the accessibility tree. The slider thumb (role=slider with aria-label) is the control.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "h010",
+          "file": "packages/react-aria-components/src/Checkbox.tsx",
+          "line": 481,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Checkbox.tsx#L481",
+          "repo": "react-aria",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A form label must be associated with a control.",
+                "rule": "jsx-a11y/label-has-associated-control"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A form label must be associated with a control.",
+                "rule": "jsx-a11y/label-has-associated-control"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h010",
+            "label": "false-positive",
+            "note": "CheckboxButton renders a <label> that contains a VisuallyHidden <input> plus the children, so the label wraps its control. The rule sees only <CheckboxButton {...props} /> with no visible children.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h010",
+            "label": "false-positive",
+            "note": "CheckboxButton renders a <label> carrying labelProps that wraps a VisuallyHidden <input> carrying inputProps, so the label is tied to a control by nesting. The rule only sees the component call."
+          }
+        },
+        {
+          "id": "h011",
+          "file": "packages/react-aria-components/src/DateField.tsx",
+          "line": 425,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DateField.tsx#L425",
+          "repo": "react-aria",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h011",
+            "label": "false-positive",
+            "note": "DateInput's <Input className='' /> takes its props from InputContext, which useDateField (@react-aria/datepicker, not in this clone) fills with a hidden form input (type='hidden'). The visible, labelled control is the segmented Group, and the hidden input isn't exposed to users.",
+            "cheapFix": "add aria-hidden or a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h011",
+            "label": "false-positive",
+            "note": "This Input gets useDateField's inputProps through InputContext and serves as the form-value carrier: the tests read its name, form and ISO value, and className=\"\" removes the default styling. The user-facing control is the Group of spinbutton segments. The hook source isn't in the sparse clone, so the input's hidden status is inferred from the tests and usage."
+          }
+        },
+        {
+          "id": "h012",
+          "file": "apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaRow.tsx",
+          "line": 109,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaRow.tsx#L109",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h012",
+            "label": "false-positive",
+            "note": "A <td> isn't a control; jsx-a11y treats td as a possible gridcell, and the census mapped TableCell to td. The cell holds a 'View replica' link and a dropdown trigger. That trigger, <Button icon={<MoreVerticalIcon />} className='w-7' />, has no aria-label and the ui Button aria-hides its icon, so it is an unnamed button: a real barrier inside the cell that this rule doesn't name.",
+            "cheapFix": "add an aria-label to the TableCell",
+            "rightFix": "leave the cell; add aria-label=\"More actions\" to the icon-only Button"
+          },
+          "r2": null
+        },
+        {
+          "id": "h013",
+          "file": "apps/studio/components/interfaces/Settings/Integrations/GithubIntegration/GitHubIntegrationConnectionForm.tsx",
+          "line": 552,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Integrations/GithubIntegration/GitHubIntegrationConnectionForm.tsx#L552",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "Ambiguous text within anchor. Screen reader users rely on link text for context; the words \"click here\", \"here\", \"link\", \"a link\", \"learn more\" are ambiguous and do not provide enough context.",
+                "rule": "jsx-a11y/anchor-ambiguous-text"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "Ambiguous text within anchor, screen reader users rely on link text for context.",
+                "rule": "jsx-a11y/anchor-ambiguous-text"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h013",
+            "label": "real-barrier",
+            "note": "InlineLink renders <a target=_blank> with the text 'Learn more'. The preceding sentence about spend caps gives context when read in order (it meets WCAG 2.4.4 in context), but in a links list or when tabbing, screen-reader users hear only 'Learn more, link', and the new tab isn't announced. Judgment call: real-barrier (mild) vs intentional-or-decorative.",
+            "cheapFix": "change the text to 'Learn more about usage not covered by the Spend Cap'",
+            "rightFix": "make the link text say what it opens (or add visually hidden context), and note that it opens in a new tab"
+          },
+          "r2": null
+        },
+        {
+          "id": "h014",
+          "file": "apps/studio/components/interfaces/Settings/Database/SSLConfiguration.tsx",
+          "line": 144,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Database/SSLConfiguration.tsx#L144",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h014",
+            "label": "false-positive",
+            "note": "DocsButton renders an <a> (through Button asChild) with visible text 'Docs' next to an aria-hidden icon, so it is named. Without a topic prop the name is only 'Docs', and the new-tab behaviour isn't announced; that's vague but not this rule's concern.",
+            "cheapFix": "add a lint-disable comment (DocsButton takes no aria-label prop)",
+            "rightFix": "leave it; pass topic so the name says which docs open"
+          },
+          "r2": {
+            "id": "h014",
+            "label": "false-positive",
+            "note": "DocsButton renders a Button asChild around <a target=\"_blank\"> with the visible text 'Docs' (the icon container is aria-hidden), so the link has an accessible name. The census mapping DocsButton to an empty <button> made the rule fire."
+          }
+        },
+        {
+          "id": "h015",
+          "file": "apps/studio/components/interfaces/Settings/Logs/LogsFormatters.tsx",
+          "line": 45,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/LogsFormatters.tsx#L45",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h015",
+            "label": "false-positive",
+            "note": "CopyButton with iconOnly renders a ui Button whose only child is an aria-hidden icon, but title='Copy to clipboard' is spread onto the <button> and gives it an accessible name. Separately, opacity-0 until group hover means a keyboard user tabbing onto it sees no visible control, and the 'Copied' state isn't announced.",
+            "cheapFix": "add aria-label=\"Copy to clipboard\"",
+            "rightFix": "add an aria-label, and show the button on focus-visible as well as on hover"
+          },
+          "r2": null
+        },
+        {
+          "id": "h016",
+          "file": "apps/studio/components/interfaces/Home/ProjectList/LoadMoreRow.tsx",
+          "line": 43,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Home/ProjectList/LoadMoreRow.tsx#L43",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h016",
+            "label": "false-positive",
+            "note": "A <td> skeleton cell in the infinite-scroll sentinel row; it isn't a control (the rule treats td as a gridcell). The loading row has no text or aria-busy, so screen readers get empty cells, a minor loading-state gap rather than a labelling one.",
+            "cheapFix": "add an aria-label to the TableCell",
+            "rightFix": "leave it (optionally add sr-only 'Loading more projects')"
+          },
+          "r2": null
+        },
+        {
+          "id": "h017",
+          "file": "apps/studio/components/interfaces/ProjectAPIDocs/Content/Entities.tsx",
+          "line": 46,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectAPIDocs/Content/Entities.tsx#L46",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h017",
+            "label": "false-positive",
+            "note": "DocsButton renders an <a> with visible text 'Docs', so it is named. With no topic, the name is just 'Docs', which is vague but not missing.",
+            "cheapFix": "add a lint-disable comment (DocsButton takes no aria-label prop)",
+            "rightFix": "leave it; pass topic (e.g. 'Generating types')"
+          },
+          "r2": {
+            "id": "h017",
+            "label": "false-positive",
+            "note": "DocsButton renders a named link with the text 'Docs' (Button asChild cloning an <a>), so the 'no label' complaint is wrong."
+          }
+        },
+        {
+          "id": "h018",
+          "file": "apps/studio/components/interfaces/Functions/FunctionsEmptyState.tsx",
+          "line": 157,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Functions/FunctionsEmptyState.tsx#L157",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "Enforce a clickable non-interactive element has at least one keyboard event listener.",
+                "rule": "jsx-a11y/click-events-have-key-events"
+              },
+              {
+                "message": "Static HTML elements with event handlers require a role.",
+                "rule": "jsx-a11y/no-static-element-interactions"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h018",
+            "label": "real-barrier",
+            "note": "ResourceItem with onClick renders CardContent with role=button, tabIndex=0 and an Enter/Space handler, so the rules' stated complaint (no role, no key handler) is wrong; the census missed this. But the onClick only fires analytics, and the real navigation is the <Link> inside. Keyboard and screen-reader users get an extra 'button' tab stop, named with the template text, that does nothing on Enter and wraps a nested link. Judgment call: real-barrier vs false-positive.",
+            "cheapFix": "pass role=\"button\" and onKeyDown at the call site",
+            "rightFix": "drop onClick from ResourceItem (or pass href so it renders a single Link) and fire the tracking from the Link's onClick"
+          },
+          "r2": {
+            "id": "h018",
+            "label": "false-positive",
+            "note": "With onClick set, ResourceItem renders CardContent with role=\"button\", tabIndex=0 and an Enter/Space handler, so the complaints about a missing role and key handler don't hold; the census mapping to a bare div was wrong. The onClick is only an analytics catch for the inner Link. A separate, unflagged nested-interactive problem results: an extra 'button' tab stop that does nothing visible sits before the real link."
+          }
+        },
+        {
+          "id": "h019",
+          "file": "apps/studio/components/interfaces/Storage/FilesBuckets/BucketTable.tsx",
+          "line": 87,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/FilesBuckets/BucketTable.tsx#L87",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h019",
+            "label": "false-positive",
+            "note": "A <tr> isn't a control. TableRowNoResults renders a row whose cell says 'No results found' along with the search text, so there's nothing to label.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h019",
+            "label": "false-positive",
+            "note": "TableRowNoResults renders a plain <tr><td> with 'No results found' text. A table row isn't a control, and it has text content anyway."
+          }
+        },
+        {
+          "id": "h020",
+          "file": "apps/studio/components/interfaces/Database/Publications/PublicationSkeleton.tsx",
+          "line": 11,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Publications/PublicationSkeleton.tsx#L11",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h020",
+            "label": "false-positive",
+            "note": "<td> skeleton cells in a loading row aren't controls. The row also renders disabled, unlabelled Switches as placeholders, which screen readers may announce as unnamed switches, a minor loading-state issue this rule doesn't target.",
+            "cheapFix": "add an aria-label to the TableCell",
+            "rightFix": "leave the cells; aria-hide the skeleton row or mark the table aria-busy"
+          },
+          "r2": {
+            "id": "h020",
+            "label": "false-positive",
+            "note": "TableCell is a plain <td> holding a decorative ShimmeringLoader skeleton. A table cell isn't a control, so a label requirement doesn't apply."
+          }
+        },
+        {
+          "id": "h021",
+          "file": "apps/studio/components/interfaces/Settings/General/ComplianceConfig/ProjectComplianceMode.tsx",
+          "line": 78,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/General/ComplianceConfig/ProjectComplianceMode.tsx#L78",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h021",
+            "label": "false-positive",
+            "note": "DocsButton renders an <a> with visible text 'Docs', so it is named. With no topic, the name is just 'Docs', which is vague but not missing.",
+            "cheapFix": "add a lint-disable comment (DocsButton takes no aria-label prop)",
+            "rightFix": "leave it; pass topic (e.g. 'HIPAA projects')"
+          },
+          "r2": {
+            "id": "h021",
+            "label": "false-positive",
+            "note": "DocsButton renders a link with the visible text 'Docs' (Button asChild around an <a>), so it has an accessible name."
+          }
+        },
+        {
+          "id": "h022",
+          "file": "apps/studio/components/interfaces/ProjectHome/ActivityStats.tsx",
+          "line": 160,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectHome/ActivityStats.tsx#L160",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h022",
+            "label": "false-positive",
+            "note": "SingleStat with href renders a Next Link around the 'Compute size' label and the value, so it is named. The rule only saw <SingleStat ... /> mapped to <button> with no children.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h022",
+            "label": "false-positive",
+            "note": "With href set, SingleStat renders a next/link <Link> whose content includes the 'Compute size' label and the value, so the link is named. The census resolved SingleStat to its onClick <button> branch."
+          }
+        },
+        {
+          "id": "h023",
+          "file": "apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx",
+          "line": 442,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx#L442",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h023",
+            "label": "false-positive",
+            "note": "A <td> holding the foreign table's schema.name text; it isn't a control, and it has text.",
+            "cheapFix": "add an aria-label to the TableCell",
+            "rightFix": "leave it"
+          },
+          "r2": null
+        },
+        {
+          "id": "h024",
+          "file": "apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppRow.tsx",
+          "line": 71,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/OAuthAppRow.tsx#L71",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h024",
+            "label": "real-barrier",
+            "note": "<Button icon={<MoreVerticalIcon />} className='px-1' /> is the row's dropdown trigger. The ui Button wraps the icon in an aria-hidden div and adds no label, so screen readers announce an unnamed 'button, menu', and voice-control users can't target it.",
+            "cheapFix": "add aria-label=\"More\"",
+            "rightFix": "aria-label={`Actions for ${app.name}`}"
+          },
+          "r2": {
+            "id": "h024",
+            "label": "real-barrier",
+            "note": "A Button with only an icon and no children or aria-label renders a <button> whose sole content is the icon inside an aria-hidden div, so each OAuth app row's DropdownMenuTrigger has no accessible name. Screen-reader users hear only 'menu button', and voice-control users can't name it."
+          }
+        },
+        {
+          "id": "h025",
+          "file": "apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaDetails.tsx",
+          "line": 154,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Infrastructure/ReadReplicas/ReadReplicaDetails.tsx#L154",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.",
+                "rule": "jsx-a11y/alt-text"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "Missing `alt` attribute.",
+                "rule": "jsx-a11y/alt-text"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h025",
+            "label": "false-positive",
+            "note": "RegionFlag defaults alt='' and sets aria-hidden when no alt is given. It is a decorative flag beside the region name, which the input already shows as its value; the rule can't see the default.",
+            "cheapFix": "pass alt=\"\" at the call site",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h025",
+            "label": "false-positive",
+            "note": "RegionFlag defaults to alt=\"\" with aria-hidden=true, and the region name is the value of the input it decorates, so the flag is correctly treated as decorative. The rule can't see the component's defaults."
+          }
+        },
+        {
+          "id": "h026",
+          "file": "apps/studio/pages/project/[ref]/observability/api-overview.tsx",
+          "line": 119,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/observability/api-overview.tsx#L119",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h026",
+            "label": "false-positive",
+            "note": "DocsButton with topic=REPORT_TITLE sets aria-label '<topic> documentation (opens in new tab)' alongside the visible 'Docs', so it is well named.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h026",
+            "label": "false-positive",
+            "note": "With a topic, DocsButton renders a link with the visible text 'Docs' and the aria-label 'API Gateway documentation (opens in new tab)', so it is labelled. A minor separate concern: the aria-label doesn't contain the visible word 'Docs' (label-in-name), which can trip up voice control."
+          }
+        },
+        {
+          "id": "h027",
+          "file": "apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx",
+          "line": 487,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/AnalyticsBuckets/AnalyticsBucketDetails/NamespaceWithTables/TableRowComponent.tsx#L487",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h027",
+            "label": "false-positive",
+            "note": "A <tr> isn't a control; this row contains cells with text and a tooltip trigger.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h027",
+            "label": "false-positive",
+            "note": "TableRow is a plain <tr>, and this row contains the text 'No matching foreign table in schema'. A row isn't a control, and it isn't unlabelled."
+          }
+        },
+        {
+          "id": "h028",
+          "file": "apps/studio/components/interfaces/Database/Indexes/Indexes.tsx",
+          "line": 229,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Indexes/Indexes.tsx#L229",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h028",
+            "label": "intentional-or-decorative",
+            "note": "An empty <th> over the actions column (the 'View definition' and edit buttons). It isn't a control. An empty header over self-describing buttons is common, though an sr-only 'Actions' would be tidier. Judgment call: intentional-or-decorative vs false-positive.",
+            "cheapFix": "add aria-label=\"Actions\" to the TableHead",
+            "rightFix": "<TableHead><span className=\"sr-only\">Actions</span></TableHead>"
+          },
+          "r2": null
+        },
+        {
+          "id": "h029",
+          "file": "apps/studio/pages/project/[ref]/observability/realtime.tsx",
+          "line": 152,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/observability/realtime.tsx#L152",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h029",
+            "label": "false-positive",
+            "note": "DocsButton with topic=REPORT_TITLE gets an aria-label naming the documentation and the new tab, plus the visible 'Docs', so it is named.",
+            "cheapFix": "add a lint-disable comment",
+            "rightFix": "leave it"
+          },
+          "r2": {
+            "id": "h029",
+            "label": "false-positive",
+            "note": "DocsButton renders a link with the visible text 'Docs' and the aria-label 'Realtime documentation (opens in new tab)', so it is labelled. A minor separate concern: the name doesn't include the visible word 'Docs' (label-in-name)."
+          }
+        },
+        {
+          "id": "h030",
+          "file": "apps/studio/pages/project/[ref]/auth/overview.tsx",
+          "line": 57,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/auth/overview.tsx#L57",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ],
+            "oxlint": [
+              {
+                "message": "A control must be associated with a text label.",
+                "rule": "jsx-a11y/control-has-associated-label"
+              }
+            ]
+          },
+          "r1": {
+            "id": "h030",
+            "label": "false-positive",
+            "note": "DocsButton renders an <a> with visible text 'Docs', so it is named. With no topic, the name is just 'Docs', which is vague but not missing.",
+            "cheapFix": "add a lint-disable comment (DocsButton takes no aria-label prop)",
+            "rightFix": "leave it; pass topic (e.g. 'Auth')"
+          },
+          "r2": {
+            "id": "h030",
+            "label": "false-positive",
+            "note": "DocsButton renders a link with the visible text 'Docs' (no topic, so no aria-label override), so it has an accessible name."
+          }
+        }
+      ],
+      "weightedShares": {
+        "intentional-or-decorative": 9.7,
+        "false-positive": 74.3,
+        "real-barrier": 16
+      }
+    },
+    "suppression": {
+      "agreement": {
+        "kappa": 1,
+        "pairs": 4,
+        "same": 4,
+        "disagreements": []
+      },
+      "counts": {
+        "right": 4
+      },
+      "n": 4,
+      "population": null,
+      "rows": [
+        {
+          "id": "s001",
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "line": 704,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L704",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "rule": "jsx-a11y/role-has-required-aria-props"
+              }
+            ]
+          },
+          "r1": {
+            "id": "s001",
+            "label": "right",
+            "note": "This oxlint-disable for role-has-required-aria-props covers the ListBox drop indicator, a role=option without aria-selected. The indicator is a virtual drop target for accessible drag and drop, not a selectable option, so leaving aria-selected off is correct, and the reason ('drop indicator is not selectable') says exactly that. Only oxlint fires in raw mode."
+          },
+          "r2": {
+            "id": "s001",
+            "label": "right",
+            "note": "The drop indicator is a virtual drop target inside the listbox, labelled through dropIndicatorProps, and it can never be selected, so leaving out aria-selected (which defaults to false) hides nothing. Oxlint still fires in raw mode, so the scoped disable is needed, and its reason is accurate."
+          }
+        },
+        {
+          "id": "s002",
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "line": 792,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L792",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "rule": "jsx-a11y/role-has-required-aria-props"
+              }
+            ]
+          },
+          "r1": {
+            "id": "s002",
+            "label": "right",
+            "note": "The same rule is disabled around the ListBox loading-row option. The loader isn't selectable, so aria-selected would be meaningless; both the reason and the inline comment say so. This is the same site as a050."
+          },
+          "r2": {
+            "id": "s002",
+            "label": "right",
+            "note": "The loader row is a non-selectable role=\"option\" (tabIndex=-1, for TalkBack) that shows the loading content, so aria-selected doesn't apply. Oxlint fires without the disable, and both the reason and the inline comment explain it correctly."
+          }
+        },
+        {
+          "id": "s003",
+          "file": "packages/react-aria-components/src/Menu.tsx",
+          "line": 712,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Menu.tsx#L712",
+          "repo": "react-aria",
+          "rules": {
+            "oxlint": [
+              {
+                "rule": "jsx-a11y/role-has-required-aria-props"
+              }
+            ]
+          },
+          "r1": {
+            "id": "s003",
+            "label": "right",
+            "note": "This disable was copied onto the Menu loading row, which is role=menuitem. menuitem has no required ARIA props, so neither linter fires in raw mode and the comment suppresses nothing. It hides no barrier and the reason is true, but it's stale and could be removed."
+          },
+          "r2": {
+            "id": "s003",
+            "label": "right",
+            "note": "The suppression hides nothing: menuitem has no required ARIA props, so neither linter fires here, and the comment was evidently copied from ListBox ('not selectable'). It's redundant but harmless, and the non-actionable loader menuitem is deliberate."
+          }
+        },
+        {
+          "id": "s004",
+          "file": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenSuccess.tsx",
+          "line": 70,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenSuccess.tsx#L70",
+          "repo": "supabase",
+          "rules": {
+            "eslint": [
+              {
+                "rule": "jsx-a11y/label-has-associated-control"
+              }
+            ]
+          },
+          "r1": {
+            "id": "s004",
+            "label": "right",
+            "note": "This eslint-disable for label-has-associated-control (no reason given) covers a <label> wrapping the ui Checkbox (Radix CheckboxPrimitive.Root, a <button role=checkbox>) and the text 'I have copied the key and stored it securely'. A wrapping label names a button, since buttons are labelable, and clicking the text toggles it, so the control is properly labelled. The rule fires because it can't tell Checkbox is a control. In raw mode only oxlint still fires."
+          },
+          "r2": {
+            "id": "s004",
+            "label": "right",
+            "note": "The <label> wraps the Radix Checkbox, which is a <button role=\"checkbox\">, a labelable element. The label text therefore names the control, and clicking the text toggles it. No reason is given, but the rule is wrong here: it can't see that Checkbox is a control (ESLint doesn't even fire in raw mode)."
+          }
+        }
+      ],
+      "weightedShares": null
+    }
+  }
+}

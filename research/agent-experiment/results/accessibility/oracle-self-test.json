@@ -1,0 +1,1655 @@
+{
+  "runtime": "node v24.14.1",
+  "cases": [
+    {
+      "name": "a11y-a (the corpus subject)",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "no role (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a01: onKeyDown={() => {}}",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "no role (a key handler that does nothing on Enter or Space)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a02: role=\"button\" tabIndex={0}",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "role and tabIndex but no key handler",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03: role=\"button\" tabIndex={0} onKeyDown={() => {}}",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "role and tabIndex, with a key handler that does nothing on Enter or Space",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04: role, tabIndex and an onKeyDown for Enter only",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "partial key handling (Enter only)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a05: role=\"presentation\"",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "role presentation: not exposed as a control (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a06: aria-hidden=\"true\"",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "hidden from assistive technology",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a07: onClick moved into a spread",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "no role (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a08: onKeyUp={openTrigger} only (not focusable)",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": false,
+      "reason": "no role (Enter and Space)",
+      "notes": [
+        "the label's heading is inside the control",
+        "Space doesn't preventDefault (the page scrolls)"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a09: native <button type=\"button\" aria-expanded={open}>",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": true,
+          "behaviourPreserved": true,
+          "statePresent": true
+        }
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a10: native <button> without type",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": true,
+          "behaviourPreserved": true,
+          "statePresent": false
+        }
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [
+        "the label's heading is inside the control",
+        "button without type"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a11: role, tabIndex, aria-expanded and an onKeyDown for Enter and Space",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": true,
+          "behaviourPreserved": true,
+          "statePresent": true
+        }
+      },
+      "fixed": true,
+      "reason": "full ARIA pattern",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a11y-b (the corpus subject)",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "named by colour code"
+        }
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b01: aria-label={color}",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "named by colour code"
+        }
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b02: aria-hidden=\"true\" on the button",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "hidden from assistive technology"
+        }
+      },
+      "fixed": false,
+      "reason": "hidden",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03: <span className=\"sr-only\">{color}</span>",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "named by colour code"
+        }
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04: aria-label=\"color\" (the same for every swatch)",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "color",
+            "color",
+            "color",
+            "color",
+            "color"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "same or generic name"
+        }
+      },
+      "fixed": false,
+      "reason": "generic name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b05: title removed",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "behaviourPreserved": true,
+          "titleKept": false,
+          "worst": "no name"
+        }
+      },
+      "fixed": false,
+      "reason": "no name",
+      "notes": [
+        "title changed or removed"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06: aria-label={color} and title removed",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "#ffffff",
+            "#f8f9fa",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": false,
+          "worst": "named by colour code"
+        }
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name",
+        "title changed or removed"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b07: aria-label from the palette name, t(`colors.${colorName}`)",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": true,
+          "canvasPicker": [
+            "White",
+            "Gray",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": null
+        }
+      },
+      "fixed": true,
+      "reason": "palette name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b08: palette name plus shade in a visually hidden span",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": true,
+          "canvasPicker": [
+            "White",
+            "Gray 1",
+            "#f5faff",
+            "#fffce8",
+            "#fdf8f6"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": null
+        }
+      },
+      "fixed": true,
+      "reason": "palette name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b09: aria-label={t(\"colorPicker.color\")} (\"Color\" on every swatch)",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "corpusVerdict": {
+          "barrierFixed": false,
+          "canvasPicker": [
+            "Color",
+            "Color",
+            "Color",
+            "Color",
+            "Color"
+          ],
+          "behaviourPreserved": true,
+          "titleKept": true,
+          "worst": "same or generic name"
+        }
+      },
+      "fixed": false,
+      "reason": "generic name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "collapsible as prepared (a-ox)",
+      "kind": "collapsible",
+      "description": null,
+      "expected": {
+        "fixed": false,
+        "reason": null
+      },
+      "fixed": false,
+      "reason": "no role (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "topPicks as prepared (b-ox)",
+      "kind": "topPicks",
+      "description": null,
+      "expected": {
+        "fixed": false,
+        "reason": null
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-aria-enter-only.tsx",
+      "kind": "collapsible",
+      "description": "role, tabIndex and an onKeyDown for Enter only",
+      "expected": {
+        "fixed": false,
+        "reason": "partial key handling"
+      },
+      "fixed": false,
+      "reason": "partial key handling (Enter only)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-aria-hidden.tsx",
+      "kind": "collapsible",
+      "description": "aria-hidden=\"true\" on the clickable div",
+      "expected": {
+        "fixed": false,
+        "reason": "hidden from assistive technology"
+      },
+      "fixed": false,
+      "reason": "hidden from assistive technology",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-aria-pattern-click.tsx",
+      "kind": "collapsible",
+      "description": "the ARIA pattern whose key handler calls event.currentTarget.click()",
+      "expected": {
+        "fixed": true,
+        "reason": "full ARIA pattern"
+      },
+      "fixed": true,
+      "reason": "full ARIA pattern",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-aria-pattern-typed.tsx",
+      "kind": "collapsible",
+      "description": "the ARIA pattern with its handler typed by a type import from react",
+      "expected": {
+        "fixed": true,
+        "reason": "full ARIA pattern"
+      },
+      "fixed": true,
+      "reason": "full ARIA pattern",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-aria-pattern.tsx",
+      "kind": "collapsible",
+      "description": "role=\"button\", tabIndex={0}, aria-expanded and an onKeyDown for Enter and Space",
+      "expected": {
+        "fixed": true,
+        "reason": "full ARIA pattern"
+      },
+      "fixed": true,
+      "reason": "full ARIA pattern",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-button-double-enter.tsx",
+      "kind": "collapsible",
+      "description": "a native <button> that also calls openTrigger on Enter in onKeyDown, without preventDefault",
+      "expected": {
+        "fixed": false,
+        "reason": "native control"
+      },
+      "fixed": false,
+      "reason": "native control",
+      "notes": [
+        "Enter toggle twice",
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-inner-button.tsx",
+      "kind": "collapsible",
+      "description": "the div keeps its layout and a native <button> inside it holds the label and takes the click",
+      "expected": {
+        "fixed": true,
+        "reason": "native control"
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-native-button-no-type.tsx",
+      "kind": "collapsible",
+      "description": "a native <button> without type",
+      "expected": {
+        "fixed": true,
+        "reason": "native control"
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [
+        "the label's heading is inside the control",
+        "button without type"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-native-button-resets.tsx",
+      "kind": "collapsible",
+      "description": "a native <button> with inline style resets (background, border, font, padding, width)",
+      "expected": {
+        "fixed": true,
+        "reason": "native control"
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-native-button.tsx",
+      "kind": "collapsible",
+      "description": "the row is a native <button type=\"button\" aria-expanded>",
+      "expected": {
+        "fixed": true,
+        "reason": "native control"
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-nested-toggle.tsx",
+      "kind": "collapsible",
+      "description": "the div keeps onClick and an inner <button> also calls openTrigger",
+      "expected": {
+        "fixed": false,
+        "reason": "native control"
+      },
+      "fixed": false,
+      "reason": "native control",
+      "notes": [
+        "a click reaches two nested handlers",
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-noop-keydown.tsx",
+      "kind": "collapsible",
+      "description": "onKeyDown={() => {}} on the div",
+      "expected": {
+        "fixed": false,
+        "reason": "no role (a key handler that does nothing"
+      },
+      "fixed": false,
+      "reason": "no role (a key handler that does nothing on Enter or Space)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-overlay-button.tsx",
+      "kind": "collapsible",
+      "description": "the div keeps its layout; an empty native <button> laid over it (after the icon) is named by aria-labelledby pointing at the div",
+      "expected": {
+        "fixed": true,
+        "reason": "native control"
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-overlay-useid.tsx",
+      "kind": "collapsible",
+      "description": "the overlay <button> named by aria-labelledby, with the id from useId imported from react",
+      "expected": {
+        "fixed": true,
+        "reason": "native control"
+      },
+      "fixed": true,
+      "reason": "native control",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-removed-handler.tsx",
+      "kind": "collapsible",
+      "description": "onClick removed",
+      "expected": {
+        "fixed": false,
+        "reason": "click broken"
+      },
+      "fixed": false,
+      "reason": "click broken: nothing calls openTrigger",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-role-presentation.tsx",
+      "kind": "collapsible",
+      "description": "role=\"presentation\"",
+      "expected": {
+        "fixed": false,
+        "reason": "role presentation: not exposed"
+      },
+      "fixed": false,
+      "reason": "role presentation: not exposed as a control (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-role-tabindex-noop.tsx",
+      "kind": "collapsible",
+      "description": "role=\"button\" tabIndex={0} onKeyDown={() => {}}",
+      "expected": {
+        "fixed": false,
+        "reason": "role and tabIndex, with a key handler that does nothing"
+      },
+      "fixed": false,
+      "reason": "role and tabIndex, with a key handler that does nothing on Enter or Space",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-role-tabindex.tsx",
+      "kind": "collapsible",
+      "description": "role=\"button\" tabIndex={0}, no key handler",
+      "expected": {
+        "fixed": false,
+        "reason": "role and tabIndex but no key handler"
+      },
+      "fixed": false,
+      "reason": "role and tabIndex but no key handler",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-spread.tsx",
+      "kind": "collapsible",
+      "description": "onClick moved into a spread",
+      "expected": {
+        "fixed": false,
+        "reason": "no role (no key handler)"
+      },
+      "fixed": false,
+      "reason": "no role (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-suppression.tsx",
+      "kind": "collapsible",
+      "description": "an oxlint-disable-next-line comment above the div",
+      "expected": {
+        "fixed": false,
+        "reason": "no role (no key handler)"
+      },
+      "fixed": false,
+      "reason": "no role (no key handler)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a-tabindex-minus-one.tsx",
+      "kind": "collapsible",
+      "description": "role, tabIndex={-1} and an Enter and Space handler",
+      "expected": {
+        "fixed": false,
+        "reason": "role but not focusable"
+      },
+      "fixed": false,
+      "reason": "role but not focusable (Enter and Space)",
+      "notes": [
+        "the label's heading is inside the control"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-aria-hidden.tsx",
+      "kind": "topPicks",
+      "description": "aria-hidden on the swatch",
+      "expected": {
+        "fixed": false,
+        "reason": "hidden"
+      },
+      "fixed": false,
+      "reason": "hidden",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-canvas-throws.tsx",
+      "kind": "topPicks",
+      "description": "a palette label that throws for colours outside the palette (the canvas picks)",
+      "expected": {
+        "fixed": false,
+        "reason": "palette name; behaviour changed"
+      },
+      "fixed": false,
+      "reason": "palette name; behaviour changed",
+      "notes": [
+        "canvasBackground picker throws: Can't find translation for colors.undefined"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-generic.tsx",
+      "kind": "topPicks",
+      "description": "aria-label={t(\"colorPicker.color\")} on every swatch",
+      "expected": {
+        "fixed": false,
+        "reason": "generic name"
+      },
+      "fixed": false,
+      "reason": "generic name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-hex-label.tsx",
+      "kind": "topPicks",
+      "description": "aria-label={color}",
+      "expected": {
+        "fixed": false,
+        "reason": "hex name"
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-hex-words.tsx",
+      "kind": "topPicks",
+      "description": "aria-label={`Color ${color}`}",
+      "expected": {
+        "fixed": false,
+        "reason": "hex name with words"
+      },
+      "fixed": false,
+      "reason": "hex name with words",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-palette-label-shade.tsx",
+      "kind": "topPicks",
+      "description": "the palette name and shade in a visually hidden span",
+      "expected": {
+        "fixed": true,
+        "reason": "palette name"
+      },
+      "fixed": true,
+      "reason": "palette name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-palette-label.tsx",
+      "kind": "topPicks",
+      "description": "aria-label from the palette name, as PickerColorList does",
+      "expected": {
+        "fixed": true,
+        "reason": "palette name"
+      },
+      "fixed": true,
+      "reason": "palette name",
+      "notes": [],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-sr-only-hex.tsx",
+      "kind": "topPicks",
+      "description": "a visually hidden span with the colour code",
+      "expected": {
+        "fixed": false,
+        "reason": "hex name"
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-suppression.tsx",
+      "kind": "topPicks",
+      "description": "an oxlint-disable-next-line comment above the swatch",
+      "expected": {
+        "fixed": false,
+        "reason": "hex name"
+      },
+      "fixed": false,
+      "reason": "hex name",
+      "notes": [
+        "a colour code is part of the name"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b-title-removed.tsx",
+      "kind": "topPicks",
+      "description": "title removed",
+      "expected": {
+        "fixed": false,
+        "reason": "no name"
+      },
+      "fixed": false,
+      "reason": "no name",
+      "notes": [
+        "title changed or removed"
+      ],
+      "loadError": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts adapters (fixAndCollect and verify, run under Bun in a scratch project with the configs `ultracite init` writes and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs with -c / --config-path), on the same files: diagnostics (every field but `raw`) and the file each leaves must match.",
+    "cases": [
+      {
+        "name": "a-ox as prepared",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/click-events-have-key-events",
+          "jsx-a11y/no-static-element-interactions"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox as prepared",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/control-has-associated-label"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio as prepared",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/noNoninteractiveElementInteractions",
+          "lint/a11y/noStaticElementInteractions",
+          "lint/a11y/useKeyWithClickEvents"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-aria-enter-only.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/prefer-tag-over-role"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-aria-enter-only.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useSemanticElements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-aria-hidden.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-aria-hidden.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-aria-pattern-click.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/prefer-tag-over-role"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-aria-pattern-click.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useSemanticElements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-aria-pattern-typed.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/prefer-tag-over-role"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-aria-pattern-typed.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useSemanticElements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-aria-pattern.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/prefer-tag-over-role"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-aria-pattern.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useSemanticElements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-button-double-enter.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-button-double-enter.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-inner-button.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-inner-button.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-native-button-no-type.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "react/button-has-type"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-native-button-no-type.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useButtonType"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-native-button-resets.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-native-button-resets.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-native-button.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-native-button.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-nested-toggle.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/click-events-have-key-events",
+          "jsx-a11y/no-static-element-interactions"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-nested-toggle.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/noNoninteractiveElementInteractions",
+          "lint/a11y/noStaticElementInteractions",
+          "lint/a11y/useKeyWithClickEvents"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-noop-keydown.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/no-static-element-interactions",
+          "no-empty-function"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-noop-keydown.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/noNoninteractiveElementInteractions",
+          "lint/a11y/noStaticElementInteractions",
+          "lint/suspicious/noEmptyBlockStatements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-overlay-button.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-overlay-button.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-overlay-useid.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-overlay-useid.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-removed-handler.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "no-unused-vars"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-removed-handler.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/correctness/noUnusedFunctionParameters"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-role-presentation.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-role-presentation.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/noStaticElementInteractions"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-role-tabindex-noop.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/prefer-tag-over-role",
+          "no-empty-function"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-role-tabindex-noop.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useSemanticElements",
+          "lint/suspicious/noEmptyBlockStatements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-role-tabindex.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/click-events-have-key-events",
+          "jsx-a11y/prefer-tag-over-role"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-role-tabindex.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useKeyWithClickEvents",
+          "lint/a11y/useSemanticElements"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-spread.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-spread.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-suppression.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-suppression.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/noNoninteractiveElementInteractions",
+          "lint/a11y/noStaticElementInteractions",
+          "lint/a11y/useKeyWithClickEvents"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a-tabindex-minus-one.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/prefer-tag-over-role"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-bio a-tabindex-minus-one.tsx",
+        "linter": "biome",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "lint/a11y/useSemanticElements",
+          "lint/performance/noJsxPropsBind"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-aria-hidden.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/control-has-associated-label"
+        ],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-canvas-throws.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-generic.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-hex-label.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-hex-words.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-palette-label-shade.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-palette-label.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-sr-only-hex.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-suppression.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [],
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b-title-removed.tsx",
+        "linter": "oxlint",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "rules": [
+          "jsx-a11y/control-has-associated-label"
+        ],
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}

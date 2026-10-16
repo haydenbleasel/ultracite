@@ -18,6 +18,11 @@
 //     [--focus rule,rule]           rules to tabulate in the Markdown summary and keep per-hit rows for
 //     [--repos name,name]           subset of repos.json (default: all)
 //     [--modes reported,raw]        which runs to do (default: both)
+//     [--files jsx]                 only the JSX files (.tsx, .jsx) of each repo; line counts and
+//                                   hits per 10,000 lines are then per JSX line (default: all files)
+//
+// Extra repo lists: with CORPUS_REPO_LISTS=repos-accessibility.json (see collect-files.cjs), the
+// repos in that list are available too, after the ones in repos.json. Unset, nothing changes.
 //
 // Writes:
 //   results/<topic>/rule-census.json   per-rule and per-repo counts for every enabled rule
@@ -32,8 +37,7 @@ const { mkdirSync, readFileSync, rmSync, writeFileSync } = require("node:fs");
 const { dirname, join, resolve } = require("node:path");
 const { pathToFileURL } = require("node:url");
 
-const { collect } = require("./collect-files.cjs");
-const config = require("./repos.json");
+const { collect, config } = require("./collect-files.cjs");
 const { ULTRACITE } = require("./tools.cjs");
 
 const HERE = resolve(__dirname, "..");
@@ -57,6 +61,13 @@ const PRESETS = list(arg("presets", "core,react"));
 const FOCUS = list(arg("focus", ""));
 const ONLY = list(arg("repos", ""));
 const MODES = list(arg("modes", "reported,raw"));
+const FILES = arg("files", "all");
+if (!["all", "jsx"].includes(FILES)) {
+  throw new Error(`--files must be "all" or "jsx", not "${FILES}".`);
+}
+// No .js, .mjs or .cjs file in the corpus contains JSX (checked by parsing them as JSX for the
+// accessibility post), so the extension is the test.
+const keepFile = (rel) => FILES === "all" || /\.(?:tsx|jsx)$/.test(rel);
 
 const RESULTS_DIR = join(HERE, "results", TOPIC);
 const OUT_DIR = join(HERE, "out", "rule-census", TOPIC);
@@ -263,7 +274,12 @@ const main = async () => {
     .filter((n) => ONLY.length === 0 || ONLY.includes(n));
 
   for (const name of names) {
-    const { repo, files } = collect(name);
+    const { repo, files: allFiles } = collect(name);
+    const files = allFiles.filter(keepFile);
+    if (files.length === 0 && FILES !== "all") {
+      console.log(`${name}: no files (--files ${FILES}), skipped`);
+      continue;
+    }
     const lines = files.reduce(
       (sum, rel) =>
         sum + readFileSync(join(repo.root, rel), "utf8").split("\n").length,
@@ -312,6 +328,10 @@ const main = async () => {
     repos[name] = entry;
   }
 
+  // Repos with no files under --files were skipped.
+  const measured = names.filter((n) => repos[n]);
+  names.length = 0;
+  names.push(...measured);
   const pooledNames = names.filter((n) => !DOGFOOD.has(n));
   const pooledLines = pooledNames.reduce((s, n) => s + repos[n].lines, 0);
 
@@ -360,6 +380,8 @@ const main = async () => {
     ])
   );
   const result = {
+    // Only recorded when filtered, so earlier topics' files regenerate unchanged.
+    ...(FILES === "all" ? {} : { files: FILES }),
     focus: FOCUS,
     generated: new Date().toISOString().slice(0, 10),
     modes: MODES,

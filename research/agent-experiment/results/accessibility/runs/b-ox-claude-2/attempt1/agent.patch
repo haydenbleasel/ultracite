@@ -1,0 +1,10 @@
+--- a/top-picks.tsx
++++ b/top-picks.tsx
+@@ -325,6 +325,7 @@
+           const displayColor = applyDarkModeFilter(color, theme === THEME.DARK);
+           return (
+             <button
++              aria-label={color}
+               className={clsx("color-picker__button top-picks-dnd__pick", {
+                 active: color === activeColor,
+                 "has-outline": !isColorDark(

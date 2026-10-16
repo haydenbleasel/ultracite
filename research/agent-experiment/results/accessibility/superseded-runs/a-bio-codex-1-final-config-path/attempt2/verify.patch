@@ -1,0 +1,75 @@
+--- a/collapsible.tsx
++++ b/collapsible.tsx
+@@ -117,41 +117,37 @@
+   children,
+   className,
+   showCollapsedIcon = true,
+-}: CollapsibleProps) => {
+-  return (
+-    <>
+-      <button
+-        aria-expanded={open}
+-        className={className}
+-        onClick={openTrigger}
+-        style={{
+-          alignItems: "center",
+-          background: "transparent",
+-          border: 0,
+-          color: "inherit",
+-          cursor: "pointer",
+-          display: "flex",
+-          font: "inherit",
+-          justifyContent: "space-between",
+-          padding: 0,
+-          position: "relative",
+-          textAlign: "inherit",
+-          width: "100%",
+-        }}
+-        type="button"
+-      >
+-        {label}
+-        {showCollapsedIcon && (
+-          <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />
+-        )}
+-      </button>
+-      {open && (
+-        <div style={{ display: "flex", flexDirection: "column" }}>
+-          {children}
+-        </div>
++}: CollapsibleProps) => (
++  <>
++    <button
++      aria-expanded={open}
++      className={className}
++      onClick={openTrigger}
++      style={{
++        alignItems: "center",
++        background: "transparent",
++        border: 0,
++        color: "inherit",
++        cursor: "pointer",
++        display: "flex",
++        font: "inherit",
++        justifyContent: "space-between",
++        padding: 0,
++        position: "relative",
++        textAlign: "inherit",
++        width: "100%",
++      }}
++      type="button"
++    >
++      {label}
++      {showCollapsedIcon && (
++        <InlineIcon icon={open ? collapseUpIcon : collapseDownIcon} />
+       )}
+-    </>
+-  );
+-};
++    </button>
++    {open && (
++      <div style={{ display: "flex", flexDirection: "column" }}>{children}</div>
++    )}
++  </>
++);
+ 
+ export default Collapsible;

@@ -1,0 +1,612 @@
+{
+  "generated": "2026-10-15",
+  "note": "Suppression comments naming an accessibility rule, in every measured file (all extensions). `stillFires` checks the raw-mode rows (disable comments neutralised) for that rule on the covered lines: Oxlint (core + react + js-plugins census), ESLint (core + react, a11y rules), Biome (a11y rules).",
+  "repos": {
+    "trpc": {
+      "blanketDisablesInJsx": 0,
+      "blanketSample": [],
+      "configLines": [
+        {
+          "file": "eslint.config.js",
+          "line": 18,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L18",
+          "text": "extends: ["
+        }
+      ],
+      "suppressions": [],
+      "byRule": {}
+    },
+    "excalidraw": {
+      "blanketDisablesInJsx": 0,
+      "blanketSample": [],
+      "configLines": [
+        {
+          "file": ".eslintrc.json",
+          "line": 2,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/.eslintrc.json#L2",
+          "text": "\"extends\": [\"@excalidraw/eslint-config\", \"react-app\"],"
+        }
+      ],
+      "suppressions": [],
+      "byRule": {}
+    },
+    "next.js": {
+      "blanketDisablesInJsx": 0,
+      "blanketSample": [],
+      "configLines": [
+        {
+          "file": "eslint.config.mjs",
+          "line": 296,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L296",
+          "text": "extends: compat.extends('plugin:jest/recommended'),"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 331,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L331",
+          "text": "extends: [tseslint.configs.recommended, tseslint.configs.stylistic],"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 544,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L544",
+          "text": "extends: compat.extends('plugin:eslint-plugin/recommended'),"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 578,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L578",
+          "text": "extends: compat.extends('plugin:mdx/recommended'),"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 591,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L591",
+          "text": "extends: [reactHooks.configs.flat['recommended']],"
+        },
+        {
+          "file": "eslint.cli.config.mjs",
+          "line": 6,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.cli.config.mjs#L6",
+          "text": "extends: [baseConfig],"
+        }
+      ],
+      "suppressions": [],
+      "byRule": {}
+    },
+    "shadcn": {
+      "blanketDisablesInJsx": 0,
+      "blanketSample": [],
+      "configLines": [
+        {
+          "file": ".eslintrc.json",
+          "line": 4,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L4",
+          "text": "\"extends\": ["
+        },
+        {
+          "file": ".eslintrc.json",
+          "line": 5,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L5",
+          "text": "\"next/core-web-vitals\","
+        }
+      ],
+      "suppressions": [],
+      "byRule": {}
+    },
+    "radix": {
+      "blanketDisablesInJsx": 0,
+      "blanketSample": [],
+      "configLines": [
+        {
+          "file": ".oxlintrc.json",
+          "line": 3,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L3",
+          "text": "\"plugins\": [\"react\", \"jsx-a11y\"],"
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 182,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L182",
+          "text": "\"jsx-a11y/alt-text\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 183,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L183",
+          "text": "\"jsx-a11y/anchor-has-content\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 184,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L184",
+          "text": "\"jsx-a11y/anchor-is-valid\": [\"warn\", { \"aspects\": [\"noHref\", \"invalidHref\"] }],"
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 185,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L185",
+          "text": "\"jsx-a11y/aria-activedescendant-has-tabindex\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 186,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L186",
+          "text": "\"jsx-a11y/aria-props\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 187,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L187",
+          "text": "\"jsx-a11y/aria-proptypes\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 188,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L188",
+          "text": "\"jsx-a11y/aria-role\": [\"warn\", { \"ignoreNonDOM\": true }],"
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 189,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L189",
+          "text": "\"jsx-a11y/aria-unsupported-elements\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 190,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L190",
+          "text": "\"jsx-a11y/iframe-has-title\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 191,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L191",
+          "text": "\"jsx-a11y/img-redundant-alt\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 192,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L192",
+          "text": "\"jsx-a11y/lang\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 193,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L193",
+          "text": "\"jsx-a11y/no-access-key\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 194,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L194",
+          "text": "\"jsx-a11y/no-redundant-roles\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 195,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L195",
+          "text": "\"jsx-a11y/role-has-required-aria-props\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 196,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L196",
+          "text": "\"jsx-a11y/role-supports-aria-props\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 197,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L197",
+          "text": "\"jsx-a11y/label-has-associated-control\": ["
+        }
+      ],
+      "suppressions": [],
+      "byRule": {}
+    },
+    "react-aria": {
+      "blanketDisablesInJsx": 5,
+      "blanketSample": [
+        {
+          "file": "packages/react-aria-components/src/GridList.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 619,
+          "text": "// eslint-disable-next-line"
+        },
+        {
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 388,
+          "text": "// eslint-disable-next-line"
+        },
+        {
+          "file": "packages/react-aria-components/src/Table.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 1848,
+          "text": "// eslint-disable-next-line"
+        },
+        {
+          "file": "packages/react-aria-components/src/Tree.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 907,
+          "text": "// eslint-disable-next-line"
+        },
+        {
+          "file": "packages/react-aria-components/src/Tree.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 917,
+          "text": "// eslint-disable-next-line"
+        }
+      ],
+      "configLines": [
+        {
+          "file": ".oxlintrc.json",
+          "line": 3,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L3",
+          "text": "\"plugins\": [\"react\", \"jsx-a11y\", \"jest\"],"
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 182,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L182",
+          "text": "\"jsx-a11y/alt-text\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 183,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L183",
+          "text": "\"jsx-a11y/anchor-has-content\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 184,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L184",
+          "text": "\"jsx-a11y/anchor-is-valid\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 185,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L185",
+          "text": "\"jsx-a11y/aria-activedescendant-has-tabindex\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 186,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L186",
+          "text": "\"jsx-a11y/aria-props\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 187,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L187",
+          "text": "\"jsx-a11y/aria-proptypes\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 188,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L188",
+          "text": "\"jsx-a11y/aria-role\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 189,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L189",
+          "text": "\"jsx-a11y/aria-unsupported-elements\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 190,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L190",
+          "text": "\"jsx-a11y/click-events-have-key-events\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 191,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L191",
+          "text": "\"jsx-a11y/heading-has-content\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 192,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L192",
+          "text": "\"jsx-a11y/html-has-lang\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 193,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L193",
+          "text": "\"jsx-a11y/iframe-has-title\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 194,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L194",
+          "text": "\"jsx-a11y/img-redundant-alt\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 195,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L195",
+          "text": "\"jsx-a11y/interactive-supports-focus\": ["
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 201,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L201",
+          "text": "\"jsx-a11y/label-has-associated-control\": ["
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 208,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L208",
+          "text": "\"jsx-a11y/media-has-caption\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 209,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L209",
+          "text": "\"jsx-a11y/mouse-events-have-key-events\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 210,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L210",
+          "text": "\"jsx-a11y/no-access-key\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 211,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L211",
+          "text": "\"jsx-a11y/no-distracting-elements\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 212,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L212",
+          "text": "\"jsx-a11y/no-noninteractive-tabindex\": ["
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 219,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L219",
+          "text": "\"jsx-a11y/no-redundant-roles\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 220,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L220",
+          "text": "\"jsx-a11y/no-static-element-interactions\": ["
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 226,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L226",
+          "text": "\"jsx-a11y/role-has-required-aria-props\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 227,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L227",
+          "text": "\"jsx-a11y/role-supports-aria-props\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 228,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L228",
+          "text": "\"jsx-a11y/scope\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 229,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L229",
+          "text": "\"jsx-a11y/tabindex-no-positive\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 284,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L284",
+          "text": "\"jsx-a11y/interactive-supports-focus\": \"off\""
+        }
+      ],
+      "suppressions": [
+        {
+          "code": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- drop indicator is not selectable */}",
+          "context": "  return (\n    <>\n      {/* oxlint-disable jsx-a11y/role-has-required-aria-props -- drop indicator is not selectable */}\n      <dom.div\n        {...dropIndicatorProps}\n        {...renderProps}\n        role=\"option\"",
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "kind": "oxlint-disable",
+          "line": 704,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L704",
+          "reason": "drop indicator is not selectable",
+          "rules": [
+            "jsx-a11y/role-has-required-aria-props"
+          ],
+          "otherRules": [],
+          "stillFires": {
+            "eslint": false,
+            "oxlint": true
+          },
+          "text": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- drop indicator is not selectable */}",
+          "tool": "oxlint"
+        },
+        {
+          "code": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}",
+          "context": "        {isLoading && renderProps.children && (\n          <>\n            {/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}\n            <dom.div\n              {...mergeProps(filterDOMProps(props, {global: true}), optionProps)}\n              {...renderProps}\n              // aria-selected isn't needed here since this option is not selectable.",
+          "file": "packages/react-aria-components/src/ListBox.tsx",
+          "kind": "oxlint-disable",
+          "line": 792,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L792",
+          "reason": "loader row is not selectable",
+          "rules": [
+            "jsx-a11y/role-has-required-aria-props"
+          ],
+          "otherRules": [],
+          "stillFires": {
+            "eslint": false,
+            "oxlint": true
+          },
+          "text": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}",
+          "tool": "oxlint"
+        },
+        {
+          "code": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}",
+          "context": "        {isLoading && renderProps.children && (\n          <>\n            {/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}\n            <dom.div\n              {...mergeProps(filterDOMProps(props, {global: true}), itemProps)}\n              {...renderProps}\n              role=\"menuitem\"",
+          "file": "packages/react-aria-components/src/Menu.tsx",
+          "kind": "oxlint-disable",
+          "line": 712,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Menu.tsx#L712",
+          "reason": "loader row is not selectable",
+          "rules": [
+            "jsx-a11y/role-has-required-aria-props"
+          ],
+          "otherRules": [],
+          "stillFires": {
+            "eslint": false,
+            "oxlint": false
+          },
+          "text": "{/* oxlint-disable jsx-a11y/role-has-required-aria-props -- loader row is not selectable */}",
+          "tool": "oxlint"
+        }
+      ],
+      "byRule": {
+        "jsx-a11y/role-has-required-aria-props": 3
+      }
+    },
+    "supabase": {
+      "blanketDisablesInJsx": 0,
+      "blanketSample": [],
+      "configLines": [
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 109,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L109",
+          "text": "'jsx-a11y/alt-text': 'warn',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 110,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L110",
+          "text": "'jsx-a11y/role-has-required-aria-props': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 111,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L111",
+          "text": "'jsx-a11y/aria-props': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 112,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L112",
+          "text": "'jsx-a11y/aria-proptypes': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 113,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L113",
+          "text": "'jsx-a11y/role-supports-aria-props': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 114,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L114",
+          "text": "'jsx-a11y/anchor-has-content': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 115,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L115",
+          "text": "'jsx-a11y/control-has-associated-label': ["
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 119,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L119",
+          "text": "'jsx-a11y/label-has-associated-control': ["
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 123,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L123",
+          "text": "'jsx-a11y/aria-role': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 124,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L124",
+          "text": "'jsx-a11y/no-redundant-roles': 'warn',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 125,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L125",
+          "text": "'jsx-a11y/no-aria-hidden-on-focusable': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 126,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L126",
+          "text": "'jsx-a11y/tabindex-no-positive': 'error',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 127,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L127",
+          "text": "'jsx-a11y/anchor-is-valid': 'warn',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 128,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L128",
+          "text": "'jsx-a11y/heading-has-content': 'warn',"
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "line": 129,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/eslint.config.cjs#L129",
+          "text": "'jsx-a11y/no-distracting-elements': 'error',"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 7,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L7",
+          "text": "const nextCoreWebVitals = require('eslint-config-next/core-web-vitals')"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 16,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L16",
+          "text": "// with core-web-vitals@16. We want to upgrade to get exhaustive-deps updates without"
+        }
+      ],
+      "suppressions": [
+        {
+          "code": "<label className=\"flex items-center gap-3 cursor-pointer py-2\">",
+          "context": "            description=\"You won't be able to see this token value again. If you lose it, revoke the token and create a new one.\"\n          >\n            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}\n            <label className=\"flex items-center gap-3 cursor-pointer py-2\">\n              <Checkbox\n                id=\"key-copied\"\n                checked={keyCopied}",
+          "file": "apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenSuccess.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 70,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/AccessTokens/Scoped/Form/NewScopedTokenSuccess.tsx#L70-L71",
+          "reason": null,
+          "rules": [
+            "jsx-a11y/label-has-associated-control"
+          ],
+          "otherRules": [],
+          "stillFires": {
+            "eslint": false,
+            "oxlint": true
+          },
+          "text": "{/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}",
+          "tool": "eslint"
+        }
+      ],
+      "byRule": {
+        "jsx-a11y/label-has-associated-control": 1
+      }
+    }
+  },
+  "totals": {
+    "blanketInJsx": 5,
+    "suppressions": 4,
+    "withReason": 3
+  }
+}

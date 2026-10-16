@@ -567,6 +567,21 @@ function checkOxlintParser() {
   return actual;
 }
 
+/**
+ * The parser hash this topic's runs were made with, for results.json. The CLI's parser has changed
+ * since (40d646a4 names rules as the config does and adds `fatal`), so a new dc3 run fails in
+ * toDiagnostics, but re-aggregating the committed runs reports the hash they used and says so.
+ * (Made per topic with the accessibility topic, whose own copy is in scripts/ultracite-adapters.cjs.)
+ */
+function recordedOxlintParser() {
+  const actual = sha256(oxlintParserSource());
+  if (actual !== OXLINT_PARSER_SHA256)
+    console.warn(
+      `note: linters.ts parseOxlintDiagnostics has changed since this topic's runs (now ${actual}); results.json records the hash the runs used`
+    );
+  return OXLINT_PARSER_SHA256;
+}
+
 function parseOxlintDiagnostics(report) {
   const diagnostics = [];
   for (const diagnostic of report.diagnostics ?? []) {
@@ -2028,7 +2043,7 @@ function driftCheck(runs) {
         uniq(earlier.map((e) => e.prompt)).join() &&
       uniq(these.map((m) => m.ultracite?.agentsTsSha256)).join() ===
         uniq(earlier.map((e) => e.agents)).join(),
-    oxlintParserSha256: checkOxlintParser(),
+    oxlintParserSha256: recordedOxlintParser(),
     argsCheckedAgainstAgentsTs:
       "run-one.mjs reads the adapter args from packages/cli/src/agent-fix/agents.ts and fails the run if they differ from the experiment spec",
     agentArgs: Object.fromEntries(
