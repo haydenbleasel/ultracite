@@ -1,7 +1,3 @@
-import { createRequire } from "node:module";
-import path from "node:path";
-import process from "node:process";
-
 import { bunRules } from "./rules.mjs";
 
 // `bun lint` and `bun fmt` read oxlint.config.ts and oxfmt.config.ts, so the
@@ -77,40 +73,14 @@ const forBun = (config) => {
   return copy;
 };
 
-// `bun fmt` takes Tailwind's class order from the `tailwindcss` package, and
-// leaves a file with classes to sort unformatted (exiting 2) when the file
-// can't resolve one, where Oxfmt falls back to its own copy of the order
-// (https://github.com/oven-sh/bun/issues/45406). Bun runs from the project
-// root, so that's where to look.
-const hasTailwindcss = () => {
-  const require = createRequire(path.join(process.cwd(), "package.json"));
-
-  return ["tailwindcss", "tailwindcss/package.json"].some((specifier) => {
-    try {
-      require.resolve(specifier);
-
-      return true;
-    } catch {
-      return false;
-    }
-  });
-};
-
 /**
- * Returns the config with Bun's gaps removed. For a lint config, rules from
- * oxlint's built-in plugins that `bun lint` doesn't implement (such as
+ * Returns the config with Bun's gaps removed from what it extends: rules
+ * from oxlint's built-in plugins that `bun lint` doesn't implement (such as
  * `jsdoc/*` and `vue/*`) are dropped from every extended preset, so a run
- * doesn't fail on them; the config's own rules are left as written. For a
- * format config, Tailwind class sorting is turned off when the project has
- * no `tailwindcss` installed, so `bun fmt` formats the files it can't sort.
+ * doesn't fail on them. The config's own rules are left as written. A format
+ * config extends nothing and is returned unchanged.
  */
 export const defineConfig = (config) => {
-  if (config.sortTailwindcss && !hasTailwindcss()) {
-    return Object.fromEntries(
-      Object.entries(config).filter(([key]) => key !== "sortTailwindcss")
-    );
-  }
-
   if (!Array.isArray(config.extends)) {
     return config;
   }

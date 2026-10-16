@@ -1,23 +1,32 @@
 import { describe, expect, test } from "bun:test";
 
-import { acceptsBunLinter, linterChoices, printsBunLintUsage } from "../bun";
+import { acceptsBunLinter, linterChoices, printsUsableBunLint } from "../bun";
 
-describe("printsBunLintUsage", () => {
-  test("accepts the usage a Bun with the linter prints", () => {
+describe("printsUsableBunLint", () => {
+  test("accepts a Bun whose linter has --no-script", () => {
     const help = [
       "Usage: bun lint [flags] [...files, directories or patterns]",
       "  Find and fix problems in JavaScript and TypeScript.",
+      "      --no-script                     Run the linter even if the project has a lint script",
     ].join("\n");
 
-    expect(printsBunLintUsage(help)).toBe(true);
+    expect(printsUsableBunLint(help)).toBe(true);
+  });
+
+  test("rejects a Bun whose linter predates --no-script", () => {
+    expect(
+      printsUsableBunLint(
+        "Usage: bun lint [flags] [...files, directories or patterns]"
+      )
+    ).toBe(false);
   });
 
   test("rejects an older Bun, which looks for a lint script", () => {
-    expect(printsBunLintUsage('error: Script not found "lint"')).toBe(false);
+    expect(printsUsableBunLint('error: Script not found "lint"')).toBe(false);
   });
 
   test("rejects no output", () => {
-    expect(printsBunLintUsage("")).toBe(false);
+    expect(printsUsableBunLint("")).toBe(false);
   });
 });
 

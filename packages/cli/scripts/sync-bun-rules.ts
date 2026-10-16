@@ -23,12 +23,7 @@ const outDir = path.join(import.meta.dirname, "../config/bun");
 const outFile = path.join(outDir, "rules.mjs");
 
 const run = (args: string[]): string => {
-  // `bun lint` runs a package.json "lint" script instead of linting unless
-  // it is already inside one.
-  const result = Bun.spawnSync([bun, ...args], {
-    env: { ...process.env, npm_lifecycle_event: "lint" },
-    stderr: "inherit",
-  });
+  const result = Bun.spawnSync([bun, ...args], { stderr: "inherit" });
 
   if (result.exitCode !== 0) {
     throw new Error(`${bun} ${args.join(" ")} failed`);
@@ -42,7 +37,8 @@ const rulesSchema = z.array(
 );
 
 const rules = rulesSchema.parse(
-  JSON.parse(run(["lint", "--rules", "--format", "json"]))
+  // --no-script, in case the package.json where this runs has a "lint" script.
+  JSON.parse(run(["lint", "--no-script", "--rules", "--format", "json"]))
 );
 
 const names = [

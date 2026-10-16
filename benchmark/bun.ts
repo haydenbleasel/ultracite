@@ -1,5 +1,4 @@
 import { spawnSync } from "node:child_process";
-import process from "node:process";
 
 // The Bun provider runs `bun lint` and `bun fmt`, which only some Bun releases
 // have, so unlike the other providers it can be missing from the machine or
@@ -9,13 +8,17 @@ import process from "node:process";
 /** How `bun lint --help` starts on a Bun that has the linter. */
 export const BUN_LINT_USAGE = "Usage: bun lint";
 
+/** The flag Ultracite runs `bun lint` and `bun fmt` with. */
+export const NO_SCRIPT_FLAG = "--no-script";
+
 /**
- * Whether `bun lint --help` printed the linter's usage. A Bun without the
- * linter takes `lint` for a package.json script and prints `Script not found
- * "lint"` instead.
+ * Whether `bun lint --help --all` came from a Bun whose linter Ultracite can
+ * run: one that has `--no-script`. A Bun without the linter takes `lint` for
+ * a package.json script and prints `Script not found "lint"` instead, and
+ * one from before the flag doesn't list it.
  */
-export const printsBunLintUsage = (helpOutput: string): boolean =>
-  helpOutput.includes(BUN_LINT_USAGE);
+export const printsUsableBunLint = (helpOutput: string): boolean =>
+  helpOutput.includes(BUN_LINT_USAGE) && helpOutput.includes(NO_SCRIPT_FLAG);
 
 // `--linter <linter>  Linter to use (biome, bun, eslint, oxlint)`. Commander
 // may wrap a long description, so the values are split on any whitespace.
@@ -47,10 +50,8 @@ export interface BunOnPath {
 }
 
 /**
- * Check the Bun on PATH for `bun lint`. Runs in `cwd`, which should have no
- * package.json: an older Bun runs a package.json `lint` script of that name,
- * and so does a newer one unless npm_lifecycle_event says it's already in
- * that script, which is how the CLI starts it too.
+ * Check the Bun on PATH for a `bun lint` Ultracite can run. `--help` reaches
+ * the linter even where a package.json has a `lint` script.
  */
 export const findBunOnPath = (cwd: string): BunOnPath => {
   const revision = spawnSync("bun", ["--revision"], {
@@ -64,15 +65,14 @@ export const findBunOnPath = (cwd: string): BunOnPath => {
 
   const version = revision.stdout.trim();
 
-  const help = spawnSync("bun", ["lint", "--help"], {
+  const help = spawnSync("bun", ["lint", "--help", "--all"], {
     cwd,
     encoding: "utf-8",
-    env: { ...process.env, npm_lifecycle_event: "lint" },
   });
 
-  if (!printsBunLintUsage(`${help.stdout ?? ""}${help.stderr ?? ""}`)) {
+  if (!printsUsableBunLint(`${help.stdout ?? ""}${help.stderr ?? ""}`)) {
     return {
-      missing: `Bun ${version} on PATH has no \`bun lint\` (\`bun lint --help\` doesn't print "${BUN_LINT_USAGE}")`,
+      missing: `Bun ${version} on PATH has no \`bun lint ${NO_SCRIPT_FLAG}\` (\`bun lint --help --all\` doesn't list it)`,
       revision: version,
     };
   }

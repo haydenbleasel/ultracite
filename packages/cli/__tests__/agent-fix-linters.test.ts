@@ -397,7 +397,11 @@ describe("agent-fix linter adapters", () => {
     const mockSpawn = mock(
       (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
         if (args[1] === "--help") {
-          return { status: 0, stdout: "Usage: bun lint [flags]" };
+          return {
+            status: 0,
+            stdout:
+              "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+          };
         }
 
         return args[0] === "lint"
@@ -414,17 +418,13 @@ describe("agent-fix linter adapters", () => {
     );
 
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
-      ["bun", "lint", "--help"],
+      ["bun", "lint", "--help", "--all"],
       // The first fix pass reports, so a second follows, as with Oxlint.
-      ["bun", "lint", "--fix-dangerously", "src/bad.ts"],
-      ["bun", "lint", "--fix-dangerously", "src/bad.ts"],
-      ["bun", "fmt", "--write", "src/bad.ts"],
-      ["bun", "lint", "-f", "json", "src/bad.ts"],
+      ["bun", "lint", "--no-script", "--fix-dangerously", "src/bad.ts"],
+      ["bun", "lint", "--no-script", "--fix-dangerously", "src/bad.ts"],
+      ["bun", "fmt", "--no-script", "--write", "src/bad.ts"],
+      ["bun", "lint", "--no-script", "-f", "json", "src/bad.ts"],
     ]);
-
-    for (const [, args, opts] of mockSpawn.mock.calls) {
-      expect(opts.env).toEqual({ npm_lifecycle_event: args[0] });
-    }
 
     expect(diagnostics).toHaveLength(1);
     expect(diagnostics[0]).toMatchObject({
