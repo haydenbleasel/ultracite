@@ -11,8 +11,8 @@ import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
-// A Bun with `bun lint` prints its usage for `bun lint --help`; an older
-// one reports a missing "lint" script.
+// A Bun with `bun lint` prints its usage, `--no-script` among its flags, for
+// `bun lint --help --all`; an older one reports a missing "lint" script.
 const mockBunSpawn = (
   run: (args: string[]) => { status: number } = () => ({ status: 0 })
 ) => {
@@ -21,7 +21,11 @@ const mockBunSpawn = (
   const mockSpawn = mock(
     (_cmd: string, args: string[], _opts: SpawnSyncOptions) =>
       args[1] === "--help"
-        ? { status: 0, stdout: "Usage: bun lint [flags]" }
+        ? {
+            status: 0,
+            stdout:
+              "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+          }
         : run(args)
   );
 
@@ -784,17 +788,18 @@ describe("check", () => {
     check(["src/index.ts", "README.md"], ["--type-aware"]);
 
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
-      ["bun", "lint", "--help"],
+      ["bun", "lint", "--help", "--all"],
       [
         "bun",
         "fmt",
+        "--no-script",
         "--check",
         "--no-error-on-unmatched-pattern",
         "src/index.ts",
         "README.md",
       ],
       // Like Oxlint, bun lint fails on a file it doesn't lint.
-      ["bun", "lint", "--type-aware", "src/index.ts"],
+      ["bun", "lint", "--no-script", "--type-aware", "src/index.ts"],
     ]);
   });
 
@@ -806,28 +811,31 @@ describe("check", () => {
     check([], ["--changed=origin/dev", "--type-aware"]);
 
     expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
-      ["lint", "--help"],
+      ["lint", "--help", "--all"],
       [
         "fmt",
+        "--no-script",
         "--check",
         "--no-error-on-unmatched-pattern",
         "--changed=origin/dev",
         ".",
       ],
-      ["lint", "--changed=origin/dev", "--type-aware", "."],
+      ["lint", "--no-script", "--changed=origin/dev", "--type-aware", "."],
     ]);
   });
 
-  // `bun lint` runs a package.json "lint" script instead of linting, unless
-  // it's already inside one.
-  test("runs each Bun tool as if inside its own package.json script", () => {
+  // Without --no-script, `bun lint` runs a package.json "lint" script
+  // instead of linting.
+  test("runs Bun's own tools whatever scripts the project has", () => {
     const mockSpawn = mockBunSpawn();
 
     check();
 
-    for (const [, args, opts] of mockSpawn.mock.calls) {
-      expect(opts.env).toEqual({ npm_lifecycle_event: args[0] });
-    }
+    const [, ...toolCalls] = mockSpawn.mock.calls;
+    expect(toolCalls.map(([, args]) => args.slice(0, 2))).toEqual([
+      ["fmt", "--no-script"],
+      ["lint", "--no-script"],
+    ]);
   });
 
   test("bun check still runs bun lint when bun fmt reports issues", () => {
@@ -837,6 +845,23 @@ describe("check", () => {
 
     expect(() => check()).toThrow("bun fmt exited with code 1");
     expect(mockSpawn.mock.calls.at(-1)?.[1][0]).toBe("lint");
+  });
+
+  // spawnBun relies on --no-script, which came after bun lint itself.
+  test("fails with a setup error when Bun's bun lint has no --no-script", () => {
+    resetBunCapabilityCache();
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({
+        status: 0,
+        stdout: "Usage: bun lint [flags]\n      --threads <n>",
+      })),
+    }));
+    mock.module("../src/utils", () => ({
+      detectLinter: mock(() => "bun"),
+    }));
+
+    expect(() => check()).toThrow(UltraciteSetupError);
   });
 
   test("fails with a setup error when Bun has no bun lint", () => {

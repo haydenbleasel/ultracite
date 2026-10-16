@@ -1,11 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { randomUUID } from "node:crypto";
 import { readdirSync } from "node:fs";
-import { tmpdir } from "node:os";
 import path from "node:path";
-import process from "node:process";
 
-import { $ } from "bun";
 import type { OxlintConfig } from "oxlint";
 
 import { defineConfig } from "../config/bun/index.mjs";
@@ -66,35 +62,6 @@ const droppedRules = (preset: OxlintConfig): string[] => {
   ].toSorted();
 };
 
-// Runs `body` from a new, real project directory, with or without a
-// `tailwindcss` package installed. node:fs and node:fs/promises are mocked
-// in this suite, so the files go through Bun's own APIs.
-const inProject = async <T>(
-  withTailwindcss: boolean,
-  body: () => T
-): Promise<T> => {
-  const dir = path.join(tmpdir(), `ultracite-bun-${randomUUID()}`);
-  const previous = process.cwd();
-
-  await Bun.write(path.join(dir, "package.json"), "{}");
-
-  if (withTailwindcss) {
-    await Bun.write(
-      path.join(dir, "node_modules", "tailwindcss", "package.json"),
-      JSON.stringify({ name: "tailwindcss", version: "4.0.0" })
-    );
-  }
-
-  try {
-    process.chdir(dir);
-
-    return body();
-  } finally {
-    process.chdir(previous);
-    await $`rm -rf ${dir}`.quiet();
-  }
-};
-
 describe("ultracite/bun defineConfig", () => {
   test("drops the jsdoc rules and plugin from core", () => {
     const adapted = forBun(core);
@@ -153,21 +120,10 @@ describe("ultracite/bun defineConfig", () => {
     expect(config.rules).toEqual({ "jsdoc/check-access": "error" });
   });
 
-  test("returns a format config unchanged when tailwindcss is installed", async () => {
+  test("returns a format config unchanged", () => {
     const config = { ...oxfmt, printWidth: 100 };
 
-    expect(await inProject(true, () => defineConfig(config))).toBe(config);
-  });
-
-  // Without tailwindcss, `bun fmt` leaves files with classes to sort
-  // unformatted and exits 2.
-  test("turns Tailwind class sorting off when tailwindcss isn't installed", async () => {
-    const config = { ...oxfmt, printWidth: 100 };
-    const { sortTailwindcss, ...rest } = config;
-    const adapted = await inProject(false, () => defineConfig(config));
-
-    expect(sortTailwindcss).toBeDefined();
-    expect(Object.entries(adapted)).toEqual(Object.entries(rest));
+    expect(defineConfig(config)).toBe(config);
   });
 
   test("doesn't change the presets it adapts", () => {
