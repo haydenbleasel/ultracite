@@ -52,11 +52,22 @@ const mockProject = (files: Record<string, string>) => {
 const countMarkers = (script: string | undefined): number =>
   (script ?? "").split("\n").filter((line) => line === "# ultracite").length;
 
+// The environment without git's own variables. The repo's pre-commit hook
+// runs this suite, and in a linked worktree git hands hooks an absolute
+// GIT_DIR and GIT_INDEX_FILE. Inherited, they point every git command below
+// at this repository instead of the temp one: `git init` marks it bare,
+// `git config` writes the test identity and turns off commit signing in its
+// shared config, and the hook runs against its index.
+const cleanEnv = Object.fromEntries(
+  Object.entries(process.env).filter(([key]) => !key.startsWith("GIT_"))
+);
+
 // Runs a command for real (node:fs and spawn-sync are mocked in tests) and
 // returns its exit code and combined output.
 const run = (cwd: string, command: string[]) => {
   const result = Bun.spawnSync(command, {
     cwd,
+    env: cleanEnv,
     stderr: "pipe",
     stdout: "pipe",
   });
@@ -123,7 +134,7 @@ const createHookRepo = async (dir: string): Promise<void> => {
 const runHook = (dir: string, env: Record<string, string> = {}) => {
   const result = Bun.spawnSync(["sh", "-e", ".husky/pre-commit"], {
     cwd: dir,
-    env: { ...process.env, ...env },
+    env: { ...cleanEnv, ...env },
     stderr: "pipe",
     stdout: "pipe",
   });
