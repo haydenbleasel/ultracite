@@ -19,7 +19,7 @@
     "validate:configs": "bun ./scripts/validate-configs.ts",
     "benchmark": "bun ./benchmark/index.ts",
     "changeset": "changeset",
-    "changeset:version": "changeset version",
+    "changeset:version": "changeset version && bun install --lockfile-only",
     "changeset:publish": "turbo run build && changeset publish",
     "bump-deps": "npx npm-check-updates --deep -u -x \"oxfmt, oxlint, @biomejs/biome, *eslint*, *prettier*, *stylelint*\" && bun install",
     "bump-tools": "npx npm-check-updates --deep -u --filter \"oxfmt, oxlint, @biomejs/biome, *eslint*, *prettier*, *stylelint*\" && bun install",
