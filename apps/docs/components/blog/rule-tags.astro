@@ -1,5 +1,7 @@
 ---
-// The lint rules a post is about, by their config names.
+// The lint rules a post is about, by their config names. A long name (most
+// jsx-a11y rules) would wrap mid-word in a narrow column, so each tag stays on
+// one line and truncates at the column's width.
 interface Props {
   class?: string;
   rules: string[];
@@ -15,7 +17,7 @@ const { class: className, rules } = Astro.props;
       role="list"
     >
       {rules.map((rule) => (
-        <li class="rounded-sm bg-muted px-1.5 py-0.5 font-mono text-muted-foreground text-xs/5">
+        <li class="min-w-0 max-w-full truncate rounded-sm bg-muted px-1.5 py-0.5 font-mono text-muted-foreground text-xs/5">
           {rule}
         </li>
       ))}
