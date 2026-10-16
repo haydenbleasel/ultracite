@@ -12,7 +12,7 @@ Only the lint invocations are timed — all setup (installs, `init`, fixture cop
 
 `bun lint` and `bun fmt` ship with Bun itself, so the Bun project installs nothing but `ultracite`, and its runs use whichever `bun` is first on `PATH`. The harness prints that Bun's version, and skips the provider, with the reason in the output and the Step Summary, when:
 
-- the Bun on `PATH` has no linter (`bun lint --help` doesn't print `Usage: bun lint`), as in Bun 1.4.3 and earlier, which includes the Bun CI uses;
+- the Bun on `PATH` has no linter Ultracite can run (`bun lint --help --all` doesn't list `--no-script`), as in Bun 1.4.3 and earlier, which includes the Bun CI uses;
 - the build under test has no `--linter bun`, or in compare mode the base build doesn't, since there's nothing to compare against.
 
 To benchmark it locally on a Bun that's older than that, put a newer build first on `PATH` and run the harness with the Bun you have:
@@ -22,7 +22,7 @@ PATH="/path/to/newer-bun-dir:$PATH" BENCH_PROVIDERS=bun \
   /path/to/your/bun ./benchmark/index.ts --head packages/cli/ultracite-*.tgz
 ```
 
-`bun lint` slows down when a directory above the project holds tens of thousands of entries, as macOS's `$TMPDIR` often does. On Bun 1.4.4-canary.1, with only `import/default` turned on, 80 files under a parent holding 50,000 files took 0.33 s to lint, against 0.01 s under an empty parent; Oxlint wasn't affected ([oven-sh/bun#45407](https://github.com/oven-sh/bun/issues/45407)). Point `TMPDIR` at a near-empty directory when you compare Bun with the other providers.
+On macOS and Windows, `bun lint` still reads the listing of each directory above the project once ([oven-sh/bun#45482](https://github.com/oven-sh/bun/pull/45482)), so a `$TMPDIR` with tens of thousands of entries, as macOS's often has, adds a little to every Bun run. Point `TMPDIR` at a near-empty directory when you compare Bun with the other providers.
 
 ### The regression gate (CI)
 

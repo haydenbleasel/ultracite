@@ -13,23 +13,18 @@ export const BUN_CONFIG_MODULE = "ultracite/bun";
 
 type BunTool = "fmt" | "lint";
 
+// Without it, `bun lint` and `bun fmt` run the package.json script of the
+// same name when the project has one ("lint": "next lint").
+const NO_SCRIPT = "--no-script";
+
 /**
- * Run `bun lint` or `bun fmt`. Each runs the package.json script of the same
- * name instead, when the project has one ("lint": "next lint"), unless it's
- * already running inside that script. Bun tells that from
- * npm_lifecycle_event, so it's set to the tool's own name. That's
- * undocumented; https://github.com/oven-sh/bun/issues/45405 asks for a
- * supported way.
+ * Run Bun's own `bun lint` or `bun fmt`, whatever scripts the project has.
  */
 export const spawnBun = (
   tool: BunTool,
   args: string[],
   options: SpawnSyncOptions = {}
-): SpawnSyncResult =>
-  spawnSync("bun", [tool, ...args], {
-    ...options,
-    env: { ...options.env, npm_lifecycle_event: tool },
-  });
+): SpawnSyncResult => spawnSync("bun", [tool, NO_SCRIPT, ...args], options);
 
 /**
  * The flags in `passthrough` that pick files from Git: `--staged`, and
@@ -47,13 +42,19 @@ export const bunFileSelectionArgs = (passthrough: string[]): string[] =>
 const BUN_LINT_USAGE = "Usage: bun lint";
 
 /**
- * Whether the Bun on PATH has `bun lint` (and `bun fmt`, which shipped with
- * it). An older Bun reports `Script not found "lint"` instead of its usage.
+ * Whether the Bun on PATH has `bun lint` and `bun fmt`, with the
+ * `--no-script` flag spawnBun relies on. A Bun from before the linter
+ * reports `Script not found "lint"` instead of its usage, and the flag is
+ * only listed with `--all`. `--help` reaches the linter even when the
+ * project has a `lint` script, so this runs without spawnBun.
  */
-export const hasBunLint = (): boolean =>
-  spawnBun("lint", ["--help"], { stdio: "pipe" }).stdout?.startsWith(
-    BUN_LINT_USAGE
-  ) ?? false;
+export const hasBunLint = (): boolean => {
+  const help =
+    spawnSync("bun", ["lint", "--help", "--all"], { stdio: "pipe" }).stdout ??
+    "";
+
+  return help.startsWith(BUN_LINT_USAGE) && help.includes(NO_SCRIPT);
+};
 
 let bunCanLint: boolean | undefined;
 
