@@ -49,7 +49,8 @@
 // Ultracite's retry loop (added with the accessibility topic, opt-in). A topic that exports both
 // of these runs its single-file subjects the way packages/cli/src/agent-fix/index.ts runs one
 // file: up to MAX_AGENT_ATTEMPTS agent runs, retrying with buildRetryPrompt while the re-lint
-// still reports something (see runWithRetries in run-one.mjs and scripts/ultracite-adapters.cjs):
+// still reports something the agent didn't leave for review (see runWithRetries in run-one.mjs
+// and scripts/ultracite-adapters.cjs):
 //   collect(subject, runDir, { runId })
 //                                   runs the subject's linter adapter's fixAndCollect on the run
 //                                   dir (fix pass, formatter, lint, in place) and returns

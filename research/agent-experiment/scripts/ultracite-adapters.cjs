@@ -5,14 +5,15 @@
 //     report-only `oxlint -f json`; Biome's `biome check --write --reporter=json`, with each rule's
 //     help from `biome explain`. `fixAndCollect` runs on the whole project, `verify` on one file.
 //   - the parsers that turn each report into Ultracite's Diagnostic shape (linters.ts).
-//   - groupByFile, verifySafely, attemptFileFix's retry condition and fixFileGroup's tally and notes
-//     (index.ts), partitionByRemaining (diff.ts), and the agent timeout and kill grace
+//   - groupByFile, verifySafely, attemptFileFix's retry decision (toRetryIssues, and the issues
+//     the agent left for review) and fixFileGroup's tally and notes (index.ts),
+//     partitionByRemaining (diff.ts), and the agent timeout, kill grace and final message
 //     (run-agent.ts).
 //
 // The CLI's modules import its own dependencies (execa, clack) and can't run from the harness, so
 // the code is copied. Every copied slice of the CLI source is hashed, and `checkSources()` fails a
-// new run when one has changed. buildPrompt and buildRetryPrompt aren't copied: run-one.mjs imports
-// them from prompt.ts.
+// new run when one has changed. buildPrompt, buildRetryPrompt, retryIssueOrder and
+// parseLeftForReview aren't copied: run-one.mjs imports them from prompt.ts.
 //
 // The harness runs the linters from this repo with the configs a topic writes (the root config
 // `ultracite init` writes, passed with -c / --config-path), because the run directory has no
@@ -81,22 +82,22 @@ const SLICES = {
   "diff.ts": () => wholeFile("diff.ts"),
 };
 
-// The hashes of the slices above in the CLI source this mirror was written from (HEAD 367d9085,
-// after 40d646a4 "Hand agents fresher, better-described diagnostics").
+// The hashes of the slices above in the CLI source this mirror was written from (9f80955d
+// "Judge agent-fix retries by what the previous edit did"; the accessibility runs used 367d9085).
 const EXPECTED = {
   "linters.ts runPiped":
     "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
   "linters.ts oxlint":
-    "fe698aa5e07dc7c6bd77bb7327d1f52c60ded6ee112eab1851028d3dd4995f2d",
+    "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
   "linters.ts biome":
-    "8c55adac2bf579da5fb3b0486f6fcd1d0e909384988c0e4ec62abea7571aaa50",
+    "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
   "index.ts fixFileGroup":
-    "d90ea5c8b41d29612714ab1d515d8a97f08d39e1d9ac8a73e2f89f8c354e6a3a",
+    "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
   "index.ts MAX_AGENT_ATTEMPTS":
     "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
   "run-agent.ts":
-    "2bb0ba8d2bb36173a51d59944d48800f58b17d73d72fdcdd54edb3d59e616177",
-  "diff.ts": "3c6ce0e339024d72ae459696c9a956c5ecb625953046f3b8af2e3d86196a3140",
+    "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+  "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9",
 };
 
 /**
@@ -146,6 +147,7 @@ function contract() {
     maxAttempts: constantMs("index.ts", "MAX_AGENT_ATTEMPTS"),
     timeoutMs: constantMs("run-agent.ts", "AGENT_TIMEOUT_MS"),
     killGraceMs: constantMs("run-agent.ts", "KILL_GRACE_MS"),
+    outputCap: constantMs("run-agent.ts", "OUTPUT_CAP"),
   };
 }
 
@@ -209,8 +211,15 @@ const UNUSED_DIRECTIVE_RE = /^Unused (?:oxlint|eslint)-(?:disable|enable)/u;
 const isOxlintFatal = (diagnostic) =>
   !diagnostic.code && !UNUSED_DIRECTIVE_RE.test(diagnostic.message ?? "");
 
+// linters.ts stripOxlintNotice: with nothing to lint, Oxlint prints "No files found to lint…" on
+// stdout ahead of its JSON report.
+function stripOxlintNotice(stdout) {
+  const start = stdout.indexOf("{");
+  return start > 0 ? stdout.slice(start) : stdout;
+}
+
 function parseOxlintDiagnostics(stdout) {
-  const parsed = parseJsonOutput("oxlint", stdout);
+  const parsed = parseJsonOutput("oxlint", stripOxlintNotice(stdout));
   const diagnostics = [];
   for (const diagnostic of parsed.diagnostics ?? []) {
     if (!diagnostic.filename) {
@@ -261,8 +270,9 @@ function biomeDiagnosticFile(diagnostic) {
   }
   return diagnosticPath?.file ?? null;
 }
+// The group can contain digits: `lint/a11y/useAltText`.
 const BIOME_RULE_CATEGORY_RE =
-  /^(?<kind>lint|assist)\/[a-zA-Z]+\/(?<rule>[a-zA-Z]+)$/u;
+  /^(?<kind>lint|assist)\/[a-zA-Z0-9]+\/(?<rule>[a-zA-Z]+)$/u;
 const UPPERCASE_RE = /[A-Z]/gu;
 function parseBiomeRuleCategory(category) {
   const groups = BIOME_RULE_CATEGORY_RE.exec(category)?.groups;
@@ -326,10 +336,11 @@ function parseBiomeDiagnostics(stdout) {
   const diagnostics = [];
   for (const diagnostic of parsed.diagnostics ?? []) {
     const file = biomeDiagnosticFile(diagnostic);
-    if (!file) {
+    const category = diagnostic.category ?? "biome";
+    // An internal error (internalError/io for a file Biome can't write) isn't a lint issue.
+    if (!file || category.startsWith("internalError/")) {
       continue;
     }
-    const category = diagnostic.category ?? "biome";
     diagnostics.push({
       column: diagnostic.location?.start?.column ?? 1,
       fatal: category === "parse",
@@ -411,38 +422,91 @@ function verifySafely(verify, file, cwd) {
   }
 }
 
-/** index.ts attemptFileFix: whether Ultracite hands the file back for another attempt. */
-function shouldRetry({ remaining, timedOut, attempt, maxAttempts }) {
-  const canRetry = !timedOut && attempt < maxAttempts;
-  return remaining !== null && remaining.length > 0 && canRetry;
-}
-
 /** diff.ts: diagnostics are matched by rule and message only (spans shift with any edit). */
 const diagnosticKey = (diagnostic) =>
-  `${diagnostic.rule} ${diagnostic.message}`;
+  `${diagnostic.rule}\u0000${diagnostic.message}`;
+
+/**
+ * diff.ts partitionByRemaining: `cleared` and `still` are originals, `introduced` and
+ * `stillReported` are the fresh reports (with current line numbers).
+ */
 function partitionByRemaining(original, remaining) {
-  const counts = new Map();
-  for (const diagnostic of remaining) {
-    const key = diagnosticKey(diagnostic);
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
-  const cleared = [];
-  const still = [];
+  const unmatched = new Map();
   for (const diagnostic of original) {
     const key = diagnosticKey(diagnostic);
-    const count = counts.get(key) ?? 0;
-    if (count > 0) {
-      counts.set(key, count - 1);
-      still.push(diagnostic);
+    const group = unmatched.get(key);
+    if (group) {
+      group.push(diagnostic);
       continue;
     }
-    cleared.push(diagnostic);
+    unmatched.set(key, [diagnostic]);
   }
-  let introduced = 0;
-  for (const count of counts.values()) {
-    introduced += count;
+  const matched = new Set();
+  const introduced = [];
+  const stillReported = [];
+  for (const diagnostic of remaining) {
+    const match = unmatched.get(diagnosticKey(diagnostic))?.shift();
+    if (match) {
+      matched.add(match);
+      stillReported.push(diagnostic);
+      continue;
+    }
+    introduced.push(diagnostic);
   }
-  return { cleared, introduced, still };
+  return {
+    cleared: original.filter((diagnostic) => !matched.has(diagnostic)),
+    introduced,
+    still: original.filter((diagnostic) => matched.has(diagnostic)),
+    stillReported,
+  };
+}
+
+/**
+ * index.ts toRetryIssues: what's still reported against what the previous attempt was given. A
+ * file that no longer parses counts every diagnostic as still reported.
+ */
+function toRetryIssues(previous, remaining) {
+  if (remaining.some((diagnostic) => diagnostic.fatal)) {
+    return { introduced: [], still: remaining };
+  }
+  const { introduced, stillReported } = partitionByRemaining(
+    previous,
+    remaining
+  );
+  return { introduced, still: stillReported };
+}
+
+/**
+ * index.ts attemptFileFix: whether Ultracite hands the file back for another attempt, and with
+ * what. `issues` are the ones this attempt was given, `leftForReview` every attempt's
+ * parseLeftForReview result so far. Returns the next attempt's RetryIssues (number them with
+ * prompt.ts retryIssueOrder), or null for no retry: verification failed, the agent timed out, the
+ * attempt limit was reached, or nothing is reported but what the agent left for review.
+ */
+function nextRetry({
+  issues,
+  remaining,
+  leftForReview,
+  timedOut,
+  attempt,
+  maxAttempts,
+}) {
+  if (remaining === null || timedOut || attempt >= maxAttempts) {
+    return null;
+  }
+  const { introduced: unresolved } = partitionByRemaining(
+    leftForReview.flatMap((entry) => entry.issues),
+    remaining
+  );
+  if (unresolved.length === 0) {
+    return null;
+  }
+  return toRetryIssues(issues, unresolved);
+}
+
+/** run-agent.ts: the agent's final message is its stdout, trimmed, keeping the tail. */
+function agentOutput(stdout, outputCap) {
+  return stdout.trim().slice(-outputCap);
 }
 
 const MS_PER_MINUTE = 60_000;
@@ -455,12 +519,22 @@ function buildFailureNote(agentLabel, { stderr, timedOut }, timeoutMs) {
   return `${agentLabel} exited with an error${stderrTail ? `: ${stderrTail}` : "."}`;
 }
 
+/** index.ts describeLeftForReview: the line for one attempt's issues left for a person. */
+function describeLeftForReview(agentLabel, { explanation, issues }) {
+  const summary = `${agentLabel} left ${issues.length} issue${issues.length === 1 ? "" : "s"} for you to decide`;
+  return explanation ? `${summary}:\n${explanation}` : `${summary}.`;
+}
+
 /**
  * index.ts fixFileGroup for the first file of a run (nothing cleared earlier) and runAgentFix's
  * outro: what Ultracite prints for the file once the retry loop ends. `issues` are the diagnostics
  * handed over on the first attempt, `agentResult` the last attempt's ({ ok, stderr, timedOut }),
- * `verified` the last verifySafely result.
+ * `verified` the last verifySafely result, `leftForReview` every attempt's parseLeftForReview
+ * result ({ explanation, issues }; only the count of issues is read). `notes` ends with one entry
+ * per attempt that left issues for review; Ultracite prints the others on one line and each of
+ * those on lines of its own.
  */
+
 function fileOutcome({
   agentLabel,
   issues,
@@ -468,6 +542,7 @@ function fileOutcome({
   agentResult,
   verified,
   timeoutMs,
+  leftForReview = [],
 }) {
   const notes = [];
   if (!agentResult.ok) {
@@ -493,15 +568,19 @@ function fileOutcome({
       remaining = Math.max(issues.length, verified.remaining.length);
     } else {
       const partition = partitionByRemaining(issues, verified.remaining);
-      if (partition.introduced > 0) {
+      const introduced = partition.introduced.length;
+      if (introduced > 0) {
         notes.push(
-          `${partition.introduced} new issue${partition.introduced === 1 ? "" : "s"} reported after the fix.`
+          `${introduced} new issue${introduced === 1 ? "" : "s"} reported after the fix.`
         );
       }
       ({ cleared } = partition);
       fixed = cleared.length;
-      remaining = partition.still.length + partition.introduced;
+      remaining = partition.still.length + introduced;
     }
+  }
+  for (const entry of leftForReview) {
+    notes.push(describeLeftForReview(agentLabel, entry));
   }
   return {
     fixed,
@@ -517,6 +596,7 @@ const AGENT_LABELS = { claude: "Claude Code", codex: "Codex" };
 
 module.exports = {
   AGENT_LABELS,
+  agentOutput,
   biomeBin,
   biomePass,
   checkSources,
@@ -528,8 +608,8 @@ module.exports = {
   oxlintPass,
   parseBiomeDiagnostics,
   parseOxlintDiagnostics,
+  nextRetry,
   partitionByRemaining,
-  shouldRetry,
   toOxlintRuleName,
   verifySafely,
 };

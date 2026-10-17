@@ -27,9 +27,10 @@
 // `collect` and `verify` hooks, the run does what packages/cli/src/agent-fix/index.ts does for one
 // file. The run dir first gets Ultracite's fix pass and lint (`collect`), then the agent runs with
 // buildPrompt; after it, `verify` runs the linter's fix pass, the formatter and the lint on the file
-// in place, and while diagnostics remain and the agent didn't time out, the agent runs again with
-// buildRetryPrompt and those diagnostics, up to MAX_AGENT_ATTEMPTS, each attempt under Ultracite's
-// own timeout (see runWithRetries below). Topics without the hooks run as before, one attempt.
+// in place, and while diagnostics remain that the agent didn't leave for review and it didn't time
+// out, the agent runs again with buildRetryPrompt and those diagnostics, up to MAX_AGENT_ATTEMPTS,
+// each attempt under Ultracite's own timeout (see runWithRetries below). Topics without the hooks
+// run as before, one attempt.
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
@@ -339,9 +340,13 @@ async function runAgentProcess(
 
 // ---------------------------------------------------------------- main
 
-const { buildPrompt, buildRetryPrompt, writeDiagnosticsFile } = await import(
-  join(AGENT_FIX, "prompt.ts")
-);
+const {
+  buildPrompt,
+  buildRetryPrompt,
+  parseLeftForReview,
+  retryIssueOrder,
+  writeDiagnosticsFile,
+} = await import(join(AGENT_FIX, "prompt.ts"));
 const adapter = adapterFromSource(agent);
 
 mkdirSync(runDir, { recursive: true });
@@ -963,10 +968,13 @@ function fileDiff(fromPath, toPath, name) {
  *      subject must be the only file with diagnostics, with exactly the rules the topic expects.
  *   2. attemptFileFix: the diagnostics JSON is written (writeDiagnosticsFile, the same path every
  *      attempt) and the agent runs with buildPrompt on attempt 1 and buildRetryPrompt after, under
- *      Ultracite's agent timeout and kill grace. verifySafely then runs the topic's `verify` (the
- *      adapter's verify: fix pass, formatter and lint on the file, in place), even after a failed
- *      run, and keeps the file's own diagnostics. While any remain and the agent didn't time out,
- *      the next attempt gets them, up to MAX_AGENT_ATTEMPTS.
+ *      Ultracite's agent timeout and kill grace. parseLeftForReview reads the issues the agent
+ *      left for a person from its final message (stdout). verifySafely then runs the topic's
+ *      `verify` (the adapter's verify: fix pass, formatter and lint on the file, in place), even
+ *      after a failed run, and keeps the file's own diagnostics. While any remain that the agent
+ *      didn't leave for review and it didn't time out, the next attempt gets them, split into
+ *      those still reported and those new since the edit (ultracite-adapters.cjs nextRetry) and
+ *      numbered with retryIssueOrder, up to MAX_AGENT_ATTEMPTS.
  *   3. fixFileGroup's tally (what Ultracite prints) is computed by the topic's measure from the
  *      committed files (ultracite-adapters.cjs fileOutcome).
  *
@@ -1037,6 +1045,9 @@ async function runWithRetries() {
   const claimed = new Set();
   const harnessCwd = process.cwd();
   let issues = group.issues;
+  // The RetryIssues behind each retry's prompt, and what the agent left for review so far.
+  let retry = null;
+  let leftForReview = [];
   let jsonName = null;
   for (let attempt = 1; ; attempt++) {
     const attemptDir = join(stagingDir, `attempt${attempt}`);
@@ -1049,7 +1060,7 @@ async function runWithRetries() {
     const prompt =
       attempt === 1
         ? buildPrompt(group.file, issues, jsonPath)
-        : buildRetryPrompt(group.file, issues, jsonPath, attempt);
+        : buildRetryPrompt(group.file, retry, jsonPath, attempt);
     process.chdir(harnessCwd);
     jsonName = basename(jsonPath);
     writeFileSync(join(attemptDir, "prompt.txt"), prompt);
@@ -1140,18 +1151,38 @@ async function runWithRetries() {
       !outcome.timedOut &&
       !outcome.spawnError;
     const stderrText = readFileSync(join(attemptDir, "stderr.txt"), "utf8");
-    const retried = mirror.shouldRetry({
+    // runAgent's `output`: the agent's final message, which both CLIs print on stdout.
+    const output = mirror.agentOutput(
+      readFileSync(join(attemptDir, "stdout.txt"), "utf8"),
+      loop.outputCap
+    );
+    const left = parseLeftForReview(output, issues);
+    if (left) leftForReview = [...leftForReview, left];
+    const next = mirror.nextRetry({
+      issues,
       remaining: verified.remaining,
+      leftForReview,
       timedOut: outcome.timedOut,
       attempt,
       maxAttempts: loop.maxAttempts,
     });
+    const retried = next !== null;
+    const short = (d) => `${d.rule} L${d.line}`;
     attempts.push({
       attempt,
       prompt: attempt === 1 ? "buildPrompt" : "buildRetryPrompt",
       promptSha256: sha256(prompt),
       diagnosticsFile: jsonName,
-      issues: issues.map((d) => `${d.rule} L${d.line}`),
+      issues: issues.map(short),
+      // How this attempt's issues relate to the previous attempt's (null on the first).
+      retryIssues: retry && {
+        still: retry.still.map(short),
+        introduced: retry.introduced.map(short),
+      },
+      leftForReview: left && {
+        issues: left.issues.map(short),
+        explanation: left.explanation,
+      },
       startedAt: startedAt.toISOString(),
       wallMs,
       ...outcome,
@@ -1191,16 +1222,20 @@ async function runWithRetries() {
       `[${runId} attempt ${attempt}] exit=${outcome.exitCode} signal=${outcome.signal} timedOut=${outcome.timedOut} wall=${(wallMs / 1000).toFixed(1)}s transcript=${transcripts.length} remaining=${verified.remaining === null ? `error: ${verified.error}` : verified.remaining.map((d) => d.rule).join(", ") || "none"}${retried ? " -> retry" : ""}`
     );
     if (!retried) break;
-    issues = verified.remaining;
+    retry = next;
+    issues = retryIssueOrder(next);
   }
   const last = attempts.at(-1);
   let stoppedBecause = "no diagnostics left";
   if (last.verify.remaining === null)
     stoppedBecause = `verification failed: ${last.verify.error}`;
-  else if (last.verify.remaining.length > 0)
-    stoppedBecause = last.timedOut
-      ? "the agent timed out (no retry after a timeout)"
-      : "attempt limit";
+  else if (last.verify.remaining.length > 0) {
+    if (last.timedOut)
+      stoppedBecause = "the agent timed out (no retry after a timeout)";
+    else if (last.attempt < loop.maxAttempts)
+      stoppedBecause = "the agent left the rest for review";
+    else stoppedBecause = "attempt limit";
+  }
 
   // Copy the run into the repo. Text is redacted, as in every topic; the session logs, stdout and
   // stderr are copied as they are and gitignored.

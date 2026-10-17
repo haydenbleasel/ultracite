@@ -1743,7 +1743,7 @@ async function measure(runId) {
       p && {
         cleared: p.cleared.map((d) => shortRule(d.rule)),
         still: p.still.map((d) => shortRule(d.rule)),
-        introduced: p.introduced,
+        introduced: p.introduced.length,
       };
     attempts.push({
       attempt: a.attempt,
@@ -1803,6 +1803,10 @@ async function measure(runId) {
     },
     verified: lastVerify,
     timeoutMs: meta.retryLoop.timeoutMs,
+    // run-one.mjs records it per attempt; runs made before 9f80955d have none.
+    leftForReview: meta.attempts.flatMap((a) =>
+      a.leftForReview ? [a.leftForReview] : []
+    ),
   });
   const finalText = readIf(join(runDir, `after${ext}`));
   const sum = (f) => {

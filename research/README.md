@@ -543,6 +543,8 @@ The run dir also gets `tsconfig.json` and a `package.json` with React and what i
 
 The copied CLI code is in `scripts/ultracite-adapters.cjs`, hash-checked against the source. The self-test also runs Ultracite's real `linters.ts` adapters in a scratch project laid out as init leaves one, and compares them with the mirror: all 55 comparisons match.
 
+After this topic's runs, Ultracite changed how it retries (`9f80955d`). The retry prompt now separates issues that are still reported from issues that are new since the edit. An issue the agent lists on a `Left for review:` line in its final message isn't retried. The mirror and `runWithRetries` follow the change, and each attempt in `meta.json` records its `retryIssues` and `leftForReview`. This topic's committed runs predate the change and re-measure unchanged.
+
 Biome runs on a copy of the run dir with its config at the root. With `--config-path`, Biome looks for `package.json` next to the config, and `noUndeclaredDependencies` reports any `react` import.
 
 **Measurement.** Each attempt is measured twice: as the agent left the file and as verify left it. Each measurement covers:
