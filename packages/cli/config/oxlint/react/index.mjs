@@ -23,7 +23,17 @@ export default defineConfig({
     "jsx-a11y/iframe-has-title": "error",
     "jsx-a11y/img-redundant-alt": "error",
     "jsx-a11y/interactive-supports-focus": "error",
-    "jsx-a11y/label-has-associated-control": "error",
+    // Count the usual design-system components (shadcn/ui and similar) as
+    // labels and controls, and look one level deeper than the default 2, so a
+    // control wrapped in two elements inside its label is still found.
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        controlComponents: ["Input", "Select", "Textarea", "Checkbox", "Radio"],
+        depth: 3,
+        labelComponents: ["Label"],
+      },
+    ],
     "jsx-a11y/lang": "error",
     "jsx-a11y/media-has-caption": "error",
     "jsx-a11y/mouse-events-have-key-events": "error",

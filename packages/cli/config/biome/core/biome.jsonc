@@ -115,7 +115,21 @@
         "noDistractingElements": "error",
         "noHeaderScope": "error",
         "noInteractiveElementToNoninteractiveRole": "error",
-        "noLabelWithoutControl": "error",
+        // The same label and control components as the Oxlint and ESLint
+        // react presets. Biome has no depth limit to match.
+        "noLabelWithoutControl": {
+          "level": "error",
+          "options": {
+            "inputComponents": [
+              "Input",
+              "Select",
+              "Textarea",
+              "Checkbox",
+              "Radio"
+            ],
+            "labelComponents": ["Label"]
+          }
+        },
         "noNoninteractiveElementInteractions": "error",
         "noNoninteractiveElementToInteractiveRole": "error",
         "noNoninteractiveTabindex": "error",
