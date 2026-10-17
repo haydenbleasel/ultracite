@@ -33,7 +33,6 @@ apps/docs/                    Docs + marketing site (blume on Astro, deployed to
   blog/*.mdx                  Research posts (served at /research), each with a page in pages/research (see "Research posts" below)
   pages/                      Custom .astro routes: the homepage, landing pages, the research index and posts
   blume.config.ts             Site config, content sources, redirects under /docs/*
-packages/video/               Remotion release videos (private, not linted: vendored UI)
 packages/typescript-config/   Shared tsconfig bases (private)
 skills/ultracite/             Source of the agent skill; copied into packages/cli/skills on pack
 benchmark/                    PR-time performance regression gate for check/fix across all providers
@@ -204,5 +203,4 @@ The Research section at `/research` publishes long reads on the rules Ultracite 
 - `ultracite fix` on a project with no `.gitignore` used to rewrite `node_modules`. Any change to ignore handling needs a test proving `**/node_modules` survives.
 - `oxlint` does not merge `settings` from extended configs. Anything that needs `settings` (react-doctor) must be hoisted onto the root config; see `jsPluginSettings` in `config/oxlint/js-plugins`.
 - Biome's `extends` does not carry `files.includes` through a transitive chain when the consumer defines its own (#679), which is why the ignore list is inlined into `biome/core`.
-- `packages/video/src/components` and `lib/remocn-ui` are vendored registry components. Do not lint, format or refactor them.
 - `tmp/` at the root is a gitignored scratch project for trying the CLI by hand (`cd tmp && bun ../packages/cli/src/index.ts init ...`). Nothing in it is source.
