@@ -1,5 +1,0 @@
----
-"ultracite": patch
----
-
-Make `ultracite fix --claude` and `--codex` judge each retry by what the previous edit actually did. An issue that's still reported gets the old note asking for a structurally different approach, but one that only appeared after the edit is now handed back as new, with the agent told to build on the fix rather than undo it. Before, a correct ARIA button pattern that then tripped `prefer-tag-over-role`, or a correct `<button>` missing its `type`, was treated as a failed fix and thrown away. When an issue needs a person's decision, the agent now lists it at the end of its final message. Ultracite stops retrying it and shows the agent's explanation in the summary, where it used to be discarded. The handoff also gets three fixes. Biome's `a11y` rules now reach the agent with their help text and documentation link, which a pattern that didn't allow digits in a rule group had dropped. A path Oxlint has no files to lint, such as a Markdown file, no longer crashes the run. And Biome's internal errors, such as `internalError/io` for a file it can't write, are no longer handed to the agent as lint issues.
