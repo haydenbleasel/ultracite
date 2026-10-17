@@ -3,7 +3,11 @@ import path from "node:path";
 
 import { agentAdapters, assertAgentAvailable } from "../src/agent-fix/agents";
 import { partitionByRemaining } from "../src/agent-fix/diff";
-import { buildPrompt, buildRetryPrompt } from "../src/agent-fix/prompt";
+import {
+  buildPrompt,
+  buildRetryPrompt,
+  parseLeftForReview,
+} from "../src/agent-fix/prompt";
 import type { Diagnostic } from "../src/agent-fix/types";
 
 const diagnostic = (overrides: Partial<Diagnostic> = {}): Diagnostic => ({
@@ -44,12 +48,13 @@ describe("agent-fix prompt", () => {
     expect(prompt).toContain("Edit only the file above.");
     expect(prompt).toContain("Do not add suppression comments");
     expect(prompt).toContain("Fix the underlying problem");
+    expect(prompt).toContain("`Left for review: 2, 3`");
   });
 
   test("retry prompt calls out the failed previous attempt", () => {
     const prompt = buildRetryPrompt(
       "src/foo.ts",
-      [diagnostic()],
+      { introduced: [], still: [diagnostic()] },
       "/tmp/ultracite-x/foo.ts.json",
       2
     );
@@ -61,6 +66,89 @@ describe("agent-fix prompt", () => {
       "1. line 12, col 5 — eslint(no-unused-vars): 'result' is assigned a value but never used."
     );
     expect(prompt).toContain("Do not add suppression comments");
+  });
+
+  test("retry prompt builds on an edit that cleared its issues and tripped new ones", () => {
+    const prompt = buildRetryPrompt(
+      "src/foo.ts",
+      {
+        introduced: [
+          diagnostic({
+            message: "Use <button> instead of the button role.",
+            rule: "jsx-a11y/prefer-tag-over-role",
+          }),
+        ],
+        still: [],
+      },
+      "/tmp/ultracite-x/foo.ts.json",
+      2
+    );
+
+    expect(prompt).toContain("resolved the issues it was given");
+    expect(prompt).toContain("build on it rather than undoing it");
+    expect(prompt).not.toContain("did not resolve");
+    expect(prompt).not.toContain("structurally different approach");
+    expect(prompt).toContain(
+      "1. line 12, col 5 — jsx-a11y/prefer-tag-over-role: Use <button> instead of the button role."
+    );
+  });
+
+  test("retry prompt splits issues still reported from new ones and numbers them in order", () => {
+    const prompt = buildRetryPrompt(
+      "src/foo.ts",
+      {
+        introduced: [diagnostic({ message: "new", rule: "no-alert" })],
+        still: [diagnostic()],
+      },
+      "/tmp/ultracite-x/foo.ts.json",
+      3
+    );
+
+    expect(prompt).toContain("This is attempt 3");
+    expect(prompt).toContain(
+      "Still reported after the previous edit:\n1. line 12, col 5 — eslint(no-unused-vars)"
+    );
+    expect(prompt).toContain(
+      "New since the previous edit:\n2. line 12, col 5 — no-alert: new"
+    );
+    expect(prompt).toContain(
+      "For the issues still reported, the previous approach was insufficient."
+    );
+    expect(prompt).toContain("For the new issues, build on the previous edit");
+  });
+});
+
+describe("issues left for review", () => {
+  const issues = [
+    diagnostic(),
+    diagnostic({ message: "second", rule: "jsx-a11y/heading-has-content" }),
+    diagnostic({ message: "third", rule: "no-alert" }),
+  ];
+
+  test("finds the issues the agent's final message lists by number", () => {
+    const result = parseLeftForReview(
+      "I fixed the first issue.\n\nThe heading would end up inside the button.\n\nLeft for review: 2, 3",
+      issues
+    );
+
+    expect(result?.issues).toEqual([issues[1], issues[2]]);
+    expect(result?.explanation).toBe(
+      "I fixed the first issue.\n\nThe heading would end up inside the button."
+    );
+  });
+
+  test("ignores markdown around the label", () => {
+    const result = parseLeftForReview("**Left for review:** 2", issues);
+
+    expect(result?.issues).toEqual([issues[1]]);
+    expect(result?.explanation).toBe("");
+  });
+
+  test("returns null without the line or without a valid issue number", () => {
+    expect(parseLeftForReview("Fixed both issues.", issues)).toBeNull();
+    expect(parseLeftForReview("Left for review: none", issues)).toBeNull();
+    expect(parseLeftForReview("Left for review: 7", issues)).toBeNull();
+    expect(parseLeftForReview("", issues)).toBeNull();
   });
 });
 
@@ -141,7 +229,8 @@ describe("diagnostic diffing", () => {
 
     expect(result.cleared).toEqual([fixed]);
     expect(result.still).toEqual([kept]);
-    expect(result.introduced).toBe(0);
+    expect(result.stillReported).toEqual(remaining);
+    expect(result.introduced).toEqual([]);
   });
 
   test("counts duplicate diagnostics individually", () => {
@@ -150,19 +239,21 @@ describe("diagnostic diffing", () => {
 
     const result = partitionByRemaining([first, second], [diagnostic()]);
 
-    expect(result.still).toHaveLength(1);
-    expect(result.cleared).toHaveLength(1);
-    expect(result.introduced).toBe(0);
+    expect(result.still).toEqual([first]);
+    expect(result.cleared).toEqual([second]);
+    expect(result.introduced).toEqual([]);
   });
 
   test("reports diagnostics introduced by the fix", () => {
-    const result = partitionByRemaining(
-      [diagnostic()],
-      [diagnostic({ message: "brand new", rule: "eslint(no-eval)" })]
-    );
+    const brandNew = diagnostic({
+      message: "brand new",
+      rule: "eslint(no-eval)",
+    });
+
+    const result = partitionByRemaining([diagnostic()], [brandNew]);
 
     expect(result.cleared).toHaveLength(1);
     expect(result.still).toHaveLength(0);
-    expect(result.introduced).toBe(1);
+    expect(result.introduced).toEqual([brandNew]);
   });
 });

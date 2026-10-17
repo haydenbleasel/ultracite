@@ -80,6 +80,28 @@ describe("agent-fix renderer", () => {
     expect(output).not.toContain("\u001B[");
   });
 
+  test("non-TTY mode indents every line of a multi-line note", () => {
+    const sink = createSink();
+
+    const renderer = createRenderer(groups, {
+      agentLabel: "Claude Code",
+      isTTY: false,
+      out: sink,
+    });
+
+    renderer.startFile("src/foo.ts");
+    renderer.settleFile(
+      "src/foo.ts",
+      [{ fixed: false, issue: issue() }],
+      "Claude Code left 1 issue for you to decide:\nThe heading would end up inside the button."
+    );
+    renderer.stop();
+
+    expect(sink.output()).toContain(
+      "  Claude Code left 1 issue for you to decide:\n  The heading would end up inside the button.\n"
+    );
+  });
+
   test("TTY mode animates the active block and settles lines with icons", () => {
     const sink = createSink();
 

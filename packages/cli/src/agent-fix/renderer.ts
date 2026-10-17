@@ -199,8 +199,9 @@ export const createRenderer = (
         out.write(`  ${line}\n`);
       }
 
-      if (note) {
-        out.write(`  ${note}\n`);
+      // A note can span lines when it carries the agent's explanation.
+      for (const line of note?.split("\n") ?? []) {
+        out.write(`  ${line}\n`);
       }
 
       activeFile = null;

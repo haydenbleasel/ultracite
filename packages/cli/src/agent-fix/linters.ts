@@ -108,8 +108,20 @@ const UNUSED_DIRECTIVE_RE = /^Unused (?:oxlint|eslint)-(?:disable|enable)/u;
 const isOxlintFatal = (diagnostic: OxlintDiagnostic): boolean =>
   !diagnostic.code && !UNUSED_DIRECTIVE_RE.test(diagnostic.message ?? "");
 
+// With nothing to lint (a Markdown file, or one the config ignores), Oxlint
+// prints "No files found to lint…" on stdout ahead of its JSON report.
+const stripOxlintNotice = (stdout: string): string => {
+  const start = stdout.indexOf("{");
+
+  return start > 0 ? stdout.slice(start) : stdout;
+};
+
 const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
-  const parsed = parseJsonOutput<OxlintReport>("oxlint", stdout);
+  const parsed = parseJsonOutput<OxlintReport>(
+    "oxlint",
+    stripOxlintNotice(stdout)
+  );
+
   const diagnostics: Diagnostic[] = [];
 
   for (const diagnostic of parsed.diagnostics ?? []) {
@@ -200,8 +212,9 @@ interface BiomeReport {
   diagnostics?: BiomeDiagnostic[];
 }
 
+// The group can contain digits: `lint/a11y/useAltText`.
 const BIOME_RULE_CATEGORY_RE =
-  /^(?<kind>lint|assist)\/[a-zA-Z]+\/(?<rule>[a-zA-Z]+)$/u;
+  /^(?<kind>lint|assist)\/[a-zA-Z0-9]+\/(?<rule>[a-zA-Z]+)$/u;
 
 const UPPERCASE_RE = /[A-Z]/gu;
 
@@ -296,12 +309,13 @@ const parseBiomeDiagnostics = (stdout: string): Diagnostic[] => {
 
   for (const diagnostic of parsed.diagnostics ?? []) {
     const file = biomeDiagnosticFile(diagnostic);
+    const category = diagnostic.category ?? "biome";
 
-    if (!file) {
+    // An internal error, such as `internalError/io` for a file Biome can't
+    // write, names a file but isn't a lint issue an agent could fix.
+    if (!file || category.startsWith("internalError/")) {
       continue;
     }
-
-    const category = diagnostic.category ?? "biome";
 
     diagnostics.push({
       column: diagnostic.location?.start?.column ?? 1,

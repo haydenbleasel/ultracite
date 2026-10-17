@@ -10,10 +10,12 @@ export const AGENT_TIMEOUT_MS = 5 * 60 * 1000;
 // traps or ignores SIGTERM would otherwise hang the run forever.
 export const KILL_GRACE_MS = 10 * 1000;
 
-const STDERR_CAP = 8192;
+const OUTPUT_CAP = 8192;
 
 export interface AgentRunResult {
   ok: boolean;
+  /** The agent's final message, which both CLIs print on stdout. */
+  output: string;
   stderr: string;
   timedOut: boolean;
 }
@@ -45,9 +47,10 @@ export const runAgent = async (
     // closed so the agent never waits for more input.
     input: prompt,
     reject: false,
+    // execa reads both pipes as the agent writes to them, so neither can fill
+    // up and stall the child.
     stderr: "pipe",
-    // stdout must be discarded or the child stalls once the pipe buffer fills.
-    stdout: "ignore",
+    stdout: "pipe",
     timeout: timeoutMs,
   });
 
@@ -58,7 +61,9 @@ export const runAgent = async (
 
   return {
     ok: !result.failed,
-    stderr: stderrText.slice(-STDERR_CAP),
+    // Keep the tail: the line listing issues left for review ends the message.
+    output: result.stdout.trim().slice(-OUTPUT_CAP),
+    stderr: stderrText.slice(-OUTPUT_CAP),
     timedOut: result.timedOut === true,
   };
 };

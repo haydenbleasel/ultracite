@@ -874,10 +874,13 @@ const oxlintReport = (entries: [file: string, code: string][]): string =>
 
 const mockAgentEnvironment = ({
   agentOk = true,
+  agentOutputs = [],
   files = ["src/bad.ts"],
   oxlintOutputs,
 }: {
   agentOk?: boolean;
+  /** The agent's final message on each run; empty once these run out. */
+  agentOutputs?: string[];
   files?: string[];
   oxlintOutputs: string[];
 }) => {
@@ -903,7 +906,12 @@ const mockAgentEnvironment = ({
   });
 
   const mockRunAgent = mock((_adapter: AgentAdapter, _prompt: string) =>
-    Promise.resolve({ ok: agentOk, stderr: "", timedOut: false })
+    Promise.resolve({
+      ok: agentOk,
+      output: agentOutputs[mockRunAgent.mock.calls.length - 1] ?? "",
+      stderr: "",
+      timedOut: false,
+    })
   );
 
   mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
@@ -1065,6 +1073,102 @@ describe("fix with an agent", () => {
     expect(retryCall?.[1]).toContain("did not resolve");
   });
 
+  test("builds on a fix that cleared its issues and only tripped a new rule", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      oxlintOutputs: [
+        oxlintReport([
+          ["src/bad.ts", "jsx-a11y(click-events-have-key-events)"],
+        ]),
+        oxlintReport([["src/bad.ts", "jsx-a11y(prefer-tag-over-role)"]]),
+        '{"diagnostics":[]}',
+      ],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(2);
+    const retryPrompt = mockRunAgent.mock.calls[1]?.[1];
+    expect(retryPrompt).toContain("resolved the issues it was given");
+    expect(retryPrompt).toContain("jsx-a11y/prefer-tag-over-role");
+    expect(retryPrompt).not.toContain("click-events-have-key-events");
+    expect(retryPrompt).not.toContain("structurally different approach");
+  });
+
+  test("words a retry by which issues are still reported and which are new", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      oxlintOutputs: [
+        oxlintReport([
+          ["src/bad.ts", "eslint(no-eval)"],
+          ["src/bad.ts", "eslint(no-console)"],
+        ]),
+        oxlintReport([
+          ["src/bad.ts", "eslint(no-alert)"],
+          ["src/bad.ts", "eslint(no-eval)"],
+        ]),
+        '{"diagnostics":[]}',
+      ],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    const retryPrompt = mockRunAgent.mock.calls[1]?.[1];
+    expect(retryPrompt).toContain(
+      "Still reported after the previous edit:\n1. line 1, col 1 — no-eval"
+    );
+    expect(retryPrompt).toContain(
+      "New since the previous edit:\n2. line 1, col 1 — no-alert"
+    );
+    expect(retryPrompt).not.toContain("no-console");
+  });
+
+  test("doesn't retry an issue the agent left for a person and shows why", async () => {
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    const { mockRunAgent } = mockAgentEnvironment({
+      agentOutputs: [
+        "The caller's heading would end up inside the button.\n\nLeft for review: 1",
+      ],
+      oxlintOutputs: [oxlintDiagnostics, oxlintDiagnostics],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+
+    const output = write.mock.calls.map((call) => String(call[0])).join("");
+    expect(mockRunAgent).toHaveBeenCalledTimes(1);
+    expect(output).toContain("Claude Code left 1 issue for you to decide:");
+    expect(output).toContain(
+      "The caller's heading would end up inside the button."
+    );
+  });
+
+  test("retries only the issues the agent didn't leave for a person", async () => {
+    const { mockRunAgent } = mockAgentEnvironment({
+      agentOutputs: ["Left for review: 2"],
+      oxlintOutputs: [
+        oxlintReport([
+          ["src/bad.ts", "eslint(no-eval)"],
+          ["src/bad.ts", "eslint(no-alert)"],
+        ]),
+        oxlintReport([
+          ["src/bad.ts", "eslint(no-eval)"],
+          ["src/bad.ts", "eslint(no-alert)"],
+        ]),
+        oxlintReport([["src/bad.ts", "eslint(no-alert)"]]),
+      ],
+    });
+
+    await expect(fix([], [], { agent: "claude" })).rejects.toThrow(
+      "Oxlint exited with code 1"
+    );
+
+    expect(mockRunAgent).toHaveBeenCalledTimes(2);
+    const retryPrompt = mockRunAgent.mock.calls[1]?.[1];
+    expect(retryPrompt).toContain("no-eval");
+    expect(retryPrompt).not.toContain("no-alert");
+  });
+
   test("stops retrying after the attempt limit and reports failure", async () => {
     const { mockRunAgent } = mockAgentEnvironment({
       oxlintOutputs: [oxlintDiagnostics, oxlintDiagnostics],
@@ -1152,7 +1256,7 @@ describe("fix with an agent", () => {
     });
 
     const mockRunAgent = mock(() =>
-      Promise.resolve({ ok: true, stderr: "", timedOut: false })
+      Promise.resolve({ ok: true, output: "", stderr: "", timedOut: false })
     );
 
     mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));

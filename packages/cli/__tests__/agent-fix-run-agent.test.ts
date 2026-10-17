@@ -25,6 +25,7 @@ interface FakeExecaResult {
   failed: boolean;
   shortMessage?: string;
   stderr: string;
+  stdout: string;
   timedOut: boolean;
 }
 
@@ -44,7 +45,22 @@ describe("runAgent", () => {
   test("resolves ok on exit code 0", async () => {
     const result = await runAgent(scriptAdapter("process.exit(0)"), "prompt");
 
-    expect(result).toEqual({ ok: true, stderr: "", timedOut: false });
+    expect(result).toEqual({
+      ok: true,
+      output: "",
+      stderr: "",
+      timedOut: false,
+    });
+  });
+
+  test("captures the agent's final message from stdout", async () => {
+    const result = await runAgent(
+      scriptAdapter("console.log('Fixed it.\\nLeft for review: 2')"),
+      "prompt"
+    );
+
+    expect(result.ok).toBe(true);
+    expect(result.output).toBe("Fixed it.\nLeft for review: 2");
   });
 
   test("resolves not-ok with captured stderr on non-zero exit", async () => {
@@ -86,6 +102,7 @@ describe("runAgent", () => {
     const { execaFn, execaMock } = fakeExeca({
       failed: false,
       stderr: "",
+      stdout: "",
       timedOut: false,
     });
 
@@ -96,7 +113,12 @@ describe("runAgent", () => {
       timeoutMs: 5678,
     });
 
-    expect(result).toEqual({ ok: true, stderr: "", timedOut: false });
+    expect(result).toEqual({
+      ok: true,
+      output: "",
+      stderr: "",
+      timedOut: false,
+    });
 
     const [call] = execaMock.mock.calls;
     expect(call[0]).toBe("claude");
@@ -121,13 +143,19 @@ describe("runAgent", () => {
       prompt
     );
 
-    expect(result).toEqual({ ok: false, stderr: prompt, timedOut: false });
+    expect(result).toEqual({
+      ok: false,
+      output: "",
+      stderr: prompt,
+      timedOut: false,
+    });
   });
 
   test("caps captured stderr at the tail", async () => {
     const { execaFn } = fakeExeca({
       failed: true,
       stderr: `${"x".repeat(STDERR_CAP)}tail`,
+      stdout: "",
       timedOut: false,
     });
 
@@ -143,6 +171,7 @@ describe("runAgent", () => {
       failed: true,
       shortMessage: "Command failed with ENOENT: claude",
       stderr: "",
+      stdout: "",
       timedOut: false,
     });
 
@@ -150,6 +179,7 @@ describe("runAgent", () => {
 
     expect(result).toEqual({
       ok: false,
+      output: "",
       stderr: "Command failed with ENOENT: claude",
       timedOut: false,
     });

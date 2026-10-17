@@ -222,6 +222,24 @@ describe("agent-fix linter adapters", () => {
     );
   });
 
+  test("oxlint adapter reports no issues for a path it has no files to lint", () => {
+    // A Markdown file, or one the config ignores, gets a notice ahead of the JSON.
+    const mockSpawn = mock((cmd: string) => ({
+      status: 1,
+      stdout:
+        cmd === "oxlint"
+          ? 'No files found to lint. Please check your paths and ignore patterns.\n{ "diagnostics": [],\n  "number_of_files": 0 }\n'
+          : "",
+    }));
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    expect(getLinterAdapter("oxlint").fixAndCollect(["notes.md"], [])).toEqual(
+      []
+    );
+    expect(getLinterAdapter("oxlint").verify("notes.md", [])).toEqual([]);
+  });
+
   test("biome adapter runs check --write with the JSON reporter and parses diagnostics", () => {
     const mockSpawn = mock((_cmd: string, args: string[]) =>
       args[0] === "explain"
@@ -295,6 +313,75 @@ describe("agent-fix linter adapters", () => {
       url: "https://biomejs.dev/linter/rules/no-unknown-rule-for-test",
     });
     expect(lint.help).toBeUndefined();
+  });
+
+  test("biome adapter explains a11y rules and links their docs", () => {
+    const stdout = JSON.stringify({
+      diagnostics: [
+        {
+          category: "lint/a11y/useKeyWithClickEvents",
+          location: { path: "src/card.tsx", start: { column: 3, line: 7 } },
+          message:
+            "Enforce to have the onClick mouse event with the onKeyUp, the onKeyDown, or the onKeyPress keyboard event.",
+          severity: "error",
+        },
+      ],
+    });
+
+    const mockSpawn = mock((_cmd: string, args: string[]) =>
+      args[0] === "explain"
+        ? {
+            status: 0,
+            stdout:
+              "Summary\n\nDescription\n\n Enforce elements with a click event handler to also have at least one keyboard event handler.\n\nExamples\n",
+          }
+        : { status: 1, stdout }
+    );
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const [diagnostic] = getLinterAdapter("biome").fixAndCollect([], []);
+
+    expect(mockSpawn.mock.calls.at(-1)?.[1]).toEqual([
+      "explain",
+      "useKeyWithClickEvents",
+    ]);
+    expect(diagnostic).toMatchObject({
+      help: "Enforce elements with a click event handler to also have at least one keyboard event handler.",
+      rule: "lint/a11y/useKeyWithClickEvents",
+      url: "https://biomejs.dev/linter/rules/use-key-with-click-events",
+    });
+  });
+
+  test("biome adapter leaves internal errors out of the handoff", () => {
+    const stdout = JSON.stringify({
+      diagnostics: [
+        {
+          category: "internalError/io",
+          location: { path: "src/read-only.ts" },
+          message: "Permission denied (os error 13)",
+          severity: "error",
+        },
+        {
+          category: "lint/suspicious/noDebugger",
+          location: { path: "src/a.ts" },
+          message: "This is an unexpected use of the debugger statement.",
+          severity: "error",
+        },
+      ],
+    });
+
+    const mockSpawn = mock((_cmd: string, args: string[]) =>
+      args[0] === "explain" ? { status: 1, stdout: "" } : { status: 1, stdout }
+    );
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const diagnostics = getLinterAdapter("biome").fixAndCollect([], []);
+
+    expect(diagnostics.map(({ file, rule }) => ({ file, rule }))).toEqual([
+      { file: "src/a.ts", rule: "lint/suspicious/noDebugger" },
+    ]);
   });
 
   test("biome adapter reads path from an object location shape", () => {

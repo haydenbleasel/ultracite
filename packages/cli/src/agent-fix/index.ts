@@ -10,7 +10,14 @@ import type { Linter } from "../utils";
 import { agentAdapters, assertAgentAvailable } from "./agents";
 import { partitionByRemaining } from "./diff";
 import { getLinterAdapter } from "./linters";
-import { buildPrompt, buildRetryPrompt, writeDiagnosticsFile } from "./prompt";
+import {
+  buildPrompt,
+  buildRetryPrompt,
+  parseLeftForReview,
+  retryIssueOrder,
+  writeDiagnosticsFile,
+} from "./prompt";
+import type { LeftForReview, RetryIssues } from "./prompt";
 import { createRenderer } from "./renderer";
 import type { FileGroup } from "./renderer";
 import { AGENT_TIMEOUT_MS, runAgent } from "./run-agent";
@@ -100,44 +107,110 @@ interface FileFixContext {
 interface FileFixAttemptResult {
   agentResult: Awaited<ReturnType<typeof runAgent>>;
   attempts: number;
+  /** What the agent left for a person, one entry per attempt that left any. */
+  leftForReview: LeftForReview[];
   verified: ReturnType<typeof verifySafely>;
 }
 
+interface AttemptInput {
+  attempt: number;
+  /** The issues handed to the agent, in the order the prompt numbers them. */
+  issues: Diagnostic[];
+  leftForReview: LeftForReview[];
+  /** How the issues relate to the previous attempt's; absent on the first. */
+  retry?: RetryIssues;
+}
+
+/**
+ * Splits what's still reported against what the previous attempt was given,
+ * for the retry prompt. A file that no longer parses runs no rules, so its
+ * issues vanish without being fixed: every diagnostic then counts as still
+ * reported, rather than as new problems after a successful edit.
+ */
+const toRetryIssues = (
+  previous: Diagnostic[],
+  remaining: Diagnostic[]
+): RetryIssues => {
+  if (remaining.some((diagnostic) => diagnostic.fatal)) {
+    return { introduced: [], still: remaining };
+  }
+
+  const { introduced, stillReported } = partitionByRemaining(
+    previous,
+    remaining
+  );
+
+  return { introduced, still: stillReported };
+};
+
 /**
  * Runs the agent, re-lints, and — when diagnostics survive — retries with a
- * prompt that carries the file's fresh diagnostics and calls out that the
- * previous approach failed. This is what stops a plausible-but-superficial
- * edit (e.g. re-spelling an escape sequence) from ending the run.
+ * prompt that carries the file's fresh diagnostics and says what the previous
+ * edit did. An issue that's still reported calls for a different approach,
+ * which is what stops a plausible-but-superficial edit (e.g. re-spelling an
+ * escape sequence) from ending the run. A new one calls for finishing the fix.
+ * An issue the agent left for a person isn't retried.
  */
 const attemptFileFix = async (
   context: FileFixContext,
   group: FileGroup,
-  issues: Diagnostic[],
-  attempt: number
+  input: AttemptInput
 ): Promise<FileFixAttemptResult> => {
   const { agentAdapter, linterAdapter, passthrough, tempDir } = context;
+  const { attempt, issues, retry } = input;
 
   const jsonPath = writeDiagnosticsFile(tempDir, group.file, issues);
 
-  const prompt =
-    attempt === 1
-      ? buildPrompt(group.file, issues, jsonPath)
-      : buildRetryPrompt(group.file, issues, jsonPath, attempt);
+  const prompt = retry
+    ? buildRetryPrompt(group.file, retry, jsonPath, attempt)
+    : buildPrompt(group.file, issues, jsonPath);
 
   const agentResult = await runAgent(agentAdapter, prompt);
+  const left = parseLeftForReview(agentResult.output, issues);
+
+  const leftForReview = left
+    ? [...input.leftForReview, left]
+    : input.leftForReview;
 
   // Verify even after an agent failure — a timed-out agent may still have
   // fixed some issues, and the re-lint is what the icons must reflect.
   const verified = verifySafely(linterAdapter, group.file, passthrough);
+  const result = { agentResult, attempts: attempt, leftForReview, verified };
 
-  const { remaining } = verified;
-  const canRetry = !agentResult.timedOut && attempt < MAX_AGENT_ATTEMPTS;
-
-  if (remaining !== null && remaining.length > 0 && canRetry) {
-    return attemptFileFix(context, group, remaining, attempt + 1);
+  if (
+    verified.remaining === null ||
+    agentResult.timedOut ||
+    attempt >= MAX_AGENT_ATTEMPTS
+  ) {
+    return result;
   }
 
-  return { agentResult, attempts: attempt, verified };
+  const { introduced: unresolved } = partitionByRemaining(
+    leftForReview.flatMap((entry) => entry.issues),
+    verified.remaining
+  );
+
+  if (unresolved.length === 0) {
+    return result;
+  }
+
+  const nextRetry = toRetryIssues(issues, unresolved);
+
+  return attemptFileFix(context, group, {
+    attempt: attempt + 1,
+    issues: retryIssueOrder(nextRetry),
+    leftForReview,
+    retry: nextRetry,
+  });
+};
+
+const describeLeftForReview = (
+  agentLabel: string,
+  { explanation, issues }: LeftForReview
+): string => {
+  const summary = `${agentLabel} left ${issues.length} issue${issues.length === 1 ? "" : "s"} for you to decide`;
+
+  return explanation ? `${summary}:\n${explanation}` : `${summary}.`;
 };
 
 interface FileFixInput {
@@ -158,12 +231,12 @@ const fixFileGroup = async (
 
   renderer.startFile(group.file);
 
-  const { agentResult, attempts, verified } = await attemptFileFix(
-    context,
-    group,
-    issues,
-    1
-  );
+  const { agentResult, attempts, leftForReview, verified } =
+    await attemptFileFix(context, group, {
+      attempt: 1,
+      issues,
+      leftForReview: [],
+    });
 
   const notes: string[] = [];
 
@@ -181,15 +254,26 @@ const fixFileGroup = async (
     notes.push(`Took ${attempts} attempts.`);
   }
 
-  const settle = (fixed: (issue: Diagnostic) => boolean): void =>
+  const settle = (fixed: (issue: Diagnostic) => boolean): void => {
+    // The agent's explanations go on lines of their own, after the notes.
+    const note = [
+      notes.join(" "),
+      ...leftForReview.map((entry) =>
+        describeLeftForReview(context.agentAdapter.label, entry)
+      ),
+    ]
+      .filter((part) => part.length > 0)
+      .join("\n");
+
     renderer.settleFile(
       group.file,
       [
         ...clearedEarlier.map((issue) => ({ fixed: true, issue })),
         ...issues.map((issue) => ({ fixed: fixed(issue), issue })),
       ],
-      notes.length > 0 ? notes.join(" ") : undefined
+      note || undefined
     );
+  };
 
   if (verified.remaining === null) {
     notes.push(`Verification failed: ${verified.error}`);
@@ -219,9 +303,9 @@ const fixFileGroup = async (
     verified.remaining
   );
 
-  if (introduced > 0) {
+  if (introduced.length > 0) {
     notes.push(
-      `${introduced} new issue${introduced === 1 ? "" : "s"} reported after the fix.`
+      `${introduced.length} new issue${introduced.length === 1 ? "" : "s"} reported after the fix.`
     );
   }
 
@@ -229,7 +313,7 @@ const fixFileGroup = async (
 
   return {
     fixed: clearedEarlier.length + cleared.length,
-    remaining: still.length + introduced,
+    remaining: still.length + introduced.length,
   };
 };
 
