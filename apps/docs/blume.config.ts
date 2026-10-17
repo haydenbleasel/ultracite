@@ -67,6 +67,9 @@ export default defineConfig({
       // (each release is a type:changelog entry). Set GITHUB_TOKEN in CI to
       // avoid rate limits; a failed fetch degrades to an empty changelog.
       githubReleases({
+        // Every release, not Blume's default of the newest 100, which drops
+        // the oldest release's page each time a new one is published.
+        limit: 1000,
         owner: "haydenbleasel",
         prefix: "changelog",
         repo: "ultracite",
@@ -178,6 +181,7 @@ export default defineConfig({
   redirects: [
     { from: "/sponsors", to: "/" },
     // Old root URLs → /docs/*
+    { from: "/install", to: "/docs/setup" },
     { from: "/setup", to: "/docs/setup" },
     { from: "/usage", to: "/docs/usage" },
     { from: "/configuration", to: "/docs/configuration" },
@@ -223,10 +227,15 @@ export default defineConfig({
     { from: "/docs/skills", to: "/docs/ai/skills" },
     { from: "/docs/hooks", to: "/docs/ai/hooks" },
     // Agents renamed in v8; their pages follow the new init ids.
+    { from: "/agents/amazon-q-cli", to: "/agents/kiro-cli" },
     { from: "/agents/kimi-cli", to: "/agents/kimi-code" },
+    { from: "/agents/mux", to: "/agents/xum" },
     { from: "/agents/snowflake-cortex", to: "/agents/snowflake-coco" },
     // Windsurf became Devin Desktop; the old editor page used its old id.
     { from: "/editors/windsurf", to: "/editors/devin" },
+    // Release notes from the old site that search engines still request
+    { from: "/updates/5.6.2", to: "/changelog/ultracite-5-6-2" },
+    { from: "/updates/7.7.0", to: "/changelog/ultracite-7-7-0" },
     // Retired MCP server pages
     { from: "/mcp", to: "/" },
     { from: "/mcp-server", to: "/" },
@@ -265,7 +274,7 @@ export default defineConfig({
     },
     software: {
       license: "https://opensource.org/license/mit",
-      operatingSystem: "Node.js 20.19+",
+      operatingSystem: "Node.js 22.18+",
       price: 0,
       sameAs: [
         "https://www.npmjs.com/package/ultracite",
