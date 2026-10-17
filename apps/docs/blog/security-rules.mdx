@@ -3,6 +3,14 @@ title: Security lint rules find the sink, not the bug
 description: Where the rules against eval and innerHTML came from, what they see in real code, how few published vulnerabilities they would have caught, and why they still matter when agents write the code.
 date: 2026-10-10
 author: hayden
+next:
+  - label: Lint each agent edit as it happens
+    href: /docs/ai/hooks
+  - label: Check every commit with a git hook
+    href: /docs/git-hooks
+results:
+  - corpus
+  - agent-experiment
 rules:
   - no-eval
   - no-implied-eval
@@ -178,6 +186,8 @@ No run used the evasions from our test cases: no `Function.prototype.constructor
 **Review what an agent changes to fix a security error.** Look for the evasions above, a different sink in place of the flagged one, and suppressions without a reason.
 
 Security lint rules don't find vulnerabilities. In our corpus they flagged 94 sinks to find one worth reviewing, and they would have caught 2 of 226 published advisories. What they do is narrower: they make sure every place a string becomes code or markup was put there on purpose. That job matters more when agents write the code, because agents reach for the sinks, and because the rule's wording decides what an agent does next. A rule that points to a safer API gets the safer API. A rule that asks for a judgment gets a rewrite, a refusal, or the same operation under another name. Keep them on as guardrails, give every exception a reason, and don't mistake a clean run for a security review. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+<NextSteps />
 
 ## References
 

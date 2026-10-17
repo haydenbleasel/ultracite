@@ -3,6 +3,14 @@ title: Cognitive complexity and the cost of reading code
 description: Where the metric came from, how it scores a function, what the research says it does and doesn't measure, and why it matters more when agents write the code.
 date: 2026-10-10
 author: hayden
+next:
+  - label: Set the limit for your linter
+    href: /docs/configuration#overriding-rules
+  - label: "Hand what autofix can’t fix to an agent"
+    href: /docs/usage#ai-powered-fixing
+results:
+  - corpus
+  - agent-experiment
 rules:
   - sonarjs/cognitive-complexity
   - noExcessiveCognitiveComplexity
@@ -206,6 +214,8 @@ Each agent found the cheapest change that made the error go away. When the cheap
 **Review the names when an agent fixes it.** The diff that clears the error is usually an extraction. Check that every new function has a name you'd have chosen, and a reason to exist on its own.
 
 Cognitive complexity is a rough measure of something real. It can't tell you whether code is good. It can tell you, on every edit, that a function has grown past the point most readers can hold in their heads. When the code is written by an agent that doesn't notice that on its own, that's worth knowing. Ultracite turns it on in its presets, and the [configuration docs](/docs/configuration#overriding-rules) show how to change its settings for your linter.
+
+<NextSteps />
 
 ## References
 

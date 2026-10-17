@@ -3,6 +3,13 @@ title: Why TypeScript lets you overrule its type checker
 description: Where any, !, as and @ts-ignore came from, what the rules that ban them can and can't see, how real codebases use them, and what changes when an agent is trying to make a type error go away.
 date: 2026-10-10
 author: hayden
+next:
+  - label: Turn on type-aware linting
+    href: /docs/usage#type-aware-linting
+  - label: Lint each agent edit as it happens
+    href: /docs/ai/hooks
+results:
+  - corpus
 rules:
   - no-explicit-any
   - no-non-null-assertion
@@ -174,6 +181,8 @@ The escape-hatch rules are what turn the cheap exits into errors. When Ultracite
 **Review what an agent changes to fix a type error.** Look for new `as`, `as unknown as`, `!` swapped for `?.`, `field!:` and `@ts-expect-error`. Each one makes the error go away, and only some of them fix it.
 
 Escape hatches are part of what made TypeScript practical, and the people who designed it said so. They also said the holes should be managed, and suggested that tools could help. The rules in this post are those tools. They can't tell a careful `any` from a careless one, but they make every one of them visible, and that matters more when the code is written by something that's trying to make the error go away.
+
+<NextSteps />
 
 ## References
 

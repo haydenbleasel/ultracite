@@ -3,6 +3,14 @@ title: The import cycle that works until it doesn't
 description: Where the rule against circular imports came from, what a cycle actually does to JavaScript, how many real cycles can break, what barrel files cost, and what agents do when the fix needs a file they're told not to touch.
 date: 2026-10-13
 author: hayden
+next:
+  - label: Why a fix can clear a type-only cycle
+    href: /docs/faq#q-why-does-an-import-cycle-go-away-after-ultracite-fix
+  - label: Compare Oxlint, Biome and ESLint
+    href: /providers
+results:
+  - corpus
+  - agent-experiment
 rules:
   - import/no-cycle
   - noImportCycles
@@ -193,6 +201,8 @@ A tool that re-lints only the file it handed over sees the barrel rule cleared. 
 **Treat a new dynamic import as a question.** It breaks the static cycle, and sometimes that's right, but it often just hides one.
 
 Import cycles and barrels are the rare lint findings that live between files, and that's where they're hard to fix. A cycle is a fact about two modules. A barrel's cost is paid by whoever imports it. The rules are good at finding both: they caught every historical cycle that ran through real files, and the static count of what a barrel drags in is real. What they can't do is tell a harmless cycle from a dangerous one, or a public entry point from a convenience index, and their fixes often belong somewhere other than the file they point at. Keep them on, read the path they print, and when the fix needs another file, let it have one. An agent told to stay in one file will, and on a barrel the only thing left for it to change is the name. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+<NextSteps />
 
 ## References
 

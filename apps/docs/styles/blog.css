@@ -12,3 +12,22 @@
   font-size: 1.0625rem;
   line-height: 1.75;
 }
+
+/* The next steps above a post's references (components/blog/next-steps.astro).
+   Blume's prose rules for links and paragraph and list margins are unlayered
+   too, so Tailwind's utilities can't undo them on the block's own elements;
+   these can. */
+.prose .blog-next :where(p, ul) {
+  margin: 0;
+}
+
+.prose .blog-next a {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.prose .blog-next a:hover {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}

@@ -3,6 +3,14 @@ title: How much of accessibility a linter can see
 description: Where the rules for alt text, labels, roles and keyboard handlers came from, what automated checks can and can't find, what they catch in seven React codebases and their history, and what agents do with a clickable div.
 date: 2026-10-16
 author: hayden
+next:
+  - label: Pick the preset for your framework
+    href: /docs/configuration#framework-presets
+  - label: Add your own instructions to AGENTS.md
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
 rules:
   - jsx-a11y/click-events-have-key-events
   - jsx-a11y/no-static-element-interactions
@@ -261,6 +269,8 @@ Automatic fixes can make things worse. One linter's unsafe fix adds `tabIndex={0
 **Tell agents what you expect, and read what they say.** In our runs, one line in `AGENTS.md` changed the first edit, and in Microsoft's eval, instructions raised the pass rate from 12% to 60%. The warnings about the heading were in the agents' final messages, not in the diff.
 
 Accessibility lint rules are good at the mistakes that show up in markup: a clickable `<div>`, an image with no `alt`, a button with no text. Those are among the most common failures on the web, and none of our agents reached for a trick to silence them. What the rules can't do is judge what a name says or what a key handler does, see inside components, or see anything that happens at runtime, and that's most of accessibility. On the swatches, the agents satisfied the rule and left the barrier exactly where it was. Keep the rules on, treat a clean run as the start of testing rather than the end, and when a rule suggests a role, try the element first. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+<NextSteps />
 
 ## References
 

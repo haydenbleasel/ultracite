@@ -1,7 +1,8 @@
 // Blume's content components, which a post's body needs for code fences,
 // `:::` callouts and the rest: pages/blog/<slug>.astro passes this map to the
 // post's <Content />. A post that uses one missing here fails the build with
-// "Expected component X to be defined"; import it and add it.
+// "Expected component X to be defined"; import it and add it. NextSteps is
+// ours: the block every post ends with, above its references.
 import Badge from "blume/components/content/Badge.astro";
 import Callout from "blume/components/content/Callout.astro";
 import Card from "blume/components/content/Card.astro";
@@ -17,6 +18,8 @@ import Tab from "blume/components/content/Tab.astro";
 import Tabs from "blume/components/content/Tabs.astro";
 import Tooltip from "blume/components/content/Tooltip.astro";
 
+import NextSteps from "./next-steps.astro";
+
 export const components = {
   Badge,
   Callout,
@@ -27,6 +30,7 @@ export const components = {
   Diff,
   FileTree,
   Frame,
+  NextSteps,
   Step,
   Steps,
   Tab,

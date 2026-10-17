@@ -3,6 +3,14 @@ title: What happens to a promise nobody awaits
 description: Why a floating promise loses its errors, where the rules that catch it came from, what they can and can't see, how often real codebases float promises and why, and what agents do when the linter flags one.
 date: 2026-10-10
 author: hayden
+next:
+  - label: Turn on type-aware linting
+    href: /docs/usage#type-aware-linting
+  - label: "Hand what autofix can’t fix to an agent"
+    href: /docs/usage#ai-powered-fixing
+results:
+  - corpus
+  - agent-experiment
 rules:
   - no-floating-promises
   - no-misused-promises
@@ -154,6 +162,8 @@ That's as much a finding about the instructions agents get as about the agents. 
 **Review what an agent changes to fix one.** Look for new `void`s, empty `.catch` handlers, and types widened to `unknown` or `any`. Each makes the error go away, and only some of them fix it.
 
 A floating promise is a small mistake with a long reach: the error happens later, somewhere else, or nowhere at all. The rules that catch it are among the few lint rules that find real bugs, and in real code about a third of what they flag can lose something. But they accept a one-word answer that fixes nothing, and agents, like people in a hurry, take it. Turn the rules on, give them types to work with, and treat every new `void` as a question that needs an answer. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+<NextSteps />
 
 ## References
 

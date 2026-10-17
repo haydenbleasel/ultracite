@@ -3,6 +3,14 @@ title: Is dead code worth an error?
 description: Where the checks for unused, unreachable and duplicated code came from, what they find in real codebases, why the rare bug looks exactly like a leftover, and what agents do when the linter flags one.
 date: 2026-10-12
 author: hayden
+next:
+  - label: Find unused exports and files
+    href: /docs/faq#q-does-ultracite-find-unused-exports-or-files
+  - label: Set the underscore convention for your linter
+    href: /docs/configuration#overriding-rules
+results:
+  - corpus
+  - agent-experiment
 rules:
   - no-unused-vars
   - noUnusedVariables
@@ -189,6 +197,8 @@ The rename the message suggests did happen, just not by an agent. Linters' own a
 **Read what an agent says, not just what it changes.** When an agent deletes dead code, check whether the value should have been used, and read its explanation: in our experiment, most of the runs that found the bug said so there, and left it.
 
 Dead code is mostly harmless and occasionally very expensive. The rules that find it are some of the oldest in programming, and in maintained code nearly everything they report is a leftover or a placeholder someone meant to leave. That's an argument for keeping them as errors: fixing every report keeps the noise at zero, so the rare report that matters isn't buried. But the rule can't tell which report that is, and neither can its fix. Agents, it turns out, don't reach for the underscore. They delete. On a leftover that's right, and on a bug it erases the only sign there was one, unless someone reads why the agent thought the code was dead. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+<NextSteps />
 
 ## References
 

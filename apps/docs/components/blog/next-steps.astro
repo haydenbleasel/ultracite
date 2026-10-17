@@ -1,0 +1,86 @@
+---
+// The block a post's body ends with, above its references: the pages that put
+// the post's advice to work, then the reports and scripts behind its numbers.
+// Both lists come from the post's `next` and `results` frontmatter (see
+// lib/blog.ts); a post places it with <NextSteps />.
+import { postAt, RESEARCH_URL } from "../../lib/blog";
+import Icon from "../home/icon.astro";
+
+const post = postAt(Astro.url.pathname);
+
+// The arrow stays on the line with the label's last word.
+const split = (label: string): [string, string] => {
+  const index = label.lastIndexOf(" ") + 1;
+
+  return [label.slice(0, index), label.slice(index)];
+};
+
+const data = [
+  ...post.results,
+  { href: RESEARCH_URL, label: "Scripts to rerun them" },
+];
+---
+
+<aside
+  aria-label="Next steps"
+  class="blog-next not-prose my-14 grid gap-8 border border-border p-6 sm:grid-cols-2 sm:p-8"
+>
+  <div>
+    <p class="font-mono text-muted-foreground text-xs/5" id="next-steps-docs">
+      Put it to work
+    </p>
+    <ul
+      aria-labelledby="next-steps-docs"
+      class="mt-4 flex flex-col gap-3 text-[15px]/6"
+      role="list"
+    >
+      {
+        post.next.map((link) => {
+          const [start, end] = split(link.label);
+
+          return (
+            <li>
+              <a class="group text-pretty" href={link.href}>
+                {start}
+                <span class="whitespace-nowrap">
+                  {end}
+                  <Icon
+                    class="ml-1.5 inline-block size-4 align-[-0.1875rem] transition-transform group-hover:translate-x-0.5"
+                    name="arrow-right"
+                  />
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+  <div>
+    <p class="font-mono text-muted-foreground text-xs/5" id="next-steps-data">
+      Check the numbers
+    </p>
+    <ul
+      aria-labelledby="next-steps-data"
+      class="mt-4 flex flex-col gap-3 text-[15px]/6"
+      role="list"
+    >
+      {
+        data.map((link) => (
+          <li>
+            <a
+              class="group inline-flex items-start gap-2 text-pretty"
+              href={link.href}
+            >
+              <Icon
+                class="mt-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
+                name="github"
+              />
+              <span>{link.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</aside>
