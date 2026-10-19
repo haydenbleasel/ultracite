@@ -8,7 +8,11 @@ const { loadTopic } = require("./topics.cjs");
 
 const topic = loadTopic();
 if (topic.selfTest) {
-  process.exitCode = topic.selfTest() > 0 ? 1 : 0;
+  // A topic's self-test may return a promise (added with the todo-comments topic, whose views run
+  // ESLint's async API); a number is resolved the same way, so the exit code is unchanged.
+  Promise.resolve(topic.selfTest()).then((failures) => {
+    process.exitCode = failures > 0 ? 1 : 0;
+  });
 } else {
   selfTestCognitiveComplexity();
 }

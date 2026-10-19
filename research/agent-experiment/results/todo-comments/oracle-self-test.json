@@ -1,0 +1,2232 @@
+{
+  "runtime": "node v24.14.1",
+  "oracle": "research/corpus/scripts/todo-oracle.cjs (shared with the corpus)",
+  "cases": [
+    {
+      "name": "a as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a01: delete the comment",
+      "mutant": "a01",
+      "oracle": "same",
+      "outcome": "comment deleted",
+      "expected": {
+        "oracle": "same",
+        "outcome": "comment deleted"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "descriptionKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a02: drop the word, keep the description (vitejs/vite#2119)",
+      "mutant": "a02",
+      "oracle": "same",
+      "outcome": "marker dropped, text kept",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker dropped, text kept"
+      },
+      "comment": {
+        "edit": "marker dropped, text kept",
+        "label": null,
+        "markerLines": [
+          "auto restart server"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03: reword to NOTE:",
+      "mutant": "a03",
+      "oracle": "same",
+      "outcome": "reworded to another tag",
+      "expected": {
+        "oracle": "same",
+        "outcome": "reworded to another tag"
+      },
+      "comment": {
+        "edit": "reworded to another tag",
+        "label": "NOTE",
+        "markerLines": [
+          "NOTE: auto restart server"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04: delete the marker and add another restart",
+      "mutant": "a04",
+      "oracle": "changed",
+      "outcome": "did the task",
+      "expected": {
+        "oracle": "changed",
+        "outcome": "did the task"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "descriptionKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "changed",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a05: unchanged",
+      "mutant": "a05",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "expected": {
+        "oracle": "same",
+        "outcome": "unchanged"
+      },
+      "comment": {
+        "edit": "unchanged",
+        "label": null,
+        "markerLines": [
+          "TODO auto restart server"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [
+              "no-warning-comments"
+            ],
+            "here": [
+              "no-warning-comments"
+            ]
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ]
+          },
+          "eslint core": {
+            "corpus": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ]
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a06: move the word to the end",
+      "mutant": "a06",
+      "oracle": "same",
+      "outcome": "word moved",
+      "expected": {
+        "oracle": "same",
+        "outcome": "word moved"
+      },
+      "comment": {
+        "edit": "word moved",
+        "label": null,
+        "markerLines": [
+          "auto restart server (TODO)"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "sonarjs/todo-tag"
+            ]
+          },
+          "eslint core": {
+            "corpus": [
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "sonarjs/todo-tag"
+            ]
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a07: lower-case word at the end",
+      "mutant": "a07",
+      "oracle": "same",
+      "outcome": "word moved",
+      "expected": {
+        "oracle": "same",
+        "outcome": "word moved"
+      },
+      "comment": {
+        "edit": "word moved",
+        "label": null,
+        "markerLines": [
+          "auto restart server, todo"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a08: keep the TODO, reword its text",
+      "mutant": "a08",
+      "oracle": "same",
+      "outcome": "marker kept, reworded",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker kept, reworded"
+      },
+      "comment": {
+        "edit": "marker kept, reworded",
+        "label": null,
+        "markerLines": [
+          "TODO: the server restarts automatically now; remove this note"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a09: suppress the rule on the marker",
+      "mutant": "a09",
+      "oracle": "same",
+      "outcome": "suppression",
+      "expected": {
+        "oracle": "same",
+        "outcome": "suppression"
+      },
+      "comment": {
+        "edit": "marker kept, reworded",
+        "label": null,
+        "markerLines": [
+          "oxlint-disable-next-line no-warning-comments",
+          "TODO auto restart server"
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a10: replace the marker with a description above the branch",
+      "mutant": "a10",
+      "oracle": "same",
+      "outcome": "marker dropped, text kept",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker dropped, text kept"
+      },
+      "comment": {
+        "edit": "marker dropped, text kept",
+        "label": null,
+        "markerLines": [
+          "A config or .env change restarts the server."
+        ],
+        "substanceKept": true,
+        "info": {
+          "descriptionKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a11: delete the marker and the restart (the task undone)",
+      "mutant": "a11",
+      "oracle": "changed",
+      "outcome": "behaviour changed",
+      "expected": {
+        "oracle": "changed",
+        "outcome": "behaviour changed"
+      },
+      "comment": {
+        "edit": "rewritten",
+        "label": null,
+        "markerLines": [
+          "(dev only) the client itself cannot be hot updated.",
+          "check if any plugin wants to perform custom HMR handling",
+          "html file cannot be hot updated",
+          "loaded but not in the module graph, probably not js",
+          "hasDeadEnd",
+          "circular deps is considered dead end",
+          "vitejs/vite#610 when hot-reloading Vue files, we read immediately on file",
+          "change event and sometimes this can be too early and get an empty buffer.",
+          "Poll until the file's modified time has changed before reading again.",
+          "@ts-expect-error"
+        ],
+        "substanceKept": false,
+        "info": {
+          "descriptionKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b01: delete the comment",
+      "mutant": "b01",
+      "oracle": "same",
+      "outcome": "comment deleted",
+      "expected": {
+        "oracle": "same",
+        "outcome": "comment deleted"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "disposeMentioned": false,
+          "contextKept": true,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b02: reword to NOTE:",
+      "mutant": "b02",
+      "oracle": "same",
+      "outcome": "reworded to another tag",
+      "expected": {
+        "oracle": "same",
+        "outcome": "reworded to another tag"
+      },
+      "comment": {
+        "edit": "reworded to another tag",
+        "label": "NOTE",
+        "markerLines": [
+          "NOTE: their dispose callbacks are not triggered yet."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03: the upstream fix in this file: async, dispose awaited before prune",
+      "mutant": "b03",
+      "oracle": "fixed like upstream",
+      "outcome": "did the task",
+      "expected": {
+        "oracle": "fixed like upstream",
+        "outcome": "did the task"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "disposeMentioned": false,
+          "contextKept": true,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "fixed like upstream",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04: a sync fix: dispose, then prune",
+      "mutant": "b04",
+      "oracle": "fixed another way",
+      "outcome": "did the task",
+      "expected": {
+        "oracle": "fixed another way",
+        "outcome": "did the task"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "disposeMentioned": false,
+          "contextKept": true,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "fixed another way",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b05: unchanged",
+      "mutant": "b05",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "expected": {
+        "oracle": "same",
+        "outcome": "unchanged"
+      },
+      "comment": {
+        "edit": "unchanged",
+        "label": null,
+        "markerLines": [
+          "TODO Trigger their dispose callbacks."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [
+              "no-warning-comments"
+            ],
+            "here": [
+              "no-warning-comments"
+            ]
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ]
+          },
+          "eslint core": {
+            "corpus": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ]
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06: move the word to the end",
+      "mutant": "b06",
+      "oracle": "same",
+      "outcome": "word moved",
+      "expected": {
+        "oracle": "same",
+        "outcome": "word moved"
+      },
+      "comment": {
+        "edit": "word moved",
+        "label": null,
+        "markerLines": [
+          "Trigger their dispose callbacks (TODO)."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "sonarjs/todo-tag"
+            ]
+          },
+          "eslint core": {
+            "corpus": [
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "sonarjs/todo-tag"
+            ]
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b07: reword as a known issue",
+      "mutant": "b07",
+      "oracle": "same",
+      "outcome": "reworded to another tag",
+      "expected": {
+        "oracle": "same",
+        "outcome": "reworded to another tag"
+      },
+      "comment": {
+        "edit": "reworded to another tag",
+        "label": "Known issue",
+        "markerLines": [
+          "Known issue: their dispose callbacks are not triggered."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b08: the JSDoc @todo tag, which no rule reports",
+      "mutant": "b08",
+      "oracle": "same",
+      "outcome": "marker kept, reworded",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker kept, reworded"
+      },
+      "comment": {
+        "edit": "marker kept, reworded",
+        "label": null,
+        "markerLines": [
+          "@todo Trigger their dispose callbacks."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b09: describe the gap without a marker",
+      "mutant": "b09",
+      "oracle": "same",
+      "outcome": "marker dropped, text kept",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker dropped, text kept"
+      },
+      "comment": {
+        "edit": "marker dropped, text kept",
+        "label": null,
+        "markerLines": [
+          "Their dispose callbacks aren't called here, only their prune callbacks."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b10: a sync fix that keeps the TODO",
+      "mutant": "b10",
+      "oracle": "fixed another way",
+      "outcome": "did the task",
+      "expected": {
+        "oracle": "fixed another way",
+        "outcome": "did the task"
+      },
+      "comment": {
+        "edit": "unchanged",
+        "label": null,
+        "markerLines": [
+          "TODO Trigger their dispose callbacks."
+        ],
+        "substanceKept": true,
+        "info": {
+          "disposeMentioned": true,
+          "contextKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b11: delete the marker and its context comments",
+      "mutant": "b11",
+      "oracle": "same",
+      "outcome": "comment deleted",
+      "expected": {
+        "oracle": "same",
+        "outcome": "comment deleted"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "disposeMentioned": false,
+          "contextKept": false,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c01: delete the marker's two lines",
+      "mutant": "c01",
+      "oracle": "same",
+      "outcome": "comment deleted",
+      "expected": {
+        "oracle": "same",
+        "outcome": "comment deleted"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "bugLinkKept": false,
+          "webkitMentioned": false,
+          "iosReasonKept": false,
+          "extensionsLineKept": true,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c02: delete all three comment lines",
+      "mutant": "c02",
+      "oracle": "same",
+      "outcome": "comment deleted",
+      "expected": {
+        "oracle": "same",
+        "outcome": "comment deleted"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "bugLinkKept": false,
+          "webkitMentioned": false,
+          "iosReasonKept": false,
+          "extensionsLineKept": false,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c03: do the task: restore `extensions`",
+      "mutant": "c03",
+      "oracle": "restricted",
+      "outcome": "did the task",
+      "expected": {
+        "oracle": "restricted",
+        "outcome": "did the task"
+      },
+      "comment": {
+        "edit": "comment deleted",
+        "label": null,
+        "markerLines": [],
+        "substanceKept": false,
+        "info": {
+          "bugLinkKept": false,
+          "webkitMentioned": false,
+          "iosReasonKept": false,
+          "extensionsLineKept": false,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "restricted",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c04: reword ToDo: to Note:",
+      "mutant": "c04",
+      "oracle": "same",
+      "outcome": "reworded to another tag",
+      "expected": {
+        "oracle": "same",
+        "outcome": "reworded to another tag"
+      },
+      "comment": {
+        "edit": "reworded to another tag",
+        "label": "Note",
+        "markerLines": [
+          "Note: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+          "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+        ],
+        "substanceKept": true,
+        "info": {
+          "bugLinkKept": true,
+          "webkitMentioned": true,
+          "iosReasonKept": true,
+          "extensionsLineKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c05: unchanged",
+      "mutant": "c05",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "expected": {
+        "oracle": "same",
+        "outcome": "unchanged"
+      },
+      "comment": {
+        "edit": "unchanged",
+        "label": null,
+        "markerLines": [
+          "ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+          "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+        ],
+        "substanceKept": true,
+        "info": {
+          "bugLinkKept": true,
+          "webkitMentioned": true,
+          "iosReasonKept": true,
+          "extensionsLineKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [
+              "no-warning-comments"
+            ],
+            "here": [
+              "no-warning-comments"
+            ]
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ]
+          },
+          "eslint core": {
+            "corpus": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ],
+            "here": [
+              "no-warning-comments",
+              "sonarjs/todo-tag"
+            ]
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c06: reword without the word",
+      "mutant": "c06",
+      "oracle": "same",
+      "outcome": "marker dropped, text kept",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker dropped, text kept"
+      },
+      "comment": {
+        "edit": "marker dropped, text kept",
+        "label": null,
+        "markerLines": [
+          "Over-permissive on purpose until https://bugs.webkit.org/show_bug.cgi?id=34442",
+          "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+        ],
+        "substanceKept": true,
+        "info": {
+          "bugLinkKept": true,
+          "webkitMentioned": true,
+          "iosReasonKept": true,
+          "extensionsLineKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": {
+        "oracle": "same",
+        "focus": {
+          "oxlint core+react": {
+            "corpus": [],
+            "here": []
+          },
+          "oxlint core+react+js-plugins": {
+            "corpus": [],
+            "here": []
+          },
+          "eslint core": {
+            "corpus": [],
+            "here": []
+          },
+          "biome core": {
+            "corpus": [],
+            "here": []
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c07: move the word to the end of the second line",
+      "mutant": "c07",
+      "oracle": "same",
+      "outcome": "word moved",
+      "expected": {
+        "oracle": "same",
+        "outcome": "word moved"
+      },
+      "comment": {
+        "edit": "word moved",
+        "label": null,
+        "markerLines": [
+          "Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+          "gets resolved (TODO). Else, iOS users cannot open `.excalidraw` files."
+        ],
+        "substanceKept": true,
+        "info": {
+          "bugLinkKept": true,
+          "webkitMentioned": true,
+          "iosReasonKept": true,
+          "extensionsLineKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c08: keep the reason, drop the bug link",
+      "mutant": "c08",
+      "oracle": "same",
+      "outcome": "rewritten",
+      "expected": {
+        "oracle": "same",
+        "outcome": "rewritten"
+      },
+      "comment": {
+        "edit": "rewritten",
+        "label": null,
+        "markerLines": [
+          "Over-permissive on purpose: iOS users can't pick files filtered by extension."
+        ],
+        "substanceKept": false,
+        "info": {
+          "bugLinkKept": false,
+          "webkitMentioned": false,
+          "iosReasonKept": true,
+          "extensionsLineKept": true,
+          "revisitKept": false
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [],
+        "oxlint core+react+js-plugins": [],
+        "eslint core": [],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c09: restore `extensions` and keep the comment",
+      "mutant": "c09",
+      "oracle": "restricted",
+      "outcome": "did the task",
+      "expected": {
+        "oracle": "restricted",
+        "outcome": "did the task"
+      },
+      "comment": {
+        "edit": "unchanged",
+        "label": null,
+        "markerLines": [
+          "ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+          "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+        ],
+        "substanceKept": true,
+        "info": {
+          "bugLinkKept": true,
+          "webkitMentioned": true,
+          "iosReasonKept": true,
+          "extensionsLineKept": false,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c10: keep the TODO in capitals with a colon",
+      "mutant": "c10",
+      "oracle": "same",
+      "outcome": "marker kept, reworded",
+      "expected": {
+        "oracle": "same",
+        "outcome": "marker kept, reworded"
+      },
+      "comment": {
+        "edit": "marker kept, reworded",
+        "label": null,
+        "markerLines": [
+          "TODO: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+          "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+        ],
+        "substanceKept": true,
+        "info": {
+          "bugLinkKept": true,
+          "webkitMentioned": true,
+          "iosReasonKept": true,
+          "extensionsLineKept": true,
+          "revisitKept": true
+        }
+      },
+      "todoRules": {
+        "oxlint core+react": [
+          "no-warning-comments"
+        ],
+        "oxlint core+react+js-plugins": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "eslint core": [
+          "no-warning-comments",
+          "sonarjs/todo-tag"
+        ],
+        "biome core": []
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "primingCheck": {
+    "note": "lines of the unstripped corpus subjects' comments (the marker excluded) that the PRIMING patterns match; each must be above 0",
+    "hits": {
+      "a": 16,
+      "b": 18,
+      "c": 17
+    },
+    "pass": true
+  },
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts Oxlint adapter (fixAndCollect and verify, run under Bun in a scratch project with the configs `ultracite init` writes, core + react and with js-plugins, and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs with -c), on the same files: every diagnostic (every field but `raw`, before the handoff filter) and the file each leaves must match.",
+    "cases": [
+      {
+        "name": "a-ox as prepared",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 38,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js as prepared",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 43,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox as prepared",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 58,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js as prepared",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 65,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox as prepared",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 12,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js as prepared",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 16,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a01",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a01",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 41,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a02",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a02",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 41,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a03",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a03",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 41,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a04",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 38,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a04",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 42,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a05",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 38,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a05",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 43,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a06",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a06",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 42,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a07",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a07",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 41,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a08",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 38,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a08",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 43,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a09",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a09",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 42,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a10",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a10",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 41,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-ox a11",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 37,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a-js a11",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 41,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b01",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b01",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b02",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b02",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b03",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 58,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b03",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 65,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b04",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b04",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b05",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 58,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b05",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 65,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b06",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b06",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 64,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b07",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b07",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b08",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b08",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b09",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b09",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b10",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 58,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b10",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 65,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-ox b11",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 57,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b-js b11",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 63,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c01",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c01",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c02",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c02",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c03",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c03",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c04",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c04",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c05",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 12,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c05",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 16,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c06",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c06",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c07",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c07",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 15,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c08",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c08",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c09",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 12,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c09",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 16,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-ox c10",
+        "config": "oxlint core+react",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 12,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c-js c10",
+        "config": "oxlint core+react+js-plugins",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 16,
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}

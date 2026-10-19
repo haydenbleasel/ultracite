@@ -1,0 +1,16 @@
+--- a/json.ts
++++ b/json.ts
+@@ -224,9 +224,10 @@
+ ) => {
+   const file = await fileOpen({
+     description: "Excalidraw files",
+-    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442
+-    // gets resolved. Else, iOS users cannot open `.excalidraw` files.
+-    // extensions: ["json", "excalidraw", "png", "svg"],
++    // Extensions are intentionally not restricted (e.g. to
++    // ["json", "excalidraw", "png", "svg"]) because of
++    // https://bugs.webkit.org/show_bug.cgi?id=34442 — with a filter, iOS users
++    // cannot open `.excalidraw` files.
+   });
+   return loadFromBlob(file, localAppState, localElements, file.handle);
+ };

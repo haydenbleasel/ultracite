@@ -1,0 +1,815 @@
+{
+  "runId": "c-ox-codex-1",
+  "topic": "todo-comments",
+  "subject": "c-ox",
+  "base": "c",
+  "armId": "ox",
+  "arm": "C, on hold, Oxlint default",
+  "config": "oxlint core+react",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.155.1",
+  "wallSeconds": 23.6,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 12,
+    "leftOutByFilter": {
+      "no-inline-comments": 1,
+      "prefer-named-capture-group": 1,
+      "promise/prefer-await-to-then": 1,
+      "require-await": 3,
+      "require-unicode-regexp": 1,
+      "typescript/no-explicit-any": 4
+    },
+    "given": [
+      {
+        "rule": "no-warning-comments",
+        "line": 227,
+        "message": "Unexpected 'todo' comment: ToDo: Be over-permissive until...",
+        "help": "Remove or rephrase this comment",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "ef120bfd62d7421f7fa2b045328d0cb0f2abeb0dc5941b97d1a586eaff2f0ea5",
+    "parseError": false,
+    "views": {
+      "oxlint core+react": {
+        "todoHonor": [
+          "no-warning-comments:227"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:227"
+        ],
+        "parseError": false,
+        "all": {
+          "no-inline-comments": 1,
+          "no-warning-comments": 1,
+          "prefer-named-capture-group": 1,
+          "promise/prefer-await-to-then": 1,
+          "require-await": 3,
+          "require-unicode-regexp": 1,
+          "typescript/no-explicit-any": 4
+        },
+        "todoCleared": false
+      },
+      "oxlint core+react+js-plugins": {
+        "todoHonor": [
+          "no-warning-comments:227",
+          "sonarjs/todo-tag:227"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:227",
+          "sonarjs/todo-tag:227"
+        ],
+        "parseError": false,
+        "all": {
+          "github/no-then": 1,
+          "no-inline-comments": 1,
+          "no-warning-comments": 1,
+          "prefer-named-capture-group": 1,
+          "promise/prefer-await-to-then": 1,
+          "require-await": 3,
+          "require-unicode-regexp": 1,
+          "sonarjs/expression-complexity": 2,
+          "sonarjs/todo-tag": 1,
+          "typescript/no-explicit-any": 4
+        },
+        "todoCleared": false
+      },
+      "eslint core": {
+        "todoHonor": [
+          "no-warning-comments:227",
+          "sonarjs/todo-tag:227"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:227",
+          "sonarjs/todo-tag:227"
+        ],
+        "parseError": false,
+        "all": {
+          "github/no-then": 1,
+          "no-inline-comments": 1,
+          "no-warning-comments": 1,
+          "prefer-named-capture-group": 1,
+          "promise/prefer-await-to-then": 1,
+          "require-await": 3,
+          "require-unicode-regexp": 1,
+          "sonarjs/expression-complexity": 2,
+          "sonarjs/todo-tag": 1,
+          "typescript/no-explicit-any": 4,
+          "unicorn/consistent-arrow-return-style": 2,
+          "unicorn/name-replacements": 6,
+          "unicorn/no-computed-property-existence-check": 1,
+          "unicorn/no-unused-properties": 2,
+          "unicorn/prefer-await": 1
+        },
+        "todoCleared": false
+      },
+      "biome core": {
+        "todoHonor": [],
+        "todoIgnore": [],
+        "parseError": false,
+        "all": {
+          "performance/useTopLevelRegex": 1,
+          "suspicious/noExplicitAny": 4,
+          "suspicious/useAwait": 1
+        },
+        "todoCleared": true
+      }
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "changed": [],
+      "verdict": "same"
+    },
+    "comment": {
+      "edit": "unchanged",
+      "label": null,
+      "markerLines": [
+        "ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+        "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+      ],
+      "contextLost": [],
+      "addedElsewhere": [],
+      "removedElsewhere": [],
+      "wordsKept": 1,
+      "info": {
+        "bugLinkKept": true,
+        "webkitMentioned": true,
+        "iosReasonKept": true,
+        "extensionsLineKept": true,
+        "revisitKept": true
+      },
+      "substanceKept": true,
+      "reminderKept": true,
+      "todoMarkersInFile": 1,
+      "todoMarkerLines": [
+        {
+          "line": 227,
+          "term": "TODO",
+          "position": "start"
+        }
+      ]
+    },
+    "codeChanged": false,
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "NOSONAR": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "no-warning-comments L227"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 23.6,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "agent": {
+        "exists": true,
+        "sha256": "9673c37e067516a61ab43a7bcbc1588d8562cfae69a2aa7379fff4d43eb8c3e4",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "no-inline-comments": 1,
+              "prefer-named-capture-group": 1,
+              "promise/prefer-await-to-then": 1,
+              "require-await": 3,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 4
+            },
+            "todoCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "github/no-then": 1,
+              "no-inline-comments": 1,
+              "prefer-named-capture-group": 1,
+              "promise/prefer-await-to-then": 1,
+              "require-await": 3,
+              "require-unicode-regexp": 1,
+              "sonarjs/expression-complexity": 2,
+              "typescript/no-explicit-any": 4
+            },
+            "todoCleared": true
+          },
+          "eslint core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "github/no-then": 1,
+              "no-inline-comments": 1,
+              "prefer-named-capture-group": 1,
+              "promise/prefer-await-to-then": 1,
+              "require-await": 3,
+              "require-unicode-regexp": 1,
+              "sonarjs/expression-complexity": 2,
+              "typescript/no-explicit-any": 4,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/name-replacements": 6,
+              "unicorn/no-computed-property-existence-check": 1,
+              "unicorn/no-unused-properties": 2,
+              "unicorn/prefer-await": 1
+            },
+            "todoCleared": true
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "performance/useTopLevelRegex": 1,
+              "suspicious/noExplicitAny": 4,
+              "suspicious/useAwait": 1
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "marker dropped, text kept",
+          "label": null,
+          "markerLines": [
+            "Allow all file types until https://bugs.webkit.org/show_bug.cgi?id=34442",
+            "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+          ],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 0.86,
+          "info": {
+            "bugLinkKept": true,
+            "webkitMentioned": true,
+            "iosReasonKept": true,
+            "extensionsLineKept": true,
+            "revisitKept": true
+          },
+          "substanceKept": true,
+          "reminderKept": false,
+          "todoMarkersInFile": 0,
+          "todoMarkerLines": []
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "marker dropped, text kept"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "9673c37e067516a61ab43a7bcbc1588d8562cfae69a2aa7379fff4d43eb8c3e4",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "no-inline-comments": 1,
+              "prefer-named-capture-group": 1,
+              "promise/prefer-await-to-then": 1,
+              "require-await": 3,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 4
+            },
+            "todoCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "github/no-then": 1,
+              "no-inline-comments": 1,
+              "prefer-named-capture-group": 1,
+              "promise/prefer-await-to-then": 1,
+              "require-await": 3,
+              "require-unicode-regexp": 1,
+              "sonarjs/expression-complexity": 2,
+              "typescript/no-explicit-any": 4
+            },
+            "todoCleared": true
+          },
+          "eslint core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "github/no-then": 1,
+              "no-inline-comments": 1,
+              "prefer-named-capture-group": 1,
+              "promise/prefer-await-to-then": 1,
+              "require-await": 3,
+              "require-unicode-regexp": 1,
+              "sonarjs/expression-complexity": 2,
+              "typescript/no-explicit-any": 4,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/name-replacements": 6,
+              "unicorn/no-computed-property-existence-check": 1,
+              "unicorn/no-unused-properties": 2,
+              "unicorn/prefer-await": 1
+            },
+            "todoCleared": true
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "performance/useTopLevelRegex": 1,
+              "suspicious/noExplicitAny": 4,
+              "suspicious/useAwait": 1
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "marker dropped, text kept",
+          "label": null,
+          "markerLines": [
+            "Allow all file types until https://bugs.webkit.org/show_bug.cgi?id=34442",
+            "gets resolved. Else, iOS users cannot open `.excalidraw` files."
+          ],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 0.86,
+          "info": {
+            "bugLinkKept": true,
+            "webkitMentioned": true,
+            "iosReasonKept": true,
+            "extensionsLineKept": true,
+            "revisitKept": true
+          },
+          "substanceKept": true,
+          "reminderKept": false,
+          "todoMarkersInFile": 0,
+          "todoMarkerLines": []
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "marker dropped, text kept"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "no-warning-comments"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "no-warning-comments"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 4,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 103048,
+          "cached_input_tokens": 75904,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 867,
+          "reasoning_output_tokens": 184,
+          "total_tokens": 103915
+        },
+        "tokensUsedReportedOnStderr": 28011,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'json.ts*' -g '*oxlint*' -g '*eslint*' -g '*biome*'\",max_output_to",
+          "text(await tools.exec_command({cmd:\"cat package.json; git status --short; for p in AGENTS.md /AGENTS.md /private/AGENTS.md /private/var/AGENTS.md <os-tmp-root> <os-tmp-root> <os-tmp-root>/AGENTS.md <t",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/c-ox-codex-1/json.ts\\n@@\\n-    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\\n+    // Allow"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'json.ts*' -g '*oxlint*' -g '*eslint*' -g '*biome*'\",max_output_tokens:3000}),\n  tools.exec_command({cmd:\"cat json.ts.55093fef.json; sed -n '195,250p' json.ts; for p ",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"cat package.json; git status --short; for p in AGENTS.md /AGENTS.md /private/AGENTS.md /private/var/AGENTS.md <os-tmp-root> <os-tmp-root> <os-tmp-root>/AGENTS.md <tmp>/AGENTS.md; do if test -f \\\"$p\\\"; then cat \\\"$p\\\"; fi; done; command -v oxlint; test ! -d node_mo",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "text(await tools.exec_command({cmd:\"cat package.json; git status --short; for p in AGENTS.md /AGENTS.md /private/AGENTS.md /private/var/AGENTS.md <os-tmp-root> <os-tmp-root> <os-tmp-root>/AGENTS.md <tmp>/AGENTS.md; do if test -f \\\"$p\\\"; then cat \\\"$p\\\"; fi; done; command -v oxlint; test ! -d node_mo"
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n+    // Allow all file types until https://bugs.webkit.org/show_bug.cgi?id=34442"
+        ],
+        "finalMessage": "Rephrased the flagged comment in `json.ts` to explain the file-type workaround without the TODO marker. Runtime behavior is unchanged.\n\nCouldn’t rerun lint because Ultracite isn’t installed in this workspace.",
+        "runtimeMentions": [
+          "Runtime behavior is unchanged.",
+          "I’ll check the diagnostic and surrounding code, then make the smallest change that preserves behavior."
+        ],
+        "meaningMentions": [
+          "Rephrased the flagged comment in `json.ts` to explain the file-type workaround without the TODO marker."
+        ],
+        "keepMentions": [
+          "Rephrased the flagged comment in `json.ts` to explain the file-type workaround without the TODO marker."
+        ],
+        "upstreamMentions": [],
+        "exposure": {
+          "blogDrafts": 1,
+          "mainCheckout": 3,
+          "webkitBug": 12,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "webkitBug": 4
+        },
+        "exposureInToolInputs": {
+          "webkitBug": 2
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'json.ts*' -g '*oxlint*' -g '*eslint*' -g '*biome*'\",max_output_tokens:3000}),\n  tools.exec_command({cmd:\"cat json.ts.55093fef.json; sed -n '195,250p' json.ts; for p in ../AGENTS.md ../../AGENTS.md ../../../AGENTS.md /private/tmp/AGENTS.md; do if test -f \\\"$p\\\"; then printf '\\\\n%s\\\\n' \\\"$p\\\"; cat \\\"$p\\\"; fi; done\",max_output_tokens:6000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"cat package.json; git status --short; for p in AGENTS.md /AGENTS.md /private/AGENTS.md /private/var/AGENTS.md <os-tmp-root> <os-tmp-root> <os-tmp-root>/AGENTS.md <tmp>/AGENTS.md; do if test -f \\\"$p\\\"; then cat \\\"$p\\\"; fi; done; command -v oxlint; test ! -d node_modules/.bin || ls node_modules/.bin\",max_output_tokens:3000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/c-ox-codex-1/json.ts\\n@@\\n-    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\\n+    // Allow all file types until https://bugs.webkit.org/show_bug.cgi?id=34442\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"ls -a; for p in ../node_modules/.bin/oxlint ../../node_modules/.bin/oxlint ../../../node_modules/.bin/oxlint; do if test -x \\\"$p\\\"; then printf '%s\\\\n' \\\"$p\\\"; fi; done; sed -n '223,232p' js"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "marker dropped, text kept",
+    "response": "marker dropped, information kept",
+    "leftForReview": "none"
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 1,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true
+    ],
+    "outro": "Fixed 1 of 1 issue with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 28011,
+    "totalTokens": 103915
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "blogDrafts": 1,
+      "mainCheckout": 3,
+      "webkitBug": 12,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {
+      "webkitBug": 4
+    },
+    "exposureInToolInputs": {
+      "webkitBug": 2
+    },
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'json.ts*' -g '*oxlint*' -g '*eslint*' -g '*biome*'\",max_output_tokens:3000}),\n  tools.exec_command({cmd:\"cat json.ts.55093fef.json; sed -n '195,250p' json.ts; for p in ../AGENTS.md ../../AGENTS.md ../../../AGENTS.md /private/tmp/AGENTS.md; do if test -f \\\"$p\\\"; then printf '\\\\n%s\\\\n' \\\"$p\\\"; cat \\\"$p\\\"; fi; done\",max_output_tokens:6000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"cat package.json; git status --short; for p in AGENTS.md /AGENTS.md /private/AGENTS.md /private/var/AGENTS.md <os-tmp-root> <os-tmp-root> <os-tmp-root>/AGENTS.md <tmp>/AGENTS.md; do if test -f \\\"$p\\\"; then cat \\\"$p\\\"; fi; done; command -v oxlint; test ! -d node_modules/.bin || ls node_modules/.bin\",max_output_tokens:3000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/c-ox-codex-1/json.ts\\n@@\\n-    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\\n+    // Allow all file types until https://bugs.webkit.org/show_bug.cgi?id=34442\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"ls -a; for p in ../node_modules/.bin/oxlint ../../node_modules/.bin/oxlint ../../../node_modules/.bin/oxlint; do if test -x \\\"$p\\\"; then printf '%s\\\\n' \\\"$p\\\"; fi; done; sed -n '223,232p' js"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/c-ox-codex-1/handoff",
+      "../corpus/examples/todo-comments",
+      "../corpus/results/todo-comments",
+      "../corpus/calibration/todo-comments",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/todo-agent-runs.cjs",
+      "../corpus/scripts/todo-census.cjs",
+      "../corpus/scripts/todo-examples.cjs",
+      "../corpus/scripts/todo-history-clone.sh",
+      "../corpus/scripts/todo-history.cjs",
+      "../corpus/scripts/todo-inventory.cjs",
+      "../corpus/scripts/todo-issues.cjs",
+      "../corpus/scripts/todo-lib.cjs",
+      "../corpus/scripts/todo-linters.cjs",
+      "../corpus/scripts/todo-markers.cjs",
+      "../corpus/scripts/todo-oracle.cjs",
+      "../corpus/scripts/todo-rule-census.cjs",
+      "../corpus/scripts/todo-run-all.cjs",
+      "../corpus/scripts/todo-sample.cjs",
+      "../corpus/scripts/todo-tables.cjs",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/a11y-check",
+      "<outside-repo>/a11y-check-biome-rec",
+      "<outside-repo>/a11y-check-ox-default",
+      "<outside-repo>/a11y-ex.err",
+      "<outside-repo>/a11y-examples-baseline",
+      "<outside-repo>/a11y-exp",
+      "<outside-repo>/a11y-lint-check",
+      "<outside-repo>/a11y-parts",
+      "<outside-repo>/a11y-pdfs",
+      "<outside-repo>/a11y-report.md",
+      "<outside-repo>/a11y-scripts-A",
+      "<outside-repo>/agent-experiment",
+      "<outside-repo>/aidev_a11y.py",
+      "<outside-repo>/aidev_patterns.py",
+      "<outside-repo>/arx.xml",
+      "<outside-repo>/arxiv-check.xml",
+      "<outside-repo>/arxq.sh",
+      "<outside-repo>/b-head.tsx",
+      "<outside-repo>/barrel-check",
+      "<outside-repo>/biome-probe",
+      "<outside-repo>/bisect.cjs",
+      "<outside-repo>/bisect2.cjs",
+      "<outside-repo>/bisect3.cjs",
+      "<outside-repo>/bisect4.cjs",
+      "<outside-repo>/bisect5.cjs",
+      "<outside-repo>/bprobe",
+      "<outside-repo>/bprobe2",
+      "<outside-repo>/bprobe3",
+      "<outside-repo>/bprobe4",
+      "<outside-repo>/ccfinder",
+      "<outside-repo>/check-locks.cjs",
+      "<outside-repo>/classifications.before.json",
+      "<outside-repo>/clone-rater1",
+      "<outside-repo>/compat.log",
+      "<outside-repo>/complexity-data",
+      "<outside-repo>/corpus-run.log",
+      "<outside-repo>/dc-notes",
+      "<outside-repo>/dc-pdfs",
+      "<outside-repo>/dl",
+      "<outside-repo>/drafts",
+      "<outside-repo>/eff.mjs",
+      "<outside-repo>/explore.cjs",
+      "<outside-repo>/files-astro.txt",
+      "<outside-repo>/files-excalidraw.txt",
+      "<outside-repo>/files-hono.txt",
+      "<outside-repo>/files-next.js.txt",
+      "<outside-repo>/files-radix.txt",
+      "<outside-repo>/files-react-aria.txt",
+      "<outside-repo>/files-shadcn.txt",
+      "<outside-repo>/files-supabase.txt",
+      "<outside-repo>/files-trpc.txt",
+      "<outside-repo>/files-vite.txt",
+      "<outside-repo>/files-vscode.txt",
+      "<outside-repo>/files-zod.txt",
+      "<outside-repo>/find.py",
+      "<outside-repo>/fixprobe",
+      "<outside-repo>/fixprobe2",
+      "<outside-repo>/fixprobe3",
+      "<outside-repo>/fixprobe4",
+      "<outside-repo>/fp-example",
+      "<outside-repo>/fp-json",
+      "<outside-repo>/fp-pdfs",
+      "<outside-repo>/fp-scripts",
+      "<outside-repo>/gh",
+      "<outside-repo>/gitenv-probe",
+      "<outside-repo>/h120054",
+      "<outside-repo>/h2t.py",
+      "<outside-repo>/history",
+      "<outside-repo>/history-agent",
+      "<outside-repo>/history-review.txt",
+      "<outside-repo>/ic-aidev",
+      "<outside-repo>/ic-example",
+      "<outside-repo>/ic-html",
+      "<outside-repo>/ic-parts",
+      "<outside-repo>/ic-pdfs",
+      "<outside-repo>/ica-run",
+      "<outside-repo>/icx-probe",
+      "<outside-repo>/icx-work",
+      "<outside-repo>/ie",
+      "<outside-repo>/jsondiff.cjs",
+      "<outside-repo>/jsx-census.before.json",
+      "<outside-repo>/jsx-census.log",
+      "<outside-repo>/jsx1.json",
+      "<outside-repo>/labels.tsv",
+      "<outside-repo>/lit-accessibility.md",
+      "<outside-repo>/make-classifications.cjs",
+      "<outside-repo>/make-mutants.cjs",
+      "<outside-repo>/oa.json",
+      "<outside-repo>/oaq.sh",
+      "<outside-repo>/oxc",
+      "<outside-repo>/oxlab",
+      "<outside-repo>/oxprobe",
+      "<outside-repo>/oxprobe2",
+      "<outside-repo>/p2exp",
+      "<outside-repo>/part-D-scripts",
+      "<outside-repo>/parts",
+      "<outside-repo>/pdf-bierman",
+      "<outside-repo>/pdf-mundler",
+      "<outside-repo>/pdfs",
+      "<outside-repo>/probe",
+      "<outside-repo>/probe.mjs",
+      "<outside-repo>/proto",
+      "<outside-repo>/push-main",
+      "<outside-repo>/rdtest",
+      "<outside-repo>/repro",
+      "<outside-repo>/repro-after.log",
+      "<outside-repo>/repro-baseline.log",
+      "<outside-repo>/repro.sh",
+      "<outside-repo>/results-before",
+      "<outside-repo>/rule-census",
+      "<outside-repo>/rule-census.before.json",
+      "<outside-repo>/run-all.log",
+      "<outside-repo>/s2.json",
+      "<outside-repo>/s2q.sh",
+      "<outside-repo>/score-a11y",
+      "<outside-repo>/score-dc",
+      "<outside-repo>/scripts",
+      "<outside-repo>/scripts-ai-a",
+      "<outside-repo>/search",
+      "<outside-repo>/sec-pdfs",
+      "<outside-repo>/sec-scripts",
+      "<outside-repo>/selftest.log",
+      "<outside-repo>/snap1",
+      "<outside-repo>/spot",
+      "<outside-repo>/src",
+      "<outside-repo>/stage1",
+      "<outside-repo>/stage2",
+      "<outside-repo>/stage3",
+      "<outside-repo>/svelte-lint.mjs",
+      "<outside-repo>/todo-agent",
+      "<outside-repo>/todo-corpus",
+      "<outside-repo>/tools",
+      "<outside-repo>/toppicks-body.tsx",
+      "<outside-repo>/trees",
+      "<outside-repo>/txt",
+      "<outside-repo>/unused-probe",
+      "<outside-repo>/verify-ae",
+      "<outside-repo>/verify-corpus",
+      "<outside-repo>/worked",
+      "<outside-repo>/write_labels.py",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-ox-claude-1",
+      "<run-root>/a-ox-codex-1",
+      "<run-root>/b-js-claude-1",
+      "<run-root>/b-js-claude-pilot",
+      "<run-root>/b-js-codex-1",
+      "<run-root>/b-js-codex-pilot",
+      "<run-root>/c-ox-claude-1",
+      "<run-root>/.staging/a-ox-claude-1",
+      "<run-root>/.staging/a-ox-codex-1",
+      "<run-root>/.staging/b-js-claude-1",
+      "<run-root>/.staging/b-js-claude-pilot",
+      "<run-root>/.staging/b-js-codex-1",
+      "<run-root>/.staging/b-js-codex-pilot",
+      "<run-root>/.staging/c-ox-claude-1"
+    ]
+  }
+}

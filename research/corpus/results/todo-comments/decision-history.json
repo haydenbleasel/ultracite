@@ -1,0 +1,70 @@
+{
+  "checked": "2026-10-18",
+  "method": "Hand input. `git log -S` on each rule name in this repository, packages/cli/CHANGELOG.md and the changesets, `gh search issues/prs --repo haydenbleasel/ultracite` for no-warning-comments, TODO comments, todo-tag, expiring-todo, warning comments and fixme (read-only), and the release notes and tagged sources of eslint-plugin-unicorn (gh api, read-only).",
+  "rules": {
+    "no-warning-comments": [
+      {
+        "commit": "e403fb15",
+        "date": "2022-03-18",
+        "what": "\"Create ESLint configuration\": the first ESLint config lists every core rule alphabetically, with \"no-warning-comments\": \"error\" among them. No rationale recorded."
+      },
+      {
+        "commit": "e6f31237",
+        "date": "2024-06-29",
+        "what": "\"Use new eslint/js for rules\": ESLint rules now come from @eslint/js's `all` config, which turns the rule on with its defaults."
+      },
+      {
+        "commit": "c92a9d2e",
+        "date": "2024-07-18",
+        "what": "\"Switch from ESLint, Prettier and Stylelint to Biome (#140)\": the ESLint config, and with it the rule, was removed. Biome has no equivalent."
+      },
+      {
+        "commit": "c4a205f8",
+        "date": "2025-12-28",
+        "what": "\"V7 (#466)\": ESLint returned as a provider, with core rules from @eslint/js's `all` config (rules/eslint.mjs), so the rule is on with its defaults again. No rationale recorded for this rule."
+      },
+      {
+        "commit": "a63d9c57",
+        "date": "2026-04-13",
+        "what": "\"Resolves #660\": Oxlint core lists every rule explicitly, including \"no-warning-comments\": \"error\" with no options."
+      }
+    ],
+    "sonarjs/todo-tag, sonarjs/fixme-tag": [
+      {
+        "commit": "44403937",
+        "date": "2026-07-04",
+        "what": "\"Run eslint-plugin-github and eslint-plugin-sonarjs via oxlint JS plugins\": every non-deprecated sonarjs rule, these two included, through Oxlint's JS plugin bridge."
+      },
+      {
+        "commit": "29e30ce9",
+        "date": "2026-07-05",
+        "what": "\"Fold github and sonarjs rules into oxlint core\"."
+      },
+      {
+        "commit": "d186c53c",
+        "date": "2026-07-07",
+        "what": "\"Resolves #742\": moved to the opt-in js-plugins preset because the JS-plugin pass is slower. In ESLint they stay in core (every non-deprecated sonarjs rule)."
+      }
+    ],
+    "unicorn/expiring-todo-comments": [
+      {
+        "commit": "c4a205f8",
+        "date": "2025-12-28",
+        "what": "\"V7 (#466)\": on in ESLint core with every other non-deprecated unicorn rule, with no options. Oxlint has no port."
+      },
+      {
+        "commit": "0b8fc122",
+        "date": "2026-07-04",
+        "what": "\"Upgrade ESLint and its plugins\" moved eslint-plugin-unicorn from ^64.0.0 to ^70.0.0, across v65.0.0. In v64.0.0 the defaults were ignoreDates: false (expired dates reported). In v65.0.0 (2026-06-07) #3045 renamed the option to checkDates with default false, so expired dates are no longer reported by default; v77.0.0's docs say \"Default: false\". The v65.0.0 release notes say the opposite (\"Make checkDates option true by default (#3044)\"; #3044 is titled \"Make ignoreDates option false by default\"). Ultracite sets no options, so since that upgrade the rule reports conditions it can parse (versions, packages, engines, malformed arguments) but never an expired date."
+      }
+    ]
+  },
+  "issues": "No issue or PR in haydenbleasel/ultracite discusses these rules. PR #637 (Bump eslint-plugin-unicorn from 63.0.0 to 64.0.0) only carries the upstream changelog.",
+  "sources": {
+    "unicornDefaultsV64": "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/rules/expiring-todo-comments.js#L263-L269",
+    "unicornDefaultsV65": "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v65.0.0/rules/expiring-todo-comments.js#L263-L269",
+    "unicornDefaultsV77": "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v77.0.0/rules/expiring-todo-comments.js#L293-L299",
+    "unicornDocsV77": "https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v77.0.0/docs/rules/expiring-todo-comments.md#checkdates",
+    "unicornReleaseV65": "https://github.com/sindresorhus/eslint-plugin-unicorn/releases/tag/v65.0.0"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "init's root config with js-plugins: selectJsPlugins([github, sonarjs, react-doctor]) extended, jsPlugins and jsPluginSettings on the root; oxfmt.config (...ultracite)",
+  "filter": "TODO-family rules (no-warning-comments, sonarjs/todo-tag, sonarjs/fixme-tag), plus any other diagnostic not among the prepared subject's own (rule and message, diff.ts): a project that lints clean apart from the TODO. Every re-lint uses the same filter.",
+  "diagnosticsReported": 65,
+  "diagnosticsHandedOver": 2,
+  "leftOutByFilter": {
+    "class-methods-use-this": 1,
+    "github/array-foreach": 3,
+    "max-classes-per-file": 1,
+    "no-empty-function": 1,
+    "promise/prefer-await-to-callbacks": 11,
+    "sonarjs/no-duplicate-string": 1,
+    "sonarjs/no-inconsistent-returns": 1,
+    "sonarjs/no-nested-template-literals": 1,
+    "typescript/method-signature-style": 15,
+    "typescript/no-explicit-any": 18,
+    "typescript/parameter-properties": 5,
+    "typescript/unified-signatures": 1,
+    "unicorn/no-array-for-each": 3,
+    "unicorn/no-await-expression-member": 1
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "index.ts fixFileGroup": "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+    "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 3,
+      "fatal": false,
+      "file": "hmr.ts",
+      "help": "Remove or rephrase this comment",
+      "line": 323,
+      "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+      "raw": {
+        "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+        "code": "eslint(no-warning-comments)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html",
+        "help": "Remove or rephrase this comment",
+        "filename": "hmr.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 10071,
+              "length": 40,
+              "line": 323,
+              "column": 3
+            }
+          }
+        ]
+      },
+      "rule": "no-warning-comments",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+    },
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "hmr.ts",
+      "line": 323,
+      "message": "Complete the task associated to this \"TODO\" comment.",
+      "raw": {
+        "message": "Complete the task associated to this \"TODO\" comment.",
+        "code": "sonarjs(todo-tag)",
+        "severity": "error",
+        "filename": "hmr.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 10074,
+              "length": 4,
+              "line": 323,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "sonarjs/todo-tag",
+      "severity": "error"
+    }
+  ]
+}

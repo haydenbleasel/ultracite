@@ -260,6 +260,47 @@ node research/corpus/scripts/a11y-run-all.cjs   # about 6 min; --skip-history sk
 
 The method, findings and caveats are in `corpus/results/accessibility/REPORT.md`.
 
+### TODO comments and self-admitted technical debt (eighth post)
+
+The TODO-comment scripts build on the rule census. They're prefixed `todo-` and share `todo-lib.cjs`, which holds the comment scanner (typescript-estree's `comments`, what ESLint's `getAllComments()` returns, so strings, template literals, identifiers and JSX text never count), what counts as a task marker and how each is written (owner, issue or PR, tracker key, date, version, condition), matchers that reimplement each rule from its source, and runners for Ultracite's presets that keep every message and help text.
+
+The rules are `no-warning-comments` (Oxlint core, ESLint core), `sonarjs/todo-tag` and `sonarjs/fixme-tag` (Oxlint's opt-in js-plugins, ESLint core) and `unicorn/expiring-todo-comments` (ESLint core; Oxlint has no port). Biome has none: no rule in its schema or `biome explain` is about task markers, and its rules-sources page maps nothing to them.
+
+The eight corpus repos are measured as in every topic, Ultracite's CLI separately, and the four React codebases from the accessibility post (`repos-accessibility.json`, all source files rather than only `.tsx`) as a separate set, because Supabase Studio is the only application code in either list.
+
+| Script | What it does |
+| --- | --- |
+| `todo-census.cjs` | Every comment in every corpus file, and every occurrence of TODO, FIXME, XXX, HACK, BUG, NOTE, OPTIMIZE, REVIEW, TBD, "to do" and JSDoc `@todo`, classified as a marker, prose or embedded (`definitions` in the output). For each marker: where it sits in its comment, case, decoration, what follows it, the comment kind (line, block, JSDoc, JSX, trailing), and its format: `TODO(person)` against `TODO(topic)` (persons are commit authors in the history clone), `TODO@name`, issue and PR references, tracker keys, URLs, dates, versions, conditions (strict and loose), area tags such as `TODO-APP`, unicorn's `[conditions]`, and whether it's bare. |
+| `todo-inventory.cjs` | The rules per linter and preset: every Oxlint preset (top level and overrides) and `oxlint --rules`; ESLint core, core + react and core + type-aware resolved with `calculateConfigForFile`, with each rule's meta; Biome's 565 schema rules and `biome explain`, and Biome's rules-sources page (fetched once with `gh api`, `--fetch`). |
+| `todo-rule-census.cjs` | `rule-census.cjs` with core, react and js-plugins over the eight repos and Ultracite, focused on the three Oxlint rules and `no-inline-comments`. |
+| `todo-linters.cjs` | `--calibration`: `calibration/todo-comments/cases.tsx` (77 cases, with a `package.json` that gives unicorn a version, a dependency and an engine) through Oxlint (init's root config, then with js-plugins), ESLint core + react (inline config ignored and honoured) and Biome core, with every message and the help the handoff carries. `--autofix`: what each fix pass does to the cases' comments. `--corpus`: the focus rules on every file of all thirteen repos, raw and reported, every diagnostic joined to its comment and marker, and the matchers checked against the real rules comment by comment. |
+| `todo-markers.cjs` | Each repo's own lint configs at its pinned commit (lines naming these rules, and shared configs that would enable them implicitly), disable comments naming them, and markers inside or next to suppression comments. |
+| `todo-issues.cjs` | The state of every GitHub issue or PR a marker references (`gh api`, read-only, cached with the fetch date), at the fetch date and at the pinned commit; candidate stale markers, joined to the hand verdicts in `stale-check.json`. |
+| `todo-history-clone.sh` | Bare history clones under `repos/history/`: the six smaller repos without blobs over 1 MB; Next.js and VS Code with commits and trees only, then `git backfill --sparse` for the measured source directories. |
+| `todo-history.cjs` | `--blame`: the age of every marker line at the pinned commit (`git blame -w -M`, with the repo's `.git-blame-ignore-revs`). `--survival`: every marker added or removed on the mainline in the measured package's source, in every layout it has had, tracked through moves, renames and rewordings, with Kaplan–Meier survival for markers added 2018–2024. `--classify`: what happened to the code around each removal, after Zampetti et al.: file deleted, enclosing function deleted, unchanged or changed. `--sample`: the stratified removal sample and its worksheet. |
+| `todo-sample.cjs` | The two hand classifications: 102 markers at the pinned commits (type after Maldonado and Shihab, on hold after Maipradit et al., still valid, resolvable in its own file, changes behaviour, deleting it loses information) and the 89 removals (addressed, already done, dropped with the debt remaining, code deleted or moved, rewritten). `--worksheet`, `--print` (blind subsets of 36 and 30), `--compute` (both raters, weighted shares, κ). |
+| `todo-agent-runs.cjs` | Marker lines added or removed in every committed agent-experiment run (net diff and each attempt's or step's own patch), per topic and agent. |
+| `todo-oracle.cjs` | The behaviour oracle for the three subjects: transpiles a file, runs it in a fresh Node process against stubs, and returns a trace and a verdict. |
+| `todo-examples.cjs` | Checks the subjects' verbatim blocks against their commits, lints and type-checks them, and runs the oracle on them and on 20 hand-made variants (the evasion matrix on real code). |
+| `todo-tables.cjs` | Generates `results/todo-comments/tables.md`. |
+| `todo-run-all.cjs` | Runs all of the above in order. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # about 3 min, 1.3 GB
+node research/corpus/scripts/todo-run-all.cjs          # about 40 min, 33 of them history; --skip-history, --skip-gh, --skip-census
+```
+
+- **The matchers predict the rules exactly.** `todo-lib.cjs` reimplements `no-warning-comments` (ESLint 10.12.0's source; Oxlint documents the same options and defaults), `sonarjs/todo-tag` and `fixme-tag` (eslint-plugin-sonarjs 4.2.2) and the shape of comment unicorn can report. On the calibration and on every corpus comment they agree with ESLint and Oxlint; if a rerun disagrees, a tool version changed.
+- **Raw mode and sonarjs.** The census's raw mirror rewrites `eslint-disable` to `xxxxxx-disable`, and sonarjs skips comments that start with `eslint-disable`, so Oxlint's raw sonarjs count includes four TODOs in disable reasons that no real run reports. ESLint's raw runs use `noInlineConfig` on the original files instead, and so does every per-marker table.
+- **unicorn needs package.json.** `unicorn/expiring-todo-comments` reads the nearest `package.json`, so ESLint lints the clones in place (read only) rather than a mirror, whose nearest `package.json` would be this repo's.
+- **The history step is slow on Next.js.** Blame and the removal classification follow files into older paths the backfill didn't cover, and git fetches those blobs one at a time (read-only).
+- **History clones stay out of the corpus clones.** `todo-history-clone.sh` writes bare repos under `repos/history/`; `clone.sh` and every earlier topic's file lists are unchanged. Backfill needs cone-mode sparse patterns, which the script writes into each bare repo.
+- **Hand inputs:** `stale-check.json` and `decision-history.json` (one rater), and the rater labels (`out/todo-comments/labels-*.json`, kept in `classifications.json`).
+- **No shared script changed.** The topic only reads `collect-files.cjs`, `rule-census.cjs` (through `todo-rule-census.cjs`, with `CORPUS_REPO_LISTS` unset so the census pools the same eight repos) and `dead-code-lib.cjs`.
+
+The method, findings and caveats are in `corpus/results/todo-comments/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -608,3 +649,80 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
 - **Earlier topics, re-measured and re-aggregated from their committed runs**, before and after these changes. Before and after match exactly for all five.
   - cognitive-complexity, floating-promises and import-cycles reproduce exactly, apart from `generatedAt`.
   - security-rules and dead-code differ from their committed files only where the presets changed after their runs: Biome's `noUndeclaredDependencies` (c9b606af), and Oxlint js-plugins' sonarjs rules (`sonarjs/void-use`, `sonarjs/regex-complexity`; 7984c6e9). See `REPORT.md`, "Harness changes".
+
+### TODO comments (eighth post)
+
+A TODO rule reports a word, and every edit that removes the word clears it: deleting the comment, rewording it to `Note:`, or moving the word off the start. Whether that's right depends on the TODO. So the subjects are three real TODOs that need three different responses, and every file goes through Ultracite's retry loop, with its `Left for review:` line.
+
+Subjects are from `corpus/examples/todo-comments/`, each through two arms:
+
+- **a:** Vite's `handleHMRUpdate` (`hmr.ts`), `// TODO auto restart server` above code that already restarts the server. Right: drop the marker.
+- **b:** Vite's `HMRClient.prunePaths` (`hmr.ts`), `// TODO Trigger their dispose callbacks.`, a known bug fixed upstream with a runtime change and edits to two other files. Right: leave it for review.
+- **c:** Excalidraw's `loadFromJSON` (`json.ts`), "Be over-permissive until WebKit bug 34442 gets resolved". Right: keep it and leave it for review.
+- **`-ox`:** Oxlint's default presets, the root config `ultracite init` writes: `no-warning-comments` ("Remove or rephrase this comment").
+- **`-js`:** the same with the js-plugins preset: also `sonarjs/todo-tag` ("Complete the task associated to this "TODO" comment.", with no help).
+
+**Subjects.** `prepareSubjects` gets each subject ready:
+
+- It removes the `stripFields` fields, and `TEXT_EDITS` rewrite the commit lines that named the fix or the corpus, the "verbatim" claims, and two STUB notes that named the behaviour check.
+- It checks every comment but the marker against 17 patterns (rule names, SATD, stale, the history's commits and PRs, "Left for review", upstream, WebKit and others). Three upstream Vite comments are allowed by name.
+- It uses the upstream file names, `hmr.ts` and `json.ts`.
+- It runs both arms' `oxlint --fix` and `oxfmt` until nothing changes, as `ultracite fix` would before the handoff. Oxlint's `sort-keys` fix reorders keys that the code serialises (B's HMR messages, C's saved files). The oracle's traces differ from the corpus subject's only in that key order, which `prepareSubjects` checks, and the prepared subject is the reference.
+
+The run dir also gets the examples' `tsconfig.json` and a `package.json` with what init adds (the plugin packages for `-js`).
+
+**The handoff is filtered** in the collect and in every re-lint. The verbatim code still trips 11 to 57 other rules after the fix pass. So only the TODO-family rules are kept, plus any diagnostic that isn't the prepared subject's own (by rule and message, as `diff.ts` matches them). That models a project that lints clean apart from the TODO. It's a deviation from a real project, recorded in each `handoff.json`.
+
+**Retry loop:** the accessibility topic's `runWithRetries` and `scripts/ultracite-adapters.cjs`, unchanged, including the `Left for review:` handling from 9f80955d. The self-test runs Ultracite's real Oxlint adapter in a scratch project with both configs, next to the mirror: all 70 comparisons match.
+
+**Measurement.** Each attempt is measured as the agent left the file and as verify left it:
+
+- the TODO-family rules and every rule in Oxlint default, Oxlint + js-plugins, ESLint core and Biome core, inline config honoured and ignored;
+- `tsc`;
+- the oracle;
+- what the comment became (deleted, marker dropped with its text kept, another tag, rewritten, word moved, unchanged);
+- whether its substance survived (A: the restart; B: the dispose gap; C: the bug link), and for B and C whether it still says what to wait for;
+- Ultracite's partition and what it would print;
+- from the session log: commands run or refused, the final message, sentences about behaviour, the TODO's meaning, keeping it and upstream history, and exposure in tool inputs.
+
+The hand classification is in `classifications.json`.
+
+**Oracle.** `corpus/scripts/todo-oracle.cjs`, imported as it is, so the corpus outputs are unchanged. The self-test has 35 cases (the prepared subjects and 32 mutants in `harness-tests/todo-comments/mutants.json`, 20 of them the corpus variants re-expressed, whose verdicts and rule results match `examples.json`), all as expected.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=todo-comments
+node scripts/prepare-subjects.cjs        # subjects/todo-comments/ (stripped, checked, normalised; package.json per arm)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (35) and the mirror against the CLI (70) -> results/todo-comments/oracle-self-test.json (~8 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a-ox:claude:1 b-js:codex:1 c-ox:claude:1 ...   # 4 of each arm and agent
+node scripts/aggregate.cjs               # results.json, with the mutant matrix (~4 min)
+node scripts/report-tables.cjs > results/todo-comments/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.27–0.43 a run (median $0.32, $7.67 for 24 runs).
+- Codex used 14.2k–31.6k tokens a run (median 17.8k).
+- Runs took 13–53 s, one attempt each, and measuring one takes about 20 s.
+- The pilot (one run per agent on `b-js`) is in `results/todo-comments/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's todo-comments examples, results and calibration, every `todo-*` corpus script, and the whole corpus `out/` and `repos/` (Vite and Excalidraw at their 2026 commits, and the history clones);
+- `plans/`, `lint-configs/` and the temp directory's `ultracite-research-*` folders;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: every top-level item of the orchestrating session's scratchpad, the batch-log folder, and the other worktrees' corpus clones and outputs.
+
+Left open on purpose: `research/bibliography/todo-comments.md` and the scratchpad's `todo-lit*` files, which a literature agent was writing during the runs; no session log names them. `node_modules` isn't locked either, though its installed Vite copies have the later `prunePaths`; reads of them are checked instead, and there were none.
+
+The method, numbers and caveats are in `agent-experiment/results/todo-comments/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/todo-comments.cjs` (new), which imports the corpus's `todo-oracle.cjs` and `todo-lib.cjs` unchanged.
+- `test-behavior-harness.cjs` accepts a self-test that returns a promise; a number resolves the same way.
+- `.gitignore` comments name the topic; the existing per-attempt patterns cover its logs.
+- **Earlier topics, re-measured and re-aggregated from their committed runs** before and after these changes: before and after match exactly for all six. Against the committed files:
+  - cognitive-complexity, floating-promises and import-cycles reproduce exactly, apart from `generatedAt`;
+  - security-rules and dead-code differ only by the known preset drift;
+  - accessibility differs only in `hasSessionLog`, because its gitignored session logs aren't in this worktree.

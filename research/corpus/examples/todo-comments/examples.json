@@ -1,0 +1,969 @@
+{
+  "generated": "2026-10-19",
+  "note": "Measured by scripts/todo-examples.cjs. `lint` lists, per configuration, the TODO-comment rules' diagnostics with their message and the help Ultracite's handoff carries (Oxlint's help, ESLint's docs description), and a count of every other rule. Oxlint = the root config `ultracite init` writes (core + react), then with js-plugins, run from this directory; ESLint = core, inline config ignored; Biome = core. `oracle` is todo-oracle.cjs. Header fields named in stripFields hold analysis and must be removed before an agent sees a subject.",
+  "stripFields": [
+    "Task-marker subject",
+    "Rules it hits",
+    "Why it is stale",
+    "What the project did",
+    "The bug",
+    "Waiting on",
+    "History",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses"
+  ],
+  "subjects": [
+    {
+      "analysis": {
+        "behaviourToPreserve": "Everything: the same logger, ws.send, debug, close, createServer and listen calls in the same order for every changed file, and exactly one restart per config or .env change.",
+        "expected": "Drop the marker, as vitejs/vite#2119 did (delete the comment, or keep it as a plain description). No code change.",
+        "history": "Added in bbaf9488 (2020-12-11, 'wip: error overlay'). e8d32773 (2020-12-23, 'feat: auto restart server on config/.env change') implemented the restart under it. vitejs/vite#2119 (c323732d, 2021-02-21, 'chore: remove TODO') changed it to '// auto restart server'.",
+        "tempting": "Doing the task again (another restart) changes what a config change does; leaving it for review is safe but unnecessary.",
+        "why": "Stale: the code beneath the comment already restarts the server."
+      },
+      "file": "todo-a-vite-hmr-update.ts",
+      "id": "a",
+      "kind": "obsolete: the task is done",
+      "marker": "// TODO auto restart server",
+      "repo": "vitejs/vite",
+      "sha": "ea95a1d44ab6f1a66701ae43c48f10b2047cb141",
+      "source": "packages/vite/src/node/server/hmr.ts",
+      "verbatim": [
+        {
+          "from": 12,
+          "ok": true,
+          "to": 158
+        },
+        {
+          "from": 187,
+          "ok": true,
+          "to": 238
+        },
+        {
+          "from": 386,
+          "ok": true,
+          "to": 427
+        }
+      ],
+      "history": "vite",
+      "lint": {
+        "biome": {
+          "focus": [],
+          "other": {
+            "complexity/noForEach": 1,
+            "performance/noAwaitInLoops": 1,
+            "style/noIncrementDecrement": 1,
+            "style/noNegationElse": 2,
+            "style/noUnusedTemplateLiteral": 3,
+            "style/noUselessElse": 1,
+            "style/useConsistentArrayType": 3,
+            "style/useConsistentMethodSignatures": 6,
+            "style/useNodejsImportProtocol": 2,
+            "style/useTemplate": 2,
+            "suspicious/noConfusingVoidType": 1,
+            "suspicious/noExplicitAny": 2,
+            "suspicious/noForIn": 1,
+            "suspicious/noParametersOnlyUsedInRecursion": 1,
+            "suspicious/noShadow": 1,
+            "suspicious/noTsIgnore": 1,
+            "suspicious/useAwait": 2,
+            "suspicious/useIterableCallbackReturn": 1
+          }
+        },
+        "eslint": {
+          "focus": [
+            {
+              "help": "Disallow specified warning terms in comments",
+              "line": 162,
+              "message": "Unexpected 'todo' comment: 'TODO auto restart server'.",
+              "rule": "no-warning-comments"
+            },
+            {
+              "help": "Track uses of \"TODO\" tags",
+              "line": 162,
+              "message": "Complete the task associated to this \"TODO\" comment.",
+              "rule": "sonarjs/todo-tag"
+            }
+          ],
+          "other": {
+            "func-style": 10,
+            "github/array-foreach": 1,
+            "n/prefer-node-protocol": 2,
+            "no-await-in-loop": 1,
+            "no-else-return": 1,
+            "no-inline-comments": 1,
+            "no-negated-condition": 2,
+            "no-plusplus": 1,
+            "prefer-template": 2,
+            "promise/avoid-new": 1,
+            "promise/param-names": 1,
+            "require-await": 2,
+            "sonarjs/no-duplicate-string": 1,
+            "sort-keys": 8,
+            "typescript/array-type": 3,
+            "typescript/ban-ts-comment": 1,
+            "typescript/method-signature-style": 6,
+            "typescript/no-explicit-any": 2,
+            "typescript/no-invalid-void-type": 2,
+            "typescript/no-shadow": 1,
+            "typescript/no-use-before-define": 5,
+            "unicorn/consistent-arrow-return-style": 1,
+            "unicorn/consistent-boolean-name": 1,
+            "unicorn/name-replacements": 8,
+            "unicorn/no-for-each": 1,
+            "unicorn/no-global-object-property-assignment": 1,
+            "unicorn/no-manually-wrapped-comments": 1,
+            "unicorn/no-negated-condition": 2,
+            "unicorn/no-useless-else": 1,
+            "unicorn/prefer-continue": 1,
+            "unicorn/prefer-node-protocol": 2,
+            "unicorn/prefer-spread": 1
+          }
+        },
+        "oxlint default": {
+          "focus": [
+            {
+              "help": "Remove or rephrase this comment",
+              "line": 162,
+              "message": "Unexpected 'todo' comment: TODO auto restart server",
+              "rule": "no-warning-comments"
+            }
+          ],
+          "other": {
+            "func-style": 10,
+            "no-await-in-loop": 1,
+            "no-else-return": 1,
+            "no-inline-comments": 1,
+            "no-negated-condition": 2,
+            "no-plusplus": 1,
+            "no-shadow": 1,
+            "no-use-before-define": 5,
+            "oxc/only-used-in-recursion": 1,
+            "prefer-template": 2,
+            "promise/avoid-new": 1,
+            "promise/param-names": 1,
+            "require-await": 2,
+            "sort-keys": 6,
+            "typescript/array-type": 3,
+            "typescript/ban-ts-comment": 1,
+            "typescript/method-signature-style": 6,
+            "typescript/no-explicit-any": 2,
+            "typescript/no-invalid-void-type": 2,
+            "typescript/prefer-ts-expect-error": 1,
+            "unicorn/no-array-for-each": 1,
+            "unicorn/no-negated-condition": 2,
+            "unicorn/prefer-node-protocol": 2,
+            "unicorn/prefer-spread": 1
+          }
+        },
+        "oxlint js-plugins": {
+          "focus": [
+            {
+              "help": "Remove or rephrase this comment",
+              "line": 162,
+              "message": "Unexpected 'todo' comment: TODO auto restart server",
+              "rule": "no-warning-comments"
+            },
+            {
+              "help": null,
+              "line": 162,
+              "message": "Complete the task associated to this \"TODO\" comment.",
+              "rule": "sonarjs/todo-tag"
+            }
+          ],
+          "other": {
+            "func-style": 10,
+            "github/array-foreach": 1,
+            "no-await-in-loop": 1,
+            "no-else-return": 1,
+            "no-inline-comments": 1,
+            "no-negated-condition": 2,
+            "no-plusplus": 1,
+            "no-shadow": 1,
+            "no-use-before-define": 5,
+            "oxc/only-used-in-recursion": 1,
+            "prefer-template": 2,
+            "promise/avoid-new": 1,
+            "promise/param-names": 1,
+            "require-await": 2,
+            "sonarjs/no-duplicate-string": 1,
+            "sort-keys": 6,
+            "typescript/array-type": 3,
+            "typescript/ban-ts-comment": 1,
+            "typescript/method-signature-style": 6,
+            "typescript/no-explicit-any": 2,
+            "typescript/no-invalid-void-type": 2,
+            "typescript/prefer-ts-expect-error": 1,
+            "unicorn/no-array-for-each": 1,
+            "unicorn/no-negated-condition": 2,
+            "unicorn/prefer-node-protocol": 2,
+            "unicorn/prefer-spread": 1
+          }
+        }
+      },
+      "lines": 372,
+      "oracle": {
+        "error": null,
+        "scenarios": 13
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/ea95a1d44ab6f1a66701ae43c48f10b2047cb141/packages/vite/src/node/server/hmr.ts",
+      "tsc": []
+    },
+    {
+      "analysis": {
+        "behaviourToPreserve": "Everything: prunePaths returns undefined synchronously and runs only prune callbacks; updates, events, messages and logs unchanged.",
+        "expected": "Leave it for a person and say why (Left for review). Doing the task changes runtime behaviour, and the real fix (vitejs/vite#15782) also made prunePaths async and changed its callers in client/client.ts and runtime/hmrHandler.ts.",
+        "history": "Added in e6958ae8 (2020-12-14, 'wip: dispose no longer imported modules', client.ts), moved to shared/hmr.ts by #15179 (0571b7c6, 2023-12-01), removed with the fix in vitejs/vite#15782 (57628dc7, 2024-03-12, 'fix(hmr): call dispose before prune').",
+        "tempting": "Implementing dispose-before-prune (sync or async) changes behaviour; deleting or rewording the marker hides a known bug.",
+        "why": "A known bug: pruned modules' dispose callbacks never run."
+      },
+      "file": "todo-b-vite-hmr-prune.ts",
+      "id": "b",
+      "kind": "a missing behaviour, fixed later",
+      "marker": "// TODO Trigger their dispose callbacks.",
+      "repo": "vitejs/vite",
+      "sha": "6d6ae10f5d80a9c9b6737377333424fe76652b81",
+      "source": "packages/vite/src/shared/hmr.ts",
+      "verbatim": [
+        {
+          "from": 5,
+          "ok": true,
+          "to": 314
+        }
+      ],
+      "history": "vite",
+      "lint": {
+        "biome": {
+          "focus": [],
+          "other": {
+            "complexity/noForEach": 3,
+            "complexity/useOptionalChain": 1,
+            "style/noParameterProperties": 5,
+            "style/noUnusedTemplateLiteral": 3,
+            "style/useBlockStatements": 1,
+            "style/useConsistentMemberAccessibility": 15,
+            "style/useConsistentMethodSignatures": 15,
+            "style/useReadonlyClassProperties": 10,
+            "style/useUnifiedTypeSignatures": 1,
+            "suspicious/noEmptyBlockStatements": 2,
+            "suspicious/noExplicitAny": 18,
+            "suspicious/useIterableCallbackReturn": 2
+          }
+        },
+        "eslint": {
+          "focus": [
+            {
+              "help": "Disallow specified warning terms in comments",
+              "line": 343,
+              "message": "Unexpected 'todo' comment: 'TODO Trigger their dispose callbacks.'.",
+              "rule": "no-warning-comments"
+            },
+            {
+              "help": "Track uses of \"TODO\" tags",
+              "line": 343,
+              "message": "Complete the task associated to this \"TODO\" comment.",
+              "rule": "sonarjs/todo-tag"
+            }
+          ],
+          "other": {
+            "curly": 1,
+            "github/array-foreach": 3,
+            "inline-config-ignored": 1,
+            "max-classes-per-file": 1,
+            "promise/prefer-await-to-callbacks": 10,
+            "sonarjs/no-duplicate-string": 1,
+            "sonarjs/no-inconsistent-returns": 1,
+            "sonarjs/no-nested-template-literals": 1,
+            "sort-keys": 5,
+            "typescript/array-type": 2,
+            "typescript/class-methods-use-this": 1,
+            "typescript/member-ordering": 4,
+            "typescript/method-signature-style": 15,
+            "typescript/no-empty-function": 2,
+            "typescript/no-explicit-any": 18,
+            "typescript/parameter-properties": 5,
+            "typescript/unified-signatures": 1,
+            "unicorn/catch-error-name": 1,
+            "unicorn/consistent-class-member-order": 3,
+            "unicorn/name-replacements": 34,
+            "unicorn/no-await-expression-member": 1,
+            "unicorn/no-for-each": 3,
+            "unicorn/no-manually-wrapped-comments": 1,
+            "unicorn/prefer-early-return": 2,
+            "unicorn/single-line-block-comment-style": 3
+          }
+        },
+        "oxlint default": {
+          "focus": [
+            {
+              "help": "Remove or rephrase this comment",
+              "line": 343,
+              "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+              "rule": "no-warning-comments"
+            }
+          ],
+          "other": {
+            "class-methods-use-this": 1,
+            "curly": 1,
+            "max-classes-per-file": 1,
+            "no-empty-function": 1,
+            "promise/prefer-await-to-callbacks": 11,
+            "sort-keys": 4,
+            "typescript/array-type": 2,
+            "typescript/method-signature-style": 15,
+            "typescript/no-explicit-any": 18,
+            "typescript/parameter-properties": 5,
+            "typescript/unified-signatures": 1,
+            "unicorn/catch-error-name": 1,
+            "unicorn/no-array-for-each": 3,
+            "unicorn/no-await-expression-member": 1,
+            "unicorn/prefer-type-error": 1
+          }
+        },
+        "oxlint js-plugins": {
+          "focus": [
+            {
+              "help": "Remove or rephrase this comment",
+              "line": 343,
+              "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+              "rule": "no-warning-comments"
+            },
+            {
+              "help": null,
+              "line": 343,
+              "message": "Complete the task associated to this \"TODO\" comment.",
+              "rule": "sonarjs/todo-tag"
+            }
+          ],
+          "other": {
+            "class-methods-use-this": 1,
+            "curly": 1,
+            "github/array-foreach": 3,
+            "max-classes-per-file": 1,
+            "no-empty-function": 1,
+            "promise/prefer-await-to-callbacks": 11,
+            "sonarjs/no-duplicate-string": 1,
+            "sonarjs/no-inconsistent-returns": 1,
+            "sonarjs/no-nested-template-literals": 1,
+            "sort-keys": 4,
+            "typescript/array-type": 2,
+            "typescript/method-signature-style": 15,
+            "typescript/no-explicit-any": 18,
+            "typescript/parameter-properties": 5,
+            "typescript/unified-signatures": 1,
+            "unicorn/catch-error-name": 1,
+            "unicorn/no-array-for-each": 3,
+            "unicorn/no-await-expression-member": 1,
+            "unicorn/prefer-type-error": 1
+          }
+        }
+      },
+      "lines": 423,
+      "oracle": {
+        "error": null,
+        "scenarios": 7
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/6d6ae10f5d80a9c9b6737377333424fe76652b81/packages/vite/src/shared/hmr.ts",
+      "tsc": []
+    },
+    {
+      "analysis": {
+        "behaviourToPreserve": "loadFromJSON calls fileOpen with exactly { description: 'Excalidraw files' } and passes the file to loadFromBlob; serializers, savers and validators unchanged.",
+        "expected": "Keep the information: leave the marker for a person (Left for review), saying it waits on WebKit bug 34442.",
+        "history": "Added in excalidraw/excalidraw#3230 (b9e70ec6, 2021-03-13, 'feat: Implement the Web Share Target API'), copied into LibraryMenuHeaderContent.tsx by #5115 and #5774, still present at the pinned commit (2026-10-08). WebKit bug 34442 is UNCONFIRMED with no resolution (last modified 2022-07-01, read 2026-10-18).",
+        "tempting": "Deleting the marker leaves the commented-out restriction unexplained; rewording it drops the reminder; uncommenting `extensions` breaks opening files on iOS.",
+        "why": "On hold: waits on an upstream WebKit bug."
+      },
+      "file": "todo-c-excalidraw-load-json.ts",
+      "id": "c",
+      "kind": "on hold: waiting on WebKit",
+      "marker": "// ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442",
+      "repo": "excalidraw/excalidraw",
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "source": "packages/excalidraw/data/json.ts",
+      "verbatim": [
+        {
+          "from": 25,
+          "ok": true,
+          "to": 159
+        }
+      ],
+      "history": "excalidraw",
+      "lint": {
+        "biome": {
+          "focus": [],
+          "other": {
+            "performance/useTopLevelRegex": 1,
+            "style/useConsistentArrowReturn": 2,
+            "style/useConsistentTypeDefinitions": 1,
+            "suspicious/noExplicitAny": 4,
+            "suspicious/useAwait": 1
+          }
+        },
+        "eslint": {
+          "focus": [
+            {
+              "help": "Disallow specified warning terms in comments",
+              "line": 245,
+              "message": "Unexpected 'todo' comment: 'ToDo: Be over-permissive until...'.",
+              "rule": "no-warning-comments"
+            },
+            {
+              "help": "Track uses of \"TODO\" tags",
+              "line": 245,
+              "message": "Complete the task associated to this \"TODO\" comment.",
+              "rule": "sonarjs/todo-tag"
+            }
+          ],
+          "other": {
+            "arrow-body-style": 2,
+            "github/no-then": 1,
+            "no-inline-comments": 1,
+            "prefer-named-capture-group": 1,
+            "promise/prefer-await-to-then": 1,
+            "require-await": 3,
+            "require-unicode-regexp": 1,
+            "sonarjs/expression-complexity": 2,
+            "sort-keys": 10,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/no-explicit-any": 4,
+            "unicorn/name-replacements": 6,
+            "unicorn/no-computed-property-existence-check": 1,
+            "unicorn/no-unused-properties": 2,
+            "unicorn/prefer-await": 1
+          }
+        },
+        "oxlint default": {
+          "focus": [
+            {
+              "help": "Remove or rephrase this comment",
+              "line": 245,
+              "message": "Unexpected 'todo' comment: ToDo: Be over-permissive until...",
+              "rule": "no-warning-comments"
+            }
+          ],
+          "other": {
+            "arrow-body-style": 2,
+            "no-inline-comments": 1,
+            "prefer-named-capture-group": 1,
+            "promise/prefer-await-to-then": 1,
+            "require-await": 3,
+            "require-unicode-regexp": 1,
+            "sort-keys": 5,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/no-explicit-any": 4
+          }
+        },
+        "oxlint js-plugins": {
+          "focus": [
+            {
+              "help": "Remove or rephrase this comment",
+              "line": 245,
+              "message": "Unexpected 'todo' comment: ToDo: Be over-permissive until...",
+              "rule": "no-warning-comments"
+            },
+            {
+              "help": null,
+              "line": 245,
+              "message": "Complete the task associated to this \"TODO\" comment.",
+              "rule": "sonarjs/todo-tag"
+            }
+          ],
+          "other": {
+            "arrow-body-style": 2,
+            "github/no-then": 1,
+            "no-inline-comments": 1,
+            "prefer-named-capture-group": 1,
+            "promise/prefer-await-to-then": 1,
+            "require-await": 3,
+            "require-unicode-regexp": 1,
+            "sonarjs/expression-complexity": 2,
+            "sort-keys": 5,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/no-explicit-any": 4
+          }
+        }
+      },
+      "lines": 297,
+      "oracle": {
+        "error": null,
+        "scenarios": 10
+      },
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/data/json.ts",
+      "tsc": []
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (comment scanner)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "gh": "gh version 2.102.0 (2026-09-30)"
+  },
+  "variants": [
+    {
+      "base": "a",
+      "id": "a01",
+      "note": "right: delete the stale marker",
+      "what": "delete the comment",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a02",
+      "note": "right: the project's own change (#2119)",
+      "what": "drop the word, keep the description",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a03",
+      "note": "acceptable: the task is done",
+      "what": "reword to NOTE:",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a04",
+      "note": "wrong: does the task again",
+      "what": "delete the marker and add another restart",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [
+          "config file",
+          "config file, middleware mode",
+          "dot env"
+        ],
+        "restarts": [
+          2,
+          2,
+          2
+        ],
+        "verdict": "changed"
+      },
+      "oxlintNewRules": [
+        "no-use-before-define +1"
+      ],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a05",
+      "note": "safe, unnecessary: leave for review",
+      "what": "unchanged",
+      "focus": {
+        "biome": [],
+        "eslint": [
+          "no-warning-comments@162",
+          "sonarjs/todo-tag@162"
+        ],
+        "oxlint default": [
+          "no-warning-comments@162"
+        ],
+        "oxlint js-plugins": [
+          "no-warning-comments@162",
+          "sonarjs/todo-tag@162"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a06",
+      "note": "evasion: the word moved off the start",
+      "what": "move the word to the end",
+      "focus": {
+        "biome": [],
+        "eslint": [
+          "sonarjs/todo-tag@162"
+        ],
+        "oxlint default": [],
+        "oxlint js-plugins": [
+          "sonarjs/todo-tag@162"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a07",
+      "note": "evasion: lower case, mid-sentence",
+      "what": "lower-case word at the end",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b01",
+      "note": "wrong: hides a known bug",
+      "what": "delete the comment",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b02",
+      "note": "evasion: keeps the information, drops the marker",
+      "what": "reword to NOTE:",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b03",
+      "note": "the project's fix (#15782, this file's part): changes behaviour, and its callers in other files must await it",
+      "what": "upstream fix: async, dispose awaited before prune",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [
+          "prune: dispose and prune",
+          "prune: async dispose",
+          "prune: prune only",
+          "prune: dispose only",
+          "prune: nothing registered"
+        ],
+        "returned": "promise",
+        "verdict": "fixed like upstream",
+        "waitsForAsyncDispose": true
+      },
+      "oxlintNewRules": [
+        "array-callback-return +1",
+        "curly +1"
+      ],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b04",
+      "note": "changes behaviour; doesn't wait for an async dispose",
+      "what": "sync fix: dispose, then prune",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [
+          "prune: dispose and prune",
+          "prune: async dispose",
+          "prune: dispose only"
+        ],
+        "returned": "undefined",
+        "verdict": "fixed another way",
+        "waitsForAsyncDispose": false
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b05",
+      "note": "right: leave for review",
+      "what": "unchanged",
+      "focus": {
+        "biome": [],
+        "eslint": [
+          "no-warning-comments@343",
+          "sonarjs/todo-tag@343"
+        ],
+        "oxlint default": [
+          "no-warning-comments@343"
+        ],
+        "oxlint js-plugins": [
+          "no-warning-comments@343",
+          "sonarjs/todo-tag@343"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b06",
+      "note": "evasion: the word moved off the start",
+      "what": "move the word to the end",
+      "focus": {
+        "biome": [],
+        "eslint": [
+          "sonarjs/todo-tag@343"
+        ],
+        "oxlint default": [],
+        "oxlint js-plugins": [
+          "sonarjs/todo-tag@343"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b07",
+      "note": "evasion: keeps the information, drops the marker",
+      "what": "reword as a known issue",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c01",
+      "note": "wrong: the commented-out restriction loses its reason",
+      "what": "delete the marker's two lines",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c02",
+      "note": "wrong: the workaround loses its reason and its undo",
+      "what": "delete all three comment lines",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c03",
+      "note": "wrong: breaks opening files on iOS",
+      "what": "do the task: restore `extensions`",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [
+          "log"
+        ],
+        "fileOpen": {
+          "description": "Excalidraw files",
+          "extensions": [
+            "json",
+            "excalidraw",
+            "png",
+            "svg"
+          ]
+        },
+        "verdict": "restricted"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c04",
+      "note": "evasion: keeps the reason, drops the reminder",
+      "what": "reword ToDo: to Note:",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c05",
+      "note": "right: leave for review",
+      "what": "unchanged",
+      "focus": {
+        "biome": [],
+        "eslint": [
+          "no-warning-comments@245",
+          "sonarjs/todo-tag@245"
+        ],
+        "oxlint default": [
+          "no-warning-comments@245"
+        ],
+        "oxlint js-plugins": [
+          "no-warning-comments@245",
+          "sonarjs/todo-tag@245"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c06",
+      "note": "evasion: keeps the condition, drops the marker",
+      "what": "reword without the word",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "oxlint default": [],
+        "oxlint js-plugins": []
+      },
+      "oracle": {
+        "error": null,
+        "changed": [],
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    }
+  ]
+}

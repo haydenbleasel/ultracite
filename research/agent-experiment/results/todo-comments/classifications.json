@@ -1,0 +1,494 @@
+{
+  "classifiedBy": "one rater (the session that ran the experiment), from each run's diff.patch and final message, before looking at the automatic outcome of the narrowed tag detection; outcome and response use the codebook in results.json rules.outcomes and rules.responses",
+  "codebook": {
+    "outcome": "what the edit did to the comment (results.json rules.outcomes)",
+    "response": "against the subject's right response (results.json rules.responses)",
+    "substanceKept": "A: a comment still describes the restart; B: the dispose gap is still written down; C: the WebKit bug link survives",
+    "revisitKept": "B and C: the comment still says there is something to do, or what to wait for (until, once, while unresolved, a known gap); null for A",
+    "explainedInFinalMessage": "the final message says what the TODO meant and why the edit fits it (A: already done; B: doing it changes behaviour; C: it waits on WebKit). A bare 'removed the flagged TODO' doesn't count",
+    "mentionedUpstreamChange": "the agent said, from its own knowledge, that upstream Vite later made the change (the run dir has no history)",
+    "citedHelpText": "the final message cites the rule's help text ('Remove or rephrase this comment') as its reason"
+  },
+  "runs": {
+    "a-js-claude-1": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "said the TODO was out of date: the branch already restarts the server"
+    },
+    "a-js-claude-2": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "said the TODO was out of date: the branch already restarts the server"
+    },
+    "a-js-claude-3": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped (right)",
+      "substanceKept": true,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "rewrote it as a description: 'config or .env changed: restart the server'"
+    },
+    "a-js-claude-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped (right)",
+      "substanceKept": true,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "'auto restart server so the changed config or .env file takes effect'; cited the help text"
+    },
+    "a-js-codex-1": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete, restart already implemented"
+    },
+    "a-js-codex-2": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete, restart already implemented"
+    },
+    "a-js-codex-3": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete, restart already implemented"
+    },
+    "a-js-codex-4": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete, restart already implemented"
+    },
+    "a-ox-claude-1": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "said the TODO was out of date: the branch already restarts the server"
+    },
+    "a-ox-claude-2": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "said the TODO was out of date: the branch already restarts the server"
+    },
+    "a-ox-claude-3": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "said the TODO was out of date: the branch already restarts the server"
+    },
+    "a-ox-claude-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped (right)",
+      "substanceKept": true,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'auto restart server on config or .env changes'"
+    },
+    "a-ox-codex-1": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete"
+    },
+    "a-ox-codex-2": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete"
+    },
+    "a-ox-codex-3": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete"
+    },
+    "a-ox-codex-4": {
+      "outcome": "comment deleted",
+      "response": "marker dropped (right)",
+      "substanceKept": false,
+      "revisitKept": null,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "one or two sentences: stale/obsolete"
+    },
+    "b-js-claude-1": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": true,
+      "citedHelpText": false,
+      "notes": "'Only prune callbacks run here; dispose callbacks are not triggered.' Explained the task would change behaviour and the signature; 'Upstream Vite made that change at some point.'"
+    },
+    "b-js-claude-2": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": true,
+      "citedHelpText": true,
+      "notes": "'Only their prune callbacks are run here; their dispose callbacks are not.' Said 'The task itself is still not done, and the comment no longer reads as a TODO.'"
+    },
+    "b-js-claude-3": {
+      "outcome": "unchanged",
+      "response": "left for review (right)",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": true,
+      "citedHelpText": false,
+      "notes": "the only Left for review line (1, 2): rewording would 'only hide the gap'; read the prompt's restyling rule as excluding rewording"
+    },
+    "b-js-claude-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": true,
+      "citedHelpText": true,
+      "notes": "'Only their prune callbacks run here; their dispose callbacks are not triggered.' 'Vite itself later made this change'"
+    },
+    "b-js-codex-1": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Removed the flagged TODO comment ... without changing runtime behavior'; the gap isn't mentioned"
+    },
+    "b-js-codex-2": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Removed the flagged TODO comment ... without changing runtime behavior'; the gap isn't mentioned"
+    },
+    "b-js-codex-3": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Removed the flagged TODO comment ... without changing runtime behavior'; the gap isn't mentioned"
+    },
+    "b-js-codex-4": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "'Removed the flagged TODO comment ... without changing runtime behavior'; the gap isn't mentioned; 'as the diagnostic help permits'"
+    },
+    "b-ox-claude-1": {
+      "outcome": "reworded to another tag",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": true,
+      "citedHelpText": false,
+      "notes": "'Note: their dispose callbacks are not triggered here, only prune callbacks.' 'That's how upstream Vite does it, and it also makes the method async.'"
+    },
+    "b-ox-claude-2": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Only their prune callbacks run here; their dispose callbacks are not triggered.' 'The new comment keeps the TODO's information by stating the gap plainly.'"
+    },
+    "b-ox-claude-3": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Only prune callbacks run here; their dispose callbacks are not triggered.' Suggested the fix as a separate change"
+    },
+    "b-ox-claude-4": {
+      "outcome": "reworded to another tag",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Note: only prune callbacks run here; dispose callbacks are not triggered for pruned modules.' 'The gap still exists, so the comment states it plainly instead of deleting it.'"
+    },
+    "b-ox-codex-1": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "deleted; the gap isn't mentioned ; cited the help text ('permits', 'allows', 'recommends')"
+    },
+    "b-ox-codex-2": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "deleted; the gap isn't mentioned ; cited the help text ('permits', 'allows', 'recommends')"
+    },
+    "b-ox-codex-3": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "deleted; the gap isn't mentioned"
+    },
+    "b-ox-codex-4": {
+      "outcome": "comment deleted",
+      "response": "marker dropped, information lost",
+      "substanceKept": false,
+      "revisitKept": false,
+      "explainedInFinalMessage": false,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "deleted; the gap isn't mentioned ; cited the help text ('permits', 'allows', 'recommends')"
+    },
+    "c-js-claude-1": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "four lines; folded the commented-out extensions line into the prose: 'The filter to use once that bug is resolved: extensions: [...]'"
+    },
+    "c-js-claude-2": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Intentionally over-permissive: `extensions` is omitted because of <link> ... Intended filter:' above the kept extensions line; no condition to wait for"
+    },
+    "c-js-claude-3": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'The intended filter, once that bug is resolved, is [...]'; the extensions line folded into prose"
+    },
+    "c-js-claude-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "'Extensions are intentionally not restricted (e.g. to [...]) because of <link>'; no condition"
+    },
+    "c-js-codex-1": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Omit extension restrictions / Allow all file types / Accept all file extensions so iOS users can open `.excalidraw` files. See <link>.' The 'until it gets resolved' condition is gone"
+    },
+    "c-js-codex-2": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Omit extension restrictions / Allow all file types / Accept all file extensions so iOS users can open `.excalidraw` files. See <link>.' The 'until it gets resolved' condition is gone"
+    },
+    "c-js-codex-3": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Omit extension restrictions / Allow all file types / Accept all file extensions so iOS users can open `.excalidraw` files. See <link>.' The 'until it gets resolved' condition is gone"
+    },
+    "c-js-codex-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Omit extension restrictions / Allow all file types / Accept all file extensions so iOS users can open `.excalidraw` files. See <link>.' The 'until it gets resolved' condition is gone"
+    },
+    "c-ox-claude-1": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Intentionally over-permissive until <link>' (second line kept)"
+    },
+    "c-ox-claude-2": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": true,
+      "notes": "'Intentionally over-permissive (no `extensions` filter) because of <link>. ... Once that bug is resolved, restrict to:'"
+    },
+    "c-ox-claude-3": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Intentionally over-permissive while <link> is unresolved.'"
+    },
+    "c-ox-claude-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Intentionally over-permissive while <link> remains unresolved.'"
+    },
+    "c-ox-codex-1": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Allow all file types/extensions until <link>' (second line kept)"
+    },
+    "c-ox-codex-2": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Allow all file types/extensions until <link>' (second line kept)"
+    },
+    "c-ox-codex-3": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": true,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Allow all file types/extensions until <link>' (second line kept)"
+    },
+    "c-ox-codex-4": {
+      "outcome": "marker dropped, text kept",
+      "response": "marker dropped, information kept",
+      "substanceKept": true,
+      "revisitKept": false,
+      "explainedInFinalMessage": true,
+      "mentionedUpstreamChange": false,
+      "citedHelpText": false,
+      "notes": "'Keep file types unrestricted so iOS users can open `.excalidraw` files. WebKit issue: <link>'; no condition"
+    }
+  }
+}

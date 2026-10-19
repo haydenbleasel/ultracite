@@ -1,0 +1,936 @@
+{
+  "biome": {
+    "commentRulesInCore": [
+      {
+        "rule": "suspicious/noCommentText",
+        "value": "error"
+      }
+    ],
+    "explainHits": [
+      {
+        "description": "Disallow using `v-if` and `v-for` directives on the same element.",
+        "matched": "todo",
+        "rule": "correctness/noVueVIfWithVFor"
+      },
+      {
+        "description": "Disallow disabled tests.",
+        "matched": "fixme",
+        "rule": "suspicious/noSkippedTests"
+      }
+    ],
+    "note": "Biome has no rule for task-marker comments. None of its rules' names or `biome explain` texts mentions TODO, FIXME, XXX or HACK (the only hit is listed in explainHits), and its rules-sources page maps no Biome rule to no-warning-comments, sonarjs todo-tag/fixme-tag or unicorn expiring-todo-comments.",
+    "rulesInSchema": 565,
+    "rulesSources": {
+      "commit": "de75d6a71b13801ad0727023e03956c657709c95",
+      "date": "2026-08-24T14:05:07Z",
+      "path": "src/content/docs/en/linter/rules-sources.mdx",
+      "url": "https://github.com/biomejs/website/blob/de75d6a71b13801ad0727023e03956c657709c95/src/content/docs/en/linter/rules-sources.mdx",
+      "mentions": {
+        "expiring-todo-comments": [],
+        "no-inline-comments": [],
+        "no-warning-comments": [],
+        "sonarjs fixme-tag / S1134": [],
+        "sonarjs todo-tag / S1135": [],
+        "TODO": []
+      }
+    },
+    "version": "2.5.15"
+  },
+  "eslint": {
+    "meta": {
+      "no-warning-comments": {
+        "defaultOptions": [
+          {
+            "location": "start",
+            "terms": [
+              "todo",
+              "fixme",
+              "xxx"
+            ]
+          }
+        ],
+        "description": "Disallow specified warning terms in comments",
+        "fixable": null,
+        "hasSuggestions": false,
+        "messages": {
+          "unexpectedComment": "Unexpected '{{matchedTerm}}' comment: '{{comment}}'."
+        },
+        "url": "https://eslint.org/docs/latest/rules/no-warning-comments"
+      },
+      "sonarjs/todo-tag": {
+        "defaultOptions": [],
+        "description": "Track uses of \"TODO\" tags",
+        "fixable": null,
+        "hasSuggestions": false,
+        "messages": {
+          "completeTODO": "Complete the task associated to this \"TODO\" comment."
+        },
+        "url": "https://sonarsource.github.io/rspec/#/rspec/S1135/javascript"
+      },
+      "sonarjs/fixme-tag": {
+        "defaultOptions": [],
+        "description": "Track uses of \"FIXME\" tags",
+        "fixable": null,
+        "hasSuggestions": false,
+        "messages": {
+          "fixme": "Take the required action to fix the issue indicated by this comment."
+        },
+        "url": "https://sonarsource.github.io/rspec/#/rspec/S1134/javascript"
+      },
+      "no-inline-comments": {
+        "defaultOptions": [
+          {}
+        ],
+        "description": "Disallow inline comments after code",
+        "fixable": null,
+        "hasSuggestions": false,
+        "messages": {
+          "unexpectedInlineComment": "Unexpected comment inline with code."
+        },
+        "url": "https://eslint.org/docs/latest/rules/no-inline-comments"
+      }
+    },
+    "resolved": [
+      {
+        "file": "x.ts",
+        "presets": [
+          "core"
+        ],
+        "rules": {
+          "no-warning-comments": {
+            "options": [
+              {
+                "location": "start",
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ]
+              }
+            ],
+            "severity": 2
+          },
+          "sonarjs/todo-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "sonarjs/fixme-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "unicorn/expiring-todo-comments": {
+            "options": [
+              {
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ],
+                "ignore": [],
+                "checkDates": false,
+                "checkDatesOnPullRequests": false,
+                "allowWarningComments": true
+              }
+            ],
+            "severity": 2
+          },
+          "no-inline-comments": {
+            "options": [
+              {}
+            ],
+            "severity": 2
+          },
+          "capitalized-comments": {
+            "options": [
+              "always"
+            ],
+            "severity": 0
+          },
+          "sonarjs/no-commented-code": {
+            "options": [],
+            "severity": 2
+          },
+          "@typescript-eslint/ban-ts-comment": {
+            "options": [],
+            "severity": 2
+          },
+          "jsdoc/check-tag-names": {
+            "options": [],
+            "severity": 2
+          },
+          "github/no-blur": {
+            "options": [],
+            "severity": 2
+          }
+        }
+      },
+      {
+        "file": "x.tsx",
+        "presets": [
+          "core"
+        ],
+        "rules": {
+          "no-warning-comments": {
+            "options": [
+              {
+                "location": "start",
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ]
+              }
+            ],
+            "severity": 2
+          },
+          "sonarjs/todo-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "sonarjs/fixme-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "unicorn/expiring-todo-comments": {
+            "options": [
+              {
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ],
+                "ignore": [],
+                "checkDates": false,
+                "checkDatesOnPullRequests": false,
+                "allowWarningComments": true
+              }
+            ],
+            "severity": 2
+          },
+          "no-inline-comments": {
+            "options": [
+              {}
+            ],
+            "severity": 2
+          },
+          "capitalized-comments": {
+            "options": [
+              "always"
+            ],
+            "severity": 0
+          },
+          "sonarjs/no-commented-code": {
+            "options": [],
+            "severity": 2
+          },
+          "@typescript-eslint/ban-ts-comment": {
+            "options": [],
+            "severity": 2
+          },
+          "jsdoc/check-tag-names": {
+            "options": [],
+            "severity": 2
+          },
+          "github/no-blur": {
+            "options": [],
+            "severity": 2
+          }
+        }
+      },
+      {
+        "file": "x.js",
+        "presets": [
+          "core"
+        ],
+        "rules": {
+          "no-warning-comments": {
+            "options": [
+              {
+                "location": "start",
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ]
+              }
+            ],
+            "severity": 2
+          },
+          "sonarjs/todo-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "sonarjs/fixme-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "unicorn/expiring-todo-comments": {
+            "options": [
+              {
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ],
+                "ignore": [],
+                "checkDates": false,
+                "checkDatesOnPullRequests": false,
+                "allowWarningComments": true
+              }
+            ],
+            "severity": 2
+          },
+          "no-inline-comments": {
+            "options": [
+              {}
+            ],
+            "severity": 2
+          },
+          "capitalized-comments": {
+            "options": [
+              "always"
+            ],
+            "severity": 0
+          },
+          "sonarjs/no-commented-code": {
+            "options": [],
+            "severity": 2
+          },
+          "jsdoc/check-tag-names": {
+            "options": [],
+            "severity": 2
+          },
+          "github/no-blur": {
+            "options": [],
+            "severity": 2
+          }
+        }
+      },
+      {
+        "file": "x.test.ts",
+        "presets": [
+          "core"
+        ],
+        "rules": {
+          "no-warning-comments": {
+            "options": [
+              {
+                "location": "start",
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ]
+              }
+            ],
+            "severity": 2
+          },
+          "sonarjs/todo-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "sonarjs/fixme-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "unicorn/expiring-todo-comments": {
+            "options": [
+              {
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ],
+                "ignore": [],
+                "checkDates": false,
+                "checkDatesOnPullRequests": false,
+                "allowWarningComments": true
+              }
+            ],
+            "severity": 2
+          },
+          "no-inline-comments": {
+            "options": [
+              {}
+            ],
+            "severity": 2
+          },
+          "capitalized-comments": {
+            "options": [
+              "always"
+            ],
+            "severity": 0
+          },
+          "sonarjs/no-commented-code": {
+            "options": [],
+            "severity": 2
+          },
+          "@typescript-eslint/ban-ts-comment": {
+            "options": [],
+            "severity": 2
+          },
+          "jsdoc/check-tag-names": {
+            "options": [],
+            "severity": 2
+          },
+          "github/no-blur": {
+            "options": [],
+            "severity": 2
+          }
+        }
+      },
+      {
+        "file": "x.tsx",
+        "presets": [
+          "core",
+          "react"
+        ],
+        "rules": {
+          "no-warning-comments": {
+            "options": [
+              {
+                "location": "start",
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ]
+              }
+            ],
+            "severity": 2
+          },
+          "sonarjs/todo-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "sonarjs/fixme-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "unicorn/expiring-todo-comments": {
+            "options": [
+              {
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ],
+                "ignore": [],
+                "checkDates": false,
+                "checkDatesOnPullRequests": false,
+                "allowWarningComments": true
+              }
+            ],
+            "severity": 2
+          },
+          "no-inline-comments": {
+            "options": [
+              {}
+            ],
+            "severity": 2
+          },
+          "capitalized-comments": {
+            "options": [
+              "always"
+            ],
+            "severity": 0
+          },
+          "sonarjs/no-commented-code": {
+            "options": [],
+            "severity": 2
+          },
+          "@typescript-eslint/ban-ts-comment": {
+            "options": [],
+            "severity": 2
+          },
+          "react/jsx-no-comment-textnodes": {
+            "options": [],
+            "severity": 2
+          },
+          "jsdoc/check-tag-names": {
+            "options": [],
+            "severity": 2
+          },
+          "github/no-blur": {
+            "options": [],
+            "severity": 2
+          }
+        }
+      },
+      {
+        "file": "x.ts",
+        "presets": [
+          "core",
+          "type-aware"
+        ],
+        "rules": {
+          "no-warning-comments": {
+            "options": [
+              {
+                "location": "start",
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ]
+              }
+            ],
+            "severity": 2
+          },
+          "sonarjs/todo-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "sonarjs/fixme-tag": {
+            "options": [],
+            "severity": 2
+          },
+          "unicorn/expiring-todo-comments": {
+            "options": [
+              {
+                "terms": [
+                  "todo",
+                  "fixme",
+                  "xxx"
+                ],
+                "ignore": [],
+                "checkDates": false,
+                "checkDatesOnPullRequests": false,
+                "allowWarningComments": true
+              }
+            ],
+            "severity": 2
+          },
+          "no-inline-comments": {
+            "options": [
+              {}
+            ],
+            "severity": 2
+          },
+          "capitalized-comments": {
+            "options": [
+              "always"
+            ],
+            "severity": 0
+          },
+          "sonarjs/no-commented-code": {
+            "options": [],
+            "severity": 2
+          },
+          "@typescript-eslint/ban-ts-comment": {
+            "options": [],
+            "severity": 2
+          },
+          "jsdoc/check-tag-names": {
+            "options": [],
+            "severity": 2
+          },
+          "github/no-blur": {
+            "options": [],
+            "severity": 2
+          }
+        }
+      }
+    ],
+    "unicorn": {
+      "defaultOptions": [
+        {
+          "terms": [
+            "todo",
+            "fixme",
+            "xxx"
+          ],
+          "ignore": [],
+          "checkDates": false,
+          "checkDatesOnPullRequests": false,
+          "allowWarningComments": true
+        }
+      ],
+      "description": "Add expiration conditions to TODO comments.",
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "unicorn/avoidMultipleDates": "Avoid using multiple expiration dates: {{expirationDates}}. {{message}}",
+        "unicorn/expiredTodo": "Past due date: {{expirationDate}}. {{message}}",
+        "unicorn/reachedPackageVersion": "Past due package version: {{comparison}}. {{message}}",
+        "unicorn/avoidMultiplePackageVersions": "Avoid using multiple package versions: {{versions}}. {{message}}",
+        "unicorn/havePackage": "Due since {{package}} was installed. {{message}}",
+        "unicorn/dontHavePackage": "Due since {{package}} was removed. {{message}}",
+        "unicorn/versionMatches": "Due since package version matched: {{comparison}}. {{message}}",
+        "unicorn/peerVersionMatches": "Due since peer dependency version matched: {{comparison}}. {{message}}",
+        "unicorn/unsupportedCatalogProtocol": "Cannot check {{dependencyType}} version because {{package}} uses the unsupported `catalog:` protocol. {{message}}",
+        "unicorn/engineMatches": "Due since Node.js version matched: {{comparison}}. {{message}}",
+        "unicorn/removeWhitespaces": "Avoid using whitespace on TODO argument. On '{{original}}' use '{{fix}}'. {{message}}",
+        "unicorn/missingAtSymbol": "Missing '@' on TODO argument. On '{{original}}' use '{{fix}}'. {{message}}",
+        "unexpectedComment": "Unexpected '{{matchedTerm}}': '{{comment}}'."
+      },
+      "version": "77.0.0"
+    }
+  },
+  "generated": "2026-10-19",
+  "oxlint": {
+    "catalogue": {
+      "no-warning-comments": {
+        "category": "pedantic",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      },
+      "sonarjs/todo-tag": null,
+      "sonarjs/fixme-tag": null,
+      "unicorn/expiring-todo-comments": null,
+      "no-inline-comments": {
+        "category": "pedantic",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-inline-comments.html"
+      },
+      "capitalized-comments": {
+        "category": "style",
+        "default": false,
+        "fix": "fixable_fix",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/capitalized-comments.html"
+      },
+      "line-comment-position": null,
+      "multiline-comment-style": null,
+      "spaced-comment": null,
+      "sonarjs/no-commented-code": null,
+      "unicorn/no-abusive-eslint-disable": {
+        "category": "restriction",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/unicorn/no-abusive-eslint-disable.html"
+      },
+      "typescript/ban-ts-comment": {
+        "category": "pedantic",
+        "default": false,
+        "fix": "conditional_fix",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/ban-ts-comment.html"
+      },
+      "@typescript-eslint/ban-ts-comment": {
+        "category": "pedantic",
+        "default": false,
+        "fix": "conditional_fix",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/typescript/ban-ts-comment.html"
+      },
+      "react/jsx-no-comment-textnodes": {
+        "category": "suspicious",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/jsx-no-comment-textnodes.html"
+      },
+      "react/todo": {
+        "category": "restriction",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/todo.html"
+      },
+      "jest/prefer-todo": {
+        "category": "style",
+        "default": false,
+        "fix": "fixable_fix",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/jest/prefer-todo.html"
+      },
+      "vitest/prefer-todo": {
+        "category": "style",
+        "default": false,
+        "fix": "fixable_fix",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/vitest/prefer-todo.html"
+      },
+      "vitest/warn-todo": {
+        "category": "correctness",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/vitest/warn-todo.html"
+      },
+      "jest/no-commented-out-tests": {
+        "category": "suspicious",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/jest/no-commented-out-tests.html"
+      },
+      "vitest/no-commented-out-tests": {
+        "category": "suspicious",
+        "default": false,
+        "fix": "none",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/vitest/no-commented-out-tests.html"
+      },
+      "jsdoc/check-tag-names": {
+        "category": "correctness",
+        "default": false,
+        "fix": "pending",
+        "typeAware": false,
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/jsdoc/check-tag-names.html"
+      },
+      "jsdoc/no-bad-blocks": null,
+      "github/no-blur": null
+    },
+    "noWarningCommentsSchema": {
+      "decoration": {
+        "default": [],
+        "description": "An array of characters to ignore at the start of comments when `location` is `\"start\"`.\n\nUseful for ignoring common comment decorations like `*` in JSDoc-style comments."
+      },
+      "location": {
+        "default": "start",
+        "description": "Where to check for the terms."
+      },
+      "terms": {
+        "default": [
+          "todo",
+          "fixme",
+          "xxx"
+        ],
+        "description": "An array of terms to match. The matching is case-insensitive."
+      }
+    },
+    "presets": {
+      "core": {
+        "jsPlugins": [],
+        "rules": {
+          "no-warning-comments": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "no-inline-comments": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "capitalized-comments": {
+            "on": false,
+            "options": [],
+            "overrides": [],
+            "severity": "off"
+          },
+          "unicorn/no-abusive-eslint-disable": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "typescript/ban-ts-comment": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "jsdoc/check-tag-names": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          }
+        }
+      },
+      "jest": {
+        "jsPlugins": [],
+        "rules": {
+          "jest/prefer-todo": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+                  "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+                ],
+                "options": [],
+                "severity": "error"
+              }
+            ],
+            "severity": null
+          },
+          "jest/no-commented-out-tests": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+                  "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+                ],
+                "options": [],
+                "severity": "error"
+              }
+            ],
+            "severity": null
+          }
+        }
+      },
+      "js-plugins": {
+        "jsPlugins": [
+          "github",
+          "sonarjs",
+          "react-doctor"
+        ],
+        "rules": {
+          "sonarjs/todo-tag": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "sonarjs/fixme-tag": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "sonarjs/no-commented-code": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "github/no-blur": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          }
+        }
+      },
+      "react": {
+        "jsPlugins": [],
+        "rules": {
+          "react/jsx-no-comment-textnodes": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          },
+          "react/todo": {
+            "on": true,
+            "options": [],
+            "overrides": [],
+            "severity": "error"
+          }
+        }
+      },
+      "remix": {
+        "jsPlugins": [],
+        "rules": {
+          "unicorn/no-abusive-eslint-disable": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/routeTree.gen.ts"
+                ],
+                "options": [],
+                "severity": "off"
+              }
+            ],
+            "severity": null
+          }
+        }
+      },
+      "tanstack": {
+        "jsPlugins": [],
+        "rules": {
+          "unicorn/no-abusive-eslint-disable": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/routeTree.gen.ts"
+                ],
+                "options": [],
+                "severity": "off"
+              }
+            ],
+            "severity": null
+          }
+        }
+      },
+      "vitest": {
+        "jsPlugins": [],
+        "rules": {
+          "vitest/prefer-todo": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+                  "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+                ],
+                "options": [],
+                "severity": "error"
+              }
+            ],
+            "severity": null
+          },
+          "vitest/warn-todo": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+                  "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+                ],
+                "options": [],
+                "severity": "error"
+              }
+            ],
+            "severity": null
+          },
+          "vitest/no-commented-out-tests": {
+            "on": false,
+            "options": [],
+            "overrides": [
+              {
+                "files": [
+                  "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+                  "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+                ],
+                "options": [],
+                "severity": "error"
+              }
+            ],
+            "severity": null
+          }
+        }
+      }
+    },
+    "version": "1.86.0"
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (comment scanner)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "gh": "gh version 2.102.0 (2026-09-30)"
+  }
+}

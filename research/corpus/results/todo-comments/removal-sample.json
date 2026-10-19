@@ -1,0 +1,1652 @@
+{
+  "codebook": {
+    "howRemoved": {
+      "addressed": "the commit does what the marker asked for (in the same file or by an API change it relies on)",
+      "already done": "the task had been done earlier, or no longer applied, and the commit deletes the stale comment",
+      "dropped, debt remains": "the comment is deleted but the task isn't done and still applies",
+      "code deleted": "the comment went with the code it described (file, function or block deleted)",
+      "code moved": "the code moved (to another file or function) and the comment went with it or was dropped there",
+      "rewritten, not addressed": "the code around it was rewritten for another reason and the comment was dropped",
+      "unclear": "can't tell from the diff and the commit message"
+    },
+    "mentionedInMessage": "does the commit message (subject) mention the marker's task?"
+  },
+  "generated": "2026-10-19",
+  "items": [
+    {
+      "added": {
+        "commit": "d0574a16c8ab6cadb94cee42b767423c0fa873fc",
+        "date": "2021-07-04"
+      },
+      "autoKind": "function deleted",
+      "id": "rm001",
+      "path": "src/types.ts",
+      "removed": {
+        "commit": "db8adf289925321068e9d05210951569a18c3fe1",
+        "date": "2021-10-17",
+        "line": 1974,
+        "subject": "Merge pull request #712 from colinhacks/3.10"
+      },
+      "repo": "zod",
+      "sameAuthor": true,
+      "text": "TODO encapsulate"
+    },
+    {
+      "added": {
+        "commit": "a1d21329ea73f69cbee6d6da74043c3320b90809",
+        "date": "2022-05-26"
+      },
+      "autoKind": "file deleted",
+      "id": "rm002",
+      "path": "src/middleware/graphql-server/index.ts",
+      "removed": {
+        "commit": "6fa5d4c935319e948d719ba12a103e66e269c587",
+        "date": "2022-07-16",
+        "line": 165,
+        "subject": "Merge pull request #390 from honojs/next"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "XXX"
+    },
+    {
+      "added": {
+        "commit": "8ccbd616cd2ae8c0d4e8343c39d3f98954836bae",
+        "date": "2021-12-17"
+      },
+      "autoKind": "function changed",
+      "id": "rm003",
+      "path": "src/compose.ts",
+      "removed": {
+        "commit": "9de6328f87f9b2e7cf715dd0958e748a8e4104eb",
+        "date": "2022-02-20",
+        "line": 16,
+        "subject": "feat: `app.onError` for handling error (#111)"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "XXX"
+    },
+    {
+      "added": {
+        "commit": "36535de0e5ae0af033a33d20f3ca6d29224c4e8a",
+        "date": "2021-12-22"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm004",
+      "path": "src/util.ts",
+      "removed": {
+        "commit": "c522636662fb91ef4fd35a42a7df4db235836e78",
+        "date": "2022-01-21",
+        "line": 27,
+        "subject": "refactor(utils): better management for utils modules to avoid kitchen sink issue (#59)"
+      },
+      "repo": "hono",
+      "sameAuthor": false,
+      "text": "XXX"
+    },
+    {
+      "added": {
+        "commit": "1564cdeee0e74fd2d90ddd459e2e09bffaacde88",
+        "date": "2024-05-03"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm005",
+      "path": "src/jsx/dom/index.ts",
+      "removed": {
+        "commit": "acd36341fb33d14c26aa63d823e7a9f41ccf6e36",
+        "date": "2024-05-27",
+        "line": 140,
+        "subject": "Merge pull request #2769 from honojs/next"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "TODO: change to `export type *` after denoify bug is fixed"
+    },
+    {
+      "added": {
+        "commit": "7efda2e32ff8c89769a2004eda26c3ca3236705a",
+        "date": "2022-02-15"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm006",
+      "path": "src/hono.ts",
+      "removed": {
+        "commit": "3d064d05592ef2f64654c50f03a54412dc13a17a",
+        "date": "2022-04-21",
+        "line": 14,
+        "subject": "feat: update visibility (#164)"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "TODO: do not use `any`"
+    },
+    {
+      "added": {
+        "commit": "3b339ecd993170f88e0f5a6526f33505c2a247ac",
+        "date": "2021-12-27"
+      },
+      "autoKind": "file deleted",
+      "id": "rm007",
+      "path": "src/hono.js",
+      "removed": {
+        "commit": "e6039f69f995ed9a96f3f0340cd3d32bc9ea5851",
+        "date": "2022-01-05",
+        "line": 93,
+        "subject": "Migrate to TypeScript (#21)"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "XXX"
+    },
+    {
+      "added": {
+        "commit": "3b339ecd993170f88e0f5a6526f33505c2a247ac",
+        "date": "2021-12-27"
+      },
+      "autoKind": "function changed",
+      "id": "rm008",
+      "path": "src/hono.ts",
+      "removed": {
+        "commit": "49fedca6a45480e01550c250e266d97b5ac908e4",
+        "date": "2022-02-20",
+        "line": 162,
+        "subject": "feat: `app.notFound` for default 404 not found (#110)"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "XXX"
+    },
+    {
+      "added": {
+        "commit": "c7afb2d13d8167c170a1a657f481ba080697ed64",
+        "date": "2024-03-11"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm009",
+      "path": "src/utils/cookie.ts",
+      "removed": {
+        "commit": "f8c5a794b03fcb576c22c6710f2bfc02d8496c2f",
+        "date": "2025-12-09",
+        "line": 168,
+        "subject": "docs(cookie): update outdated RFC links (#4557)"
+      },
+      "repo": "hono",
+      "sameAuthor": false,
+      "text": "FIXME: replace link to RFC"
+    },
+    {
+      "added": {
+        "commit": "2c44ad7dfa5d1dc5d403d6ef0c784149a3f31777",
+        "date": "2024-02-09"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm010",
+      "path": "src/jsx/index.ts",
+      "removed": {
+        "commit": "acd36341fb33d14c26aa63d823e7a9f41ccf6e36",
+        "date": "2024-05-27",
+        "line": 95,
+        "subject": "Merge pull request #2769 from honojs/next"
+      },
+      "repo": "hono",
+      "sameAuthor": true,
+      "text": "TODO: change to `export type *` after denoify bug is fixed"
+    },
+    {
+      "added": {
+        "commit": "9da10ac44ba01b1c9f058a9deae6c94f56bbaf12",
+        "date": "2022-06-02"
+      },
+      "autoKind": "function changed",
+      "id": "rm011",
+      "path": "src/hono.ts",
+      "removed": {
+        "commit": "5125c780f0c2bb6d353379a70e7d65951355e36c",
+        "date": "2022-06-27",
+        "line": 77,
+        "subject": "refactor: make `HonoRequest` (#330)"
+      },
+      "repo": "hono",
+      "sameAuthor": false,
+      "text": "FIXME: should be executed at a better timing"
+    },
+    {
+      "added": {
+        "commit": "c7afb2d13d8167c170a1a657f481ba080697ed64",
+        "date": "2024-03-11"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm012",
+      "path": "src/utils/cookie.ts",
+      "removed": {
+        "commit": "f8c5a794b03fcb576c22c6710f2bfc02d8496c2f",
+        "date": "2025-12-09",
+        "line": 151,
+        "subject": "docs(cookie): update outdated RFC links (#4557)"
+      },
+      "repo": "hono",
+      "sameAuthor": false,
+      "text": "FIXME: replace link to RFC"
+    },
+    {
+      "added": {
+        "commit": "c7afb2d13d8167c170a1a657f481ba080697ed64",
+        "date": "2024-03-11"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm013",
+      "path": "src/utils/cookie.ts",
+      "removed": {
+        "commit": "f8c5a794b03fcb576c22c6710f2bfc02d8496c2f",
+        "date": "2025-12-09",
+        "line": 187,
+        "subject": "docs(cookie): update outdated RFC links (#4557)"
+      },
+      "repo": "hono",
+      "sameAuthor": false,
+      "text": "FIXME: replace link to RFC"
+    },
+    {
+      "added": {
+        "commit": "264e366558e5006c8e6fd4b5bf71d9e6bd1ac8e6",
+        "date": "2022-11-25"
+      },
+      "autoKind": "file deleted",
+      "id": "rm014",
+      "path": "packages/client/src/createTRPCClient.ts",
+      "removed": {
+        "commit": "7f6e6eb617ff9681f70dc75c225cabe0165f27cb",
+        "date": "2022-12-27",
+        "line": 46,
+        "subject": "chore: rm v9 support (#3494)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "TODO - this should probably be updated to use inferTransformedProcedureOutput but this is only hit for legacy clients"
+    },
+    {
+      "added": {
+        "commit": "239ace2d8d590dfc71e5a38683a9de1c98f3d082",
+        "date": "2021-06-17"
+      },
+      "autoKind": "function changed",
+      "id": "rm015",
+      "path": "packages/server/src/ws/wssHandler.ts",
+      "removed": {
+        "commit": "a243f005868fa24c79c4485df6b2f3f305b0d472",
+        "date": "2021-06-21",
+        "line": 93,
+        "subject": "removing http handlers' `transform:`-property (#571)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "TODO - remove in next major"
+    },
+    {
+      "added": {
+        "commit": "eb08226bb2e5b0fafedfb82414f596a4a9927ee3",
+        "date": "2021-06-15"
+      },
+      "autoKind": "function deleted",
+      "id": "rm016",
+      "path": "packages/server/src/ws/wssHandler.ts",
+      "removed": {
+        "commit": "179c233d7dc0e0ec65d86cf43654f02a4059d261",
+        "date": "2021-06-20",
+        "line": 222,
+        "subject": "refactor to be JSON-RPC 2.0 compliant (#532)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "TODO trigger some global error handler?"
+    },
+    {
+      "added": {
+        "commit": "2edcf84289457d7377214577a5b12b7867973d05",
+        "date": "2021-01-23"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm017",
+      "path": "packages/server/src/router.ts",
+      "removed": {
+        "commit": "7873912fc80fc5ad58651d9c741e7a71ca4bd34c",
+        "date": "2021-02-07",
+        "line": 147,
+        "subject": "make test helpers + add type testing (#61)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "FIXME"
+    },
+    {
+      "added": {
+        "commit": "9d2d8b385fdc6ac75445ebd1f1495f0b4aa6add1",
+        "date": "2023-09-26"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm018",
+      "path": "packages/server/src/index.ts",
+      "removed": {
+        "commit": "06825867aaeccf844b28f1ab27c7104e0d436cfd",
+        "date": "2024-01-07",
+        "line": 1,
+        "subject": "chore: add `@trpc/core`-package (#5270)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "FIXME: this file should only export"
+    },
+    {
+      "added": {
+        "commit": "f8ffb9f100927f67efc40956f01305d32eeb81b4",
+        "date": "2022-07-06"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm019",
+      "path": "packages/server/src/core/internals/config.ts",
+      "removed": {
+        "commit": "abc941152b71ff2d68c63156eb5a142174779261",
+        "date": "2022-10-08",
+        "line": 55,
+        "subject": "feat: rm `process.env` deps &  refactor root config (#2907)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "FIXME this should probably be restricted"
+    },
+    {
+      "added": {
+        "commit": "ad25239cefd972494bfff49a869b9432fd2f403f",
+        "date": "2022-06-19"
+      },
+      "autoKind": "file deleted",
+      "id": "rm020",
+      "path": "packages/server/src/core/internals/internalProcedure.ts",
+      "removed": {
+        "commit": "475c1088617560e305f593d7c312e34a9cde784f",
+        "date": "2022-07-17",
+        "line": 3,
+        "subject": "refactor server side calls (#2209)"
+      },
+      "repo": "trpc",
+      "sameAuthor": false,
+      "text": "FIXME - I want to get rid of this and use the public API instead"
+    },
+    {
+      "added": {
+        "commit": "f3a71c30678fe397a67f5ade16d078dae3c6d275",
+        "date": "2022-12-26"
+      },
+      "autoKind": "function changed",
+      "id": "rm021",
+      "path": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+      "removed": {
+        "commit": "6f8cb859ccc22364de031e3568e714d6bc189fa5",
+        "date": "2023-01-14",
+        "line": 395,
+        "subject": "chore: single `queryKey` format (#3591)"
+      },
+      "repo": "trpc",
+      "sameAuthor": false,
+      "text": "FIXME tuple in next major"
+    },
+    {
+      "added": {
+        "commit": "ad25239cefd972494bfff49a869b9432fd2f403f",
+        "date": "2022-06-19"
+      },
+      "autoKind": "function deleted",
+      "id": "rm022",
+      "path": "packages/react/src/createReactQueryHooks.tsx",
+      "removed": {
+        "commit": "e567bf891554ea356cc98cf0685fc9d117c0c274",
+        "date": "2022-09-04",
+        "line": 523,
+        "subject": "improve dx for interop (#2635)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "FIXME: delete or fix this"
+    },
+    {
+      "added": {
+        "commit": "12ec756d9da808811655c816a3628cf4d559f1d4",
+        "date": "2022-08-02"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm023",
+      "path": "packages/server/src/core/procedure.ts",
+      "removed": {
+        "commit": "97b8c5b2671981df2542106077dddebe4746057e",
+        "date": "2023-03-06",
+        "line": 23,
+        "subject": "fix: changes ProcedureParams to use one generic (#3899)"
+      },
+      "repo": "trpc",
+      "sameAuthor": false,
+      "text": "FIXME: this should only take 1 generic argument instead of a list"
+    },
+    {
+      "added": {
+        "commit": "f8ffb9f100927f67efc40956f01305d32eeb81b4",
+        "date": "2022-07-06"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm024",
+      "path": "packages/server/src/core/router.ts",
+      "removed": {
+        "commit": "6681f20addc65e819ab38c27cba4486166e55223",
+        "date": "2023-05-29",
+        "line": 60,
+        "subject": "Next merge 2023 05 30 (#4446)"
+      },
+      "repo": "trpc",
+      "sameAuthor": true,
+      "text": "FIXME rename me and deprecate"
+    },
+    {
+      "added": {
+        "commit": "952c38ea41e35df67f48a2f6b42e5b7268b7d189",
+        "date": "2023-05-03"
+      },
+      "autoKind": "file deleted",
+      "id": "rm025",
+      "path": "packages/client/src/links/httpFormDataLink.ts",
+      "removed": {
+        "commit": "5ad570aa5e1d8951e31900d4c2ee8c1766235e6d",
+        "date": "2024-04-30",
+        "line": 7,
+        "subject": "feat: add formdata and octet stream support (#5665)"
+      },
+      "repo": "trpc",
+      "sameAuthor": false,
+      "text": "TODO(?) handle formdata queries"
+    },
+    {
+      "added": {
+        "commit": "5648d09b66458d45612a9edbbdc4a869afa9bf27",
+        "date": "2022-03-08"
+      },
+      "autoKind": "file deleted",
+      "id": "rm026",
+      "path": "packages/vite/src/node/server/middlewares/compression.ts",
+      "removed": {
+        "commit": "592c95ad5423c63ecbf4ce86266e2ff0699f1b75",
+        "date": "2024-03-12",
+        "line": 3,
+        "subject": "chore: use `@polka/compression` (#16146)"
+      },
+      "repo": "vite",
+      "sameAuthor": false,
+      "text": "TODO: replace this code with https://github.com/lukeed/polka/pull/148 once it's released"
+    },
+    {
+      "added": {
+        "commit": "3ac6f4cbda092df8e7a60917561f4dd8cf389f70",
+        "date": "2020-12-11"
+      },
+      "autoKind": "function changed",
+      "id": "rm027",
+      "path": "packages/vite/src/node/server/moduleGraph.ts",
+      "removed": {
+        "commit": "833f7e1a16977ccb269a3179291a18b3ace351d4",
+        "date": "2020-12-11",
+        "line": 78,
+        "subject": "wip: hmr propagation"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "TODO remove ?t"
+    },
+    {
+      "added": {
+        "commit": "f8a5ffce31fec7e9d3f94a7ae27d8748521a92b1",
+        "date": "2023-07-29"
+      },
+      "autoKind": "function deleted",
+      "id": "rm028",
+      "path": "packages/vite/src/node/optimizer/scan.ts",
+      "removed": {
+        "commit": "72340211d3eedf0ffd12618622d6b8cdc4c133d0",
+        "date": "2023-10-30",
+        "line": 691,
+        "subject": "refactor(esbuild)!: remove esbuild 0.17 -> 0.18 compat (#14804)"
+      },
+      "repo": "vite",
+      "sameAuthor": false,
+      "text": "TODO: Remove this in Vite 5 and check https://github.com/vitejs/vite/pull/13805#issuecomment-1633612320"
+    },
+    {
+      "added": {
+        "commit": "8ef733368fd6618a252e44616f7577f593fd4fbc",
+        "date": "2022-06-20"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm029",
+      "path": "packages/vite/src/node/ssr/ssrManifestPlugin.ts",
+      "removed": {
+        "commit": "e012f296df583bd133d26399397bd4ae49de1497",
+        "date": "2024-08-19",
+        "line": 22,
+        "subject": "chore: remove stale TODOs (#17866)"
+      },
+      "repo": "vite",
+      "sameAuthor": false,
+      "text": "TODO:base"
+    },
+    {
+      "added": {
+        "commit": "cb9f750e887d33edc7986f7f1f70b6f0aae1ec64",
+        "date": "2020-12-06"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm030",
+      "path": "packages/vite/src/node/config.ts",
+      "removed": {
+        "commit": "9ce2ab4febfb110b03760a2494546d683097189c",
+        "date": "2020-12-08",
+        "line": 77,
+        "subject": "wip: html transform"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "@TODO validate and warn plugins that will not work during serve"
+    },
+    {
+      "added": {
+        "commit": "6e66766c858ff4fb16d14f4eb8659617fcbcba77",
+        "date": "2020-04-23"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm031",
+      "path": "src/node/config.ts",
+      "removed": {
+        "commit": "efc853fcfecd23df2024fd3e134754c9c7f65d63",
+        "date": "2020-05-10",
+        "line": 32,
+        "subject": "feat: Vue JSX support"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "TODO"
+    },
+    {
+      "added": {
+        "commit": "3fdfe8a78c803b712c2064c1defb43845b2a0039",
+        "date": "2020-05-30"
+      },
+      "autoKind": "file deleted",
+      "id": "rm032",
+      "path": "src/node/resolver.ts",
+      "removed": {
+        "commit": "cb9f750e887d33edc7986f7f1f70b6f0aae1ec64",
+        "date": "2020-12-06",
+        "line": 501,
+        "subject": "refactor: re-organize into monorepo"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "TODO properly support conditional exports"
+    },
+    {
+      "added": {
+        "commit": "2e81e64929d9c2909ff5882b26933ea54a353aab",
+        "date": "2020-05-26"
+      },
+      "autoKind": "function changed",
+      "id": "rm033",
+      "path": "src/node/server/serverPluginVue.ts",
+      "removed": {
+        "commit": "6174e3328fe70c38a53763bb431a79656535fae1",
+        "date": "2020-06-05",
+        "line": 408,
+        "subject": "feat(dev): merge source map for vue script block with `lang='ts'` (#345)"
+      },
+      "repo": "vite",
+      "sameAuthor": false,
+      "text": "TODO merge lang=ts source map"
+    },
+    {
+      "added": {
+        "commit": "d7dd433c1c547dfc407d575d10d5d33348ca30eb",
+        "date": "2020-12-11"
+      },
+      "autoKind": "function deleted",
+      "id": "rm034",
+      "path": "packages/vite/src/node/plugins/css.ts",
+      "removed": {
+        "commit": "b5479b8be4c4fbe63845fa05c352aa1d8bfff58d",
+        "date": "2020-12-14",
+        "line": 69,
+        "subject": "wip: css @import hmr"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "TODO record css @import virtual modules for HMR"
+    },
+    {
+      "added": {
+        "commit": "3517827ed94f2e5cdf7a64c1a535d4b1a001d7d7",
+        "date": "2020-12-18"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm035",
+      "path": "packages/vite/src/node/plugins/html.ts",
+      "removed": {
+        "commit": "ab805228e55bd79275b6ac67b0408419a8ab5c70",
+        "date": "2021-01-05",
+        "line": 210,
+        "subject": "fix: run mutiple output builds sequantially"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "TODO should store the imported entries for each page"
+    },
+    {
+      "added": {
+        "commit": "4a05a6e2f69c3a799fee651d182beeb176abfaac",
+        "date": "2021-11-27"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm036",
+      "path": "packages/vite/src/node/utils.ts",
+      "removed": {
+        "commit": "9884308228d3c918d973c08a84f4cca5251cf23a",
+        "date": "2023-09-18",
+        "line": 91,
+        "subject": "feat: improve deno and bun support (#14379)"
+      },
+      "repo": "vite",
+      "sameAuthor": false,
+      "text": "TODO: revisit later to see if the edge case that \"compiling using node v12 code to be run in node v16 in the server\" is what we intend to support."
+    },
+    {
+      "added": {
+        "commit": "496b3fb71616780e0cd056ad3e8ec7c1f0a13706",
+        "date": "2020-05-12"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm037",
+      "path": "src/node/server/serverPluginServiceWorker.ts",
+      "removed": {
+        "commit": "3bb13240d9d6c3ef84020cd69b2e60835f206f8f",
+        "date": "2020-05-12",
+        "line": 5,
+        "subject": "feat(sw): use lockfile hash"
+      },
+      "repo": "vite",
+      "sameAuthor": true,
+      "text": "TODO inject lockfile hash"
+    },
+    {
+      "added": {
+        "commit": "addd67d2445de7bf61124412347b050b9a2d2caa",
+        "date": "2021-06-01"
+      },
+      "autoKind": "file deleted",
+      "id": "rm038",
+      "path": "packages/astro/src/build/util.ts",
+      "removed": {
+        "commit": "d84bfe719a546ad855640338d5ed49ad3aa4ccb4",
+        "date": "2021-10-29",
+        "line": 65,
+        "subject": "🚀 Astro Next (0.21.0) (#1406)"
+      },
+      "repo": "astro",
+      "sameAuthor": true,
+      "text": "TODO: Astro pages (this isn’t currently used for that lookup)"
+    },
+    {
+      "added": {
+        "commit": "a79a8b0230b06ed32ce1802f2a5f84a6cf92dbe7",
+        "date": "2024-08-14"
+      },
+      "autoKind": "function changed",
+      "id": "rm039",
+      "path": "packages/astro/src/content/loaders/glob.ts",
+      "removed": {
+        "commit": "5f4dc0356f2c2ecf98fa88a257908c9226fac9f1",
+        "date": "2026-07-15",
+        "line": 217,
+        "subject": "Add `deferRender` option to `glob()` loader to prevent OOM during content sync (#17302)"
+      },
+      "repo": "astro",
+      "sameAuthor": false,
+      "text": "todo: add an explicit way to opt in to deferred rendering"
+    },
+    {
+      "added": {
+        "commit": "e5ebebbcd74df8027651f3cf717fb16ffe712367",
+        "date": "2021-03-16"
+      },
+      "autoKind": "function deleted",
+      "id": "rm040",
+      "path": "src/transform2.ts",
+      "removed": {
+        "commit": "588b086a4dc45e717341e18728fff65a90ddf46c",
+        "date": "2021-03-16",
+        "line": 193,
+        "subject": "Bring compiler into Astro (#4)"
+      },
+      "repo": "astro",
+      "sameAuthor": true,
+      "text": "TODO codegen"
+    },
+    {
+      "added": {
+        "commit": "8ebc077cb0d9f50aae22d2651bd5ef13fe4641d3",
+        "date": "2021-03-19"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm041",
+      "path": "src/compiler/optimize/styles.ts",
+      "removed": {
+        "commit": "3fa6396a7b092258c994d0bee6719b89b45c7bf8",
+        "date": "2021-03-31",
+        "line": 179,
+        "subject": "Extract Astro styles to external stylesheets (#43)"
+      },
+      "repo": "astro",
+      "sameAuthor": true,
+      "text": "TODO: we should delete the old untransformed <style> node after we’re done."
+    },
+    {
+      "added": {
+        "commit": "1048aca550769415e528016e42b358ffbfd44b61",
+        "date": "2023-08-28"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm042",
+      "path": "packages/astro/src/core/endpoint/index.ts",
+      "removed": {
+        "commit": "21e0757ea22a57d344c934045ca19db93b684436",
+        "date": "2023-10-04",
+        "line": 96,
+        "subject": "chore: remove undici polyfill (#8729)"
+      },
+      "repo": "astro",
+      "sameAuthor": false,
+      "text": "TODO Remove this after StackBlitz supports Node 18."
+    },
+    {
+      "added": {
+        "commit": "2668ef984104574f25f29ef75e2572a0745d1666",
+        "date": "2024-06-05"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm043",
+      "path": "packages/astro/src/env/vite-plugin-env.ts",
+      "removed": {
+        "commit": "8b1a641be9de4baa9ae48dd0d045915fbbeffa8c",
+        "date": "2024-10-16",
+        "line": 15,
+        "subject": "fix: do not override process.env (#12227)"
+      },
+      "repo": "astro",
+      "sameAuthor": true,
+      "text": "TODO: reminders for when astro:env comes out of experimental"
+    },
+    {
+      "added": {
+        "commit": "22ca9e0aacf26bf82aa5d0ddd6d1e1d495a1a945",
+        "date": "2021-04-15"
+      },
+      "autoKind": "file deleted",
+      "id": "rm044",
+      "path": "packages/astro/src/frontend/SvelteWrapper.svelte.client.ts",
+      "removed": {
+        "commit": "c93201a909105bb0ef75278d9635de4b5b8734e7",
+        "date": "2021-05-03",
+        "line": 3,
+        "subject": "Refactor `astro` export map, add `source-map-support` (#161)"
+      },
+      "repo": "astro",
+      "sameAuthor": true,
+      "text": "TODO: don't precompile this, but it works for now"
+    },
+    {
+      "added": {
+        "commit": "d84bfe719a546ad855640338d5ed49ad3aa4ccb4",
+        "date": "2021-10-29"
+      },
+      "autoKind": "function changed",
+      "id": "rm045",
+      "path": "packages/astro/src/core/ssr/html.ts",
+      "removed": {
+        "commit": "2e1bded735f3e2149c3ff95b1c131a147dda0f34",
+        "date": "2021-11-04",
+        "line": 7,
+        "subject": "Get Tailwind HMR working (first cut) (#1736)"
+      },
+      "repo": "astro",
+      "sameAuthor": true,
+      "text": "TODO: this usually takes 5ms or less, but if it becomes a bottleneck we can create a WeakMap cache"
+    },
+    {
+      "added": {
+        "commit": "5a9528741fa98d017b269c7e4f013058028bdc5d",
+        "date": "2024-03-08"
+      },
+      "autoKind": "function deleted",
+      "id": "rm046",
+      "path": "packages/astro/src/core/config/schema.ts",
+      "removed": {
+        "commit": "c50882daf67666694cd4bd1b3a594db547cf0bc4",
+        "date": "2024-11-28",
+        "line": 342,
+        "subject": "Merge pull request #12551 from withastro/next"
+      },
+      "repo": "astro",
+      "sameAuthor": false,
+      "text": "TODO: Remove this in Astro 5.0"
+    },
+    {
+      "added": {
+        "commit": "e22be22e5729e60220726e92b52d2833c937fd1c",
+        "date": "2024-06-17"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm047",
+      "path": "packages/astro/src/core/build/plugins/plugin-prerender.ts",
+      "removed": {
+        "commit": "c50882daf67666694cd4bd1b3a594db547cf0bc4",
+        "date": "2024-11-28",
+        "line": 59,
+        "subject": "Merge pull request #12551 from withastro/next"
+      },
+      "repo": "astro",
+      "sameAuthor": false,
+      "text": "TODO: Revisit this so we can delete additional unused chunks"
+    },
+    {
+      "added": {
+        "commit": "2668ef984104574f25f29ef75e2572a0745d1666",
+        "date": "2024-06-05"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm048",
+      "path": "packages/astro/src/core/app/types.ts",
+      "removed": {
+        "commit": "c50882daf67666694cd4bd1b3a594db547cf0bc4",
+        "date": "2024-11-28",
+        "line": 73,
+        "subject": "Merge pull request #12551 from withastro/next"
+      },
+      "repo": "astro",
+      "sameAuthor": false,
+      "text": "TODO: remove experimental prefix"
+    },
+    {
+      "added": {
+        "commit": "dd176ca58d9ce8ab757075491568a014c0943de2",
+        "date": "2022-06-29"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm049",
+      "path": "packages/astro/src/events/error.ts",
+      "removed": {
+        "commit": "63745f8d5ab89b771a18846e7415eed6392d85d9",
+        "date": "2023-01-04",
+        "line": 28,
+        "subject": "Update telemetry to use new errors information (#5547)"
+      },
+      "repo": "astro",
+      "sameAuthor": false,
+      "text": "TODO(fks): Remove around v1.0.0 release."
+    },
+    {
+      "added": {
+        "commit": "ee302250628d9994770f848ac5f3595e3a92f9c0",
+        "date": "2024-08-30"
+      },
+      "autoKind": "file deleted",
+      "id": "rm050",
+      "path": "packages/excalidraw/fonts/wasm/hb-subset.loader.ts",
+      "removed": {
+        "commit": "b479f3bd6553be5730e3b60beb8eee5bd9905b37",
+        "date": "2024-10-17",
+        "line": 6,
+        "subject": "feat: add first-class support for CJK (#8530)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": true,
+      "text": "TODO: add support for fetching the wasm from an URL (external CDN, data URL, etc.)"
+    },
+    {
+      "added": {
+        "commit": "3b1d6910aae71481b4ff7ab359b3221594b3929b",
+        "date": "2020-05-09"
+      },
+      "autoKind": "function changed",
+      "id": "rm051",
+      "path": "src/element/resizeElements.ts",
+      "removed": {
+        "commit": "c77c9ce65ab843e5d01b6637fe19c5d0bea045e4",
+        "date": "2021-03-03",
+        "line": 109,
+        "subject": "fix: cursor being leaked outside of canvas (#3161)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": false,
+      "text": "FIXME it is not very nice to have this here"
+    },
+    {
+      "added": {
+        "commit": "16263e942b7b690bb3e97340383009016129d489",
+        "date": "2020-01-31"
+      },
+      "autoKind": "function deleted",
+      "id": "rm052",
+      "path": "packages/excalidraw/element/collision.ts",
+      "removed": {
+        "commit": "bbdcd30a7330443b198426d8199024a22038e485",
+        "date": "2024-04-04",
+        "line": 1164,
+        "subject": "refactor: update collision from ga to vector geometry (#7636)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": false,
+      "text": "TODO: Implement this"
+    },
+    {
+      "added": {
+        "commit": "530617be90df8d41f93c7c885d3097565c4c7f6d",
+        "date": "2024-04-17"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm053",
+      "path": "packages/excalidraw/data/reconcile.ts",
+      "removed": {
+        "commit": "9036812b6d6d7c38d092405b312114e9fd9fcb49",
+        "date": "2025-08-08",
+        "line": 33,
+        "subject": "fix: editing linear element (#9839)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": true,
+      "text": "TODO: Is this still valid? As newElement is selection element, which is never part of the elements array"
+    },
+    {
+      "added": {
+        "commit": "ea7c702cfce515e83cff4ea73b8432b306c438d5",
+        "date": "2024-08-27"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm054",
+      "path": "packages/element/src/typeChecks.ts",
+      "removed": {
+        "commit": "d87620b23907cef9a119c758124569b5f44991a4",
+        "date": "2025-12-21",
+        "line": 359,
+        "subject": "fix: Circular reference (#10544)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": true,
+      "text": "TODO: Move this to @excalidraw/math"
+    },
+    {
+      "added": {
+        "commit": "baa8fb6c14c49fdd0b6ff0b4a5ab768bb39071f9",
+        "date": "2020-06-23"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm055",
+      "path": "packages/excalidraw/constants.ts",
+      "removed": {
+        "commit": "3cfcc7b489b359c86854f331131c41b8f583de74",
+        "date": "2024-08-14",
+        "line": 182,
+        "subject": "feat: split `gridSize` from enabled state & support custom `gridStep` (#8364)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": false,
+      "text": "TODO make it configurable?"
+    },
+    {
+      "added": {
+        "commit": "6334bd832fc4db3b5e5ad79ef785f9ed565a1d1e",
+        "date": "2022-11-01"
+      },
+      "autoKind": "file deleted",
+      "id": "rm056",
+      "path": "src/components/LibraryButton.tsx",
+      "removed": {
+        "commit": "e9cae918a7c83c577afb5f6385f6aba9d3544670",
+        "date": "2023-05-04",
+        "line": 18,
+        "subject": "feat: sidebar tabs support (#6213)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": false,
+      "text": "TODO barnabasmolnar/redesign"
+    },
+    {
+      "added": {
+        "commit": "5a0771ad9c68f5011784b46c96f8360da1599d42",
+        "date": "2024-07-30"
+      },
+      "autoKind": "function changed",
+      "id": "rm057",
+      "path": "packages/excalidraw/fonts/index.ts",
+      "removed": {
+        "commit": "b479f3bd6553be5730e3b60beb8eee5bd9905b37",
+        "date": "2024-10-17",
+        "line": 210,
+        "subject": "feat: add first-class support for CJK (#8530)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": true,
+      "text": "TODO: let's tweak this once we know how `register` will be exposed as part of the custom fonts API"
+    },
+    {
+      "added": {
+        "commit": "d9bbf1eda665f616f46f465f6122da22a850ef47",
+        "date": "2024-05-02"
+      },
+      "autoKind": "function deleted",
+      "id": "rm058",
+      "path": "packages/element/src/binding.ts",
+      "removed": {
+        "commit": "c141960ada4869ee6a3bb8a665e75c0c18ad7f19",
+        "date": "2025-11-25",
+        "line": 378,
+        "subject": "feat: Non-elbow arrow snapping and behavior changes (#9670)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": true,
+      "text": "TODO: Is it worth turning the list into a set to avoid dupes?"
+    },
+    {
+      "added": {
+        "commit": "16263e942b7b690bb3e97340383009016129d489",
+        "date": "2020-01-31"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm059",
+      "path": "src/index.tsx",
+      "removed": {
+        "commit": "33016bf6bf608d97640dfbce3e5a84f82defe044",
+        "date": "2020-02-05",
+        "line": 1141,
+        "subject": "Fix issues related to history (#701)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": true,
+      "text": "TODO: Implement perfect sizing for origin"
+    },
+    {
+      "added": {
+        "commit": "a376bd949537f93b1f0cae2ca696cfe44065b226",
+        "date": "2023-08-12"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm060",
+      "path": "packages/excalidraw/element/binding.ts",
+      "removed": {
+        "commit": "d9bbf1eda665f616f46f465f6122da22a850ef47",
+        "date": "2024-05-02",
+        "line": 555,
+        "subject": "feat: Allow binding only via linear element ends (#7946)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": false,
+      "text": "TODO: this is a bottleneck, optimise"
+    },
+    {
+      "added": {
+        "commit": "6334bd832fc4db3b5e5ad79ef785f9ed565a1d1e",
+        "date": "2022-11-01"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm061",
+      "path": "packages/excalidraw/actions/actionProperties.tsx",
+      "removed": {
+        "commit": "47cbb5b6fbeba23fbdfb72729159d723f1176746",
+        "date": "2025-11-03",
+        "line": 83,
+        "subject": "refactor: single source of truths with editor interface (#10178)"
+      },
+      "repo": "excalidraw",
+      "sameAuthor": false,
+      "text": "TODO barnabasmolnar/editor-redesign"
+    },
+    {
+      "added": {
+        "commit": "b9861fd2cd4ffe759bdabaa04cd4c4f85adf48c6",
+        "date": "2024-02-13"
+      },
+      "autoKind": "file deleted",
+      "id": "rm062",
+      "path": "packages/next/src/client/components/router-reducer/prefetch-cache-utils.ts",
+      "removed": {
+        "commit": "56db4345f2eca501712d1963b78521a68a73803e",
+        "date": "2025-10-17",
+        "line": 328,
+        "subject": "Delete old prefetch cache related code (#84977)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "TODO: `fetchServerResponse` should be more tighly coupled to these prefetch cache operations"
+    },
+    {
+      "added": {
+        "commit": "b5772b859a73c78140b1fbd8efb46f0a126044d9",
+        "date": "2024-01-24"
+      },
+      "autoKind": "function changed",
+      "id": "rm063",
+      "path": "packages/next/src/server/route-modules/app-route/module.ts",
+      "removed": {
+        "commit": "a0687a9cefc7086360885167b5e605c3725cabfe",
+        "date": "2024-10-09",
+        "line": 622,
+        "subject": "Move tracking of revalidate and tags from WorkStore to WorkUnitStore (#70940)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "@TODO this type of logic is too indirect. we need to refactor how we set fetch cache"
+    },
+    {
+      "added": {
+        "commit": "c567d7d2daa9e7f24f966ecb27709032d967eaeb",
+        "date": "2022-07-28"
+      },
+      "autoKind": "function deleted",
+      "id": "rm064",
+      "path": "packages/next/src/build/webpack/plugins/flight-manifest-plugin.ts",
+      "removed": {
+        "commit": "9ffea840802abaae71e933df0a83e38af40ce34d",
+        "date": "2023-06-13",
+        "line": 252,
+        "subject": "Simplify the client manifest structure (#51183)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "@ts-expect-error: TODO: Fix Dependency type"
+    },
+    {
+      "added": {
+        "commit": "24b09ad4f89ce9b77b296223a99d1fc768e7b83f",
+        "date": "2021-08-16"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm065",
+      "path": "packages/next/build/webpack/plugins/next-trace-entrypoints-plugin.ts",
+      "removed": {
+        "commit": "78cb07a4ca6fc66c583a28e30b714ad91275adbe",
+        "date": "2022-09-28",
+        "line": 473,
+        "subject": "chore: remove unsless @ts-ignore (#40992)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "@ts-ignore TODO: Remove ignore when webpack 5 is stable"
+    },
+    {
+      "added": {
+        "commit": "2ba352da39ee00b6595aecdc9ffb2f103e803a85",
+        "date": "2019-09-04"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm066",
+      "path": "packages/next/next-server/server/render.tsx",
+      "removed": {
+        "commit": "cb84bc5dafcf0c3c1629a5c653ca0e537f5f4bd2",
+        "date": "2021-06-14",
+        "line": 86,
+        "subject": "Remove deprecated features and enable future flag (#26066)"
+      },
+      "repo": "next.js",
+      "sameAuthor": true,
+      "text": "TODO: Remove in the next major version, as this would mean the user is adding event listeners in server-side `render` method"
+    },
+    {
+      "added": {
+        "commit": "05f159dffcd2e37837f9afb9e18927722147627a",
+        "date": "2024-09-25"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm067",
+      "path": "packages/next/src/server/request/cookies.ts",
+      "removed": {
+        "commit": "376438101a4a579fc1048209b407c18af4b8568a",
+        "date": "2024-10-12",
+        "line": 39,
+        "subject": "chore: update migration comments (#71169)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "// TODO [sync-cookies-usage]"
+    },
+    {
+      "added": {
+        "commit": "39fd9177efdb27bf77fbeb6fb0186b2217c1b0bd",
+        "date": "2023-07-26"
+      },
+      "autoKind": "top level, nothing follows",
+      "id": "rm068",
+      "path": "packages/next/src/client/app-next-turbopack.ts",
+      "removed": {
+        "commit": "b7f353804ea677ffbb88477bda4877dd2f3e07ea",
+        "date": "2025-01-08",
+        "line": 13,
+        "subject": "feat: dev build indicator for App Router (#74618)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "TODO-APP: build indicator"
+    },
+    {
+      "added": {
+        "commit": "647c93e4d036a9f506cad329e687780be09cafa9",
+        "date": "2022-06-01"
+      },
+      "autoKind": "file deleted",
+      "id": "rm069",
+      "path": "packages/next/client/components/userouter.ts",
+      "removed": {
+        "commit": "f1131413898fa26d35989fa43ccdcf94e8d89197",
+        "date": "2022-07-06",
+        "line": 3,
+        "subject": "Implement new client-side router (#37551)"
+      },
+      "repo": "next.js",
+      "sameAuthor": true,
+      "text": "TODO: Handle case where current layout path does not handle navigation"
+    },
+    {
+      "added": {
+        "commit": "2dc0ba4bd9712e2b5931eb6e00156761384ff44d",
+        "date": "2023-05-03"
+      },
+      "autoKind": "function changed",
+      "id": "rm070",
+      "path": "packages/next/src/client/components/router-reducer/reducers/server-action-reducer.ts",
+      "removed": {
+        "commit": "a721a749d802dd7e89e40507a63c75f784b2f052",
+        "date": "2023-07-31",
+        "line": 210,
+        "subject": "router: apply server actions in a similar way to router.refresh() (#53373)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "TODO-APP: verify the logic around canonical URL overrides"
+    },
+    {
+      "added": {
+        "commit": "c567d7d2daa9e7f24f966ecb27709032d967eaeb",
+        "date": "2022-07-28"
+      },
+      "autoKind": "function deleted",
+      "id": "rm071",
+      "path": "packages/next/src/build/webpack/plugins/flight-manifest-plugin.ts",
+      "removed": {
+        "commit": "9ffea840802abaae71e933df0a83e38af40ce34d",
+        "date": "2023-06-13",
+        "line": 260,
+        "subject": "Simplify the client manifest structure (#51183)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "@ts-expect-error: TODO: Fix Dependency type"
+    },
+    {
+      "added": {
+        "commit": "efcec4c1e303848a5293cef6961be8f73fd5160b",
+        "date": "2023-01-03"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm072",
+      "path": "packages/next/src/client/components/react-dev-overlay/pages/hot-reloader-client.ts",
+      "removed": {
+        "commit": "8a5f08e5e30330925fd9b54406bf8c6037dedf80",
+        "date": "2025-03-18",
+        "line": 483,
+        "subject": "chore(HMR clients): Fix a bunch of typescript errors by including the appropriate webpack type declarations (#77207)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "@ts-expect-error TODO: module.hot exists but type needs to be added. Can't use `as any` here as webpack parses for `module.hot` calls."
+    },
+    {
+      "added": {
+        "commit": "89fffa694dc238eb40bd52809c8cbcbc39c2ec8b",
+        "date": "2020-06-11"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm073",
+      "path": "packages/next/next-server/lib/head.tsx",
+      "removed": {
+        "commit": "cb84bc5dafcf0c3c1629a5c653ca0e537f5f4bd2",
+        "date": "2021-06-14",
+        "line": 187,
+        "subject": "Remove deprecated features and enable future flag (#26066)"
+      },
+      "repo": "next.js",
+      "sameAuthor": true,
+      "text": "TODO: Remove in the next major release"
+    },
+    {
+      "added": {
+        "commit": "af6f6aa96c8524dade596622052e684e3ec98637",
+        "date": "2024-10-24"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm074",
+      "path": "packages/next/src/server/patch-error-inspect.ts",
+      "removed": {
+        "commit": "e5336c226650b1d97d35eee9ada459c65b049c10",
+        "date": "2024-12-03",
+        "line": 45,
+        "subject": "Sourcemap errors logged in Edge runtime (#73438)"
+      },
+      "repo": "next.js",
+      "sameAuthor": true,
+      "text": "TODO: Implement for Edge runtime"
+    },
+    {
+      "added": {
+        "commit": "2d9875983ca61a195a60048bf0493494002256af",
+        "date": "2022-07-10"
+      },
+      "autoKind": "top level, nothing follows",
+      "id": "rm075",
+      "path": "packages/next/src/client/app-next-dev.ts",
+      "removed": {
+        "commit": "b7f353804ea677ffbb88477bda4877dd2f3e07ea",
+        "date": "2025-01-08",
+        "line": 11,
+        "subject": "feat: dev build indicator for App Router (#74618)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "TODO-APP: build indicator"
+    },
+    {
+      "added": {
+        "commit": "8b92b8b7ce28b6a31bfd9fe23ed92eec36732e74",
+        "date": "2019-05-02"
+      },
+      "autoKind": "file deleted",
+      "id": "rm076",
+      "path": "packages/next/build/webpack/loaders/next-babel-loader.ts",
+      "removed": {
+        "commit": "41c6d92d259a9f85d9b29255cb9c9d5a585e85b1",
+        "date": "2019-05-07",
+        "line": 175,
+        "subject": "Revert migrating babel-loader into Next.js (#7265)"
+      },
+      "repo": "next.js",
+      "sameAuthor": true,
+      "text": "TODO: Babel should really provide the full list of config files that"
+    },
+    {
+      "added": {
+        "commit": "58e5c780f33d22bc8300b1d5d8ed4065c62645e2",
+        "date": "2023-05-01"
+      },
+      "autoKind": "function changed",
+      "id": "rm077",
+      "path": "packages/next/src/server/route-modules/app-route/module.ts",
+      "removed": {
+        "commit": "f0e4298f674c1cd031ad1e8046f479f7425ffc3b",
+        "date": "2024-06-11",
+        "line": 263,
+        "subject": "Ensure urlPathname is always a pathname (#63846)"
+      },
+      "repo": "next.js",
+      "sameAuthor": false,
+      "text": "@ts-expect-error TODO: types for renderOpts should include previewProps"
+    },
+    {
+      "added": {
+        "commit": "6aa6b3e2ed6afe171779cc72813bf597b3ba6e55",
+        "date": "2019-07-29"
+      },
+      "autoKind": "file deleted",
+      "id": "rm078",
+      "path": "src/vs/editor/common/modes/tokenization/typescript.ts",
+      "removed": {
+        "commit": "cbad70fe834e56125bf34e5ce39a3f38f595c667",
+        "date": "2021-11-01",
+        "line": 248,
+        "subject": "Merge pull request #136025 from microsoft/hediet/remove-typescript-tokenization"
+      },
+      "repo": "vscode",
+      "sameAuthor": false,
+      "text": "TODO: avoid regex..."
+    },
+    {
+      "added": {
+        "commit": "2a49e82150196bfcc19fca3703af53d5b8ec2673",
+        "date": "2019-11-15"
+      },
+      "autoKind": "function changed",
+      "id": "rm079",
+      "path": "src/vs/editor/common/viewLayout/linesLayout.ts",
+      "removed": {
+        "commit": "f0ec8373f329cc96e5d90ebffa6046089598ba4d",
+        "date": "2019-11-15",
+        "line": 256,
+        "subject": "Recompute whitespace entirely in case of larger changes (#84726)"
+      },
+      "repo": "vscode",
+      "sameAuthor": true,
+      "text": "TODO"
+    },
+    {
+      "added": {
+        "commit": "840a5e71c961beda5049757e3d7272fa2356e6ee",
+        "date": "2023-03-23"
+      },
+      "autoKind": "function deleted",
+      "id": "rm080",
+      "path": "src/vs/editor/common/services/editorSimpleWorker.ts",
+      "removed": {
+        "commit": "08a6d8253f073ea81433ceceb509c2580119d887",
+        "date": "2023-03-27",
+        "line": 585,
+        "subject": "Merge pull request #177839 from microsoft/hediet/coloured-anteater"
+      },
+      "repo": "vscode",
+      "sameAuthor": false,
+      "text": "TODO this should be fixed in the experimental diff algorithm, but it might have consequences for the merge editor."
+    },
+    {
+      "added": {
+        "commit": "78cb0b490a600e84b9364531e14c08958c25bc71",
+        "date": "2022-04-01"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm081",
+      "path": "src/vs/editor/common/model/guidesTextModelPart.ts",
+      "removed": {
+        "commit": "32001ed925ee8b787cb41a62f009282aaf29072d",
+        "date": "2022-04-11",
+        "line": 419,
+        "subject": "Fixes bugs in bracket guides for wrapped lines."
+      },
+      "repo": "vscode",
+      "sameAuthor": true,
+      "text": "TODO: Investigate if this is correct"
+    },
+    {
+      "added": {
+        "commit": "9f6ecfd436ef3dcb4e144da3d27b0209bff09621",
+        "date": "2023-07-18"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm082",
+      "path": "src/vs/editor/common/diff/linesDiffComputer.ts",
+      "removed": {
+        "commit": "e424e83820568bd3a954182020a730fc2972da7a",
+        "date": "2023-09-01",
+        "line": 143,
+        "subject": "Diff Algorithm Cleanup"
+      },
+      "repo": "vscode",
+      "sameAuthor": true,
+      "text": "TODO@hediet: Make LineRangeMapping extend from this!"
+    },
+    {
+      "added": {
+        "commit": "57a072f82a792ccf677ee1ac79b49443410150e9",
+        "date": "2018-01-24"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm083",
+      "path": "src/vs/editor/common/modes.ts",
+      "removed": {
+        "commit": "29a6e3d3cadf2990dd1e18d7cb51b733b6b94029",
+        "date": "2018-11-04",
+        "line": 924,
+        "subject": "Merge remote-tracking branch 'origin/master' into tyriar/snap"
+      },
+      "repo": "vscode",
+      "sameAuthor": false,
+      "text": "TODO@joh, move to rename"
+    },
+    {
+      "added": {
+        "commit": "6aa6b3e2ed6afe171779cc72813bf597b3ba6e55",
+        "date": "2019-07-29"
+      },
+      "autoKind": "file deleted",
+      "id": "rm084",
+      "path": "src/vs/editor/common/modes/tokenization/typescript.ts",
+      "removed": {
+        "commit": "cbad70fe834e56125bf34e5ce39a3f38f595c667",
+        "date": "2021-11-01",
+        "line": 191,
+        "subject": "Merge pull request #136025 from microsoft/hediet/remove-typescript-tokenization"
+      },
+      "repo": "vscode",
+      "sameAuthor": false,
+      "text": "TODO: avoid regex..."
+    },
+    {
+      "added": {
+        "commit": "2a49e82150196bfcc19fca3703af53d5b8ec2673",
+        "date": "2019-11-15"
+      },
+      "autoKind": "function changed",
+      "id": "rm085",
+      "path": "src/vs/editor/common/viewLayout/linesLayout.ts",
+      "removed": {
+        "commit": "c0032079593cf751b318a589214037a9cd9d5085",
+        "date": "2019-11-15",
+        "line": 248,
+        "subject": "Remove _whitespaceId2Index"
+      },
+      "repo": "vscode",
+      "sameAuthor": true,
+      "text": "console.log(`TODO: `, inserts, changes, removes);"
+    },
+    {
+      "added": {
+        "commit": "8df547fef33a45ac2621b94ecbfae3bf3bd82c5d",
+        "date": "2021-07-16"
+      },
+      "autoKind": "function deleted",
+      "id": "rm086",
+      "path": "src/vs/editor/common/viewModel/splitLinesCollection.ts",
+      "removed": {
+        "commit": "a28d33aa6c8b7b75213fab710a9c349da62fab02",
+        "date": "2021-11-04",
+        "line": 1298,
+        "subject": "Merge pull request #136296 from microsoft/hediet/refactoring1"
+      },
+      "repo": "vscode",
+      "sameAuthor": false,
+      "text": "TODO @hediet make this method a member of LineBreakData."
+    },
+    {
+      "added": {
+        "commit": "e54a781e444d4481245942a2394580c32777cc74",
+        "date": "2018-01-19"
+      },
+      "autoKind": "function unchanged",
+      "id": "rm087",
+      "path": "src/vs/editor/common/model/pieceTreeTextBuffer/pieceTreeBase.ts",
+      "removed": {
+        "commit": "474568c55ba1ca08d741f25a59083ed4ccba00d9",
+        "date": "2018-03-05",
+        "line": 1142,
+        "subject": "Merge remote-tracking branch 'origin/master' into tyriar/snap"
+      },
+      "repo": "vscode",
+      "sameAuthor": false,
+      "text": "@todo, we can optimize"
+    },
+    {
+      "added": {
+        "commit": "516f0d1246df401b98b4a8cf4afd7c57535d746e",
+        "date": "2022-08-09"
+      },
+      "autoKind": "top level, next statement changed or removed",
+      "id": "rm088",
+      "path": "src/vs/editor/common/diff/algorithms/diffAlgorithm.ts",
+      "removed": {
+        "commit": "08a6d8253f073ea81433ceceb509c2580119d887",
+        "date": "2023-03-27",
+        "line": 33,
+        "subject": "Merge pull request #177839 from microsoft/hediet/coloured-anteater"
+      },
+      "repo": "vscode",
+      "sameAuthor": true,
+      "text": "Todo move this class to some top level utils."
+    },
+    {
+      "added": {
+        "commit": "cb3bc8a60e6fec5db31620ca6ad879d2346e6161",
+        "date": "2021-12-08"
+      },
+      "autoKind": "top level, next statement unchanged",
+      "id": "rm089",
+      "path": "src/vs/editor/common/services/languageService.ts",
+      "removed": {
+        "commit": "cc1301d2b1cda3de6ac473e9104bba33e202a143",
+        "date": "2021-12-28",
+        "line": 41,
+        "subject": "Use `languageId` to look up extensions"
+      },
+      "repo": "vscode",
+      "sameAuthor": true,
+      "text": "TODO"
+    }
+  ],
+  "seed": 20261018,
+  "blind": [
+    "rm003",
+    "rm006",
+    "rm008",
+    "rm010",
+    "rm012",
+    "rm014",
+    "rm017",
+    "rm018",
+    "rm021",
+    "rm024",
+    "rm026",
+    "rm031",
+    "rm035",
+    "rm040",
+    "rm041",
+    "rm043",
+    "rm046",
+    "rm047",
+    "rm048",
+    "rm049",
+    "rm054",
+    "rm064",
+    "rm066",
+    "rm068",
+    "rm071",
+    "rm072",
+    "rm076",
+    "rm077",
+    "rm081",
+    "rm083"
+  ]
+}

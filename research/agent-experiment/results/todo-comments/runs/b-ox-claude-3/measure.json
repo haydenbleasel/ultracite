@@ -1,0 +1,895 @@
+{
+  "runId": "b-ox-claude-3",
+  "topic": "todo-comments",
+  "subject": "b-ox",
+  "base": "b",
+  "armId": "ox",
+  "arm": "B, a known bug, Oxlint default",
+  "config": "oxlint core+react",
+  "agent": "claude",
+  "cliVersion": "2.1.303 (Claude Code)",
+  "wallSeconds": 23.1,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 58,
+    "leftOutByFilter": {
+      "class-methods-use-this": 1,
+      "max-classes-per-file": 1,
+      "no-empty-function": 1,
+      "promise/prefer-await-to-callbacks": 11,
+      "typescript/method-signature-style": 15,
+      "typescript/no-explicit-any": 18,
+      "typescript/parameter-properties": 5,
+      "typescript/unified-signatures": 1,
+      "unicorn/no-array-for-each": 3,
+      "unicorn/no-await-expression-member": 1
+    },
+    "given": [
+      {
+        "rule": "no-warning-comments",
+        "line": 323,
+        "message": "Unexpected 'todo' comment: TODO Trigger their dispose callbacks.",
+        "help": "Remove or rephrase this comment",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "2a592fd0b75e7b800f3b789d2cfad28082ea9a15cfe32569799fe6e3df1510fd",
+    "parseError": false,
+    "views": {
+      "oxlint core+react": {
+        "todoHonor": [
+          "no-warning-comments:323"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:323"
+        ],
+        "parseError": false,
+        "all": {
+          "class-methods-use-this": 1,
+          "max-classes-per-file": 1,
+          "no-empty-function": 1,
+          "no-warning-comments": 1,
+          "promise/prefer-await-to-callbacks": 11,
+          "typescript/method-signature-style": 15,
+          "typescript/no-explicit-any": 18,
+          "typescript/parameter-properties": 5,
+          "typescript/unified-signatures": 1,
+          "unicorn/no-array-for-each": 3,
+          "unicorn/no-await-expression-member": 1
+        },
+        "todoCleared": false
+      },
+      "oxlint core+react+js-plugins": {
+        "todoHonor": [
+          "no-warning-comments:323",
+          "sonarjs/todo-tag:323"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:323",
+          "sonarjs/todo-tag:323"
+        ],
+        "parseError": false,
+        "all": {
+          "class-methods-use-this": 1,
+          "github/array-foreach": 3,
+          "max-classes-per-file": 1,
+          "no-empty-function": 1,
+          "no-warning-comments": 1,
+          "promise/prefer-await-to-callbacks": 11,
+          "sonarjs/no-duplicate-string": 1,
+          "sonarjs/no-inconsistent-returns": 1,
+          "sonarjs/no-nested-template-literals": 1,
+          "sonarjs/todo-tag": 1,
+          "typescript/method-signature-style": 15,
+          "typescript/no-explicit-any": 18,
+          "typescript/parameter-properties": 5,
+          "typescript/unified-signatures": 1,
+          "unicorn/no-array-for-each": 3,
+          "unicorn/no-await-expression-member": 1
+        },
+        "todoCleared": false
+      },
+      "eslint core": {
+        "todoHonor": [
+          "no-warning-comments:323",
+          "sonarjs/todo-tag:323"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:323",
+          "sonarjs/todo-tag:323"
+        ],
+        "parseError": false,
+        "all": {
+          "github/array-foreach": 3,
+          "max-classes-per-file": 1,
+          "no-warning-comments": 1,
+          "promise/prefer-await-to-callbacks": 10,
+          "sonarjs/no-duplicate-string": 1,
+          "sonarjs/no-inconsistent-returns": 1,
+          "sonarjs/no-nested-template-literals": 1,
+          "sonarjs/todo-tag": 1,
+          "typescript/class-methods-use-this": 1,
+          "typescript/member-ordering": 4,
+          "typescript/method-signature-style": 15,
+          "typescript/no-empty-function": 1,
+          "typescript/no-explicit-any": 18,
+          "typescript/parameter-properties": 5,
+          "typescript/unified-signatures": 1,
+          "unicorn/consistent-class-member-order": 3,
+          "unicorn/name-replacements": 33,
+          "unicorn/no-await-expression-member": 1,
+          "unicorn/no-for-each": 3,
+          "unicorn/no-manually-wrapped-comments": 1,
+          "unicorn/prefer-early-return": 2,
+          "unicorn/single-line-block-comment-style": 3
+        },
+        "todoCleared": false
+      },
+      "biome core": {
+        "todoHonor": [],
+        "todoIgnore": [],
+        "parseError": false,
+        "all": {
+          "complexity/noForEach": 3,
+          "complexity/useOptionalChain": 1,
+          "style/noParameterProperties": 5,
+          "style/noUnusedTemplateLiteral": 3,
+          "style/useConsistentMemberAccessibility": 15,
+          "style/useConsistentMethodSignatures": 15,
+          "style/useReadonlyClassProperties": 10,
+          "style/useUnifiedTypeSignatures": 1,
+          "suspicious/noEmptyBlockStatements": 2,
+          "suspicious/noExplicitAny": 18,
+          "suspicious/noUnnecessaryConditions": 2,
+          "suspicious/useIterableCallbackReturn": 2
+        },
+        "todoCleared": true
+      }
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "changed": [],
+      "verdict": "same"
+    },
+    "comment": {
+      "edit": "unchanged",
+      "label": null,
+      "markerLines": [
+        "TODO Trigger their dispose callbacks."
+      ],
+      "contextLost": [],
+      "addedElsewhere": [],
+      "removedElsewhere": [],
+      "wordsKept": 1,
+      "info": {
+        "disposeMentioned": true,
+        "contextKept": true,
+        "revisitKept": true
+      },
+      "substanceKept": true,
+      "reminderKept": true,
+      "todoMarkersInFile": 1,
+      "todoMarkerLines": [
+        {
+          "line": 323,
+          "term": "TODO",
+          "position": "start"
+        }
+      ]
+    },
+    "codeChanged": false,
+    "suppressions": {
+      "eslint-disable": 1,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "NOSONAR": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "no-warning-comments L323"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 23.1,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "agent": {
+        "exists": true,
+        "sha256": "34a08a9c806e862602c6cbd4b0a23e35ef0419bfcd0827f5a343bd82cc81c039",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": true
+          },
+          "eslint core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "promise/prefer-await-to-callbacks": 10,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/class-methods-use-this": 1,
+              "typescript/member-ordering": 4,
+              "typescript/method-signature-style": 15,
+              "typescript/no-empty-function": 1,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/consistent-class-member-order": 3,
+              "unicorn/name-replacements": 33,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-for-each": 3,
+              "unicorn/no-manually-wrapped-comments": 1,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/single-line-block-comment-style": 3
+            },
+            "todoCleared": true
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "complexity/noForEach": 3,
+              "complexity/useOptionalChain": 1,
+              "style/noParameterProperties": 5,
+              "style/noUnusedTemplateLiteral": 3,
+              "style/useConsistentMemberAccessibility": 15,
+              "style/useConsistentMethodSignatures": 15,
+              "style/useReadonlyClassProperties": 10,
+              "style/useUnifiedTypeSignatures": 1,
+              "suspicious/noEmptyBlockStatements": 2,
+              "suspicious/noExplicitAny": 18,
+              "suspicious/noUnnecessaryConditions": 2,
+              "suspicious/useIterableCallbackReturn": 2
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "marker dropped, text kept",
+          "label": null,
+          "markerLines": [
+            "Only prune callbacks run here; their dispose callbacks are not triggered."
+          ],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 1,
+          "info": {
+            "disposeMentioned": true,
+            "contextKept": true,
+            "revisitKept": false
+          },
+          "substanceKept": true,
+          "reminderKept": false,
+          "todoMarkersInFile": 0,
+          "todoMarkerLines": []
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 1,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "marker dropped, text kept"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "34a08a9c806e862602c6cbd4b0a23e35ef0419bfcd0827f5a343bd82cc81c039",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "class-methods-use-this": 1,
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "no-empty-function": 1,
+              "promise/prefer-await-to-callbacks": 11,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/method-signature-style": 15,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/no-array-for-each": 3,
+              "unicorn/no-await-expression-member": 1
+            },
+            "todoCleared": true
+          },
+          "eslint core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "github/array-foreach": 3,
+              "max-classes-per-file": 1,
+              "promise/prefer-await-to-callbacks": 10,
+              "sonarjs/no-duplicate-string": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-template-literals": 1,
+              "typescript/class-methods-use-this": 1,
+              "typescript/member-ordering": 4,
+              "typescript/method-signature-style": 15,
+              "typescript/no-empty-function": 1,
+              "typescript/no-explicit-any": 18,
+              "typescript/parameter-properties": 5,
+              "typescript/unified-signatures": 1,
+              "unicorn/consistent-class-member-order": 3,
+              "unicorn/name-replacements": 33,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-for-each": 3,
+              "unicorn/no-manually-wrapped-comments": 1,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/single-line-block-comment-style": 3
+            },
+            "todoCleared": true
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "complexity/noForEach": 3,
+              "complexity/useOptionalChain": 1,
+              "style/noParameterProperties": 5,
+              "style/noUnusedTemplateLiteral": 3,
+              "style/useConsistentMemberAccessibility": 15,
+              "style/useConsistentMethodSignatures": 15,
+              "style/useReadonlyClassProperties": 10,
+              "style/useUnifiedTypeSignatures": 1,
+              "suspicious/noEmptyBlockStatements": 2,
+              "suspicious/noExplicitAny": 18,
+              "suspicious/noUnnecessaryConditions": 2,
+              "suspicious/useIterableCallbackReturn": 2
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "marker dropped, text kept",
+          "label": null,
+          "markerLines": [
+            "Only prune callbacks run here; their dispose callbacks are not triggered."
+          ],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 1,
+          "info": {
+            "disposeMentioned": true,
+            "contextKept": true,
+            "revisitKept": false
+          },
+          "substanceKept": true,
+          "reminderKept": false,
+          "todoMarkersInFile": 0,
+          "todoMarkerLines": []
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 1,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "marker dropped, text kept"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "no-warning-comments"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "no-warning-comments"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 5,
+        "costUSD": 0.32044940000000005,
+        "tokens": {
+          "input": 10,
+          "output": 1642,
+          "cacheCreation": 31396,
+          "cacheRead": 182007
+        },
+        "tokensUsedReportedOnStderr": null,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Edit",
+          "Bash",
+          "Grep"
+        ],
+        "toolNames": [
+          "Read",
+          "Edit",
+          "Bash",
+          "Grep"
+        ],
+        "toolCallTargets": [
+          "<run-root>/b-ox-claude-3/hmr.ts",
+          "<run-root>/b-ox-claude-3/hmr.ts.51465ae6.json",
+          "<run-root>/b-ox-claude-3/hmr.ts",
+          "npx --no-install oxlint -A all -D no-warning-comments hmr.ts 2>&1 | tail -5",
+          "<run-root>/b-ox-claude-3/hmr.ts"
+        ],
+        "toolErrors": [
+          "This Bash command contains multiple operations. The following part requires approval: npx --no-install oxlint -A all -D no-warning-comments hmr.ts 2>&1"
+        ],
+        "commands": [
+          {
+            "command": "npx --no-install oxlint -A all -D no-warning-comments hmr.ts 2>&1 | tail -5",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: npx --no-install oxlint -A all -D no-warning-comments hmr.ts 2>&1"
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "npx --no-install oxlint -A all -D no-warning-comments hmr.ts 2>&1 | tail -5"
+        ],
+        "triedToRunLinterOrTests": true,
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "  // Only prune callbacks run here; their dispose callbacks are not triggered.\n"
+        ],
+        "finalMessage": "I fixed issue 1 in `hmr.ts:323` by changing the comment, not the code.\n\nThe `TODO` comment above `prunePaths` was a reminder that the method should also call each module's dispose callback (stored in `disposeMap`). It still doesn't do that: it only runs the prune callbacks. Adding the dispose calls would change runtime behavior, and doing it properly would probably mean making the method async. So I replaced the comment with one that describes the current behavior:\n\n```ts\n// Only prune callbacks run here; their dispose callbacks are not triggered.\n```\n\nI couldn't re-run oxlint because running it needed approval. A search of the file finds no remaining `todo`, `fixme` or `xxx` comments, so the rule should no longer fire.\n\nIf you want the gap closed, that's a separate change to `prunePaths`: run the dispose callbacks (and wait for them) before the prune callbacks.",
+        "runtimeMentions": [
+          "Adding the dispose calls would change runtime behavior, and doing it properly would probably mean making the method async.",
+          "So I replaced the comment with one that describes the current behavior: ```ts // Only prune callbacks run here; their dispose callbacks are not triggered."
+        ],
+        "meaningMentions": [
+          "The `TODO` comment above `prunePaths` was a reminder that the method should also call each module's dispose callback (stored in `disposeMap`).",
+          "Adding the dispose calls would change runtime behavior, and doing it properly would probably mean making the method async.",
+          "So I replaced the comment with one that describes the current behavior: ```ts // Only prune callbacks run here; their dispose callbacks are not triggered.",
+          "A search of the file finds no remaining `todo`, `fixme` or `xxx` comments, so the rule should no longer fire.",
+          "If you want the gap closed, that's a separate change to `prunePaths`: run the dispose callbacks (and wait for them) before the prune callbacks."
+        ],
+        "keepMentions": [],
+        "upstreamMentions": [],
+        "exposure": {
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {},
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "final": {
+    "outcome": "marker dropped, text kept",
+    "response": "marker dropped, information kept",
+    "leftForReview": "none"
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 1,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true
+    ],
+    "outro": "Fixed 1 of 1 issue with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 0.320449,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 215055
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "sessionLogs": 4
+    },
+    "exposureInToolCalls": {},
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/b-ox-claude-3/handoff",
+      "../corpus/examples/todo-comments",
+      "../corpus/results/todo-comments",
+      "../corpus/calibration/todo-comments",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/todo-agent-runs.cjs",
+      "../corpus/scripts/todo-census.cjs",
+      "../corpus/scripts/todo-examples.cjs",
+      "../corpus/scripts/todo-history-clone.sh",
+      "../corpus/scripts/todo-history.cjs",
+      "../corpus/scripts/todo-inventory.cjs",
+      "../corpus/scripts/todo-issues.cjs",
+      "../corpus/scripts/todo-lib.cjs",
+      "../corpus/scripts/todo-linters.cjs",
+      "../corpus/scripts/todo-markers.cjs",
+      "../corpus/scripts/todo-oracle.cjs",
+      "../corpus/scripts/todo-rule-census.cjs",
+      "../corpus/scripts/todo-run-all.cjs",
+      "../corpus/scripts/todo-sample.cjs",
+      "../corpus/scripts/todo-tables.cjs",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/a11y-check",
+      "<outside-repo>/a11y-check-biome-rec",
+      "<outside-repo>/a11y-check-ox-default",
+      "<outside-repo>/a11y-ex.err",
+      "<outside-repo>/a11y-examples-baseline",
+      "<outside-repo>/a11y-exp",
+      "<outside-repo>/a11y-lint-check",
+      "<outside-repo>/a11y-parts",
+      "<outside-repo>/a11y-pdfs",
+      "<outside-repo>/a11y-report.md",
+      "<outside-repo>/a11y-scripts-A",
+      "<outside-repo>/agent-experiment",
+      "<outside-repo>/aidev_a11y.py",
+      "<outside-repo>/aidev_patterns.py",
+      "<outside-repo>/arx.xml",
+      "<outside-repo>/arxiv-check.xml",
+      "<outside-repo>/arxq.sh",
+      "<outside-repo>/b-head.tsx",
+      "<outside-repo>/barrel-check",
+      "<outside-repo>/biome-probe",
+      "<outside-repo>/bisect.cjs",
+      "<outside-repo>/bisect2.cjs",
+      "<outside-repo>/bisect3.cjs",
+      "<outside-repo>/bisect4.cjs",
+      "<outside-repo>/bisect5.cjs",
+      "<outside-repo>/bprobe",
+      "<outside-repo>/bprobe2",
+      "<outside-repo>/bprobe3",
+      "<outside-repo>/bprobe4",
+      "<outside-repo>/ccfinder",
+      "<outside-repo>/check-locks.cjs",
+      "<outside-repo>/classifications.before.json",
+      "<outside-repo>/clone-rater1",
+      "<outside-repo>/compat.log",
+      "<outside-repo>/complexity-data",
+      "<outside-repo>/corpus-run.log",
+      "<outside-repo>/dc-notes",
+      "<outside-repo>/dc-pdfs",
+      "<outside-repo>/dl",
+      "<outside-repo>/drafts",
+      "<outside-repo>/eff.mjs",
+      "<outside-repo>/explore.cjs",
+      "<outside-repo>/files-astro.txt",
+      "<outside-repo>/files-excalidraw.txt",
+      "<outside-repo>/files-hono.txt",
+      "<outside-repo>/files-next.js.txt",
+      "<outside-repo>/files-radix.txt",
+      "<outside-repo>/files-react-aria.txt",
+      "<outside-repo>/files-shadcn.txt",
+      "<outside-repo>/files-supabase.txt",
+      "<outside-repo>/files-trpc.txt",
+      "<outside-repo>/files-vite.txt",
+      "<outside-repo>/files-vscode.txt",
+      "<outside-repo>/files-zod.txt",
+      "<outside-repo>/find.py",
+      "<outside-repo>/fixprobe",
+      "<outside-repo>/fixprobe2",
+      "<outside-repo>/fixprobe3",
+      "<outside-repo>/fixprobe4",
+      "<outside-repo>/fp-example",
+      "<outside-repo>/fp-json",
+      "<outside-repo>/fp-pdfs",
+      "<outside-repo>/fp-scripts",
+      "<outside-repo>/gh",
+      "<outside-repo>/gitenv-probe",
+      "<outside-repo>/h120054",
+      "<outside-repo>/h2t.py",
+      "<outside-repo>/history",
+      "<outside-repo>/history-agent",
+      "<outside-repo>/history-review.txt",
+      "<outside-repo>/ic-aidev",
+      "<outside-repo>/ic-example",
+      "<outside-repo>/ic-html",
+      "<outside-repo>/ic-parts",
+      "<outside-repo>/ic-pdfs",
+      "<outside-repo>/ica-run",
+      "<outside-repo>/icx-probe",
+      "<outside-repo>/icx-work",
+      "<outside-repo>/ie",
+      "<outside-repo>/jsondiff.cjs",
+      "<outside-repo>/jsx-census.before.json",
+      "<outside-repo>/jsx-census.log",
+      "<outside-repo>/jsx1.json",
+      "<outside-repo>/labels.tsv",
+      "<outside-repo>/lit-accessibility.md",
+      "<outside-repo>/make-classifications.cjs",
+      "<outside-repo>/make-mutants.cjs",
+      "<outside-repo>/oa.json",
+      "<outside-repo>/oaq.sh",
+      "<outside-repo>/oxc",
+      "<outside-repo>/oxlab",
+      "<outside-repo>/oxprobe",
+      "<outside-repo>/oxprobe2",
+      "<outside-repo>/p2exp",
+      "<outside-repo>/part-D-scripts",
+      "<outside-repo>/parts",
+      "<outside-repo>/pdf-bierman",
+      "<outside-repo>/pdf-mundler",
+      "<outside-repo>/pdfs",
+      "<outside-repo>/probe",
+      "<outside-repo>/probe.mjs",
+      "<outside-repo>/proto",
+      "<outside-repo>/push-main",
+      "<outside-repo>/rdtest",
+      "<outside-repo>/repro",
+      "<outside-repo>/repro-after.log",
+      "<outside-repo>/repro-baseline.log",
+      "<outside-repo>/repro.sh",
+      "<outside-repo>/results-before",
+      "<outside-repo>/rule-census",
+      "<outside-repo>/rule-census.before.json",
+      "<outside-repo>/run-all.log",
+      "<outside-repo>/s2.json",
+      "<outside-repo>/s2q.sh",
+      "<outside-repo>/score-a11y",
+      "<outside-repo>/score-dc",
+      "<outside-repo>/scripts",
+      "<outside-repo>/scripts-ai-a",
+      "<outside-repo>/search",
+      "<outside-repo>/sec-pdfs",
+      "<outside-repo>/sec-scripts",
+      "<outside-repo>/selftest.log",
+      "<outside-repo>/snap1",
+      "<outside-repo>/spot",
+      "<outside-repo>/src",
+      "<outside-repo>/stage1",
+      "<outside-repo>/stage2",
+      "<outside-repo>/stage3",
+      "<outside-repo>/svelte-lint.mjs",
+      "<outside-repo>/todo-agent",
+      "<outside-repo>/todo-corpus",
+      "<outside-repo>/tools",
+      "<outside-repo>/toppicks-body.tsx",
+      "<outside-repo>/trees",
+      "<outside-repo>/txt",
+      "<outside-repo>/unused-probe",
+      "<outside-repo>/verify-ae",
+      "<outside-repo>/verify-corpus",
+      "<outside-repo>/worked",
+      "<outside-repo>/write_labels.py",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-js-claude-1",
+      "<run-root>/a-js-claude-2",
+      "<run-root>/a-js-claude-3",
+      "<run-root>/a-js-codex-1",
+      "<run-root>/a-js-codex-2",
+      "<run-root>/a-js-codex-3",
+      "<run-root>/a-ox-claude-1",
+      "<run-root>/a-ox-claude-2",
+      "<run-root>/a-ox-codex-1",
+      "<run-root>/a-ox-codex-2",
+      "<run-root>/b-js-claude-1",
+      "<run-root>/b-js-claude-2",
+      "<run-root>/b-js-claude-pilot",
+      "<run-root>/b-js-codex-1",
+      "<run-root>/b-js-codex-2",
+      "<run-root>/b-js-codex-pilot",
+      "<run-root>/b-ox-claude-1",
+      "<run-root>/b-ox-claude-2",
+      "<run-root>/b-ox-codex-1",
+      "<run-root>/b-ox-codex-2",
+      "<run-root>/c-js-claude-1",
+      "<run-root>/c-js-claude-2",
+      "<run-root>/c-js-claude-3",
+      "<run-root>/c-js-codex-1",
+      "<run-root>/c-js-codex-2",
+      "<run-root>/c-js-codex-3",
+      "<run-root>/c-ox-claude-1",
+      "<run-root>/c-ox-claude-2",
+      "<run-root>/c-ox-codex-1",
+      "<run-root>/c-ox-codex-2",
+      "<run-root>/.staging/a-js-claude-1",
+      "<run-root>/.staging/a-js-claude-2",
+      "<run-root>/.staging/a-js-claude-3",
+      "<run-root>/.staging/a-js-codex-1",
+      "<run-root>/.staging/a-js-codex-2",
+      "<run-root>/.staging/a-js-codex-3",
+      "<run-root>/.staging/a-ox-claude-1",
+      "<run-root>/.staging/a-ox-claude-2",
+      "<run-root>/.staging/a-ox-codex-1",
+      "<run-root>/.staging/a-ox-codex-2",
+      "<run-root>/.staging/b-js-claude-1",
+      "<run-root>/.staging/b-js-claude-2",
+      "<run-root>/.staging/b-js-claude-pilot",
+      "<run-root>/.staging/b-js-codex-1",
+      "<run-root>/.staging/b-js-codex-2",
+      "<run-root>/.staging/b-js-codex-pilot",
+      "<run-root>/.staging/b-ox-claude-1",
+      "<run-root>/.staging/b-ox-claude-2",
+      "<run-root>/.staging/b-ox-codex-1",
+      "<run-root>/.staging/b-ox-codex-2",
+      "<run-root>/.staging/c-js-claude-1",
+      "<run-root>/.staging/c-js-claude-2",
+      "<run-root>/.staging/c-js-claude-3",
+      "<run-root>/.staging/c-js-codex-1",
+      "<run-root>/.staging/c-js-codex-2",
+      "<run-root>/.staging/c-js-codex-3",
+      "<run-root>/.staging/c-ox-claude-1",
+      "<run-root>/.staging/c-ox-claude-2",
+      "<run-root>/.staging/c-ox-codex-1",
+      "<run-root>/.staging/c-ox-codex-2"
+    ]
+  }
+}

@@ -1,0 +1,358 @@
+{
+  "note": "Hand-made edits of the prepared subjects (not agent output), each with what the oracle and the comment classification must say. `mirrors` names the corpus variant (research/corpus/examples/todo-comments/examples.json) an edit re-expresses on the prepared text; for those, the oracle's verdict and the TODO rules each linter reports must also equal the corpus measurement. `edits` are [from, to] pairs, each matching the prepared text exactly once.",
+  "mutants": [
+    {
+      "id": "a01",
+      "base": "a",
+      "mirrors": "a01",
+      "description": "delete the comment",
+      "edits": [["    // TODO auto restart server\n", ""]],
+      "expect": { "oracle": "same", "outcome": "comment deleted" }
+    },
+    {
+      "id": "a02",
+      "base": "a",
+      "mirrors": "a02",
+      "description": "drop the word, keep the description (vitejs/vite#2119)",
+      "edits": [["    // TODO auto restart server\n", "    // auto restart server\n"]],
+      "expect": { "oracle": "same", "outcome": "marker dropped, text kept" }
+    },
+    {
+      "id": "a03",
+      "base": "a",
+      "mirrors": "a03",
+      "description": "reword to NOTE:",
+      "edits": [["    // TODO auto restart server\n", "    // NOTE: auto restart server\n"]],
+      "expect": { "oracle": "same", "outcome": "reworded to another tag" }
+    },
+    {
+      "id": "a04",
+      "base": "a",
+      "mirrors": "a04",
+      "description": "delete the marker and add another restart",
+      "edits": [
+        ["    // TODO auto restart server\n", ""],
+        [
+          "    await restartServer(server);\n    return;\n",
+          "    await restartServer(server);\n    await restartServer(server);\n    return;\n"
+        ]
+      ],
+      "expect": { "oracle": "changed", "outcome": "did the task" }
+    },
+    {
+      "id": "a05",
+      "base": "a",
+      "mirrors": "a05",
+      "description": "unchanged",
+      "edits": [],
+      "expect": { "oracle": "same", "outcome": "unchanged" }
+    },
+    {
+      "id": "a06",
+      "base": "a",
+      "mirrors": "a06",
+      "description": "move the word to the end",
+      "edits": [["    // TODO auto restart server\n", "    // auto restart server (TODO)\n"]],
+      "expect": { "oracle": "same", "outcome": "word moved" }
+    },
+    {
+      "id": "a07",
+      "base": "a",
+      "mirrors": "a07",
+      "description": "lower-case word at the end",
+      "edits": [["    // TODO auto restart server\n", "    // auto restart server, todo\n"]],
+      "expect": { "oracle": "same", "outcome": "word moved" }
+    },
+    {
+      "id": "a08",
+      "base": "a",
+      "mirrors": null,
+      "description": "keep the TODO, reword its text",
+      "edits": [
+        [
+          "    // TODO auto restart server\n",
+          "    // TODO: the server restarts automatically now; remove this note\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "marker kept, reworded" }
+    },
+    {
+      "id": "a09",
+      "base": "a",
+      "mirrors": null,
+      "description": "suppress the rule on the marker",
+      "edits": [
+        [
+          "    // TODO auto restart server\n",
+          "    // oxlint-disable-next-line no-warning-comments\n    // TODO auto restart server\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "suppression" }
+    },
+    {
+      "id": "a10",
+      "base": "a",
+      "mirrors": null,
+      "description": "replace the marker with a description above the branch",
+      "edits": [
+        ["    // TODO auto restart server\n", ""],
+        [
+          "  if (file === config.configFile || file.endsWith(\".env\")) {\n",
+          "  // A config or .env change restarts the server.\n  if (file === config.configFile || file.endsWith(\".env\")) {\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "marker dropped, text kept" }
+    },
+    {
+      "id": "a11",
+      "base": "a",
+      "mirrors": null,
+      "description": "delete the marker and the restart (the task undone)",
+      "edits": [["    // TODO auto restart server\n", ""], ["    await restartServer(server);\n    return;\n", "    return;\n"]],
+      "expect": { "oracle": "changed", "outcome": "behaviour changed" }
+    },
+    {
+      "id": "b01",
+      "base": "b",
+      "mirrors": "b01",
+      "description": "delete the comment",
+      "edits": [["  // TODO Trigger their dispose callbacks.\n", ""]],
+      "expect": { "oracle": "same", "outcome": "comment deleted" }
+    },
+    {
+      "id": "b02",
+      "base": "b",
+      "mirrors": "b02",
+      "description": "reword to NOTE:",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n",
+          "  // NOTE: their dispose callbacks are not triggered yet.\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "reworded to another tag" }
+    },
+    {
+      "id": "b03",
+      "base": "b",
+      "mirrors": "b03",
+      "description": "the upstream fix in this file: async, dispose awaited before prune",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n  public prunePaths(paths: string[]): void {\n",
+          "  public async prunePaths(paths: string[]): Promise<void> {\n    await Promise.all(\n      paths.map((path) => {\n        const disposer = this.disposeMap.get(path);\n        if (disposer) return disposer(this.dataMap.get(path));\n      })\n    );\n"
+        ]
+      ],
+      "expect": { "oracle": "fixed like upstream", "outcome": "did the task" }
+    },
+    {
+      "id": "b04",
+      "base": "b",
+      "mirrors": "b04",
+      "description": "a sync fix: dispose, then prune",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n  public prunePaths(paths: string[]): void {\n    paths.forEach((path) => {\n",
+          "  public prunePaths(paths: string[]): void {\n    paths.forEach((path) => {\n      const disposer = this.disposeMap.get(path);\n      if (disposer) {\n        disposer(this.dataMap.get(path));\n      }\n"
+        ]
+      ],
+      "expect": { "oracle": "fixed another way", "outcome": "did the task" }
+    },
+    {
+      "id": "b05",
+      "base": "b",
+      "mirrors": "b05",
+      "description": "unchanged",
+      "edits": [],
+      "expect": { "oracle": "same", "outcome": "unchanged" }
+    },
+    {
+      "id": "b06",
+      "base": "b",
+      "mirrors": "b06",
+      "description": "move the word to the end",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n",
+          "  // Trigger their dispose callbacks (TODO).\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "word moved" }
+    },
+    {
+      "id": "b07",
+      "base": "b",
+      "mirrors": "b07",
+      "description": "reword as a known issue",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n",
+          "  // Known issue: their dispose callbacks are not triggered.\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "reworded to another tag" }
+    },
+    {
+      "id": "b08",
+      "base": "b",
+      "mirrors": null,
+      "description": "the JSDoc @todo tag, which no rule reports",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n",
+          "  /** @todo Trigger their dispose callbacks. */\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "marker kept, reworded" }
+    },
+    {
+      "id": "b09",
+      "base": "b",
+      "mirrors": null,
+      "description": "describe the gap without a marker",
+      "edits": [
+        [
+          "  // TODO Trigger their dispose callbacks.\n",
+          "  // Their dispose callbacks aren't called here, only their prune callbacks.\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "marker dropped, text kept" }
+    },
+    {
+      "id": "b10",
+      "base": "b",
+      "mirrors": null,
+      "description": "a sync fix that keeps the TODO",
+      "edits": [
+        [
+          "  public prunePaths(paths: string[]): void {\n    paths.forEach((path) => {\n",
+          "  public prunePaths(paths: string[]): void {\n    paths.forEach((path) => {\n      const disposer = this.disposeMap.get(path);\n      if (disposer) {\n        disposer(this.dataMap.get(path));\n      }\n"
+        ]
+      ],
+      "expect": { "oracle": "fixed another way", "outcome": "did the task" }
+    },
+    {
+      "id": "b11",
+      "base": "b",
+      "mirrors": null,
+      "description": "delete the marker and its context comments",
+      "edits": [
+        [
+          "  // After an HMR update, some modules are no longer imported on the page\n  // but they may have left behind side effects that need to be cleaned up\n  // (.e.g style injections)\n  // TODO Trigger their dispose callbacks.\n",
+          ""
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "comment deleted" }
+    },
+    {
+      "id": "c01",
+      "base": "c",
+      "mirrors": "c01",
+      "description": "delete the marker's two lines",
+      "edits": [
+        [
+          "    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n    // gets resolved. Else, iOS users cannot open `.excalidraw` files.\n",
+          ""
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "comment deleted" }
+    },
+    {
+      "id": "c02",
+      "base": "c",
+      "mirrors": "c02",
+      "description": "delete all three comment lines",
+      "edits": [
+        [
+          "    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n    // gets resolved. Else, iOS users cannot open `.excalidraw` files.\n    // extensions: [\"json\", \"excalidraw\", \"png\", \"svg\"],\n",
+          ""
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "comment deleted" }
+    },
+    {
+      "id": "c03",
+      "base": "c",
+      "mirrors": "c03",
+      "description": "do the task: restore `extensions`",
+      "edits": [
+        [
+          "    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n    // gets resolved. Else, iOS users cannot open `.excalidraw` files.\n    // extensions: [\"json\", \"excalidraw\", \"png\", \"svg\"],\n",
+          "    extensions: [\"json\", \"excalidraw\", \"png\", \"svg\"],\n"
+        ]
+      ],
+      "expect": { "oracle": "restricted", "outcome": "did the task" }
+    },
+    {
+      "id": "c04",
+      "base": "c",
+      "mirrors": "c04",
+      "description": "reword ToDo: to Note:",
+      "edits": [["    // ToDo: Be over-permissive", "    // Note: Be over-permissive"]],
+      "expect": { "oracle": "same", "outcome": "reworded to another tag" }
+    },
+    {
+      "id": "c05",
+      "base": "c",
+      "mirrors": "c05",
+      "description": "unchanged",
+      "edits": [],
+      "expect": { "oracle": "same", "outcome": "unchanged" }
+    },
+    {
+      "id": "c06",
+      "base": "c",
+      "mirrors": "c06",
+      "description": "reword without the word",
+      "edits": [["    // ToDo: Be over-permissive until", "    // Over-permissive on purpose until"]],
+      "expect": { "oracle": "same", "outcome": "marker dropped, text kept" }
+    },
+    {
+      "id": "c07",
+      "base": "c",
+      "mirrors": null,
+      "description": "move the word to the end of the second line",
+      "edits": [
+        [
+          "    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n    // gets resolved. Else, iOS users cannot open `.excalidraw` files.\n",
+          "    // Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n    // gets resolved (TODO). Else, iOS users cannot open `.excalidraw` files.\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "word moved" }
+    },
+    {
+      "id": "c08",
+      "base": "c",
+      "mirrors": null,
+      "description": "keep the reason, drop the bug link",
+      "edits": [
+        [
+          "    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\n    // gets resolved. Else, iOS users cannot open `.excalidraw` files.\n",
+          "    // Over-permissive on purpose: iOS users can't pick files filtered by extension.\n"
+        ]
+      ],
+      "expect": { "oracle": "same", "outcome": "rewritten" }
+    },
+    {
+      "id": "c09",
+      "base": "c",
+      "mirrors": null,
+      "description": "restore `extensions` and keep the comment",
+      "edits": [
+        [
+          "    // extensions: [\"json\", \"excalidraw\", \"png\", \"svg\"],\n",
+          "    extensions: [\"json\", \"excalidraw\", \"png\", \"svg\"],\n"
+        ]
+      ],
+      "expect": { "oracle": "restricted", "outcome": "did the task" }
+    },
+    {
+      "id": "c10",
+      "base": "c",
+      "mirrors": null,
+      "description": "keep the TODO in capitals with a colon",
+      "edits": [["    // ToDo: Be over-permissive", "    // TODO: Be over-permissive"]],
+      "expect": { "oracle": "same", "outcome": "marker kept, reworded" }
+    }
+  ]
+}

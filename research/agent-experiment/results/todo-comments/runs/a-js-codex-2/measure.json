@@ -1,0 +1,990 @@
+{
+  "runId": "a-js-codex-2",
+  "topic": "todo-comments",
+  "subject": "a-js",
+  "base": "a",
+  "armId": "js",
+  "arm": "A, obsolete, Oxlint + js-plugins",
+  "config": "oxlint core+react+js-plugins",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.155.1",
+  "wallSeconds": 27.3,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 43,
+    "leftOutByFilter": {
+      "func-style": 10,
+      "github/array-foreach": 1,
+      "no-await-in-loop": 1,
+      "no-inline-comments": 1,
+      "no-plusplus": 1,
+      "no-shadow": 1,
+      "no-use-before-define": 5,
+      "oxc/only-used-in-recursion": 1,
+      "promise/avoid-new": 1,
+      "promise/param-names": 1,
+      "react-doctor/async-await-in-loop": 1,
+      "react-doctor/js-set-map-lookups": 1,
+      "require-await": 2,
+      "sonarjs/no-duplicate-string": 1,
+      "typescript/ban-ts-comment": 1,
+      "typescript/method-signature-style": 6,
+      "typescript/no-explicit-any": 2,
+      "typescript/no-invalid-void-type": 2,
+      "unicorn/no-array-for-each": 1,
+      "unicorn/prefer-spread": 1
+    },
+    "given": [
+      {
+        "rule": "no-warning-comments",
+        "line": 144,
+        "message": "Unexpected 'todo' comment: TODO auto restart server",
+        "help": "Remove or rephrase this comment",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      },
+      {
+        "rule": "sonarjs/todo-tag",
+        "line": 144,
+        "message": "Complete the task associated to this \"TODO\" comment.",
+        "help": null,
+        "url": null
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "b81449b91c98571e5b60480b2dee559f3539687394d3b160ef30c37a865d416c",
+    "parseError": false,
+    "views": {
+      "oxlint core+react": {
+        "todoHonor": [
+          "no-warning-comments:144"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:144"
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 10,
+          "no-await-in-loop": 1,
+          "no-inline-comments": 1,
+          "no-plusplus": 1,
+          "no-shadow": 1,
+          "no-use-before-define": 5,
+          "no-warning-comments": 1,
+          "oxc/only-used-in-recursion": 1,
+          "promise/avoid-new": 1,
+          "promise/param-names": 1,
+          "require-await": 2,
+          "typescript/ban-ts-comment": 1,
+          "typescript/method-signature-style": 6,
+          "typescript/no-explicit-any": 2,
+          "typescript/no-invalid-void-type": 2,
+          "unicorn/no-array-for-each": 1,
+          "unicorn/prefer-spread": 1
+        },
+        "todoCleared": false
+      },
+      "oxlint core+react+js-plugins": {
+        "todoHonor": [
+          "no-warning-comments:144",
+          "sonarjs/todo-tag:144"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:144",
+          "sonarjs/todo-tag:144"
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 10,
+          "github/array-foreach": 1,
+          "no-await-in-loop": 1,
+          "no-inline-comments": 1,
+          "no-plusplus": 1,
+          "no-shadow": 1,
+          "no-use-before-define": 5,
+          "no-warning-comments": 1,
+          "oxc/only-used-in-recursion": 1,
+          "promise/avoid-new": 1,
+          "promise/param-names": 1,
+          "react-doctor/async-await-in-loop": 1,
+          "react-doctor/js-set-map-lookups": 1,
+          "require-await": 2,
+          "sonarjs/no-duplicate-string": 1,
+          "sonarjs/todo-tag": 1,
+          "typescript/ban-ts-comment": 1,
+          "typescript/method-signature-style": 6,
+          "typescript/no-explicit-any": 2,
+          "typescript/no-invalid-void-type": 2,
+          "unicorn/no-array-for-each": 1,
+          "unicorn/prefer-spread": 1
+        },
+        "todoCleared": false
+      },
+      "eslint core": {
+        "todoHonor": [
+          "no-warning-comments:144",
+          "sonarjs/todo-tag:144"
+        ],
+        "todoIgnore": [
+          "no-warning-comments:144",
+          "sonarjs/todo-tag:144"
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 10,
+          "github/array-foreach": 1,
+          "no-await-in-loop": 1,
+          "no-inline-comments": 1,
+          "no-plusplus": 1,
+          "no-warning-comments": 1,
+          "promise/avoid-new": 1,
+          "promise/param-names": 1,
+          "require-await": 2,
+          "sonarjs/no-duplicate-string": 1,
+          "sonarjs/todo-tag": 1,
+          "typescript/ban-ts-comment": 1,
+          "typescript/method-signature-style": 6,
+          "typescript/no-explicit-any": 2,
+          "typescript/no-invalid-void-type": 2,
+          "typescript/no-shadow": 1,
+          "typescript/no-use-before-define": 5,
+          "unicorn/consistent-arrow-return-style": 1,
+          "unicorn/consistent-boolean-name": 1,
+          "unicorn/name-replacements": 8,
+          "unicorn/no-for-each": 1,
+          "unicorn/no-global-object-property-assignment": 1,
+          "unicorn/no-manually-wrapped-comments": 1,
+          "unicorn/prefer-continue": 1,
+          "unicorn/prefer-spread": 1
+        },
+        "todoCleared": false
+      },
+      "biome core": {
+        "todoHonor": [],
+        "todoIgnore": [],
+        "parseError": false,
+        "all": {
+          "complexity/noForEach": 1,
+          "performance/noAwaitInLoops": 1,
+          "style/noIncrementDecrement": 1,
+          "style/noUnusedTemplateLiteral": 3,
+          "style/useConsistentMethodSignatures": 6,
+          "suspicious/noConfusingVoidType": 1,
+          "suspicious/noExplicitAny": 2,
+          "suspicious/noForIn": 1,
+          "suspicious/noParametersOnlyUsedInRecursion": 1,
+          "suspicious/noShadow": 1,
+          "suspicious/useAwait": 2,
+          "suspicious/useIterableCallbackReturn": 1
+        },
+        "todoCleared": true
+      }
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "changed": [],
+      "verdict": "same"
+    },
+    "comment": {
+      "edit": "unchanged",
+      "label": null,
+      "markerLines": [
+        "TODO auto restart server"
+      ],
+      "contextLost": [],
+      "addedElsewhere": [],
+      "removedElsewhere": [],
+      "wordsKept": 1,
+      "info": {
+        "descriptionKept": true
+      },
+      "substanceKept": true,
+      "reminderKept": true,
+      "todoMarkersInFile": 1,
+      "todoMarkerLines": [
+        {
+          "line": 144,
+          "term": "TODO",
+          "position": "start"
+        }
+      ]
+    },
+    "codeChanged": false,
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "NOSONAR": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 1
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "no-warning-comments L144",
+        "sonarjs/todo-tag L144"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 27.3,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "agent": {
+        "exists": true,
+        "sha256": "3b5f5e2e60614ee446c6db829c12aac7375780a12263efdb6f8acce776525fe3",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 10,
+              "no-await-in-loop": 1,
+              "no-inline-comments": 1,
+              "no-plusplus": 1,
+              "no-shadow": 1,
+              "no-use-before-define": 5,
+              "oxc/only-used-in-recursion": 1,
+              "promise/avoid-new": 1,
+              "promise/param-names": 1,
+              "require-await": 2,
+              "typescript/ban-ts-comment": 1,
+              "typescript/method-signature-style": 6,
+              "typescript/no-explicit-any": 2,
+              "typescript/no-invalid-void-type": 2,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/prefer-spread": 1
+            },
+            "todoCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 10,
+              "github/array-foreach": 1,
+              "no-await-in-loop": 1,
+              "no-inline-comments": 1,
+              "no-plusplus": 1,
+              "no-shadow": 1,
+              "no-use-before-define": 5,
+              "oxc/only-used-in-recursion": 1,
+              "promise/avoid-new": 1,
+              "promise/param-names": 1,
+              "react-doctor/async-await-in-loop": 1,
+              "react-doctor/js-set-map-lookups": 1,
+              "require-await": 2,
+              "sonarjs/no-duplicate-string": 1,
+              "typescript/ban-ts-comment": 1,
+              "typescript/method-signature-style": 6,
+              "typescript/no-explicit-any": 2,
+              "typescript/no-invalid-void-type": 2,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/prefer-spread": 1
+            },
+            "todoCleared": true
+          },
+          "eslint core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 10,
+              "github/array-foreach": 1,
+              "no-await-in-loop": 1,
+              "no-inline-comments": 1,
+              "no-plusplus": 1,
+              "promise/avoid-new": 1,
+              "promise/param-names": 1,
+              "require-await": 2,
+              "sonarjs/no-duplicate-string": 1,
+              "typescript/ban-ts-comment": 1,
+              "typescript/method-signature-style": 6,
+              "typescript/no-explicit-any": 2,
+              "typescript/no-invalid-void-type": 2,
+              "typescript/no-shadow": 1,
+              "typescript/no-use-before-define": 5,
+              "unicorn/consistent-arrow-return-style": 1,
+              "unicorn/consistent-boolean-name": 1,
+              "unicorn/name-replacements": 8,
+              "unicorn/no-for-each": 1,
+              "unicorn/no-global-object-property-assignment": 1,
+              "unicorn/no-manually-wrapped-comments": 1,
+              "unicorn/prefer-continue": 1,
+              "unicorn/prefer-spread": 1
+            },
+            "todoCleared": true
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "complexity/noForEach": 1,
+              "performance/noAwaitInLoops": 1,
+              "style/noIncrementDecrement": 1,
+              "style/noUnusedTemplateLiteral": 3,
+              "style/useConsistentMethodSignatures": 6,
+              "suspicious/noConfusingVoidType": 1,
+              "suspicious/noExplicitAny": 2,
+              "suspicious/noForIn": 1,
+              "suspicious/noParametersOnlyUsedInRecursion": 1,
+              "suspicious/noShadow": 1,
+              "suspicious/useAwait": 2,
+              "suspicious/useIterableCallbackReturn": 1
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "comment deleted",
+          "label": null,
+          "markerLines": [],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 0,
+          "info": {
+            "descriptionKept": false
+          },
+          "substanceKept": false,
+          "reminderKept": false,
+          "todoMarkersInFile": 0,
+          "todoMarkerLines": []
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 1
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "comment deleted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "3b5f5e2e60614ee446c6db829c12aac7375780a12263efdb6f8acce776525fe3",
+        "parseError": false,
+        "views": {
+          "oxlint core+react": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 10,
+              "no-await-in-loop": 1,
+              "no-inline-comments": 1,
+              "no-plusplus": 1,
+              "no-shadow": 1,
+              "no-use-before-define": 5,
+              "oxc/only-used-in-recursion": 1,
+              "promise/avoid-new": 1,
+              "promise/param-names": 1,
+              "require-await": 2,
+              "typescript/ban-ts-comment": 1,
+              "typescript/method-signature-style": 6,
+              "typescript/no-explicit-any": 2,
+              "typescript/no-invalid-void-type": 2,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/prefer-spread": 1
+            },
+            "todoCleared": true
+          },
+          "oxlint core+react+js-plugins": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 10,
+              "github/array-foreach": 1,
+              "no-await-in-loop": 1,
+              "no-inline-comments": 1,
+              "no-plusplus": 1,
+              "no-shadow": 1,
+              "no-use-before-define": 5,
+              "oxc/only-used-in-recursion": 1,
+              "promise/avoid-new": 1,
+              "promise/param-names": 1,
+              "react-doctor/async-await-in-loop": 1,
+              "react-doctor/js-set-map-lookups": 1,
+              "require-await": 2,
+              "sonarjs/no-duplicate-string": 1,
+              "typescript/ban-ts-comment": 1,
+              "typescript/method-signature-style": 6,
+              "typescript/no-explicit-any": 2,
+              "typescript/no-invalid-void-type": 2,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/prefer-spread": 1
+            },
+            "todoCleared": true
+          },
+          "eslint core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 10,
+              "github/array-foreach": 1,
+              "no-await-in-loop": 1,
+              "no-inline-comments": 1,
+              "no-plusplus": 1,
+              "promise/avoid-new": 1,
+              "promise/param-names": 1,
+              "require-await": 2,
+              "sonarjs/no-duplicate-string": 1,
+              "typescript/ban-ts-comment": 1,
+              "typescript/method-signature-style": 6,
+              "typescript/no-explicit-any": 2,
+              "typescript/no-invalid-void-type": 2,
+              "typescript/no-shadow": 1,
+              "typescript/no-use-before-define": 5,
+              "unicorn/consistent-arrow-return-style": 1,
+              "unicorn/consistent-boolean-name": 1,
+              "unicorn/name-replacements": 8,
+              "unicorn/no-for-each": 1,
+              "unicorn/no-global-object-property-assignment": 1,
+              "unicorn/no-manually-wrapped-comments": 1,
+              "unicorn/prefer-continue": 1,
+              "unicorn/prefer-spread": 1
+            },
+            "todoCleared": true
+          },
+          "biome core": {
+            "todoHonor": [],
+            "todoIgnore": [],
+            "parseError": false,
+            "all": {
+              "complexity/noForEach": 1,
+              "performance/noAwaitInLoops": 1,
+              "style/noIncrementDecrement": 1,
+              "style/noUnusedTemplateLiteral": 3,
+              "style/useConsistentMethodSignatures": 6,
+              "suspicious/noConfusingVoidType": 1,
+              "suspicious/noExplicitAny": 2,
+              "suspicious/noForIn": 1,
+              "suspicious/noParametersOnlyUsedInRecursion": 1,
+              "suspicious/noShadow": 1,
+              "suspicious/useAwait": 2,
+              "suspicious/useIterableCallbackReturn": 1
+            },
+            "todoCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "changed": [],
+          "verdict": "same"
+        },
+        "comment": {
+          "edit": "comment deleted",
+          "label": null,
+          "markerLines": [],
+          "contextLost": [],
+          "addedElsewhere": [],
+          "removedElsewhere": [],
+          "wordsKept": 0,
+          "info": {
+            "descriptionKept": false
+          },
+          "substanceKept": false,
+          "reminderKept": false,
+          "todoMarkersInFile": 0,
+          "todoMarkerLines": []
+        },
+        "codeChanged": false,
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 1
+        },
+        "newRules": {
+          "oxlint core+react": {},
+          "oxlint core+react+js-plugins": {},
+          "eslint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "comment deleted"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "no-warning-comments",
+            "sonarjs/todo-tag"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "no-warning-comments",
+            "sonarjs/todo-tag"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 6,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 168526,
+          "cached_input_tokens": 138240,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 957,
+          "reasoning_output_tokens": 64,
+          "total_tokens": 169483
+        },
+        "tokensUsedReportedOnStderr": 31243,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g '!node_modules' -g '!vendor' . <tmp>/ultracite-agent-experiment 2>/dev/null\",\"max_output_tokens\":4000}));\ntext(await tools.exec_comm",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for directory in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <",
+          "text(await tools.exec_command({cmd:\"cat package.json; ls -ld node_modules; command -v oxlint\",\"max_output_tokens\":2000}));\nstore(\"hmrOriginal\", (await tools.exec_command({cmd:\"cat hmr.ts\",\"max_output_",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/a-js-codex-2/hmr.ts\\n@@\\n   if (file === config.configFile || file.endsWith(\\\".env\\\")) {\\n-    // TODO auto restart server\\n ",
+          "const result = await tools.exec_command({cmd:\"cat hmr.ts\",\"max_output_tokens\":12000});\nconst before = load(\"hmrOriginal\");\nconst expected = before.replace(\"    // TODO auto restart server\\n\", \"\");\nif "
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g '!node_modules' -g '!vendor' . <tmp>/ultracite-agent-experiment 2>/dev/null\",\"max_output_tokens\":4000}));\ntext(await tools.exec_command({cmd:\"cat hmr.ts.51465ae6.json; sed -n '1,220p' hmr.ts\",\"max_output_tokens\":6000}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for directory in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> \\\"$PWD\\\"; do if [ -f \\\"$directory/AGENTS.md\\\" ]; then cat \\\"$directory/AGENTS.md\\\"; fi; do",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"cat package.json; ls -ld node_modules; command -v oxlint\",\"max_output_tokens\":2000}));\nstore(\"hmrOriginal\", (await tools.exec_command({cmd:\"cat hmr.ts\",\"max_output_tokens\":12000})).output);\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const result = await tools.exec_command({cmd:\"cat hmr.ts\",\"max_output_tokens\":12000});\nconst before = load(\"hmrOriginal\");\nconst expected = before.replace(\"    // TODO auto restart server\\n\", \"\");\nif (before === expected || result.output !== expected) throw new Error(\"Unexpected file changes\");\ntext",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": false,
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-    // TODO auto restart server"
+        ],
+        "finalMessage": "Removed the obsolete TODO comment in `hmr.ts`; server restart behavior is already implemented. This resolves both reported issues without changing runtime behavior.\n\nVerified that only the comment changed. Lint wasn’t rerun because dependencies aren’t installed.",
+        "runtimeMentions": [
+          "Removed the obsolete TODO comment in `hmr.ts`; server restart behavior is already implemented.",
+          "This resolves both reported issues without changing runtime behavior.",
+          "I’ll read the diagnostics and surrounding code, then make the smallest change that preserves runtime behavior.",
+          "Removing that comment resolves both issues without changing behavior."
+        ],
+        "meaningMentions": [
+          "Removed the obsolete TODO comment in `hmr.ts`; server restart behavior is already implemented.",
+          "The code already restarts the server, so the TODO is obsolete."
+        ],
+        "keepMentions": [
+          "Removed the obsolete TODO comment in `hmr.ts`; server restart behavior is already implemented.",
+          "Removing that comment resolves both issues without changing behavior."
+        ],
+        "upstreamMentions": [],
+        "exposure": {
+          "blogDrafts": 1,
+          "mainCheckout": 3,
+          "viteInstalls": 10,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "viteInstalls": 1
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g '!node_modules' -g '!vendor' . <tmp>/ultracite-agent-experiment 2>/dev/null\",\"max_output_tokens\":4000}));\ntext(await tools.exec_command({cmd:\"cat hmr.ts.51465ae6.json; sed -n '1,220p' hmr.ts\",\"max_output_tokens\":6000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for directory in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> \\\"$PWD\\\"; do if [ -f \\\"$directory/AGENTS.md\\\" ]; then cat \\\"$directory/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":4000}),\n  tools.exec_command({cmd:\"r"
+          },
+          {
+            "tool": "exec",
+            "target": "const result = await tools.exec_command({cmd:\"cat hmr.ts\",\"max_output_tokens\":12000});\nconst before = load(\"hmrOriginal\");\nconst expected = before.replace(\"    // TODO auto restart server\\n\", \"\");\nif (before === expected || result.output !== expected) throw new Error(\"Unexpected file changes\");\ntext(\"Verified: the only change is removal of the obsolete TODO comment.\");\ntext(await tools.exec_command({cmd:\"for directory in \\\"$PWD\\\" .. ../.. ../../.. ../../../..; do if [ -x \\\"$directory/node_modules/.bin/oxlint\\\" ]; then printf '%s\\\\n' \\\"$directory/node_modules/.bin/oxlint\\\"; fi; done; rg -n -i '"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "comment deleted",
+    "response": "marker dropped (right)",
+    "leftForReview": "none"
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 2,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true
+    ],
+    "outro": "Fixed 2 of 2 issues with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 31243,
+    "totalTokens": 169483
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "blogDrafts": 1,
+      "mainCheckout": 3,
+      "viteInstalls": 10,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {
+      "viteInstalls": 1
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g '!node_modules' -g '!vendor' . <tmp>/ultracite-agent-experiment 2>/dev/null\",\"max_output_tokens\":4000}));\ntext(await tools.exec_command({cmd:\"cat hmr.ts.51465ae6.json; sed -n '1,220p' hmr.ts\",\"max_output_tokens\":6000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"for directory in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> \\\"$PWD\\\"; do if [ -f \\\"$directory/AGENTS.md\\\" ]; then cat \\\"$directory/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":4000}),\n  tools.exec_command({cmd:\"r"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const result = await tools.exec_command({cmd:\"cat hmr.ts\",\"max_output_tokens\":12000});\nconst before = load(\"hmrOriginal\");\nconst expected = before.replace(\"    // TODO auto restart server\\n\", \"\");\nif (before === expected || result.output !== expected) throw new Error(\"Unexpected file changes\");\ntext(\"Verified: the only change is removal of the obsolete TODO comment.\");\ntext(await tools.exec_command({cmd:\"for directory in \\\"$PWD\\\" .. ../.. ../../.. ../../../..; do if [ -x \\\"$directory/node_modules/.bin/oxlint\\\" ]; then printf '%s\\\\n' \\\"$directory/node_modules/.bin/oxlint\\\"; fi; done; rg -n -i '"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/a-js-codex-2/handoff",
+      "../corpus/examples/todo-comments",
+      "../corpus/results/todo-comments",
+      "../corpus/calibration/todo-comments",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/todo-agent-runs.cjs",
+      "../corpus/scripts/todo-census.cjs",
+      "../corpus/scripts/todo-examples.cjs",
+      "../corpus/scripts/todo-history-clone.sh",
+      "../corpus/scripts/todo-history.cjs",
+      "../corpus/scripts/todo-inventory.cjs",
+      "../corpus/scripts/todo-issues.cjs",
+      "../corpus/scripts/todo-lib.cjs",
+      "../corpus/scripts/todo-linters.cjs",
+      "../corpus/scripts/todo-markers.cjs",
+      "../corpus/scripts/todo-oracle.cjs",
+      "../corpus/scripts/todo-rule-census.cjs",
+      "../corpus/scripts/todo-run-all.cjs",
+      "../corpus/scripts/todo-sample.cjs",
+      "../corpus/scripts/todo-tables.cjs",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/a11y-check",
+      "<outside-repo>/a11y-check-biome-rec",
+      "<outside-repo>/a11y-check-ox-default",
+      "<outside-repo>/a11y-ex.err",
+      "<outside-repo>/a11y-examples-baseline",
+      "<outside-repo>/a11y-exp",
+      "<outside-repo>/a11y-lint-check",
+      "<outside-repo>/a11y-parts",
+      "<outside-repo>/a11y-pdfs",
+      "<outside-repo>/a11y-report.md",
+      "<outside-repo>/a11y-scripts-A",
+      "<outside-repo>/agent-experiment",
+      "<outside-repo>/aidev_a11y.py",
+      "<outside-repo>/aidev_patterns.py",
+      "<outside-repo>/arx.xml",
+      "<outside-repo>/arxiv-check.xml",
+      "<outside-repo>/arxq.sh",
+      "<outside-repo>/b-head.tsx",
+      "<outside-repo>/barrel-check",
+      "<outside-repo>/biome-probe",
+      "<outside-repo>/bisect.cjs",
+      "<outside-repo>/bisect2.cjs",
+      "<outside-repo>/bisect3.cjs",
+      "<outside-repo>/bisect4.cjs",
+      "<outside-repo>/bisect5.cjs",
+      "<outside-repo>/bprobe",
+      "<outside-repo>/bprobe2",
+      "<outside-repo>/bprobe3",
+      "<outside-repo>/bprobe4",
+      "<outside-repo>/ccfinder",
+      "<outside-repo>/check-locks.cjs",
+      "<outside-repo>/classifications.before.json",
+      "<outside-repo>/clone-rater1",
+      "<outside-repo>/compat.log",
+      "<outside-repo>/complexity-data",
+      "<outside-repo>/corpus-run.log",
+      "<outside-repo>/dc-notes",
+      "<outside-repo>/dc-pdfs",
+      "<outside-repo>/dl",
+      "<outside-repo>/drafts",
+      "<outside-repo>/eff.mjs",
+      "<outside-repo>/explore.cjs",
+      "<outside-repo>/files-astro.txt",
+      "<outside-repo>/files-excalidraw.txt",
+      "<outside-repo>/files-hono.txt",
+      "<outside-repo>/files-next.js.txt",
+      "<outside-repo>/files-radix.txt",
+      "<outside-repo>/files-react-aria.txt",
+      "<outside-repo>/files-shadcn.txt",
+      "<outside-repo>/files-supabase.txt",
+      "<outside-repo>/files-trpc.txt",
+      "<outside-repo>/files-vite.txt",
+      "<outside-repo>/files-vscode.txt",
+      "<outside-repo>/files-zod.txt",
+      "<outside-repo>/find.py",
+      "<outside-repo>/fixprobe",
+      "<outside-repo>/fixprobe2",
+      "<outside-repo>/fixprobe3",
+      "<outside-repo>/fixprobe4",
+      "<outside-repo>/fp-example",
+      "<outside-repo>/fp-json",
+      "<outside-repo>/fp-pdfs",
+      "<outside-repo>/fp-scripts",
+      "<outside-repo>/gh",
+      "<outside-repo>/gitenv-probe",
+      "<outside-repo>/h120054",
+      "<outside-repo>/h2t.py",
+      "<outside-repo>/history",
+      "<outside-repo>/history-agent",
+      "<outside-repo>/history-review.txt",
+      "<outside-repo>/ic-aidev",
+      "<outside-repo>/ic-example",
+      "<outside-repo>/ic-html",
+      "<outside-repo>/ic-parts",
+      "<outside-repo>/ic-pdfs",
+      "<outside-repo>/ica-run",
+      "<outside-repo>/icx-probe",
+      "<outside-repo>/icx-work",
+      "<outside-repo>/ie",
+      "<outside-repo>/jsondiff.cjs",
+      "<outside-repo>/jsx-census.before.json",
+      "<outside-repo>/jsx-census.log",
+      "<outside-repo>/jsx1.json",
+      "<outside-repo>/labels.tsv",
+      "<outside-repo>/lit-accessibility.md",
+      "<outside-repo>/make-classifications.cjs",
+      "<outside-repo>/make-mutants.cjs",
+      "<outside-repo>/oa.json",
+      "<outside-repo>/oaq.sh",
+      "<outside-repo>/oxc",
+      "<outside-repo>/oxlab",
+      "<outside-repo>/oxprobe",
+      "<outside-repo>/oxprobe2",
+      "<outside-repo>/p2exp",
+      "<outside-repo>/part-D-scripts",
+      "<outside-repo>/parts",
+      "<outside-repo>/pdf-bierman",
+      "<outside-repo>/pdf-mundler",
+      "<outside-repo>/pdfs",
+      "<outside-repo>/probe",
+      "<outside-repo>/probe.mjs",
+      "<outside-repo>/proto",
+      "<outside-repo>/push-main",
+      "<outside-repo>/rdtest",
+      "<outside-repo>/repro",
+      "<outside-repo>/repro-after.log",
+      "<outside-repo>/repro-baseline.log",
+      "<outside-repo>/repro.sh",
+      "<outside-repo>/results-before",
+      "<outside-repo>/rule-census",
+      "<outside-repo>/rule-census.before.json",
+      "<outside-repo>/run-all.log",
+      "<outside-repo>/s2.json",
+      "<outside-repo>/s2q.sh",
+      "<outside-repo>/score-a11y",
+      "<outside-repo>/score-dc",
+      "<outside-repo>/scripts",
+      "<outside-repo>/scripts-ai-a",
+      "<outside-repo>/search",
+      "<outside-repo>/sec-pdfs",
+      "<outside-repo>/sec-scripts",
+      "<outside-repo>/selftest.log",
+      "<outside-repo>/snap1",
+      "<outside-repo>/spot",
+      "<outside-repo>/src",
+      "<outside-repo>/stage1",
+      "<outside-repo>/stage2",
+      "<outside-repo>/stage3",
+      "<outside-repo>/svelte-lint.mjs",
+      "<outside-repo>/todo-agent",
+      "<outside-repo>/todo-corpus",
+      "<outside-repo>/tools",
+      "<outside-repo>/toppicks-body.tsx",
+      "<outside-repo>/trees",
+      "<outside-repo>/txt",
+      "<outside-repo>/unused-probe",
+      "<outside-repo>/verify-ae",
+      "<outside-repo>/verify-corpus",
+      "<outside-repo>/worked",
+      "<outside-repo>/write_labels.py",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-js-claude-1",
+      "<run-root>/a-js-codex-1",
+      "<run-root>/a-ox-claude-1",
+      "<run-root>/a-ox-claude-2",
+      "<run-root>/a-ox-codex-1",
+      "<run-root>/a-ox-codex-2",
+      "<run-root>/b-js-claude-1",
+      "<run-root>/b-js-claude-2",
+      "<run-root>/b-js-claude-pilot",
+      "<run-root>/b-js-codex-1",
+      "<run-root>/b-js-codex-2",
+      "<run-root>/b-js-codex-pilot",
+      "<run-root>/b-ox-claude-1",
+      "<run-root>/b-ox-claude-2",
+      "<run-root>/b-ox-codex-1",
+      "<run-root>/b-ox-codex-2",
+      "<run-root>/c-js-claude-1",
+      "<run-root>/c-js-claude-2",
+      "<run-root>/c-js-codex-1",
+      "<run-root>/c-js-codex-2",
+      "<run-root>/c-ox-claude-1",
+      "<run-root>/c-ox-claude-2",
+      "<run-root>/c-ox-codex-1",
+      "<run-root>/c-ox-codex-2",
+      "<run-root>/.staging/a-js-claude-1",
+      "<run-root>/.staging/a-js-codex-1",
+      "<run-root>/.staging/a-ox-claude-1",
+      "<run-root>/.staging/a-ox-claude-2",
+      "<run-root>/.staging/a-ox-codex-1",
+      "<run-root>/.staging/a-ox-codex-2",
+      "<run-root>/.staging/b-js-claude-1",
+      "<run-root>/.staging/b-js-claude-2",
+      "<run-root>/.staging/b-js-claude-pilot",
+      "<run-root>/.staging/b-js-codex-1",
+      "<run-root>/.staging/b-js-codex-2",
+      "<run-root>/.staging/b-js-codex-pilot",
+      "<run-root>/.staging/b-ox-claude-1",
+      "<run-root>/.staging/b-ox-claude-2",
+      "<run-root>/.staging/b-ox-codex-1",
+      "<run-root>/.staging/b-ox-codex-2",
+      "<run-root>/.staging/c-js-claude-1",
+      "<run-root>/.staging/c-js-claude-2",
+      "<run-root>/.staging/c-js-codex-1",
+      "<run-root>/.staging/c-js-codex-2",
+      "<run-root>/.staging/c-ox-claude-1",
+      "<run-root>/.staging/c-ox-claude-2",
+      "<run-root>/.staging/c-ox-codex-1",
+      "<run-root>/.staging/c-ox-codex-2"
+    ]
+  }
+}

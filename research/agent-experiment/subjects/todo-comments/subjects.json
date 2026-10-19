@@ -1,0 +1,756 @@
+[
+  {
+    "id": "a-ox",
+    "base": "a",
+    "armId": "ox",
+    "arm": "A, obsolete, Oxlint default",
+    "example": "todo-a-vite-hmr-update.ts",
+    "basename": "hmr.ts",
+    "kind": "obsolete",
+    "linter": "oxlint",
+    "config": "oxlint core+react",
+    "jsPlugins": false,
+    "expected": [
+      "no-warning-comments"
+    ],
+    "source": "vitejs/vite packages/vite/src/node/server/hmr.ts @ ea95a1d4, L12-158, L187-238 and L386-427; imports as a STUB",
+    "right": "drop the marker (delete it, or keep the description as vitejs/vite#2119 did); no code change",
+    "path": "subjects/todo-comments/a-ox/hmr.ts",
+    "sha256": "b81449b91c98571e5b60480b2dee559f3539687394d3b160ef30c37a865d416c",
+    "originalSha256": "eb6a1b35b29ae26f780354b01051d718871dc2aecd7cc0339b3de205c52d699d",
+    "headerLinesRemoved": 18,
+    "textEdits": [
+      {
+        "from": " * Lines 12-158, 187-238 and 386-427 are copied verbatim (the import block, the glob-import and\n * pruning handlers and the import.meta.hot lexer are left out). Anything marked STUB is not part\n * of the original source.",
+        "to": " * Lines 12-158, 187-238 and 386-427 are copied, with their formatting changed (the import block,\n * the glob-import and pruning handlers and the import.meta.hot lexer are left out). Anything\n * marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// functions use. `harness` lets the behaviour check supply createServer and see the debug log.",
+        "to": "// functions use. `harness` supplies createServer and collects the debug log.",
+        "why": "named the behaviour check"
+      }
+    ],
+    "primingPatterns": [
+      "/\\btodo\\b|\\bfixme\\b|\\bxxx\\b/i",
+      "/task.?marker|\\bmarker\\b/i",
+      "/\\bSATD\\b|self.?admitted|technical debt|\\bdebt\\b/i",
+      "/\\bstale\\b|obsolete|already (done|implemented)|outdated/i",
+      "/no-warning-comments|todo-tag|fixme-tag|expiring|sonarjs|unicorn|oxlint|biome|\\blint(er|ing)?\\b/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it is|The bug|Waiting on|What the project did/",
+      "/\\bHistory\\b/",
+      "/behaviou?r check|\\boracle\\b|\\bscenario/i",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|ultracite/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bthe fix\\b/i",
+      "/15782|#2119\\b|\\b2119\\b|c323732d|57628dc7|e8d32773|bbaf9488|e6958ae8|15179|0571b7c6|#3230|b9e70ec6|#5115|#5774/",
+      "/dispose (before|then) prune|call dispose|never (runs|calls)? ?(its )?dispose/i",
+      "/left for review|leave it for|for a person|\\breview\\b/i",
+      "/upstream|later|known (bug|issue)|\\bopen\\b(?! the)|UNCONFIRMED|34442|webkit|\\biOS\\b/i",
+      "/verbatim/i",
+      "/LibraryMenuHeaderContent|Web Share Target/i",
+      "/\\brestart(s|ed|ing)?\\b/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "oxlint --fix (core+react), oxlint --fix (+js-plugins), oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 139,
+        "added": 146
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-warning-comments L144"
+      ],
+      "reportedBeforeFilter": 38,
+      "leftOutByFilter": {
+        "func-style": 10,
+        "no-await-in-loop": 1,
+        "no-inline-comments": 1,
+        "no-plusplus": 1,
+        "no-shadow": 1,
+        "no-use-before-define": 5,
+        "oxc/only-used-in-recursion": 1,
+        "promise/avoid-new": 1,
+        "promise/param-names": 1,
+        "require-await": 2,
+        "typescript/ban-ts-comment": 1,
+        "typescript/method-signature-style": 6,
+        "typescript/no-explicit-any": 2,
+        "typescript/no-invalid-void-type": 2,
+        "unicorn/no-array-for-each": 1,
+        "unicorn/prefer-spread": 1
+      },
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "scenarios": 13,
+        "keyOrderOnly": []
+      },
+      "typeErrors": 0
+    },
+    "packageJsonSha256": "97d65dd9d7e3ff999445fd16365e4215a258c936cb5c62aab6208086a25be4e5",
+    "tsconfigSha256": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817",
+    "corpusLint": {
+      "biome": {
+        "focus": [],
+        "other": 32
+      },
+      "eslint": {
+        "focus": [
+          "no-warning-comments@162",
+          "sonarjs/todo-tag@162"
+        ],
+        "other": 74
+      },
+      "oxlint default": {
+        "focus": [
+          "no-warning-comments@162"
+        ],
+        "other": 56
+      },
+      "oxlint js-plugins": {
+        "focus": [
+          "no-warning-comments@162",
+          "sonarjs/todo-tag@162"
+        ],
+        "other": 58
+      }
+    }
+  },
+  {
+    "id": "a-js",
+    "base": "a",
+    "armId": "js",
+    "arm": "A, obsolete, Oxlint + js-plugins",
+    "example": "todo-a-vite-hmr-update.ts",
+    "basename": "hmr.ts",
+    "kind": "obsolete",
+    "linter": "oxlint",
+    "config": "oxlint core+react+js-plugins",
+    "jsPlugins": true,
+    "expected": [
+      "no-warning-comments",
+      "sonarjs/todo-tag"
+    ],
+    "source": "vitejs/vite packages/vite/src/node/server/hmr.ts @ ea95a1d4, L12-158, L187-238 and L386-427; imports as a STUB",
+    "right": "drop the marker (delete it, or keep the description as vitejs/vite#2119 did); no code change",
+    "path": "subjects/todo-comments/a-js/hmr.ts",
+    "sha256": "b81449b91c98571e5b60480b2dee559f3539687394d3b160ef30c37a865d416c",
+    "originalSha256": "eb6a1b35b29ae26f780354b01051d718871dc2aecd7cc0339b3de205c52d699d",
+    "headerLinesRemoved": 18,
+    "textEdits": [
+      {
+        "from": " * Lines 12-158, 187-238 and 386-427 are copied verbatim (the import block, the glob-import and\n * pruning handlers and the import.meta.hot lexer are left out). Anything marked STUB is not part\n * of the original source.",
+        "to": " * Lines 12-158, 187-238 and 386-427 are copied, with their formatting changed (the import block,\n * the glob-import and pruning handlers and the import.meta.hot lexer are left out). Anything\n * marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// functions use. `harness` lets the behaviour check supply createServer and see the debug log.",
+        "to": "// functions use. `harness` supplies createServer and collects the debug log.",
+        "why": "named the behaviour check"
+      }
+    ],
+    "primingPatterns": [
+      "/\\btodo\\b|\\bfixme\\b|\\bxxx\\b/i",
+      "/task.?marker|\\bmarker\\b/i",
+      "/\\bSATD\\b|self.?admitted|technical debt|\\bdebt\\b/i",
+      "/\\bstale\\b|obsolete|already (done|implemented)|outdated/i",
+      "/no-warning-comments|todo-tag|fixme-tag|expiring|sonarjs|unicorn|oxlint|biome|\\blint(er|ing)?\\b/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it is|The bug|Waiting on|What the project did/",
+      "/\\bHistory\\b/",
+      "/behaviou?r check|\\boracle\\b|\\bscenario/i",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|ultracite/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bthe fix\\b/i",
+      "/15782|#2119\\b|\\b2119\\b|c323732d|57628dc7|e8d32773|bbaf9488|e6958ae8|15179|0571b7c6|#3230|b9e70ec6|#5115|#5774/",
+      "/dispose (before|then) prune|call dispose|never (runs|calls)? ?(its )?dispose/i",
+      "/left for review|leave it for|for a person|\\breview\\b/i",
+      "/upstream|later|known (bug|issue)|\\bopen\\b(?! the)|UNCONFIRMED|34442|webkit|\\biOS\\b/i",
+      "/verbatim/i",
+      "/LibraryMenuHeaderContent|Web Share Target/i",
+      "/\\brestart(s|ed|ing)?\\b/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "oxlint --fix (core+react), oxlint --fix (+js-plugins), oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 139,
+        "added": 146
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-warning-comments L144",
+        "sonarjs/todo-tag L144"
+      ],
+      "reportedBeforeFilter": 43,
+      "leftOutByFilter": {
+        "func-style": 10,
+        "github/array-foreach": 1,
+        "no-await-in-loop": 1,
+        "no-inline-comments": 1,
+        "no-plusplus": 1,
+        "no-shadow": 1,
+        "no-use-before-define": 5,
+        "oxc/only-used-in-recursion": 1,
+        "promise/avoid-new": 1,
+        "promise/param-names": 1,
+        "react-doctor/async-await-in-loop": 1,
+        "react-doctor/js-set-map-lookups": 1,
+        "require-await": 2,
+        "sonarjs/no-duplicate-string": 1,
+        "typescript/ban-ts-comment": 1,
+        "typescript/method-signature-style": 6,
+        "typescript/no-explicit-any": 2,
+        "typescript/no-invalid-void-type": 2,
+        "unicorn/no-array-for-each": 1,
+        "unicorn/prefer-spread": 1
+      },
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "scenarios": 13,
+        "keyOrderOnly": []
+      },
+      "typeErrors": 0
+    },
+    "packageJsonSha256": "7f58458e0b65afea5cfe04f035f745b287b37253897938a6a3aaa4407ace8237",
+    "tsconfigSha256": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817",
+    "corpusLint": {
+      "biome": {
+        "focus": [],
+        "other": 32
+      },
+      "eslint": {
+        "focus": [
+          "no-warning-comments@162",
+          "sonarjs/todo-tag@162"
+        ],
+        "other": 74
+      },
+      "oxlint default": {
+        "focus": [
+          "no-warning-comments@162"
+        ],
+        "other": 56
+      },
+      "oxlint js-plugins": {
+        "focus": [
+          "no-warning-comments@162",
+          "sonarjs/todo-tag@162"
+        ],
+        "other": 58
+      }
+    }
+  },
+  {
+    "id": "b-ox",
+    "base": "b",
+    "armId": "ox",
+    "arm": "B, a known bug, Oxlint default",
+    "example": "todo-b-vite-hmr-prune.ts",
+    "basename": "hmr.ts",
+    "kind": "known bug",
+    "linter": "oxlint",
+    "config": "oxlint core+react",
+    "jsPlugins": false,
+    "expected": [
+      "no-warning-comments"
+    ],
+    "source": "vitejs/vite packages/vite/src/shared/hmr.ts @ 6d6ae10f (the parent of vitejs/vite#15782), L5-314; its type imports copied in",
+    "right": "leave it for a person (Left for review) and say why: the fix changes runtime behaviour and two other files",
+    "path": "subjects/todo-comments/b-ox/hmr.ts",
+    "sha256": "2a592fd0b75e7b800f3b789d2cfad28082ea9a15cfe32569799fe6e3df1510fd",
+    "originalSha256": "28a3499ad7aca3dabfaa2d72a3ee6dfb00b7436398bfea002524656bed4fb297",
+    "headerLinesRemoved": 21,
+    "textEdits": [
+      {
+        "from": " * Commit:    6d6ae10f5d80a9c9b6737377333424fe76652b81 (2024-03-12T21:17:11+08:00), the parent of the fix",
+        "to": " * Commit:    6d6ae10f5d80a9c9b6737377333424fe76652b81 (2024-03-12T21:17:11+08:00)",
+        "why": "said a fix followed"
+      },
+      {
+        "from": " * Lines 5-314 are copied verbatim. The types above them replace its three type imports; they are\n * copied from packages/vite/types/{hmrPayload,hot,customEvent}.d.ts at the same commit,\n * reduced to what this file uses. Anything marked STUB is not part of the original source.",
+        "to": " * Lines 5-314 are copied, with their formatting changed. The types above them replace its three\n * type imports; they are copied from packages/vite/types/{hmrPayload,hot,customEvent}.d.ts at the\n * same commit, reduced to what this file uses. Anything marked STUB is not part of the original\n * source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\btodo\\b|\\bfixme\\b|\\bxxx\\b/i",
+      "/task.?marker|\\bmarker\\b/i",
+      "/\\bSATD\\b|self.?admitted|technical debt|\\bdebt\\b/i",
+      "/\\bstale\\b|obsolete|already (done|implemented)|outdated/i",
+      "/no-warning-comments|todo-tag|fixme-tag|expiring|sonarjs|unicorn|oxlint|biome|\\blint(er|ing)?\\b/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it is|The bug|Waiting on|What the project did/",
+      "/\\bHistory\\b/",
+      "/behaviou?r check|\\boracle\\b|\\bscenario/i",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|ultracite/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bthe fix\\b/i",
+      "/15782|#2119\\b|\\b2119\\b|c323732d|57628dc7|e8d32773|bbaf9488|e6958ae8|15179|0571b7c6|#3230|b9e70ec6|#5115|#5774/",
+      "/dispose (before|then) prune|call dispose|never (runs|calls)? ?(its )?dispose/i",
+      "/left for review|leave it for|for a person|\\breview\\b/i",
+      "/upstream|later|known (bug|issue)|\\bopen\\b(?! the)|UNCONFIRMED|34442|webkit|\\biOS\\b/i",
+      "/verbatim/i",
+      "/LibraryMenuHeaderContent|Web Share Target/i",
+      "/\\brestart(s|ed|ing)?\\b/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "clear its stale callbacks",
+        "why": "Vite's own comment in the HMRContext constructor"
+      },
+      {
+        "text": "clear stale custom event listeners",
+        "why": "Vite's own comment in the HMRContext constructor"
+      },
+      {
+        "text": "eslint-disable-next-line @typescript-eslint/no-empty-function",
+        "why": "Vite's own suppression on decline(), part of the copied code"
+      }
+    ],
+    "normalisation": {
+      "steps": "oxlint --fix (core+react), oxlint --fix (+js-plugins), oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 140,
+        "added": 147
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-warning-comments L323"
+      ],
+      "reportedBeforeFilter": 58,
+      "leftOutByFilter": {
+        "class-methods-use-this": 1,
+        "max-classes-per-file": 1,
+        "no-empty-function": 1,
+        "promise/prefer-await-to-callbacks": 11,
+        "typescript/method-signature-style": 15,
+        "typescript/no-explicit-any": 18,
+        "typescript/parameter-properties": 5,
+        "typescript/unified-signatures": 1,
+        "unicorn/no-array-for-each": 3,
+        "unicorn/no-await-expression-member": 1
+      },
+      "oracle": {
+        "verdictAgainstCorpusSubject": "changed",
+        "scenarios": 7,
+        "keyOrderOnly": [
+          "events"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "packageJsonSha256": "97d65dd9d7e3ff999445fd16365e4215a258c936cb5c62aab6208086a25be4e5",
+    "tsconfigSha256": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817",
+    "corpusLint": {
+      "biome": {
+        "focus": [],
+        "other": 76
+      },
+      "eslint": {
+        "focus": [
+          "no-warning-comments@343",
+          "sonarjs/todo-tag@343"
+        ],
+        "other": 120
+      },
+      "oxlint default": {
+        "focus": [
+          "no-warning-comments@343"
+        ],
+        "other": 66
+      },
+      "oxlint js-plugins": {
+        "focus": [
+          "no-warning-comments@343",
+          "sonarjs/todo-tag@343"
+        ],
+        "other": 72
+      }
+    }
+  },
+  {
+    "id": "b-js",
+    "base": "b",
+    "armId": "js",
+    "arm": "B, a known bug, Oxlint + js-plugins",
+    "example": "todo-b-vite-hmr-prune.ts",
+    "basename": "hmr.ts",
+    "kind": "known bug",
+    "linter": "oxlint",
+    "config": "oxlint core+react+js-plugins",
+    "jsPlugins": true,
+    "expected": [
+      "no-warning-comments",
+      "sonarjs/todo-tag"
+    ],
+    "source": "vitejs/vite packages/vite/src/shared/hmr.ts @ 6d6ae10f (the parent of vitejs/vite#15782), L5-314; its type imports copied in",
+    "right": "leave it for a person (Left for review) and say why: the fix changes runtime behaviour and two other files",
+    "path": "subjects/todo-comments/b-js/hmr.ts",
+    "sha256": "2a592fd0b75e7b800f3b789d2cfad28082ea9a15cfe32569799fe6e3df1510fd",
+    "originalSha256": "28a3499ad7aca3dabfaa2d72a3ee6dfb00b7436398bfea002524656bed4fb297",
+    "headerLinesRemoved": 21,
+    "textEdits": [
+      {
+        "from": " * Commit:    6d6ae10f5d80a9c9b6737377333424fe76652b81 (2024-03-12T21:17:11+08:00), the parent of the fix",
+        "to": " * Commit:    6d6ae10f5d80a9c9b6737377333424fe76652b81 (2024-03-12T21:17:11+08:00)",
+        "why": "said a fix followed"
+      },
+      {
+        "from": " * Lines 5-314 are copied verbatim. The types above them replace its three type imports; they are\n * copied from packages/vite/types/{hmrPayload,hot,customEvent}.d.ts at the same commit,\n * reduced to what this file uses. Anything marked STUB is not part of the original source.",
+        "to": " * Lines 5-314 are copied, with their formatting changed. The types above them replace its three\n * type imports; they are copied from packages/vite/types/{hmrPayload,hot,customEvent}.d.ts at the\n * same commit, reduced to what this file uses. Anything marked STUB is not part of the original\n * source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\btodo\\b|\\bfixme\\b|\\bxxx\\b/i",
+      "/task.?marker|\\bmarker\\b/i",
+      "/\\bSATD\\b|self.?admitted|technical debt|\\bdebt\\b/i",
+      "/\\bstale\\b|obsolete|already (done|implemented)|outdated/i",
+      "/no-warning-comments|todo-tag|fixme-tag|expiring|sonarjs|unicorn|oxlint|biome|\\blint(er|ing)?\\b/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it is|The bug|Waiting on|What the project did/",
+      "/\\bHistory\\b/",
+      "/behaviou?r check|\\boracle\\b|\\bscenario/i",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|ultracite/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bthe fix\\b/i",
+      "/15782|#2119\\b|\\b2119\\b|c323732d|57628dc7|e8d32773|bbaf9488|e6958ae8|15179|0571b7c6|#3230|b9e70ec6|#5115|#5774/",
+      "/dispose (before|then) prune|call dispose|never (runs|calls)? ?(its )?dispose/i",
+      "/left for review|leave it for|for a person|\\breview\\b/i",
+      "/upstream|later|known (bug|issue)|\\bopen\\b(?! the)|UNCONFIRMED|34442|webkit|\\biOS\\b/i",
+      "/verbatim/i",
+      "/LibraryMenuHeaderContent|Web Share Target/i",
+      "/\\brestart(s|ed|ing)?\\b/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "clear its stale callbacks",
+        "why": "Vite's own comment in the HMRContext constructor"
+      },
+      {
+        "text": "clear stale custom event listeners",
+        "why": "Vite's own comment in the HMRContext constructor"
+      },
+      {
+        "text": "eslint-disable-next-line @typescript-eslint/no-empty-function",
+        "why": "Vite's own suppression on decline(), part of the copied code"
+      }
+    ],
+    "normalisation": {
+      "steps": "oxlint --fix (core+react), oxlint --fix (+js-plugins), oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 140,
+        "added": 147
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-warning-comments L323",
+        "sonarjs/todo-tag L323"
+      ],
+      "reportedBeforeFilter": 65,
+      "leftOutByFilter": {
+        "class-methods-use-this": 1,
+        "github/array-foreach": 3,
+        "max-classes-per-file": 1,
+        "no-empty-function": 1,
+        "promise/prefer-await-to-callbacks": 11,
+        "sonarjs/no-duplicate-string": 1,
+        "sonarjs/no-inconsistent-returns": 1,
+        "sonarjs/no-nested-template-literals": 1,
+        "typescript/method-signature-style": 15,
+        "typescript/no-explicit-any": 18,
+        "typescript/parameter-properties": 5,
+        "typescript/unified-signatures": 1,
+        "unicorn/no-array-for-each": 3,
+        "unicorn/no-await-expression-member": 1
+      },
+      "oracle": {
+        "verdictAgainstCorpusSubject": "changed",
+        "scenarios": 7,
+        "keyOrderOnly": [
+          "events"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "packageJsonSha256": "7f58458e0b65afea5cfe04f035f745b287b37253897938a6a3aaa4407ace8237",
+    "tsconfigSha256": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817",
+    "corpusLint": {
+      "biome": {
+        "focus": [],
+        "other": 76
+      },
+      "eslint": {
+        "focus": [
+          "no-warning-comments@343",
+          "sonarjs/todo-tag@343"
+        ],
+        "other": 120
+      },
+      "oxlint default": {
+        "focus": [
+          "no-warning-comments@343"
+        ],
+        "other": 66
+      },
+      "oxlint js-plugins": {
+        "focus": [
+          "no-warning-comments@343",
+          "sonarjs/todo-tag@343"
+        ],
+        "other": 72
+      }
+    }
+  },
+  {
+    "id": "c-ox",
+    "base": "c",
+    "armId": "ox",
+    "arm": "C, on hold, Oxlint default",
+    "example": "todo-c-excalidraw-load-json.ts",
+    "basename": "json.ts",
+    "kind": "on hold",
+    "linter": "oxlint",
+    "config": "oxlint core+react",
+    "jsPlugins": false,
+    "expected": [
+      "no-warning-comments"
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/data/json.ts @ 4c00f31d, L25-159; imports as a STUB",
+    "right": "keep the information and leave it for a person (Left for review): it waits on WebKit bug 34442",
+    "path": "subjects/todo-comments/c-ox/json.ts",
+    "sha256": "ef120bfd62d7421f7fa2b045328d0cb0f2abeb0dc5941b97d1a586eaff2f0ea5",
+    "originalSha256": "7e18a8c57b3775f676ed79f1708b63256326696a0ae261f379f3053fc9d1e8dd",
+    "headerLinesRemoved": 18,
+    "textEdits": [
+      {
+        "from": " * Commit:    4c00f31ddcc20086bac1020428819fe0b9a30bce (2026-10-08T11:11:53+02:00), the corpus's pinned commit",
+        "to": " * Commit:    4c00f31ddcc20086bac1020428819fe0b9a30bce (2026-10-08T11:11:53+02:00)",
+        "why": "named the corpus"
+      },
+      {
+        "from": " * Lines 25-159 are copied verbatim. Anything marked STUB is not part of the original source.",
+        "to": " * Lines 25-159 are copied, with their formatting changed. Anything marked STUB is not part of\n * the original source.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// `harness` lets the behaviour check supply the file dialogs, loadFromBlob and app-state helpers.",
+        "to": "// `harness` supplies the file dialogs, loadFromBlob and the app-state helpers.",
+        "why": "named the behaviour check"
+      }
+    ],
+    "primingPatterns": [
+      "/\\btodo\\b|\\bfixme\\b|\\bxxx\\b/i",
+      "/task.?marker|\\bmarker\\b/i",
+      "/\\bSATD\\b|self.?admitted|technical debt|\\bdebt\\b/i",
+      "/\\bstale\\b|obsolete|already (done|implemented)|outdated/i",
+      "/no-warning-comments|todo-tag|fixme-tag|expiring|sonarjs|unicorn|oxlint|biome|\\blint(er|ing)?\\b/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it is|The bug|Waiting on|What the project did/",
+      "/\\bHistory\\b/",
+      "/behaviou?r check|\\boracle\\b|\\bscenario/i",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|ultracite/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bthe fix\\b/i",
+      "/15782|#2119\\b|\\b2119\\b|c323732d|57628dc7|e8d32773|bbaf9488|e6958ae8|15179|0571b7c6|#3230|b9e70ec6|#5115|#5774/",
+      "/dispose (before|then) prune|call dispose|never (runs|calls)? ?(its )?dispose/i",
+      "/left for review|leave it for|for a person|\\breview\\b/i",
+      "/upstream|later|known (bug|issue)|\\bopen\\b(?! the)|UNCONFIRMED|34442|webkit|\\biOS\\b/i",
+      "/verbatim/i",
+      "/LibraryMenuHeaderContent|Web Share Target/i",
+      "/\\brestart(s|ed|ing)?\\b/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "oxlint --fix (core+react), oxlint --fix (+js-plugins), oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 17,
+        "added": 14
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-warning-comments L227"
+      ],
+      "reportedBeforeFilter": 12,
+      "leftOutByFilter": {
+        "no-inline-comments": 1,
+        "prefer-named-capture-group": 1,
+        "promise/prefer-await-to-then": 1,
+        "require-await": 3,
+        "require-unicode-regexp": 1,
+        "typescript/no-explicit-any": 4
+      },
+      "oracle": {
+        "verdictAgainstCorpusSubject": "changed",
+        "scenarios": 10,
+        "keyOrderOnly": [
+          "serializeLocal",
+          "serializeDatabase",
+          "library",
+          "log"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "packageJsonSha256": "97d65dd9d7e3ff999445fd16365e4215a258c936cb5c62aab6208086a25be4e5",
+    "tsconfigSha256": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817",
+    "corpusLint": {
+      "biome": {
+        "focus": [],
+        "other": 9
+      },
+      "eslint": {
+        "focus": [
+          "no-warning-comments@245",
+          "sonarjs/todo-tag@245"
+        ],
+        "other": 37
+      },
+      "oxlint default": {
+        "focus": [
+          "no-warning-comments@245"
+        ],
+        "other": 19
+      },
+      "oxlint js-plugins": {
+        "focus": [
+          "no-warning-comments@245",
+          "sonarjs/todo-tag@245"
+        ],
+        "other": 22
+      }
+    }
+  },
+  {
+    "id": "c-js",
+    "base": "c",
+    "armId": "js",
+    "arm": "C, on hold, Oxlint + js-plugins",
+    "example": "todo-c-excalidraw-load-json.ts",
+    "basename": "json.ts",
+    "kind": "on hold",
+    "linter": "oxlint",
+    "config": "oxlint core+react+js-plugins",
+    "jsPlugins": true,
+    "expected": [
+      "no-warning-comments",
+      "sonarjs/todo-tag"
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/data/json.ts @ 4c00f31d, L25-159; imports as a STUB",
+    "right": "keep the information and leave it for a person (Left for review): it waits on WebKit bug 34442",
+    "path": "subjects/todo-comments/c-js/json.ts",
+    "sha256": "ef120bfd62d7421f7fa2b045328d0cb0f2abeb0dc5941b97d1a586eaff2f0ea5",
+    "originalSha256": "7e18a8c57b3775f676ed79f1708b63256326696a0ae261f379f3053fc9d1e8dd",
+    "headerLinesRemoved": 18,
+    "textEdits": [
+      {
+        "from": " * Commit:    4c00f31ddcc20086bac1020428819fe0b9a30bce (2026-10-08T11:11:53+02:00), the corpus's pinned commit",
+        "to": " * Commit:    4c00f31ddcc20086bac1020428819fe0b9a30bce (2026-10-08T11:11:53+02:00)",
+        "why": "named the corpus"
+      },
+      {
+        "from": " * Lines 25-159 are copied verbatim. Anything marked STUB is not part of the original source.",
+        "to": " * Lines 25-159 are copied, with their formatting changed. Anything marked STUB is not part of\n * the original source.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": "// `harness` lets the behaviour check supply the file dialogs, loadFromBlob and app-state helpers.",
+        "to": "// `harness` supplies the file dialogs, loadFromBlob and the app-state helpers.",
+        "why": "named the behaviour check"
+      }
+    ],
+    "primingPatterns": [
+      "/\\btodo\\b|\\bfixme\\b|\\bxxx\\b/i",
+      "/task.?marker|\\bmarker\\b/i",
+      "/\\bSATD\\b|self.?admitted|technical debt|\\bdebt\\b/i",
+      "/\\bstale\\b|obsolete|already (done|implemented)|outdated/i",
+      "/no-warning-comments|todo-tag|fixme-tag|expiring|sonarjs|unicorn|oxlint|biome|\\blint(er|ing)?\\b/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it is|The bug|Waiting on|What the project did/",
+      "/\\bHistory\\b/",
+      "/behaviou?r check|\\boracle\\b|\\bscenario/i",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|ultracite/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bthe fix\\b/i",
+      "/15782|#2119\\b|\\b2119\\b|c323732d|57628dc7|e8d32773|bbaf9488|e6958ae8|15179|0571b7c6|#3230|b9e70ec6|#5115|#5774/",
+      "/dispose (before|then) prune|call dispose|never (runs|calls)? ?(its )?dispose/i",
+      "/left for review|leave it for|for a person|\\breview\\b/i",
+      "/upstream|later|known (bug|issue)|\\bopen\\b(?! the)|UNCONFIRMED|34442|webkit|\\biOS\\b/i",
+      "/verbatim/i",
+      "/LibraryMenuHeaderContent|Web Share Target/i",
+      "/\\brestart(s|ed|ing)?\\b/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "oxlint --fix (core+react), oxlint --fix (+js-plugins), oxfmt --write, repeated until nothing changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 17,
+        "added": 14
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "no-warning-comments L227",
+        "sonarjs/todo-tag L227"
+      ],
+      "reportedBeforeFilter": 16,
+      "leftOutByFilter": {
+        "github/no-then": 1,
+        "no-inline-comments": 1,
+        "prefer-named-capture-group": 1,
+        "promise/prefer-await-to-then": 1,
+        "require-await": 3,
+        "require-unicode-regexp": 1,
+        "sonarjs/expression-complexity": 2,
+        "typescript/no-explicit-any": 4
+      },
+      "oracle": {
+        "verdictAgainstCorpusSubject": "changed",
+        "scenarios": 10,
+        "keyOrderOnly": [
+          "serializeLocal",
+          "serializeDatabase",
+          "library",
+          "log"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "packageJsonSha256": "7f58458e0b65afea5cfe04f035f745b287b37253897938a6a3aaa4407ace8237",
+    "tsconfigSha256": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817",
+    "corpusLint": {
+      "biome": {
+        "focus": [],
+        "other": 9
+      },
+      "eslint": {
+        "focus": [
+          "no-warning-comments@245",
+          "sonarjs/todo-tag@245"
+        ],
+        "other": 37
+      },
+      "oxlint default": {
+        "focus": [
+          "no-warning-comments@245"
+        ],
+        "other": 19
+      },
+      "oxlint js-plugins": {
+        "focus": [
+          "no-warning-comments@245",
+          "sonarjs/todo-tag@245"
+        ],
+        "other": 22
+      }
+    }
+  }
+]

@@ -1,0 +1,6009 @@
+{
+  "generated": "2026-10-19",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (comment scanner)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "gh": "gh version 2.102.0 (2026-09-30)"
+  },
+  "configs": {
+    "biome": "Ultracite's core preset, extended by absolute path",
+    "eslint raw": "Ultracite's core + react presets, inline config ignored (noInlineConfig); the corpus run keeps only the four focus rules",
+    "eslint reported": "the same, with the file's own disable comments honoured",
+    "oxlint default": "the root config `ultracite init` writes for core + react",
+    "oxlint js-plugins": "the same with js-plugins (jsPlugins and settings re-declared on the root)"
+  },
+  "calibration": {
+    "biomeDiagnostics": [
+      {
+        "case": "T28",
+        "message": "Wrap comments inside children within braces.",
+        "rule": "suspicious/noCommentText"
+      }
+    ],
+    "biomeOnComments": [
+      {
+        "case": "T28",
+        "message": "Wrap comments inside children within braces.",
+        "rule": "suspicious/noCommentText"
+      }
+    ],
+    "cases": [
+      {
+        "id": "T01",
+        "line": 14,
+        "what": "the plain form, with a colon",
+        "end": 17,
+        "source": "// TODO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 15,
+                "message": "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 15,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 15,
+                "message": "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 15,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 15,
+                "message": "Unexpected 'todo' comment: TODO: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 15,
+                "message": "Unexpected 'todo' comment: TODO: handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 15,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T02",
+        "line": 18,
+        "what": "no space, lower case",
+        "end": 21,
+        "source": "//todo handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 19,
+                "message": "Unexpected 'todo' comment: 'todo handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 3,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 19,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 19,
+                "message": "Unexpected 'todo' comment: 'todo handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 3,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 19,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 19,
+                "message": "Unexpected 'todo' comment: todo handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 19,
+                "message": "Unexpected 'todo' comment: todo handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 3,
+                "help": null,
+                "line": 19,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T03",
+        "line": 22,
+        "what": "title case with a colon",
+        "end": 25,
+        "source": "// Todo: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 23,
+                "message": "Unexpected 'todo' comment: 'Todo: handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 23,
+                "message": "Unexpected 'todo' comment: 'Todo: handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 23,
+                "message": "Unexpected 'todo' comment: Todo: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 23,
+                "message": "Unexpected 'todo' comment: Todo: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T04",
+        "line": 26,
+        "what": "mixed case",
+        "end": 29,
+        "source": "// ToDo: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 27,
+                "message": "Unexpected 'todo' comment: 'ToDo: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 27,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 27,
+                "message": "Unexpected 'todo' comment: 'ToDo: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 27,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 27,
+                "message": "Unexpected 'todo' comment: ToDo: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 27,
+                "message": "Unexpected 'todo' comment: ToDo: handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 27,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T05",
+        "line": 30,
+        "what": "the bare word, nothing after it",
+        "end": 33,
+        "source": "// TODO\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 31,
+                "message": "Unexpected 'todo' comment: 'TODO'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 31,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 31,
+                "message": "Unexpected 'todo' comment: 'TODO'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 31,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 31,
+                "message": "Unexpected 'todo' comment: TODO",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 31,
+                "message": "Unexpected 'todo' comment: TODO",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 31,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T06",
+        "line": 34,
+        "what": "a block comment",
+        "end": 37,
+        "source": "/* FIXME */\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 35,
+                "message": "Unexpected 'fixme' comment: 'FIXME'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"FIXME\" tags",
+                "line": 35,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 35,
+                "message": "Unexpected 'fixme' comment: 'FIXME'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"FIXME\" tags",
+                "line": 35,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 35,
+                "message": "Unexpected 'fixme' comment: FIXME",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 35,
+                "message": "Unexpected 'fixme' comment: FIXME",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 35,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 1,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T07",
+        "line": 38,
+        "what": "XXX",
+        "end": 41,
+        "source": "// XXX: this breaks on Windows\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 39,
+                "message": "Unexpected 'xxx' comment: 'XXX: this breaks on Windows'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 39,
+                "message": "Unexpected 'xxx' comment: 'XXX: this breaks on Windows'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 39,
+                "message": "Unexpected 'xxx' comment: XXX: this breaks on Windows",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 39,
+                "message": "Unexpected 'xxx' comment: XXX: this breaks on Windows",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T08",
+        "line": 42,
+        "what": "FIXME with a description",
+        "end": 45,
+        "source": "// FIXME: this breaks on Windows\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 43,
+                "message": "Unexpected 'fixme' comment: 'FIXME: this breaks on Windows'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"FIXME\" tags",
+                "line": 43,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 43,
+                "message": "Unexpected 'fixme' comment: 'FIXME: this breaks on Windows'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"FIXME\" tags",
+                "line": 43,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 43,
+                "message": "Unexpected 'fixme' comment: FIXME: this breaks on Windows",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 43,
+                "message": "Unexpected 'fixme' comment: FIXME: this breaks on Windows",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 43,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 1,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T09",
+        "line": 46,
+        "what": "the JSDoc @todo tag",
+        "end": 49,
+        "source": "/** @todo handle the empty case */\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T10",
+        "line": 50,
+        "what": "a JSDoc block with the marker on a later line",
+        "end": 56,
+        "source": "/**\n * Loads the user's settings.\n * TODO: cache the result\n */\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 53,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 53,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 4,
+                "help": null,
+                "line": 53,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T11",
+        "line": 57,
+        "what": "a block comment with the marker on its second line, no asterisks",
+        "end": 62,
+        "source": "/*\n  TODO: cache the result\n*/\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 58,
+                "message": "Unexpected 'todo' comment: 'TODO: cache the result'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 3,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 59,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 58,
+                "message": "Unexpected 'todo' comment: 'TODO: cache the result'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 3,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 59,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 58,
+                "message": "Unexpected 'todo' comment: TODO: cache the result",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 58,
+                "message": "Unexpected 'todo' comment: TODO: cache the result",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 3,
+                "help": null,
+                "line": 59,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T12",
+        "line": 63,
+        "what": "with an issue reference",
+        "end": 66,
+        "source": "// TODO(#12): handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 64,
+                "message": "Unexpected 'todo' comment: 'TODO(#12): handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 64,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 64,
+                "message": "Unexpected 'todo' comment: 'TODO(#12): handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 64,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 64,
+                "message": "Unexpected 'todo' comment: TODO(#12): handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 64,
+                "message": "Unexpected 'todo' comment: TODO(#12): handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 64,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T13",
+        "line": 67,
+        "what": "with an owner",
+        "end": 70,
+        "source": "// TODO(alice): handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 68,
+                "message": "Unexpected 'todo' comment: 'TODO(alice): handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 68,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 68,
+                "message": "Unexpected 'todo' comment: 'TODO(alice): handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 68,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 68,
+                "message": "Unexpected 'todo' comment: TODO(alice): handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 68,
+                "message": "Unexpected 'todo' comment: TODO(alice): handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 68,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T14",
+        "line": 71,
+        "what": "with a GitHub issue URL",
+        "end": 74,
+        "source": "// TODO: remove once https://github.com/vitejs/vite/issues/12345 is fixed\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 72,
+                "message": "Unexpected 'todo' comment: 'TODO: remove once...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 72,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 72,
+                "message": "Unexpected 'todo' comment: 'TODO: remove once...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 72,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 72,
+                "message": "Unexpected 'todo' comment: TODO: remove once...",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 72,
+                "message": "Unexpected 'todo' comment: TODO: remove once...",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 72,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T15",
+        "line": 75,
+        "what": "with a Jira-style key",
+        "end": 78,
+        "source": "// TODO PROJ-123 handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 76,
+                "message": "Unexpected 'todo' comment: 'TODO PROJ-123 handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 76,
+                "message": "Unexpected 'todo' comment: 'TODO PROJ-123 handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 76,
+                "message": "Unexpected 'todo' comment: TODO PROJ-123 handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 76,
+                "message": "Unexpected 'todo' comment: TODO PROJ-123 handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T16",
+        "line": 79,
+        "what": "with a key in parentheses (Next.js's Linear form)",
+        "end": 82,
+        "source": "// TODO(NAR-804): handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 80,
+                "message": "Unexpected 'todo' comment: 'TODO(NAR-804): handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 80,
+                "message": "Unexpected 'todo' comment: 'TODO(NAR-804): handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 80,
+                "message": "Unexpected 'todo' comment: TODO(NAR-804): handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 80,
+                "message": "Unexpected 'todo' comment: TODO(NAR-804): handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T17",
+        "line": 83,
+        "what": "an area tag glued with a dash (Next.js's TODO-APP form)",
+        "end": 86,
+        "source": "// TODO-APP: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 84,
+                "message": "Unexpected 'todo' comment: 'TODO-APP: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 84,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 84,
+                "message": "Unexpected 'todo' comment: 'TODO-APP: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 84,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 84,
+                "message": "Unexpected 'todo' comment: TODO-APP: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 84,
+                "message": "Unexpected 'todo' comment: TODO-APP: handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 84,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T18",
+        "line": 87,
+        "what": "trailing, after code on the same line",
+        "end": 89,
+        "source": "work(); // TODO: handle the empty case",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 9,
+                "help": "Disallow specified warning terms in comments",
+                "line": 88,
+                "message": "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 12,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 88,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 88,
+                "message": "Unexpected comment inline with code.",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 9,
+                "help": "Disallow specified warning terms in comments",
+                "line": 88,
+                "message": "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 12,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 88,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 88,
+                "message": "Unexpected comment inline with code.",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 9,
+                "help": "Remove or rephrase this comment",
+                "line": 88,
+                "message": "Unexpected 'todo' comment: TODO: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": [
+              {
+                "line": 88,
+                "message": "Unexpected comment inline with code",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 9,
+                "help": "Remove or rephrase this comment",
+                "line": 88,
+                "message": "Unexpected 'todo' comment: TODO: handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 12,
+                "help": null,
+                "line": 88,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 88,
+                "message": "Unexpected comment inline with code",
+                "rule": "no-inline-comments"
+              }
+            ]
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T19",
+        "line": 90,
+        "what": "in the middle of a comment",
+        "end": 93,
+        "source": "// This works for now, TODO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 24,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 91,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 24,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 91,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 24,
+                "help": null,
+                "line": 91,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T20",
+        "line": 94,
+        "what": "at the end of a comment",
+        "end": 97,
+        "source": "// Handle the empty case (todo)\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T21",
+        "line": 98,
+        "what": "a later line of a run of line comments",
+        "end": 102,
+        "source": "// Loads the user's settings.\n// TODO: cache the result\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 100,
+                "message": "Unexpected 'todo' comment: 'TODO: cache the result'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 100,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 100,
+                "message": "Unexpected 'todo' comment: 'TODO: cache the result'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 100,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 100,
+                "message": "Unexpected 'todo' comment: TODO: cache the result",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 100,
+                "message": "Unexpected 'todo' comment: TODO: cache the result",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 100,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T22",
+        "line": 103,
+        "what": "two markers in one comment",
+        "end": 106,
+        "source": "// TODO: cache the result. FIXME: this breaks on Windows\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 104,
+                "message": "Unexpected 'todo' comment: 'TODO: cache the result. FIXME: this...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 104,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              },
+              {
+                "column": 28,
+                "help": "Track uses of \"FIXME\" tags",
+                "line": 104,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 104,
+                "message": "Unexpected 'todo' comment: 'TODO: cache the result. FIXME: this...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 104,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              },
+              {
+                "column": 28,
+                "help": "Track uses of \"FIXME\" tags",
+                "line": 104,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 104,
+                "message": "Unexpected 'todo' comment: TODO: cache the result. FIXME: this...",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 104,
+                "message": "Unexpected 'todo' comment: TODO: cache the result. FIXME: this...",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 28,
+                "help": null,
+                "line": 104,
+                "message": "Take the required action to fix the issue indicated by this comment.",
+                "rule": "sonarjs/fixme-tag"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 104,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 1,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T23",
+        "line": 107,
+        "what": "a JSX comment child",
+        "end": 109,
+        "source": "export const T23 = () => <div>{/* TODO: handle the empty case */}</div>;",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 32,
+                "help": "Disallow specified warning terms in comments",
+                "line": 108,
+                "message": "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 35,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 108,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 108,
+                "message": "Unexpected comment inline with code.",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 32,
+                "help": "Disallow specified warning terms in comments",
+                "line": 108,
+                "message": "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 35,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 108,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 108,
+                "message": "Unexpected comment inline with code.",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 32,
+                "help": "Remove or rephrase this comment",
+                "line": 108,
+                "message": "Unexpected 'todo' comment: TODO: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": [
+              {
+                "line": 108,
+                "message": "Unexpected comment inline with code",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 32,
+                "help": "Remove or rephrase this comment",
+                "line": 108,
+                "message": "Unexpected 'todo' comment: TODO: handle the empty case",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 35,
+                "help": null,
+                "line": 108,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 108,
+                "message": "Unexpected comment inline with code",
+                "rule": "no-inline-comments"
+              }
+            ]
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T24",
+        "line": 110,
+        "what": "a comment inside a JSX attribute expression",
+        "end": 112,
+        "source": "export const T24 = () => <div title={/* TODO */ \"x\"} />;",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 38,
+                "help": "Disallow specified warning terms in comments",
+                "line": 111,
+                "message": "Unexpected 'todo' comment: 'TODO'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 41,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 111,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 111,
+                "message": "Unexpected comment inline with code.",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 38,
+                "help": "Disallow specified warning terms in comments",
+                "line": 111,
+                "message": "Unexpected 'todo' comment: 'TODO'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 41,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 111,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 111,
+                "message": "Unexpected comment inline with code.",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 38,
+                "help": "Remove or rephrase this comment",
+                "line": 111,
+                "message": "Unexpected 'todo' comment: TODO",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": [
+              {
+                "line": 111,
+                "message": "Unexpected comment inline with code",
+                "rule": "no-inline-comments"
+              }
+            ]
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 38,
+                "help": "Remove or rephrase this comment",
+                "line": 111,
+                "message": "Unexpected 'todo' comment: TODO",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 41,
+                "help": null,
+                "line": 111,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": [
+              {
+                "line": 111,
+                "message": "Unexpected comment inline with code",
+                "rule": "no-inline-comments"
+              }
+            ]
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T25",
+        "line": 113,
+        "what": "the word in a string literal",
+        "end": 115,
+        "source": "export const T25 = \"TODO: handle the empty case\";",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T26",
+        "line": 116,
+        "what": "the word in a template literal",
+        "end": 118,
+        "source": "export const T26 = `// TODO: handle the empty case ${String(flag)}`;",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T27",
+        "line": 119,
+        "what": "the word in JSX text",
+        "end": 121,
+        "source": "export const T27 = () => <div>TODO: handle the empty case</div>;",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T28",
+        "line": 122,
+        "what": "a comment-like string in JSX text",
+        "end": 124,
+        "source": "export const T28 = () => <div>// TODO handle the empty case</div>;",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": [
+              {
+                "line": 123,
+                "message": "Wrap comments inside children within braces.",
+                "rule": "suspicious/noCommentText"
+              }
+            ]
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": [
+              {
+                "line": 123,
+                "message": "Comments inside children section of tag should be placed inside braces",
+                "rule": "react/jsx-no-comment-textnodes"
+              }
+            ]
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": [
+              {
+                "line": 123,
+                "message": "Comments inside children section of tag should be placed inside braces",
+                "rule": "react/jsx-no-comment-textnodes"
+              }
+            ]
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": [
+              {
+                "line": 123,
+                "message": "Comments inside children section of tag should be placed inside braces",
+                "rule": "react/jsx-no-comment-textnodes"
+              }
+            ]
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": [
+              {
+                "line": 123,
+                "message": "Comments inside children section of tag should be placed inside braces",
+                "rule": "react/jsx-no-comment-textnodes"
+              }
+            ]
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T29",
+        "line": 125,
+        "what": "the word as an identifier",
+        "end": 127,
+        "source": "export const TODO_LIMIT = 3;",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T30",
+        "line": 128,
+        "what": "after a ts-expect-error directive",
+        "end": 131,
+        "source": "// @ts-expect-error TODO: fix the types\nexport const T30: number = \"x\";",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 21,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 129,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 21,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 129,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 21,
+                "help": null,
+                "line": 129,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T31",
+        "line": 132,
+        "what": "the reason of an eslint-disable directive",
+        "end": 135,
+        "source": "// eslint-disable-next-line no-console -- TODO: remove before release\nconsole.log(\"x\");",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T32",
+        "line": 136,
+        "what": "an eslint-disable for the rule itself, with the word",
+        "end": 139,
+        "source": "// eslint-disable-next-line no-warning-comments -- TODO: tracked in #12\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T33",
+        "line": 140,
+        "what": "an oxlint-disable for the rule itself, with the word",
+        "end": 143,
+        "source": "// oxlint-disable-next-line no-warning-comments -- TODO: tracked in #12\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 52,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 141,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 52,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 141,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 52,
+                "help": null,
+                "line": 141,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T34",
+        "line": 144,
+        "what": "the plural",
+        "end": 147,
+        "source": "// TODOs are tracked in the issue tracker\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T35",
+        "line": 148,
+        "what": "Todo as the first word of a sentence (prose)",
+        "end": 151,
+        "source": "// Todo items are sorted by date\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 149,
+                "message": "Unexpected 'todo' comment: 'Todo items are sorted by date'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 149,
+                "message": "Unexpected 'todo' comment: 'Todo items are sorted by date'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 149,
+                "message": "Unexpected 'todo' comment: Todo items are sorted by date",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 149,
+                "message": "Unexpected 'todo' comment: Todo items are sorted by date",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T36",
+        "line": 152,
+        "what": "todo in lower case in the middle of a sentence (prose)",
+        "end": 155,
+        "source": "// Sort the todo items by date\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "T37",
+        "line": 156,
+        "what": "an embedded word",
+        "end": 160,
+        "source": "// See todo_list.ts for the format\nwork();\n\n// ── unicorn's expiration conditions ───────────────────────────────────",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "U01",
+        "line": 161,
+        "what": "an expired date",
+        "end": 164,
+        "source": "// TODO [2000-01-01]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 162,
+                "message": "Unexpected 'todo' comment: 'TODO [2000-01-01]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 162,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 162,
+                "message": "Unexpected 'todo' comment: 'TODO [2000-01-01]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 162,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 162,
+                "message": "Unexpected 'todo' comment: TODO [2000-01-01]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 162,
+                "message": "Unexpected 'todo' comment: TODO [2000-01-01]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 162,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U02",
+        "line": 165,
+        "what": "a future date",
+        "end": 168,
+        "source": "// TODO [2999-01-01]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 166,
+                "message": "Unexpected 'todo' comment: 'TODO [2999-01-01]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 166,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 166,
+                "message": "Unexpected 'todo' comment: 'TODO [2999-01-01]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 166,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 166,
+                "message": "Unexpected 'todo' comment: TODO [2999-01-01]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 166,
+                "message": "Unexpected 'todo' comment: TODO [2999-01-01]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 166,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U03",
+        "line": 169,
+        "what": "two dates",
+        "end": 172,
+        "source": "// TODO [2000-01-01, 2999-01-01]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 170,
+                "message": "Avoid using multiple expiration dates: 2000-01-01, 2999-01-01. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 170,
+                "message": "Unexpected 'todo' comment: 'TODO [2000-01-01, 2999-01-01]: remove...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 170,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 170,
+                "message": "Avoid using multiple expiration dates: 2000-01-01, 2999-01-01. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 170,
+                "message": "Unexpected 'todo' comment: 'TODO [2000-01-01, 2999-01-01]: remove...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 170,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 170,
+                "message": "Unexpected 'todo' comment: TODO [2000-01-01, 2999-01-01]: remove...",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 170,
+                "message": "Unexpected 'todo' comment: TODO [2000-01-01, 2999-01-01]: remove...",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 170,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U04",
+        "line": 173,
+        "what": "a package version already reached (package.json says 2.0.0)",
+        "end": 176,
+        "source": "// TODO [>1.0.0]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 174,
+                "message": "Past due package version: >1.0.0. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 174,
+                "message": "Unexpected 'todo' comment: 'TODO [>1.0.0]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 174,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 174,
+                "message": "Past due package version: >1.0.0. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 174,
+                "message": "Unexpected 'todo' comment: 'TODO [>1.0.0]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 174,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 174,
+                "message": "Unexpected 'todo' comment: TODO [>1.0.0]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 174,
+                "message": "Unexpected 'todo' comment: TODO [>1.0.0]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 174,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U05",
+        "line": 177,
+        "what": "a package version not reached yet",
+        "end": 180,
+        "source": "// TODO [>3.0.0]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 178,
+                "message": "Unexpected 'todo' comment: 'TODO [>3.0.0]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 178,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 178,
+                "message": "Unexpected 'todo' comment: 'TODO [>3.0.0]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 178,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 178,
+                "message": "Unexpected 'todo' comment: TODO [>3.0.0]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 178,
+                "message": "Unexpected 'todo' comment: TODO [>3.0.0]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 178,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U06",
+        "line": 181,
+        "what": "a dependency that is installed",
+        "end": 184,
+        "source": "// TODO [+react]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 182,
+                "message": "Due since react was installed. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 182,
+                "message": "Unexpected 'todo' comment: 'TODO [+react]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 182,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 182,
+                "message": "Due since react was installed. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 182,
+                "message": "Unexpected 'todo' comment: 'TODO [+react]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 182,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 182,
+                "message": "Unexpected 'todo' comment: TODO [+react]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 182,
+                "message": "Unexpected 'todo' comment: TODO [+react]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 182,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U07",
+        "line": 185,
+        "what": "a dependency that is not installed",
+        "end": 188,
+        "source": "// TODO [+left-pad]: use left-pad\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 186,
+                "message": "Unexpected 'todo' comment: 'TODO [+left-pad]: use left-pad'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 186,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 186,
+                "message": "Unexpected 'todo' comment: 'TODO [+left-pad]: use left-pad'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 186,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 186,
+                "message": "Unexpected 'todo' comment: TODO [+left-pad]: use left-pad",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 186,
+                "message": "Unexpected 'todo' comment: TODO [+left-pad]: use left-pad",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 186,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U08",
+        "line": 189,
+        "what": "a dependency that is not installed, with a removal condition",
+        "end": 192,
+        "source": "// TODO [-left-pad]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 190,
+                "message": "Due since left-pad was removed. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 190,
+                "message": "Unexpected 'todo' comment: 'TODO [-left-pad]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 190,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 190,
+                "message": "Due since left-pad was removed. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 190,
+                "message": "Unexpected 'todo' comment: 'TODO [-left-pad]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 190,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 190,
+                "message": "Unexpected 'todo' comment: TODO [-left-pad]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 190,
+                "message": "Unexpected 'todo' comment: TODO [-left-pad]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 190,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U09",
+        "line": 193,
+        "what": "a dependency version already reached",
+        "end": 196,
+        "source": "// TODO [react@>=18]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 194,
+                "message": "Due since package version matched: react >= 18. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 194,
+                "message": "Unexpected 'todo' comment: 'TODO [react@>=18]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 194,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 194,
+                "message": "Due since package version matched: react >= 18. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 194,
+                "message": "Unexpected 'todo' comment: 'TODO [react@>=18]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 194,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 194,
+                "message": "Unexpected 'todo' comment: TODO [react@>=18]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 194,
+                "message": "Unexpected 'todo' comment: TODO [react@>=18]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 194,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U10",
+        "line": 197,
+        "what": "a Node engine already reached (engines says >=20)",
+        "end": 200,
+        "source": "// TODO [engine:node@>=18]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 198,
+                "message": "Due since Node.js version matched: node>=18. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 198,
+                "message": "Unexpected 'todo' comment: 'TODO [engine:node@>=18]: remove the...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 198,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 198,
+                "message": "Due since Node.js version matched: node>=18. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 198,
+                "message": "Unexpected 'todo' comment: 'TODO [engine:node@>=18]: remove the...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 198,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 198,
+                "message": "Unexpected 'todo' comment: TODO [engine:node@>=18]: remove the...",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 198,
+                "message": "Unexpected 'todo' comment: TODO [engine:node@>=18]: remove the...",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 198,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U11",
+        "line": 201,
+        "what": "a condition with whitespace",
+        "end": 204,
+        "source": "// TODO [ > 1.0.0 ]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 202,
+                "message": "Avoid using whitespace on TODO argument. On '> 1.0.0' use '>1.0.0'. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 202,
+                "message": "Unexpected 'todo' comment: 'TODO [ > 1.0.0 ]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 202,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 202,
+                "message": "Avoid using whitespace on TODO argument. On '> 1.0.0' use '>1.0.0'. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 202,
+                "message": "Unexpected 'todo' comment: 'TODO [ > 1.0.0 ]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 202,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 202,
+                "message": "Unexpected 'todo' comment: TODO [ > 1.0.0 ]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 202,
+                "message": "Unexpected 'todo' comment: TODO [ > 1.0.0 ]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 202,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U12",
+        "line": 205,
+        "what": "a condition missing its @",
+        "end": 208,
+        "source": "// TODO [react>=18]: remove the fallback\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 206,
+                "message": "Missing '@' on TODO argument. On 'react>=18' use 'react@>=18'. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 206,
+                "message": "Unexpected 'todo' comment: 'TODO [react>=18]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 206,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Add expiration conditions to TODO comments.",
+                "line": 206,
+                "message": "Missing '@' on TODO argument. On 'react>=18' use 'react@>=18'. remove the fallback",
+                "rule": "unicorn/expiring-todo-comments"
+              },
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 206,
+                "message": "Unexpected 'todo' comment: 'TODO [react>=18]: remove the fallback'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 206,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 206,
+                "message": "Unexpected 'todo' comment: TODO [react>=18]: remove the fallback",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 206,
+                "message": "Unexpected 'todo' comment: TODO [react>=18]: remove the fallback",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 206,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U13",
+        "line": 209,
+        "what": "brackets that aren't a condition",
+        "end": 212,
+        "source": "// TODO: read arr[0] instead\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 210,
+                "message": "Unexpected 'todo' comment: 'TODO: read arr[0] instead'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 210,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 210,
+                "message": "Unexpected 'todo' comment: 'TODO: read arr[0] instead'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 210,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 210,
+                "message": "Unexpected 'todo' comment: TODO: read arr[0] instead",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 210,
+                "message": "Unexpected 'todo' comment: TODO: read arr[0] instead",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 210,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "U14",
+        "line": 213,
+        "what": "a condition in prose form (no brackets)",
+        "end": 217,
+        "source": "// TODO: remove the fallback once React 19 is the minimum\nwork();\n\n// ── rewordings that keep the task and drop the marker ──────────────────",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 214,
+                "message": "Unexpected 'todo' comment: 'TODO: remove the fallback once React 19...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 214,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 214,
+                "message": "Unexpected 'todo' comment: 'TODO: remove the fallback once React 19...'.",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 214,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 214,
+                "message": "Unexpected 'todo' comment: TODO: remove the fallback once React 19...",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 214,
+                "message": "Unexpected 'todo' comment: TODO: remove the fallback once React 19...",
+                "rule": "no-warning-comments"
+              },
+              {
+                "column": 4,
+                "help": null,
+                "line": 214,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R01",
+        "line": 218,
+        "what": "NOTE instead",
+        "end": 221,
+        "source": "// NOTE: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R02",
+        "line": 222,
+        "what": "Later instead",
+        "end": 225,
+        "source": "// Later: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R03",
+        "line": 226,
+        "what": "TBD instead",
+        "end": 229,
+        "source": "// TBD: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R04",
+        "line": 230,
+        "what": "Pending instead",
+        "end": 233,
+        "source": "// Pending: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R05",
+        "line": 234,
+        "what": "Follow-up instead",
+        "end": 237,
+        "source": "// Follow-up: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R06",
+        "line": 238,
+        "what": "HACK instead",
+        "end": 241,
+        "source": "// HACK: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R07",
+        "line": 242,
+        "what": "BUG instead",
+        "end": 245,
+        "source": "// BUG: the empty case isn't handled\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R08",
+        "line": 246,
+        "what": "the task as a plain sentence",
+        "end": 249,
+        "source": "// The empty case isn't handled yet.\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R09",
+        "line": 250,
+        "what": "the word moved away from the start",
+        "end": 253,
+        "source": "// Handle the empty case. TODO\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 27,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 251,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 27,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 251,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 27,
+                "help": null,
+                "line": 251,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R10",
+        "line": 254,
+        "what": "decoration in front of the word",
+        "end": 257,
+        "source": "// - TODO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 6,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 255,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 6,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 255,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 6,
+                "help": null,
+                "line": 255,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R11",
+        "line": 258,
+        "what": "an asterisk in front of the word",
+        "end": 261,
+        "source": "// * TODO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 6,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 259,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 6,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 259,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 6,
+                "help": null,
+                "line": 259,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R12",
+        "line": 262,
+        "what": "the word in brackets",
+        "end": 265,
+        "source": "// [TODO] handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 5,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 263,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 5,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 263,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 5,
+                "help": null,
+                "line": 263,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": true
+        }
+      },
+      {
+        "id": "R13",
+        "line": 266,
+        "what": "the word in bold",
+        "end": 269,
+        "source": "// **TODO**: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 6,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 267,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 6,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 267,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 6,
+                "help": null,
+                "line": 267,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R14",
+        "line": 270,
+        "what": "a block comment with decoration",
+        "end": 273,
+        "source": "/* ** TODO: handle the empty case */\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 7,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 271,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 7,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 271,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 7,
+                "help": null,
+                "line": 271,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R15",
+        "line": 274,
+        "what": "split with a space",
+        "end": 277,
+        "source": "// TO DO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R16",
+        "line": 278,
+        "what": "split with a dash",
+        "end": 281,
+        "source": "// TO-DO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R17",
+        "line": 282,
+        "what": "zero for the letter O",
+        "end": 285,
+        "source": "// T0D0: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R18",
+        "line": 286,
+        "what": "a Cyrillic homoglyph (U+0422, U+041E)",
+        "end": 289,
+        "source": "// ТОDО: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R19",
+        "line": 290,
+        "what": "a zero-width space inside the word",
+        "end": 293,
+        "source": "// TO​DO: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R20",
+        "line": 294,
+        "what": "full-width letters",
+        "end": 297,
+        "source": "// ＴＯＤＯ: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R21",
+        "line": 298,
+        "what": "a trailing underscore",
+        "end": 301,
+        "source": "// TODO_: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 299,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 4,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 299,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 4,
+                "help": null,
+                "line": 299,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R22",
+        "line": 302,
+        "what": "the word glued to a letter",
+        "end": 305,
+        "source": "// TODOx: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R23",
+        "line": 306,
+        "what": "moved into a string",
+        "end": 308,
+        "source": "export const R23 = { todo: \"handle the empty case\" };",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R24",
+        "line": 309,
+        "what": "moved into a ts-expect-error reason",
+        "end": 312,
+        "source": "// @ts-expect-error -- TODO: handle the empty case\nexport const R24: number = \"x\";",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 24,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 310,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 24,
+                "help": "Track uses of \"TODO\" tags",
+                "line": 310,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 24,
+                "help": null,
+                "line": 310,
+                "message": "Complete the task associated to this \"TODO\" comment.",
+                "rule": "sonarjs/todo-tag"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 1,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R25",
+        "line": 313,
+        "what": "a Jira-style key after the word",
+        "end": 316,
+        "source": "// TODO ABC-1: handle the empty case\nwork();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 314,
+                "message": "Unexpected 'todo' comment: 'TODO ABC-1: handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Disallow specified warning terms in comments",
+                "line": 314,
+                "message": "Unexpected 'todo' comment: 'TODO ABC-1: handle the empty case'.",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 314,
+                "message": "Unexpected 'todo' comment: TODO ABC-1: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [
+              {
+                "column": 1,
+                "help": "Remove or rephrase this comment",
+                "line": 314,
+                "message": "Unexpected 'todo' comment: TODO ABC-1: handle the empty case",
+                "rule": "no-warning-comments"
+              }
+            ],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 1,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      },
+      {
+        "id": "R26",
+        "line": 317,
+        "what": "the comment deleted (control)",
+        "end": 319,
+        "source": "work();",
+        "byConfig": {
+          "biome": {
+            "focus": [],
+            "related": []
+          },
+          "eslint raw": {
+            "focus": [],
+            "related": []
+          },
+          "eslint reported": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint default": {
+            "focus": [],
+            "related": []
+          },
+          "oxlint js-plugins": {
+            "focus": [],
+            "related": []
+          }
+        },
+        "checks": {
+          "eslint no-warning-comments": true,
+          "eslint sonarjs/fixme-tag": true,
+          "eslint sonarjs/todo-tag": true,
+          "oxlint no-warning-comments": true,
+          "oxlint sonarjs/fixme-tag": true,
+          "oxlint sonarjs/todo-tag": true,
+          "unicorn only on candidates": true
+        },
+        "predicted": {
+          "no-warning-comments": 0,
+          "sonarjs/fixme-tag": 0,
+          "sonarjs/todo-tag": 0,
+          "unicornCandidate": false
+        }
+      }
+    ],
+    "eslintHelp": {
+      "no-inline-comments": "Disallow inline comments after code",
+      "no-warning-comments": "Disallow specified warning terms in comments",
+      "sonarjs/fixme-tag": "Track uses of \"FIXME\" tags",
+      "sonarjs/todo-tag": "Track uses of \"TODO\" tags",
+      "unicorn/expiring-todo-comments": "Add expiration conditions to TODO comments."
+    },
+    "matcherMismatches": [],
+    "messages": {
+      "biome suspicious/noCommentText": {
+        "examples": [
+          "Wrap comments inside children within braces."
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": null
+      },
+      "eslint raw no-warning-comments": {
+        "examples": [
+          "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+          "Unexpected 'todo' comment: 'todo handle the empty case'.",
+          "Unexpected 'todo' comment: 'Todo: handle the empty case'.",
+          "Unexpected 'todo' comment: 'ToDo: handle the empty case'."
+        ],
+        "help": "Disallow specified warning terms in comments",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint raw sonarjs/todo-tag": {
+        "examples": [
+          "Complete the task associated to this \"TODO\" comment."
+        ],
+        "help": "Track uses of \"TODO\" tags",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint raw sonarjs/fixme-tag": {
+        "examples": [
+          "Take the required action to fix the issue indicated by this comment."
+        ],
+        "help": "Track uses of \"FIXME\" tags",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint raw no-inline-comments": {
+        "examples": [
+          "Unexpected comment inline with code."
+        ],
+        "help": "Disallow inline comments after code",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint raw react/jsx-no-comment-textnodes": {
+        "examples": [
+          "Comments inside children section of tag should be placed inside braces"
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": null
+      },
+      "eslint raw unicorn/expiring-todo-comments": {
+        "examples": [
+          "Avoid using multiple expiration dates: 2000-01-01, 2999-01-01. remove the fallback",
+          "Past due package version: >1.0.0. remove the fallback",
+          "Due since react was installed. remove the fallback",
+          "Due since left-pad was removed. remove the fallback"
+        ],
+        "help": "Add expiration conditions to TODO comments.",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint reported no-warning-comments": {
+        "examples": [
+          "Unexpected 'todo' comment: 'TODO: handle the empty case'.",
+          "Unexpected 'todo' comment: 'todo handle the empty case'.",
+          "Unexpected 'todo' comment: 'Todo: handle the empty case'.",
+          "Unexpected 'todo' comment: 'ToDo: handle the empty case'."
+        ],
+        "help": "Disallow specified warning terms in comments",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint reported sonarjs/todo-tag": {
+        "examples": [
+          "Complete the task associated to this \"TODO\" comment."
+        ],
+        "help": "Track uses of \"TODO\" tags",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint reported sonarjs/fixme-tag": {
+        "examples": [
+          "Take the required action to fix the issue indicated by this comment."
+        ],
+        "help": "Track uses of \"FIXME\" tags",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint reported no-inline-comments": {
+        "examples": [
+          "Unexpected comment inline with code."
+        ],
+        "help": "Disallow inline comments after code",
+        "suggestions": [],
+        "url": null
+      },
+      "eslint reported react/jsx-no-comment-textnodes": {
+        "examples": [
+          "Comments inside children section of tag should be placed inside braces"
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": null
+      },
+      "eslint reported unicorn/expiring-todo-comments": {
+        "examples": [
+          "Avoid using multiple expiration dates: 2000-01-01, 2999-01-01. remove the fallback",
+          "Past due package version: >1.0.0. remove the fallback",
+          "Due since react was installed. remove the fallback",
+          "Due since left-pad was removed. remove the fallback"
+        ],
+        "help": "Add expiration conditions to TODO comments.",
+        "suggestions": [],
+        "url": null
+      },
+      "oxlint default no-inline-comments": {
+        "examples": [
+          "Unexpected comment inline with code"
+        ],
+        "help": "Move the comment to a separate line",
+        "suggestions": [],
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-inline-comments.html"
+      },
+      "oxlint default no-warning-comments": {
+        "examples": [
+          "Unexpected 'todo' comment: TODO: handle the empty case",
+          "Unexpected 'todo' comment: todo handle the empty case",
+          "Unexpected 'todo' comment: Todo: handle the empty case",
+          "Unexpected 'todo' comment: ToDo: handle the empty case"
+        ],
+        "help": "Remove or rephrase this comment",
+        "suggestions": [],
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      },
+      "oxlint default react/jsx-no-comment-textnodes": {
+        "examples": [
+          "Comments inside children section of tag should be placed inside braces"
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/jsx-no-comment-textnodes.html"
+      },
+      "oxlint js-plugins no-inline-comments": {
+        "examples": [
+          "Unexpected comment inline with code"
+        ],
+        "help": "Move the comment to a separate line",
+        "suggestions": [],
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-inline-comments.html"
+      },
+      "oxlint js-plugins no-warning-comments": {
+        "examples": [
+          "Unexpected 'todo' comment: TODO: handle the empty case",
+          "Unexpected 'todo' comment: todo handle the empty case",
+          "Unexpected 'todo' comment: Todo: handle the empty case",
+          "Unexpected 'todo' comment: ToDo: handle the empty case"
+        ],
+        "help": "Remove or rephrase this comment",
+        "suggestions": [],
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+      },
+      "oxlint js-plugins react/jsx-no-comment-textnodes": {
+        "examples": [
+          "Comments inside children section of tag should be placed inside braces"
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/jsx-no-comment-textnodes.html"
+      },
+      "oxlint js-plugins sonarjs/fixme-tag": {
+        "examples": [
+          "Take the required action to fix the issue indicated by this comment."
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": null
+      },
+      "oxlint js-plugins sonarjs/todo-tag": {
+        "examples": [
+          "Complete the task associated to this \"TODO\" comment."
+        ],
+        "help": null,
+        "suggestions": [],
+        "url": null
+      }
+    }
+  },
+  "autofix": {
+    "oxlint --fix": {
+      "casesWithCommentChanges": [],
+      "fileChanged": false,
+      "timedOut": false
+    },
+    "oxlint --fix-dangerously": {
+      "casesWithCommentChanges": [],
+      "fileChanged": false,
+      "timedOut": false
+    },
+    "oxlint --fix (js-plugins)": {
+      "casesWithCommentChanges": [],
+      "fileChanged": false,
+      "timedOut": false
+    },
+    "oxlint --fix-dangerously (js-plugins)": {
+      "casesWithCommentChanges": [],
+      "fileChanged": false,
+      "timedOut": false
+    },
+    "eslint --fix": {
+      "casesWithCommentChanges": [
+        {
+          "after": [
+            "/*\nFIXME\n*/"
+          ],
+          "before": [
+            "/* FIXME */"
+          ],
+          "id": "T06"
+        },
+        {
+          "after": [
+            "/**\n@todo handle the empty case\n*/"
+          ],
+          "before": [
+            "/** @todo handle the empty case */"
+          ],
+          "id": "T09"
+        },
+        {
+          "after": [
+            "/*\n** TODO: handle the empty case\n*/"
+          ],
+          "before": [
+            "/* ** TODO: handle the empty case */"
+          ],
+          "id": "R14"
+        }
+      ],
+      "fileChanged": true,
+      "timedOut": false
+    },
+    "biome check --write": {
+      "casesWithCommentChanges": [],
+      "fileChanged": false,
+      "timedOut": false
+    },
+    "biome check --write --unsafe": {
+      "casesWithCommentChanges": [
+        {
+          "after": [
+            "/* TODO handle the empty case */"
+          ],
+          "before": [],
+          "id": "T28"
+        }
+      ],
+      "fileChanged": true,
+      "timedOut": false
+    }
+  }
+}

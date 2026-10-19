@@ -1,0 +1,3262 @@
+{
+  "definitions": {
+    "bare": "No owner (TODO(name) naming a commit author, or an @mention of one), no link (issue/PR reference, URL, tracker key), no date, no version, no strict condition (an event to wait for: 'once X is released', 'remove when Y lands', 'blocked on Z') and no unicorn [condition].",
+    "bareLoose": "bare, and also none of the condition words once/when/whenever/after/until/unless/as soon as/pending/blocked on/waiting for/depends on anywhere in its text (they also describe code, so this undercounts bare TODOs).",
+    "paren": "TODO(x): issue (#n, URL, number), key (a tracker key such as NAR-804), date, person (every word is a commit author's name, first name, email local part or GitHub login in the history clone), topic (anything else), empty.",
+    "marker": "A term written in capitals, the JSDoc @todo tag, a term followed by ':' '(' '[' or a dash, or a term opening the comment (or a block comment's line). TODO, FIXME and TBD are markers anywhere. 'Note that…', 'review the…' and the like at the start of a sentence are prose; terms inside paths or words (foo.xxx, /xxx/) are embedded.",
+    "position": "start: only whitespace before the term in the comment (no-warning-comments' default location); start-decorated: only whitespace and * / ! # = + - before it; line-start: the start of a later line of a block comment; later: anywhere else.",
+    "ruleTerms": "TODO, FIXME, XXX (the default terms of no-warning-comments and unicorn/expiring-todo-comments).",
+    "taskMarkers": "TODO, FIXME, XXX, @todo, TO DO, TBD, HACK, BUG.",
+    "text": "The rest of the marker's comment line, plus the lines that continue it (next lines of a block comment, adjacent // comments at the same column), up to a blank line or another marker.",
+    "wordingWithoutMarker": "Comments with no marker that use hack/hacky/workaround/kludge/temporary/for now/ugly/quick fix/stopgap/band-aid (a rough indicator only)."
+  },
+  "generated": "2026-10-19",
+  "groups": {
+    "core": {
+      "repos": [
+        "zod",
+        "hono",
+        "trpc",
+        "vite",
+        "astro",
+        "excalidraw",
+        "next.js",
+        "vscode"
+      ],
+      "all": {
+        "case": {
+          "upper": 1164,
+          "title": 72,
+          "lower": 21,
+          "mixed": 2
+        },
+        "commentKind": {
+          "line": 1098,
+          "jsdoc": 110,
+          "line (trailing)": 40,
+          "jsx block": 8,
+          "block": 2,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 1253,
+        "decoration": {
+          "none": 1070,
+          "decoration \"*\"": 90,
+          "text": 43,
+          "@": 22,
+          "bracket": 17,
+          "decoration \"* **\"": 9,
+          "decoration \"* * **\"": 4,
+          "decoration \"* //\"": 2,
+          "decoration \"---\"": 1,
+          "decoration \"* *\"": 1
+        },
+        "follow": {
+          "colon": 910,
+          "text": 140,
+          "paren": 120,
+          "glued": 75,
+          "end": 7,
+          "bang": 3,
+          "comma": 3,
+          "dash": 1
+        },
+        "format": {
+          "bare": 1037,
+          "bareLoose": 934,
+          "bareShare": 82.4,
+          "conditionWord": 242,
+          "date": 1,
+          "issueOrPr": 32,
+          "link": 59,
+          "mention": 4,
+          "otherTracker": 3,
+          "owner": 20,
+          "paren": {
+            "topic": 98,
+            "key": 12,
+            "person": 8,
+            "issue": 2
+          },
+          "ownerOrMention": 24,
+          "condition": 129,
+          "areaTag": 43,
+          "external": 48,
+          "temporary": 41,
+          "trackerKey": 17,
+          "unicornArgs": 0,
+          "url": 32,
+          "version": 33,
+          "year": 2
+        },
+        "markers": 1259,
+        "markersPer10k": 18.1,
+        "position": {
+          "start": 1092,
+          "line-start": 90,
+          "later": 61,
+          "start-decorated": 16
+        },
+        "term": {
+          "TODO": 857,
+          "NOTE": 344,
+          "FIXME": 25,
+          "@todo": 22,
+          "HACK": 8,
+          "TBD": 2,
+          "BUG": 1
+        }
+      },
+      "comments": 53259,
+      "commentsPer10k": 767.1,
+      "files": 3333,
+      "lines": 694309,
+      "markerComments": 1253,
+      "markerCommentsPer10k": 18,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 245,
+        "TO DO prose": 119,
+        "BUG prose": 57,
+        "OPTIMIZE prose": 57,
+        "HACK prose": 30,
+        "REVIEW prose": 6,
+        "XXX embedded": 4,
+        "XXX prose": 3,
+        "OPTIMIZE embedded": 2,
+        "REVIEW embedded": 1,
+        "NOTE embedded": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 873,
+          "lower": 6,
+          "mixed": 2,
+          "title": 1
+        },
+        "commentKind": {
+          "line": 809,
+          "line (trailing)": 34,
+          "jsdoc": 29,
+          "jsx block": 8,
+          "block": 1,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 880,
+        "decoration": {
+          "none": 808,
+          "text": 40,
+          "decoration \"*\"": 24,
+          "bracket": 7,
+          "decoration \"* //\"": 2,
+          "decoration \"---\"": 1
+        },
+        "follow": {
+          "colon": 620,
+          "paren": 111,
+          "text": 83,
+          "glued": 58,
+          "end": 7,
+          "comma": 2,
+          "dash": 1
+        },
+        "format": {
+          "bare": 693,
+          "bareLoose": 634,
+          "bareShare": 78.6,
+          "conditionWord": 178,
+          "date": 1,
+          "issueOrPr": 26,
+          "link": 48,
+          "mention": 3,
+          "otherTracker": 3,
+          "owner": 20,
+          "paren": {
+            "topic": 89,
+            "key": 12,
+            "person": 8,
+            "issue": 2
+          },
+          "ownerOrMention": 23,
+          "condition": 112,
+          "areaTag": 43,
+          "external": 36,
+          "temporary": 31,
+          "trackerKey": 17,
+          "unicornArgs": 0,
+          "url": 21,
+          "version": 28,
+          "year": 2
+        },
+        "markers": 882,
+        "markersPer10k": 12.7,
+        "position": {
+          "start": 808,
+          "later": 48,
+          "line-start": 19,
+          "start-decorated": 7
+        },
+        "term": {
+          "TODO": 857,
+          "FIXME": 25
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 906,
+          "lower": 6,
+          "mixed": 2,
+          "title": 1
+        },
+        "commentKind": {
+          "line": 841,
+          "line (trailing)": 34,
+          "jsdoc": 30,
+          "jsx block": 8,
+          "block": 1,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 913,
+        "decoration": {
+          "none": 817,
+          "text": 41,
+          "decoration \"*\"": 25,
+          "@": 22,
+          "bracket": 7,
+          "decoration \"* //\"": 2,
+          "decoration \"---\"": 1
+        },
+        "follow": {
+          "colon": 626,
+          "paren": 111,
+          "text": 106,
+          "glued": 58,
+          "end": 7,
+          "bang": 3,
+          "comma": 3,
+          "dash": 1
+        },
+        "format": {
+          "bare": 722,
+          "bareLoose": 662,
+          "bareShare": 78.9,
+          "conditionWord": 182,
+          "date": 1,
+          "issueOrPr": 26,
+          "link": 48,
+          "mention": 3,
+          "otherTracker": 3,
+          "owner": 20,
+          "paren": {
+            "topic": 89,
+            "key": 12,
+            "person": 8,
+            "issue": 2
+          },
+          "ownerOrMention": 23,
+          "condition": 115,
+          "areaTag": 43,
+          "external": 36,
+          "temporary": 32,
+          "trackerKey": 17,
+          "unicornArgs": 0,
+          "url": 21,
+          "version": 29,
+          "year": 2
+        },
+        "markers": 915,
+        "markersPer10k": 13.2,
+        "position": {
+          "start": 839,
+          "later": 49,
+          "line-start": 19,
+          "start-decorated": 8
+        },
+        "term": {
+          "TODO": 857,
+          "FIXME": 25,
+          "@todo": 22,
+          "HACK": 8,
+          "TBD": 2,
+          "BUG": 1
+        }
+      },
+      "wordingWithoutMarker": 169
+    },
+    "coreWithoutNext": {
+      "repos": [
+        "zod",
+        "hono",
+        "trpc",
+        "vite",
+        "astro",
+        "excalidraw",
+        "vscode"
+      ],
+      "all": {
+        "case": {
+          "upper": 370,
+          "title": 36,
+          "lower": 17,
+          "mixed": 2
+        },
+        "commentKind": {
+          "line": 334,
+          "jsdoc": 68,
+          "line (trailing)": 17,
+          "jsx block": 3,
+          "block": 2,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 422,
+        "decoration": {
+          "none": 350,
+          "decoration \"*\"": 50,
+          "decoration \"* **\"": 9,
+          "text": 5,
+          "decoration \"* * **\"": 4,
+          "bracket": 2,
+          "decoration \"* //\"": 2,
+          "decoration \"---\"": 1,
+          "@": 1,
+          "decoration \"* *\"": 1
+        },
+        "follow": {
+          "colon": 291,
+          "text": 88,
+          "glued": 25,
+          "paren": 14,
+          "bang": 3,
+          "end": 2,
+          "comma": 2
+        },
+        "format": {
+          "bare": 343,
+          "bareLoose": 317,
+          "bareShare": 80.7,
+          "conditionWord": 65,
+          "date": 1,
+          "issueOrPr": 20,
+          "link": 25,
+          "mention": 4,
+          "otherTracker": 2,
+          "owner": 12,
+          "paren": {
+            "topic": 14
+          },
+          "ownerOrMention": 16,
+          "condition": 35,
+          "areaTag": 0,
+          "external": 15,
+          "temporary": 11,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 17,
+          "version": 11,
+          "year": 1
+        },
+        "markers": 425,
+        "markersPer10k": 10.2,
+        "position": {
+          "start": 351,
+          "line-start": 57,
+          "start-decorated": 9,
+          "later": 8
+        },
+        "term": {
+          "NOTE": 214,
+          "TODO": 187,
+          "FIXME": 16,
+          "HACK": 5,
+          "BUG": 1,
+          "TBD": 1,
+          "@todo": 1
+        }
+      },
+      "comments": 27008,
+      "commentsPer10k": 645.8,
+      "files": 1917,
+      "lines": 418181,
+      "markerComments": 422,
+      "markerCommentsPer10k": 10.1,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 169,
+        "TO DO prose": 54,
+        "OPTIMIZE prose": 37,
+        "HACK prose": 20,
+        "BUG prose": 19,
+        "REVIEW prose": 4,
+        "XXX embedded": 3,
+        "XXX prose": 3,
+        "REVIEW embedded": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 196,
+          "lower": 4,
+          "mixed": 2,
+          "title": 1
+        },
+        "commentKind": {
+          "line": 174,
+          "jsdoc": 13,
+          "line (trailing)": 11,
+          "jsx block": 3,
+          "block": 1,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 203,
+        "decoration": {
+          "none": 185,
+          "decoration \"*\"": 9,
+          "text": 5,
+          "decoration \"* //\"": 2,
+          "decoration \"---\"": 1,
+          "bracket": 1
+        },
+        "follow": {
+          "colon": 130,
+          "text": 52,
+          "glued": 12,
+          "paren": 5,
+          "end": 2,
+          "comma": 2
+        },
+        "format": {
+          "bare": 142,
+          "bareLoose": 134,
+          "bareShare": 70,
+          "conditionWord": 35,
+          "date": 1,
+          "issueOrPr": 14,
+          "link": 17,
+          "mention": 3,
+          "otherTracker": 2,
+          "owner": 12,
+          "paren": {
+            "topic": 5
+          },
+          "ownerOrMention": 15,
+          "condition": 25,
+          "areaTag": 0,
+          "external": 3,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 9,
+          "version": 9,
+          "year": 1
+        },
+        "markers": 203,
+        "markersPer10k": 4.9,
+        "position": {
+          "start": 185,
+          "later": 7,
+          "start-decorated": 6,
+          "line-start": 5
+        },
+        "term": {
+          "TODO": 187,
+          "FIXME": 16
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 204,
+          "lower": 4,
+          "mixed": 2,
+          "title": 1
+        },
+        "commentKind": {
+          "line": 182,
+          "jsdoc": 13,
+          "line (trailing)": 11,
+          "jsx block": 3,
+          "block": 1,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 211,
+        "decoration": {
+          "none": 192,
+          "decoration \"*\"": 9,
+          "text": 5,
+          "decoration \"* //\"": 2,
+          "decoration \"---\"": 1,
+          "bracket": 1,
+          "@": 1
+        },
+        "follow": {
+          "colon": 133,
+          "text": 54,
+          "glued": 12,
+          "paren": 5,
+          "bang": 3,
+          "end": 2,
+          "comma": 2
+        },
+        "format": {
+          "bare": 147,
+          "bareLoose": 139,
+          "bareShare": 69.7,
+          "conditionWord": 37,
+          "date": 1,
+          "issueOrPr": 14,
+          "link": 17,
+          "mention": 3,
+          "otherTracker": 2,
+          "owner": 12,
+          "paren": {
+            "topic": 5
+          },
+          "ownerOrMention": 15,
+          "condition": 27,
+          "areaTag": 0,
+          "external": 3,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 9,
+          "version": 10,
+          "year": 1
+        },
+        "markers": 211,
+        "markersPer10k": 5,
+        "position": {
+          "start": 193,
+          "later": 7,
+          "start-decorated": 6,
+          "line-start": 5
+        },
+        "term": {
+          "TODO": 187,
+          "FIXME": 16,
+          "HACK": 5,
+          "BUG": 1,
+          "TBD": 1,
+          "@todo": 1
+        }
+      },
+      "wordingWithoutMarker": 95
+    },
+    "react": {
+      "repos": [
+        "shadcn",
+        "radix",
+        "react-aria",
+        "supabase"
+      ],
+      "all": {
+        "case": {
+          "upper": 117,
+          "title": 11,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 92,
+          "jsdoc": 29,
+          "jsx block": 6,
+          "line (trailing)": 4
+        },
+        "comments": 129,
+        "decoration": {
+          "none": 84,
+          "decoration \"*\"": 25,
+          "bracket": 11,
+          "text": 11
+        },
+        "follow": {
+          "colon": 101,
+          "glued": 12,
+          "paren": 11,
+          "text": 5,
+          "dash": 1,
+          "end": 1
+        },
+        "format": {
+          "bare": 105,
+          "bareLoose": 95,
+          "bareShare": 80.2,
+          "conditionWord": 26,
+          "date": 2,
+          "issueOrPr": 3,
+          "link": 6,
+          "mention": 2,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 11
+          },
+          "ownerOrMention": 2,
+          "condition": 16,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 3,
+          "trackerKey": 1,
+          "unicornArgs": 0,
+          "url": 5,
+          "version": 4,
+          "year": 2
+        },
+        "markers": 131,
+        "markersPer10k": 2.9,
+        "position": {
+          "start": 84,
+          "later": 22,
+          "line-start": 15,
+          "start-decorated": 10
+        },
+        "term": {
+          "TODO": 89,
+          "NOTE": 24,
+          "FIXME": 10,
+          "TBD": 7,
+          "TO DO": 1
+        }
+      },
+      "comments": 9890,
+      "commentsPer10k": 220.2,
+      "files": 3155,
+      "lines": 449047,
+      "markerComments": 129,
+      "markerCommentsPer10k": 2.9,
+      "nonMarkerOccurrences": {
+        "TO DO prose": 17,
+        "NOTE prose": 14,
+        "REVIEW prose": 7,
+        "HACK prose": 4,
+        "BUG prose": 3,
+        "OPTIMIZE prose": 2,
+        "BUG embedded": 1,
+        "XXX embedded": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 97,
+          "lower": 2
+        },
+        "commentKind": {
+          "line": 82,
+          "jsdoc": 8,
+          "jsx block": 6,
+          "line (trailing)": 3
+        },
+        "comments": 99,
+        "decoration": {
+          "none": 73,
+          "bracket": 11,
+          "text": 8,
+          "decoration \"*\"": 7
+        },
+        "follow": {
+          "colon": 77,
+          "glued": 12,
+          "paren": 6,
+          "text": 3,
+          "end": 1
+        },
+        "format": {
+          "bare": 77,
+          "bareLoose": 74,
+          "bareShare": 77.8,
+          "conditionWord": 17,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 5,
+          "mention": 2,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 6
+          },
+          "ownerOrMention": 2,
+          "condition": 14,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 1,
+          "unicornArgs": 0,
+          "url": 4,
+          "version": 4,
+          "year": 1
+        },
+        "markers": 99,
+        "markersPer10k": 2.2,
+        "position": {
+          "start": 73,
+          "later": 19,
+          "start-decorated": 5,
+          "line-start": 2
+        },
+        "term": {
+          "TODO": 89,
+          "FIXME": 10
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 104,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 82,
+          "jsdoc": 16,
+          "jsx block": 6,
+          "line (trailing)": 3
+        },
+        "comments": 105,
+        "decoration": {
+          "none": 73,
+          "decoration \"*\"": 12,
+          "bracket": 11,
+          "text": 11
+        },
+        "follow": {
+          "colon": 82,
+          "glued": 12,
+          "paren": 7,
+          "text": 5,
+          "end": 1
+        },
+        "format": {
+          "bare": 85,
+          "bareLoose": 82,
+          "bareShare": 79.4,
+          "conditionWord": 17,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 5,
+          "mention": 2,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 7
+          },
+          "ownerOrMention": 2,
+          "condition": 14,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 1,
+          "unicornArgs": 0,
+          "url": 4,
+          "version": 4,
+          "year": 1
+        },
+        "markers": 107,
+        "markersPer10k": 2.4,
+        "position": {
+          "start": 73,
+          "later": 22,
+          "start-decorated": 9,
+          "line-start": 3
+        },
+        "term": {
+          "TODO": 89,
+          "FIXME": 10,
+          "TBD": 7,
+          "TO DO": 1
+        }
+      },
+      "wordingWithoutMarker": 83
+    },
+    "dogfood": {
+      "repos": [
+        "ultracite"
+      ],
+      "all": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "comments": 1283,
+      "commentsPer10k": 785.2,
+      "files": 54,
+      "lines": 16340,
+      "markerComments": 0,
+      "markerCommentsPer10k": 0,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 4,
+        "REVIEW prose": 1,
+        "BUG prose": 1
+      },
+      "ruleTerms": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "taskMarkers": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "wordingWithoutMarker": 0
+    }
+  },
+  "repos": {
+    "zod": {
+      "blockComments": 721,
+      "commentLines": 4089,
+      "comments": 3624,
+      "files": 125,
+      "jsdocComments": 397,
+      "jsxComments": 0,
+      "lineComments": 2903,
+      "lines": 37903,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c",
+      "authorsFromHistory": 1972,
+      "wordingWithoutMarker": 0,
+      "all": {
+        "case": {
+          "title": 2
+        },
+        "commentKind": {
+          "line": 1,
+          "jsdoc": 1
+        },
+        "comments": 2,
+        "decoration": {
+          "none": 1,
+          "decoration \"*\"": 1
+        },
+        "follow": {
+          "colon": 2
+        },
+        "format": {
+          "bare": 2,
+          "bareLoose": 2,
+          "bareShare": 100,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 2,
+        "markersPer10k": 0.5,
+        "position": {
+          "start": 1,
+          "line-start": 1
+        },
+        "term": {
+          "NOTE": 1,
+          "TODO": 1
+        }
+      },
+      "commentsPer10k": 956.1,
+      "markerComments": 2,
+      "markerCommentsPer10k": 0.5,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 2,
+        "BUG prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "title": 1
+        },
+        "commentKind": {
+          "jsdoc": 1
+        },
+        "comments": 1,
+        "decoration": {
+          "decoration \"*\"": 1
+        },
+        "follow": {
+          "colon": 1
+        },
+        "format": {
+          "bare": 1,
+          "bareLoose": 1,
+          "bareShare": 100,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 1,
+        "markersPer10k": 0.3,
+        "position": {
+          "line-start": 1
+        },
+        "term": {
+          "TODO": 1
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "title": 1
+        },
+        "commentKind": {
+          "jsdoc": 1
+        },
+        "comments": 1,
+        "decoration": {
+          "decoration \"*\"": 1
+        },
+        "follow": {
+          "colon": 1
+        },
+        "format": {
+          "bare": 1,
+          "bareLoose": 1,
+          "bareShare": 100,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 1,
+        "markersPer10k": 0.3,
+        "position": {
+          "line-start": 1
+        },
+        "term": {
+          "TODO": 1
+        }
+      }
+    },
+    "hono": {
+      "blockComments": 520,
+      "commentLines": 4683,
+      "comments": 1398,
+      "files": 187,
+      "jsdocComments": 502,
+      "jsxComments": 0,
+      "lineComments": 878,
+      "lines": 25540,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "authorsFromHistory": 1232,
+      "wordingWithoutMarker": 2,
+      "all": {
+        "case": {
+          "lower": 4
+        },
+        "commentKind": {
+          "line": 4
+        },
+        "comments": 4,
+        "decoration": {
+          "none": 4
+        },
+        "follow": {
+          "colon": 4
+        },
+        "format": {
+          "bare": 2,
+          "bareLoose": 2,
+          "bareShare": 50,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 1,
+          "link": 2,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 2,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 4,
+        "markersPer10k": 1.6,
+        "position": {
+          "start": 4
+        },
+        "term": {
+          "NOTE": 4
+        }
+      },
+      "commentsPer10k": 547.4,
+      "markerComments": 4,
+      "markerCommentsPer10k": 1.6,
+      "nonMarkerOccurrences": {
+        "HACK prose": 2
+      },
+      "ruleTerms": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "taskMarkers": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      }
+    },
+    "trpc": {
+      "blockComments": 802,
+      "commentLines": 3653,
+      "comments": 1561,
+      "files": 176,
+      "jsdocComments": 768,
+      "jsxComments": 0,
+      "lineComments": 759,
+      "lines": 25948,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7",
+      "authorsFromHistory": 1791,
+      "wordingWithoutMarker": 1,
+      "all": {
+        "case": {
+          "upper": 16,
+          "title": 3
+        },
+        "commentKind": {
+          "line": 17,
+          "jsdoc": 2
+        },
+        "comments": 19,
+        "decoration": {
+          "none": 15,
+          "decoration \"*\"": 2,
+          "decoration \"---\"": 1,
+          "bracket": 1
+        },
+        "follow": {
+          "colon": 15,
+          "text": 3,
+          "paren": 1
+        },
+        "format": {
+          "bare": 17,
+          "bareLoose": 16,
+          "bareShare": 89.5,
+          "conditionWord": 2,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 1
+          },
+          "ownerOrMention": 0,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 1,
+          "year": 0
+        },
+        "markers": 19,
+        "markersPer10k": 7.3,
+        "position": {
+          "start": 15,
+          "line-start": 2,
+          "start-decorated": 1,
+          "later": 1
+        },
+        "term": {
+          "TODO": 8,
+          "FIXME": 7,
+          "NOTE": 4
+        }
+      },
+      "commentsPer10k": 601.6,
+      "markerComments": 19,
+      "markerCommentsPer10k": 7.3,
+      "nonMarkerOccurrences": {
+        "TO DO prose": 2,
+        "NOTE prose": 2,
+        "HACK prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 15
+        },
+        "commentKind": {
+          "line": 15
+        },
+        "comments": 15,
+        "decoration": {
+          "none": 13,
+          "decoration \"---\"": 1,
+          "bracket": 1
+        },
+        "follow": {
+          "colon": 11,
+          "text": 3,
+          "paren": 1
+        },
+        "format": {
+          "bare": 14,
+          "bareLoose": 13,
+          "bareShare": 93.3,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 1
+          },
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 1,
+          "year": 0
+        },
+        "markers": 15,
+        "markersPer10k": 5.8,
+        "position": {
+          "start": 13,
+          "start-decorated": 1,
+          "later": 1
+        },
+        "term": {
+          "TODO": 8,
+          "FIXME": 7
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 15
+        },
+        "commentKind": {
+          "line": 15
+        },
+        "comments": 15,
+        "decoration": {
+          "none": 13,
+          "decoration \"---\"": 1,
+          "bracket": 1
+        },
+        "follow": {
+          "colon": 11,
+          "text": 3,
+          "paren": 1
+        },
+        "format": {
+          "bare": 14,
+          "bareLoose": 13,
+          "bareShare": 93.3,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 1
+          },
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 1,
+          "year": 0
+        },
+        "markers": 15,
+        "markersPer10k": 5.8,
+        "position": {
+          "start": 13,
+          "start-decorated": 1,
+          "later": 1
+        },
+        "term": {
+          "TODO": 8,
+          "FIXME": 7
+        }
+      }
+    },
+    "vite": {
+      "blockComments": 608,
+      "commentLines": 5421,
+      "comments": 3422,
+      "files": 124,
+      "jsdocComments": 577,
+      "jsxComments": 3,
+      "lineComments": 2814,
+      "lines": 45885,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "authorsFromHistory": 4080,
+      "wordingWithoutMarker": 33,
+      "all": {
+        "case": {
+          "upper": 53,
+          "title": 10,
+          "lower": 1
+        },
+        "commentKind": {
+          "line": 51,
+          "jsdoc": 7,
+          "line (trailing)": 5,
+          "block": 1
+        },
+        "comments": 64,
+        "decoration": {
+          "none": 56,
+          "decoration \"*\"": 6,
+          "text": 2
+        },
+        "follow": {
+          "colon": 63,
+          "end": 1
+        },
+        "format": {
+          "bare": 56,
+          "bareLoose": 53,
+          "bareShare": 87.5,
+          "conditionWord": 7,
+          "date": 0,
+          "issueOrPr": 4,
+          "link": 5,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 3,
+          "areaTag": 0,
+          "external": 6,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 5,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 64,
+        "markersPer10k": 13.9,
+        "position": {
+          "start": 56,
+          "line-start": 6,
+          "later": 2
+        },
+        "term": {
+          "NOTE": 39,
+          "TODO": 25
+        }
+      },
+      "commentsPer10k": 745.8,
+      "markerComments": 64,
+      "markerCommentsPer10k": 13.9,
+      "nonMarkerOccurrences": {
+        "OPTIMIZE prose": 25,
+        "NOTE prose": 15,
+        "BUG prose": 8,
+        "HACK prose": 5,
+        "TO DO prose": 4,
+        "XXX embedded": 3,
+        "REVIEW prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 24,
+          "lower": 1
+        },
+        "commentKind": {
+          "line": 21,
+          "line (trailing)": 2,
+          "jsdoc": 1,
+          "block": 1
+        },
+        "comments": 25,
+        "decoration": {
+          "none": 23,
+          "text": 2
+        },
+        "follow": {
+          "colon": 24,
+          "end": 1
+        },
+        "format": {
+          "bare": 23,
+          "bareLoose": 23,
+          "bareShare": 92,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 1,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 1,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 25,
+        "markersPer10k": 5.4,
+        "position": {
+          "start": 23,
+          "later": 2
+        },
+        "term": {
+          "TODO": 25
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 24,
+          "lower": 1
+        },
+        "commentKind": {
+          "line": 21,
+          "line (trailing)": 2,
+          "jsdoc": 1,
+          "block": 1
+        },
+        "comments": 25,
+        "decoration": {
+          "none": 23,
+          "text": 2
+        },
+        "follow": {
+          "colon": 24,
+          "end": 1
+        },
+        "format": {
+          "bare": 23,
+          "bareLoose": 23,
+          "bareShare": 92,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 1,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 1,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 25,
+        "markersPer10k": 5.4,
+        "position": {
+          "start": 23,
+          "later": 2
+        },
+        "term": {
+          "TODO": 25
+        }
+      }
+    },
+    "astro": {
+      "blockComments": 1798,
+      "commentLines": 16589,
+      "comments": 6204,
+      "files": 635,
+      "jsdocComments": 1771,
+      "jsxComments": 2,
+      "lineComments": 4406,
+      "lines": 82969,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "authorsFromHistory": 3900,
+      "wordingWithoutMarker": 25,
+      "all": {
+        "case": {
+          "upper": 95,
+          "title": 8,
+          "lower": 1
+        },
+        "commentKind": {
+          "line": 95,
+          "jsdoc": 8,
+          "block": 1
+        },
+        "comments": 104,
+        "decoration": {
+          "none": 96,
+          "decoration \"*\"": 8
+        },
+        "follow": {
+          "colon": 94,
+          "paren": 5,
+          "bang": 3,
+          "text": 2
+        },
+        "format": {
+          "bare": 85,
+          "bareLoose": 79,
+          "bareShare": 81.7,
+          "conditionWord": 15,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 3,
+          "mention": 1,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 5
+          },
+          "ownerOrMention": 1,
+          "condition": 9,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 3,
+          "version": 8,
+          "year": 1
+        },
+        "markers": 104,
+        "markersPer10k": 12.5,
+        "position": {
+          "start": 96,
+          "line-start": 7,
+          "start-decorated": 1
+        },
+        "term": {
+          "NOTE": 60,
+          "TODO": 39,
+          "HACK": 4,
+          "BUG": 1
+        }
+      },
+      "commentsPer10k": 747.7,
+      "markerComments": 104,
+      "markerCommentsPer10k": 12.5,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 14,
+        "TO DO prose": 8,
+        "BUG prose": 3,
+        "OPTIMIZE prose": 2,
+        "HACK prose": 1,
+        "REVIEW prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 39
+        },
+        "commentKind": {
+          "line": 39
+        },
+        "comments": 39,
+        "decoration": {
+          "none": 39
+        },
+        "follow": {
+          "colon": 35,
+          "paren": 2,
+          "text": 2
+        },
+        "format": {
+          "bare": 24,
+          "bareLoose": 23,
+          "bareShare": 61.5,
+          "conditionWord": 7,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 3,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 2
+          },
+          "ownerOrMention": 0,
+          "condition": 6,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 3,
+          "version": 8,
+          "year": 1
+        },
+        "markers": 39,
+        "markersPer10k": 4.7,
+        "position": {
+          "start": 39
+        },
+        "term": {
+          "TODO": 39
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 44
+        },
+        "commentKind": {
+          "line": 44
+        },
+        "comments": 44,
+        "decoration": {
+          "none": 44
+        },
+        "follow": {
+          "colon": 37,
+          "bang": 3,
+          "paren": 2,
+          "text": 2
+        },
+        "format": {
+          "bare": 28,
+          "bareLoose": 27,
+          "bareShare": 63.6,
+          "conditionWord": 8,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 3,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 2
+          },
+          "ownerOrMention": 0,
+          "condition": 7,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 3,
+          "version": 8,
+          "year": 1
+        },
+        "markers": 44,
+        "markersPer10k": 5.3,
+        "position": {
+          "start": 44
+        },
+        "term": {
+          "TODO": 39,
+          "HACK": 4,
+          "BUG": 1
+        }
+      }
+    },
+    "excalidraw": {
+      "blockComments": 1260,
+      "commentLines": 10399,
+      "comments": 6291,
+      "files": 444,
+      "jsdocComments": 1198,
+      "jsxComments": 42,
+      "lineComments": 5031,
+      "lines": 128127,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce",
+      "authorsFromHistory": 1336,
+      "wordingWithoutMarker": 27,
+      "all": {
+        "case": {
+          "upper": 156,
+          "title": 9,
+          "lower": 8,
+          "mixed": 2
+        },
+        "commentKind": {
+          "line": 137,
+          "jsdoc": 28,
+          "line (trailing)": 7,
+          "jsx block": 3
+        },
+        "comments": 175,
+        "decoration": {
+          "none": 145,
+          "decoration \"*\"": 25,
+          "decoration \"* //\"": 2,
+          "bracket": 1,
+          "text": 1,
+          "@": 1
+        },
+        "follow": {
+          "colon": 93,
+          "text": 74,
+          "paren": 8
+        },
+        "format": {
+          "bare": 142,
+          "bareLoose": 126,
+          "bareShare": 81.1,
+          "conditionWord": 40,
+          "date": 0,
+          "issueOrPr": 7,
+          "link": 10,
+          "mention": 0,
+          "otherTracker": 2,
+          "owner": 0,
+          "paren": {
+            "topic": 8
+          },
+          "ownerOrMention": 0,
+          "condition": 21,
+          "areaTag": 0,
+          "external": 6,
+          "temporary": 5,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 4,
+          "version": 2,
+          "year": 0
+        },
+        "markers": 175,
+        "markersPer10k": 13.7,
+        "position": {
+          "start": 146,
+          "line-start": 23,
+          "start-decorated": 3,
+          "later": 3
+        },
+        "term": {
+          "NOTE": 89,
+          "TODO": 74,
+          "FIXME": 9,
+          "TBD": 1,
+          "HACK": 1,
+          "@todo": 1
+        }
+      },
+      "commentsPer10k": 491,
+      "markerComments": 175,
+      "markerCommentsPer10k": 13.7,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 124,
+        "HACK prose": 11,
+        "OPTIMIZE prose": 9,
+        "BUG prose": 6,
+        "TO DO prose": 5,
+        "REVIEW embedded": 1,
+        "REVIEW prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 81,
+          "mixed": 2
+        },
+        "commentKind": {
+          "line": 71,
+          "jsdoc": 5,
+          "line (trailing)": 4,
+          "jsx block": 3
+        },
+        "comments": 83,
+        "decoration": {
+          "none": 78,
+          "decoration \"* //\"": 2,
+          "decoration \"*\"": 2,
+          "text": 1
+        },
+        "follow": {
+          "colon": 43,
+          "text": 38,
+          "paren": 2
+        },
+        "format": {
+          "bare": 58,
+          "bareLoose": 52,
+          "bareShare": 69.9,
+          "conditionWord": 25,
+          "date": 0,
+          "issueOrPr": 6,
+          "link": 8,
+          "mention": 0,
+          "otherTracker": 2,
+          "owner": 0,
+          "paren": {
+            "topic": 2
+          },
+          "ownerOrMention": 0,
+          "condition": 17,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 2,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 83,
+        "markersPer10k": 6.5,
+        "position": {
+          "start": 78,
+          "later": 2,
+          "line-start": 2,
+          "start-decorated": 1
+        },
+        "term": {
+          "TODO": 74,
+          "FIXME": 9
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 84,
+          "mixed": 2
+        },
+        "commentKind": {
+          "line": 74,
+          "jsdoc": 5,
+          "line (trailing)": 4,
+          "jsx block": 3
+        },
+        "comments": 86,
+        "decoration": {
+          "none": 80,
+          "decoration \"* //\"": 2,
+          "decoration \"*\"": 2,
+          "text": 1,
+          "@": 1
+        },
+        "follow": {
+          "colon": 44,
+          "text": 40,
+          "paren": 2
+        },
+        "format": {
+          "bare": 59,
+          "bareLoose": 53,
+          "bareShare": 68.6,
+          "conditionWord": 26,
+          "date": 0,
+          "issueOrPr": 6,
+          "link": 8,
+          "mention": 0,
+          "otherTracker": 2,
+          "owner": 0,
+          "paren": {
+            "topic": 2
+          },
+          "ownerOrMention": 0,
+          "condition": 18,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 2,
+          "version": 1,
+          "year": 0
+        },
+        "markers": 86,
+        "markersPer10k": 6.7,
+        "position": {
+          "start": 81,
+          "later": 2,
+          "line-start": 2,
+          "start-decorated": 1
+        },
+        "term": {
+          "TODO": 74,
+          "FIXME": 9,
+          "TBD": 1,
+          "HACK": 1,
+          "@todo": 1
+        }
+      }
+    },
+    "next.js": {
+      "blockComments": 3191,
+      "commentLines": 40178,
+      "comments": 26251,
+      "files": 1416,
+      "jsdocComments": 2919,
+      "jsxComments": 26,
+      "lineComments": 23060,
+      "lines": 276128,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+      "authorsFromHistory": 12490,
+      "wordingWithoutMarker": 74,
+      "all": {
+        "case": {
+          "upper": 794,
+          "title": 36,
+          "lower": 4
+        },
+        "commentKind": {
+          "line": 764,
+          "jsdoc": 42,
+          "line (trailing)": 23,
+          "jsx block": 5
+        },
+        "comments": 831,
+        "decoration": {
+          "none": 720,
+          "decoration \"*\"": 40,
+          "text": 38,
+          "@": 21,
+          "bracket": 15
+        },
+        "follow": {
+          "colon": 619,
+          "paren": 106,
+          "text": 52,
+          "glued": 50,
+          "end": 5,
+          "comma": 1,
+          "dash": 1
+        },
+        "format": {
+          "bare": 694,
+          "bareLoose": 617,
+          "bareShare": 83.2,
+          "conditionWord": 177,
+          "date": 0,
+          "issueOrPr": 12,
+          "link": 34,
+          "mention": 0,
+          "otherTracker": 1,
+          "owner": 8,
+          "paren": {
+            "topic": 84,
+            "key": 12,
+            "person": 8,
+            "issue": 2
+          },
+          "ownerOrMention": 8,
+          "condition": 94,
+          "areaTag": 43,
+          "external": 33,
+          "temporary": 30,
+          "trackerKey": 17,
+          "unicornArgs": 0,
+          "url": 15,
+          "version": 22,
+          "year": 1
+        },
+        "markers": 834,
+        "markersPer10k": 30.2,
+        "position": {
+          "start": 741,
+          "later": 53,
+          "line-start": 33,
+          "start-decorated": 7
+        },
+        "term": {
+          "TODO": 670,
+          "NOTE": 130,
+          "@todo": 21,
+          "FIXME": 9,
+          "HACK": 3,
+          "TBD": 1
+        }
+      },
+      "commentsPer10k": 950.7,
+      "markerComments": 831,
+      "markerCommentsPer10k": 30.1,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 76,
+        "TO DO prose": 65,
+        "BUG prose": 38,
+        "OPTIMIZE prose": 20,
+        "HACK prose": 10,
+        "OPTIMIZE embedded": 2,
+        "REVIEW prose": 2,
+        "NOTE embedded": 1,
+        "XXX embedded": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 677,
+          "lower": 2
+        },
+        "commentKind": {
+          "line": 635,
+          "line (trailing)": 23,
+          "jsdoc": 16,
+          "jsx block": 5
+        },
+        "comments": 677,
+        "decoration": {
+          "none": 623,
+          "text": 35,
+          "decoration \"*\"": 15,
+          "bracket": 6
+        },
+        "follow": {
+          "colon": 490,
+          "paren": 106,
+          "glued": 46,
+          "text": 31,
+          "end": 5,
+          "dash": 1
+        },
+        "format": {
+          "bare": 551,
+          "bareLoose": 500,
+          "bareShare": 81.1,
+          "conditionWord": 143,
+          "date": 0,
+          "issueOrPr": 12,
+          "link": 31,
+          "mention": 0,
+          "otherTracker": 1,
+          "owner": 8,
+          "paren": {
+            "topic": 84,
+            "key": 12,
+            "person": 8,
+            "issue": 2
+          },
+          "ownerOrMention": 8,
+          "condition": 87,
+          "areaTag": 43,
+          "external": 33,
+          "temporary": 29,
+          "trackerKey": 17,
+          "unicornArgs": 0,
+          "url": 12,
+          "version": 19,
+          "year": 1
+        },
+        "markers": 679,
+        "markersPer10k": 24.6,
+        "position": {
+          "start": 623,
+          "later": 41,
+          "line-start": 14,
+          "start-decorated": 1
+        },
+        "term": {
+          "TODO": 670,
+          "FIXME": 9
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 702,
+          "lower": 2
+        },
+        "commentKind": {
+          "line": 659,
+          "line (trailing)": 23,
+          "jsdoc": 17,
+          "jsx block": 5
+        },
+        "comments": 702,
+        "decoration": {
+          "none": 625,
+          "text": 36,
+          "@": 21,
+          "decoration \"*\"": 16,
+          "bracket": 6
+        },
+        "follow": {
+          "colon": 493,
+          "paren": 106,
+          "text": 52,
+          "glued": 46,
+          "end": 5,
+          "comma": 1,
+          "dash": 1
+        },
+        "format": {
+          "bare": 575,
+          "bareLoose": 523,
+          "bareShare": 81.7,
+          "conditionWord": 145,
+          "date": 0,
+          "issueOrPr": 12,
+          "link": 31,
+          "mention": 0,
+          "otherTracker": 1,
+          "owner": 8,
+          "paren": {
+            "topic": 84,
+            "key": 12,
+            "person": 8,
+            "issue": 2
+          },
+          "ownerOrMention": 8,
+          "condition": 88,
+          "areaTag": 43,
+          "external": 33,
+          "temporary": 30,
+          "trackerKey": 17,
+          "unicornArgs": 0,
+          "url": 12,
+          "version": 19,
+          "year": 1
+        },
+        "markers": 704,
+        "markersPer10k": 25.5,
+        "position": {
+          "start": 646,
+          "later": 42,
+          "line-start": 14,
+          "start-decorated": 2
+        },
+        "term": {
+          "TODO": 670,
+          "@todo": 21,
+          "FIXME": 9,
+          "HACK": 3,
+          "TBD": 1
+        }
+      }
+    },
+    "vscode": {
+      "blockComments": 2263,
+      "commentLines": 10535,
+      "comments": 4508,
+      "files": 226,
+      "jsdocComments": 1983,
+      "jsxComments": 0,
+      "lineComments": 2245,
+      "lines": 71809,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+      "authorsFromHistory": 8982,
+      "wordingWithoutMarker": 7,
+      "all": {
+        "case": {
+          "upper": 50,
+          "title": 4,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 29,
+          "jsdoc": 22,
+          "line (trailing)": 5,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 54,
+        "decoration": {
+          "none": 33,
+          "decoration \"* **\"": 9,
+          "decoration \"*\"": 8,
+          "decoration \"* * **\"": 4,
+          "text": 2,
+          "decoration \"* *\"": 1
+        },
+        "follow": {
+          "glued": 25,
+          "colon": 20,
+          "text": 9,
+          "comma": 2,
+          "end": 1
+        },
+        "format": {
+          "bare": 39,
+          "bareLoose": 39,
+          "bareShare": 68.4,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 5,
+          "link": 5,
+          "mention": 3,
+          "otherTracker": 0,
+          "owner": 12,
+          "paren": {},
+          "ownerOrMention": 15,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 3,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 57,
+        "markersPer10k": 7.9,
+        "position": {
+          "start": 33,
+          "line-start": 18,
+          "start-decorated": 4,
+          "later": 2
+        },
+        "term": {
+          "TODO": 40,
+          "NOTE": 17
+        }
+      },
+      "commentsPer10k": 627.8,
+      "markerComments": 54,
+      "markerCommentsPer10k": 7.5,
+      "nonMarkerOccurrences": {
+        "TO DO prose": 35,
+        "NOTE prose": 12,
+        "XXX prose": 3,
+        "REVIEW prose": 1,
+        "OPTIMIZE prose": 1,
+        "BUG prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 37,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 28,
+          "jsdoc": 6,
+          "line (trailing)": 5,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 40,
+        "decoration": {
+          "none": 32,
+          "decoration \"*\"": 6,
+          "text": 2
+        },
+        "follow": {
+          "colon": 16,
+          "glued": 12,
+          "text": 9,
+          "comma": 2,
+          "end": 1
+        },
+        "format": {
+          "bare": 22,
+          "bareLoose": 22,
+          "bareShare": 55,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 5,
+          "link": 5,
+          "mention": 3,
+          "otherTracker": 0,
+          "owner": 12,
+          "paren": {},
+          "ownerOrMention": 15,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 3,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 40,
+        "markersPer10k": 5.6,
+        "position": {
+          "start": 32,
+          "start-decorated": 4,
+          "later": 2,
+          "line-start": 2
+        },
+        "term": {
+          "TODO": 40
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 37,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 28,
+          "jsdoc": 6,
+          "line (trailing)": 5,
+          "jsdoc (trailing)": 1
+        },
+        "comments": 40,
+        "decoration": {
+          "none": 32,
+          "decoration \"*\"": 6,
+          "text": 2
+        },
+        "follow": {
+          "colon": 16,
+          "glued": 12,
+          "text": 9,
+          "comma": 2,
+          "end": 1
+        },
+        "format": {
+          "bare": 22,
+          "bareLoose": 22,
+          "bareShare": 55,
+          "conditionWord": 1,
+          "date": 0,
+          "issueOrPr": 5,
+          "link": 5,
+          "mention": 3,
+          "otherTracker": 0,
+          "owner": 12,
+          "paren": {},
+          "ownerOrMention": 15,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 3,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 40,
+        "markersPer10k": 5.6,
+        "position": {
+          "start": 32,
+          "start-decorated": 4,
+          "later": 2,
+          "line-start": 2
+        },
+        "term": {
+          "TODO": 40
+        }
+      }
+    },
+    "ultracite": {
+      "blockComments": 195,
+      "commentLines": 1830,
+      "comments": 1283,
+      "files": 54,
+      "jsdocComments": 192,
+      "jsxComments": 0,
+      "lineComments": 1088,
+      "lines": 16340,
+      "parseErrors": [],
+      "set": "dogfood",
+      "sha": "a74ed7a9c62903a7b2c0c2963530c235c6b08009",
+      "authorsFromHistory": null,
+      "wordingWithoutMarker": 0,
+      "all": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "commentsPer10k": 785.2,
+      "markerComments": 0,
+      "markerCommentsPer10k": 0,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 4,
+        "REVIEW prose": 1,
+        "BUG prose": 1
+      },
+      "ruleTerms": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "taskMarkers": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      }
+    },
+    "shadcn": {
+      "blockComments": 8,
+      "commentLines": 43,
+      "comments": 43,
+      "files": 165,
+      "jsdocComments": 0,
+      "jsxComments": 8,
+      "lineComments": 35,
+      "lines": 18473,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea",
+      "authorsFromHistory": null,
+      "wordingWithoutMarker": 0,
+      "all": {
+        "case": {
+          "title": 1
+        },
+        "commentKind": {
+          "line": 1
+        },
+        "comments": 1,
+        "decoration": {
+          "none": 1
+        },
+        "follow": {
+          "colon": 1
+        },
+        "format": {
+          "bare": 1,
+          "bareLoose": 1,
+          "bareShare": 100,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 1,
+        "markersPer10k": 0.5,
+        "position": {
+          "start": 1
+        },
+        "term": {
+          "NOTE": 1
+        }
+      },
+      "commentsPer10k": 23.3,
+      "markerComments": 1,
+      "markerCommentsPer10k": 0.5,
+      "nonMarkerOccurrences": {},
+      "ruleTerms": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      },
+      "taskMarkers": {
+        "case": {},
+        "commentKind": {},
+        "comments": 0,
+        "decoration": {},
+        "follow": {},
+        "format": {
+          "bare": 0,
+          "bareLoose": 0,
+          "bareShare": null,
+          "conditionWord": 0,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 0,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 0,
+        "markersPer10k": 0,
+        "position": {},
+        "term": {}
+      }
+    },
+    "radix": {
+      "blockComments": 836,
+      "commentLines": 3679,
+      "comments": 2163,
+      "files": 160,
+      "jsdocComments": 234,
+      "jsxComments": 9,
+      "lineComments": 1327,
+      "lines": 25594,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "authorsFromHistory": null,
+      "wordingWithoutMarker": 3,
+      "all": {
+        "case": {
+          "upper": 17,
+          "title": 1
+        },
+        "commentKind": {
+          "line": 13,
+          "jsdoc": 5
+        },
+        "comments": 18,
+        "decoration": {
+          "none": 13,
+          "decoration \"*\"": 5
+        },
+        "follow": {
+          "colon": 18
+        },
+        "format": {
+          "bare": 8,
+          "bareLoose": 5,
+          "bareShare": 44.4,
+          "conditionWord": 12,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 9,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 2,
+          "year": 0
+        },
+        "markers": 18,
+        "markersPer10k": 7,
+        "position": {
+          "start": 13,
+          "line-start": 5
+        },
+        "term": {
+          "TODO": 12,
+          "NOTE": 6
+        }
+      },
+      "commentsPer10k": 845.1,
+      "markerComments": 18,
+      "markerCommentsPer10k": 7,
+      "nonMarkerOccurrences": {
+        "OPTIMIZE prose": 2,
+        "TO DO prose": 2,
+        "BUG prose": 1,
+        "NOTE prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 12
+        },
+        "commentKind": {
+          "line": 12
+        },
+        "comments": 12,
+        "decoration": {
+          "none": 12
+        },
+        "follow": {
+          "colon": 12
+        },
+        "format": {
+          "bare": 3,
+          "bareLoose": 3,
+          "bareShare": 25,
+          "conditionWord": 8,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 8,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 2,
+          "year": 0
+        },
+        "markers": 12,
+        "markersPer10k": 4.7,
+        "position": {
+          "start": 12
+        },
+        "term": {
+          "TODO": 12
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 12
+        },
+        "commentKind": {
+          "line": 12
+        },
+        "comments": 12,
+        "decoration": {
+          "none": 12
+        },
+        "follow": {
+          "colon": 12
+        },
+        "format": {
+          "bare": 3,
+          "bareLoose": 3,
+          "bareShare": 25,
+          "conditionWord": 8,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 8,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 2,
+          "year": 0
+        },
+        "markers": 12,
+        "markersPer10k": 4.7,
+        "position": {
+          "start": 12
+        },
+        "term": {
+          "TODO": 12
+        }
+      }
+    },
+    "react-aria": {
+      "blockComments": 1059,
+      "commentLines": 4900,
+      "comments": 1547,
+      "files": 71,
+      "jsdocComments": 872,
+      "jsxComments": 28,
+      "lineComments": 488,
+      "lines": 22407,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c",
+      "authorsFromHistory": null,
+      "wordingWithoutMarker": 13,
+      "all": {
+        "case": {
+          "upper": 9,
+          "title": 1
+        },
+        "commentKind": {
+          "line": 8,
+          "line (trailing)": 1,
+          "jsdoc": 1
+        },
+        "comments": 10,
+        "decoration": {
+          "none": 9,
+          "decoration \"*\"": 1
+        },
+        "follow": {
+          "colon": 10
+        },
+        "format": {
+          "bare": 9,
+          "bareLoose": 8,
+          "bareShare": 90,
+          "conditionWord": 2,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 10,
+        "markersPer10k": 4.5,
+        "position": {
+          "start": 9,
+          "line-start": 1
+        },
+        "term": {
+          "TODO": 9,
+          "NOTE": 1
+        }
+      },
+      "commentsPer10k": 690.4,
+      "markerComments": 10,
+      "markerCommentsPer10k": 4.5,
+      "nonMarkerOccurrences": {
+        "NOTE prose": 1,
+        "TO DO prose": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 9
+        },
+        "commentKind": {
+          "line": 8,
+          "line (trailing)": 1
+        },
+        "comments": 9,
+        "decoration": {
+          "none": 9
+        },
+        "follow": {
+          "colon": 9
+        },
+        "format": {
+          "bare": 8,
+          "bareLoose": 7,
+          "bareShare": 88.9,
+          "conditionWord": 2,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 9,
+        "markersPer10k": 4,
+        "position": {
+          "start": 9
+        },
+        "term": {
+          "TODO": 9
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 9
+        },
+        "commentKind": {
+          "line": 8,
+          "line (trailing)": 1
+        },
+        "comments": 9,
+        "decoration": {
+          "none": 9
+        },
+        "follow": {
+          "colon": 9
+        },
+        "format": {
+          "bare": 8,
+          "bareLoose": 7,
+          "bareShare": 88.9,
+          "conditionWord": 2,
+          "date": 0,
+          "issueOrPr": 0,
+          "link": 0,
+          "mention": 0,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {},
+          "ownerOrMention": 0,
+          "condition": 1,
+          "areaTag": 0,
+          "external": 0,
+          "temporary": 0,
+          "trackerKey": 0,
+          "unicornArgs": 0,
+          "url": 0,
+          "version": 0,
+          "year": 0
+        },
+        "markers": 9,
+        "markersPer10k": 4,
+        "position": {
+          "start": 9
+        },
+        "term": {
+          "TODO": 9
+        }
+      }
+    },
+    "supabase": {
+      "blockComments": 1407,
+      "commentLines": 9596,
+      "comments": 6137,
+      "files": 2759,
+      "jsdocComments": 1138,
+      "jsxComments": 230,
+      "lineComments": 4730,
+      "lines": 382573,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "09f80f528ec47569841408a81668dff90525c48a",
+      "authorsFromHistory": null,
+      "wordingWithoutMarker": 67,
+      "all": {
+        "case": {
+          "upper": 91,
+          "title": 8,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 70,
+          "jsdoc": 23,
+          "jsx block": 6,
+          "line (trailing)": 3
+        },
+        "comments": 100,
+        "decoration": {
+          "none": 61,
+          "decoration \"*\"": 19,
+          "bracket": 11,
+          "text": 11
+        },
+        "follow": {
+          "colon": 72,
+          "glued": 12,
+          "paren": 11,
+          "text": 5,
+          "dash": 1,
+          "end": 1
+        },
+        "format": {
+          "bare": 87,
+          "bareLoose": 81,
+          "bareShare": 85.3,
+          "conditionWord": 12,
+          "date": 2,
+          "issueOrPr": 3,
+          "link": 6,
+          "mention": 2,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 11
+          },
+          "ownerOrMention": 2,
+          "condition": 6,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 3,
+          "trackerKey": 1,
+          "unicornArgs": 0,
+          "url": 5,
+          "version": 2,
+          "year": 2
+        },
+        "markers": 102,
+        "markersPer10k": 2.7,
+        "position": {
+          "start": 61,
+          "later": 22,
+          "start-decorated": 10,
+          "line-start": 9
+        },
+        "term": {
+          "TODO": 68,
+          "NOTE": 16,
+          "FIXME": 10,
+          "TBD": 7,
+          "TO DO": 1
+        }
+      },
+      "commentsPer10k": 160.4,
+      "markerComments": 100,
+      "markerCommentsPer10k": 2.6,
+      "nonMarkerOccurrences": {
+        "TO DO prose": 14,
+        "NOTE prose": 12,
+        "REVIEW prose": 7,
+        "HACK prose": 4,
+        "BUG prose": 2,
+        "BUG embedded": 1,
+        "XXX embedded": 1
+      },
+      "ruleTerms": {
+        "case": {
+          "upper": 76,
+          "lower": 2
+        },
+        "commentKind": {
+          "line": 62,
+          "jsdoc": 8,
+          "jsx block": 6,
+          "line (trailing)": 2
+        },
+        "comments": 78,
+        "decoration": {
+          "none": 52,
+          "bracket": 11,
+          "text": 8,
+          "decoration \"*\"": 7
+        },
+        "follow": {
+          "colon": 56,
+          "glued": 12,
+          "paren": 6,
+          "text": 3,
+          "end": 1
+        },
+        "format": {
+          "bare": 66,
+          "bareLoose": 64,
+          "bareShare": 84.6,
+          "conditionWord": 7,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 5,
+          "mention": 2,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 6
+          },
+          "ownerOrMention": 2,
+          "condition": 5,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 1,
+          "unicornArgs": 0,
+          "url": 4,
+          "version": 2,
+          "year": 1
+        },
+        "markers": 78,
+        "markersPer10k": 2,
+        "position": {
+          "start": 52,
+          "later": 19,
+          "start-decorated": 5,
+          "line-start": 2
+        },
+        "term": {
+          "TODO": 68,
+          "FIXME": 10
+        }
+      },
+      "taskMarkers": {
+        "case": {
+          "upper": 83,
+          "lower": 3
+        },
+        "commentKind": {
+          "line": 62,
+          "jsdoc": 16,
+          "jsx block": 6,
+          "line (trailing)": 2
+        },
+        "comments": 84,
+        "decoration": {
+          "none": 52,
+          "decoration \"*\"": 12,
+          "bracket": 11,
+          "text": 11
+        },
+        "follow": {
+          "colon": 61,
+          "glued": 12,
+          "paren": 7,
+          "text": 5,
+          "end": 1
+        },
+        "format": {
+          "bare": 74,
+          "bareLoose": 72,
+          "bareShare": 86,
+          "conditionWord": 7,
+          "date": 1,
+          "issueOrPr": 3,
+          "link": 5,
+          "mention": 2,
+          "otherTracker": 0,
+          "owner": 0,
+          "paren": {
+            "topic": 7
+          },
+          "ownerOrMention": 2,
+          "condition": 5,
+          "areaTag": 0,
+          "external": 1,
+          "temporary": 2,
+          "trackerKey": 1,
+          "unicornArgs": 0,
+          "url": 4,
+          "version": 2,
+          "year": 1
+        },
+        "markers": 86,
+        "markersPer10k": 2.2,
+        "position": {
+          "start": 52,
+          "later": 22,
+          "start-decorated": 9,
+          "line-start": 3
+        },
+        "term": {
+          "TODO": 68,
+          "FIXME": 10,
+          "TBD": 7,
+          "TO DO": 1
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (comment scanner)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "gh": "gh version 2.102.0 (2026-09-30)"
+  }
+}

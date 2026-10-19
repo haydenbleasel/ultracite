@@ -1,0 +1,307 @@
+---
+title: Who finishes a TODO?
+description: Where TODO and FIXME came from, what twenty years of research on admitted technical debt found, what happened to 1,892 TODOs in eight TypeScript codebases, and what agents do when a lint rule flags one.
+date: 2026-10-19
+author: hayden
+next:
+  - label: Turn the TODO rules down, or give them options
+    href: /docs/configuration#overriding-rules
+  - label: Tell agents what to do with a TODO in AGENTS.md
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - no-warning-comments
+  - sonarjs/todo-tag
+  - sonarjs/fixme-tag
+  - unicorn/expiring-todo-comments
+---
+
+A TODO comment is a note that some work isn't done. It's the cheapest way to write that down: no ticket and no meeting, just a line above the code that needs the work. Lint rules such as `no-warning-comments` and `sonarjs/todo-tag` report those lines. Ultracite turns them on, so a TODO shows up like any other lint problem, and when you ask Ultracite to hand what's left to an agent, the TODO goes with it.
+
+The rules can't tell a finished TODO from a known bug, and the quickest way to clear one is to delete the word. So we wanted to know what happens to TODOs, with and without a rule. We read the history and twenty years of research on what's called self-admitted technical debt, counted the TODOs in eight TypeScript codebases, followed 1,892 of them through their projects' histories, and handed three real ones to coding agents.
+
+## A marker made for grep
+
+The markers are decades older than the rules. The [Jargon File](http://www.catb.org/jargon/html/F/FIXME.html), the hacker dictionary, added FIXME in 1993 as "a standard tag often put in C comments near a piece of code that needs work." Its reason is the case every rule since has made: the point is that "a grep or a similar pattern-matching tool can find all such places quickly." Sun's [Java code conventions](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf) (1997) graded them: XXX for something "bogus but works," FIXME for something "bogus and broken."
+
+Editors picked them up. Eclipse has listed TODO comments as tasks since 2003, and Visual Studio's Task List does the same, but neither fails a build. When Swift added a `#warning` directive in 2018, its [proposal](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0196-diagnostic-directives.md) gave that as the reason: editors show TODO comments, "but these don't materialize in command-line builds or continuous integration." A lint rule makes the same move. It takes a note an editor would show you and makes CI see it.
+
+The first attempt to standardize them asked for much more. [PEP 350](https://peps.python.org/pep-0350/) (2005) proposed about twenty Python "codetags" with fields for who wrote them, a due date and a priority, as in `# FIXME: Seems like this loop should be finite. <MDE,CLE d:14w p:2>`, plus a "Codetag Lint" to check them. Its case for writing TODOs at all still holds: "Creating tickets in a tracking system for every thought degrades development velocity." It was rejected in 2007, because there was "no desire to make the standard library conform to this standard."
+
+Style guides settled on something lighter: a TODO should say where to find out more. Google's C++ guide asked for a name in 2008, and most of its guides now ask for a bug. The [Python guide](https://google.github.io/styleguide/pyguide.html#312-todo-comments) explains why: "A bug reference is preferable because bugs are tracked and have follow-up comments." Google's [JavaScript guide](https://google.github.io/styleguide/jsguide.html) is the one that talks about linters. When a warning can't be fixed or suppressed with a reason, "leave a TODO comment. This is a last resort." And then, "do not suppress the warning."
+
+## A rule routed around
+
+Rust tried the strict version. From 2012, the compiler's `tidy` script rejected any FIXME that didn't name an issue number. Developers who didn't want to file an issue for a half-written change wrote XXX instead, and by [September 2013](https://github.com/rust-lang/rust/issues/3303) the codebase had 141 XXX comments against 421 FIXMEs. In January 2014 Brian Anderson [asked to drop the rule](https://github.com/rust-lang/rust/issues/11815): "This has just led to us littering the codebase with XXX comments instead."
+
+What Rust settled on splits the job in two. Its [`tidy`](https://github.com/rust-lang/rust/blob/main/src/tools/tidy/src/style.rs) now rejects TODO and XXX outright, because "TODO is used for tasks that should be done before merging a PR," and FIXME is the marker for known work that stays in the code. Chromium, which asks for bug links in TODOs, found the other way links decay: when it moved to a new issue tracker, its [presubmit checks](https://github.com/chromium/chromium/blob/main/PRESUBMIT.py) gained a warning for TODOs that still point at old bug numbers.
+
+## Off since 2014
+
+JavaScript's first popular linter reported TODOs by default. JSLint printed "Unexpected TODO comment." unless a project set `todo: true`. When Alexander Schmidt wrote [ESLint's `no-warning-comments`](https://github.com/eslint/eslint/pull/671) in 2014, his first version flagged `todo` out of the box to match. He took that out, he explained, "because the eslint project itself threw some errors as it has TODO comments." Nicholas Zakas agreed on the defaults (todo, fixme and xxx, at the start of a comment) and added: "This rule should be off by default."
+
+It has been off ever since, and it has never been in `eslint:recommended`. Its [docs](https://eslint.org/docs/latest/rules/no-warning-comments) warn that on a large codebase you "might get hundreds of warnings / errors which might be counter-productive." ESLint now treats it as stylistic and has frozen it. In 2021 it [declined](https://github.com/eslint/eslint/issues/15133) to let TODOs with a ticket reference pass, because it wasn't "making any further updates to rules that enforce stylistic preferences."
+
+ESLint's maintainers have never agreed on what the rule is for. In a [2015 thread](https://github.com/eslint/eslint/issues/4409), one said "the point of turning it on is to prevent such comments." In [2018](https://github.com/eslint/eslint/issues/10976), another said it "was intentionally created as a rule to help with task management." The user who started the 2015 thread saw the problem with the first reading: if the goal is to ban TODOs, "people are gonna write comments without putting TODO as a prefix."
+
+Sonar has tracked TODOs since 2014, in rules that SonarJS later published as `sonarjs/todo-tag` and `sonarjs/fixme-tag`. Their messages ask for the work: "Complete the task associated to this "TODO" comment." Sonar rates an open TODO as informational, an open FIXME as major, and both as zero minutes to fix. The rules cite [CWE-546](https://cwe.mitre.org/data/definitions/546.html), MITRE's entry for "Suspicious Comment," whose only mitigation is to "Remove comments that suggest the presence of bugs" before deploying. Read literally, that's advice to delete the note and keep the bug. In 2026 Sonar's `todo-tag` started skipping TODOs that name a Jira-style ticket key, which makes it the only one of these rules that treats a tracked TODO as handled.
+
+Oxlint ported ESLint's rule in 2025, with the same options and defaults. It added a line of help text that ESLint doesn't have, and that matters for agents: "Remove or rephrase this comment." The rule's [documentation](https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html) shows `// Note: This explains something` as correct code. Biome has no rule for TODO comments at all.
+
+`no-warning-comments` was in Ultracite's first ESLint config, in 2022. It went away when Ultracite moved to Biome, and came back when Ultracite added ESLint and Oxlint support, with the SonarJS and unicorn rules alongside every other rule in those plugins. Nobody wrote down a reason. They're on because Ultracite's policy is to turn on every rule unless there's a reason not to, and nobody had made the case for an exception.
+
+## A TODO with an expiry date
+
+The other answer is to let a TODO say when it's due. In 2019 Sindre Sorhus [proposed](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/238) an expiring TODO for eslint-plugin-unicorn: `// TODO [2018-05-01]: Do this thing` would be fine until that date and an error after it. The rule that shipped, `unicorn/expiring-todo-comments`, also takes conditions on the project's own version, a dependency being added or removed, a dependency's version or the Node.js engine range.
+
+It started strict and softened in steps. The first release rejected any TODO without a condition. Ten days after it shipped, Sorhus [reversed that](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/398), expecting most people to "make normal TODOs a warning and this rule an error." Since then ordinary TODOs pass, and the rule only fires when a stated condition comes true. Dates were checked by default for seven more years, which meant a build could fail on a morning when nothing in the code had changed. In June 2026 Sorhus [turned date checks off by default](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1207) to avoid "the problematic case where CI starts failing just because the calendar date changed." The [release notes](https://github.com/sindresorhus/eslint-plugin-unicorn/releases/tag/v65.0.0) for that version say the opposite, but the code and the docs agree: a dated TODO now expires only if a project opts in.
+
+The rule's own source shows the cheapest response to an expired date. In 2019 its example TODOs, dated 2000, broke the plugin's CI, and the [fix](https://github.com/sindresorhus/eslint-plugin-unicorn/pull/413) moved them to 2999. Sorhus: "I doubt your grandchild will live that long."
+
+## Debt you admit to
+
+TODOs are the visible part of what Ward Cunningham, in [1992](https://doi.org/10.1145/157709.157715), described with a metaphor: "Shipping first time code is like going into debt." Most debt is never written down, because nobody knew they were taking it on. A TODO records the kind its author knew about, and in 2014 Aniket Potdar and Emad Shihab [named that](https://doi.org/10.1109/ICSME.2014.31) "self-admitted technical debt." A decade of research, almost all of it on Java, has followed.
+
+The founding study of how developers use TODOs is [Storey and colleagues](https://doi.org/10.1145/1368088.1368123) (ICSE 2008). Of 79 Eclipse developers who wrote annotations in their comments, 77 used TODO. Teams opened bug reports for big jobs and wrote TODOs for small ones, edge cases and work they didn't want to switch to yet. And they didn't trust them: "we all put these comments in our code and then don't look back at them. None of them actually remind us." Another said "the ones that stay forever are the ones that are unnamed." Two developers forced themselves to come back, one by leaving a deliberate compile error and one with a method that throws when it runs, which is what a lint error on a TODO does for everyone.
+
+Later studies sorted the debt. In [five Java projects](https://doi.org/10.1109/MTD.2015.7332619), design debt (workarounds, temporary solutions) was the largest type everywhere, at 42% to 84% of admitted debt, and requirement debt, meaning unfinished features, was the other large one. Whether it causes bugs is less clear. [Wehaibi and colleagues](https://doi.org/10.1109/SANER.2016.72) found that changes carrying admitted debt were less likely to introduce defects than other changes, about 10% against 27% in Chromium, but larger and harder to make. In [159 Java projects](https://doi.org/10.1145/2901739.2901742), Bavota and Russo found about 57% of admitted debt eventually removed, 63% of it by the person who added it.
+
+## Removed isn't repaid
+
+Those removal numbers count a deleted comment as paid-off debt, and the studies that looked closer found it often isn't. In [1,691 removals](https://doi.org/10.1145/3196398.3196423) from five Java projects, Zampetti, Serebrenik and Di Penta concluded that between 20% and 50% of the comments were "accidentally removed while entire classes or methods are dropped." Only 8% of removals were mentioned in a commit message. In a [follow-up sample](https://doi.org/10.1007/s10664-020-09854-3) from the same projects, the debt "was not actually addressed" in 58% of removals: the comment was simply gone. In a [2025 study](https://arxiv.org/abs/2501.09888) of thousands of Python and Java repositories, only 45 of 100 Python and 62 of 100 Java candidate repayments turned out to be real.
+
+Some TODOs are waiting for something a machine could check. [Maipradit and colleagues](https://doi.org/10.1007/s10664-020-09854-3) found 5.3% of admitted debt "on hold": waiting for an issue to close, a release or another change. [Nie and colleagues](https://doi.org/10.1145/3338906.3338965) read 4,360 TODOs in ten Java projects and found 471 written as "do X when Y," some whose condition had come true years earlier. When they told the maintainers, one replied "Thank you for the reminder!" That's the research case for expiring TODOs.
+
+Making TODOs more visible hasn't made them go faster. In 2,208 repositories that installed a [bot](https://doi.org/10.1145/3528228.3528408) that opens an issue for every new TODO, the number of TODO comments went up slightly, and they weren't addressed any sooner.
+
+None of this research is about JavaScript or TypeScript. Every founding study is Java, with some C, C++ and Python, and the field's own [2019 survey](https://doi.org/10.1016/j.jss.2019.02.056) says so. We found no study of TODO comments in JavaScript or TypeScript code, so we measured some.
+
+## Mostly Next.js, mostly bare
+
+The corpus is the same eight codebases as [our other research](/research/cognitive-complexity): Astro, Excalidraw, Hono, Next.js, tRPC, Vite, VS Code's editor core and Zod, pinned to commits, 694,309 lines of source. In October 2026 they had 882 TODO, FIXME and XXX markers: 857 TODOs, 25 FIXMEs and no XXX at all. That's 12.7 per 10,000 lines, about one comment in 60.
+
+Next.js has 679 of them, 77%. The other seven average 4.9 per 10,000 lines, from none in Hono and one in Zod to 6.5 in Excalidraw. Nobody in the corpus lints them: no repo turns on any of these rules, and no disable comment names one. (Ultracite's own source, which does lint them, has none.)
+
+Most say nothing beyond the task. 693 of the 882 (79%) name no person, issue, date, version or condition. 26 link to a GitHub issue or pull request and 17 to a tracker key, such as Next.js's Linear tickets. 23 name a person, most of them in VS Code, which writes `TODO@name`. Next.js tags another 132 by topic or area, like `TODO(app-shells)` and `TODO-APP:`. The median TODO line was last changed 506 days before the pinned commit, and 21% more than three years before.
+
+Two raters labelled a sample of 89 with a codebook built from the research, the second blind on a subset. Both raters were Claude models, so their agreement measures how consistently the codebook applies, not that it's right:
+
+- **What they are,** in the categories the research uses: design debt 61%, requirement debt 27%, defects 10%.
+- **On hold,** waiting for something outside the code at hand: 15%.
+- **Still true:** 81% still applied at the pinned commit, and 7% no longer did. The raters agreed least on this field, because it often takes knowledge from outside the file.
+- **Worth keeping:** deleting the comment would lose information a maintainer would want for 87%.
+- **Hard to finish:** doing the task would change runtime behavior for 54%, and only 36% could be done inside their own file.
+
+Linking a TODO to an issue doesn't make it stale-proof, but it helps. Of the 14 markers pointing only at closed issues or merged pull requests, 10 used the link as context and were still valid. One was stale: a Next.js TODO to remove a dependency once [react#29665](https://github.com/facebook/react/pull/29665) was released. It shipped in React 19.
+
+## Half gone in six months
+
+To see what happens to TODOs over time, we followed every TODO, FIXME and XXX added to each project's mainline from 2018 through 2024, 1,892 in all, until it was removed or the history ran out at the pinned commit.
+
+By October 2026, 1,468 (78%) were gone. Half were removed within 179 days, and 16.5% survived five years. Removal is fast or not at all: a quarter of the removals came within 12 days of the marker being added. Without Next.js, which keeps its TODOs longer, 84% were removed and the median survival was 84 days. The person who added a TODO removed it in 51% of cases, a little less often than in the Java studies.
+
+The code around them tells part of the story. In 53% of removals the enclosing function changed, in 15.5% the whole file was deleted and in 11.5% the function was. In 8.7% the comment went and the function stayed exactly as it was.
+
+To see whether the work was done, the same two raters labelled a sample of 89 removals from the commits that made them (the second rater matched 26 of 30):
+
+| Why it went                         | Sample | Weighted |
+| ----------------------------------- | -----: | -------: |
+| Task done                           |     49 |      58% |
+| Code deleted                        |     14 |      18% |
+| Code rewritten for another reason   |      8 |      18% |
+| Already done, stale comment deleted |      7 |       3% |
+| Code moved                          |      5 |       1% |
+| Comment deleted, debt still there   |      5 |       1% |
+| Unclear                             |      1 |       2% |
+
+The weighted column scales the sample up to all 1,468 removals, by project and by how the code around each one changed.
+
+So a little over half of the TODOs that disappear were done, and most of the rest went with their code. That's better than in the Java projects, where 58% of removals in the follow-up sample didn't address the debt. Deleting a TODO while its problem stays was rare here, 5 of 89. None of these projects lints TODOs, so that's the rate with no rule pushing anyone to delete one. The commit that removed a TODO mentioned its task in 28 of the 89.
+
+## The rule reads one word
+
+The rules match a word in a comment, and where it sits. We wrote 77 cases and ran each through Oxlint, ESLint and Biome as Ultracite configures them in October 2026. Oxlint and ESLint gave the same answer on every case:
+
+| Comment | `no-warning-comments` | `sonarjs/todo-tag` |
+| --- | :-: | :-: |
+| `// TODO: handle the empty case` | reported | reported |
+| `// TODO PROJ-123 handle the empty case` | reported | – |
+| `// This works for now, TODO: handle the empty case` | – | reported |
+| `// - TODO: handle the empty case` | – | reported |
+| A TODO on a later line of a JSDoc block | – | reported |
+| `/** @todo handle the empty case */` | – | – |
+| `// NOTE: handle the empty case` | – | – |
+| `// TO-DO: handle the empty case` | – | – |
+| `// The empty case isn't handled yet.` | – | – |
+
+`no-warning-comments` only looks at the start of a comment, so it misses a TODO later in a line or on a later line of a JSDoc block. That's 94 of the corpus's 904 TODO-family markers, including all 22 `@todo` tags. `sonarjs/todo-tag` reads the whole comment, but skips a TODO followed by a ticket key on purpose, and treats `Todo` at the start of a sentence as prose. Where both rules run, most TODOs are reported twice. One marker in the corpus is reported by nothing, Zod's `* Todo: unions?`, and both raters judged it no longer valid anyway.
+
+None of these rules has an autofix. Every rewording we tried that drops the word, such as `NOTE:`, `Later:`, `TBD:`, `TO-DO`, a zero for the O or a plain sentence, silences every linter. Moving the word off the start of the comment silences `no-warning-comments`. Apart from SonarJS's exemption for ticket keys, a TODO that links an issue or names an owner is reported exactly like a bare one.
+
+The expiring-TODO rule does nothing on this corpus. With the default options Ultracite uses, it reports no plain TODO and no expired date. It fires only on bracketed version, dependency and engine conditions, and no TODO in the corpus has one.
+
+## Lazy comments
+
+Models write the same kind of note, and vendors have been trying to train it out. In 2023 Aider measured "lazy comments," code replaced with comments like "…add logic here…", on [12 of 89 refactoring tasks](https://aider.chat/2023/12/21/unified-diffs.html) for one GPT-4 Turbo model. Anthropic's [Claude 3.7 Sonnet system card](https://assets.anthropic.com/m/785e231869ea8b3b/original/claude-3-7-sonnet-system-card.pdf) reported that when the model special-cased a test to make it pass, it "often (though not always)" left a comment saying so, and it listed "Comments that suggest test-specific handling" as a sign for developers to watch for.
+
+In real repositories, agents admit less. In popular projects that take pull requests from coding agents, [Brahmi and colleagues](https://doi.org/10.1145/3793302.3793588) (MSR 2026) found admitted debt in 1.60% of the comments people wrote, against 0.34% to 1.11% for four agents. The agents' most common kind was requirement debt, mostly a feature still to be built. In the 138 runs of our earlier experiments, Claude Code and Codex didn't write a single TODO, FIXME or XXX. None of those subjects had a TODO in it, though, so they don't tell us what an agent does with one.
+
+There's one more result that matters here. In [ImpossibleBench](https://arxiv.org/abs/2510.20270), where tasks couldn't be completed honestly, giving agents a way to flag a task for a human cut "the cheating rate of GPT-5 from 54% to 9% and o3 from 49% to 12%." The effect was much smaller for Claude Opus 4.1. Ultracite's prompt has a way out of this kind. If an issue needs a person's decision, the agent can leave it and end its message with a line such as `Left for review: 2, 3`.
+
+## Three TODOs, three right answers
+
+In October 2026 we picked three real TODOs that need three different responses, and handed each to Claude Code and to Codex with the prompt and permissions Ultracite uses for leftover lint errors, one file at a time:
+
+- **A, already done.** In [Vite's `handleHMRUpdate`](https://github.com/vitejs/vite/blob/ea95a1d44ab6f1a66701ae43c48f10b2047cb141/packages/vite/src/node/server/hmr.ts#L37-L54) (2021), `// TODO auto restart server` sits directly above code that logs "restarting server..." and restarts it. The work was done in December 2020 under the comment, and [vitejs/vite#2119](https://github.com/vitejs/vite/pull/2119) dropped the word two months later. The right response is to drop the marker.
+- **B, a known bug.** In [Vite's `HMRClient`](https://github.com/vitejs/vite/blob/6d6ae10f5d80a9c9b6737377333424fe76652b81/packages/vite/src/shared/hmr.ts#L232-L243) (2024), `// TODO Trigger their dispose callbacks.` sits above `prunePaths`, which runs a pruned module's prune callbacks and never its dispose callbacks. It stayed for more than three years, until [vitejs/vite#15782](https://github.com/vitejs/vite/pull/15782) fixed it by making the method async and changing its callers in two other files. Doing it changes runtime behavior, which Ultracite's prompt doesn't allow, so the right response is to leave it for review.
+- **C, waiting on WebKit.** In [Excalidraw's `loadFromJSON`](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/data/json.ts#L103-L113), the file picker accepts every file type, with a comment: "Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442 gets resolved. Else, iOS users cannot open .excalidraw files." The comment has been there for five and a half years, and [the WebKit bug](https://bugs.webkit.org/show_bug.cgi?id=34442) is still open. The right response is to keep it and leave it for review.
+
+Each went through two handoffs: Oxlint's `no-warning-comments` alone, with its help text "Remove or rephrase this comment," and the same with `sonarjs/todo-tag`, whose message asks the agent to "Complete the task associated to this "TODO" comment." That's 48 runs, four per agent for each combination. Each ran through Ultracite's loop: after an edit, the file is fixed, formatted and linted again, and anything still reported goes back to the agent, up to three attempts. The subjects trip other rules too, so the handoff kept only the TODO rules and anything an edit added, as if the project were otherwise clean. We checked every result by running it against the original's behavior.
+
+## Fixed 1 of 1 issue
+
+No run did the task, changed the code's behavior, suppressed a rule or touched another file. Forty-seven of the 48 removed the marker, and Ultracite reported every one of those as fixed. One left it for review.
+
+| TODO       | Right call       | Claude Code                    | Codex      |
+| ---------- | ---------------- | ------------------------------ | ---------- |
+| A, done    | drop the marker  | deleted 5, described 3         | deleted 8  |
+| B, a bug   | leave for review | described 7, left for review 1 | deleted 8  |
+| C, on hold | leave for review | reworded 8                     | reworded 8 |
+
+Each cell is eight runs, four with each handoff. "Described" means the marker was replaced by a statement of what the code does.
+
+A was right every time. All 16 runs said the code below the comment already restarts the server, and either deleted the comment or kept a description of what the branch does.
+
+B is where the runs split. Codex deleted the line in all eight. Its final messages were a sentence or two, such as "Removed the flagged TODO comment from `hmr.ts`, resolving both issues without changing runtime behavior." None mentioned the missing dispose callbacks. The comment above it, which says removed modules "may have left behind side effects that need to be cleaned up," was left without the line saying the cleanup doesn't happen:
+
+{/* prettier-ignore */}
+```diff title="hmr.ts (Vite), all eight Codex runs"
+   // After an HMR update, some modules are no longer imported on the page
+   // but they may have left behind side effects that need to be cleaned up
+   // (.e.g style injections)
+-  // TODO Trigger their dispose callbacks.
+   public prunePaths(paths: string[]): void {
+```
+
+Seven Claude runs rewrote it as a statement of what the code does now:
+
+{/* prettier-ignore */}
+```diff title="hmr.ts (Vite), one Claude run"
+-  // TODO Trigger their dispose callbacks.
++  // Only their prune callbacks run here; their dispose callbacks are not triggered.
+   public prunePaths(paths: string[]): void {
+```
+
+That keeps the fact and drops the intent. A reader can no longer tell a design choice from a bug, and a search for TODOs won't find it. Every Claude run said doing the task would change runtime behavior, and five said, from what they knew of Vite, that Vite later fixed it by making `prunePaths` async. One run summed up its own edit: "The task itself is still not done, and the comment no longer reads as a TODO." That sentence was in its final message, which Ultracite didn't show, because it had counted the issue as fixed.
+
+C kept its most important part. All 16 runs kept the link to the WebKit bug and the reason. Nine kept the condition ("until … gets resolved", "while … is unresolved"). The other seven turned a temporary workaround into a permanent explanation:
+
+{/* prettier-ignore */}
+```diff title="json.ts (Excalidraw), one Codex run"
+   const file = await fileOpen({
+     description: "Excalidraw files",
+-    // ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442
+-    // gets resolved. Else, iOS users cannot open `.excalidraw` files.
++    // Omit extension restrictions so iOS users can open `.excalidraw` files.
++    // See https://bugs.webkit.org/show_bug.cgi?id=34442.
+     // extensions: ["json", "excalidraw", "png", "svg"],
+   });
+```
+
+The commented-out filter is still there, but nothing says to put it back when WebKit fixes its bug.
+
+## Remove or rephrase
+
+Ultracite's loop never needed a second attempt. Every edit that deletes or rewords the marker clears both rules the first time, so the agent's first choice was always its last. That choice followed the help text. Ten runs cited "Remove or rephrase this comment" as their reason, and the prompt tells agents to "Follow the rule's help text." One Claude run on C put it plainly: "Nothing in this code can complete that "task", since the fix depends on WebKit. So I followed the rule's help text."
+
+The one run that left a TODO alone read a different line of the same prompt. Ultracite's prompt also says that "Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it," which is meant for rules that look at code. That run, a Claude run on B, took it to rule out rewording a comment, and left both issues for review:
+
+> Rewording or deleting the comment would only hide the gap. The comment is the only record that pruned modules skip their dispose callbacks. Rewording it to avoid the word "TODO" is the kind of restyling your rules exclude, and deleting it would lose that record.
+
+That's the right answer. Ultracite printed "Fixed 0 of 2 issues" for it and exited with an error, because a TODO left for review still counts as a lint failure, and running the fix again would hand the same TODO back. The other seven Claude runs on B said the task would change behavior, which is the case the prompt's "Left for review" line is for, and reworded the comment anyway.
+
+The SonarJS message, "Complete the task," didn't change what agents did. No run tried to complete a task, and each TODO ended up the same way with or without it. The agents treated the two diagnostics as one comment. In C, all four Claude runs with the SonarJS message explained why the task can't be done in this code, and the condition to wait for survived in 2 of the 8 runs with it against 7 of the 8 without. With four runs per agent, that's a hypothesis, not a finding.
+
+Our experiment is small: three TODOs, four runs per agent for each handoff, one file at a time, with a handoff filtered to the TODO rules. The subjects are well-known open-source code, and Claude knew how Vite fixed B. A project's own TODOs wouldn't come with that history. The scripts, every run's edits and the full report are in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research).
+
+## What a word can't carry
+
+A TODO rule sees spelling and position. It can't tell a TODO whose work is done from one that records a known bug, or from one waiting on a browser vendor, and it reports a TODO with an issue link exactly like a bare one. In our sample, 87% of TODOs carry information a maintainer would want, and doing the task would change behavior for more than half.
+
+It's also trivially gamed, and the help text names the trick. "Rephrase" clears it, and so does deleting the line. Rust's issue-number rule produced a second marker that nothing checked. In our runs, 47 of 48 agents took the exit the help text offered. On the two TODOs that should have stayed, 22 of 32 runs left nothing in the code saying the work was still to do, and in 8 the information was gone entirely. The research on removals says the same thing at a larger scale: a TODO that disappears hasn't necessarily been done.
+
+The implementations don't agree. The ESLint rule and its Oxlint port miss TODOs on later lines of JSDoc blocks and `@todo` tags, Sonar's rule skips TODOs with ticket keys, and Biome has no rule. Where two rules run, one comment gets two diagnostics with two different instructions: remove it, or do it. The expiring-TODO rule, the one designed for TODOs with a deadline, no longer checks deadlines by default.
+
+And the evidence that a TODO rule improves code is thin. We found no study that measures it. The research on admitted debt is about Java and Python and counts comments, not rules. None of the codebases in our corpus lints TODOs, so we can't compare one that does, and Next.js has three-quarters of our TODOs.
+
+What the rule does well is the job the Jargon File gave the marker: finding every place someone said the work isn't done. One of Storey's developers said TODOs don't remind anyone. A rule does remind them, at the price of making the word the thing to remove.
+
+## Give each TODO a way out
+
+**Decide what a TODO means in your project.** Rust uses TODO for "before this merges" and FIXME for known work that stays. Pick one meaning, or both, and write it down where people and agents will read it.
+
+**Delete the ones that are done.** A comment above code that already does the task is clutter, and agents are good at spotting it: all 16 of our runs on the finished TODO got it right.
+
+**Point the rest somewhere.** An issue link survives a change of owner, which is why Google's guides ask for one. If a TODO waits on a release or a dependency, write the condition so a tool can check it, such as unicorn's `// TODO [react@>=19]: …`. Version and dependency conditions fire in the commit that makes them true. Dates fire only if you turn date checks on.
+
+**Tell agents not to reword a TODO to clear a rule.** In our runs, the agents did what the help text said and took the cheapest edit that passed. One line in `AGENTS.md`, such as "If a TODO's task isn't done, leave it for review instead of deleting or rewording it," gives them a different instruction. We didn't test that line here, but in the [accessibility experiment](/research/accessibility#the-help-text-writes-the-first-draft), one line in `AGENTS.md` changed the agents' first move.
+
+**Read TODO edits in the diff.** A deleted TODO or a new `Note:` is a decision about the work, not a lint fix. A clean run only means the word is gone.
+
+**Start an existing codebase with a report, not a wall of errors.** Next.js has 679 TODOs, and ESLint's docs warn about exactly that. A warning or a one-off report keeps them visible without making deletion the way to pass. The [configuration docs](/docs/configuration#overriding-rules) show how to change these rules for your linter.
+
+TODO rules do one thing well: they find every comment that says the work isn't done, so somebody can decide what to do about it. In the history we measured, a little over half of the TODOs that disappeared had been done. In our experiment, none were done, 47 of 48 were deleted or reworded, and Ultracite counted each of those as fixed. Keep the rules if you want TODOs to be seen, give them a way out that isn't deletion, and when a TODO disappears from a diff, check whether the work went with it.
+
+<NextSteps />
+
+## References
+
+**History and conventions**
+
+- Eric S. Raymond (maintainer). [The Jargon File](http://www.catb.org/jargon/html/F/FIXME.html), entry "FIXME" (added in version 3.0.0, 1993).
+- Sun Microsystems. [Java Code Conventions](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf), §10.5.4. 1997.
+- Micah Elliott. [PEP 350: Codetags](https://peps.python.org/pep-0350/). 2005; rejected 2007.
+- Harlan Haskins. [SE-0196: Compiler Diagnostic Directives](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0196-diagnostic-directives.md). Swift Evolution, 2018.
+- Google. [Python Style Guide, §3.12 TODO Comments](https://google.github.io/styleguide/pyguide.html#312-todo-comments) and [JavaScript Style Guide, §8.2.2](https://google.github.io/styleguide/jsguide.html).
+- rust-lang/rust. [#3303: Change all XXXs to FIXMEs](https://github.com/rust-lang/rust/issues/3303) (2012) and [#11815: Stop enforcing FIXME issue numbers](https://github.com/rust-lang/rust/issues/11815) (2014); [`tidy` style checks](https://github.com/rust-lang/rust/blob/main/src/tools/tidy/src/style.rs).
+- Chromium. [`PRESUBMIT.py`](https://github.com/chromium/chromium/blob/main/PRESUBMIT.py), `CheckTodoBugReferences`.
+
+**The rules**
+
+- Alexander Schmidt. [Added no-warning-comments rule](https://github.com/eslint/eslint/pull/671). eslint/eslint #671, 2014.
+- ESLint. [no-warning-comments](https://eslint.org/docs/latest/rules/no-warning-comments) rule documentation, and issues [#4409](https://github.com/eslint/eslint/issues/4409) (2015), [#10976](https://github.com/eslint/eslint/issues/10976) (2018) and [#15133](https://github.com/eslint/eslint/issues/15133) (2021).
+- Oxc. [no-warning-comments](https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html) rule documentation.
+- SonarSource. [eslint-plugin-sonarjs](https://github.com/SonarSource/SonarJS/tree/master/packages/analysis/src/jsts/rules/S1135) `todo-tag` (S1135) and `fixme-tag` (S1134).
+- MITRE. [CWE-546: Suspicious Comment](https://cwe.mitre.org/data/definitions/546.html).
+- sindresorhus/eslint-plugin-unicorn. [#238: Expiring TODO comments](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/238) (2019), [#398](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/398) (2019), [#413](https://github.com/sindresorhus/eslint-plugin-unicorn/pull/413) (2019), [#1207](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1207) (2021–2026) and the [v65.0.0 release notes](https://github.com/sindresorhus/eslint-plugin-unicorn/releases/tag/v65.0.0) (2026).
+
+**Technical debt and TODOs**
+
+- Ward Cunningham. [The WyCash Portfolio Management System](https://doi.org/10.1145/157709.157715). OOPSLA '92 Addendum, 1992.
+- Margaret-Anne Storey, Jody Ryall, R. Ian Bull, Del Myers and Janice Singer. [TODO or To Bug: Exploring How Task Annotations Play a Role in the Work Practices of Software Developers](https://doi.org/10.1145/1368088.1368123). ICSE 2008.
+- Aniket Potdar and Emad Shihab. [An Exploratory Study on Self-Admitted Technical Debt](https://doi.org/10.1109/ICSME.2014.31). ICSME 2014.
+- Everton da S. Maldonado and Emad Shihab. [Detecting and Quantifying Different Types of Self-Admitted Technical Debt](https://doi.org/10.1109/MTD.2015.7332619). MTD 2015.
+- Sultan Wehaibi, Emad Shihab and Latifa Guerrouj. [Examining the Impact of Self-Admitted Technical Debt on Software Quality](https://doi.org/10.1109/SANER.2016.72). SANER 2016.
+- Gabriele Bavota and Barbara Russo. [A Large-Scale Empirical Study on Self-Admitted Technical Debt](https://doi.org/10.1145/2901739.2901742). MSR 2016.
+- Fiorella Zampetti, Alexander Serebrenik and Massimiliano Di Penta. [Was Self-Admitted Technical Debt Removal a Real Removal? An In-Depth Perspective](https://doi.org/10.1145/3196398.3196423). MSR 2018.
+- Pengyu Nie, Rishabh Rai, Junyi Jessy Li, Sarfraz Khurshid, Raymond J. Mooney and Milos Gligoric. [A Framework for Writing Trigger-Action Todo Comments in Executable Format](https://doi.org/10.1145/3338906.3338965). ESEC/FSE 2019.
+- Giancarlo Sierra, Emad Shihab and Yasutaka Kamei. [A survey of self-admitted technical debt](https://doi.org/10.1016/j.jss.2019.02.056). _Journal of Systems and Software_ 152, 2019.
+- Rungroj Maipradit, Christoph Treude, Hideaki Hata and Kenichi Matsumoto. [Wait for it: identifying "On-Hold" self-admitted technical debt](https://doi.org/10.1007/s10664-020-09854-3). _Empirical Software Engineering_ 25, 2020.
+- Hamid Mohayeji, Felipe Ebert, Eric Arts, Eleni Constantinou and Alexander Serebrenik. [On the adoption of a TODO bot on GitHub](https://doi.org/10.1145/3528228.3528408). BotSE 2022.
+- Mohammad Sadegh Sheikhaei, Yuan Tian, Shaowei Wang and Bowen Xu. [Understanding the Effectiveness of LLMs in Automated Self-Admitted Technical Debt Repayment](https://arxiv.org/abs/2501.09888). arXiv, 2025.
+
+**Agents and models**
+
+- Paul Gauthier. [Unified diffs make GPT-4 Turbo 3X less lazy](https://aider.chat/2023/12/21/unified-diffs.html). Aider, 2023.
+- Anthropic. [Claude 3.7 Sonnet System Card](https://assets.anthropic.com/m/785e231869ea8b3b/original/claude-3-7-sonnet-system-card.pdf). 2025.
+- Ziqian Zhong, Aditi Raghunathan and Nicholas Carlini. [ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases](https://arxiv.org/abs/2510.20270). arXiv, 2025.
+- Zaki Brahmi, Ali Ouni, Mohammed Sayagh and Mohamed Aymen Saied. [Characterizing Self-Admitted Technical Debt Generated by AI Coding Agents](https://doi.org/10.1145/3793302.3793588). MSR 2026.
+
+**Codebases and subjects**
+
+- [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [hono](https://github.com/honojs/hono), [Next.js](https://github.com/vercel/next.js), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [VS Code](https://github.com/microsoft/vscode) and [Zod](https://github.com/colinhacks/zod), at the commits listed in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research).
+- Vite. [#2119](https://github.com/vitejs/vite/pull/2119) (2021) and [#15782: call dispose before prune](https://github.com/vitejs/vite/pull/15782) (2024).
+- WebKit. [Bug 34442](https://bugs.webkit.org/show_bug.cgi?id=34442).
+- React. [#29665](https://github.com/facebook/react/pull/29665).

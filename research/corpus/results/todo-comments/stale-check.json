@@ -1,0 +1,76 @@
+{
+  "checked": "2026-10-18",
+  "method": "Hand input, one rater (the report's author). For every marker whose referenced GitHub issues were all closed as completed or merged at the pinned commit (todo-issues.cjs candidates), the marker's code at the pinned commit was read in the corpus clone and the issue or PR read with gh (read-only). Verdicts: stale (the task is done or the condition it waits for has happened), still valid (the reference is context, or the task doesn't depend on the issue being closed), unclear.",
+  "items": [
+    {
+      "evidence": "The marker's own condition is the next major version: 'remove in Astro 8'. packages/astro/package.json at the pinned commit is 7.3.8. #18267 ('security.checkOrigin: 7.3.6 checks every Content-Type, docs still say only form-like Content-Types are checked') was closed two days before the pinned commit; the link explains the restored check.",
+      "id": "astro:packages/astro/src/core/app/origin-check.ts:51:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "#7529 ('CSS HMR is broken on 2.7.2', closed 2023) is the regression the slower check prevents. The marker asks for a faster approach that doesn't regress it; the code is the same isImportedBy check.",
+      "id": "astro:packages/astro/src/vite-plugin-astro-server/vite.ts:97:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "#7348 ('feat: multiplayer undo / redo', merged 2024) is the PR that introduced the marker. It records a known limitation of the new history ('we could still get an empty undo/redo') that the code still has.",
+      "id": "excalidraw:packages/element/src/delta.ts:728:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "Follow-up from #7348 (merged 2024): changed elements are still not validated before being applied.",
+      "id": "excalidraw:packages/element/src/delta.ts:1424:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "Follow-up from #7348 (merged 2024): the condition it asks to remove (only text elements are rebound) is still there.",
+      "id": "excalidraw:packages/element/src/delta.ts:2025:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "Follow-up from #7348 (merged 2024): invisible elements are still marked deleted and recorded by the store.",
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:156:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "Same marker and code as actionFinalize.tsx:156, in the second finalize path.",
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:300:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "Follow-up from #7348 (merged 2024): captureUpdate still captures everything when committing.",
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:415:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "webpack/webpack#11467 (closed 2020) ended with webpack's maintainers recommending exactly this rule ({ test: /\\.m?js/, resolve: { fullySpecified: false } }) and pinning the issue; webpack 5 is the only webpack Next.js supports. The marker ('do NOT webpack 5 support with this') asks for nothing a maintainer can act on now, but the override itself is still needed.",
+      "id": "next.js:packages/next/src/build/webpack-config.ts:1597:1",
+      "verdict": "unclear"
+    },
+    {
+      "evidence": "The FIXME on the same comment line as the TODO above; same verdict.",
+      "id": "next.js:packages/next/src/build/webpack-config.ts:1597:7",
+      "verdict": "unclear"
+    },
+    {
+      "evidence": "The marker asks for a test of a failing CORS fetch and links #43605 (closed 2023) only for a reproduction. Whether the test exists can't be checked from the sparse clone (test/ isn't in it).",
+      "id": "next.js:packages/next/src/client/components/router-reducer/fetch-server-response.ts:343:1",
+      "verdict": "unclear"
+    },
+    {
+      "evidence": "The condition is met: 'Remove from dependencies once https://github.com/facebook/react/pull/29665 is released.' The PR was merged on 2024-07-06, and its merge commit (1b0132c0) is an ancestor of the v19.0.0 tag (gh api compare v19.0.0...1b0132c0: behind by 657, ahead by 0). React 19.0.0 was released in December 2024; `dispatch` is still in the dependency array at the pinned commit.",
+      "id": "next.js:packages/next/src/next-devtools/dev-overlay/components/copy-button/index.tsx:57:1",
+      "verdict": "stale"
+    },
+    {
+      "evidence": "facebook/react#22644 ('useId', merged 2021) is cited as background for the isomorphic wrapper; the marker's doubt about enhanceApp/enhanceComponents doesn't depend on it.",
+      "id": "next.js:packages/next/src/server/render.tsx:790:1",
+      "verdict": "still valid"
+    },
+    {
+      "evidence": "#89478 ('Don't insert build id comment in HTML', merged 2026) is what made the commented-out stream unused. The marker waits for 'proper output:export support', which the PR didn't add.",
+      "id": "next.js:packages/next/src/server/stream-utils/node-web-streams-helper.ts:316:1",
+      "verdict": "still valid"
+    }
+  ]
+}

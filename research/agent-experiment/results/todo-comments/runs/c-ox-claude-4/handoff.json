@@ -1,0 +1,57 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "the root config `ultracite init` writes (env, extends [core, react], ignorePatterns) and its oxfmt.config (...ultracite)",
+  "filter": "TODO-family rules (no-warning-comments, sonarjs/todo-tag, sonarjs/fixme-tag), plus any other diagnostic not among the prepared subject's own (rule and message, diff.ts): a project that lints clean apart from the TODO. Every re-lint uses the same filter.",
+  "diagnosticsReported": 12,
+  "diagnosticsHandedOver": 1,
+  "leftOutByFilter": {
+    "no-inline-comments": 1,
+    "prefer-named-capture-group": 1,
+    "promise/prefer-await-to-then": 1,
+    "require-await": 3,
+    "require-unicode-regexp": 1,
+    "typescript/no-explicit-any": 4
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "index.ts fixFileGroup": "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+    "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 5,
+      "fatal": false,
+      "file": "json.ts",
+      "help": "Remove or rephrase this comment",
+      "line": 227,
+      "message": "Unexpected 'todo' comment: ToDo: Be over-permissive until...",
+      "raw": {
+        "message": "Unexpected 'todo' comment: ToDo: Be over-permissive until...",
+        "code": "eslint(no-warning-comments)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html",
+        "help": "Remove or rephrase this comment",
+        "filename": "json.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 7483,
+              "length": 79,
+              "line": 227,
+              "column": 5
+            }
+          }
+        ]
+      },
+      "rule": "no-warning-comments",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-warning-comments.html"
+    }
+  ]
+}

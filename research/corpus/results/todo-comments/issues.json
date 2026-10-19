@@ -1,0 +1,1256 @@
+{
+  "candidates": [
+    {
+      "id": "astro:packages/astro/src/core/app/origin-check.ts:51:1",
+      "issues": [
+        {
+          "closedAt": "2026-10-07T19:53:16Z",
+          "key": "withastro/astro#18267",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "security.checkOrigin: 7.3.6 checks every Content-Type, docs still say only form-like Content-Types are checked",
+          "url": "https://github.com/withastro/astro/issues/18267"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/app/origin-check.ts#L51",
+      "repo": "astro",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: remove in Astro 8, so every unsafe request goes through the\n`Sec-Fetch-Site`/`Origin` check below. https://github.com/withastro/astro/issues/18267",
+      "verdict": {
+        "evidence": "The marker's own condition is the next major version: 'remove in Astro 8'. packages/astro/package.json at the pinned commit is 7.3.8. #18267 ('security.checkOrigin: 7.3.6 checks every Content-Type, docs still say only form-like Content-Types are checked') was closed two days before the pinned commit; the link explains the restored check.",
+        "id": "astro:packages/astro/src/core/app/origin-check.ts:51:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "astro:packages/astro/src/vite-plugin-astro-server/vite.ts:97:1",
+      "issues": [
+        {
+          "closedAt": "2023-07-05T06:13:47Z",
+          "key": "withastro/astro#7529",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "CSS HMR is broken on 2.7.2",
+          "url": "https://github.com/withastro/astro/issues/7529"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-astro-server/vite.ts#L97",
+      "repo": "astro",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: This isn't very performant. Maybe look into using `ssrTransformResult` but make sure it\ndoesn't regress UnoCSS. https://github.com/withastro/astro/issues/7529",
+      "verdict": {
+        "evidence": "#7529 ('CSS HMR is broken on 2.7.2', closed 2023) is the regression the slower check prevents. The marker asks for a faster approach that doesn't regress it; the code is the same isImportedBy check.",
+        "id": "astro:packages/astro/src/vite-plugin-astro-server/vite.ts:97:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "excalidraw:packages/element/src/delta.ts:728:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L728",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 we could still get an empty undo/redo, as we assume that previous appstate does not contain references to deleted elements\nwhich is not always true - i.e. now we do cleanup appstate during history, but we do not do it during remote updates",
+      "verdict": {
+        "evidence": "#7348 ('feat: multiplayer undo / redo', merged 2024) is the PR that introduced the marker. It records a known limitation of the new history ('we could still get an empty undo/redo') that the code still has.",
+        "id": "excalidraw:packages/element/src/delta.ts:728:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "excalidraw:packages/element/src/delta.ts:1424:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L1424",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 validate elements semantically and syntactically the changed elements, in case they would result data integrity issues",
+      "verdict": {
+        "evidence": "Follow-up from #7348 (merged 2024): changed elements are still not validated before being applied.",
+        "id": "excalidraw:packages/element/src/delta.ts:1424:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "excalidraw:packages/element/src/delta.ts:2025:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L2025",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 add startBinding / endBinding to the `BoundElement` context so that we could rebind arrows and remove this condition",
+      "verdict": {
+        "evidence": "Follow-up from #7348 (merged 2024): the condition it asks to remove (only text elements are rebound) is still there.",
+        "id": "excalidraw:packages/element/src/delta.ts:2025:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:156:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFinalize.tsx#L156",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 in theory this gets recorded by the store, so the invisible elements could be restored by the undo/redo, which might be not what we would want",
+      "verdict": {
+        "evidence": "Follow-up from #7348 (merged 2024): invisible elements are still marked deleted and recorded by the store.",
+        "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:156:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:300:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFinalize.tsx#L300",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 in theory this gets recorded by the store, so the invisible elements could be restored by the undo/redo, which might be not what we would want",
+      "verdict": {
+        "evidence": "Same marker and code as actionFinalize.tsx:156, in the second finalize path.",
+        "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:300:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:415:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFinalize.tsx#L415",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 we should not capture everything, but if we don't, it leads to incosistencies -> revisit",
+      "verdict": {
+        "evidence": "Follow-up from #7348 (merged 2024): captureUpdate still captures everything when committing.",
+        "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:415:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "next.js:packages/next/src/build/webpack-config.ts:1597:1",
+      "issues": [
+        {
+          "closedAt": "2020-10-14T21:55:12Z",
+          "key": "webpack/webpack#11467",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "webpack 5.0.0-beta.30 Module not found: Error: Can't resolve '../../core-js/object/define-property'",
+          "url": "https://github.com/webpack/webpack/issues/11467"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack-config.ts#L1597",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: FIXME: do NOT webpack 5 support with this\nx-ref: https://github.com/webpack/webpack/issues/11467",
+      "verdict": {
+        "evidence": "webpack/webpack#11467 (closed 2020) ended with webpack's maintainers recommending exactly this rule ({ test: /\\.m?js/, resolve: { fullySpecified: false } }) and pinning the issue; webpack 5 is the only webpack Next.js supports. The marker ('do NOT webpack 5 support with this') asks for nothing a maintainer can act on now, but the override itself is still needed.",
+        "id": "next.js:packages/next/src/build/webpack-config.ts:1597:1",
+        "verdict": "unclear"
+      }
+    },
+    {
+      "id": "next.js:packages/next/src/build/webpack-config.ts:1597:7",
+      "issues": [
+        {
+          "closedAt": "2020-10-14T21:55:12Z",
+          "key": "webpack/webpack#11467",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "webpack 5.0.0-beta.30 Module not found: Error: Can't resolve '../../core-js/object/define-property'",
+          "url": "https://github.com/webpack/webpack/issues/11467"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack-config.ts#L1597",
+      "repo": "next.js",
+      "set": "core",
+      "term": "FIXME",
+      "text": "FIXME: do NOT webpack 5 support with this\nx-ref: https://github.com/webpack/webpack/issues/11467",
+      "verdict": {
+        "evidence": "The FIXME on the same comment line as the TODO above; same verdict.",
+        "id": "next.js:packages/next/src/build/webpack-config.ts:1597:7",
+        "verdict": "unclear"
+      }
+    },
+    {
+      "id": "next.js:packages/next/src/client/components/router-reducer/fetch-server-response.ts:343:1",
+      "issues": [
+        {
+          "closedAt": "2023-03-04T14:47:13Z",
+          "key": "vercel/next.js#43605",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "[NEXT-325] NextJS13 - AppDir - Server redirect happens as fetch not browser redirection",
+          "url": "https://github.com/vercel/next.js/issues/43605"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/router-reducer/fetch-server-response.ts#L343",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO-APP: Add a test for the case where a CORS request fails, e.g. external url redirect coming from the response.\nSee https://github.com/vercel/next.js/issues/43605#issuecomment-1451617521 for a reproduction.",
+      "verdict": {
+        "evidence": "The marker asks for a test of a failing CORS fetch and links #43605 (closed 2023) only for a reproduction. Whether the test exists can't be checked from the sparse clone (test/ isn't in it).",
+        "id": "next.js:packages/next/src/client/components/router-reducer/fetch-server-response.ts:343:1",
+        "verdict": "unclear"
+      }
+    },
+    {
+      "id": "next.js:packages/next/src/next-devtools/dev-overlay/components/copy-button/index.tsx:57:1",
+      "issues": [
+        {
+          "closedAt": "2024-07-06T06:52:20Z",
+          "key": "facebook/react#29665",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "Consider dispatch from `useActionState` stable",
+          "url": "https://github.com/react/react/pull/29665"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/copy-button/index.tsx#L57",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: `dispatch` from `useActionState` is not reactive.\nRemove from dependencies once https://github.com/facebook/react/pull/29665 is released.",
+      "verdict": {
+        "evidence": "The condition is met: 'Remove from dependencies once https://github.com/facebook/react/pull/29665 is released.' The PR was merged on 2024-07-06, and its merge commit (1b0132c0) is an ancestor of the v19.0.0 tag (gh api compare v19.0.0...1b0132c0: behind by 657, ahead by 0). React 19.0.0 was released in December 2024; `dispatch` is still in the dependency array at the pinned commit.",
+        "id": "next.js:packages/next/src/next-devtools/dev-overlay/components/copy-button/index.tsx:57:1",
+        "verdict": "stale"
+      }
+    },
+    {
+      "id": "next.js:packages/next/src/server/render.tsx:790:1",
+      "issues": [
+        {
+          "closedAt": "2021-11-01T20:30:45Z",
+          "key": "facebook/react#22644",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "useId",
+          "url": "https://github.com/react/react/pull/22644"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/render.tsx#L790",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: With `enhanceApp` and `enhanceComponents` options, this approach may\nnot be useful.\nhttps://github.com/facebook/react/pull/22644",
+      "verdict": {
+        "evidence": "facebook/react#22644 ('useId', merged 2021) is cited as background for the isomorphic wrapper; the marker's doubt about enhanceApp/enhanceComponents doesn't depend on it.",
+        "id": "next.js:packages/next/src/server/render.tsx:790:1",
+        "verdict": "still valid"
+      }
+    },
+    {
+      "id": "next.js:packages/next/src/server/stream-utils/node-web-streams-helper.ts:316:1",
+      "issues": [
+        {
+          "closedAt": "2026-02-05T11:20:23Z",
+          "key": "vercel/next.js#89478",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "Don't insert build id comment in HTML",
+          "url": "https://github.com/vercel/next.js/pull/89478"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/stream-utils/node-web-streams-helper.ts#L316",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO this is currently unused but once we add proper output:export support, it needs to be\nrevisited. See https://github.com/vercel/next.js/pull/89478 for more details",
+      "verdict": {
+        "evidence": "#89478 ('Don't insert build id comment in HTML', merged 2026) is what made the commented-out stream unused. The marker waits for 'proper output:export support', which the PR didn't add.",
+        "id": "next.js:packages/next/src/server/stream-utils/node-web-streams-helper.ts:316:1",
+        "verdict": "still valid"
+      }
+    }
+  ],
+  "fetched": [
+    "2026-10-19"
+  ],
+  "generated": "2026-10-19",
+  "note": "TODO-family markers (TODO, FIXME, XXX, @todo, HACK, BUG, TBD) with a GitHub issue or PR reference, a tracker key or another tracker URL. Issue states are as of the fetch date. A candidate stale marker references only issues closed as completed (or with no reason) or merged PRs; the verdicts are hand inputs in stale-check.json.",
+  "rows": [
+    {
+      "id": "astro:packages/astro/src/core/app/origin-check.ts:51:1",
+      "issues": [
+        {
+          "closedAt": "2026-10-07T19:53:16Z",
+          "key": "withastro/astro#18267",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "security.checkOrigin: 7.3.6 checks every Content-Type, docs still say only form-like Content-Types are checked",
+          "url": "https://github.com/withastro/astro/issues/18267"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/app/origin-check.ts#L51",
+      "repo": "astro",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: remove in Astro 8, so every unsafe request goes through the\n`Sec-Fetch-Site`/`Origin` check below. https://github.com/withastro/astro/issues/18267"
+    },
+    {
+      "id": "astro:packages/astro/src/vite-plugin-astro-server/vite.ts:97:1",
+      "issues": [
+        {
+          "closedAt": "2023-07-05T06:13:47Z",
+          "key": "withastro/astro#7529",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "CSS HMR is broken on 2.7.2",
+          "url": "https://github.com/withastro/astro/issues/7529"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-astro-server/vite.ts#L97",
+      "repo": "astro",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: This isn't very performant. Maybe look into using `ssrTransformResult` but make sure it\ndoesn't regress UnoCSS. https://github.com/withastro/astro/issues/7529"
+    },
+    {
+      "id": "astro:packages/astro/src/vite-plugin-astro/index.ts:68:1",
+      "issues": [
+        {
+          "closedAt": "2026-07-12T17:30:30Z",
+          "key": "vitejs/vite#18103",
+          "status": "closed unmerged",
+          "statusAtPinned": "closed unmerged",
+          "title": "test: css addWatchFile in load hook",
+          "url": "https://github.com/vitejs/vite/pull/18103"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-astro/index.ts#L68",
+      "repo": "astro",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: Remove this when Vite fixes it (https://github.com/vitejs/vite/pull/18103)"
+    },
+    {
+      "id": "excalidraw:packages/element/src/delta.ts:728:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L728",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 we could still get an empty undo/redo, as we assume that previous appstate does not contain references to deleted elements\nwhich is not always true - i.e. now we do cleanup appstate during history, but we do not do it during remote updates"
+    },
+    {
+      "id": "excalidraw:packages/element/src/delta.ts:1424:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L1424",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 validate elements semantically and syntactically the changed elements, in case they would result data integrity issues"
+    },
+    {
+      "id": "excalidraw:packages/element/src/delta.ts:2025:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/delta.ts#L2025",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 add startBinding / endBinding to the `BoundElement` context so that we could rebind arrows and remove this condition"
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:156:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFinalize.tsx#L156",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 in theory this gets recorded by the store, so the invisible elements could be restored by the undo/redo, which might be not what we would want"
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:300:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFinalize.tsx#L300",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 in theory this gets recorded by the store, so the invisible elements could be restored by the undo/redo, which might be not what we would want"
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/actions/actionFinalize.tsx:415:1",
+      "issues": [
+        {
+          "closedAt": "2024-04-17T12:01:24Z",
+          "key": "excalidraw/excalidraw#7348",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "feat: multiplayer undo / redo",
+          "url": "https://github.com/excalidraw/excalidraw/pull/7348"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionFinalize.tsx#L415",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: #7348 we should not capture everything, but if we don't, it leads to incosistencies -> revisit"
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/components/LibraryMenuHeaderContent.tsx:163:1",
+      "issues": [],
+      "keys": [],
+      "otherTrackers": [
+        "https://bugs.webkit.org/show_bug.cgi?id=34442"
+      ],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryMenuHeaderContent.tsx#L163",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\ngets resolved. Else, iOS users cannot open `.excalidraw` files."
+    },
+    {
+      "id": "excalidraw:packages/excalidraw/data/json.ts:108:1",
+      "issues": [],
+      "keys": [],
+      "otherTrackers": [
+        "https://bugs.webkit.org/show_bug.cgi?id=34442"
+      ],
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/data/json.ts#L108",
+      "repo": "excalidraw",
+      "set": "core",
+      "term": "TODO",
+      "text": "ToDo: Be over-permissive until https://bugs.webkit.org/show_bug.cgi?id=34442\ngets resolved. Else, iOS users cannot open `.excalidraw` files.\nextensions: [\"json\", \"excalidraw\", \"png\", \"svg\"],"
+    },
+    {
+      "id": "next.js:packages/next/src/build/webpack-config.ts:1597:1",
+      "issues": [
+        {
+          "closedAt": "2020-10-14T21:55:12Z",
+          "key": "webpack/webpack#11467",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "webpack 5.0.0-beta.30 Module not found: Error: Can't resolve '../../core-js/object/define-property'",
+          "url": "https://github.com/webpack/webpack/issues/11467"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack-config.ts#L1597",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: FIXME: do NOT webpack 5 support with this\nx-ref: https://github.com/webpack/webpack/issues/11467"
+    },
+    {
+      "id": "next.js:packages/next/src/build/webpack-config.ts:1597:7",
+      "issues": [
+        {
+          "closedAt": "2020-10-14T21:55:12Z",
+          "key": "webpack/webpack#11467",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "webpack 5.0.0-beta.30 Module not found: Error: Can't resolve '../../core-js/object/define-property'",
+          "url": "https://github.com/webpack/webpack/issues/11467"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack-config.ts#L1597",
+      "repo": "next.js",
+      "set": "core",
+      "term": "FIXME",
+      "text": "FIXME: do NOT webpack 5 support with this\nx-ref: https://github.com/webpack/webpack/issues/11467"
+    },
+    {
+      "id": "next.js:packages/next/src/client/components/catch-error.tsx:136:1",
+      "issues": [],
+      "keys": [
+        "NAR-804"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/catch-error.tsx#L136",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NAR-804): Docs say this is an Error object, but we don't guarantee that"
+    },
+    {
+      "id": "next.js:packages/next/src/client/components/error-boundary.tsx:131:1",
+      "issues": [],
+      "keys": [
+        "NAR-804"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/error-boundary.tsx#L131",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NAR-804): Docs say this is an Error object, but we don't guarantee that"
+    },
+    {
+      "id": "next.js:packages/next/src/client/components/router-reducer/fetch-server-response.ts:343:1",
+      "issues": [
+        {
+          "closedAt": "2023-03-04T14:47:13Z",
+          "key": "vercel/next.js#43605",
+          "status": "closed (completed)",
+          "statusAtPinned": "closed (completed)",
+          "title": "[NEXT-325] NextJS13 - AppDir - Server redirect happens as fetch not browser redirection",
+          "url": "https://github.com/vercel/next.js/issues/43605"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/router-reducer/fetch-server-response.ts#L343",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO-APP: Add a test for the case where a CORS request fails, e.g. external url redirect coming from the response.\nSee https://github.com/vercel/next.js/issues/43605#issuecomment-1451617521 for a reproduction."
+    },
+    {
+      "id": "next.js:packages/next/src/next-devtools/dev-overlay/components/copy-button/index.tsx:57:1",
+      "issues": [
+        {
+          "closedAt": "2024-07-06T06:52:20Z",
+          "key": "facebook/react#29665",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "Consider dispatch from `useActionState` stable",
+          "url": "https://github.com/react/react/pull/29665"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/copy-button/index.tsx#L57",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: `dispatch` from `useActionState` is not reactive.\nRemove from dependencies once https://github.com/facebook/react/pull/29665 is released."
+    },
+    {
+      "id": "next.js:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-handle.tsx:31:1",
+      "issues": [],
+      "keys": [
+        "NEXT-4645"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-handle.tsx#L31",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: NEXT-4645"
+    },
+    {
+      "id": "next.js:packages/next/src/next-devtools/dev-overlay/menu/panel-router.tsx:276:1",
+      "issues": [],
+      "keys": [
+        "NEXT-4644"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/menu/panel-router.tsx#L276",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: NEXT-4644 "
+    },
+    {
+      "id": "next.js:packages/next/src/next-devtools/userspace/app/errors/replay-ssr-only-errors.tsx:51:1",
+      "issues": [],
+      "keys": [
+        "NDX-905"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/userspace/app/errors/replay-ssr-only-errors.tsx#L51",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(veil): Include original Owner Stack (NDX-905)"
+    },
+    {
+      "id": "next.js:packages/next/src/server/app-render/app-render.tsx:1897:1",
+      "issues": [],
+      "keys": [
+        "NAR-810"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/app-render.tsx#L1897",
+      "repo": "next.js",
+      "set": "core",
+      "term": "FIXME",
+      "text": "FIXME(NAR-810): If we're already aborted due to Sync IO, there should be no need to\nfinish the accumulators. However, it seems like in `--debug-prerender`\nthe stream will stay open if we don't close the iterable here."
+    },
+    {
+      "id": "next.js:packages/next/src/server/app-render/app-render.tsx:9671:1",
+      "issues": [],
+      "keys": [
+        "NAR-810"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/app-render.tsx#L9671",
+      "repo": "next.js",
+      "set": "core",
+      "term": "FIXME",
+      "text": "FIXME(NAR-810): If we're already aborted due to Sync IO, there should be no need to\nfinish the accumulators. However, it seems like in `--debug-prerender`\nthe stream will stay open if we don't settle these here."
+    },
+    {
+      "id": "next.js:packages/next/src/server/app-render/app-render.tsx:11152:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "vercel/next.js#91407",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "[Bug Demo] Static generation runs on every request for routes with unstable_instant = false",
+          "url": "https://github.com/vercel/next.js/pull/91407"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/app-render.tsx#L11152",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(#91407): No hints found for this route. This currently\nhappens for routes with `instant = false` at the root segment,\nwhich causes the prerender to run per-request and the hints\nmanifest to be unavailable at runtime."
+    },
+    {
+      "id": "next.js:packages/next/src/server/app-render/create-transport-tree-from-loader-tree.ts:38:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "vercel/next.js#91407",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "[Bug Demo] Static generation runs on every request for routes with unstable_instant = false",
+          "url": "https://github.com/vercel/next.js/pull/91407"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/create-transport-tree-from-loader-tree.ts#L38",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(#91407): Runtime prerenders should always have hints from the\nmanifest. Until that is guaranteed, disable prefetching when they are\nmissing. Fully dynamic Cache Components routes have no manifest entry,\nso disabling prefetching is their permanent fallback."
+    },
+    {
+      "id": "next.js:packages/next/src/server/app-render/dynamic-rendering.ts:922:1",
+      "issues": [],
+      "keys": [
+        "NAR-787"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/dynamic-rendering.ts#L922",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(instant-validation) TODO(NAR-787)\nIf shared parents blocked us from validating, we should only log\nthe errors from the innermost (segments), i.e. omit layouts whose\nslots managed to render (because clearly they didn't block validation)"
+    },
+    {
+      "id": "next.js:packages/next/src/server/app-render/dynamic-rendering.ts:922:26",
+      "issues": [],
+      "keys": [
+        "NAR-787"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/dynamic-rendering.ts#L922",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NAR-787)\nIf shared parents blocked us from validating, we should only log\nthe errors from the innermost (segments), i.e. omit layouts whose\nslots managed to render (because clearly they didn't block validation)"
+    },
+    {
+      "id": "next.js:packages/next/src/server/dev/hot-reloader-turbopack.ts:1025:1",
+      "issues": [],
+      "keys": [
+        "PACK-2049"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/hot-reloader-turbopack.ts#L1025",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(PACK-2049): For some reason we end up emitting hundreds of issues messages on bigger apps,\n  a lot of which are duplicates.\n  They are currently not handled on the client at all, so might as well not send them for now."
+    },
+    {
+      "id": "next.js:packages/next/src/server/dev/middleware-turbopack.ts:116:1",
+      "issues": [],
+      "keys": [
+        "NDX-531"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/middleware-turbopack.ts#L116",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NDX-531): Spy on prepareStackTrace to get the enclosing line number for method name mapping."
+    },
+    {
+      "id": "next.js:packages/next/src/server/dev/middleware-turbopack.ts:272:1",
+      "issues": [],
+      "keys": [
+        "NDX-531"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/middleware-turbopack.ts#L272",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NDX-531): Spy on prepareStackTrace to get the enclosing line number for method name mapping."
+    },
+    {
+      "id": "next.js:packages/next/src/server/dev/middleware-webpack.ts:261:1",
+      "issues": [],
+      "keys": [
+        "NDX-531"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/middleware-webpack.ts#L261",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NDX-531): Spy on prepareStackTrace to get the enclosing line number for method name mapping.\ndefault is not a valid identifier in JS so webpack uses a custom variable when it's an unnamed default export\nResolve it back to `default` for the method name if the source position didn't have the method."
+    },
+    {
+      "id": "next.js:packages/next/src/server/dev/use-cache-probe-pool.ts:106:1",
+      "issues": [
+        {
+          "closedAt": "2026-10-16T13:53:46Z",
+          "key": "vercel/next.js#90532",
+          "status": "closed unmerged",
+          "statusAtPinned": "open",
+          "title": "Replace jest-worker with custom worker pool",
+          "url": "https://github.com/vercel/next.js/pull/90532"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/use-cache-probe-pool.ts#L106",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: replace with on-demand scaling once\nhttps://github.com/vercel/next.js/pull/90532 lands — workers can\nthen spawn lazily and shrink back when idle."
+    },
+    {
+      "id": "next.js:packages/next/src/server/patch-error-inspect.ts:324:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "react/react#37105",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "[Flight] Make fake stack frame URLs reversible ",
+          "url": "https://github.com/react/react/pull/37105"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/patch-error-inspect.ts#L324",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(veil): Making React's fake frame URLs reversible, as proposed in\nhttps://github.com/react/react/pull/37105, would let the first lookup\nsucceed on its own and retire this retry."
+    },
+    {
+      "id": "next.js:packages/next/src/server/patch-error-inspect.ts:445:1",
+      "issues": [],
+      "keys": [
+        "NDX-531"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/patch-error-inspect.ts#L445",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NDX-531): Spy on prepareStackTrace to get the enclosing line number for method name mapping."
+    },
+    {
+      "id": "next.js:packages/next/src/server/pipe-readable.ts:177:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "expressjs/compression#153",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "support res.removeListener('drain'), res.once('drain')",
+          "url": "https://github.com/expressjs/compression/pull/153"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/pipe-readable.ts#L177",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: the upstream fix for that asymmetry is\nhttps://github.com/expressjs/compression/pull/153, which intercepts\n`removeListener` so it reaches the zlib stream. It has been open since\n2019 and is not in upstream 1.8.1; we vendor 1.7.4. If it ever lands and\nwe upgrade, `res.off('drain', onDrain)` below would start working with\ncompression active and the caveat on the `close` handler could go away."
+    },
+    {
+      "id": "next.js:packages/next/src/server/render.tsx:790:1",
+      "issues": [
+        {
+          "closedAt": "2021-11-01T20:30:45Z",
+          "key": "facebook/react#22644",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "useId",
+          "url": "https://github.com/react/react/pull/22644"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/render.tsx#L790",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: With `enhanceApp` and `enhanceComponents` options, this approach may\nnot be useful.\nhttps://github.com/facebook/react/pull/22644"
+    },
+    {
+      "id": "next.js:packages/next/src/server/request/connection.ts:90:1",
+      "issues": [],
+      "keys": [
+        "NAR-789"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/request/connection.ts#L90",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NAR-789): make this consistent with the actual browser behavior when we change it.\nUntil then, erroring is fine."
+    },
+    {
+      "id": "next.js:packages/next/src/server/request/connection.ts:131:1",
+      "issues": [],
+      "keys": [
+        "NAR-789"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/request/connection.ts#L131",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO(NAR-789): connection() is not currently statically prevented from being imported in client components,\nso we always error about a missing work unit store."
+    },
+    {
+      "id": "next.js:packages/next/src/server/stream-utils/node-web-streams-helper.ts:316:1",
+      "issues": [
+        {
+          "closedAt": "2026-02-05T11:20:23Z",
+          "key": "vercel/next.js#89478",
+          "status": "merged",
+          "statusAtPinned": "merged",
+          "title": "Don't insert build id comment in HTML",
+          "url": "https://github.com/vercel/next.js/pull/89478"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/stream-utils/node-web-streams-helper.ts#L316",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO this is currently unused but once we add proper output:export support, it needs to be\nrevisited. See https://github.com/vercel/next.js/pull/89478 for more details"
+    },
+    {
+      "id": "next.js:packages/next/src/shared/lib/app-router-types.ts:253:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "vercel/next.js#91407",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "[Bug Demo] Static generation runs on every request for routes with unstable_instant = false",
+          "url": "https://github.com/vercel/next.js/pull/91407"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/app-router-types.ts#L253",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: Also set as an internal fallback when the prefetch hints manifest\nis unavailable (see #91407 mitigations), which only means \"no static\nprefetch data exists\" — not a user opt-out. Split the fallback into its\nown bit so the two intents can diverge."
+    },
+    {
+      "id": "next.js:packages/next/src/shared/lib/magic-identifier.ts:126:1",
+      "issues": [],
+      "keys": [
+        "NEXT-4875"
+      ],
+      "otherTrackers": [
+        "https://linear.app/vercel/issue/NEXT-4875"
+      ],
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/magic-identifier.ts#L126",
+      "repo": "next.js",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: Fix https://linear.app/vercel/issue/NEXT-4875 to allow using unicode property escapes"
+    },
+    {
+      "id": "vscode:src/vs/editor/common/core/text/positionToOffset.ts:21:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "microsoft/vscode#251126",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "Improve Cycle Detection",
+          "url": "https://github.com/microsoft/vscode/issues/251126"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/text/positionToOffset.ts#L21",
+      "repo": "vscode",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO@hediet this is dept and needs to go. See https://github.com/microsoft/vscode/issues/251126."
+    },
+    {
+      "id": "vscode:src/vs/editor/common/languageFeatureRegistry.ts:25:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "microsoft/typescript#42768",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "isArray type guards still causing issues in latest nightly build ",
+          "url": "https://github.com/microsoft/TypeScript/issues/42768"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languageFeatureRegistry.ts#L25",
+      "repo": "vscode",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: microsoft/TypeScript#42768"
+    },
+    {
+      "id": "vscode:src/vs/editor/common/languageSelector.ts:64:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "microsoft/typescript#42768",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "isArray type guards still causing issues in latest nightly build ",
+          "url": "https://github.com/microsoft/TypeScript/issues/42768"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languageSelector.ts#L64",
+      "repo": "vscode",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: microsoft/TypeScript#42768"
+    },
+    {
+      "id": "vscode:src/vs/editor/common/languages/modesRegistry.ts:71:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "microsoft/vscode#240567",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "Editor setting `editor.tabSize` does not apply on empty files after startup",
+          "url": "https://github.com/microsoft/vscode/issues/240567"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/modesRegistry.ts#L71",
+      "repo": "vscode",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO: Below is a workaround for: https://github.com/microsoft/vscode/issues/240567"
+    },
+    {
+      "id": "vscode:src/vs/editor/common/services/textResourceConfigurationService.ts:113:0",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "microsoft/vscode#240410",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "`IConfigurationChangeEvent.affectsConfiguration` does not support `overrides` properly for default changes",
+          "url": "https://github.com/microsoft/vscode/issues/240410"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/services/textResourceConfigurationService.ts#L113",
+      "repo": "vscode",
+      "set": "core",
+      "term": "TODO",
+      "text": "TODO@sandy081 workaround for https://github.com/microsoft/vscode/issues/240410"
+    },
+    {
+      "id": "supabase:apps/studio/components/interfaces/Database/Replication/ReplicationDiagram/index.tsx:95:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "xyflow/xyflow#4876",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "inherit colorMode from parent element",
+          "url": "https://github.com/xyflow/xyflow/issues/4876"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Replication/ReplicationDiagram/index.tsx#L95",
+      "repo": "supabase",
+      "set": "react",
+      "term": "FIXME",
+      "text": "FIXME: https://github.com/xyflow/xyflow/issues/4876"
+    },
+    {
+      "id": "supabase:apps/studio/components/interfaces/Database/Schemas/SchemaGraph.tsx:576:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "xyflow/xyflow#4876",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "inherit colorMode from parent element",
+          "url": "https://github.com/xyflow/xyflow/issues/4876"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Schemas/SchemaGraph.tsx#L576",
+      "repo": "supabase",
+      "set": "react",
+      "term": "FIXME",
+      "text": "FIXME: https://github.com/xyflow/xyflow/issues/4876"
+    },
+    {
+      "id": "supabase:apps/studio/components/interfaces/Linter/Linter.utils.tsx:270:103",
+      "issues": [],
+      "keys": [
+        "INDATA-1149"
+      ],
+      "otherTrackers": [],
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Linter/Linter.utils.tsx#L270",
+      "repo": "supabase",
+      "set": "react",
+      "term": "TODO",
+      "text": "TODO: INDATA-1149"
+    },
+    {
+      "id": "supabase:apps/studio/components/interfaces/Settings/Infrastructure/InfrastructureConfiguration/DiagramFlow.tsx:106:1",
+      "issues": [
+        {
+          "closedAt": null,
+          "key": "xyflow/xyflow#4876",
+          "status": "open",
+          "statusAtPinned": "open",
+          "title": "inherit colorMode from parent element",
+          "url": "https://github.com/xyflow/xyflow/issues/4876"
+        }
+      ],
+      "keys": [],
+      "otherTrackers": [],
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Infrastructure/InfrastructureConfiguration/DiagramFlow.tsx#L106",
+      "repo": "supabase",
+      "set": "react",
+      "term": "FIXME",
+      "text": "FIXME: https://github.com/xyflow/xyflow/issues/4876"
+    }
+  ],
+  "summary": {
+    "core": {
+      "issueStatus": {
+        "closed (completed)": 5,
+        "closed unmerged": 2,
+        "merged": 9,
+        "open": 10
+      },
+      "issueStatusAtPinned": {
+        "closed (completed)": 5,
+        "closed unmerged": 1,
+        "merged": 9,
+        "open": 11
+      },
+      "markers": 915,
+      "markersWithGitHubRef": 26,
+      "markersWithKeyOnly": 17,
+      "markersWithOtherTracker": 2,
+      "staleCandidates": 14,
+      "uniqueIssues": 17,
+      "verdicts": {
+        "still valid": 10,
+        "unclear": 3,
+        "stale": 1
+      }
+    },
+    "react": {
+      "issueStatus": {
+        "open": 3
+      },
+      "issueStatusAtPinned": {
+        "open": 3
+      },
+      "markers": 106,
+      "markersWithGitHubRef": 3,
+      "markersWithKeyOnly": 1,
+      "markersWithOtherTracker": 0,
+      "staleCandidates": 0,
+      "uniqueIssues": 1,
+      "verdicts": {}
+    },
+    "dogfood": {
+      "issueStatus": {},
+      "issueStatusAtPinned": {},
+      "markers": 0,
+      "markersWithGitHubRef": 0,
+      "markersWithKeyOnly": 0,
+      "markersWithOtherTracker": 0,
+      "staleCandidates": 0,
+      "uniqueIssues": 0,
+      "verdicts": {}
+    }
+  }
+}
