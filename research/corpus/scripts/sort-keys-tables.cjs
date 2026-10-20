@@ -43,8 +43,14 @@ const ltable = (head, rows) =>
     `| ${head.map(() => "---").join(" | ")} |`,
     ...rows.map((r) => `| ${r.join(" | ")} |`),
   ].join("\n");
+// Escape pipes so they don't split the table cell. A backslash already before a
+// pipe would pair with the escape and free the pipe, so odd runs get one more.
+// Other backslashes stay as they are, since a code span shows them literally.
 const code = (s) =>
-  `\`${String(s).replace(/`/g, "'").replace(/\|/g, "\\|").replace(/\n/g, "⏎")}\``;
+  `\`${String(s)
+    .replace(/`/g, "'")
+    .replace(/(\\*)\|/g, (_, run) => `${run}${run.length % 2 ? "\\" : ""}\\|`)
+    .replace(/\n/g, "⏎")}\``;
 const out = [];
 const h = (level, text) => out.push("", `${"#".repeat(level)} ${text}`, "");
 const p = (text) => out.push(text);
