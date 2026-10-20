@@ -1,0 +1,24 @@
+--- a/send.ts
++++ b/send.ts
+@@ -133,9 +133,9 @@
+ });
+ 
+ const alias: Record<string, string | undefined> = {
+-  js: "text/javascript",
+   css: "text/css",
+   html: "text/html",
++  js: "text/javascript",
+   json: "application/json",
+ };
+ 
+@@ -200,9 +200,9 @@
+         type,
+         code,
+         ms.generateMap({
+-          source: path.basename(urlWithoutTimestamp),
+           hires: "boundary",
+           includeContent: true,
++          source: path.basename(urlWithoutTimestamp),
+         }) as SourceMap
+       );
+     }

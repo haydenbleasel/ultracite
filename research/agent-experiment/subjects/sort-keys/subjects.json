@@ -1,0 +1,489 @@
+[
+  {
+    "id": "a",
+    "base": "a",
+    "example": "sort-keys-a-vite-send.ts",
+    "basename": "send.ts",
+    "kind": "order carries no meaning",
+    "label": "A, order carries no meaning",
+    "linter": "eslint",
+    "config": "eslint core",
+    "expected": [
+      "sort-keys",
+      "sort-keys"
+    ],
+    "targets": [
+      {
+        "name": "alias",
+        "keys": [
+          "js",
+          "css",
+          "html",
+          "json"
+        ]
+      },
+      {
+        "name": "generateMap options",
+        "keys": [
+          "source",
+          "hires",
+          "includeContent"
+        ]
+      }
+    ],
+    "source": "vitejs/vite packages/vite/src/node/server/send.ts @ 3b72997d, L13-101; imports as a STUB",
+    "right": "sort both objects: `alias` is read only by key and the options bag by name, so nothing observes the order",
+    "path": "subjects/sort-keys/a/send.ts",
+    "sha256": "16b34b16ee089274f3dc524697bc131aba061084cc2d54215d4f335c2e8ff077",
+    "originalSha256": "16545703b7e37d9f5c9c9792242d50aaba0469a715a1f8da24b6b278cdcc72d8",
+    "cleanedSha256": "4b5a02e0f84c03720b60f2befa44e9ed11d3c5196cba36ea29d6e314b89f62c6",
+    "headerLinesRemoved": 17,
+    "textEdits": [
+      {
+        "from": " * Lines 13-101 are copied verbatim. The stubs above them replace its imports. Anything marked STUB\n * is not part of the original source.",
+        "to": " * Lines 13-101 are copied, with their formatting changed. The stubs above them replace its\n * imports. Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\bsort|alphabeti|ascending|descending|lexicograph/i",
+      "/\\border(s|ed|ing)?\\b|\\breorder/i",
+      "/prefer(red|ence|ences|s)?\\b|priorit|precedence|first match|\\bwins?\\b/i",
+      "/observab|semantic|meaning(ful|less)?\\b|\\bmatters?\\b|significan/i",
+      "/\\bbytes?\\b|key order|insertion order|iteration order|enumerat/i",
+      "/\\btests?\\b|\\bspecs?\\b|destination\\.test|index\\.test|\\bassert/i",
+      "/eslint|oxlint|biome|\\blint(s|er|ers|ing)?\\b|useSortedKeys|ultracite/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why the order|What the project did/",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|oracle|scenario|behaviou?r check/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/3366|3414|16477|17390|17332|c76a9845|a621de8d|15427|0156bd2c|c8d5e346|0edb243a|28fb3e16|23319/",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b/i",
+      "/zstd|gzip|brotli/i",
+      "/JSON\\.stringify|seriali[sz]|log (line|format|output)s?\\b|stringif/i",
+      "/upstream|\\blater\\b|histor(y|ical)/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's ESLint pass on the project (eslint --fix ., stylelint --fix, prettier --write ., eslint -f json-with-metadata .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 70,
+        "added": 84
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "sort-keys L137: Expected object keys to be in ascending order. 'css' should be before 'js'.",
+        "sort-keys L204: Expected object keys to be in ascending order. 'hires' should be before 'source'."
+      ],
+      "help": [
+        "Require object keys to be sorted"
+      ],
+      "url": [
+        "https://eslint.org/docs/latest/rules/sort-keys"
+      ],
+      "reportedBeforeFilter": 25,
+      "leftOutByFilter": {
+        "@typescript-eslint/no-non-null-assertion": 2,
+        "@typescript-eslint/no-unused-vars": 1,
+        "func-style": 1,
+        "guard-for-in": 1,
+        "no-param-reassign": 5,
+        "prefer-named-capture-group": 3,
+        "require-unicode-regexp": 3,
+        "sonarjs/concise-regex": 1,
+        "sonarjs/for-in": 1,
+        "sonarjs/regex-complexity": 1,
+        "sonarjs/single-character-alternation": 1,
+        "sonarjs/super-linear-regex": 1,
+        "unicorn/name-replacements": 1,
+        "unicorn/prefer-uint8array-base64": 1
+      },
+      "stepExitCodes": {
+        "eslint --fix": 1,
+        "stylelint --fix": 0,
+        "prettier --write": 0,
+        "eslint -f json-with-metadata": 1
+      },
+      "objectsUnderTest": [
+        {
+          "line": 135,
+          "keys": [
+            "js",
+            "css",
+            "html",
+            "json"
+          ]
+        },
+        {
+          "line": 202,
+          "keys": [
+            "source",
+            "hires",
+            "includeContent"
+          ]
+        }
+      ],
+      "objectsWithTwoOrMoreKeys": 3,
+      "keyOrdersUnchangedByNormalising": true,
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "scenarios": 42
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "eslint.config.mjs": "ff6cfedbeeb2eb2dae738c0c9bcdfbf68b3f40c692c110c333c421f1bc3cb0df",
+      "package.json": "8cc7d16499dce190d5ca13141374058ce5988fa54b344560842d66ce06efecd7",
+      "prettier.config.mjs": "554c48343afe0a38377c9de531d5533a65c887ffa52d1c47be9eb8b12840b74c",
+      "stylelint.config.mjs": "6b6bb86ec9e6ee491e986ea352292452d7734b22d0445d0ac8fd284cc0c79aab",
+      "tsconfig.json": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817"
+    },
+    "corpusLint": {
+      "biome": {
+        "focus": [
+          "assist/source/useSortedKeys@146",
+          "assist/source/useSortedKeys@213"
+        ],
+        "other": 15
+      },
+      "eslint": {
+        "focus": [
+          "sort-keys@147",
+          "sort-keys@214"
+        ],
+        "other": 27
+      },
+      "eslint (inline config honoured)": {
+        "focus": [
+          "sort-keys@147",
+          "sort-keys@214"
+        ],
+        "other": 27
+      },
+      "oxlint": {
+        "focus": [
+          "sort-keys@145",
+          "sort-keys@212"
+        ],
+        "other": 16
+      }
+    }
+  },
+  {
+    "id": "b",
+    "base": "b",
+    "example": "sort-keys-b-astro-json-logger.ts",
+    "basename": "json.ts",
+    "kind": "order is observable",
+    "label": "B, order is observable",
+    "linter": "eslint",
+    "config": "eslint core",
+    "expected": [
+      "sort-keys",
+      "sort-keys"
+    ],
+    "targets": [
+      {
+        "name": "pretty payload",
+        "keys": [
+          "message",
+          "label",
+          "level"
+        ]
+      },
+      {
+        "name": "compact payload",
+        "keys": [
+          "message",
+          "label",
+          "level"
+        ]
+      }
+    ],
+    "source": "withastro/astro packages/astro/src/core/logger/impls/json.ts @ 9050e381, L9-48; imports as a STUB",
+    "right": "keep every log line's bytes: leave it for a person (Left for review), or restructure without changing the output (a replacer array, an ordered list)",
+    "path": "subjects/sort-keys/b/json.ts",
+    "sha256": "a323c9c2be8b199c16f6fe46eba82aa1bcd28c19e2d63459f2c07e0c9c3c5a80",
+    "originalSha256": "4968cc0364e07c6feddd75af3958b4b736d8d04e2ff191b5020a04efa2734eaf",
+    "cleanedSha256": "8f11f8acff161006e7e04b299859d492a0381a8608615d40996951e6595fa9e6",
+    "headerLinesRemoved": 23,
+    "textEdits": [
+      {
+        "from": " * Lines 9-48 are copied verbatim. The stubs above them replace its imports. Anything marked STUB is\n * not part of the original source.",
+        "to": " * Lines 9-48 are copied, with their formatting changed. The stubs above them replace its\n * imports. Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\bsort|alphabeti|ascending|descending|lexicograph/i",
+      "/\\border(s|ed|ing)?\\b|\\breorder/i",
+      "/prefer(red|ence|ences|s)?\\b|priorit|precedence|first match|\\bwins?\\b/i",
+      "/observab|semantic|meaning(ful|less)?\\b|\\bmatters?\\b|significan/i",
+      "/\\bbytes?\\b|key order|insertion order|iteration order|enumerat/i",
+      "/\\btests?\\b|\\bspecs?\\b|destination\\.test|index\\.test|\\bassert/i",
+      "/eslint|oxlint|biome|\\blint(s|er|ers|ing)?\\b|useSortedKeys|ultracite/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why the order|What the project did/",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|oracle|scenario|behaviou?r check/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/3366|3414|16477|17390|17332|c76a9845|a621de8d|15427|0156bd2c|c8d5e346|0edb243a|28fb3e16|23319/",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b/i",
+      "/zstd|gzip|brotli/i",
+      "/JSON\\.stringify|seriali[sz]|log (line|format|output)s?\\b|stringif/i",
+      "/upstream|\\blater\\b|histor(y|ical)/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's ESLint pass on the project (eslint --fix ., stylelint --fix, prettier --write ., eslint -f json-with-metadata .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 64,
+        "added": 83
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "sort-keys L175: Expected object keys to be in ascending order. 'label' should be before 'message'.",
+        "sort-keys L179: Expected object keys to be in ascending order. 'label' should be before 'message'."
+      ],
+      "help": [
+        "Require object keys to be sorted"
+      ],
+      "url": [
+        "https://eslint.org/docs/latest/rules/sort-keys"
+      ],
+      "reportedBeforeFilter": 11,
+      "leftOutByFilter": {
+        "@typescript-eslint/member-ordering": 3,
+        "func-style": 2,
+        "require-unicode-regexp": 1,
+        "unicorn/consistent-boolean-name": 2,
+        "unicorn/prefer-code-point": 1
+      },
+      "stepExitCodes": {
+        "eslint --fix": 1,
+        "stylelint --fix": 0,
+        "prettier --write": 0,
+        "eslint -f json-with-metadata": 1
+      },
+      "objectsUnderTest": [
+        {
+          "line": 175,
+          "keys": [
+            "message",
+            "label",
+            "level"
+          ]
+        },
+        {
+          "line": 179,
+          "keys": [
+            "message",
+            "label",
+            "level"
+          ]
+        }
+      ],
+      "objectsWithTwoOrMoreKeys": 5,
+      "keyOrdersUnchangedByNormalising": true,
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "scenarios": 16
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "eslint.config.mjs": "ff6cfedbeeb2eb2dae738c0c9bcdfbf68b3f40c692c110c333c421f1bc3cb0df",
+      "package.json": "8cc7d16499dce190d5ca13141374058ce5988fa54b344560842d66ce06efecd7",
+      "prettier.config.mjs": "554c48343afe0a38377c9de531d5533a65c887ffa52d1c47be9eb8b12840b74c",
+      "stylelint.config.mjs": "6b6bb86ec9e6ee491e986ea352292452d7734b22d0445d0ac8fd284cc0c79aab",
+      "tsconfig.json": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817"
+    },
+    "corpusLint": {
+      "biome": {
+        "focus": [
+          "assist/source/useSortedKeys@183",
+          "assist/source/useSortedKeys@184"
+        ],
+        "other": 4
+      },
+      "eslint": {
+        "focus": [
+          "sort-keys@183",
+          "sort-keys@184"
+        ],
+        "other": 11
+      },
+      "eslint (inline config honoured)": {
+        "focus": [
+          "sort-keys@183",
+          "sort-keys@184"
+        ],
+        "other": 11
+      },
+      "oxlint": {
+        "focus": [
+          "sort-keys@183",
+          "sort-keys@184"
+        ],
+        "other": 5
+      }
+    }
+  },
+  {
+    "id": "c",
+    "base": "c",
+    "example": "sort-keys-c-hono-serve-static.ts",
+    "basename": "index.ts",
+    "kind": "order is semantics",
+    "label": "C, order is semantics",
+    "linter": "eslint",
+    "config": "eslint core",
+    "expected": [
+      "sort-keys"
+    ],
+    "targets": [
+      {
+        "name": "ENCODINGS",
+        "keys": [
+          "br",
+          "zstd",
+          "gzip"
+        ]
+      }
+    ],
+    "source": "honojs/hono src/middleware/serve-static/index.ts @ f78a245a, L13-131; imports as a STUB",
+    "right": "keep the order, the encoding preference: leave it for review (Left for review), or make the order explicit without changing behaviour",
+    "path": "subjects/sort-keys/c/index.ts",
+    "sha256": "8f9a5d93729a16d6a6a17c667057cceefe211d8d4c25e89c746056a25b4b21d5",
+    "originalSha256": "ef588ad3676666e1ca7060aedc192afd05ab3b8e66738ac1423ef4fc227be143",
+    "cleanedSha256": "972b3739541fd90898237155cb16fb65b4a65087c2510fc60004c9ca08608de6",
+    "headerLinesRemoved": 24,
+    "textEdits": [
+      {
+        "from": " * Lines 13-131 are copied verbatim. The stubs above them replace its imports. Anything marked STUB\n * is not part of the original source.",
+        "to": " * Lines 13-131 are copied, with their formatting changed. The stubs above them replace its\n * imports. Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\bsort|alphabeti|ascending|descending|lexicograph/i",
+      "/\\border(s|ed|ing)?\\b|\\breorder/i",
+      "/prefer(red|ence|ences|s)?\\b|priorit|precedence|first match|\\bwins?\\b/i",
+      "/observab|semantic|meaning(ful|less)?\\b|\\bmatters?\\b|significan/i",
+      "/\\bbytes?\\b|key order|insertion order|iteration order|enumerat/i",
+      "/\\btests?\\b|\\bspecs?\\b|destination\\.test|index\\.test|\\bassert/i",
+      "/eslint|oxlint|biome|\\blint(s|er|ers|ing)?\\b|useSortedKeys|ultracite/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why the order|What the project did/",
+      "/\\bagent|experiment|\\bsubject\\b(?! to the following)|analysis|\\bcorpus|research|oracle|scenario|behaviou?r check/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/3366|3414|16477|17390|17332|c76a9845|a621de8d|15427|0156bd2c|c8d5e346|0edb243a|28fb3e16|23319/",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b/i",
+      "/zstd|gzip|brotli/i",
+      "/JSON\\.stringify|seriali[sz]|log (line|format|output)s?\\b|stringif/i",
+      "/upstream|\\blater\\b|histor(y|ical)/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's ESLint pass on the project (eslint --fix ., stylelint --fix, prettier --write ., eslint -f json-with-metadata .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 94,
+        "added": 124
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "sort-keys L146: Expected object keys to be in ascending order. 'gzip' should be before 'zstd'."
+      ],
+      "help": [
+        "Require object keys to be sorted"
+      ],
+      "url": [
+        "https://eslint.org/docs/latest/rules/sort-keys"
+      ],
+      "reportedBeforeFilter": 26,
+      "leftOutByFilter": {
+        "@typescript-eslint/no-invalid-void-type": 1,
+        "@typescript-eslint/no-unused-vars": 1,
+        "complexity": 1,
+        "eqeqeq": 1,
+        "n/callback-return": 1,
+        "no-await-in-loop": 1,
+        "no-eq-null": 1,
+        "no-useless-escape": 3,
+        "prefer-named-capture-group": 1,
+        "require-unicode-regexp": 5,
+        "sonarjs/cognitive-complexity": 1,
+        "sonarjs/no-inconsistent-returns": 1,
+        "sonarjs/regex-complexity": 1,
+        "sonarjs/too-many-break-or-continue-in-loop": 1,
+        "sonarjs/variable-name": 2,
+        "unicorn/error-message": 2,
+        "unicorn/try-complexity": 1
+      },
+      "stepExitCodes": {
+        "eslint --fix": 1,
+        "stylelint --fix": 0,
+        "prettier --write": 0,
+        "eslint -f json-with-metadata": 1
+      },
+      "objectsUnderTest": [
+        {
+          "line": 143,
+          "keys": [
+            "br",
+            "zstd",
+            "gzip"
+          ]
+        }
+      ],
+      "objectsWithTwoOrMoreKeys": 2,
+      "keyOrdersUnchangedByNormalising": true,
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "scenarios": 480
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "eslint.config.mjs": "ff6cfedbeeb2eb2dae738c0c9bcdfbf68b3f40c692c110c333c421f1bc3cb0df",
+      "package.json": "8cc7d16499dce190d5ca13141374058ce5988fa54b344560842d66ce06efecd7",
+      "prettier.config.mjs": "554c48343afe0a38377c9de531d5533a65c887ffa52d1c47be9eb8b12840b74c",
+      "stylelint.config.mjs": "6b6bb86ec9e6ee491e986ea352292452d7734b22d0445d0ac8fd284cc0c79aab",
+      "tsconfig.json": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817"
+    },
+    "corpusLint": {
+      "biome": {
+        "focus": [
+          "assist/source/useSortedKeys@160"
+        ],
+        "other": 15
+      },
+      "eslint": {
+        "focus": [
+          "sort-keys@162"
+        ],
+        "other": 34
+      },
+      "eslint (inline config honoured)": {
+        "focus": [
+          "sort-keys@162"
+        ],
+        "other": 34
+      },
+      "oxlint": {
+        "focus": [
+          "sort-keys@159"
+        ],
+        "other": 22
+      }
+    }
+  }
+]

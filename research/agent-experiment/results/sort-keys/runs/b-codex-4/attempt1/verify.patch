@@ -1,0 +1,18 @@
+--- a/json.ts
++++ b/json.ts
+@@ -176,10 +176,11 @@
+             ["message", "label", "level"],
+             2
+           )
+-        : JSON.stringify(
+-            { label: event.label, level: event.level, message },
+-            ["message", "label", "level"]
+-          );
++        : JSON.stringify({ label: event.label, level: event.level, message }, [
++            "message",
++            "label",
++            "level",
++          ]);
+       destination(payload);
+     },
+   };

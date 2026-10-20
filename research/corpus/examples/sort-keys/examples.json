@@ -1,0 +1,1432 @@
+{
+  "generated": "2026-10-20",
+  "note": "Measured by scripts/sort-keys-examples.cjs. `lint` lists, per configuration, the key-sorting diagnostics with their message and the help Ultracite's handoff carries (Oxlint's help; ESLint's docs description), and a count of every other rule. ESLint = core, inline config ignored, then honoured; Oxlint = the root config `ultracite init` writes (core + react), run from this directory; Biome = core. `fixes` is what each fix pass does to the pristine subject, with the oracle's verdict. `oracle` is sort-keys-oracle.cjs. Header fields named in stripFields hold analysis and must be removed before an agent sees a subject.",
+  "stripFields": [
+    "Sort-keys subject",
+    "Rules it hits",
+    "Why the order doesn't matter",
+    "Why the order is observable",
+    "Why the order is semantics",
+    "What the project did",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses"
+  ],
+  "subjects": [
+    {
+      "file": "sort-keys-a-vite-send.ts",
+      "history": "vite",
+      "id": "a",
+      "kind": "order carries no meaning: a lookup map and an options bag",
+      "repo": "vitejs/vite",
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+      "source": "packages/vite/src/node/server/send.ts",
+      "verbatim": [
+        {
+          "from": 13,
+          "ok": true,
+          "to": 101
+        }
+      ],
+      "fixes": {
+        "biome useSortedKeys alone --write": {
+          "moved": [
+            {
+              "after": [
+                "css",
+                "html",
+                "js",
+                "json"
+              ],
+              "before": [
+                "js",
+                "css",
+                "html",
+                "json"
+              ],
+              "line": 145
+            },
+            {
+              "after": [
+                "hires",
+                "includeContent",
+                "source"
+              ],
+              "before": [
+                "source",
+                "hires",
+                "includeContent"
+              ],
+              "line": 212
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 0,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "oxlint init --fix": {
+          "moved": [
+            {
+              "after": [
+                "css",
+                "html",
+                "js",
+                "json"
+              ],
+              "before": [
+                "js",
+                "css",
+                "html",
+                "json"
+              ],
+              "line": 145
+            },
+            {
+              "after": [
+                "hires",
+                "includeContent",
+                "source"
+              ],
+              "before": [
+                "source",
+                "hires",
+                "includeContent"
+              ],
+              "line": 212
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 0,
+            "verdict": "same"
+          },
+          "tsc": 0
+        },
+        "oxlint sort-keys alone --fix": {
+          "moved": [
+            {
+              "after": [
+                "css",
+                "html",
+                "js",
+                "json"
+              ],
+              "before": [
+                "js",
+                "css",
+                "html",
+                "json"
+              ],
+              "line": 145
+            },
+            {
+              "after": [
+                "hires",
+                "includeContent",
+                "source"
+              ],
+              "before": [
+                "source",
+                "hires",
+                "includeContent"
+              ],
+              "line": 212
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 0,
+            "verdict": "same"
+          },
+          "tsc": 0
+        }
+      },
+      "lines": 229,
+      "lint": {
+        "biome": {
+          "focus": [
+            {
+              "fix": true,
+              "help": null,
+              "line": 146,
+              "message": "The object properties are not sorted by key.",
+              "rule": "assist/source/useSortedKeys"
+            },
+            {
+              "fix": true,
+              "help": null,
+              "line": 213,
+              "message": "The object properties are not sorted by key.",
+              "rule": "assist/source/useSortedKeys"
+            }
+          ],
+          "other": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "format": 1,
+            "lint/complexity/noUselessReturn": 1,
+            "lint/complexity/useOptionalChain": 1,
+            "lint/style/noNonNullAssertion": 2,
+            "lint/style/noParameterAssign": 5,
+            "lint/style/useReadonlyClassProperties": 2,
+            "lint/suspicious/noForIn": 1,
+            "lint/suspicious/useGuardForIn": 1
+          }
+        },
+        "eslint": {
+          "focus": [
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 147,
+              "message": "Expected object keys to be in ascending order. 'css' should be before 'js'.",
+              "rule": "sort-keys"
+            },
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 214,
+              "message": "Expected object keys to be in ascending order. 'hires' should be before 'source'.",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "func-style": 1,
+            "guard-for-in": 1,
+            "import/order": 1,
+            "no-param-reassign": 5,
+            "no-useless-return": 1,
+            "prefer-named-capture-group": 3,
+            "require-unicode-regexp": 3,
+            "sonarjs/concise-regex": 1,
+            "sonarjs/for-in": 1,
+            "sonarjs/no-redundant-jump": 1,
+            "sonarjs/regex-complexity": 1,
+            "sonarjs/single-character-alternation": 1,
+            "sonarjs/super-linear-regex": 1,
+            "typescript/no-non-null-assertion": 2,
+            "typescript/no-unused-vars": 1,
+            "unicorn/name-replacements": 2,
+            "unicorn/prefer-uint8array-base64": 1
+          }
+        },
+        "eslint (inline config honoured)": {
+          "focus": [
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 147,
+              "message": "Expected object keys to be in ascending order. 'css' should be before 'js'.",
+              "rule": "sort-keys"
+            },
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 214,
+              "message": "Expected object keys to be in ascending order. 'hires' should be before 'source'.",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "func-style": 1,
+            "guard-for-in": 1,
+            "import/order": 1,
+            "no-param-reassign": 5,
+            "no-useless-return": 1,
+            "prefer-named-capture-group": 3,
+            "require-unicode-regexp": 3,
+            "sonarjs/concise-regex": 1,
+            "sonarjs/for-in": 1,
+            "sonarjs/no-redundant-jump": 1,
+            "sonarjs/regex-complexity": 1,
+            "sonarjs/single-character-alternation": 1,
+            "sonarjs/super-linear-regex": 1,
+            "typescript/no-non-null-assertion": 2,
+            "typescript/no-unused-vars": 1,
+            "unicorn/name-replacements": 2,
+            "unicorn/prefer-uint8array-base64": 1
+          }
+        },
+        "oxlint": {
+          "focus": [
+            {
+              "fix": true,
+              "help": "Replace `js: 'text/javascript',\n  css: 'text/css',\n  html: 'text/html',\n  json: 'application/json'` with `css: 'text/css',\n  html: 'text/html',\n  js: 'text/javascript',\n  json: 'application/json'`.",
+              "line": 145,
+              "message": "Object keys should be sorted",
+              "rule": "sort-keys"
+            },
+            {
+              "fix": true,
+              "help": "Replace `source: path.basename(urlWithoutTimestamp),\n          hires: 'boundary',\n          includeContent: true` with `hires: 'boundary',\n          includeContent: true,\n          source: path.basename(urlWithoutTimestamp)`.",
+              "line": 212,
+              "message": "Object keys should be sorted",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "func-style": 1,
+            "guard-for-in": 1,
+            "no-param-reassign": 5,
+            "no-useless-return": 1,
+            "prefer-named-capture-group": 3,
+            "require-unicode-regexp": 3,
+            "typescript/no-non-null-assertion": 2
+          }
+        }
+      },
+      "oracle": {
+        "error": null,
+        "scenarios": 42
+      },
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/send.ts",
+      "tsc": []
+    },
+    {
+      "file": "sort-keys-b-astro-json-logger.ts",
+      "history": "astro",
+      "id": "b",
+      "kind": "order is observable: a JSON log line, its byte order pinned by the project's tests",
+      "repo": "withastro/astro",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468",
+      "source": "packages/astro/src/core/logger/impls/json.ts",
+      "verbatim": [
+        {
+          "from": 9,
+          "ok": true,
+          "to": 48
+        }
+      ],
+      "fixes": {
+        "biome useSortedKeys alone --write": {
+          "moved": [
+            {
+              "after": [
+                "label",
+                "level",
+                "message"
+              ],
+              "before": [
+                "message",
+                "label",
+                "level"
+              ],
+              "line": 184
+            },
+            {
+              "after": [
+                "label",
+                "level",
+                "message"
+              ],
+              "before": [
+                "message",
+                "label",
+                "level"
+              ],
+              "line": 183
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 14,
+            "example": "destination|pretty=false|level=debug",
+            "verdict": "same JSON, another key order"
+          },
+          "tsc": 0
+        },
+        "oxlint init --fix": {
+          "moved": [
+            {
+              "after": [
+                "label",
+                "level",
+                "message"
+              ],
+              "before": [
+                "message",
+                "label",
+                "level"
+              ],
+              "line": 184
+            },
+            {
+              "after": [
+                "label",
+                "level",
+                "message"
+              ],
+              "before": [
+                "message",
+                "label",
+                "level"
+              ],
+              "line": 183
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 14,
+            "example": "destination|pretty=false|level=debug",
+            "verdict": "same JSON, another key order"
+          },
+          "tsc": 0
+        },
+        "oxlint sort-keys alone --fix": {
+          "moved": [
+            {
+              "after": [
+                "label",
+                "level",
+                "message"
+              ],
+              "before": [
+                "message",
+                "label",
+                "level"
+              ],
+              "line": 184
+            },
+            {
+              "after": [
+                "label",
+                "level",
+                "message"
+              ],
+              "before": [
+                "message",
+                "label",
+                "level"
+              ],
+              "line": 183
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 14,
+            "example": "destination|pretty=false|level=debug",
+            "verdict": "same JSON, another key order"
+          },
+          "tsc": 0
+        }
+      },
+      "lines": 196,
+      "lint": {
+        "biome": {
+          "focus": [
+            {
+              "fix": true,
+              "help": null,
+              "line": 183,
+              "message": "The object properties are not sorted by key.",
+              "rule": "assist/source/useSortedKeys"
+            },
+            {
+              "fix": true,
+              "help": null,
+              "line": 184,
+              "message": "The object properties are not sorted by key.",
+              "rule": "assist/source/useSortedKeys"
+            }
+          ],
+          "other": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "format": 1,
+            "lint/complexity/useLiteralKeys": 1,
+            "lint/style/useConsistentTypeDefinitions": 1
+          }
+        },
+        "eslint": {
+          "focus": [
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 183,
+              "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+              "rule": "sort-keys"
+            },
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 184,
+              "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "func-style": 2,
+            "require-unicode-regexp": 1,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/member-ordering": 3,
+            "unicorn/consistent-boolean-name": 2,
+            "unicorn/name-replacements": 1,
+            "unicorn/prefer-code-point": 1
+          }
+        },
+        "eslint (inline config honoured)": {
+          "focus": [
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 183,
+              "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+              "rule": "sort-keys"
+            },
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 184,
+              "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "func-style": 2,
+            "require-unicode-regexp": 1,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/member-ordering": 3,
+            "unicorn/consistent-boolean-name": 2,
+            "unicorn/name-replacements": 1,
+            "unicorn/prefer-code-point": 1
+          }
+        },
+        "oxlint": {
+          "focus": [
+            {
+              "fix": true,
+              "help": "Replace `message, label: event.label, level: event.level` with `label: event.label, level: event.level, message`.",
+              "line": 183,
+              "message": "Object keys should be sorted",
+              "rule": "sort-keys"
+            },
+            {
+              "fix": true,
+              "help": "Replace `message, label: event.label, level: event.level` with `label: event.label, level: event.level, message`.",
+              "line": 184,
+              "message": "Object keys should be sorted",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "func-style": 2,
+            "require-unicode-regexp": 1,
+            "typescript/consistent-type-definitions": 1,
+            "unicorn/prefer-code-point": 1
+          }
+        }
+      },
+      "oracle": {
+        "error": null,
+        "scenarios": 16
+      },
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/logger/impls/json.ts",
+      "tsc": []
+    },
+    {
+      "file": "sort-keys-c-hono-serve-static.ts",
+      "history": "hono",
+      "id": "c",
+      "kind": "order is semantics: the encoding preference, first match wins",
+      "repo": "honojs/hono",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51",
+      "source": "src/middleware/serve-static/index.ts",
+      "verbatim": [
+        {
+          "from": 13,
+          "ok": true,
+          "to": 131
+        }
+      ],
+      "fixes": {
+        "biome useSortedKeys alone --write": {
+          "moved": [
+            {
+              "after": [
+                "br",
+                "gzip",
+                "zstd"
+              ],
+              "before": [
+                "br",
+                "zstd",
+                "gzip"
+              ],
+              "line": 159
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 58,
+            "encodingChanged": 16,
+            "example": {
+              "after": [
+                [
+                  "getContent",
+                  "static/hello.html"
+                ],
+                [
+                  "header",
+                  "Content-Type",
+                  "text/html; charset=utf-8",
+                  false
+                ],
+                [
+                  "getContent",
+                  "static/hello.html.gz"
+                ],
+                [
+                  "header",
+                  "Content-Encoding",
+                  "gzip",
+                  false
+                ],
+                [
+                  "header",
+                  "Vary",
+                  "Accept-Encoding",
+                  true
+                ],
+                [
+                  "onFound",
+                  "static/hello.html"
+                ],
+                [
+                  "body",
+                  "content of static/hello.html.gz"
+                ]
+              ],
+              "before": [
+                [
+                  "getContent",
+                  "static/hello.html"
+                ],
+                [
+                  "header",
+                  "Content-Type",
+                  "text/html; charset=utf-8",
+                  false
+                ],
+                [
+                  "getContent",
+                  "static/hello.html.zst"
+                ],
+                [
+                  "header",
+                  "Content-Encoding",
+                  "zstd",
+                  false
+                ],
+                [
+                  "header",
+                  "Vary",
+                  "Accept-Encoding",
+                  true
+                ],
+                [
+                  "onFound",
+                  "static/hello.html"
+                ],
+                [
+                  "body",
+                  "content of static/hello.html.zst"
+                ]
+              ],
+              "scenario": "true|gzip, zstd|all|/static/hello.html"
+            },
+            "otherChanged": 0,
+            "probesOnly": 42,
+            "verdict": "another encoding chosen"
+          },
+          "tsc": 0
+        },
+        "oxlint init --fix": {
+          "moved": [
+            {
+              "after": [
+                "br",
+                "gzip",
+                "zstd"
+              ],
+              "before": [
+                "br",
+                "zstd",
+                "gzip"
+              ],
+              "line": 159
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 58,
+            "encodingChanged": 16,
+            "example": {
+              "after": [
+                [
+                  "getContent",
+                  "static/hello.html"
+                ],
+                [
+                  "header",
+                  "Content-Type",
+                  "text/html; charset=utf-8",
+                  false
+                ],
+                [
+                  "getContent",
+                  "static/hello.html.gz"
+                ],
+                [
+                  "header",
+                  "Content-Encoding",
+                  "gzip",
+                  false
+                ],
+                [
+                  "header",
+                  "Vary",
+                  "Accept-Encoding",
+                  true
+                ],
+                [
+                  "onFound",
+                  "static/hello.html"
+                ],
+                [
+                  "body",
+                  "content of static/hello.html.gz"
+                ]
+              ],
+              "before": [
+                [
+                  "getContent",
+                  "static/hello.html"
+                ],
+                [
+                  "header",
+                  "Content-Type",
+                  "text/html; charset=utf-8",
+                  false
+                ],
+                [
+                  "getContent",
+                  "static/hello.html.zst"
+                ],
+                [
+                  "header",
+                  "Content-Encoding",
+                  "zstd",
+                  false
+                ],
+                [
+                  "header",
+                  "Vary",
+                  "Accept-Encoding",
+                  true
+                ],
+                [
+                  "onFound",
+                  "static/hello.html"
+                ],
+                [
+                  "body",
+                  "content of static/hello.html.zst"
+                ]
+              ],
+              "scenario": "true|gzip, zstd|all|/static/hello.html"
+            },
+            "otherChanged": 0,
+            "probesOnly": 42,
+            "verdict": "another encoding chosen"
+          },
+          "tsc": 0
+        },
+        "oxlint sort-keys alone --fix": {
+          "moved": [
+            {
+              "after": [
+                "br",
+                "gzip",
+                "zstd"
+              ],
+              "before": [
+                "br",
+                "zstd",
+                "gzip"
+              ],
+              "line": 159
+            }
+          ],
+          "oracle": {
+            "error": null,
+            "differences": 58,
+            "encodingChanged": 16,
+            "example": {
+              "after": [
+                [
+                  "getContent",
+                  "static/hello.html"
+                ],
+                [
+                  "header",
+                  "Content-Type",
+                  "text/html; charset=utf-8",
+                  false
+                ],
+                [
+                  "getContent",
+                  "static/hello.html.gz"
+                ],
+                [
+                  "header",
+                  "Content-Encoding",
+                  "gzip",
+                  false
+                ],
+                [
+                  "header",
+                  "Vary",
+                  "Accept-Encoding",
+                  true
+                ],
+                [
+                  "onFound",
+                  "static/hello.html"
+                ],
+                [
+                  "body",
+                  "content of static/hello.html.gz"
+                ]
+              ],
+              "before": [
+                [
+                  "getContent",
+                  "static/hello.html"
+                ],
+                [
+                  "header",
+                  "Content-Type",
+                  "text/html; charset=utf-8",
+                  false
+                ],
+                [
+                  "getContent",
+                  "static/hello.html.zst"
+                ],
+                [
+                  "header",
+                  "Content-Encoding",
+                  "zstd",
+                  false
+                ],
+                [
+                  "header",
+                  "Vary",
+                  "Accept-Encoding",
+                  true
+                ],
+                [
+                  "onFound",
+                  "static/hello.html"
+                ],
+                [
+                  "body",
+                  "content of static/hello.html.zst"
+                ]
+              ],
+              "scenario": "true|gzip, zstd|all|/static/hello.html"
+            },
+            "otherChanged": 0,
+            "probesOnly": 42,
+            "verdict": "another encoding chosen"
+          },
+          "tsc": 0
+        }
+      },
+      "lines": 266,
+      "lint": {
+        "biome": {
+          "focus": [
+            {
+              "fix": true,
+              "help": null,
+              "line": 160,
+              "message": "The object properties are not sorted by key.",
+              "rule": "assist/source/useSortedKeys"
+            }
+          ],
+          "other": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "format": 1,
+            "lint/complexity/noExcessiveCognitiveComplexity": 1,
+            "lint/complexity/noUselessEscapeInRegex": 1,
+            "lint/complexity/noUselessReturn": 1,
+            "lint/performance/noAwaitInLoops": 1,
+            "lint/performance/useTopLevelRegex": 2,
+            "lint/style/useConsistentTypeDefinitions": 1,
+            "lint/style/useDestructuring": 1,
+            "lint/suspicious/noConfusingVoidType": 1,
+            "lint/suspicious/noEqualsToNull": 1,
+            "lint/suspicious/noEvolvingTypes": 1,
+            "lint/suspicious/useErrorMessage": 2
+          }
+        },
+        "eslint": {
+          "focus": [
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 162,
+              "message": "Expected object keys to be in ascending order. 'gzip' should be before 'zstd'.",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "complexity": 1,
+            "eqeqeq": 1,
+            "n/callback-return": 1,
+            "no-await-in-loop": 1,
+            "no-eq-null": 1,
+            "no-useless-escape": 3,
+            "no-useless-return": 1,
+            "prefer-destructuring": 1,
+            "prefer-named-capture-group": 1,
+            "require-unicode-regexp": 5,
+            "sonarjs/cognitive-complexity": 1,
+            "sonarjs/no-inconsistent-returns": 1,
+            "sonarjs/no-redundant-jump": 1,
+            "sonarjs/regex-complexity": 1,
+            "sonarjs/too-many-break-or-continue-in-loop": 1,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/no-invalid-void-type": 1,
+            "typescript/no-unused-vars": 1,
+            "unicorn/error-message": 2,
+            "unicorn/name-replacements": 4,
+            "unicorn/prefer-string-replace-all": 2,
+            "unicorn/single-line-block-comment-style": 1,
+            "unicorn/try-complexity": 1
+          }
+        },
+        "eslint (inline config honoured)": {
+          "focus": [
+            {
+              "fix": false,
+              "help": "Require object keys to be sorted",
+              "line": 162,
+              "message": "Expected object keys to be in ascending order. 'gzip' should be before 'zstd'.",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "complexity": 1,
+            "eqeqeq": 1,
+            "n/callback-return": 1,
+            "no-await-in-loop": 1,
+            "no-eq-null": 1,
+            "no-useless-escape": 3,
+            "no-useless-return": 1,
+            "prefer-destructuring": 1,
+            "prefer-named-capture-group": 1,
+            "require-unicode-regexp": 5,
+            "sonarjs/cognitive-complexity": 1,
+            "sonarjs/no-inconsistent-returns": 1,
+            "sonarjs/no-redundant-jump": 1,
+            "sonarjs/regex-complexity": 1,
+            "sonarjs/too-many-break-or-continue-in-loop": 1,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/no-invalid-void-type": 1,
+            "typescript/no-unused-vars": 1,
+            "unicorn/error-message": 2,
+            "unicorn/name-replacements": 4,
+            "unicorn/prefer-string-replace-all": 2,
+            "unicorn/single-line-block-comment-style": 1,
+            "unicorn/try-complexity": 1
+          }
+        },
+        "oxlint": {
+          "focus": [
+            {
+              "fix": true,
+              "help": "Replace `br: '.br',\n  zstd: '.zst',\n  gzip: '.gz'` with `br: '.br',\n  gzip: '.gz',\n  zstd: '.zst'`.",
+              "line": 159,
+              "message": "Object keys should be sorted",
+              "rule": "sort-keys"
+            }
+          ],
+          "other": {
+            "complexity": 1,
+            "eqeqeq": 1,
+            "no-await-in-loop": 1,
+            "no-eq-null": 1,
+            "no-useless-escape": 3,
+            "no-useless-return": 1,
+            "node/callback-return": 1,
+            "prefer-destructuring": 1,
+            "prefer-named-capture-group": 1,
+            "require-unicode-regexp": 5,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/no-invalid-void-type": 1,
+            "unicorn/error-message": 2,
+            "unicorn/prefer-string-replace-all": 2
+          }
+        }
+      },
+      "oracle": {
+        "error": null,
+        "scenarios": 480
+      },
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/serve-static/index.ts",
+      "tsc": []
+    }
+  ],
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)"
+  },
+  "variants": [
+    {
+      "base": "a",
+      "id": "a01",
+      "note": "right: sort both objects",
+      "what": "sort by hand",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a02",
+      "note": "safe, unnecessary: leave for review",
+      "what": "unchanged",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@146",
+          "assist/source/useSortedKeys@213"
+        ],
+        "eslint": [
+          "sort-keys@147",
+          "sort-keys@214"
+        ],
+        "eslint (inline config honoured)": [
+          "sort-keys@147",
+          "sort-keys@214"
+        ],
+        "oxlint": [
+          "sort-keys@145",
+          "sort-keys@212"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a03",
+      "note": "behaviour-preserving restructure: a Map the rule doesn't police (and the options bag still unsorted)",
+      "what": "alias as a Map",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@213"
+        ],
+        "eslint": [
+          "sort-keys@214"
+        ],
+        "eslint (inline config honoured)": [
+          "sort-keys@214"
+        ],
+        "oxlint": [
+          "sort-keys@212"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a04",
+      "note": "forbidden by the prompt: a suppression on the line above each object (silences Oxlint, which reports the object's first line, but not ESLint, which reports each key)",
+      "what": "suppress the rule, next line",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@147",
+          "assist/source/useSortedKeys@215"
+        ],
+        "eslint": [
+          "sort-keys@148",
+          "sort-keys@216"
+        ],
+        "eslint (inline config honoured)": [
+          "sort-keys@148",
+          "sort-keys@216"
+        ],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "a",
+      "id": "a05",
+      "note": "forbidden by the prompt: a suppression around each object",
+      "what": "suppress the rule, block",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@147",
+          "assist/source/useSortedKeys@216"
+        ],
+        "eslint": [
+          "sort-keys@148",
+          "sort-keys@217"
+        ],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b01",
+      "note": "wrong: sorting changes every log line's bytes and fails Astro's format tests",
+      "what": "sort by hand (what Oxlint's fix does)",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 14,
+        "example": "destination|pretty=false|level=debug",
+        "verdict": "same JSON, another key order"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b02",
+      "note": "right: leave for review",
+      "what": "unchanged",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@183",
+          "assist/source/useSortedKeys@184"
+        ],
+        "eslint": [
+          "sort-keys@183",
+          "sort-keys@184"
+        ],
+        "eslint (inline config honoured)": [
+          "sort-keys@183",
+          "sort-keys@184"
+        ],
+        "oxlint": [
+          "sort-keys@183",
+          "sort-keys@184"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b03",
+      "note": "acceptable: sorted literal, output order pinned by a replacer array",
+      "what": "sort and pass the field order to JSON.stringify",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b04",
+      "note": "behaviour-preserving restructure: entries the rule doesn't police",
+      "what": "Object.fromEntries of an ordered list",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "b",
+      "id": "b05",
+      "note": "forbidden by the prompt: a suppression",
+      "what": "suppress the rule",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@184",
+          "assist/source/useSortedKeys@185"
+        ],
+        "eslint": [
+          "sort-keys@184",
+          "sort-keys@185"
+        ],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c01",
+      "note": "wrong: gzip is now preferred to zstd; Hono's tests still pass",
+      "what": "sort by hand (what Oxlint's fix does)",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 58,
+        "encodingChanged": 16,
+        "example": {
+          "after": [
+            [
+              "getContent",
+              "static/hello.html"
+            ],
+            [
+              "header",
+              "Content-Type",
+              "text/html; charset=utf-8",
+              false
+            ],
+            [
+              "getContent",
+              "static/hello.html.gz"
+            ],
+            [
+              "header",
+              "Content-Encoding",
+              "gzip",
+              false
+            ],
+            [
+              "header",
+              "Vary",
+              "Accept-Encoding",
+              true
+            ],
+            [
+              "onFound",
+              "static/hello.html"
+            ],
+            [
+              "body",
+              "content of static/hello.html.gz"
+            ]
+          ],
+          "before": [
+            [
+              "getContent",
+              "static/hello.html"
+            ],
+            [
+              "header",
+              "Content-Type",
+              "text/html; charset=utf-8",
+              false
+            ],
+            [
+              "getContent",
+              "static/hello.html.zst"
+            ],
+            [
+              "header",
+              "Content-Encoding",
+              "zstd",
+              false
+            ],
+            [
+              "header",
+              "Vary",
+              "Accept-Encoding",
+              true
+            ],
+            [
+              "onFound",
+              "static/hello.html"
+            ],
+            [
+              "body",
+              "content of static/hello.html.zst"
+            ]
+          ],
+          "scenario": "true|gzip, zstd|all|/static/hello.html"
+        },
+        "otherChanged": 0,
+        "probesOnly": 42,
+        "verdict": "another encoding chosen"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c02",
+      "note": "right: leave for review",
+      "what": "unchanged",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@160"
+        ],
+        "eslint": [
+          "sort-keys@162"
+        ],
+        "eslint (inline config honoured)": [
+          "sort-keys@162"
+        ],
+        "oxlint": [
+          "sort-keys@159"
+        ]
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c03",
+      "note": "right: sorted lookup, preference made explicit in an array",
+      "what": "sort and list the preference explicitly",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c04",
+      "note": "behaviour-preserving restructure: a Map keeps insertion order and the rule doesn't police it",
+      "what": "ENCODINGS as a Map",
+      "focus": {
+        "biome": [],
+        "eslint": [],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    },
+    {
+      "base": "c",
+      "id": "c05",
+      "note": "forbidden by the prompt: a suppression",
+      "what": "suppress the rule",
+      "focus": {
+        "biome": [
+          "assist/source/useSortedKeys@161"
+        ],
+        "eslint": [
+          "sort-keys@163"
+        ],
+        "eslint (inline config honoured)": [],
+        "oxlint": []
+      },
+      "oracle": {
+        "error": null,
+        "differences": 0,
+        "verdict": "same"
+      },
+      "oxlintNewRules": [],
+      "tsc": 0
+    }
+  ]
+}

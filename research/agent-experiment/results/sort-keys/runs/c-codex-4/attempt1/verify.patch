@@ -1,0 +1,15 @@
+--- a/index.ts
++++ b/index.ts
+@@ -145,7 +145,11 @@
+   gzip: ".gz",
+   zstd: ".zst",
+ } as const;
+-const ENCODINGS_ORDERED_KEYS: (keyof typeof ENCODINGS)[] = ["br", "zstd", "gzip"];
++const ENCODINGS_ORDERED_KEYS: (keyof typeof ENCODINGS)[] = [
++  "br",
++  "zstd",
++  "gzip",
++];
+ 
+ const DEFAULT_DOCUMENT = "index.html";
+ 

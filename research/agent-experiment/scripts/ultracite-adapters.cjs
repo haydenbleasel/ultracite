@@ -3,7 +3,10 @@
 //
 //   - the linter adapters' passes (linters.ts): Oxlint's `oxlint --fix`, `oxfmt --write`, then a
 //     report-only `oxlint -f json`; Biome's `biome check --write --reporter=json`, with each rule's
-//     help from `biome explain`. `fixAndCollect` runs on the whole project, `verify` on one file.
+//     help from `biome explain`; ESLint's `eslint --fix`, `stylelint --fix` on the style files,
+//     `prettier --write`, then a report-only `eslint -f json-with-metadata`, with each rule's help
+//     from its docs (added with the sort-keys topic, with the linter-args.ts helpers it uses).
+//     `fixAndCollect` runs on the whole project, `verify` on one file.
 //   - the parsers that turn each report into Ultracite's Diagnostic shape (linters.ts).
 //   - groupByFile, verifySafely, attemptFileFix's retry decision (toRetryIssues, and the issues
 //     the agent left for review) and fixFileGroup's tally and notes (index.ts),
@@ -23,17 +26,19 @@
 
 const { spawnSync } = require("node:child_process");
 const { createHash } = require("node:crypto");
-const { existsSync, readFileSync } = require("node:fs");
-const { dirname, join } = require("node:path");
+const { existsSync, readFileSync, statSync } = require("node:fs");
+const { dirname, extname, join, resolve } = require("node:path");
 
 const lib = require("./lib.cjs");
 
 const REPO = lib.REPO_ROOT;
-const AGENT_FIX = join(REPO, "packages/cli/src/agent-fix");
+const CLI = join(REPO, "packages/cli");
+const AGENT_FIX = join(CLI, "src/agent-fix");
 const sha256 = (s) => createHash("sha256").update(s).digest("hex");
 
 // ---------------------------------------------------------------- the CLI source this mirrors
 
+// `file` is relative to packages/cli/src/agent-fix (`../linter-args.ts` for the helpers in src/).
 const sourceSlice = (file, start, end, { inclusive = true } = {}) => {
   const src = readFileSync(join(AGENT_FIX, file), "utf8");
   const a = src.indexOf(start);
@@ -67,6 +72,28 @@ const SLICES = {
       "const biomeDiagnosticFile = ",
       "verify: (file, passthrough) => runBiomePass([file], passthrough),\n};"
     ),
+  // The ESLint report's shape through the ESLint adapter (parser, pass, verify). Added with the
+  // sort-keys topic.
+  "linters.ts eslint": () =>
+    sourceSlice(
+      "linters.ts",
+      "interface EslintMessage {",
+      "verify: (file, passthrough) => runEslintPass([file], passthrough),\n};"
+    ),
+  // The ESLint pass's helpers in src/linter-args.ts: which targets Stylelint gets, and the
+  // --no-warn-ignored flag for explicit files.
+  "linter-args.ts toStylelintTargets": () =>
+    sourceSlice(
+      "../linter-args.ts",
+      "const STYLE_FILE_GLOB = ",
+      "  return targets;\n};"
+    ),
+  "linter-args.ts eslintIgnoredFileArgs": () =>
+    sourceSlice(
+      "../linter-args.ts",
+      "export const eslintIgnoredFileArgs = (",
+      "    : [];"
+    ),
   // groupByFile through fixFileGroup: handoff order, failure notes, verifySafely, the retry loop,
   // and the per-file tally.
   "index.ts fixFileGroup": () =>
@@ -84,6 +111,8 @@ const SLICES = {
 
 // The hashes of the slices above in the CLI source this mirror was written from (9f80955d
 // "Judge agent-fix retries by what the previous edit did"; the accessibility runs used 367d9085).
+// The ESLint and linter-args.ts slices were added with the sort-keys topic, from f8960ace, where
+// every other slice still had the hash below.
 const EXPECTED = {
   "linters.ts runPiped":
     "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
@@ -91,6 +120,12 @@ const EXPECTED = {
     "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
   "linters.ts biome":
     "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+  "linters.ts eslint":
+    "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+  "linter-args.ts toStylelintTargets":
+    "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+  "linter-args.ts eslintIgnoredFileArgs":
+    "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
   "index.ts fixFileGroup":
     "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
   "index.ts MAX_AGENT_ATTEMPTS":
@@ -381,6 +416,160 @@ function biomePass({ cwd, files = [], configDir = null }) {
   return { diagnostics: parseBiomeDiagnostics(stdout), stdout };
 }
 
+// ---------------------------------------------------------------- ESLint (linters.ts, linter-args.ts)
+
+const binOf = (pkg, rel) =>
+  join(dirname(require.resolve(`${pkg}/package.json`, { paths: [CLI] })), rel);
+// ESLint, Prettier and Stylelint as `ultracite init --linter eslint` installs them: packages/cli's.
+const eslintBin = binOf("eslint", "bin/eslint.js");
+const prettierBin = binOf("prettier", "bin/prettier.cjs");
+const stylelintBin = binOf("stylelint", "bin/stylelint.mjs");
+
+// linter-args.ts STYLE_FILE_GLOB and toStylelintTargets: Stylelint gets the style files, and a
+// style-scoped glob for each directory (the project root when no files are given). `cwd` stands in
+// for the CLI's process.cwd(), the project root, when a target is checked for being a directory.
+const STYLE_FILE_GLOB = "**/*.{css,scss,less}";
+const styleExtensions = [".css", ".scss", ".less"];
+const GLOB_SPECIAL_CHARS_RE = /[!()*+?@[\]{|}]/gu;
+const escapeGlobPath = (dir) =>
+  dir.replaceAll(GLOB_SPECIAL_CHARS_RE, String.raw`\$&`);
+const hasExtension = (file, extensions) => {
+  const lowered = file.toLowerCase();
+  return extensions.some((extension) => lowered.endsWith(extension));
+};
+const isDirectory = (file, cwd) => {
+  try {
+    return statSync(resolve(cwd, file)).isDirectory();
+  } catch {
+    return false;
+  }
+};
+function toStylelintTargets(files, cwd) {
+  if (files.length === 0) {
+    return [STYLE_FILE_GLOB];
+  }
+  const targets = [];
+  for (const file of files) {
+    if (hasExtension(file, styleExtensions)) {
+      targets.push(file);
+      continue;
+    }
+    // (The CLI also turns Windows separators into `/` here.)
+    if (extname(file) === "" || isDirectory(file, cwd)) {
+      const base = file.replace(/\/+$/u, "");
+      targets.push(
+        base === "." || base === ""
+          ? STYLE_FILE_GLOB
+          : `${escapeGlobPath(base)}/${STYLE_FILE_GLOB}`
+      );
+    }
+  }
+  return targets;
+}
+
+/** linter-args.ts eslintIgnoredFileArgs, with no passthrough. */
+const eslintIgnoredFileArgs = (files) =>
+  files.length > 0 ? ["--no-warn-ignored"] : [];
+
+/**
+ * linters.ts parseEslintDiagnostics: the json-with-metadata report, each rule's help and URL from
+ * the docs in its meta. ESLint names files by absolute path.
+ */
+function parseEslintDiagnostics(stdout) {
+  const parsed = parseJsonOutput("eslint", stdout);
+  const rulesMeta = parsed.metadata?.rulesMeta ?? {};
+  const diagnostics = [];
+  for (const result of Array.isArray(parsed.results) ? parsed.results : []) {
+    if (!result.filePath) {
+      continue;
+    }
+    for (const message of result.messages ?? []) {
+      const docs = message.ruleId ? rulesMeta[message.ruleId]?.docs : undefined;
+      diagnostics.push({
+        column: message.column ?? 1,
+        fatal: message.fatal === true,
+        file: result.filePath,
+        help: docs?.description,
+        line: message.line ?? 1,
+        message: message.message ?? "",
+        raw: message,
+        rule: message.ruleId ?? "eslint",
+        severity: message.severity === 2 ? "error" : "warning",
+        url: docs?.url,
+      });
+    }
+  }
+  return diagnostics;
+}
+
+/**
+ * linters.ts runEslintPass with no passthrough: `eslint --fix`, `stylelint --fix
+ * --allow-empty-input` on the style targets (skipped when there are none, as for one .ts file),
+ * `prettier --write`, then `eslint -f json-with-metadata`, on the same targets, from `cwd`. The
+ * configs are passed with --config (Ultracite's tools find the project's own: the files `ultracite
+ * init` writes, which import `ultracite/...`). Returns the diagnostics, the raw report and each
+ * step's exit status.
+ */
+function eslintPass({
+  cwd,
+  files = [],
+  config,
+  prettierConfig,
+  stylelintConfig,
+}) {
+  const targets = toTargets(files, ".");
+  const ignoredFileArgs = eslintIgnoredFileArgs(files);
+  const es = ["--config", config];
+  const steps = {};
+  const run = (step, label, bin, args) => {
+    const result = spawnSync(process.execPath, [bin, ...args], {
+      cwd,
+      encoding: "utf8",
+      maxBuffer: PIPED_MAX_BUFFER,
+    });
+    if (result.error) {
+      throw new Error(`Failed to run ${label}: ${result.error.message}`);
+    }
+    if (result.status === null) {
+      throw new Error(
+        `${label} was killed by signal ${result.signal ?? "unknown"}`
+      );
+    }
+    steps[step] = result.status;
+    return String(result.stdout ?? "");
+  };
+  run("eslint --fix", "eslint", eslintBin, [
+    ...es,
+    "--fix",
+    ...ignoredFileArgs,
+    ...targets,
+  ]);
+  const stylelintTargets = toStylelintTargets(files, cwd);
+  if (stylelintTargets.length > 0) {
+    run("stylelint --fix", "stylelint", stylelintBin, [
+      "--config",
+      stylelintConfig,
+      "--fix",
+      "--allow-empty-input",
+      ...stylelintTargets,
+    ]);
+  }
+  run("prettier --write", "prettier", prettierBin, [
+    "--config",
+    prettierConfig,
+    "--write",
+    ...targets,
+  ]);
+  const stdout = run("eslint -f json-with-metadata", "eslint", eslintBin, [
+    ...es,
+    ...ignoredFileArgs,
+    "-f",
+    "json-with-metadata",
+    ...targets,
+  ]);
+  return { diagnostics: parseEslintDiagnostics(stdout), stdout, steps };
+}
+
 // ---------------------------------------------------------------- index.ts and diff.ts
 
 /** index.ts groupByFile: one group per file, in path order. */
@@ -402,10 +591,11 @@ function groupByFile(diagnostics) {
 /**
  * index.ts verifySafely: a missing file is a failed verification; otherwise the adapter's verify
  * pass, keeping only this file's diagnostics. `verify(file)` is the topic's adapter pass; `cwd` is
- * the project root the relative path resolves from.
+ * the project root a relative path resolves from (ESLint's paths are absolute, and resolve to
+ * themselves; added with the sort-keys topic, the same as join for a relative path).
  */
 function verifySafely(verify, file, cwd) {
-  if (!existsSync(join(cwd, file))) {
+  if (!existsSync(resolve(cwd, file))) {
     return { error: "the file no longer exists.", remaining: null };
   }
   try {
@@ -601,13 +791,19 @@ module.exports = {
   biomePass,
   checkSources,
   contract,
+  eslintBin,
+  eslintPass,
   fileOutcome,
   groupByFile,
   oxfmtBin,
   oxlintBin,
   oxlintPass,
   parseBiomeDiagnostics,
+  parseEslintDiagnostics,
   parseOxlintDiagnostics,
+  prettierBin,
+  stylelintBin,
+  toStylelintTargets,
   nextRetry,
   partitionByRemaining,
   toOxlintRuleName,

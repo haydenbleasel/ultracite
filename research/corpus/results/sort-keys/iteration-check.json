@@ -1,0 +1,993 @@
+{
+  "note": "Hand input (one rater, read at the pinned commits): every object Oxlint's fix rewrites in the eight corpus repos whose order the static analysis saw reach Object.keys / values / entries or for-in. Verdicts: semantics (sorting changes what a user gets), display (changes an order a user sees), observable (changes bytes or iteration order nothing should depend on), harmless.",
+  "generated": "2026-10-20",
+  "items": [
+    {
+      "file": "src/helper/adapter/index.ts",
+      "keysAfter": [
+        "bun",
+        "deno",
+        "node",
+        "workerd"
+      ],
+      "keysBefore": [
+        "deno",
+        "bun",
+        "workerd",
+        "node"
+      ],
+      "line": 43,
+      "note": "First match over user agents, but at most one of Deno, Bun, Cloudflare-Workers and Node.js can match.",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/helper/adapter/index.ts#L43",
+      "repo": "hono",
+      "verdict": "harmless"
+    },
+    {
+      "file": "src/middleware/language/language.ts",
+      "keysAfter": [
+        "cookie",
+        "header",
+        "path",
+        "querystring"
+      ],
+      "keysBefore": [
+        "querystring",
+        "cookie",
+        "header",
+        "path"
+      ],
+      "line": 191,
+      "note": "Detection order comes from options.order, an array; the object is read by key and only checked with includes().",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/language/language.ts#L191",
+      "repo": "hono",
+      "verdict": "harmless"
+    },
+    {
+      "file": "src/middleware/secure-headers/secure-headers.ts",
+      "keysAfter": [
+        "crossOriginEmbedderPolicy",
+        "crossOriginOpenerPolicy",
+        "crossOriginResourcePolicy",
+        "originAgentCluster",
+        "referrerPolicy",
+        "strictTransportSecurity",
+        "xContentTypeOptions",
+        "xDnsPrefetchControl",
+        "xDownloadOptions",
+        "xFrameOptions",
+        "xPermittedCrossDomainPolicies",
+        "xXssProtection"
+      ],
+      "keysBefore": [
+        "crossOriginEmbedderPolicy",
+        "crossOriginResourcePolicy",
+        "crossOriginOpenerPolicy",
+        "originAgentCluster",
+        "referrerPolicy",
+        "strictTransportSecurity",
+        "xContentTypeOptions",
+        "xDnsPrefetchControl",
+        "xDownloadOptions",
+        "xFrameOptions",
+        "xPermittedCrossDomainPolicies",
+        "xXssProtection"
+      ],
+      "line": 94,
+      "note": "Object.entries sets the response headers in this order; header order changes, values don't.",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/secure-headers/secure-headers.ts#L94",
+      "repo": "hono",
+      "verdict": "observable"
+    },
+    {
+      "file": "src/middleware/serve-static/index.ts",
+      "keysAfter": [
+        "br",
+        "gzip",
+        "zstd"
+      ],
+      "keysBefore": [
+        "br",
+        "zstd",
+        "gzip"
+      ],
+      "line": 25,
+      "note": "ENCODINGS_ORDERED_KEYS is the encoding preference: sorted, a client that accepts gzip and zstd but not br gets gzip instead of zstd (subject C).",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/serve-static/index.ts#L25",
+      "repo": "hono",
+      "verdict": "semantics"
+    },
+    {
+      "file": "src/utils/mime.ts",
+      "keysAfter": [
+        "'3g2'",
+        "'3gp'",
+        "aac",
+        "av1",
+        "avi",
+        "avif",
+        "bin",
+        "bmp",
+        "css",
+        "csv",
+        "eot",
+        "epub"
+      ],
+      "keysBefore": [
+        "aac",
+        "avi",
+        "avif",
+        "av1",
+        "bin",
+        "bmp",
+        "css",
+        "csv",
+        "eot",
+        "epub",
+        "gif",
+        "gz"
+      ],
+      "line": 35,
+      "note": "getExtension() returns the first extension whose type matches, but every pair of extensions sharing a type (htm/html, jpeg/jpg, js/mjs, json/map, mid/midi, tif/tiff) is already in alphabetical order, so no result changes; the exported mimes object iterates in another order.",
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/mime.ts#L35",
+      "repo": "hono",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "useInfiniteQuery",
+        "useMutation",
+        "useQuery",
+        "useSubscription",
+        "useSuspenseInfiniteQuery",
+        "useSuspenseQuery"
+      ],
+      "keysBefore": [
+        "useQuery",
+        "useSuspenseQuery",
+        "useInfiniteQuery",
+        "useSuspenseInfiniteQuery",
+        "useMutation",
+        "useSubscription"
+      ],
+      "line": 21,
+      "note": "The codemod rewrites each hook by exact name; the order of the passes doesn't change the result.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L21",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "fn",
+        "lib"
+      ],
+      "keysBefore": [
+        "lib",
+        "fn"
+      ],
+      "line": 22,
+      "note": "A nested { lib, fn } entry of the codemod table, read by destructuring.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L22",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "fn",
+        "lib"
+      ],
+      "keysBefore": [
+        "lib",
+        "fn"
+      ],
+      "line": 23,
+      "note": "A nested { lib, fn } entry of the codemod table, read by destructuring.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L23",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "fn",
+        "lib"
+      ],
+      "keysBefore": [
+        "lib",
+        "fn"
+      ],
+      "line": 24,
+      "note": "A nested { lib, fn } entry of the codemod table, read by destructuring.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L24",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "fn",
+        "lib"
+      ],
+      "keysBefore": [
+        "lib",
+        "fn"
+      ],
+      "line": 28,
+      "note": "A nested { lib, fn } entry of the codemod table, read by destructuring.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L28",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "fn",
+        "lib"
+      ],
+      "keysBefore": [
+        "lib",
+        "fn"
+      ],
+      "line": 32,
+      "note": "A nested { lib, fn } entry of the codemod table, read by destructuring.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L32",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+      "keysAfter": [
+        "fn",
+        "lib"
+      ],
+      "keysBefore": [
+        "lib",
+        "fn"
+      ],
+      "line": 33,
+      "note": "A nested { lib, fn } entry of the codemod table, read by destructuring.",
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L33",
+      "repo": "trpc",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/astro/src/runtime/client/dev-toolbar/apps/utils/icons.ts",
+      "keysAfter": [
+        "accessibility",
+        "adapters",
+        "analytics",
+        "'css+ui'",
+        "frameworks",
+        "other",
+        "'performance+seo'"
+      ],
+      "keysBefore": [
+        "frameworks",
+        "adapters",
+        "'css+ui'",
+        "'performance+seo'",
+        "analytics",
+        "accessibility",
+        "other"
+      ],
+      "line": 8,
+      "note": "new Map(Object.entries(...)) read with has() and get() in the order of the integration's own categories; the icon is then picked at random.",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/apps/utils/icons.ts#L8",
+      "repo": "astro",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/common/src/constants.ts",
+      "keysAfter": [
+        "avif",
+        "bmp",
+        "gif",
+        "ico",
+        "jfif",
+        "jpg",
+        "png",
+        "svg",
+        "webp"
+      ],
+      "keysBefore": [
+        "svg",
+        "png",
+        "jpg",
+        "gif",
+        "webp",
+        "bmp",
+        "ico",
+        "avif",
+        "jfif"
+      ],
+      "line": 299,
+      "note": "Image MIME types spread into MIME_TYPES and listed with Object.values for file filters; nothing depends on the order.",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/common/src/constants.ts#L299",
+      "repo": "excalidraw",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/element/src/store.ts",
+      "keysAfter": [
+        "EVENTUALLY",
+        "IMMEDIATELY",
+        "NEVER"
+      ],
+      "keysBefore": [
+        "IMMEDIATELY",
+        "NEVER",
+        "EVENTUALLY"
+      ],
+      "line": 38,
+      "note": "An enum-like constant; Object.values is used only for its type.",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/store.ts#L38",
+      "repo": "excalidraw",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/element/src/textWrapping.ts",
+      "keysAfter": [
+        "CHAR",
+        "CLOSING",
+        "CURRENCY",
+        "OPENING"
+      ],
+      "keysBefore": [
+        "CHAR",
+        "OPENING",
+        "CLOSING",
+        "CURRENCY"
+      ],
+      "line": 89,
+      "note": "Object.values(CJK) goes into a regex character class, where order doesn't matter.",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/textWrapping.ts#L89",
+      "repo": "excalidraw",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/excalidraw/components/ColorPicker/keyboardNavHandlers.ts",
+      "keysAfter": [
+        "baseColors",
+        "custom",
+        "hex",
+        "shades"
+      ],
+      "keysBefore": [
+        "custom",
+        "baseColors",
+        "shades",
+        "hex"
+      ],
+      "line": 178,
+      "note": "Object.entries(sectionsMap) is the Tab order between the colour picker's sections (custom, base colours, shades, hex); sorted, Tab moves base colours, custom, hex, shades.",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/keyboardNavHandlers.ts#L178",
+      "repo": "excalidraw",
+      "verdict": "semantics"
+    },
+    {
+      "file": "packages/next/src/build/create-compiler-aliases.ts",
+      "keysAfter": [
+        "dynamic",
+        "form",
+        "head",
+        "link"
+      ],
+      "keysBefore": [
+        "head",
+        "dynamic",
+        "link",
+        "form"
+      ],
+      "line": 306,
+      "note": "An alias mapping assigned into another object by key.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/create-compiler-aliases.ts#L306",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/build/index.ts",
+      "keysAfter": [
+        "app",
+        "pages"
+      ],
+      "keysBefore": [
+        "pages",
+        "app"
+      ],
+      "line": 1641,
+      "note": "pageKeys is read by name (pages, app).",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/index.ts#L1641",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+      "keysAfter": [
+        "forbidden",
+        "'not-found'",
+        "unauthorized"
+      ],
+      "keysBefore": [
+        "'not-found'",
+        "forbidden",
+        "unauthorized"
+      ],
+      "line": 73,
+      "note": "The order of the fallback entries in the generated loader tree.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/loaders/next-app-loader/index.ts#L73",
+      "repo": "next.js",
+      "verdict": "observable"
+    },
+    {
+      "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+      "keysAfter": [
+        "forbidden",
+        "'not-found'",
+        "unauthorized"
+      ],
+      "keysBefore": [
+        "'not-found'",
+        "forbidden",
+        "unauthorized"
+      ],
+      "line": 78,
+      "note": "Object.keys of the default fallback paths, each then read by key.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/loaders/next-app-loader/index.ts#L78",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/build/webpack/loaders/next-app-loader/index.ts",
+      "keysAfter": [
+        "error",
+        "'global-error'",
+        "'global-not-found'",
+        "layout",
+        "loading",
+        "template",
+        "..."
+      ],
+      "keysBefore": [
+        "layout",
+        "template",
+        "error",
+        "loading",
+        "'global-error'",
+        "'global-not-found'",
+        "..."
+      ],
+      "line": 84,
+      "note": "Object.values(FILE_TYPES) fixes the order of the special files in the generated loader tree (layout, template, error, loading, ...); not checked whether anything downstream depends on it.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/loaders/next-app-loader/index.ts#L84",
+      "repo": "next.js",
+      "verdict": "observable"
+    },
+    {
+      "file": "packages/next/src/cli/next-build.ts",
+      "keysAfter": [
+        "experimentalBuildMode",
+        "experimentalCpuProf",
+        "experimentalDebugMemoryUsage"
+      ],
+      "keysBefore": [
+        "experimentalDebugMemoryUsage",
+        "experimentalBuildMode",
+        "experimentalCpuProf"
+      ],
+      "line": 147,
+      "note": "enabledFeatures become trace span attributes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-build.ts#L147",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/cli/next-dev.ts",
+      "keysAfter": [
+        "experimentalCpuProf",
+        "serverFastRefreshDisabled"
+      ],
+      "keysBefore": [
+        "serverFastRefreshDisabled",
+        "experimentalCpuProf"
+      ],
+      "line": 436,
+      "note": "enabledFeatures become trace span attributes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-dev.ts#L436",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/client/app-dir/link.tsx",
+      "keysAfter": [
+        "as",
+        "legacyBehavior",
+        "onClick",
+        "onMouseEnter",
+        "onNavigate",
+        "onTouchStart",
+        "passHref",
+        "prefetch",
+        "replace",
+        "scroll",
+        "shallow",
+        "transitionTypes"
+      ],
+      "keysBefore": [
+        "as",
+        "replace",
+        "scroll",
+        "shallow",
+        "passHref",
+        "prefetch",
+        "unstable_dynamicOnHover",
+        "onClick",
+        "onMouseEnter",
+        "onTouchStart",
+        "legacyBehavior",
+        "onNavigate"
+      ],
+      "line": 431,
+      "note": "optionalPropsGuard: Object.keys to validate each prop; only the order of possible errors changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/app-dir/link.tsx#L431",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/client/components/http-access-fallback/http-access-fallback.ts",
+      "keysAfter": [
+        "FORBIDDEN",
+        "NOT_FOUND",
+        "UNAUTHORIZED"
+      ],
+      "keysBefore": [
+        "NOT_FOUND",
+        "FORBIDDEN",
+        "UNAUTHORIZED"
+      ],
+      "line": 1,
+      "note": "Object.values into a Set used for lookups.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/http-access-fallback/http-access-fallback.ts#L1",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/client/link.tsx",
+      "keysAfter": [
+        "as",
+        "legacyBehavior",
+        "locale",
+        "onClick",
+        "onMouseEnter",
+        "onNavigate",
+        "onTouchStart",
+        "passHref",
+        "prefetch",
+        "replace",
+        "scroll",
+        "shallow"
+      ],
+      "keysBefore": [
+        "as",
+        "replace",
+        "scroll",
+        "shallow",
+        "passHref",
+        "prefetch",
+        "locale",
+        "onClick",
+        "onMouseEnter",
+        "onTouchStart",
+        "legacyBehavior",
+        "onNavigate"
+      ],
+      "line": 385,
+      "note": "optionalPropsGuard, as in app-dir/link.tsx.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/link.tsx#L385",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/lib/memory/trace.ts",
+      "keysAfter": [
+        "'memory.heapMax'",
+        "'memory.heapTotal'",
+        "'memory.heapUsed'",
+        "'memory.rss'"
+      ],
+      "keysBefore": [
+        "'memory.rss'",
+        "'memory.heapUsed'",
+        "'memory.heapTotal'",
+        "'memory.heapMax'"
+      ],
+      "line": 59,
+      "note": "Trace attributes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/memory/trace.ts#L59",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/lib/upgrade/prompt.ts",
+      "keysAfter": [
+        "...",
+        "dismiss",
+        "skip"
+      ],
+      "keysBefore": [
+        "...",
+        "skip",
+        "dismiss"
+      ],
+      "line": 24,
+      "note": "The upgrade prompt's choices, in key order, with the first selected by default: sorted, \"Skip until next version\" comes before \"Skip\" and becomes the default when no update is possible.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/upgrade/prompt.ts#L24",
+      "repo": "next.js",
+      "verdict": "semantics"
+    },
+    {
+      "file": "packages/next/src/next-devtools/server/font/get-dev-overlay-font-middleware.ts",
+      "keysAfter": [
+        "'Cache-Control'",
+        "'Content-Type'"
+      ],
+      "keysBefore": [
+        "'Content-Type'",
+        "'Cache-Control'"
+      ],
+      "line": 17,
+      "note": "Response header order.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/server/font/get-dev-overlay-font-middleware.ts#L17",
+      "repo": "next.js",
+      "verdict": "observable"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "dynamic",
+        "dynamicParams",
+        "ensureStatic",
+        "fetchCache",
+        "generateMetadata",
+        "instant",
+        "maxDuration",
+        "metadata",
+        "preferredRegion",
+        "prefetch",
+        "revalidate",
+        "runtime"
+      ],
+      "keysBefore": [
+        "dynamic",
+        "fetchCache",
+        "preferredRegion",
+        "revalidate",
+        "dynamicParams",
+        "runtime",
+        "metadata",
+        "generateMetadata",
+        "maxDuration",
+        "instant",
+        "prefetch",
+        "ensureStatic"
+      ],
+      "line": 28,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L28",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "link",
+        "options"
+      ],
+      "keysBefore": [
+        "description",
+        "options",
+        "link"
+      ],
+      "line": 29,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L29",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "link",
+        "options"
+      ],
+      "keysBefore": [
+        "description",
+        "options",
+        "link"
+      ],
+      "line": 44,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L44",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "getHint",
+        "isValid",
+        "link",
+        "options"
+      ],
+      "keysBefore": [
+        "description",
+        "options",
+        "link",
+        "isValid",
+        "getHint"
+      ],
+      "line": 65,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L65",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "getHint",
+        "isValid",
+        "link",
+        "options",
+        "type"
+      ],
+      "keysBefore": [
+        "description",
+        "type",
+        "options",
+        "link",
+        "isValid",
+        "getHint"
+      ],
+      "line": 94,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L94",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "0",
+        "30",
+        "false"
+      ],
+      "keysBefore": [
+        "false",
+        "0",
+        "30"
+      ],
+      "line": 98,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L98",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "isValid",
+        "link",
+        "options"
+      ],
+      "keysBefore": [
+        "description",
+        "options",
+        "link",
+        "isValid"
+      ],
+      "line": 112,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L112",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "link",
+        "options"
+      ],
+      "keysBefore": [
+        "description",
+        "options",
+        "link"
+      ],
+      "line": 125,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L125",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "insertText",
+        "link"
+      ],
+      "keysBefore": [
+        "description",
+        "link",
+        "insertText"
+      ],
+      "line": 137,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L137",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "insertText",
+        "link"
+      ],
+      "keysBefore": [
+        "description",
+        "link",
+        "insertText"
+      ],
+      "line": 142,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L142",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "insertText",
+        "link",
+        "options",
+        "type"
+      ],
+      "keysBefore": [
+        "description",
+        "link",
+        "type",
+        "options",
+        "insertText"
+      ],
+      "line": 162,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L162",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "auto",
+        "'force-disabled'",
+        "partial"
+      ],
+      "keysBefore": [
+        "auto",
+        "partial",
+        "'force-disabled'"
+      ],
+      "line": 166,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L166",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "insertText",
+        "isValid",
+        "link",
+        "options",
+        "type"
+      ],
+      "keysBefore": [
+        "description",
+        "link",
+        "type",
+        "options",
+        "insertText",
+        "isValid"
+      ],
+      "line": 174,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L174",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "keysAfter": [
+        "description",
+        "getHint",
+        "isValid",
+        "link",
+        "type"
+      ],
+      "keysBefore": [
+        "description",
+        "link",
+        "type",
+        "isValid",
+        "getHint"
+      ],
+      "line": 198,
+      "note": "API_DOCS for Next.js's TypeScript plugin: Object.entries of the options builds the hover and completion text, so the order of the options shown in the editor changes.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/config.ts#L198",
+      "repo": "next.js",
+      "verdict": "display"
+    },
+    {
+      "file": "packages/next/src/server/web/sandbox/context.ts",
+      "keysAfter": [
+        "'node:assert'",
+        "'node:async_hooks'",
+        "'node:buffer'",
+        "'node:events'",
+        "'node:util'"
+      ],
+      "keysBefore": [
+        "'node:buffer'",
+        "'node:events'",
+        "'node:async_hooks'",
+        "'node:assert'",
+        "'node:util'"
+      ],
+      "line": 195,
+      "note": "A Map of node: modules read by name.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/web/sandbox/context.ts#L195",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/shared/lib/get-img-props.ts",
+      "keysAfter": [
+        "layout",
+        "lazyBoundary",
+        "lazyRoot",
+        "objectFit",
+        "objectPosition"
+      ],
+      "keysBefore": [
+        "layout",
+        "objectFit",
+        "objectPosition",
+        "lazyBoundary",
+        "lazyRoot"
+      ],
+      "line": 619,
+      "note": "The order of deprecation warnings when an Image has more than one legacy prop.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/get-img-props.ts#L619",
+      "repo": "next.js",
+      "verdict": "observable"
+    }
+  ],
+  "tally": {
+    "harmless": 24,
+    "observable": 5,
+    "semantics": 3,
+    "display": 14
+  },
+  "population": 46
+}

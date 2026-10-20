@@ -1,0 +1,20 @@
+--- a/json.ts
++++ b/json.ts
+@@ -170,13 +170,11 @@
+       const destination =
+         levels[event.level] >= levels["error"] ? console.error : console.info;
+       const message = event.message.replace(SGR_REGEX, "");
++      const entry = { message };
++      Object.assign(entry, { label: event.label, level: event.level });
+       const payload = pretty
+-        ? JSON.stringify(
+-            { message, label: event.label, level: event.level },
+-            null,
+-            2
+-          )
+-        : JSON.stringify({ message, label: event.label, level: event.level });
++        ? JSON.stringify(entry, null, 2)
++        : JSON.stringify(entry);
+       destination(payload);
+     },
+   };

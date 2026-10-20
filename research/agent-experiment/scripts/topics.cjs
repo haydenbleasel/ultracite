@@ -60,7 +60,9 @@
 //                                   lint, in place) and returns every diagnostic it reports
 // and `expectedDiagnostics(subject)` returns the rule names the handoff must hand over. `lint`
 // and `toDiagnostics` aren't used for these subjects. Topics without `verify` run one attempt,
-// exactly as before.
+// exactly as before. A diagnostic's `file` may be absolute, as ESLint's adapter reports it (added
+// with the sort-keys topic): run-one.mjs checks the handoff by the path relative to the run dir and
+// hands the absolute path to `verify`, as Ultracite does; relative paths are used as they are.
 "use strict";
 
 const { existsSync } = require("node:fs");

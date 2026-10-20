@@ -1,0 +1,364 @@
+---
+title: Sorting object keys changes more than style
+description: Where the rules that alphabetize object keys came from, why JavaScript lets code read key order, what sorting would do to 13,574 objects in eight TypeScript codebases, and what agents do with an object whose order is the point.
+date: 2026-10-20
+author: hayden
+next:
+  - label: Turn key sorting off where the order matters
+    href: /docs/configuration#overriding-rules
+  - label: Tell agents when an object's order is deliberate
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - sort-keys
+  - useSortedKeys
+---
+
+`sort-keys` reports an object literal whose keys aren't in alphabetical order. ESLint has had the rule since 2016, Oxlint and Biome have their own versions, and Ultracite turns them on. ESLint's version only reports. Oxlint's and Biome's can also rewrite the object, and when we ran `ultracite fix` in October 2026, it applied those rewrites like any other fix, before anyone looked at them.
+
+The case for sorting is tidiness: sorted keys are easier to find, easier to diff and cause fewer merge conflicts. The case against is that a JavaScript object remembers the order its keys were written in, and code can read that order. So we wanted to know what sorting actually changes. We read the rule's history and the research on finding things in lists, measured key order in eight TypeScript codebases and their histories, ran the fixes over 13,574 objects, and handed three real objects to coding agents.
+
+## Neat and tidy
+
+The first key-sorting rule we found is TSLint's. Calvin Fernandez [added it](https://github.com/palantir/tslint/pull/416) in 2015, and the pull request gave no reason beyond what it does: it "validates that the user has declared them in alphabetical order." A year later, when TSLint gave every rule a rationale, this one got "Useful in preventing merge conflicts." JSCS had added its own rule in August 2015, and the [release notes](https://github.com/jscs-dev/node-jscs/releases/tag/v2.1.0) offered it as a way "to keep your object neat and tidy." Its contributors argued on [the first day](https://github.com/jscs-dev/node-jscs/issues/1545) about what alphabetical means, because in character codes `_` sorts between `Z` and `a`.
+
+ESLint's `sort-keys` is a port of the JSCS rule. Toru Nagashima [proposed it](https://github.com/eslint/eslint/issues/6076) in 2016, and it shipped that August. Its [documentation](https://eslint.org/docs/latest/rules/sort-keys) gives the reasons every version since has repeated: some developers sort keys "to more easily find and/or diff necessary properties at a later time." The next sentence gives the other side: "Others feel that it adds complexity and becomes burden to maintain." Two days after the proposal, Andy Edwards raised the objection that still matters, that some major libraries "rely on the de-facto preservation of object property ordering." The answer was that those projects didn't need to turn the rule on.
+
+TSLint put its rule in `tslint:recommended`, its default config, in 2016. Two years later a user [asked](https://github.com/palantir/tslint/issues/4305) why they'd want keys "alphabetic if they made more sense in some other ordering," and added that the rule "just complains." A maintainer agreed, and the rule [left the recommended set](https://github.com/palantir/tslint/pull/4871) in TSLint 6.0. ESLint's rule has never been in `eslint:recommended`, and most widely used configs leave it off. [Airbnb's](https://github.com/airbnb/javascript/blob/8ed19247bef145e3cc41b24a02dd1fe6d9b5e681/packages/eslint-config-airbnb-base/rules/style.js#L473-L477) turns it off, and eslint-config-love, which is built to be strict, files it under rules that are ["too much"](https://github.com/mightyiam/eslint-config-love/blob/fc9a5b5fe7b971d7807ea1f6669b71d2707a0f71/src/test/_intentionally-unused-rules.ts#L23-L61).
+
+## A fix ESLint wouldn't ship
+
+In December 2016 Gajus Kuizinas [asked for an autofix](https://github.com/eslint/eslint/issues/7714), because sorting by hand "is a laborious style requirement when applied on a large code base." Teddy Katz, on ESLint's team, said no: "autofixing `sort-keys` isn't safe, because it changes the order of `Object.keys`". A fix could sort the keys, but it couldn't update the code elsewhere that relied on the old order. Katz described the user ESLint was protecting. Someone joins a project, runs `--fix` before reading the errors, sees the build pass and commits, "without ever realizing that the linter broke it." Katz's rule was that "ESLint should not break working code under any circumstances."
+
+ESLint has given the same answer since. It declined a fix again in [2018](https://github.com/eslint/eslint/issues/10715), [2022](https://github.com/eslint/eslint/issues/16167) and [2024](https://github.com/eslint/eslint/issues/18741), and editor suggestions in [2021](https://github.com/eslint/eslint/issues/14021). It now treats the rule as stylistic and has frozen it. Prettier won't sort object keys either. Its [rationale](https://prettier.io/docs/rationale) says "sorting is potentially unsafe because of side effects".
+
+Katz's user, who runs the fix before reading what it fixes, is a fair description of an automated fix pass. It's what an agent's harness runs after every edit, and a pre-commit hook before every commit.
+
+Biome and Oxlint shipped fixes anyway. Biome's `useSortedKeys` [arrived](https://github.com/biomejs/biome/pull/5079) in Biome 2.0 in 2025 as an "assist", a code action that sits outside both the linter and the formatter. Biome's pre-release docs [said](http://web.archive.org/web/20250415194531/https://next.biomejs.dev/assist/) that assist actions "must not change the semantics of a program." In a [May 2025 discussion](https://github.com/biomejs/biome/discussions/5907), Jonas Wagner pointed out that sorting keys "absolutely changes program semantics." Emanuele Stoppa, Biome's lead maintainer, replied that relying on the order of a static object "is an edge case", and that people who turn sorting on know they can't rely on that order. The promise came out of the docs, and the action kept its safe label. Its [own documentation](https://github.com/biomejs/biome/blob/%40biomejs/biome%402.5.15/crates/biome_js_analyze/src/assist/source/use_sorted_keys.rs#L35-L39) now says: "Sorting the keys of an object technically changes the semantics of the program."
+
+Oxlint [ported](https://github.com/oxc-project/oxc/pull/4845) ESLint's rule in 2024 and [added a fix](https://github.com/oxc-project/oxc/pull/14225) a year later, as an ordinary fix that `oxlint --fix` applies. Its maintainers don't think sorting is safe either. When a user [asked](https://github.com/oxc-project/oxc/issues/19696) for key sorting in Oxc's formatter in 2026, a core maintainer pointed them to the linter's fix, and explained that sorting keys "is unsafe, and can change runtime behaviour".
+
+Both positions make sense for a tool you opt into. If you turn sorting on, you've decided that your objects' order doesn't matter. A preset makes that decision for you.
+
+## The order JavaScript promises
+
+Whether key order is part of a program has a precise answer, and it changed over time. ES5 left the order of a `for-in` loop ["not specified"](https://262.ecma-international.org/5.1/#sec-12.6.4). ES2015 defined an order for some operations but left `Object.keys` and `JSON.stringify` tied to the unspecified one. Engines agreed anyway. The [proposal](https://github.com/tc39/proposal-for-in-order) that settled it starts from the problem: "There are a variety of APIs which make a property enumeration order observable." Kevin Gibbons's [change](https://github.com/tc39/ecma262/pull/1791) made it part of ES2020. Since then, an ordinary object's integer-like keys come first in ascending order, then its string keys in the order they were created. An object literal creates them in source order. Sort the literal and you sort what `Object.keys`, `for-in`, spread and `JSON.stringify` see.
+
+A literal also runs in source order: each key, then its value, top to bottom. Moving a property moves when its value is computed, so `{ b: log("b"), a: log("a") }` logs in the other order once it's sorted. When someone [proposed a fixer](https://github.com/palantir/tslint/pull/2634) for TSLint's rule, a maintainer objected for this reason, with `{ b: ++i, a: ++i }` as the example, and it was never merged. And when a key appears twice, the last one wins, so a sort that isn't stable can change which value the object ends up with.
+
+JSON is different on paper. [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259) calls an object "an unordered collection", but admits that parsers "differ as to whether or not they make the ordering of object members visible". JavaScript's does. So does anything that compares the text, such as a snapshot test, a hash, a signature or a cache key.
+
+## Producers before consumers
+
+TypeScript reads order too. When an object passed to a generic function holds callbacks whose parameter types have to be inferred, TypeScript infers them in source order. What an earlier callback returns can type a later one's parameter, but not the other way round. Anders Hejlsberg [called it](https://github.com/microsoft/TypeScript/pull/48538) "a long standing limitation of our inference algorithm," and "one that isn't likely to change."
+
+Libraries built on that order say so. TanStack Query's maintainer Dominik Dorfmeister [put it in one line](https://github.com/TanStack/query/issues/8988): "In an object, type consumers must come after type producers." In `useMutation`, `onMutate` returns a context that `onError` receives. Alphabetical order puts `onError` first, and the context becomes `{}`. TanStack ships its own fixable lint rules, such as [`mutation-property-order`](https://tanstack.com/query/latest/docs/eslint/mutation-property-order), that put these keys in dependency order, the opposite of what `sort-keys` asks for.
+
+Ultracite's users ran into this twice in 2026. In [#762](https://github.com/haydenbleasel/ultracite/issues/762), Biome's fix put TanStack Router's route options in alphabetical order and broke type-checking, and the reporter noted that "the damage happens silently during the fix pass". A month later, [#801](https://github.com/haydenbleasel/ultracite/issues/801) reported the Query case. TypeScript passed, "`ultracite fix` exits successfully and moves `onError` first," and the next type-check failed with `Property 'previous' does not exist on type '{}'`. The reporter's summary: "A style autofix should not turn type-correct code into a type error."
+
+In our calibration, three small cases of this shape type-check before either fix and fail after it. Two controls show where the dependency comes from. A callback with no parameters isn't inferred this way, so its position doesn't matter, and giving the later callback's parameter a type annotation removes the dependency.
+
+## Where the order is the meaning
+
+Outside TypeScript, the platform docs are blunt. [Node.js](https://nodejs.org/api/packages.html#conditional-exports) says that within the `exports` object, "key order is significant." The `default` condition always matches, so it "should always come last." Sorted, `default` comes first and every condition after it is dead. Vite's [`resolve.alias`](https://vite.dev/config/shared-options#resolve-alias) applies "the first defined rules" first. In MongoDB, an equality match on an embedded document has to be exact, ["including the field order"](https://www.mongodb.com/docs/manual/tutorial/query-embedded-documents/), so a sorted filter can match nothing. In a style object, a later shorthand overrides an earlier longhand. Our calibration renders `{ marginTop: 4, margin: 0 }` with no top margin, and sorted, with one.
+
+Language models read order as well. OpenAI's [structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs) "will be produced in the same order as the ordering of keys in the schema," and a schema can be a Zod object that the rule lints like any other. Until November 2025, Google's Gemini API did what `sort-keys` does. "By default, the API orders properties alphabetically," its [docs said](https://web.archive.org/web/20250323002801/https://ai.google.dev/gemini-api/docs/structured-output/), and Google [changed it](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-api-structured-outputs/) to keep the schema's order.
+
+That matters because a model writes fields in the order they come. In a [2026 preprint](https://arxiv.org/abs/2610.12056), GPT-4o solved 95.6% of the GSM8K math problems when its JSON schema put the reasoning before the answer, and 55.3% when the answer came first. The schema was given in the prompt rather than enforced, and not every model went that way: Claude Sonnet 4.5 did better with the answer first. Alphabetically, `answer` sorts before `reasoning`.
+
+## On by policy
+
+Ultracite didn't always sort keys. Its first ESLint config, in 2022, set `sort-keys` to off, and when Biome added key sorting in 2025, Ultracite's Biome config turned it off too. Key sorting came on at the end of 2025, when Ultracite's Oxlint config started turning on every rule category and switching off only the rules that didn't fit. The ESLint and Biome configs were aligned to match in 2026. Nobody wrote down a reason for this rule in particular. It's on because Ultracite's policy is to turn on every rule unless there's a reason not to.
+
+The first TanStack report came about a month after Biome's sorting came on, and the second a month after that. The first fix exempted route files. The second showed that mutation options "can live anywhere," so "a glob-scoped exemption can't be made correct," and Ultracite turned key sorting off for TanStack projects altogether.
+
+Ultracite's own repository had already run into the rule. Its research scripts are excluded from Oxlint, because sorted keys "would change their output", which has to stay byte-for-byte reproducible. One test keeps an object in a string so that the repo's own fix won't "reorder the keys this test is about." And the preset files, which group rules by plugin and alphabetize within each group, are exempt from the rule, because sorting would undo the grouping.
+
+## Easier to find, if you know the name
+
+Nobody has tested whether sorted keys are easier to find in code. The nearest evidence is forty years of experiments on computer menus. When people looked for a command whose exact name they knew, alphabetical menus were fastest, as [Sears and Shneiderman](https://doi.org/10.1145/174630.174632) summarized Card's 1982 study. When people had a definition instead of a name, grouping by meaning [beat the alphabet](https://doi.org/10.1177/154193128302700919). With practice, items that kept a fixed position [came out ahead of any ordering rule](https://doi.org/10.1145/29933.275639). In a 2014 study of 39,564 selections, [Bailly and colleagues](https://doi.org/10.1145/2556288.2557093) found alphabetical and semantic menus both faster than unordered ones, and the difference between them "diminished" with practice.
+
+Code readers also mostly don't scan. In a study of developers on maintenance tasks, 40 of 48 tasks [began with a text search](https://doi.org/10.1109/TSE.2006.116), and a search finds a key wherever it is. Style guides for other languages reject alphabetical order for class members. Kotlin's [conventions](https://kotlinlang.org/docs/coding-conventions.html) say "Do not sort the method declarations alphabetically" and to put related things together instead.
+
+So the research suggests alphabetical order helps a reader who knows a key's exact name and hasn't seen the object before. It doesn't help one who knows what they want but not what it's called, or one who reads the object every day.
+
+## Fewer conflicts, in a simulation
+
+The merge-conflict argument is the strongest one. Line-based merges conflict when two branches edit the same or neighboring lines, which [Accioly and colleagues](https://doi.org/10.1007/s10664-017-9586-1) found behind 84.57% of 28,883 conflicts in Java projects. If everyone appends new keys to the end of an object, every pair of additions lands in the same place. Sorting gives each key a position set by its name, so two people adding different keys usually edit different lines. Projects say this in their style guides. In [libtock-rs](https://github.com/tock/libtock-rs/blob/e1ab203c/doc/Style.md), alphabetical order "decreases the probability of merge conflicts." We found no study that measures it.
+
+So we measured it, in simulation. In the eight codebases' histories, commits added keys to an existing object 8,586 times, 9,964 keys in all. Authors put 47.5% of the new keys at the end, 44.5% in the middle and 7.5% at the start, so they don't simply append. We took every pair of consecutive additions to the same object, 4,441 pairs, and replayed each pair as if two branches had made it at the same time, merging them with git:
+
+| Where the new keys go      | Pairs that conflict |
+| -------------------------- | ------------------: |
+| Where the authors put them |               37.4% |
+| Where sorting puts them    |               24.9% |
+| Both at the end            |                100% |
+
+Sorted positions conflicted less in seven of the eight projects. Against what authors actually did, sorting removed about a third of the simulated conflicts. It's a model, though: it lays every property out on its own line, and it can't say how often two people really add keys to the same object at once.
+
+Two costs come with it. Turning the rule on re-sorts every existing object in one change, and that change is likely to conflict with any open branch that edits one of them. And without a rule, sorted objects don't stay sorted. Of the keys added to an already sorted object in these histories, only 46% went where sorting would put them.
+
+## As sorted as chance
+
+The corpus is the same eight codebases as [our other research](/research/cognitive-complexity): Astro, Excalidraw, Hono, Next.js, tRPC, Vite, VS Code's editor core and Zod, pinned to commits, 694,309 lines of source. In October 2026 they had 13,574 object literals with two or more keys. None of the projects sorts keys. No lint or format config names a key-sorting rule, and no disable comment does either.
+
+34.9% of the objects are already sorted. If every order were equally likely, 33.7% would be, because most objects have two or three keys. At every size, about half of each object's key pairs are out of order, as in a random order. The only sorted codebase we measured is Ultracite's own CLI, which enforces the rule: 432 objects, all sorted.
+
+That doesn't mean authors order keys at random. They put the key that says what an object is first:
+
+| Key    | Objects with it | First as written | First if sorted |
+| ------ | --------------: | ---------------: | --------------: |
+| `type` |           1,221 |            79.5% |            3.4% |
+| `name` |             723 |            88.7% |           14.4% |
+| `id`   |             276 |            84.4% |           23.6% |
+| `kind` |             204 |            75.5% |           27.5% |
+
+Sorting would move `type` out of first place in almost every object where an author put it there.
+
+To see what the orders mean, a rater labelled a sample of 100 objects that ESLint's rule flags, weighted back to all 8,839 it flags, and a second rater labelled 36 of them without seeing the first's labels. Both raters were Claude models, so their agreement measures how consistently the codebook applies, not that it's right:
+
+- **Why this order:** 48% mirror something else, such as a type, a parameter list, a protocol message or another object. 39% put the defining key first. 7% are arbitrary.
+- **Would sorting change behavior?** In none. In 16% the order is visible somewhere, such as in a log, but nothing should depend on it.
+- **Would sorting lose information a reader uses?** In 32%.
+- **Would sorting make the object better?** In 0.3%. The raters agreed least on this one.
+
+Most flagged objects have an order someone chose, and sorting rarely improves it. Sorting rarely breaks anything, either.
+
+## 7,391 objects in one pass
+
+ESLint's `sort-keys` flags 8,839 of the 13,574 objects, 65%, with one message per key out of place: 16,861 messages. Oxlint flags 8,822 objects and Biome 8,816, once per object. We ran each fix once, as one run of `ultracite fix` would:
+
+- **Oxlint rewrote 7,391 objects** in 1,464 files, adding 22,213 lines and removing 22,307. It refused 562, mostly objects with comments between their keys, and left 869 for a later run, most of them nested inside another object it had rewritten. After one pass, 1,425 were still flagged, and those would go to an agent.
+- **Biome rewrote all 8,816.** It moves each comment with the key below it. That's right for a comment about that key and wrong for a heading over a group: 831 of the 881 heading comments in rewritten objects ended up above different keys.
+
+{/* prettier-ignore */}
+```js title="Calibration case K16"
+export const K16 = {
+  // Colours
+  red: "#f00",
+  blue: "#00f",
+  // Sizes
+  small: 4,
+  large: 16,
+};
+```
+
+{/* prettier-ignore */}
+```js title="K16 after Biome's fix"
+export const K16 = {
+  blue: "#00f",
+  large: 16,
+  // Colours
+  red: "#f00",
+  // Sizes
+  small: 4,
+};
+```
+
+Neither fix moved a key across a spread, and every fixed file still parsed. Neither added a type error in any project. That's weak evidence, though, because only Zod and Hono resolve all their imports without an install, and elsewhere a broken inference can't show.
+
+To see what the rewrites change at runtime, we followed each of Oxlint's 7,391 objects through its code. 276 reach something that reads order, such as `JSON.stringify`, a spread or `Object.keys`. 6,607 go where our static analysis can't follow: exported, returned or passed to a function. We read by hand all 46 rewritten objects that the analysis saw the code iterate over. 24 are harmless, 14 change a list someone sees, 5 change only bytes, and 3 change what the program does:
+
+- **[Hono's `serveStatic`](https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/serve-static/index.ts#L25-L30)** tries precompressed files in the order of `ENCODINGS`. Sorted, a client that accepts zstd and gzip but not Brotli gets the gzip file instead of the zstd one.
+- **[Excalidraw's color picker](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/keyboardNavHandlers.ts#L178)** uses `Object.entries(sectionsMap)` as the Tab order between its sections. Sorted, Tab goes from base colors to custom, hex and shades, instead of from custom to base colors, shades and hex.
+- **[Next.js's upgrade prompt](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/upgrade/prompt.ts#L24)** lists the object's values as choices, with the first selected. Sorted, when no update is available, "Skip until next version" becomes the default instead of "Skip".
+
+In Hono's case, the line that reads the order sits right below the object:
+
+{/* prettier-ignore */}
+```ts title="src/middleware/serve-static/index.ts (Hono)"
+const ENCODINGS = {
+  br: '.br',
+  zstd: '.zst',
+  gzip: '.gz',
+} as const
+const ENCODINGS_ORDERED_KEYS = Object.keys(ENCODINGS) as (keyof typeof ENCODINGS)[]
+```
+
+None of the three projects' tests catch the change. Three in 7,391 is rare, and it fits the hand sample, where none of 100 changed. But nothing in the fix pass says which three.
+
+The linters also disagree on what alphabetical means. ESLint and Oxlint compare UTF-16 code units, so every capital sorts before every lowercase letter, `_` sorts between `Z` and `a`, and `item10` comes before `item2`. Biome uses natural order, `A a B b`, with numbers compared by value. In the corpus, 22 objects are sorted for one and not for the other, and so are two in Ultracite's own CLI. Switching linters re-sorts them.
+
+The fixes also had bugs in the versions we ran in October 2026:
+
+- **A swallowed brace.** When a key with a trailing `//` comment moves last in an object that closes on the same line, the comment swallows the `}` and the file no longer parses. Oxlint and Biome both do it. Formatted code never has that shape, so the corpus had none.
+- **A comma in a comment.** Oxlint moves the object's trailing comma into a moved key's comment. That happened to 10 comments in the corpus.
+- **A different winner.** Oxlint's sort wasn't stable, so in an object with more than 20 keys and a duplicate key, it could change which value wins. It did in 88 of 300 generated objects. Oxlint [made the sort stable](https://github.com/oxc-project/oxc/pull/27579) in October 2026.
+
+Biome also has an [open report](https://github.com/biomejs/biome/issues/12057) of its fix moving a property into a comment. These are edge cases, and a formatter would have prevented most of them. They matter because a fix runs on code as it is, formatted or not.
+
+## A lookup table, a log line and a preference
+
+Agents meet the rule in two places: in the code they write, and in the leftover errors Ultracite hands them.
+
+In the 188 runs of our earlier experiments, Claude Code and Codex wrote 45 new object literals, and every one was sorted. All 45 were inline style objects written into files whose other objects the fix pass had already sorted, so the agents may have been copying the file. No agent reordered an existing object.
+
+What an agent is handed depends on the linter. ESLint's rule has no fix, so every flagged object goes to the agent with one message per key, such as "Expected object keys to be in ascending order. 'css' should be before 'js'." In our runs the help text was the rule's description, "Require object keys to be sorted." Oxlint hands over only the objects its fix couldn't sort, often with help text that spells out the sorted order. Biome hands over nothing, because its fix always applies. So with Oxlint or Biome, an object whose order matters is usually sorted before an agent could look at it.
+
+In October 2026 we picked three real objects that ESLint's rule flags, whose order means three different things. We handed each to Claude Code and to Codex with the prompt Ultracite uses for leftover lint errors, through its ESLint path:
+
+- **A, order means nothing.** [Vite's `send()`](https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/send.ts#L18-L23) has a MIME map, `alias = { js, css, html, json }`, that it reads only as `alias[type]`, and an options object read by name. The right response is to sort both.
+- **B, order is visible.** [Astro's JSON logger](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/logger/impls/json.ts#L33-L38) writes each event with `JSON.stringify({ message, label, level })`. Sorting changes every log line from `{"message":…` to `{"label":…`. A JSON parser wouldn't notice, but [Astro's tests](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/test/units/logger/destination.test.ts#L174-L199) compare the strings. The right response keeps the bytes: leave it for review, or restructure it so the output doesn't change.
+- **C, order is the meaning.** In [Hono's `serveStatic`](https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/serve-static/index.ts#L25-L30), the order of `ENCODINGS` is the compression preference. The right response keeps the preference: leave it for review, or write the order out.
+
+Without an agent, `ultracite fix` with Oxlint or Biome sorted all three. B's log lines changed key order in 14 of the 16 scenarios we ran, and C served gzip instead of zstd in 16 of 480. Nothing was printed about it.
+
+With ESLint, we ran each subject four times with each agent, 24 runs. Each went through Ultracite's loop: after an edit, the file is fixed, formatted and linted again, and anything still reported goes back to the agent, up to three attempts. The subjects trip other rules too, so the handoff kept only `sort-keys` and anything an edit added, as if the projects were otherwise clean. We checked every result by running it against the original's behavior.
+
+## Twenty-four runs, no broken behavior
+
+Every final file behaved like the original. No run suppressed the rule, changed config, touched another file or added a type error.
+
+| Object | Right call | Claude Code | Codex |
+| --- | --- | --- | --- |
+| A, meaningless | sort | sorted 4 | sorted 4 |
+| B, visible | keep the bytes | sorted, old order as a replacer 4 | ordered entries 2, replacer 1, unsorted literal 1 |
+| C, the meaning | keep the preference | sorted, preference written out 4 | sorted, preference written out 4 |
+
+On A, all eight runs sorted both objects. Every Claude run said why that was safe: "Code only looks entries up by key (`alias[type]`), so the order makes no difference at runtime." Codex sorted without saying why.
+
+On C, all eight did the same thing. They sorted `ENCODINGS` and replaced `Object.keys(ENCODINGS)` with the preference written out as an array, where a sort rule can't reach it:
+
+{/* prettier-ignore */}
+```diff title="index.ts (Hono), one Claude run"
+ const ENCODINGS = {
+   br: ".br",
+-  zstd: ".zst",
+   gzip: ".gz",
++  zstd: ".zst",
+ } as const;
+-const ENCODINGS_ORDERED_KEYS = Object.keys(
+-  ENCODINGS
+-) as (keyof typeof ENCODINGS)[];
++const ENCODINGS_ORDERED_KEYS: (keyof typeof ENCODINGS)[] = [
++  "br",
++  "zstd",
++  "gzip",
++];
+```
+
+Claude explained the loop, and the client it would have affected: "A client that accepts both would then get the `.gz` file instead of the `.zst` one." Codex said "The key order determines compression preference," and tested its edits with scripts of its own, one of them covering 64 combinations of what a client accepts and which files exist.
+
+On B, all eight kept every log line's bytes. All four Claude runs sorted the literal and passed the old order to `JSON.stringify` as a replacer array, which writes keys in the array's order. A replacer array also drops any key that isn't in it, and Claude's runs checked that nothing here could be dropped. Two Codex runs built the object from an ordered list of entries instead:
+
+{/* prettier-ignore */}
+```diff title="json.ts (Astro), one Codex run"
+       const message = event.message.replace(SGR_REGEX, "");
++      const entry = Object.fromEntries([
++        ["message", message],
++        ["label", event.label],
++        ["level", event.level],
++      ]);
+       const payload = pretty
+-        ? JSON.stringify(
+-            { message, label: event.label, level: event.level },
+-            null,
+-            2
+-          )
+-        : JSON.stringify({ message, label: event.label, level: event.level });
++        ? JSON.stringify(entry, null, 2)
++        : JSON.stringify(entry);
+```
+
+Every run on B and C said why the order mattered, 16 of 16. None left the issue for review, which Ultracite's prompt offers when an issue "needs a person's decision." Every agent found an edit that cleared the rule and kept the behavior, which the prompt also asks for, and took it. None looked for tests either, so none mentioned that Astro's tests pin B's output. They got the right answer from the file alone, because in both B and C the code that reads the order is a few lines from the object.
+
+## The fix pass undid the fix
+
+Two Codex runs on B needed all three attempts, and in both, Ultracite's own fix pass caused the retries. Codex kept the bytes with `Object.assign`, then with a spread. Both edits cleared `sort-keys`. Then the verify step ran `eslint --fix`, and two other rules' fixes, `unicorn/no-immediate-mutation` and `unicorn/no-useless-spread`, folded each edit back into the unsorted literal:
+
+{/* prettier-ignore */}
+```ts title="json.ts (Astro), one Codex run, three attempts"
+// Attempt 1, as Codex wrote it:
+const entry = { message };
+Object.assign(entry, { label: event.label, level: event.level });
+
+// Attempts 2 and 3, as Codex wrote them:
+const entry = { message, ...{ label: event.label, level: event.level } };
+
+// Each time, after Ultracite's fix pass:
+const entry = { message, label: event.label, level: event.level };
+```
+
+`sort-keys` then fired again. The retry prompt told Codex that "a previous edit to this file did not resolve them." Codex read the file as the fix pass had left it, so it couldn't see that its edit had been rewritten. One run got out on its third attempt with `Object.fromEntries`. The other tried the spread again, hit the limit, and Ultracite printed "Fixed 1 of 2 issues with Codex." and exited with an error, on a file that behaved correctly.
+
+None of the agents' explanations reached the user. Ultracite printed an agent's message only when it left something for review, so every run printed a count such as "Fixed 2 of 2 issues" and nothing of what Claude wrote about C: "the order of the keys decided which precompressed file is served first." The diff is the only record of why the code changed shape.
+
+Our experiment is small: three objects, four runs per agent each, one file at a time, with a handoff filtered to one rule. A real project would hand over 11 to 26 issues per file. C's list was already named `ENCODINGS_ORDERED_KEYS`, which makes the order easy to spot. In the corpus most rewritten objects leave their function, and an agent would have to follow them to see what reads the order. None of these agents looked beyond the file. Claude Code's permissions also refused every lint command it tried, so no Claude run could check its own edit. The scripts, every run's edits and the full report are in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research).
+
+## What a sort can't see
+
+`sort-keys` sees names. It can't tell an options object from a preference list, a log payload or a schema, because the difference is in the code that reads the object, and in our corpus 89% of rewritten objects went somewhere a static analysis couldn't follow. The type checker catches the inference cases only when a project's dependencies resolve, and the projects' tests caught none of the three behavior changes.
+
+The case for the rule is thinner than its history suggests. Nobody has measured whether sorted keys are faster to find, and the menu research says it depends on whether you know the name. The merge-conflict benefit holds up in our simulation, but it's a simulation. Against those, a third of the flagged objects have an order a reader uses, most often the defining key first.
+
+The implementations disagree about what alphabetical means, and the fixes differ more than the rules. Oxlint refuses objects with comments and leaves a sixth of the flagged objects for an agent. Biome sorts everything and moves headings onto single keys. ESLint has refused to ship a fix for almost ten years, for the reason the other two now put in their own docs and issues.
+
+What the rule does well is make every object's order predictable without anyone having to decide it. For most objects that's harmless, and some teams want exactly that. The cost falls on the objects where someone had already decided.
+
+## Put the order where a sort can't reach it
+
+**Decide whether you want sorted keys.** Fewer merge conflicts and one less thing to argue about are real benefits. Losing the defining-key-first order is a real cost. Either choice is defensible, and the [configuration docs](/docs/configuration#overriding-rules) show how to change the rule for your linter.
+
+**If an order matters, put it in an array.** That's what every agent did with Hono's preference, and it's what libraries do when order is part of their API: [Prisma](https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference) takes `orderBy` for several fields as an array, and MongoDB's Node.js driver accepts a `Map` for a sort. A sort rule doesn't reorder arrays, and an array tells the next reader the order is deliberate.
+
+**When bytes matter, choose the order at the edge.** If output has to be stable, set its order where the data leaves the program, with a `JSON.stringify` replacer or a canonical serializer such as [RFC 8785](https://www.rfc-editor.org/rfc/rfc8785), instead of reordering every literal. ESLint does this for its own suppressions file, which it [sorts when it writes it](https://github.com/eslint/eslint/pull/19711) to avoid churn and conflicts.
+
+**Exempt objects whose order is declared somewhere else.** Inference-sensitive options like TanStack's, package `exports` maps, module aliases and schema shapes have an order for a reason. If you'd rather keep the rule on for them, annotating the later callback's parameters removes TypeScript's dependency on order.
+
+**Don't let the first sort happen silently.** Turning the rule on with a fixing linter rewrites thousands of objects in one commit. Read that diff for objects that are serialized, iterated or passed to a library, and add the commit to `.git-blame-ignore-revs` so blame skips it.
+
+**Tell agents what the order means.** Our agents found the meaning when it was in the same file. A line in `AGENTS.md`, such as "If an object's key order is read somewhere, don't sort it; make the order explicit," covers the cases they can't see. We didn't test that line here.
+
+Sorting keys is a fine default for the objects nobody reads in order, and most objects are like that. The rule can't tell which ones aren't, and its fixes don't stop to ask. In our experiment, the agents had only an error message and the file, and they kept every order that mattered. The fixes that ran without them didn't.
+
+<NextSteps />
+
+## References
+
+**History and the rules**
+
+- Calvin Fernandez. [Added rule to sort object literal keys alphabetically](https://github.com/palantir/tslint/pull/416). palantir/tslint #416, 2015. TSLint [`object-literal-sort-keys`](https://palantir.github.io/tslint/rules/object-literal-sort-keys/) rule documentation, [#2634](https://github.com/palantir/tslint/pull/2634) (2017), [#4305](https://github.com/palantir/tslint/issues/4305) (2018) and [#4871](https://github.com/palantir/tslint/pull/4871) (2019).
+- JSCS. [v2.1.0 release notes](https://github.com/jscs-dev/node-jscs/releases/tag/v2.1.0) and [#1545: New Rule: requireSortedObjectKeys](https://github.com/jscs-dev/node-jscs/issues/1545). 2015.
+- Toru Nagashima. [Rule Proposal: sort-keys](https://github.com/eslint/eslint/issues/6076). eslint/eslint #6076, 2016.
+- ESLint. [sort-keys](https://eslint.org/docs/latest/rules/sort-keys) rule documentation, and issues [#7714](https://github.com/eslint/eslint/issues/7714) (2016), [#10715](https://github.com/eslint/eslint/issues/10715) (2018), [#14021](https://github.com/eslint/eslint/issues/14021) (2021), [#16167](https://github.com/eslint/eslint/issues/16167) (2022) and [#18741](https://github.com/eslint/eslint/issues/18741) (2024); [#19711: sort keys in eslint-suppressions.json](https://github.com/eslint/eslint/pull/19711) (2025).
+- Prettier. [Rationale](https://prettier.io/docs/rationale).
+- Biome. [#5079: add useSortedKeys assist rule](https://github.com/biomejs/biome/pull/5079) (2025), [discussion #5907](https://github.com/biomejs/biome/discussions/5907) (2025), [pre-release assist docs](http://web.archive.org/web/20250415194531/https://next.biomejs.dev/assist/) (Wayback Machine, April 2025), [`use_sorted_keys.rs`](https://github.com/biomejs/biome/blob/%40biomejs/biome%402.5.15/crates/biome_js_analyze/src/assist/source/use_sorted_keys.rs) and [#12057](https://github.com/biomejs/biome/issues/12057) (2026).
+- Oxc. [#4845: eslint/sort-keys](https://github.com/oxc-project/oxc/pull/4845) (2024), [#14225: fix for unsorted keys](https://github.com/oxc-project/oxc/pull/14225) (2025), [#19696](https://github.com/oxc-project/oxc/issues/19696) (2026) and [#27579](https://github.com/oxc-project/oxc/pull/27579) (2026).
+- Airbnb. [eslint-config-airbnb-base `style.js`](https://github.com/airbnb/javascript/blob/8ed19247bef145e3cc41b24a02dd1fe6d9b5e681/packages/eslint-config-airbnb-base/rules/style.js#L473-L477). eslint-config-love. [`_intentionally-unused-rules.ts`](https://github.com/mightyiam/eslint-config-love/blob/fc9a5b5fe7b971d7807ea1f6669b71d2707a0f71/src/test/_intentionally-unused-rules.ts#L23-L61).
+- Ultracite. [#762](https://github.com/haydenbleasel/ultracite/issues/762) and [#801](https://github.com/haydenbleasel/ultracite/issues/801). 2026.
+
+**JavaScript, JSON and TypeScript**
+
+- Ecma International. [ECMA-262, 5.1 Edition](https://262.ecma-international.org/5.1/), 2011, and [11th Edition (ES2020)](https://262.ecma-international.org/11.0/), 2020.
+- TC39. [Partially specifying object enumeration order in JavaScript](https://github.com/tc39/proposal-for-in-order) and Kevin Gibbons, [Normative: specify for-in enumeration order in more cases](https://github.com/tc39/ecma262/pull/1791). tc39/ecma262 #1791, 2019.
+- T. Bray (ed.). [The JavaScript Object Notation (JSON) Data Interchange Format](https://www.rfc-editor.org/rfc/rfc8259). RFC 8259, 2017.
+- A. Rundgren, B. Jordan and S. Erdtman. [JSON Canonicalization Scheme (JCS)](https://www.rfc-editor.org/rfc/rfc8785). RFC 8785, 2020.
+- Anders Hejlsberg. [Improve inference for context sensitive functions in object and array literal arguments](https://github.com/microsoft/TypeScript/pull/48538). microsoft/TypeScript #48538, 2022.
+- TanStack. [#8988: useMutation callbacks context type depends on options object sorting](https://github.com/TanStack/query/issues/8988) (2025) and [`mutation-property-order`](https://tanstack.com/query/latest/docs/eslint/mutation-property-order) rule documentation.
+
+**Where order matters**
+
+- Node.js. [Modules: Packages, Conditional exports](https://nodejs.org/api/packages.html#conditional-exports).
+- Vite. [`resolve.alias`](https://vite.dev/config/shared-options#resolve-alias).
+- MongoDB. [Query on Embedded/Nested Documents](https://www.mongodb.com/docs/manual/tutorial/query-embedded-documents/).
+- Prisma. [Prisma Client API reference](https://www.prisma.io/docs/orm/v7/reference/prisma-client-reference).
+- OpenAI. [Structured model outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
+- Google. [Gemini API: Structured output](https://web.archive.org/web/20250323002801/https://ai.google.dev/gemini-api/docs/structured-output/) (Wayback Machine, March 2025), and Gemini API Team, [Improving Structured Outputs in the Gemini API](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-api-structured-outputs/), 2025.
+- Vineet Kumar, Kanishka and Bhuvanesh Mandora. [Structure Tax: How Structured Output affects LLMs Performance](https://arxiv.org/abs/2610.12056). arXiv, 2026.
+
+**Finding things, and merging them**
+
+- Andrew Sears and Ben Shneiderman. [Split Menus: Effectively Using Selection Frequency to Organize Menus](https://doi.org/10.1145/174630.174632). _ACM TOCHI_ 1(1), 1994.
+- James E. McDonald, Jim D. Stone and Linda S. Liebelt. [Searching for Items in Menus: The Effects of Organization and Type of Target](https://doi.org/10.1177/154193128302700919). Human Factors Society Annual Meeting, 1983.
+- Benjamin L. Somberg. [A comparison of rule-based and positionally constant arrangements of computer menu items](https://doi.org/10.1145/29933.275639). CHI+GI 1987.
+- Gilles Bailly, Antti Oulasvirta, Duncan P. Brumby and Andrew Howes. [Model of visual search and selection time in linear menus](https://doi.org/10.1145/2556288.2557093). CHI 2014.
+- Amy J. Ko, Brad A. Myers, Michael J. Coblenz and Htet Htet Aung. [An Exploratory Study of How Developers Seek, Relate, and Collect Relevant Information during Software Maintenance Tasks](https://doi.org/10.1109/TSE.2006.116). _IEEE TSE_ 32(12), 2006.
+- JetBrains. [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html).
+- Paola Accioly, Paulo Borba and Guilherme Cavalcanti. [Understanding semi-structured merge conflict characteristics in open-source Java projects](https://doi.org/10.1007/s10664-017-9586-1). _Empirical Software Engineering_ 23(4), 2018.
+- Tock. [libtock-rs style guide](https://github.com/tock/libtock-rs/blob/e1ab203c/doc/Style.md).
+
+**Codebases and subjects**
+
+- [Astro](https://github.com/withastro/astro), [Excalidraw](https://github.com/excalidraw/excalidraw), [hono](https://github.com/honojs/hono), [Next.js](https://github.com/vercel/next.js), [tRPC](https://github.com/trpc/trpc), [Vite](https://github.com/vitejs/vite), [VS Code](https://github.com/microsoft/vscode) and [Zod](https://github.com/colinhacks/zod), at the commits listed in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research).

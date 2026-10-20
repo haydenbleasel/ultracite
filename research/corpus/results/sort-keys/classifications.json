@@ -1,0 +1,2296 @@
+{
+  "agreement": {
+    "behaviour": {
+      "disagreements": [
+        {
+          "first": "no",
+          "id": "s072",
+          "second": "observable"
+        }
+      ],
+      "kappa": 0.87,
+      "n": 36,
+      "same": 35
+    },
+    "improvement": {
+      "disagreements": [
+        {
+          "first": "no",
+          "id": "s020",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s021",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s031",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s037",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s039",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s042",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s065",
+          "second": "neutral"
+        },
+        {
+          "first": "yes",
+          "id": "s074",
+          "second": "neutral"
+        },
+        {
+          "first": "no",
+          "id": "s076",
+          "second": "neutral"
+        },
+        {
+          "first": "neutral",
+          "id": "s088",
+          "second": "no"
+        }
+      ],
+      "kappa": 0.44,
+      "n": 36,
+      "same": 26
+    },
+    "informationLoss": {
+      "disagreements": [
+        {
+          "first": "no",
+          "id": "s044",
+          "second": "unclear"
+        },
+        {
+          "first": "no",
+          "id": "s088",
+          "second": "yes"
+        }
+      ],
+      "kappa": 0.85,
+      "n": 36,
+      "same": 34
+    },
+    "reason": {
+      "disagreements": [
+        {
+          "first": "arbitrary",
+          "id": "s044",
+          "second": "mirrors"
+        },
+        {
+          "first": "arbitrary",
+          "id": "s052",
+          "second": "grouping"
+        },
+        {
+          "first": "arbitrary",
+          "id": "s074",
+          "second": "mirrors"
+        },
+        {
+          "first": "arbitrary",
+          "id": "s095",
+          "second": "mirrors"
+        },
+        {
+          "first": "mirrors",
+          "id": "s098",
+          "second": "importance"
+        }
+      ],
+      "kappa": 0.75,
+      "n": 36,
+      "same": 31
+    },
+    "coarse": {
+      "behaviourAny": {
+        "kappa": 0.87,
+        "n": 36,
+        "same": 35
+      },
+      "improvementYes": {
+        "kappa": 0,
+        "n": 36,
+        "same": 35
+      },
+      "reasonArbitrary": {
+        "kappa": 0,
+        "n": 36,
+        "same": 32
+      }
+    }
+  },
+  "byStratum": {
+    "order observed": {
+      "behaviour": {
+        "no": 17,
+        "observable": 7
+      },
+      "improvement": {
+        "neutral": 13,
+        "no": 9,
+        "yes": 2
+      },
+      "informationLoss": {
+        "no": 15,
+        "yes": 8,
+        "unclear": 1
+      },
+      "reason": {
+        "importance": 9,
+        "grouping": 5,
+        "mirrors": 5,
+        "arbitrary": 4,
+        "data-flow": 1
+      },
+      "n": 24
+    },
+    "escapes": {
+      "behaviour": {
+        "no": 53,
+        "observable": 11
+      },
+      "improvement": {
+        "no": 33,
+        "neutral": 31
+      },
+      "informationLoss": {
+        "yes": 19,
+        "no": 44,
+        "unclear": 1
+      },
+      "reason": {
+        "display": 2,
+        "importance": 26,
+        "mirrors": 30,
+        "grouping": 2,
+        "arbitrary": 4
+      },
+      "n": 64
+    },
+    "local": {
+      "behaviour": {
+        "no": 11,
+        "observable": 1
+      },
+      "improvement": {
+        "no": 7,
+        "neutral": 5
+      },
+      "informationLoss": {
+        "yes": 7,
+        "no": 5
+      },
+      "reason": {
+        "mirrors": 8,
+        "arbitrary": 1,
+        "importance": 3
+      },
+      "n": 12
+    }
+  },
+  "codebook": {
+    "behaviour": {
+      "question": "Would sorting the keys (as Oxlint's fix or a person would) change what the program does?",
+      "values": {
+        "no": "No use can see the order: lookups, destructuring, a function that reads named options",
+        "observable": "The order is visible but nothing should depend on it: serialised bytes, log output, iteration whose order nobody relies on, a cache key or hash that changes once",
+        "yes": "Order is semantics: first match wins, a later key overrides an earlier one, evaluation order of values with side effects, TypeScript inference from earlier callbacks, CSS shorthand and longhand, display order, an output format's field order",
+        "unclear": "Can't tell from the code and its visible uses"
+      }
+    },
+    "improvement": {
+      "question": "Would sorting this object be an improvement for a reader?",
+      "values": {
+        "yes": "Sorting makes it easier to scan or diff, and loses nothing",
+        "neutral": "No real difference",
+        "no": "Sorting makes it worse: breaks a grouping, an order a reader expects, or behaviour",
+        "unclear": "Can't tell"
+      }
+    },
+    "informationLoss": {
+      "question": "Would sorting lose information a reader uses (a grouping, a sequence, a priority, a correspondence with another structure)?",
+      "values": {
+        "no": "No",
+        "unclear": "Can't tell",
+        "yes": "Yes"
+      }
+    },
+    "reason": {
+      "question": "Why are the keys in this order? The most specific that applies.",
+      "values": {
+        "arbitrary": "No visible reason: the order is how they happened to be typed",
+        "data-flow": "Data flow or lifecycle: the order things are computed, happen or are used (inputs before outputs, setup before teardown)",
+        "display": "Display order: the order a user sees (menus, columns, form fields, help text)",
+        "grouping": "Semantic grouping: related keys sit together (an identity block, then options, then callbacks)",
+        "mirrors": "Mirrors another structure or a spec: a type, an interface, a protocol message, a file format, another object, a parameter list",
+        "priority": "Priority or first match: the order decides which entry wins or is tried first",
+        "importance": "Importance or convention: the defining key first (type, id, name, kind), then the rest",
+        "unclear": "Can't tell"
+      }
+    }
+  },
+  "generated": "2026-10-20",
+  "items": [
+    {
+      "file": "packages/astro/src/cli/preferences/index.ts",
+      "line": 48,
+      "repo": "astro",
+      "start": 1658,
+      "stratum": "escapes",
+      "id": "s001",
+      "rater1": {
+        "id": "s001",
+        "reason": "display",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "printHelp destructures commandName/usage/tables by name, but the keys follow the order the help text prints (name, usage line, then tables) and its parameter list."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/content/content-layer.ts",
+      "line": 517,
+      "repo": "astro",
+      "start": 16090,
+      "stratum": "escapes",
+      "id": "s002",
+      "rater1": {
+        "id": "s002",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Identity key first ({ id, data }), matching the store.set call below; parseData reads both by name."
+      },
+      "rater2": {
+        "id": "s002",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Entry id first then data, as ParseDataOptions also declares it; parseData destructures { id, data } by name, so order is invisible."
+      }
+    },
+    {
+      "file": "packages/astro/src/core/build/plugins/plugin-manifest.ts",
+      "line": 369,
+      "repo": "astro",
+      "start": 13847,
+      "stratum": "escapes",
+      "id": "s003",
+      "rater1": {
+        "id": "s003",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Mirrors scriptDirective and partitionByKind's { resources, hashes } parameter; the object ends up in the serialised build manifest, where nothing reads key order."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/vite-plugin-head/index.ts",
+      "line": 84,
+      "repo": "astro",
+      "start": 3736,
+      "stratum": "escapes",
+      "id": "s004",
+      "rater1": {
+        "id": "s004",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Matches the getModuleInfo return type { importers, dynamicImporters } in graph.ts, which the callee reads by name."
+      },
+      "rater2": {
+        "id": "s004",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Matches the callback return type in head-propagation/graph.ts (importers, dynamicImporters), which reads both arrays by name into a Set."
+      }
+    },
+    {
+      "file": "packages/astro/src/config/index.ts",
+      "line": 52,
+      "repo": "astro",
+      "start": 2059,
+      "stratum": "escapes",
+      "id": "s005",
+      "rater1": {
+        "id": "s005",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows runHookConfigSetup's destructured parameters (settings, command, logger), all read by name."
+      },
+      "rater2": {
+        "id": "s005",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows runHookConfigSetup's destructured parameter list (settings, command, logger), which reads options by name."
+      }
+    },
+    {
+      "file": "packages/astro/src/env/schema.ts",
+      "line": 72,
+      "repo": "astro",
+      "start": 2031,
+      "stratum": "escapes",
+      "id": "s006",
+      "rater1": {
+        "id": "s006",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Context (client/server) is the primary axis and comes first in all three sibling schemas; a z.object shape sets the key order of parsed output, but nothing depends on it."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/assets/endpoint/dev.ts",
+      "line": 76,
+      "repo": "astro",
+      "start": 2467,
+      "stratum": "escapes",
+      "id": "s007",
+      "rater1": {
+        "id": "s007",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Exactly matches handleImageRequest's destructured parameter list in shared.ts (request, loadLocalImage, logger)."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/core/logger/core.ts",
+      "line": 116,
+      "repo": "astro",
+      "start": 2963,
+      "stratum": "escapes",
+      "id": "s008",
+      "rater1": {
+        "id": "s008",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Keys follow the AstroLoggerLevel union and the ascending severity values; levels is only used for lookups (no Object.keys/entries found), so sorting would only scramble the severity scale."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/runtime/server/render/util.ts",
+      "line": 90,
+      "repo": "astro",
+      "start": 3457,
+      "stratum": "local",
+      "id": "s009",
+      "rater1": {
+        "id": "s009",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Enum-like constant ordered by its numeric values 0-7 and by classifyAttribute's check order; it is only used for member lookups."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/core/app/node.ts",
+      "line": 178,
+      "repo": "astro",
+      "start": 6427,
+      "stratum": "order observed",
+      "id": "s010",
+      "rater1": {
+        "id": "s010",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Conventional fetch init order with method first; new Request reads RequestInit by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/core/logger/impls/json.ts",
+      "line": 37,
+      "repo": "astro",
+      "start": 1057,
+      "stratum": "order observed",
+      "id": "s011",
+      "rater1": {
+        "id": "s011",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "JSON log line with the message first; JSON.stringify output order shows in logs, but JSON consumers shouldn't depend on field order."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/astro/src/core/app/node.ts",
+      "line": 97,
+      "repo": "astro",
+      "start": 3432,
+      "stratum": "order observed",
+      "id": "s012",
+      "rater1": {
+        "id": "s012",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Same RequestInit pattern as s010: method first, and new Request reads it by name."
+      },
+      "rater2": {
+        "id": "s012",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "fetch-style convention of method first then headers and signal; RequestInit is read by name by new Request and options.method."
+      }
+    },
+    {
+      "file": "packages/excalidraw/lasso/index.ts",
+      "line": 183,
+      "repo": "excalidraw",
+      "start": 5638,
+      "stratum": "escapes",
+      "id": "s013",
+      "rater1": {
+        "id": "s013",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Exactly mirrors the input type of getLassoSelectedElementIds in lasso/utils.ts (path, element collections, caches, then options), which the callee destructures."
+      },
+      "rater2": {
+        "id": "s013",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Exactly mirrors getLassoSelectedElementIds' input type and destructuring in lasso/utils.ts (primary lassoPath first, optional simplifyDistance/mode last); read by name."
+      }
+    },
+    {
+      "file": "packages/excalidraw/components/FontPicker/FontPicker.tsx",
+      "line": 91,
+      "repo": "excalidraw",
+      "start": 2273,
+      "stratum": "escapes",
+      "id": "s014",
+      "rater1": {
+        "id": "s014",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Fallback entry copies the shape of the DEFAULT_FONTS items (value, icon, text, testId), which sort-keys would also sort, so they stay parallel."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/excalidraw/actions/actionDuplicateSelection.tsx",
+      "line": 103,
+      "repo": "excalidraw",
+      "start": 2856,
+      "stratum": "escapes",
+      "id": "s015",
+      "rater1": {
+        "id": "s015",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the ActionResult type (elements, appState, files, captureUpdate) used by every action; the action manager reads it by name."
+      },
+      "rater2": {
+        "id": "s015",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the ActionResult type and the elements, appState, captureUpdate convention used across ~118 action results; consumed by name."
+      }
+    },
+    {
+      "file": "packages/element/src/textWrapping.ts",
+      "line": 465,
+      "repo": "excalidraw",
+      "start": 14520,
+      "stratum": "escapes",
+      "id": "s016",
+      "rater1": {
+        "id": "s016",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Mirrors the WrappedTextLine type { text, start, end }; sorting puts end before start and breaks the natural start/end order."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/excalidraw/snapping.ts",
+      "line": 665,
+      "repo": "excalidraw",
+      "start": 17905,
+      "stratum": "escapes",
+      "id": "s017",
+      "rater1": {
+        "id": "s017",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The type discriminant ('point') comes first; sorting moves it to the end, and snap objects are read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/common/src/font-metadata.ts",
+      "line": 137,
+      "repo": "excalidraw",
+      "start": 3003,
+      "stratum": "escapes",
+      "id": "s018",
+      "rater1": {
+        "id": "s018",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Ranges are grouped by script (Latin pair, Cyrillic pair) with Latin first; fonts read them by name, and sorting keeps the pairs together."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/excalidraw/components/ColorPicker/colorTopPicksDnD.ts",
+      "line": 58,
+      "repo": "excalidraw",
+      "start": 1910,
+      "stratum": "escapes",
+      "id": "s019",
+      "rater1": {
+        "id": "s019",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Matches the destructured parameters just above and useTopPicksDnD's option type; the generic T is inferred from picks, and the callbacks are named, already-typed functions (not context-sensitive), so property order doesn't affect inference."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/excalidraw/appState.ts",
+      "line": 62,
+      "repo": "excalidraw",
+      "start": 2005,
+      "stratum": "escapes",
+      "id": "s020",
+      "rater1": {
+        "id": "s020",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "type comes first, like the activeTool object above; preferredSelectionTool is saved to browser storage (APP_STATE_STORAGE_CONF browser: true), so the order shows in the serialised JSON."
+      },
+      "rater2": {
+        "id": "s020",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "type first like the sibling activeTool and the AppState type; preferredSelectionTool is browser-persisted (APP_STATE_STORAGE_CONF browser: true) so its JSON bytes in localStorage change, nothing depends on it."
+      }
+    },
+    {
+      "file": "packages/element/src/convertToShape.ts",
+      "line": 526,
+      "repo": "excalidraw",
+      "start": 16933,
+      "stratum": "escapes",
+      "id": "s021",
+      "rater1": {
+        "id": "s021",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The recognised shape type comes first in the returned result; callers read it by name."
+      },
+      "rater2": {
+        "id": "s021",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Recognised shape type first, then inputs, matching ShapeRecognitionResult and the earlier return; callers read recognizedShape.boundingBox etc. by name."
+      }
+    },
+    {
+      "file": "packages/excalidraw/components/Toolbar.tsx",
+      "line": 244,
+      "repo": "excalidraw",
+      "start": 8001,
+      "stratum": "local",
+      "id": "s022",
+      "rater1": {
+        "id": "s022",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Two props spread into JSX buttons; the order inside the spread is invisible to the components."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/excalidraw/wysiwyg/textWysiwyg.tsx",
+      "line": 165,
+      "repo": "excalidraw",
+      "start": 4427,
+      "stratum": "order observed",
+      "id": "s023",
+      "rater1": {
+        "id": "s023",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Style keys are grouped (positioning, box, visibility, text); Object.assign applies them in order, but sorting still puts the font shorthand before lineHeight, so the rendered style doesn't change."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/excalidraw/components/TTDDialog/Chat/useChatAgent.ts",
+      "line": 48,
+      "repo": "excalidraw",
+      "start": 1101,
+      "stratum": "order observed",
+      "id": "s024",
+      "rater1": {
+        "id": "s024",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows an Error's own name/message/stack order; the JSON.stringify string is stored as errorDetails in chat history, but nothing parses it by position."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/element/src/newElement.ts",
+      "line": 124,
+      "repo": "excalidraw",
+      "start": 3021,
+      "stratum": "order observed",
+      "id": "s025",
+      "rater1": {
+        "id": "s025",
+        "reason": "grouping",
+        "behaviour": "observable",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Conventional x, y, width, height geometry order, mirroring the bounds check above; it shows in console.error output, and sorting scatters the pairs."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/element/src/textElement.ts",
+      "line": 75,
+      "repo": "excalidraw",
+      "start": 2063,
+      "stratum": "order observed",
+      "id": "s026",
+      "rater1": {
+        "id": "s026",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Geometry pairs (x/y, width/height) sit together; mutateElement's for...in assigns to keys the element already has, so order has no effect."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/middleware/jwt/jwt.ts",
+      "line": 178,
+      "repo": "hono",
+      "start": 5733,
+      "stratum": "escapes",
+      "id": "s027",
+      "rater1": {
+        "id": "s027",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the Fetch spec's ResponseInit order (status, statusText, headers); Response reads it by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/helper/css/index.ts",
+      "line": 208,
+      "repo": "hono",
+      "start": 6657,
+      "stratum": "escapes",
+      "id": "s028",
+      "rater1": {
+        "id": "s028",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Exactly mirrors the DefaultContextType interface declared right below; case-sensitive sorting would move Style first and break that correspondence."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/jsx/dom/context.ts",
+      "line": 30,
+      "repo": "hono",
+      "start": 836,
+      "stratum": "escapes",
+      "id": "s029",
+      "rater1": {
+        "id": "s029",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "A virtual node with tag first, the convention for JSX nodes in this file; it is read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/jsx/dom/intrinsic-element/components.ts",
+      "line": 304,
+      "repo": "hono",
+      "start": 8588,
+      "stratum": "escapes",
+      "id": "s030",
+      "rater1": {
+        "id": "s030",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "A JSXNode-shaped literal with tag first (tag, props, type, ref), consistent across the file; it is read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/jsx/dom/intrinsic-element/components.ts",
+      "line": 373,
+      "repo": "hono",
+      "start": 10586,
+      "stratum": "escapes",
+      "id": "s031",
+      "rater1": {
+        "id": "s031",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "Same tag-first JSX node shape as s030, nested inside a FormContext node."
+      },
+      "rater2": {
+        "id": "s031",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "JSX-node convention of tag then props (like jsx(tag, props)), then type and ref; the hono DOM renderer reads node fields by name."
+      }
+    },
+    {
+      "file": "src/utils/encode.ts",
+      "line": 11,
+      "repo": "hono",
+      "start": 310,
+      "stratum": "local",
+      "id": "s032",
+      "rater1": {
+        "id": "s032",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "neutral",
+        "note": "The lookup map follows the alternation order of the regex /\\/|\\+/ on the same line; lookups don't depend on order."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/middleware/language/language.ts",
+      "line": 51,
+      "repo": "hono",
+      "start": 1507,
+      "stratum": "order observed",
+      "id": "s033",
+      "rater1": {
+        "id": "s033",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Roughly follows the DetectorOptions interface, with order first and the lookup* keys in detection-strategy order; it is spread and read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/middleware/language/language.ts",
+      "line": 191,
+      "repo": "hono",
+      "start": 5447,
+      "stratum": "order observed",
+      "id": "s034",
+      "rater1": {
+        "id": "s034",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Keys follow the default detection order ['querystring','cookie','header'] plus path; Object.keys(detectors) is only used with .includes, and the order array decides priority."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/server/dev/hot-reloader-turbopack.ts",
+      "line": 297,
+      "repo": "next.js",
+      "start": 10668,
+      "stratum": "escapes",
+      "id": "s035",
+      "rater1": {
+        "id": "s035",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The type discriminant comes first in an HMR update payload; the HMR runtime reads type/instruction by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/shared/lib/router/utils/parse-path.ts",
+      "line": 21,
+      "repo": "next.js",
+      "start": 716,
+      "stratum": "escapes",
+      "id": "s036",
+      "rater1": {
+        "id": "s036",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Follows the order the parts appear in a URL (pathname?query#hash), like the return above; callers read the parts by name."
+      },
+      "rater2": {
+        "id": "s036",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "pathname, query, hash follows the URL's own component order and the return just above; callers destructure by name."
+      }
+    },
+    {
+      "file": "packages/next/src/cli/internal/static-routes-info.ts",
+      "line": 250,
+      "repo": "next.js",
+      "start": 8468,
+      "stratum": "escapes",
+      "id": "s037",
+      "rater1": {
+        "id": "s037",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The runtime kind discriminant comes first (matching the node variant); it is only read internally via entry.runtime.kind and isn't printed."
+      },
+      "rater2": {
+        "id": "s037",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "kind discriminant first as in the runtime union type; runtime is read via entry.runtime.kind/files and is not part of the RouteInfo JSON/markdown output."
+      }
+    },
+    {
+      "file": "packages/next/src/server/next.ts",
+      "line": 382,
+      "repo": "next.js",
+      "start": 11395,
+      "stratum": "escapes",
+      "id": "s038",
+      "rater1": {
+        "id": "s038",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The main payload (config) comes first, matching the other return in the same function; the caller reads both by name."
+      },
+      "rater2": {
+        "id": "s038",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Main payload config first, then the optional compileMode, same as the sibling return; caller reads by name."
+      }
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/menu/panel-router.tsx",
+      "line": 208,
+      "repo": "next.js",
+      "start": 7334,
+      "stratum": "escapes",
+      "id": "s039",
+      "rater1": {
+        "id": "s039",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "A reducer action with type first (the Redux convention); the reducer reads it by name."
+      },
+      "rater2": {
+        "id": "s039",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Redux-style action with type first; the reducer reads action.type and action.disabled by name."
+      }
+    },
+    {
+      "file": "packages/next/src/shared/lib/router/router.ts",
+      "line": 1782,
+      "repo": "next.js",
+      "start": 55605,
+      "stratum": "escapes",
+      "id": "s040",
+      "rater1": {
+        "id": "s040",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Matches handleHardNavigation's destructured { url, router } parameter."
+      },
+      "rater2": {
+        "id": "s040",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Matches handleHardNavigation's destructured parameters ({ url, router }) and every other call site; read by name."
+      }
+    },
+    {
+      "file": "packages/next/src/server/app-render/app-render.tsx",
+      "line": 10615,
+      "repo": "next.js",
+      "start": 366607,
+      "stratum": "escapes",
+      "id": "s041",
+      "rater1": {
+        "id": "s041",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "neutral",
+        "note": "Close to makeGetServerInsertedHTML's destructured parameter order (only basePath and tracingMetadata are swapped); the callee reads by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/server/mcp/tools/get-server-action-by-id.ts",
+      "line": 83,
+      "repo": "next.js",
+      "start": 2343,
+      "stratum": "escapes",
+      "id": "s042",
+      "rater1": {
+        "id": "s042",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "An MCP content block with the type discriminant first; it is serialised to the MCP client, which reads fields by name."
+      },
+      "rater2": {
+        "id": "s042",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "MCP content block with the type discriminant first; the result is JSON-serialised to the MCP client, which parses fields by name."
+      }
+    },
+    {
+      "file": "packages/next/src/build/webpack/plugins/minify-webpack-plugin/src/index.ts",
+      "line": 54,
+      "repo": "next.js",
+      "start": 1262,
+      "stratum": "escapes",
+      "id": "s043",
+      "rater1": {
+        "id": "s043",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Mangle options go to the native swc minify binding as an object, and String(mangle) prints [object Object]; the parallel rspack config uses the same order, but no reason for it is visible."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/build/webpack-config.ts",
+      "line": 1253,
+      "repo": "next.js",
+      "start": 42433,
+      "stratum": "escapes",
+      "id": "s044",
+      "rater1": {
+        "id": "s044",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Compress options passed to the rspack SWC minimizer and read by key; the comment about aligning with patch_opts concerns values, and I couldn't check the Rust file in the clone."
+      },
+      "rater2": {
+        "id": "s044",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "unclear",
+        "improvement": "neutral",
+        "note": "Comment says these options should align with minify.rs patch_opts (not in the clone, so the order there is unverified); SWC reads compress options by name."
+      }
+    },
+    {
+      "file": "packages/next/src/next-devtools/dev-overlay/components/instant/instant-guidance-data.ts",
+      "line": 460,
+      "repo": "next.js",
+      "start": 13706,
+      "stratum": "escapes",
+      "id": "s045",
+      "rater1": {
+        "id": "s045",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Exactly mirrors the FixCard type (id, title, group, link, snippets, copyable); cards are rendered from named fields."
+      },
+      "rater2": {
+        "id": "s045",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Mirrors the FixCard type (id, title, group, link, snippets, copyable) repeated across a long data file; CardGrid reads card fields by name."
+      }
+    },
+    {
+      "file": "packages/next/src/server/app-render/app-render.tsx",
+      "line": 4387,
+      "repo": "next.js",
+      "start": 146155,
+      "stratum": "escapes",
+      "id": "s046",
+      "rater1": {
+        "id": "s046",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Follows continueFizzStream's destructured options exactly; only consume() has a side effect, and moving it past pure reads changes nothing."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/build/index.ts",
+      "line": 2360,
+      "repo": "next.js",
+      "start": 79394,
+      "stratum": "escapes",
+      "id": "s047",
+      "rater1": {
+        "id": "s047",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Mirrors the destructuring pattern directly above it, which sort-keys doesn't reorder, so sorting breaks a correspondence visible right there."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/server/web/next-url.ts",
+      "line": 68,
+      "repo": "next.js",
+      "start": 1961,
+      "stratum": "escapes",
+      "id": "s048",
+      "rater1": {
+        "id": "s048",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The parsed url comes first in the internal state; the [Internal] type lists keys in a different order, and fields are read by name."
+      },
+      "rater2": {
+        "id": "s048",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The parsed url (the core of NextURL) first, then options and a basePath placeholder that analyze() fills; symbol-keyed internal state read by name."
+      }
+    },
+    {
+      "file": "packages/next/src/shared/lib/fnv1a.ts",
+      "line": 20,
+      "repo": "next.js",
+      "start": 869,
+      "stratum": "local",
+      "id": "s049",
+      "rater1": {
+        "id": "s049",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Integer-like keys in ascending bit size, parallel to FNV_PRIMES; engines iterate integer keys numerically anyway, and lexical sorting (1024, 128, ...) wrecks the sequence."
+      },
+      "rater2": {
+        "id": "s049",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Bit sizes in ascending numeric order mirroring FNV_PRIMES above; integer keys iterate numerically anyway and are only looked up, and the lexicographic sort (1024, 128, ...) would scramble the sequence."
+      }
+    },
+    {
+      "file": "packages/next/src/server/app-render/encryption-utils-server.ts",
+      "line": 26,
+      "repo": "next.js",
+      "start": 1020,
+      "stratum": "order observed",
+      "id": "s050",
+      "rater1": {
+        "id": "s050",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The key value, then its expiry, written as JSON to a cache file that is read back with JSON.parse by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/server/typescript/rules/config.ts",
+      "line": 174,
+      "repo": "next.js",
+      "start": 9438,
+      "stratum": "order observed",
+      "id": "s051",
+      "rater1": {
+        "id": "s051",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "unclear",
+        "improvement": "neutral",
+        "note": "Doc fields (description, link, type, options) precede editor behaviour (insertText, isValid) and don't follow the declared type's order; the entry is read by name (only its nested options object is iterated)."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/server/api-utils/node/api-resolver.ts",
+      "line": 220,
+      "repo": "next.js",
+      "start": 6766,
+      "stratum": "order observed",
+      "id": "s052",
+      "rater1": {
+        "id": "s052",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "cookie.serialize emits attributes in a fixed order of its own, and sorting within the spread group keeps the path override after path: '/'."
+      },
+      "rater2": {
+        "id": "s052",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Security flags then the path default ahead of the overriding spreads (sorting stays within spread groups); compiled cookie.serialize emits attributes in a fixed order regardless of option order."
+      }
+    },
+    {
+      "file": "packages/next/src/client/dev/hot-reloader/app/hot-reloader-app.tsx",
+      "line": 134,
+      "repo": "next.js",
+      "start": 4800,
+      "stratum": "order observed",
+      "id": "s053",
+      "rater1": {
+        "id": "s053",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The event discriminant comes first in an HMR message JSON-stringified over the socket; the server parses it by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/build/templates/edge-ssr.ts",
+      "line": 150,
+      "repo": "next.js",
+      "start": 4158,
+      "stratum": "order observed",
+      "id": "s054",
+      "rater1": {
+        "id": "s054",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Large render options split by blank lines into page/module fields, values derived from nextConfig, and manifests; it is spread and read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/openapi/src/generate.ts",
+      "line": 1785,
+      "repo": "trpc",
+      "start": 51385,
+      "stratum": "escapes",
+      "id": "s055",
+      "rater1": {
+        "id": "s055",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Matches the WalkTypeOpts interface (type, ctx, currentPath), which walkType destructures."
+      },
+      "rater2": {
+        "id": "s055",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows WalkTypeOpts (type, ctx, currentPath) and the other walkType call; destructured by name."
+      }
+    },
+    {
+      "file": "packages/server/src/adapters/ws.ts",
+      "line": 163,
+      "repo": "trpc",
+      "start": 4733,
+      "stratum": "escapes",
+      "id": "s056",
+      "rater1": {
+        "id": "s056",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The error comes first in the onError payload; it only loosely follows ErrorHandlerOptions, and users read it by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/tanstack-react-query/src/internals/subscriptionOptions.ts",
+      "line": 202,
+      "repo": "trpc",
+      "start": 5859,
+      "stratum": "escapes",
+      "id": "s057",
+      "rater1": {
+        "id": "s057",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Status comes first after the spread, like the sibling state updates; sorting stays after the spread, so the overrides still win."
+      },
+      "rater2": {
+        "id": "s057",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "status first like the sibling state updates; keys already exist on the spread prev so the result's key order is unchanged, and updateState compares tracked keys by name."
+      }
+    },
+    {
+      "file": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+      "line": 443,
+      "repo": "trpc",
+      "start": 12743,
+      "stratum": "escapes",
+      "id": "s058",
+      "rater1": {
+        "id": "s058",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Status, data, error follows the query-result convention after the spread; overrides are preserved and fields are read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/openapi/src/cli.ts",
+      "line": 47,
+      "repo": "trpc",
+      "start": 1617,
+      "stratum": "escapes",
+      "id": "s059",
+      "rater1": {
+        "id": "s059",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "parseArgs option specs put type first across all siblings; parseArgs reads them by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/client/src/links/internals/httpUtils.ts",
+      "line": 66,
+      "repo": "trpc",
+      "start": 1642,
+      "stratum": "local",
+      "id": "s060",
+      "rater1": {
+        "id": "s060",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Follows tRPC's canonical procedure type order (query, mutation, subscription); it is used only as METHOD[opts.type]."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/next/src/app-dir/server.ts",
+      "line": 213,
+      "repo": "trpc",
+      "start": 5849,
+      "stratum": "order observed",
+      "id": "s061",
+      "rater1": {
+        "id": "s061",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The revalidated status comes first, matching the error response above; it shows in the HTTP JSON body, which clients read by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/server/src/unstable-core-do-not-import/stream/jsonl.ts",
+      "line": 429,
+      "repo": "trpc",
+      "start": 11786,
+      "stratum": "order observed",
+      "id": "s062",
+      "rater1": {
+        "id": "s062",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Controller methods referenced by name (Object.assign later overrides by key); sorting keeps close/closed together."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/config.ts",
+      "line": 2046,
+      "repo": "vite",
+      "start": 62880,
+      "stratum": "escapes",
+      "id": "s063",
+      "rater1": {
+        "id": "s063",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Closely follows the ResolvedConfig interface order; the resolved config is dumped with debug('%O'), and no value has order-dependent side effects."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/server/index.ts",
+      "line": 297,
+      "repo": "vite",
+      "start": 9748,
+      "stratum": "escapes",
+      "id": "s064",
+      "rater1": {
+        "id": "s064",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows ResolvedForwardConsoleOptions and the sibling returns; the resolved options are JSON-injected into client code (escapeReplacement), but nothing reads them by position."
+      },
+      "rater2": {
+        "id": "s064",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Mirrors ResolvedForwardConsoleOptions (enabled, unhandledErrors, logLevels); clientInjections JSON.stringifies it into the client bundle, so bytes change but the client reads by name."
+      }
+    },
+    {
+      "file": "packages/vite/src/node/plugins/oxc.ts",
+      "line": 61,
+      "repo": "vite",
+      "start": 2193,
+      "stratum": "escapes",
+      "id": "s065",
+      "rater1": {
+        "id": "s065",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "runtime (classic vs automatic) decides which of the other keys matter and comes first, as in the sibling case; oxc reads options by key."
+      },
+      "rater2": {
+        "id": "s065",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The defining runtime mode first, as in the sibling classic preset; scan.ts passes it to the rolldown/oxc transform, which reads options by name."
+      }
+    },
+    {
+      "file": "packages/vite/src/node/plugins/index.ts",
+      "line": 65,
+      "repo": "vite",
+      "start": 2369,
+      "stratum": "escapes",
+      "id": "s066",
+      "rater1": {
+        "id": "s066",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The primary option (entries) comes before the customResolver hook; the alias plugin reads both by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/optimizer/rolldownDepPlugin.ts",
+      "line": 440,
+      "repo": "vite",
+      "start": 15149,
+      "stratum": "escapes",
+      "id": "s067",
+      "rater1": {
+        "id": "s067",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "A resolveId result with id first, consistent with the other returns; the bundler reads it by name."
+      },
+      "rater2": {
+        "id": "s067",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Resolved id first, then the external flag, as in the other resolveId returns; rolldown reads the result by name."
+      }
+    },
+    {
+      "file": "packages/vite/src/node/build.ts",
+      "line": 1275,
+      "repo": "vite",
+      "start": 38960,
+      "stratum": "escapes",
+      "id": "s068",
+      "rater1": {
+        "id": "s068",
+        "reason": "grouping",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "The real metadata fields match the other branch, and a commented workaround (__modules) is appended last; sorting moves the hack and its comment to the top."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/client/bundledDevClient.ts",
+      "line": 58,
+      "repo": "vite",
+      "start": 1401,
+      "stratum": "escapes",
+      "id": "s069",
+      "rater1": {
+        "id": "s069",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Exactly matches the BundledDevHMRClientOptions interface (base, partialAccept, beforeApply)."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/ssr/fetchModule.ts",
+      "line": 109,
+      "repo": "vite",
+      "start": 3208,
+      "stratum": "escapes",
+      "id": "s070",
+      "rater1": {
+        "id": "s070",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "yes",
+        "improvement": "neutral",
+        "note": "Exactly mirrors ViteFetchResult (code, file, id, url, invalidate); fetch results can be serialised over module-runner transports, but they are read by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/config.ts",
+      "line": 865,
+      "repo": "vite",
+      "start": 25776,
+      "stratum": "local",
+      "id": "s071",
+      "rater1": {
+        "id": "s071",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Defaults follow the resolve options interface, with placeholder comments for omitted keys (mainFields, conditions) that sorting would strand; mergeWithDefaults works by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/build.ts",
+      "line": 390,
+      "repo": "vite",
+      "start": 12410,
+      "stratum": "order observed",
+      "id": "s072",
+      "rater1": {
+        "id": "s072",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Build defaults follow BuildEnvironmentOptions, with comment placeholders for keys that have no default; they are spread and merged by key."
+      },
+      "rater2": {
+        "id": "s072",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Follows the BuildEnvironmentOptions interface order, with comments marking the interface keys not defaulted here; mergeWithDefaults preserves this order and the debug 'using resolved config: %O' log prints it."
+      }
+    },
+    {
+      "file": "packages/vite/src/node/ssr/ssrModuleLoader.ts",
+      "line": 64,
+      "repo": "vite",
+      "start": 1834,
+      "stratum": "order observed",
+      "id": "s073",
+      "rater1": {
+        "id": "s073",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "yes",
+        "note": "Logger options read by name, and another call site (s074) writes the same three keys in a different order, so sorting would make them consistent."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/vite/src/node/server/middlewares/error.ts",
+      "line": 50,
+      "repo": "vite",
+      "start": 1753,
+      "stratum": "order observed",
+      "id": "s074",
+      "rater1": {
+        "id": "s074",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "yes",
+        "note": "The same logger options as s073 in a different order; read by name, so sorting only adds consistency."
+      },
+      "rater2": {
+        "id": "s074",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "LogOptions fields (clear, timestamp) then LogErrorOptions' added error, matching the interface and other { clear, timestamp } calls; the logger reads options by name."
+      }
+    },
+    {
+      "file": "src/vs/editor/common/model/tokens/treeSitter/treeSitterTree.ts",
+      "line": 123,
+      "repo": "vscode",
+      "start": 5298,
+      "stratum": "escapes",
+      "id": "s075",
+      "rater1": {
+        "id": "s075",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "tree-sitter Point { row, column } with row before column, consistent across the edit object; tree-sitter reads fields by name."
+      },
+      "rater2": {
+        "id": "s075",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "tree-sitter Point { row, column } and the conventional line-then-column order, repeated on three adjacent points; tree.edit marshals fields by name."
+      }
+    },
+    {
+      "file": "src/vs/editor/common/config/editorConfigurationSchema.ts",
+      "line": 257,
+      "repo": "vscode",
+      "start": 12416,
+      "stratum": "escapes",
+      "id": "s076",
+      "rater1": {
+        "id": "s076",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "JSON Schema convention with type first, then enum/default/descriptions; registered configuration schemas get serialised for settings tooling, but consumers read them by key."
+      },
+      "rater2": {
+        "id": "s076",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "JSON-schema convention of type first, then enum, default and enum descriptions; the property schema reaches the settings JSON schema (serialised) but is read by name, and enum stays next to markdownEnumDescriptions after sorting."
+      }
+    },
+    {
+      "file": "src/vs/editor/common/model/tokens/abstractSyntaxTokenBackend.ts",
+      "line": 57,
+      "repo": "vscode",
+      "start": 2570,
+      "stratum": "escapes",
+      "id": "s077",
+      "rater1": {
+        "id": "s077",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Matches the Emitter's event type { view, state }, which listeners read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/vs/editor/common/viewModel/inlineDecorations.ts",
+      "line": 152,
+      "repo": "vscode",
+      "start": 6385,
+      "stratum": "escapes",
+      "id": "s078",
+      "rater1": {
+        "id": "s078",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the return interface (decorations, inlineDecorations, hasVariableFonts), read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/vs/editor/common/textModelEditSource.ts",
+      "line": 95,
+      "repo": "vscode",
+      "start": 3224,
+      "stratum": "escapes",
+      "id": "s079",
+      "rater1": {
+        "id": "s079",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The source discriminant comes first like every other EditSources entry; TextModelEditSource.toKey joins Object.entries(metadata), so the key string would change (I couldn't see its call sites in the partial clone)."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/vs/editor/common/model/textModel.ts",
+      "line": 497,
+      "repo": "vscode",
+      "start": 21706,
+      "stratum": "escapes",
+      "id": "s080",
+      "rater1": {
+        "id": "s080",
+        "reason": "mirrors",
+        "behaviour": "observable",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Mirrors the content-change shape and the parameter order (range, rangeOffset, rangeLength, text), with offset before length; change events are serialised to the extension host but read by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/vs/editor/common/config/editorOptions.ts",
+      "line": 3823,
+      "repo": "vscode",
+      "start": 125559,
+      "stratum": "local",
+      "id": "s081",
+      "rater1": {
+        "id": "s081",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "A JSON Schema fragment with type first, used in a registered editor option schema that gets serialised but is read by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/vs/editor/common/config/editorConfigurationSchema.ts",
+      "line": 14,
+      "repo": "vscode",
+      "start": 1006,
+      "stratum": "order observed",
+      "id": "s082",
+      "rater1": {
+        "id": "s082",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The node id comes first (and stays first when sorted); the configuration registry reads node fields by name."
+      },
+      "rater2": {
+        "id": "s082",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Configuration node with id first (it stays first when sorted), the rest unordered; registerConfiguration and the settings UI read id/order/title by name."
+      }
+    },
+    {
+      "file": "src/vs/editor/common/services/textResourceConfigurationService.ts",
+      "line": 42,
+      "repo": "vscode",
+      "start": 2536,
+      "stratum": "order observed",
+      "id": "s083",
+      "rater1": {
+        "id": "s083",
+        "reason": "data-flow",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "overrideIdentifier is derived from resource on the line above; overrides are read by name (the 'serialised' flag looks like a heuristic on the name inspect, and the callee isn't in the clone)."
+      },
+      "rater2": null
+    },
+    {
+      "file": "src/vs/editor/common/config/editorOptions.ts",
+      "line": 2256,
+      "repo": "vscode",
+      "start": 66912,
+      "stratum": "order observed",
+      "id": "s084",
+      "rater1": {
+        "id": "s084",
+        "reason": "importance",
+        "behaviour": "observable",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "A JSON Schema subset with type first, spread after description into several setting schemas that get serialised but are read by key."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v4/core/checks.ts",
+      "line": 303,
+      "repo": "zod",
+      "start": 10149,
+      "stratum": "escapes",
+      "id": "s085",
+      "rater1": {
+        "id": "s085",
+        "reason": "arbitrary",
+        "behaviour": "observable",
+        "informationLoss": "unclear",
+        "improvement": "neutral",
+        "note": "finalizeIssue copies keys in Object.keys order into the public issue, and ZodError messages and snapshots stringify it; this order (input first) differs from most issues in the file, which start with origin or code."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v4/core/api.ts",
+      "line": 239,
+      "repo": "zod",
+      "start": 8268,
+      "stratum": "escapes",
+      "id": "s086",
+      "rater1": {
+        "id": "s086",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The def opens with its defining keys (type, format, check), as in every factory in api.ts; the params spread stays last, so overrides are kept."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v4/mini/schemas.ts",
+      "line": 1352,
+      "repo": "zod",
+      "start": 43303,
+      "stratum": "escapes",
+      "id": "s087",
+      "rater1": {
+        "id": "s087",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "The type discriminant comes first, then keyType/valueType in the function's parameter order; sorting puts type between the key/value pair."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v3/types.ts",
+      "line": 437,
+      "repo": "zod",
+      "start": 13455,
+      "stratum": "escapes",
+      "id": "s088",
+      "rater1": {
+        "id": "s088",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the Standard Schema spec's props order (version, vendor, validate), which consumers read by name."
+      },
+      "rater2": {
+        "id": "s088",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Matches the Standard Schema spec's Props interface order (version, vendor, validate) in standard-schema.ts; consumers read by name."
+      }
+    },
+    {
+      "file": "packages/zod/src/v4/core/visit.ts",
+      "line": 46,
+      "repo": "zod",
+      "start": 2138,
+      "stratum": "escapes",
+      "id": "s089",
+      "rater1": {
+        "id": "s089",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "no",
+        "note": "The schema def puts its type discriminant first; $ZodLazy reads it by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v3/types.ts",
+      "line": 3154,
+      "repo": "zod",
+      "start": 99802,
+      "stratum": "escapes",
+      "id": "s090",
+      "rater1": {
+        "id": "s090",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the ParseInput shape (data, path, parent), as the parallel _parseAsync call does; it is read by name."
+      },
+      "rater2": {
+        "id": "s090",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the ParseInput type (data, path, parent) and the async twin call above; _parseSync reads by name."
+      }
+    },
+    {
+      "file": "packages/zod/src/v4/locales/he.ts",
+      "line": 86,
+      "repo": "zod",
+      "start": 3592,
+      "stratum": "local",
+      "id": "s091",
+      "rater1": {
+        "id": "s091",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The label comes before its grammatical gender in every dictionary entry; both are read by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v4/locales/pt.ts",
+      "line": 74,
+      "repo": "zod",
+      "start": 2510,
+      "stratum": "local",
+      "id": "s092",
+      "rater1": {
+        "id": "s092",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "The name comes before its articles in every entry; both are read by name in the template string."
+      },
+      "rater2": null
+    },
+    {
+      "file": "packages/zod/src/v4/locales/ru.ts",
+      "line": 60,
+      "repo": "zod",
+      "start": 1198,
+      "stratum": "local",
+      "id": "s093",
+      "rater1": {
+        "id": "s093",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "CLDR plural categories in their canonical order (one, few, many); forms are picked by name."
+      },
+      "rater2": {
+        "id": "s093",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "CLDR plural category order one, few, many, matching RussianSizable and getRussianPlural's parameter list; looked up by name."
+      }
+    },
+    {
+      "file": "packages/zod/src/v4/locales/lt.ts",
+      "line": 48,
+      "repo": "zod",
+      "start": 1289,
+      "stratum": "local",
+      "id": "s094",
+      "rater1": {
+        "id": "s094",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Same CLDR one/few/many plural order as s093, in the Lithuanian locale."
+      },
+      "rater2": null
+    },
+    {
+      "file": "apps/studio/components/interfaces/ConfigDrift/ConfigurationDriftPage.constants.ts",
+      "line": 699,
+      "repo": "supabase",
+      "start": 26990,
+      "stratum": "escapes",
+      "id": "s095",
+      "rater1": {
+        "id": "s095",
+        "reason": "arbitrary",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Registry entries all use settingHref then label, with no visible reason; they are looked up and spread by name."
+      },
+      "rater2": {
+        "id": "s095",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the ConfigFieldDefinition interface (settingHref, label) used by hundreds of identical entries; getFieldDefinition reads by name."
+      }
+    },
+    {
+      "file": "apps/studio/components/interfaces/Auth/EmailTemplates/AuthTemplatesValidation.tsx",
+      "line": 338,
+      "repo": "supabase",
+      "start": 9754,
+      "stratum": "escapes",
+      "id": "s096",
+      "rater1": {
+        "id": "s096",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Exactly mirrors the AuthTemplate interface (id, type, title, purpose, properties, variables, validationSchema, misc); it is read by name."
+      },
+      "rater2": {
+        "id": "s096",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "Mirrors the AuthTemplate interface (identity and description, then properties/variables/validationSchema, misc last) shared by every template; the editor iterates only the nested properties object, not these keys."
+      }
+    },
+    {
+      "file": "apps/studio/components/interfaces/Integrations/Wrappers/Wrappers.constants.ts",
+      "line": 1555,
+      "repo": "supabase",
+      "start": 36238,
+      "stratum": "escapes",
+      "id": "s097",
+      "rater1": {
+        "id": "s097",
+        "reason": "display",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "no",
+        "note": "WrapperTableEditor renders label, then description, then the option fields, which is the written order; rendering reads by name."
+      },
+      "rater2": null
+    },
+    {
+      "file": "apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/ColumnEditor/ColumnEditor.constants.ts",
+      "line": 11,
+      "repo": "supabase",
+      "start": 291,
+      "stratum": "local",
+      "id": "s098",
+      "rater1": {
+        "id": "s098",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Follows the Suggestion interface (name, value, description) and nullSuggestion; it is read by name."
+      },
+      "rater2": {
+        "id": "s098",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Display name first, then value and description, as the Suggestion interface declares; InputWithSuggestions reads suggestion.name/description by name."
+      }
+    },
+    {
+      "file": "apps/studio/components/layouts/ProjectLayout/LayoutSidebar/LayoutSidebarProvider.tsx",
+      "line": 34,
+      "repo": "supabase",
+      "start": 1389,
+      "stratum": "order observed",
+      "id": "s099",
+      "rater1": {
+        "id": "s099",
+        "reason": "mirrors",
+        "behaviour": "no",
+        "informationLoss": "yes",
+        "improvement": "neutral",
+        "note": "Keys follow the useRegisterSidebar call order below; Object.values(SIDEBAR_KEYS) is only used with .includes, so order is invisible."
+      },
+      "rater2": null
+    },
+    {
+      "file": "apps/studio/components/interfaces/App/CommandMenu/ContextSearchResults.shared.tsx",
+      "line": 68,
+      "repo": "supabase",
+      "start": 2284,
+      "stratum": "order observed",
+      "id": "s100",
+      "rater1": {
+        "id": "s100",
+        "reason": "importance",
+        "behaviour": "no",
+        "informationLoss": "no",
+        "improvement": "neutral",
+        "note": "Command identity first (id, name, value, then the icon renderer); it is spread into route/action commands and read by name."
+      },
+      "rater2": null
+    }
+  ],
+  "missing": [],
+  "note": "Rater 1 labelled every item; rater 2 a blind seeded subset. Weighted shares stand for every object ESLint's sort-keys reports in the eight corpus repos (Supabase's items are listed but not in the shares), weighting each item by its repo and stratum.",
+  "raters": {
+    "rater1": "A Claude subagent with the worksheet and read-only access to the clones",
+    "rater2": "A separate Claude subagent with the blind subset only, without rater 1's labels"
+  },
+  "shares": {
+    "behaviour": {
+      "no": {
+        "n": 75,
+        "weightedPct": 84
+      },
+      "observable": {
+        "n": 19,
+        "weightedPct": 16
+      },
+      "yes": {
+        "n": 0,
+        "weightedPct": 0
+      },
+      "unclear": {
+        "n": 0,
+        "weightedPct": 0
+      }
+    },
+    "improvement": {
+      "yes": {
+        "n": 2,
+        "weightedPct": 0.3
+      },
+      "neutral": {
+        "n": 45,
+        "weightedPct": 47.6
+      },
+      "no": {
+        "n": 47,
+        "weightedPct": 52.1
+      },
+      "unclear": {
+        "n": 0,
+        "weightedPct": 0
+      }
+    },
+    "informationLoss": {
+      "no": {
+        "n": 61,
+        "weightedPct": 66.2
+      },
+      "unclear": {
+        "n": 2,
+        "weightedPct": 1.4
+      },
+      "yes": {
+        "n": 31,
+        "weightedPct": 32.4
+      }
+    },
+    "reason": {
+      "arbitrary": {
+        "n": 8,
+        "weightedPct": 7.4
+      },
+      "data-flow": {
+        "n": 1,
+        "weightedPct": 0
+      },
+      "display": {
+        "n": 1,
+        "weightedPct": 1.7
+      },
+      "grouping": {
+        "n": 7,
+        "weightedPct": 3.8
+      },
+      "mirrors": {
+        "n": 40,
+        "weightedPct": 48.4
+      },
+      "priority": {
+        "n": 0,
+        "weightedPct": 0
+      },
+      "importance": {
+        "n": 37,
+        "weightedPct": 38.6
+      },
+      "unclear": {
+        "n": 0,
+        "weightedPct": 0
+      }
+    }
+  }
+}

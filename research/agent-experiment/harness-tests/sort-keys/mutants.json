@@ -1,0 +1,486 @@
+{
+  "note": "Hand-made edits of the prepared sort-keys subjects (subjects/sort-keys/), each applied exactly once, with the oracle verdict, the edit reading and the ESLint sort-keys reports (inline config ignored, then honoured) they must produce. `mirrors` names the corpus variant (research/corpus/examples/sort-keys/examples.json) an edit re-expresses on the prepared text; its oracle verdict must match the variant's.",
+  "mutants": [
+    {
+      "id": "a01",
+      "base": "a",
+      "description": "sort both objects by hand",
+      "mirrors": "a01",
+      "edits": [
+        [
+          "const alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n",
+          "const alias: Record<string, string | undefined> = {\n  css: \"text/css\",\n  html: \"text/html\",\n  js: \"text/javascript\",\n  json: \"application/json\",\n};\n"
+        ],
+        [
+          "        ms.generateMap({\n          source: path.basename(urlWithoutTimestamp),\n          hires: \"boundary\",\n          includeContent: true,\n        }) as SourceMap",
+          "        ms.generateMap({\n          hires: \"boundary\",\n          includeContent: true,\n          source: path.basename(urlWithoutTimestamp),\n        }) as SourceMap"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "sorted as the rule asks",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "a02",
+      "base": "a",
+      "description": "unchanged",
+      "mirrors": "a02",
+      "edits": [],
+      "expect": {
+        "oracle": "same",
+        "outcome": "unchanged",
+        "eslintSortLeft": 2,
+        "eslintSortLeftHonor": 2
+      }
+    },
+    {
+      "id": "a03",
+      "base": "a",
+      "description": "alias as a Map (the options bag still unsorted)",
+      "mirrors": "a03",
+      "edits": [
+        [
+          "const alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n",
+          "const alias = new Map<string, string>([\n  [\"js\", \"text/javascript\"],\n  [\"css\", \"text/css\"],\n  [\"html\", \"text/html\"],\n  [\"json\", \"application/json\"],\n]);\n"
+        ],
+        [
+          "alias[type] || type",
+          "alias.get(type) || type"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured part of it",
+        "eslintSortLeft": 1,
+        "eslintSortLeftHonor": 1
+      }
+    },
+    {
+      "id": "a04",
+      "base": "a",
+      "description": "a next-line suppression above each object (silences the object's first line only)",
+      "mirrors": "a04",
+      "edits": [
+        [
+          "const alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n",
+          "// eslint-disable-next-line sort-keys\nconst alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n"
+        ],
+        [
+          "        ms.generateMap({\n          source: path.basename(urlWithoutTimestamp),\n          hires: \"boundary\",\n          includeContent: true,\n        }) as SourceMap",
+          "        // eslint-disable-next-line sort-keys\n        ms.generateMap({\n          source: path.basename(urlWithoutTimestamp),\n          hires: \"boundary\",\n          includeContent: true,\n        }) as SourceMap"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "suppression",
+        "eslintSortLeft": 2,
+        "eslintSortLeftHonor": 2
+      }
+    },
+    {
+      "id": "a05",
+      "base": "a",
+      "description": "a block suppression around each object",
+      "mirrors": "a05",
+      "edits": [
+        [
+          "const alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n",
+          "/* eslint-disable sort-keys */\nconst alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n/* eslint-enable sort-keys */\n"
+        ],
+        [
+          "        ms.generateMap({\n          source: path.basename(urlWithoutTimestamp),\n          hires: \"boundary\",\n          includeContent: true,\n        }) as SourceMap",
+          "        /* eslint-disable sort-keys */\n        ms.generateMap({\n          source: path.basename(urlWithoutTimestamp),\n          hires: \"boundary\",\n          includeContent: true,\n        }) as SourceMap\n        /* eslint-enable sort-keys */"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "suppression",
+        "eslintSortLeft": 2,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "a06",
+      "base": "a",
+      "description": "alias as a switch, the options bag sorted",
+      "mirrors": null,
+      "edits": [
+        [
+          "const alias: Record<string, string | undefined> = {\n  js: \"text/javascript\",\n  css: \"text/css\",\n  html: \"text/html\",\n  json: \"application/json\",\n};\n",
+          "const alias = (type: string): string | undefined => {\n  switch (type) {\n    case \"js\":\n      return \"text/javascript\";\n    case \"css\":\n      return \"text/css\";\n    case \"html\":\n      return \"text/html\";\n    case \"json\":\n      return \"application/json\";\n    default:\n      return undefined;\n  }\n};\n"
+        ],
+        [
+          "alias[type] || type",
+          "alias(type) || type"
+        ],
+        [
+          "        ms.generateMap({\n          source: path.basename(urlWithoutTimestamp),\n          hires: \"boundary\",\n          includeContent: true,\n        }) as SourceMap",
+          "        ms.generateMap({\n          hires: \"boundary\",\n          includeContent: true,\n          source: path.basename(urlWithoutTimestamp),\n        }) as SourceMap"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured and sorted",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b01",
+      "base": "b",
+      "description": "sort both payloads by hand (what Oxlint's fix does)",
+      "mirrors": "b01",
+      "edits": [
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(\n            { label: event.label, level: event.level, message },\n            null,\n            2\n          )"
+        ],
+        [
+          "        : JSON.stringify({ message, label: event.label, level: event.level });",
+          "        : JSON.stringify({ label: event.label, level: event.level, message });"
+        ]
+      ],
+      "expect": {
+        "oracle": "same JSON, another key order",
+        "outcome": "sorted as the rule asks",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b02",
+      "base": "b",
+      "description": "unchanged",
+      "mirrors": "b02",
+      "edits": [],
+      "expect": {
+        "oracle": "same",
+        "outcome": "unchanged",
+        "eslintSortLeft": 2,
+        "eslintSortLeftHonor": 2
+      }
+    },
+    {
+      "id": "b03",
+      "base": "b",
+      "description": "sort both and pass the field order to JSON.stringify as a replacer",
+      "mirrors": "b03",
+      "edits": [
+        [
+          "export const SGR_REGEX",
+          "// The order of the fields in each JSON line.\nconst LINE_FIELDS = [\"message\", \"label\", \"level\"];\n\nexport const SGR_REGEX"
+        ],
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(\n            { label: event.label, level: event.level, message },\n            LINE_FIELDS,\n            2\n          )"
+        ],
+        [
+          "        : JSON.stringify({ message, label: event.label, level: event.level });",
+          "        : JSON.stringify(\n            { label: event.label, level: event.level, message },\n            LINE_FIELDS\n          );"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "sorted, order made explicit",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b04",
+      "base": "b",
+      "description": "Object.fromEntries of an ordered list",
+      "mirrors": "b04",
+      "edits": [
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(\n            Object.fromEntries([\n              [\"message\", message],\n              [\"label\", event.label],\n              [\"level\", event.level],\n            ]),\n            null,\n            2\n          )"
+        ],
+        [
+          "        : JSON.stringify({ message, label: event.label, level: event.level });",
+          "        : JSON.stringify(\n            Object.fromEntries([\n              [\"message\", message],\n              [\"label\", event.label],\n              [\"level\", event.level],\n            ])\n          );"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured to keep the order",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b05",
+      "base": "b",
+      "description": "a block suppression",
+      "mirrors": "b05",
+      "edits": [
+        [
+          "      const payload = pretty",
+          "      /* eslint-disable sort-keys -- the field order is the log format */\n      const payload = pretty"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "suppression",
+        "eslintSortLeft": 2,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b06",
+      "base": "b",
+      "description": "sort the pretty payload only",
+      "mirrors": null,
+      "edits": [
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(\n            { label: event.label, level: event.level, message },\n            null,\n            2\n          )"
+        ]
+      ],
+      "expect": {
+        "oracle": "same JSON, another key order",
+        "outcome": "sorted part of it",
+        "eslintSortLeft": 1,
+        "eslintSortLeftHonor": 1
+      }
+    },
+    {
+      "id": "b07",
+      "base": "b",
+      "description": "sort both and give the field order inline as the replacer",
+      "mirrors": null,
+      "edits": [
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(\n            { label: event.label, level: event.level, message },\n            [\"message\", \"label\", \"level\"],\n            2\n          )"
+        ],
+        [
+          "        : JSON.stringify({ message, label: event.label, level: event.level });",
+          "        : JSON.stringify({ label: event.label, level: event.level, message }, [\n            \"message\",\n            \"label\",\n            \"level\",\n          ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "sorted, order made explicit",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b08",
+      "base": "b",
+      "description": "one payload object built with Object.assign (an agent's edit in b-codex-1 and b-codex-3; unicorn/no-immediate-mutation's fix folds it back into the unsorted literal)",
+      "mirrors": null,
+      "edits": [
+        [
+          "      const payload = pretty",
+          "      const entry = { message };\n      Object.assign(entry, { label: event.label, level: event.level });\n      const payload = pretty"
+        ],
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(entry, null, 2)"
+        ],
+        [
+          "        : JSON.stringify({ message, label: event.label, level: event.level });",
+          "        : JSON.stringify(entry);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "b09",
+      "base": "b",
+      "description": "one payload object with the later keys spread from a literal (an agent's edit in b-codex-1 and b-codex-3; unicorn/no-useless-spread's fix inlines it back into the unsorted literal)",
+      "mirrors": null,
+      "edits": [
+        [
+          "      const payload = pretty",
+          "      const entry = { message, ...{ label: event.label, level: event.level } };\n      const payload = pretty"
+        ],
+        [
+          "        ? JSON.stringify(\n            { message, label: event.label, level: event.level },\n            null,\n            2\n          )",
+          "        ? JSON.stringify(entry, null, 2)"
+        ],
+        [
+          "        : JSON.stringify({ message, label: event.label, level: event.level });",
+          "        : JSON.stringify(entry);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c01",
+      "base": "c",
+      "description": "sort by hand (what Oxlint's fix does)",
+      "mirrors": "c01",
+      "edits": [
+        [
+          "const ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n",
+          "const ENCODINGS = {\n  br: \".br\",\n  gzip: \".gz\",\n  zstd: \".zst\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "another encoding chosen",
+        "outcome": "sorted as the rule asks",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c02",
+      "base": "c",
+      "description": "unchanged",
+      "mirrors": "c02",
+      "edits": [],
+      "expect": {
+        "oracle": "same",
+        "outcome": "unchanged",
+        "eslintSortLeft": 1,
+        "eslintSortLeftHonor": 1
+      }
+    },
+    {
+      "id": "c03",
+      "base": "c",
+      "description": "sort and list the preference explicitly",
+      "mirrors": "c03",
+      "edits": [
+        [
+          "const ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n",
+          "const ENCODINGS = {\n  br: \".br\",\n  gzip: \".gz\",\n  zstd: \".zst\",\n} as const;\n// The order of preference when the client accepts more than one.\nconst ENCODINGS_ORDERED_KEYS: (keyof typeof ENCODINGS)[] = [\"br\", \"zstd\", \"gzip\"];\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "sorted, order made explicit",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c04",
+      "base": "c",
+      "description": "ENCODINGS as a Map",
+      "mirrors": "c04",
+      "edits": [
+        [
+          "const ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n",
+          "const ENCODINGS = new Map([\n  [\"br\", \".br\"],\n  [\"zstd\", \".zst\"],\n  [\"gzip\", \".gz\"],\n] as const);\nconst ENCODINGS_ORDERED_KEYS = [...ENCODINGS.keys()];\n"
+        ],
+        [
+          "path + ENCODINGS[encoding]",
+          "path + ENCODINGS.get(encoding)"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured to keep the order",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c05",
+      "base": "c",
+      "description": "a block suppression",
+      "mirrors": "c05",
+      "edits": [
+        [
+          "const ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n",
+          "/* eslint-disable sort-keys -- the order is the preference */\nconst ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n/* eslint-enable sort-keys */\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "suppression",
+        "eslintSortLeft": 1,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c06",
+      "base": "c",
+      "description": "sort and list the preference in sorted order (a wrong list)",
+      "mirrors": null,
+      "edits": [
+        [
+          "const ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n",
+          "const ENCODINGS = {\n  br: \".br\",\n  gzip: \".gz\",\n  zstd: \".zst\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS: (keyof typeof ENCODINGS)[] = [\"br\", \"gzip\", \"zstd\"];\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "another encoding chosen",
+        "outcome": "sorted, order made explicit",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c07",
+      "base": "c",
+      "description": "a next-line suppression on the reported key",
+      "mirrors": null,
+      "edits": [
+        [
+          "  zstd: \".zst\",\n  gzip: \".gz\",",
+          "  zstd: \".zst\",\n  // eslint-disable-next-line sort-keys -- preference order\n  gzip: \".gz\","
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "suppression",
+        "eslintSortLeft": 1,
+        "eslintSortLeftHonor": 0
+      }
+    },
+    {
+      "id": "c08",
+      "base": "c",
+      "description": "quote the keys (restyling)",
+      "mirrors": null,
+      "edits": [
+        [
+          "  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",",
+          "  \"br\": \".br\",\n  \"zstd\": \".zst\",\n  \"gzip\": \".gz\","
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "objects unchanged, other code edited",
+        "eslintSortLeft": 1,
+        "eslintSortLeftHonor": 1
+      }
+    },
+    {
+      "id": "c09",
+      "base": "c",
+      "description": "an array of entries, with Object.fromEntries for the lookup",
+      "mirrors": null,
+      "edits": [
+        [
+          "const ENCODINGS = {\n  br: \".br\",\n  zstd: \".zst\",\n  gzip: \".gz\",\n} as const;\nconst ENCODINGS_ORDERED_KEYS = Object.keys(\n  ENCODINGS\n) as (keyof typeof ENCODINGS)[];\n",
+          "const ENCODING_LIST = [\n  [\"br\", \".br\"],\n  [\"zstd\", \".zst\"],\n  [\"gzip\", \".gz\"],\n] as const;\nconst ENCODINGS = Object.fromEntries(ENCODING_LIST) as Record<\n  (typeof ENCODING_LIST)[number][0],\n  string\n>;\nconst ENCODINGS_ORDERED_KEYS = ENCODING_LIST.map(([key]) => key);\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "outcome": "restructured to keep the order",
+        "eslintSortLeft": 0,
+        "eslintSortLeftHonor": 0
+      }
+    }
+  ]
+}

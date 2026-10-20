@@ -1,0 +1,697 @@
+{
+  "runId": "b-codex-4",
+  "topic": "sort-keys",
+  "subject": "b",
+  "base": "b",
+  "label": "B, order is observable",
+  "config": "eslint core",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.155.1",
+  "wallSeconds": 66.5,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 11,
+    "leftOutByFilter": {
+      "@typescript-eslint/member-ordering": 3,
+      "func-style": 2,
+      "require-unicode-regexp": 1,
+      "unicorn/consistent-boolean-name": 2,
+      "unicorn/prefer-code-point": 1
+    },
+    "given": [
+      {
+        "rule": "sort-keys",
+        "line": 175,
+        "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+        "help": "Require object keys to be sorted",
+        "url": "https://eslint.org/docs/latest/rules/sort-keys"
+      },
+      {
+        "rule": "sort-keys",
+        "line": 179,
+        "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+        "help": "Require object keys to be sorted",
+        "url": "https://eslint.org/docs/latest/rules/sort-keys"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "a323c9c2be8b199c16f6fe46eba82aa1bcd28c19e2d63459f2c07e0c9c3c5a80",
+    "parseError": false,
+    "views": {
+      "eslint core": {
+        "sortHonor": [
+          "sort-keys:175",
+          "sort-keys:179"
+        ],
+        "sortIgnore": [
+          "sort-keys:175",
+          "sort-keys:179"
+        ],
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/member-ordering": 3,
+          "func-style": 2,
+          "require-unicode-regexp": 1,
+          "sort-keys": 2,
+          "unicorn/consistent-boolean-name": 2,
+          "unicorn/prefer-code-point": 1
+        },
+        "sortCleared": false
+      },
+      "oxlint core": {
+        "sortHonor": [
+          "sort-keys:175",
+          "sort-keys:179"
+        ],
+        "sortIgnore": [
+          "sort-keys:175",
+          "sort-keys:179"
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 2,
+          "require-unicode-regexp": 1,
+          "sort-keys": 2,
+          "unicorn/prefer-code-point": 1
+        },
+        "sortCleared": false
+      },
+      "biome core": {
+        "sortHonor": [
+          "assist/source/useSortedKeys:175",
+          "assist/source/useSortedKeys:179"
+        ],
+        "sortIgnore": [
+          "assist/source/useSortedKeys:175",
+          "assist/source/useSortedKeys:179"
+        ],
+        "parseError": false,
+        "all": {
+          "assist/source/useSortedInterfaceMembers": 2,
+          "assist/source/useSortedKeys": 2,
+          "complexity/useLiteralKeys": 1
+        },
+        "sortCleared": false
+      }
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "verdict": "same",
+      "differences": 0,
+      "encodingChanged": null,
+      "probesOnly": null,
+      "otherChanged": null,
+      "example": null
+    },
+    "edit": {
+      "edit": "unchanged",
+      "targets": [],
+      "added": {}
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "NOSONAR": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "sort-keys L175",
+        "sort-keys L179"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 66.5,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "agent": {
+        "exists": true,
+        "sha256": "693c91016fc841351cf4d70136139b5d28604811417d5d372414bf9ffbdc9de6",
+        "parseError": false,
+        "views": {
+          "eslint core": {
+            "sortHonor": [],
+            "sortIgnore": [],
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/member-ordering": 3,
+              "func-style": 2,
+              "require-unicode-regexp": 1,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/prefer-code-point": 1
+            },
+            "sortCleared": true
+          },
+          "oxlint core": {
+            "sortHonor": [],
+            "sortIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 2,
+              "require-unicode-regexp": 1,
+              "unicorn/prefer-code-point": 1
+            },
+            "sortCleared": true
+          },
+          "biome core": {
+            "sortHonor": [],
+            "sortIgnore": [],
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "complexity/useLiteralKeys": 1,
+              "format": 1
+            },
+            "sortCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "same",
+          "differences": 0,
+          "encodingChanged": null,
+          "probesOnly": null,
+          "otherChanged": null,
+          "example": null
+        },
+        "edit": {
+          "edit": "sorted, order made explicit",
+          "targets": [
+            {
+              "name": "pretty payload",
+              "status": "sorted",
+              "keys": [
+                "label",
+                "level",
+                "message"
+              ],
+              "line": 175,
+              "merged": false
+            },
+            {
+              "name": "compact payload",
+              "status": "sorted",
+              "keys": [
+                "label",
+                "level",
+                "message"
+              ],
+              "line": 180,
+              "merged": false
+            }
+          ],
+          "added": {
+            "replacer": 2,
+            "orderList": 2,
+            "orderListInSourceOrder": 2
+          },
+          "constructs": [
+            "a JSON.stringify replacer",
+            "an explicit order list"
+          ],
+          "orderListInSourceOrder": true,
+          "codeChanged": true
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "eslint core": {},
+          "oxlint core": {},
+          "biome core": {
+            "format": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "sorted, order made explicit"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "7a00ca95b353c34ea01e483c2afa07f43bdcac599e05dab0ab7593425d6f8fdf",
+        "parseError": false,
+        "views": {
+          "eslint core": {
+            "sortHonor": [],
+            "sortIgnore": [],
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/member-ordering": 3,
+              "func-style": 2,
+              "require-unicode-regexp": 1,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/prefer-code-point": 1
+            },
+            "sortCleared": true
+          },
+          "oxlint core": {
+            "sortHonor": [],
+            "sortIgnore": [],
+            "parseError": false,
+            "all": {
+              "func-style": 2,
+              "require-unicode-regexp": 1,
+              "unicorn/prefer-code-point": 1
+            },
+            "sortCleared": true
+          },
+          "biome core": {
+            "sortHonor": [],
+            "sortIgnore": [],
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "complexity/useLiteralKeys": 1
+            },
+            "sortCleared": true
+          }
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "same",
+          "differences": 0,
+          "encodingChanged": null,
+          "probesOnly": null,
+          "otherChanged": null,
+          "example": null
+        },
+        "edit": {
+          "edit": "sorted, order made explicit",
+          "targets": [
+            {
+              "name": "pretty payload",
+              "status": "sorted",
+              "keys": [
+                "label",
+                "level",
+                "message"
+              ],
+              "line": 175,
+              "merged": false
+            },
+            {
+              "name": "compact payload",
+              "status": "sorted",
+              "keys": [
+                "label",
+                "level",
+                "message"
+              ],
+              "line": 179,
+              "merged": false
+            }
+          ],
+          "added": {
+            "replacer": 2,
+            "orderList": 2,
+            "orderListInSourceOrder": 2
+          },
+          "constructs": [
+            "a JSON.stringify replacer",
+            "an explicit order list"
+          ],
+          "orderListInSourceOrder": true,
+          "codeChanged": true
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "NOSONAR": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "eslint core": {},
+          "oxlint core": {},
+          "biome core": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "sorted, order made explicit"
+      },
+      "verifyChangedTheFile": true,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingSortKeysOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "sort-keys",
+            "sort-keys"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "sort-keys",
+            "sort-keys"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 7,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 242335,
+          "cached_input_tokens": 204416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2196,
+          "reasoning_output_tokens": 777,
+          "total_tokens": 244531
+        },
+        "tokensUsedReportedOnStderr": 40115,
+        "thinkingBlocks": 5,
+        "toolCalls": [
+          "exec_command",
+          "exec_command",
+          "exec_command",
+          "apply_patch",
+          "exec_command",
+          "exec_command"
+        ],
+        "toolNames": [
+          "exec_command",
+          "apply_patch"
+        ],
+        "toolCallTargets": [
+          "pwd; rg --files -g AGENTS.md -g package.json -g 'json.ts*' -g '*lock*' -g '*oxlint*' -g '*eslint*' -g '*biome*' -g '*ultracite*' -g '!node_modules' -g '!\\.git'",
+          "for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/b-codex-4; do if [ -f \"$dir/AGENTS.md\" ]; then cat \"$di",
+          "rg --files -g '!node_modules' -g '!\\.git'\nls -d node_modules node_modules/.bin/eslint node_modules/.bin/tsx 2>/dev/null\ngit status --short",
+          "*** Begin Patch\n*** Update File: <run-root>/b-codex-4/json.ts\n@@\n-            { message, label: event.label, level: event.level },\n-            null,\n+            { label: event.label, level: event.le",
+          "command -v node npm eslint ultracite\nnode -e 'for (const name of [\"eslint\", \"typescript\", \"ultracite\"]) { try { console.log(name, import.meta.resolve(name)); } catch { console.log(name, \"not found\"); ",
+          "for dir in ~/GitHub/ultracite/node_modules /private/tmp/node_modules <tmp>/ultracite-agent-experiment/node_modules; do if [ -d \"$dir/eslint\" ]; then printf '%s\\n' \"$dir/eslint/bin/eslint.js\"; fi; done"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "pwd; rg --files -g AGENTS.md -g package.json -g 'json.ts*' -g '*lock*' -g '*oxlint*' -g '*eslint*' -g '*biome*' -g '*ultracite*' -g '!node_modules' -g '!\\.git'",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/b-codex-4; do if [ -f \"$dir/AGENTS.md\" ]; then cat \"$dir/AGENTS.md\"; fi; done\ncat json.ts.11cde34c.json\nsed -n '1,230p' json.ts\ncat pack",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "rg --files -g '!node_modules' -g '!\\.git'\nls -d node_modules node_modules/.bin/eslint node_modules/.bin/tsx 2>/dev/null\ngit status --short",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "command -v node npm eslint ultracite\nnode -e 'for (const name of [\"eslint\", \"typescript\", \"ultracite\"]) { try { console.log(name, import.meta.resolve(name)); } catch { console.log(name, \"not found\"); } }'\ncat tsconfig.json",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "for dir in ~/GitHub/ultracite/node_modules /private/tmp/node_modules <tmp>/ultracite-agent-experiment/node_modules; do if [ -d \"$dir/eslint\" ]; then printf '%s\\n' \"$dir/eslint/bin/eslint.js\"; fi; done\nnode --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readFileSync } ",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "rg --files -g '!node_modules' -g '!\\.git'\nls -d node_modules node_modules/.bin/eslint node_modules/.bin/tsx 2>/dev/null\ngit status --short",
+          "command -v node npm eslint ultracite\nnode -e 'for (const name of [\"eslint\", \"typescript\", \"ultracite\"]) { try { console.log(name, import.meta.resolve(name)); } catch { console.log(name, \"not found\"); } }'\ncat tsconfig.json",
+          "for dir in ~/GitHub/ultracite/node_modules /private/tmp/node_modules <tmp>/ultracite-agent-experiment/node_modules; do if [ -d \"$dir/eslint\" ]; then printf '%s\\n' \"$dir/eslint/bin/eslint.js\"; fi; done\nnode --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readFileSync } "
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "ownBehaviourChecks": [
+          "{\"tool\":\"exec_command\",\"input\":\"{\\\"cmd\\\":\\\"for dir in ~/GitHub/ultracite/node_modules /private/tmp/node_modules <tmp>/ultracite-agent-exp"
+        ],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-            { message, label: event.label, level: event.level },\n-            null,\n+            { label: event.label, level: event.level, message },\n+            [\"message\", \"label\", \"level\"],\n-        : JSON.stringify({ message, label: event.label, level: event.level });\n+        : JSON.stringify(\n+            { label: event.label, level: event.level, message },\n+            [\"message\", \"label\", \"level\"]\n+          );"
+        ],
+        "finalMessage": "Fixed both issues in `json.ts`, preserving JSON field order. Verified unchanged behavior across 100 cases.\n\nCouldn’t rerun lint because dependencies aren’t installed.",
+        "orderMentions": [
+          "Fixed both issues in `json.ts`, preserving JSON field order.",
+          "The field order affects the JSON log output.",
+          "I’ll sort the object keys and explicitly preserve the existing `message`, `label`, `level` order when serializing."
+        ],
+        "runtimeMentions": [
+          "Verified unchanged behavior across 100 cases.",
+          "The field order affects the JSON log output."
+        ],
+        "testMentions": [],
+        "keepMentions": [
+          "Fixed both issues in `json.ts`, preserving JSON field order.",
+          "I’ll sort the object keys and explicitly preserve the existing `message`, `label`, `level` order when serializing."
+        ],
+        "upstreamMentions": [],
+        "exposure": {
+          "otherTopicRuns": 3,
+          "blogDrafts": 1,
+          "mainCheckout": 6,
+          "webAccess": 21,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "otherTopicRuns": 1,
+          "mainCheckout": 1,
+          "webAccess": 5
+        },
+        "exposureInToolInputs": {
+          "otherTopicRuns": 1,
+          "mainCheckout": 1
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec_command",
+            "target": "for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/b-codex-4; do if [ -f \"$dir/AGENTS.md\" ]; then cat \"$dir/AGENTS.md\"; fi; done\ncat json.ts.11cde34c.json\nsed -n '1,230p' json.ts\ncat pack"
+          },
+          {
+            "tool": "exec_command",
+            "target": "for dir in ~/GitHub/ultracite/node_modules /private/tmp/node_modules <tmp>/ultracite-agent-experiment/node_modules; do if [ -d \"$dir/eslint\" ]; then printf '%s\\n' \"$dir/eslint/bin/eslint.js\"; fi; done\nnode --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readFileSync } from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nconst source = readFileSync('json.ts', 'utf8');\nconst before = source\n  .replaceAll('{ label: event.label, level: event.level, message }', '{ message, label: event.label"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "sorted, order made explicit",
+    "response": "sorted, order made explicit (right)",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 2,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true
+    ],
+    "outro": "Fixed 2 of 2 issues with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 40115,
+    "totalTokens": 244531
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "otherTopicRuns": 3,
+      "blogDrafts": 1,
+      "mainCheckout": 6,
+      "webAccess": 21,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {
+      "otherTopicRuns": 1,
+      "mainCheckout": 1,
+      "webAccess": 5
+    },
+    "exposureInToolInputs": {
+      "otherTopicRuns": 1,
+      "mainCheckout": 1
+    },
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec_command",
+        "target": "for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <run-root>/b-codex-4; do if [ -f \"$dir/AGENTS.md\" ]; then cat \"$dir/AGENTS.md\"; fi; done\ncat json.ts.11cde34c.json\nsed -n '1,230p' json.ts\ncat pack"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec_command",
+        "target": "for dir in ~/GitHub/ultracite/node_modules /private/tmp/node_modules <tmp>/ultracite-agent-experiment/node_modules; do if [ -d \"$dir/eslint\" ]; then printf '%s\\n' \"$dir/eslint/bin/eslint.js\"; fi; done\nnode --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport { readFileSync } from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nconst source = readFileSync('json.ts', 'utf8');\nconst before = source\n  .replaceAll('{ label: event.label, level: event.level, message }', '{ message, label: event.label"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/b-codex-4/handoff",
+      "../corpus/examples/sort-keys",
+      "../corpus/results/sort-keys",
+      "../corpus/calibration/sort-keys",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/sort-keys-agent-runs.cjs",
+      "../corpus/scripts/sort-keys-calibration.cjs",
+      "../corpus/scripts/sort-keys-census.cjs",
+      "../corpus/scripts/sort-keys-examples.cjs",
+      "../corpus/scripts/sort-keys-fixes.cjs",
+      "../corpus/scripts/sort-keys-hand-checks.cjs",
+      "../corpus/scripts/sort-keys-history.cjs",
+      "../corpus/scripts/sort-keys-inventory.cjs",
+      "../corpus/scripts/sort-keys-lib.cjs",
+      "../corpus/scripts/sort-keys-linters.cjs",
+      "../corpus/scripts/sort-keys-markers.cjs",
+      "../corpus/scripts/sort-keys-oracle.cjs",
+      "../corpus/scripts/sort-keys-run-all.cjs",
+      "../corpus/scripts/sort-keys-sample.cjs",
+      "../corpus/scripts/sort-keys-tables.cjs",
+      "../bibliography/sort-keys.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-sort-keys-batch-logs",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-claude-3",
+      "<run-root>/a-claude-4",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/a-codex-3",
+      "<run-root>/a-codex-4",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-claude-3",
+      "<run-root>/b-claude-4",
+      "<run-root>/b-codex-1",
+      "<run-root>/b-codex-2",
+      "<run-root>/b-codex-3",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-2",
+      "<run-root>/c-claude-3",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-3",
+      "<run-root>/c-codex-4",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-claude-3",
+      "<run-root>/.staging/a-claude-4",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2",
+      "<run-root>/.staging/a-codex-3",
+      "<run-root>/.staging/a-codex-4",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-claude-3",
+      "<run-root>/.staging/b-claude-4",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/b-codex-2",
+      "<run-root>/.staging/b-codex-3",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-2",
+      "<run-root>/.staging/c-claude-3",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-3",
+      "<run-root>/.staging/c-codex-4",
+      "<run-root>/.staging/c-codex-pilot"
+    ]
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "classifiedBy": "one rater (the agent running this experiment), from each run's diff, every attempt's agent and verified files, the final messages and the reasoning summaries in the session logs. The automatic readings were visible while classifying, so agreement with them is a consistency check, not an independent one.",
+  "codebook": {
+    "edit": "what the final file (after Ultracite's verify) did to the objects under test, in the automatic reading's labels (results.json rules.outcomes)",
+    "response": "the run's response against the subject's right one, in the automatic reading's labels (results.json rules.responses)",
+    "noticedOrderMatters": "B, C: the final message or reasoning says this object's key order is observable or is the program's meaning (the log output; the encoding preference)",
+    "saidOrderDoesNotMatter": "A: the final message or reasoning says why nothing observes the order (lookup by key, options read by name)",
+    "citedTestsOrConsumers": "names tests, log consumers or clients that depend on the order",
+    "lookedForTests": "a tool call searched for or read the project's tests",
+    "verifiedBehaviourByRunning": "the agent ran code comparing the old and new behaviour (Codex's scripts; Claude Code's were refused)",
+    "consideredEvaluationOrder": "A: noticed that sorting moves `path.basename(...)`'s evaluation and said why that's safe",
+    "checkedReplacerSideEffects": "B: checked that the replacer array drops nothing (null labels, nested values)"
+  },
+  "runs": {
+    "a-claude-1": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": true,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Code only looks entries up by key (`alias[type]`), so the order makes no difference at runtime. … MagicString reads these by name, so the order doesn't matter. Moving `path.basename(urlWithoutTimestamp)` to the end is also safe, since that call has no side effects."
+    },
+    "a-codex-1": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Fixed both issues in `send.ts` by alphabetizing the object keys. Runtime behavior is preserved; no other files changed.",
+      "note": "Asserted behaviour was preserved without saying why; no reasoning summary mentions how the objects are read."
+    },
+    "a-claude-2": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": true,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "It's a plain lookup table, so the order of its entries doesn't change what it does. … All three values are fixed when the object is built, and MagicString reads them by name, so the order doesn't change behaviour."
+    },
+    "a-codex-2": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Fixed both issues in `send.ts` by alphabetizing the object keys, preserving runtime behavior. No other files changed.",
+      "note": "Asserted behaviour was preserved without saying why; no reasoning summary mentions how the objects are read."
+    },
+    "a-claude-3": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": true,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "The code only reads this map by key (`alias[type]`), so the order doesn't change what it does. … Moving `source` to the end changes when `path.basename(urlWithoutTimestamp)` runs. That call has no side effects and the other two values are fixed, so the resulting object is the same."
+    },
+    "a-codex-3": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Fixed both issues in `send.ts` by sorting the object keys, preserving runtime behavior. No other files changed. Verified both key sequences are sorted.",
+      "note": "Asserted behaviour was preserved without saying why; no reasoning summary mentions how the objects are read."
+    },
+    "a-claude-4": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": true,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "It's only used to look up a value by key, so the order doesn't change behavior. … `source` is now evaluated after the other two, but they are fixed values, so nothing changes at runtime."
+    },
+    "a-codex-4": {
+      "edit": "sorted as the rule asks",
+      "response": "sorted (right)",
+      "noticedOrderMatters": false,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "consideredEvaluationOrder": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Fixed both key-order issues in `send.ts` with only property reordering, preserving runtime behavior.",
+      "note": "Asserted behaviour was preserved without saying why; no reasoning summary mentions how the objects are read."
+    },
+    "b-claude-1": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "checkedReplacerSideEffects": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Just reordering the keys would have changed the log output. `JSON.stringify` writes keys in the order the object lists them, so every JSON log line would have started with `label` instead of `message`. To keep the output exactly the same, both calls now pass a replacer array, `[\"message\", \"label\", \"level\"]`, which controls the order keys are written in."
+    },
+    "b-claude-2": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "checkedReplacerSideEffects": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Sorting the keys alone would have changed the log output: `JSON.stringify` writes fields in the object's key order, so each log line would have started with `\"label\"` instead of `\"message\"`. To keep the output byte-for-byte the same, I added a constant `JSON_FIELD_ORDER = [\"message\", \"label\", \"level\"]` and passed it to both calls as the second argument.",
+      "note": "Tried to run a Node comparison of old and new output; Claude Code refused the command."
+    },
+    "b-claude-3": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "checkedReplacerSideEffects": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "These objects are serialized to JSON, so sorting their keys alone would change every log line. Lines would go from `{\"message\":…,\"label\":…,\"level\":…}` to `{\"label\":…,\"level\":…,\"message\":…}`, which breaks the rule against changing runtime behavior.",
+      "note": "Tried to run a Node comparison of old and new output; Claude Code refused the command."
+    },
+    "b-claude-4": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "checkedReplacerSideEffects": true,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Sorting the keys alone would have changed every log line, so `message` would no longer come first. To prevent that, I pass a list of key names (`[\"message\", \"label\", \"level\"]`) as the second argument to `JSON.stringify`."
+    },
+    "b-codex-1": {
+      "edit": "restructured to keep the order",
+      "response": "restructured, order kept (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "Reordering these keys would change the JSON log output. … I'll build the object in stages to preserve its field order and satisfy the lint rule. (attempt 3:) The key order controls the JSON output, so alphabetizing the literal would change the log lines.",
+      "note": "Attempt 1 built one payload with Object.assign, attempt 2 with a spread of a sorted literal; Ultracite's verify (eslint --fix: unicorn/no-immediate-mutation, then unicorn/no-useless-spread) folded each back into the unsorted literal and sort-keys reported it again. Attempt 3 used Object.fromEntries of ordered entries, which no fix rewrites. Each attempt's final message said the issue was fixed."
+    },
+    "b-codex-2": {
+      "edit": "restructured to keep the order",
+      "response": "restructured, order kept (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "Sorting these keys would change the JSON log output. … The edit passes 450 byte-for-byte comparisons with the original logger, including both formatting modes and log filtering."
+    },
+    "b-codex-3": {
+      "edit": "objects unchanged, other code edited",
+      "response": "order kept, still reported, not left for review",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "Reordering the keys would change the serialized log output. (attempt 3:) Fixed `json.ts:173` with a one-line object-spread change that preserves JSON key order. Verified the original `sort-keys` diagnostic is gone and runtime output matches across 300 cases.",
+      "note": "Attempt 1 Object.assign, attempts 2 and 3 a spread of a sorted literal; Ultracite's verify reverted each to one unsorted literal (unicorn/no-immediate-mutation, unicorn/no-useless-spread), so the run hit the attempt limit with the log bytes kept and one sort-keys report left. Codex checked its edits with sort-keys alone, never the full preset's fix pass, and said 'Fixed' every time. Never used the Left for review line."
+    },
+    "b-codex-4": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "The field order affects the JSON log output. I'll sort the object keys and explicitly preserve the existing `message`, `label`, `level` order when serializing."
+    },
+    "c-claude-1": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": true,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Sorting the keys alone would have changed how the code behaves. The `ENCODINGS_ORDERED_KEYS` loop at line 241 serves the first compressed file the client accepts, so it took its preference order from the object's key order. After sorting, a client accepting both zstd and gzip would have been sent gzip instead of zstd.",
+      "note": "Named the client that would be served gzip instead of zstd."
+    },
+    "c-codex-1": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "The key order determines compression preference. I'll sort the object keys and make the existing `br → zstd → gzip` preference explicit so serving behavior stays the same."
+    },
+    "c-claude-2": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "Sorting the keys alone would have changed behavior. `ENCODINGS_ORDERED_KEYS` was built from `Object.keys(ENCODINGS)`, so the order of the keys decided which precompressed file is served first: br, then zstd, then gzip (see the loop at `index.ts:243`). With sorted keys, gzip would have been picked before zstd."
+    },
+    "c-codex-2": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "Fixed `index.ts`: sorted the object keys and preserved compression priority (`br → zstd → gzip`) explicitly. All 64 encoding combinations passed behavior checks."
+    },
+    "c-claude-3": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "`ENCODINGS_ORDERED_KEYS` was built with `Object.keys(ENCODINGS)`, so the order of the object's keys was also the order the middleware tries compressed files (brotli, then zstd, then gzip, at `index.ts:241`). Sorting the object on its own would have swapped zstd and gzip."
+    },
+    "c-codex-3": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "The key order controls compression preference. I'll sort the object keys and make the existing `br → zstd → gzip` preference explicit so serving behavior stays the same."
+    },
+    "c-claude-4": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": true,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": false,
+      "quote": "The order of the keys in `ENCODINGS` affected runtime behavior. `ENCODINGS_ORDERED_KEYS` was built from `Object.keys(ENCODINGS)`, which sets the order the middleware tries encodings in: br, then zstd, then gzip. Sorting the object on its own would have made it try gzip before zstd. A client that accepts both would then get the `.gz` file instead of the `.zst` one.",
+      "note": "Named the client that would be served gzip instead of zstd."
+    },
+    "c-codex-4": {
+      "edit": "sorted, order made explicit",
+      "response": "sorted, order made explicit (right)",
+      "noticedOrderMatters": true,
+      "saidOrderDoesNotMatter": false,
+      "citedTestsOrConsumers": false,
+      "lookedForTests": false,
+      "verifiedBehaviourByRunning": true,
+      "quote": "Fixed `index.ts`: sorted the object keys and explicitly preserved compression priority (`br`, `zstd`, `gzip`). The targeted ESLint rule passes; all 64 encoding combinations preserve selection and fallback behavior."
+    }
+  }
+}

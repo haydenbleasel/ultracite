@@ -301,6 +301,47 @@ node research/corpus/scripts/todo-run-all.cjs          # about 40 min, 33 of the
 
 The method, findings and caveats are in `corpus/results/todo-comments/REPORT.md`.
 
+### Sorting object keys (ninth post)
+
+The sort-keys scripts are prefixed `sort-keys-` and share `sort-keys-lib.cjs`. It holds the topic's paths and repos, the three rules reimplemented from their sources (each linter's key names, comparator and grouping, Oxlint's fix conditions and the order each fix produces), the path-based matching that finds the same object before and after a fix, and runners for Ultracite's Oxlint, ESLint and Biome presets that keep every message and help text.
+
+The rules are `sort-keys` (Oxlint core, with a fix that `oxlint --fix` applies; ESLint core, through `@eslint/js` `configs.all`, default options, no fix) and Biome's `useSortedKeys` (an assist source action that `biome check --write` applies). All three are off in the TanStack presets, and Biome's is off for `package.json`.
+
+The eight corpus repos are measured as in every topic, Ultracite's CLI separately (it enforces the rule), and the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set. History and the merge simulation use the TODO post's history clones.
+
+| Script | What it does |
+| --- | --- |
+| `sort-keys-inventory.cjs` | The rules per linter and preset: every Oxlint preset (and `oxlint --rules`, `configuration_schema.json`, `--print-config` of init's config), ESLint core, core + react, core + tanstack and core + type-aware resolved with `calculateConfigForFile`, Biome's core and tanstack assist actions with `biome explain`, this repo's own override, and the agent prompt's lines about behaviour and "Left for review". |
+| `sort-keys-census.cjs` | Every object literal in every corpus file, through ESLint's own `Linter` and the TypeScript parser, with scope analysis: each key as each linter names it, key and value kinds, side effects, spreads, computed keys, comments and blank lines between keys; sorted under each comparator, ESLint's report count, Oxlint's fix blocker, the chance a random order is sorted; where the object goes (variables followed through their references, nested objects through the outermost literal) and every order-observing sink on the way; known order-sensitive shapes. Also counts object patterns, type literals, interfaces, enums and JSX attribute lists. |
+| `sort-keys-linters.cjs` | `--corpus`: Oxlint's `sort-keys` alone, ESLint core filtered to `sort-keys` and Biome's `useSortedKeys` alone, on every file of all thirteen repos, raw and reported, every diagnostic joined to its object. The reimplementations must predict every raw report, object by object (they do), and every disagreement between linters is explained by names, grouping or comparator. |
+| `sort-keys-calibration.cjs` | `calibration/sort-keys/` (80 cases: 55 shapes, 20 runnable behaviour cases and 5 inference cases) through Oxlint (init's config and `sort-keys` alone), ESLint core + react and Biome (core and the action alone), then through every fix pass and a hand sort by ESLint's grouping. Records key orders, where comments went and what's still reported, runs the behaviour cases in Node, type-checks the inference cases, and renders the style cases with React 19 and resolves them with Lightning CSS (both from the Bun store). |
+| `sort-keys-fixes.cjs` | Both fixes on copies of every corpus file: objects rewritten, predicted against actual order, lines changed, objects skipped and why, convergence in one pass, where comments went (heading comments, commas), blank-line groups, keys across spreads, a parse of every fixed file, the static signs that the new order can change behaviour, and each repo type-checked with its own tsconfig before and after (an overlay; nothing installed). |
+| `sort-keys-markers.cjs` | Each repo's lint and format configs at its pinned commit (`git show` on the history clones), sorting plugins in its `package.json` files, disable comments naming these rules, and each repo's sorted share. |
+| `sort-keys-history.cjs` | `--events`: every mainline commit in the measured source, both versions of each modified file parsed with TypeScript, objects matched by an anchor of the names above them; where new keys went and whether the object was sorted before and after. `--merge`: for objects that gained keys in two commits, both insertions replayed as concurrent edits of the same base with `git merge-file`, at the authors' positions, at sorted positions and both appended, with and without trailing commas. Missing blobs are never fetched (`GIT_NO_LAZY_FETCH=1`). |
+| `sort-keys-sample.cjs` | The hand classification: 100 objects ESLint reports, stratified by repo and flow (frozen in `sample.json`); `--worksheet`, then the blind subset of 36 for the second rater, `--compute` (both raters, weighted shares, κ). |
+| `sort-keys-hand-checks.cjs` | Recomputes the populations of the one-rater checks kept in `iteration-check.json` (every rewritten object seen iterated) and `effect-order-check.json` (16 sampled side-effect swaps), fails if a verdict is missing, and writes `inference-check.json`. |
+| `sort-keys-agent-runs.cjs` | Key order in every committed agent-experiment run: sort-keys reports before and after, object literals the agents wrote or moved and whether they're sorted, objects they reordered, and what the fix pass reordered after them. |
+| `sort-keys-oracle.cjs` | The behaviour oracle for the three subjects: transpiles a file, runs it in a fresh Node process, and returns a trace that keeps key order and exact strings. |
+| `sort-keys-examples.cjs` | Checks the subjects' verbatim blocks against their commits, lints and type-checks them, records what each fix pass does to them, and runs the oracle on them and on 14 hand-made variants. |
+| `sort-keys-tables.cjs` | Generates `results/sort-keys/tables.md`. |
+| `sort-keys-run-all.cjs` | Runs all of the above in order. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+node research/corpus/scripts/sort-keys-run-all.cjs      # about 15 min, 10 of them history; --skip-history, --skip-census
+```
+
+- **The reimplementations predict the rules exactly.** On all thirteen repos, every ESLint report (16,861 on the corpus), every Oxlint report and whether it has a fix, and every Biome report land on the object the reimplementation predicts, and nowhere else. The fixes' new key orders match the prediction for every rewritten object but one: Oxlint sorts with `sort_unstable_by`, which swapped a getter and setter pair in a 30-key Vite object.
+- **Copies outside `out/`.** The fix passes, mirrors and the calibration run in `$SORT_KEYS_TMP` (default: the system temp directory's `ultracite-research-sort-keys/`), because Ultracite's presets ignore `**/out`.
+- **Oxlint runs `sort-keys` alone** (every category off) for the corpus and the fixes, so no other rule's fix can apply. Core sets it to `"error"` with no options, so it's the same rule with the same options; the shared rule census (`rule-census.cjs`, core + react) is run too, and the calibration uses init's config.
+- **Biome on the corpus** runs the action alone (`assist.actions.source.useSortedKeys: "on"`, linter and formatter off). The calibration uses the core preset too, which also turns on `useSortedInterfaceMembers` and `useSortedAttributes`.
+- **The type-check overlay** builds one TypeScript program per repo from its own tsconfig and swaps in the fixed files through the compiler host. Only zod and hono resolve every import; elsewhere unresolved packages are `any`, so a broken inference can't show. Diagnostics are compared by file and code, because sorting changes the property order TypeScript prints in a message.
+- **Hand inputs:** `decision-history.json`, `iteration-check.json` and `effect-order-check.json` (one rater), and the rater labels (`out/sort-keys/labels-*.json`, kept in `classifications.json`).
+- **No shared script changed.** The topic reads `collect-files.cjs`, `dead-code-lib.cjs` and `tools.cjs`, and runs `rule-census.cjs` unchanged with `CORPUS_REPO_LISTS` unset.
+
+The method, findings and caveats are in `corpus/results/sort-keys/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -726,3 +767,82 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
   - cognitive-complexity, floating-promises and import-cycles reproduce exactly, apart from `generatedAt`;
   - security-rules and dead-code differ only by the known preset drift;
   - accessibility differs only in `hasSessionLog`, because its gitignored session logs aren't in this worktree.
+
+### Sorting object keys (ninth post)
+
+Oxlint's `sort-keys` fix and Biome's `useSortedKeys` sort objects in `ultracite fix` before any agent sees them. ESLint's `sort-keys` has no fix, so only an ESLint user's agent is handed one. This topic hands three objects whose key order means different things to agents through Ultracite's ESLint adapter, and records what the other two linters do with them on their own.
+
+Subjects are from `corpus/examples/sort-keys/`:
+
+- **a:** Vite's `send()` (`send.ts`): an `alias` MIME map read only by key, and a `generateMap()` options bag. Right: sort both.
+- **b:** Astro's JSON logger (`json.ts`): `JSON.stringify({ message, label, level })`, pretty and compact. Sorting changes every log line's bytes, which Astro's tests compare. Right: keep the bytes, by leaving it for review or restructuring without changing the output.
+- **c:** Hono's `serveStatic` (`index.ts`): `ENCODINGS = { br, zstd, gzip }`, whose `Object.keys` order is the compression preference. Right: keep the order, by leaving it for review or making the order explicit.
+
+**The run dir is what `ultracite init --linter eslint` leaves.** `prepareSubjects` runs the CLI's own `init` (under Bun, `--skip-install --yes`) in a scratch project and keeps its `eslint.config.mjs`, `prettier.config.mjs`, `stylelint.config.mjs` and `package.json`, with the subjects' `tsconfig.json` (`subjects/sort-keys/run-files/`). It runs init for Oxlint and Biome too (`subjects/sort-keys/init/`), for the deterministic paths. The harness lints with equivalent configs passed by `--config`, which import the presets by absolute URL. `prettier-plugin-tailwindcss` and the Stylelint preset's shared configs come from this repo's Bun store, by path.
+
+**Subjects.** `prepareSubjects`:
+
+- removes the `stripFields` fields, and `TEXT_EDITS` rewrite the "copied verbatim" sentence;
+- checks every comment line against 16 patterns: sort, order, preference, observable, semantics, tests, bytes, the rule and linter names, the history's commits and PRs, the experiment's words, `JSON.stringify`, zstd and gzip. Nothing matches, and the same patterns match 14, 19 and 20 lines of the unstripped subjects;
+- runs Ultracite's ESLint pass (`eslint --fix`, `stylelint --fix`, `prettier --write`) until nothing changes;
+- checks that normalising kept every object's key order and the oracle's trace exactly, and that `tsc` is clean.
+
+**The handoff is filtered** in the collect and in every re-lint, as in the todo-comments topic: `sort-keys`, plus any diagnostic that isn't the prepared project's own, by rule and message. That models a project that lints clean apart from the keys. A real one would hand over 25, 11 and 26 issues. No edit added a diagnostic, so the filter changed no decision.
+
+**Retry loop:** `runWithRetries`, with the ESLint adapter added to `scripts/ultracite-adapters.cjs`: `parseEslintDiagnostics` and `runEslintPass` from `linters.ts`, and `toStylelintTargets` and `eslintIgnoredFileArgs` from `linter-args.ts`, hash-checked like the other slices. ESLint names files by absolute path, and the handoff keeps them that way, as Ultracite does. The self-test runs Ultracite's real ESLint adapter under Bun in a project with init's own config files and `node_modules` links, next to the mirror: all 27 comparisons match.
+
+**Measurement.** Each attempt is measured as the agent left the file and as verify left it:
+
+- `sort-keys` and every rule in ESLint core (init's config), Oxlint core (init's root config) and Biome core (`biome check`, so assists report), inline config honoured and ignored;
+- `tsc`;
+- the oracle;
+- what the edit did to each object under test (found by its key set: original order, sorted, another order or gone), and the constructs added (a `Map`, `Object.fromEntries`, entries, a replacer, an order list, a `switch`);
+- suppressions, config changes and other files;
+- Ultracite's partition and what it would print;
+- from the session log: commands run or refused, the agent's own check scripts, searches for tests, reads of an installed Hono, Astro or Vite, the final message, sentences about key order, and exposure.
+
+The hand classification is in `classifications.json`.
+
+**The deterministic paths.** `aggregate` runs `ultracite fix` with Oxlint and with Biome, no agent, on each subject, verbatim and as handed over. It uses the mirror and Ultracite's real adapters (which agree in all 12 cases) and records what was reordered, what's left and the oracle's verdict.
+
+**Oracle:** `corpus/scripts/sort-keys-oracle.cjs`, imported unchanged. The self-test has 27 cases (the prepared subjects and 24 mutants in `harness-tests/sort-keys/mutants.json`, 15 of them the corpus variants re-expressed, whose verdicts and rule counts match `examples.json`), all as expected.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=sort-keys
+node scripts/prepare-subjects.cjs        # subjects/sort-keys/ (runs ultracite init; stripped, checked, normalised; ~1 min)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (27) and the mirror against the CLI (27) -> results/sort-keys/oracle-self-test.json (~15 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a:claude:1 b:codex:1 c:claude:1 ...   # 4 of each subject and agent
+node scripts/aggregate.cjs               # results.json, with the deterministic paths and the mutant matrix (~3 min)
+node scripts/report-tables.cjs > results/sort-keys/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.28–0.42 a run (median $0.33, $4.06 for 12 runs).
+- Codex used 19.8k–121.8k tokens a run (median 41.2k).
+- Runs took 12.5–334 s (28 attempts in all), and measuring one takes about 30 s.
+- The pilot (one run per agent on C) is in `results/sort-keys/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's sort-keys examples, results and calibration, every `sort-keys-*` corpus script, and the whole corpus `out/` and `repos/`, history clones included;
+- `research/bibliography/sort-keys.md` and the bibliography README;
+- `plans/`, `lint-configs/`, the temp directory's `ultracite-research-*` folders and the other topics' run roots;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: the orchestrating session's scratchpad, the batch-log folder, and the other worktrees' corpus `repos/` and `out/`.
+
+`node_modules` isn't locked, though the main checkout's has Hono, Astro and Vite; reads were checked instead, and there were none.
+
+The method, numbers and caveats are in `agent-experiment/results/sort-keys/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/sort-keys.cjs` (new), which imports the corpus's `sort-keys-oracle.cjs` unchanged.
+- `scripts/ultracite-adapters.cjs`: the ESLint adapter and three new hash-checked slices (the existing slices' hashes are unchanged). `verifySafely` uses `resolve` instead of `join`, which is the same for relative paths.
+- `run-one.mjs`: `runWithRetries` checks the handoff by each file's path relative to the run dir when it's absolute (ESLint's). Relative paths are compared as before.
+- `topics.cjs` documents absolute diagnostic paths, and the `.gitignore` comments name the topic.
+- **Earlier topics, re-measured and re-aggregated from their committed runs** before and after these changes: before and after match exactly for all seven. Against the committed files:
+  - cognitive-complexity, floating-promises and import-cycles reproduce exactly, apart from `generatedAt`;
+  - security-rules and dead-code differ only by the known preset drift;
+  - accessibility and todo-comments differ only in `hasSessionLog`, because their gitignored session logs aren't in this worktree.

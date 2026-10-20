@@ -1,0 +1,93 @@
+{
+  "note": "Hand input: how Ultracite came to sort keys, from `git log -S` on \"sort-keys\" and \"useSortedKeys\" in this repository, packages/cli/CHANGELOG.md, and `gh issue view` (read-only) on the issues the commits resolve. One rater. Read 2026-10-19.",
+  "events": [
+    {
+      "commit": "871ee738",
+      "date": "2025-06-22",
+      "linter": "biome",
+      "summary": "Ultracite v5 (#162) turned Biome's useSortedKeys assist off (\"Disable useSortedKeys and useUniqueElementIds\" in the commit message).",
+      "value": "off"
+    },
+    {
+      "commit": "c4a205f8",
+      "date": "2025-12-28",
+      "linter": "eslint",
+      "summary": "V7 (#466) built ESLint core from @eslint/js configs.all, which includes sort-keys, and overrode it to \"off\" (with sort-imports and sort-vars).",
+      "value": "off"
+    },
+    {
+      "commit": "a63d9c57",
+      "date": "2026-04-13",
+      "linter": "oxlint",
+      "summary": "\"Resolves #660\" rewrote Oxlint core as an explicit list of every rule, with \"sort-keys\": \"error\". Issue #660 (\"Conflict on test title descriptions\") is about a different rule; no issue or PR discusses sort-keys.",
+      "issue": "https://github.com/haydenbleasel/ultracite/issues/660",
+      "value": "error"
+    },
+    {
+      "commit": "44f6d7fe",
+      "date": "2026-05-10",
+      "linter": "eslint",
+      "summary": "\"Align ESLint with Oxlint\" removed the \"off\" override, so ESLint core gets sort-keys from configs.all with its default options.",
+      "value": "error (configs.all)"
+    },
+    {
+      "commit": "2687cf9f",
+      "date": "2026-07-04",
+      "linter": "biome",
+      "summary": "\"Align ESLint and Biome presets to the oxlint benchmark\" turned useSortedKeys on, with the comment \"Enforce ordering of a JS object properties. Matches sort-keys in the oxlint/ESLint configs.\" Changelog: \"the `useSortedKeys` assist is on (matching ... `sort-keys` in the other presets)\".",
+      "value": "on"
+    },
+    {
+      "commit": "b81578b4",
+      "date": "2026-08-02",
+      "linter": "biome",
+      "summary": "\"Fix useSortedPackageJson action not being executed\" (#757, for issue #728) turned useSortedKeys off for package.json and .github JSON, so useSortedPackageJson's conventional order applies there.",
+      "issue": "https://github.com/haydenbleasel/ultracite/issues/728",
+      "value": "off for **/package.json, .github/**/*.json"
+    },
+    {
+      "commit": "dc78be4f",
+      "date": "2026-08-06",
+      "linter": "oxlint, biome",
+      "summary": "\"Exempt TanStack route files from key sorting\", for issue #762: Biome's useSortedKeys reordered createFileRoute options alphabetically, so head and component came before loader and loaderData was inferred as never (TS2339). The TanStack presets turned the rule off for route files.",
+      "issue": "https://github.com/haydenbleasel/ultracite/issues/762",
+      "value": "off in routes/"
+    },
+    {
+      "commit": "a71dda4c",
+      "date": "2026-09-07",
+      "linter": "oxlint, biome",
+      "summary": "\"Disable key sorting across the TanStack presets\", resolving #801: Oxlint's sort-keys fix moved onError above onMutate in TanStack Query mutation options, the onMutate context became {} and `ultracite fix` turned type-correct code into TS2339 errors. Mutation options live anywhere, so the presets turn the rule off for all files.",
+      "issue": "https://github.com/haydenbleasel/ultracite/issues/801",
+      "value": "off (tanstack presets)"
+    },
+    {
+      "commit": "d9803a6e",
+      "date": "2026-09-28",
+      "linter": "eslint",
+      "summary": "\"Fix ESLint TanStack, Qwik, Jest, Cypress and Storybook blocks\" turned sort-keys off in ESLint's TanStack preset too, matching the Oxlint and Biome TanStack presets.",
+      "value": "off (tanstack preset)"
+    },
+    {
+      "commit": "(this repository's oxlint.config.ts)",
+      "date": "2026-10-19",
+      "linter": "oxlint",
+      "summary": "Ultracite lints itself with its core preset, so its CLI source has sort-keys on; the root config turns it off for packages/cli/src/oxlint.ts and packages/cli/config/oxlint/**/*.mjs, whose rule maps are grouped by plugin and alphabetised by hand (AGENTS.md: \"The sort-keys lint rule is off for preset files, so keep that order by hand\").",
+      "value": "error, off for preset files"
+    }
+  ],
+  "upstream": [
+    {
+      "source": "ESLint 10.12.0 lib/rules/sort-keys.js (as installed)",
+      "summary": "meta.docs.frozen: true, recommended: false, no fixer and no suggestions; default options asc, caseSensitive true, natural false, minKeys 2, allowLineSeparatedGroups false, ignoreComputedKeys false."
+    },
+    {
+      "source": "Oxlint 1.86.0 crates/oxc_linter/src/rules/eslint/sort_keys.rs (tag oxlint_v1.86.0, read with gh api)",
+      "summary": "Category style, conditional_fix, added in 0.9.4. Docs: \"sorting property names alphabetically makes it easier to find and/or diff necessary properties at a later time\". The fix sorts with sort_unstable_by."
+    },
+    {
+      "source": "Biome 2.5.15 crates/biome_js_analyze/src/assist/source/use_sorted_keys.rs (tag @biomejs/biome@2.5.15, read with gh api) and `biome explain useSortedKeys`",
+      "summary": "A source action with a safe fix, inspired by ESLint's sort-keys and perfectionist's sort-objects; natural order; spreads and computed keys split groups. Its docs: \"Sorting the keys of an object technically changes the semantics of the program.\""
+    }
+  ]
+}

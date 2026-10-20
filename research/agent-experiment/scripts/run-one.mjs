@@ -49,7 +49,14 @@ import {
 } from "node:fs";
 import { createRequire } from "node:module";
 import { homedir } from "node:os";
-import { basename, dirname, extname, join, relative } from "node:path";
+import {
+  basename,
+  dirname,
+  extname,
+  isAbsolute,
+  join,
+  relative,
+} from "node:path";
 
 const require = createRequire(import.meta.url);
 const lib = require("./lib.cjs");
@@ -1026,8 +1033,17 @@ async function runWithRetries() {
       rules: [...topic.expectedDiagnostics(subject)].sort(),
     },
   ];
+  // ESLint names files by absolute path, and Ultracite hands them over as they are (added with the
+  // sort-keys topic); Oxlint's and Biome's are relative to the project root and checked as they are.
+  const handedName = (f) => {
+    if (!isAbsolute(f)) return f;
+    const inRun = [realpathSync(runDir), runDir]
+      .map((d) => relative(d, f))
+      .find((r) => !r.startsWith(".."));
+    return inRun ?? f;
+  };
   const got = groups.map((g) => ({
-    file: g.file,
+    file: handedName(g.file),
     rules: g.issues.map((d) => d.rule).sort(),
   }));
   if (JSON.stringify(got) !== JSON.stringify(want))

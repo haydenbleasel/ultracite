@@ -1,0 +1,78 @@
+{
+  "linter": "eslint",
+  "adapter": "linters.ts runEslintPass: eslint --fix ., stylelint --fix --allow-empty-input '**/*.{css,scss,less}', prettier --write ., eslint -f json-with-metadata .",
+  "config": "what `ultracite init --linter eslint` writes (eslint.config.mjs spreading ultracite/eslint/core, prettier.config.mjs with prettier-plugin-tailwindcss, stylelint.config.mjs), passed with --config and importing the presets by absolute URL",
+  "filter": "sort-keys, plus any other diagnostic not among the prepared project's own (rule and message, file by file, as diff.ts matches them): a project that lints clean apart from the keys. Every re-lint uses the same filter.",
+  "stepExitCodes": {
+    "eslint --fix": 1,
+    "stylelint --fix": 0,
+    "prettier --write": 0,
+    "eslint -f json-with-metadata": 1
+  },
+  "diagnosticsReported": 11,
+  "diagnosticsHandedOver": 2,
+  "leftOutByFilter": {
+    "@typescript-eslint/member-ordering": 3,
+    "func-style": 2,
+    "require-unicode-regexp": 1,
+    "unicorn/consistent-boolean-name": 2,
+    "unicorn/prefer-code-point": 1
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+    "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 24,
+      "fatal": false,
+      "file": "<run-root>/b-codex-2/json.ts",
+      "help": "Require object keys to be sorted",
+      "line": 175,
+      "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+      "raw": {
+        "ruleId": "sort-keys",
+        "severity": 2,
+        "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+        "line": 175,
+        "column": 24,
+        "messageId": "sortKeys",
+        "endLine": 175,
+        "endColumn": 29
+      },
+      "rule": "sort-keys",
+      "severity": "error",
+      "url": "https://eslint.org/docs/latest/rules/sort-keys"
+    },
+    {
+      "column": 37,
+      "fatal": false,
+      "file": "<run-root>/b-codex-2/json.ts",
+      "help": "Require object keys to be sorted",
+      "line": 179,
+      "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+      "raw": {
+        "ruleId": "sort-keys",
+        "severity": 2,
+        "message": "Expected object keys to be in ascending order. 'label' should be before 'message'.",
+        "line": 179,
+        "column": 37,
+        "messageId": "sortKeys",
+        "endLine": 179,
+        "endColumn": 42
+      },
+      "rule": "sort-keys",
+      "severity": "error",
+      "url": "https://eslint.org/docs/latest/rules/sort-keys"
+    }
+  ]
+}

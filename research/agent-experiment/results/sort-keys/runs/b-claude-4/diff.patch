@@ -1,0 +1,21 @@
+--- a/json.ts
++++ b/json.ts
+@@ -172,11 +172,15 @@
+       const message = event.message.replace(SGR_REGEX, "");
+       const payload = pretty
+         ? JSON.stringify(
+-            { message, label: event.label, level: event.level },
+-            null,
++            { label: event.label, level: event.level, message },
++            ["message", "label", "level"],
+             2
+           )
+-        : JSON.stringify({ message, label: event.label, level: event.level });
++        : JSON.stringify({ label: event.label, level: event.level, message }, [
++            "message",
++            "label",
++            "level",
++          ]);
+       destination(payload);
+     },
+   };

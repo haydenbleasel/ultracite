@@ -1,0 +1,138 @@
+{
+  "generated": "2026-10-20",
+  "note": "Hand input (one rater): a seeded sample (seed 1019) of 16 of the objects Oxlint's fix rewrites in the corpus where two values that run code swap places. For each, whether the swap can change behaviour.",
+  "population": 16,
+  "items": [
+    {
+      "file": "src/vs/editor/common/config/editorOptions.ts",
+      "line": 6557,
+      "note": "nls.localize calls: pure lookups of translated strings.",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/editorOptions.ts#L6557",
+      "repo": "vscode",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/resume-data-cache/resume-data-cache.ts",
+      "line": 217,
+      "note": "new Map() four times: independent constructions.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/resume-data-cache/resume-data-cache.ts#L217",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "src/vs/editor/common/config/editorOptions.ts",
+      "line": 4286,
+      "note": "clampedInt / boolean / _scrollbarVisibilityFromString on input fields: pure.",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/editorOptions.ts#L4286",
+      "repo": "vscode",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/astro/src/core/build/plugins/plugin-noop.ts",
+      "line": 11,
+      "note": "new RegExp in two nested filters: independent.",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-noop.ts#L11",
+      "repo": "astro",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/zod/src/v3/types.ts",
+      "line": 195,
+      "note": "new ParseStatus() and getParsedType(input.data): independent.",
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/types.ts#L195",
+      "repo": "zod",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/dev/on-demand-entry-handler.ts",
+      "line": 524,
+      "note": "join / posix.join / posix.normalize: pure path functions.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/on-demand-entry-handler.ts#L524",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/excalidraw/components/SearchMenu.tsx",
+      "line": 201,
+      "note": "isFrameLikeElement checks and reads: pure.",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SearchMenu.tsx#L201",
+      "repo": "excalidraw",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/lib/start-server.ts",
+      "line": 282,
+      "note": "fs.readFileSync of the key and the certificate: two independent reads, now in the other order.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/start-server.ts#L282",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/astro/src/core/middleware/sequence.ts",
+      "line": 78,
+      "note": "ForbiddenRewrite.message(...) and .hint(...): pure message builders.",
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/middleware/sequence.ts#L78",
+      "repo": "astro",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/common/src/points.ts",
+      "line": 15,
+      "note": "Math.max / Math.min: pure.",
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/common/src/points.ts#L15",
+      "repo": "excalidraw",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/config-schema.ts",
+      "line": 352,
+      "note": "zod schema builders: independent.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/config-schema.ts#L352",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/use-cache/use-cache-probe-scheduler.ts",
+      "line": 110,
+      "note": "Array.from(headers.entries()) and headers.get: reads.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/use-cache/use-cache-probe-scheduler.ts#L110",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "src/vs/editor/common/config/editorOptions.ts",
+      "line": 4622,
+      "note": "nls.localize calls inside nested schema objects: pure.",
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/config/editorOptions.ts#L4622",
+      "repo": "vscode",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/lib/router-utils/route-types-utils.ts",
+      "line": 307,
+      "note": "getRelativePath and extractRouteParams: pure.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/router-utils/route-types-utils.ts#L307",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/lib/router-utils/route-types-utils.ts",
+      "line": 359,
+      "note": "getRelativePath and extractRouteParams: pure.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/lib/router-utils/route-types-utils.ts#L359",
+      "repo": "next.js",
+      "verdict": "harmless"
+    },
+    {
+      "file": "packages/next/src/server/config.ts",
+      "line": 1914,
+      "note": "Boolean(...) conversions: pure.",
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/config.ts#L1914",
+      "repo": "next.js",
+      "verdict": "harmless"
+    }
+  ],
+  "tally": {
+    "harmless": 16
+  }
+}

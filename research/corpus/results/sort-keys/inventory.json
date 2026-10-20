@@ -1,0 +1,1646 @@
+{
+  "generated": "2026-10-20",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)"
+  },
+  "oxlint": {
+    "presets": {
+      "core": {
+        "overrides": [],
+        "rules": {
+          "sort-imports": "off",
+          "sort-keys": "error",
+          "sort-vars": "error",
+          "typescript/require-array-sort-compare": "error",
+          "unicorn/no-array-sort": "error"
+        }
+      },
+      "jest": {
+        "overrides": [
+          {
+            "files": [
+              "**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+              "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+            ],
+            "rules": {
+              "jest/prefer-hooks-in-order": "error"
+            }
+          }
+        ],
+        "rules": {}
+      },
+      "js-plugins": {
+        "overrides": [],
+        "rules": {
+          "sonarjs/arguments-order": "error",
+          "sonarjs/shorthand-property-grouping": "off",
+          "react-doctor/js-tosorted-immutable": "error"
+        }
+      },
+      "tanstack": {
+        "overrides": [],
+        "rules": {
+          "sort-keys": "off"
+        }
+      },
+      "vitest": {
+        "overrides": [
+          {
+            "files": [
+              "**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}",
+              "**/__tests__/**/*.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"
+            ],
+            "rules": {
+              "vitest/prefer-hooks-in-order": "error"
+            }
+          }
+        ],
+        "rules": {}
+      }
+    },
+    "rule": {
+      "scope": "eslint",
+      "value": "sort-keys",
+      "category": "style",
+      "type_aware": false,
+      "fix": "conditional_fix",
+      "default": false,
+      "docs_url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/sort-keys.html"
+    },
+    "schemaDefaults": {
+      "allowLineSeparatedGroups": false,
+      "caseSensitive": true,
+      "minKeys": 2,
+      "natural": false
+    },
+    "initConfigEffective": {
+      "sort-keys": "deny"
+    },
+    "message": "Object keys should be sorted",
+    "helpWhenFixable": "Replace `<the keys as written>` with `<the keys sorted>`."
+  },
+  "eslint": {
+    "resolved": {
+      "core": {
+        "probe.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ]
+          }
+        },
+        "probe.tsx": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ]
+          }
+        },
+        "probe.js": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ]
+          }
+        },
+        "probe.test.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ]
+          }
+        }
+      },
+      "core + react": {
+        "probe.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ]
+          }
+        },
+        "probe.tsx": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "react/sort-comp": [
+              2
+            ],
+            "react/sort-default-props": [
+              2
+            ],
+            "react/sort-prop-types": [
+              2
+            ],
+            "react-doctor/js-tosorted-immutable": [
+              2
+            ]
+          }
+        },
+        "probe.js": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ]
+          }
+        },
+        "probe.test.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ]
+          }
+        }
+      },
+      "core + tanstack": {
+        "probe.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            0,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "@tanstack/query/infinite-query-property-order": [
+              2
+            ],
+            "@tanstack/query/mutation-property-order": [
+              2
+            ],
+            "@tanstack/router/create-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-server-fn-method-order": [
+              2
+            ]
+          }
+        },
+        "probe.tsx": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            0,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "@tanstack/query/infinite-query-property-order": [
+              2
+            ],
+            "@tanstack/query/mutation-property-order": [
+              2
+            ],
+            "@tanstack/router/create-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-server-fn-method-order": [
+              2
+            ]
+          }
+        },
+        "probe.js": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            0,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@tanstack/query/infinite-query-property-order": [
+              2
+            ],
+            "@tanstack/query/mutation-property-order": [
+              2
+            ],
+            "@tanstack/router/create-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-server-fn-method-order": [
+              2
+            ]
+          }
+        },
+        "probe.test.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            0,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "@tanstack/query/infinite-query-property-order": [
+              2
+            ],
+            "@tanstack/query/mutation-property-order": [
+              2
+            ],
+            "@tanstack/router/create-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-route-property-order": [
+              2
+            ],
+            "react-doctor/tanstack-start-server-fn-method-order": [
+              2
+            ]
+          }
+        }
+      },
+      "core + type-aware": {
+        "probe.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "@typescript-eslint/require-array-sort-compare": [
+              2
+            ],
+            "sonarjs/no-alphabetical-sort": [
+              2
+            ]
+          }
+        },
+        "probe.tsx": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "@typescript-eslint/require-array-sort-compare": [
+              2
+            ],
+            "sonarjs/no-alphabetical-sort": [
+              2
+            ]
+          }
+        },
+        "probe.js": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ]
+          }
+        },
+        "probe.test.ts": {
+          "sonarjs/shorthand-property-grouping": [
+            0
+          ],
+          "sort-keys": [
+            2,
+            "asc",
+            {
+              "allowLineSeparatedGroups": false,
+              "caseSensitive": true,
+              "ignoreComputedKeys": false,
+              "minKeys": 2,
+              "natural": false
+            }
+          ],
+          "others": {
+            "sort-vars": [
+              2,
+              {
+                "ignoreCase": false
+              }
+            ],
+            "import-x/order": [
+              2,
+              {
+                "groups": [
+                  "builtin",
+                  "external",
+                  "internal",
+                  "parent",
+                  "sibling",
+                  "index",
+                  "object",
+                  "type"
+                ],
+                "distinctGroup": true,
+                "sortTypesGroup": false,
+                "named": false,
+                "warnOnUnassignedImports": false
+              }
+            ],
+            "sonarjs/arguments-order": [
+              2
+            ],
+            "unicorn/consistent-class-member-order": [
+              2,
+              {
+                "order": [
+                  "static-field",
+                  "static-block",
+                  "static-method",
+                  "private-field",
+                  "public-field",
+                  "constructor",
+                  "private-method",
+                  "public-method"
+                ]
+              }
+            ],
+            "unicorn/no-array-sort": [
+              2,
+              {
+                "allowExpressionStatement": true
+              }
+            ],
+            "unicorn/no-array-sort-for-min-max": [
+              2
+            ],
+            "unicorn/no-boolean-sort-comparator": [
+              2
+            ],
+            "unicorn/prefer-simple-sort-comparator": [
+              2
+            ],
+            "unicorn/require-array-sort-compare": [
+              2
+            ],
+            "@typescript-eslint/member-ordering": [
+              2
+            ],
+            "@typescript-eslint/require-array-sort-compare": [
+              2
+            ],
+            "sonarjs/no-alphabetical-sort": [
+              2
+            ]
+          }
+        }
+      }
+    },
+    "meta": {
+      "defaultOptions": [
+        "asc",
+        {
+          "allowLineSeparatedGroups": false,
+          "caseSensitive": true,
+          "ignoreComputedKeys": false,
+          "minKeys": 2,
+          "natural": false
+        }
+      ],
+      "description": "Require object keys to be sorted",
+      "fixable": null,
+      "frozen": true,
+      "hasSuggestions": false,
+      "messages": {
+        "sortKeys": "Expected object keys to be in {{natural}}{{insensitive}}{{order}}ending order. '{{thisName}}' should be before '{{prevName}}'."
+      },
+      "recommended": false,
+      "url": "https://eslint.org/docs/latest/rules/sort-keys"
+    }
+  },
+  "biome": {
+    "core": {
+      "organizeImports": {
+        "explain": {
+          "category": "assist/source/organizeImports",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Sorts imports and exports in your JavaScript and TypeScript files."
+        },
+        "presetComment": "Provides a code action to sort the imports and exports in the file using a built-in or custom order.",
+        "value": "on"
+      },
+      "useSortedAttributes": {
+        "explain": {
+          "category": "assist/source/useSortedAttributes",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Enforce attribute sorting in JSX elements."
+        },
+        "presetComment": "Enforce attribute sorting in JSX elements.",
+        "value": "on"
+      },
+      "useSortedKeys": {
+        "explain": {
+          "category": "assist/source/useSortedKeys",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Sort properties of a JS object in natural order."
+        },
+        "presetComment": "Enforce ordering of a JS object properties. Matches sort-keys in the oxlint/ESLint configs.",
+        "value": "on"
+      },
+      "useSortedEnumMembers": {
+        "explain": {
+          "category": "assist/source/useSortedEnumMembers",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Sort the members of an enum in natural order."
+        },
+        "presetComment": "Enforce ordering of TypeScript enum members. Off because reordering members changes the implicit numeric values of the enum.",
+        "value": "off"
+      },
+      "noDuplicateClasses": {
+        "explain": {
+          "category": "assist/source/noDuplicateClasses",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Remove duplicate CSS classes."
+        },
+        "presetComment": "Enforce no duplicate classes in the file.",
+        "value": "on"
+      },
+      "useSortedInterfaceMembers": {
+        "explain": {
+          "category": "assist/source/useSortedInterfaceMembers",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Sort interface members by key."
+        },
+        "presetComment": "Enforce ordering of a TypeScript interface members.",
+        "value": "on"
+      },
+      "useSortedProperties": {
+        "explain": {
+          "category": "assist/source/useSortedProperties",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Enforce ordering of CSS properties and nested rules."
+        },
+        "presetComment": "Enforce ordering of a JavaScript object properties.",
+        "value": "on"
+      },
+      "useSortedTypeFields": {
+        "explain": {
+          "category": "assist/source/useSortedTypeFields",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Sort fields in GraphQL type definitions alphabetically."
+        },
+        "presetComment": "Enforce ordering of TypeScript type alias members.",
+        "value": "on"
+      },
+      "useSortedSelectionSet": {
+        "explain": {
+          "category": "assist/source/useSortedSelectionSet",
+          "defaultSeverity": "info",
+          "fix": "unsafe",
+          "summary": "Sort GraphQL selection sets."
+        },
+        "presetComment": "Enforce alphabetical ordering of GraphQL selection sets.",
+        "value": "on"
+      },
+      "useSortedPackageJson": {
+        "explain": {
+          "category": "assist/source/useSortedPackageJson",
+          "defaultSeverity": "info",
+          "fix": "safe",
+          "summary": "Organize package.json fields according to established conventions."
+        },
+        "presetComment": "Enforce ordering of package.json keys.",
+        "value": "on"
+      }
+    },
+    "coreOverrides": [
+      {
+        "includes": [
+          "**/package.json",
+          ".github/**/*.json"
+        ],
+        "useSortedKeys": "off"
+      }
+    ],
+    "tanstack": {
+      "useSortedKeys": "off"
+    },
+    "useSortedKeysExplain": "Summary\n\n- Name: useSortedKeys\n- Fix: safe\n- Default severity: info\n- Available from version: 2.0.0\n- Diagnostic category: assist/source/useSortedKeys\n\n\nDescription\n\n Sort properties of a JS object in natural order.\n\n [Natural order](https://en.wikipedia.org/wiki/Natural_sort_order) means\n that uppercase letters come before lowercase letters (e.g. `A` < `a` <\n `B` < `b`) and numbers are compared in a human way (e.g. `9` < `10`).\n\n This rule will consider spread/calculated keys e.g [k]: 1 as\n non-sortable. Instead, whenever it encounters a non-sortable key, it\n will sort all the previous sortable keys up until the nearest\n non-sortable key, if one exist. This prevents breaking the override of\n certain keys using spread keys.\n\n Sorting the keys of an object technically changes the semantics of the\n program. It affects the result of operations like\n `Object.getOwnPropertyNames`. Since ES2020, operations like `for-in`\n loops, `Object.keys`, and `JSON.stringify` are guaranteed to process\n string keys in insertion order.\n\n In cases where the order of such operations is important, you can\n disable the assist action using a suppression comment:\n\n `// biome-ignore assist/source/useSortedKeys`"
+  },
+  "thisRepo": {
+    "rootOxlintOverride": "overrides: [\n    {\n      files: [\n        \"packages/cli/src/oxlint.ts\",\n        \"packages/cli/config/oxlint/**/*.mjs\",\n      ],\n      rules:",
+    "researchIgnored": true
+  },
+  "agentPrompt": {
+    "behaviourLine": "\"- Make the minimal change that resolves each issue while preserving runtime behavior.\"",
+    "leftForReviewLine": "`- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. If an issue needs a person's decision, leave it, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like \\`${LEFT_FOR_REVIEW_LABEL}: 2, 3\\`.`,",
+    "restyleLine": "\"- Fix the underlying problem — the file is re-linted after your edit, and a diagnostic that still fires is a failed fix. Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it; rework the code so the rule genuinely no longer applies.\""
+  }
+}

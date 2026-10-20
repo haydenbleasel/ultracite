@@ -1,0 +1,30 @@
+--- a/json.ts
++++ b/json.ts
+@@ -157,6 +157,9 @@
+   "g"
+ );
+ 
++// The order fields appear in each JSON log line, independent of the object's key order.
++const JSON_FIELD_ORDER = ["message", "label", "level"];
++
+ export default function jsonLoggerDestination(
+   config: JsonHandlerConfig = {}
+ ): AstroLoggerDestination {
+@@ -172,11 +175,14 @@
+       const message = event.message.replace(SGR_REGEX, "");
+       const payload = pretty
+         ? JSON.stringify(
+-            { message, label: event.label, level: event.level },
+-            null,
++            { label: event.label, level: event.level, message },
++            JSON_FIELD_ORDER,
+             2
+           )
+-        : JSON.stringify({ message, label: event.label, level: event.level });
++        : JSON.stringify(
++            { label: event.label, level: event.level, message },
++            JSON_FIELD_ORDER
++          );
+       destination(payload);
+     },
+   };
