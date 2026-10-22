@@ -1,9 +1,9 @@
 ---
 title: Language Support
-description: Compare language and file-format coverage across Biome, Oxlint, Oxfmt, ESLint, Prettier, and Stylelint to pick the toolchain that fits your project.
+description: Compare language and file-format coverage across Biome, Oxlint, Oxfmt, Bun, ESLint, Prettier, and Stylelint to pick the toolchain that fits your project.
 ---
 
-Each of the tools Ultracite wraps has a different coverage story. Biome and Oxlint/Oxfmt are Rust-based and lean on what their own parsers natively support. ESLint and Prettier lean heavily on their plugin ecosystems, which means wider coverage but more moving parts. Stylelint is CSS-focused by design.
+Each of the tools Ultracite wraps has a different coverage story. Biome and Oxlint/Oxfmt are Rust-based and lean on what their own parsers natively support, and Bun's `bun lint` and `bun fmt` reimplement Oxlint and Oxfmt inside Bun. ESLint and Prettier lean heavily on their plugin ecosystems, which means wider coverage but more moving parts. Stylelint is CSS-focused by design.
 
 This page summarizes what each tool supports natively today so you can choose a toolchain that fits the languages your project actually uses.
 
@@ -19,49 +19,49 @@ This page summarizes what each tool supports natively today so you can choose a 
 
 ## Linting Support
 
-| Language   | Biome | Oxlint     | ESLint | Stylelint |
-| ---------- | ----- | ---------- | ------ | --------- |
-| JavaScript | ✅    | ✅         | ✅     | ❌        |
-| TypeScript | ✅    | ✅         | 🔌     | ❌        |
-| JSX        | ✅    | ✅         | ✅     | ❌        |
-| TSX        | ✅    | ✅         | 🔌     | ❌        |
-| JSON       | ✅    | ❌         | 🔌     | ❌        |
-| JSONC      | ✅    | ❌         | 🔌     | ❌        |
-| CSS        | ✅    | ❌         | 🔌     | ✅        |
-| SCSS       | ❌    | ❌         | ❌     | 🔌        |
-| Sass       | ❌    | ❌         | ❌     | ❌        |
-| Less       | ❌    | ❌         | ❌     | 🔌        |
-| HTML       | ✅    | ❌         | 🔌     | 🔌        |
-| Vue        | 🟡    | 🟡 scripts | 🔌     | 🔌        |
-| Svelte     | 🟡    | 🟡 scripts | 🔌     | 🔌        |
-| Astro      | 🟡    | 🟡 scripts | 🔌     | 🔌        |
-| GraphQL    | ✅    | ❌         | 🔌     | ❌        |
-| Markdown   | ❌    | ❌         | 🔌     | ❌        |
-| MDX        | ❌    | ❌         | 🔌     | ❌        |
-| YAML       | ❌    | ❌         | 🔌     | ❌        |
+| Language   | Biome | Oxlint     | Bun        | ESLint | Stylelint |
+| ---------- | ----- | ---------- | ---------- | ------ | --------- |
+| JavaScript | ✅    | ✅         | ✅         | ✅     | ❌        |
+| TypeScript | ✅    | ✅         | ✅         | 🔌     | ❌        |
+| JSX        | ✅    | ✅         | ✅         | ✅     | ❌        |
+| TSX        | ✅    | ✅         | ✅         | 🔌     | ❌        |
+| JSON       | ✅    | ❌         | ❌         | 🔌     | ❌        |
+| JSONC      | ✅    | ❌         | ❌         | 🔌     | ❌        |
+| CSS        | ✅    | ❌         | ❌         | 🔌     | ✅        |
+| SCSS       | ❌    | ❌         | ❌         | ❌     | 🔌        |
+| Sass       | ❌    | ❌         | ❌         | ❌     | ❌        |
+| Less       | ❌    | ❌         | ❌         | ❌     | 🔌        |
+| HTML       | ✅    | ❌         | ❌         | 🔌     | 🔌        |
+| Vue        | 🟡    | 🟡 scripts | 🟡 scripts | 🔌     | 🔌        |
+| Svelte     | 🟡    | 🟡 scripts | 🟡 scripts | 🔌     | 🔌        |
+| Astro      | 🟡    | 🟡 scripts | 🟡 scripts | 🔌     | 🔌        |
+| GraphQL    | ✅    | ❌         | ❌         | 🔌     | ❌        |
+| Markdown   | ❌    | ❌         | ❌         | 🔌     | ❌        |
+| MDX        | ❌    | ❌         | ❌         | 🔌     | ❌        |
+| YAML       | ❌    | ❌         | ❌         | 🔌     | ❌        |
 
 ## Formatting Support
 
-| Language   | Biome | Oxfmt | Prettier |
-| ---------- | ----- | ----- | -------- |
-| JavaScript | ✅    | ✅    | ✅       |
-| TypeScript | ✅    | ✅    | ✅       |
-| JSX        | ✅    | ✅    | ✅       |
-| TSX        | ✅    | ✅    | ✅       |
-| JSON       | ✅    | ✅    | ✅       |
-| JSONC      | ✅    | ✅    | ✅       |
-| CSS        | ✅    | ✅    | ✅       |
-| SCSS       | ⌛    | ✅    | ✅       |
-| Sass       | ❌    | ❌    | ❌       |
-| Less       | ❌    | ✅    | ✅       |
-| HTML       | ✅    | ✅    | ✅       |
-| Vue        | 🟡    | ✅    | ✅       |
-| Svelte     | 🟡    | 🟡    | 🔌       |
-| Astro      | 🟡    | 🟡    | 🔌       |
-| GraphQL    | ✅    | ✅    | ✅       |
-| Markdown   | ⌛    | ✅    | ✅       |
-| MDX        | ❌    | ✅    | ✅       |
-| YAML       | ⌛    | ✅    | ✅       |
+| Language   | Biome | Oxfmt | Bun | Prettier |
+| ---------- | ----- | ----- | --- | -------- |
+| JavaScript | ✅    | ✅    | ✅  | ✅       |
+| TypeScript | ✅    | ✅    | ✅  | ✅       |
+| JSX        | ✅    | ✅    | ✅  | ✅       |
+| TSX        | ✅    | ✅    | ✅  | ✅       |
+| JSON       | ✅    | ✅    | ✅  | ✅       |
+| JSONC      | ✅    | ✅    | ✅  | ✅       |
+| CSS        | ✅    | ✅    | ✅  | ✅       |
+| SCSS       | ⌛    | ✅    | ✅  | ✅       |
+| Sass       | ❌    | ❌    | ❌  | ❌       |
+| Less       | ❌    | ✅    | ✅  | ✅       |
+| HTML       | ✅    | ✅    | ✅  | ✅       |
+| Vue        | 🟡    | ✅    | ✅  | ✅       |
+| Svelte     | 🟡    | 🟡    | ✅  | 🔌       |
+| Astro      | 🟡    | 🟡    | ❌  | 🔌       |
+| GraphQL    | ✅    | ✅    | ✅  | ✅       |
+| Markdown   | ⌛    | ✅    | ✅  | ✅       |
+| MDX        | ❌    | ✅    | ✅  | ✅       |
+| YAML       | ⌛    | ✅    | ✅  | ✅       |
 
 ## Notes
 
@@ -72,6 +72,10 @@ Biome is the only tool here that explicitly tracks parse, format, and lint suppo
 ### Oxlint
 
 Oxlint is a JavaScript and TypeScript linter — that's it. For framework files (`.vue`, `.svelte`, `.astro`) it lints only the `<script>` block; templates are not parsed. If you need linting for CSS, JSON, YAML, or similar formats, Oxlint is not the right tool and you'll need to pair it with something else.
+
+### Bun
+
+`bun lint` and `bun fmt` reimplement Oxlint and Oxfmt, so the [Bun provider](/providers/bun) covers the same ground: `bun lint` lints JavaScript and TypeScript, and only the `<script>` blocks of `.vue`, `.svelte` and `.astro` files, and `bun fmt` formats what Oxfmt formats, as [Bun's formatter docs](https://bun.com/docs/format) list. Bun formats Svelte natively, but next to an Oxfmt config it follows that config's `svelte` option, which Ultracite's leaves off. Astro isn't built in.
 
 ### Oxfmt
 
@@ -91,10 +95,11 @@ Stylelint natively handles CSS. Other CSS-adjacent syntaxes — SCSS, Less, CSS-
 
 ## Choosing a toolchain
 
-Three quick rules of thumb:
+Four quick rules of thumb:
 
 - If your project is primarily **JavaScript, TypeScript, JSON, CSS, and GraphQL**, Biome gives you the tightest, fastest single-binary experience.
 - If you need the **widest language coverage** or rely on language-specific ecosystem rules (e.g. deep Vue, Svelte, or Astro tooling), ESLint + Prettier + Stylelint is still the most complete option.
 - If **raw lint speed** on a large JS/TS codebase matters most, Oxlint + Oxfmt is the fastest of the three. Pair it with Stylelint if you also need CSS linting.
+- If your project already runs on **Bun**, the Bun provider covers the same languages as Oxlint + Oxfmt with Bun's built-in tools.
 
-See the individual provider pages ([Biome](/providers/biome), [ESLint](/providers/eslint), [Oxlint](/providers/oxlint)) for Ultracite-specific setup details.
+See the individual provider pages ([Biome](/providers/biome), [ESLint](/providers/eslint), [Oxlint](/providers/oxlint), [Bun](/providers/bun)) for Ultracite-specific setup details.

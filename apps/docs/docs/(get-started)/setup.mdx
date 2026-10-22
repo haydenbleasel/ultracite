@@ -17,7 +17,7 @@ You can optionally pass the following flags to the `init` command:
 
 | Flag | Description | Options |
 | --- | --- | --- |
-| `--linter` | The linting toolchain to use. When omitted and prompts are skipped, init keeps the linter the project already uses, or picks `oxlint` for a project without one. | `oxlint`, `biome`, `eslint` |
+| `--linter` | The linting toolchain to use. When omitted and prompts are skipped, init keeps the linter the project already uses, or picks `oxlint` for a project without one. `bun` runs `bun lint` and `bun fmt`, which need Bun 1.4.5 or later. | `oxlint`, `biome`, `eslint`, `bun` |
 | `--pm` | The package manager to use. | `pnpm`, `bun`, `yarn`, `npm`, `deno`, `nub`, `aube` |
 | `--frameworks` | The frameworks to configure. | Space-separated: `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`, `cypress`, `storybook` |
 | `--workspace-framework` | Frameworks for one workspace of a monorepo, as `<path>=<framework>`. Writes a config in that workspace that extends the root config. See [Monorepos](/docs/monorepos#different-frameworks-per-workspace). | Space-separated: `apps/web=react`, `apps/docs=astro` |
@@ -26,8 +26,8 @@ You can optionally pass the following flags to the `init` command:
 | `--hooks` | The agent hooks to configure. | Space-separated: `cursor`, `devin`, `codebuddy`, `claude`, `codex`, `deepagents`, `copilot`, `grok` |
 | `--integrations` | Additional integrations to set up. | Space-separated: `husky`, `lefthook`, `lint-staged`, `pre-commit` |
 | `--install-skill` | Install the reusable Ultracite skill after setup. | (no value needed) |
-| `--js-plugins` | Optional Oxlint JS plugins to enable. Only Oxlint runs them, so without `--linter`, init skips the linter prompt and keeps the project's linter (or picks `oxlint`), and stops if that linter isn't Oxlint. | Space-separated: `@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc`, `oxlint-plugin-react-doctor` |
-| `--type-aware` | Turn on type-aware linting: the rules that need type information or a scan of the whole project. Adds `ultracite/eslint/type-aware` for ESLint and `ultracite/biome/type-aware` for Biome; for Oxlint, installs `oxlint-tsgolint` and sets `typeAware` in the config. Also turns on `strictNullChecks` in your tsconfig files, which those rules need. Without the flag, an interactive run asks. | (no value needed) |
+| `--js-plugins` | Optional Oxlint JS plugins to enable. Only Oxlint and Bun run them, so without `--linter`, init skips the linter prompt and keeps the project's linter (or picks `oxlint`), and stops if that linter isn't Oxlint or Bun. | Space-separated: `@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc`, `oxlint-plugin-react-doctor` |
+| `--type-aware` | Turn on type-aware linting: the rules that need type information or a scan of the whole project. Adds `ultracite/eslint/type-aware` for ESLint and `ultracite/biome/type-aware` for Biome; for Oxlint, installs `oxlint-tsgolint` and sets `typeAware` in the config; for Bun, sets `typeAware` in the config, since `bun lint` gets types from Bun's own type checker. Also turns on `strictNullChecks` in your tsconfig files, which those rules need. Without the flag, an interactive run asks. | (no value needed) |
 | `--skip-install` | Skip installing dependencies. | (no value needed) |
 | `--yes`, `-y` | Take the default for every question no flag answers, without prompting. | (no value needed, on automatically in CI and when there's no terminal) |
 | `--quiet` | Only print warnings and errors. | (no value needed) |
@@ -70,10 +70,10 @@ npx ultracite init --yes --linter eslint --pm npm
 
 ### Editor Extensions
 
-When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. It installs them with your editor's own command-line launcher (`code`, `cursor`, `devin-desktop` or `windsurf`, `buddy` for CodeBuddy, `antigravity-ide`, `bobide` for IBM Bob, `kiro`, `trae` or `void`), so they land in the editor you picked. Install them yourself from the editor's Extensions view if the settings file already existed, the launcher isn't on your `PATH`, or the install failed or took more than two minutes. The Stylelint extension is never installed for you. For VS Code (use your editor's launcher in place of `code`):
+When `init` creates `.vscode/settings.json`, it installs the extension your linter needs: the Oxc extension for Oxlint and Bun, the Biome extension for Biome, or the ESLint and Prettier extensions for ESLint. It installs them with your editor's own command-line launcher (`code`, `cursor`, `devin-desktop` or `windsurf`, `buddy` for CodeBuddy, `antigravity-ide`, `bobide` for IBM Bob, `kiro`, `trae` or `void`), so they land in the editor you picked. Install them yourself from the editor's Extensions view if the settings file already existed, the launcher isn't on your `PATH`, or the install failed or took more than two minutes. The Stylelint extension is never installed for you. For VS Code (use your editor's launcher in place of `code`):
 
 ```bash title="Terminal"
-# Oxlint + Oxfmt
+# Oxlint + Oxfmt, or Bun
 code --install-extension oxc.oxc-vscode
 
 # Biome
@@ -84,6 +84,8 @@ code --install-extension dbaeumer.vscode-eslint
 code --install-extension esbenp.prettier-vscode
 code --install-extension stylelint.vscode-stylelint
 ```
+
+Bun has no language server, so the Oxc extension lints and formats a Bun project with `oxlint` and `oxfmt`, reading the same `oxlint.config.ts` and `oxfmt.config.ts` as `bun lint` and `bun fmt`. When `init` sets up an editor for Bun, it installs both packages (and `oxlint-tsgolint` with `--type-aware`) for the extension to use; without an editor, it installs nothing but `ultracite`.
 
 Each editor has its own page, with the settings `init` writes for it and what to do after: see [Editors](/editors).
 

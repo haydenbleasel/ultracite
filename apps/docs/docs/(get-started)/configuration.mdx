@@ -9,7 +9,7 @@ One of Ultracite's best features is that it's zero-config out of the box — you
 
 Ultracite provides framework-specific configurations that you can extend in addition to the base `core` configuration. This allows you to add framework-specific linting rules without bloating the base config or dealing with irrelevant rules.
 
-The concept is the same across all supported linters — pull in the `core` preset, then layer on any framework presets you need — though the exact syntax differs per linter (Biome uses an `extends` array, while ESLint and Oxlint use imports; each [provider page](/providers) shows its config files). For example, if you're using Biome with React and Next.js, you can pull in the following presets:
+The concept is the same across all supported linters — pull in the `core` preset, then layer on any framework presets you need — though the exact syntax differs per linter (Biome uses an `extends` array, while ESLint, Oxlint and Bun use imports; each [provider page](/providers) shows its config files). For example, if you're using Biome with React and Next.js, you can pull in the following presets:
 
 ```jsonc title="biome.jsonc"
 {
@@ -21,9 +21,31 @@ The concept is the same across all supported linters — pull in the `core` pres
 }
 ```
 
-On Oxlint, `init` writes `oxlint.config.ts` and `oxfmt.config.ts` in an ES module package (`"type": "module"` in `package.json`) and `oxlint.config.mts` and `oxfmt.config.mts` otherwise, because Node only loads ES module syntax from a `.ts` file in an ES module package. `init` never changes `"type"`.
+On Oxlint and Bun, `init` writes `oxlint.config.ts` and `oxfmt.config.ts` in an ES module package (`"type": "module"` in `package.json`) and `oxlint.config.mts` and `oxfmt.config.mts` otherwise, because Node only loads ES module syntax from a `.ts` file in an ES module package. `init` never changes `"type"`.
 
 For the opt-in presets, such as the JS plugins that bring Oxlint closer to the ESLint preset, see [Optional Presets](/docs/presets).
+
+### Bun's config files
+
+`bun lint` and `bun fmt` read Oxlint's and Oxfmt's config files, so Bun uses Ultracite's Oxlint presets and Oxfmt settings as they are. The only difference is where `defineConfig` comes from:
+
+```ts title="oxlint.config.ts"
+import { defineConfig } from "ultracite/bun";
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, react],
+  ignorePatterns: core.ignorePatterns,
+});
+```
+
+`oxfmt.config.ts` imports it from `ultracite/bun` too. That lets `bun lint` and `bun fmt` load both files without the `oxlint` and `oxfmt` packages installed, and it's how `ultracite check` tells a Bun project from an Oxlint one. Switching with `npx ultracite init --linter oxlint` or `--linter bun` rewrites only that import.
+
+`ultracite/bun`'s `defineConfig` also leaves out the rules Bun doesn't implement, today every `jsdoc/*` and `vue/*` rule, from the presets you extend, since `bun lint` exits with code 2 when a config turns on a rule it doesn't have. Your editor's Oxlint reads the same config, so it skips them too. Your own `rules` are left as you wrote them, but Bun can't run a `jsdoc/*` or `vue/*` rule you add there: it skips it, or exits with code 2 if you also list the plugin in `plugins`. Everything else on this page written for Oxlint and Oxfmt works on Bun with that one import changed.
+
+Keep your overrides in `oxlint.config.ts` and `oxfmt.config.ts` rather than in `bunfig.toml`. Bun applies `bunfig.toml`'s `[lint]` and `[fmt]` sections on top of the two files, but the Oxc extension in your editor only reads the files, so the editor and `ultracite check` would disagree. `ultracite doctor` warns about those sections.
 
 ## Default Configuration
 
@@ -68,6 +90,10 @@ The `type-aware` preset enables project-graph and type-aware rules: `noPrivateIm
 ### Oxlint
 
 Oxlint runs the type-aware rules `core` lists, such as `typescript/no-floating-promises`, through `oxlint-tsgolint`. `init --type-aware` installs it and sets `typeAware` in the config's `options`.
+
+### Bun
+
+Bun runs the same type-aware rules from `core`, with types from `bun check`, its built-in type checker, so there's nothing to install. `init --type-aware` sets `typeAware` in the config's `options`, as for Oxlint.
 
 ## Safe Fixes (Biome)
 
@@ -316,4 +342,4 @@ A few things to keep in mind:
 
 ## Rule Reference
 
-Every rule each preset sets, and why some are off, is in the presets' source on GitHub: [Oxlint](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/oxlint), [Biome](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/biome) and [ESLint](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/eslint).
+Every rule each preset sets, and why some are off, is in the presets' source on GitHub: [Oxlint](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/oxlint) (which Bun uses too), [Biome](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/biome) and [ESLint](https://github.com/haydenbleasel/ultracite/tree/main/packages/cli/config/eslint).

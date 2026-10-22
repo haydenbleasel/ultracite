@@ -1,0 +1,116 @@
+---
+import { MIN_BUN_VERSION } from "../../../../../packages/cli/src/dependencies";
+import SectionHeading from "../../home/section-heading.astro";
+import RichText from "../../landing/rich-text.astro";
+import Terminal from "../../landing/terminal.astro";
+
+// What the Bun provider can't do, each with what Bun or Ultracite printed
+// for it, run for real on 2026-10-14 and 15: Bun 1.4.2 for the old-Bun lines, Bun
+// 1.4.4-canary.1 for the rest, and `ultracite doctor` from Ultracite 8.0.1
+// with the Bun provider. The Tailwind card and the scripts warning follow
+// oven-sh/bun#45482, and were rerun on 2026-10-22 on Bun
+// 1.4.4-canary.1+963452075, the first canary checked that has it.
+const limits: { body: string; output?: string; title: string; topic: string }[] = [
+  {
+    body: "Bun has no version of Oxlint’s `jsdoc` and `vue` plugins. `ultracite/bun` leaves their rules out of the presets you extend, which is core’s 19 `jsdoc` rules and all of the Vue preset. One you turn on yourself doesn’t run, and with the plugin in `plugins`, `bun lint` exits with code 2.",
+    output: `error: 1 rule in oxlint.config.ts is not supported: jsdoc/require-param
+  bun lint has no "jsdoc" rules. Turn it off or remove it.`,
+    title: "No jsdoc or vue rules",
+    topic: "Rules",
+  },
+  {
+    body: "Bun’s rules are Oxlint 1.87’s and its formatting is Oxfmt 0.72’s, whichever versions you have installed. When Ultracite turns on a rule from a newer Oxlint, `ultracite/bun` leaves it out until Bun has it.",
+    title: "A snapshot of one Oxlint release",
+    topic: "Versions",
+  },
+  {
+    body: "Editors run Oxlint and Oxfmt through the Oxc extension instead, on the same two configs. So a Bun project with editor settings has the `oxlint` and `oxfmt` packages installed after all.",
+    output: `$ bun lint --lsp
+error: bun lint does not support --lsp`,
+    title: "No language server",
+    topic: "Editors",
+  },
+  {
+    body: "Bun reads Tailwind’s class order from the `tailwindcss` package in your project, where Oxfmt has its own copy. Without the package, `bun fmt` still formats the file but leaves its classes in the order you wrote them, and `bun fmt --doctor` says why.",
+    title: "Class sorting needs tailwindcss",
+    topic: "Formatting",
+  },
+  {
+    body: "With a `lint` script in `package.json`, `bun lint` runs the script, and the same goes for `bun fmt` and a `fmt` script. Add `--no-script` to run Bun’s own tool. `ultracite check` and `fix` always do, and `ultracite doctor` warns about the scripts.",
+    output: "▲  `bun lint` runs the package.json \"lint\" script (`next lint`) instead of Bun's own tool, unless you pass `--no-script`",
+    title: "A lint script runs instead",
+    topic: "Scripts",
+  },
+  {
+    body: "Bun applies `bunfig.toml`’s `[lint]` and `[fmt]` sections on top of the two configs, but the Oxc extension never reads them, so your editor and the CLI drift apart. Keep overrides in `oxlint.config.ts` and `oxfmt.config.ts`.",
+    output: "▲  bunfig.toml has [lint] settings, which Bun applies on top of oxlint.config.ts and oxfmt.config.ts but editors don't read",
+    title: "bunfig.toml only reaches Bun",
+    topic: "Settings",
+  },
+];
+---
+
+<section aria-labelledby="bn-limits" class="border-border border-b">
+  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <SectionHeading id="bn-limits" title="What Bun doesn’t do yet">
+      Bun’s linter and formatter are new. Here’s what to know before you
+      move a project onto them, with what you’ll see when you hit each one.
+    </SectionHeading>
+    <div class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-12">
+      <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:col-span-5 lg:px-10 lg:py-10">
+        <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">Bun version</p>
+        <p class="font-medium text-5xl tracking-[-0.04em] tabular-nums">
+          {MIN_BUN_VERSION}<span class="text-muted-foreground">+</span>
+        </p>
+        <p class="max-w-[46ch] text-pretty text-base/7 text-muted-foreground">
+          <code class="font-mono text-sm">bun lint</code> and{" "}
+          <code class="font-mono text-sm">bun fmt</code> need Bun{" "}
+          {MIN_BUN_VERSION} or later. An older Bun takes{" "}
+          <code class="font-mono text-sm">lint</code> for the name of a script,
+          so Ultracite checks first and stops with a message instead of
+          reporting a failed lint.
+        </p>
+      </div>
+      <div class="flex min-w-0 flex-col bg-muted/60 p-2 sm:p-6 lg:col-span-7 lg:p-10">
+        <Terminal class="flex-1" title="Bun 1.4.2">
+          <p class="mb-1 truncate text-panel-foreground">
+            <span class="text-signal">$</span> bun lint
+          </p>
+          <p class="mb-3 whitespace-normal">
+            <span class="text-signal">error:</span> Script not found "lint"
+          </p>
+          <p class="mb-1 truncate text-panel-foreground">
+            <span class="text-signal">$</span> bunx ultracite check
+          </p>
+          <p class="whitespace-normal">
+            ■ The Bun provider runs `bun lint` and `bun fmt`, which need Bun{" "}
+            {MIN_BUN_VERSION} or later. Install or upgrade Bun (`bun upgrade`)
+            and try again; `ultracite doctor` checks the setup.
+          </p>
+        </Terminal>
+      </div>
+    </div>
+    <ul
+      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2 lg:grid-cols-3"
+      role="list"
+    >
+      {
+        limits.map((limit) => (
+          <li class="flex min-w-0 flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-8">
+            <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">{limit.topic}</p>
+            <h3 class="font-medium text-xl/7 tracking-[-0.015em]">{limit.title}</h3>
+            <p class="text-pretty text-[15px]/6 text-muted-foreground">
+              <RichText text={limit.body} />
+            </p>
+            {limit.output && (
+              <pre
+                class="mt-auto overflow-x-auto whitespace-pre-wrap break-words rounded-md border border-border bg-code px-3 py-2.5 font-mono text-[12px]/5 text-muted-foreground"
+                set:text={limit.output}
+              />
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -39,6 +39,7 @@ import { getEditorFileTargets } from "./editors";
 import type { EditorFileTarget } from "./editors";
 import { createHooks } from "./hooks";
 import { husky } from "./integrations/husky";
+import type { HuskyHookMode } from "./integrations/husky";
 import { lefthook } from "./integrations/lefthook";
 import { lintStaged } from "./integrations/lint-staged";
 import { preCommit } from "./integrations/pre-commit";
@@ -163,18 +164,21 @@ interface RawInitializeFlags {
   pm?: string;
 }
 
-// Only Oxlint runs JS plugins, so on any other linter --js-plugins would be
-// left out without a word.
+// Oxlint and Bun both run the Oxlint config, and so the JS plugins it loads.
+const runsOxlintConfig = (linter: string): boolean =>
+  linter === "oxlint" || linter === "bun";
+
+// On any other linter --js-plugins would be left out without a word.
 const assertJsPluginsMatchLinter = (
   linter: string | undefined,
   jsPlugins: readonly string[] | undefined
 ): void => {
-  if (linter === undefined || linter === "oxlint" || !jsPlugins?.length) {
+  if (linter === undefined || runsOxlintConfig(linter) || !jsPlugins?.length) {
     return;
   }
 
   throw new UltraciteSetupError(
-    `--js-plugins only works with Oxlint, but the linter is "${linter}". Pass --linter oxlint to use JS plugins.`
+    `--js-plugins only works with Oxlint or Bun, but the linter is "${linter}". Pass --linter oxlint or --linter bun to use JS plugins.`
   );
 };
 
@@ -262,11 +266,56 @@ const oxlintJsPluginHints: Partial<Record<OxlintJsPlugin, string>> = {
   "eslint-plugin-tsdoc": "validate TSDoc syntax in TypeScript comments",
 };
 
+interface OxlintToolchainOptions {
+  jsPlugins: OxlintJsPlugin[];
+  linter: Linter;
+  typeAware: boolean;
+  /** Editors are being set up, whose extensions run oxlint and oxfmt. */
+  withEditors: boolean;
+}
+
+// The packages an Oxlint config needs. Bun runs the configs itself, so it
+// only needs oxlint and oxfmt (and oxlint-tsgolint, for type-aware rules) for
+// the editor extensions, but the JS plugins it loads from node_modules.
+const oxlintToolchainDependencies = ({
+  jsPlugins,
+  linter,
+  typeAware,
+  withEditors,
+}: OxlintToolchainOptions) => {
+  if (!runsOxlintConfig(linter)) {
+    return {};
+  }
+
+  const dependencies: Record<string, string> = {};
+
+  if (linter === "oxlint" || withEditors) {
+    dependencies.oxlint = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint;
+    // Oxlint is only a linter, so we need oxfmt for formatting
+    dependencies.oxfmt = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt;
+
+    // Type-aware linting requires oxlint-tsgolint
+    if (typeAware) {
+      dependencies["oxlint-tsgolint"] =
+        OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"];
+    }
+  }
+
+  for (const jsPlugin of jsPlugins) {
+    if (isOxlintNpmJsPlugin(jsPlugin)) {
+      dependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
+    }
+  }
+
+  return dependencies;
+};
+
 const buildNoInstallDevDependencies = (
   linter: Linter,
   typeAware: boolean,
   frameworks: Frameworks[],
-  jsPlugins: OxlintJsPlugin[] = []
+  jsPlugins: OxlintJsPlugin[] = [],
+  withEditors = false
 ) => {
   const devDependencies = asDependencyVersionMap({
     ultracite: ultraciteVersion,
@@ -280,21 +329,10 @@ const buildNoInstallDevDependencies = (
     Object.assign(devDependencies, buildEslintDevDependencies(frameworks));
   }
 
-  if (linter === "oxlint") {
-    devDependencies.oxlint = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint;
-    devDependencies.oxfmt = OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt;
-
-    if (typeAware) {
-      devDependencies["oxlint-tsgolint"] =
-        OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"];
-    }
-
-    for (const jsPlugin of jsPlugins) {
-      if (isOxlintNpmJsPlugin(jsPlugin)) {
-        devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
-      }
-    }
-  }
+  Object.assign(
+    devDependencies,
+    oxlintToolchainDependencies({ jsPlugins, linter, typeAware, withEditors })
+  );
 
   return devDependencies;
 };
@@ -410,7 +448,9 @@ const staleLinterConfigFiles = (linter: Linter): string[] => {
     );
   }
 
-  if (linter !== "oxlint") {
+  // Bun reads the Oxlint and oxfmt configs, so switching between the two
+  // keeps them; init rewrites their defineConfig import.
+  if (!runsOxlintConfig(linter)) {
     candidates.push(...oxlintConfigNames, ...oxfmtConfigNames);
   }
 
@@ -510,7 +550,8 @@ export const installDependencies = async (
   quiet = false,
   typeAware = false,
   frameworks: Frameworks[] = ["react"],
-  jsPlugins: OxlintJsPlugin[] = []
+  jsPlugins: OxlintJsPlugin[] = [],
+  withEditors = false
 ) => {
   const s = spinner();
 
@@ -533,28 +574,11 @@ export const installDependencies = async (
     );
   }
 
-  if (linter === "oxlint") {
-    packages.push(
-      `oxlint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint}`,
-      // Oxlint is only a linter, so we need oxfmt for formatting
-      `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`
-    );
-
-    // Type-aware linting requires oxlint-tsgolint
-    if (typeAware) {
-      packages.push(
-        `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
-      );
-    }
-
-    packages.push(
-      ...jsPlugins.flatMap((jsPlugin) =>
-        isOxlintNpmJsPlugin(jsPlugin)
-          ? [`${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`]
-          : []
-      )
-    );
-  }
+  packages.push(
+    ...Object.entries(
+      oxlintToolchainDependencies({ jsPlugins, linter, typeAware, withEditors })
+    ).map(([name, version]) => `${name}@${version}`)
+  );
 
   const scripts = await getScriptsToAdd();
 
@@ -592,7 +616,8 @@ export const installDependencies = async (
       linter,
       typeAware,
       frameworks,
-      jsPlugins
+      jsPlugins,
+      withEditors
     );
 
     // Batch devDependencies and scripts into a single read/write
@@ -645,6 +670,7 @@ const additionalVscodeExtensions: Partial<Record<Linter, string[]>> = {
 
 const zedExtensionHints: Partial<Record<Linter, string>> = {
   biome: "Biome extension: https://biomejs.dev/reference/zed/",
+  bun: "Oxc extension: https://zed.dev/extensions/oxc",
   oxlint: "Oxc extension: https://zed.dev/extensions/oxc",
 };
 
@@ -829,7 +855,8 @@ export const upsertOxlintConfig = async (
   frameworks?: (typeof options.frameworks)[number][],
   quiet = false,
   jsPlugins: OxlintJsPlugin[] = [],
-  typeAware = false
+  typeAware = false,
+  bun = false
 ) => {
   const s = spinner();
 
@@ -842,7 +869,7 @@ export const upsertOxlintConfig = async (
       s.message("Oxlint configuration found, updating...");
     }
 
-    await oxlint.update({ frameworks, jsPlugins, typeAware });
+    await oxlint.update({ bun, frameworks, jsPlugins, typeAware });
 
     if (!quiet) {
       s.stop("Oxlint configuration updated.");
@@ -855,7 +882,7 @@ export const upsertOxlintConfig = async (
     s.message("Oxlint configuration not found, creating...");
   }
 
-  await oxlint.create({ frameworks, jsPlugins, typeAware });
+  await oxlint.create({ bun, frameworks, jsPlugins, typeAware });
 
   if (!quiet) {
     s.stop("Oxlint configuration created.");
@@ -897,13 +924,26 @@ export const upsertPrettierConfig = async (
   }
 };
 
-const workspaceConfigWriters = { biome, eslint, oxlint } satisfies Record<
+const workspaceConfigWriters = {
+  biome,
+  bun: {
+    createWorkspace: (workspace: WorkspaceFrameworks) =>
+      oxlint.createWorkspace(workspace, { bun: true }),
+    findWorkspaceConfig: oxlint.findWorkspaceConfig,
+  },
+  eslint,
+  oxlint,
+} satisfies Record<
   Linter,
   {
     createWorkspace: (workspace: WorkspaceFrameworks) => Promise<string>;
     findWorkspaceConfig: (dir: string) => string | null;
   }
 >;
+
+// The presets a linter's configs extend: Bun uses Oxlint's.
+const presetLinter = (linter: Linter): Exclude<Linter, "bun"> =>
+  linter === "bun" ? "oxlint" : linter;
 
 // Nested configs for workspaces with frameworks of their own. Each extends
 // the root config and adds the workspace's presets, so the editor extensions
@@ -920,12 +960,20 @@ export const upsertWorkspaceConfigs = async (
       const existing = writer.findWorkspaceConfig(workspace.dir);
 
       if (existing) {
+        // Oxlint and Bun share config files, so a workspace config kept on a
+        // switch between them still gets the new provider's defineConfig.
+        const retargeted =
+          runsOxlintConfig(linter) &&
+          (await oxlint.retargetWorkspaceConfig(existing, {
+            bun: linter === "bun",
+          }));
+
         const presets = workspace.frameworks.map(
-          (framework) => `ultracite/${linter}/${framework}`
+          (framework) => `ultracite/${presetLinter(linter)}/${framework}`
         );
 
         log.warn(
-          `${existing} already exists, so it was left unchanged. Add ${presets.join(", ")} to it yourself.`
+          `${existing} already exists, so ${retargeted ? "only its defineConfig import was updated" : "it was left unchanged"}. Add ${presets.join(", ")} to it yourself.`
         );
 
         return;
@@ -978,7 +1026,7 @@ export const upsertStylelintConfig = async (quiet = false) => {
   }
 };
 
-export const upsertOxfmtConfig = async (quiet = false) => {
+export const upsertOxfmtConfig = async (quiet = false, bun = false) => {
   const s = spinner();
 
   if (!quiet) {
@@ -990,7 +1038,7 @@ export const upsertOxfmtConfig = async (quiet = false) => {
       s.message("oxfmt configuration found, updating...");
     }
 
-    await oxfmt.update();
+    await oxfmt.update({ bun });
 
     if (!quiet) {
       s.stop("oxfmt configuration updated.");
@@ -1003,7 +1051,7 @@ export const upsertOxfmtConfig = async (quiet = false) => {
     s.message("oxfmt configuration not found, creating...");
   }
 
-  await oxfmt.create();
+  await oxfmt.create({ bun });
 
   if (!quiet) {
     s.stop("oxfmt configuration created.");
@@ -1014,7 +1062,7 @@ export const initializePrecommitHook = async (
   packageManager: PackageManager,
   install = true,
   quiet = false,
-  useLintStaged = false
+  mode: HuskyHookMode = "script"
 ) => {
   const s = spinner();
 
@@ -1052,7 +1100,7 @@ export const initializePrecommitHook = async (
       s.message("Pre-commit hook found, updating...");
     }
 
-    await husky.update(packageManager.name, useLintStaged);
+    await husky.update(packageManager.name, mode);
 
     if (!quiet) {
       s.stop("Pre-commit hook updated.");
@@ -1065,7 +1113,7 @@ export const initializePrecommitHook = async (
     s.message("Pre-commit hook not found, creating...");
   }
 
-  await husky.create(packageManager.name, useLintStaged);
+  await husky.create(packageManager.name, mode);
 
   if (!quiet) {
     s.stop("Pre-commit hook created.");
@@ -1364,9 +1412,9 @@ const selectLinter = async (
   // agents or editors doesn't migrate the project to another linter.
   const defaultLinter = detectLinter() ?? "oxlint";
 
-  // Only Oxlint runs JS plugins, so --js-plugins settles the question. On a
-  // project that uses another linter it's a mistake to report, not a reason
-  // to migrate the project.
+  // Only Oxlint and Bun run JS plugins, so --js-plugins settles the
+  // question. On a project that uses another linter it's a mistake to
+  // report, not a reason to migrate the project.
   if (opts["js-plugins"] !== undefined) {
     assertJsPluginsMatchLinter(defaultLinter, opts["js-plugins"]);
 
@@ -1384,6 +1432,11 @@ const selectLinter = async (
       { label: "Oxlint + Oxfmt (Recommended)", value: "oxlint" },
       { label: "Biome", value: "biome" },
       { label: "ESLint + Prettier + Stylelint", value: "eslint" },
+      {
+        hint: "bun lint and bun fmt, on the Oxlint presets",
+        label: "Bun",
+        value: "bun",
+      },
     ],
   });
 
@@ -1448,7 +1501,7 @@ const selectJsPlugins = async (
 ): Promise<OxlintJsPlugin[]> => {
   // A --js-plugins list on another linter was already rejected, by
   // validateInitializeFlags or selectLinter.
-  if (linter !== "oxlint") {
+  if (!runsOxlintConfig(linter)) {
     return [];
   }
 
@@ -1673,7 +1726,8 @@ const selectHooks = async (
 
 const selectIntegrations = async (
   opts: InitializeFlags,
-  interactive: boolean
+  interactive: boolean,
+  linter: Linter
 ): Promise<(typeof options.integrations)[number][]> => {
   if (opts.integrations !== undefined) {
     return opts.integrations;
@@ -1688,7 +1742,15 @@ const selectIntegrations = async (
     options: [
       { label: "Husky pre-commit hook", value: "husky" },
       { label: "Lefthook pre-commit hook", value: "lefthook" },
-      { label: "Lint-staged", value: LINT_STAGED },
+      {
+        // Bun's own --staged mode does lint-staged's job in the Husky hook.
+        hint:
+          linter === "bun"
+            ? "not needed with Bun: the Husky hook runs ultracite fix --staged"
+            : undefined,
+        label: "Lint-staged",
+        value: LINT_STAGED,
+      },
       { label: "pre-commit (Python framework)", value: "pre-commit" },
     ],
     required: false,
@@ -1712,7 +1774,7 @@ const selectInitializeOptions = async (
   const editorSelections = await selectEditors(opts, interactive);
   const agentSelections = await selectAgents(opts, interactive);
   const hooks = await selectHooks(opts, interactive);
-  const integrations = await selectIntegrations(opts, interactive);
+  const integrations = await selectIntegrations(opts, interactive, linter);
 
   return {
     ...editorSelections,
@@ -1889,7 +1951,9 @@ const setupLinting = async ({
     quiet,
     typeAware,
     allFrameworks,
-    jsPlugins
+    jsPlugins,
+    selections.editorConfig.length > 0 ||
+      selections.selectedEditorFiles.length > 0
   );
 
   await upsertTsConfig(changes.tsconfigUpdates, quiet);
@@ -1918,6 +1982,19 @@ const setupLinting = async ({
     await upsertOxlintConfig(frameworks, quiet, jsPlugins, typeAware);
     // Oxlint is only a linter, so we need oxfmt for formatting
     await upsertOxfmtConfig(quiet);
+  }
+
+  if (linter === "bun") {
+    // `bun lint` and `bun fmt` read the Oxlint and oxfmt configs, written
+    // to import defineConfig from ultracite/bun instead.
+    await upsertOxlintConfig(frameworks, quiet, jsPlugins, typeAware, true);
+    await upsertOxfmtConfig(quiet, true);
+
+    if (allFrameworks.includes("vue")) {
+      log.warn(
+        "Bun has no Vue rules, so the Vue preset's rules don't run under `bun lint`."
+      );
+    }
   }
 
   await upsertWorkspaceConfigs(linter, workspaces, quiet);
@@ -1979,17 +2056,35 @@ const setupSelectedFiles = async ({
   );
 };
 
+// lint-staged runs the hook when it's selected. Otherwise a Bun project
+// lets `bun lint --staged` and `bun fmt --staged` pick the staged files,
+// and the rest use the hook's own script.
+const huskyHookMode = (
+  integrations: readonly (typeof options.integrations)[number][],
+  linter: Linter
+): HuskyHookMode => {
+  if (integrations.includes(LINT_STAGED)) {
+    return "lint-staged";
+  }
+
+  return linter === "bun" ? "bun" : "script";
+};
+
 const setupIntegrations = async ({
   install,
   pmInfo,
   quiet,
   selections,
 }: InitializeContext): Promise<void> => {
-  const { integrations } = selections;
+  const { integrations, linter } = selections;
 
   if (integrations.includes("husky")) {
-    const useLintStaged = integrations.includes(LINT_STAGED);
-    await initializePrecommitHook(pmInfo, install, quiet, useLintStaged);
+    await initializePrecommitHook(
+      pmInfo,
+      install,
+      quiet,
+      huskyHookMode(integrations, linter)
+    );
   }
 
   if (integrations.includes("lefthook")) {

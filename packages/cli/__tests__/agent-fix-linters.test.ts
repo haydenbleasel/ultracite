@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 
 import { getLinterAdapter } from "../src/agent-fix/linters";
+import { UltraciteSetupError } from "../src/config-resolution";
+import { resetBunCapabilityCache } from "../src/linters/bun";
+import type { SpawnSyncOptions } from "../src/spawn-sync";
 
 const oxlintJson = JSON.stringify({
   diagnostics: [
@@ -238,6 +241,69 @@ describe("agent-fix linter adapters", () => {
       []
     );
     expect(getLinterAdapter("oxlint").verify("notes.md", [])).toEqual([]);
+  });
+
+  // bun lint reads the Oxlint config and prints oxlint's JSON report.
+  test("bun adapter runs the Oxlint pass through bun lint and bun fmt", () => {
+    resetBunCapabilityCache();
+
+    const mockSpawn = mock(
+      (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
+        if (args[0] === "--help") {
+          return {
+            status: 0,
+            stdout: "Commands:\n  lint     Lint JavaScript and TypeScript",
+          };
+        }
+
+        if (args[1] === "--help") {
+          return {
+            status: 0,
+            stdout:
+              "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
+          };
+        }
+
+        return args[0] === "lint"
+          ? { status: 1, stdout: oxlintJson }
+          : { status: 0, stdout: "" };
+      }
+    );
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const diagnostics = getLinterAdapter("bun").fixAndCollect(
+      ["src/bad.ts"],
+      ["--unsafe"]
+    );
+
+    expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "--help"],
+      ["bun", "lint", "--help", "--all"],
+      ["bun", "lint", "--no-script", "--fix-dangerously", "src/bad.ts"],
+      ["bun", "fmt", "--no-script", "--write", "src/bad.ts"],
+      ["bun", "lint", "--no-script", "-f", "json", "src/bad.ts"],
+    ]);
+
+    expect(diagnostics).toHaveLength(1);
+    expect(diagnostics[0]).toMatchObject({
+      file: "src/bad.ts",
+      line: 4,
+      rule: "no-eval",
+    });
+    expect(getLinterAdapter("bun").name).toBe("Bun");
+  });
+
+  test("bun adapter fails with a setup error when Bun has no bun lint", () => {
+    resetBunCapabilityCache();
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock(() => ({ status: 1, stderr: "Script not found" })),
+    }));
+
+    expect(() => getLinterAdapter("bun").verify("src/bad.ts", [])).toThrow(
+      UltraciteSetupError
+    );
   });
 
   test("biome adapter runs check --write with the JSON reporter and parses diagnostics", () => {

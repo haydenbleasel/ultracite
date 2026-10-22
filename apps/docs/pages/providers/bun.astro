@@ -1,0 +1,149 @@
+---
+import Cta from "../../components/home/cta.astro";
+import Faq from "../../components/landing/faq.astro";
+import LandingHero from "../../components/landing/landing-hero.astro";
+import LandingLayout from "../../components/landing/landing-layout.astro";
+import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import NextSteps from "../../components/landing/next-steps.astro";
+import type { NextStep } from "../../components/landing/next-steps.astro";
+import ConfigFiles from "../../components/providers/bun/config-files.astro";
+import Everywhere from "../../components/providers/bun/everywhere.astro";
+import Formatter from "../../components/providers/bun/formatter.astro";
+import Limits from "../../components/providers/bun/limits.astro";
+import Rules from "../../components/providers/bun/rules.astro";
+import Speed from "../../components/providers/bun/speed.astro";
+import TypeAware from "../../components/providers/bun/type-aware.astro";
+import { MIN_BUN_VERSION } from "../../../../packages/cli/src/dependencies";
+import { bunParity, formatMs, runFor, typeAware } from "../../lib/benchmarks";
+import { providerLogos } from "../../lib/logos";
+
+// Facts on this page were checked against Bun 1.4.4-canary.1+9510e7415,
+// Oxlint 1.88.0, Oxfmt 0.71.0 and Ultracite 8.0.1 with the Bun provider, ahead
+// of its release, on this date. Bun's linter and formatter aren't in a stable
+// Bun release yet: recheck the rule counts, the version floor and the
+// limitations when they are.
+const lastModified = "2026-10-16";
+const large = runFor(420);
+const command = "bunx ultracite@latest init --linter bun";
+
+const breadcrumbs: Crumb[] = [
+  { href: "/providers", name: "Providers" },
+  { href: "/providers/bun", name: "Bun" },
+];
+
+const faqs: FaqItem[] = [
+  {
+    answer:
+      `Almost. \`bun lint\` reimplements Oxlint’s rules under the same names and reads \`oxlint.config.ts\`, so the Bun provider extends Ultracite’s Oxlint presets as they are. Bun has no \`jsdoc\` or \`vue\` rules, so \`ultracite/bun\` leaves those out: core runs 455 of its 474 rules on Bun, and the Vue preset none. On the benchmark project’s 420 files, Oxlint and Bun reported the same ${bunParity.lintProblems} problems.`,
+    question: "Does Bun run the same rules as Oxlint?",
+  },
+  {
+    answer:
+      "Not for the command line. `init --linter bun` installs `ultracite` and nothing else, and `ultracite check` runs the `bun lint` and `bun fmt` that come with Bun. Bun has no language server, though, so your editor’s Oxc extension runs Oxlint and Oxfmt on the same configs. When `init` sets up an editor, it installs `oxlint` and `oxfmt` for it, plus `oxlint-tsgolint` with `--type-aware`.",
+    question: "Do I need oxlint or oxfmt installed?",
+  },
+  {
+    answer:
+      `Bun ${MIN_BUN_VERSION} or later, the first with \`bun lint\` and \`bun fmt\`. On an older Bun, \`ultracite check\` stops and says so, and \`ultracite doctor\` reports the Bun it finds. Run \`bun upgrade\`, and raise \`bun-version\` in CI if you pin it.`,
+    question: "Which Bun do I need?",
+  },
+  {
+    answer:
+      "Yes. They read the same `oxlint.config.ts` and `oxfmt.config.ts`, so `bun lint` and `bun fmt --check` report what `ultracite check` does. The exception is a `lint` or `fmt` script in `package.json`: Bun runs the script of that name instead of its tool, unless you add `--no-script`. `ultracite check` and `fix` always run the tools.",
+    question: "Can I run bun lint and bun fmt directly?",
+  },
+  {
+    answer:
+      "They share their configs, so it comes down to the tools. Pick Bun if the project already runs on a Bun that has them and you’d rather not install the Oxc packages. Pick Oxlint for the `jsdoc` and `vue` rules, for a formatter that doesn’t need `tailwindcss` installed to sort classes, and for new Oxlint rules as soon as Ultracite turns them on, since Bun’s rules follow one Oxlint release.",
+    question: "Should I use Bun or Oxlint?",
+  },
+  {
+    answer:
+      "Run `bunx ultracite init --linter bun`. On an Oxlint project it rewrites the `defineConfig` import in `oxlint.config.ts` and `oxfmt.config.ts`, including workspace configs, and keeps everything else, packages included. `--linter oxlint` switches back the same way. From ESLint or Biome, it removes the packages and config files it installed for them.",
+    question: "How do I switch an existing project to Bun?",
+  },
+  {
+    answer:
+      `Yes. \`init --type-aware\` sets \`typeAware\` in \`oxlint.config.ts\` and installs nothing, because \`bun lint\` gets types from \`bun check\`, Bun’s type checker. On the 420-file benchmark project that check took ${formatMs(typeAware.ms.bun)}, where Oxlint with \`oxlint-tsgolint\` took ${formatMs(typeAware.ms.oxlint)}, for the same ${typeAware.problems.toLocaleString("en-US")} problems.`,
+    question: "Does it support type-aware rules?",
+  },
+  {
+    answer:
+      "No. `bun lint --staged` and `bun fmt --staged` fix only the staged files and stage them again, so with `init --integrations husky` the hook runs `ultracite fix --staged` and nothing else. A file with both staged and unstaged changes stops the commit until you stage the rest or set it aside with `git stash --keep-index`.",
+    question: "Do I still need lint-staged?",
+  },
+  {
+    answer:
+      "Set it in `rules` in `oxlint.config.ts`, after the presets in `extends`: `rules: { \"no-console\": \"off\" }`. Bun would also read a `[lint.rules]` table in `bunfig.toml`, but your editor’s Oxc extension doesn’t, so the two would disagree. For a single line, `// oxlint-disable-next-line no-console` works in both.",
+    question: "How do I turn off a rule?",
+  },
+];
+
+const nextSteps: NextStep[] = [
+  {
+    description:
+      "What `ultracite/bun` changes, the files `init` writes, and where overrides go.",
+    href: "/docs/configuration#buns-config-files",
+    label: "Reference",
+    title: "Bun’s config files",
+  },
+  {
+    description: "Turn on the 56 rules that read your types, with types from `bun check`.",
+    href: "/docs/usage#bun",
+    label: "Guide",
+    title: "Type-aware linting",
+  },
+  {
+    description: "Old Bun versions, `lint` scripts and `bunfig.toml`, and how to fix each.",
+    href: "/docs/troubleshooting",
+    label: "Help",
+    title: "Troubleshooting",
+  },
+  {
+    description: "Bun, Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    href: "/providers",
+    label: "Providers",
+    title: "Compare the engines",
+  },
+];
+---
+
+<LandingLayout
+  breadcrumbs={breadcrumbs}
+  description={`Ultracite runs its Oxlint presets on Bun’s built-in bun lint and bun fmt: 455 rules, all errors, Oxfmt’s formatting, editor and agent setup, and a 420-file check in ${formatMs(large.ms.bun)}, with nothing to install but ultracite.`}
+  faqs={faqs}
+  lastModified={lastModified}
+  title="Ultracite for Bun — Strict bun lint and bun fmt Config"
+>
+  <LandingHero
+    breadcrumbs={breadcrumbs}
+    command={command}
+    logo={providerLogos.bun}
+    name="Bun"
+    title="The strict config for bun lint and bun fmt"
+  >
+    From {MIN_BUN_VERSION}, Bun has a linter and a formatter that
+    reimplement Oxlint and Oxfmt. Ultracite points them at its own Oxlint and Oxfmt
+    presets, so you get 455 rules, all errors, and Prettier-style formatting
+    with nothing to install but{" "}
+    <code class="font-mono text-base text-foreground">ultracite</code>.
+    <Fragment slot="note">
+      <span>Also on</span>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/biome">Biome</a>
+      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/eslint">ESLint</a>
+      <span aria-hidden="true">·</span>
+      <span>Checked against Bun 1.4.4-canary.1</span>
+    </Fragment>
+    <ConfigFiles slot="visual" />
+  </LandingHero>
+  <Rules />
+  <Speed />
+  <TypeAware />
+  <Formatter />
+  <Everywhere />
+  <Limits />
+  <Faq id="bn-faq" items={faqs} title="Bun questions, answered" />
+  <NextSteps id="bn-next" items={nextSteps} title="Keep going" />
+  <Cta command={command} />
+</LandingLayout>
