@@ -1509,6 +1509,13 @@ const mockBun = (lintStatus = 0) => {
 
   const mockSpawn = mock(
     (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
+      if (args[0] === "--help") {
+        return {
+          status: 0,
+          stdout: "Commands:\n  lint     Lint JavaScript and TypeScript",
+        };
+      }
+
       if (args[1] === "--help") {
         return {
           status: 0,
@@ -1542,6 +1549,7 @@ describe("fix with Bun", () => {
     fix(["src/a.ts", "Dockerfile"], ["--type-aware"]);
 
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "--help"],
       ["bun", "lint", "--help", "--all"],
       ["bun", "lint", "--no-script", "--fix", "--type-aware", "src/a.ts"],
       [
@@ -1564,6 +1572,7 @@ describe("fix with Bun", () => {
     fix([], ["--staged"]);
 
     expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
+      ["--help"],
       ["lint", "--help", "--all"],
       ["lint", "--no-script", "--fix", "--staged", "."],
       [
@@ -1582,8 +1591,9 @@ describe("fix with Bun", () => {
 
     fix([], ["--unsafe"]);
 
-    const [, lintCall] = mockSpawn.mock.calls;
-    expect(lintCall[1]).toEqual([
+    // After the two capability probe calls.
+    const lintCall = mockSpawn.mock.calls.at(2);
+    expect(lintCall?.[1]).toEqual([
       "lint",
       "--no-script",
       "--fix-dangerously",

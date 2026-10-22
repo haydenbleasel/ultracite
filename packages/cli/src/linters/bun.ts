@@ -39,16 +39,29 @@ export const bunFileSelectionArgs = (passthrough: string[]): string[] =>
       arg === "--staged" || arg === "--changed" || arg.startsWith("--changed=")
   );
 
+// `  lint   Lint JavaScript and TypeScript, like ESLint` in `bun --help`'s
+// command column. Further in, under `run`, the help shows a random example
+// script name, which can be `lint`.
+const BUN_LINT_COMMAND_RE = /^ {2}lint\s/mu;
+
 const BUN_LINT_USAGE = "Usage: bun lint";
 
 /**
  * Whether the Bun on PATH has `bun lint` and `bun fmt`, with the
- * `--no-script` flag spawnBun relies on. A Bun from before the linter
- * reports `Script not found "lint"` instead of its usage, and the flag is
- * only listed with `--all`. `--help` reaches the linter even when the
- * project has a `lint` script, so this runs without spawnBun.
+ * `--no-script` flag spawnBun relies on. A Bun without the linter, which
+ * includes every release build so far (oven-sh/bun#46438), runs the
+ * project's `lint` script for `bun lint`, even with `--help`. So the command
+ * list in `bun --help` is checked first, and only a Bun that lists `lint` is
+ * asked for `bun lint --help --all`. That reaches the linter whatever
+ * scripts the project has, and is the only help that lists the flag.
  */
 export const hasBunLint = (): boolean => {
+  const commands = spawnSync("bun", ["--help"], { stdio: "pipe" }).stdout ?? "";
+
+  if (!BUN_LINT_COMMAND_RE.test(commands)) {
+    return false;
+  }
+
   const help =
     spawnSync("bun", ["lint", "--help", "--all"], { stdio: "pipe" }).stdout ??
     "";
