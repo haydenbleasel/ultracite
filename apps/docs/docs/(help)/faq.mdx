@@ -23,7 +23,7 @@ It depends on the provider. With the default Oxlint + Oxfmt, Oxlint lints JavaSc
 
 ## Q: Should I use Bun or Oxlint?
 
-They run the same configs. `bun lint` is a native reimplementation of Oxlint and `bun fmt` of Oxfmt, both built into Bun, so the Bun provider uses Ultracite's Oxlint presets and Oxfmt settings and installs nothing but `ultracite`. Pick Bun if your project already runs on a Bun that has them (1.4.4 or later) and you'd rather not install the Oxc toolchain. Pick Oxlint if you need the `jsdoc/*` or `vue/*` rules, which Bun doesn't have, or want new Oxlint rules as soon as Ultracite turns them on: Bun's rules are a snapshot of one Oxlint release, so it can lag behind. Either way, your editor runs Oxlint and Oxfmt, because Bun has no language server. See [Bun](/providers/bun) for the details.
+They run the same configs. `bun lint` is a native reimplementation of Oxlint and `bun fmt` of Oxfmt, both built into Bun, so the Bun provider uses Ultracite's Oxlint presets and Oxfmt settings and installs nothing but `ultracite`. Pick Bun if your project already runs on a Bun that has them (1.4.5 or later) and you'd rather not install the Oxc toolchain. Pick Oxlint if you need the `jsdoc/*` or `vue/*` rules, which Bun doesn't have, or want new Oxlint rules as soon as Ultracite turns them on: Bun's rules are a snapshot of one Oxlint release, so it can lag behind. Either way, your editor runs Oxlint and Oxfmt, because Bun has no language server. See [Bun](/providers/bun) for the details.
 
 ## Q: How often is Ultracite updated?
 

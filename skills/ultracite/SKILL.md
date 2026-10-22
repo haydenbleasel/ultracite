@@ -14,7 +14,7 @@ Check if `ultracite` is in `package.json` dependencies or devDependencies. Detec
 - `biome.json` / `biome.jsonc` → Biome
 - `eslint.config.*` (`.mjs`, `.js`, `.cjs`, `.ts`, `.mts`, `.cts`) → ESLint (with Prettier for formatting)
 - `oxlint.config.ts`, `oxlint.config.mts` or `.oxlintrc.json` → Oxlint (with `oxfmt.config.ts` or `oxfmt.config.mts` for formatting; init writes the `.mts` form in a package that isn't an ES module)
-- The same oxlint and oxfmt configs importing `defineConfig` from `ultracite/bun` → Bun, which runs them with `bun lint` and `bun fmt` (Bun 1.4.4 or later). `bunfig.toml` never decides the linter
+- The same oxlint and oxfmt configs importing `defineConfig` from `ultracite/bun` → Bun, which runs them with `bun lint` and `bun fmt` (Bun 1.4.5 or later). `bunfig.toml` never decides the linter
 
 ## CLI Commands
 

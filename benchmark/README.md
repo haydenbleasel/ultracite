@@ -12,7 +12,7 @@ Only the lint invocations are timed — all setup (installs, `init`, fixture cop
 
 `bun lint` and `bun fmt` ship with Bun itself, so the Bun project installs nothing but `ultracite`, and its runs use whichever `bun` is first on `PATH`. The harness prints that Bun's version, and skips the provider, with the reason in the output and the Step Summary, when:
 
-- the Bun on `PATH` has no linter Ultracite can run (`bun lint --help --all` doesn't list `--no-script`), as in Bun 1.4.3 and earlier, which includes the Bun CI uses;
+- the Bun on `PATH` has no linter Ultracite can run (`bun lint --help --all` doesn't list `--no-script`), as in Bun 1.4.4 and earlier, which includes the Bun CI uses (1.4.4 has `bun fmt`, but its `bun lint` runs a package.json script);
 - the build under test has no `--linter bun`, or in compare mode the base build doesn't, since there's nothing to compare against.
 
 To benchmark it locally on a Bun that's older than that, put a newer build first on `PATH` and run the harness with the Bun you have:
