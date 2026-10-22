@@ -8,4 +8,4 @@ Add Bun as a provider. `ultracite init --linter bun` sets a project up to lint w
 
 On Bun, `ultracite fix --staged` and `ultracite check --staged` pass `--staged` to both `bun lint` and `bun fmt`, so both work on just the staged files, and `fix` stages the files it changes again. `--changed` reaches both tools the same way. So the Husky hook `init --integrations husky` writes for a Bun project runs `ultracite fix --staged` in place of its staged-files script, and lint-staged isn't needed. Bun won't fix a file with both staged and unstaged changes, so the hook stops the commit until you stage the rest of that file or stash it.
 
-Requires Bun >= 1.4.4
+Requires Bun >= 1.4.5

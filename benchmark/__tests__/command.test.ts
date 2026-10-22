@@ -83,7 +83,7 @@ describe("assertRunnable", () => {
     ],
     [
       "Ultracite's Bun setup error",
-      "The Bun provider runs `bun lint` and `bun fmt`, which need Bun 1.4.4 or later.",
+      "The Bun provider runs `bun lint` and `bun fmt`, which need Bun 1.4.5 or later.",
       "stdout",
     ],
     [
