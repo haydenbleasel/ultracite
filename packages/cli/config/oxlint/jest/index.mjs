@@ -80,9 +80,6 @@ export default defineConfig({
         // Disabled: bun:test uses beforeEach hooks for mock.restore()
         "jest/no-hooks": "off",
 
-        // Disabled: bun:test mock factories return Promise.resolve/reject
-        "promise/prefer-await-to-then": "off",
-
         // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
       },

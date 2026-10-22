@@ -18,6 +18,9 @@ const overrideRules = {
   // oxlint's JS plugin bridge misreads module-scoped declarations (e.g. Astro
   // frontmatter) as implicit globals. Off in both linters to keep parity.
   "github/no-implicit-buggy-globals": "off",
+  // Same name-only match as promise/prefer-await-to-then, which is off for
+  // reporting non-promise APIs such as Zod's `.catch()` (#854).
+  "github/no-then": "off",
   "github/unescaped-html-literal": "off",
 };
 

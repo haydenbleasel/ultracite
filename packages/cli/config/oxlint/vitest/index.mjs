@@ -78,9 +78,6 @@ export default defineConfig({
         // Disabled: mock callbacks often need empty functions
         "no-empty-function": "off",
 
-        // Disabled: mock factories use Promise.resolve/reject (conflicts with require-await)
-        "promise/prefer-await-to-then": "off",
-
         // Disabled: conflicts with prefer-describe-function-title — function names
         "vitest/prefer-lowercase-title": "off",
 

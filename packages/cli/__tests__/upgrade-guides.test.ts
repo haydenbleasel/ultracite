@@ -258,7 +258,9 @@ describe("findPendingGuides", () => {
 
   test("lists every rule the ESLint type-aware presets run", () => {
     // The presets are imported in a child process: they load plugins that
-    // read node:fs, which this test suite mocks.
+    // read node:fs, which this test suite mocks. The rules the presets keep
+    // out of core only because types make them accurate still run without
+    // types, so a config that sets one doesn't need the type-aware preset.
     const presets = [
       "type-aware",
       ...["angular", "jest", "nestjs", "qwik", "tanstack", "vitest"].map(
@@ -268,11 +270,12 @@ describe("findPendingGuides", () => {
 
     const script = `
       const ids = new Set();
+      const { typeAwareOnlyRules } = await import("./config/eslint/core/rules/unicorn.mjs");
       for (const preset of ${JSON.stringify(presets)}) {
         const { default: config } = await import(\`./config/eslint/\${preset}/eslint.config.mjs\`);
         for (const block of config) {
           for (const id of Object.keys(block.rules ?? {})) {
-            if (id.includes("/")) ids.add(id);
+            if (id.includes("/") && !typeAwareOnlyRules.has(id)) ids.add(id);
           }
         }
       }

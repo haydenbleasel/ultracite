@@ -49,6 +49,9 @@ export default defineConfig({
     // Deliberately initializes with `undefined` so the test can assert
     // no-useless-undefined still fires once call arguments are skipped.
     "packages/cli/__tests__/fixtures/useless-undefined",
+    // Deliberately leaves a promise chain unhandled so the test can assert
+    // catch-or-return fires once prefer-await-to-then is off.
+    "packages/cli/__tests__/fixtures/promise-chains",
     // Blog research harnesses (see research/README.md). The fixtures are
     // third-party code, deliberately complex cases and agent output, and the
     // results are generated. The scripts aren't shipped, and lint autofixes

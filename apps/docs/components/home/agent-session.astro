@@ -1,6 +1,6 @@
 ---
 // A replay of a real agent session: the agent writes a component, Claude
-// Code's PostToolUse hook runs `ultracite fix --hook`, the 11 problems it
+// Code's PostToolUse hook runs `ultracite fix --hook`, the 10 problems it
 // can't fix go back to the agent, and the next run is clean. The diagnostics
 // and timings are what Ultracite's Oxlint core + React presets report for this
 // component (checked with oxlint 1.86 on an M1 Pro). The markup is the
@@ -12,9 +12,8 @@ const problems = [
   { at: "3:8", rule: "func-style" },
   { at: "3:8", rule: "function-component-definition" },
   { at: "4:38", rule: "no-explicit-any" },
+  { at: "7:5", rule: "catch-or-return" },
   { at: "7:25", rule: "exhaustive-deps" },
-  { at: "8:8", rule: "prefer-await-to-then" },
-  { at: "9:8", rule: "prefer-await-to-then" },
   { at: "10:6", rule: "exhaustive-effect-dependencies" },
   { at: "16:11", rule: "jsx-a11y/alt-text" },
   { at: "17:12", rule: "no-nested-ternary" },
@@ -26,6 +25,9 @@ const diff = [
   { line: "const [users, setUsers] = useState<any[]>([]);", sign: "-" },
   { line: "const [users, setUsers] = useState<User[]>([]);", sign: "+" },
   { line: "…", sign: " " },
+  { line: "      .then((data) => setUsers(data));", sign: "-" },
+  { line: "      .then((data) => setUsers(data))", sign: "+" },
+  { line: "      .catch(reportError);", sign: "+" },
   { line: "  }, []);", sign: "-" },
   { line: "  }, [teamId]);", sign: "+" },
   { line: "…", sign: " " },
@@ -107,7 +109,7 @@ const diff = [
                 aria-hidden="true"
                 class="hp-spinner text-panel-muted"></span><span
                 class="hp-hook-result text-signal"
-                >✕ 11 problems in user-list.tsx <span
+                >✕ 10 problems in user-list.tsx <span
                   class="whitespace-nowrap text-panel-muted">· 333 ms</span
                 ></span
               >
@@ -117,7 +119,7 @@ const diff = [
         <li class="flex gap-3" data-hp-step="4">
           <span aria-hidden="true" class="shrink-0">●</span>
           <p class="text-pretty font-sans text-[15px]/6 text-panel-foreground/90">
-            Fixing all 11: typing the users, adding <code
+            Fixing all 10: typing the users, reporting fetch errors, adding <code
               class="font-mono text-[13px]">teamId</code
             > to the effect dependencies, adding alt text, and replacing the loose
             comparisons and nested ternary with a lookup.

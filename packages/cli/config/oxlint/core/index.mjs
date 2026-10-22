@@ -17,7 +17,6 @@ export default defineConfig({
       ],
       rules: {
         "no-empty-function": "off",
-        "promise/prefer-await-to-then": "off",
       },
     },
     {
@@ -352,9 +351,9 @@ export default defineConfig({
     "oxc/uninvoked-array-callback": "error",
 
     // ── promise ────────────────────────────────────────────────────────
-    "promise/always-return": "off",
+    "promise/always-return": "error",
     "promise/avoid-new": "error",
-    "promise/catch-or-return": "off",
+    "promise/catch-or-return": "error",
     "promise/no-callback-in-promise": "error",
     "promise/no-multiple-resolved": "error",
     "promise/no-nesting": "error",
@@ -363,7 +362,11 @@ export default defineConfig({
     "promise/no-return-wrap": "error",
     "promise/param-names": "error",
     "promise/prefer-await-to-callbacks": "error",
-    "promise/prefer-await-to-then": "error",
+    // Matches `.then()`, `.catch()` and `.finally()` by name, so it reports
+    // non-promise APIs such as Zod's `.catch()` fallback, and has no type
+    // information to tell them apart (oxc-project/oxc#22161, #854).
+    // always-return and catch-or-return still check promise chains.
+    "promise/prefer-await-to-then": "off",
     "promise/prefer-catch": "error",
     "promise/spec-only": "error",
     "promise/valid-params": "error",

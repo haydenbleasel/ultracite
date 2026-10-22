@@ -11,13 +11,14 @@ const baseRules = Object.fromEntries(
 );
 
 // Overrides mirror the oxlint core config (config/oxlint/core/index.mjs),
-// which is the benchmark for rule decisions across linters. always-return
-// and catch-or-return are off there because prefer-await-to-then already
-// steers code away from .then() chains.
+// which is the benchmark for rule decisions across linters.
 const overrideRules = {
-  "promise/always-return": "off",
-  "promise/catch-or-return": "off",
   "promise/no-native": "off",
+  // Matches `.then()`, `.catch()` and `.finally()` by name, so it reports
+  // non-promise APIs such as Zod's `.catch()` fallback, and has no type
+  // information to tell them apart (oxc-project/oxc#22161, #854).
+  // always-return and catch-or-return still check promise chains.
+  "promise/prefer-await-to-then": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

@@ -48,22 +48,18 @@ const lines: Line[] = [
   { code: [["  useEffect(() => {"]] },
   {
     code: [
-      ["    fetch("],
+      ["    "],
+      ["fetch", "squiggle"],
+      ["("],
       ["`/api/teams/${", "string"],
       ["teamId", "squiggle"],
       ["}/users`", "string"],
       [")"],
     ],
-    problems: "exhaustive-deps",
+    problems: "catch-or-return · exhaustive-deps",
   },
-  {
-    code: [["      ."], ["then", "squiggle"], ["((res) => res.json())"]],
-    problems: "prefer-await-to-then",
-  },
-  {
-    code: [["      ."], ["then", "squiggle"], ["((data) => setUsers(data));"]],
-    problems: "prefer-await-to-then",
-  },
+  { code: [["      .then((res) => res.json())"]] },
+  { code: [["      .then((data) => setUsers(data));"]] },
   {
     code: [["  }, "], ["[]", "squiggle"], [");"]],
     problems: "exhaustive-effect-dependencies",
@@ -111,7 +107,7 @@ const tokenClass = {
   type: "text-syntax-type",
 };
 
-const problemCount = 11;
+const problemCount = 10;
 
 const families = [
   {

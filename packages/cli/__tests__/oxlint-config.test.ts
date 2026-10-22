@@ -513,6 +513,16 @@ describe("oxlint core config", () => {
       "initializer.ts",
     ]);
   });
+
+  // #854: prefer-await-to-then matches `.catch()` by name, so it flagged
+  // Zod's parse fallback and is off. catch-or-return still reports a promise
+  // chain that nothing handles.
+  test("allows non-promise .catch() but reports unhandled promise chains", () => {
+    const { flaggedBy } = lintFixture("promise-chains");
+
+    expect(flaggedBy("promise(prefer-await-to-then)")).toEqual([]);
+    expect(flaggedBy("promise(catch-or-return)")).toEqual(["unhandled.ts"]);
+  });
 });
 
 describe("oxlint vitest config", () => {

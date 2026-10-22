@@ -72,6 +72,11 @@ const typedModule = `${legacyVar}
 export const read = (input: string): unknown => JSON.parse(input);
 `;
 
+// A `.catch()` that isn't on a promise, like Zod's parse fallback (#854).
+const schemaFallback = `declare const schema: { catch: (value: string) => string };
+export const name = (): string => schema.catch("anonymous");
+`;
+
 const presets = {
   angular: {
     files: {
@@ -130,6 +135,17 @@ const markup = "<b>x</b>";
         expect: ["no-var"],
       },
       "src/esm-module.mts": { content: typedModule, expect: ["no-var"] },
+      "src/fallback.ts": {
+        // These match `.catch()` by name, so without type information they
+        // would flag a schema's fallback.
+        content: schemaFallback,
+        expect: [],
+        forbid: [
+          "github/no-then",
+          "promise/prefer-await-to-then",
+          "unicorn/prefer-await",
+        ],
+      },
       "src/index.html": {
         content: `<!doctype html>
 <html lang="en">
@@ -523,6 +539,19 @@ function PostPage() {
   },
   "type-aware": {
     files: {
+      "src/fallback.ts": {
+        // With types, unicorn/prefer-await skips a `.catch()` that isn't on a
+        // promise.
+        content: schemaFallback,
+        expect: [],
+        forbid: ["unicorn/prefer-await"],
+      },
+      "src/refresh.ts": {
+        content: `export const refresh = (url: string): Promise<unknown> =>
+  fetch(url).then((response) => response.json());
+`,
+        expect: ["unicorn/prefer-await"],
+      },
       "src/typed-module.ts": {
         // Type-aware rule: proves the project service supplies type
         // information.
@@ -820,10 +849,18 @@ const listenersWithoutTypes = (rule: Rule.RuleModule): number => {
  * Some of those also work from the syntax tree; the rest register no
  * listeners without a TypeScript program, so in core they would be on but do
  * nothing. Core must run only the first kind, and the SonarJS and Unicorn
- * rules the type-aware preset adds must be the second. (typescript-eslint's
- * split follows its own `disable-type-checked` list instead.)
+ * rules the type-aware preset adds must be the second, apart from the ones
+ * the unicorn rules keep out of core on purpose because they are only
+ * accurate with types. (typescript-eslint's split follows its own
+ * `disable-type-checked` list instead.)
  */
 const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
+  // SAFETY: the ESLint preset's unicorn module exports the rules it runs only
+  // with type information as a set of prefixed rule names.
+  const { typeAwareOnlyRules } = (await import(
+    path.join(here, "../config/eslint/core/rules/unicorn.mjs")
+  )) as { typeAwareOnlyRules: Set<string> };
+
   const core = await loadPreset("core");
   const withTypeAware = [...core, ...(await loadPreset("type-aware"))];
   const plugins = new Map<string, Rule.RuleModule>();
@@ -881,8 +918,9 @@ const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
   for (const [ruleId] of await rulesFor(withTypeAware)) {
     const added = !coreIds.has(ruleId);
     const ownSplit = ruleId.startsWith("@typescript-eslint/");
+    const typeAwareOnly = typeAwareOnlyRules.has(ruleId);
 
-    if (added && !ownSplit && needsTypes(ruleId) !== true) {
+    if (added && !ownSplit && !typeAwareOnly && needsTypes(ruleId) !== true) {
       failures.push(
         `type-aware: ${ruleId} works without type information; keep it in core`
       );

@@ -67,12 +67,18 @@ const overrideRules = {
 
 const config = Object.assign(baseRules, overrideRules);
 
+// prefer-await runs without type information, but then it matches
+// `.then()`, `.catch()` and `.finally()` by name and reports non-promise APIs
+// such as Zod's `.catch()` fallback (#854). With a TypeScript program it
+// skips receivers that aren't promises, so it runs only there.
+export const typeAwareOnlyRules = new Set(["unicorn/prefer-await"]);
+
 // The rules unicorn marks `meta.docs.requiresTypeChecking` register nothing
 // without a TypeScript program, so they run only with the type-aware preset.
 const needsTypes = (key) => {
   const { docs } = rules[key.slice("unicorn/".length)]?.meta ?? {};
 
-  return docs?.requiresTypeChecking === true;
+  return docs?.requiresTypeChecking === true || typeAwareOnlyRules.has(key);
 };
 
 const pickRules = (typeChecked) =>

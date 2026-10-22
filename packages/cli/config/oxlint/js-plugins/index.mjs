@@ -230,7 +230,9 @@ const config = defineConfig({
     "github/no-implicit-buggy-globals": "off",
     "github/no-inner-html": "error",
     "github/no-innerText": "error",
-    "github/no-then": "error",
+    // Same name-only match as promise/prefer-await-to-then, which is off for
+    // reporting non-promise APIs such as Zod's `.catch()` (#854).
+    "github/no-then": "off",
     "github/no-useless-passive": "error",
     "github/prefer-observers": "error",
     "github/require-passive-events": "error",

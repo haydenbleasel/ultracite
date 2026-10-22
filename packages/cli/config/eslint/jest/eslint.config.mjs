@@ -51,8 +51,6 @@ const jest = [
       ...jestRules,
       // Mock callbacks often need empty functions
       "no-empty-function": "off",
-      // Mock factories use Promise.resolve/reject (conflicts with require-await)
-      "promise/prefer-await-to-then": "off",
     },
     settings: {
       jest: {
