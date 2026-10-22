@@ -50,9 +50,11 @@ export const isOxlintNpmJsPlugin = (
 /**
  * The first Bun release with `bun lint` and `bun fmt`, which the Bun
  * provider runs. Bun isn't an npm dependency of the project, so `ultracite
- * doctor` and the Bun commands check the installed version against this.
+ * doctor` and the Bun commands name this version when the Bun on PATH can't
+ * run them. Bun 1.4.4 shipped `bun fmt` but kept `bun lint` to canary builds
+ * (oven-sh/bun#46438), so this is the earliest release that could have both.
  */
-export const MIN_BUN_VERSION = "1.4.4";
+export const MIN_BUN_VERSION = "1.4.5";
 
 /**
  * The Oxlint toolchain `init` installs and `upgrade` re-syncs, at the ranges

@@ -17,7 +17,7 @@ You can optionally pass the following flags to the `init` command:
 
 | Flag | Description | Options |
 | --- | --- | --- |
-| `--linter` | The linting toolchain to use. When omitted and prompts are skipped, init keeps the linter the project already uses, or picks `oxlint` for a project without one. `bun` runs `bun lint` and `bun fmt`, which need Bun 1.4.4 or later. | `oxlint`, `biome`, `eslint`, `bun` |
+| `--linter` | The linting toolchain to use. When omitted and prompts are skipped, init keeps the linter the project already uses, or picks `oxlint` for a project without one. `bun` runs `bun lint` and `bun fmt`, which need Bun 1.4.5 or later. | `oxlint`, `biome`, `eslint`, `bun` |
 | `--pm` | The package manager to use. | `pnpm`, `bun`, `yarn`, `npm`, `deno`, `nub`, `aube` |
 | `--frameworks` | The frameworks to configure. | Space-separated: `react`, `next`, `solid`, `vue`, `svelte`, `qwik`, `remix`, `tanstack`, `angular`, `astro`, `nestjs`, `jest`, `vitest`, `cypress`, `storybook` |
 | `--workspace-framework` | Frameworks for one workspace of a monorepo, as `<path>=<framework>`. Writes a config in that workspace that extends the root config. See [Monorepos](/docs/monorepos#different-frameworks-per-workspace). | Space-separated: `apps/web=react`, `apps/docs=astro` |

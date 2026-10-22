@@ -27,9 +27,9 @@ npx ultracite upgrade
 
 If the versions already line up, the stale rule usually comes from your own overrides — check your `biome.jsonc` (or ESLint/Oxlint config) for a rule that was renamed or moved between linter releases.
 
-## "The Bun provider runs `bun lint` and `bun fmt`, which need Bun 1.4.4 or later."
+## "The Bun provider runs `bun lint` and `bun fmt`, which need Bun 1.4.5 or later."
 
-`bun lint` and `bun fmt` are new in Bun 1.4.4. An older Bun takes `lint` for a `package.json` script and fails with `Script not found "lint"`, and Ultracite runs them with `--no-script`, which some early builds of `bun lint` don't have, so Ultracite checks first and stops with this message. Upgrade Bun with `bun upgrade` (or the installer you used), then check with `npx ultracite doctor`, which reports the Bun it finds. In CI, raise the Bun version in your setup step, such as `bun-version` for `oven-sh/setup-bun`.
+`bun lint` is new in Bun 1.4.5 (1.4.4 has only `bun fmt`). An older Bun takes `lint` for a `package.json` script, and runs yours or fails with `Script not found "lint"`. Ultracite also runs both tools with `--no-script`, which some early canary builds of `bun lint` don't have. So Ultracite checks `bun --help` first, without running any script, and stops with this message. Upgrade Bun with `bun upgrade` (or the installer you used), then check with `npx ultracite doctor`, which reports the Bun it finds. In CI, raise the Bun version in your setup step, such as `bun-version` for `oven-sh/setup-bun`.
 
 ## "`bun lint` runs my `lint` script instead of linting."
 

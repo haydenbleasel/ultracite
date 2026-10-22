@@ -144,7 +144,7 @@ Alongside the config checks, `doctor` compares the linter and formatter installe
 
 For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both.
 
-For Bun projects, `doctor` checks that the Bun on your `PATH` has `bun lint` and `bun fmt` (Bun 1.4.4 or later), and that both configs are there. It warns when `package.json` has a `lint` or `fmt` script, which `bun lint` and `bun fmt` would run instead of linting, and when `bunfig.toml` has `[lint]` or `[fmt]` settings: Bun applies them on top of `oxlint.config.ts` and `oxfmt.config.ts`, but the Oxc extension doesn't read them, so your editor and `ultracite check` would disagree. Keep overrides in the two config files.
+For Bun projects, `doctor` checks that the Bun on your `PATH` has `bun lint` and `bun fmt` (Bun 1.4.5 or later), and that both configs are there. It warns when `package.json` has a `lint` or `fmt` script, which `bun lint` and `bun fmt` would run instead of linting, and when `bunfig.toml` has `[lint]` or `[fmt]` settings: Bun applies them on top of `oxlint.config.ts` and `oxfmt.config.ts`, but the Oxc extension doesn't read them, so your editor and `ultracite check` would disagree. Keep overrides in the two config files.
 
 Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's version.
 
