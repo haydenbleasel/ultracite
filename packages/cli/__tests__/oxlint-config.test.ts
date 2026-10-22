@@ -502,6 +502,17 @@ describe("oxlint core config", () => {
       "commonjs.astro",
     ]);
   });
+
+  // #851: the rule can't see parameter types, so it skips call arguments (a
+  // required `T | undefined` parameter needs an explicit `undefined`) but
+  // keeps its other checks.
+  test("allows undefined arguments but still reports useless initializers", () => {
+    const { flaggedBy } = lintFixture("useless-undefined");
+
+    expect(flaggedBy("unicorn(no-useless-undefined)")).toEqual([
+      "initializer.ts",
+    ]);
+  });
 });
 
 describe("oxlint vitest config", () => {

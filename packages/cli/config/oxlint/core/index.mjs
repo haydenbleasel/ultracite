@@ -554,7 +554,12 @@ export default defineConfig({
     "unicorn/no-useless-promise-resolve-reject": "error",
     "unicorn/no-useless-spread": "error",
     "unicorn/no-useless-switch-case": "error",
-    "unicorn/no-useless-undefined": "error",
+    // A required parameter typed `T | undefined` has to be passed `undefined`
+    // explicitly, and the rule's autofix deletes it into a TS2554 error
+    // (#851). The rule can't see parameter types, so skip call arguments.
+    // Not a TypeScript-only override: oxlint applies a preset's overrides
+    // after the user's own `rules`, so it would undo their settings.
+    "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
     "unicorn/no-zero-fractions": "error",
     // Disabled due to https://github.com/oxc-project/oxc/issues/21949
     "unicorn/number-literal-case": "off",
