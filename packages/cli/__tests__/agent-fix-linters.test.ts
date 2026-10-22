@@ -396,6 +396,13 @@ describe("agent-fix linter adapters", () => {
 
     const mockSpawn = mock(
       (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
+        if (args[0] === "--help") {
+          return {
+            status: 0,
+            stdout: "Commands:\n  lint     Lint JavaScript and TypeScript",
+          };
+        }
+
         if (args[1] === "--help") {
           return {
             status: 0,
@@ -418,6 +425,7 @@ describe("agent-fix linter adapters", () => {
     );
 
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "--help"],
       ["bun", "lint", "--help", "--all"],
       // The first fix pass reports, so a second follows, as with Oxlint.
       ["bun", "lint", "--no-script", "--fix-dangerously", "src/bad.ts"],

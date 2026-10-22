@@ -1,6 +1,44 @@
 import { describe, expect, test } from "bun:test";
 
-import { acceptsBunLinter, linterChoices, printsUsableBunLint } from "../bun";
+import {
+  acceptsBunLinter,
+  linterChoices,
+  listsBunLintCommand,
+  printsUsableBunLint,
+} from "../bun";
+
+describe("listsBunLintCommand", () => {
+  test("accepts a Bun that lists the lint command", () => {
+    const help = [
+      "Commands:",
+      "  run       ./my-script.ts       Execute a file with Bun",
+      "            dev                  Run a package.json script",
+      "  check                          Type check a TypeScript project",
+      "  lint                           Lint JavaScript and TypeScript, like ESLint",
+      "  fmt                            Format JavaScript and TypeScript, like Prettier",
+    ].join("\n");
+
+    expect(listsBunLintCommand(help)).toBe(true);
+  });
+
+  // Bun 1.4.4 has `bun fmt` but not `bun lint`, and the example script under
+  // `run` is picked at random.
+  test("rejects a Bun whose help shows lint only as an example script", () => {
+    const help = [
+      "Commands:",
+      "  run       ./my-script.ts       Execute a file with Bun",
+      "            lint                 Run a package.json script",
+      "  check                          Type check a TypeScript project",
+      "  fmt                            Format JavaScript and TypeScript, like Prettier",
+    ].join("\n");
+
+    expect(listsBunLintCommand(help)).toBe(false);
+  });
+
+  test("rejects no output", () => {
+    expect(listsBunLintCommand("")).toBe(false);
+  });
+});
 
 describe("printsUsableBunLint", () => {
   test("accepts a Bun whose linter has --no-script", () => {

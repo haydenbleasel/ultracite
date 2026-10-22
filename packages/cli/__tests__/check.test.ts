@@ -11,22 +11,34 @@ import { STYLELINT_MISSING_MESSAGE } from "../src/run-command";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
-// A Bun with `bun lint` prints its usage, `--no-script` among its flags, for
-// `bun lint --help --all`; an older one reports a missing "lint" script.
+// A Bun with `bun lint` lists the command in `bun --help`, and prints its
+// usage, `--no-script` among its flags, for `bun lint --help --all`.
+const BUN_HELP =
+  "Commands:\n  check    Type check a TypeScript project\n  lint     Lint JavaScript and TypeScript, like ESLint\n  fmt      Format JavaScript and TypeScript, like Prettier";
+
+// A release build, such as Bun 1.4.4, has `bun fmt` but no `bun lint`. The
+// example script under `run` is picked at random.
+const BUN_HELP_WITHOUT_LINT =
+  "Commands:\n  run      ./my-script.ts   Execute a file with Bun\n           lint             Run a package.json script\n  fmt      Format JavaScript and TypeScript, like Prettier";
+
+const BUN_LINT_HELP =
+  "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script";
+
 const mockBunSpawn = (
   run: (args: string[]) => { status: number } = () => ({ status: 0 })
 ) => {
   resetBunCapabilityCache();
 
   const mockSpawn = mock(
-    (_cmd: string, args: string[], _opts: SpawnSyncOptions) =>
-      args[1] === "--help"
-        ? {
-            status: 0,
-            stdout:
-              "Usage: bun lint [flags]\n      --no-script  Run the linter even if the project has a lint script",
-          }
-        : run(args)
+    (_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
+      if (args[0] === "--help") {
+        return { status: 0, stdout: BUN_HELP };
+      }
+
+      return args[1] === "--help"
+        ? { status: 0, stdout: BUN_LINT_HELP }
+        : run(args);
+    }
   );
 
   mock.module("../src/spawn-sync", () => ({
@@ -788,6 +800,7 @@ describe("check", () => {
     check(["src/index.ts", "README.md"], ["--type-aware"]);
 
     expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "--help"],
       ["bun", "lint", "--help", "--all"],
       [
         "bun",
@@ -811,6 +824,7 @@ describe("check", () => {
     check([], ["--changed=origin/dev", "--type-aware"]);
 
     expect(mockSpawn.mock.calls.map(([, args]) => args)).toEqual([
+      ["--help"],
       ["lint", "--help", "--all"],
       [
         "fmt",
@@ -831,7 +845,8 @@ describe("check", () => {
 
     check();
 
-    const [, ...toolCalls] = mockSpawn.mock.calls;
+    // The first two calls are the capability probe.
+    const toolCalls = mockSpawn.mock.calls.slice(2);
     expect(toolCalls.map(([, args]) => args.slice(0, 2))).toEqual([
       ["fmt", "--no-script"],
       ["lint", "--no-script"],
@@ -852,9 +867,12 @@ describe("check", () => {
     resetBunCapabilityCache();
 
     mock.module("../src/spawn-sync", () => ({
-      spawnSync: mock(() => ({
+      spawnSync: mock((_cmd: string, args: string[]) => ({
         status: 0,
-        stdout: "Usage: bun lint [flags]\n      --threads <n>",
+        stdout:
+          args[0] === "--help"
+            ? BUN_HELP
+            : "Usage: bun lint [flags]\n      --threads <n>",
       })),
     }));
     mock.module("../src/utils", () => ({
@@ -864,13 +882,16 @@ describe("check", () => {
     expect(() => check()).toThrow(UltraciteSetupError);
   });
 
-  test("fails with a setup error when Bun has no bun lint", () => {
+  // Such a Bun runs the project's `lint` script for any `bun lint`, so the
+  // probe must never get that far.
+  test("fails with a setup error, and runs no lint script, when Bun has no bun lint", () => {
     resetBunCapabilityCache();
 
-    const mockSpawn = mock(() => ({
-      status: 1,
-      stderr: 'error: Script not found "lint"',
-    }));
+    const mockSpawn = mock((_cmd: string, args: string[]) =>
+      args[0] === "--help"
+        ? { status: 0, stdout: BUN_HELP_WITHOUT_LINT }
+        : { status: 0, stdout: "$ next lint" }
+    );
 
     mock.module("../src/spawn-sync", () => ({
       spawnSync: mockSpawn,
@@ -881,7 +902,9 @@ describe("check", () => {
 
     expect(() => check()).toThrow(UltraciteSetupError);
     expect(() => check()).toThrow(/need Bun \d+\.\d+\.\d+ or later/u);
-    // Only the capability probe ran, once: the answer is cached.
-    expect(mockSpawn).toHaveBeenCalledTimes(1);
+    // Only `bun --help` ran, once: the answer is cached.
+    expect(mockSpawn.mock.calls.map(([cmd, args]) => [cmd, ...args])).toEqual([
+      ["bun", "--help"],
+    ]);
   });
 });
