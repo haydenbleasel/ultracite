@@ -1283,7 +1283,17 @@ const mockBunProject = ({
   mock.module("../src/spawn-sync", () => ({
     spawnSync: mock((_cmd: string, args: string[], _opts: SpawnSyncOptions) => {
       if (args[0] === "--version") {
-        return { status: 0, stdout: "1.4.4\n" };
+        return { status: 0, stdout: bunLint ? "1.4.4-canary.1\n" : "1.4.4\n" };
+      }
+
+      // Bun 1.4.4 has `bun fmt` but no `bun lint`.
+      if (args[0] === "--help") {
+        return {
+          status: 0,
+          stdout: bunLint
+            ? "Commands:\n  lint     Lint JavaScript and TypeScript\n  fmt      Format"
+            : "Commands:\n  fmt      Format",
+        };
       }
 
       return bunLint

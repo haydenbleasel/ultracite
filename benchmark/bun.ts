@@ -8,6 +8,18 @@ import { spawnSync } from "node:child_process";
 /** How `bun lint --help` starts on a Bun that has the linter. */
 export const BUN_LINT_USAGE = "Usage: bun lint";
 
+// `lint` in `bun --help`'s command column. Further in, under `run`, the help
+// shows a random example script name, which can be `lint`.
+const BUN_LINT_COMMAND_RE = /^ {2}lint\s/mu;
+
+/**
+ * Whether `bun --help` lists `lint` as a command. A Bun without the linter,
+ * which includes every release build so far, runs a package.json `lint`
+ * script for `bun lint`, even with `--help`, so this is checked first.
+ */
+export const listsBunLintCommand = (helpOutput: string): boolean =>
+  BUN_LINT_COMMAND_RE.test(helpOutput);
+
 /** The flag Ultracite runs `bun lint` and `bun fmt` with. */
 export const NO_SCRIPT_FLAG = "--no-script";
 
@@ -50,8 +62,9 @@ export interface BunOnPath {
 }
 
 /**
- * Check the Bun on PATH for a `bun lint` Ultracite can run. `--help` reaches
- * the linter even where a package.json has a `lint` script.
+ * Check the Bun on PATH for a `bun lint` Ultracite can run. Once `bun --help`
+ * lists the command, `bun lint --help` reaches the linter even where a
+ * package.json has a `lint` script.
  */
 export const findBunOnPath = (cwd: string): BunOnPath => {
   const revision = spawnSync("bun", ["--revision"], {
@@ -64,6 +77,15 @@ export const findBunOnPath = (cwd: string): BunOnPath => {
   }
 
   const version = revision.stdout.trim();
+
+  const commands = spawnSync("bun", ["--help"], { cwd, encoding: "utf-8" });
+
+  if (!listsBunLintCommand(commands.stdout ?? "")) {
+    return {
+      missing: `Bun ${version} on PATH has no \`bun lint\` (\`bun --help\` doesn't list it)`,
+      revision: version,
+    };
+  }
 
   const help = spawnSync("bun", ["lint", "--help", "--all"], {
     cwd,
