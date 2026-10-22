@@ -8,8 +8,8 @@ import Terminal from "../../landing/terminal.astro";
 // for it, run for real on 2026-10-14 and 15: Bun 1.4.2 for the old-Bun lines, Bun
 // 1.4.4-canary.1 for the rest, and `ultracite doctor` from Ultracite 8.0.1
 // with the Bun provider. The Tailwind card and the scripts warning follow
-// oven-sh/bun#45482 and doctor.ts as of 2026-10-16, ahead of a canary that
-// has that PR: rerun them when one does.
+// oven-sh/bun#45482, and were rerun on 2026-10-22 on Bun
+// 1.4.4-canary.1+963452075, the first canary checked that has it.
 const limits: { body: string; output?: string; title: string; topic: string }[] = [
   {
     body: "Bun has no version of Oxlint’s `jsdoc` and `vue` plugins. `ultracite/bun` leaves their rules out of the presets you extend, which is core’s 19 `jsdoc` rules and all of the Vue preset. One you turn on yourself doesn’t run, and with the plugin in `plugins`, `bun lint` exits with code 2.",
