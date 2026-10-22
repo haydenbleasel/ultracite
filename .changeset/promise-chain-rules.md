@@ -1,5 +1,0 @@
----
-"ultracite": patch
----
-
-Turn off `promise/prefer-await-to-then` in `ultracite/oxlint/core` and `ultracite/eslint/core`, and `github/no-then` in `ultracite/oxlint/js-plugins` and `ultracite/eslint/core`. Both rules match `.then()`, `.catch()` and `.finally()` by method name, without type information, so they flagged APIs that aren't promises, such as [Zod's `.catch()` fallback](https://zod.dev/api#catch). They also flagged a fire-and-forget promise given a `.catch()` handler. Oxlint closed the false positive as [not planned](https://github.com/oxc-project/oxc/issues/22161). `promise/always-return` and `promise/catch-or-return` are now on in both presets, so an unhandled promise chain is still reported. In ESLint, `unicorn/prefer-await` moves to `ultracite/eslint/type-aware`, where it uses type information to skip calls that aren't on a promise. The test-file overrides that turned `promise/prefer-await-to-then` off in the jest and vitest presets are gone, since the rule is off everywhere.
