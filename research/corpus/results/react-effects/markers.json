@@ -1,0 +1,1862 @@
+{
+  "generated": "2026-10-24",
+  "note": "Directive comments in every measured file. A dependency-rule suppression names react-hooks/exhaustive-deps, react/exhaustive-deps (Oxlint's spelling) or Biome's useExhaustiveDependencies. `hooks` is the hook the directive covers (next line, same line, or for a block or file-wide disable every hook after it), with whether each Ultracite linter's dependency rule flags it raw (disables neutralised) and reported. `nearby` is a plain comment on the three lines above or on the same line.",
+  "pooled": {
+    "core": {
+      "dependencyRule": {
+        "n": 12,
+        "per100DepHooks": 3.1,
+        "per100Effects": 5.9,
+        "withNearbyComment": 3,
+        "withReason": 0,
+        "withReasonOrComment": 3
+      },
+      "depHooks": 384,
+      "directives": 426,
+      "effects": 204,
+      "topRules": [
+        [
+          "@typescript-eslint/no-explicit-any",
+          141
+        ],
+        [
+          "import/no-extraneous-dependencies",
+          31
+        ],
+        [
+          "@typescript-eslint/no-non-null-assertion",
+          23
+        ],
+        [
+          "@next/internal/no-ambiguous-jsx",
+          20
+        ],
+        [
+          "local/code-no-any-casts",
+          20
+        ],
+        [
+          "@next/internal/typechecked-require",
+          19
+        ],
+        [
+          "no-restricted-imports",
+          14
+        ],
+        [
+          "react-hooks/rules-of-hooks",
+          14
+        ],
+        [
+          "@typescript-eslint/no-unused-vars",
+          13
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          12
+        ],
+        [
+          "no-control-regex",
+          11
+        ],
+        [
+          "@typescript-eslint/ban-ts-comment",
+          11
+        ],
+        [
+          "no-console",
+          9
+        ],
+        [
+          "n/no-unsupported-features/node-builtins",
+          8
+        ],
+        [
+          "no-restricted-syntax",
+          7
+        ],
+        [
+          "eqeqeq",
+          6
+        ],
+        [
+          "ban/ban",
+          5
+        ],
+        [
+          "(all rules)",
+          5
+        ],
+        [
+          "@typescript-eslint/no-this-alias",
+          5
+        ],
+        [
+          "no-loop-func",
+          5
+        ],
+        [
+          "@typescript-eslint/no-namespace",
+          4
+        ],
+        [
+          "@typescript-eslint/no-empty-function",
+          4
+        ],
+        [
+          "regexp/no-super-linear-backtracking",
+          4
+        ],
+        [
+          "@typescript-eslint/switch-exhaustiveness-check",
+          4
+        ],
+        [
+          "@typescript-eslint/no-shadow",
+          4
+        ]
+      ]
+    },
+    "react": {
+      "dependencyRule": {
+        "n": 89,
+        "per100DepHooks": 4.2,
+        "per100Effects": 10.4,
+        "withNearbyComment": 13,
+        "withReason": 4,
+        "withReasonOrComment": 16
+      },
+      "depHooks": 2119,
+      "directives": 233,
+      "effects": 855,
+      "topRules": [
+        [
+          "react-hooks/exhaustive-deps",
+          89
+        ],
+        [
+          "react/react-compiler",
+          76
+        ],
+        [
+          "react-hooks/rules-of-hooks",
+          22
+        ],
+        [
+          "@typescript-eslint/no-unused-vars",
+          10
+        ],
+        [
+          "react/display-name",
+          7
+        ],
+        [
+          "@typescript-eslint/no-explicit-any",
+          7
+        ],
+        [
+          "max-depth",
+          5
+        ],
+        [
+          "(all rules)",
+          5
+        ],
+        [
+          "import/no-anonymous-default-export",
+          4
+        ],
+        [
+          "jsx-a11y/role-has-required-aria-props",
+          3
+        ],
+        [
+          "rsp-rules/pure-render",
+          3
+        ],
+        [
+          "@tanstack/query/exhaustive-deps",
+          3
+        ],
+        [
+          "rsp-rules/no-non-composing-event-listener",
+          2
+        ],
+        [
+          "no-self-compare",
+          1
+        ],
+        [
+          "jsx-a11y/label-has-associated-control",
+          1
+        ],
+        [
+          "shadcn/no-arbitrary-values",
+          1
+        ],
+        [
+          "react/no-unstable-nested-components",
+          1
+        ]
+      ]
+    }
+  },
+  "repos": {
+    "zod": {
+      "blanket": 1,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": null,
+        "per100Effects": null,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 13,
+      "effects": 0,
+      "depHooks": 0,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "ban/ban",
+          5
+        ],
+        [
+          "@typescript-eslint/no-this-alias",
+          2
+        ],
+        [
+          "format",
+          2
+        ],
+        [
+          "lint/suspicious/noShadowRestrictedNames",
+          1
+        ],
+        [
+          "lint/complexity/noUselessEmptyExport",
+          1
+        ],
+        [
+          "(all rules)",
+          1
+        ],
+        [
+          "lint/style/useShorthandFunctionType",
+          1
+        ]
+      ],
+      "totalRulesNamed": 7
+    },
+    "hono": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": 0,
+        "per100Effects": 0,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 132,
+      "effects": 3,
+      "depHooks": 11,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "@typescript-eslint/no-explicit-any",
+          113
+        ],
+        [
+          "@typescript-eslint/ban-ts-comment",
+          7
+        ],
+        [
+          "no-control-regex",
+          5
+        ],
+        [
+          "@typescript-eslint/no-this-alias",
+          3
+        ],
+        [
+          "no-async-promise-executor",
+          2
+        ],
+        [
+          "@typescript-eslint/no-namespace",
+          1
+        ],
+        [
+          "no-unsafe-optional-chaining",
+          1
+        ]
+      ],
+      "totalRulesNamed": 7
+    },
+    "trpc": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": "eslint.config.js",
+          "line": 4,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L4",
+          "text": "import * as reactHooks from 'eslint-plugin-react-hooks';"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 127,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L127",
+          "text": "'react-hooks/refs': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 128,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L128",
+          "text": "'react-hooks/immutability': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 129,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L129",
+          "text": "'react-hooks/set-state-in-effect': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 130,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L130",
+          "text": "'react-hooks/use-memo': 'off',"
+        },
+        {
+          "file": "eslint.config.js",
+          "line": 131,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L131",
+          "text": "'react-hooks/preserve-manual-memoization': 'off',"
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 2,
+        "per100DepHooks": 9.1,
+        "per100Effects": 40,
+        "scopes": {
+          "next-line": 2
+        },
+        "stillFlaggedRaw": {
+          "biome": 2,
+          "eslint": 2,
+          "oxlint": 2
+        },
+        "tools": {
+          "eslint-disable-next-line": 2
+        },
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": 7,
+      "directives": 63,
+      "effects": 5,
+      "depHooks": 22,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "@typescript-eslint/no-non-null-assertion",
+          23
+        ],
+        [
+          "no-restricted-imports",
+          13
+        ],
+        [
+          "no-restricted-syntax",
+          7
+        ],
+        [
+          "@typescript-eslint/ban-ts-comment",
+          4
+        ],
+        [
+          "no-console",
+          2
+        ],
+        [
+          "max-params",
+          2
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          2
+        ],
+        [
+          "@typescript-eslint/no-base-to-string",
+          2
+        ],
+        [
+          "@typescript-eslint/dot-notation",
+          2
+        ],
+        [
+          "@typescript-eslint/no-namespace",
+          2
+        ],
+        [
+          "@typescript-eslint/unbound-method",
+          1
+        ],
+        [
+          "@typescript-eslint/naming-convention",
+          1
+        ],
+        [
+          "@typescript-eslint/no-unsafe-function-type",
+          1
+        ],
+        [
+          "@typescript-eslint/no-empty-function",
+          1
+        ]
+      ],
+      "totalRulesNamed": 14
+    },
+    "vite": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": null,
+        "per100Effects": null,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 22,
+      "effects": 0,
+      "depHooks": 0,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "n/no-unsupported-features/node-builtins",
+          8
+        ],
+        [
+          "no-console",
+          5
+        ],
+        [
+          "@typescript-eslint/no-empty-function",
+          3
+        ],
+        [
+          "eqeqeq",
+          3
+        ],
+        [
+          "@typescript-eslint/no-unused-vars",
+          1
+        ],
+        [
+          "regexp/no-unused-capturing-group",
+          1
+        ],
+        [
+          "no-control-regex",
+          1
+        ]
+      ],
+      "totalRulesNamed": 7
+    },
+    "astro": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": null,
+        "per100Effects": null,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 19,
+      "effects": 0,
+      "depHooks": 0,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "regexp/no-super-linear-backtracking",
+          4
+        ],
+        [
+          "@typescript-eslint/switch-exhaustiveness-check",
+          4
+        ],
+        [
+          "@typescript-eslint/no-empty-object-type",
+          3
+        ],
+        [
+          "lint/suspicious/noConsole",
+          3
+        ],
+        [
+          "no-control-regex",
+          1
+        ],
+        [
+          "regexp/no-unused-capturing-group",
+          1
+        ],
+        [
+          "@typescript-eslint/no-unsafe-function-type",
+          1
+        ],
+        [
+          "@typescript-eslint/prefer-for-of",
+          1
+        ],
+        [
+          "@typescript-eslint/no-namespace",
+          1
+        ]
+      ],
+      "totalRulesNamed": 9
+    },
+    "excalidraw": {
+      "blanket": 1,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": ".eslintrc.json",
+          "line": 2,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/.eslintrc.json#L2",
+          "text": "\"extends\": [\"@excalidraw/eslint-config\", \"react-app\"],"
+        },
+        {
+          "file": ".eslintrc.json",
+          "line": 36,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/.eslintrc.json#L36",
+          "text": "\"react/jsx-no-target-blank\": ["
+        },
+        {
+          "file": "package.json",
+          "line": 26,
+          "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/package.json#L26",
+          "text": "\"eslint-config-react-app\": \"7.0.1\","
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 9,
+        "per100DepHooks": 4.4,
+        "per100Effects": 7.6,
+        "scopes": {
+          "next-line": 8,
+          "line": 1
+        },
+        "stillFlaggedRaw": {
+          "biome": 8,
+          "eslint": 8,
+          "oxlint": 8
+        },
+        "tools": {
+          "eslint-disable-next-line": 8,
+          "eslint-disable-line": 1
+        },
+        "withNearbyComment": 3,
+        "withReason": 0,
+        "withReasonOrComment": 3
+      },
+      "dependencyRuleRank": 1,
+      "directives": 25,
+      "effects": 118,
+      "depHooks": 205,
+      "otherHookRules": {
+        "byRule": {
+          "react-hooks/rules-of-hooks": 1
+        },
+        "n": 1
+      },
+      "topRules": [
+        [
+          "react-hooks/exhaustive-deps",
+          9
+        ],
+        [
+          "@typescript-eslint/no-unused-vars",
+          3
+        ],
+        [
+          "no-else-return",
+          2
+        ],
+        [
+          "no-console",
+          2
+        ],
+        [
+          "prettier/prettier",
+          1
+        ],
+        [
+          "react-hooks/rules-of-hooks",
+          1
+        ],
+        [
+          "no-lonely-if",
+          1
+        ],
+        [
+          "react/jsx-no-target-blank",
+          1
+        ],
+        [
+          "no-loop-func",
+          1
+        ],
+        [
+          "@typescript-eslint/no-restricted-imports",
+          1
+        ],
+        [
+          "no-fallthrough",
+          1
+        ],
+        [
+          "no-restricted-imports",
+          1
+        ],
+        [
+          "(all rules)",
+          1
+        ]
+      ],
+      "totalRulesNamed": 13
+    },
+    "next.js": {
+      "blanket": 3,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": "eslint.config.mjs",
+          "line": 3,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L3",
+          "text": "import reactHooks from 'eslint-plugin-react-hooks'"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 42,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L42",
+          "text": "'react-hooks': reactHooks,"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 236,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L236",
+          "text": "'react-hooks/exhaustive-deps': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 275,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L275",
+          "text": "'react-hooks/rules-of-hooks': 'error',"
+        },
+        {
+          "file": "eslint.config.mjs",
+          "line": 593,
+          "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L593",
+          "text": "'react-hooks/exhaustive-deps': 'error',"
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 1,
+        "per100DepHooks": 0.7,
+        "per100Effects": 1.3,
+        "scopes": {
+          "next-line": 1
+        },
+        "stillFlaggedRaw": {
+          "biome": 1,
+          "eslint": 1,
+          "oxlint": 1
+        },
+        "tools": {
+          "eslint-disable-next-line": 1
+        },
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": 15,
+      "directives": 124,
+      "effects": 78,
+      "depHooks": 146,
+      "otherHookRules": {
+        "byRule": {
+          "react-hooks/rules-of-hooks": 13,
+          "react-hooks/set-state-in-effect": 3,
+          "react-hooks/refs": 2,
+          "react-hooks/immutability": 1
+        },
+        "n": 19
+      },
+      "topRules": [
+        [
+          "import/no-extraneous-dependencies",
+          31
+        ],
+        [
+          "@next/internal/no-ambiguous-jsx",
+          20
+        ],
+        [
+          "@next/internal/typechecked-require",
+          19
+        ],
+        [
+          "react-hooks/rules-of-hooks",
+          13
+        ],
+        [
+          "@typescript-eslint/no-unused-vars",
+          9
+        ],
+        [
+          "no-loop-func",
+          4
+        ],
+        [
+          "@typescript-eslint/no-shadow",
+          4
+        ],
+        [
+          "no-control-regex",
+          4
+        ],
+        [
+          "(all rules)",
+          3
+        ],
+        [
+          "react-hooks/set-state-in-effect",
+          3
+        ],
+        [
+          "eqeqeq",
+          3
+        ],
+        [
+          "react-hooks/refs",
+          2
+        ],
+        [
+          "no-fallthrough",
+          2
+        ],
+        [
+          "no-self-assign",
+          1
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          1
+        ]
+      ],
+      "totalRulesNamed": 20
+    },
+    "vscode": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": null,
+        "per100Effects": null,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 28,
+      "effects": 0,
+      "depHooks": 0,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "@typescript-eslint/no-explicit-any",
+          28
+        ],
+        [
+          "local/code-no-any-casts",
+          20
+        ]
+      ],
+      "totalRulesNamed": 2
+    },
+    "ultracite": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": null,
+        "per100Effects": null,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 20,
+      "effects": 0,
+      "depHooks": 0,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [
+        [
+          "anti-slop/no-runtime-typeof",
+          17
+        ],
+        [
+          "lint/style/useNamingConvention",
+          1
+        ],
+        [
+          "lint/complexity/noExcessiveCognitiveComplexity",
+          1
+        ],
+        [
+          "no-await-in-loop",
+          1
+        ]
+      ],
+      "totalRulesNamed": 4
+    },
+    "shadcn": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": ".eslintrc.json",
+          "line": 5,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L5",
+          "text": "\"next/core-web-vitals\","
+        },
+        {
+          "file": "apps/v4/eslint.config.mjs",
+          "line": 1,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/eslint.config.mjs#L1",
+          "text": "import nextVitals from \"eslint-config-next/core-web-vitals\""
+        },
+        {
+          "file": "apps/v4/eslint.config.mjs",
+          "line": 27,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/eslint.config.mjs#L27",
+          "text": "\"react-hooks/incompatible-library\": \"off\","
+        },
+        {
+          "file": "apps/v4/eslint.config.mjs",
+          "line": 28,
+          "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/eslint.config.mjs#L28",
+          "text": "\"react-hooks/purity\": \"off\","
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 0,
+        "per100DepHooks": 0,
+        "per100Effects": 0,
+        "scopes": {},
+        "stillFlaggedRaw": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0
+        },
+        "tools": {},
+        "withNearbyComment": 0,
+        "withReason": 0,
+        "withReasonOrComment": 0
+      },
+      "dependencyRuleRank": null,
+      "directives": 0,
+      "effects": 6,
+      "depHooks": 18,
+      "otherHookRules": {
+        "byRule": {},
+        "n": 0
+      },
+      "topRules": [],
+      "totalRulesNamed": 0
+    },
+    "radix": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": ".oxlintrc.json",
+          "line": 167,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L167",
+          "text": "\"react/jsx-key\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 168,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L168",
+          "text": "\"react/jsx-no-comment-textnodes\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 169,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L169",
+          "text": "\"react/jsx-no-target-blank\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 170,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L170",
+          "text": "\"react/jsx-no-undef\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 171,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L171",
+          "text": "\"react/jsx-pascal-case\": [\"warn\", { \"allowNamespace\": true }],"
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 172,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L172",
+          "text": "\"react/no-danger-with-children\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 173,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L173",
+          "text": "\"react/no-direct-mutation-state\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 174,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L174",
+          "text": "\"react/no-find-dom-node\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 175,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L175",
+          "text": "\"react/no-is-mounted\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 176,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L176",
+          "text": "\"react/no-render-return-value\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 177,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L177",
+          "text": "\"react/no-string-refs\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 178,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L178",
+          "text": "\"react/style-prop-object\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 179,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L179",
+          "text": "\"react/exhaustive-deps\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 180,
+          "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L180",
+          "text": "\"react/rules-of-hooks\": \"error\","
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 5,
+        "per100DepHooks": 1.8,
+        "per100Effects": 3.2,
+        "scopes": {
+          "next-line": 5
+        },
+        "stillFlaggedRaw": {
+          "biome": 3,
+          "eslint": 3,
+          "oxlint": 5
+        },
+        "tools": {
+          "eslint-disable-next-line": 3,
+          "oxlint-disable-next-line": 2
+        },
+        "withNearbyComment": 3,
+        "withReason": 0,
+        "withReasonOrComment": 3
+      },
+      "dependencyRuleRank": 2,
+      "directives": 16,
+      "effects": 155,
+      "depHooks": 277,
+      "otherHookRules": {
+        "byRule": {
+          "react-hooks/rules-of-hooks": 10
+        },
+        "n": 10
+      },
+      "topRules": [
+        [
+          "react-hooks/rules-of-hooks",
+          10
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          5
+        ],
+        [
+          "no-self-compare",
+          1
+        ]
+      ],
+      "totalRulesNamed": 3
+    },
+    "react-aria": {
+      "blanket": 5,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {
+          "next-line": 4
+        },
+        "n": 4,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": ".oxlintrc.json",
+          "line": 151,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L151",
+          "text": "\"react/jsx-no-duplicate-props\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 152,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L152",
+          "text": "\"react/jsx-no-undef\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 153,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L153",
+          "text": "\"react/no-did-update-set-state\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 154,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L154",
+          "text": "\"react/no-unknown-property\": ["
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 160,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L160",
+          "text": "\"react/react-in-jsx-scope\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 161,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L161",
+          "text": "\"react/jsx-boolean-value\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 162,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L162",
+          "text": "\"react/self-closing-comp\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 165,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L165",
+          "text": "\"react/rules-of-hooks\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 166,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L166",
+          "text": "\"react/exhaustive-deps\": \"warn\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 168,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L168",
+          "text": "\"react/react-compiler\": \"error\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 283,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L283",
+          "text": "\"react/react-in-jsx-scope\": \"off\","
+        },
+        {
+          "file": ".oxlintrc.json",
+          "line": 371,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L371",
+          "text": "\"react/react-in-jsx-scope\": \"off\""
+        },
+        {
+          "file": "package.json",
+          "line": 28,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/package.json#L28",
+          "text": "\"install-16\": \"node scripts/react-16-install-prep.mjs && yarn add react@^16.8.0 react-dom@^16.8.0 @testing-library/react@^12 @testing-library/react-hooks@^8 @testing-library/dom@^8 react-test-renderer"
+        },
+        {
+          "file": "package.json",
+          "line": 29,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/package.json#L29",
+          "text": "\"install-17\": \"node scripts/react-17-install-prep.mjs && yarn add react@^17 react-dom@^17 @testing-library/react@^12 @testing-library/react-hooks@^8 @testing-library/dom@^8 react-test-renderer@^16.9.0"
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 1,
+        "per100DepHooks": 1.1,
+        "per100Effects": 3.1,
+        "scopes": {
+          "next-line": 1
+        },
+        "stillFlaggedRaw": {
+          "biome": 1,
+          "eslint": 1,
+          "oxlint": 1
+        },
+        "tools": {
+          "eslint-disable-next-line": 1
+        },
+        "withNearbyComment": 1,
+        "withReason": 0,
+        "withReasonOrComment": 1
+      },
+      "dependencyRuleRank": 9,
+      "directives": 105,
+      "effects": 32,
+      "depHooks": 91,
+      "otherHookRules": {
+        "byRule": {
+          "react/react-compiler": 76,
+          "react-hooks/rules-of-hooks": 7
+        },
+        "n": 76
+      },
+      "topRules": [
+        [
+          "react/react-compiler",
+          76
+        ],
+        [
+          "@typescript-eslint/no-unused-vars",
+          10
+        ],
+        [
+          "react-hooks/rules-of-hooks",
+          7
+        ],
+        [
+          "max-depth",
+          5
+        ],
+        [
+          "(all rules)",
+          5
+        ],
+        [
+          "jsx-a11y/role-has-required-aria-props",
+          3
+        ],
+        [
+          "rsp-rules/pure-render",
+          3
+        ],
+        [
+          "rsp-rules/no-non-composing-event-listener",
+          2
+        ],
+        [
+          "react-hooks/exhaustive-deps",
+          1
+        ]
+      ],
+      "totalRulesNamed": 9
+    },
+    "supabase": {
+      "blanket": 0,
+      "blanketCoveringFlaggedHook": {
+        "byScope": {},
+        "n": 0,
+        "withReasonOrComment": 0
+      },
+      "configLines": [
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 7,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L7",
+          "text": "const nextCoreWebVitals = require('eslint-config-next/core-web-vitals')"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 16,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L16",
+          "text": "// with core-web-vitals@16. We want to upgrade to get exhaustive-deps updates without"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 22,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L22",
+          "text": "key.startsWith('react-hooks/') &&"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 23,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L23",
+          "text": "key !== 'react-hooks/exhaustive-deps' &&"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 24,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L24",
+          "text": "key !== 'react-hooks/rules-of-hooks'"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 63,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L63",
+          "text": "// eslint-config-next v16 registers its plugins for `.mts`/`.cts` (v15 didn't lint"
+        },
+        {
+          "file": "packages/eslint-config-supabase/next.js",
+          "line": 87,
+          "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/packages/eslint-config-supabase/next.js#L87",
+          "text": "'@tanstack/query/exhaustive-deps': 'warn',"
+        }
+      ],
+      "dependencyRule": {
+        "coveringNoHook": 0,
+        "n": 83,
+        "per100DepHooks": 4.8,
+        "per100Effects": 12.5,
+        "scopes": {
+          "next-line": 83
+        },
+        "stillFlaggedRaw": {
+          "biome": 83,
+          "eslint": 81,
+          "oxlint": 81
+        },
+        "tools": {
+          "eslint-disable-next-line": 83
+        },
+        "withNearbyComment": 9,
+        "withReason": 4,
+        "withReasonOrComment": 12
+      },
+      "dependencyRuleRank": 1,
+      "directives": 112,
+      "effects": 662,
+      "depHooks": 1733,
+      "otherHookRules": {
+        "byRule": {
+          "react-hooks/rules-of-hooks": 5
+        },
+        "n": 5
+      },
+      "topRules": [
+        [
+          "react-hooks/exhaustive-deps",
+          83
+        ],
+        [
+          "react/display-name",
+          7
+        ],
+        [
+          "@typescript-eslint/no-explicit-any",
+          7
+        ],
+        [
+          "react-hooks/rules-of-hooks",
+          5
+        ],
+        [
+          "import/no-anonymous-default-export",
+          4
+        ],
+        [
+          "@tanstack/query/exhaustive-deps",
+          3
+        ],
+        [
+          "jsx-a11y/label-has-associated-control",
+          1
+        ],
+        [
+          "shadcn/no-arbitrary-values",
+          1
+        ],
+        [
+          "react/no-unstable-nested-components",
+          1
+        ]
+      ],
+      "totalRulesNamed": 9
+    }
+  },
+  "ruleCensusSuppressed": {
+    "core": {
+      "typescript/no-explicit-any": {
+        "raw": 4292,
+        "reported": 3840,
+        "suppressed": 452
+      },
+      "typescript/no-non-null-assertion": {
+        "raw": 1416,
+        "reported": 1378,
+        "suppressed": 38
+      },
+      "no-inline-comments": {
+        "raw": 1712,
+        "reported": 1697,
+        "suppressed": 15
+      },
+      "react/rules-of-hooks": {
+        "raw": 38,
+        "reported": 23,
+        "suppressed": 15
+      },
+      "react/exhaustive-deps": {
+        "raw": 20,
+        "reported": 6,
+        "suppressed": 14
+      },
+      "react/hooks": {
+        "raw": 32,
+        "reported": 20,
+        "suppressed": 12
+      },
+      "react/refs": {
+        "raw": 51,
+        "reported": 39,
+        "suppressed": 12
+      },
+      "no-control-regex": {
+        "raw": 11,
+        "reported": 0,
+        "suppressed": 11
+      },
+      "typescript/ban-ts-comment": {
+        "raw": 133,
+        "reported": 122,
+        "suppressed": 11
+      },
+      "react/immutability": {
+        "raw": 36,
+        "reported": 27,
+        "suppressed": 9
+      },
+      "func-names": {
+        "raw": 240,
+        "reported": 233,
+        "suppressed": 7
+      },
+      "typescript/no-empty-object-type": {
+        "raw": 343,
+        "reported": 336,
+        "suppressed": 7
+      },
+      "no-extend-native": {
+        "raw": 6,
+        "reported": 0,
+        "suppressed": 6
+      },
+      "no-unused-vars": {
+        "raw": 396,
+        "reported": 390,
+        "suppressed": 6
+      },
+      "object-shorthand": {
+        "raw": 338,
+        "reported": 332,
+        "suppressed": 6
+      },
+      "sort-keys": {
+        "raw": 8822,
+        "reported": 8816,
+        "suppressed": 6
+      },
+      "no-empty-function": {
+        "raw": 233,
+        "reported": 228,
+        "suppressed": 5
+      },
+      "no-loop-func": {
+        "raw": 18,
+        "reported": 13,
+        "suppressed": 5
+      },
+      "no-shadow": {
+        "raw": 595,
+        "reported": 590,
+        "suppressed": 5
+      },
+      "react/exhaustive-effect-dependencies": {
+        "raw": 25,
+        "reported": 20,
+        "suppressed": 5
+      },
+      "typescript/no-namespace": {
+        "raw": 38,
+        "reported": 33,
+        "suppressed": 5
+      },
+      "typescript/no-this-alias": {
+        "raw": 17,
+        "reported": 12,
+        "suppressed": 5
+      },
+      "eqeqeq": {
+        "raw": 429,
+        "reported": 426,
+        "suppressed": 3
+      },
+      "no-fallthrough": {
+        "raw": 18,
+        "reported": 15,
+        "suppressed": 3
+      },
+      "react/memo-dependencies": {
+        "raw": 3,
+        "reported": 0,
+        "suppressed": 3
+      },
+      "react/set-state-in-effect": {
+        "raw": 26,
+        "reported": 23,
+        "suppressed": 3
+      },
+      "unicorn/no-array-reverse": {
+        "raw": 31,
+        "reported": 28,
+        "suppressed": 3
+      },
+      "no-async-promise-executor": {
+        "raw": 16,
+        "reported": 14,
+        "suppressed": 2
+      },
+      "no-param-reassign": {
+        "raw": 837,
+        "reported": 835,
+        "suppressed": 2
+      },
+      "react/globals": {
+        "raw": 7,
+        "reported": 5,
+        "suppressed": 2
+      },
+      "react/preserve-manual-memoization": {
+        "raw": 3,
+        "reported": 1,
+        "suppressed": 2
+      },
+      "react/todo": {
+        "raw": 20,
+        "reported": 18,
+        "suppressed": 2
+      },
+      "typescript/no-unsafe-function-type": {
+        "raw": 81,
+        "reported": 79,
+        "suppressed": 2
+      },
+      "array-callback-return": {
+        "raw": 13,
+        "reported": 12,
+        "suppressed": 1
+      },
+      "no-empty-pattern": {
+        "raw": 1,
+        "reported": 0,
+        "suppressed": 1
+      },
+      "no-extra-bind": {
+        "raw": 1,
+        "reported": 0,
+        "suppressed": 1
+      },
+      "no-lonely-if": {
+        "raw": 109,
+        "reported": 108,
+        "suppressed": 1
+      },
+      "no-plusplus": {
+        "raw": 1824,
+        "reported": 1823,
+        "suppressed": 1
+      },
+      "no-self-assign": {
+        "raw": 2,
+        "reported": 1,
+        "suppressed": 1
+      },
+      "no-sequences": {
+        "raw": 12,
+        "reported": 11,
+        "suppressed": 1
+      },
+      "no-unsafe-optional-chaining": {
+        "raw": 6,
+        "reported": 5,
+        "suppressed": 1
+      },
+      "no-useless-constructor": {
+        "raw": 19,
+        "reported": 18,
+        "suppressed": 1
+      },
+      "node/global-require": {
+        "raw": 490,
+        "reported": 489,
+        "suppressed": 1
+      },
+      "react/purity": {
+        "raw": 5,
+        "reported": 4,
+        "suppressed": 1
+      },
+      "react/use-memo": {
+        "raw": 1,
+        "reported": 0,
+        "suppressed": 1
+      },
+      "typescript/prefer-for-of": {
+        "raw": 62,
+        "reported": 61,
+        "suppressed": 1
+      },
+      "unicorn/no-array-sort": {
+        "raw": 187,
+        "reported": 186,
+        "suppressed": 1
+      },
+      "unicorn/no-useless-undefined": {
+        "raw": 194,
+        "reported": 193,
+        "suppressed": 1
+      },
+      "unicorn/prefer-module": {
+        "raw": 739,
+        "reported": 738,
+        "suppressed": 1
+      }
+    },
+    "react": {
+      "react/exhaustive-deps": {
+        "raw": 229,
+        "reported": 137,
+        "suppressed": 92
+      },
+      "react/exhaustive-effect-dependencies": {
+        "raw": 235,
+        "reported": 156,
+        "suppressed": 79
+      },
+      "react/rules-of-hooks": {
+        "raw": 39,
+        "reported": 2,
+        "suppressed": 37
+      },
+      "react/set-state-in-effect": {
+        "raw": 190,
+        "reported": 161,
+        "suppressed": 29
+      },
+      "import/no-cycle": {
+        "raw": 27,
+        "reported": 5,
+        "suppressed": 22
+      },
+      "react/hooks": {
+        "raw": 59,
+        "reported": 37,
+        "suppressed": 22
+      },
+      "no-unused-vars": {
+        "raw": 117,
+        "reported": 102,
+        "suppressed": 15
+      },
+      "react/immutability": {
+        "raw": 69,
+        "reported": 55,
+        "suppressed": 14
+      },
+      "react/refs": {
+        "raw": 169,
+        "reported": 158,
+        "suppressed": 11
+      },
+      "react/todo": {
+        "raw": 124,
+        "reported": 116,
+        "suppressed": 8
+      },
+      "react/capitalized-calls": {
+        "raw": 40,
+        "reported": 33,
+        "suppressed": 7
+      },
+      "react/memo-dependencies": {
+        "raw": 40,
+        "reported": 33,
+        "suppressed": 7
+      },
+      "typescript/no-explicit-any": {
+        "raw": 745,
+        "reported": 738,
+        "suppressed": 7
+      },
+      "react/use-memo": {
+        "raw": 12,
+        "reported": 7,
+        "suppressed": 5
+      },
+      "no-inline-comments": {
+        "raw": 560,
+        "reported": 556,
+        "suppressed": 4
+      },
+      "unicorn/no-anonymous-default-export": {
+        "raw": 61,
+        "reported": 57,
+        "suppressed": 4
+      },
+      "jsx-a11y/role-has-required-aria-props": {
+        "raw": 8,
+        "reported": 5,
+        "suppressed": 3
+      },
+      "react/preserve-manual-memoization": {
+        "raw": 50,
+        "reported": 47,
+        "suppressed": 3
+      },
+      "react/no-deriving-state-in-effects": {
+        "raw": 8,
+        "reported": 6,
+        "suppressed": 2
+      },
+      "jsx-a11y/prefer-tag-over-role": {
+        "raw": 158,
+        "reported": 157,
+        "suppressed": 1
+      },
+      "no-self-compare": {
+        "raw": 1,
+        "reported": 0,
+        "suppressed": 1
+      },
+      "react/incompatible-library": {
+        "raw": 7,
+        "reported": 6,
+        "suppressed": 1
+      },
+      "react/no-unstable-nested-components": {
+        "raw": 46,
+        "reported": 45,
+        "suppressed": 1
+      },
+      "react/static-components": {
+        "raw": 21,
+        "reported": 20,
+        "suppressed": 1
+      }
+    }
+  },
+  "census": {
+    "zod": {
+      "effects": 0,
+      "hooks": 0
+    },
+    "hono": {
+      "effects": 3,
+      "hooks": 11
+    },
+    "trpc": {
+      "effects": 5,
+      "hooks": 22
+    },
+    "vite": {
+      "effects": 0,
+      "hooks": 0
+    },
+    "astro": {
+      "effects": 0,
+      "hooks": 0
+    },
+    "excalidraw": {
+      "effects": 118,
+      "hooks": 205
+    },
+    "next.js": {
+      "effects": 78,
+      "hooks": 146
+    },
+    "vscode": {
+      "effects": 0,
+      "hooks": 0
+    },
+    "ultracite": {
+      "effects": 0,
+      "hooks": 0
+    },
+    "shadcn": {
+      "effects": 6,
+      "hooks": 18
+    },
+    "radix": {
+      "effects": 155,
+      "hooks": 277
+    },
+    "react-aria": {
+      "effects": 32,
+      "hooks": 91
+    },
+    "supabase": {
+      "effects": 662,
+      "hooks": 1733
+    }
+  }
+}

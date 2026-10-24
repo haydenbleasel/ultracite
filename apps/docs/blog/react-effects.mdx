@@ -1,0 +1,320 @@
+---
+title: When a React effect's missing dependency isn't the bug
+description: Where React's dependency rule came from, why React took its autofix back, what it reports on 2,503 hooks in twelve codebases, and what coding agents did with a stale subscription, a fix that crashes and an omission made on purpose.
+date: 2026-10-24
+author: hayden
+next:
+  - label: Change how strictly the dependency rules report
+    href: /docs/configuration#overriding-rules
+  - label: Tell agents how your project's effects work
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - react-hooks/exhaustive-deps
+  - react/exhaustive-deps
+  - useExhaustiveDependencies
+  - react-hooks/set-state-in-effect
+---
+
+`exhaustive-deps` checks the list of values a React effect depends on. If the effect reads a prop or a piece of state that isn't in its dependency array, the rule reports it: "React Hook useEffect has a missing dependency." React's ESLint plugin has had the rule since 2019, Oxlint and Biome have their own versions, and Ultracite turns all of them on. The same rule checks `useMemo` and `useCallback`.
+
+Every version gives the same advice: add the value to the array. React's own documentation says that advice is often wrong. "The linter only knows when the dependencies are _wrong_," one page says. "It doesn't know _the best_ way to solve each case." So we wanted to know how often the warning points at a real bug, how often the suggested fix is right, and what coding agents do when they're handed the warning. We read the rule's history and React's docs, measured 2,503 hooks in twelve codebases, ran each linter's fix and then ran the fixed code, and handed three real effects to Claude Code and Codex.
+
+## Stale closures, known from day one
+
+React announced Hooks in October 2018, and [the RFC](https://github.com/reactjs/rfcs/pull/68) listed the rule's target among its drawbacks. A function passed to `useEffect` can "capture **old versions** of props and state values," and "this happens if the “inputs” array is inadvertently missing one of captured variables." Read a prop inside an effect, leave it out of the array, and the effect keeps using the value from the render that created it.
+
+The array began as an optimization. The [2018 docs](https://legacy.reactjs.org/docs/hooks-effect.html) present it as a replacement for "an extra comparison with `prevProps` or `prevState` inside `componentDidUpdate`". React compares the listed values with the last render's and skips the effect if none changed: "That's our optimization." The page also predicted that "the second argument might get added automatically" by a build step one day.
+
+Caleb Meredith started a lint rule for the array in 2018, and Dan Abramov's [rewrite](https://github.com/react/react/pull/14636) shipped in February 2019, two weeks after Hooks were released. His design notes say to report the array itself, so that "the user blames the array rather than the actual code," and to "**Always allow auto-fix.**" In the [feedback thread](https://github.com/react/react/issues/14920) he opened the day it shipped, Abramov relaxed the rule to allow extra dependencies in effects ("This seems like a legit case."), and named the problem that would follow it. Besides stale values, "There is a problem on the opposite spectrum of this," "where you get infinite loops (a function value always changes)."
+
+His [essay](https://overreacted.io/a-complete-guide-to-useeffect/) that March gave the advice React has repeated since: "There are two strategies to be honest about dependencies." The first is to list everything the effect reads. The second is to "change our effect code so that it wouldn’t _need_ a value" that changes more often than you want.
+
+## An autofix React took back
+
+The rule's first fix rewrote the array whenever ESLint ran with `--fix`. In August 2019, Tom Williams [described](https://github.com/react/react/issues/16313) what that did to a data fetch. The fix added the fetch function to the array, and a parent that passed a new function on every render now caused a refetch on every render. ESLint's guidelines say a fix shouldn't change what the code does, and Williams wrote: "I as a repo maintainer see the auto fix as a greater risk" "than the problems the lint rule prevents."
+
+React waited for ESLint's suggestions API, which offers a fix in the editor without applying it. In February 2020 the plugin [switched](https://github.com/react/react/pull/17385): "Disable dangerous autofix and use ESLint Suggestions API instead." Six weeks later Abramov added a way back for editors that couldn't show suggestions, an option called `enableDangerousAutofixThisMayCauseInfiniteLoops`. The [pull request](https://github.com/react/react/pull/18437) says: "You've been warned."
+
+Oxlint and Biome wrote their own versions of the rule later and gave them fixes again, with a warning label. Oxlint's [fix](https://github.com/oxc-project/oxc/pull/12354) for a missing dependency is classed as dangerous. Biome's was [proposed](https://github.com/biomejs/biome/issues/5309) as one that "would always be **unsafe**," because "users may have intentional reasons for diverging from the suggested dependencies." When we ran Ultracite's normal fix pass in October 2026, neither one ran, so every missing dependency reached a person or an agent as a warning. Oxlint's safe fix does run. It removes a value from outside the component or a `ref.current` from the array, and it gives a `useMemo` or `useCallback` with no array an empty one.
+
+## One fix for every problem
+
+The rule is precise about one fact. It collects every value from the component that the callback reads, drops the ones it knows can't change (a ref, a state setter), and compares the rest with the array. What it offers as a fix is narrower still. Every missing-dependency message ends with "Either include it or remove the dependency array.", and the one suggestion is the new array. Restructuring appears only as hints in ESLint's messages, such as an updater function or `useReducer`, and Oxlint's port leaves those out.
+
+The rule even works in an order that leads to the array. It checks for objects and functions that are rebuilt on every render only "If nothing else to report". So a missing `options` object is first reported as missing. Add it, and the next run says it makes the dependencies "change on every render." The [source](https://github.com/react/react/blob/eslint-plugin-react-hooks%407.1.1/packages/eslint-plugin-react-hooks/src/rules/ExhaustiveDeps.ts) has a TODO about this: "What if the function needs to change on every render anyway?"
+
+React's docs, mostly written by Abramov in 2022, spend pages on the other answers. [Lifecycle of Reactive Effects](https://react.dev/learn/lifecycle-of-reactive-effects) says the linter is right and its fix may not be: "If the linter suggests a dependency, but adding it causes a loop," "it doesn't mean the linter should be ignored." You change the code instead. [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect) opens with "Effects are an escape hatch from the React paradigm." It goes through the effects that shouldn't exist: state computed from other state, logic that belongs in an event handler, state reset when a prop changes, a parent notified after the fact. [Removing Effect Dependencies](https://react.dev/learn/removing-effect-dependencies) works through a form that shows a notification. The effect's array is completed as the linter asks, and then: "By doing this, you've introduced a bug." The first question, the page says, is "whether this code should be an Effect at all."
+
+The rule assumes the effect should exist and that the array is what needs fixing. React's docs say the effect is often what needs fixing.
+
+## Rules that question the effect
+
+Since 2025 the official plugin has had a second kind of rule. The React Compiler analyzes components so it can memoize them, and in October 2025 its checks [became lint rules](https://react.dev/blog/2025/10/07/react-compiler-1). Two of them look at effects from the other side. `set-state-in-effect` reports state set synchronously inside an effect, and `no-deriving-state-in-effects` reports state an effect computes from props or other state. Oxlint added the compiler's rules in [August 2026](https://oxc.rs/blog/2026-08-18-react-compiler-support). [React Doctor](https://github.com/millionco/react-doctor), a rule set whose repository says "Your agent writes bad React. This catches it", ported Nick van Dyke's [plugin](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect) of "You Might Not Need an Effect" rules. None of these rules has a fix, and when we checked, Biome had no equivalent.
+
+They're new, and React's own examples trip them. In September 2025, Lauren Tan, on the React team, [wrote](https://github.com/reactjs/react.dev/pull/7989) that "our effects validations are flagging patterns that our own docs examples use." The data-fetching example in the `useEffect` reference, which resets state and then fetches with an `ignore` flag, now carries a TODO to "investigate potential false positives".
+
+The compiler also put a price on suppressing the dependency rule. React Compiler 1.0 skips any component with that suppression: "React Compiler has skipped optimizing this component because one or more" "React ESLint rules were disabled". The compiler's main branch [changed that](https://github.com/react/react/pull/35184) in November 2025, because "a suppression within a useEffect could prevent memoization," even though a suppression in an effect doesn't make memoizing unsafe. When we ran the linters in October 2026, Oxlint still followed the old behavior. A disable comment for the dependency rule switched off the compiler's checks for the whole component, and was reported itself.
+
+## Too little reactivity, or too much
+
+Ultracite's first ESLint config, in 2022, set `exhaustive-deps` to error, while React's own recommended config uses a warning. The rule stayed on as Ultracite moved to Biome and then supported all three linters. The compiler rules came on later, under the policy of turning on every rule unless there's a reason not to. Nobody wrote down a reason for the dependency rule in particular.
+
+The reason we keep it on is that it's one of the few correctness rules that catches bugs you'd otherwise only see at runtime, and at both ends. Leave a value out, and the effect doesn't react when that value changes: the stale closure the RFC warned about. List a value that's rebuilt on every render, and the effect reacts too much: it re-runs, resubscribes or loops. The rule reports both, a missing dependency and one that changes on every render.
+
+That's a claim about real code, so we tested it.
+
+## Nobody has counted effect bugs
+
+We found no empirical study of effect bugs. No paper counts how often effects are unnecessary, how often adding a dependency causes a loop, how often `exhaustive-deps` is wrong, or what developers do with the warning. The closest is formal work. [React-tRace](https://doi.org/10.1145/3763067), presented at OOPSLA 2025, gives Hooks a formal semantics and calls infinite re-rendering "perhaps the most catastrophic bug one can encounter when using Hooks." But it doesn't model dependency arrays, and it doesn't measure real code.
+
+React's team describes the problem without numbers. Its [2025 research update](https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-and-more#automatic-effect-dependencies) says effects "are the most common pain point we hear from developers", and that the array is "baiting you into the mental model of 'do this when these values change'." The [React 19.2 post](https://react.dev/blog/2025/10/01/react-19-2), which made `useEffectEvent` stable, says: "To solve this, most users just disable the lint rule and exclude the dependency."
+
+Stack Overflow agrees. The top-voted question with `useEffect` in its title is ["How to fix missing dependency warning when using useEffect React Hook"](https://stackoverflow.com/questions/55840294), with 1.26 million views in October 2026. Its accepted answer offers two ways out: move the function into the effect, or add `// eslint-disable-next-line react-hooks/exhaustive-deps`. Nine of its 26 answers suppress the rule or turn it off.
+
+Studies of suppressions in other languages suggest why. In Python projects, [Hu et al.](https://doi.org/10.1145/3715729) found that "50.8% of all suppressions do not affect any warning". In Java, [Liargkovas et al.](https://arxiv.org/abs/2311.07482) found that "false positives account for a minor proportion of suppressions." Most marked warnings the developer couldn't or wouldn't act on. That fits a rule that's usually right about the array and often wrong about the fix.
+
+## 2,503 hooks in twelve codebases
+
+Our corpus is the eight TypeScript codebases we use for every post, plus the four React codebases from our accessibility post, all at pinned commits. Four of the eight have React-style hooks: Excalidraw, Next.js's client code, tRPC's React packages and Hono's own JSX hooks, which follow React's API. The React set is shadcn/ui, Radix, React Aria and Supabase Studio. Together they have 2,503 hooks with a dependency array, and 1,059 of them are effects. Supabase Studio, the one application in the set, has 662 of the effects.
+
+The effects mostly look careful. 26% return a cleanup function. Only one lists an object built during render, and none lists a function built during render, so authors already avoid those or memoize them first. A static reading in the categories of "You Might Not Need an Effect" put 38% as synchronizing with something outside React and 16% as state derived from other state.
+
+The rule fired on 9–14% of hooks, depending on the linter, when we counted every hook and ignored disable comments:
+
+| Linter                                  | Hooks flagged |
+| --------------------------------------- | ------------: |
+| ESLint, `exhaustive-deps`               |    229 (9.1%) |
+| Oxlint, its port                        |    229 (9.1%) |
+| Oxlint, the compiler's dependency check |   303 (12.1%) |
+| Biome, `useExhaustiveDependencies`      |   340 (13.6%) |
+
+ESLint's rule and Oxlint's port flagged the same hooks, apart from one each. Biome flagged 121 hooks neither of them did, and 87 of those are effects that list a dependency the effect never reads, which ESLint allows in effects. It's often a trigger: a value listed so the effect re-runs when it changes. Even where both flag a hook, they disagree on the fix: of 203 hooks both ESLint and Biome flagged, 116 got different suggestions, because Biome asks for the property the callback reads (`form.reset`), and ESLint for the object (`form`).
+
+## The rule people silence
+
+The corpus has 101 disable comments for the dependency rule. Supabase Studio has 83 of them, 12.5 for every 100 effects. In the React set, it's the rule with the most disable comments, 89 of the set's 233, and only 4 of the 101 give a reason after `--`.
+
+We read all 101 to see what each was for. 43 keep an effect from re-running after the first render, 20 avoid a loop or extra runs, and 14 cover a value that doesn't change but the rule can't tell. Six are effects that behave like event handlers, six are workarounds that are now wrong, and 12 are other cases. Adding the dependencies would change behavior for 67 of them. React's newer API, `useEffectEvent`, which lets an effect read the latest value without depending on it, could replace 43. For 31, adding the dependency would be fine.
+
+Public code shows the same thing on a larger scale. In October 2026, GitHub's code search found `eslint-disable-next-line react-hooks/exhaustive-deps` in more than 1.2 million files. Of the 57 rules we searched for, that's the most, about 1.6 times `@typescript-eslint/no-explicit-any`.
+
+Agents do it too. [AIDev](https://arxiv.org/abs/2602.09185) is a public [dataset](https://huggingface.co/datasets/hao-li/AIDev) of pull requests opened by coding agents, and its version up to March 2026 has 361,296 of them in repositories with more than 100 stars. Agents wrote 984 lines that suppress `exhaustive-deps`, in 566 pull requests across 297 repositories, and 347 of those pull requests were merged. 714 of the lines are from Claude Code. In a sample of 52 lines, 41 were still in the pull request's final diff. In pull requests meant to fix lint warnings, agents added the dependency in some places and suppressed the rest. One merged Claude Code [pull request](https://github.com/skypilot-org/skypilot/pull/8655) describes its suppressions as "eslint-disable comments for intentional patterns (mount-only effects, stable setState)". Another [fixed](https://github.com/promptfoo/promptfoo/pull/6908) an infinite render loop by depending on a `JSON.stringify` of an array, then suppressed the rule. We left out merge commits and lines we couldn't attribute to an agent, but counted lines that a later commit in the same pull request removed.
+
+## Right about the array, rarely the bug
+
+We read 100 flagged hooks by hand, sampled to represent all 351 hooks any linter flagged, and a second rater classified 36 of them blind. Both raters were Claude models, as in our other posts. The question for each was whether the missing or extra dependency is a bug, and what the suggested fix would do.
+
+| Of the flagged hooks                      | Share |
+| ----------------------------------------- | ----: |
+| A bug someone can see today               |  1.5% |
+| A bug only if other code changes          | 18.7% |
+| The suggested fix is right                |  9.3% |
+| The fix is harmless                       | 31.9% |
+| The fix changes behavior                  | 38.7% |
+| The fix makes it re-run more              | 11.7% |
+| The fix makes it loop                     |  8.5% |
+| The effect shouldn't exist (effects only) | 52.8% |
+
+For effects alone, the suggested fix was right 0.5% of the time. The raters agreed fairly well on whether a hook is a bug (Cohen's κ 0.62), well on what the fix would do (0.84), and completely on whether an effect should exist (1.0).
+
+The one clear bug was in Supabase's [MFA sign-in](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/sign-in-mfa.tsx#L39-L90). It redirects with `router.query` from the first render, which is empty on a statically optimized page. Even there, the suggested fix is wrong: adding `router` would re-run the whole sign-in flow every time the router changed, so the right fix is a ref. Most "harmless" fixes add a value that doesn't change but that the rule can't see, such as a form object from react-hook-form. Most behavior changes are an effect meant to run once, or on one trigger, that would now repeat. The effects that shouldn't exist were mostly resetting state when a prop changed, logic that belongs in an event handler, or state derived from other state.
+
+We also looked for the bugs the rule should have prevented. In the histories of Excalidraw, Next.js, tRPC and Hono, 42 commits whose messages point at an effect bug changed a hook, and 17 of them fixed one. Eight were effects that ran twice or too often, mostly Strict Mode's double run in development in Next.js. Two were stale values, two were races and two were ordering bugs, and there was one loop, one missing cleanup and one hydration warning. The rule had flagged the buggy hook, about the value the bug was about, in one of the 17: Hono's `useSyncExternalStore`, which became one of our experiment's subjects.
+
+So the claim holds at one end, rarely. The rule did find a stale subscription in real code. But in our sample, a flagged hook was a visible bug 1.5% of the time, and the fix the rule offers caused the other end, re-running or looping, more often than it fixed anything.
+
+## Fixes that loop, crash or go stale
+
+To see what the fixes do, we applied each linter's to every flagged hook in copies of the corpus.
+
+- **ESLint's suggestion rewrote 223 hooks.** It added a function built during render to 25 of them and an object to 6. Afterwards ESLint said the dependencies of 33 hooks "change on every render."
+- **It also wrote code that throws.** In 7 hooks it added a value declared further down the component, which the array reads before the declaration runs, a `ReferenceError` on the first render. In 9 it dropped a `?.` from a dependency that was already listed, which throws when the object is missing.
+- **Applying its next suggestion** wrapped the function in a `useCallback` with no dependency array, which still makes a new function on every render. In 10 of 13 files the fix didn't import `useCallback`.
+- **Oxlint's dangerous fix** had the same declaration problem in 7 hooks, and in 14 listed a property path without the `?.` the callback reads it with.
+- **Biome's unsafe fix removed 129 dependencies that do something,** mostly triggers. Excalidraw's color picker focuses its input when the active section changes. After the fix the array is empty, and focus [no longer follows](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L64-L68) the section.
+
+To check what the fixed code does, we ran small components through React 19 on a minimal DOM, after checking that it reproduces ten behaviors react.dev documents. The rule's fix solved a stale interval. It also made a counter set up its interval six times instead of once, made a chat reconnect on every keystroke and whenever the theme changed, and made a run-once callback fire after every parent render. And it made this one loop:
+
+{/* prettier-ignore */}
+```tsx title="B03, one of our calibration cases"
+const [visible, setVisible] = useState(items);
+useEffect(() => {
+  setVisible(visible.filter((i) => i.length > 0));
+}, []); // the fix: [visible]
+```
+
+With `[visible]`, every run makes a new array, so the effect never settles. The test stopped it after 500 runs, and React logged "Maximum update depth exceeded". The right fix has no effect and no state: `const visible = items.filter(…)` during render, which is what "You Might Not Need an Effect" says to do. The fixes that remove dependencies went the other way. Oxlint's removed a dependency that changed every render, and the effect stopped loading new data. Biome's removed a trigger, and a refetch stopped.
+
+## A store switch, a time input and a chat
+
+In October 2026 we picked three real effects that Oxlint's rule flags in Ultracite's default React setup, each with a different right answer:
+
+- **A, a real bug.** [Hono's `useSyncExternalStore`](https://github.com/honojs/hono/blob/df653cea0450657977887d56a5188368387456c8/src/jsx/hooks/index.ts#L397-L425) subscribed once, with an empty array. A component that switched to another store stayed subscribed to the first. Hono [fixed it](https://github.com/honojs/hono/pull/5166) in July 2026 by resubscribing when `subscribe` changes and reading the snapshot during render. The right response follows the new store.
+- **B, the obvious fix breaks it.** Supabase Studio's [`TimeInput`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx) has two effects that call `validate`, which is declared below them. Adding it to the arrays reads it before its declaration and throws on the first render. Moving it up and listing everything makes the time revert while the user types. The right response keeps when each effect runs.
+- **C, an omission on purpose.** Excalidraw's [`useTTDChatStorage`](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/useTTDChatStorage.ts#L77-L155) loads saved chats once and saves when a response finishes. Its authors suppressed the rule on both effects. Adding the dependencies saves the chat on every keystroke in the prompt. We deleted the two suppression comments. The right response keeps both effects running as they did.
+
+A's effect, as we handed it over:
+
+{/* prettier-ignore */}
+```ts title="index.ts (Hono), before the fix"
+useEffect(() => {
+  if (serverSnapshotIsUsed) {
+    setState(getSnapshot());
+  }
+  return subscribe(() => {
+    setState(getSnapshot());
+  });
+}, []);
+```
+
+Oxlint reported it twice, once from the rule ("React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'", with the help "Either include it or remove the dependency array.") and once from the compiler's check ("Found missing effect dependencies").
+
+Without an agent, Ultracite's normal fix pass left every dependency array alone with all three linters. Its unsafe fixes for Oxlint and Biome, which run only when asked, gave A a half-fix, crashed B on its first render and made C save on every keystroke. Nothing was printed about any of it.
+
+So we ran each subject four times with Claude Code and four times with Codex, 24 runs. Each run went through Ultracite's agent loop. The agent gets the file, the diagnostics and Ultracite's prompt, which asks for "the minimal change that resolves each issue while preserving runtime behavior", to follow the rule's help text, and not to add suppression comments. After each edit, the file is fixed, formatted and linted again, and anything still reported goes back to the agent, for up to three attempts. The subjects trip other rules too, so the handoff kept only the two dependency rules and anything an edit added. We checked every result by running it in the same React harness, in two scenarios per subject.
+
+## Better at keeping behavior than fixing it
+
+| Subject | Right response | Claude Code | Codex |
+| --- | --- | --- | --- |
+| A, a real bug | follow the new store | listed the dependencies 3, kept the bug 1 | listed the dependencies 4 |
+| B, the fix breaks it | keep when each effect runs | `useEffectEvent` 3, moved the logic into render 1 | moved the logic into render 4 |
+| C, on purpose | keep both effects as they run | `useEffectEvent` 3, a ref 1 | a ref 3, `useEffectEvent` 1 |
+
+No agent fixed A. Seven of the eight runs listed the three values the rule named, which is what every linter's unsafe fix does. That resubscribes when the store changes, but doesn't read the new store's value right away. After the switch, the component kept showing the old store's value until the new store changed, and when a caller passed `getSnapshot` inline, the hook subscribed six times in our scenario instead of once. Codex said little: "Updated only `index.ts`, adding the three missing effect dependencies." Every Claude run explained the resubscribing, and three said the edit fixed a stale value, which was half true. Two said they'd followed the help text: "I chose to list the dependencies because the rule's help text recommends it." That's what Ultracite's prompt tells agents to do.
+
+The eighth run, one of Claude's, kept the bug on purpose. It froze the first render's functions in a ref and explained that listing them "isn't the minimal, behaviour-preserving fix this task asked for." That's a fair reading of a prompt that asks agents to preserve behavior, but it cleared the warning and kept the bug. The prompt also lets an agent leave an issue for review when it "needs a person's decision", and no run did. Ultracite printed "Fixed 2 of 2 issues" for all eight.
+
+On B, all eight kept the behavior. No agent mentioned that adding `validate` would throw, and none ran into it. Three Claude runs moved the validation into Effect Events, which read the latest value when called, after render:
+
+{/* prettier-ignore */}
+```diff title="TimeInput.tsx (Supabase), one Claude run"
+-  useEffect(() => {
+-    if (minimumTime || maximumTime) {
+-      validate(time);
++  // Compare the bounds by value so new objects with the same time don't re-run validation
++  const minimumTimeKey = JSON.stringify(minimumTime);
++  const maximumTimeKey = JSON.stringify(maximumTime);
++
++  // Read the latest time and validate without re-running the effects below when they change
++  const onBoundsChange = useEffectEvent(() => validate(time));
++  const onDefaultTimeChange = useEffectEvent((nextTime: Time) =>
++    validate(nextTime)
++  );
++
++  useEffect(() => {
++    if (minimumTimeKey || maximumTimeKey) {
++      onBoundsChange();
+     }
+-  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);
++  }, [minimumTimeKey, maximumTimeKey]);
+```
+
+Both agents gave the same reason: listing everything "would trigger validation while typing", as Codex put it. Codex took two attempts every time. Its first edit moved the effects below `validate`. That let the compiler analyze the whole component and report `set-state-in-effect` once more, and that rule's help, which suggests deriving the value during render or doing the update "from the event that caused the change", led Codex to replace both effects with state updates during render. That kept the behavior, and it's what "You Might Not Need an Effect" recommends, though no run mentioned the page.
+
+On C, all eight kept every load and save, and every run said why the save function couldn't simply be listed: "typing in the prompt would trigger a save on every keystroke." The harder part was the compiler's check, which also reports the effect's triggers as "extra" dependencies, because the effect never reads them. Every run cleared that by making the effect read them. Three Claude runs built a string key from the triggers and depended on that. Three Codex runs added the save function to the array and then rebuilt the dependency check inside the effect by hand:
+
+{/* prettier-ignore */}
+```ts title="useTTDChatStorage.ts (Excalidraw), one Codex run"
+useEffect(() => {
+  const inputs = {
+    id: lastMessageInHistory?.id,
+    isGenerating: lastMessageInHistory?.isGenerating,
+    length: chatHistory.messages?.length,
+  };
+  const previousInputs = previousAutoSaveInputs.current;
+  previousAutoSaveInputs.current = inputs;
+
+  // Callback changes alone should not trigger an auto-save.
+  if (
+    previousInputs &&
+    previousInputs.id === inputs.id &&
+    previousInputs.isGenerating === inputs.isGenerating &&
+    previousInputs.length === inputs.length
+  ) {
+    return;
+  }
+
+  if (!lastMessageInHistory?.isGenerating) {
+    saveCurrentChat();
+  }
+}, [
+  chatHistory.messages?.length,
+  lastMessageInHistory?.id,
+  lastMessageInHistory?.isGenerating,
+  saveCurrentChat,
+]);
+```
+
+It saves exactly when the original did, ten times across our two scenarios. But the effect now runs 56 times instead of 20, returning early on every keystroke, and a reader has to work out that the ref is doing the array's job.
+
+No run added a suppression, unlike the agents in AIDev, whose instructions we don't know. Ultracite's prompt forbids them. Five runs needed a second attempt, all because an edit made a rule outside the dependency pair report again. None of the agents' explanations reached the user: Ultracite printed only "Fixed N of N issues", so the three Claude runs that said A now resubscribes on every render looked the same as the run that kept the bug.
+
+Our experiment is small: three effects, four runs per agent each, one file at a time, with a filtered handoff. A real project would have handed over 10 to 22 issues per file. Our harness has no Strict Mode and no server rendering, so one Claude run's rewrite of A's server path is unchecked. Claude Code's permissions refused every lint command it tried, so no Claude run could check its own edit. Codex linted with the binaries in a checkout it remembered from earlier sessions, and opened react.dev's `useEffectEvent` page in four runs. No run read Hono's later code, which contains the real fix. The scripts, every run's edits and the full report are in [`research/`](https://github.com/haydenbleasel/ultracite/tree/main/research).
+
+## What a dependency list can't say
+
+The rule sees what a callback reads. It can't see why a value is missing: a trigger, an effect meant to run once, a value that never changes, or a mistake. It can't tell whether the effect should exist. Its only fix is to edit the array, and its check for values rebuilt on every render runs only after you've added them. In our sample those blind spots decided the result: the warning was usually right about the array and rarely a bug, and the fix it offered was right for under one flagged effect in a hundred.
+
+The implementations disagree more than their names suggest. Biome reports extra dependencies that ESLint has allowed in effects since 2019, and wants member paths where ESLint wants objects. Oxlint's compiler check reports every missing dependency a second time, and calls a deliberate trigger "extra". Calling triggers extra is what led our agents to the most roundabout code in the experiment. The fixes are labeled as risky, and they are: in our corpus they wrote code that throws, and in our runs the fixed code looped, re-ran and went stale.
+
+The evidence is thin in places, and some of it is ours. No study measures effect bugs. Supabase Studio, one application, has most of our effects and suppressions. Our raters are Claude models, they agree least on why a value was left out, and the history we searched relies on commit messages. Our agents' good results on B and C came from reading a file where the triggers were a few lines from the effect.
+
+What the rule does well is make every effect's dependencies a decision someone has to look at. That catches the stale closures it was built for. It also turns every flagged effect into a prompt to add a value, and people, agents and fixes take that prompt more often than they should.
+
+## Fix the effect, not the array
+
+**Keep the rule, and read it as a question.** When it fires, ask first whether the effect should exist. Derived state belongs in render, user actions belong in event handlers, and state that resets when a prop changes can use a `key`. If the effect is synchronizing with something outside React, then ask whether the missing value should re-run it.
+
+**Don't let a fix add dependencies unread.** An added dependency changes when the effect runs. Check whether the new value is an object or function built during render, declared further down the component, or read through `?.`. The [configuration docs](/docs/configuration#overriding-rules) show how to change the rule's severity if you'd rather see it as a warning.
+
+**Move trigger logic to where the change happens.** An effect that runs when a value changes but never reads it is usually reacting to an event, such as a response finishing. The rules will call that value extra, and a fix may remove it. Where you can, run the logic from the code that causes the change. Where you can't, `useEffectEvent` is for logic that's an event fired from an effect. React warns against using it "to avoid specifying dependencies", and that applies to agents too.
+
+**Use the API built for subscriptions.** Subscribing to an external store in an effect is easy to get subtly wrong. Subject A got it wrong inside an implementation of `useSyncExternalStore` itself, which is why it's better to call React's than to write your own.
+
+**If you suppress, say why.** Only 4 of 101 suppressions in our corpus gave a reason. A suppression can hide later bugs from the rule, and in some setups it costs the compiler's optimizations for the whole component.
+
+**Tell agents what the warning means.** Our agents did well when the code made the intent visible, and they took the help text's advice when it didn't. A line in `AGENTS.md`, such as "When a dependency rule fires, check whether the effect is needed and whether adding the dependency changes when it runs; if fixing it changes behavior, leave it for review," covers what the help text doesn't. We didn't test that line here.
+
+The dependency rule is right about the array almost every time it fires. In our corpus it was right about the bug once in a long while, and its fix was right less often than that. On the one real bug in our experiment, every agent cleared the warning and none fixed the bug, and Ultracite reported all eight as fixed.
+
+<NextSteps />
+
+## References
+
+**History and the rules**
+
+- Sebastian Markbåge. [RFC: React Hooks](https://github.com/reactjs/rfcs/pull/68). reactjs/rfcs #68, 2018.
+- React. [Using the Effect Hook](https://legacy.reactjs.org/docs/hooks-effect.html) (legacy docs, 2018–2019).
+- Dan Abramov. [Add eslint-plugin-react-hooks/exhaustive-deps rule to check stale closure dependencies](https://github.com/react/react/pull/14636). react/react #14636, 2019, and [Feedback for 'exhaustive-deps' lint rule](https://github.com/react/react/issues/14920), #14920, 2019.
+- Dan Abramov. [A Complete Guide to useEffect](https://overreacted.io/a-complete-guide-to-useeffect/). overreacted.io, 2019.
+- Tom Williams. [react-hooks/exhaustive-deps rule autofix modifies code function](https://github.com/react/react/issues/16313). react/react #16313, 2019. Will Douglas, [#17385](https://github.com/react/react/pull/17385) (2020), and Dan Abramov, [#18437](https://github.com/react/react/pull/18437) (2020).
+- React. [`ExhaustiveDeps.ts`](https://github.com/react/react/blob/eslint-plugin-react-hooks%407.1.1/packages/eslint-plugin-react-hooks/src/rules/ExhaustiveDeps.ts), eslint-plugin-react-hooks 7.1.1.
+- Oxc. [`react/exhaustive-deps`](https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html) rule documentation, [#12354: fixes for exhaustive-deps](https://github.com/oxc-project/oxc/pull/12354) (2025), and [React Compiler Support](https://oxc.rs/blog/2026-08-18-react-compiler-support) (2026).
+- Biome. [`useExhaustiveDependencies`](https://biomejs.dev/linter/rules/use-exhaustive-dependencies/) rule documentation and [#5309](https://github.com/biomejs/biome/issues/5309) (2025).
+- Million Software. [React Doctor](https://github.com/millionco/react-doctor). Nick van Dyke. [eslint-plugin-react-you-might-not-need-an-effect](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect).
+
+**React's guidance**
+
+- React. [Lifecycle of Reactive Effects](https://react.dev/learn/lifecycle-of-reactive-effects), [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect), [Removing Effect Dependencies](https://react.dev/learn/removing-effect-dependencies), [Separating Events from Effects](https://react.dev/learn/separating-events-from-effects) and [`useEffectEvent`](https://react.dev/reference/react/useEffectEvent).
+- React. [React Labs: View Transitions, Activity, and more](https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-and-more), [React 19.2](https://react.dev/blog/2025/10/01/react-19-2) and [React Compiler v1.0](https://react.dev/blog/2025/10/07/react-compiler-1). 2025.
+- Lauren Tan. [fix compiler errors](https://github.com/reactjs/react.dev/pull/7989). reactjs/react.dev #7989, 2025.
+- Joseph Savona. [Ignore ESLint suppressions when ValidateMemoDeps enabled](https://github.com/react/react/pull/35184). react/react #35184, 2025.
+
+**Research and suppressions**
+
+- Jay Lee, Joongwon Ahn and Kwangkeun Yi. [React-tRace: A Semantics for Understanding React Hooks](https://doi.org/10.1145/3763067). _Proc. ACM Program. Lang._ 9 (OOPSLA2), 2025.
+- Huimin Hu, Yingying Wang, Julia Rubin and Michael Pradel. [An Empirical Study of Suppressed Static Analysis Warnings](https://doi.org/10.1145/3715729). _Proc. ACM Softw. Eng._ 2 (FSE), 2025.
+- Georgios Liargkovas, Evangelia Panourgia and Diomidis Spinellis. [Quieting the Static: A Study of Static Analysis Alert Suppressions](https://arxiv.org/abs/2311.07482). arXiv, 2023.
+- Stack Overflow. [How to fix missing dependency warning when using useEffect React Hook](https://stackoverflow.com/questions/55840294). 2019.
+- Hao Li, Haoxiang Zhang and Ahmed E. Hassan. [AIDev: Studying AI Coding Agents on GitHub](https://arxiv.org/abs/2602.09185). arXiv, 2026, and the [AIDev dataset](https://huggingface.co/datasets/hao-li/AIDev).
+- SkyPilot. [Fix React hook dependency warnings and enforce zero warnings](https://github.com/skypilot-org/skypilot/pull/8655). skypilot-org/skypilot #8655, 2026. promptfoo. [#6908](https://github.com/promptfoo/promptfoo/pull/6908), 2026.
+
+**The subjects**
+
+- Hono. [`src/jsx/hooks/index.ts`](https://github.com/honojs/hono/blob/df653cea0450657977887d56a5188368387456c8/src/jsx/hooks/index.ts#L397-L425) and [#5166: handle useSyncExternalStore subscription and snapshot changes](https://github.com/honojs/hono/pull/5166). 2026.
+- Supabase. [`TimeInput.tsx`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx) and [`sign-in-mfa.tsx`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/sign-in-mfa.tsx#L39-L90).
+- Excalidraw. [`useTTDChatStorage.ts`](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/useTTDChatStorage.ts#L77-L155) and [`ColorInput.tsx`](https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L64-L68).

@@ -1,0 +1,57 @@
+--- a/useTTDChatStorage.ts
++++ b/useTTDChatStorage.ts
+@@ -181,10 +181,10 @@
+     persistenceAdapter,
+   ]);
+ 
+-  // INITIAL LOAD
++  // INITIAL LOAD (loadChats is a no-op once chats are loading or loaded)
+   useEffect(() => {
+     loadChats();
+-  }, []);
++  }, [loadChats]);
+ 
+   const saveCurrentChat = useCallback(async () => {
+     if (chatHistory.messages.length === 0) {
+@@ -249,15 +249,35 @@
+   }, [chatHistory, setSavedChats, persistenceAdapter]);
+ 
+   // Auto-save when generation completes
++  const messageCount = chatHistory.messages?.length;
++  const lastMessageId = lastMessageInHistory?.id;
++  const isLastMessageGenerating = lastMessageInHistory?.isGenerating;
++  // saveCurrentChat also changes on edits that shouldn't save (e.g. the
++  // current prompt), so only save when the messages state itself changes
++  const lastAutoSaveTriggerRef = useRef<{
++    isLastMessageGenerating: boolean | undefined;
++    lastMessageId: string | undefined;
++    messageCount: number | undefined;
++  } | null>(null);
+   useEffect(() => {
+-    if (!lastMessageInHistory?.isGenerating) {
++    const lastTrigger = lastAutoSaveTriggerRef.current;
++    if (
++      lastTrigger &&
++      lastTrigger.messageCount === messageCount &&
++      lastTrigger.lastMessageId === lastMessageId &&
++      lastTrigger.isLastMessageGenerating === isLastMessageGenerating
++    ) {
++      return;
++    }
++    lastAutoSaveTriggerRef.current = {
++      isLastMessageGenerating,
++      lastMessageId,
++      messageCount,
++    };
++    if (!isLastMessageGenerating) {
+       saveCurrentChat();
+     }
+-  }, [
+-    chatHistory.messages?.length,
+-    lastMessageInHistory?.id,
+-    lastMessageInHistory?.isGenerating,
+-  ]);
++  }, [isLastMessageGenerating, lastMessageId, messageCount, saveCurrentChat]);
+ 
+   const deleteChat = useCallback(
+     async (chatId: string): Promise<SavedChats> => {

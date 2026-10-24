@@ -1,0 +1,4825 @@
+{
+  "generated": "2026-10-24",
+  "note": "Raw: every disable comment neutralised; reported: as written. A hook is flagged by a view when any of the view's dependency-rule diagnostics joins to it (effects-lib.cjs matchHook). Denominators are the census's hooks.",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "eslint-plugin-react": "7.37.5",
+    "react": "19.3.0"
+  },
+  "denominators": {
+    "zod": {
+      "effects": 0,
+      "files": 125,
+      "hooks": 0,
+      "jsxLines": 0,
+      "lines": 37903
+    },
+    "hono": {
+      "effects": 3,
+      "files": 187,
+      "hooks": 11,
+      "jsxLines": 0,
+      "lines": 25540
+    },
+    "trpc": {
+      "effects": 5,
+      "files": 176,
+      "hooks": 22,
+      "jsxLines": 2499,
+      "lines": 25948
+    },
+    "vite": {
+      "effects": 0,
+      "files": 124,
+      "hooks": 0,
+      "jsxLines": 0,
+      "lines": 45885
+    },
+    "astro": {
+      "effects": 0,
+      "files": 635,
+      "hooks": 0,
+      "jsxLines": 0,
+      "lines": 82969
+    },
+    "excalidraw": {
+      "effects": 118,
+      "files": 444,
+      "hooks": 205,
+      "jsxLines": 50038,
+      "lines": 128127
+    },
+    "next.js": {
+      "effects": 78,
+      "files": 1416,
+      "hooks": 146,
+      "jsxLines": 50133,
+      "lines": 276128
+    },
+    "vscode": {
+      "effects": 0,
+      "files": 226,
+      "hooks": 0,
+      "jsxLines": 0,
+      "lines": 71809
+    },
+    "shadcn": {
+      "effects": 6,
+      "files": 165,
+      "hooks": 18,
+      "jsxLines": 16911,
+      "lines": 18473
+    },
+    "radix": {
+      "effects": 155,
+      "files": 160,
+      "hooks": 277,
+      "jsxLines": 23867,
+      "lines": 25594
+    },
+    "react-aria": {
+      "effects": 32,
+      "files": 71,
+      "hooks": 91,
+      "jsxLines": 21979,
+      "lines": 22407
+    },
+    "supabase": {
+      "effects": 662,
+      "files": 2759,
+      "hooks": 1733,
+      "jsxLines": 310726,
+      "lines": 382573
+    }
+  },
+  "byRepo": {
+    "zod": {
+      "effects": 0,
+      "hooks": 0,
+      "raw": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      }
+    },
+    "hono": {
+      "effects": 3,
+      "hooks": 11,
+      "raw": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "memo": 6,
+            "effect": 1
+          },
+          "byKind": {
+            "missing": 5,
+            "assignment-lost": 1,
+            "non-literal": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 8,
+          "effects": 1,
+          "hooks": 7,
+          "pctOfHooks": 63.6,
+          "pctOfEffects": 33.3,
+          "missing": 5,
+          "unnecessary": 1
+        },
+        "oxlint": {
+          "byHookKind": {
+            "memo": 5,
+            "effect": 1
+          },
+          "byKind": {
+            "missing": 5,
+            "non-literal": 1
+          },
+          "diagnostics": 6,
+          "effects": 1,
+          "hooks": 6,
+          "pctOfHooks": 54.5,
+          "pctOfEffects": 33.3,
+          "missing": 5,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "memo": 6,
+            "effect": 1
+          },
+          "byKind": {
+            "missing": 5,
+            "assignment-lost": 1,
+            "non-literal": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 8,
+          "effects": 1,
+          "hooks": 7,
+          "pctOfHooks": 63.6,
+          "pctOfEffects": 33.3,
+          "missing": 5,
+          "unnecessary": 1
+        },
+        "oxlint": {
+          "byHookKind": {
+            "memo": 5,
+            "effect": 1
+          },
+          "byKind": {
+            "missing": 5,
+            "non-literal": 1
+          },
+          "diagnostics": 6,
+          "effects": 1,
+          "hooks": 6,
+          "pctOfHooks": 54.5,
+          "pctOfEffects": 33.3,
+          "missing": 5,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      }
+    },
+    "trpc": {
+      "effects": 5,
+      "hooks": 22,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 4.5,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 2,
+            "complex": 1
+          },
+          "diagnostics": 3,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 2,
+            "complex": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 4,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 1
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 2
+          },
+          "diagnostics": 2,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 2,
+            "unnecessary": 2
+          },
+          "diagnostics": 8,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 2
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 2,
+            "unnecessary": 2
+          },
+          "diagnostics": 8,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 2
+        }
+      }
+    },
+    "vite": {
+      "effects": 0,
+      "hooks": 0,
+      "raw": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      }
+    },
+    "astro": {
+      "effects": 0,
+      "hooks": 0,
+      "raw": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      }
+    },
+    "excalidraw": {
+      "effects": 118,
+      "hooks": 205,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 5,
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 6,
+            "non-literal": 1
+          },
+          "diagnostics": 7,
+          "effects": 5,
+          "hooks": 6,
+          "pctOfHooks": 2.9,
+          "pctOfEffects": 4.2,
+          "missing": 6,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 7,
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 8,
+            "non-literal": 1
+          },
+          "diagnostics": 9,
+          "effects": 7,
+          "hooks": 8,
+          "pctOfHooks": 3.9,
+          "pctOfEffects": 5.9,
+          "missing": 8,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 7,
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 7,
+            "non-literal": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 9,
+          "effects": 7,
+          "hooks": 8,
+          "pctOfHooks": 3.9,
+          "pctOfEffects": 5.9,
+          "missing": 7,
+          "unnecessary": 1
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 18,
+            "memo": 1
+          },
+          "byKind": {
+            "unnecessary": 13,
+            "missing": 6
+          },
+          "diagnostics": 19,
+          "effects": 18,
+          "hooks": 19,
+          "pctOfHooks": 9.3,
+          "pctOfEffects": 15.3,
+          "missing": 6,
+          "unnecessary": 13
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 0.5,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 21,
+            "memo": 2
+          },
+          "byKind": {
+            "unnecessary": 17,
+            "missing": 7,
+            "other": 1
+          },
+          "diagnostics": 28,
+          "effects": 21,
+          "hooks": 23,
+          "pctOfHooks": 11.2,
+          "pctOfEffects": 17.8,
+          "missing": 7,
+          "unnecessary": 17
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 14
+          },
+          "byKind": {
+            "unnecessary": 13,
+            "missing": 1
+          },
+          "diagnostics": 14,
+          "effects": 14,
+          "hooks": 14,
+          "pctOfHooks": 6.8,
+          "pctOfEffects": 11.9,
+          "missing": 1,
+          "unnecessary": 13
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 0.5,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 21,
+            "memo": 2
+          },
+          "byKind": {
+            "unnecessary": 17,
+            "missing": 7,
+            "other": 1
+          },
+          "diagnostics": 28,
+          "effects": 21,
+          "hooks": 23,
+          "pctOfHooks": 11.2,
+          "pctOfEffects": 17.8,
+          "missing": 7,
+          "unnecessary": 17
+        }
+      }
+    },
+    "next.js": {
+      "effects": 78,
+      "hooks": 146,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 1
+          },
+          "byKind": {
+            "unnecessary": 1
+          },
+          "diagnostics": 1,
+          "effects": 1,
+          "hooks": 1,
+          "pctOfHooks": 0.7,
+          "pctOfEffects": 1.3,
+          "missing": 0,
+          "unnecessary": 1
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 1
+          },
+          "byKind": {
+            "unnecessary": 1
+          },
+          "diagnostics": 1,
+          "effects": 1,
+          "hooks": 1,
+          "pctOfHooks": 0.7,
+          "pctOfEffects": 1.3,
+          "missing": 0,
+          "unnecessary": 1
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 1
+          },
+          "byKind": {
+            "unnecessary": 1
+          },
+          "diagnostics": 1,
+          "effects": 1,
+          "hooks": 1,
+          "pctOfHooks": 0.7,
+          "pctOfEffects": 1.3,
+          "missing": 0,
+          "unnecessary": 1
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 7
+          },
+          "byKind": {
+            "unnecessary": 6,
+            "missing": 1
+          },
+          "diagnostics": 7,
+          "effects": 7,
+          "hooks": 7,
+          "pctOfHooks": 4.8,
+          "pctOfEffects": 9,
+          "missing": 1,
+          "unnecessary": 6
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 9
+          },
+          "byKind": {
+            "unnecessary": 7,
+            "missing": 1,
+            "other": 1
+          },
+          "diagnostics": 9,
+          "effects": 9,
+          "hooks": 9,
+          "pctOfHooks": 6.2,
+          "pctOfEffects": 11.5,
+          "missing": 1,
+          "unnecessary": 7
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 6
+          },
+          "byKind": {
+            "unnecessary": 5,
+            "missing": 1
+          },
+          "diagnostics": 6,
+          "effects": 6,
+          "hooks": 6,
+          "pctOfHooks": 4.1,
+          "pctOfEffects": 7.7,
+          "missing": 1,
+          "unnecessary": 5
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 9
+          },
+          "byKind": {
+            "unnecessary": 7,
+            "missing": 1,
+            "other": 1
+          },
+          "diagnostics": 9,
+          "effects": 9,
+          "hooks": 9,
+          "pctOfHooks": 6.2,
+          "pctOfEffects": 11.5,
+          "missing": 1,
+          "unnecessary": 7
+        }
+      }
+    },
+    "vscode": {
+      "effects": 0,
+      "hooks": 0,
+      "raw": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": null,
+          "pctOfEffects": null,
+          "missing": 0,
+          "unnecessary": 0
+        }
+      }
+    },
+    "shadcn": {
+      "effects": 6,
+      "hooks": 18,
+      "raw": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "unnecessary": 2
+          },
+          "diagnostics": 2,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 11.1,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 2
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-compiler": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "unnecessary": 2
+          },
+          "diagnostics": 2,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 11.1,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 2
+        }
+      }
+    },
+    "radix": {
+      "effects": 155,
+      "hooks": 277,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "memo": 3
+          },
+          "byKind": {
+            "missing": 2,
+            "non-literal": 2,
+            "unknown-callback": 1
+          },
+          "diagnostics": 5,
+          "effects": 0,
+          "hooks": 3,
+          "pctOfHooks": 1.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "memo": 3
+          },
+          "byKind": {
+            "missing": 2,
+            "non-literal": 2,
+            "unknown-callback": 1
+          },
+          "diagnostics": 5,
+          "effects": 0,
+          "hooks": 3,
+          "pctOfHooks": 1.1,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {
+            "memo": 3,
+            "effect": 1
+          },
+          "byKind": {
+            "non-literal": 2,
+            "ref-cleanup": 1,
+            "unknown-callback": 1
+          },
+          "diagnostics": 5,
+          "effects": 1,
+          "hooks": 4,
+          "pctOfHooks": 1.4,
+          "pctOfEffects": 0.6,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 8,
+            "memo": 1
+          },
+          "byKind": {
+            "unnecessary": 6,
+            "missing": 3
+          },
+          "diagnostics": 9,
+          "effects": 8,
+          "hooks": 9,
+          "pctOfHooks": 3.2,
+          "pctOfEffects": 5.2,
+          "missing": 3,
+          "unnecessary": 6
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 0.4,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 12,
+            "memo": 5
+          },
+          "byKind": {
+            "unnecessary": 13,
+            "other": 3,
+            "missing": 2
+          },
+          "diagnostics": 18,
+          "effects": 12,
+          "hooks": 17,
+          "pctOfHooks": 6.1,
+          "pctOfEffects": 7.7,
+          "missing": 2,
+          "unnecessary": 13
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 7,
+            "memo": 1
+          },
+          "byKind": {
+            "unnecessary": 5,
+            "missing": 3
+          },
+          "diagnostics": 8,
+          "effects": 7,
+          "hooks": 8,
+          "pctOfHooks": 2.9,
+          "pctOfEffects": 4.5,
+          "missing": 3,
+          "unnecessary": 5
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 0.4,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 12,
+            "memo": 5
+          },
+          "byKind": {
+            "unnecessary": 13,
+            "other": 3,
+            "missing": 2
+          },
+          "diagnostics": 18,
+          "effects": 12,
+          "hooks": 17,
+          "pctOfHooks": 6.1,
+          "pctOfEffects": 7.7,
+          "missing": 2,
+          "unnecessary": 13
+        }
+      }
+    },
+    "react-aria": {
+      "effects": 32,
+      "hooks": 91,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 4,
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 5
+          },
+          "diagnostics": 5,
+          "effects": 4,
+          "hooks": 5,
+          "pctOfHooks": 5.5,
+          "pctOfEffects": 12.5,
+          "missing": 5,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 4,
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 5
+          },
+          "diagnostics": 5,
+          "effects": 4,
+          "hooks": 5,
+          "pctOfHooks": 5.5,
+          "pctOfEffects": 12.5,
+          "missing": 5,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 4,
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 5
+          },
+          "diagnostics": 5,
+          "effects": 4,
+          "hooks": 5,
+          "pctOfHooks": 5.5,
+          "pctOfEffects": 12.5,
+          "missing": 5,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "memo": 3
+          },
+          "byKind": {
+            "missing": 2,
+            "unnecessary": 1
+          },
+          "diagnostics": 3,
+          "effects": 0,
+          "hooks": 3,
+          "pctOfHooks": 3.3,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 1
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 3
+          },
+          "byKind": {
+            "missing": 2,
+            "unnecessary": 1
+          },
+          "diagnostics": 3,
+          "effects": 0,
+          "hooks": 3,
+          "pctOfHooks": 3.3,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 1
+        },
+        "biome": {
+          "byHookKind": {
+            "memo": 8,
+            "effect": 5
+          },
+          "byKind": {
+            "unnecessary": 7,
+            "missing": 6,
+            "unstable": 1
+          },
+          "diagnostics": 14,
+          "effects": 5,
+          "hooks": 13,
+          "pctOfHooks": 14.3,
+          "pctOfEffects": 15.6,
+          "missing": 6,
+          "unnecessary": 7
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 2,
+          "effects": 0,
+          "hooks": 2,
+          "pctOfHooks": 2.2,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 1
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 3
+          },
+          "byKind": {
+            "missing": 2,
+            "unnecessary": 1
+          },
+          "diagnostics": 3,
+          "effects": 0,
+          "hooks": 3,
+          "pctOfHooks": 3.3,
+          "pctOfEffects": 0,
+          "missing": 2,
+          "unnecessary": 1
+        },
+        "biome": {
+          "byHookKind": {
+            "memo": 8,
+            "effect": 5
+          },
+          "byKind": {
+            "unnecessary": 7,
+            "missing": 6,
+            "unstable": 1
+          },
+          "diagnostics": 14,
+          "effects": 5,
+          "hooks": 13,
+          "pctOfHooks": 14.3,
+          "pctOfEffects": 15.6,
+          "missing": 6,
+          "unnecessary": 7
+        }
+      }
+    },
+    "supabase": {
+      "effects": 662,
+      "hooks": 1733,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 161,
+            "memo": 29
+          },
+          "byKind": {
+            "missing": 185,
+            "complex": 8,
+            "unnecessary": 3,
+            "unstable": 2
+          },
+          "diagnostics": 201,
+          "effects": 161,
+          "hooks": 190,
+          "pctOfHooks": 11,
+          "pctOfEffects": 24.3,
+          "missing": 185,
+          "unnecessary": 3
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 166,
+            "memo": 37
+          },
+          "byKind": {
+            "missing": 193,
+            "complex": 9,
+            "unnecessary": 6,
+            "unstable": 2,
+            "unknown-callback": 1
+          },
+          "diagnostics": 215,
+          "effects": 166,
+          "hooks": 203,
+          "pctOfHooks": 11.7,
+          "pctOfEffects": 25.1,
+          "missing": 193,
+          "unnecessary": 6
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 166,
+            "memo": 37
+          },
+          "byKind": {
+            "missing": 193,
+            "unnecessary": 10,
+            "complex": 9,
+            "unstable": 2,
+            "unknown-callback": 1
+          },
+          "diagnostics": 219,
+          "effects": 166,
+          "hooks": 203,
+          "pctOfHooks": 11.7,
+          "pctOfEffects": 25.1,
+          "missing": 193,
+          "unnecessary": 10
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 227,
+            "memo": 36
+          },
+          "byKind": {
+            "missing": 199,
+            "unnecessary": 64
+          },
+          "diagnostics": 263,
+          "effects": 227,
+          "hooks": 263,
+          "pctOfHooks": 15.2,
+          "pctOfEffects": 34.3,
+          "missing": 199,
+          "unnecessary": 64
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 26,
+            "unnecessary": 4
+          },
+          "diagnostics": 30,
+          "effects": 0,
+          "hooks": 30,
+          "pctOfHooks": 1.7,
+          "pctOfEffects": 0,
+          "missing": 26,
+          "unnecessary": 4
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 232,
+            "memo": 42
+          },
+          "byKind": {
+            "missing": 197,
+            "unnecessary": 115,
+            "other": 1,
+            "too-specific": 1,
+            "unstable": 1
+          },
+          "diagnostics": 599,
+          "effects": 232,
+          "hooks": 274,
+          "pctOfHooks": 15.8,
+          "pctOfEffects": 35,
+          "missing": 197,
+          "unnecessary": 115
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 90,
+            "memo": 25
+          },
+          "byKind": {
+            "missing": 112,
+            "complex": 6,
+            "unstable": 2,
+            "unnecessary": 1
+          },
+          "diagnostics": 124,
+          "effects": 90,
+          "hooks": 115,
+          "pctOfHooks": 6.6,
+          "pctOfEffects": 13.6,
+          "missing": 112,
+          "unnecessary": 1
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 93,
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 118,
+            "complex": 7,
+            "unnecessary": 2,
+            "unstable": 2
+          },
+          "diagnostics": 133,
+          "effects": 93,
+          "hooks": 123,
+          "pctOfHooks": 7.1,
+          "pctOfEffects": 14,
+          "missing": 118,
+          "unnecessary": 2
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 93,
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 118,
+            "complex": 7,
+            "unnecessary": 6,
+            "unstable": 2
+          },
+          "diagnostics": 137,
+          "effects": 93,
+          "hooks": 123,
+          "pctOfHooks": 7.1,
+          "pctOfEffects": 14,
+          "missing": 118,
+          "unnecessary": 6
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 149,
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 123,
+            "unnecessary": 56
+          },
+          "diagnostics": 179,
+          "effects": 149,
+          "hooks": 179,
+          "pctOfHooks": 10.3,
+          "pctOfEffects": 22.5,
+          "missing": 123,
+          "unnecessary": 56
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 26,
+            "unnecessary": 4
+          },
+          "diagnostics": 30,
+          "effects": 0,
+          "hooks": 30,
+          "pctOfHooks": 1.7,
+          "pctOfEffects": 0,
+          "missing": 26,
+          "unnecessary": 4
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 232,
+            "memo": 42
+          },
+          "byKind": {
+            "missing": 197,
+            "unnecessary": 115,
+            "other": 1,
+            "too-specific": 1,
+            "unstable": 1
+          },
+          "diagnostics": 599,
+          "effects": 232,
+          "hooks": 274,
+          "pctOfHooks": 15.8,
+          "pctOfEffects": 35,
+          "missing": 197,
+          "unnecessary": 115
+        }
+      }
+    }
+  },
+  "pooled": {
+    "all": {
+      "effects": 1059,
+      "hooks": 2503,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 171,
+            "memo": 35
+          },
+          "byKind": {
+            "missing": 199,
+            "complex": 8,
+            "unnecessary": 4,
+            "non-literal": 3,
+            "unstable": 2,
+            "unknown-callback": 1
+          },
+          "diagnostics": 220,
+          "effects": 171,
+          "hooks": 206,
+          "pctOfHooks": 8.2,
+          "pctOfEffects": 16.1,
+          "missing": 199,
+          "unnecessary": 4
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 179,
+            "memo": 50
+          },
+          "byKind": {
+            "missing": 215,
+            "complex": 10,
+            "unnecessary": 8,
+            "non-literal": 4,
+            "unknown-callback": 2,
+            "unstable": 2,
+            "assignment-lost": 1
+          },
+          "diagnostics": 246,
+          "effects": 179,
+          "hooks": 229,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 16.9,
+          "missing": 215,
+          "unnecessary": 8
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 180,
+            "memo": 49
+          },
+          "byKind": {
+            "missing": 212,
+            "unnecessary": 13,
+            "complex": 10,
+            "non-literal": 4,
+            "unknown-callback": 2,
+            "unstable": 2,
+            "ref-cleanup": 1
+          },
+          "diagnostics": 249,
+          "effects": 180,
+          "hooks": 229,
+          "pctOfHooks": 9.1,
+          "pctOfEffects": 17,
+          "missing": 212,
+          "unnecessary": 13
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 260,
+            "memo": 43
+          },
+          "byKind": {
+            "missing": 213,
+            "unnecessary": 90
+          },
+          "diagnostics": 303,
+          "effects": 260,
+          "hooks": 303,
+          "pctOfHooks": 12.1,
+          "pctOfEffects": 24.6,
+          "missing": 213,
+          "unnecessary": 90
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 35
+          },
+          "byKind": {
+            "missing": 30,
+            "unnecessary": 5
+          },
+          "diagnostics": 35,
+          "effects": 0,
+          "hooks": 35,
+          "pctOfHooks": 1.4,
+          "pctOfEffects": 0,
+          "missing": 30,
+          "unnecessary": 5
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 279,
+            "memo": 61
+          },
+          "byKind": {
+            "missing": 215,
+            "unnecessary": 163,
+            "other": 6,
+            "unstable": 2,
+            "too-specific": 1
+          },
+          "diagnostics": 678,
+          "effects": 279,
+          "hooks": 340,
+          "pctOfHooks": 13.6,
+          "pctOfEffects": 26.3,
+          "missing": 215,
+          "unnecessary": 163
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 90,
+            "memo": 25
+          },
+          "byKind": {
+            "missing": 112,
+            "complex": 6,
+            "unstable": 2,
+            "unnecessary": 1
+          },
+          "diagnostics": 124,
+          "effects": 90,
+          "hooks": 115,
+          "pctOfHooks": 4.6,
+          "pctOfEffects": 8.5,
+          "missing": 112,
+          "unnecessary": 1
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 94,
+            "memo": 36
+          },
+          "byKind": {
+            "missing": 123,
+            "complex": 7,
+            "unnecessary": 3,
+            "unstable": 2,
+            "assignment-lost": 1,
+            "non-literal": 1
+          },
+          "diagnostics": 141,
+          "effects": 94,
+          "hooks": 130,
+          "pctOfHooks": 5.2,
+          "pctOfEffects": 8.9,
+          "missing": 123,
+          "unnecessary": 3
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 94,
+            "memo": 35
+          },
+          "byKind": {
+            "missing": 123,
+            "complex": 7,
+            "unnecessary": 6,
+            "unstable": 2,
+            "non-literal": 1
+          },
+          "diagnostics": 143,
+          "effects": 94,
+          "hooks": 129,
+          "pctOfHooks": 5.2,
+          "pctOfEffects": 8.9,
+          "missing": 123,
+          "unnecessary": 6
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 176,
+            "memo": 33
+          },
+          "byKind": {
+            "missing": 129,
+            "unnecessary": 80
+          },
+          "diagnostics": 209,
+          "effects": 176,
+          "hooks": 209,
+          "pctOfHooks": 8.3,
+          "pctOfEffects": 16.6,
+          "missing": 129,
+          "unnecessary": 80
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 35
+          },
+          "byKind": {
+            "missing": 30,
+            "unnecessary": 5
+          },
+          "diagnostics": 35,
+          "effects": 0,
+          "hooks": 35,
+          "pctOfHooks": 1.4,
+          "pctOfEffects": 0,
+          "missing": 30,
+          "unnecessary": 5
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 279,
+            "memo": 61
+          },
+          "byKind": {
+            "missing": 215,
+            "unnecessary": 163,
+            "other": 6,
+            "unstable": 2,
+            "too-specific": 1
+          },
+          "diagnostics": 678,
+          "effects": 279,
+          "hooks": 340,
+          "pctOfHooks": 13.6,
+          "pctOfEffects": 26.3,
+          "missing": 215,
+          "unnecessary": 163
+        }
+      }
+    },
+    "core": {
+      "effects": 204,
+      "hooks": 384,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 6,
+            "memo": 2
+          },
+          "byKind": {
+            "missing": 7,
+            "non-literal": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 9,
+          "effects": 6,
+          "hooks": 8,
+          "pctOfHooks": 2.1,
+          "pctOfEffects": 2.9,
+          "missing": 7,
+          "unnecessary": 1,
+          "per10kLines": 0.1
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 9,
+            "memo": 9
+          },
+          "byKind": {
+            "missing": 15,
+            "non-literal": 2,
+            "unnecessary": 2,
+            "assignment-lost": 1,
+            "complex": 1
+          },
+          "diagnostics": 21,
+          "effects": 9,
+          "hooks": 18,
+          "pctOfHooks": 4.7,
+          "pctOfEffects": 4.4,
+          "missing": 15,
+          "unnecessary": 2,
+          "per10kLines": 0.3
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 9,
+            "memo": 8
+          },
+          "byKind": {
+            "missing": 14,
+            "unnecessary": 3,
+            "non-literal": 2,
+            "complex": 1
+          },
+          "diagnostics": 20,
+          "effects": 9,
+          "hooks": 17,
+          "pctOfHooks": 4.4,
+          "pctOfEffects": 4.4,
+          "missing": 14,
+          "unnecessary": 3,
+          "per10kLines": 0.3
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 25,
+            "memo": 3
+          },
+          "byKind": {
+            "unnecessary": 19,
+            "missing": 9
+          },
+          "diagnostics": 28,
+          "effects": 25,
+          "hooks": 28,
+          "pctOfHooks": 7.3,
+          "pctOfEffects": 12.3,
+          "missing": 9,
+          "unnecessary": 19,
+          "per10kLines": 0.4
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 0.3,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0,
+          "per10kLines": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 30,
+            "memo": 4
+          },
+          "byKind": {
+            "unnecessary": 26,
+            "missing": 10,
+            "other": 2
+          },
+          "diagnostics": 45,
+          "effects": 30,
+          "hooks": 34,
+          "pctOfHooks": 8.9,
+          "pctOfEffects": 14.7,
+          "missing": 10,
+          "unnecessary": 26,
+          "per10kLines": 0.6
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {},
+          "byKind": {},
+          "diagnostics": 0,
+          "effects": 0,
+          "hooks": 0,
+          "pctOfHooks": 0,
+          "pctOfEffects": 0,
+          "missing": 0,
+          "unnecessary": 0
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "memo": 6,
+            "effect": 1
+          },
+          "byKind": {
+            "missing": 5,
+            "assignment-lost": 1,
+            "non-literal": 1,
+            "unnecessary": 1
+          },
+          "diagnostics": 8,
+          "effects": 1,
+          "hooks": 7,
+          "pctOfHooks": 1.8,
+          "pctOfEffects": 0.5,
+          "missing": 5,
+          "unnecessary": 1
+        },
+        "oxlint": {
+          "byHookKind": {
+            "memo": 5,
+            "effect": 1
+          },
+          "byKind": {
+            "missing": 5,
+            "non-literal": 1
+          },
+          "diagnostics": 6,
+          "effects": 1,
+          "hooks": 6,
+          "pctOfHooks": 1.6,
+          "pctOfEffects": 0.5,
+          "missing": 5,
+          "unnecessary": 0
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 20
+          },
+          "byKind": {
+            "unnecessary": 18,
+            "missing": 2
+          },
+          "diagnostics": 20,
+          "effects": 20,
+          "hooks": 20,
+          "pctOfHooks": 5.2,
+          "pctOfEffects": 9.8,
+          "missing": 2,
+          "unnecessary": 18
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 1
+          },
+          "byKind": {
+            "missing": 1
+          },
+          "diagnostics": 1,
+          "effects": 0,
+          "hooks": 1,
+          "pctOfHooks": 0.3,
+          "pctOfEffects": 0,
+          "missing": 1,
+          "unnecessary": 0
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 30,
+            "memo": 4
+          },
+          "byKind": {
+            "unnecessary": 26,
+            "missing": 10,
+            "other": 2
+          },
+          "diagnostics": 45,
+          "effects": 30,
+          "hooks": 34,
+          "pctOfHooks": 8.9,
+          "pctOfEffects": 14.7,
+          "missing": 10,
+          "unnecessary": 26
+        }
+      },
+      "lines": 694309
+    },
+    "react": {
+      "effects": 855,
+      "hooks": 2119,
+      "raw": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 165,
+            "memo": 33
+          },
+          "byKind": {
+            "missing": 192,
+            "complex": 8,
+            "unnecessary": 3,
+            "non-literal": 2,
+            "unstable": 2,
+            "unknown-callback": 1
+          },
+          "diagnostics": 211,
+          "effects": 165,
+          "hooks": 198,
+          "pctOfHooks": 9.3,
+          "pctOfEffects": 19.3,
+          "missing": 192,
+          "unnecessary": 3,
+          "per10kLines": 4.7
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 170,
+            "memo": 41
+          },
+          "byKind": {
+            "missing": 200,
+            "complex": 9,
+            "unnecessary": 6,
+            "non-literal": 2,
+            "unknown-callback": 2,
+            "unstable": 2
+          },
+          "diagnostics": 225,
+          "effects": 170,
+          "hooks": 211,
+          "pctOfHooks": 10,
+          "pctOfEffects": 19.9,
+          "missing": 200,
+          "unnecessary": 6,
+          "per10kLines": 5
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 171,
+            "memo": 41
+          },
+          "byKind": {
+            "missing": 198,
+            "unnecessary": 10,
+            "complex": 9,
+            "non-literal": 2,
+            "unknown-callback": 2,
+            "unstable": 2,
+            "ref-cleanup": 1
+          },
+          "diagnostics": 229,
+          "effects": 171,
+          "hooks": 212,
+          "pctOfHooks": 10,
+          "pctOfEffects": 20,
+          "missing": 198,
+          "unnecessary": 10,
+          "per10kLines": 5.1
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 235,
+            "memo": 40
+          },
+          "byKind": {
+            "missing": 204,
+            "unnecessary": 71
+          },
+          "diagnostics": 275,
+          "effects": 235,
+          "hooks": 275,
+          "pctOfHooks": 13,
+          "pctOfEffects": 27.5,
+          "missing": 204,
+          "unnecessary": 71,
+          "per10kLines": 6.1
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 34
+          },
+          "byKind": {
+            "missing": 29,
+            "unnecessary": 5
+          },
+          "diagnostics": 34,
+          "effects": 0,
+          "hooks": 34,
+          "pctOfHooks": 1.6,
+          "pctOfEffects": 0,
+          "missing": 29,
+          "unnecessary": 5,
+          "per10kLines": 0.8
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 249,
+            "memo": 57
+          },
+          "byKind": {
+            "missing": 205,
+            "unnecessary": 137,
+            "other": 4,
+            "unstable": 2,
+            "too-specific": 1
+          },
+          "diagnostics": 633,
+          "effects": 249,
+          "hooks": 306,
+          "pctOfHooks": 14.4,
+          "pctOfEffects": 29.1,
+          "missing": 205,
+          "unnecessary": 137,
+          "per10kLines": 14.1
+        }
+      },
+      "reported": {
+        "eslint": {
+          "byHookKind": {
+            "effect": 90,
+            "memo": 25
+          },
+          "byKind": {
+            "missing": 112,
+            "complex": 6,
+            "unstable": 2,
+            "unnecessary": 1
+          },
+          "diagnostics": 124,
+          "effects": 90,
+          "hooks": 115,
+          "pctOfHooks": 5.4,
+          "pctOfEffects": 10.5,
+          "missing": 112,
+          "unnecessary": 1
+        },
+        "eslint-all": {
+          "byHookKind": {
+            "effect": 93,
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 118,
+            "complex": 7,
+            "unnecessary": 2,
+            "unstable": 2
+          },
+          "diagnostics": 133,
+          "effects": 93,
+          "hooks": 123,
+          "pctOfHooks": 5.8,
+          "pctOfEffects": 10.9,
+          "missing": 118,
+          "unnecessary": 2
+        },
+        "oxlint": {
+          "byHookKind": {
+            "effect": 93,
+            "memo": 30
+          },
+          "byKind": {
+            "missing": 118,
+            "complex": 7,
+            "unnecessary": 6,
+            "unstable": 2
+          },
+          "diagnostics": 137,
+          "effects": 93,
+          "hooks": 123,
+          "pctOfHooks": 5.8,
+          "pctOfEffects": 10.9,
+          "missing": 118,
+          "unnecessary": 6
+        },
+        "oxlint-compiler": {
+          "byHookKind": {
+            "effect": 156,
+            "memo": 33
+          },
+          "byKind": {
+            "missing": 127,
+            "unnecessary": 62
+          },
+          "diagnostics": 189,
+          "effects": 156,
+          "hooks": 189,
+          "pctOfHooks": 8.9,
+          "pctOfEffects": 18.2,
+          "missing": 127,
+          "unnecessary": 62
+        },
+        "eslint-compiler": {
+          "byHookKind": {
+            "memo": 34
+          },
+          "byKind": {
+            "missing": 29,
+            "unnecessary": 5
+          },
+          "diagnostics": 34,
+          "effects": 0,
+          "hooks": 34,
+          "pctOfHooks": 1.6,
+          "pctOfEffects": 0,
+          "missing": 29,
+          "unnecessary": 5
+        },
+        "biome": {
+          "byHookKind": {
+            "effect": 249,
+            "memo": 57
+          },
+          "byKind": {
+            "missing": 205,
+            "unnecessary": 137,
+            "other": 4,
+            "unstable": 2,
+            "too-specific": 1
+          },
+          "diagnostics": 633,
+          "effects": 249,
+          "hooks": 306,
+          "pctOfHooks": 14.4,
+          "pctOfEffects": 29.1,
+          "missing": 205,
+          "unnecessary": 137
+        }
+      },
+      "lines": 449047
+    }
+  },
+  "overlapRaw": {
+    "oxlint": 7,
+    "none": 2153,
+    "eslint+oxlint+biome": 203,
+    "oxlint+biome": 16,
+    "biome": 121,
+    "eslint+oxlint": 3
+  },
+  "overlapRawEslintEverywhere": {
+    "eslint-all+oxlint": 9,
+    "eslint-all": 1,
+    "none": 2152,
+    "eslint-all+oxlint+biome": 219,
+    "biome": 121,
+    "oxlint": 1
+  },
+  "disagreements": {
+    "oxlint not eslint": {
+      "n": 23,
+      "primary": {
+        "eslint-skips-non-jsx-file": 22,
+        "kind:ref-cleanup": 1
+      },
+      "anyReason": {
+        "eslint-skips-non-jsx-file": 22,
+        "missing:hookValue": 7,
+        "missing:prop": 7,
+        "missing:callback": 3,
+        "unnecessary-dependency": 3,
+        "kind:complex": 2,
+        "missing:derived": 2,
+        "kind:non-literal": 1,
+        "kind:ref-cleanup": 1,
+        "kind:unknown-callback": 1,
+        "missing:let": 1
+      },
+      "examples": {
+        "eslint-skips-non-jsx-file": [
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has a missing dependency: 'updateState'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/hooks/index.ts#L65-L67"
+          },
+          {
+            "deps": [
+              "ref"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React Hook useMemo has a missing dependency: 'cb'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L28-L53"
+          },
+          {
+            "deps": [
+              "deDupeByKey",
+              "precedence",
+              "tag"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has missing dependencies: 'existingElements', and 'head'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L127-L188"
+          }
+        ],
+        "kind:ref-cleanup": [
+          {
+            "deps": [
+              "context.isPointerDownOnContentRef",
+              "context.hasSelectionRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "The ref's value `.current` is accessed directly in the effect cleanup function.",
+              "The ref's value `.current` is accessed directly in the effect cleanup function."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L300-L322"
+          }
+        ]
+      }
+    },
+    "eslint not oxlint": {
+      "n": 0,
+      "primary": {},
+      "anyReason": {},
+      "examples": {}
+    },
+    "biome not eslint": {
+      "n": 137,
+      "primary": {
+        "unnecessary-dependency-in-effect": 87,
+        "eslint-skips-non-jsx-file": 23,
+        "unnecessary-dependency": 15,
+        "missing:function": 5,
+        "stable:effectEvent": 3,
+        "kind:unstable": 2,
+        "eslint-skips-useInsertionEffect": 1,
+        "kind:other": 1
+      },
+      "anyReason": {
+        "unnecessary-dependency-in-effect": 95,
+        "eslint-skips-non-jsx-file": 23,
+        "unnecessary-dependency": 18,
+        "missing:hookValue": 7,
+        "missing:function": 6,
+        "missing:callback": 3,
+        "missing:prop": 3,
+        "stable:effectEvent": 3,
+        "kind:other": 2,
+        "kind:unstable": 2,
+        "eslint-skips-useInsertionEffect": 1,
+        "missing:derived": 1,
+        "optional-chain": 1
+      },
+      "examples": {
+        "unnecessary-dependency-in-effect": [
+          {
+            "deps": [
+              "activeSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: activeSection."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L64-L68"
+          },
+          {
+            "deps": [
+              "color",
+              "activeColorPickerSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: color, activeColorPickerSection."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/CustomColorList.tsx#L36-L40"
+          },
+          {
+            "deps": [
+              "colorObj?.colorName",
+              "activeColorPickerSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: colorObj?.colorName."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/PickerColorList.tsx#L60-L64"
+          }
+        ],
+        "eslint-skips-non-jsx-file": [
+          {
+            "deps": [
+              "hashKey(opts.queryKey)",
+              "opts.enabled"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook does not specify its dependency on getInitialState.",
+              "This hook does not specify its dependency on opts.subscribe."
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/subscriptionOptions.ts#L191-L254"
+          },
+          {
+            "deps": [
+              "chatHistory?.id",
+              "renderMermaid",
+              "showPreview"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: chatHistory?.id."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/hooks/useMermaidRenderer.ts#L179-L190"
+          },
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on loadChats."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/useTTDChatStorage.ts#L78-L81"
+          }
+        ],
+        "unnecessary-dependency": [
+          {
+            "deps": [
+              "setPublishLibSuccess",
+              "publishLibSuccess"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook specifies more dependencies than necessary: setPublishLibSuccess."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryMenuHeaderContent.tsx#L107-L141"
+          },
+          {
+            "deps": [
+              "isMobile",
+              "setOpen",
+              "setOpenMobile"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook specifies more dependencies than necessary: setOpenMobile."
+            ],
+            "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/sidebar.tsx#L92-L94"
+          },
+          {
+            "deps": [
+              "state",
+              "open",
+              "setOpen",
+              "isMobile",
+              "openMobile",
+              "setOpenMobile",
+              "toggleSidebar"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "This hook specifies more dependencies than necessary: setOpenMobile."
+            ],
+            "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/sidebar.tsx#L116-L127"
+          }
+        ],
+        "missing:function": [
+          {
+            "deps": [
+              "selectedRow",
+              "view",
+              "reportData"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on isSelectQuery."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/QueryPerformance/QueryPerformanceGrid.tsx#L476-L483"
+          },
+          {
+            "deps": [
+              "open",
+              "variant",
+              "startDate",
+              "endDate",
+              "handleCopy"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on handlePaste.",
+              "This hook specifies more dependencies than necessary: startDate, endDate."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/Logs.DatePickers.tsx#L260-L269"
+          },
+          {
+            "deps": [
+              "visible"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on onViewIntro."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/StoragePolicies/StoragePoliciesEditPolicyModal.tsx#L40-L45"
+          }
+        ],
+        "stable:effectEvent": [
+          {
+            "deps": [
+              "inputRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on _setVisible."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/password-toggle-field/src/password-toggle-field.tsx#L182-L211"
+          },
+          {
+            "deps": [
+              "uncontrolledState",
+              "prevValueRef",
+              "isControlled"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on onChange.",
+              "This hook specifies more dependencies than necessary: prevValueRef."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/use-controllable-state/src/use-controllable-state-reducer.tsx#L93-L100"
+          },
+          {
+            "deps": [
+              "stackItem",
+              "axis",
+              "maxScroll",
+              "enteredScroll",
+              "after"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook does not specify its dependency on onCloseEvent."
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Sheet.tsx#L263-L319"
+          }
+        ],
+        "kind:unstable": [
+          {
+            "deps": [
+              "states",
+              "isHovered",
+              "isFocusVisible",
+              "isExpanded",
+              "hasChildItems",
+              "level",
+              "isFocusVisibleWithin",
+              "state",
+              "item.key",
+              "dragState",
+              "isDragging",
+              "isDropTarget",
+              "selectionBehavior",
+              "selectionMode"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              ""
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L846-L879"
+          },
+          {
+            "deps": [
+              "props"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "props changes on every re-render and should not be used as a hook dependency."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/providers/DataTableProvider.tsx#L59-L74"
+          }
+        ],
+        "eslint-skips-useInsertionEffect": [
+          {
+            "deps": [],
+            "hook": "useInsertionEffect",
+            "messages": [
+              "This hook does not specify its dependency on dispatch."
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay.browser.tsx#L372-L384"
+          }
+        ],
+        "kind:other": [
+          {
+            "deps": [],
+            "hook": "useLayoutEffect",
+            "messages": [
+              "This dependencies list is not an array literal."
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/layout-router.tsx#L151-L275"
+          }
+        ]
+      }
+    },
+    "eslint not biome": {
+      "n": 3,
+      "primary": {
+        "kind:unstable": 2,
+        "kind:complex": 1
+      },
+      "anyReason": {
+        "kind:unstable": 2,
+        "kind:complex": 1,
+        "missing:hookValue": 1
+      },
+      "examples": {
+        "kind:unstable": [
+          {
+            "deps": [
+              "selectedFeatures"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "The 'selectedFeatures' conditional could make the dependencies of useMemo Hook (at line 56) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'selectedFeatures' in its own useMemo() Hook."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/steps/mcp/cursor/content.tsx#L51-L56"
+          },
+          {
+            "deps": [
+              "ctx",
+              "updateDateRange"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "The 'ctx' conditional could make the dependencies of useMemo Hook (at line 81) change on every render. To fix this, wrap the initialization of 'ctx' in its own useMemo() Hook."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ChartHighlightActions.tsx#L64-L81"
+          }
+        ],
+        "kind:complex": [
+          {
+            "deps": [
+              "snap.isInitialized",
+              "router.query[ASSISTANT_HANDOFF_QUERY_PARAM]"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'router.query'. Either include it or remove the dependency array.",
+              "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/AIAssistantPanel/AIAssistant.tsx#L114-L121"
+          }
+        ]
+      }
+    },
+    "biome not oxlint": {
+      "n": 121,
+      "primary": {
+        "unnecessary-dependency-in-effect": 94,
+        "unnecessary-dependency": 15,
+        "missing:function": 5,
+        "stable:effectEvent": 3,
+        "kind:unstable": 2,
+        "kind:other": 1,
+        "missing:hookValue": 1
+      },
+      "anyReason": {
+        "unnecessary-dependency-in-effect": 94,
+        "unnecessary-dependency": 15,
+        "missing:function": 5,
+        "stable:effectEvent": 3,
+        "kind:unstable": 2,
+        "kind:other": 1,
+        "missing:hookValue": 1
+      },
+      "examples": {
+        "unnecessary-dependency-in-effect": [
+          {
+            "deps": [
+              "activeSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: activeSection."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L64-L68"
+          },
+          {
+            "deps": [
+              "color",
+              "activeColorPickerSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: color, activeColorPickerSection."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/CustomColorList.tsx#L36-L40"
+          },
+          {
+            "deps": [
+              "colorObj?.colorName",
+              "activeColorPickerSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook specifies more dependencies than necessary: colorObj?.colorName."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/PickerColorList.tsx#L60-L64"
+          }
+        ],
+        "unnecessary-dependency": [
+          {
+            "deps": [
+              "setPublishLibSuccess",
+              "publishLibSuccess"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook specifies more dependencies than necessary: setPublishLibSuccess."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryMenuHeaderContent.tsx#L107-L141"
+          },
+          {
+            "deps": [
+              "isMobile",
+              "setOpen",
+              "setOpenMobile"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook specifies more dependencies than necessary: setOpenMobile."
+            ],
+            "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/sidebar.tsx#L92-L94"
+          },
+          {
+            "deps": [
+              "state",
+              "open",
+              "setOpen",
+              "isMobile",
+              "openMobile",
+              "setOpenMobile",
+              "toggleSidebar"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "This hook specifies more dependencies than necessary: setOpenMobile."
+            ],
+            "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/sidebar.tsx#L116-L127"
+          }
+        ],
+        "missing:function": [
+          {
+            "deps": [
+              "selectedRow",
+              "view",
+              "reportData"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on isSelectQuery."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/QueryPerformance/QueryPerformanceGrid.tsx#L476-L483"
+          },
+          {
+            "deps": [
+              "open",
+              "variant",
+              "startDate",
+              "endDate",
+              "handleCopy"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on handlePaste.",
+              "This hook specifies more dependencies than necessary: startDate, endDate."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/Logs.DatePickers.tsx#L260-L269"
+          },
+          {
+            "deps": [
+              "visible"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on onViewIntro."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/StoragePolicies/StoragePoliciesEditPolicyModal.tsx#L40-L45"
+          }
+        ],
+        "stable:effectEvent": [
+          {
+            "deps": [
+              "inputRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on _setVisible."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/password-toggle-field/src/password-toggle-field.tsx#L182-L211"
+          },
+          {
+            "deps": [
+              "uncontrolledState",
+              "prevValueRef",
+              "isControlled"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "This hook does not specify its dependency on onChange.",
+              "This hook specifies more dependencies than necessary: prevValueRef."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/use-controllable-state/src/use-controllable-state-reducer.tsx#L93-L100"
+          },
+          {
+            "deps": [
+              "stackItem",
+              "axis",
+              "maxScroll",
+              "enteredScroll",
+              "after"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "This hook does not specify its dependency on onCloseEvent."
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Sheet.tsx#L263-L319"
+          }
+        ],
+        "kind:unstable": [
+          {
+            "deps": [
+              "states",
+              "isHovered",
+              "isFocusVisible",
+              "isExpanded",
+              "hasChildItems",
+              "level",
+              "isFocusVisibleWithin",
+              "state",
+              "item.key",
+              "dragState",
+              "isDragging",
+              "isDropTarget",
+              "selectionBehavior",
+              "selectionMode"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              ""
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L846-L879"
+          },
+          {
+            "deps": [
+              "props"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "props changes on every re-render and should not be used as a hook dependency."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/providers/DataTableProvider.tsx#L59-L74"
+          }
+        ],
+        "kind:other": [
+          {
+            "deps": [],
+            "hook": "useLayoutEffect",
+            "messages": [
+              "This dependencies list is not an array literal."
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/layout-router.tsx#L151-L275"
+          }
+        ],
+        "missing:hookValue": [
+          {
+            "deps": [],
+            "hook": "useInsertionEffect",
+            "messages": [
+              "This hook does not specify its dependency on dispatch."
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay.browser.tsx#L372-L384"
+          }
+        ]
+      }
+    },
+    "oxlint not biome": {
+      "n": 10,
+      "primary": {
+        "missing:prop": 4,
+        "kind:unstable": 2,
+        "kind:complex": 1,
+        "kind:non-literal": 1,
+        "kind:ref-cleanup": 1,
+        "missing:let": 1
+      },
+      "anyReason": {
+        "missing:prop": 4,
+        "kind:unstable": 2,
+        "kind:complex": 1,
+        "kind:non-literal": 1,
+        "kind:ref-cleanup": 1,
+        "missing:derived": 1,
+        "missing:hookValue": 1,
+        "missing:let": 1
+      },
+      "examples": {
+        "missing:prop": [
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has a missing dependency: 'updateState'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/hooks/index.ts#L65-L67"
+          },
+          {
+            "deps": [
+              "ref"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React Hook useMemo has a missing dependency: 'cb'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L28-L53"
+          },
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has a missing dependency: 'action'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L333-L353"
+          }
+        ],
+        "kind:unstable": [
+          {
+            "deps": [
+              "selectedFeatures"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React hook useMemo depends on `selectedFeatures`, which changes every render"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/steps/mcp/cursor/content.tsx#L51-L56"
+          },
+          {
+            "deps": [
+              "ctx",
+              "updateDateRange"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React hook useMemo depends on `ctx`, which changes every render"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ChartHighlightActions.tsx#L64-L81"
+          }
+        ],
+        "kind:complex": [
+          {
+            "deps": [
+              "snap.isInitialized",
+              "router.query[ASSISTANT_HANDOFF_QUERY_PARAM]"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'router.query'",
+              "React Hook useEffect has a complex expression in the dependency array."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/AIAssistantPanel/AIAssistant.tsx#L114-L121"
+          }
+        ],
+        "kind:non-literal": [
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies."
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/hooks/index.ts#L393-L398"
+          }
+        ],
+        "kind:ref-cleanup": [
+          {
+            "deps": [
+              "context.isPointerDownOnContentRef",
+              "context.hasSelectionRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "The ref's value `.current` is accessed directly in the effect cleanup function.",
+              "The ref's value `.current` is accessed directly in the effect cleanup function."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L300-L322"
+          }
+        ],
+        "missing:let": [
+          {
+            "deps": [
+              "deDupeByKey",
+              "precedence",
+              "tag"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has missing dependencies: 'existingElements', and 'head'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L127-L188"
+          }
+        ]
+      }
+    },
+    "oxlint not eslint-all": {
+      "n": 1,
+      "primary": {
+        "kind:ref-cleanup": 1
+      },
+      "anyReason": {
+        "kind:ref-cleanup": 1
+      },
+      "examples": {
+        "kind:ref-cleanup": [
+          {
+            "deps": [
+              "context.isPointerDownOnContentRef",
+              "context.hasSelectionRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "The ref's value `.current` is accessed directly in the effect cleanup function.",
+              "The ref's value `.current` is accessed directly in the effect cleanup function."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L300-L322"
+          }
+        ]
+      }
+    },
+    "eslint-all not oxlint": {
+      "n": 1,
+      "primary": {
+        "unnecessary-dependency": 1
+      },
+      "anyReason": {
+        "unnecessary-dependency": 1
+      },
+      "examples": {
+        "unnecessary-dependency": [
+          {
+            "deps": [
+              "state"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has an unnecessary dependency: 'state'. Either exclude it or remove the dependency array."
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/hooks/index.ts#L137-L151"
+          }
+        ]
+      }
+    },
+    "oxlint-compiler not oxlint": {
+      "n": 98,
+      "primary": {
+        "unnecessary-dependency-in-effect": 81,
+        "missing:function": 5,
+        "stable:ref": 5,
+        "stable:effectEvent": 2,
+        "stable:setter": 2,
+        "unnecessary-dependency": 2,
+        "missing:hookValue": 1
+      },
+      "anyReason": {
+        "unnecessary-dependency-in-effect": 81,
+        "missing:function": 5,
+        "stable:ref": 5,
+        "missing:unresolved": 2,
+        "stable:effectEvent": 2,
+        "stable:setter": 2,
+        "unnecessary-dependency": 2,
+        "missing:hookValue": 1
+      },
+      "examples": {
+        "unnecessary-dependency-in-effect": [
+          {
+            "deps": [
+              "activeSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found extra effect dependencies"
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L64-L68"
+          },
+          {
+            "deps": [
+              "color",
+              "activeColorPickerSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found extra effect dependencies"
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/CustomColorList.tsx#L36-L40"
+          },
+          {
+            "deps": [
+              "colorObj?.colorName",
+              "activeColorPickerSection"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found extra effect dependencies"
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/PickerColorList.tsx#L60-L64"
+          }
+        ],
+        "missing:function": [
+          {
+            "deps": [
+              "selectedRow",
+              "view",
+              "reportData"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/QueryPerformance/QueryPerformanceGrid.tsx#L476-L483"
+          },
+          {
+            "deps": [
+              "open",
+              "variant",
+              "startDate",
+              "endDate",
+              "handleCopy"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing/extra effect dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/Logs.DatePickers.tsx#L260-L269"
+          },
+          {
+            "deps": [
+              "visible"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/StoragePolicies/StoragePoliciesEditPolicyModal.tsx#L40-L45"
+          }
+        ],
+        "stable:ref": [
+          {
+            "deps": [
+              "registryRef"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "Found missing memoization dependencies"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/collection/src/collection.tsx#L231-L244"
+          },
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/menu/src/menu.tsx#L476-L478"
+          },
+          {
+            "deps": [
+              "mode",
+              "isSpotColorEnabled",
+              "flushDraft"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing/extra effect dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/Preferences/ThemeColorSettings.tsx#L87-L90"
+          }
+        ],
+        "stable:effectEvent": [
+          {
+            "deps": [
+              "inputRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/password-toggle-field/src/password-toggle-field.tsx#L182-L211"
+          },
+          {
+            "deps": [
+              "stackItem",
+              "axis",
+              "maxScroll",
+              "enteredScroll",
+              "after"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "Found missing memoization dependencies"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Sheet.tsx#L263-L319"
+          }
+        ],
+        "stable:setter": [
+          {
+            "deps": [
+              "initialDatePickerValue"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Reports/ReportFilterBar.tsx#L232-L236"
+          },
+          {
+            "deps": [
+              "bucketId",
+              "projectRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/FilesBuckets/PublicBucketWarning.tsx#L99-L102"
+          }
+        ],
+        "unnecessary-dependency": [
+          {
+            "deps": [
+              "groupRef",
+              "inputRef"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "Found extra memoization dependencies"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ComboBox.tsx#L266-L274"
+          },
+          {
+            "deps": [
+              "editor",
+              "diffController",
+              "sourceSqlDiff",
+              "selectedDiffType",
+              "generateSqlTitle",
+              "handleNewQuery",
+              "track",
+              "setIsAcceptDiffLoading",
+              "setSelectedDiffType",
+              "resetPrompt",
+              "closeDiff",
+              "refocusEditor"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "Found extra memoization dependencies"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/useSqlEditorAi.ts#L152-L191"
+          }
+        ],
+        "missing:hookValue": [
+          {
+            "deps": [],
+            "hook": "useInsertionEffect",
+            "messages": [
+              "Found missing effect dependencies"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay.browser.tsx#L372-L384"
+          }
+        ]
+      }
+    },
+    "oxlint not oxlint-compiler": {
+      "n": 24,
+      "primary": {
+        "missing:prop": 6,
+        "kind:non-literal": 4,
+        "missing:context": 3,
+        "kind:unknown-callback": 2,
+        "kind:unstable": 2,
+        "missing:hookValue": 2,
+        "missing:let": 2,
+        "kind:ref-cleanup": 1,
+        "missing:function": 1,
+        "unnecessary-dependency-in-effect": 1
+      },
+      "anyReason": {
+        "missing:prop": 7,
+        "kind:non-literal": 4,
+        "missing:context": 3,
+        "kind:unknown-callback": 2,
+        "kind:unstable": 2,
+        "missing:function": 2,
+        "missing:hookValue": 2,
+        "missing:let": 2,
+        "kind:ref-cleanup": 1,
+        "missing:derived": 1,
+        "missing:state": 1,
+        "unnecessary-dependency-in-effect": 1
+      },
+      "examples": {
+        "missing:prop": [
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has a missing dependency: 'updateState'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/hooks/index.ts#L65-L67"
+          },
+          {
+            "deps": [
+              "ref"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React Hook useMemo has a missing dependency: 'cb'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L28-L53"
+          },
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has a missing dependency: 'action'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L333-L353"
+          }
+        ],
+        "kind:non-literal": [
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies."
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/hooks/index.ts#L393-L398"
+          },
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies."
+            ],
+            "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SVGLayer.tsx#L14-L27"
+          },
+          {
+            "deps": [],
+            "hook": "useMemo",
+            "messages": [
+              "React Hook useMemo was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/context/src/create-context.tsx#L37"
+          }
+        ],
+        "missing:context": [
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'dragState'"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L613-L620"
+          },
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'dragState'"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Table.tsx#L1842-L1849"
+          },
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'dragState'"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L911-L918"
+          }
+        ],
+        "kind:unknown-callback": [
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback received a function whose dependencies are unknown."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/compose-refs/src/compose-refs.tsx#L57"
+          },
+          {
+            "deps": [],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback received a function whose dependencies are unknown."
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/hooks/useComposedRefs.ts#L31"
+          }
+        ],
+        "kind:unstable": [
+          {
+            "deps": [
+              "selectedFeatures"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React hook useMemo depends on `selectedFeatures`, which changes every render"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/steps/mcp/cursor/content.tsx#L51-L56"
+          },
+          {
+            "deps": [
+              "ctx",
+              "updateDateRange"
+            ],
+            "hook": "useMemo",
+            "messages": [
+              "React hook useMemo depends on `ctx`, which changes every render"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ChartHighlightActions.tsx#L64-L81"
+          }
+        ],
+        "missing:hookValue": [
+          {
+            "deps": [
+              "sorting"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'setSearch'"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/UnifiedLogs/UnifiedLogs.tsx#L370-L373"
+          },
+          {
+            "deps": [
+              "openRowId",
+              "selectedRow",
+              "isLoading",
+              "isFetching"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has missing dependencies: 'search.id', 'track', 'setSearch', and 'setOpenRowId'"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/UnifiedLogs/UnifiedLogs.tsx#L375-L390"
+          }
+        ],
+        "missing:let": [
+          {
+            "deps": [
+              "deDupeByKey",
+              "precedence",
+              "tag"
+            ],
+            "hook": "useCallback",
+            "messages": [
+              "React Hook useCallback has missing dependencies: 'existingElements', and 'head'"
+            ],
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L127-L188"
+          },
+          {
+            "deps": [],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has a missing dependency: 'hasChildItems'"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L901-L908"
+          }
+        ],
+        "kind:ref-cleanup": [
+          {
+            "deps": [
+              "context.isPointerDownOnContentRef",
+              "context.hasSelectionRef"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "The ref's value `.current` is accessed directly in the effect cleanup function.",
+              "The ref's value `.current` is accessed directly in the effect cleanup function."
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L300-L322"
+          }
+        ],
+        "missing:function": [
+          {
+            "deps": [
+              "loading"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has missing dependencies: 'handleChange', and 'value'"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DateRangePicker.tsx#L56-L58"
+          }
+        ],
+        "unnecessary-dependency-in-effect": [
+          {
+            "deps": [
+              "isDisabled",
+              "rootMargin",
+              "rootRef",
+              "visible",
+              "elementRef.current"
+            ],
+            "hook": "useEffect",
+            "messages": [
+              "React Hook useEffect has an unnecessary dependency: elementRef."
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/use-intersection.tsx#L109-L130"
+          }
+        ]
+      }
+    }
+  },
+  "sameHookDifferentNames": {
+    "eslintAndBiome": 203,
+    "namesDiffer": 116,
+    "eslintAndOxlint": 206,
+    "eslintOxlintNamesDiffer": 34
+  },
+  "messages": {
+    "biome · missing": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook does not specify its dependency on input.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L420",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook does not specify its dependency on path.join.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L420",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook does not specify its dependency on reset.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L420",
+        "suggestions": []
+      }
+    ],
+    "biome · other": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "This dependencies list is not an array literal.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SVGLayer.tsx#L27",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "This dependencies list is not an array literal.",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/layout-router.tsx#L274",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "This dependencies list is not an array literal.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/compose-refs/src/compose-refs.tsx#L57",
+        "suggestions": []
+      }
+    ],
+    "biome · too-specific": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook specifies a dependency more specific than its captures: value.isHelper",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/LogsQueryPanel.tsx#L117",
+        "suggestions": []
+      }
+    ],
+    "biome · unnecessary": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook specifies more dependencies than necessary: queryKey.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L420",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook specifies more dependencies than necessary: hashKey(opts.queryKey).",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/subscriptionOptions.ts#L191",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "This hook specifies more dependencies than necessary: activeSection.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L64",
+        "suggestions": []
+      }
+    ],
+    "biome · unstable": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "         states changes on every re-render and should not be used as a hook dependency.",
+        "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Tree.tsx#L864",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "props changes on every re-render and should not be used as a hook dependency.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/providers/DataTableProvider.tsx#L73",
+        "suggestions": []
+      }
+    ],
+    "eslint · complex": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx#L40",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx#L40",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/CronJobs/CreateCronJobSheet/CreateCronJobSheet.tsx#L273",
+        "suggestions": []
+      }
+    ],
+    "eslint · missing": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook React.useCallback has missing dependencies: 'input' and 'path'. Either include them or remove the dependency array.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L501",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [enabled, updateState, client, path, input]",
+            "text": "[enabled, updateState, client, path, input]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has a missing dependency: 'updateData'. Either include it or remove the dependency array. If 'updateData' changes too often, find the parent component that defines it and wrap that definition in useCallback.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/actions/actionProperties.tsx#L1428",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [batchedData, updateData]",
+            "text": "[batchedData, updateData]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useMemo has a missing dependency: 'fonts'. Either include it or remove the dependency array.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/FontPicker/FontPickerList.tsx#L161",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [fonts]",
+            "text": "[fonts]"
+          }
+        ]
+      }
+    ],
+    "eslint · non-literal": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SVGLayer.tsx#L27",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook React.useMemo was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/context/src/create-context.tsx#L37",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook React.useMemo was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/context/src/create-context.tsx#L130",
+        "suggestions": []
+      }
+    ],
+    "eslint · unknown-callback": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/compose-refs/src/compose-refs.tsx#L57",
+        "suggestions": []
+      }
+    ],
+    "eslint · unnecessary": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has an unnecessary dependency: 'elementRef.current'. Either exclude it or remove the dependency array. Mutable values like 'elementRef.current' aren't valid dependencies because mutating them doesn't re-render the component.",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/use-intersection.tsx#L130",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [isDisabled, rootMargin, rootRef, visible]",
+            "text": "[isDisabled, rootMargin, rootRef, visible]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useMemo has an unnecessary dependency: 'refreshKey'. Either exclude it or remove the dependency array.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Observability/DatabaseInfrastructureSection.tsx#L67",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [interval]",
+            "text": "[interval]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useMemo has an unnecessary dependency: 'subscription'. Either exclude it or remove the dependency array.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/Usage/Usage.tsx#L93",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [dateRange]",
+            "text": "[dateRange]"
+          }
+        ]
+      }
+    ],
+    "eslint · unstable": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "The 'selectedFeatures' conditional could make the dependencies of useMemo Hook (at line 56) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'selectedFeatures' in its own useMemo() Hook.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/steps/mcp/cursor/content.tsx#L49",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "The 'ctx' conditional could make the dependencies of useMemo Hook (at line 81) change on every render. To fix this, wrap the initialization of 'ctx' in its own useMemo() Hook.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ChartHighlightActions.tsx#L59",
+        "suggestions": []
+      }
+    ],
+    "eslint-all · assignment-lost": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "Assignments to the 'existingElements' variable from inside React Hook useCallback will be lost after each render. To preserve the value over time, store it in a useRef Hook and keep the mutable value in the '.current' property. Otherwise, you can move this variable directly inside useCallback.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L184",
+        "suggestions": []
+      }
+    ],
+    "eslint-all · complex": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook React.useCallback has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/subscriptionOptions.ts#L254",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx#L40",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx#L40",
+        "suggestions": []
+      }
+    ],
+    "eslint-all · missing": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useCallback has a missing dependency: 'updateState'. Either include it or remove the dependency array. If 'updateState' changes too often, find the parent component that defines it and wrap that definition in useCallback.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/hooks/index.ts#L67",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [updateState]",
+            "text": "[updateState]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useMemo has a missing dependency: 'cb'. Either include it or remove the dependency array. If 'cb' changes too often, find the parent component that defines it and wrap that definition in useCallback.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L52",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [cb, ref]",
+            "text": "[cb, ref]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useCallback has a missing dependency: 'action'. Either include it or remove the dependency array.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L352",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [action]",
+            "text": "[action]"
+          }
+        ]
+      }
+    ],
+    "eslint-all · non-literal": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/hooks/index.ts#L398",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SVGLayer.tsx#L27",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook React.useMemo was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/context/src/create-context.tsx#L37",
+        "suggestions": []
+      }
+    ],
+    "eslint-all · unknown-callback": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/compose-refs/src/compose-refs.tsx#L57",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/hooks/useComposedRefs.ts#L31",
+        "suggestions": []
+      }
+    ],
+    "eslint-all · unnecessary": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useCallback has an unnecessary dependency: 'state'. Either exclude it or remove the dependency array.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/hooks/index.ts#L150",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: []",
+            "text": "[]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useEffect has an unnecessary dependency: 'elementRef.current'. Either exclude it or remove the dependency array. Mutable values like 'elementRef.current' aren't valid dependencies because mutating them doesn't re-render the component.",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/use-intersection.tsx#L130",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [isDisabled, rootMargin, rootRef, visible]",
+            "text": "[isDisabled, rootMargin, rootRef, visible]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "React Hook useMemo has an unnecessary dependency: 'refreshKey'. Either exclude it or remove the dependency array.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Observability/DatabaseInfrastructureSection.tsx#L67",
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [interval]",
+            "text": "[interval]"
+          }
+        ]
+      }
+    ],
+    "eslint-all · unstable": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "The 'selectedFeatures' conditional could make the dependencies of useMemo Hook (at line 56) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'selectedFeatures' in its own useMemo() Hook.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/steps/mcp/cursor/content.tsx#L49",
+        "suggestions": []
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "The 'ctx' conditional could make the dependencies of useMemo Hook (at line 81) change on every render. To fix this, wrap the initialization of 'ctx' in its own useMemo() Hook.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ChartHighlightActions.tsx#L59",
+        "suggestions": []
+      }
+    ],
+    "eslint-compiler · missing": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "Error: Found missing memoization dependencies  Missing dependencies can cause a value to update less often than it should, resulting in stale UI.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TopPicksDnD/topPicksDnD.tsx#L405",
+        "suggestions": [
+          {
+            "desc": "Update dependencies",
+            "text": "[onKeyDown, onPointerCancel, onPointerMove, onPointerUp]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "Error: Found missing memoization dependencies  Missing dependencies can cause a value to update less often than it should, resulting in stale UI.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/select/src/select.tsx#L1973",
+        "suggestions": [
+          {
+            "desc": "Update dependencies",
+            "text": "[handleSearchChange, updateSearch]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "Error: Found missing/extra memoization dependencies  Missing dependencies can cause a value to update less often than it should, resulting in stale UI. Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often.",
+        "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DragAndDrop.tsx#L87",
+        "suggestions": [
+          {
+            "desc": "Update dependencies",
+            "text": "[dropState, isVirtualDragging, renderDropIndicator]"
+          }
+        ]
+      }
+    ],
+    "eslint-compiler · unnecessary": [
+      {
+        "help": null,
+        "labels": [],
+        "message": "Error: Found extra memoization dependencies  Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often.",
+        "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ComboBox.tsx#L273",
+        "suggestions": [
+          {
+            "desc": "Update dependencies",
+            "text": "[]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "Error: Found extra memoization dependencies  Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Hooks/CreateHookSheet.tsx#L212",
+        "suggestions": [
+          {
+            "desc": "Update dependencies",
+            "text": "[hook.method.functionName, hook.method.schema, hook.method.type, postgresValues.functionName]"
+          }
+        ]
+      },
+      {
+        "help": null,
+        "labels": [],
+        "message": "Error: Found extra memoization dependencies  Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Observability/DatabaseInfrastructureSection.tsx#L67",
+        "suggestions": [
+          {
+            "desc": "Update dependencies",
+            "text": "[interval]"
+          }
+        ]
+      }
+    ],
+    "oxlint · complex": [
+      {
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "labels": [],
+        "message": "React Hook useCallback has a complex expression in the dependency array.",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/subscriptionOptions.ts#L254",
+        "suggestions": []
+      },
+      {
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx#L40",
+        "suggestions": []
+      },
+      {
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "labels": [],
+        "message": "React Hook useEffect has a complex expression in the dependency array.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx#L40",
+        "suggestions": []
+      }
+    ],
+    "oxlint · missing": [
+      {
+        "help": "Either include it or remove the dependency array.",
+        "labels": [
+          "useCallback uses `updateState` here"
+        ],
+        "message": "React Hook useCallback has a missing dependency: 'updateState'",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/hooks/index.ts#L66",
+        "suggestions": []
+      },
+      {
+        "help": "Either include it or remove the dependency array.",
+        "labels": [
+          "useMemo uses `cb` here"
+        ],
+        "message": "React Hook useMemo has a missing dependency: 'cb'",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L46",
+        "suggestions": []
+      },
+      {
+        "help": "Either include it or remove the dependency array.",
+        "labels": [],
+        "message": "React Hook useCallback has missing dependencies: 'existingElements', and 'head'",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/intrinsic-element/components.ts#L169",
+        "suggestions": []
+      }
+    ],
+    "oxlint · non-literal": [
+      {
+        "help": "Use an array literal as the second argument.",
+        "labels": [],
+        "message": "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/hooks/index.ts#L398",
+        "suggestions": []
+      },
+      {
+        "help": "Use an array literal as the second argument.",
+        "labels": [],
+        "message": "React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/SVGLayer.tsx#L27",
+        "suggestions": []
+      },
+      {
+        "help": "Use an array literal as the second argument.",
+        "labels": [],
+        "message": "React Hook useMemo was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/context/src/create-context.tsx#L37",
+        "suggestions": []
+      }
+    ],
+    "oxlint · ref-cleanup": [
+      {
+        "help": "The ref value will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by react, copy it to a variable inside the effect and use that variable in the cleanup function.",
+        "labels": [],
+        "message": "The ref's value `.current` is accessed directly in the effect cleanup function.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L317",
+        "suggestions": []
+      },
+      {
+        "help": "The ref value will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by react, copy it to a variable inside the effect and use that variable in the cleanup function.",
+        "labels": [],
+        "message": "The ref's value `.current` is accessed directly in the effect cleanup function.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L319",
+        "suggestions": []
+      }
+    ],
+    "oxlint · unknown-callback": [
+      {
+        "help": "Pass an inline function instead.",
+        "labels": [],
+        "message": "React Hook useCallback received a function whose dependencies are unknown.",
+        "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/compose-refs/src/compose-refs.tsx#L57",
+        "suggestions": []
+      },
+      {
+        "help": "Pass an inline function instead.",
+        "labels": [],
+        "message": "React Hook useCallback received a function whose dependencies are unknown.",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/hooks/useComposedRefs.ts#L31",
+        "suggestions": []
+      }
+    ],
+    "oxlint · unnecessary": [
+      {
+        "help": "Either include it or remove the dependency array.",
+        "labels": [],
+        "message": "React Hook useCallback has unnecessary dependency: queryKey",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L501",
+        "suggestions": []
+      },
+      {
+        "help": "Either include it or remove the dependency array.",
+        "labels": [],
+        "message": "React Hook useMemo has unnecessary dependency: selectedFontFamily",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/FontPicker/FontPickerList.tsx#L161",
+        "suggestions": []
+      },
+      {
+        "help": "Consider removing it from the dependency array. Outer scope values aren't valid dependencies because mutating them doesn't re-render the component.",
+        "labels": [],
+        "message": "React Hook useEffect has an unnecessary dependency: elementRef.",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/use-intersection.tsx#L130",
+        "suggestions": []
+      }
+    ],
+    "oxlint · unstable": [
+      {
+        "help": "Try memoizing this variable with `useRef` or `useCallback`.",
+        "labels": [
+          "it will always cause this hook to re-evaluate",
+          "`selectedFeatures` is declared here"
+        ],
+        "message": "React hook useMemo depends on `selectedFeatures`, which changes every render",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/steps/mcp/cursor/content.tsx#L56",
+        "suggestions": []
+      },
+      {
+        "help": "Try memoizing this variable with `useRef` or `useCallback`.",
+        "labels": [
+          "it will always cause this hook to re-evaluate",
+          "`ctx` is declared here"
+        ],
+        "message": "React hook useMemo depends on `ctx`, which changes every render",
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ChartHighlightActions.tsx#L81",
+        "suggestions": []
+      }
+    ],
+    "oxlint-compiler · missing": [
+      {
+        "help": "Missing dependencies can cause a value to update less often than it should, resulting in stale UI. Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often",
+        "labels": [
+          "Missing dependency `input`",
+          "Missing dependency `path`",
+          "Missing dependency `reset`",
+          "Unnecessary dependency `queryKey`"
+        ],
+        "message": "Found missing/extra memoization dependencies",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L431",
+        "suggestions": []
+      },
+      {
+        "help": "Missing dependencies can cause a value to update less often than it should, resulting in stale UI. Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often",
+        "labels": [
+          "Missing dependency `getInitialState`",
+          "Missing dependency `opts`",
+          "Missing dependency `updateState`",
+          "Overly precise dependency `opts.enabled`, use `opts` instead"
+        ],
+        "message": "Found missing/extra memoization dependencies",
+        "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/tanstack-react-query/src/internals/subscriptionOptions.ts#L195",
+        "suggestions": []
+      },
+      {
+        "help": "Missing dependencies can cause a value to update less often than it should, resulting in stale UI. Extra dependencies can cause a value to update more often than it should, resulting in performance problems such as excessive renders or effects firing too often",
+        "labels": [
+          "Missing dependency `fonts`",
+          "Unnecessary dependency `selectedFontFamily`"
+        ],
+        "message": "Found missing/extra memoization dependencies",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/FontPicker/FontPickerList.tsx#L158",
+        "suggestions": []
+      }
+    ],
+    "oxlint-compiler · unnecessary": [
+      {
+        "help": "Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+        "labels": [
+          "Unnecessary dependency `activeSection`"
+        ],
+        "message": "Found extra effect dependencies",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/ColorInput.tsx#L68",
+        "suggestions": []
+      },
+      {
+        "help": "Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+        "labels": [
+          "Unnecessary dependency `color`",
+          "Unnecessary dependency `activeColorPickerSection`"
+        ],
+        "message": "Found extra effect dependencies",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/CustomColorList.tsx#L40",
+        "suggestions": []
+      },
+      {
+        "help": "Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+        "labels": [
+          "Unnecessary dependency `colorObj?.colorName`"
+        ],
+        "message": "Found extra effect dependencies",
+        "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/ColorPicker/PickerColorList.tsx#L64",
+        "suggestions": []
+      }
+    ]
+  }
+}

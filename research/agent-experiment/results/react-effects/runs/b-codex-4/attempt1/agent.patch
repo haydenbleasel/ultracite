@@ -1,0 +1,58 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -83,7 +83,7 @@
+ // ── end of STUB ────────────────────────────────────────────────────────
+ 
+ import type { ChangeEvent } from "react";
+-import { useEffect, useState } from "react";
++import { useEffect, useEffectEvent, useState } from "react";
+ 
+ // [Joshen] This is trying to do the same thing as TimeSplitInput.tsx
+ // so can we please look to try to combine these 2 components together if possible
+@@ -118,19 +118,6 @@
+     ? dayjs(formatTimeToTimeString(maximumTime), "HH:mm:ss", true)
+     : undefined;
+ 
+-  useEffect(() => {
+-    if (minimumTime || maximumTime) {
+-      validate(time);
+-    }
+-  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);
+-
+-  useEffect(() => {
+-    if (defaultTime) {
+-      setTime(defaultTime);
+-      validate(defaultTime);
+-    }
+-  }, [defaultTime]);
+-
+   const validate = (time: Time) => {
+     let error;
+     const formattedTime = dayjs(formatTimeToTimeString(time), "HH:mm:ss", true);
+@@ -153,6 +140,26 @@
+     return error === undefined;
+   };
+ 
++  const minimumTimeKey = JSON.stringify(minimumTime);
++  const maximumTimeKey = JSON.stringify(maximumTime);
++
++  const onBoundsChange = useEffectEvent(() => validate(time));
++
++  useEffect(() => {
++    if (minimumTimeKey || maximumTimeKey) {
++      onBoundsChange();
++    }
++  }, [minimumTimeKey, maximumTimeKey]);
++
++  const validateDefaultTime = useEffectEvent((value: Time) => validate(value));
++
++  useEffect(() => {
++    if (defaultTime) {
++      setTime(defaultTime);
++      validateDefaultTime(defaultTime);
++    }
++  }, [defaultTime]);
++
+   const onFocus = () => setIsFocused(true);
+ 
+   const onInputChange = (

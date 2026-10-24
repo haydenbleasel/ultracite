@@ -1,0 +1,140 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint.config.ts: env, extends [core, react], ignorePatterns; oxfmt.config.ts: ...ultracite), passed with -c and importing the presets by absolute URL",
+  "filter": "react-hooks/exhaustive-deps and react/exhaustive-effect-dependencies, plus any other diagnostic not among the prepared project's own (rule and message, file by file, as diff.ts matches them): a project that lints clean apart from the dependency arrays. Every re-lint uses the same filter.",
+  "diagnosticsReported": 10,
+  "diagnosticsHandedOver": 2,
+  "leftOutByFilter": {
+    "react-hooks/rules-of-hooks": 3,
+    "react/hook-use-state": 1,
+    "react/hooks": 3,
+    "react/set-state-in-effect": 1
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+    "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Missing dependencies can cause an effect to fire less often than it should",
+      "line": 78,
+      "message": "Found missing effect dependencies",
+      "raw": {
+        "message": "Found missing effect dependencies",
+        "code": "react(exhaustive-effect-dependencies)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "label": "This dependency list is missing values used by the callback",
+            "span": {
+              "offset": 3603,
+              "length": 2,
+              "line": 78,
+              "column": 6
+            }
+          },
+          {
+            "label": "Missing dependency `getSnapshot`",
+            "span": {
+              "offset": 3508,
+              "length": 11,
+              "line": 73,
+              "column": 16
+            }
+          },
+          {
+            "label": "Missing dependency `serverSnapshotIsUsed`",
+            "span": {
+              "offset": 3469,
+              "length": 20,
+              "line": 72,
+              "column": 9
+            }
+          },
+          {
+            "label": "Missing dependency `subscribe`",
+            "span": {
+              "offset": 3541,
+              "length": 9,
+              "line": 75,
+              "column": 12
+            }
+          }
+        ]
+      },
+      "rule": "react/exhaustive-effect-dependencies",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+    },
+    {
+      "column": 9,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Either include it or remove the dependency array.",
+      "line": 72,
+      "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+      "raw": {
+        "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Either include it or remove the dependency array.",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 3469,
+              "length": 20,
+              "line": 72,
+              "column": 9
+            }
+          },
+          {
+            "span": {
+              "offset": 3508,
+              "length": 11,
+              "line": 73,
+              "column": 16
+            }
+          },
+          {
+            "span": {
+              "offset": 3541,
+              "length": 9,
+              "line": 75,
+              "column": 12
+            }
+          },
+          {
+            "span": {
+              "offset": 3603,
+              "length": 2,
+              "line": 78,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "generated": "2026-10-23",
+  "note": "How Ultracite came to turn these rules on, from `git log -S` in this repository (exhaustive-deps, useExhaustiveDependencies, useHookAtTopLevel, eslint-plugin-react-hooks, react/exhaustive-deps, react/rules-of-hooks, set-state-in-effect, exhaustive-effect-dependencies, rule-suppression), packages/cli/CHANGELOG.md, and `gh issue view` / `gh search issues` (read-only). One rater. No issue or PR discusses the dependency rule's merits; the recorded reasons are policy (every rule on) and tool upgrades.",
+  "events": [
+    {
+      "commit": "86ee61e3",
+      "date": "2025-10-20",
+      "linter": "biome",
+      "subject": "Specific Ultracite configurations (#319)",
+      "what": "The Biome react preset sets correctness/useExhaustiveDependencies and correctness/useHookAtTopLevel to error (no options)."
+    },
+    {
+      "commit": "c4a205f8",
+      "date": "2025-12-28",
+      "linter": "eslint, oxlint",
+      "subject": "V7 (#466)",
+      "what": "The ESLint react preset turns on every non-deprecated eslint-plugin-react-hooks rule as error (rules/react-hooks.mjs), with an explicit react-hooks/exhaustive-deps override; the Oxlint react preset lists react/exhaustive-deps and react/rules-of-hooks."
+    },
+    {
+      "commit": "63f6a18f",
+      "date": "2026-05-10",
+      "linter": "eslint",
+      "subject": "Drop redundant react-hooks/exhaustive-deps override",
+      "what": "The explicit override goes; the every-rule loop already sets it to error."
+    },
+    {
+      "commit": "f7025b12",
+      "date": "2026-07-04",
+      "linter": "eslint, oxlint",
+      "subject": "Extend cross-linter parity to framework presets and add a parity check",
+      "what": "react-hooks/* is normalised to react/* in compare-rule-parity.ts, so the Oxlint and ESLint react presets must agree on these rules."
+    },
+    {
+      "commit": "972b9468",
+      "date": "2026-08-19",
+      "issue": "#775 (Update the React preset for Oxlint 1.79)",
+      "linter": "oxlint",
+      "subject": "Update the oxlint presets for oxlint 1.79",
+      "what": "Oxlint 1.79 split its nursery react/react-compiler rule into 22 React Compiler rules (exhaustive-effect-dependencies, memo-dependencies, set-state-in-effect, no-deriving-state-in-effects, rule-suppression, refs, purity, …). All 22 were turned on as error, 'matching the ESLint react preset (which already errors on every non-deprecated eslint-plugin-react-hooks rule)'."
+    }
+  ],
+  "issues": [
+    { "number": 766, "title": "[Oxlint] react/rules-of-hooks cannot accept configuration", "state": "closed" },
+    { "number": 775, "title": "Update the React preset for Oxlint 1.79", "state": "closed" },
+    { "number": 438, "title": "Explain if the auto-enabled Biome domains (e.g. React, Next.js) take precedence over the Ultracite `extends`", "state": "closed" }
+  ],
+  "templates": "packages/cli/src/data/rules.ts and skills/ultracite/references/code-standards.md say: 'Call hooks at the top level only, never conditionally' and 'Specify all dependencies in hook dependency arrays correctly'. Neither mentions useEffectEvent, deliberate omissions, or when an effect isn't needed."
+}

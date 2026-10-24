@@ -1,0 +1,116 @@
+{
+  "diagnostics": [
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Missing dependencies can cause an effect to fire less often than it should",
+      "line": 78,
+      "message": "Found missing effect dependencies",
+      "raw": {
+        "message": "Found missing effect dependencies",
+        "code": "react(exhaustive-effect-dependencies)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "label": "This dependency list is missing values used by the callback",
+            "span": {
+              "offset": 3603,
+              "length": 2,
+              "line": 78,
+              "column": 6
+            }
+          },
+          {
+            "label": "Missing dependency `getSnapshot`",
+            "span": {
+              "offset": 3508,
+              "length": 11,
+              "line": 73,
+              "column": 16
+            }
+          },
+          {
+            "label": "Missing dependency `serverSnapshotIsUsed`",
+            "span": {
+              "offset": 3469,
+              "length": 20,
+              "line": 72,
+              "column": 9
+            }
+          },
+          {
+            "label": "Missing dependency `subscribe`",
+            "span": {
+              "offset": 3541,
+              "length": 9,
+              "line": 75,
+              "column": 12
+            }
+          }
+        ]
+      },
+      "rule": "react/exhaustive-effect-dependencies",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+    },
+    {
+      "column": 9,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Either include it or remove the dependency array.",
+      "line": 72,
+      "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+      "raw": {
+        "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Either include it or remove the dependency array.",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 3469,
+              "length": 20,
+              "line": 72,
+              "column": 9
+            }
+          },
+          {
+            "span": {
+              "offset": 3508,
+              "length": 11,
+              "line": 73,
+              "column": 16
+            }
+          },
+          {
+            "span": {
+              "offset": 3541,
+              "length": 9,
+              "line": 75,
+              "column": 12
+            }
+          },
+          {
+            "span": {
+              "offset": 3603,
+              "length": 2,
+              "line": 78,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    }
+  ],
+  "file": "index.ts"
+}

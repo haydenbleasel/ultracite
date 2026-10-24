@@ -1,0 +1,52 @@
+--- a/useTTDChatStorage.ts
++++ b/useTTDChatStorage.ts
+@@ -184,7 +184,7 @@
+   // INITIAL LOAD
+   useEffect(() => {
+     loadChats();
+-  }, []);
++  }, [loadChats]);
+ 
+   const saveCurrentChat = useCallback(async () => {
+     if (chatHistory.messages.length === 0) {
+@@ -248,8 +248,32 @@
+     }
+   }, [chatHistory, setSavedChats, persistenceAdapter]);
+ 
++  const previousAutoSaveInputs = useRef<{
++    id: string | undefined;
++    isGenerating: boolean | undefined;
++    length: number;
++  } | null>(null);
++
+   // Auto-save when generation completes
+   useEffect(() => {
++    const inputs = {
++      id: lastMessageInHistory?.id,
++      isGenerating: lastMessageInHistory?.isGenerating,
++      length: chatHistory.messages?.length,
++    };
++    const previousInputs = previousAutoSaveInputs.current;
++    previousAutoSaveInputs.current = inputs;
++
++    // Callback changes alone should not trigger an auto-save.
++    if (
++      previousInputs &&
++      previousInputs.id === inputs.id &&
++      previousInputs.isGenerating === inputs.isGenerating &&
++      previousInputs.length === inputs.length
++    ) {
++      return;
++    }
++
+     if (!lastMessageInHistory?.isGenerating) {
+       saveCurrentChat();
+     }
+@@ -257,6 +281,7 @@
+     chatHistory.messages?.length,
+     lastMessageInHistory?.id,
+     lastMessageInHistory?.isGenerating,
++    saveCurrentChat,
+   ]);
+ 
+   const deleteChat = useCallback(

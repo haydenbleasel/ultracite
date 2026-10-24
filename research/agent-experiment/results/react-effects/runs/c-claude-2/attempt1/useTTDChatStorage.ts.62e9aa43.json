@@ -1,0 +1,170 @@
+{
+  "diagnostics": [
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "useTTDChatStorage.ts",
+      "help": "Missing dependencies can cause an effect to fire less often than it should",
+      "line": 187,
+      "message": "Found missing effect dependencies",
+      "raw": {
+        "message": "Found missing effect dependencies",
+        "code": "react(exhaustive-effect-dependencies)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+        "filename": "useTTDChatStorage.ts",
+        "labels": [
+          {
+            "label": "This dependency list is missing values used by the callback",
+            "span": {
+              "offset": 6695,
+              "length": 2,
+              "line": 187,
+              "column": 6
+            }
+          },
+          {
+            "label": "Missing dependency `loadChats`",
+            "span": {
+              "offset": 6677,
+              "length": 9,
+              "line": 186,
+              "column": 5
+            }
+          }
+        ]
+      },
+      "rule": "react/exhaustive-effect-dependencies",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "useTTDChatStorage.ts",
+      "help": "Missing dependencies can cause an effect to fire less often than it should. Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+      "line": 254,
+      "message": "Found missing/extra effect dependencies",
+      "raw": {
+        "message": "Found missing/extra effect dependencies",
+        "code": "react(exhaustive-effect-dependencies)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "help": "Missing dependencies can cause an effect to fire less often than it should. Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+        "filename": "useTTDChatStorage.ts",
+        "labels": [
+          {
+            "label": "Missing dependency `saveCurrentChat`",
+            "span": {
+              "offset": 8611,
+              "length": 15,
+              "line": 254,
+              "column": 7
+            }
+          },
+          {
+            "label": "Unnecessary dependency `chatHistory.messages?.length`",
+            "span": {
+              "offset": 8647,
+              "length": 28,
+              "line": 257,
+              "column": 5
+            }
+          },
+          {
+            "label": "Unnecessary dependency `lastMessageInHistory?.id`",
+            "span": {
+              "offset": 8681,
+              "length": 24,
+              "line": 258,
+              "column": 5
+            }
+          }
+        ]
+      },
+      "rule": "react/exhaustive-effect-dependencies",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+    },
+    {
+      "column": 5,
+      "fatal": false,
+      "file": "useTTDChatStorage.ts",
+      "help": "Either include it or remove the dependency array.",
+      "line": 186,
+      "message": "React Hook useEffect has a missing dependency: 'loadChats'",
+      "raw": {
+        "message": "React Hook useEffect has a missing dependency: 'loadChats'",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Either include it or remove the dependency array.",
+        "filename": "useTTDChatStorage.ts",
+        "labels": [
+          {
+            "label": "useEffect uses `loadChats` here",
+            "span": {
+              "offset": 6677,
+              "length": 9,
+              "line": 186,
+              "column": 5
+            }
+          },
+          {
+            "span": {
+              "offset": 6695,
+              "length": 2,
+              "line": 187,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "useTTDChatStorage.ts",
+      "help": "Either include it or remove the dependency array.",
+      "line": 254,
+      "message": "React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+      "raw": {
+        "message": "React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Either include it or remove the dependency array.",
+        "filename": "useTTDChatStorage.ts",
+        "labels": [
+          {
+            "label": "useEffect uses `saveCurrentChat` here",
+            "span": {
+              "offset": 8611,
+              "length": 15,
+              "line": 254,
+              "column": 7
+            }
+          },
+          {
+            "span": {
+              "offset": 8641,
+              "length": 109,
+              "line": 256,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    }
+  ],
+  "file": "useTTDChatStorage.ts"
+}

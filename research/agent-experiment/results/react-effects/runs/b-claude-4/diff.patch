@@ -1,0 +1,40 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -83,7 +83,7 @@
+ // ── end of STUB ────────────────────────────────────────────────────────
+ 
+ import type { ChangeEvent } from "react";
+-import { useEffect, useState } from "react";
++import { useEffect, useEffectEvent, useState } from "react";
+ 
+ // [Joshen] This is trying to do the same thing as TimeSplitInput.tsx
+ // so can we please look to try to combine these 2 components together if possible
+@@ -118,16 +118,23 @@
+     ? dayjs(formatTimeToTimeString(maximumTime), "HH:mm:ss", true)
+     : undefined;
+ 
+-  useEffect(() => {
+-    if (minimumTime || maximumTime) {
+-      validate(time);
++  // Compared by value so the effect below only re-runs when the bounds change
++  const minimumTimeKey = minimumTime && JSON.stringify(minimumTime);
++  const maximumTimeKey = maximumTime && JSON.stringify(maximumTime);
++
++  const validateCurrentTime = useEffectEvent(() => validate(time));
++  const validateTime = useEffectEvent((value: Time) => validate(value));
++
++  useEffect(() => {
++    if (minimumTimeKey || maximumTimeKey) {
++      validateCurrentTime();
+     }
+-  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);
++  }, [minimumTimeKey, maximumTimeKey]);
+ 
+   useEffect(() => {
+     if (defaultTime) {
+       setTime(defaultTime);
+-      validate(defaultTime);
++      validateTime(defaultTime);
+     }
+   }, [defaultTime]);
+ 

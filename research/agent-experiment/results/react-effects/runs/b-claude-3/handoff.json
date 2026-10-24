@@ -1,0 +1,300 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "what `ultracite init --linter oxlint --frameworks react` writes (oxlint.config.ts: env, extends [core, react], ignorePatterns; oxfmt.config.ts: ...ultracite), passed with -c and importing the presets by absolute URL",
+  "filter": "react-hooks/exhaustive-deps and react/exhaustive-effect-dependencies, plus any other diagnostic not among the prepared project's own (rule and message, file by file, as diff.ts matches them): a project that lints clean apart from the dependency arrays. Every re-lint uses the same filter.",
+  "diagnosticsReported": 22,
+  "diagnosticsHandedOver": 6,
+  "leftOutByFilter": {
+    "import/first": 2,
+    "no-empty-function": 1,
+    "no-nested-ternary": 1,
+    "no-shadow": 2,
+    "no-use-before-define": 2,
+    "prefer-named-capture-group": 3,
+    "react/immutability": 1,
+    "react/jsx-no-useless-fragment": 1,
+    "react/set-state-in-effect": 1,
+    "require-unicode-regexp": 1,
+    "unicorn/filename-case": 1
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+    "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Missing dependencies can cause an effect to fire less often than it should",
+      "line": 125,
+      "message": "Found missing effect dependencies",
+      "raw": {
+        "message": "Found missing effect dependencies",
+        "code": "react(exhaustive-effect-dependencies)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "label": "This dependency list is missing values used by the callback",
+            "span": {
+              "offset": 4658,
+              "length": 58,
+              "line": 125,
+              "column": 6
+            }
+          },
+          {
+            "label": "Missing dependency `maximumTime`",
+            "span": {
+              "offset": 4610,
+              "length": 11,
+              "line": 122,
+              "column": 24
+            }
+          },
+          {
+            "label": "Missing dependency `minimumTime`",
+            "span": {
+              "offset": 4595,
+              "length": 11,
+              "line": 122,
+              "column": 9
+            }
+          },
+          {
+            "label": "Missing dependency `time`",
+            "span": {
+              "offset": 4640,
+              "length": 4,
+              "line": 123,
+              "column": 16
+            }
+          },
+          {
+            "label": "Missing dependency `validate`",
+            "span": {
+              "offset": 4631,
+              "length": 8,
+              "line": 123,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "react/exhaustive-effect-dependencies",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+    },
+    {
+      "column": 6,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Missing dependencies can cause an effect to fire less often than it should",
+      "line": 132,
+      "message": "Found missing effect dependencies",
+      "raw": {
+        "message": "Found missing effect dependencies",
+        "code": "react(exhaustive-effect-dependencies)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/exhaustive-deps",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "label": "This dependency list is missing values used by the callback",
+            "span": {
+              "offset": 4831,
+              "length": 13,
+              "line": 132,
+              "column": 6
+            }
+          },
+          {
+            "label": "Missing dependency `validate`",
+            "span": {
+              "offset": 4797,
+              "length": 8,
+              "line": 130,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "react/exhaustive-effect-dependencies",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Extract the expression to a separate variable so it can be statically checked.",
+      "line": 125,
+      "message": "React Hook useEffect has a complex expression in the dependency array.",
+      "raw": {
+        "message": "React Hook useEffect has a complex expression in the dependency array.",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "span": {
+              "offset": 4659,
+              "length": 27,
+              "line": 125,
+              "column": 7
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    },
+    {
+      "column": 36,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Extract the expression to a separate variable so it can be statically checked.",
+      "line": 125,
+      "message": "React Hook useEffect has a complex expression in the dependency array.",
+      "raw": {
+        "message": "React Hook useEffect has a complex expression in the dependency array.",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "span": {
+              "offset": 4688,
+              "length": 27,
+              "line": 125,
+              "column": 36
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Either include it or remove the dependency array.",
+      "line": 123,
+      "message": "React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+      "raw": {
+        "message": "React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Either include it or remove the dependency array.",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "span": {
+              "offset": 4631,
+              "length": 8,
+              "line": 123,
+              "column": 7
+            }
+          },
+          {
+            "span": {
+              "offset": 4640,
+              "length": 4,
+              "line": 123,
+              "column": 16
+            }
+          },
+          {
+            "span": {
+              "offset": 4595,
+              "length": 11,
+              "line": 122,
+              "column": 9
+            }
+          },
+          {
+            "span": {
+              "offset": 4610,
+              "length": 11,
+              "line": 122,
+              "column": 24
+            }
+          },
+          {
+            "span": {
+              "offset": 4658,
+              "length": 58,
+              "line": 125,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Either include it or remove the dependency array.",
+      "line": 130,
+      "message": "React Hook useEffect has a missing dependency: 'validate'",
+      "raw": {
+        "message": "React Hook useEffect has a missing dependency: 'validate'",
+        "code": "react-hooks(exhaustive-deps)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "help": "Either include it or remove the dependency array.",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "label": "useEffect uses `validate` here",
+            "span": {
+              "offset": 4797,
+              "length": 8,
+              "line": 130,
+              "column": 7
+            }
+          },
+          {
+            "span": {
+              "offset": 4831,
+              "length": 13,
+              "line": 132,
+              "column": 6
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/exhaustive-deps",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+    }
+  ]
+}

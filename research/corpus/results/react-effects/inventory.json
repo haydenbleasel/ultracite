@@ -1,0 +1,1391 @@
+{
+  "biome": {
+    "explain": {
+      "useExhaustiveDependencies": {
+        "defaultHooks": "By default, the following hooks (and their Preact counterparts) will have their arguments checked by this rule:\n\n - `useEffect`\n - `useLayoutEffect`\n - `useInsertionEffect`\n - `useCallback`\n - `useMemo`\n - `useImperativeHandle`",
+        "fix": "unsafe",
+        "head": "Summary\n\n- Name: useExhaustiveDependencies\n- Fix: unsafe\n- Default severity: error\n- Available from version: 1.0.0\n- Diagnostic category: lint/correctness/useExhaustiveDependencies\n\nDomains\n\n- Name: react\n- The rule is recommended for this domain\n- The rule is enabled when one of these dependencies are detected:\n  - react@>=16.0.0\n\n- Name: next\n- The rule is recommended for this domain\n- The rule is enabled when one of these dependencies are detected:\n  - next@>=14.0.0",
+        "options": null,
+        "stable": "Stable results\n When a hook is known to have a stable return value (one whose identity doesn't change across invocations),\n that value doesn't need to and _should not_ be specified as a dependency.\n For example, setters returned by React's `useState` hook will not change throughout the lifetime of a program\n and should therefore be omitted.\n\n By default, the following hooks are considered to have stable return values:\n - `useState` (index 1)\n - `useReducer` (index 1)\n - `useTransition` (index 1)\n - `useRef`\n - `useEffectEvent`\n\n If you want to add custom hooks to the rule's diagnostics or specify your own functions with stable results,\n see the [options](#options) section for more information."
+      },
+      "useHookAtTopLevel": {
+        "defaultHooks": null,
+        "fix": null,
+        "head": "Summary\n\n- Name: useHookAtTopLevel\n- No fix available.\n- Default severity: error\n- Available from version: 1.0.0\n- Diagnostic category: lint/correctness/useHookAtTopLevel\n\nDomains\n\n- Name: react\n- The rule is recommended for this domain\n- The rule is enabled when one of these dependencies are detected:\n  - react@>=16.0.0\n\n- Name: next\n- The rule is recommended for this domain\n- The rule is enabled when one of these dependencies are detected:\n  - next@>=14.0.0",
+        "options": null,
+        "stable": null
+      }
+    },
+    "reactPreset": {
+      "correctness": {
+        "noChildrenProp": "error",
+        "noNestedComponentDefinitions": "error",
+        "noReactPropAssignments": "error",
+        "noRenderReturnValue": "error",
+        "noVoidElementsWithChildren": "error",
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error",
+        "useJsxKeyInIterable": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "error",
+        "noDuplicateJsxProps": "error",
+        "noLeakedRender": "error",
+        "noReactForwardRef": "error",
+        "noSuspiciousSemicolonInJsx": "error",
+        "noUnknownAttribute": "error",
+        "noReactSpecificProps": "off"
+      },
+      "style": {
+        "useReactFunctionComponents": "error"
+      }
+    }
+  },
+  "eslint": {
+    "compilerFlags": {
+      "eprh_enableUseKeyedStateCompilerLint": "false",
+      "eprh_enableVerboseNoSetStateInEffectCompilerLint": "false",
+      "eprh_enableExhaustiveEffectDependenciesCompilerLint": "'off'"
+    },
+    "compilerOptions": "const COMPILER_OPTIONS = {\n    outputMode: 'lint',\n    panicThreshold: 'none',\n    flowSuppressions: false,\n    environment: {\n        validateRefAccessDuringRender: true,\n        validateNoSetStateInRender: true,\n        validateNoSetStateInEffects: true,\n        validateNoJSXInTryStatements: true,\n        validateNoImpureFunctionsInRender: true,\n        validateStaticComponents: true,\n        validateNoFreezingKnownMutableFunctions: true,\n        validateNoVoidUseMemo: true,\n        validateNoCapitalizedCalls: [],\n        validateHooksUsage: true,\n        validateNoDerivedComputationsInEffects: true,\n        enableUseKeyedState: eprh_enableUseKeyedStateCompilerLint,\n        enableVerboseNoSetStateInEffect: eprh_enableVerboseNoSetStateInEffectCompilerLint,\n        validateExhaustiveEffectDependencies: eprh_enableExhaustiveEffectDependenciesCompilerLint,\n    },\n};",
+    "exhaustiveDepsHooks": "function getReactiveHookCallbackIndex(calleeNode, options) {\n    const node = getNodeWithoutReactNamespace$1(calleeNode);\n    if (node.type !== 'Identifier') {\n        return -1;\n    }\n    switch (node.name) {\n        case 'useEffect':\n        case 'useLayoutEffect':\n        case 'useCallback':\n        case 'useMemo':\n            return 0;\n        case 'useImperativeHandle':\n            return 1;\n        default:",
+    "reactHooksRules": {
+      "react-hooks/exhaustive-deps": {
+        "deprecated": false,
+        "description": "verifies the list of dependencies for Hooks like useEffect and similar",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "suggestion"
+      },
+      "react-hooks/rules-of-hooks": {
+        "deprecated": false,
+        "description": "enforces the Rules of Hooks",
+        "fixable": null,
+        "hasSuggestions": false,
+        "type": "problem"
+      },
+      "react-hooks/hooks": {
+        "deprecated": false,
+        "description": "Validates the rules of hooks",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/capitalized-calls": {
+        "deprecated": false,
+        "description": "Validates against calling capitalized functions/methods instead of using JSX",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/static-components": {
+        "deprecated": false,
+        "description": "Validates that components are static, not recreated every render. Components that are recreated dynamically can reset state and trigger excessive re-rendering",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/use-memo": {
+        "deprecated": false,
+        "description": "Validates usage of the useMemo() hook against common mistakes. See [`useMemo()` docs](https://react.dev/reference/react/useMemo) for more information.",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/void-use-memo": {
+        "deprecated": false,
+        "description": "Validates that useMemos always return a value and that the result of the useMemo is used by the component/hook. See [`useMemo()` docs](https://react.dev/reference/react/useMemo) for more information.",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/preserve-manual-memoization": {
+        "deprecated": false,
+        "description": "Validates that existing manual memoized is preserved by the compiler. React Compiler will only compile components and hooks if its inference [matches or exceeds the existing manual memoization](https://react.dev/learn/react-compiler/introduction#what-should-i-do-about-usememo-usecallback-and-reactmemo)",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/memo-dependencies": {
+        "deprecated": false,
+        "description": "Validates that useMemo() and useCallback() specify comprehensive dependencies without extraneous values. See [`useMemo()` docs](https://react.dev/reference/react/useMemo) for more information.",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/incompatible-library": {
+        "deprecated": false,
+        "description": "Validates against usage of libraries which are incompatible with memoization (manual or automatic)",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/immutability": {
+        "deprecated": false,
+        "description": "Validates against mutating props, state, and other values that [are immutable](https://react.dev/reference/rules/components-and-hooks-must-be-pure#props-and-state-are-immutable)",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/globals": {
+        "deprecated": false,
+        "description": "Validates against assignment/mutation of globals during render, part of ensuring that [side effects must render outside of render](https://react.dev/reference/rules/components-and-hooks-must-be-pure#side-effects-must-run-outside-of-render)",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/refs": {
+        "deprecated": false,
+        "description": "Validates correct usage of refs, not reading/writing during render. See the \"pitfalls\" section in [`useRef()` usage](https://react.dev/reference/react/useRef#usage)",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/memoized-effect-dependencies": {
+        "deprecated": false,
+        "description": "Validates that effect dependencies are memoized",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/exhaustive-effect-dependencies": {
+        "deprecated": false,
+        "description": "Validates that effect dependencies are exhaustive and without extraneous values",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/set-state-in-effect": {
+        "deprecated": false,
+        "description": "Validates against calling setState synchronously in an effect. This can indicate non-local derived data, a derived event pattern, or improper external data synchronization.",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/no-deriving-state-in-effects": {
+        "deprecated": false,
+        "description": "Validates against deriving values from state in an effect",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/error-boundaries": {
+        "deprecated": false,
+        "description": "Validates usage of error boundaries instead of try/catch for errors in child components",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/purity": {
+        "deprecated": false,
+        "description": "Validates that [components/hooks are pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure) by checking that they do not call known-impure functions",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/set-state-in-render": {
+        "deprecated": false,
+        "description": "Validates against setting state during render, which can trigger additional renders and potential infinite render loops",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/invariant": {
+        "deprecated": false,
+        "description": "Internal invariants",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/todo": {
+        "deprecated": false,
+        "description": "Unimplemented features",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/syntax": {
+        "deprecated": false,
+        "description": "Validates against invalid syntax",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/unsupported-syntax": {
+        "deprecated": false,
+        "description": "Validates against syntax that we do not plan to support in React Compiler",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/config": {
+        "deprecated": false,
+        "description": "Validates the compiler configuration options",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/gating": {
+        "deprecated": false,
+        "description": "Validates configuration of [gating mode](https://react.dev/reference/react-compiler/gating)",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/rule-suppression": {
+        "deprecated": false,
+        "description": "Validates against suppression of other rules",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/fbt": {
+        "deprecated": false,
+        "description": "Validates usage of fbt",
+        "fixable": "code",
+        "hasSuggestions": true,
+        "type": "problem"
+      },
+      "react-hooks/component-hook-factories": {
+        "deprecated": true,
+        "description": "Deprecated: this rule has been removed in 7.1.0.",
+        "fixable": null,
+        "hasSuggestions": false,
+        "type": "suggestion"
+      }
+    },
+    "resolved": {
+      "x.tsx": {
+        "react-hooks/exhaustive-deps": [
+          2
+        ],
+        "react-hooks/rules-of-hooks": [
+          2
+        ],
+        "react-hooks/hooks": [
+          2
+        ],
+        "react-hooks/capitalized-calls": [
+          2
+        ],
+        "react-hooks/static-components": [
+          2
+        ],
+        "react-hooks/use-memo": [
+          2
+        ],
+        "react-hooks/void-use-memo": [
+          2
+        ],
+        "react-hooks/preserve-manual-memoization": [
+          2
+        ],
+        "react-hooks/memo-dependencies": [
+          2
+        ],
+        "react-hooks/incompatible-library": [
+          2
+        ],
+        "react-hooks/immutability": [
+          2
+        ],
+        "react-hooks/globals": [
+          2
+        ],
+        "react-hooks/refs": [
+          2
+        ],
+        "react-hooks/memoized-effect-dependencies": [
+          2
+        ],
+        "react-hooks/exhaustive-effect-dependencies": [
+          2
+        ],
+        "react-hooks/set-state-in-effect": [
+          2
+        ],
+        "react-hooks/no-deriving-state-in-effects": [
+          2
+        ],
+        "react-hooks/error-boundaries": [
+          2
+        ],
+        "react-hooks/purity": [
+          2
+        ],
+        "react-hooks/set-state-in-render": [
+          2
+        ],
+        "react-hooks/invariant": [
+          2
+        ],
+        "react-hooks/todo": [
+          2
+        ],
+        "react-hooks/syntax": [
+          2
+        ],
+        "react-hooks/unsupported-syntax": [
+          2
+        ],
+        "react-hooks/config": [
+          2
+        ],
+        "react-hooks/gating": [
+          2
+        ],
+        "react-hooks/rule-suppression": [
+          2
+        ],
+        "react-hooks/fbt": [
+          2
+        ],
+        "react-doctor/activity-wraps-effect-heavy-subtree": [
+          2
+        ],
+        "react-doctor/advanced-event-handler-refs": [
+          2
+        ],
+        "react-doctor/effect-listener-cleanup-mismatch": [
+          2
+        ],
+        "react-doctor/effect-listener-cleanup-reference-mismatch": [
+          2
+        ],
+        "react-doctor/effect-needs-cleanup": [
+          2
+        ],
+        "react-doctor/effect-observer-needs-disconnect": [
+          2
+        ],
+        "react-doctor/effect-raf-loop-needs-cancel": [
+          2
+        ],
+        "react-doctor/effect-remove-listener-inline-handler": [
+          2
+        ],
+        "react-doctor/hooks-no-nan-in-deps": [
+          2
+        ],
+        "react-doctor/no-adjust-state-on-prop-change": [
+          2
+        ],
+        "react-doctor/no-async-effect-callback": [
+          2
+        ],
+        "react-doctor/no-cascading-set-state": [
+          2
+        ],
+        "react-doctor/no-chain-state-updates": [
+          2
+        ],
+        "react-doctor/no-derived-state": [
+          2
+        ],
+        "react-doctor/no-derived-state-effect": [
+          2
+        ],
+        "react-doctor/no-effect-chain": [
+          2
+        ],
+        "react-doctor/no-effect-event-handler": [
+          2
+        ],
+        "react-doctor/no-effect-event-in-deps": [
+          2
+        ],
+        "react-doctor/no-effect-with-fresh-deps": [
+          2
+        ],
+        "react-doctor/no-effect-wrapper-discards-callback-cleanup-return": [
+          2
+        ],
+        "react-doctor/no-event-trigger-state": [
+          2
+        ],
+        "react-doctor/no-fetch-in-effect": [
+          2
+        ],
+        "react-doctor/no-initialize-state": [
+          2
+        ],
+        "react-doctor/no-mirror-prop-effect": [
+          2
+        ],
+        "react-doctor/no-mutable-in-deps": [
+          2
+        ],
+        "react-doctor/no-pass-data-to-parent": [
+          2
+        ],
+        "react-doctor/no-pass-live-state-to-parent": [
+          2
+        ],
+        "react-doctor/no-promise-then-side-effect-in-effect-without-catch": [
+          2
+        ],
+        "react-doctor/no-prop-callback-in-effect": [
+          2
+        ],
+        "react-doctor/no-reset-all-state-on-prop-change": [
+          2
+        ],
+        "react-doctor/no-self-updating-effect": [
+          2
+        ],
+        "react-doctor/no-set-state-after-await-in-effect": [
+          2
+        ],
+        "react-doctor/no-stale-timer-ref": [
+          2
+        ],
+        "react-doctor/prefer-use-effect-event": [
+          2
+        ],
+        "react-doctor/prefer-use-sync-external-store": [
+          2
+        ],
+        "react-doctor/rerender-dependencies": [
+          2
+        ]
+      },
+      "x.jsx": {
+        "react-hooks/exhaustive-deps": [
+          2
+        ],
+        "react-hooks/rules-of-hooks": [
+          2
+        ],
+        "react-hooks/hooks": [
+          2
+        ],
+        "react-hooks/capitalized-calls": [
+          2
+        ],
+        "react-hooks/static-components": [
+          2
+        ],
+        "react-hooks/use-memo": [
+          2
+        ],
+        "react-hooks/void-use-memo": [
+          2
+        ],
+        "react-hooks/preserve-manual-memoization": [
+          2
+        ],
+        "react-hooks/memo-dependencies": [
+          2
+        ],
+        "react-hooks/incompatible-library": [
+          2
+        ],
+        "react-hooks/immutability": [
+          2
+        ],
+        "react-hooks/globals": [
+          2
+        ],
+        "react-hooks/refs": [
+          2
+        ],
+        "react-hooks/memoized-effect-dependencies": [
+          2
+        ],
+        "react-hooks/exhaustive-effect-dependencies": [
+          2
+        ],
+        "react-hooks/set-state-in-effect": [
+          2
+        ],
+        "react-hooks/no-deriving-state-in-effects": [
+          2
+        ],
+        "react-hooks/error-boundaries": [
+          2
+        ],
+        "react-hooks/purity": [
+          2
+        ],
+        "react-hooks/set-state-in-render": [
+          2
+        ],
+        "react-hooks/invariant": [
+          2
+        ],
+        "react-hooks/todo": [
+          2
+        ],
+        "react-hooks/syntax": [
+          2
+        ],
+        "react-hooks/unsupported-syntax": [
+          2
+        ],
+        "react-hooks/config": [
+          2
+        ],
+        "react-hooks/gating": [
+          2
+        ],
+        "react-hooks/rule-suppression": [
+          2
+        ],
+        "react-hooks/fbt": [
+          2
+        ],
+        "react-doctor/activity-wraps-effect-heavy-subtree": [
+          2
+        ],
+        "react-doctor/advanced-event-handler-refs": [
+          2
+        ],
+        "react-doctor/effect-listener-cleanup-mismatch": [
+          2
+        ],
+        "react-doctor/effect-listener-cleanup-reference-mismatch": [
+          2
+        ],
+        "react-doctor/effect-needs-cleanup": [
+          2
+        ],
+        "react-doctor/effect-observer-needs-disconnect": [
+          2
+        ],
+        "react-doctor/effect-raf-loop-needs-cancel": [
+          2
+        ],
+        "react-doctor/effect-remove-listener-inline-handler": [
+          2
+        ],
+        "react-doctor/hooks-no-nan-in-deps": [
+          2
+        ],
+        "react-doctor/no-adjust-state-on-prop-change": [
+          2
+        ],
+        "react-doctor/no-async-effect-callback": [
+          2
+        ],
+        "react-doctor/no-cascading-set-state": [
+          2
+        ],
+        "react-doctor/no-chain-state-updates": [
+          2
+        ],
+        "react-doctor/no-derived-state": [
+          2
+        ],
+        "react-doctor/no-derived-state-effect": [
+          2
+        ],
+        "react-doctor/no-effect-chain": [
+          2
+        ],
+        "react-doctor/no-effect-event-handler": [
+          2
+        ],
+        "react-doctor/no-effect-event-in-deps": [
+          2
+        ],
+        "react-doctor/no-effect-with-fresh-deps": [
+          2
+        ],
+        "react-doctor/no-effect-wrapper-discards-callback-cleanup-return": [
+          2
+        ],
+        "react-doctor/no-event-trigger-state": [
+          2
+        ],
+        "react-doctor/no-fetch-in-effect": [
+          2
+        ],
+        "react-doctor/no-initialize-state": [
+          2
+        ],
+        "react-doctor/no-mirror-prop-effect": [
+          2
+        ],
+        "react-doctor/no-mutable-in-deps": [
+          2
+        ],
+        "react-doctor/no-pass-data-to-parent": [
+          2
+        ],
+        "react-doctor/no-pass-live-state-to-parent": [
+          2
+        ],
+        "react-doctor/no-promise-then-side-effect-in-effect-without-catch": [
+          2
+        ],
+        "react-doctor/no-prop-callback-in-effect": [
+          2
+        ],
+        "react-doctor/no-reset-all-state-on-prop-change": [
+          2
+        ],
+        "react-doctor/no-self-updating-effect": [
+          2
+        ],
+        "react-doctor/no-set-state-after-await-in-effect": [
+          2
+        ],
+        "react-doctor/no-stale-timer-ref": [
+          2
+        ],
+        "react-doctor/prefer-use-effect-event": [
+          2
+        ],
+        "react-doctor/prefer-use-sync-external-store": [
+          2
+        ],
+        "react-doctor/rerender-dependencies": [
+          2
+        ]
+      },
+      "x.ts": {},
+      "x.js": {},
+      "x.test.tsx": {
+        "react-hooks/exhaustive-deps": [
+          2
+        ],
+        "react-hooks/rules-of-hooks": [
+          2
+        ],
+        "react-hooks/hooks": [
+          2
+        ],
+        "react-hooks/capitalized-calls": [
+          2
+        ],
+        "react-hooks/static-components": [
+          2
+        ],
+        "react-hooks/use-memo": [
+          2
+        ],
+        "react-hooks/void-use-memo": [
+          2
+        ],
+        "react-hooks/preserve-manual-memoization": [
+          2
+        ],
+        "react-hooks/memo-dependencies": [
+          2
+        ],
+        "react-hooks/incompatible-library": [
+          2
+        ],
+        "react-hooks/immutability": [
+          2
+        ],
+        "react-hooks/globals": [
+          2
+        ],
+        "react-hooks/refs": [
+          2
+        ],
+        "react-hooks/memoized-effect-dependencies": [
+          2
+        ],
+        "react-hooks/exhaustive-effect-dependencies": [
+          2
+        ],
+        "react-hooks/set-state-in-effect": [
+          2
+        ],
+        "react-hooks/no-deriving-state-in-effects": [
+          2
+        ],
+        "react-hooks/error-boundaries": [
+          2
+        ],
+        "react-hooks/purity": [
+          2
+        ],
+        "react-hooks/set-state-in-render": [
+          2
+        ],
+        "react-hooks/invariant": [
+          2
+        ],
+        "react-hooks/todo": [
+          2
+        ],
+        "react-hooks/syntax": [
+          2
+        ],
+        "react-hooks/unsupported-syntax": [
+          2
+        ],
+        "react-hooks/config": [
+          2
+        ],
+        "react-hooks/gating": [
+          2
+        ],
+        "react-hooks/rule-suppression": [
+          2
+        ],
+        "react-hooks/fbt": [
+          2
+        ],
+        "react-doctor/activity-wraps-effect-heavy-subtree": [
+          2
+        ],
+        "react-doctor/advanced-event-handler-refs": [
+          2
+        ],
+        "react-doctor/effect-listener-cleanup-mismatch": [
+          2
+        ],
+        "react-doctor/effect-listener-cleanup-reference-mismatch": [
+          2
+        ],
+        "react-doctor/effect-needs-cleanup": [
+          2
+        ],
+        "react-doctor/effect-observer-needs-disconnect": [
+          2
+        ],
+        "react-doctor/effect-raf-loop-needs-cancel": [
+          2
+        ],
+        "react-doctor/effect-remove-listener-inline-handler": [
+          2
+        ],
+        "react-doctor/hooks-no-nan-in-deps": [
+          2
+        ],
+        "react-doctor/no-adjust-state-on-prop-change": [
+          2
+        ],
+        "react-doctor/no-async-effect-callback": [
+          2
+        ],
+        "react-doctor/no-cascading-set-state": [
+          2
+        ],
+        "react-doctor/no-chain-state-updates": [
+          2
+        ],
+        "react-doctor/no-derived-state": [
+          2
+        ],
+        "react-doctor/no-derived-state-effect": [
+          2
+        ],
+        "react-doctor/no-effect-chain": [
+          2
+        ],
+        "react-doctor/no-effect-event-handler": [
+          2
+        ],
+        "react-doctor/no-effect-event-in-deps": [
+          2
+        ],
+        "react-doctor/no-effect-with-fresh-deps": [
+          2
+        ],
+        "react-doctor/no-effect-wrapper-discards-callback-cleanup-return": [
+          2
+        ],
+        "react-doctor/no-event-trigger-state": [
+          2
+        ],
+        "react-doctor/no-fetch-in-effect": [
+          2
+        ],
+        "react-doctor/no-initialize-state": [
+          2
+        ],
+        "react-doctor/no-mirror-prop-effect": [
+          2
+        ],
+        "react-doctor/no-mutable-in-deps": [
+          2
+        ],
+        "react-doctor/no-pass-data-to-parent": [
+          2
+        ],
+        "react-doctor/no-pass-live-state-to-parent": [
+          2
+        ],
+        "react-doctor/no-promise-then-side-effect-in-effect-without-catch": [
+          2
+        ],
+        "react-doctor/no-prop-callback-in-effect": [
+          2
+        ],
+        "react-doctor/no-reset-all-state-on-prop-change": [
+          2
+        ],
+        "react-doctor/no-self-updating-effect": [
+          2
+        ],
+        "react-doctor/no-set-state-after-await-in-effect": [
+          2
+        ],
+        "react-doctor/no-stale-timer-ref": [
+          2
+        ],
+        "react-doctor/prefer-use-effect-event": [
+          2
+        ],
+        "react-doctor/prefer-use-sync-external-store": [
+          2
+        ],
+        "react-doctor/rerender-dependencies": [
+          2
+        ]
+      }
+    },
+    "scope": "The react block (react, react-hooks, jsx-a11y, react-doctor) has files: ['**/*.jsx', '**/*.tsx'] (packages/cli/config/eslint/react/eslint.config.mjs), so .ts and .js files get none of these rules."
+  },
+  "generated": "2026-10-24",
+  "oxlint": {
+    "printConfig": {
+      "react/capitalized-calls": "deny",
+      "react/error-boundaries": "deny",
+      "react/exhaustive-deps": "deny",
+      "react/exhaustive-effect-dependencies": "deny",
+      "react/globals": "deny",
+      "react/hooks": "deny",
+      "react/immutability": "deny",
+      "react/incompatible-library": "deny",
+      "react/invariant": "deny",
+      "react/memo-dependencies": "deny",
+      "react/no-deriving-state-in-effects": "deny",
+      "react/preserve-manual-memoization": "deny",
+      "react/purity": "deny",
+      "react/refs": "deny",
+      "react/rule-suppression": "deny",
+      "react/rules-of-hooks": "deny",
+      "react/set-state-in-effect": "deny",
+      "react/set-state-in-render": "deny",
+      "react/static-components": "deny",
+      "react/syntax": "deny",
+      "react/todo": "deny",
+      "react/unsupported-syntax": "deny",
+      "react/use-memo": "deny",
+      "react/void-use-memo": "deny"
+    },
+    "reactCatalogueNotInPreset": [],
+    "rules": {
+      "react/exhaustive-deps": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html",
+        "fix": "fixable_dangerous_fix_or_suggestion",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/rules-of-hooks": {
+        "category": "pedantic",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/rules-of-hooks.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/exhaustive-effect-dependencies": {
+        "category": "suspicious",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/memo-dependencies": {
+        "category": "suspicious",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/memo-dependencies.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/set-state-in-effect": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/set-state-in-effect.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/no-deriving-state-in-effects": {
+        "category": "perf",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/no-deriving-state-in-effects.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/set-state-in-render": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/set-state-in-render.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/rule-suppression": {
+        "category": "restriction",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/rule-suppression.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/refs": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/refs.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/purity": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/purity.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/immutability": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/immutability.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/globals": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/globals.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/hooks": {
+        "category": "suspicious",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/hooks.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/use-memo": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/use-memo.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/void-use-memo": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/void-use-memo.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/preserve-manual-memoization": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/preserve-manual-memoization.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/incompatible-library": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/incompatible-library.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/static-components": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/static-components.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/capitalized-calls": {
+        "category": "suspicious",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/capitalized-calls.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/error-boundaries": {
+        "category": "correctness",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/error-boundaries.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/unsupported-syntax": {
+        "category": "restriction",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/unsupported-syntax.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/invariant": {
+        "category": "restriction",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/invariant.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/todo": {
+        "category": "restriction",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/todo.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      },
+      "react/syntax": {
+        "category": "restriction",
+        "docs": "https://oxc.rs/docs/guide/usage/linter/rules/react/syntax.html",
+        "fix": "none",
+        "presets": {
+          "react": "error"
+        },
+        "typeAware": false
+      }
+    }
+  },
+  "reactDoctor": {
+    "react-doctor/activity-wraps-effect-heavy-subtree": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Activity wraps an effect-heavy subtree"
+    },
+    "react-doctor/advanced-event-handler-refs": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Performance",
+      "title": "Listener re-subscribes on every handler change"
+    },
+    "react-doctor/effect-listener-cleanup-mismatch": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Effect cleanup does not match its event listener"
+    },
+    "react-doctor/effect-listener-cleanup-reference-mismatch": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Effect cleanup removes the wrong listener reference"
+    },
+    "react-doctor/effect-needs-cleanup": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effect subscription or timer never cleaned up"
+    },
+    "react-doctor/effect-observer-needs-disconnect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Observer created in an effect never disconnected"
+    },
+    "react-doctor/effect-raf-loop-needs-cancel": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "requestAnimationFrame loop never cancelled"
+    },
+    "react-doctor/effect-remove-listener-inline-handler": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "removeEventListener called with a fresh inline handler"
+    },
+    "react-doctor/exhaustive-deps": {
+      "eslintReact": null,
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Missing effect dependencies"
+    },
+    "react-doctor/hooks-no-nan-in-deps": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "NaN in a hook dependency array"
+    },
+    "react-doctor/no-adjust-state-on-prop-change": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "State adjusted after a prop changes"
+    },
+    "react-doctor/no-async-effect-callback": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Async effect callback"
+    },
+    "react-doctor/no-cascading-set-state": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Multiple setState calls in one effect"
+    },
+    "react-doctor/no-chain-state-updates": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "State updates chained through effects"
+    },
+    "react-doctor/no-derived-state": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Derived value copied into state"
+    },
+    "react-doctor/no-derived-state-effect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Derived state stored in an effect"
+    },
+    "react-doctor/no-effect-chain": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effects chained together"
+    },
+    "react-doctor/no-effect-event-handler": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effect used as an event handler"
+    },
+    "react-doctor/no-effect-event-in-deps": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effect Event listed in effect deps"
+    },
+    "react-doctor/no-effect-with-fresh-deps": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effect dependency recreated every render"
+    },
+    "react-doctor/no-effect-wrapper-discards-callback-cleanup-return": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Effect wrapper discards forwarded cleanup return"
+    },
+    "react-doctor/no-event-trigger-state": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "State exists only to trigger an effect"
+    },
+    "react-doctor/no-fetch-in-effect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Data fetching inside an effect"
+    },
+    "react-doctor/no-initialize-state": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "State initialized from a mount effect"
+    },
+    "react-doctor/no-mirror-prop-effect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Prop mirrored into state via effect"
+    },
+    "react-doctor/no-mutable-in-deps": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Mutable value in effect dependencies"
+    },
+    "react-doctor/no-pass-data-to-parent": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Data passed to parent via effect"
+    },
+    "react-doctor/no-pass-live-state-to-parent": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Live state pushed to parent via effect"
+    },
+    "react-doctor/no-prop-callback-in-effect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Parent kept in sync with a callback effect"
+    },
+    "react-doctor/no-promise-then-side-effect-in-effect-without-catch": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Effect promise .then sets state with no catch"
+    },
+    "react-doctor/no-reset-all-state-on-prop-change": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "All state reset on prop change"
+    },
+    "react-doctor/no-self-updating-effect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effect updates its own dependency"
+    },
+    "react-doctor/no-set-state-after-await-in-effect": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "State update after await in an effect"
+    },
+    "react-doctor/no-stale-timer-ref": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Cleared timer ref keeps the stale id"
+    },
+    "react-doctor/prefer-use-effect-event": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Effect re-subscribes on a changing callback"
+    },
+    "react-doctor/prefer-use-sync-external-store": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Hand-rolled external store subscription"
+    },
+    "react-doctor/query-no-query-in-effect": {
+      "eslintReact": null,
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Query refetch inside useEffect"
+    },
+    "react-doctor/query-no-mutation-in-effect-as-read": {
+      "eslintReact": null,
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Mutation driven from an effect as a read"
+    },
+    "react-doctor/rerender-dependencies": {
+      "eslintReact": "error",
+      "oxlintJsPlugins": "error",
+      "category": "Bugs",
+      "title": "Unstable value recreated every render"
+    },
+    "react-doctor/rules-of-hooks": {
+      "eslintReact": null,
+      "oxlintJsPlugins": null,
+      "category": "Bugs",
+      "title": "Hook called conditionally"
+    }
+  },
+  "reactDoctorDifferences": {
+    "eslintOnly": [
+      "react-doctor/effect-listener-cleanup-mismatch",
+      "react-doctor/effect-listener-cleanup-reference-mismatch",
+      "react-doctor/effect-observer-needs-disconnect",
+      "react-doctor/effect-raf-loop-needs-cancel",
+      "react-doctor/effect-remove-listener-inline-handler",
+      "react-doctor/no-effect-wrapper-discards-callback-cleanup-return",
+      "react-doctor/no-promise-then-side-effect-in-effect-without-catch",
+      "react-doctor/no-set-state-after-await-in-effect",
+      "react-doctor/no-stale-timer-ref"
+    ],
+    "neither": [
+      "react-doctor/exhaustive-deps",
+      "react-doctor/query-no-query-in-effect",
+      "react-doctor/query-no-mutation-in-effect-as-read",
+      "react-doctor/rules-of-hooks"
+    ],
+    "oxlintOnly": []
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "eslint-plugin-react": "7.37.5",
+    "react": "19.3.0"
+  },
+  "ultracite": {
+    "agentsTemplate": [
+      "- Call hooks at the top level only, never conditionally",
+      "- Specify all dependencies in hook dependency arrays correctly"
+    ],
+    "prompt": [
+      "const LEFT_FOR_REVIEW_LABEL = \"Left for review\";",
+      "`Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: ${jsonPath}`,",
+      "\"- Make the minimal change that resolves each issue while preserving runtime behavior.\",",
+      "\"- Follow the rule's help text from the JSON file where provided.\",",
+      "\"- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.\","
+    ]
+  }
+}

@@ -1,0 +1,431 @@
+{
+  "note": "Hand-made edits of the prepared subjects (subjects/react-effects/): the corpus's variants (examples.json, effects-examples.cjs) re-expressed on the normalised text (`mirrors`), and a few more for the classifier and Oxlint's suppression handling. `expect` is the design: the oracle's verdict over both modes, the automatic edit reading, and how many of the two dependency rules' reports Oxlint (init's config) still makes with inline config ignored (`handoffLeft`) and honoured (`handoffLeftHonor`); null means not checked.",
+  "mutants": [
+    {
+      "id": "a01",
+      "base": "a",
+      "mirrors": "a01",
+      "description": "list the dependencies the rule names (what each linter's fix does)",
+      "edits": [
+        [
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, []);",
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, [getSnapshot, serverSnapshotIsUsed, subscribe]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "partly fixed, resubscribes on every render",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 0
+      }
+    },
+    {
+      "id": "a02",
+      "base": "a",
+      "mirrors": "a02",
+      "description": "list the dependencies and refresh the state from the new store when it changes",
+      "edits": [
+        [
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, []);",
+          "  useEffect(() => {\n    // a new store: show its value now, then follow it\n    setState(getSnapshot());\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, [getSnapshot, serverSnapshotIsUsed, subscribe]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "bug fixed, resubscribes on every render",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 1
+      }
+    },
+    {
+      "id": "a03",
+      "base": "a",
+      "mirrors": "a03",
+      "description": "read the latest getSnapshot through a ref and keep subscribing once",
+      "edits": [
+        [
+          "import { useEffect, useState } from \"react\";",
+          "import { useEffect, useRef, useState } from \"react\";"
+        ],
+        [
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, []);",
+          "  const getSnapshotRef = useRef(getSnapshot);\n  useEffect(() => {\n    getSnapshotRef.current = getSnapshot;\n  });\n  useEffect(() => {\n    const getSnapshot = getSnapshotRef.current;\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshotRef.current());\n    });\n  }, []);"
+        ]
+      ],
+      "expect": {
+        "oracle": "changed",
+        "edit": "a ref",
+        "handoffLeft": 2
+      }
+    },
+    {
+      "id": "a04",
+      "base": "a",
+      "mirrors": "a04",
+      "description": "leave it for review (no edit)",
+      "edits": [],
+      "expect": {
+        "oracle": "bug kept",
+        "edit": "unchanged",
+        "handoffLeft": 2
+      }
+    },
+    {
+      "id": "a05",
+      "base": "a",
+      "mirrors": "a05",
+      "description": "the project's own fix (honojs/hono#5166)",
+      "edits": [
+        [
+          "import { useEffect, useState } from \"react\";",
+          "import { useEffect, useRef, useState } from \"react\";"
+        ],
+        [
+          "  const [serverSnapshotIsUsed] = useState<boolean>(\n    !!(buildData[0][4] && getServerSnapshot)\n  );\n  const [state, setState] = useState(() =>\n    serverSnapshotIsUsed ? (getServerSnapshot as () => T)() : getSnapshot()\n  );\n  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, []);\n\n  return state;\n};",
+          "  const snapshot =\n    buildData[0][4] && getServerSnapshot\n      ? (getServerSnapshot as () => T)()\n      : getSnapshot();\n  const [, setVersion] = useState(0);\n  const latestSnapshot = useRef<[T, () => T]>([snapshot, getSnapshot]);\n  latestSnapshot.current = [snapshot, getSnapshot];\n  const unsubscribeRef = useRef<() => void>(null);\n\n  // Swap subscriptions at effect flush: a returned cleanup would run synchronously\n  // during render when `subscribe` changes, leaving a window with no subscription.\n  useEffect(() => {\n    const update = () => setVersion((version) => version + 1);\n    unsubscribeRef.current?.();\n    unsubscribeRef.current = subscribe(update);\n    const [snapshot, getSnapshot] = latestSnapshot.current!;\n    if (!Object.is(snapshot, getSnapshot())) {\n      update();\n    }\n  }, [subscribe]);\n\n  useEffect(() => () => unsubscribeRef.current?.(), []);\n\n  return snapshot;\n};"
+        ]
+      ],
+      "expect": {
+        "oracle": "bug fixed",
+        "edit": "a ref",
+        "handoffLeft": 0
+      }
+    },
+    {
+      "id": "a06",
+      "base": "a",
+      "mirrors": null,
+      "description": "depend on subscribe only and read the new store's value when it changes",
+      "edits": [
+        [
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, []);",
+          "  useEffect(() => {\n    setState(getSnapshot());\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, [subscribe]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "bug fixed",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 2
+      }
+    },
+    {
+      "id": "a07",
+      "base": "a",
+      "mirrors": null,
+      "description": "a suppression comment above the array",
+      "edits": [
+        [
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n  }, []);",
+          "  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(getSnapshot());\n    }\n    return subscribe(() => {\n      setState(getSnapshot());\n    });\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, []);"
+        ]
+      ],
+      "expect": {
+        "oracle": "bug kept",
+        "edit": "suppression",
+        "handoffLeft": 2,
+        "handoffLeftHonor": 0,
+        "suppressionReported": 1
+      }
+    },
+    {
+      "id": "b01",
+      "base": "b",
+      "mirrors": "b01",
+      "description": "add validate to the second effect's array (what each linter's fix does there)",
+      "edits": [
+        [
+          "  }, [defaultTime]);",
+          "  }, [defaultTime, validate]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "crashes",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 5,
+        "typeErrors": 2
+      }
+    },
+    {
+      "id": "b02",
+      "base": "b",
+      "mirrors": "b02",
+      "description": "move validate above the effects and list every dependency the rule asks for",
+      "edits": [
+        [
+          "  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);\n\n  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validate(defaultTime);\n    }\n  }, [defaultTime]);\n\n  const validate = (time: Time) => {\n    let error;\n    const formattedTime = dayjs(formatTimeToTimeString(time), \"HH:mm:ss\", true);\n\n    if (!formattedTime.isValid()) {\n      error = \"Please enter a valid time\";\n    } else if (\n      formattedMinimumTime &&\n      formattedTime.isBefore(formattedMinimumTime)\n    ) {\n      error = \"Selected time is before the minimum time allowed\";\n    } else if (\n      formattedMaximumTime &&\n      formattedTime.isAfter(formattedMaximumTime)\n    ) {\n      error = \"Selected time is after the maximum time allowed\";\n    }\n\n    setError(error);\n    return error === undefined;\n  };\n",
+          "  const validate = (time: Time) => {\n    let error;\n    const formattedTime = dayjs(formatTimeToTimeString(time), \"HH:mm:ss\", true);\n\n    if (!formattedTime.isValid()) {\n      error = \"Please enter a valid time\";\n    } else if (\n      formattedMinimumTime &&\n      formattedTime.isBefore(formattedMinimumTime)\n    ) {\n      error = \"Selected time is before the minimum time allowed\";\n    } else if (\n      formattedMaximumTime &&\n      formattedTime.isAfter(formattedMaximumTime)\n    ) {\n      error = \"Selected time is after the maximum time allowed\";\n    }\n\n    setError(error);\n    return error === undefined;\n  };\n\n  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  }, [maximumTime, minimumTime, time, validate]);\n\n  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validate(defaultTime);\n    }\n  }, [defaultTime, validate]);\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "typing reverted",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 2
+      }
+    },
+    {
+      "id": "b03",
+      "base": "b",
+      "mirrors": "b03",
+      "description": "read validate (and the time) through Effect Events; keep each effect's trigger",
+      "edits": [
+        [
+          "import { useEffect, useState } from \"react\";",
+          "import { useEffect, useEffectEvent, useState } from \"react\";"
+        ],
+        [
+          "  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);",
+          "  const minimumKey = JSON.stringify(minimumTime);\n  const maximumKey = JSON.stringify(maximumTime);\n  const revalidate = useEffectEvent(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  });\n  const applyDefaultTime = useEffectEvent((next: Time) => {\n    setTime(next);\n    validate(next);\n  });\n\n  useEffect(() => {\n    revalidate();\n  }, [minimumKey, maximumKey]);"
+        ],
+        [
+          "  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validate(defaultTime);\n    }\n  }, [defaultTime]);",
+          "  useEffect(() => {\n    if (defaultTime) {\n      applyDefaultTime(defaultTime);\n    }\n  }, [defaultTime]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "useEffectEvent",
+        "handoffLeft": 1
+      }
+    },
+    {
+      "id": "b04",
+      "base": "b",
+      "mirrors": "b04",
+      "description": "leave it for review (no edit)",
+      "edits": [],
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 6
+      }
+    },
+    {
+      "id": "b05",
+      "base": "b",
+      "mirrors": "b05",
+      "description": "memoise a validate wrapper on the dayjs objects built during render",
+      "edits": [
+        [
+          "import { useEffect, useState } from \"react\";",
+          "import { useCallback, useEffect, useState } from \"react\";"
+        ],
+        [
+          "  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);",
+          "  const validateTime = useCallback(\n    (t: Time) => validate(t),\n    [formattedMinimumTime, formattedMaximumTime]\n  );\n\n  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);"
+        ],
+        [
+          "  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validate(defaultTime);\n    }\n  }, [defaultTime]);",
+          "  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validateTime(defaultTime);\n    }\n  }, [defaultTime, validateTime]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "changed",
+        "edit": "added the dependencies and memoised",
+        "handoffLeft": 7
+      }
+    },
+    {
+      "id": "b06",
+      "base": "b",
+      "mirrors": null,
+      "description": "suppression comments above both arrays",
+      "edits": [
+        [
+          "  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);",
+          "  useEffect(() => {\n    if (minimumTime || maximumTime) {\n      validate(time);\n    }\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);"
+        ],
+        [
+          "  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validate(defaultTime);\n    }\n  }, [defaultTime]);",
+          "  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      validate(defaultTime);\n    }\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [defaultTime]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 6,
+        "handoffLeftHonor": null,
+        "suppressionReported": 2
+      }
+    },
+    {
+      "id": "c01",
+      "base": "c",
+      "mirrors": "c01",
+      "description": "add both dependencies (what each linter's fix does)",
+      "edits": [
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, [loadChats]);"
+        ],
+        [
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n    saveCurrentChat,\n  ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "saves while typing or streaming",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 1
+      }
+    },
+    {
+      "id": "c02",
+      "base": "c",
+      "mirrors": "c02",
+      "description": "Effect Events for both, each effect keeping its trigger",
+      "edits": [
+        [
+          "import { useCallback, useEffect, useRef } from \"react\";",
+          "import { useCallback, useEffect, useEffectEvent, useRef } from \"react\";"
+        ],
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  const onMount = useEffectEvent(() => {\n    loadChats();\n  });\n  useEffect(() => {\n    onMount();\n  }, []);"
+        ],
+        [
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  // Auto-save when generation completes\n  const onMessagesChange = useEffectEvent(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  });\n  useEffect(() => {\n    onMessagesChange();\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "useEffectEvent",
+        "handoffLeft": 1
+      }
+    },
+    {
+      "id": "c03",
+      "base": "c",
+      "mirrors": "c03",
+      "description": "add loadChats (harmless here) and read saveCurrentChat through an Effect Event",
+      "edits": [
+        [
+          "import { useCallback, useEffect, useRef } from \"react\";",
+          "import { useCallback, useEffect, useEffectEvent, useRef } from \"react\";"
+        ],
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, [loadChats]);"
+        ],
+        [
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  // Auto-save when generation completes\n  const save = useEffectEvent(() => {\n    saveCurrentChat();\n  });\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      save();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "useEffectEvent",
+        "handoffLeft": 1
+      }
+    },
+    {
+      "id": "c04",
+      "base": "c",
+      "mirrors": "c04",
+      "description": "keep the latest saveCurrentChat in a ref (updated in an effect), add loadChats",
+      "edits": [
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, [loadChats]);"
+        ],
+        [
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  // Auto-save when generation completes\n  const saveCurrentChatRef = useRef(saveCurrentChat);\n  useEffect(() => {\n    saveCurrentChatRef.current = saveCurrentChat;\n  });\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChatRef.current();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "a ref",
+        "handoffLeft": 1
+      }
+    },
+    {
+      "id": "c05",
+      "base": "c",
+      "mirrors": "c05",
+      "description": "leave both for review (no edit)",
+      "edits": [],
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 4
+      }
+    },
+    {
+      "id": "c06",
+      "base": "c",
+      "mirrors": "c06",
+      "description": "do what Oxlint's compiler rule asks: add saveCurrentChat and drop the dependencies the body doesn't read",
+      "edits": [
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, [loadChats]);"
+        ],
+        [
+          "  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  }, [lastMessageInHistory?.isGenerating, saveCurrentChat]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "saves while typing or streaming",
+        "edit": "added and removed dependencies",
+        "handoffLeft": 0
+      }
+    },
+    {
+      "id": "c07",
+      "base": "c",
+      "mirrors": null,
+      "description": "the upstream suppression comments, put back",
+      "edits": [
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, []);"
+        ],
+        [
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 4,
+        "handoffLeftHonor": 0,
+        "suppressionReported": 2
+      }
+    },
+    {
+      "id": "c08",
+      "base": "c",
+      "mirrors": null,
+      "description": "keep the latest saveCurrentChat in a ref assigned during render",
+      "edits": [
+        [
+          "  // Auto-save when generation completes\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveCurrentChat();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);",
+          "  // Auto-save when generation completes\n  const saveRef = useRef(saveCurrentChat);\n  saveRef.current = saveCurrentChat;\n  useEffect(() => {\n    if (!lastMessageInHistory?.isGenerating) {\n      saveRef.current();\n    }\n  }, [\n    chatHistory.messages?.length,\n    lastMessageInHistory?.id,\n    lastMessageInHistory?.isGenerating,\n  ]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "a ref",
+        "handoffLeft": null
+      }
+    },
+    {
+      "id": "c09",
+      "base": "c",
+      "mirrors": null,
+      "description": "add loadChats only (harmless); leave the auto-save effect as it is",
+      "edits": [
+        [
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, []);",
+          "  // INITIAL LOAD\n  useEffect(() => {\n    loadChats();\n  }, [loadChats]);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 2
+      }
+    }
+  ]
+}

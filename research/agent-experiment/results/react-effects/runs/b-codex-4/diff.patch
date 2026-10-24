@@ -1,0 +1,71 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -83,7 +83,7 @@
+ // ── end of STUB ────────────────────────────────────────────────────────
+ 
+ import type { ChangeEvent } from "react";
+-import { useEffect, useState } from "react";
++import { useState } from "react";
+ 
+ // [Joshen] This is trying to do the same thing as TimeSplitInput.tsx
+ // so can we please look to try to combine these 2 components together if possible
+@@ -109,6 +109,11 @@
+   const [isFocused, setIsFocused] = useState(false);
+   const [error, setError] = useState<string>();
+   const [time, setTime] = useState<Time>(defaultTime || { h: 0, m: 0, s: 0 });
++  const [previousDefaultTime, setPreviousDefaultTime] = useState<Time>();
++  const [previousBounds, setPreviousBounds] = useState<{
++    maximumTimeKey?: string;
++    minimumTimeKey?: string;
++  }>({});
+ 
+   const formattedMinimumTime = minimumTime
+     ? dayjs(formatTimeToTimeString(minimumTime), "HH:mm:ss", true)
+@@ -118,19 +123,6 @@
+     ? dayjs(formatTimeToTimeString(maximumTime), "HH:mm:ss", true)
+     : undefined;
+ 
+-  useEffect(() => {
+-    if (minimumTime || maximumTime) {
+-      validate(time);
+-    }
+-  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);
+-
+-  useEffect(() => {
+-    if (defaultTime) {
+-      setTime(defaultTime);
+-      validate(defaultTime);
+-    }
+-  }, [defaultTime]);
+-
+   const validate = (time: Time) => {
+     let error;
+     const formattedTime = dayjs(formatTimeToTimeString(time), "HH:mm:ss", true);
+@@ -153,6 +145,27 @@
+     return error === undefined;
+   };
+ 
++  const minimumTimeKey = JSON.stringify(minimumTime);
++  const maximumTimeKey = JSON.stringify(maximumTime);
++
++  if (
++    minimumTimeKey !== previousBounds.minimumTimeKey ||
++    maximumTimeKey !== previousBounds.maximumTimeKey
++  ) {
++    setPreviousBounds({ maximumTimeKey, minimumTimeKey });
++    if (minimumTimeKey || maximumTimeKey) {
++      validate(time);
++    }
++  }
++
++  if (defaultTime !== previousDefaultTime) {
++    setPreviousDefaultTime(defaultTime);
++    if (defaultTime) {
++      setTime(defaultTime);
++      validate(defaultTime);
++    }
++  }
++
+   const onFocus = () => setIsFocused(true);
+ 
+   const onInputChange = (

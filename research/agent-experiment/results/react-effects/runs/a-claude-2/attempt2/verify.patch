@@ -1,0 +1,13 @@
+--- a/index.ts
++++ b/index.ts
+@@ -54,9 +54,7 @@
+   const buildData = buildDataStack.at(-1) as [Context, unknown];
+   // no buildData means a stringify process, maybe in server side; the server snapshot is used then
+   if (!(buildData || getServerSnapshot)) {
+-    throw new Error(
+-      "getServerSnapshot is required for server side rendering"
+-    );
++    throw new Error("getServerSnapshot is required for server side rendering");
+   }
+ 
+   const [serverSnapshotIsUsed] = useState<boolean>(

@@ -1,0 +1,1426 @@
+{
+  "runtime": "node v24.14.1",
+  "oracle": "research/corpus/scripts/effects-oracle.cjs on effects-runtime.cjs (shared with the corpus)",
+  "cases": [
+    {
+      "name": "a as prepared",
+      "oracle": "bug kept",
+      "outcome": "unchanged",
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "handoffLeft": 6,
+      "handoffLeftHonor": 6,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "handoffLeft": 4,
+      "handoffLeftHonor": 4,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a01: list the dependencies the rule names (what each linter's fix does)",
+      "mutant": "a01",
+      "oracle": "partly fixed, resubscribes on every render",
+      "modes": {
+        "stable": "partly fixed",
+        "inline": "partly fixed"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "added the dependencies"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "partly fixed, resubscribes on every render",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 0
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 71,
+          "deps": [
+            "getSnapshot",
+            "serverSnapshotIsUsed",
+            "subscribe"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "partly fixed, resubscribes on every render",
+        "dependencyRule": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 0
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 0,
+          "biome": 0,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a02: list the dependencies and refresh the state from the new store when it changes",
+      "mutant": "a02",
+      "oracle": "bug fixed, resubscribes on every render",
+      "modes": {
+        "stable": "bug fixed",
+        "inline": "bug fixed"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "added the dependencies"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "bug fixed, resubscribes on every render",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 1
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 71,
+          "deps": [
+            "getSnapshot",
+            "serverSnapshotIsUsed",
+            "subscribe"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "bug fixed, resubscribes on every render",
+        "dependencyRule": {
+          "biome": 1,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 1,
+          "biome": 1,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03: read the latest getSnapshot through a ref and keep subscribing once",
+      "mutant": "a03",
+      "oracle": "changed",
+      "modes": {
+        "stable": "changed",
+        "inline": "changed"
+      },
+      "outcome": "a ref",
+      "kinds": [
+        "a ref",
+        "removed or restructured the effect"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "a ref",
+        "handoffLeft": 2
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 75,
+          "deps": []
+        }
+      ],
+      "corpus": {
+        "oracle": "changed",
+        "dependencyRule": {
+          "biome": 2,
+          "eslint": 1,
+          "oxlint": 1,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 1,
+          "oxlintCompiler": 1,
+          "biome": 2,
+          "eslint": 1
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04: leave it for review (no edit)",
+      "mutant": "a04",
+      "oracle": "bug kept",
+      "modes": {
+        "stable": "bug kept",
+        "inline": "bug kept"
+      },
+      "outcome": "unchanged",
+      "kinds": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "bug kept",
+        "edit": "unchanged",
+        "handoffLeft": 2
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 71,
+          "deps": []
+        }
+      ],
+      "corpus": {
+        "oracle": "bug kept",
+        "dependencyRule": {
+          "biome": 3,
+          "eslint": 1,
+          "oxlint": 1,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 1,
+          "oxlintCompiler": 1,
+          "biome": 3,
+          "eslint": 1
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a05: the project's own fix (honojs/hono#5166)",
+      "mutant": "a05",
+      "oracle": "bug fixed",
+      "modes": {
+        "stable": "bug fixed",
+        "inline": "bug fixed"
+      },
+      "outcome": "a ref",
+      "kinds": [
+        "a ref",
+        "an updater function",
+        "added the dependencies",
+        "removed or restructured the effect"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "bug fixed",
+        "edit": "a ref",
+        "handoffLeft": 0
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 76,
+          "deps": [
+            "subscribe"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "bug fixed",
+        "dependencyRule": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 0
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 0,
+          "biome": 0,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a06: depend on subscribe only and read the new store's value when it changes",
+      "mutant": "a06",
+      "oracle": "bug fixed",
+      "modes": {
+        "stable": "bug fixed",
+        "inline": "bug fixed"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "added the dependencies"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "bug fixed",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 2
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 71,
+          "deps": [
+            "subscribe"
+          ]
+        }
+      ],
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a07: a suppression comment above the array",
+      "mutant": "a07",
+      "oracle": "bug kept",
+      "modes": {
+        "stable": "bug kept",
+        "inline": "bug kept"
+      },
+      "outcome": "suppression",
+      "kinds": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 0,
+      "suppressionReported": 1,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "bug kept",
+        "edit": "suppression",
+        "handoffLeft": 2,
+        "handoffLeftHonor": 0,
+        "suppressionReported": 1
+      },
+      "effects": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "line": 71,
+          "deps": []
+        }
+      ],
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b01: add validate to the second effect's array (what each linter's fix does there)",
+      "mutant": "b01",
+      "oracle": "crashes",
+      "modes": {
+        "stable": "crashes",
+        "app": "crashes"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "added the dependencies"
+      ],
+      "handoffLeft": 5,
+      "handoffLeftHonor": 5,
+      "suppressionReported": 0,
+      "typeErrors": 2,
+      "expected": {
+        "oracle": "crashes",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 5,
+        "typeErrors": 2
+      },
+      "effects": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "line": 121,
+          "deps": [
+            "JSON.stringify(minimumTime)",
+            "JSON.stringify(maximumTime)"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "line": 127,
+          "deps": [
+            "defaultTime",
+            "validate"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "crashes",
+        "dependencyRule": {
+          "biome": 6,
+          "eslint": 4,
+          "oxlint": 4,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 2,
+        "ours": {
+          "oxlint": 4,
+          "oxlintCompiler": 1,
+          "biome": 6,
+          "eslint": 4
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b02: move validate above the effects and list every dependency the rule asks for",
+      "mutant": "b02",
+      "oracle": "typing reverted",
+      "modes": {
+        "stable": "typing reverted",
+        "app": "typing reverted"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "moved a declaration above the effects",
+        "added the dependencies",
+        "replaced a dependency with the value it reads"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "typing reverted",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 2
+      },
+      "effects": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "line": 143,
+          "deps": [
+            "maximumTime",
+            "minimumTime",
+            "time",
+            "validate"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "line": 149,
+          "deps": [
+            "defaultTime",
+            "validate"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "typing reverted",
+        "dependencyRule": {
+          "biome": 2,
+          "eslint": 2,
+          "oxlint": 2,
+          "oxlintCompiler": 0
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 2,
+          "oxlintCompiler": 0,
+          "biome": 2,
+          "eslint": 2
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03: read validate (and the time) through Effect Events; keep each effect's trigger",
+      "mutant": "b03",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "app": "same"
+      },
+      "outcome": "useEffectEvent",
+      "kinds": [
+        "useEffectEvent",
+        "extracted a dependency to a variable"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "useEffectEvent",
+        "handoffLeft": 1
+      },
+      "effects": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "line": 133,
+          "deps": [
+            "minimumKey",
+            "maximumKey"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "line": 137,
+          "deps": [
+            "defaultTime"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "same",
+        "dependencyRule": {
+          "biome": 1,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 1,
+          "biome": 1,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04: leave it for review (no edit)",
+      "mutant": "b04",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "app": "same"
+      },
+      "outcome": "unchanged",
+      "kinds": [],
+      "handoffLeft": 6,
+      "handoffLeftHonor": 6,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 6
+      },
+      "effects": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "line": 121,
+          "deps": [
+            "JSON.stringify(minimumTime)",
+            "JSON.stringify(maximumTime)"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "line": 127,
+          "deps": [
+            "defaultTime"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "same",
+        "dependencyRule": {
+          "biome": 6,
+          "eslint": 4,
+          "oxlint": 4,
+          "oxlintCompiler": 2
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 4,
+          "oxlintCompiler": 2,
+          "biome": 6,
+          "eslint": 4
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b05: memoise a validate wrapper on the dayjs objects built during render",
+      "mutant": "b05",
+      "oracle": "changed",
+      "modes": {
+        "stable": "changed",
+        "app": "typing reverted"
+      },
+      "outcome": "added the dependencies and memoised",
+      "kinds": [
+        "memoised",
+        "added the dependencies"
+      ],
+      "handoffLeft": 7,
+      "handoffLeftHonor": 7,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "added the dependencies and memoised",
+        "handoffLeft": 7
+      },
+      "effects": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "line": 126,
+          "deps": [
+            "JSON.stringify(minimumTime)",
+            "JSON.stringify(maximumTime)"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "line": 132,
+          "deps": [
+            "defaultTime",
+            "validateTime"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "changed",
+        "dependencyRule": {
+          "biome": 7,
+          "eslint": 4,
+          "oxlint": 6,
+          "oxlintCompiler": 2
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 6,
+          "oxlintCompiler": 2,
+          "biome": 7,
+          "eslint": 4
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06: suppression comments above both arrays",
+      "mutant": "b06",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "app": "same"
+      },
+      "outcome": "suppression",
+      "kinds": [],
+      "handoffLeft": 6,
+      "handoffLeftHonor": 0,
+      "suppressionReported": 2,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 6,
+        "handoffLeftHonor": null,
+        "suppressionReported": 2
+      },
+      "effects": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "line": 121,
+          "deps": [
+            "JSON.stringify(minimumTime)",
+            "JSON.stringify(maximumTime)"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "line": 128,
+          "deps": [
+            "defaultTime"
+          ]
+        }
+      ],
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c01: add both dependencies (what each linter's fix does)",
+      "mutant": "c01",
+      "oracle": "saves while typing or streaming",
+      "modes": {
+        "stable": "saves while typing or streaming",
+        "fresh": "saves while typing or streaming"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "added the dependencies"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "saves while typing or streaming",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 1
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": [
+            "loadChats"
+          ]
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 252,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating",
+            "saveCurrentChat"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "saves while typing or streaming",
+        "dependencyRule": {
+          "biome": 1,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 1,
+          "biome": 1,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c02: Effect Events for both, each effect keeping its trigger",
+      "mutant": "c02",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "useEffectEvent",
+      "kinds": [
+        "useEffectEvent"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "useEffectEvent",
+        "handoffLeft": 1
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 188,
+          "deps": []
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 260,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "same",
+        "dependencyRule": {
+          "biome": 1,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 1,
+          "biome": 1,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c03: add loadChats (harmless here) and read saveCurrentChat through an Effect Event",
+      "mutant": "c03",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "useEffectEvent",
+      "kinds": [
+        "useEffectEvent",
+        "added the dependencies"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "useEffectEvent",
+        "handoffLeft": 1
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": [
+            "loadChats"
+          ]
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 255,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "same",
+        "dependencyRule": {
+          "biome": 1,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 1,
+          "biome": 1,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c04: keep the latest saveCurrentChat in a ref (updated in an effect), add loadChats",
+      "mutant": "c04",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "a ref",
+      "kinds": [
+        "a ref",
+        "added the dependencies",
+        "removed trigger dependencies",
+        "removed or restructured the effect"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "a ref",
+        "handoffLeft": 1
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": [
+            "loadChats"
+          ]
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 253,
+          "deps": []
+        }
+      ],
+      "corpus": {
+        "oracle": "same",
+        "dependencyRule": {
+          "biome": 1,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 1
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 1,
+          "biome": 1,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c05: leave both for review (no edit)",
+      "mutant": "c05",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "unchanged",
+      "kinds": [],
+      "handoffLeft": 4,
+      "handoffLeftHonor": 4,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 4
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": []
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 252,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "same",
+        "dependencyRule": {
+          "biome": 3,
+          "eslint": 2,
+          "oxlint": 2,
+          "oxlintCompiler": 2
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 2,
+          "oxlintCompiler": 2,
+          "biome": 3,
+          "eslint": 2
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c06: do what Oxlint's compiler rule asks: add saveCurrentChat and drop the dependencies the body doesn't read",
+      "mutant": "c06",
+      "oracle": "saves while typing or streaming",
+      "modes": {
+        "stable": "saves while typing or streaming",
+        "fresh": "saves while typing or streaming"
+      },
+      "outcome": "added and removed dependencies",
+      "kinds": [
+        "added the dependencies",
+        "removed trigger dependencies"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "saves while typing or streaming",
+        "edit": "added and removed dependencies",
+        "handoffLeft": 0
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": [
+            "loadChats"
+          ]
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 252,
+          "deps": [
+            "lastMessageInHistory?.isGenerating",
+            "saveCurrentChat"
+          ]
+        }
+      ],
+      "corpus": {
+        "oracle": "saves while typing or streaming",
+        "dependencyRule": {
+          "biome": 0,
+          "eslint": 0,
+          "oxlint": 0,
+          "oxlintCompiler": 0
+        },
+        "typeErrors": 0,
+        "ours": {
+          "oxlint": 0,
+          "oxlintCompiler": 0,
+          "biome": 0,
+          "eslint": 0
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c07: the upstream suppression comments, put back",
+      "mutant": "c07",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "suppression",
+      "kinds": [],
+      "handoffLeft": 4,
+      "handoffLeftHonor": 0,
+      "suppressionReported": 2,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 4,
+        "handoffLeftHonor": 0,
+        "suppressionReported": 2
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": []
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 253,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c08: keep the latest saveCurrentChat in a ref assigned during render",
+      "mutant": "c08",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "a ref",
+      "kinds": [
+        "a ref"
+      ],
+      "handoffLeft": 3,
+      "handoffLeftHonor": 3,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "a ref",
+        "handoffLeft": null
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": []
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 254,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c09: add loadChats only (harmless); leave the auto-save effect as it is",
+      "mutant": "c09",
+      "oracle": "same",
+      "modes": {
+        "stable": "same",
+        "fresh": "same"
+      },
+      "outcome": "added the dependencies as the rule asks",
+      "kinds": [
+        "added the dependencies"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "suppressionReported": 0,
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "added the dependencies as the rule asks",
+        "handoffLeft": 2
+      },
+      "effects": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "line": 185,
+          "deps": [
+            "loadChats"
+          ]
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "line": 252,
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "corpus": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "primingCheck": {
+    "note": "lines of the unstripped corpus subjects' comments that the PRIMING patterns match; each must be above 0",
+    "hits": {
+      "a": 18,
+      "b": 21,
+      "c": 30
+    },
+    "pass": true
+  },
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts Oxlint adapter (fixAndCollect and verify, run under Bun in a project with init's oxlint.config.ts and oxfmt.config.ts, which import `ultracite/...`, and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs, configs passed with -c), on the same files: every diagnostic (every field but `raw`, before the handoff filter) and the subject, package.json and tsconfig.json each pass leaves must match.",
+    "cases": [
+      {
+        "name": "a as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "dependencyRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "dependencyRules": 6,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "dependencyRules": 4,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "dependencyRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 9,
+        "dependencyRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "dependencyRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "dependencyRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "dependencyRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "dependencyRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 5,
+        "dependencyRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "dependencyRules": 5,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 16,
+        "dependencyRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 17,
+        "dependencyRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "dependencyRules": 6,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 24,
+        "dependencyRules": 7,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 16,
+        "dependencyRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "dependencyRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "dependencyRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "dependencyRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "dependencyRules": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "dependencyRules": 4,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "dependencyRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "dependencyRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "dependencyRules": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 12,
+        "dependencyRules": 2,
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}

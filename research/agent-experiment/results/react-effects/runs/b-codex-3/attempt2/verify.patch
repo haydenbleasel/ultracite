@@ -1,0 +1,15 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -143,8 +143,10 @@
+ 
+   const minimumTimeKey = JSON.stringify(minimumTime);
+   const maximumTimeKey = JSON.stringify(maximumTime);
+-  const [previousMinimumTimeKey, setPreviousMinimumTimeKey] = useState<string>();
+-  const [previousMaximumTimeKey, setPreviousMaximumTimeKey] = useState<string>();
++  const [previousMinimumTimeKey, setPreviousMinimumTimeKey] =
++    useState<string>();
++  const [previousMaximumTimeKey, setPreviousMaximumTimeKey] =
++    useState<string>();
+ 
+   if (
+     minimumTimeKey !== previousMinimumTimeKey ||

@@ -1,0 +1,575 @@
+[
+  {
+    "id": "a",
+    "base": "a",
+    "example": "effects-a-hono-use-sync-external-store.ts",
+    "basename": "index.ts",
+    "kind": "the warning is a real bug",
+    "label": "A, a real bug",
+    "linter": "oxlint",
+    "config": "oxlint react",
+    "expected": [
+      "react/exhaustive-effect-dependencies",
+      "react-hooks/exhaustive-deps"
+    ],
+    "targets": [
+      {
+        "name": "subscription",
+        "missing": [
+          "getSnapshot",
+          "serverSnapshotIsUsed",
+          "subscribe"
+        ],
+        "triggers": []
+      }
+    ],
+    "functions": [],
+    "source": "honojs/hono src/jsx/hooks/index.ts @ df653cea (the parent of honojs/hono#5166), L397-425 (useSyncExternalStore); the rest of the file and ../dom/render as a STUB",
+    "right": "follow the new store: resubscribe when `subscribe` changes and show the new store's value at once (the project's fix), or say that fixing it changes behaviour and leave it for review",
+    "path": "subjects/react-effects/a/index.ts",
+    "sha256": "340f80cccfda8ce4eb2c0d600e3183ff85989c055e58c12ee3be8f5fce420dd5",
+    "originalSha256": "b9bd9cc6631b8683d5631b2c3766922f306a68e6a5463da2d59126c344a96601",
+    "cleanedSha256": "615a036228b3a92a7ce28972190c55f5010d5c71f79d919c70f5d4c4ab57fab7",
+    "headerLinesRemoved": 22,
+    "upstreamDisablesRemoved": 0,
+    "textEdits": [
+      {
+        "from": " * Commit:    df653cea0450657977887d56a5188368387456c8 (2026-07-26T14:07:57+09:00), the parent of the fix",
+        "to": " * Commit:    df653cea0450657977887d56a5188368387456c8 (2026-07-26T14:07:57+09:00)",
+        "why": "named the fix"
+      },
+      {
+        "from": " * Hook:      useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?), hono/jsx's version of\n *   React's hook: it reads an external store's snapshot and re-renders when the store notifies. hono/jsx\n *   follows React's hooks API, and the dependency rules apply to it by name.",
+        "to": " * Hook:      useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?), hono/jsx's version of\n *   React's hook of the same name.",
+        "why": "named the dependency rules and described the behaviour the oracle checks"
+      },
+      {
+        "from": " * Lines 397-425 are copied verbatim. The stubs above them replace what the function uses from the rest\n * of the file and from ../dom/render. Anything marked STUB is not part of the original source.",
+        "to": " * Lines 397-425 are copied, with their formatting changed. The stubs above them replace what the\n * function uses from the rest of the file and from ../dom/render. Anything marked STUB is not part of\n * the original source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\beffects?\\b|side[- ]effects?/i",
+      "/dependenc|\\bdeps\\b/i",
+      "/\\bstale\\b|outdated|old (store|value|subscription|snapshot)/i",
+      "/\\bloops?\\b|infinite|every render|each render|re-?renders?\\b|re-?runs?\\b/i",
+      "/strict ?mode/i",
+      "/useEffectEvent|effect events?/i",
+      "/5166|10530|10662|51613|224d2f5|a0b98a94|5a73b9a3|a1412f71|50f2fcca|09a1f431/",
+      "/deliberate|intentional|on purpose|mount-?only|\\bonce\\b|on mount/i",
+      "/exhaustive|rules?[- ]of[- ]hooks|eslint|oxlint|biome|\\blint(s|er|ers|ing)?\\b|ultracite|react-hooks|compiler/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why the|What the project did|Upstream disable/",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|analysis|\\bcorpus|research|oracle|scenario|behaviou?r check/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression/i",
+      "/re-?subscri|keystroke|\\btyping\\b|\\brevert/i",
+      "/suppress|disable|\\bignor/i",
+      "/upstream|\\blater\\b|(?<!chat[ -]?)histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\bTDZ\\b|temporal dead|initiali[sz]|declared (below|after)|hoist/i",
+      "/memoi[sz]|identity|referential|useCallback|useMemo/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 14,
+        "added": 20
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "react/exhaustive-effect-dependencies L78: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps L72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'"
+      ],
+      "help": [
+        "Missing dependencies can cause an effect to fire less often than it should",
+        "Either include it or remove the dependency array."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      ],
+      "reportedBeforeFilter": 10,
+      "leftOutByFilter": {
+        "react-hooks/rules-of-hooks": 3,
+        "react/hook-use-state": 1,
+        "react/hooks": 3,
+        "react/set-state-in-effect": 1
+      },
+      "effectsUnderTest": [
+        {
+          "name": "subscription",
+          "hook": "useEffect",
+          "deps": []
+        }
+      ],
+      "effectsUnchangedByNormalising": true,
+      "oracle": {
+        "verdictAgainstCorpusSubject": "bug kept",
+        "traceIdentical": true,
+        "modes": [
+          "stable",
+          "inline"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "268537c406255e99ce8f1838dbc1d74e4a1cf64554c5f4a2e99ef1e20be3da8f",
+      "package.json": "41329e2489aa3c52f305b9f206814ce362824ea3ea1e6ea06d1c57a2c14f07f7",
+      "tsconfig.json": "dc06eea139a1c1367efb3e8f4e823dda898ec2ea2442bfa4ff4fe2adb45690a9"
+    },
+    "corpusLint": {
+      "biome": {
+        "hookRules": [
+          "lint/correctness/useHookAtTopLevel@83",
+          "lint/correctness/useHookAtTopLevel@84",
+          "lint/correctness/useExhaustiveDependencies@87",
+          "lint/correctness/useExhaustiveDependencies@87",
+          "lint/correctness/useExhaustiveDependencies@87",
+          "lint/correctness/useHookAtTopLevel@87"
+        ],
+        "other": 2
+      },
+      "eslint": {
+        "hookRules": [
+          "react-hooks/hooks@83",
+          "react-hooks/rules-of-hooks@83",
+          "react-hooks/hooks@84",
+          "react-hooks/rules-of-hooks@84",
+          "react-hooks/hooks@87",
+          "react-hooks/rules-of-hooks@87",
+          "react-hooks/set-state-in-effect@89",
+          "react-hooks/exhaustive-deps@94"
+        ],
+        "other": 2
+      },
+      "oxlint": {
+        "hookRules": [
+          "react/exhaustive-effect-dependencies@94",
+          "react/hooks@83",
+          "react/hooks@84",
+          "react/hooks@87",
+          "react/set-state-in-effect@89",
+          "react-hooks/rules-of-hooks@83",
+          "react-hooks/rules-of-hooks@84",
+          "react-hooks/exhaustive-deps@88",
+          "react-hooks/rules-of-hooks@87"
+        ],
+        "other": 1
+      },
+      "react-doctor": {
+        "hookRules": [],
+        "other": 0
+      }
+    }
+  },
+  {
+    "id": "b",
+    "base": "b",
+    "example": "effects-b-supabase-time-input.tsx",
+    "basename": "TimeInput.tsx",
+    "kind": "the obvious fix breaks it",
+    "label": "B, the obvious fix breaks it",
+    "linter": "oxlint",
+    "config": "oxlint react",
+    "expected": [
+      "react/exhaustive-effect-dependencies",
+      "react/exhaustive-effect-dependencies",
+      "react-hooks/exhaustive-deps",
+      "react-hooks/exhaustive-deps",
+      "react-hooks/exhaustive-deps",
+      "react-hooks/exhaustive-deps"
+    ],
+    "targets": [
+      {
+        "name": "limits",
+        "missing": [
+          "validate",
+          "time",
+          "minimumTime",
+          "maximumTime"
+        ],
+        "triggers": [
+          "JSON.stringify(minimumTime)",
+          "JSON.stringify(maximumTime)"
+        ]
+      },
+      {
+        "name": "defaultTime",
+        "missing": [
+          "validate"
+        ],
+        "triggers": [
+          "defaultTime"
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "name": "validate",
+        "marker": "Please enter a valid time"
+      }
+    ],
+    "source": "supabase/supabase apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx @ 09f80f52, L4 and L10-156; its other imports as a STUB",
+    "right": "keep each effect running when it does now and satisfy the rule another way (Effect Events, or validation that doesn't change on every render), or leave it for review",
+    "path": "subjects/react-effects/b/TimeInput.tsx",
+    "sha256": "bd6fbb6e749e118f65ec37a7fbe0b9d32f671a94f0e31333870d23e079e478d0",
+    "originalSha256": "eca0e3c508e7628506f0d766f1cee5fd04bacd6957595d8b2dbc17370881a73a",
+    "cleanedSha256": "a6d4a4becd89f73a0559bb5c6e990cd5cc7d35ec448025198ebd45cd9e68f65e",
+    "headerLinesRemoved": 26,
+    "upstreamDisablesRemoved": 0,
+    "textEdits": [
+      {
+        "from": " * Component: TimeInput (default export), the HH:MM:SS input of Supabase Studio's point-in-time\n *   recovery form (PITRForm.tsx L202-L217 at the same commit). It shows `defaultTime`, lets the user\n *   type each field, commits a field on blur through onChange, and shows an error when the time is\n *   outside minimumTime-maximumTime.",
+        "to": " * Component: TimeInput (default export), the HH:MM:SS input of Supabase Studio's point-in-time\n *   recovery form (PITRForm.tsx L202-L217 at the same commit).",
+        "why": "described the behaviour the oracle checks"
+      },
+      {
+        "from": " * Line 4 and lines 10-156 are copied verbatim. The stubs above them replace the other imports (lines 1-3\n * and 5-8). Anything marked STUB is not part of the original source.",
+        "to": " * Line 4 and lines 10-156 are copied, with their formatting changed. The stubs above them replace the\n * other imports (lines 1-3 and 5-8). Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      },
+      {
+        "from": " * License of the source repository: Apache License 2.0 (supabase/supabase/LICENSE, reproduced in full in\n * research/corpus/examples/licenses/supabase-LICENSE). This file is a modified copy: its imports were\n * replaced by the stubs marked STUB.",
+        "to": " * License of the source repository: Apache License 2.0 (supabase/supabase/LICENSE). Licensed under the\n * Apache License, Version 2.0; you may obtain a copy of the License at\n * http://www.apache.org/licenses/LICENSE-2.0. This file is a modified copy: its imports were replaced by\n * the stubs marked STUB.",
+        "why": "named this repo's research folder (the license's copy there); the standard Apache notice instead"
+      }
+    ],
+    "primingPatterns": [
+      "/\\beffects?\\b|side[- ]effects?/i",
+      "/dependenc|\\bdeps\\b/i",
+      "/\\bstale\\b|outdated|old (store|value|subscription|snapshot)/i",
+      "/\\bloops?\\b|infinite|every render|each render|re-?renders?\\b|re-?runs?\\b/i",
+      "/strict ?mode/i",
+      "/useEffectEvent|effect events?/i",
+      "/5166|10530|10662|51613|224d2f5|a0b98a94|5a73b9a3|a1412f71|50f2fcca|09a1f431/",
+      "/deliberate|intentional|on purpose|mount-?only|\\bonce\\b|on mount/i",
+      "/exhaustive|rules?[- ]of[- ]hooks|eslint|oxlint|biome|\\blint(s|er|ers|ing)?\\b|ultracite|react-hooks|compiler/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why the|What the project did|Upstream disable/",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|analysis|\\bcorpus|research|oracle|scenario|behaviou?r check/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression/i",
+      "/re-?subscri|keystroke|\\btyping\\b|\\brevert/i",
+      "/suppress|disable|\\bignor/i",
+      "/upstream|\\blater\\b|(?<!chat[ -]?)histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\bTDZ\\b|temporal dead|initiali[sz]|declared (below|after)|hoist/i",
+      "/memoi[sz]|identity|referential|useCallback|useMemo/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 80,
+        "added": 132
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "react/exhaustive-effect-dependencies L125: Found missing effect dependencies",
+        "react/exhaustive-effect-dependencies L132: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps L125: React Hook useEffect has a complex expression in the dependency array.",
+        "react-hooks/exhaustive-deps L125: React Hook useEffect has a complex expression in the dependency array.",
+        "react-hooks/exhaustive-deps L123: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+        "react-hooks/exhaustive-deps L130: React Hook useEffect has a missing dependency: 'validate'"
+      ],
+      "help": [
+        "Missing dependencies can cause an effect to fire less often than it should",
+        "Extract the expression to a separate variable so it can be statically checked.",
+        "Either include it or remove the dependency array."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      ],
+      "reportedBeforeFilter": 22,
+      "leftOutByFilter": {
+        "import/first": 2,
+        "no-empty-function": 1,
+        "no-nested-ternary": 1,
+        "no-shadow": 2,
+        "no-use-before-define": 2,
+        "prefer-named-capture-group": 3,
+        "react/immutability": 1,
+        "react/jsx-no-useless-fragment": 1,
+        "react/set-state-in-effect": 1,
+        "require-unicode-regexp": 1,
+        "unicorn/filename-case": 1
+      },
+      "effectsUnderTest": [
+        {
+          "name": "limits",
+          "hook": "useEffect",
+          "deps": [
+            "JSON.stringify(minimumTime)",
+            "JSON.stringify(maximumTime)"
+          ]
+        },
+        {
+          "name": "defaultTime",
+          "hook": "useEffect",
+          "deps": [
+            "defaultTime"
+          ]
+        }
+      ],
+      "effectsUnchangedByNormalising": true,
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "traceIdentical": true,
+        "modes": [
+          "stable",
+          "app"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "268537c406255e99ce8f1838dbc1d74e4a1cf64554c5f4a2e99ef1e20be3da8f",
+      "package.json": "41329e2489aa3c52f305b9f206814ce362824ea3ea1e6ea06d1c57a2c14f07f7",
+      "tsconfig.json": "dc06eea139a1c1367efb3e8f4e823dda898ec2ea2442bfa4ff4fe2adb45690a9"
+    },
+    "corpusLint": {
+      "biome": {
+        "hookRules": [
+          "lint/correctness/useExhaustiveDependencies@120",
+          "lint/correctness/useExhaustiveDependencies@120",
+          "lint/correctness/useExhaustiveDependencies@120",
+          "lint/correctness/useExhaustiveDependencies@120",
+          "lint/correctness/useExhaustiveDependencies@120",
+          "lint/correctness/useExhaustiveDependencies@124"
+        ],
+        "other": 34
+      },
+      "eslint": {
+        "hookRules": [
+          "react-hooks/immutability@121",
+          "react-hooks/exhaustive-deps@122",
+          "react-hooks/exhaustive-deps@122",
+          "react-hooks/exhaustive-deps@122",
+          "react-hooks/set-state-in-effect@126",
+          "react-hooks/exhaustive-deps@129"
+        ],
+        "other": 53
+      },
+      "oxlint": {
+        "hookRules": [
+          "react/exhaustive-effect-dependencies@122",
+          "react/exhaustive-effect-dependencies@129",
+          "react/immutability@121",
+          "react/set-state-in-effect@126",
+          "react-hooks/exhaustive-deps@122",
+          "react-hooks/exhaustive-deps@122",
+          "react-hooks/exhaustive-deps@121",
+          "react-hooks/exhaustive-deps@127"
+        ],
+        "other": 21
+      },
+      "react-doctor": {
+        "hookRules": [],
+        "other": 0
+      }
+    }
+  },
+  {
+    "id": "c",
+    "base": "c",
+    "example": "effects-c-excalidraw-ttd-chat-storage.ts",
+    "basename": "useTTDChatStorage.ts",
+    "kind": "a deliberate omission",
+    "label": "C, a deliberate omission",
+    "linter": "oxlint",
+    "config": "oxlint react",
+    "expected": [
+      "react/exhaustive-effect-dependencies",
+      "react/exhaustive-effect-dependencies",
+      "react-hooks/exhaustive-deps",
+      "react-hooks/exhaustive-deps"
+    ],
+    "targets": [
+      {
+        "name": "initial load",
+        "missing": [
+          "loadChats"
+        ],
+        "triggers": []
+      },
+      {
+        "name": "auto-save",
+        "missing": [
+          "saveCurrentChat"
+        ],
+        "triggers": [
+          "chatHistory.messages?.length",
+          "lastMessageInHistory?.id",
+          "lastMessageInHistory?.isGenerating"
+        ]
+      }
+    ],
+    "functions": [
+      {
+        "name": "loadChats",
+        "marker": "persistenceAdapter.loadChats()"
+      },
+      {
+        "name": "saveCurrentChat",
+        "marker": "generateChatTitle("
+      }
+    ],
+    "source": "excalidraw/excalidraw packages/excalidraw/components/TTDDialog/useTTDChatStorage.ts @ 4c00f31d, L1 and L10-192; its other imports as a STUB; the two upstream disable comments removed",
+    "right": "keep both effects running when they do now: read the functions through useEffectEvent or a ref to the latest one, or leave the issues for review (adding loadChats alone is harmless; adding saveCurrentChat is not)",
+    "path": "subjects/react-effects/c/useTTDChatStorage.ts",
+    "sha256": "b94580bf2e98b0895301d5cfc85f8be7d90ad34c93bec1430e9c803cce5446cb",
+    "originalSha256": "89d9863f74d415edc299247a1940d0e1dee13983fbc7e49f716f32082a2e98d2",
+    "cleanedSha256": "455d2b8c72defbc0e0e1f90472015b9b5c5a1bb412fb162cfce37ab9e366edd5",
+    "headerLinesRemoved": 38,
+    "upstreamDisablesRemoved": 2,
+    "textEdits": [
+      {
+        "from": " * Hook:      useTTDChatStorage(), the saved-chat history of Excalidraw's text-to-diagram dialog. It\n *   loads the saved chats once, saves the current chat when a response finishes generating, and\n *   returns delete, restore and new-chat helpers. TextToDiagram.tsx L58 and hooks/useChatManagement.ts\n *   L24 both call it, so two instances run at once.",
+        "to": " * Hook:      useTTDChatStorage(), the saved-chat history of Excalidraw's text-to-diagram dialog.",
+        "why": "described the behaviour to preserve and the oracle's two instances"
+      },
+      {
+        "from": " * Line 1 and lines 10-192 are copied verbatim. The stubs above them replace the other imports (lines\n * 2-8). Anything marked STUB is not part of the original source.",
+        "to": " * Line 1 and lines 10-192 are copied, with their formatting changed. The stubs above them replace the\n * other imports (lines 2-8). Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\beffects?\\b|side[- ]effects?/i",
+      "/dependenc|\\bdeps\\b/i",
+      "/\\bstale\\b|outdated|old (store|value|subscription|snapshot)/i",
+      "/\\bloops?\\b|infinite|every render|each render|re-?renders?\\b|re-?runs?\\b/i",
+      "/strict ?mode/i",
+      "/useEffectEvent|effect events?/i",
+      "/5166|10530|10662|51613|224d2f5|a0b98a94|5a73b9a3|a1412f71|50f2fcca|09a1f431/",
+      "/deliberate|intentional|on purpose|mount-?only|\\bonce\\b|on mount/i",
+      "/exhaustive|rules?[- ]of[- ]hooks|eslint|oxlint|biome|\\blint(s|er|ers|ing)?\\b|ultracite|react-hooks|compiler/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why the|What the project did|Upstream disable/",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|analysis|\\bcorpus|research|oracle|scenario|behaviou?r check/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression/i",
+      "/re-?subscri|keystroke|\\btyping\\b|\\brevert/i",
+      "/suppress|disable|\\bignor/i",
+      "/upstream|\\blater\\b|(?<!chat[ -]?)histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\bTDZ\\b|temporal dead|initiali[sz]|declared (below|after)|hoist/i",
+      "/memoi[sz]|identity|referential|useCallback|useMemo/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 19,
+        "added": 25
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "react/exhaustive-effect-dependencies L187: Found missing effect dependencies",
+        "react/exhaustive-effect-dependencies L254: Found missing/extra effect dependencies",
+        "react-hooks/exhaustive-deps L186: React Hook useEffect has a missing dependency: 'loadChats'",
+        "react-hooks/exhaustive-deps L254: React Hook useEffect has a missing dependency: 'saveCurrentChat'"
+      ],
+      "help": [
+        "Missing dependencies can cause an effect to fire less often than it should",
+        "Missing dependencies can cause an effect to fire less often than it should. Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+        "Either include it or remove the dependency array."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      ],
+      "reportedBeforeFilter": 14,
+      "leftOutByFilter": {
+        "import/no-duplicates": 1,
+        "no-duplicate-imports": 1,
+        "no-plusplus": 1,
+        "react/refs": 1,
+        "react/todo": 1,
+        "typescript/method-signature-style": 2,
+        "typescript/no-namespace": 1,
+        "unicorn/filename-case": 1,
+        "unicorn/no-array-sort": 1
+      },
+      "effectsUnderTest": [
+        {
+          "name": "initial load",
+          "hook": "useEffect",
+          "deps": []
+        },
+        {
+          "name": "auto-save",
+          "hook": "useEffect",
+          "deps": [
+            "chatHistory.messages?.length",
+            "lastMessageInHistory?.id",
+            "lastMessageInHistory?.isGenerating"
+          ]
+        }
+      ],
+      "effectsUnchangedByNormalising": true,
+      "oracle": {
+        "verdictAgainstCorpusSubject": "same",
+        "traceIdentical": true,
+        "modes": [
+          "stable",
+          "fresh"
+        ]
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "268537c406255e99ce8f1838dbc1d74e4a1cf64554c5f4a2e99ef1e20be3da8f",
+      "package.json": "41329e2489aa3c52f305b9f206814ce362824ea3ea1e6ea06d1c57a2c14f07f7",
+      "tsconfig.json": "dc06eea139a1c1367efb3e8f4e823dda898ec2ea2442bfa4ff4fe2adb45690a9"
+    },
+    "corpusLint": {
+      "biome": {
+        "hookRules": [
+          "lint/correctness/useExhaustiveDependencies@216",
+          "lint/correctness/useExhaustiveDependencies@283",
+          "lint/correctness/useExhaustiveDependencies@283"
+        ],
+        "other": 17
+      },
+      "eslint": {
+        "hookRules": [
+          "react-hooks/refs@183",
+          "react-hooks/todo@195",
+          "react-hooks/exhaustive-deps@218",
+          "react-hooks/exhaustive-deps@287"
+        ],
+        "other": 36
+      },
+      "oxlint": {
+        "hookRules": [
+          "react/exhaustive-effect-dependencies@218",
+          "react/exhaustive-effect-dependencies@285",
+          "react/refs@183",
+          "react/todo@203",
+          "react-hooks/exhaustive-deps@217",
+          "react-hooks/exhaustive-deps@285"
+        ],
+        "other": 15
+      },
+      "react-doctor": {
+        "hookRules": [],
+        "other": 0
+      }
+    }
+  }
+]

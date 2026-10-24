@@ -1,0 +1,56 @@
+--- a/useTTDChatStorage.ts
++++ b/useTTDChatStorage.ts
+@@ -32,7 +32,7 @@
+  * SOFTWARE.
+  */
+ 
+-import { useCallback, useEffect, useRef } from "react";
++import { useCallback, useEffect, useEffectEvent, useMemo, useRef } from "react";
+ // STUB (not part of the original source): what lines 2-8 import, reduced to what this file uses.
+ // randomId (@excalidraw/common) returns increasing ids. atom, useAtom and getDefaultStore stand in
+ // for jotai through ../../editor-jotai: one shared store whose atoms are read with
+@@ -182,8 +182,9 @@
+   ]);
+ 
+   // INITIAL LOAD
++  const onInitialLoad = useEffectEvent(loadChats);
+   useEffect(() => {
+-    loadChats();
++    onInitialLoad();
+   }, []);
+ 
+   const saveCurrentChat = useCallback(async () => {
+@@ -249,15 +250,26 @@
+   }, [chatHistory, setSavedChats, persistenceAdapter]);
+ 
+   // Auto-save when generation completes
+-  useEffect(() => {
+-    if (!lastMessageInHistory?.isGenerating) {
++  const autoSaveState = useMemo(
++    () => ({
++      isGenerating: lastMessageInHistory?.isGenerating,
++      lastMessageId: lastMessageInHistory?.id,
++      messageCount: chatHistory.messages?.length,
++    }),
++    [
++      chatHistory.messages?.length,
++      lastMessageInHistory?.id,
++      lastMessageInHistory?.isGenerating,
++    ]
++  );
++  const onAutoSave = useEffectEvent((state: typeof autoSaveState) => {
++    if (!state.isGenerating) {
+       saveCurrentChat();
+     }
+-  }, [
+-    chatHistory.messages?.length,
+-    lastMessageInHistory?.id,
+-    lastMessageInHistory?.isGenerating,
+-  ]);
++  });
++  useEffect(() => {
++    onAutoSave(autoSaveState);
++  }, [autoSaveState]);
+ 
+   const deleteChat = useCallback(
+     async (chatId: string): Promise<SavedChats> => {

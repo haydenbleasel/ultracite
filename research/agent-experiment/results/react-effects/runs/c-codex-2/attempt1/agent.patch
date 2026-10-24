@@ -1,0 +1,43 @@
+--- a/useTTDChatStorage.ts
++++ b/useTTDChatStorage.ts
+@@ -184,7 +184,7 @@
+   // INITIAL LOAD
+   useEffect(() => {
+     loadChats();
+-  }, []);
++  }, [loadChats]);
+ 
+   const saveCurrentChat = useCallback(async () => {
+     if (chatHistory.messages.length === 0) {
+@@ -249,7 +249,23 @@
+   }, [chatHistory, setSavedChats, persistenceAdapter]);
+ 
+   // Auto-save when generation completes
++  const autoSaveTriggerRef = useRef<unknown[] | null>(null);
+   useEffect(() => {
++    const trigger = [
++      chatHistory.messages?.length,
++      lastMessageInHistory?.id,
++      lastMessageInHistory?.isGenerating,
++    ];
++    const previousTrigger = autoSaveTriggerRef.current;
++    autoSaveTriggerRef.current = trigger;
++    // Callback changes alone should not trigger an autosave.
++    if (
++      previousTrigger &&
++      trigger.every((value, index) => Object.is(value, previousTrigger[index]))
++    ) {
++      return;
++    }
++
+     if (!lastMessageInHistory?.isGenerating) {
+       saveCurrentChat();
+     }
+@@ -257,6 +273,7 @@
+     chatHistory.messages?.length,
+     lastMessageInHistory?.id,
+     lastMessageInHistory?.isGenerating,
++    saveCurrentChat,
+   ]);
+ 
+   const deleteChat = useCallback(

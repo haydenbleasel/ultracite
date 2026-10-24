@@ -1,0 +1,3379 @@
+{
+  "generated": "2026-10-24",
+  "note": "Every hook call with a dependency array, plus the built-in dependency hooks (useEffect, useLayoutEffect, useInsertionEffect, useCallback, useMemo, useImperativeHandle) with or without one. Custom hooks count when an argument after the first is an array literal and the argument before it is a function. Dependency kinds come from where each dependency's root identifier was declared (effects-lib.cjs describeInit). Effect categories are a static reading of the effect's own body (effects-lib.cjs classifyEffect).",
+  "repos": {
+    "zod": {
+      "builtinByName": {},
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": null
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "calledPropCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "categories": {},
+        "categoriesPct": {},
+        "cleanup": {},
+        "conditional": {
+          "n": 0,
+          "pct": null
+        },
+        "depKinds": {},
+        "depsCount": {},
+        "depsForm": {},
+        "dom": {
+          "n": 0,
+          "pct": null
+        },
+        "fetch": {
+          "n": 0,
+          "pct": null
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": null
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasPropDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": null
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": null
+        },
+        "listener": {
+          "n": 0,
+          "pct": null
+        },
+        "meanDeps": 0,
+        "n": 0,
+        "observer": {
+          "n": 0,
+          "pct": null
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": null
+        },
+        "memberDep": {
+          "n": 0,
+          "pct": null
+        },
+        "ownerKind": {},
+        "perTenK": 0,
+        "promise": {
+          "n": 0,
+          "pct": null
+        },
+        "refRead": {
+          "n": 0,
+          "pct": null
+        },
+        "refWrite": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateAny": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateDirect": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": null
+        },
+        "storage": {
+          "n": 0,
+          "pct": null
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": null
+        },
+        "timer": {
+          "n": 0,
+          "pct": null
+        },
+        "withCategoriesCount": 0
+      },
+      "filesWithHooks": 0,
+      "hooks": 0,
+      "hooksInNonJsxFiles": 0,
+      "hooksPerTenK": 0,
+      "lines": 37903,
+      "memos": {
+        "depKinds": {},
+        "depsForm": {},
+        "n": 0
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {},
+      "counts": {
+        "useContext": 0,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 0,
+        "useState": 0,
+        "useSyncExternalStore": 0,
+        "components": 156,
+        "customHooks": 0
+      },
+      "files": 125,
+      "jsxFiles": 0,
+      "jsxLines": 0,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c"
+    },
+    "hono": {
+      "builtinByName": {
+        "useCallback": 6,
+        "useEffect": 3,
+        "useMemo": 2
+      },
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": 0
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 2,
+          "pct": 66.7
+        },
+        "categories": {
+          "external-sync": 1,
+          "mount-only": 1,
+          "notify-parent": 1
+        },
+        "categoriesPct": {
+          "external-sync": 33.3,
+          "mount-only": 33.3,
+          "notify-parent": 33.3
+        },
+        "cleanup": {
+          "function": 2,
+          "none": 1
+        },
+        "conditional": {
+          "n": 1,
+          "pct": 33.3
+        },
+        "depKinds": {
+          "prop": 1
+        },
+        "depsCount": {
+          "1": 1,
+          "empty": 1,
+          "non-literal": 1
+        },
+        "depsForm": {
+          "empty": 1,
+          "literal": 1,
+          "non-literal": 1
+        },
+        "dom": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 1,
+          "pct": 33.3
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "inNonJsxFile": {
+          "n": 3,
+          "pct": 100
+        },
+        "listener": {
+          "n": 0,
+          "pct": 0
+        },
+        "meanDeps": 1,
+        "n": 3,
+        "observer": {
+          "n": 0,
+          "pct": 0
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "memberDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "ownerKind": {
+          "hook": 3
+        },
+        "perTenK": 1.2,
+        "promise": {
+          "n": 0,
+          "pct": 0
+        },
+        "refRead": {
+          "n": 2,
+          "pct": 66.7
+        },
+        "refWrite": {
+          "n": 1,
+          "pct": 33.3
+        },
+        "setStateAny": {
+          "n": 1,
+          "pct": 33.3
+        },
+        "setStateDirect": {
+          "n": 0,
+          "pct": 0
+        },
+        "setStateOnlyNested": {
+          "n": 1,
+          "pct": 33.3
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": 0
+        },
+        "timer": {
+          "n": 0,
+          "pct": 0
+        },
+        "withCategoriesCount": 3
+      },
+      "filesWithHooks": 3,
+      "hooks": 11,
+      "hooksInNonJsxFiles": 11,
+      "hooksPerTenK": 4.3,
+      "lines": 25540,
+      "memos": {
+        "depKinds": {
+          "prop": 4,
+          "derived": 1,
+          "state": 1
+        },
+        "depsForm": {
+          "empty": 4,
+          "literal": 4
+        },
+        "n": 8
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {
+        "local": 6,
+        "../../hooks": 5
+      },
+      "counts": {
+        "useContext": 10,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 2,
+        "useState": 9,
+        "useSyncExternalStore": 0,
+        "components": 14,
+        "customHooks": 21
+      },
+      "files": 187,
+      "jsxFiles": 0,
+      "jsxLines": 0,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51"
+    },
+    "trpc": {
+      "builtinByName": {
+        "useCallback": 9,
+        "useMemo": 8,
+        "useEffect": 5
+      },
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": 0
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "categories": {
+          "external-sync": 2,
+          "store-or-form-update": 2,
+          "derived-state": 1
+        },
+        "categoriesPct": {
+          "external-sync": 40,
+          "store-or-form-update": 40,
+          "derived-state": 20
+        },
+        "cleanup": {
+          "function": 3,
+          "none": 2
+        },
+        "conditional": {
+          "n": 1,
+          "pct": 20
+        },
+        "depKinds": {
+          "callback": 2,
+          "prop": 1
+        },
+        "depsCount": {
+          "1": 1,
+          "2": 1,
+          "empty": 2,
+          "none": 1
+        },
+        "depsForm": {
+          "empty": 2,
+          "literal": 2,
+          "none": 1
+        },
+        "dom": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 1,
+          "pct": 20
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "inNonJsxFile": {
+          "n": 1,
+          "pct": 20
+        },
+        "listener": {
+          "n": 0,
+          "pct": 0
+        },
+        "meanDeps": 1.5,
+        "n": 5,
+        "observer": {
+          "n": 0,
+          "pct": 0
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "memberDep": {
+          "n": 1,
+          "pct": 20
+        },
+        "ownerKind": {
+          "hook": 4,
+          "component": 1
+        },
+        "perTenK": 1.9,
+        "promise": {
+          "n": 0,
+          "pct": 0
+        },
+        "refRead": {
+          "n": 2,
+          "pct": 40
+        },
+        "refWrite": {
+          "n": 2,
+          "pct": 40
+        },
+        "setStateAny": {
+          "n": 1,
+          "pct": 20
+        },
+        "setStateDirect": {
+          "n": 1,
+          "pct": 20
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": 0
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": 0
+        },
+        "timer": {
+          "n": 0,
+          "pct": 0
+        },
+        "withCategoriesCount": 5
+      },
+      "filesWithHooks": 8,
+      "hooks": 22,
+      "hooksInNonJsxFiles": 6,
+      "hooksPerTenK": 8.5,
+      "lines": 25948,
+      "memos": {
+        "depKinds": {
+          "prop": 11,
+          "callback": 7,
+          "derived": 5,
+          "state": 4,
+          "hookValue": 2,
+          "context": 1,
+          "expression": 1,
+          "memo": 1
+        },
+        "depsForm": {
+          "literal": 16,
+          "empty": 1
+        },
+        "n": 17
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {
+        "React.namespace": 17,
+        "react": 5
+      },
+      "counts": {
+        "useContext": 14,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 9,
+        "useState": 6,
+        "useSyncExternalStore": 0,
+        "components": 4,
+        "customHooks": 17
+      },
+      "files": 176,
+      "jsxFiles": 10,
+      "jsxLines": 2499,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7"
+    },
+    "vite": {
+      "builtinByName": {},
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": null
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "calledPropCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "categories": {},
+        "categoriesPct": {},
+        "cleanup": {},
+        "conditional": {
+          "n": 0,
+          "pct": null
+        },
+        "depKinds": {},
+        "depsCount": {},
+        "depsForm": {},
+        "dom": {
+          "n": 0,
+          "pct": null
+        },
+        "fetch": {
+          "n": 0,
+          "pct": null
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": null
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasPropDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": null
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": null
+        },
+        "listener": {
+          "n": 0,
+          "pct": null
+        },
+        "meanDeps": 0,
+        "n": 0,
+        "observer": {
+          "n": 0,
+          "pct": null
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": null
+        },
+        "memberDep": {
+          "n": 0,
+          "pct": null
+        },
+        "ownerKind": {},
+        "perTenK": 0,
+        "promise": {
+          "n": 0,
+          "pct": null
+        },
+        "refRead": {
+          "n": 0,
+          "pct": null
+        },
+        "refWrite": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateAny": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateDirect": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": null
+        },
+        "storage": {
+          "n": 0,
+          "pct": null
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": null
+        },
+        "timer": {
+          "n": 0,
+          "pct": null
+        },
+        "withCategoriesCount": 0
+      },
+      "filesWithHooks": 0,
+      "hooks": 0,
+      "hooksInNonJsxFiles": 0,
+      "hooksPerTenK": 0,
+      "lines": 45885,
+      "memos": {
+        "depKinds": {},
+        "depsForm": {},
+        "n": 0
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {},
+      "counts": {
+        "useContext": 0,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 0,
+        "useState": 0,
+        "useSyncExternalStore": 0,
+        "components": 7,
+        "customHooks": 0
+      },
+      "files": 124,
+      "jsxFiles": 0,
+      "jsxLines": 0,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6"
+    },
+    "astro": {
+      "builtinByName": {},
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": null
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "calledPropCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "categories": {},
+        "categoriesPct": {},
+        "cleanup": {},
+        "conditional": {
+          "n": 0,
+          "pct": null
+        },
+        "depKinds": {},
+        "depsCount": {},
+        "depsForm": {},
+        "dom": {
+          "n": 0,
+          "pct": null
+        },
+        "fetch": {
+          "n": 0,
+          "pct": null
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": null
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasPropDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": null
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": null
+        },
+        "listener": {
+          "n": 0,
+          "pct": null
+        },
+        "meanDeps": 0,
+        "n": 0,
+        "observer": {
+          "n": 0,
+          "pct": null
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": null
+        },
+        "memberDep": {
+          "n": 0,
+          "pct": null
+        },
+        "ownerKind": {},
+        "perTenK": 0,
+        "promise": {
+          "n": 0,
+          "pct": null
+        },
+        "refRead": {
+          "n": 0,
+          "pct": null
+        },
+        "refWrite": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateAny": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateDirect": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": null
+        },
+        "storage": {
+          "n": 0,
+          "pct": null
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": null
+        },
+        "timer": {
+          "n": 0,
+          "pct": null
+        },
+        "withCategoriesCount": 0
+      },
+      "filesWithHooks": 0,
+      "hooks": 0,
+      "hooksInNonJsxFiles": 0,
+      "hooksPerTenK": 0,
+      "lines": 82969,
+      "memos": {
+        "depKinds": {},
+        "depsForm": {},
+        "n": 0
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {},
+      "counts": {
+        "useContext": 0,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 0,
+        "useState": 0,
+        "useSyncExternalStore": 0,
+        "components": 20,
+        "customHooks": 0
+      },
+      "files": 635,
+      "jsxFiles": 0,
+      "jsxLines": 0,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468"
+    },
+    "excalidraw": {
+      "builtinByName": {
+        "useEffect": 103,
+        "useCallback": 49,
+        "useMemo": 34,
+        "useLayoutEffect": 15,
+        "useImperativeHandle": 4
+      },
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 12,
+          "pct": 10.2
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 25,
+          "pct": 21.2
+        },
+        "categories": {
+          "external-sync": 57,
+          "unclassified": 18,
+          "derived-state": 13,
+          "event-specific": 10,
+          "store-or-form-update": 8,
+          "data-fetching": 4,
+          "mount-only": 3,
+          "notify-parent": 3,
+          "effect-chain": 1,
+          "reset-state-on-prop-change": 1
+        },
+        "categoriesPct": {
+          "external-sync": 48.3,
+          "unclassified": 15.3,
+          "derived-state": 11,
+          "event-specific": 8.5,
+          "store-or-form-update": 6.8,
+          "data-fetching": 3.4,
+          "mount-only": 2.5,
+          "notify-parent": 2.5,
+          "effect-chain": 0.8,
+          "reset-state-on-prop-change": 0.8
+        },
+        "cleanup": {
+          "none": 62,
+          "function": 51,
+          "call-result": 5
+        },
+        "conditional": {
+          "n": 73,
+          "pct": 61.9
+        },
+        "depKinds": {
+          "prop": 95,
+          "hookValue": 82,
+          "state": 22,
+          "derived": 18,
+          "memo": 14,
+          "callback": 6,
+          "setter": 2,
+          "ref": 1,
+          "transition": 1
+        },
+        "depsCount": {
+          "1": 40,
+          "2": 21,
+          "3": 15,
+          "4": 11,
+          "empty": 16,
+          "5+": 11,
+          "none": 3,
+          "non-literal": 1
+        },
+        "depsForm": {
+          "literal": 98,
+          "empty": 16,
+          "none": 3,
+          "non-literal": 1
+        },
+        "dom": {
+          "n": 29,
+          "pct": 24.6
+        },
+        "fetch": {
+          "n": 1,
+          "pct": 0.8
+        },
+        "fetchLike": {
+          "n": 8,
+          "pct": 6.8
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 62,
+          "pct": 52.5
+        },
+        "hasRefDep": {
+          "n": 1,
+          "pct": 0.8
+        },
+        "hasSetterDep": {
+          "n": 2,
+          "pct": 1.7
+        },
+        "hasStateDep": {
+          "n": 15,
+          "pct": 12.7
+        },
+        "inNonJsxFile": {
+          "n": 18,
+          "pct": 15.3
+        },
+        "listener": {
+          "n": 21,
+          "pct": 17.8
+        },
+        "meanDeps": 2.46,
+        "n": 118,
+        "observer": {
+          "n": 1,
+          "pct": 0.8
+        },
+        "optionalChainDep": {
+          "n": 8,
+          "pct": 6.8
+        },
+        "memberDep": {
+          "n": 33,
+          "pct": 28
+        },
+        "ownerKind": {
+          "component": 97,
+          "hook": 21
+        },
+        "perTenK": 9.2,
+        "promise": {
+          "n": 3,
+          "pct": 2.5
+        },
+        "refRead": {
+          "n": 47,
+          "pct": 39.8
+        },
+        "refWrite": {
+          "n": 16,
+          "pct": 13.6
+        },
+        "setStateAny": {
+          "n": 38,
+          "pct": 32.2
+        },
+        "setStateDirect": {
+          "n": 22,
+          "pct": 18.6
+        },
+        "setStateOnlyNested": {
+          "n": 16,
+          "pct": 13.6
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 5,
+          "pct": 4.2
+        },
+        "timer": {
+          "n": 7,
+          "pct": 5.9
+        },
+        "withCategoriesCount": 118
+      },
+      "filesWithHooks": 77,
+      "hooks": 205,
+      "hooksInNonJsxFiles": 41,
+      "hooksPerTenK": 16,
+      "lines": 128127,
+      "memos": {
+        "depKinds": {
+          "prop": 71,
+          "hookValue": 37,
+          "memo": 17,
+          "state": 12,
+          "callback": 9,
+          "derived": 6,
+          "context": 1,
+          "setter": 1
+        },
+        "depsForm": {
+          "literal": 69,
+          "empty": 14
+        },
+        "n": 83
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {
+        "react": 198,
+        "React.namespace": 7
+      },
+      "counts": {
+        "useContext": 16,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 94,
+        "useState": 82,
+        "useSyncExternalStore": 0,
+        "components": 368,
+        "customHooks": 43
+      },
+      "files": 444,
+      "jsxFiles": 202,
+      "jsxLines": 50038,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce"
+    },
+    "next.js": {
+      "builtinByName": {
+        "useEffect": 60,
+        "useMemo": 41,
+        "useCallback": 26,
+        "useLayoutEffect": 14,
+        "useInsertionEffect": 4
+      },
+      "customByName": {
+        "useNonWarningLayoutEffect": 1
+      },
+      "customHooksWithDeps": 1,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": 0
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 11,
+          "pct": 14.1
+        },
+        "categories": {
+          "external-sync": 49,
+          "unclassified": 10,
+          "event-specific": 9,
+          "notify-parent": 4,
+          "mount-only": 3,
+          "derived-state": 2,
+          "store-or-form-update": 1
+        },
+        "categoriesPct": {
+          "external-sync": 62.8,
+          "unclassified": 12.8,
+          "event-specific": 11.5,
+          "notify-parent": 5.1,
+          "mount-only": 3.8,
+          "derived-state": 2.6,
+          "store-or-form-update": 1.3
+        },
+        "cleanup": {
+          "none": 40,
+          "function": 36,
+          "call-result": 2
+        },
+        "conditional": {
+          "n": 46,
+          "pct": 59
+        },
+        "depKinds": {
+          "prop": 70,
+          "hookValue": 25,
+          "derived": 9,
+          "state": 6,
+          "context": 4,
+          "memo": 4,
+          "callback": 2,
+          "refCurrent": 1,
+          "setter": 1
+        },
+        "depsCount": {
+          "1": 25,
+          "2": 22,
+          "3": 8,
+          "4": 3,
+          "empty": 16,
+          "5+": 3,
+          "non-literal": 1
+        },
+        "depsForm": {
+          "literal": 61,
+          "empty": 16,
+          "non-literal": 1
+        },
+        "dom": {
+          "n": 26,
+          "pct": 33.3
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 40,
+          "pct": 51.3
+        },
+        "hasRefDep": {
+          "n": 1,
+          "pct": 1.3
+        },
+        "hasSetterDep": {
+          "n": 1,
+          "pct": 1.3
+        },
+        "hasStateDep": {
+          "n": 6,
+          "pct": 7.7
+        },
+        "inNonJsxFile": {
+          "n": 14,
+          "pct": 17.9
+        },
+        "listener": {
+          "n": 12,
+          "pct": 15.4
+        },
+        "meanDeps": 2,
+        "n": 78,
+        "observer": {
+          "n": 2,
+          "pct": 2.6
+        },
+        "optionalChainDep": {
+          "n": 3,
+          "pct": 3.8
+        },
+        "memberDep": {
+          "n": 11,
+          "pct": 14.1
+        },
+        "ownerKind": {
+          "component": 56,
+          "hook": 22
+        },
+        "perTenK": 2.8,
+        "promise": {
+          "n": 0,
+          "pct": 0
+        },
+        "refRead": {
+          "n": 17,
+          "pct": 21.8
+        },
+        "refWrite": {
+          "n": 12,
+          "pct": 15.4
+        },
+        "setStateAny": {
+          "n": 18,
+          "pct": 23.1
+        },
+        "setStateDirect": {
+          "n": 10,
+          "pct": 12.8
+        },
+        "setStateOnlyNested": {
+          "n": 8,
+          "pct": 10.3
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 2,
+          "pct": 2.6
+        },
+        "timer": {
+          "n": 11,
+          "pct": 14.1
+        },
+        "withCategoriesCount": 78
+      },
+      "filesWithHooks": 73,
+      "hooks": 146,
+      "hooksInNonJsxFiles": 22,
+      "hooksPerTenK": 5.3,
+      "lines": 276128,
+      "memos": {
+        "depKinds": {
+          "prop": 55,
+          "hookValue": 24,
+          "derived": 13,
+          "memo": 9,
+          "context": 7,
+          "callback": 4,
+          "state": 2,
+          "dispatch": 1
+        },
+        "depsForm": {
+          "literal": 57,
+          "empty": 10
+        },
+        "n": 67
+      },
+      "custom": {
+        "depKinds": {
+          "prop": 7
+        },
+        "depsForm": {
+          "literal": 1
+        },
+        "importSources": {
+          "local": 1
+        },
+        "n": 1
+      },
+      "hookBindings": {
+        "react": 122,
+        "React.namespace": 22,
+        "local": 1
+      },
+      "counts": {
+        "useContext": 40,
+        "useEffectEvent": 3,
+        "useReducer": 2,
+        "useRef": 48,
+        "useState": 58,
+        "useSyncExternalStore": 3,
+        "components": 339,
+        "customHooks": 61
+      },
+      "files": 1416,
+      "jsxFiles": 209,
+      "jsxLines": 50133,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
+    },
+    "vscode": {
+      "builtinByName": {},
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": null
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "calledPropCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "categories": {},
+        "categoriesPct": {},
+        "cleanup": {},
+        "conditional": {
+          "n": 0,
+          "pct": null
+        },
+        "depKinds": {},
+        "depsCount": {},
+        "depsForm": {},
+        "dom": {
+          "n": 0,
+          "pct": null
+        },
+        "fetch": {
+          "n": 0,
+          "pct": null
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": null
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasPropDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": null
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": null
+        },
+        "listener": {
+          "n": 0,
+          "pct": null
+        },
+        "meanDeps": 0,
+        "n": 0,
+        "observer": {
+          "n": 0,
+          "pct": null
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": null
+        },
+        "memberDep": {
+          "n": 0,
+          "pct": null
+        },
+        "ownerKind": {},
+        "perTenK": 0,
+        "promise": {
+          "n": 0,
+          "pct": null
+        },
+        "refRead": {
+          "n": 0,
+          "pct": null
+        },
+        "refWrite": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateAny": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateDirect": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": null
+        },
+        "storage": {
+          "n": 0,
+          "pct": null
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": null
+        },
+        "timer": {
+          "n": 0,
+          "pct": null
+        },
+        "withCategoriesCount": 0
+      },
+      "filesWithHooks": 0,
+      "hooks": 0,
+      "hooksInNonJsxFiles": 0,
+      "hooksPerTenK": 0,
+      "lines": 71809,
+      "memos": {
+        "depKinds": {},
+        "depsForm": {},
+        "n": 0
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {},
+      "counts": {
+        "useContext": 0,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 0,
+        "useState": 0,
+        "useSyncExternalStore": 0,
+        "components": 2,
+        "customHooks": 0
+      },
+      "files": 226,
+      "jsxFiles": 0,
+      "jsxLines": 0,
+      "parseErrors": [],
+      "set": "core",
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4"
+    },
+    "ultracite": {
+      "builtinByName": {},
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": null
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "calledPropCallback": {
+          "n": 0,
+          "pct": null
+        },
+        "categories": {},
+        "categoriesPct": {},
+        "cleanup": {},
+        "conditional": {
+          "n": 0,
+          "pct": null
+        },
+        "depKinds": {},
+        "depsCount": {},
+        "depsForm": {},
+        "dom": {
+          "n": 0,
+          "pct": null
+        },
+        "fetch": {
+          "n": 0,
+          "pct": null
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": null
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasPropDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": null
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": null
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": null
+        },
+        "listener": {
+          "n": 0,
+          "pct": null
+        },
+        "meanDeps": 0,
+        "n": 0,
+        "observer": {
+          "n": 0,
+          "pct": null
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": null
+        },
+        "memberDep": {
+          "n": 0,
+          "pct": null
+        },
+        "ownerKind": {},
+        "perTenK": 0,
+        "promise": {
+          "n": 0,
+          "pct": null
+        },
+        "refRead": {
+          "n": 0,
+          "pct": null
+        },
+        "refWrite": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateAny": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateDirect": {
+          "n": 0,
+          "pct": null
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": null
+        },
+        "storage": {
+          "n": 0,
+          "pct": null
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": null
+        },
+        "timer": {
+          "n": 0,
+          "pct": null
+        },
+        "withCategoriesCount": 0
+      },
+      "filesWithHooks": 0,
+      "hooks": 0,
+      "hooksInNonJsxFiles": 0,
+      "hooksPerTenK": 0,
+      "lines": 16340,
+      "memos": {
+        "depKinds": {},
+        "depsForm": {},
+        "n": 0
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {},
+      "counts": {
+        "useContext": 0,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 0,
+        "useState": 0,
+        "useSyncExternalStore": 0,
+        "components": 2,
+        "customHooks": 0
+      },
+      "files": 54,
+      "jsxFiles": 0,
+      "jsxLines": 0,
+      "parseErrors": [],
+      "set": "dogfood",
+      "sha": "2077efd77fed46019b69b17048acb5075229d90b"
+    },
+    "shadcn": {
+      "builtinByName": {
+        "useCallback": 6,
+        "useEffect": 6,
+        "useMemo": 6
+      },
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": 0
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 1,
+          "pct": 16.7
+        },
+        "categories": {
+          "external-sync": 3,
+          "derived-state": 2,
+          "notify-parent": 1
+        },
+        "categoriesPct": {
+          "external-sync": 50,
+          "derived-state": 33.3,
+          "notify-parent": 16.7
+        },
+        "cleanup": {
+          "none": 4,
+          "function": 2
+        },
+        "conditional": {
+          "n": 4,
+          "pct": 66.7
+        },
+        "depKinds": {
+          "hookValue": 3,
+          "callback": 2,
+          "prop": 2
+        },
+        "depsCount": {
+          "1": 3,
+          "2": 2,
+          "empty": 1
+        },
+        "depsForm": {
+          "literal": 5,
+          "empty": 1
+        },
+        "dom": {
+          "n": 2,
+          "pct": 33.3
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 2,
+          "pct": 33.3
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasStateDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": 0
+        },
+        "listener": {
+          "n": 1,
+          "pct": 16.7
+        },
+        "meanDeps": 1.4,
+        "n": 6,
+        "observer": {
+          "n": 0,
+          "pct": 0
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "memberDep": {
+          "n": 1,
+          "pct": 16.7
+        },
+        "ownerKind": {
+          "component": 6
+        },
+        "perTenK": 3.2,
+        "promise": {
+          "n": 0,
+          "pct": 0
+        },
+        "refRead": {
+          "n": 1,
+          "pct": 16.7
+        },
+        "refWrite": {
+          "n": 0,
+          "pct": 0
+        },
+        "setStateAny": {
+          "n": 2,
+          "pct": 33.3
+        },
+        "setStateDirect": {
+          "n": 2,
+          "pct": 33.3
+        },
+        "setStateOnlyNested": {
+          "n": 0,
+          "pct": 0
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 1,
+          "pct": 16.7
+        },
+        "timer": {
+          "n": 0,
+          "pct": 0
+        },
+        "withCategoriesCount": 6
+      },
+      "filesWithHooks": 9,
+      "hooks": 18,
+      "hooksInNonJsxFiles": 0,
+      "hooksPerTenK": 9.7,
+      "lines": 18473,
+      "memos": {
+        "depKinds": {
+          "prop": 13,
+          "callback": 5,
+          "hookValue": 5,
+          "derived": 3,
+          "setter": 2,
+          "state": 2
+        },
+        "depsForm": {
+          "literal": 10,
+          "empty": 2
+        },
+        "n": 12
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {
+        "React.namespace": 17,
+        "react": 1
+      },
+      "counts": {
+        "useContext": 7,
+        "useEffectEvent": 0,
+        "useReducer": 0,
+        "useRef": 2,
+        "useState": 20,
+        "useSyncExternalStore": 0,
+        "components": 439,
+        "customHooks": 5
+      },
+      "files": 165,
+      "jsxFiles": 163,
+      "jsxLines": 16911,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "c2477f311c19982ef6e246085438e6cfec3e35ea"
+    },
+    "radix": {
+      "builtinByName": {
+        "useEffect": 118,
+        "useCallback": 100,
+        "useLayoutEffect": 36,
+        "useMemo": 22,
+        "useInsertionEffect": 1
+      },
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": 0
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 10,
+          "pct": 6.5
+        },
+        "categories": {
+          "external-sync": 98,
+          "unclassified": 21,
+          "event-specific": 14,
+          "store-or-form-update": 9,
+          "derived-state": 8,
+          "mount-only": 4,
+          "notify-parent": 1
+        },
+        "categoriesPct": {
+          "external-sync": 63.2,
+          "unclassified": 13.5,
+          "event-specific": 9,
+          "store-or-form-update": 5.8,
+          "derived-state": 5.2,
+          "mount-only": 2.6,
+          "notify-parent": 0.6
+        },
+        "cleanup": {
+          "function": 97,
+          "none": 49,
+          "call-result": 6,
+          "identifier": 2,
+          "unknown": 1
+        },
+        "conditional": {
+          "n": 92,
+          "pct": 59.4
+        },
+        "depKinds": {
+          "hookValue": 125,
+          "prop": 59,
+          "derived": 25,
+          "callback": 23,
+          "state": 22,
+          "ref": 7,
+          "context": 5,
+          "memo": 2,
+          "let": 1,
+          "outer": 1
+        },
+        "depsCount": {
+          "1": 43,
+          "2": 47,
+          "3": 18,
+          "4": 13,
+          "empty": 22,
+          "none": 7,
+          "5+": 5
+        },
+        "depsForm": {
+          "literal": 126,
+          "empty": 22,
+          "none": 7
+        },
+        "dom": {
+          "n": 51,
+          "pct": 32.9
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 46,
+          "pct": 29.7
+        },
+        "hasRefDep": {
+          "n": 7,
+          "pct": 4.5
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasStateDep": {
+          "n": 22,
+          "pct": 14.2
+        },
+        "inNonJsxFile": {
+          "n": 1,
+          "pct": 0.6
+        },
+        "listener": {
+          "n": 43,
+          "pct": 27.7
+        },
+        "meanDeps": 2.14,
+        "n": 155,
+        "observer": {
+          "n": 6,
+          "pct": 3.9
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "memberDep": {
+          "n": 22,
+          "pct": 14.2
+        },
+        "ownerKind": {
+          "component": 126,
+          "hook": 29
+        },
+        "perTenK": 60.6,
+        "promise": {
+          "n": 1,
+          "pct": 0.6
+        },
+        "refRead": {
+          "n": 62,
+          "pct": 40
+        },
+        "refWrite": {
+          "n": 37,
+          "pct": 23.9
+        },
+        "setStateAny": {
+          "n": 23,
+          "pct": 14.8
+        },
+        "setStateDirect": {
+          "n": 15,
+          "pct": 9.7
+        },
+        "setStateOnlyNested": {
+          "n": 8,
+          "pct": 5.2
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": 0
+        },
+        "timer": {
+          "n": 13,
+          "pct": 8.4
+        },
+        "withCategoriesCount": 155
+      },
+      "filesWithHooks": 47,
+      "hooks": 277,
+      "hooksInNonJsxFiles": 1,
+      "hooksPerTenK": 108.2,
+      "lines": 25594,
+      "memos": {
+        "depKinds": {
+          "hookValue": 70,
+          "prop": 26,
+          "derived": 16,
+          "state": 16,
+          "callback": 11,
+          "ref": 2,
+          "context": 1
+        },
+        "depsForm": {
+          "literal": 81,
+          "empty": 38,
+          "non-literal": 3
+        },
+        "n": 122
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {
+        "React.namespace": 240,
+        "@radix-ui/react-use-layout-effect": 36,
+        "local": 1
+      },
+      "counts": {
+        "useContext": 7,
+        "useEffectEvent": 2,
+        "useReducer": 3,
+        "useRef": 196,
+        "useState": 121,
+        "useSyncExternalStore": 0,
+        "components": 306,
+        "customHooks": 41
+      },
+      "files": 160,
+      "jsxFiles": 62,
+      "jsxLines": 23867,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3"
+    },
+    "react-aria": {
+      "builtinByName": {
+        "useMemo": 51,
+        "useEffect": 18,
+        "useLayoutEffect": 14,
+        "useCallback": 8
+      },
+      "customByName": {},
+      "customHooksWithDeps": 0,
+      "effects": {
+        "async": {
+          "n": 0,
+          "pct": 0
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 4,
+          "pct": 12.5
+        },
+        "categories": {
+          "unclassified": 13,
+          "external-sync": 7,
+          "mount-only": 6,
+          "derived-state": 3,
+          "event-specific": 2,
+          "notify-parent": 1
+        },
+        "categoriesPct": {
+          "unclassified": 40.6,
+          "external-sync": 21.9,
+          "mount-only": 18.8,
+          "derived-state": 9.4,
+          "event-specific": 6.3,
+          "notify-parent": 3.1
+        },
+        "cleanup": {
+          "none": 25,
+          "call-result": 3,
+          "function": 3,
+          "unknown": 1
+        },
+        "conditional": {
+          "n": 25,
+          "pct": 78.1
+        },
+        "depKinds": {
+          "prop": 21,
+          "let": 11,
+          "hookValue": 8,
+          "context": 6,
+          "callback": 1,
+          "memo": 1,
+          "state": 1
+        },
+        "depsCount": {
+          "1": 7,
+          "2": 9,
+          "3": 2,
+          "4": 2,
+          "empty": 8,
+          "5+": 2,
+          "none": 2
+        },
+        "depsForm": {
+          "literal": 22,
+          "empty": 8,
+          "none": 2
+        },
+        "dom": {
+          "n": 3,
+          "pct": 9.4
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 1,
+          "pct": 3.1
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 11,
+          "pct": 34.4
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasSetterDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasStateDep": {
+          "n": 1,
+          "pct": 3.1
+        },
+        "inNonJsxFile": {
+          "n": 0,
+          "pct": 0
+        },
+        "listener": {
+          "n": 0,
+          "pct": 0
+        },
+        "meanDeps": 2.23,
+        "n": 32,
+        "observer": {
+          "n": 1,
+          "pct": 3.1
+        },
+        "optionalChainDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "memberDep": {
+          "n": 6,
+          "pct": 18.8
+        },
+        "ownerKind": {
+          "component": 29,
+          "hook": 3
+        },
+        "perTenK": 14.3,
+        "promise": {
+          "n": 2,
+          "pct": 6.3
+        },
+        "refRead": {
+          "n": 15,
+          "pct": 46.9
+        },
+        "refWrite": {
+          "n": 4,
+          "pct": 12.5
+        },
+        "setStateAny": {
+          "n": 8,
+          "pct": 25
+        },
+        "setStateDirect": {
+          "n": 5,
+          "pct": 15.6
+        },
+        "setStateOnlyNested": {
+          "n": 3,
+          "pct": 9.4
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 0,
+          "pct": 0
+        },
+        "timer": {
+          "n": 1,
+          "pct": 3.1
+        },
+        "withCategoriesCount": 32
+      },
+      "filesWithHooks": 29,
+      "hooks": 91,
+      "hooksInNonJsxFiles": 2,
+      "hooksPerTenK": 40.6,
+      "lines": 22407,
+      "memos": {
+        "depKinds": {
+          "prop": 76,
+          "hookValue": 29,
+          "let": 24,
+          "context": 22,
+          "ref": 8,
+          "memo": 4,
+          "callback": 1,
+          "setter": 1,
+          "state": 1
+        },
+        "depsForm": {
+          "literal": 55,
+          "empty": 4
+        },
+        "n": 59
+      },
+      "custom": {
+        "depKinds": {},
+        "depsForm": {},
+        "importSources": {},
+        "n": 0
+      },
+      "hookBindings": {
+        "react": 76,
+        "react-aria/private/utils/useLayoutEffect": 14,
+        "React.namespace": 1
+      },
+      "counts": {
+        "useContext": 175,
+        "useEffectEvent": 1,
+        "useReducer": 0,
+        "useRef": 94,
+        "useState": 20,
+        "useSyncExternalStore": 1,
+        "components": 205,
+        "customHooks": 23
+      },
+      "files": 71,
+      "jsxFiles": 68,
+      "jsxLines": 21979,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c"
+    },
+    "supabase": {
+      "builtinByName": {
+        "useMemo": 730,
+        "useEffect": 655,
+        "useCallback": 335,
+        "useLayoutEffect": 7,
+        "useImperativeHandle": 4
+      },
+      "customByName": {
+        "useIsomorphicLayoutEffect": 2
+      },
+      "customHooksWithDeps": 2,
+      "effects": {
+        "async": {
+          "n": 15,
+          "pct": 2.3
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 53,
+          "pct": 8
+        },
+        "categories": {
+          "external-sync": 188,
+          "store-or-form-update": 145,
+          "derived-state": 138,
+          "event-specific": 78,
+          "unclassified": 52,
+          "notify-parent": 23,
+          "mount-only": 15,
+          "reset-state-on-prop-change": 14,
+          "data-fetching": 5,
+          "effect-chain": 4
+        },
+        "categoriesPct": {
+          "external-sync": 28.4,
+          "store-or-form-update": 21.9,
+          "derived-state": 20.8,
+          "event-specific": 11.8,
+          "unclassified": 7.9,
+          "notify-parent": 3.5,
+          "mount-only": 2.3,
+          "reset-state-on-prop-change": 2.1,
+          "data-fetching": 0.8,
+          "effect-chain": 0.6
+        },
+        "cleanup": {
+          "none": 555,
+          "function": 80,
+          "call-result": 22,
+          "identifier": 5
+        },
+        "conditional": {
+          "n": 515,
+          "pct": 77.8
+        },
+        "depKinds": {
+          "hookValue": 916,
+          "prop": 307,
+          "derived": 181,
+          "state": 124,
+          "memo": 44,
+          "callback": 17,
+          "context": 6,
+          "expression": 5,
+          "setter": 4,
+          "import": 1,
+          "object": 1
+        },
+        "depsCount": {
+          "1": 219,
+          "2": 151,
+          "3": 88,
+          "4": 67,
+          "5+": 92,
+          "empty": 44,
+          "none": 1
+        },
+        "depsForm": {
+          "literal": 617,
+          "empty": 44,
+          "none": 1
+        },
+        "dom": {
+          "n": 36,
+          "pct": 5.4
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 10,
+          "pct": 1.5
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 1,
+          "pct": 0.2
+        },
+        "hasPropDep": {
+          "n": 197,
+          "pct": 29.8
+        },
+        "hasRefDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasSetterDep": {
+          "n": 3,
+          "pct": 0.5
+        },
+        "hasStateDep": {
+          "n": 104,
+          "pct": 15.7
+        },
+        "inNonJsxFile": {
+          "n": 40,
+          "pct": 6
+        },
+        "listener": {
+          "n": 15,
+          "pct": 2.3
+        },
+        "meanDeps": 2.6,
+        "n": 662,
+        "observer": {
+          "n": 7,
+          "pct": 1.1
+        },
+        "optionalChainDep": {
+          "n": 49,
+          "pct": 7.4
+        },
+        "memberDep": {
+          "n": 96,
+          "pct": 14.5
+        },
+        "ownerKind": {
+          "component": 610,
+          "hook": 52
+        },
+        "perTenK": 17.3,
+        "promise": {
+          "n": 11,
+          "pct": 1.7
+        },
+        "refRead": {
+          "n": 82,
+          "pct": 12.4
+        },
+        "refWrite": {
+          "n": 57,
+          "pct": 8.6
+        },
+        "setStateAny": {
+          "n": 226,
+          "pct": 34.1
+        },
+        "setStateDirect": {
+          "n": 181,
+          "pct": 27.3
+        },
+        "setStateOnlyNested": {
+          "n": 45,
+          "pct": 6.8
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 3,
+          "pct": 0.5
+        },
+        "timer": {
+          "n": 51,
+          "pct": 7.7
+        },
+        "withCategoriesCount": 662
+      },
+      "filesWithHooks": 746,
+      "hooks": 1733,
+      "hooksInNonJsxFiles": 203,
+      "hooksPerTenK": 45.3,
+      "lines": 382573,
+      "memos": {
+        "depKinds": {
+          "hookValue": 1028,
+          "prop": 439,
+          "memo": 249,
+          "derived": 200,
+          "state": 123,
+          "callback": 106,
+          "object": 10,
+          "expression": 7,
+          "setter": 4,
+          "constant": 1,
+          "context": 1,
+          "let": 1
+        },
+        "depsForm": {
+          "literal": 950,
+          "empty": 114,
+          "non-literal": 1
+        },
+        "n": 1065
+      },
+      "custom": {
+        "depKinds": {
+          "prop": 5,
+          "hookValue": 2,
+          "derived": 1
+        },
+        "depsForm": {
+          "literal": 2
+        },
+        "importSources": {
+          "common": 2
+        },
+        "n": 2
+      },
+      "hookBindings": {
+        "react": 1731
+      },
+      "counts": {
+        "useContext": 35,
+        "useEffectEvent": 49,
+        "useReducer": 6,
+        "useRef": 281,
+        "useState": 1331,
+        "useSyncExternalStore": 1,
+        "components": 2735,
+        "customHooks": 286
+      },
+      "files": 2759,
+      "jsxFiles": 2079,
+      "jsxLines": 310726,
+      "parseErrors": [],
+      "set": "react",
+      "sha": "09f80f528ec47569841408a81668dff90525c48a"
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "eslint-plugin-react": "7.37.5",
+    "react": "19.3.0"
+  },
+  "pooled": {
+    "core": {
+      "builtinByName": {
+        "useEffect": 171,
+        "useCallback": 90,
+        "useMemo": 85,
+        "useLayoutEffect": 29,
+        "useImperativeHandle": 4,
+        "useInsertionEffect": 4
+      },
+      "customByName": {
+        "useNonWarningLayoutEffect": 1
+      },
+      "customHooksWithDeps": 1,
+      "effects": {
+        "async": {
+          "n": 12,
+          "pct": 5.9
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 38,
+          "pct": 18.6
+        },
+        "categories": {
+          "external-sync": 109,
+          "unclassified": 28,
+          "event-specific": 19,
+          "derived-state": 16,
+          "store-or-form-update": 11,
+          "notify-parent": 8,
+          "mount-only": 7,
+          "data-fetching": 4,
+          "effect-chain": 1,
+          "reset-state-on-prop-change": 1
+        },
+        "categoriesPct": {
+          "external-sync": 53.4,
+          "unclassified": 13.7,
+          "event-specific": 9.3,
+          "derived-state": 7.8,
+          "store-or-form-update": 5.4,
+          "notify-parent": 3.9,
+          "mount-only": 3.4,
+          "data-fetching": 2,
+          "effect-chain": 0.5,
+          "reset-state-on-prop-change": 0.5
+        },
+        "cleanup": {
+          "none": 105,
+          "function": 92,
+          "call-result": 7
+        },
+        "conditional": {
+          "n": 121,
+          "pct": 59.3
+        },
+        "depKinds": {
+          "prop": 167,
+          "hookValue": 107,
+          "state": 28,
+          "derived": 27,
+          "memo": 18,
+          "callback": 10,
+          "context": 4,
+          "setter": 3,
+          "ref": 1,
+          "refCurrent": 1,
+          "transition": 1
+        },
+        "depsCount": {
+          "1": 67,
+          "2": 44,
+          "3": 23,
+          "4": 14,
+          "empty": 35,
+          "5+": 14,
+          "none": 4,
+          "non-literal": 3
+        },
+        "depsForm": {
+          "literal": 162,
+          "empty": 35,
+          "none": 4,
+          "non-literal": 3
+        },
+        "dom": {
+          "n": 55,
+          "pct": 27
+        },
+        "fetch": {
+          "n": 1,
+          "pct": 0.5
+        },
+        "fetchLike": {
+          "n": 8,
+          "pct": 3.9
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasPropDep": {
+          "n": 104,
+          "pct": 51
+        },
+        "hasRefDep": {
+          "n": 2,
+          "pct": 1
+        },
+        "hasSetterDep": {
+          "n": 3,
+          "pct": 1.5
+        },
+        "hasStateDep": {
+          "n": 21,
+          "pct": 10.3
+        },
+        "inNonJsxFile": {
+          "n": 36,
+          "pct": 17.6
+        },
+        "listener": {
+          "n": 33,
+          "pct": 16.2
+        },
+        "meanDeps": 2.27,
+        "n": 204,
+        "observer": {
+          "n": 3,
+          "pct": 1.5
+        },
+        "optionalChainDep": {
+          "n": 11,
+          "pct": 5.4
+        },
+        "memberDep": {
+          "n": 45,
+          "pct": 22.1
+        },
+        "ownerKind": {
+          "component": 154,
+          "hook": 50
+        },
+        "perTenK": 2.9,
+        "promise": {
+          "n": 3,
+          "pct": 1.5
+        },
+        "refRead": {
+          "n": 68,
+          "pct": 33.3
+        },
+        "refWrite": {
+          "n": 31,
+          "pct": 15.2
+        },
+        "setStateAny": {
+          "n": 58,
+          "pct": 28.4
+        },
+        "setStateDirect": {
+          "n": 33,
+          "pct": 16.2
+        },
+        "setStateOnlyNested": {
+          "n": 25,
+          "pct": 12.3
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 7,
+          "pct": 3.4
+        },
+        "timer": {
+          "n": 18,
+          "pct": 8.8
+        },
+        "withCategoriesCount": 204
+      },
+      "filesWithHooks": 161,
+      "hooks": 384,
+      "hooksInNonJsxFiles": 80,
+      "hooksPerTenK": 5.5,
+      "lines": 694309,
+      "memos": {
+        "depKinds": {
+          "prop": 141,
+          "hookValue": 63,
+          "memo": 27,
+          "derived": 25,
+          "callback": 20,
+          "state": 19,
+          "context": 9,
+          "dispatch": 1,
+          "expression": 1,
+          "setter": 1
+        },
+        "depsForm": {
+          "literal": 146,
+          "empty": 29
+        },
+        "n": 175
+      },
+      "custom": {
+        "depKinds": {
+          "prop": 7
+        },
+        "depsForm": {
+          "literal": 1
+        },
+        "importSources": {
+          "local": 1
+        },
+        "n": 1
+      },
+      "hookBindings": {
+        "react": 325,
+        "React.namespace": 46,
+        "local": 7,
+        "../../hooks": 5
+      },
+      "counts": {
+        "useContext": 80,
+        "useEffectEvent": 3,
+        "useReducer": 2,
+        "useRef": 153,
+        "useState": 155,
+        "useSyncExternalStore": 3,
+        "components": 910,
+        "customHooks": 142
+      }
+    },
+    "react": {
+      "builtinByName": {
+        "useMemo": 809,
+        "useEffect": 797,
+        "useCallback": 449,
+        "useLayoutEffect": 57,
+        "useImperativeHandle": 4,
+        "useInsertionEffect": 1
+      },
+      "customByName": {
+        "useIsomorphicLayoutEffect": 2
+      },
+      "customHooksWithDeps": 2,
+      "effects": {
+        "async": {
+          "n": 15,
+          "pct": 1.8
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 68,
+          "pct": 8
+        },
+        "categories": {
+          "external-sync": 296,
+          "store-or-form-update": 154,
+          "derived-state": 151,
+          "event-specific": 94,
+          "unclassified": 86,
+          "notify-parent": 26,
+          "mount-only": 25,
+          "reset-state-on-prop-change": 14,
+          "data-fetching": 5,
+          "effect-chain": 4
+        },
+        "categoriesPct": {
+          "external-sync": 34.6,
+          "store-or-form-update": 18,
+          "derived-state": 17.7,
+          "event-specific": 11,
+          "unclassified": 10.1,
+          "notify-parent": 3,
+          "mount-only": 2.9,
+          "reset-state-on-prop-change": 1.6,
+          "data-fetching": 0.6,
+          "effect-chain": 0.5
+        },
+        "cleanup": {
+          "none": 633,
+          "function": 182,
+          "call-result": 31,
+          "identifier": 7,
+          "unknown": 2
+        },
+        "conditional": {
+          "n": 636,
+          "pct": 74.4
+        },
+        "depKinds": {
+          "hookValue": 1052,
+          "prop": 389,
+          "derived": 206,
+          "state": 147,
+          "memo": 47,
+          "callback": 43,
+          "context": 17,
+          "let": 12,
+          "ref": 7,
+          "expression": 5,
+          "setter": 4,
+          "import": 1,
+          "object": 1,
+          "outer": 1
+        },
+        "depsCount": {
+          "1": 272,
+          "2": 209,
+          "3": 108,
+          "4": 82,
+          "5+": 99,
+          "empty": 75,
+          "none": 10
+        },
+        "depsForm": {
+          "literal": 770,
+          "empty": 75,
+          "none": 10
+        },
+        "dom": {
+          "n": 92,
+          "pct": 10.8
+        },
+        "fetch": {
+          "n": 0,
+          "pct": 0
+        },
+        "fetchLike": {
+          "n": 11,
+          "pct": 1.3
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 1,
+          "pct": 0.1
+        },
+        "hasPropDep": {
+          "n": 256,
+          "pct": 29.9
+        },
+        "hasRefDep": {
+          "n": 7,
+          "pct": 0.8
+        },
+        "hasSetterDep": {
+          "n": 3,
+          "pct": 0.4
+        },
+        "hasStateDep": {
+          "n": 127,
+          "pct": 14.9
+        },
+        "inNonJsxFile": {
+          "n": 41,
+          "pct": 4.8
+        },
+        "listener": {
+          "n": 59,
+          "pct": 6.9
+        },
+        "meanDeps": 2.51,
+        "n": 855,
+        "observer": {
+          "n": 14,
+          "pct": 1.6
+        },
+        "optionalChainDep": {
+          "n": 49,
+          "pct": 5.7
+        },
+        "memberDep": {
+          "n": 125,
+          "pct": 14.6
+        },
+        "ownerKind": {
+          "component": 771,
+          "hook": 84
+        },
+        "perTenK": 19,
+        "promise": {
+          "n": 14,
+          "pct": 1.6
+        },
+        "refRead": {
+          "n": 160,
+          "pct": 18.7
+        },
+        "refWrite": {
+          "n": 98,
+          "pct": 11.5
+        },
+        "setStateAny": {
+          "n": 259,
+          "pct": 30.3
+        },
+        "setStateDirect": {
+          "n": 203,
+          "pct": 23.7
+        },
+        "setStateOnlyNested": {
+          "n": 56,
+          "pct": 6.5
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 4,
+          "pct": 0.5
+        },
+        "timer": {
+          "n": 65,
+          "pct": 7.6
+        },
+        "withCategoriesCount": 855
+      },
+      "filesWithHooks": 831,
+      "hooks": 2119,
+      "hooksInNonJsxFiles": 206,
+      "hooksPerTenK": 47.2,
+      "lines": 449047,
+      "memos": {
+        "depKinds": {
+          "hookValue": 1132,
+          "prop": 554,
+          "memo": 253,
+          "derived": 219,
+          "state": 142,
+          "callback": 123,
+          "let": 25,
+          "context": 24,
+          "object": 10,
+          "ref": 10,
+          "expression": 7,
+          "setter": 7,
+          "constant": 1
+        },
+        "depsForm": {
+          "literal": 1096,
+          "empty": 158,
+          "non-literal": 4
+        },
+        "n": 1258
+      },
+      "custom": {
+        "depKinds": {
+          "prop": 5,
+          "hookValue": 2,
+          "derived": 1
+        },
+        "depsForm": {
+          "literal": 2
+        },
+        "importSources": {
+          "common": 2
+        },
+        "n": 2
+      },
+      "hookBindings": {
+        "react": 1808,
+        "React.namespace": 258,
+        "@radix-ui/react-use-layout-effect": 36,
+        "react-aria/private/utils/useLayoutEffect": 14,
+        "local": 1
+      },
+      "counts": {
+        "useContext": 224,
+        "useEffectEvent": 52,
+        "useReducer": 9,
+        "useRef": 573,
+        "useState": 1492,
+        "useSyncExternalStore": 2,
+        "components": 3685,
+        "customHooks": 355
+      }
+    },
+    "all": {
+      "builtinByName": {
+        "useEffect": 968,
+        "useMemo": 894,
+        "useCallback": 539,
+        "useLayoutEffect": 86,
+        "useImperativeHandle": 8,
+        "useInsertionEffect": 5
+      },
+      "customByName": {
+        "useIsomorphicLayoutEffect": 2,
+        "useNonWarningLayoutEffect": 1
+      },
+      "customHooksWithDeps": 3,
+      "effects": {
+        "async": {
+          "n": 27,
+          "pct": 2.5
+        },
+        "asyncCallback": {
+          "n": 0,
+          "pct": 0
+        },
+        "calledPropCallback": {
+          "n": 106,
+          "pct": 10
+        },
+        "categories": {
+          "external-sync": 405,
+          "derived-state": 167,
+          "store-or-form-update": 165,
+          "unclassified": 114,
+          "event-specific": 113,
+          "notify-parent": 34,
+          "mount-only": 32,
+          "reset-state-on-prop-change": 15,
+          "data-fetching": 9,
+          "effect-chain": 5
+        },
+        "categoriesPct": {
+          "external-sync": 38.2,
+          "derived-state": 15.8,
+          "store-or-form-update": 15.6,
+          "unclassified": 10.8,
+          "event-specific": 10.7,
+          "notify-parent": 3.2,
+          "mount-only": 3,
+          "reset-state-on-prop-change": 1.4,
+          "data-fetching": 0.8,
+          "effect-chain": 0.5
+        },
+        "cleanup": {
+          "none": 738,
+          "function": 274,
+          "call-result": 38,
+          "identifier": 7,
+          "unknown": 2
+        },
+        "conditional": {
+          "n": 757,
+          "pct": 71.5
+        },
+        "depKinds": {
+          "hookValue": 1159,
+          "prop": 556,
+          "derived": 233,
+          "state": 175,
+          "memo": 65,
+          "callback": 53,
+          "context": 21,
+          "let": 12,
+          "ref": 8,
+          "setter": 7,
+          "expression": 5,
+          "import": 1,
+          "object": 1,
+          "outer": 1,
+          "refCurrent": 1,
+          "transition": 1
+        },
+        "depsCount": {
+          "1": 339,
+          "2": 253,
+          "3": 131,
+          "4": 96,
+          "5+": 113,
+          "empty": 110,
+          "none": 14,
+          "non-literal": 3
+        },
+        "depsForm": {
+          "literal": 932,
+          "empty": 110,
+          "none": 14,
+          "non-literal": 3
+        },
+        "dom": {
+          "n": 147,
+          "pct": 13.9
+        },
+        "fetch": {
+          "n": 1,
+          "pct": 0.1
+        },
+        "fetchLike": {
+          "n": 19,
+          "pct": 1.8
+        },
+        "hasFunctionDep": {
+          "n": 0,
+          "pct": 0
+        },
+        "hasObjectDep": {
+          "n": 1,
+          "pct": 0.1
+        },
+        "hasPropDep": {
+          "n": 360,
+          "pct": 34
+        },
+        "hasRefDep": {
+          "n": 9,
+          "pct": 0.8
+        },
+        "hasSetterDep": {
+          "n": 6,
+          "pct": 0.6
+        },
+        "hasStateDep": {
+          "n": 148,
+          "pct": 14
+        },
+        "inNonJsxFile": {
+          "n": 77,
+          "pct": 7.3
+        },
+        "listener": {
+          "n": 92,
+          "pct": 8.7
+        },
+        "meanDeps": 2.47,
+        "n": 1059,
+        "observer": {
+          "n": 17,
+          "pct": 1.6
+        },
+        "optionalChainDep": {
+          "n": 60,
+          "pct": 5.7
+        },
+        "memberDep": {
+          "n": 170,
+          "pct": 16.1
+        },
+        "ownerKind": {
+          "component": 925,
+          "hook": 134
+        },
+        "perTenK": 9.3,
+        "promise": {
+          "n": 17,
+          "pct": 1.6
+        },
+        "refRead": {
+          "n": 228,
+          "pct": 21.5
+        },
+        "refWrite": {
+          "n": 129,
+          "pct": 12.2
+        },
+        "setStateAny": {
+          "n": 317,
+          "pct": 29.9
+        },
+        "setStateDirect": {
+          "n": 236,
+          "pct": 22.3
+        },
+        "setStateOnlyNested": {
+          "n": 81,
+          "pct": 7.6
+        },
+        "storage": {
+          "n": 0,
+          "pct": 0
+        },
+        "subscribe": {
+          "n": 11,
+          "pct": 1
+        },
+        "timer": {
+          "n": 83,
+          "pct": 7.8
+        },
+        "withCategoriesCount": 1059
+      },
+      "filesWithHooks": 992,
+      "hooks": 2503,
+      "hooksInNonJsxFiles": 286,
+      "hooksPerTenK": 21.9,
+      "lines": 1143356,
+      "memos": {
+        "depKinds": {
+          "hookValue": 1195,
+          "prop": 695,
+          "memo": 280,
+          "derived": 244,
+          "state": 161,
+          "callback": 143,
+          "context": 33,
+          "let": 25,
+          "object": 10,
+          "ref": 10,
+          "expression": 8,
+          "setter": 8,
+          "constant": 1,
+          "dispatch": 1
+        },
+        "depsForm": {
+          "literal": 1242,
+          "empty": 187,
+          "non-literal": 4
+        },
+        "n": 1433
+      },
+      "custom": {
+        "depKinds": {
+          "prop": 12,
+          "hookValue": 2,
+          "derived": 1
+        },
+        "depsForm": {
+          "literal": 3
+        },
+        "importSources": {
+          "common": 2,
+          "local": 1
+        },
+        "n": 3
+      },
+      "hookBindings": {
+        "react": 2133,
+        "React.namespace": 304,
+        "@radix-ui/react-use-layout-effect": 36,
+        "react-aria/private/utils/useLayoutEffect": 14,
+        "local": 8,
+        "../../hooks": 5
+      }
+    }
+  },
+  "reposWithReactCode": [
+    {
+      "hooks": 11,
+      "name": "hono",
+      "set": "core"
+    },
+    {
+      "hooks": 22,
+      "name": "trpc",
+      "set": "core"
+    },
+    {
+      "hooks": 205,
+      "name": "excalidraw",
+      "set": "core"
+    },
+    {
+      "hooks": 146,
+      "name": "next.js",
+      "set": "core"
+    },
+    {
+      "hooks": 18,
+      "name": "shadcn",
+      "set": "react"
+    },
+    {
+      "hooks": 277,
+      "name": "radix",
+      "set": "react"
+    },
+    {
+      "hooks": 91,
+      "name": "react-aria",
+      "set": "react"
+    },
+    {
+      "hooks": 1733,
+      "name": "supabase",
+      "set": "react"
+    }
+  ]
+}

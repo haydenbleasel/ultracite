@@ -1,0 +1,15 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -110,8 +110,10 @@
+   const [error, setError] = useState<string>();
+   const [time, setTime] = useState<Time>(defaultTime || { h: 0, m: 0, s: 0 });
+   const [previousDefaultTime, setPreviousDefaultTime] = useState<Time>();
+-  const [previousMinimumTimeKey, setPreviousMinimumTimeKey] = useState<string>();
+-  const [previousMaximumTimeKey, setPreviousMaximumTimeKey] = useState<string>();
++  const [previousMinimumTimeKey, setPreviousMinimumTimeKey] =
++    useState<string>();
++  const [previousMaximumTimeKey, setPreviousMaximumTimeKey] =
++    useState<string>();
+ 
+   const formattedMinimumTime = minimumTime
+     ? dayjs(formatTimeToTimeString(minimumTime), "HH:mm:ss", true)

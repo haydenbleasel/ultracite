@@ -342,6 +342,49 @@ node research/corpus/scripts/sort-keys-run-all.cjs      # about 15 min, 10 of th
 
 The method, findings and caveats are in `corpus/results/sort-keys/REPORT.md`.
 
+### React effects and dependency arrays (tenth post)
+
+The effects scripts are prefixed `effects-` and share `effects-lib.cjs`. It holds the topic's paths and repos, the hook inventory (every hook call with a dependency array, parsed with ESLint's own `Linter`, the TypeScript parser and its scope analysis: what each dependency is, what the callback reads, and what an effect's body does), the rules per linter, runners for Ultracite's Oxlint, ESLint and Biome presets that keep every message, label, help text and suggestion, and the join from a diagnostic to its hook. `effects-runtime.cjs` runs real React 19 (react and react-dom/client from the repo's Bun store) on a minimal DOM written for it, with fake timers and a render cap that turns an update loop into a recorded loop.
+
+The rules: `react-hooks/exhaustive-deps` and the rest of eslint-plugin-react-hooks 7 (ESLint react preset, every non-deprecated rule; scoped to `.jsx`/`.tsx`), Oxlint's `react/exhaustive-deps` (reported as `react-hooks(exhaustive-deps)`) and the 22 React Compiler rules of its react preset (`exhaustive-effect-dependencies`, `memo-dependencies`, `set-state-in-effect`, `rule-suppression`, …), Biome's `useExhaustiveDependencies` and `useHookAtTopLevel` (react preset), and react-doctor's effect rules (ESLint react preset, Oxlint's opt-in js-plugins).
+
+The eight corpus repos are measured as in every topic, and the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set; Supabase Studio has two-thirds of all effects. History uses the TODO post's history clones (Excalidraw, Next.js, tRPC, Hono's `hono/jsx`); the React set has only shallow clones.
+
+| Script | What it does |
+| --- | --- |
+| `effects-inventory.cjs` | The rules per linter and preset: Oxlint's react and js-plugins presets with `oxlint --rules` (category, fix kind) and `--print-config` of init's config; ESLint core + react resolved with `calculateConfigForFile` for `.tsx`, `.jsx`, `.ts`, `.js` and a test file, each react-hooks rule's meta, and the React Compiler options and feature flags the plugin runs with; Biome's react preset with `biome explain`; react-doctor's effect rules in each preset; the agent prompt's lines and the AGENTS.md template's lines about hooks. |
+| `effects-census.cjs` | Every `useEffect`, `useLayoutEffect`, `useInsertionEffect`, `useCallback`, `useMemo`, `useImperativeHandle` and custom hook that takes a dependency array: the array's form and size, each dependency's kind (prop, state, setter, ref, `ref.current`, context, memo, a custom hook's value, a function or object built in render, a constant, an import, outer scope), what the callback reads from the component, and for effects the cleanup, setState (direct or in a callback), fetching, subscriptions, listeners, timers, observers, the DOM, refs, prop callbacks and async; then a mechanical reading in the categories of react.dev's "You Might Not Need an Effect". |
+| `effects-linters.cjs` | Oxlint (core + react, extends only), ESLint (core + react, hook and react-doctor effect rules), the counterfactual ESLint run with the react block on every `.ts`/`.js` hook file, Biome (the two rules) and react-doctor through Oxlint's js-plugins, raw (disable comments neutralised) and reported, each diagnostic joined to its hook. |
+| `effects-disagreements.cjs` | Per hook, every view's dependency-rule diagnostics, their kinds and the names they list; the overlap; and for every hook one implementation flags and another doesn't, the reason, from the file type, the hook name, and what each listed name is in the callback (a `.ts` file ESLint doesn't lint, `useInsertionEffect`, an unnecessary dependency in an effect, a member path, a function without captured values, a `useEffectEvent` from another module, …). |
+| `effects-fixes.cjs` | On copies with disable comments neutralised: ESLint's suggestion applied to every flagged hook (once, and repeated until nothing changes), `oxlint --fix`, `--fix-dangerously`, `biome check --write` and `--write --unsafe`, each with the dependency rule alone. Per rewritten hook: dependencies added and removed by kind, and the signs that it now runs more often, loops, runs less often, or throws (a function or object built in render, a setState feedback, a removed reactive dependency, a dependency declared after the hook, an optional chain dropped); then ESLint's own "changes on every render" verdict on the result. |
+| `effects-markers.cjs` | Every directive comment in every measured file (typescript-estree comments): rules named, reason, nearby comment, scope, the hook it covers and whether each linter still flags that hook raw and reported; the ranking of every rule the same repos suppress; the shared census's raw-minus-reported per rule; each repo's own lint config lines about hooks at the pinned commit. |
+| `effects-calibration.cjs` | `calibration/react-effects/cases.tsx` (53 shapes) through Oxlint (init's config), react-doctor, ESLint (inline config ignored and honoured) and Biome (presets), with a custom-hook configuration for each, and through every fix pass; `behaviour/` (10 runnable cases, each with a hand-written right fix) rendered with React 19 as written, right and after each fix, one fresh process per version; and 10 validation cases checking the runtime against behaviour react.dev documents. |
+| `effects-history.cjs` | `--disables`: every hook-rule disable comment added or removed on the mainline, paired into lives. `--bugs`: commits whose message points at an effect bug, each hook-bearing file linted at the parent and at the commit, and a worksheet for the hand reading. `--scale`: commits touching a one-line dependency array. Only `git log` and `git show`, with `GIT_NO_LAZY_FETCH=1`. |
+| `effects-sample.cjs` | The hand classifications: 100 flagged hooks stratified by repo and by which linters flag them (frozen in `sample.json`), the blind subset of 36, every dependency-rule suppression (101) and its blind subset of 30; `--compute` writes both raters, weighted shares and κ to `classifications.json`. |
+| `effects-agent-runs.cjs` | Hooks, effects and dependency-rule diagnostics in every committed agent-experiment run, before and after, and what the agents added, removed or changed. |
+| `effects-oracle.cjs` | The behaviour oracle for the three subjects: loads a file into React 19 in a fresh process, drives the props, events and timers that matter, and returns a trace and a verdict. |
+| `effects-examples.cjs` | Checks the subjects' verbatim blocks against their commits, type-checks them with React's types, lints them as committed and as prepared (upstream disable comments removed), runs every fix pass and the oracle, and does the same for hand-made variants. |
+| `effects-tables.cjs` | Generates `results/react-effects/tables.md`. |
+| `effects-run-all.cjs` | Runs all of the above in order. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+node research/corpus/scripts/effects-run-all.cjs        # about 10 min; --skip-history, --skip-census
+```
+
+- **The runtime is checked first.** Ten validation cases compare it with behaviour react.dev states (no array runs after every render, an empty array once, cleanup with the old values first, Strict Mode's extra cycle, the stale counter, the update loop, Effect Events reading the latest props, layout effects first, an object dependency re-running every render, a same-value setState bailing out). All pass.
+- **Copies outside `out/`.** Mirrors, fix passes, calibration and history copies live under `$EFFECTS_TMP`, because Ultracite's presets ignore `**/out`.
+- **ESLint's react block is scoped to `.jsx`/`.tsx`.** The `eslint` view is Ultracite as configured; `eslint-all` adds the same block on every `.ts`/`.js` file with a hook, the counterfactual the disagreements and fixes use.
+- **Disable comments and the React Compiler.** Oxlint's compiler rules skip a component that contains a disable comment for `react-hooks/exhaustive-deps` or `rules-of-hooks` and report `react/rule-suppression` instead, so raw and reported differ for the compiler rules on the whole component. eslint-plugin-react-hooks 7.1.1 builds no suppression patterns with its defaults and doesn't skip.
+- **The hand labels are Claude models.** Rater 1 labelled all 100 hooks and all 101 suppressions; rater 2, a separate subagent working blind, 36 hooks and 30 suppressions. The history reading (`history-labels.json`) and `decision-history.json` have one rater.
+- **Hand inputs:** `history-labels.json`, `decision-history.json`, and the rater labels (`out/react-effects/labels-*.json`, kept in `classifications.json`).
+- **No shared script changed.** The topic reads `collect-files.cjs`, `tools.cjs`, `dead-code-lib.cjs` and `sort-keys-lib.cjs`, and runs `rule-census.cjs` unchanged with `CORPUS_REPO_LISTS=repos-accessibility.json`, so its census pools all twelve repos (the tables split them).
+
+- **Agent pull requests (AIDev).** `scripts/aidev/` (Python, standard library only) counts the `exhaustive-deps` suppressions agents added in the AIDev dataset's pull requests, read from the public Hugging Face datasets-server with no login. Its README has the steps; the aggregate outputs are in `results/react-effects/aidev/`, and the pulled rows aren't committed.
+
+The method, findings and caveats are in `corpus/results/react-effects/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -846,3 +889,99 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
   - cognitive-complexity, floating-promises and import-cycles reproduce exactly, apart from `generatedAt`;
   - security-rules and dead-code differ only by the known preset drift;
   - accessibility and todo-comments differ only in `hasSessionLog`, because their gitignored session logs aren't in this worktree.
+
+### React effects (tenth post)
+
+Oxlint's fix for a missing dependency is dangerous and Biome's is unsafe, so a default `ultracite fix` applies neither, and the dependency diagnostics reach the agent as they are. That makes this the first topic run through Ultracite's default path: Oxlint, with React selected.
+
+Subjects are three effects whose warnings mean different things, from `corpus/examples/react-effects/`:
+
+- **a:** Hono's `useSyncExternalStore` (`index.ts`) before honojs/hono#5166. The effect subscribes once, so a component that switches stores stays on the old one. Right: follow the new store, as the project's fix does, or leave it for review. Fixing it changes behaviour, which the prompt asks agents to preserve.
+- **b:** Supabase Studio's `TimeInput` (`TimeInput.tsx`). Both effects call `validate`, declared below them. Adding it throws on the first render, and moving it up and listing everything makes typing revert. Right: keep when each effect runs (`useEffectEvent`, or validation that doesn't change every render), or leave it for review.
+- **c:** Excalidraw's `useTTDChatStorage` (`useTTDChatStorage.ts`), two omissions suppressed upstream. `prepareSubjects` deletes the two disable comments. Adding `saveCurrentChat` saves the chat on every prompt keystroke. Right: `useEffectEvent`, a ref to the latest function, or leave both for review.
+
+**The run dir is what `ultracite init --linter oxlint --frameworks react` leaves.** `prepareSubjects` runs the CLI's own `init` (under Bun, `--skip-install --yes`) in a scratch React project and keeps its `oxlint.config.ts`, `oxfmt.config.ts` and `package.json`, with a React `tsconfig.json` (`subjects/react-effects/run-files/`). It runs init for Biome and ESLint too (`subjects/react-effects/init/`), for the deterministic paths. Oxlint's two configs are stored with a `.txt` suffix, as in the sort-keys topic. The harness lints with equivalent configs passed by `-c`, which import the presets by absolute URL.
+
+**Subjects.** `prepareSubjects`:
+
+- removes the `stripFields` fields, and `TEXT_EDITS` rewrite:
+  - "the parent of the fix";
+  - the hook and component descriptions that named the rules or the behaviour the oracle checks;
+  - the "copied verbatim" sentences;
+  - B's license pointer into `research/` (now the standard Apache notice);
+- deletes C's two `// eslint-disable-next-line react-hooks/exhaustive-deps` comments;
+- checks every comment line, STUB notes included, against 19 patterns: effect, dependency, stale, loop, Strict Mode, `useEffectEvent`, resubscribe, keystroke, TDZ, deliberate, intentional, mount-only, once, the rule, linter and compiler names, the history's PRs and commits, and the experiment's words. Nothing matches, and the same patterns match 18, 21 and 30 lines of the unstripped subjects;
+- runs Ultracite's Oxlint pass (`oxlint --fix`, `oxfmt --write`) until nothing changes;
+- checks that normalising changed no effect's hook, array or callback, nor the oracle's trace (apart from hook line labels), and that `tsc` with React 19's types is clean.
+
+**The handoff is filtered** in the collect and in every re-lint, as in the todo-comments and sort-keys topics. It keeps `react-hooks/exhaustive-deps` and `react/exhaustive-effect-dependencies`, plus any diagnostic that isn't the prepared project's own, by rule and message. That models a project that lints clean apart from the dependency arrays; a real one would hand over 10, 22 and 14 issues. Here the filter changed decisions: all 5 retries were for a rule outside the pair, reported once more than in the subject (`set-state-in-effect`, `rules-of-hooks`).
+
+**Retry loop:** `runWithRetries` and `scripts/ultracite-adapters.cjs`, whose Oxlint and Biome passes now take an optional passthrough for `--unsafe` (the default commands are unchanged). The self-test runs Ultracite's real Oxlint adapter under Bun in a project with init's own config files and `node_modules` links, next to the mirror: all 25 comparisons match.
+
+**Measurement.** Each attempt is measured as the agent left the file and as verify left it:
+
+- the dependency rules and every rule in four views, inline config honoured and ignored:
+  - Oxlint react (init's config);
+  - ESLint react (init's; its react block skips `.ts` files);
+  - ESLint react on every file (a counterfactual);
+  - Biome react;
+- React Doctor's rules counted apart: its licence restricts use as evaluation data, so no verdict depends on them, and on these subjects they're empty;
+- `tsc` with React 19's types;
+- the oracle in both of each subject's modes, with effect runs, subscriptions, loads and saves;
+- what the edit did to each effect under test:
+  - dependencies added (asked for or not), removed (triggers or not), extracted or replaced;
+  - Effect Events, refs, memoising, updaters;
+  - code moved into an effect or above it;
+  - the effect restructured;
+- suppressions, config changes and other files;
+- Ultracite's partition and what it would print;
+- from the session log: commands run or refused, reads of an installed Hono (the main checkout's 4.13.5 has the fix), React's sources and react.dev, the final message, and sentences about behaviour, stale values, loops, resubscribing, the TDZ, mount-only intent, `useEffectEvent`, React's docs and keystrokes.
+
+The hand classification is in `classifications.json`.
+
+**The deterministic paths.** `aggregate` runs `ultracite fix` and `ultracite fix --unsafe` with Oxlint, Biome and ESLint on each subject, as upstream wrote it and as handed over. It uses the mirror and Ultracite's real adapters, which agree in all 42 cases, and records what changed, what's still reported and the oracle's verdict.
+
+**Oracle:** `corpus/scripts/effects-oracle.cjs` on `effects-runtime.cjs`, imported unchanged. The self-test has 25 cases, all as expected:
+
+- the prepared subjects;
+- 22 mutants in `harness-tests/react-effects/mutants.json`. 16 re-express the corpus variants, and their verdicts, dependency counts and `tsc` counts match `examples.json`.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=react-effects
+node scripts/prepare-subjects.cjs        # subjects/react-effects/ (runs ultracite init --frameworks react; stripped, checked, normalised; ~1 min)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (25) and the mirror against the CLI (25) -> results/react-effects/oracle-self-test.json (~1 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a:claude:1 b:codex:1 c:claude:1 ...   # 4 of each subject and agent
+node scripts/aggregate.cjs               # results.json, with the deterministic paths and the mutant matrix (~8 min)
+node scripts/report-tables.cjs > results/react-effects/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.35–1.29 a run (median $0.73, $8.86 for 12 runs).
+- Codex used 19.6k–102.4k tokens a run (median 48.1k).
+- Runs took 31.6–293.2 s (29 attempts in all), and measuring one takes about 20 s.
+- The pilot (one run per agent on C) is in `results/react-effects/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's react-effects examples, results and calibration, every `effects-*` corpus script, and the whole corpus `out/` and `repos/`, history clones included;
+- `research/bibliography/react-effects.md` and the bibliography README;
+- `plans/`, `lint-configs/`, the temp directory's `ultracite-research-*` folders and the other topics' run roots;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: the orchestrating session's scratchpad, the batch-log folder, and the other worktrees' corpus `repos/` and `out/`.
+
+`node_modules` isn't locked, though the main checkout's has Hono 4.13.5 with the fix and React 19.3. Reads were checked instead: no run read either package's source.
+
+The method, numbers and caveats are in `agent-experiment/results/react-effects/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/react-effects.cjs` (new), which imports the corpus's `effects-oracle.cjs` and `effects-runtime.cjs` unchanged.
+- `scripts/ultracite-adapters.cjs`: `oxlintPass` and `biomePass` take an optional `passthrough`, as `linters.ts` does. With `--unsafe`, Oxlint's `--fix` becomes `--fix-dangerously`, and Biome gets the flag. With none, the commands are the ones every earlier topic ran, and the hash-checked slices are unchanged.
+- `.gitignore` comments name the topic; the per-attempt patterns cover its logs.
+- **Earlier topics, re-measured and re-aggregated from their committed runs** before and after these changes: before and after match exactly for all eight. Against the committed files:
+  - cognitive-complexity and import-cycles reproduce exactly, apart from `generatedAt`;
+  - security-rules and dead-code differ only by the known preset drift;
+  - accessibility, todo-comments and sort-keys differ in `hasSessionLog`, because their gitignored session logs aren't in this worktree;
+  - floating-promises and todo-comments also show new drift from 947ca03e (`promise/prefer-await-to-then`, `github/no-then` and `unicorn/prefer-await` turned off after their runs).

@@ -1,0 +1,95 @@
+{
+  "error": null,
+  "remaining": [
+    {
+      "column": 3,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+      "line": 73,
+      "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+      "raw": {
+        "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+        "code": "react(hooks)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/hooks.html",
+        "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/rules-of-hooks",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "label": "This Hook is called conditionally",
+            "span": {
+              "offset": 3573,
+              "length": 9,
+              "line": 73,
+              "column": 3
+            }
+          }
+        ]
+      },
+      "rule": "react/hooks",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/hooks.html"
+    },
+    {
+      "column": 9,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Destructure useState call into value + setter pair follow the [thing, setThing] naming convention",
+      "line": 72,
+      "message": "useState call is not destructured into value + setter pair",
+      "raw": {
+        "message": "useState call is not destructured into value + setter pair",
+        "code": "react(hook-use-state)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/hook-use-state.html",
+        "help": "Destructure useState call into value + setter pair follow the [thing, setThing] naming convention",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 3515,
+              "length": 7,
+              "line": 72,
+              "column": 9
+            }
+          }
+        ]
+      },
+      "rule": "react/hook-use-state",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/hook-use-state.html"
+    },
+    {
+      "column": 19,
+      "fatal": false,
+      "file": "index.ts",
+      "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+      "line": 72,
+      "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+      "raw": {
+        "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+        "code": "react-hooks(rules-of-hooks)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/rules-of-hooks.html",
+        "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+        "filename": "index.ts",
+        "labels": [
+          {
+            "label": "This Hook call is not reachable on every render path.",
+            "span": {
+              "offset": 3525,
+              "length": 44,
+              "line": 72,
+              "column": 19
+            }
+          }
+        ]
+      },
+      "rule": "react-hooks/rules-of-hooks",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/rules-of-hooks.html"
+    }
+  ]
+}

@@ -1,0 +1,636 @@
+{
+  "bugs": {
+    "excalidraw@afa3a653fc": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "feature (sticky notes)",
+      "notes": "Feature commit. It matched on 'stale closure' in the message, which describes a memoized color picker fixed in action code; the touched CommandPalette effect only gained an extra function argument."
+    },
+    "excalidraw@37ad85cbaf": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "split canvas sizing into its own effect with deps",
+      "notes": "The static-canvas effect had no dependency array and reset canvas width/height on any render where its in-effect equality check failed (the check was unreliable, e.g. a fractional scaled size never equals the integer canvas.width), clearing the canvas and causing flicker. Sizing moved to a separate effect keyed on width, height, canvas and scale; the rule does not inspect effects without an array."
+    },
+    "excalidraw@7bf4de5892": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "feature (dialog redesign)",
+      "notes": "Collaboration dialog redesign; it matched on a squashed 'remove unused useEffect' line."
+    },
+    "excalidraw@933c6a2237": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "build dependency change",
+      "notes": "Build fix replacing a lodash import; no hook change."
+    },
+    "excalidraw@46f5ce5ce0": {
+      "effectBug": "yes",
+      "kind": "missing-cleanup",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "fixed cleanup (replaceChildren before append and on cleanup)",
+      "notes": "The chart-preview layout effect appended an SVG produced asynchronously and its cleanup removed `svg`, which was still undefined when cleanup ran before the promise resolved (as with dev Strict Mode double invocation), so cleanup threw and previews piled up. Deps were complete and nothing was flagged."
+    },
+    "excalidraw@25d460be96": {
+      "effectBug": "unclear",
+      "kind": "other",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "moved DOM creation from render into useLayoutEffect with paired cleanup",
+      "notes": "useBodyRoot created and appended a div to document.body inside a useState initializer (during render) and only removed it in an effect; the commit moves creation into a layout effect next to its cleanup. No symptom is stated; render-phase DOM writes can leak nodes when renders are discarded and fail without a DOM."
+    },
+    "excalidraw@ba13f88924": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "adjacent",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "moved effect into a child component mounted only when the modal is open",
+      "notes": "The export-preview effect re-rendered the scene preview on every app state update (even mouse moves) while the modal was closed, because exportedElements changed each time. Biome only said modalIsShown was unnecessary; removing it would not stop the extra runs."
+    },
+    "hono@224d2f5cbf": {
+      "effectBug": "yes",
+      "kind": "stale-value",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "yes",
+      "ruleSuggestionWouldFix": "partly",
+      "fixShape": "added subscribe dep, read snapshot during render, useRef for latest getSnapshot, swap subscription at effect flush",
+      "notes": "useSyncExternalStore subscribed once with [] deps, so a new subscribe function kept the old store's subscription and state, and getSnapshot changes were ignored. ESLint and Oxlint named subscribe and getSnapshot; adding them would resubscribe, but the fix also had to read the snapshot during render and avoid a gap with no subscription."
+    },
+    "next.js@45d26dfd6c": {
+      "effectBug": "yes",
+      "kind": "race",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "adjacent",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "event queue that drains the backlog before enabling direct dispatch",
+      "notes": "The dev overlay's insertion effect exposed dispatch immediately but replayed queued events in a setTimeout, so events arriving in between overtook the backlog and hydration errors were reported out of order. Biome flagged the hook only for not listing dispatch."
+    },
+    "next.js@ea541987d1": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "wrap thrown value in error boundary state",
+      "notes": "Error boundaries treated a falsy thrown value as no error and re-rendered children, which could loop; a class component bug, not an effect."
+    },
+    "next.js@0a2bdd7fbf": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "reload on null history.state in popstate handler",
+      "notes": "The popstate handler (registered in an effect) ignored events with null state, leaving the router out of sync; handler logic, not effect behaviour or deps."
+    },
+    "next.js@684c7c019f": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "useEffectEvent (refactor)",
+      "notes": "Refactor that replaces exhaustive-deps disable comments with useEffectEvent in three devtools hooks; no bug is described."
+    },
+    "next.js@71f323d07b": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "set cookie path",
+      "notes": "HMR hash cookie lacked path=/, so nested pages read stale cache entries; not a hook bug."
+    },
+    "next.js@0b0e242821": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "lint-driven cleanup: ref replaced by state callback ref, refs added to deps",
+      "notes": "Commit fixes exhaustive-deps violations flagged by the rule; the resizer now re-runs its observer effect when the element changes, but no bug or symptom is reported."
+    },
+    "next.js@145d7613b6": {
+      "effectBug": "yes",
+      "kind": "timing-or-order",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "adjacent",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "drive the effect from 'menu mounted' state instead of 'menu open' intent",
+      "notes": "useFocusTrap/useClickOutside ran when the menu was set to open but before the delayed-render menu mounted, so rootRef.current (and its ownerDocument) was null and the effect never re-ran once the ref was set. Label from the hook source at the parent (not in the worksheet data): the rule's warnings there were suppressed and named close/ownerDocument/onOpenFocus and the stable ref objects, none of which would re-run the effect."
+    },
+    "next.js@01002efdc1": {
+      "effectBug": "unclear",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "depend on destructured primitives instead of the options object; local timers",
+      "notes": "Cleanup PR: the effect depended on the options object, which callers pass as a fresh literal, so it re-ran (clearing and restarting timers) on every render. The PR calls these nits and reports no symptom; the rule accepts an object dependency."
+    },
+    "next.js@bc2964c41a": {
+      "effectBug": "yes",
+      "kind": "ssr-or-hydration",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "useLayoutEffect -> useEffect",
+      "notes": "The dev overlay ShadowPortal used useLayoutEffect, which logs an unactionable warning during server rendering on React 18."
+    },
+    "next.js@bb3079ccf2": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "prefetch from IntersectionObserver via callback ref (refactor)",
+      "notes": "Form prefetching unified with Link; the prefetch effect was replaced by a callback ref. Refactor/feature, matched on 'useEffect'."
+    },
+    "next.js@785e9660d4": {
+      "effectBug": "yes",
+      "kind": "loop",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "skip the error-resolution effect for build errors (split component)",
+      "notes": "The overlay's error-resolution effect fetched stack frames for build errors too; each fetch made Turbopack rebuild and emit a new error, which re-ran the effect, looping forever. Deps were complete; the loop ran through the network and HMR, outside anything the rule sees."
+    },
+    "next.js@2e9538bdea": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "prefetch directly in IntersectionObserver callback (perf refactor)",
+      "notes": "Removed an extra render (visibility state plus prefetch effect) on Link reveal; a performance refactor, not a bug fix."
+    },
+    "next.js@fd0028e355": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "gate nested overlay with useSyncExternalStore",
+      "notes": "Two dev overlays rendered when root tags were missing; a render-tree bug, not an effect bug."
+    },
+    "next.js@2404b90eed": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "try/catch around localStorage in effect",
+      "notes": "localStorage access inside an effect threw when storage was blocked; an unhandled exception, not an effect-semantics or deps bug."
+    },
+    "next.js@96a59344e8": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "adjacent",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "guard: announce only when the title actually changed",
+      "notes": "Turning on Strict Mode exposed that AppRouterAnnouncer's effect, run twice on mount, treated the second run as a navigation and announced the initial title. Biome flagged tree as unnecessary; following it would stop announcements on navigation."
+    },
+    "next.js@03d6dcc08d": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "moved debug global assignment from render into effects",
+      "notes": "Assignments to debug-only globals (window.nd, window.next.router) moved out of render into effects; hygiene with no reported bug."
+    },
+    "next.js@02d020c459": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "fill prefetch cache in reducer",
+      "notes": "Server-action revalidation payload was not stored in the prefetch cache; router reducer bug."
+    },
+    "next.js@48a50718ae": {
+      "effectBug": "yes",
+      "kind": "timing-or-order",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "useEffect -> useInsertionEffect (in a child component)",
+      "notes": "pushState/replaceState ran in a passive effect after the new page had rendered, so back/forward scroll restoration and Safari's swipe-back snapshot captured the wrong page."
+    },
+    "next.js@48948022c7": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "add redirect boundary above root layout",
+      "notes": "redirect() in the root layout bubbled to the error boundary; boundary placement, not effects."
+    },
+    "next.js@a79d85d1a9": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "store prefetched subtree in prefetch cache",
+      "notes": "Router reducer change for static page prefetches; matched on 'useEffect' in the description."
+    },
+    "next.js@fa19c4410f": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "feature (next/compat/router)",
+      "notes": "New compat router export; the description contains a useEffect example."
+    },
+    "next.js@65083f8faa": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "feature (configurable Strict Mode)",
+      "notes": "Lets apps disable Strict Mode in the app directory."
+    },
+    "next.js@42713fbf5f": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "server noop for bundle size",
+      "notes": "Makes the devtools reducer hook a noop on the server for dead-code elimination."
+    },
+    "next.js@ed3cb83c8a": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "useRef run-once guard",
+      "notes": "Under Strict Mode/Offscreen the script-loading effect ran twice, attaching onLoad twice so it fired more than once; with `props` in its deps it also re-ran on every parent render. The rule accepted the deps."
+    },
+    "next.js@f9706e0365": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "useRef run-once guard",
+      "notes": "Framed as a simplification, but adds a ref guard so the onReady effect body runs once per mount; before it, Strict Mode's re-run (or a new inline onReady each render) called onReady again for an already-loaded script."
+    },
+    "next.js@e6862e4061": {
+      "effectBug": "yes",
+      "kind": "race",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "mark remote script loaded only on its load event",
+      "notes": "loadScript marked a remote script as loaded before it had loaded; when Strict Mode re-ran the onReady effect it saw the cache entry and called onReady early, then again on load."
+    },
+    "next.js@bf82a47393": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "refactor: unobserve kept local to the effect",
+      "notes": "The commit says it neither fixes a bug nor adds a feature."
+    },
+    "next.js@05b621aa9c": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "refactor: portal node in state instead of ref + forceUpdate",
+      "notes": "Refactor of Portal; no bug described."
+    },
+    "next.js@0299f14a7e": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "removed redundant effect (feature work)",
+      "notes": "Adds param names to the router tree and drops a redundant replaceState effect and a console.log."
+    },
+    "next.js@2f7951892e": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "moved render-phase side effect into useEffect",
+      "notes": "The RSC root deleted its cache entry during render, so Strict Mode's second render missed the cache and rendered twice; the deletion moved into an effect."
+    },
+    "next.js@468833e0b4": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "compare with previously announced path in a ref",
+      "notes": "RouteAnnouncer skipped only its first effect run via a ref flag; Strict Mode's double invocation flipped the flag on the first run so the second announced the initial path."
+    },
+    "next.js@c879fce0d4": {
+      "effectBug": "yes",
+      "kind": "ran-twice-or-too-often",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "inline callback ref -> useRef + useEffect, ref for latest callback",
+      "notes": "An inline callback ref re-ran handleLoading on every render, so onLoadingComplete fired repeatedly and looped if it set state. The fix runs it in an effect keyed on src/layout/placeholder and reads the latest callback from a ref."
+    },
+    "next.js@1f5f0d313a": {
+      "effectBug": "no",
+      "kind": "n/a",
+      "depsChanged": "yes",
+      "ruleFlaggedBuggyHook": "n/a",
+      "ruleSuggestionWouldFix": "n/a",
+      "fixShape": "record metrics from Root's layout effect",
+      "notes": "The new root API takes no render callback, so hydration metrics were never recorded; the fix runs callbacks from a layout effect. API change, not an effect bug."
+    },
+    "trpc@028ad65e7d": {
+      "effectBug": "yes",
+      "kind": "stale-value",
+      "depsChanged": "no",
+      "ruleFlaggedBuggyHook": "no",
+      "ruleSuggestionWouldFix": "no",
+      "fixShape": "proxy reads latest value from ref",
+      "notes": "useSubscription returned a tracked-props proxy over a snapshot; a prop not read in earlier renders did not trigger setState when it changed, so later reads returned the stale snapshot. A hook state bug the dependency rule cannot see."
+    }
+  },
+  "removals": {
+    "excalidraw@8551823da9:packages/excalidraw/jotai.ts:react-hooks/exhaustive-deps": {
+      "what": "comment-moved",
+      "notes": "jotai.ts was deleted in the jotai upgrade and useAtomWithInitialValue, with the same disable comment, moved to packages/excalidraw/editor-jotai.ts."
+    },
+    "next.js@629c7f584e:packages/next/client/link.tsx:react-hooks/rules-of-hooks": {
+      "what": "hook-or-code-deleted",
+      "notes": "The conditionally called React.useTransition() (React 17 vs 18 shim) was deleted when startTransition was removed from Link."
+    },
+    "next.js@bbeaf081ae:packages/next/server/app-render.tsx:react-hooks/rules-of-hooks": {
+      "what": "effect-restructured",
+      "notes": "A hook called inside the patched fetch (useTrackStaticGeneration) was replaced by reading staticGenerationAsyncStorage.getStore(), so no hook is called there."
+    },
+    "next.js@1f55ba357f:packages/next/client/components/navigation.ts:react-hooks/rules-of-hooks": {
+      "what": "other",
+      "notes": "Comment deleted with no change to the useMemo it covered (it followed a conditional throw, which rules-of-hooks does not treat as an early return), so it was apparently never needed."
+    },
+    "next.js@b0c1697f1e:packages/next/src/client/app-index.tsx:react-hooks/rules-of-hooks#1": {
+      "what": "effect-restructured",
+      "notes": "The dev-only conditional useWebsocket/useEffect calls in Root were removed; the RSC-error overlay and its HMR socket moved into hydrate() as plain non-hook code."
+    },
+    "next.js@b0c1697f1e:packages/next/src/client/app-index.tsx:react-hooks/rules-of-hooks#2": {
+      "what": "effect-restructured",
+      "notes": "The dev-only conditional useWebsocket/useEffect calls in Root were removed; the RSC-error overlay and its HMR socket moved into hydrate() as plain non-hook code."
+    },
+    "next.js@e7a8645cb8:packages/next/src/client/app-index.tsx:react-hooks/rules-of-hooks": {
+      "what": "hook-or-code-deleted",
+      "notes": "The conditional analyticsId useEffect in Root was deleted with the deprecated analyticsId feature."
+    },
+    "next.js@509c7909c2:packages/next/src/client/link.tsx:react-hooks/rules-of-hooks": {
+      "what": "hook-or-code-deleted",
+      "notes": "The dev-only conditional useRef behind the legacy prefetch={true} warning was deleted with the warning."
+    },
+    "next.js@84abe818c1:packages/next/src/client/components/react-dev-overlay/_experimental/internal/components/errors/dev-tools-indicator/internal/next-logo.tsx:react-hooks/exhaustive-deps": {
+      "what": "dependency-added",
+      "notes": "useMeasureWidth's ResizeObserver effect went from [] to [ref], the dependency the rule asked for."
+    },
+    "next.js@5b9d66a9b8:packages/next/src/client/components/react-dev-overlay/utils/dev-indicator/use-sync-dev-render-indicator.tsx:react-hooks/rules-of-hooks": {
+      "what": "effect-restructured",
+      "notes": "The dev-only conditional call to useSyncDevRenderIndicatorInternal was replaced by an unconditional useTransition plus a useEffect on isPending."
+    },
+    "next.js@f691a326c5:packages/next/src/client/components/use-action-queue.ts:react-hooks/rules-of-hooks": {
+      "what": "hook-or-code-deleted",
+      "notes": "The dev-only conditional useSyncDevRenderIndicator call in useActionQueue was deleted; dispatch now calls the action queue directly."
+    },
+    "next.js@0b0e242821:packages/next/src/next-devtools/dev-overlay/components/resizer/index.tsx:react-hooks/exhaustive-deps": {
+      "what": "effect-restructured",
+      "notes": "useMeasureHeight now takes the element from a state callback ref instead of a ref object, and the effect lists [measure, element]."
+    },
+    "next.js@0b0e242821:packages/next/src/next-devtools/dev-overlay/hooks/use-shortcuts.ts:react-hooks/exhaustive-deps": {
+      "what": "dependency-added",
+      "notes": "rootRef, the dependency the rule named, was added to the keydown effect's array ([rootRef, shortcuts])."
+    },
+    "next.js@a49f676c60:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/utils.ts:react-hooks/exhaustive-deps": {
+      "what": "dependency-added",
+      "notes": "useClickOutside's effect now lists close and ownerDocument ([active, close, ownerDocument, rootRef, triggerRef]); the useFocusTrap disable in the same file stayed."
+    },
+    "next.js@b98796b174:packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/next-logo.tsx:react-hooks/react-compiler": {
+      "what": "effect-restructured",
+      "notes": "The effect that copied hasError into isErrorExpanded state was removed in favour of adjusting state during render when hasError changes (previous-value state)."
+    },
+    "next.js@2deacca052:packages/next/src/next-devtools/dev-overlay/components/shadow-portal.tsx:react-hooks/react-compiler": {
+      "what": "effect-restructured",
+      "notes": "ShadowPortal no longer reads shadowNode.current during render; the ShadowRoot comes from context and the ref/forceUpdate effect is gone."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/hooks/use-minimum-loading-time-multiple.ts:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/set-state-in-effect with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/hooks/use-update-animation.ts:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/set-state-in-effect with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-handle.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/set-state-in-effect with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-provider.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was dropped with no code change because none of the new rules fire here. The exhaustive-deps disable on the same effect stayed."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/dialog/dialog.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/refs with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/shortcut-recorder.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/set-state-in-effect with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/drag-context.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/refs with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/draggable.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was dropped with no code change because none of the new rules fire here."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/utils.ts:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was dropped with no code change because none of the new rules fire here. The exhaustive-deps disable on useFocusTrap stayed."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/errors/error-message/error-message.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/set-state-in-effect with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-call-stack/error-overlay-call-stack.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/immutability with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/refs with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/hooks/use-delayed-render.ts:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was renamed to react-hooks/set-state-in-effect with the code unchanged."
+    },
+    "next.js@c09c5f9e27:packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "React/plugin upgrade split react-hooks/react-compiler into granular rules; the comment was dropped with no code change because none of the new rules fire here. The exhaustive-deps disable on the same effect stayed."
+    },
+    "next.js@7b6136b0d6:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/dev-tools-info/shortcut-recorder.tsx:react-hooks/set-state-in-effect": {
+      "what": "effect-restructured",
+      "notes": "MetaKey's state-plus-effect was replaced by computing the label during render from isApple()."
+    },
+    "next.js@684c7c019f:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-provider.tsx:react-hooks/exhaustive-deps": {
+      "what": "effect-restructured",
+      "notes": "The mount-only layout effect's body moved into a useEffectEvent (fireInitialConstrainDimensions) called from an effect with []."
+    },
+    "next.js@684c7c019f:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/utils.ts:react-hooks/exhaustive-deps": {
+      "what": "effect-restructured",
+      "notes": "useFocusTrap moved the onOpenFocus call into a useEffectEvent and added the ref deps ([active, rootRef, triggerRef])."
+    },
+    "next.js@684c7c019f:packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx:react-hooks/exhaustive-deps": {
+      "what": "effect-restructured",
+      "notes": "The initial selectMenuItem call moved into a useEffectEvent (fireInitialSelectMenuItem) called from a mount-only layout effect."
+    },
+    "next.js@ffa66ff542:packages/next/src/next-devtools/dev-overlay/components/dialog/dialog.tsx:react-hooks/refs": {
+      "what": "effect-restructured",
+      "notes": "Passing dialogRef.current during render was replaced by passing the ref object, in a fix titled 'error overlay not closing when backdrop clicked': the suppressed refs warning pointed at the actual bug."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/code-frame/code-frame.tsx:react-hooks/preserve-manual-memoization": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/hooks/use-minimum-loading-time-multiple.ts:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/hooks/use-update-animation.ts:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. A later life of the same comment was re-added and removed again in 77d93237ef."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-handle.tsx:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. A later life of the same comment was re-added and removed again in 77d93237ef."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/errors/dev-tools-indicator/drag-context.tsx:react-hooks/refs": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/errors/error-message/error-message.tsx:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/errors/error-overlay-call-stack/error-overlay-call-stack.tsx:react-hooks/immutability": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/overview/segment-boundary-trigger.tsx:react-hooks/refs": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx:react-hooks/preserve-manual-memoization#1": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. (Only formatting of a deps array changed.)"
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/overview/segment-explorer.tsx:react-hooks/preserve-manual-memoization#2": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. (Only formatting of a deps array changed.)"
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/terminal/terminal.tsx:react-hooks/preserve-manual-memoization#1": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. (Only formatting of a deps array changed.)"
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/terminal/terminal.tsx:react-hooks/preserve-manual-memoization#2": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. (Only formatting of a deps array changed.)"
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/components/terminal/terminal.tsx:react-hooks/preserve-manual-memoization#3": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line. (Only formatting of a deps array changed.)"
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/container/errors.tsx:react-hooks/preserve-manual-memoization#1": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/container/errors.tsx:react-hooks/preserve-manual-memoization#2": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/container/runtime-error/render-error.tsx:react-hooks/preserve-manual-memoization": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@79706a33e8:packages/next/src/next-devtools/dev-overlay/hooks/use-delayed-render.ts:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment was deleted with no code change because the new plugin build no longer reports this line."
+    },
+    "next.js@6feaddf73e:packages/next/src/client/components/app-router.tsx:react-hooks/rules-of-hooks": {
+      "what": "other",
+      "notes": "Removed in a repo-wide sweep of unused disable directives: it sat above a destructuring line, not a hook (the useEffect below keeps its own disable)."
+    },
+    "next.js@6feaddf73e:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-provider.tsx:react-hooks/rules-of-hooks": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "Workaround ('eprh bug') for a plugin false positive on calling a useEffectEvent function inside an effect; unused after later plugin upgrades and removed in an unused-directive sweep with no code change."
+    },
+    "next.js@6feaddf73e:packages/next/src/next-devtools/dev-overlay/menu/dev-overlay-menu.tsx:react-hooks/rules-of-hooks": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "Workaround ('eprh bug') for a plugin false positive on calling a useEffectEvent function inside an effect; unused after later plugin upgrades and removed in an unused-directive sweep with no code change."
+    },
+    "next.js@77d93237ef:packages/next/src/next-devtools/dev-overlay/components/devtools-indicator/hooks/use-update-animation.ts:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment (re-added after 79706a33e8 removed it once) was deleted again with no code change."
+    },
+    "next.js@77d93237ef:packages/next/src/next-devtools/dev-overlay/components/devtools-panel/resize/resize-handle.tsx:react-hooks/set-state-in-effect": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks bump in a React upgrade; the comment (re-added after 79706a33e8 removed it once) was deleted again with no code change."
+    },
+    "trpc@5c26525e93:packages/react/src/createReactQueryHooks.tsx:react-hooks/exhaustive-deps": {
+      "what": "hook-or-code-deleted",
+      "notes": "The infinite-subscription hook's [lastCursor] refetch effect was deleted with HTTP subscriptions; the subscription effect's disable in the same file stayed."
+    },
+    "trpc@7f6e6eb617:packages/react-query/src/shared/hooks/deprecated/createHooksInternal.tsx:react-hooks/exhaustive-deps": {
+      "what": "hook-or-code-deleted",
+      "notes": "The deprecated v9 hooks file was deleted when v9 support was removed."
+    },
+    "trpc@482065b68b:packages/next/src/app-dir/client.ts:react-hooks/exhaustive-deps": {
+      "what": "hook-or-code-deleted",
+      "notes": "The comment sat in a commented-out experimental useEffect that was deleted in a main-to-next merge."
+    },
+    "trpc@f35eb5a2e2:packages/next/src/withTRPC.tsx:react-hooks/exhaustive-deps": {
+      "what": "effect-restructured",
+      "notes": "The deps array was rewritten to satisfy the rule: the unnecessary trpcClient dependency was dropped from the useMemo ([trpcState])."
+    },
+    "trpc@352da1c271:packages/react-query/src/shared/hooks/createHooksInternal.tsx:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks v7 removed react-hooks/react-compiler; the file-level disable was deleted and the new compiler rules that fire were turned off in config instead."
+    },
+    "trpc@352da1c271:packages/tanstack-react-query/src/internals/subscriptionOptions.ts:react-hooks/react-compiler": {
+      "what": "rule-renamed-or-reconfigured",
+      "notes": "eslint-plugin-react-hooks v7 removed react-hooks/react-compiler; the line disable was deleted (the exhaustive-deps disable below stayed) and the new compiler rules were turned off in config."
+    }
+  }
+}

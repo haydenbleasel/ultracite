@@ -1,0 +1,45 @@
+--- a/useTTDChatStorage.ts
++++ b/useTTDChatStorage.ts
+@@ -32,7 +32,7 @@
+  * SOFTWARE.
+  */
+ 
+-import { useCallback, useEffect, useRef } from "react";
++import { useCallback, useEffect, useEffectEvent, useRef } from "react";
+ // STUB (not part of the original source): what lines 2-8 import, reduced to what this file uses.
+ // randomId (@excalidraw/common) returns increasing ids. atom, useAtom and getDefaultStore stand in
+ // for jotai through ../../editor-jotai: one shared store whose atoms are read with
+@@ -181,10 +181,10 @@
+     persistenceAdapter,
+   ]);
+ 
+-  // INITIAL LOAD
++  // INITIAL LOAD - loadChats is a no-op once chats are loaded or loading
+   useEffect(() => {
+     loadChats();
+-  }, []);
++  }, [loadChats]);
+ 
+   const saveCurrentChat = useCallback(async () => {
+     if (chatHistory.messages.length === 0) {
+@@ -248,10 +248,18 @@
+     }
+   }, [chatHistory, setSavedChats, persistenceAdapter]);
+ 
+-  // Auto-save when generation completes
++  // Auto-save when generation completes. The effect passes in the message
++  // count and last message id so that a change to either triggers a save,
++  // while edits to the rest of the chat (e.g. the prompt) do not.
++  const onMessagesSettled = useEffectEvent(
++    (_messageCount: number, _lastMessageId: string | undefined) => {
++      saveCurrentChat();
++    }
++  );
++
+   useEffect(() => {
+     if (!lastMessageInHistory?.isGenerating) {
+-      saveCurrentChat();
++      onMessagesSettled(chatHistory.messages?.length, lastMessageInHistory?.id);
+     }
+   }, [
+     chatHistory.messages?.length,

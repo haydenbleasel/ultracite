@@ -1,0 +1,63 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -83,7 +83,7 @@
+ // ── end of STUB ────────────────────────────────────────────────────────
+ 
+ import type { ChangeEvent } from "react";
+-import { useEffect, useEffectEvent, useState } from "react";
++import { useState } from "react";
+ 
+ // [Joshen] This is trying to do the same thing as TimeSplitInput.tsx
+ // so can we please look to try to combine these 2 components together if possible
+@@ -109,6 +109,11 @@
+   const [isFocused, setIsFocused] = useState(false);
+   const [error, setError] = useState<string>();
+   const [time, setTime] = useState<Time>(defaultTime || { h: 0, m: 0, s: 0 });
++  const [previousInputs, setPreviousInputs] = useState<{
++    defaultTime?: Time;
++    maximumTimeKey?: string;
++    minimumTimeKey?: string;
++  }>();
+ 
+   const formattedMinimumTime = minimumTime
+     ? dayjs(formatTimeToTimeString(minimumTime), "HH:mm:ss", true)
+@@ -143,22 +148,25 @@
+   const minimumTimeKey = JSON.stringify(minimumTime);
+   const maximumTimeKey = JSON.stringify(maximumTime);
+ 
+-  const validateFromEffect = useEffectEvent((value: Time = time) => {
+-    validate(value);
+-  });
+-
+-  useEffect(() => {
+-    if (minimumTimeKey || maximumTimeKey) {
+-      validateFromEffect();
+-    }
+-  }, [minimumTimeKey, maximumTimeKey]);
+-
+-  useEffect(() => {
+-    if (defaultTime) {
++  if (
++    !previousInputs ||
++    defaultTime !== previousInputs.defaultTime ||
++    minimumTimeKey !== previousInputs.minimumTimeKey ||
++    maximumTimeKey !== previousInputs.maximumTimeKey
++  ) {
++    setPreviousInputs({ defaultTime, maximumTimeKey, minimumTimeKey });
++    if (defaultTime && defaultTime !== previousInputs?.defaultTime) {
+       setTime(defaultTime);
+-      validateFromEffect(defaultTime);
++      validate(defaultTime);
++    } else if (
++      (minimumTimeKey || maximumTimeKey) &&
++      (!previousInputs ||
++        minimumTimeKey !== previousInputs.minimumTimeKey ||
++        maximumTimeKey !== previousInputs.maximumTimeKey)
++    ) {
++      validate(time);
+     }
+-  }, [defaultTime]);
++  }
+ 
+   const onFocus = () => setIsFocused(true);
+ 

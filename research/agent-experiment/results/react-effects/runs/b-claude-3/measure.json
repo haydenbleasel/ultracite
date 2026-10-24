@@ -1,0 +1,1316 @@
+{
+  "runId": "b-claude-3",
+  "topic": "react-effects",
+  "subject": "b",
+  "base": "b",
+  "label": "B, the obvious fix breaks it",
+  "config": "oxlint react",
+  "agent": "claude",
+  "cliVersion": "2.1.310 (Claude Code)",
+  "wallSeconds": 153.4,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 22,
+    "leftOutByFilter": {
+      "import/first": 2,
+      "no-empty-function": 1,
+      "no-nested-ternary": 1,
+      "no-shadow": 2,
+      "no-use-before-define": 2,
+      "prefer-named-capture-group": 3,
+      "react/immutability": 1,
+      "react/jsx-no-useless-fragment": 1,
+      "react/set-state-in-effect": 1,
+      "require-unicode-regexp": 1,
+      "unicorn/filename-case": 1
+    },
+    "given": [
+      {
+        "rule": "react/exhaustive-effect-dependencies",
+        "line": 125,
+        "message": "Found missing effect dependencies",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+      },
+      {
+        "rule": "react/exhaustive-effect-dependencies",
+        "line": 132,
+        "message": "Found missing effect dependencies",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 125,
+        "message": "React Hook useEffect has a complex expression in the dependency array.",
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 125,
+        "message": "React Hook useEffect has a complex expression in the dependency array.",
+        "help": "Extract the expression to a separate variable so it can be statically checked.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 123,
+        "message": "React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+        "help": "Either include it or remove the dependency array.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 130,
+        "message": "React Hook useEffect has a missing dependency: 'validate'",
+        "help": "Either include it or remove the dependency array.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "bd6fbb6e749e118f65ec37a7fbe0b9d32f671a94f0e31333870d23e079e478d0",
+    "parseError": false,
+    "views": {
+      "oxlint react": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:123: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+          "react/exhaustive-effect-dependencies:125: Found missing effect dependencies",
+          "react-hooks/exhaustive-deps:130: React Hook useEffect has a missing dependency: 'validate'",
+          "react/exhaustive-effect-dependencies:132: Found missing effect dependencies"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:123: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+          "react/exhaustive-effect-dependencies:125: Found missing effect dependencies",
+          "react-hooks/exhaustive-deps:130: React Hook useEffect has a missing dependency: 'validate'",
+          "react/exhaustive-effect-dependencies:132: Found missing effect dependencies"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 4,
+          "react/exhaustive-effect-dependencies": 2,
+          "react/immutability": 1,
+          "react/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "import/first": 2,
+          "no-empty-function": 1,
+          "no-nested-ternary": 1,
+          "no-shadow": 2,
+          "no-use-before-define": 2,
+          "prefer-named-capture-group": 3,
+          "react-hooks/exhaustive-deps": 4,
+          "react/exhaustive-effect-dependencies": 2,
+          "react/immutability": 1,
+          "react/jsx-no-useless-fragment": 1,
+          "react/set-state-in-effect": 1,
+          "require-unicode-regexp": 1,
+          "unicorn/filename-case": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "eslint react": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+          "react-hooks/exhaustive-deps:132: React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array."
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+          "react-hooks/exhaustive-deps:132: React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array."
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 4,
+          "react-hooks/immutability": 1,
+          "react-hooks/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/no-empty-function": 1,
+          "@typescript-eslint/no-shadow": 2,
+          "@typescript-eslint/no-unused-vars": 4,
+          "@typescript-eslint/no-use-before-define": 2,
+          "github/filenames-match-regex": 1,
+          "import-x/first": 2,
+          "import-x/order": 1,
+          "no-nested-ternary": 1,
+          "prefer-named-capture-group": 3,
+          "react-hooks/exhaustive-deps": 4,
+          "react-hooks/immutability": 1,
+          "react-hooks/set-state-in-effect": 1,
+          "react/jsx-no-leaked-render": 1,
+          "react/jsx-no-useless-fragment": 1,
+          "react/no-unused-prop-types": 1,
+          "react/prefer-read-only-props": 8,
+          "require-unicode-regexp": 1,
+          "sonarjs/function-name": 2,
+          "sonarjs/no-built-in-override": 1,
+          "sonarjs/no-globals-shadowing": 1,
+          "sonarjs/no-nested-conditional": 1,
+          "unicorn/consistent-arrow-return-style": 3,
+          "unicorn/consistent-boolean-name": 2,
+          "unicorn/name-replacements": 3,
+          "unicorn/no-unnecessary-parameters": 2,
+          "unicorn/prefer-early-return": 1,
+          "unicorn/prefer-global-number-constants": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "eslint react, every file": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+          "react-hooks/exhaustive-deps:132: React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array."
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+          "react-hooks/exhaustive-deps:125: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+          "react-hooks/exhaustive-deps:132: React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array."
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 4,
+          "react-hooks/immutability": 1,
+          "react-hooks/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/no-empty-function": 1,
+          "@typescript-eslint/no-shadow": 2,
+          "@typescript-eslint/no-unused-vars": 4,
+          "@typescript-eslint/no-use-before-define": 2,
+          "github/filenames-match-regex": 1,
+          "import-x/first": 2,
+          "import-x/order": 1,
+          "no-nested-ternary": 1,
+          "prefer-named-capture-group": 3,
+          "react-hooks/exhaustive-deps": 4,
+          "react-hooks/immutability": 1,
+          "react-hooks/set-state-in-effect": 1,
+          "react/jsx-no-leaked-render": 1,
+          "react/jsx-no-useless-fragment": 1,
+          "react/no-unused-prop-types": 1,
+          "react/prefer-read-only-props": 8,
+          "require-unicode-regexp": 1,
+          "sonarjs/function-name": 2,
+          "sonarjs/no-built-in-override": 1,
+          "sonarjs/no-globals-shadowing": 1,
+          "sonarjs/no-nested-conditional": 1,
+          "unicorn/consistent-arrow-return-style": 3,
+          "unicorn/consistent-boolean-name": 2,
+          "unicorn/name-replacements": 3,
+          "unicorn/no-unnecessary-parameters": 2,
+          "unicorn/prefer-early-return": 1,
+          "unicorn/prefer-global-number-constants": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "biome react": {
+        "depHonor": [
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on maximumTime.",
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on minimumTime.",
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on time.",
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on validate.",
+          "correctness/useExhaustiveDependencies:121: This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+          "correctness/useExhaustiveDependencies:127: This hook does not specify its dependency on validate."
+        ],
+        "depIgnore": [
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on maximumTime.",
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on minimumTime.",
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on time.",
+          "correctness/useExhaustiveDependencies:121: This hook does not specify its dependency on validate.",
+          "correctness/useExhaustiveDependencies:121: This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+          "correctness/useExhaustiveDependencies:127: This hook does not specify its dependency on validate."
+        ],
+        "hookHonor": {
+          "correctness/useExhaustiveDependencies": 6
+        },
+        "parseError": false,
+        "all": {
+          "assist/source/organizeImports": 1,
+          "assist/source/useSortedAttributes": 3,
+          "assist/source/useSortedInterfaceMembers": 2,
+          "correctness/useExhaustiveDependencies": 6,
+          "nursery/useSortedClasses": 2,
+          "performance/noJsxPropsBind": 6,
+          "performance/useTopLevelRegex": 1,
+          "style/noNestedTernary": 1,
+          "style/useFilenamingConvention": 1,
+          "suspicious/noEmptyBlockStatements": 1,
+          "suspicious/noEvolvingTypes": 1,
+          "suspicious/noImplicitAnyLet": 1,
+          "suspicious/noLeakedRender": 1,
+          "suspicious/noShadow": 2,
+          "suspicious/noShadowRestrictedNames": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "react-hooks/exhaustive-deps:123: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+        "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+        "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+        "react/exhaustive-effect-dependencies:125: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps:130: React Hook useEffect has a missing dependency: 'validate'",
+        "react/exhaustive-effect-dependencies:132: Found missing effect dependencies"
+      ],
+      "ignore": [
+        "react-hooks/exhaustive-deps:123: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+        "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+        "react-hooks/exhaustive-deps:125: React Hook useEffect has a complex expression in the dependency array.",
+        "react/exhaustive-effect-dependencies:125: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps:130: React Hook useEffect has a missing dependency: 'validate'",
+        "react/exhaustive-effect-dependencies:132: Found missing effect dependencies"
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "suppressionReported": 0,
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "verdict": "same",
+      "differences": [],
+      "modes": {
+        "stable": {
+          "verdict": "same",
+          "effectRuns": 5,
+          "effectRunsAsWritten": 5,
+          "errors": []
+        },
+        "app": {
+          "verdict": "same",
+          "effectRuns": 10,
+          "effectRunsAsWritten": 10,
+          "errors": []
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": [],
+      "targets": [],
+      "added": {}
+    },
+    "effects": [
+      {
+        "name": "limits",
+        "hook": "useEffect",
+        "line": 121,
+        "deps": [
+          "JSON.stringify(minimumTime)",
+          "JSON.stringify(maximumTime)"
+        ]
+      },
+      {
+        "name": "defaultTime",
+        "hook": "useEffect",
+        "line": 127,
+        "deps": [
+          "defaultTime"
+        ]
+      }
+    ],
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "react/exhaustive-effect-dependencies L125: Found missing effect dependencies",
+        "react/exhaustive-effect-dependencies L132: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps L125: React Hook useEffect has a complex expression in the dependency array.",
+        "react-hooks/exhaustive-deps L125: React Hook useEffect has a complex expression in the dependency array.",
+        "react-hooks/exhaustive-deps L123: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+        "react-hooks/exhaustive-deps L130: React Hook useEffect has a missing dependency: 'validate'"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 153.4,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "useEffectEvent",
+        "kinds": [
+          "useEffectEvent",
+          "extracted a dependency to a variable"
+        ],
+        "targets": [
+          {
+            "name": "limits",
+            "status": "dependencies changed",
+            "hook": "useEffect",
+            "line": 131,
+            "deps": [
+              "minimumTimeKey",
+              "maximumTimeKey"
+            ],
+            "depsBefore": [
+              "JSON.stringify(minimumTime)",
+              "JSON.stringify(maximumTime)"
+            ],
+            "added": [
+              "minimumTimeKey",
+              "maximumTimeKey"
+            ],
+            "addedAsked": [],
+            "removed": [],
+            "extracted": [
+              "JSON.stringify(minimumTime)",
+              "JSON.stringify(maximumTime)"
+            ],
+            "replacedByValue": [],
+            "removedTriggers": [],
+            "callbackChanged": true,
+            "callsEffectEvent": true
+          },
+          {
+            "name": "defaultTime",
+            "status": "callback changed",
+            "hook": "useEffect",
+            "line": 137,
+            "deps": [
+              "defaultTime"
+            ],
+            "depsBefore": [
+              "defaultTime"
+            ],
+            "added": [],
+            "addedAsked": [],
+            "removed": [],
+            "extracted": [],
+            "replacedByValue": [],
+            "removedTriggers": [],
+            "callbackChanged": true,
+            "callsEffectEvent": true
+          }
+        ],
+        "added": {
+          "useEffectEvent": 2
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "dd3b96b9877842339dc6706ca1f9d66e02abe66131294de23f3fd1428ba2962c",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react/immutability": 1,
+              "react/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "import/first": 2,
+              "no-empty-function": 1,
+              "no-nested-ternary": 1,
+              "no-shadow": 2,
+              "no-use-before-define": 2,
+              "prefer-named-capture-group": 3,
+              "react/immutability": 1,
+              "react/jsx-no-useless-fragment": 1,
+              "react/set-state-in-effect": 1,
+              "require-unicode-regexp": 1,
+              "unicorn/filename-case": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-shadow": 2,
+              "@typescript-eslint/no-unused-vars": 4,
+              "@typescript-eslint/no-use-before-define": 2,
+              "github/filenames-match-regex": 1,
+              "import-x/first": 2,
+              "import-x/order": 1,
+              "no-nested-ternary": 1,
+              "prefer-named-capture-group": 3,
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1,
+              "react/jsx-no-leaked-render": 1,
+              "react/jsx-no-useless-fragment": 1,
+              "react/no-unused-prop-types": 1,
+              "react/prefer-read-only-props": 8,
+              "require-unicode-regexp": 1,
+              "sonarjs/function-name": 2,
+              "sonarjs/no-built-in-override": 1,
+              "sonarjs/no-globals-shadowing": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "unicorn/consistent-arrow-return-style": 3,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 3,
+              "unicorn/no-unnecessary-parameters": 2,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-global-number-constants": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-shadow": 2,
+              "@typescript-eslint/no-unused-vars": 4,
+              "@typescript-eslint/no-use-before-define": 2,
+              "github/filenames-match-regex": 1,
+              "import-x/first": 2,
+              "import-x/order": 1,
+              "no-nested-ternary": 1,
+              "prefer-named-capture-group": 3,
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1,
+              "react/jsx-no-leaked-render": 1,
+              "react/jsx-no-useless-fragment": 1,
+              "react/no-unused-prop-types": 1,
+              "react/prefer-read-only-props": 8,
+              "require-unicode-regexp": 1,
+              "sonarjs/function-name": 2,
+              "sonarjs/no-built-in-override": 1,
+              "sonarjs/no-globals-shadowing": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "unicorn/consistent-arrow-return-style": 3,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 3,
+              "unicorn/no-unnecessary-parameters": 2,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-global-number-constants": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "assist/source/organizeImports": 1,
+              "assist/source/useSortedAttributes": 3,
+              "assist/source/useSortedInterfaceMembers": 2,
+              "nursery/useSortedClasses": 2,
+              "performance/noJsxPropsBind": 6,
+              "performance/useTopLevelRegex": 1,
+              "style/noNestedTernary": 1,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noEmptyBlockStatements": 1,
+              "suspicious/noEvolvingTypes": 1,
+              "suspicious/noImplicitAnyLet": 1,
+              "suspicious/noLeakedRender": 1,
+              "suspicious/noShadow": 2,
+              "suspicious/noShadowRestrictedNames": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "same",
+          "differences": [],
+          "modes": {
+            "stable": {
+              "verdict": "same",
+              "effectRuns": 5,
+              "effectRunsAsWritten": 5,
+              "errors": []
+            },
+            "app": {
+              "verdict": "same",
+              "effectRuns": 10,
+              "effectRunsAsWritten": 10,
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "useEffectEvent",
+          "kinds": [
+            "useEffectEvent",
+            "extracted a dependency to a variable"
+          ],
+          "targets": [
+            {
+              "name": "limits",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 131,
+              "deps": [
+                "minimumTimeKey",
+                "maximumTimeKey"
+              ],
+              "depsBefore": [
+                "JSON.stringify(minimumTime)",
+                "JSON.stringify(maximumTime)"
+              ],
+              "added": [
+                "minimumTimeKey",
+                "maximumTimeKey"
+              ],
+              "addedAsked": [],
+              "removed": [],
+              "extracted": [
+                "JSON.stringify(minimumTime)",
+                "JSON.stringify(maximumTime)"
+              ],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": true
+            },
+            {
+              "name": "defaultTime",
+              "status": "callback changed",
+              "hook": "useEffect",
+              "line": 137,
+              "deps": [
+                "defaultTime"
+              ],
+              "depsBefore": [
+                "defaultTime"
+              ],
+              "added": [],
+              "addedAsked": [],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": true
+            }
+          ],
+          "added": {
+            "useEffectEvent": 2
+          },
+          "functions": [
+            {
+              "name": "validate",
+              "before": "function",
+              "after": "function",
+              "movedIntoEffect": false,
+              "movedAboveEffects": false,
+              "wrapped": null
+            }
+          ]
+        },
+        "effects": [
+          {
+            "name": "limits",
+            "hook": "useEffect",
+            "line": 131,
+            "deps": [
+              "minimumTimeKey",
+              "maximumTimeKey"
+            ]
+          },
+          {
+            "name": "defaultTime",
+            "hook": "useEffect",
+            "line": 137,
+            "deps": [
+              "defaultTime"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "useEffectEvent"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "dd3b96b9877842339dc6706ca1f9d66e02abe66131294de23f3fd1428ba2962c",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react/immutability": 1,
+              "react/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "import/first": 2,
+              "no-empty-function": 1,
+              "no-nested-ternary": 1,
+              "no-shadow": 2,
+              "no-use-before-define": 2,
+              "prefer-named-capture-group": 3,
+              "react/immutability": 1,
+              "react/jsx-no-useless-fragment": 1,
+              "react/set-state-in-effect": 1,
+              "require-unicode-regexp": 1,
+              "unicorn/filename-case": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-shadow": 2,
+              "@typescript-eslint/no-unused-vars": 4,
+              "@typescript-eslint/no-use-before-define": 2,
+              "github/filenames-match-regex": 1,
+              "import-x/first": 2,
+              "import-x/order": 1,
+              "no-nested-ternary": 1,
+              "prefer-named-capture-group": 3,
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1,
+              "react/jsx-no-leaked-render": 1,
+              "react/jsx-no-useless-fragment": 1,
+              "react/no-unused-prop-types": 1,
+              "react/prefer-read-only-props": 8,
+              "require-unicode-regexp": 1,
+              "sonarjs/function-name": 2,
+              "sonarjs/no-built-in-override": 1,
+              "sonarjs/no-globals-shadowing": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "unicorn/consistent-arrow-return-style": 3,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 3,
+              "unicorn/no-unnecessary-parameters": 2,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-global-number-constants": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-shadow": 2,
+              "@typescript-eslint/no-unused-vars": 4,
+              "@typescript-eslint/no-use-before-define": 2,
+              "github/filenames-match-regex": 1,
+              "import-x/first": 2,
+              "import-x/order": 1,
+              "no-nested-ternary": 1,
+              "prefer-named-capture-group": 3,
+              "react-hooks/immutability": 1,
+              "react-hooks/set-state-in-effect": 1,
+              "react/jsx-no-leaked-render": 1,
+              "react/jsx-no-useless-fragment": 1,
+              "react/no-unused-prop-types": 1,
+              "react/prefer-read-only-props": 8,
+              "require-unicode-regexp": 1,
+              "sonarjs/function-name": 2,
+              "sonarjs/no-built-in-override": 1,
+              "sonarjs/no-globals-shadowing": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "unicorn/consistent-arrow-return-style": 3,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 3,
+              "unicorn/no-unnecessary-parameters": 2,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-global-number-constants": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "assist/source/organizeImports": 1,
+              "assist/source/useSortedAttributes": 3,
+              "assist/source/useSortedInterfaceMembers": 2,
+              "nursery/useSortedClasses": 2,
+              "performance/noJsxPropsBind": 6,
+              "performance/useTopLevelRegex": 1,
+              "style/noNestedTernary": 1,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noEmptyBlockStatements": 1,
+              "suspicious/noEvolvingTypes": 1,
+              "suspicious/noImplicitAnyLet": 1,
+              "suspicious/noLeakedRender": 1,
+              "suspicious/noShadow": 2,
+              "suspicious/noShadowRestrictedNames": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "same",
+          "differences": [],
+          "modes": {
+            "stable": {
+              "verdict": "same",
+              "effectRuns": 5,
+              "effectRunsAsWritten": 5,
+              "errors": []
+            },
+            "app": {
+              "verdict": "same",
+              "effectRuns": 10,
+              "effectRunsAsWritten": 10,
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "useEffectEvent",
+          "kinds": [
+            "useEffectEvent",
+            "extracted a dependency to a variable"
+          ],
+          "targets": [
+            {
+              "name": "limits",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 131,
+              "deps": [
+                "minimumTimeKey",
+                "maximumTimeKey"
+              ],
+              "depsBefore": [
+                "JSON.stringify(minimumTime)",
+                "JSON.stringify(maximumTime)"
+              ],
+              "added": [
+                "minimumTimeKey",
+                "maximumTimeKey"
+              ],
+              "addedAsked": [],
+              "removed": [],
+              "extracted": [
+                "JSON.stringify(minimumTime)",
+                "JSON.stringify(maximumTime)"
+              ],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": true
+            },
+            {
+              "name": "defaultTime",
+              "status": "callback changed",
+              "hook": "useEffect",
+              "line": 137,
+              "deps": [
+                "defaultTime"
+              ],
+              "depsBefore": [
+                "defaultTime"
+              ],
+              "added": [],
+              "addedAsked": [],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": true
+            }
+          ],
+          "added": {
+            "useEffectEvent": 2
+          },
+          "functions": [
+            {
+              "name": "validate",
+              "before": "function",
+              "after": "function",
+              "movedIntoEffect": false,
+              "movedAboveEffects": false,
+              "wrapped": null
+            }
+          ]
+        },
+        "effects": [
+          {
+            "name": "limits",
+            "hook": "useEffect",
+            "line": 131,
+            "deps": [
+              "minimumTimeKey",
+              "maximumTimeKey"
+            ]
+          },
+          {
+            "name": "defaultTime",
+            "hook": "useEffect",
+            "line": 137,
+            "deps": [
+              "defaultTime"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "useEffectEvent"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingDependencyRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 9,
+        "costUSD": 0.7893430000000001,
+        "tokens": {
+          "input": 18,
+          "output": 14750,
+          "cacheCreation": 51179,
+          "cacheRead": 424195
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "ToolSearch",
+          "WebFetch",
+          "Edit",
+          "Edit"
+        ],
+        "toolNames": [
+          "Read",
+          "Bash",
+          "ToolSearch",
+          "WebFetch",
+          "Edit"
+        ],
+        "toolCallTargets": [
+          "<run-root>/b-claude-3/TimeInput.tsx",
+          "cat <run-root>/b-claude-3/TimeInput.tsx.c5f71852.json",
+          "ls -la && ls -la .. && ls ../.. ; for d in . .. ../..; do ls $d/node_modules 2>/dev/null | head -30; done; which oxlint ultracite npx",
+          "ls -la <run-root>/b-claude-3 <run-root> <tmp>/ultracite-agent-experiment",
+          "ls -la <run-root>/b-claude-3",
+          "cat package.json oxlint.config.ts tsconfig.json oxfmt.config.ts",
+          null,
+          null,
+          "<run-root>/b-claude-3/TimeInput.tsx",
+          "<run-root>/b-claude-3/TimeInput.tsx"
+        ],
+        "toolErrors": [
+          "A variable in this command can't be checked before it runs",
+          "ls in '<run-root>' was blocked. For security, Claude Code may only list files in the allowed working directories for this session: '<tmp>/ultracite-agent-experime",
+          "Claude requested permissions to use WebFetch, but you haven't granted it yet."
+        ],
+        "commands": [
+          {
+            "command": "cat <run-root>/b-claude-3/TimeInput.tsx.c5f71852.json",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "ls -la && ls -la .. && ls ../.. ; for d in . .. ../..; do ls $d/node_modules 2>/dev/null | head -30; done; which oxlint ultracite npx",
+            "refused": true,
+            "refusal": "A variable in this command can't be checked before it runs"
+          },
+          {
+            "command": "ls -la <run-root>/b-claude-3 <run-root> <tmp>/ultracite-agent-experiment",
+            "refused": true,
+            "refusal": "ls in '<run-root>' was blocked. For security, Claude Code may only list files in the allowed working directories "
+          },
+          {
+            "command": "ls -la <run-root>/b-claude-3",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "cat package.json oxlint.config.ts tsconfig.json oxfmt.config.ts",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "ls -la && ls -la .. && ls ../.. ; for d in . .. ../..; do ls $d/node_modules 2>/dev/null | head -30; done; which oxlint ultracite npx",
+          "ls -la <run-root>/b-claude-3 <run-root> <tmp>/ultracite-agent-experiment"
+        ],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "readInstalledHono": [],
+        "readReactSources": [],
+        "usedReactTypes": [],
+        "webAccess": [
+          "{\"tool\":\"ToolSearch\",\"query\":\"select:WebFetch\",\"max_results\":1}",
+          "{\"tool\":\"WebFetch\",\"url\":\"https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html\",\"prompt\":\"Reproduce the full rule description, including what it flags (missing deps, extra/unnecessary deps, non-reactive deps), how it treats useEffectEvent, refs, setState, and any co"
+        ],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "import { useEffect, useEffectEvent, useState } from \"react\";",
+          "  // Compare the bounds by value so new objects with the same time don't re-run validation\n  const minimumTimeKey = JSON.stringify(minimumTime);\n  const maximumTimeKey = JSON.stringify(maximumTime);\n\n  // Read the latest time and validate without re-running the effects below when they change\n  const onBoundsChange = useEffectEvent(() => validate(time));\n  const onDefaultTimeChange = useEffectEvent((nextTime: Time) =>\n    validate(nextTime)\n  );\n\n  useEffect(() => {\n    if (minimumTimeKey || maximumTimeKey) {\n      onBoundsChange();\n    }\n  }, [minimumTimeKey, maximumTimeKey]);\n\n  useEffect(() => {\n    if (defaultTime) {\n      setTime(defaultTime);\n      onDefaultTimeChange(defaultTime);\n    }\n  }, [defaultTime]);"
+        ],
+        "finalMessage": "I've fixed all six issues in `TimeInput.tsx`, but I couldn't confirm it with the linter. The folder has no `node_modules`, so I couldn't run Ultracite or oxlint, and web access wasn't allowed, so I couldn't check the rule docs either.\n\n**What I changed:**\n- **Issues 3 and 4 (complex expressions in the dependency list):** I moved the two `JSON.stringify(...)` calls into variables, `minimumTimeKey` and `maximumTimeKey`, as the rule's help text says. The bounds are still compared by value, so a parent passing a new object with the same time still won't re-run validation. The effect now checks `minimumTimeKey || maximumTimeKey` instead of `minimumTime || maximumTime`. That gives the same result, because `JSON.stringify(undefined)` is `undefined` and any time object turns into a non-empty string.\n- **Issues 1 and 5 (missing `validate`, `time`, `minimumTime`, `maximumTime`):** Adding `time` to the dependencies would change behaviour. Validation would run on every keystroke and show \"Please enter a valid time\" while the user is still typing. Instead, the effect now calls `onBoundsChange`, a `useEffectEvent` that reads the latest `time` and `validate` without being a dependency. The dependency list is now `[minimumTimeKey, maximumTimeKey]`, which is exactly what the effect body uses.\n- **Issues 2 and 6 (missing `validate`):** The `defaultTime` effect now calls `onDefaultTimeChange(defaultTime)`, also a `useEffectEvent`. So `[defaultTime]` is the complete list, and the effect still runs only when `defaultTime` changes.\n\nI added `useEffectEvent` to the React import. It's stable in React 19.2 and later, and the project uses `^19.3.0`. Both effects still run at the same times with the same values as before. No suppression comments were added, and no other file was touched.\n\n**Remaining risk:** the fix assumes both rules recognise `useEffectEvent` results and don't expect them in the dependency list, which current versions are designed to do.",
+        "understood": {
+          "behaviourChange": [
+            "That gives the same result, because `JSON.stringify(undefined)` is `undefined` and any time object turns into a non-empty string. - **Issues 1 and 5 (missing `validate`, `time`, `minimumTime`, `maximumTime`):** Adding `time` to the dependencies would change behaviour."
+          ],
+          "stale": [],
+          "loop": [],
+          "resubscribe": [],
+          "tdz": [],
+          "mountOnly": [],
+          "useEffectEvent": [
+            "Instead, the effect now calls `onBoundsChange`, a `useEffectEvent` that reads the latest `time` and `validate` without being a dependency.",
+            "The dependency list is now `[minimumTimeKey, maximumTimeKey]`, which is exactly what the effect body uses. - **Issues 2 and 6 (missing `validate`):** The `defaultTime` effect now calls `onDefaultTimeChange(defaultTime)`, also a `useEffectEvent`.",
+            "I added `useEffectEvent` to the React import.",
+            "**Remaining risk:** the fix assumes both rules recognise `useEffectEvent` results and don't expect them in the dependency list, which current versions are designed to do.",
+            "React 19.3 is installed, so `useEffectEvent` can be used here."
+          ],
+          "reactDocs": [],
+          "keystroke": [
+            "Validation would run on every keystroke and show \"Please enter a valid time\" while the user is still typing."
+          ],
+          "trigger": [],
+          "deliberate": [],
+          "review": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "reactDocs": 6,
+          "webAccess": 138,
+          "sessionLogs": 5
+        },
+        "exposureInToolCalls": {
+          "reactDocs": 2,
+          "webAccess": 19
+        },
+        "exposureInToolInputs": {
+          "webAccess": 3
+        },
+        "outsideRunDir": [
+          {
+            "tool": "Bash",
+            "target": "ls -la && ls -la .. && ls ../.. ; for d in . .. ../..; do ls $d/node_modules 2>/dev/null | head -30; done; which oxlint ultracite npx"
+          },
+          {
+            "tool": "Bash",
+            "target": "ls -la <run-root>/b-claude-3 <run-root> <tmp>/ultracite-agent-experiment"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "useEffectEvent",
+    "response": "behaviour kept, rule satisfied (right)",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 6,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "outro": "Fixed 6 of 6 issues with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 0.789343,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 490142
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "reactDocs": 6,
+      "webAccess": 138,
+      "sessionLogs": 5
+    },
+    "exposureInToolCalls": {
+      "reactDocs": 2,
+      "webAccess": 19
+    },
+    "exposureInToolInputs": {
+      "webAccess": 3
+    },
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "ls -la && ls -la .. && ls ../.. ; for d in . .. ../..; do ls $d/node_modules 2>/dev/null | head -30; done; which oxlint ultracite npx"
+      },
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "ls -la <run-root>/b-claude-3 <run-root> <tmp>/ultracite-agent-experiment"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/b-claude-3/handoff",
+      "../corpus/examples/react-effects",
+      "../corpus/results/react-effects",
+      "../corpus/calibration/react-effects",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/effects-agent-runs.cjs",
+      "../corpus/scripts/effects-calibration.cjs",
+      "../corpus/scripts/effects-census.cjs",
+      "../corpus/scripts/effects-disagreements.cjs",
+      "../corpus/scripts/effects-examples.cjs",
+      "../corpus/scripts/effects-fixes.cjs",
+      "../corpus/scripts/effects-history.cjs",
+      "../corpus/scripts/effects-inventory.cjs",
+      "../corpus/scripts/effects-lib.cjs",
+      "../corpus/scripts/effects-linters.cjs",
+      "../corpus/scripts/effects-markers.cjs",
+      "../corpus/scripts/effects-oracle.cjs",
+      "../corpus/scripts/effects-run-all.cjs",
+      "../corpus/scripts/effects-runtime.cjs",
+      "../corpus/scripts/effects-sample.cjs",
+      "../corpus/scripts/effects-tables.cjs",
+      "../bibliography/react-effects.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-react-effects-batch-logs",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/a-codex-3",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-codex-1",
+      "<run-root>/b-codex-2",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-2",
+      "<run-root>/c-claude-3",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2",
+      "<run-root>/.staging/a-codex-3",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/b-codex-2",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-2",
+      "<run-root>/.staging/c-claude-3",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-pilot"
+    ]
+  }
+}

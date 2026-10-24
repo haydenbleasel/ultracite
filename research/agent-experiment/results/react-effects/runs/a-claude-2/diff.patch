@@ -1,0 +1,53 @@
+--- a/index.ts
++++ b/index.ts
+@@ -38,7 +38,7 @@
+ // ../dom/render, where each entry is [context, node] for the component being rendered and context[4]
+ // says whether it's hydrating; this stub always describes a client render that isn't hydrating, so the
+ // server-snapshot path never runs.
+-import { useEffect, useState } from "react";
++import { useEffect, useRef, useState } from "react";
+ 
+ type Context = [unknown, unknown, unknown, unknown, boolean];
+ const buildDataStack: [Context, unknown][] = [
+@@ -52,30 +52,28 @@
+   getServerSnapshot?: () => T
+ ): T => {
+   const buildData = buildDataStack.at(-1) as [Context, unknown];
+-  if (!buildData) {
+-    // now a stringify process, maybe in server side
+-    if (!getServerSnapshot) {
+-      throw new Error(
+-        "getServerSnapshot is required for server side rendering"
+-      );
+-    }
+-    return getServerSnapshot();
++  // no buildData means a stringify process, maybe in server side; the server snapshot is used then
++  if (!(buildData || getServerSnapshot)) {
++    throw new Error("getServerSnapshot is required for server side rendering");
+   }
+ 
+   const [serverSnapshotIsUsed] = useState<boolean>(
+-    !!(buildData[0][4] && getServerSnapshot)
++    !!((!buildData || buildData[0][4]) && getServerSnapshot)
+   );
+   const [state, setState] = useState(() =>
+     serverSnapshotIsUsed ? (getServerSnapshot as () => T)() : getSnapshot()
+   );
++  // subscribe once, with the functions given on the first render
++  const storeRef = useRef({ getSnapshot, subscribe });
+   useEffect(() => {
++    const store = storeRef.current;
+     if (serverSnapshotIsUsed) {
+-      setState(getSnapshot());
++      setState(store.getSnapshot());
+     }
+-    return subscribe(() => {
+-      setState(getSnapshot());
++    return store.subscribe(() => {
++      setState(store.getSnapshot());
+     });
+-  }, []);
++  }, [serverSnapshotIsUsed]);
+ 
+   return state;
+ };

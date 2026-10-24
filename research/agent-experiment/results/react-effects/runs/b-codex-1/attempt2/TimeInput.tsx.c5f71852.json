@@ -1,0 +1,45 @@
+{
+  "diagnostics": [
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "TimeInput.tsx",
+      "help": "Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.",
+      "line": 164,
+      "message": "Calling setState synchronously within an effect can trigger cascading renders",
+      "raw": {
+        "message": "Calling setState synchronously within an effect can trigger cascading renders",
+        "code": "react(set-state-in-effect)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/set-state-in-effect.html",
+        "help": "Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.",
+        "note": "React Compiler skipped optimizing this component or hook. Additional guidance: https://react.dev/reference/eslint-plugin-react-hooks/lints/set-state-in-effect",
+        "filename": "TimeInput.tsx",
+        "labels": [
+          {
+            "label": "Avoid calling setState() directly within an effect",
+            "span": {
+              "offset": 5716,
+              "length": 7,
+              "line": 164,
+              "column": 7
+            }
+          },
+          {
+            "label": "This is the containing effect",
+            "span": {
+              "offset": 5669,
+              "length": 9,
+              "line": 162,
+              "column": 3
+            }
+          }
+        ]
+      },
+      "rule": "react/set-state-in-effect",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/set-state-in-effect.html"
+    }
+  ],
+  "file": "TimeInput.tsx"
+}

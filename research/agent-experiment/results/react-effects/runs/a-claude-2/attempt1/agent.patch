@@ -1,0 +1,23 @@
+--- a/index.ts
++++ b/index.ts
+@@ -68,14 +68,16 @@
+   const [state, setState] = useState(() =>
+     serverSnapshotIsUsed ? (getServerSnapshot as () => T)() : getSnapshot()
+   );
++  // subscribe once, with the functions given on the first render
++  const [store] = useState(() => ({ getSnapshot, subscribe }));
+   useEffect(() => {
+     if (serverSnapshotIsUsed) {
+-      setState(getSnapshot());
++      setState(store.getSnapshot());
+     }
+-    return subscribe(() => {
+-      setState(getSnapshot());
++    return store.subscribe(() => {
++      setState(store.getSnapshot());
+     });
+-  }, []);
++  }, [serverSnapshotIsUsed, store]);
+ 
+   return state;
+ };

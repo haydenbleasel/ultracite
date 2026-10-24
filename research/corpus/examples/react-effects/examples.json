@@ -1,0 +1,3108 @@
+{
+  "generated": "2026-10-24",
+  "note": "Measured by scripts/effects-examples.cjs. `asCommitted` lints the subject as it is in this folder (with any upstream disable comments); `prepared` is what the experiment hands an agent: the subject with stripFields removed from its header and the upstream `// eslint-disable-next-line react-hooks/exhaustive-deps` comments deleted. Oxlint's view is the root config `ultracite init` writes for React (core + react); its dependency rule's fix is dangerous, so `oxlint --fix` (what `ultracite fix` runs) leaves the diagnostic for the agent. `fixes` run each linter's fix pass on the prepared subject. `variants` are hand-made edits; `intent` is the design, `oracle.verdict` the measurement.",
+  "stripFields": [
+    "Effects subject",
+    "Rules it hits",
+    "Why the warning is a real bug",
+    "Why the obvious fix breaks it",
+    "Why the omission is deliberate",
+    "Upstream disable comments",
+    "What the project did",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses"
+  ],
+  "subjects": {
+    "b": {
+      "notes": [
+        "Both effects are flagged. The first also gets ESLint's and Oxlint's complex-expression diagnostic for JSON.stringify(minimumTime), and the React Compiler rules (react/immutability, react/set-state-in-effect) fire too.",
+        "Every linter's fix adds validate to an array evaluated during render, before `const validate` is initialised, so the component throws a ReferenceError on its first render (and tsc reports TS2448)."
+      ],
+      "asCommitted": {
+        "biome": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on maximumTime.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on time.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on minimumTime.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on validate.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 124,
+              "message": "This hook does not specify its dependency on validate.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "lint/performance/noJsxPropsBind": 6,
+            "lint/nursery/useSortedClasses": 5,
+            "assist/source/useSortedAttributes": 3,
+            "lint/style/useBlockStatements": 2,
+            "lint/style/useConsistentArrowReturn": 2,
+            "lint/suspicious/noShadow": 2,
+            "assist/source/organizeImports": 1,
+            "assist/source/useSortedInterfaceMembers": 1,
+            "format": 1,
+            "lint/complexity/noBannedTypes": 1,
+            "lint/complexity/noUselessUndefined": 1,
+            "lint/complexity/noUselessUndefinedInitialization": 1,
+            "lint/correctness/noUndeclaredDependencies": 1,
+            "lint/performance/useTopLevelRegex": 1,
+            "lint/style/noNestedTernary": 1,
+            "lint/style/useConsistentTypeDefinitions": 1,
+            "lint/style/useImportType": 1,
+            "lint/suspicious/noEmptyBlockStatements": 1,
+            "lint/suspicious/noLeakedRender": 1,
+            "lint/suspicious/noShadowRestrictedNames": 1
+          }
+        },
+        "eslint": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 121,
+              "message": "Error: Cannot access variable before it is declared",
+              "rule": "react-hooks/immutability",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them or remove the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [maximumTime, minimumTime, time, validate]",
+                  "text": "[maximumTime, minimumTime, time, validate]"
+                }
+              ]
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 126,
+              "message": "Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react-hooks/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 129,
+              "message": "React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [defaultTime, validate]",
+                  "text": "[defaultTime, validate]"
+                }
+              ]
+            }
+          ],
+          "otherRules": {
+            "react/prefer-read-only-props": 8,
+            "@typescript-eslint/no-unused-vars": 4,
+            "prefer-named-capture-group": 3,
+            "unicorn/name-replacements": 3,
+            "@typescript-eslint/no-shadow": 2,
+            "@typescript-eslint/no-use-before-define": 2,
+            "arrow-body-style": 2,
+            "curly": 2,
+            "sonarjs/function-name": 2,
+            "unicorn/consistent-boolean-name": 2,
+            "unicorn/no-unnecessary-parameters": 2,
+            "@typescript-eslint/consistent-type-definitions": 1,
+            "@typescript-eslint/consistent-type-imports": 1,
+            "@typescript-eslint/no-empty-function": 1,
+            "@typescript-eslint/no-wrapper-object-types": 1,
+            "import-x/first": 1,
+            "no-nested-ternary": 1,
+            "no-undef-init": 1,
+            "react/jsx-no-leaked-render": 1,
+            "react/jsx-no-useless-fragment": 1,
+            "react/no-unused-prop-types": 1,
+            "require-unicode-regexp": 1,
+            "sonarjs/no-built-in-override": 1,
+            "sonarjs/no-globals-shadowing": 1,
+            "sonarjs/no-nested-conditional": 1,
+            "sonarjs/no-primitive-wrappers": 1,
+            "sonarjs/no-undefined-assignment": 1,
+            "unicorn/consistent-arrow-return-style": 1,
+            "unicorn/no-manually-wrapped-comments": 1,
+            "unicorn/no-useless-undefined": 1,
+            "unicorn/prefer-early-return": 1,
+            "unicorn/prefer-global-number-constants": 1
+          }
+        },
+        "oxlint": {
+          "hookRules": [
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `maximumTime`",
+                "Missing dependency `minimumTime`",
+                "Missing dependency `time`",
+                "Missing dependency `validate`"
+              ],
+              "line": 122,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `validate`"
+              ],
+              "line": 129,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "`validate` is read while its declaration is still being initialized. Move the access after initialization. For a recursive callback, use a named function expression or restructure the callback so it does not capture itself during initialization",
+              "labels": [
+                "`validate` is read during its own initialization"
+              ],
+              "line": 121,
+              "message": "Cannot access variable while it is being initialized",
+              "rule": "react/immutability",
+              "suggestions": []
+            },
+            {
+              "help": "Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.",
+              "labels": [
+                "Avoid calling setState() directly within an effect",
+                "This is the containing effect"
+              ],
+              "line": 126,
+              "message": "Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": "Extract the expression to a separate variable so it can be statically checked.",
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Extract the expression to a separate variable so it can be statically checked.",
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [],
+              "line": 121,
+              "message": "React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [
+                "useEffect uses `validate` here"
+              ],
+              "line": 127,
+              "message": "React Hook useEffect has a missing dependency: 'validate'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "prefer-named-capture-group": 3,
+            "arrow-body-style": 2,
+            "curly": 2,
+            "no-shadow": 2,
+            "no-use-before-define": 2,
+            "import/first": 1,
+            "no-empty-function": 1,
+            "no-nested-ternary": 1,
+            "react/jsx-no-useless-fragment": 1,
+            "require-unicode-regexp": 1,
+            "typescript/ban-types": 1,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/consistent-type-imports": 1,
+            "typescript/no-wrapper-object-types": 1,
+            "unicorn/no-useless-undefined": 1
+          }
+        },
+        "react-doctor": {
+          "hookRules": [],
+          "otherRules": {}
+        }
+      },
+      "baseTrace": {
+        "stable": {
+          "calls": [
+            "12:20:30",
+            "12:5:30"
+          ],
+          "steps": [
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "10",
+                "20",
+                "30"
+              ],
+              "label": "mount",
+              "onChange": 0
+            },
+            {
+              "border": "focused",
+              "error": null,
+              "fields": [
+                "1",
+                "20",
+                "30"
+              ],
+              "label": "type H 1",
+              "onChange": 0
+            },
+            {
+              "border": "focused",
+              "error": null,
+              "fields": [
+                "12",
+                "20",
+                "30"
+              ],
+              "label": "type H 12",
+              "onChange": 0
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "20",
+                "30"
+              ],
+              "label": "blur H 12",
+              "onChange": 1
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "20",
+                "30"
+              ],
+              "label": "parent re-render",
+              "onChange": 1
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "5",
+                "30"
+              ],
+              "label": "type M 5",
+              "onChange": 1
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "05",
+                "30"
+              ],
+              "label": "blur M 5",
+              "onChange": 2
+            },
+            {
+              "border": "error",
+              "error": "Selected time is before the minimum time allowed",
+              "fields": [
+                "12",
+                "05",
+                "30"
+              ],
+              "label": "minimum 13:00:00",
+              "onChange": 2
+            },
+            {
+              "border": "error",
+              "error": "Selected time is after the maximum time allowed",
+              "fields": [
+                "12",
+                "05",
+                "30"
+              ],
+              "label": "maximum 11:00:00",
+              "onChange": 2
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "08",
+                "00",
+                "00"
+              ],
+              "label": "defaultTime 08:00:00",
+              "onChange": 2
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "08",
+                "00",
+                "4"
+              ],
+              "label": "type S 4",
+              "onChange": 2
+            }
+          ],
+          "cleanups": {},
+          "errors": [],
+          "loop": null,
+          "renders": {
+            "Parent": 5,
+            "TimeInput": 15,
+            "ClockIcon": 15,
+            "Tooltip": 45,
+            "TooltipTrigger": 45,
+            "TooltipContent": 45
+          },
+          "setups": {
+            "useEffect@120": 3,
+            "useEffect@124": 2
+          },
+          "warnings": []
+        },
+        "app": {
+          "calls": [
+            "12:20:30",
+            "12:5:30"
+          ],
+          "steps": [
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "10",
+                "20",
+                "30"
+              ],
+              "label": "mount",
+              "onChange": 0
+            },
+            {
+              "border": "focused",
+              "error": null,
+              "fields": [
+                "1",
+                "20",
+                "30"
+              ],
+              "label": "type H 1",
+              "onChange": 0
+            },
+            {
+              "border": "focused",
+              "error": null,
+              "fields": [
+                "12",
+                "20",
+                "30"
+              ],
+              "label": "type H 12",
+              "onChange": 0
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "20",
+                "30"
+              ],
+              "label": "blur H 12",
+              "onChange": 1
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "20",
+                "30"
+              ],
+              "label": "parent re-render",
+              "onChange": 1
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "5",
+                "30"
+              ],
+              "label": "type M 5",
+              "onChange": 1
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "12",
+                "05",
+                "30"
+              ],
+              "label": "blur M 5",
+              "onChange": 2
+            },
+            {
+              "border": "error",
+              "error": "Selected time is before the minimum time allowed",
+              "fields": [
+                "12",
+                "05",
+                "30"
+              ],
+              "label": "minimum 13:00:00",
+              "onChange": 2
+            },
+            {
+              "border": "error",
+              "error": "Selected time is after the maximum time allowed",
+              "fields": [
+                "12",
+                "05",
+                "30"
+              ],
+              "label": "maximum 11:00:00",
+              "onChange": 2
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "08",
+                "00",
+                "00"
+              ],
+              "label": "defaultTime 08:00:00",
+              "onChange": 2
+            },
+            {
+              "border": "normal",
+              "error": null,
+              "fields": [
+                "08",
+                "00",
+                "4"
+              ],
+              "label": "type S 4",
+              "onChange": 2
+            }
+          ],
+          "cleanups": {},
+          "errors": [],
+          "loop": null,
+          "renders": {
+            "Parent": 7,
+            "TimeInput": 18,
+            "ClockIcon": 18,
+            "Tooltip": 54,
+            "TooltipTrigger": 54,
+            "TooltipContent": 54
+          },
+          "setups": {
+            "useEffect@120": 3,
+            "useEffect@124": 7
+          },
+          "warnings": []
+        }
+      },
+      "deps": [
+        "useEffect@120([JSON.stringify(minimumTime), JSON.stringify(maximumTime)])",
+        "useEffect@124([defaultTime])"
+      ],
+      "file": "effects-b-supabase-time-input.tsx",
+      "fixes": {
+        "oxlint-fix": {
+          "changed": true,
+          "deps": [
+            "useEffect@121([JSON.stringify(minimumTime), JSON.stringify(maximumTime)])",
+            "useEffect@125([defaultTime])"
+          ],
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": []
+        },
+        "oxlint-dangerous": {
+          "changed": true,
+          "deps": [
+            "useEffect@121([JSON.stringify(minimumTime), JSON.stringify(maximumTime), validate, time, minimumTime, maximumTime])",
+            "useEffect@132([defaultTime, validate])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: Cannot access 'validate' before initialization",
+              "app: Cannot access 'validate' before initialization"
+            ],
+            "verdict": "crashes"
+          },
+          "typecheck": [
+            "L126 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L126 TS2454: Variable 'validate' is used before being assigned.",
+            "L137 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L137 TS2454: Variable 'validate' is used before being assigned."
+          ]
+        },
+        "eslint-suggestion": {
+          "changed": true,
+          "deps": [
+            "useEffect@120([maximumTime, minimumTime, time, validate])",
+            "useEffect@124([defaultTime, validate])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: Cannot access 'validate' before initialization",
+              "app: Cannot access 'validate' before initialization"
+            ],
+            "verdict": "crashes"
+          },
+          "typecheck": [
+            "L122 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L122 TS2454: Variable 'validate' is used before being assigned.",
+            "L129 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L129 TS2454: Variable 'validate' is used before being assigned."
+          ]
+        },
+        "biome-write": {
+          "changed": true,
+          "deps": [
+            "useEffect@147([JSON.stringify(minimumTime), JSON.stringify(maximumTime)])",
+            "useEffect@153([defaultTime])"
+          ],
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": []
+        },
+        "biome-unsafe": {
+          "changed": true,
+          "deps": [
+            "useEffect@147([validate, minimumTime, time, maximumTime])",
+            "useEffect@153([defaultTime, validate])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: Cannot access 'validate' before initialization",
+              "app: Cannot access 'validate' before initialization"
+            ],
+            "verdict": "crashes"
+          },
+          "typecheck": [
+            "L151 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L151 TS2454: Variable 'validate' is used before being assigned.",
+            "L158 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L158 TS2454: Variable 'validate' is used before being assigned."
+          ]
+        }
+      },
+      "prepared": {
+        "biome": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on maximumTime.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on time.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on minimumTime.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 120,
+              "message": "This hook does not specify its dependency on validate.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 124,
+              "message": "This hook does not specify its dependency on validate.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "lint/performance/noJsxPropsBind": 6,
+            "lint/nursery/useSortedClasses": 5,
+            "assist/source/useSortedAttributes": 3,
+            "lint/style/useBlockStatements": 2,
+            "lint/style/useConsistentArrowReturn": 2,
+            "lint/suspicious/noShadow": 2,
+            "assist/source/organizeImports": 1,
+            "assist/source/useSortedInterfaceMembers": 1,
+            "format": 1,
+            "lint/complexity/noBannedTypes": 1,
+            "lint/complexity/noUselessUndefined": 1,
+            "lint/complexity/noUselessUndefinedInitialization": 1,
+            "lint/correctness/noUndeclaredDependencies": 1,
+            "lint/performance/useTopLevelRegex": 1,
+            "lint/style/noNestedTernary": 1,
+            "lint/style/useConsistentTypeDefinitions": 1,
+            "lint/style/useImportType": 1,
+            "lint/suspicious/noEmptyBlockStatements": 1,
+            "lint/suspicious/noLeakedRender": 1,
+            "lint/suspicious/noShadowRestrictedNames": 1
+          }
+        },
+        "eslint": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 121,
+              "message": "Error: Cannot access variable before it is declared",
+              "rule": "react-hooks/immutability",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them or remove the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [maximumTime, minimumTime, time, validate]",
+                  "text": "[maximumTime, minimumTime, time, validate]"
+                }
+              ]
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 126,
+              "message": "Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react-hooks/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 129,
+              "message": "React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [defaultTime, validate]",
+                  "text": "[defaultTime, validate]"
+                }
+              ]
+            }
+          ],
+          "otherRules": {
+            "react/prefer-read-only-props": 8,
+            "@typescript-eslint/no-unused-vars": 4,
+            "prefer-named-capture-group": 3,
+            "unicorn/name-replacements": 3,
+            "@typescript-eslint/no-shadow": 2,
+            "@typescript-eslint/no-use-before-define": 2,
+            "arrow-body-style": 2,
+            "curly": 2,
+            "sonarjs/function-name": 2,
+            "unicorn/consistent-boolean-name": 2,
+            "unicorn/no-unnecessary-parameters": 2,
+            "@typescript-eslint/consistent-type-definitions": 1,
+            "@typescript-eslint/consistent-type-imports": 1,
+            "@typescript-eslint/no-empty-function": 1,
+            "@typescript-eslint/no-wrapper-object-types": 1,
+            "import-x/first": 1,
+            "no-nested-ternary": 1,
+            "no-undef-init": 1,
+            "react/jsx-no-leaked-render": 1,
+            "react/jsx-no-useless-fragment": 1,
+            "react/no-unused-prop-types": 1,
+            "require-unicode-regexp": 1,
+            "sonarjs/no-built-in-override": 1,
+            "sonarjs/no-globals-shadowing": 1,
+            "sonarjs/no-nested-conditional": 1,
+            "sonarjs/no-primitive-wrappers": 1,
+            "sonarjs/no-undefined-assignment": 1,
+            "unicorn/consistent-arrow-return-style": 1,
+            "unicorn/no-manually-wrapped-comments": 1,
+            "unicorn/no-useless-undefined": 1,
+            "unicorn/prefer-early-return": 1,
+            "unicorn/prefer-global-number-constants": 1
+          }
+        },
+        "oxlint": {
+          "hookRules": [
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `maximumTime`",
+                "Missing dependency `minimumTime`",
+                "Missing dependency `time`",
+                "Missing dependency `validate`"
+              ],
+              "line": 122,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `validate`"
+              ],
+              "line": 129,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "`validate` is read while its declaration is still being initialized. Move the access after initialization. For a recursive callback, use a named function expression or restructure the callback so it does not capture itself during initialization",
+              "labels": [
+                "`validate` is read during its own initialization"
+              ],
+              "line": 121,
+              "message": "Cannot access variable while it is being initialized",
+              "rule": "react/immutability",
+              "suggestions": []
+            },
+            {
+              "help": "Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.",
+              "labels": [
+                "Avoid calling setState() directly within an effect",
+                "This is the containing effect"
+              ],
+              "line": 126,
+              "message": "Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": "Extract the expression to a separate variable so it can be statically checked.",
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Extract the expression to a separate variable so it can be statically checked.",
+              "labels": [],
+              "line": 122,
+              "message": "React Hook useEffect has a complex expression in the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [],
+              "line": 121,
+              "message": "React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [
+                "useEffect uses `validate` here"
+              ],
+              "line": 127,
+              "message": "React Hook useEffect has a missing dependency: 'validate'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "prefer-named-capture-group": 3,
+            "arrow-body-style": 2,
+            "curly": 2,
+            "no-shadow": 2,
+            "no-use-before-define": 2,
+            "import/first": 1,
+            "no-empty-function": 1,
+            "no-nested-ternary": 1,
+            "react/jsx-no-useless-fragment": 1,
+            "require-unicode-regexp": 1,
+            "typescript/ban-types": 1,
+            "typescript/consistent-type-definitions": 1,
+            "typescript/consistent-type-imports": 1,
+            "typescript/no-wrapper-object-types": 1,
+            "unicorn/no-useless-undefined": 1
+          }
+        },
+        "react-doctor": {
+          "hookRules": [],
+          "otherRules": {}
+        }
+      },
+      "source": {
+        "path": "apps/studio/components/interfaces/Database/Backups/PITR/TimeInput.tsx",
+        "repo": "supabase",
+        "github": "supabase/supabase",
+        "sha": "09f80f528ec47569841408a81668dff90525c48a"
+      },
+      "typecheck": [],
+      "upstreamDisablesRemoved": 0,
+      "variants": [
+        {
+          "deps": [
+            "useEffect@120([JSON.stringify(minimumTime), JSON.stringify(maximumTime)])",
+            "useEffect@124([defaultTime, validate])"
+          ],
+          "dependencyRule": {
+            "biome": 6,
+            "eslint": 4,
+            "oxlint": 4,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on maximumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on time.",
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on minimumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on validate.",
+              "lint/correctness/useExhaustiveDependencies: validate changes on every re-render and should not be used as a hook dependency."
+            ],
+            "eslint": [
+              "react-hooks/immutability: Error: Cannot access variable before it is declared",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-doctor/no-effect-with-fresh-deps: Your useEffect runs every render because dep `validate` is a new function built fresh each time, so `===` always fails.",
+              "react-hooks/exhaustive-deps: The 'validate' function makes the dependencies of useEffect Hook (at line 129) change on every render. To fix this, wrap"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/immutability: Cannot access variable while it is being initialized",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+              "react-hooks/exhaustive-deps: React hook useEffect depends on `validate`, which changes every render"
+            ],
+            "react-doctor": [
+              "react-doctor/no-effect-with-fresh-deps: Your useEffect runs every render because dep `validate` is a new function built fresh each time, so `===` always fails."
+            ]
+          },
+          "id": "b01",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable: Cannot access 'validate' before initialization",
+              "app: Cannot access 'validate' before initialization"
+            ],
+            "verdict": "crashes"
+          },
+          "typecheck": [
+            "L129 TS2448: Block-scoped variable 'validate' used before its declaration.",
+            "L129 TS2454: Variable 'validate' is used before being assigned."
+          ],
+          "what": "add validate to the second effect's array (what each linter's fix does there)"
+        },
+        {
+          "deps": [
+            "useEffect@136([maximumTime, minimumTime, time, validate])",
+            "useEffect@140([defaultTime, validate])"
+          ],
+          "dependencyRule": {
+            "biome": 2,
+            "eslint": 2,
+            "oxlint": 2,
+            "oxlintCompiler": 0
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: validate changes on every re-render and should not be used as a hook dependency.",
+              "lint/correctness/useExhaustiveDependencies: validate changes on every re-render and should not be used as a hook dependency."
+            ],
+            "eslint": [
+              "react-hooks/exhaustive-deps: The 'validate' function makes the dependencies of useEffect Hook (at line 138) change on every render. To fix this, wrap",
+              "react-hooks/exhaustive-deps: The 'validate' function makes the dependencies of useEffect Hook (at line 145) change on every render. To fix this, wrap",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-doctor/no-effect-with-fresh-deps: Your useEffect runs every render because dep `validate` is a new function built fresh each time, so `===` always fails.",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-doctor/no-effect-with-fresh-deps: Your useEffect runs every render because dep `validate` is a new function built fresh each time, so `===` always fails."
+            ],
+            "oxlint": [
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/exhaustive-deps: React hook useEffect depends on `validate`, which changes every render",
+              "react-hooks/exhaustive-deps: React hook useEffect depends on `validate`, which changes every render"
+            ],
+            "react-doctor": [
+              "react-doctor/no-effect-with-fresh-deps: Your useEffect runs every render because dep `validate` is a new function built fresh each time, so `===` always fails.",
+              "react-doctor/no-effect-with-fresh-deps: Your useEffect runs every render because dep `validate` is a new function built fresh each time, so `===` always fails."
+            ]
+          },
+          "id": "b02",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable type H 1: {\"border\":\"focused\",\"error\":null,\"fields\":[\"1\",\"20\",\"30\"],\"label\":\"type H 1\",\"onChange\":0} -> {\"border\":\"focused\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"type H 1\",\"onChange\":0}",
+              "stable type H 12: {\"border\":\"focused\",\"error\":null,\"fields\":[\"12\",\"20\",\"30\"],\"label\":\"type H 12\",\"onChange\":0} -> {\"border\":\"focused\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"type H 12\",\"onChange\":0}",
+              "stable blur H 12: {\"border\":\"normal\",\"error\":null,\"fields\":[\"12\",\"20\",\"30\"],\"label\":\"blur H 12\",\"onChange\":1} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"blur H 12\",\"onChange\":1}",
+              "stable parent re-render: {\"border\":\"normal\",\"error\":null,\"fields\":[\"12\",\"20\",\"30\"],\"label\":\"parent re-render\",\"onChange\":1} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"parent re-render\",\"onChange\":1}",
+              "stable type M 5: {\"border\":\"normal\",\"error\":null,\"fields\":[\"12\",\"5\",\"30\"],\"label\":\"type M 5\",\"onChange\":1} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"type M 5\",\"onChange\":1}",
+              "stable blur M 5: {\"border\":\"normal\",\"error\":null,\"fields\":[\"12\",\"05\",\"30\"],\"label\":\"blur M 5\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"blur M 5\",\"onChange\":2}",
+              "stable minimum 13:00:00: {\"border\":\"error\",\"error\":\"Selected time is before the minimum time allowed\",\"fields\":[\"12\",\"05\",\"30\"],\"label\":\"minimum 13:00:00\",\"onChange\":2} -> {\"border\":\"error\",\"error\":\"Selected time is before the minimum time allowed\",\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"minimum 13:00:00\",\"onChange\":2}",
+              "stable maximum 11:00:00: {\"border\":\"error\",\"error\":\"Selected time is after the maximum time allowed\",\"fields\":[\"12\",\"05\",\"30\"],\"label\":\"maximum 11:00:00\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"maximum 11:00:00\",\"onChange\":2}",
+              "stable type S 4: {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"4\"],\"label\":\"type S 4\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"00\"],\"label\":\"type S 4\",\"onChange\":2}",
+              "stable onChange: [\"12:20:30\",\"12:5:30\"] -> [\"12:20:30\",\"10:5:30\"]",
+              "app type H 1: {\"border\":\"focused\",\"error\":null,\"fields\":[\"1\",\"20\",\"30\"],\"label\":\"type H 1\",\"onChange\":0} -> {\"border\":\"focused\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"type H 1\",\"onChange\":0}",
+              "app type H 12: {\"border\":\"focused\",\"error\":null,\"fields\":[\"12\",\"20\",\"30\"],\"label\":\"type H 12\",\"onChange\":0} -> {\"border\":\"focused\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"type H 12\",\"onChange\":0}",
+              "app type M 5: {\"border\":\"normal\",\"error\":null,\"fields\":[\"12\",\"5\",\"30\"],\"label\":\"type M 5\",\"onChange\":1} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"12\",\"20\",\"30\"],\"label\":\"type M 5\",\"onChange\":1}",
+              "app type S 4: {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"4\"],\"label\":\"type S 4\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"00\"],\"label\":\"type S 4\",\"onChange\":2}"
+            ],
+            "verdict": "typing reverted"
+          },
+          "typecheck": [],
+          "what": "move validate above the effects (so it's initialised) and list every dependency the rule asks for"
+        },
+        {
+          "deps": [
+            "useEffect@130([minimumKey, maximumKey])",
+            "useEffect@134([defaultTime])"
+          ],
+          "dependencyRule": {
+            "biome": 1,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: minimumKey, maximumKey."
+            ],
+            "eslint": [
+              "react-hooks/immutability: Error: Cannot access variable before it is declared",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found extra effect dependencies",
+              "react/immutability: Cannot access variable while it is being initialized",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders"
+            ],
+            "react-doctor": []
+          },
+          "id": "b03",
+          "intent": "right",
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": [],
+          "what": "read validate (and the time) through Effect Events; keep each effect's trigger"
+        },
+        {
+          "deps": [
+            "useEffect@120([JSON.stringify(minimumTime), JSON.stringify(maximumTime)])",
+            "useEffect@124([defaultTime])"
+          ],
+          "dependencyRule": {
+            "biome": 6,
+            "eslint": 4,
+            "oxlint": 4,
+            "oxlintCompiler": 2
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on maximumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on time.",
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on minimumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on validate.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on validate."
+            ],
+            "eslint": [
+              "react-hooks/immutability: Error: Cannot access variable before it is declared",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a missing dependency: 'validate'. Either include it or remove the dependency array."
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/immutability: Cannot access variable while it is being initialized",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'validate', 'time', 'minimumTime', and 'maximumTime'",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a missing dependency: 'validate'"
+            ],
+            "react-doctor": []
+          },
+          "id": "b04",
+          "intent": "right",
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": [],
+          "what": "leave it for review (no edit)"
+        },
+        {
+          "deps": [
+            "useCallback@120([formattedMinimumTime, formattedMaximumTime])",
+            "useEffect@125([JSON.stringify(minimumTime), JSON.stringify(maximumTime)])",
+            "useEffect@129([defaultTime, validateTime])"
+          ],
+          "dependencyRule": {
+            "biome": 7,
+            "eslint": 4,
+            "oxlint": 6,
+            "oxlintCompiler": 2
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on validate.",
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: formattedMinimumTime, formattedMaximumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on maximumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on time.",
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: JSON.stringify(minimumTime), JSON.stringify(maximumTime).",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on minimumTime.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on validate."
+            ],
+            "eslint": [
+              "react-hooks/memo-dependencies: Error: Found missing/extra memoization dependencies",
+              "react-hooks/immutability: Error: Cannot access variable before it is declared",
+              "react-hooks/exhaustive-deps: React Hook useCallback has a missing dependency: 'validate'. Either include it or remove the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'maximumTime', 'minimumTime', 'time', and 'validate'. Either include them",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be st",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/immutability: Cannot access variable while it is being initialized",
+              "react/memo-dependencies: Found missing/extra memoization dependencies",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/exhaustive-deps: React Hook useCallback has a missing dependency: 'validate'",
+              "react-hooks/exhaustive-deps: React Hook useCallback has unnecessary dependency: formattedMinimumTime",
+              "react-hooks/exhaustive-deps: React Hook useCallback has unnecessary dependency: formattedMaximumTime",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a complex expression in the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'minimumTime', 'maximumTime', 'validate', and 'time'"
+            ],
+            "react-doctor": []
+          },
+          "id": "b05",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable minimum 13:00:00: {\"border\":\"error\",\"error\":\"Selected time is before the minimum time allowed\",\"fields\":[\"12\",\"05\",\"30\"],\"label\":\"minimum 13:00:00\",\"onChange\":2} -> {\"border\":\"error\",\"error\":\"Selected time is before the minimum time allowed\",\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"minimum 13:00:00\",\"onChange\":2}",
+              "stable maximum 11:00:00: {\"border\":\"error\",\"error\":\"Selected time is after the maximum time allowed\",\"fields\":[\"12\",\"05\",\"30\"],\"label\":\"maximum 11:00:00\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"10\",\"20\",\"30\"],\"label\":\"maximum 11:00:00\",\"onChange\":2}",
+              "stable type S 4: {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"4\"],\"label\":\"type S 4\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"00\"],\"label\":\"type S 4\",\"onChange\":2}",
+              "app type S 4: {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"4\"],\"label\":\"type S 4\",\"onChange\":2} -> {\"border\":\"normal\",\"error\":null,\"fields\":[\"08\",\"00\",\"00\"],\"label\":\"type S 4\",\"onChange\":2}"
+            ],
+            "verdict": "changed"
+          },
+          "typecheck": [],
+          "what": "memoise a validate wrapper on the dayjs objects built during render"
+        }
+      ],
+      "verbatim": {
+        "checkedLines": 129,
+        "missing": [],
+        "ok": true,
+        "sha": "09f80f528ec47569841408a81668dff90525c48a"
+      }
+    },
+    "c": {
+      "notes": [
+        "A .ts file: as for A, the eslint view is the counterfactual with the react block on every file.",
+        "Oxlint's react/exhaustive-effect-dependencies also calls the auto-save effect's trigger dependencies extra, and keeps reporting that after every behaviour-preserving variant (c02-c05); removing them as it asks (c06) saves on every keystroke. Under Ultracite's default Oxlint config no variant here clears every diagnostic and keeps the behaviour.",
+        "ESLint's suggestion rewrites the listed `lastMessageInHistory?.id` as `lastMessageInHistory.id`, which throws while the chat is empty."
+      ],
+      "asCommitted": {
+        "biome": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 216,
+              "message": "This hook does not specify its dependency on loadChats.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 284,
+              "message": "This hook does not specify its dependency on saveCurrentChat.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 284,
+              "message": "This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "assist/source/useSortedKeys": 3,
+            "lint/style/useConsistentTypeDefinitions": 3,
+            "assist/source/useSortedInterfaceMembers": 2,
+            "lint/correctness/noUndeclaredDependencies": 2,
+            "lint/style/useConsistentMethodSignatures": 2,
+            "assist/source/organizeImports": 1,
+            "format": 1,
+            "lint/style/noIncrementDecrement": 1,
+            "lint/style/noNamespace": 1,
+            "lint/style/noSubstr": 1
+          }
+        },
+        "eslint": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 183,
+              "message": "Error: Cannot access refs during render",
+              "rule": "react-hooks/refs",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 195,
+              "message": "Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause",
+              "rule": "react-hooks/todo",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "unicorn/name-replacements": 10,
+            "sort-keys": 6,
+            "@typescript-eslint/consistent-type-definitions": 3,
+            "@typescript-eslint/method-signature-style": 2,
+            "import-x/no-duplicates": 2,
+            "unicorn/consistent-arrow-return-style": 2,
+            "@typescript-eslint/no-namespace": 1,
+            "arrow-body-style": 1,
+            "no-duplicate-imports": 1,
+            "no-plusplus": 1,
+            "react-doctor/no-ref-current-in-render": 1,
+            "sonarjs/no-nested-incdec": 1,
+            "unicorn/no-array-sort": 1,
+            "unicorn/no-top-level-assignment-in-function": 1,
+            "unicorn/prefer-early-return": 1,
+            "unicorn/prefer-string-slice": 1,
+            "unicorn/prefer-ternary": 1
+          }
+        },
+        "oxlint": {
+          "hookRules": [
+            {
+              "help": "Remove the suppression and address the reported React rule violation",
+              "labels": [
+                "Found React rule suppression"
+              ],
+              "line": 218,
+              "message": "React rule suppression prevents optimization",
+              "rule": "react/rule-suppression",
+              "suggestions": []
+            },
+            {
+              "help": "Remove the suppression and address the reported React rule violation",
+              "labels": [
+                "Found React rule suppression"
+              ],
+              "line": 288,
+              "message": "React rule suppression prevents optimization",
+              "rule": "react/rule-suppression",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "sort-keys": 3,
+            "typescript/consistent-type-definitions": 3,
+            "typescript/method-signature-style": 2,
+            "arrow-body-style": 1,
+            "import/no-duplicates": 1,
+            "no-duplicate-imports": 1,
+            "no-plusplus": 1,
+            "typescript/no-namespace": 1,
+            "unicorn/no-array-sort": 1,
+            "unicorn/prefer-string-slice": 1
+          }
+        },
+        "react-doctor": {
+          "hookRules": [],
+          "otherRules": {}
+        }
+      },
+      "baseTrace": {
+        "stable": {
+          "loads": 2,
+          "saves": [
+            "Draw a login flowchart|1 messages|prompt \"\"",
+            "Draw a login flowchart|1 messages|prompt \"\"",
+            "Draw a login flowchart|2 messages|prompt \"\"",
+            "Draw a login flowchart|2 messages|prompt \"\"",
+            "Draw a login flowchart|2 messages|prompt \"Make\""
+          ],
+          "steps": [
+            {
+              "label": "mount",
+              "loads": 2,
+              "saved": [],
+              "saves": 0
+            },
+            {
+              "label": "user message",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|1"
+              ],
+              "saves": 2
+            },
+            {
+              "label": "response starts",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|1"
+              ],
+              "saves": 2
+            },
+            {
+              "label": "response streams",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|1"
+              ],
+              "saves": 2
+            },
+            {
+              "label": "response finishes",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 4
+            },
+            {
+              "label": "typing the next prompt",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 4
+            },
+            {
+              "label": "parent re-render",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 4
+            },
+            {
+              "label": "new chat id",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 5
+            }
+          ],
+          "cleanups": {},
+          "errors": [],
+          "loop": null,
+          "renders": {
+            "Root": 2,
+            "Instance": 32
+          },
+          "setups": {
+            "useEffect@216": 2,
+            "useEffect@283": 8
+          },
+          "warnings": []
+        },
+        "fresh": {
+          "loads": 2,
+          "saves": [
+            "Draw a login flowchart|1 messages|prompt \"\"",
+            "Draw a login flowchart|1 messages|prompt \"\"",
+            "Draw a login flowchart|2 messages|prompt \"\"",
+            "Draw a login flowchart|2 messages|prompt \"\"",
+            "Draw a login flowchart|2 messages|prompt \"Make\""
+          ],
+          "steps": [
+            {
+              "label": "mount",
+              "loads": 2,
+              "saved": [],
+              "saves": 0
+            },
+            {
+              "label": "user message",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|1"
+              ],
+              "saves": 2
+            },
+            {
+              "label": "response starts",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|1"
+              ],
+              "saves": 2
+            },
+            {
+              "label": "response streams",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|1"
+              ],
+              "saves": 2
+            },
+            {
+              "label": "response finishes",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 4
+            },
+            {
+              "label": "typing the next prompt",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 4
+            },
+            {
+              "label": "parent re-render",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 4
+            },
+            {
+              "label": "new chat id",
+              "loads": 2,
+              "saved": [
+                "Draw a login flowchart|2"
+              ],
+              "saves": 5
+            }
+          ],
+          "cleanups": {},
+          "errors": [],
+          "loop": null,
+          "renders": {
+            "Root": 2,
+            "Instance": 32
+          },
+          "setups": {
+            "useEffect@216": 2,
+            "useEffect@283": 8
+          },
+          "warnings": []
+        }
+      },
+      "deps": [
+        "useCallback@111([a])",
+        "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+        "useEffect@216([])",
+        "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+        "useEffect@283([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+        "useCallback@293([setSavedChats, persistenceAdapter])",
+        "useCallback@311([])",
+        "useCallback@316([saveCurrentChat])"
+      ],
+      "file": "effects-c-excalidraw-ttd-chat-storage.ts",
+      "fixes": {
+        "oxlint-fix": {
+          "changed": true,
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@283([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+            "useCallback@293([setSavedChats, persistenceAdapter])",
+            "useCallback@311([])",
+            "useCallback@316([saveCurrentChat])"
+          ],
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": []
+        },
+        "oxlint-dangerous": {
+          "changed": true,
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([loadChats])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@283([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating, saveCurrentChat])",
+            "useCallback@294([setSavedChats, persistenceAdapter])",
+            "useCallback@312([])",
+            "useCallback@317([saveCurrentChat])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":11}",
+              "fresh typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "fresh parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":12}",
+              "fresh new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":13}"
+            ],
+            "verdict": "saves while typing or streaming"
+          },
+          "typecheck": []
+        },
+        "eslint-suggestion": {
+          "changed": true,
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([loadChats])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@283([chatHistory.messages.length, lastMessageInHistory.id, lastMessageInHistory?.isGenerating, saveCurrentChat])",
+            "useCallback@289([setSavedChats, persistenceAdapter])",
+            "useCallback@307([])",
+            "useCallback@312([saveCurrentChat])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: Cannot read properties of undefined (reading 'id')",
+              "fresh: Cannot read properties of undefined (reading 'id')"
+            ],
+            "verdict": "crashes"
+          },
+          "typecheck": []
+        },
+        "biome-write": {
+          "changed": true,
+          "deps": [
+            "useCallback@113([a])",
+            "useCallback@191([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@218([])",
+            "useCallback@222([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@285([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+            "useCallback@295([setSavedChats, persistenceAdapter])",
+            "useCallback@313([])",
+            "useCallback@318([saveCurrentChat])"
+          ],
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": []
+        },
+        "biome-unsafe": {
+          "changed": true,
+          "deps": [
+            "useCallback@115([a])",
+            "useCallback@193([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@220([loadChats])",
+            "useCallback@224([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@287([lastMessageInHistory?.isGenerating, saveCurrentChat])",
+            "useCallback@293([setSavedChats, persistenceAdapter])",
+            "useCallback@311([])",
+            "useCallback@316([saveCurrentChat])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":11}",
+              "fresh typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "fresh parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":12}",
+              "fresh new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":13}"
+            ],
+            "verdict": "saves while typing or streaming"
+          },
+          "typecheck": []
+        }
+      },
+      "prepared": {
+        "biome": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 216,
+              "message": "This hook does not specify its dependency on loadChats.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 283,
+              "message": "This hook does not specify its dependency on saveCurrentChat.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 283,
+              "message": "This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "assist/source/useSortedKeys": 3,
+            "lint/style/useConsistentTypeDefinitions": 3,
+            "assist/source/useSortedInterfaceMembers": 2,
+            "lint/correctness/noUndeclaredDependencies": 2,
+            "lint/style/useConsistentMethodSignatures": 2,
+            "assist/source/organizeImports": 1,
+            "format": 1,
+            "lint/style/noIncrementDecrement": 1,
+            "lint/style/noNamespace": 1,
+            "lint/style/noSubstr": 1
+          }
+        },
+        "eslint": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 183,
+              "message": "Error: Cannot access refs during render",
+              "rule": "react-hooks/refs",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 195,
+              "message": "Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause",
+              "rule": "react-hooks/todo",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 218,
+              "message": "React Hook useEffect has a missing dependency: 'loadChats'. Either include it or remove the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [loadChats]",
+                  "text": "[loadChats]"
+                }
+              ]
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 287,
+              "message": "React Hook useEffect has a missing dependency: 'saveCurrentChat'. Either include it or remove the dependency array.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [chatHistory.messages.length, lastMessageInHistory.id, lastMessageInHistory?.isGenerating, saveCurrentChat]",
+                  "text": "[chatHistory.messages.length, lastMessageInHistory.id, lastMessageInHistory?.isGenerating, saveCurrentChat]"
+                }
+              ]
+            }
+          ],
+          "otherRules": {
+            "unicorn/name-replacements": 10,
+            "sort-keys": 6,
+            "@typescript-eslint/consistent-type-definitions": 3,
+            "@typescript-eslint/method-signature-style": 2,
+            "import-x/no-duplicates": 2,
+            "unicorn/consistent-arrow-return-style": 2,
+            "@typescript-eslint/no-namespace": 1,
+            "arrow-body-style": 1,
+            "no-duplicate-imports": 1,
+            "no-plusplus": 1,
+            "react-doctor/no-ref-current-in-render": 1,
+            "sonarjs/no-nested-incdec": 1,
+            "unicorn/no-array-sort": 1,
+            "unicorn/no-top-level-assignment-in-function": 1,
+            "unicorn/prefer-early-return": 1,
+            "unicorn/prefer-string-slice": 1,
+            "unicorn/prefer-ternary": 1
+          }
+        },
+        "oxlint": {
+          "hookRules": [
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `loadChats`"
+              ],
+              "line": 218,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should. Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+              "labels": [
+                "Missing dependency `saveCurrentChat`",
+                "Unnecessary dependency `chatHistory.messages?.length`",
+                "Unnecessary dependency `lastMessageInHistory?.id`"
+              ],
+              "line": 285,
+              "message": "Found missing/extra effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected",
+              "labels": [
+                "Cannot update ref value during render",
+                "This value is a ref"
+              ],
+              "line": 183,
+              "message": "Cannot access refs during render",
+              "rule": "react/refs",
+              "suggestions": []
+            },
+            {
+              "help": "Rewrite the highlighted code using syntax supported by React Compiler",
+              "labels": [],
+              "line": 203,
+              "message": "(BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause",
+              "rule": "react/todo",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [
+                "useEffect uses `loadChats` here"
+              ],
+              "line": 217,
+              "message": "React Hook useEffect has a missing dependency: 'loadChats'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [
+                "useEffect uses `saveCurrentChat` here"
+              ],
+              "line": 285,
+              "message": "React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "sort-keys": 3,
+            "typescript/consistent-type-definitions": 3,
+            "typescript/method-signature-style": 2,
+            "arrow-body-style": 1,
+            "import/no-duplicates": 1,
+            "no-duplicate-imports": 1,
+            "no-plusplus": 1,
+            "typescript/no-namespace": 1,
+            "unicorn/no-array-sort": 1,
+            "unicorn/prefer-string-slice": 1
+          }
+        },
+        "react-doctor": {
+          "hookRules": [],
+          "otherRules": {}
+        }
+      },
+      "source": {
+        "path": "packages/excalidraw/components/TTDDialog/useTTDChatStorage.ts",
+        "repo": "excalidraw",
+        "github": "excalidraw/excalidraw",
+        "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce"
+      },
+      "typecheck": [],
+      "upstreamDisablesRemoved": 2,
+      "variants": [
+        {
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([loadChats])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@283([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating, saveCurrentChat])",
+            "useCallback@294([setSavedChats, persistenceAdapter])",
+            "useCallback@312([])",
+            "useCallback@317([saveCurrentChat])"
+          ],
+          "dependencyRule": {
+            "biome": 1,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id."
+            ],
+            "eslint": [
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/todo: Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found extra effect dependencies",
+              "react/refs: Cannot access refs during render",
+              "react/todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "react-doctor": []
+          },
+          "id": "c01",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":11}",
+              "fresh typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "fresh parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":12}",
+              "fresh new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":13}"
+            ],
+            "verdict": "saves while typing or streaming"
+          },
+          "typecheck": [],
+          "what": "add both dependencies (what each linter's fix does)"
+        },
+        {
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@219([])",
+            "useCallback@223([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@291([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+            "useCallback@299([setSavedChats, persistenceAdapter])",
+            "useCallback@317([])",
+            "useCallback@322([saveCurrentChat])"
+          ],
+          "dependencyRule": {
+            "biome": 1,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id, lastMessag"
+            ],
+            "eslint": [
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/todo: Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found extra effect dependencies",
+              "react/refs: Cannot access refs during render",
+              "react/todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "react-doctor": []
+          },
+          "id": "c02",
+          "intent": "right",
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": [],
+          "what": "Effect Events for both, each effect keeping its trigger"
+        },
+        {
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([loadChats])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@286([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+            "useCallback@296([setSavedChats, persistenceAdapter])",
+            "useCallback@314([])",
+            "useCallback@319([saveCurrentChat])"
+          ],
+          "dependencyRule": {
+            "biome": 1,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id."
+            ],
+            "eslint": [
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/todo: Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found extra effect dependencies",
+              "react/refs: Cannot access refs during render",
+              "react/todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "react-doctor": []
+          },
+          "id": "c03",
+          "intent": "right",
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": [],
+          "what": "add loadChats (harmless here) and read saveCurrentChat through an Effect Event"
+        },
+        {
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([loadChats])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@284(no array)",
+            "useEffect@287([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+            "useCallback@297([setSavedChats, persistenceAdapter])",
+            "useCallback@315([])",
+            "useCallback@320([saveCurrentChat])"
+          ],
+          "dependencyRule": {
+            "biome": 1,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id."
+            ],
+            "eslint": [
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/todo: Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found extra effect dependencies",
+              "react/refs: Cannot access refs during render",
+              "react/todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "react-doctor": []
+          },
+          "id": "c04",
+          "intent": "right",
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": [],
+          "what": "keep the latest saveCurrentChat in a ref (updated in an effect), add loadChats"
+        },
+        {
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@283([chatHistory.messages?.length, lastMessageInHistory?.id, lastMessageInHistory?.isGenerating])",
+            "useCallback@293([setSavedChats, persistenceAdapter])",
+            "useCallback@311([])",
+            "useCallback@316([saveCurrentChat])"
+          ],
+          "dependencyRule": {
+            "biome": 3,
+            "eslint": 2,
+            "oxlint": 2,
+            "oxlintCompiler": 2
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on loadChats.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on saveCurrentChat.",
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id."
+            ],
+            "eslint": [
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/todo: Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a missing dependency: 'loadChats'. Either include it or remove the dependency array.",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a missing dependency: 'saveCurrentChat'. Either include it or remove the dependency array."
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/exhaustive-effect-dependencies: Found missing/extra effect dependencies",
+              "react/refs: Cannot access refs during render",
+              "react/todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a missing dependency: 'loadChats'",
+              "react-hooks/exhaustive-deps: React Hook useEffect has a missing dependency: 'saveCurrentChat'"
+            ],
+            "react-doctor": []
+          },
+          "id": "c05",
+          "intent": "right",
+          "oracle": {
+            "differences": [],
+            "verdict": "same"
+          },
+          "typecheck": [],
+          "what": "leave both for review (no edit)"
+        },
+        {
+          "deps": [
+            "useCallback@111([a])",
+            "useCallback@189([chatsLoaded, isLoading, setSavedChats, setIsLoading, setChatsLoaded, persistenceAdapter])",
+            "useEffect@216([loadChats])",
+            "useCallback@220([chatHistory, setSavedChats, persistenceAdapter])",
+            "useEffect@283([lastMessageInHistory?.isGenerating, saveCurrentChat])",
+            "useCallback@289([setSavedChats, persistenceAdapter])",
+            "useCallback@307([])",
+            "useCallback@312([saveCurrentChat])"
+          ],
+          "dependencyRule": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 0
+          },
+          "hookRules": {
+            "biome": [],
+            "eslint": [
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/todo: Todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "oxlint": [
+              "react/refs: Cannot access refs during render",
+              "react/todo: (BuildHIR::lowerStatement) Handle TryStatement with a finalizer ('finally') clause"
+            ],
+            "react-doctor": []
+          },
+          "id": "c06",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "stable new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":11}",
+              "fresh typing the next prompt: {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"typing the next prompt\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":10}",
+              "fresh parent re-render: {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":4} -> {\"label\":\"parent re-render\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":12}",
+              "fresh new chat id: {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":5} -> {\"label\":\"new chat id\",\"loads\":2,\"saved\":[\"Draw a login flowchart|2\"],\"saves\":13}"
+            ],
+            "verdict": "saves while typing or streaming"
+          },
+          "typecheck": [],
+          "what": "do what Oxlint's compiler rule asks: add saveCurrentChat and drop the dependencies the body doesn't read"
+        }
+      ],
+      "verbatim": {
+        "checkedLines": 159,
+        "missing": [],
+        "ok": true,
+        "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce"
+      }
+    },
+    "a": {
+      "notes": [
+        "A .ts file: Ultracite's ESLint react block covers only .jsx and .tsx, so ESLint as configured reports nothing on it. The eslint view here applies the same block to every file (the counterfactual).",
+        "Every linter also reports rules-of-hooks (Biome: useHookAtTopLevel; Oxlint and ESLint: react/hooks too) on the three hooks after the early return for server rendering, which is in the original code. An experiment about the dependency rule should hand over only the dependency diagnostics.",
+        "Satisfying the rule isn't fixing the bug: a01 (the linters' fix) clears every dependency diagnostic and still shows the old store's value after the switch; a05 (the project's fix) clears them all and fixes it."
+      ],
+      "asCommitted": {
+        "biome": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 83,
+              "message": "This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "rule": "lint/correctness/useHookAtTopLevel",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 84,
+              "message": "This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "rule": "lint/correctness/useHookAtTopLevel",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook does not specify its dependency on getSnapshot.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook does not specify its dependency on subscribe.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "rule": "lint/correctness/useHookAtTopLevel",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "format": 1,
+            "lint/correctness/noUndeclaredDependencies": 1
+          }
+        },
+        "eslint": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 83,
+              "message": "Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (https://react.dev/warnings/invalid-hook-call-warning)",
+              "rule": "react-hooks/hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 83,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 84,
+              "message": "Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (https://react.dev/warnings/invalid-hook-call-warning)",
+              "rule": "react-hooks/hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 84,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (https://react.dev/warnings/invalid-hook-call-warning)",
+              "rule": "react-hooks/hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 89,
+              "message": "Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react-hooks/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 94,
+              "message": "React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include them or remove the dependency array. If 'subscribe' changes too often, find the parent component that defines it and wrap that definition in useCallback.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [getSnapshot, serverSnapshotIsUsed, subscribe]",
+                  "text": "[getSnapshot, serverSnapshotIsUsed, subscribe]"
+                }
+              ]
+            }
+          ],
+          "otherRules": {
+            "react/hook-use-state": 1,
+            "unicorn/prefer-simple-condition-first": 1
+          }
+        },
+        "oxlint": {
+          "hookRules": [
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `getSnapshot`",
+                "Missing dependency `serverSnapshotIsUsed`",
+                "Missing dependency `subscribe`"
+              ],
+              "line": 94,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+              "labels": [
+                "This Hook is called conditionally"
+              ],
+              "line": 83,
+              "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+              "rule": "react/hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+              "labels": [
+                "This Hook is called conditionally"
+              ],
+              "line": 84,
+              "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+              "rule": "react/hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+              "labels": [
+                "This Hook is called conditionally"
+              ],
+              "line": 87,
+              "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+              "rule": "react/hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.",
+              "labels": [
+                "Avoid calling setState() directly within an effect",
+                "This is the containing effect"
+              ],
+              "line": 89,
+              "message": "Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+              "labels": [
+                "This Hook call is not reachable on every render path."
+              ],
+              "line": 83,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+              "labels": [
+                "This Hook call is not reachable on every render path."
+              ],
+              "line": 84,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [],
+              "line": 88,
+              "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+              "labels": [
+                "This Hook call is not reachable on every render path."
+              ],
+              "line": 87,
+              "message": "React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "react/hook-use-state": 1
+          }
+        },
+        "react-doctor": {
+          "hookRules": [],
+          "otherRules": {}
+        }
+      },
+      "baseTrace": {
+        "stable": {
+          "events": [
+            "subscribe A",
+            "unsubscribe A"
+          ],
+          "steps": [
+            {
+              "events": 1,
+              "label": "mount",
+              "text": "a1"
+            },
+            {
+              "events": 1,
+              "label": "A changes to a2",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "two re-renders",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "switch to B",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "B changes to b1",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "A changes to a3",
+              "text": "a3"
+            },
+            {
+              "events": 2,
+              "label": "unmount",
+              "text": ""
+            }
+          ],
+          "cleanups": {
+            "useEffect@87": 1
+          },
+          "errors": [],
+          "loop": null,
+          "renders": {
+            "App": 6
+          },
+          "setups": {
+            "useEffect@87": 1
+          },
+          "warnings": []
+        },
+        "inline": {
+          "events": [
+            "subscribe A",
+            "unsubscribe A"
+          ],
+          "steps": [
+            {
+              "events": 1,
+              "label": "mount",
+              "text": "a1"
+            },
+            {
+              "events": 1,
+              "label": "A changes to a2",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "two re-renders",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "switch to B",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "B changes to b1",
+              "text": "a2"
+            },
+            {
+              "events": 1,
+              "label": "A changes to a3",
+              "text": "a3"
+            },
+            {
+              "events": 2,
+              "label": "unmount",
+              "text": ""
+            }
+          ],
+          "cleanups": {
+            "useEffect@87": 1
+          },
+          "errors": [],
+          "loop": null,
+          "renders": {
+            "App": 6
+          },
+          "setups": {
+            "useEffect@87": 1
+          },
+          "warnings": []
+        }
+      },
+      "deps": [
+        "useEffect@87([])"
+      ],
+      "file": "effects-a-hono-use-sync-external-store.ts",
+      "fixes": {
+        "oxlint-fix": {
+          "changed": false,
+          "deps": [
+            "useEffect@87([])"
+          ],
+          "oracle": {
+            "verdict": "same (unchanged)"
+          },
+          "typecheck": []
+        },
+        "oxlint-dangerous": {
+          "changed": true,
+          "deps": [
+            "useEffect@87([serverSnapshotIsUsed, getSnapshot, subscribe])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: partly fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / ",
+              "inline: partly fixed; 6 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / "
+            ],
+            "verdict": "partly fixed, resubscribes on every render"
+          },
+          "typecheck": []
+        },
+        "eslint-suggestion": {
+          "changed": true,
+          "deps": [
+            "useMemo@83([])",
+            "useEffect@87([getSnapshot, serverSnapshotIsUsed, subscribe])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: partly fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / ",
+              "inline: partly fixed; 6 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / "
+            ],
+            "verdict": "partly fixed, resubscribes on every render"
+          },
+          "typecheck": []
+        },
+        "biome-write": {
+          "changed": true,
+          "deps": [
+            "useEffect@93([])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+              "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+            ],
+            "verdict": "bug kept"
+          },
+          "typecheck": []
+        },
+        "biome-unsafe": {
+          "changed": true,
+          "deps": [
+            "useEffect@93([subscribe, serverSnapshotIsUsed, getSnapshot])"
+          ],
+          "oracle": {
+            "differences": [
+              "stable: partly fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / ",
+              "inline: partly fixed; 6 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / "
+            ],
+            "verdict": "partly fixed, resubscribes on every render"
+          },
+          "typecheck": []
+        }
+      },
+      "prepared": {
+        "biome": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 83,
+              "message": "This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "rule": "lint/correctness/useHookAtTopLevel",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 84,
+              "message": "This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "rule": "lint/correctness/useHookAtTopLevel",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook does not specify its dependency on getSnapshot.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook does not specify its dependency on subscribe.",
+              "rule": "lint/correctness/useExhaustiveDependencies",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "rule": "lint/correctness/useHookAtTopLevel",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "format": 1,
+            "lint/correctness/noUndeclaredDependencies": 1
+          }
+        },
+        "eslint": {
+          "hookRules": [
+            {
+              "help": null,
+              "labels": [],
+              "line": 83,
+              "message": "Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (https://react.dev/warnings/invalid-hook-call-warning)",
+              "rule": "react-hooks/hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 83,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 84,
+              "message": "Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (https://react.dev/warnings/invalid-hook-call-warning)",
+              "rule": "react-hooks/hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 84,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (https://react.dev/warnings/invalid-hook-call-warning)",
+              "rule": "react-hooks/hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 87,
+              "message": "React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 89,
+              "message": "Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react-hooks/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": null,
+              "labels": [],
+              "line": 94,
+              "message": "React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include them or remove the dependency array. If 'subscribe' changes too often, find the parent component that defines it and wrap that definition in useCallback.",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": [
+                {
+                  "desc": "Update the dependencies array to be: [getSnapshot, serverSnapshotIsUsed, subscribe]",
+                  "text": "[getSnapshot, serverSnapshotIsUsed, subscribe]"
+                }
+              ]
+            }
+          ],
+          "otherRules": {
+            "react/hook-use-state": 1,
+            "unicorn/prefer-simple-condition-first": 1
+          }
+        },
+        "oxlint": {
+          "hookRules": [
+            {
+              "help": "Missing dependencies can cause an effect to fire less often than it should",
+              "labels": [
+                "This dependency list is missing values used by the callback",
+                "Missing dependency `getSnapshot`",
+                "Missing dependency `serverSnapshotIsUsed`",
+                "Missing dependency `subscribe`"
+              ],
+              "line": 94,
+              "message": "Found missing effect dependencies",
+              "rule": "react/exhaustive-effect-dependencies",
+              "suggestions": []
+            },
+            {
+              "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+              "labels": [
+                "This Hook is called conditionally"
+              ],
+              "line": 83,
+              "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+              "rule": "react/hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+              "labels": [
+                "This Hook is called conditionally"
+              ],
+              "line": 84,
+              "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+              "rule": "react/hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Call Hooks unconditionally at the top level of the component or custom Hook",
+              "labels": [
+                "This Hook is called conditionally"
+              ],
+              "line": 87,
+              "message": "Hooks must always be called in a consistent order and may not be called conditionally",
+              "rule": "react/hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Effects should synchronize React with external systems. Calling setState synchronously inside an effect starts another render and is usually unnecessary. Derive the value during render, initialize state directly, or update it from the event that caused the change. Use an effect only when synchronizing with an external system.",
+              "labels": [
+                "Avoid calling setState() directly within an effect",
+                "This is the containing effect"
+              ],
+              "line": 89,
+              "message": "Calling setState synchronously within an effect can trigger cascading renders",
+              "rule": "react/set-state-in-effect",
+              "suggestions": []
+            },
+            {
+              "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+              "labels": [
+                "This Hook call is not reachable on every render path."
+              ],
+              "line": 83,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+              "labels": [
+                "This Hook call is not reachable on every render path."
+              ],
+              "line": 84,
+              "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            },
+            {
+              "help": "Either include it or remove the dependency array.",
+              "labels": [],
+              "line": 88,
+              "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "rule": "react-hooks/exhaustive-deps",
+              "suggestions": []
+            },
+            {
+              "help": "Move the Hook call before the condition, or call it unconditionally and branch inside the Hook/effect instead.",
+              "labels": [
+                "This Hook call is not reachable on every render path."
+              ],
+              "line": 87,
+              "message": "React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component render.",
+              "rule": "react-hooks/rules-of-hooks",
+              "suggestions": []
+            }
+          ],
+          "otherRules": {
+            "react/hook-use-state": 1
+          }
+        },
+        "react-doctor": {
+          "hookRules": [],
+          "otherRules": {}
+        }
+      },
+      "source": {
+        "path": "src/jsx/hooks/index.ts",
+        "repo": "hono",
+        "sha": "df653cea0450657977887d56a5188368387456c8",
+        "github": "honojs/hono"
+      },
+      "typecheck": [],
+      "upstreamDisablesRemoved": 0,
+      "variants": [
+        {
+          "deps": [
+            "useEffect@87([getSnapshot, serverSnapshotIsUsed, subscribe])"
+          ],
+          "dependencyRule": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 0
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render."
+            ],
+            "eslint": [
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders"
+            ],
+            "oxlint": [
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re"
+            ],
+            "react-doctor": []
+          },
+          "id": "a01",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable: partly fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / ",
+              "inline: partly fixed; 6 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / b1 / b1 / "
+            ],
+            "verdict": "partly fixed, resubscribes on every render"
+          },
+          "typecheck": [],
+          "what": "list the dependencies the rule names (what each linter's fix does)"
+        },
+        {
+          "deps": [
+            "useEffect@87([getSnapshot, serverSnapshotIsUsed, subscribe])"
+          ],
+          "dependencyRule": {
+            "biome": 1,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useExhaustiveDependencies: This hook specifies more dependencies than necessary: serverSnapshotIsUsed.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render."
+            ],
+            "eslint": [
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found extra effect dependencies",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re"
+            ],
+            "react-doctor": []
+          },
+          "id": "a02",
+          "intent": "right",
+          "oracle": {
+            "differences": [
+              "stable: bug fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / b0 / b1 / b1 / ",
+              "inline: bug fixed; 7 subscriptions (as written: 1); texts a1 / a2 / a2 / b0 / b1 / b1 / "
+            ],
+            "verdict": "bug fixed, resubscribes on every render"
+          },
+          "typecheck": [],
+          "what": "list the dependencies and refresh the state from the new store when it changes"
+        },
+        {
+          "deps": [
+            "useEffect@88(no array)",
+            "useEffect@91([])"
+          ],
+          "dependencyRule": {
+            "biome": 2,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on subscribe.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render."
+            ],
+            "eslint": [
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useRef\" is called conditionally. React Hooks must be called in the exact same order in every component rende",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed' and 'subscribe'. Either include them or remove the"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useRef\" is called conditionally. React Hooks must be called in the exact same order in every component rende",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'subscribe', and 'serverSnapshotIsUsed'",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re"
+            ],
+            "react-doctor": []
+          },
+          "id": "a03",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable: changed; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / b1 / ",
+              "inline: changed; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / b1 / "
+            ],
+            "verdict": "changed"
+          },
+          "typecheck": [],
+          "what": "read the latest getSnapshot through a ref and keep subscribing once"
+        },
+        {
+          "deps": [
+            "useEffect@87([])"
+          ],
+          "dependencyRule": {
+            "biome": 3,
+            "eslint": 1,
+            "oxlint": 1,
+            "oxlintCompiler": 1
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on getSnapshot.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on serverSnapshotIsUsed.",
+              "lint/correctness/useExhaustiveDependencies: This hook does not specify its dependency on subscribe.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render."
+            ],
+            "eslint": [
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/set-state-in-effect: Error: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+            ],
+            "oxlint": [
+              "react/exhaustive-effect-dependencies: Found missing effect dependencies",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/set-state-in-effect: Calling setState synchronously within an effect can trigger cascading renders",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re"
+            ],
+            "react-doctor": []
+          },
+          "id": "a04",
+          "intent": "tempting",
+          "oracle": {
+            "differences": [
+              "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+              "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+            ],
+            "verdict": "bug kept"
+          },
+          "typecheck": [],
+          "what": "leave it for review (no edit)"
+        },
+        {
+          "deps": [
+            "useEffect@92([subscribe])",
+            "useEffect@102([])"
+          ],
+          "dependencyRule": {
+            "biome": 0,
+            "eslint": 0,
+            "oxlint": 0,
+            "oxlintCompiler": 0
+          },
+          "hookRules": {
+            "biome": [
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render.",
+              "lint/correctness/useHookAtTopLevel: This hook is being called conditionally, but all hooks must be called in the exact same order in every component render."
+            ],
+            "eslint": [
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useRef\" is called conditionally. React Hooks must be called in the exact same order in every component rende",
+              "react-hooks/refs: Error: Cannot access refs during render",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useRef\" is called conditionally. React Hooks must be called in the exact same order in every component rende",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/hooks: Error: Hooks must always be called in a consistent order, and may not be called conditionally. See the Rules of Hooks (h",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re"
+            ],
+            "oxlint": [
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+              "react/refs: Cannot access refs during render",
+              "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component ren",
+              "react-hooks/rules-of-hooks: React Hook \"useRef\" is called conditionally. React Hooks must be called in the exact same order in every component rende",
+              "react-hooks/rules-of-hooks: React Hook \"useRef\" is called conditionally. React Hooks must be called in the exact same order in every component rende",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re",
+              "react-hooks/rules-of-hooks: React Hook \"useEffect\" is called conditionally. React Hooks must be called in the exact same order in every component re"
+            ],
+            "react-doctor": []
+          },
+          "id": "a05",
+          "intent": "right",
+          "oracle": {
+            "differences": [
+              "stable: bug fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / b0 / b1 / b1 / ",
+              "inline: bug fixed; 2 subscriptions (as written: 1); texts a1 / a2 / a2 / b0 / b1 / b1 / "
+            ],
+            "verdict": "bug fixed"
+          },
+          "typecheck": [],
+          "what": "the project's own fix (honojs/hono#5166), with its two STUB-free lines"
+        }
+      ],
+      "verbatim": {
+        "checkedLines": 27,
+        "missing": [],
+        "ok": true,
+        "sha": "df653cea0450657977887d56a5188368387456c8"
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/typescript-estree": "8.71.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "77.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.5.15",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.71.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-doctor": "0.9.16",
+    "oxlint-plugin-react-doctor": "0.9.16",
+    "eslint-plugin-react": "7.37.5",
+    "react": "19.3.0"
+  }
+}

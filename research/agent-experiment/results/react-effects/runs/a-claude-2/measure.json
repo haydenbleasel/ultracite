@@ -1,0 +1,1564 @@
+{
+  "runId": "a-claude-2",
+  "topic": "react-effects",
+  "subject": "a",
+  "base": "a",
+  "label": "A, a real bug",
+  "config": "oxlint react",
+  "agent": "claude",
+  "cliVersion": "2.1.310 (Claude Code)",
+  "wallSeconds": 146.9,
+  "attemptCount": 2,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 10,
+    "leftOutByFilter": {
+      "react-hooks/rules-of-hooks": 3,
+      "react/hook-use-state": 1,
+      "react/hooks": 3,
+      "react/set-state-in-effect": 1
+    },
+    "given": [
+      {
+        "rule": "react/exhaustive-effect-dependencies",
+        "line": 78,
+        "message": "Found missing effect dependencies",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 72,
+        "message": "React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "help": "Either include it or remove the dependency array.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "340f80cccfda8ce4eb2c0d600e3183ff85989c055e58c12ee3be8f5fce420dd5",
+    "parseError": false,
+    "views": {
+      "oxlint react": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+          "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+          "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/rules-of-hooks": 3,
+          "react/exhaustive-effect-dependencies": 1,
+          "react/hooks": 3,
+          "react/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/rules-of-hooks": 3,
+          "react/exhaustive-effect-dependencies": 1,
+          "react/hook-use-state": 1,
+          "react/hooks": 3,
+          "react/set-state-in-effect": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "eslint react": {
+        "depHonor": [],
+        "depIgnore": [],
+        "hookHonor": {},
+        "parseError": false,
+        "all": {
+          "unicorn/prefer-simple-condition-first": 1
+        },
+        "reactDoctor": {},
+        "depCleared": true
+      },
+      "eslint react, every file": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:78: React Hook useEffect has missing dependencies: 'getSnapshot', 'serverSnapshotIsUsed', and 'subscribe'. Either include th"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/hooks": 3,
+          "react-hooks/rules-of-hooks": 3,
+          "react-hooks/set-state-in-effect": 1
+        },
+        "parseError": false,
+        "all": {
+          "react-hooks/exhaustive-deps": 1,
+          "react-hooks/hooks": 3,
+          "react-hooks/rules-of-hooks": 3,
+          "react-hooks/set-state-in-effect": 1,
+          "react/hook-use-state": 1,
+          "unicorn/prefer-simple-condition-first": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "biome react": {
+        "depHonor": [
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+        ],
+        "depIgnore": [
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on getSnapshot.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on serverSnapshotIsUsed.",
+          "correctness/useExhaustiveDependencies:71: This hook does not specify its dependency on subscribe."
+        ],
+        "hookHonor": {
+          "correctness/useExhaustiveDependencies": 3,
+          "correctness/useHookAtTopLevel": 3
+        },
+        "parseError": false,
+        "all": {
+          "correctness/useExhaustiveDependencies": 3,
+          "correctness/useHookAtTopLevel": 3,
+          "suspicious/noUnnecessaryConditions": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+      ],
+      "ignore": [
+        "react-hooks/exhaustive-deps:72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'",
+        "react/exhaustive-effect-dependencies:78: Found missing effect dependencies"
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "suppressionReported": 0,
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "verdict": "bug kept",
+      "differences": [
+        "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+        "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+      ],
+      "modes": {
+        "stable": {
+          "verdict": "bug kept",
+          "effectRuns": 1,
+          "effectRunsAsWritten": 1,
+          "subscriptions": 1,
+          "subscriptionsAsWritten": 1,
+          "texts": [
+            "a1",
+            "a2",
+            "a2",
+            "a2",
+            "a2",
+            "a3",
+            ""
+          ],
+          "errors": []
+        },
+        "inline": {
+          "verdict": "bug kept",
+          "effectRuns": 1,
+          "effectRunsAsWritten": 1,
+          "subscriptions": 1,
+          "subscriptionsAsWritten": 1,
+          "texts": [
+            "a1",
+            "a2",
+            "a2",
+            "a2",
+            "a2",
+            "a3",
+            ""
+          ],
+          "errors": []
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": [],
+      "targets": [],
+      "added": {}
+    },
+    "effects": [
+      {
+        "name": "subscription",
+        "hook": "useEffect",
+        "line": 71,
+        "deps": []
+      }
+    ],
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "react/exhaustive-effect-dependencies L78: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps L72: React Hook useEffect has missing dependencies: 'serverSnapshotIsUsed', 'getSnapshot', and 'subscribe'"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 47.2,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "added the dependencies as the rule asks",
+        "kinds": [
+          "added the dependencies"
+        ],
+        "targets": [
+          {
+            "name": "subscription",
+            "status": "dependencies changed",
+            "hook": "useEffect",
+            "line": 73,
+            "deps": [
+              "serverSnapshotIsUsed",
+              "store"
+            ],
+            "depsBefore": [],
+            "added": [
+              "serverSnapshotIsUsed",
+              "store"
+            ],
+            "addedAsked": [
+              "serverSnapshotIsUsed"
+            ],
+            "removed": [],
+            "extracted": [],
+            "replacedByValue": [],
+            "removedTriggers": [],
+            "callbackChanged": true,
+            "callsEffectEvent": false
+          }
+        ],
+        "added": {
+          "useState": 1
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "b62e911cb9e57fc520e3eafb44774568e3b7ebcf4c4ca9efaa7752e10bef8ada",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/rules-of-hooks": 4,
+              "react/hooks": 4,
+              "react/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/rules-of-hooks": 4,
+              "react/hook-use-state": 2,
+              "react/hooks": 4,
+              "react/set-state-in-effect": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/hooks": 4,
+              "react-hooks/rules-of-hooks": 4,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/hooks": 4,
+              "react-hooks/rules-of-hooks": 4,
+              "react-hooks/set-state-in-effect": 1,
+              "react/hook-use-state": 2,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "correctness/useHookAtTopLevel": 4
+            },
+            "parseError": false,
+            "all": {
+              "correctness/useHookAtTopLevel": 4,
+              "suspicious/noUnnecessaryConditions": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "bug kept",
+          "differences": [
+            "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+            "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+          ],
+          "modes": {
+            "stable": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            },
+            "inline": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "added the dependencies as the rule asks",
+          "kinds": [
+            "added the dependencies"
+          ],
+          "targets": [
+            {
+              "name": "subscription",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 73,
+              "deps": [
+                "serverSnapshotIsUsed",
+                "store"
+              ],
+              "depsBefore": [],
+              "added": [
+                "serverSnapshotIsUsed",
+                "store"
+              ],
+              "addedAsked": [
+                "serverSnapshotIsUsed"
+              ],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": false
+            }
+          ],
+          "added": {
+            "useState": 1
+          },
+          "functions": []
+        },
+        "effects": [
+          {
+            "name": "subscription",
+            "hook": "useEffect",
+            "line": 73,
+            "deps": [
+              "serverSnapshotIsUsed",
+              "store"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {
+            "react-hooks/rules-of-hooks": 1,
+            "react/hook-use-state": 1,
+            "react/hooks": 1
+          },
+          "eslint react": {},
+          "eslint react, every file": {
+            "react-hooks/hooks": 1,
+            "react-hooks/rules-of-hooks": 1,
+            "react/hook-use-state": 1
+          },
+          "biome react": {
+            "correctness/useHookAtTopLevel": 1
+          }
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "added the dependencies as the rule asks"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "b62e911cb9e57fc520e3eafb44774568e3b7ebcf4c4ca9efaa7752e10bef8ada",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/rules-of-hooks": 4,
+              "react/hooks": 4,
+              "react/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/rules-of-hooks": 4,
+              "react/hook-use-state": 2,
+              "react/hooks": 4,
+              "react/set-state-in-effect": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/hooks": 4,
+              "react-hooks/rules-of-hooks": 4,
+              "react-hooks/set-state-in-effect": 1
+            },
+            "parseError": false,
+            "all": {
+              "react-hooks/hooks": 4,
+              "react-hooks/rules-of-hooks": 4,
+              "react-hooks/set-state-in-effect": 1,
+              "react/hook-use-state": 2,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "correctness/useHookAtTopLevel": 4
+            },
+            "parseError": false,
+            "all": {
+              "correctness/useHookAtTopLevel": 4,
+              "suspicious/noUnnecessaryConditions": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "bug kept",
+          "differences": [
+            "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+            "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+          ],
+          "modes": {
+            "stable": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            },
+            "inline": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "added the dependencies as the rule asks",
+          "kinds": [
+            "added the dependencies"
+          ],
+          "targets": [
+            {
+              "name": "subscription",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 73,
+              "deps": [
+                "serverSnapshotIsUsed",
+                "store"
+              ],
+              "depsBefore": [],
+              "added": [
+                "serverSnapshotIsUsed",
+                "store"
+              ],
+              "addedAsked": [
+                "serverSnapshotIsUsed"
+              ],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": false
+            }
+          ],
+          "added": {
+            "useState": 1
+          },
+          "functions": []
+        },
+        "effects": [
+          {
+            "name": "subscription",
+            "hook": "useEffect",
+            "line": 73,
+            "deps": [
+              "serverSnapshotIsUsed",
+              "store"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {
+            "react-hooks/rules-of-hooks": 1,
+            "react/hook-use-state": 1,
+            "react/hooks": 1
+          },
+          "eslint react": {},
+          "eslint react, every file": {
+            "react-hooks/hooks": 1,
+            "react-hooks/rules-of-hooks": 1,
+            "react/hook-use-state": 1
+          },
+          "biome react": {
+            "correctness/useHookAtTopLevel": 1
+          }
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "added the dependencies as the rule asks"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [
+          "react/hooks L73: Hooks must always be called in a consistent order and may not be called conditionally",
+          "react/hook-use-state L72: useState call is not destructured into value + setter pair",
+          "react-hooks/rules-of-hooks L72: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render."
+        ],
+        "remainingDetail": [
+          {
+            "rule": "react/hooks",
+            "line": 73,
+            "message": "Hooks must always be called in a consistent order and may not be called conditionally"
+          },
+          {
+            "rule": "react/hook-use-state",
+            "line": 72,
+            "message": "useState call is not destructured into value + setter pair"
+          },
+          {
+            "rule": "react-hooks/rules-of-hooks",
+            "line": 72,
+            "message": "React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render."
+          }
+        ],
+        "remainingDependencyRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": [
+            "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+            "react/hook-use-state: useState call is not destructured into value + setter pair",
+            "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render."
+          ]
+        },
+        "vsHandoff": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": [
+            "react/hooks: Hooks must always be called in a consistent order and may not be called conditionally",
+            "react/hook-use-state: useState call is not destructured into value + setter pair",
+            "react-hooks/rules-of-hooks: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render."
+          ]
+        },
+        "retried": true
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 6,
+        "costUSD": 0.39310399999999995,
+        "tokens": {
+          "input": 12,
+          "output": 3572,
+          "cacheCreation": 34291,
+          "cacheRead": 236440
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Bash",
+          "Bash",
+          "Glob",
+          "Edit",
+          "Bash"
+        ],
+        "toolNames": [
+          "Read",
+          "Bash",
+          "Glob",
+          "Edit"
+        ],
+        "toolCallTargets": [
+          "<run-root>/a-claude-2/index.ts",
+          "cat <run-root>/a-claude-2/index.ts.a123abce.json",
+          "ls -la && ls .. | head; which oxlint npx",
+          "<run-root>/a-claude-2",
+          "<run-root>/a-claude-2/index.ts",
+          "npx --no-install oxlint index.ts 2>&1 | tail -20"
+        ],
+        "toolErrors": [
+          "This Bash command contains multiple operations. The following part requires approval: ls -la && ls ..",
+          "This Bash command contains multiple operations. The following part requires approval: npx --no-install oxlint index.ts 2>&1"
+        ],
+        "commands": [
+          {
+            "command": "cat <run-root>/a-claude-2/index.ts.a123abce.json",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "ls -la && ls .. | head; which oxlint npx",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: ls -la && ls .."
+          },
+          {
+            "command": "npx --no-install oxlint index.ts 2>&1 | tail -20",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: npx --no-install oxlint index.ts 2>&1"
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "ls -la && ls .. | head; which oxlint npx",
+          "npx --no-install oxlint index.ts 2>&1 | tail -20"
+        ],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "readInstalledHono": [],
+        "readReactSources": [],
+        "usedReactTypes": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "  // subscribe once, with the functions given on the first render\n  const [store] = useState(() => ({ getSnapshot, subscribe }));\n  useEffect(() => {\n    if (serverSnapshotIsUsed) {\n      setState(store.getSnapshot());\n    }\n    return store.subscribe(() => {\n      setState(store.getSnapshot());\n    });\n  }, [serverSnapshotIsUsed, store]);"
+        ],
+        "finalMessage": "I fixed both issues with one edit to the effect in `index.ts:71-80`. I couldn't re-run the linter to confirm they're cleared, because running `oxlint` needed a permission approval that this run can't give.\n\n**What was wrong:** The effect used `serverSnapshotIsUsed`, `getSnapshot` and `subscribe` but had an empty dependency list (`[]`). So it always kept the `subscribe` and `getSnapshot` from the first render.\n\n**Fix:** The original code subscribes once, on mount, using the functions from the first render. I kept that behaviour but made it explicit:\n\n```ts\n// subscribe once, with the functions given on the first render\nconst [store] = useState(() => ({ getSnapshot, subscribe }));\nuseEffect(() => {\n  if (serverSnapshotIsUsed) {\n    setState(store.getSnapshot());\n  }\n  return store.subscribe(() => {\n    setState(store.getSnapshot());\n  });\n}, [serverSnapshotIsUsed, store]);\n```\n\nThe dependency list now names everything the effect uses. Both values come from `useState` and are never updated, so the effect still runs only once, with the same first-render functions as before.\n\n**The other option:** I didn't just list `getSnapshot` and `subscribe` as dependencies, because that would change behaviour. Any caller passing inline functions would unsubscribe and resubscribe on every render. That is how React's own `useSyncExternalStore` handles a new `subscribe`, so it's a reasonable change to make later. But it isn't the minimal, behaviour-preserving fix this task asked for.",
+        "understood": {
+          "behaviourChange": [
+            "**The other option:** I didn't just list `getSnapshot` and `subscribe` as dependencies, because that would change behaviour."
+          ],
+          "stale": [
+            "So it always kept the `subscribe` and `getSnapshot` from the first render.",
+            "**Fix:** The original code subscribes once, on mount, using the functions from the first render.",
+            "I kept that behaviour but made it explicit: ```ts // subscribe once, with the functions given on the first render const [store] = useState(() => ({ getSnapshot, subscribe })); useEffect(() => { if (serverSnapshotIsUsed) { setState(store.getSnapshot()); } return store.subscribe(() => { setState(store.getSnapshot()); }); }, [serverSnapshotIsUsed, store]); ``` The dependency list now names everything the effect uses."
+          ],
+          "loop": [
+            "Any caller passing inline functions would unsubscribe and resubscribe on every render."
+          ],
+          "resubscribe": [
+            "Any caller passing inline functions would unsubscribe and resubscribe on every render."
+          ],
+          "tdz": [],
+          "mountOnly": [
+            "So it always kept the `subscribe` and `getSnapshot` from the first render.",
+            "**Fix:** The original code subscribes once, on mount, using the functions from the first render.",
+            "I kept that behaviour but made it explicit: ```ts // subscribe once, with the functions given on the first render const [store] = useState(() => ({ getSnapshot, subscribe })); useEffect(() => { if (serverSnapshotIsUsed) { setState(store.getSnapshot()); } return store.subscribe(() => { setState(store.getSnapshot()); }); }, [serverSnapshotIsUsed, store]); ``` The dependency list now names everything the effect uses.",
+            "Both values come from `useState` and are never updated, so the effect still runs only once, with the same first-render functions as before."
+          ],
+          "useEffectEvent": [],
+          "reactDocs": [],
+          "keystroke": [],
+          "trigger": [],
+          "deliberate": [],
+          "review": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "reactDocs": 3,
+          "webAccess": 67,
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {
+          "reactDocs": 1,
+          "webAccess": 5
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    },
+    {
+      "attempt": 2,
+      "prompt": "buildRetryPrompt",
+      "promptKind": "retry: new since the edit",
+      "given": [
+        "react/hooks L73: Hooks must always be called in a consistent order and may not be called conditionally",
+        "react/hook-use-state L72: useState call is not destructured into value + setter pair",
+        "react-hooks/rules-of-hooks L72: React Hook \"useState\" is called conditionally. React Hooks must be called in the exact same order in every component render."
+      ],
+      "retryIssues": {
+        "still": [],
+        "introduced": [
+          "react/hooks L73",
+          "react/hook-use-state L72",
+          "react-hooks/rules-of-hooks L72"
+        ]
+      },
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 99.7,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "a ref",
+        "kinds": [
+          "a ref",
+          "removed dependencies"
+        ],
+        "targets": [
+          {
+            "name": "subscription",
+            "status": "dependencies changed",
+            "hook": "useEffect",
+            "line": 70,
+            "deps": [
+              "serverSnapshotIsUsed"
+            ],
+            "depsBefore": [
+              "serverSnapshotIsUsed",
+              "store"
+            ],
+            "added": [],
+            "addedAsked": [],
+            "removed": [
+              "store"
+            ],
+            "extracted": [],
+            "replacedByValue": [],
+            "removedTriggers": [],
+            "callbackChanged": true,
+            "callsEffectEvent": false
+          }
+        ],
+        "added": {
+          "useRef": 1,
+          "useState": -1,
+          "refCurrentReads": 1
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "332026b71f303ff24762270021773ccbeac8d226d835beff5eba8ade07aa9315",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "react/hook-use-state": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "unicorn/name-replacements": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "react/hook-use-state": 1,
+              "unicorn/name-replacements": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "format": 1,
+              "suspicious/noUnnecessaryConditions": 2
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "bug kept",
+          "differences": [
+            "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+            "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+          ],
+          "modes": {
+            "stable": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            },
+            "inline": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "a ref",
+          "kinds": [
+            "a ref",
+            "added the dependencies"
+          ],
+          "targets": [
+            {
+              "name": "subscription",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 70,
+              "deps": [
+                "serverSnapshotIsUsed"
+              ],
+              "depsBefore": [],
+              "added": [
+                "serverSnapshotIsUsed"
+              ],
+              "addedAsked": [
+                "serverSnapshotIsUsed"
+              ],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": false
+            }
+          ],
+          "added": {
+            "useRef": 1,
+            "refCurrentReads": 1
+          },
+          "functions": []
+        },
+        "effects": [
+          {
+            "name": "subscription",
+            "hook": "useEffect",
+            "line": 70,
+            "deps": [
+              "serverSnapshotIsUsed"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {
+            "unicorn/name-replacements": 1
+          },
+          "eslint react, every file": {
+            "unicorn/name-replacements": 1
+          },
+          "biome react": {
+            "format": 1,
+            "suspicious/noUnnecessaryConditions": 1
+          }
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "a ref"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "b6c040419f7e0a8c2392abc27f6e8326a262d3640cdb111e6419a37ec110bfeb",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "react/hook-use-state": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "unicorn/name-replacements": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "react/hook-use-state": 1,
+              "unicorn/name-replacements": 1,
+              "unicorn/prefer-simple-condition-first": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "suspicious/noUnnecessaryConditions": 2
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "bug kept",
+          "differences": [
+            "stable: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / ",
+            "inline: bug kept; 1 subscriptions (as written: 1); texts a1 / a2 / a2 / a2 / a2 / a3 / "
+          ],
+          "modes": {
+            "stable": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            },
+            "inline": {
+              "verdict": "bug kept",
+              "effectRuns": 1,
+              "effectRunsAsWritten": 1,
+              "subscriptions": 1,
+              "subscriptionsAsWritten": 1,
+              "texts": [
+                "a1",
+                "a2",
+                "a2",
+                "a2",
+                "a2",
+                "a3",
+                ""
+              ],
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "a ref",
+          "kinds": [
+            "a ref",
+            "added the dependencies"
+          ],
+          "targets": [
+            {
+              "name": "subscription",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 68,
+              "deps": [
+                "serverSnapshotIsUsed"
+              ],
+              "depsBefore": [],
+              "added": [
+                "serverSnapshotIsUsed"
+              ],
+              "addedAsked": [
+                "serverSnapshotIsUsed"
+              ],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": false
+            }
+          ],
+          "added": {
+            "useRef": 1,
+            "refCurrentReads": 1
+          },
+          "functions": []
+        },
+        "effects": [
+          {
+            "name": "subscription",
+            "hook": "useEffect",
+            "line": 68,
+            "deps": [
+              "serverSnapshotIsUsed"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {
+            "unicorn/name-replacements": 1
+          },
+          "eslint react, every file": {
+            "unicorn/name-replacements": 1
+          },
+          "biome react": {
+            "suspicious/noUnnecessaryConditions": 1
+          }
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "a ref"
+      },
+      "verifyChangedTheFile": true,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingDependencyRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "react/hooks",
+            "react/hook-use-state",
+            "react-hooks/rules-of-hooks"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 7,
+        "costUSD": 0.5588998000000001,
+        "tokens": {
+          "input": 14,
+          "output": 9013,
+          "cacheCreation": 39510,
+          "cacheRead": 312519
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Bash",
+          "Glob",
+          "Bash",
+          "Read"
+        ],
+        "toolNames": [
+          "Read",
+          "Edit",
+          "Bash",
+          "Glob"
+        ],
+        "toolCallTargets": [
+          "<run-root>/a-claude-2/index.ts",
+          "<run-root>/a-claude-2/index.ts.a123abce.json",
+          "<run-root>/a-claude-2/index.ts",
+          "<run-root>/a-claude-2/index.ts",
+          "<run-root>/a-claude-2/index.ts",
+          "ls -a && (command -v oxlint || ls node_modules/.bin 2>/dev/null | head)",
+          "<run-root>/a-claude-2",
+          "npx --no-install oxlint index.ts",
+          "<run-root>/a-claude-2/index.ts"
+        ],
+        "toolErrors": [
+          "This command uses shell operators that require approval for safety",
+          "This command requires approval"
+        ],
+        "commands": [
+          {
+            "command": "ls -a && (command -v oxlint || ls node_modules/.bin 2>/dev/null | head)",
+            "refused": true,
+            "refusal": "This command uses shell operators that require approval for safety"
+          },
+          {
+            "command": "npx --no-install oxlint index.ts",
+            "refused": true,
+            "refusal": "This command requires approval"
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "ls -a && (command -v oxlint || ls node_modules/.bin 2>/dev/null | head)",
+          "npx --no-install oxlint index.ts"
+        ],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "readInstalledHono": [],
+        "readReactSources": [],
+        "usedReactTypes": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "  const buildData = buildDataStack.at(-1) as [Context, unknown];\n  // no buildData means a stringify process, maybe in server side; the server snapshot is used then\n  if (!(buildData || getServerSnapshot)) {\n    throw new Error(\n      \"getServerSnapshot is required for server side rendering\"\n    );\n  }\n\n  const [serverSnapshotIsUsed] = useState<boolean>(\n    !!((!buildData || buildData[0][4]) && getServerSnapshot)\n  );\n  const [state, setState] = useState(() =>\n    serverSnapshotIsUsed ? (getServerSnapshot as () => T)() : getSnapshot()\n  );\n  // subscribe once, with the functions given on the first render\n  const storeRef = useRef({ getSnapshot, subscribe });\n  useEffect(() => {\n    const store = storeRef.current;\n    if (serverSnapshotIsUsed) {",
+          "  }, [serverSnapshotIsUsed]);",
+          "import { useEffect, useRef, useState } from \"react\";"
+        ],
+        "finalMessage": "I fixed all three issues in `index.ts`, but couldn't re-run the linter: running commands needed approval this session, so I've only read the file back.\n\n- **Issues 1 and 3 (hooks called conditionally):** the real cause was the early `if (!buildData) { … return getServerSnapshot(); }` before the hooks, which made every hook after it conditional. All hooks now run unconditionally at the top level:\n  - The \"`getServerSnapshot` is required\" error is now thrown before the hooks. A throw doesn't make later hooks conditional the way an early `return` does.\n  - With no build data (the server render case), `serverSnapshotIsUsed` is now true. The first `useState` then returns `getServerSnapshot()` and `getSnapshot()` is never called, which matches what the old early return gave back.\n- **Issue 2 (`useState` not destructured into a value + setter pair):** the stored first-render functions now live in a `useRef` instead of a `useState` with no setter. I added `useRef` to the import from `react`. The effect reads `storeRef.current` once at its start. A ref is stable, so the dependency list is back to `[serverSnapshotIsUsed]`. The subscription still happens once, with the functions from the first render, as the previous edit intended.\n\nNormal client behaviour is unchanged. In this file's stub, `buildDataStack` always holds an entry, so the server branch never runs anyway.",
+        "understood": {
+          "behaviourChange": [],
+          "stale": [
+            "The subscription still happens once, with the functions from the first render, as the previous edit intended."
+          ],
+          "loop": [],
+          "resubscribe": [],
+          "tdz": [],
+          "mountOnly": [
+            "The effect reads `storeRef.current` once at its start.",
+            "The subscription still happens once, with the functions from the first render, as the previous edit intended.",
+            "I couldn't run the linter to check it because running commands needs approval here, so I'm reading the file back once to check the result."
+          ],
+          "useEffectEvent": [],
+          "reactDocs": [],
+          "keystroke": [],
+          "trigger": [],
+          "deliberate": [],
+          "review": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "reactDocs": 3,
+          "webAccess": 79,
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {
+          "reactDocs": 1,
+          "webAccess": 7
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "final": {
+    "outcome": "a ref",
+    "response": "bug kept, rule satisfied",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 2,
+    "remaining": 0,
+    "notes": [
+      "Took 2 attempts."
+    ],
+    "issueFixed": [
+      true,
+      true
+    ],
+    "outro": "Fixed 2 of 2 issues with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 0.952004,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 635371
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "reactDocs": 6,
+      "webAccess": 146,
+      "sessionLogs": 8
+    },
+    "exposureInToolCalls": {
+      "reactDocs": 2,
+      "webAccess": 12
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/a-claude-2/handoff",
+      "../corpus/examples/react-effects",
+      "../corpus/results/react-effects",
+      "../corpus/calibration/react-effects",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/effects-agent-runs.cjs",
+      "../corpus/scripts/effects-calibration.cjs",
+      "../corpus/scripts/effects-census.cjs",
+      "../corpus/scripts/effects-disagreements.cjs",
+      "../corpus/scripts/effects-examples.cjs",
+      "../corpus/scripts/effects-fixes.cjs",
+      "../corpus/scripts/effects-history.cjs",
+      "../corpus/scripts/effects-inventory.cjs",
+      "../corpus/scripts/effects-lib.cjs",
+      "../corpus/scripts/effects-linters.cjs",
+      "../corpus/scripts/effects-markers.cjs",
+      "../corpus/scripts/effects-oracle.cjs",
+      "../corpus/scripts/effects-run-all.cjs",
+      "../corpus/scripts/effects-runtime.cjs",
+      "../corpus/scripts/effects-sample.cjs",
+      "../corpus/scripts/effects-tables.cjs",
+      "../bibliography/react-effects.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-react-effects-batch-logs",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-codex-1",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-codex-1",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-pilot",
+      "<run-root>/.staging/a-claude-2/attempt1"
+    ]
+  }
+}

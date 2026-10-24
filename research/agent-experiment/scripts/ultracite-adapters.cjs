@@ -21,7 +21,9 @@
 // The harness runs the linters from this repo with the configs a topic writes (the root config
 // `ultracite init` writes, passed with -c / --config-path), because the run directory has no
 // node_modules. Each command is otherwise the one linters.ts runs, with the same arguments in the
-// same order, from the run directory as the project root.
+// same order, from the run directory as the project root. The Oxlint and Biome passes take the
+// passthrough linters.ts gives them (added with the react-effects topic, for `ultracite fix
+// --unsafe`); with none, as every earlier topic runs them, the commands are unchanged.
 "use strict";
 
 const { spawnSync } = require("node:child_process");
@@ -278,19 +280,29 @@ function parseOxlintDiagnostics(stdout) {
 }
 
 /**
- * linters.ts runOxlintPass with no passthrough: `oxlint --fix`, `oxfmt --write`, then `oxlint -f
- * json` on the same targets, from `cwd`. `config` and `fmtConfig` are passed with -c (Ultracite
- * finds the project's own). Returns the diagnostics and the raw report.
+ * linters.ts runOxlintPass: `oxlint --fix`, `oxfmt --write`, then `oxlint -f json` on the same
+ * targets, from `cwd`. `config` and `fmtConfig` are passed with -c (Ultracite finds the project's
+ * own). As in linters.ts, an `--unsafe` in `passthrough` turns `--fix` into `--fix-dangerously`, and
+ * the rest of the passthrough goes to both Oxlint runs (added with the react-effects topic; the
+ * default, none, gives the commands every earlier topic ran). Returns the diagnostics and the raw
+ * report.
  */
-function oxlintPass({ cwd, files = [], config, fmtConfig }) {
+function oxlintPass({ cwd, files = [], config, fmtConfig, passthrough = [] }) {
+  const hasUnsafe = passthrough.includes("--unsafe");
+  const filtered = passthrough.filter((arg) => arg !== "--unsafe");
   const targets = toTargets(files, ".");
   const ox = ["-c", config, "--disable-nested-config"];
-  runPiped("oxlint", oxlintBin, [...ox, "--fix", ...targets], cwd);
+  runPiped(
+    "oxlint",
+    oxlintBin,
+    [...ox, hasUnsafe ? "--fix-dangerously" : "--fix", ...filtered, ...targets],
+    cwd
+  );
   runPiped("oxfmt", oxfmtBin, ["-c", fmtConfig, "--write", ...targets], cwd);
   const stdout = runPiped(
     "oxlint",
     oxlintBin,
-    [...ox, "-f", "json", ...targets],
+    [...ox, ...filtered, "-f", "json", ...targets],
     cwd
   );
   return { diagnostics: parseOxlintDiagnostics(stdout), stdout };
@@ -393,13 +405,14 @@ function parseBiomeDiagnostics(stdout) {
 }
 
 /**
- * linters.ts runBiomePass with no passthrough: `biome check --write --no-errors-on-unmatched
- * --reporter=json` on the targets, from `cwd`. Biome finds its config at the root of `cwd`, as in
- * a project, unless `configDir` is passed with --config-path (then project files such as
+ * linters.ts runBiomePass: `biome check --write --no-errors-on-unmatched [passthrough]
+ * --reporter=json` on the targets, from `cwd` (`passthrough`, such as `--unsafe`, added with the
+ * react-effects topic; none by default). Biome finds its config at the root of `cwd`, as in a
+ * project, unless `configDir` is passed with --config-path (then project files such as
  * package.json are looked up next to the config, not in `cwd`). Ultracite's
  * findUnresolvableBiomeConfig check has nothing to check here.
  */
-function biomePass({ cwd, files = [], configDir = null }) {
+function biomePass({ cwd, files = [], configDir = null, passthrough = [] }) {
   const stdout = runPiped(
     "biome",
     biomeBin,
@@ -408,6 +421,7 @@ function biomePass({ cwd, files = [], configDir = null }) {
       "--write",
       "--no-errors-on-unmatched",
       ...(configDir ? [`--config-path=${configDir}`] : []),
+      ...passthrough,
       "--reporter=json",
       ...toTargets(files, "./"),
     ],

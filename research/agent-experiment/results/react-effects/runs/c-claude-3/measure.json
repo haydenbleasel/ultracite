@@ -1,0 +1,1279 @@
+{
+  "runId": "c-claude-3",
+  "topic": "react-effects",
+  "subject": "c",
+  "base": "c",
+  "label": "C, a deliberate omission",
+  "config": "oxlint react",
+  "agent": "claude",
+  "cliVersion": "2.1.310 (Claude Code)",
+  "wallSeconds": 179.3,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 14,
+    "leftOutByFilter": {
+      "import/no-duplicates": 1,
+      "no-duplicate-imports": 1,
+      "no-plusplus": 1,
+      "react/refs": 1,
+      "react/todo": 1,
+      "typescript/method-signature-style": 2,
+      "typescript/no-namespace": 1,
+      "unicorn/filename-case": 1,
+      "unicorn/no-array-sort": 1
+    },
+    "given": [
+      {
+        "rule": "react/exhaustive-effect-dependencies",
+        "line": 187,
+        "message": "Found missing effect dependencies",
+        "help": "Missing dependencies can cause an effect to fire less often than it should",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+      },
+      {
+        "rule": "react/exhaustive-effect-dependencies",
+        "line": 254,
+        "message": "Found missing/extra effect dependencies",
+        "help": "Missing dependencies can cause an effect to fire less often than it should. Extra dependencies can cause an effect to fire more often than it should, resulting in performance problems such as excessive renders and side effects",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-effect-dependencies.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 186,
+        "message": "React Hook useEffect has a missing dependency: 'loadChats'",
+        "help": "Either include it or remove the dependency array.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      },
+      {
+        "rule": "react-hooks/exhaustive-deps",
+        "line": 254,
+        "message": "React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+        "help": "Either include it or remove the dependency array.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/react/exhaustive-deps.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "b94580bf2e98b0895301d5cfc85f8be7d90ad34c93bec1430e9c803cce5446cb",
+    "parseError": false,
+    "views": {
+      "oxlint react": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:186: React Hook useEffect has a missing dependency: 'loadChats'",
+          "react/exhaustive-effect-dependencies:187: Found missing effect dependencies",
+          "react-hooks/exhaustive-deps:254: React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+          "react/exhaustive-effect-dependencies:254: Found missing/extra effect dependencies"
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:186: React Hook useEffect has a missing dependency: 'loadChats'",
+          "react/exhaustive-effect-dependencies:187: Found missing effect dependencies",
+          "react-hooks/exhaustive-deps:254: React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+          "react/exhaustive-effect-dependencies:254: Found missing/extra effect dependencies"
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 2,
+          "react/exhaustive-effect-dependencies": 2,
+          "react/refs": 1,
+          "react/todo": 1
+        },
+        "parseError": false,
+        "all": {
+          "import/no-duplicates": 1,
+          "no-duplicate-imports": 1,
+          "no-plusplus": 1,
+          "react-hooks/exhaustive-deps": 2,
+          "react/exhaustive-effect-dependencies": 2,
+          "react/refs": 1,
+          "react/todo": 1,
+          "typescript/method-signature-style": 2,
+          "typescript/no-namespace": 1,
+          "unicorn/filename-case": 1,
+          "unicorn/no-array-sort": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      },
+      "eslint react": {
+        "depHonor": [],
+        "depIgnore": [],
+        "hookHonor": {},
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/method-signature-style": 2,
+          "@typescript-eslint/no-namespace": 1,
+          "github/filenames-match-regex": 1,
+          "import-x/no-duplicates": 2,
+          "no-duplicate-imports": 1,
+          "no-plusplus": 1,
+          "sonarjs/no-nested-incdec": 1,
+          "unicorn/consistent-arrow-return-style": 2,
+          "unicorn/name-replacements": 10,
+          "unicorn/no-array-sort": 1,
+          "unicorn/no-top-level-assignment-in-function": 1,
+          "unicorn/prefer-early-return": 1,
+          "unicorn/prefer-ternary": 1
+        },
+        "reactDoctor": {},
+        "depCleared": true
+      },
+      "eslint react, every file": {
+        "depHonor": [
+          "react-hooks/exhaustive-deps:187: React Hook useEffect has a missing dependency: 'loadChats'. Either include it or remove the dependency array.",
+          "react-hooks/exhaustive-deps:256: React Hook useEffect has a missing dependency: 'saveCurrentChat'. Either include it or remove the dependency array."
+        ],
+        "depIgnore": [
+          "react-hooks/exhaustive-deps:187: React Hook useEffect has a missing dependency: 'loadChats'. Either include it or remove the dependency array.",
+          "react-hooks/exhaustive-deps:256: React Hook useEffect has a missing dependency: 'saveCurrentChat'. Either include it or remove the dependency array."
+        ],
+        "hookHonor": {
+          "react-hooks/exhaustive-deps": 2,
+          "react-hooks/refs": 1,
+          "react-hooks/todo": 1
+        },
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/method-signature-style": 2,
+          "@typescript-eslint/no-namespace": 1,
+          "github/filenames-match-regex": 1,
+          "import-x/no-duplicates": 2,
+          "no-duplicate-imports": 1,
+          "no-plusplus": 1,
+          "react-hooks/exhaustive-deps": 2,
+          "react-hooks/refs": 1,
+          "react-hooks/todo": 1,
+          "sonarjs/no-nested-incdec": 1,
+          "unicorn/consistent-arrow-return-style": 2,
+          "unicorn/name-replacements": 10,
+          "unicorn/no-array-sort": 1,
+          "unicorn/no-top-level-assignment-in-function": 1,
+          "unicorn/prefer-early-return": 1,
+          "unicorn/prefer-ternary": 1
+        },
+        "reactDoctor": {
+          "react-doctor/js-combine-iterations": 1,
+          "react-doctor/no-ref-current-in-render": 1
+        },
+        "depCleared": false
+      },
+      "biome react": {
+        "depHonor": [
+          "correctness/useExhaustiveDependencies:185: This hook does not specify its dependency on loadChats.",
+          "correctness/useExhaustiveDependencies:252: This hook does not specify its dependency on saveCurrentChat.",
+          "correctness/useExhaustiveDependencies:252: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id."
+        ],
+        "depIgnore": [
+          "correctness/useExhaustiveDependencies:185: This hook does not specify its dependency on loadChats.",
+          "correctness/useExhaustiveDependencies:252: This hook does not specify its dependency on saveCurrentChat.",
+          "correctness/useExhaustiveDependencies:252: This hook specifies more dependencies than necessary: chatHistory.messages?.length, lastMessageInHistory?.id."
+        ],
+        "hookHonor": {
+          "correctness/useExhaustiveDependencies": 3
+        },
+        "parseError": false,
+        "all": {
+          "assist/source/organizeImports": 1,
+          "assist/source/useSortedInterfaceMembers": 4,
+          "correctness/useExhaustiveDependencies": 3,
+          "style/noIncrementDecrement": 1,
+          "style/noNamespace": 1,
+          "style/useConsistentMethodSignatures": 2,
+          "style/useFilenamingConvention": 1
+        },
+        "reactDoctor": {},
+        "depCleared": false
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "react-hooks/exhaustive-deps:186: React Hook useEffect has a missing dependency: 'loadChats'",
+        "react/exhaustive-effect-dependencies:187: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps:254: React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+        "react/exhaustive-effect-dependencies:254: Found missing/extra effect dependencies"
+      ],
+      "ignore": [
+        "react-hooks/exhaustive-deps:186: React Hook useEffect has a missing dependency: 'loadChats'",
+        "react/exhaustive-effect-dependencies:187: Found missing effect dependencies",
+        "react-hooks/exhaustive-deps:254: React Hook useEffect has a missing dependency: 'saveCurrentChat'",
+        "react/exhaustive-effect-dependencies:254: Found missing/extra effect dependencies"
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "suppressionReported": 0,
+    "typeErrors": [],
+    "oracle": {
+      "error": null,
+      "verdict": "same",
+      "differences": [],
+      "modes": {
+        "stable": {
+          "verdict": "same",
+          "effectRuns": 10,
+          "effectRunsAsWritten": 10,
+          "saves": 5,
+          "savesAsWritten": 5,
+          "loads": 2,
+          "loadsAsWritten": 2,
+          "savesWhileTyping": 0,
+          "errors": []
+        },
+        "fresh": {
+          "verdict": "same",
+          "effectRuns": 10,
+          "effectRunsAsWritten": 10,
+          "saves": 5,
+          "savesAsWritten": 5,
+          "loads": 2,
+          "loadsAsWritten": 2,
+          "savesWhileTyping": 0,
+          "errors": []
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": [],
+      "targets": [],
+      "added": {}
+    },
+    "effects": [
+      {
+        "name": "initial load",
+        "hook": "useEffect",
+        "line": 185,
+        "deps": []
+      },
+      {
+        "name": "auto-save",
+        "hook": "useEffect",
+        "line": 252,
+        "deps": [
+          "chatHistory.messages?.length",
+          "lastMessageInHistory?.id",
+          "lastMessageInHistory?.isGenerating"
+        ]
+      }
+    ],
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "react/exhaustive-effect-dependencies L187: Found missing effect dependencies",
+        "react/exhaustive-effect-dependencies L254: Found missing/extra effect dependencies",
+        "react-hooks/exhaustive-deps L186: React Hook useEffect has a missing dependency: 'loadChats'",
+        "react-hooks/exhaustive-deps L254: React Hook useEffect has a missing dependency: 'saveCurrentChat'"
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 179.3,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "a ref",
+        "kinds": [
+          "a ref",
+          "added the dependencies",
+          "extracted a dependency to a variable"
+        ],
+        "targets": [
+          {
+            "name": "initial load",
+            "status": "dependencies changed",
+            "hook": "useEffect",
+            "line": 185,
+            "deps": [
+              "loadChats"
+            ],
+            "depsBefore": [],
+            "added": [
+              "loadChats"
+            ],
+            "addedAsked": [
+              "loadChats"
+            ],
+            "removed": [],
+            "extracted": [],
+            "replacedByValue": [],
+            "removedTriggers": [],
+            "callbackChanged": false,
+            "callsEffectEvent": false
+          },
+          {
+            "name": "auto-save",
+            "status": "dependencies changed",
+            "hook": "useEffect",
+            "line": 262,
+            "deps": [
+              "isLastMessageGenerating",
+              "lastMessageId",
+              "messageCount",
+              "saveCurrentChat"
+            ],
+            "depsBefore": [
+              "chatHistory.messages?.length",
+              "lastMessageInHistory?.id",
+              "lastMessageInHistory?.isGenerating"
+            ],
+            "added": [
+              "isLastMessageGenerating",
+              "lastMessageId",
+              "messageCount",
+              "saveCurrentChat"
+            ],
+            "addedAsked": [
+              "saveCurrentChat"
+            ],
+            "removed": [],
+            "extracted": [
+              "chatHistory.messages?.length",
+              "lastMessageInHistory?.id",
+              "lastMessageInHistory?.isGenerating"
+            ],
+            "replacedByValue": [],
+            "removedTriggers": [],
+            "callbackChanged": true,
+            "callsEffectEvent": false
+          }
+        ],
+        "added": {
+          "useRef": 1,
+          "refCurrentReads": 1
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "d54f0a7af272fbb961fffeb616b3561384513197a91cdf3496e79366e1485d50",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react/refs": 1,
+              "react/todo": 1
+            },
+            "parseError": false,
+            "all": {
+              "import/no-duplicates": 1,
+              "no-duplicate-imports": 1,
+              "no-plusplus": 1,
+              "react/refs": 1,
+              "react/todo": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-namespace": 1,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-namespace": 1,
+              "github/filenames-match-regex": 1,
+              "import-x/no-duplicates": 2,
+              "no-duplicate-imports": 1,
+              "no-plusplus": 1,
+              "sonarjs/no-nested-incdec": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/name-replacements": 11,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-top-level-assignment-in-function": 1,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-ternary": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/refs": 1,
+              "react-hooks/todo": 1
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-namespace": 1,
+              "github/filenames-match-regex": 1,
+              "import-x/no-duplicates": 2,
+              "no-duplicate-imports": 1,
+              "no-plusplus": 1,
+              "react-hooks/refs": 1,
+              "react-hooks/todo": 1,
+              "sonarjs/no-nested-incdec": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/name-replacements": 11,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-top-level-assignment-in-function": 1,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-ternary": 1
+            },
+            "reactDoctor": {
+              "react-doctor/js-combine-iterations": 1,
+              "react-doctor/no-ref-current-in-render": 1
+            },
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "assist/source/organizeImports": 1,
+              "assist/source/useSortedInterfaceMembers": 4,
+              "style/noIncrementDecrement": 1,
+              "style/noNamespace": 1,
+              "style/useConsistentMethodSignatures": 2,
+              "style/useFilenamingConvention": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "same",
+          "differences": [],
+          "modes": {
+            "stable": {
+              "verdict": "same",
+              "effectRuns": 26,
+              "effectRunsAsWritten": 10,
+              "saves": 5,
+              "savesAsWritten": 5,
+              "loads": 2,
+              "loadsAsWritten": 2,
+              "savesWhileTyping": 0,
+              "errors": []
+            },
+            "fresh": {
+              "verdict": "same",
+              "effectRuns": 30,
+              "effectRunsAsWritten": 10,
+              "saves": 5,
+              "savesAsWritten": 5,
+              "loads": 2,
+              "loadsAsWritten": 2,
+              "savesWhileTyping": 0,
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "a ref",
+          "kinds": [
+            "a ref",
+            "added the dependencies",
+            "extracted a dependency to a variable"
+          ],
+          "targets": [
+            {
+              "name": "initial load",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 185,
+              "deps": [
+                "loadChats"
+              ],
+              "depsBefore": [],
+              "added": [
+                "loadChats"
+              ],
+              "addedAsked": [
+                "loadChats"
+              ],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": false,
+              "callsEffectEvent": false
+            },
+            {
+              "name": "auto-save",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 262,
+              "deps": [
+                "isLastMessageGenerating",
+                "lastMessageId",
+                "messageCount",
+                "saveCurrentChat"
+              ],
+              "depsBefore": [
+                "chatHistory.messages?.length",
+                "lastMessageInHistory?.id",
+                "lastMessageInHistory?.isGenerating"
+              ],
+              "added": [
+                "isLastMessageGenerating",
+                "lastMessageId",
+                "messageCount",
+                "saveCurrentChat"
+              ],
+              "addedAsked": [
+                "saveCurrentChat"
+              ],
+              "removed": [],
+              "extracted": [
+                "chatHistory.messages?.length",
+                "lastMessageInHistory?.id",
+                "lastMessageInHistory?.isGenerating"
+              ],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": false
+            }
+          ],
+          "added": {
+            "useRef": 1,
+            "refCurrentReads": 1
+          },
+          "functions": [
+            {
+              "name": "loadChats",
+              "before": "useCallback",
+              "after": "useCallback",
+              "movedIntoEffect": false,
+              "movedAboveEffects": false,
+              "wrapped": null
+            },
+            {
+              "name": "saveCurrentChat",
+              "before": "useCallback",
+              "after": "useCallback",
+              "movedIntoEffect": false,
+              "movedAboveEffects": false,
+              "wrapped": null
+            }
+          ]
+        },
+        "effects": [
+          {
+            "name": "initial load",
+            "hook": "useEffect",
+            "line": 185,
+            "deps": [
+              "loadChats"
+            ]
+          },
+          {
+            "name": "auto-save",
+            "hook": "useEffect",
+            "line": 262,
+            "deps": [
+              "isLastMessageGenerating",
+              "lastMessageId",
+              "messageCount",
+              "saveCurrentChat"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {
+            "unicorn/name-replacements": 1
+          },
+          "eslint react, every file": {
+            "unicorn/name-replacements": 1
+          },
+          "biome react": {}
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "a ref"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "d54f0a7af272fbb961fffeb616b3561384513197a91cdf3496e79366e1485d50",
+        "parseError": false,
+        "views": {
+          "oxlint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react/refs": 1,
+              "react/todo": 1
+            },
+            "parseError": false,
+            "all": {
+              "import/no-duplicates": 1,
+              "no-duplicate-imports": 1,
+              "no-plusplus": 1,
+              "react/refs": 1,
+              "react/todo": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-namespace": 1,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-namespace": 1,
+              "github/filenames-match-regex": 1,
+              "import-x/no-duplicates": 2,
+              "no-duplicate-imports": 1,
+              "no-plusplus": 1,
+              "sonarjs/no-nested-incdec": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/name-replacements": 11,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-top-level-assignment-in-function": 1,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-ternary": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          },
+          "eslint react, every file": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {
+              "react-hooks/refs": 1,
+              "react-hooks/todo": 1
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-namespace": 1,
+              "github/filenames-match-regex": 1,
+              "import-x/no-duplicates": 2,
+              "no-duplicate-imports": 1,
+              "no-plusplus": 1,
+              "react-hooks/refs": 1,
+              "react-hooks/todo": 1,
+              "sonarjs/no-nested-incdec": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/name-replacements": 11,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-top-level-assignment-in-function": 1,
+              "unicorn/prefer-early-return": 1,
+              "unicorn/prefer-ternary": 1
+            },
+            "reactDoctor": {
+              "react-doctor/js-combine-iterations": 1,
+              "react-doctor/no-ref-current-in-render": 1
+            },
+            "depCleared": true
+          },
+          "biome react": {
+            "depHonor": [],
+            "depIgnore": [],
+            "hookHonor": {},
+            "parseError": false,
+            "all": {
+              "assist/source/organizeImports": 1,
+              "assist/source/useSortedInterfaceMembers": 4,
+              "style/noIncrementDecrement": 1,
+              "style/noNamespace": 1,
+              "style/useConsistentMethodSignatures": 2,
+              "style/useFilenamingConvention": 1
+            },
+            "reactDoctor": {},
+            "depCleared": true
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "suppressionReported": 0,
+        "typeErrors": [],
+        "oracle": {
+          "error": null,
+          "verdict": "same",
+          "differences": [],
+          "modes": {
+            "stable": {
+              "verdict": "same",
+              "effectRuns": 26,
+              "effectRunsAsWritten": 10,
+              "saves": 5,
+              "savesAsWritten": 5,
+              "loads": 2,
+              "loadsAsWritten": 2,
+              "savesWhileTyping": 0,
+              "errors": []
+            },
+            "fresh": {
+              "verdict": "same",
+              "effectRuns": 30,
+              "effectRunsAsWritten": 10,
+              "saves": 5,
+              "savesAsWritten": 5,
+              "loads": 2,
+              "loadsAsWritten": 2,
+              "savesWhileTyping": 0,
+              "errors": []
+            }
+          }
+        },
+        "edit": {
+          "edit": "a ref",
+          "kinds": [
+            "a ref",
+            "added the dependencies",
+            "extracted a dependency to a variable"
+          ],
+          "targets": [
+            {
+              "name": "initial load",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 185,
+              "deps": [
+                "loadChats"
+              ],
+              "depsBefore": [],
+              "added": [
+                "loadChats"
+              ],
+              "addedAsked": [
+                "loadChats"
+              ],
+              "removed": [],
+              "extracted": [],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": false,
+              "callsEffectEvent": false
+            },
+            {
+              "name": "auto-save",
+              "status": "dependencies changed",
+              "hook": "useEffect",
+              "line": 262,
+              "deps": [
+                "isLastMessageGenerating",
+                "lastMessageId",
+                "messageCount",
+                "saveCurrentChat"
+              ],
+              "depsBefore": [
+                "chatHistory.messages?.length",
+                "lastMessageInHistory?.id",
+                "lastMessageInHistory?.isGenerating"
+              ],
+              "added": [
+                "isLastMessageGenerating",
+                "lastMessageId",
+                "messageCount",
+                "saveCurrentChat"
+              ],
+              "addedAsked": [
+                "saveCurrentChat"
+              ],
+              "removed": [],
+              "extracted": [
+                "chatHistory.messages?.length",
+                "lastMessageInHistory?.id",
+                "lastMessageInHistory?.isGenerating"
+              ],
+              "replacedByValue": [],
+              "removedTriggers": [],
+              "callbackChanged": true,
+              "callsEffectEvent": false
+            }
+          ],
+          "added": {
+            "useRef": 1,
+            "refCurrentReads": 1
+          },
+          "functions": [
+            {
+              "name": "loadChats",
+              "before": "useCallback",
+              "after": "useCallback",
+              "movedIntoEffect": false,
+              "movedAboveEffects": false,
+              "wrapped": null
+            },
+            {
+              "name": "saveCurrentChat",
+              "before": "useCallback",
+              "after": "useCallback",
+              "movedIntoEffect": false,
+              "movedAboveEffects": false,
+              "wrapped": null
+            }
+          ]
+        },
+        "effects": [
+          {
+            "name": "initial load",
+            "hook": "useEffect",
+            "line": 185,
+            "deps": [
+              "loadChats"
+            ]
+          },
+          {
+            "name": "auto-save",
+            "hook": "useEffect",
+            "line": 262,
+            "deps": [
+              "isLastMessageGenerating",
+              "lastMessageId",
+              "messageCount",
+              "saveCurrentChat"
+            ]
+          }
+        ],
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint react": {},
+          "eslint react": {
+            "unicorn/name-replacements": 1
+          },
+          "eslint react, every file": {
+            "unicorn/name-replacements": 1
+          },
+          "biome react": {}
+        },
+        "newReactDoctorRules": {
+          "oxlint react": {},
+          "eslint react": {},
+          "eslint react, every file": {},
+          "biome react": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "a ref"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingDependencyRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "react/exhaustive-effect-dependencies",
+            "react/exhaustive-effect-dependencies",
+            "react-hooks/exhaustive-deps",
+            "react-hooks/exhaustive-deps"
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 11,
+        "costUSD": 0.8847782000000002,
+        "tokens": {
+          "input": 22,
+          "output": 17343,
+          "cacheCreation": 53787,
+          "cacheRead": 537671
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Bash",
+          "Glob",
+          "Bash",
+          "Read",
+          "Read",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Bash",
+          "Edit",
+          "Edit"
+        ],
+        "toolNames": [
+          "Read",
+          "Bash",
+          "Glob",
+          "Edit"
+        ],
+        "toolCallTargets": [
+          "<run-root>/c-claude-3/useTTDChatStorage.ts",
+          "<run-root>/c-claude-3/useTTDChatStorage.ts.62e9aa43.json",
+          "ls -a; ls .. | head; cat package.json 2>/dev/null; ls node_modules 2>/dev/null | head -50; ls ../node_modules 2>/dev/null | head -50",
+          "<run-root>",
+          "ls -a <run-root>/c-claude-3",
+          "<run-root>/c-claude-3/package.json",
+          "<run-root>/c-claude-3/oxlint.config.ts",
+          "which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx 2>/dev/null | head",
+          "which oxlint ultracite npx",
+          "mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1 | tail -5",
+          "npx -y oxlint@1.86.0 --version",
+          "<run-root>/c-claude-3/useTTDChatStorage.ts",
+          "<run-root>/c-claude-3/useTTDChatStorage.ts"
+        ],
+        "toolErrors": [
+          "This Bash command contains multiple operations. The following parts require approval: ls -a; ls .., head -50; ls ../node_modules",
+          "This Bash command contains multiple operations. The following part requires approval: which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx",
+          "Exit code 1\noxlint not found\nultracite not found\n~/.nvm/versions/node/v24.14.1/bin/npx",
+          "This Bash command contains multiple operations. The following part requires approval: mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1",
+          "This command requires approval"
+        ],
+        "commands": [
+          {
+            "command": "ls -a; ls .. | head; cat package.json 2>/dev/null; ls node_modules 2>/dev/null | head -50; ls ../node_modules 2>/dev/null | head -50",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following parts require approval: ls -a; ls .., head -50; ls ../node_modules"
+          },
+          {
+            "command": "ls -a <run-root>/c-claude-3",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx 2>/dev/null | head",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx"
+          },
+          {
+            "command": "which oxlint ultracite npx",
+            "refused": true,
+            "refusal": "Exit code 1\noxlint not found\nultracite not found\n~/.nvm/versions/node/v24.14.1/bin/npx"
+          },
+          {
+            "command": "mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1 | tail -5",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1"
+          },
+          {
+            "command": "npx -y oxlint@1.86.0 --version",
+            "refused": true,
+            "refusal": "This command requires approval"
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "ls -a; ls .. | head; cat package.json 2>/dev/null; ls node_modules 2>/dev/null | head -50; ls ../node_modules 2>/dev/null | head -50",
+          "which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx 2>/dev/null | head",
+          "which oxlint ultracite npx",
+          "mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1 | tail -5",
+          "npx -y oxlint@1.86.0 --version"
+        ],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "readInstalledHono": [],
+        "readReactSources": [],
+        "usedReactTypes": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "  // INITIAL LOAD (loadChats is a no-op once chats are loading or loaded)\n  useEffect(() => {\n    loadChats();\n  }, [loadChats]);",
+          "  // Auto-save when generation completes\n  const messageCount = chatHistory.messages?.length;\n  const lastMessageId = lastMessageInHistory?.id;\n  const isLastMessageGenerating = lastMessageInHistory?.isGenerating;\n  // saveCurrentChat also changes on edits that shouldn't save (e.g. the\n  // current prompt), so only save when the messages state itself changes\n  const lastAutoSaveTriggerRef = useRef<{\n    isLastMessageGenerating: boolean | undefined;\n    lastMessageId: string | undefined;\n    messageCount: number | undefined;\n  } | null>(null);\n  useEffect(() => {\n    const lastTrigger = lastAutoSaveTriggerRef.current;\n    if (\n      lastTrigger &&\n      lastTrigger.messageCount === messageCount &&\n      lastTrigger.lastMessageId === lastMessageId &&\n      lastTrigger.isLastMessageGenerating"
+        ],
+        "finalMessage": "I fixed all four issues by editing the two effects in `useTTDChatStorage.ts`. I couldn't re-run the linter or the type checker: there's no `node_modules`, and downloading oxlint needed approval this non-interactive run can't give. So the fixes are reasoned through against both rules, not confirmed by a lint run.\n\n**Issues 1 and 3 (initial load effect, line 185):** I added `loadChats` to the dependency array. The effect can now re-run whenever `loadChats` changes, but `loadChats` returns early once chats are loading or loaded, so in practice it still loads once. The one difference: if other code resets the exported `chatsLoadedAtom` to `false`, the chats will now reload.\n\n**Issues 2 and 4 (auto-save effect, line 252):** I didn't just list `saveCurrentChat` as a dependency, because that changes behaviour. It changes whenever anything in `chatHistory` changes, such as typing in the prompt, so the hook would call `persistenceAdapter.saveChats` on every keystroke. It could also loop forever if a caller creates the adapter inline.\n\nInstead:\n- The three trigger values (message count, last message id, last message's `isGenerating`) are now local variables that the effect reads.\n- A ref, `lastAutoSaveTriggerRef`, records the values from the last save attempt. The effect only saves when one of them has actually changed and the last message isn't generating.\n- The dependency array is now exactly what the effect uses: `isLastMessageGenerating`, `lastMessageId`, `messageCount`, `saveCurrentChat`. This also clears the \"unnecessary dependency\" part of issue 2.\n\nSaves happen at the same moments as before. The only difference is in development under StrictMode: the original saved twice on mount, and this version saves once.",
+        "understood": {
+          "behaviourChange": [
+            "**Issues 2 and 4 (auto-save effect, line 252):** I didn't just list `saveCurrentChat` as a dependency, because that changes behaviour.",
+            "It changes whenever anything in `chatHistory` changes, such as typing in the prompt, so the hook would call `persistenceAdapter.saveChats` on every keystroke."
+          ],
+          "stale": [],
+          "loop": [
+            "It could also loop forever if a caller creates the adapter inline."
+          ],
+          "resubscribe": [],
+          "tdz": [],
+          "mountOnly": [
+            "**Issues 1 and 3 (initial load effect, line 185):** I added `loadChats` to the dependency array.",
+            "The effect can now re-run whenever `loadChats` changes, but `loadChats` returns early once chats are loading or loaded, so in practice it still loads once.",
+            "The only difference is in development under StrictMode: the original saved twice on mount, and this version saves once."
+          ],
+          "useEffectEvent": [],
+          "reactDocs": [],
+          "keystroke": [
+            "It changes whenever anything in `chatHistory` changes, such as typing in the prompt, so the hook would call `persistenceAdapter.saveChats` on every keystroke."
+          ],
+          "trigger": [
+            "Instead: - The three trigger values (message count, last message id, last message's `isGenerating`) are now local variables that the effect reads. - A ref, `lastAutoSaveTriggerRef`, records the values from the last save attempt.",
+            "This also clears the \"unnecessary dependency\" part of issue 2."
+          ],
+          "deliberate": [],
+          "review": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "reactDocs": 6,
+          "webAccess": 93,
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {
+          "reactDocs": 2,
+          "webAccess": 10
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": [
+          {
+            "tool": "Bash",
+            "target": "ls -a; ls .. | head; cat package.json 2>/dev/null; ls node_modules 2>/dev/null | head -50; ls ../node_modules 2>/dev/null | head -50"
+          },
+          {
+            "tool": "Glob",
+            "target": "<run-root>"
+          },
+          {
+            "tool": "Bash",
+            "target": "which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx 2>/dev/null | head"
+          },
+          {
+            "tool": "Bash",
+            "target": "mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1 | tail -5"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "a ref",
+    "response": "behaviour kept, rule satisfied (right)",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 4,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "outro": "Fixed 4 of 4 issues with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 0.884778,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 608823
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "reactDocs": 6,
+      "webAccess": 93,
+      "sessionLogs": 4
+    },
+    "exposureInToolCalls": {
+      "reactDocs": 2,
+      "webAccess": 10
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "ls -a; ls .. | head; cat package.json 2>/dev/null; ls node_modules 2>/dev/null | head -50; ls ../node_modules 2>/dev/null | head -50"
+      },
+      {
+        "attempt": 1,
+        "tool": "Glob",
+        "target": "<run-root>"
+      },
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "which oxlint ultracite npx bun pnpm 2>&1; ls ~/.npm/_npx 2>/dev/null | head"
+      },
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "mkdir -p /tmp/ttd-lint-scratch && cd /tmp/ttd-lint-scratch && npx -y oxlint@1.86.0 --version 2>&1 | tail -5"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/c-claude-3/handoff",
+      "../corpus/examples/react-effects",
+      "../corpus/results/react-effects",
+      "../corpus/calibration/react-effects",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/effects-agent-runs.cjs",
+      "../corpus/scripts/effects-calibration.cjs",
+      "../corpus/scripts/effects-census.cjs",
+      "../corpus/scripts/effects-disagreements.cjs",
+      "../corpus/scripts/effects-examples.cjs",
+      "../corpus/scripts/effects-fixes.cjs",
+      "../corpus/scripts/effects-history.cjs",
+      "../corpus/scripts/effects-inventory.cjs",
+      "../corpus/scripts/effects-lib.cjs",
+      "../corpus/scripts/effects-linters.cjs",
+      "../corpus/scripts/effects-markers.cjs",
+      "../corpus/scripts/effects-oracle.cjs",
+      "../corpus/scripts/effects-run-all.cjs",
+      "../corpus/scripts/effects-runtime.cjs",
+      "../corpus/scripts/effects-sample.cjs",
+      "../corpus/scripts/effects-tables.cjs",
+      "../bibliography/react-effects.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-react-effects-batch-logs",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-codex-1",
+      "<run-root>/b-codex-2",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-2",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/b-codex-2",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-2",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-pilot"
+    ]
+  }
+}

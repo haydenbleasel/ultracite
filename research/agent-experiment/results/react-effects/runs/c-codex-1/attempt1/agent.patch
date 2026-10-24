@@ -1,0 +1,53 @@
+--- a/useTTDChatStorage.ts
++++ b/useTTDChatStorage.ts
+@@ -184,7 +184,7 @@
+   // INITIAL LOAD
+   useEffect(() => {
+     loadChats();
+-  }, []);
++  }, [loadChats]);
+ 
+   const saveCurrentChat = useCallback(async () => {
+     if (chatHistory.messages.length === 0) {
+@@ -247,16 +247,40 @@
+       console.warn("Failed to save chats:", error);
+     }
+   }, [chatHistory, setSavedChats, persistenceAdapter]);
++
++  const previousAutoSaveTrigger = useRef<{
++    isGenerating: boolean | undefined;
++    lastMessageId: string | undefined;
++    messageCount: number;
++  } | null>(null);
+ 
+   // Auto-save when generation completes
+   useEffect(() => {
+-    if (!lastMessageInHistory?.isGenerating) {
++    const trigger = {
++      isGenerating: lastMessageInHistory?.isGenerating,
++      lastMessageId: lastMessageInHistory?.id,
++      messageCount: chatHistory.messages?.length,
++    };
++    const previous = previousAutoSaveTrigger.current;
++    previousAutoSaveTrigger.current = trigger;
++
++    if (
++      previous &&
++      previous.messageCount === trigger.messageCount &&
++      previous.lastMessageId === trigger.lastMessageId &&
++      previous.isGenerating === trigger.isGenerating
++    ) {
++      return;
++    }
++
++    if (!trigger.isGenerating) {
+       saveCurrentChat();
+     }
+   }, [
+     chatHistory.messages?.length,
+     lastMessageInHistory?.id,
+     lastMessageInHistory?.isGenerating,
++    saveCurrentChat,
+   ]);
+ 
+   const deleteChat = useCallback(

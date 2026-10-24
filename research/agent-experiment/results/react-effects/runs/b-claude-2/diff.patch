@@ -1,0 +1,58 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -83,7 +83,7 @@
+ // ── end of STUB ────────────────────────────────────────────────────────
+ 
+ import type { ChangeEvent } from "react";
+-import { useEffect, useState } from "react";
++import { useState } from "react";
+ 
+ // [Joshen] This is trying to do the same thing as TimeSplitInput.tsx
+ // so can we please look to try to combine these 2 components together if possible
+@@ -118,19 +118,6 @@
+     ? dayjs(formatTimeToTimeString(maximumTime), "HH:mm:ss", true)
+     : undefined;
+ 
+-  useEffect(() => {
+-    if (minimumTime || maximumTime) {
+-      validate(time);
+-    }
+-  }, [JSON.stringify(minimumTime), JSON.stringify(maximumTime)]);
+-
+-  useEffect(() => {
+-    if (defaultTime) {
+-      setTime(defaultTime);
+-      validate(defaultTime);
+-    }
+-  }, [defaultTime]);
+-
+   const validate = (time: Time) => {
+     let error;
+     const formattedTime = dayjs(formatTimeToTimeString(time), "HH:mm:ss", true);
+@@ -153,6 +140,26 @@
+     return error === undefined;
+   };
+ 
++  // Revalidate when the bounds change and apply a new defaultTime while rendering,
++  // instead of in effects. Both checks also run on mount.
++  const boundsKey = JSON.stringify({ maximumTime, minimumTime });
++  const [validatedBoundsKey, setValidatedBoundsKey] = useState<string>();
++  if (boundsKey !== validatedBoundsKey) {
++    setValidatedBoundsKey(boundsKey);
++    if (minimumTime || maximumTime) {
++      validate(time);
++    }
++  }
++
++  const [appliedDefaultTime, setAppliedDefaultTime] = useState<Time>();
++  if (defaultTime !== appliedDefaultTime) {
++    setAppliedDefaultTime(defaultTime);
++    if (defaultTime) {
++      setTime(defaultTime);
++      validate(defaultTime);
++    }
++  }
++
+   const onFocus = () => setIsFocused(true);
+ 
+   const onInputChange = (

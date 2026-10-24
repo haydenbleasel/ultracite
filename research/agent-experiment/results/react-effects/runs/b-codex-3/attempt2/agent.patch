@@ -1,0 +1,60 @@
+--- a/TimeInput.tsx
++++ b/TimeInput.tsx
+@@ -83,7 +83,7 @@
+ // ── end of STUB ────────────────────────────────────────────────────────
+ 
+ import type { ChangeEvent } from "react";
+-import { useEffect, useEffectEvent, useState } from "react";
++import { useState } from "react";
+ 
+ // [Joshen] This is trying to do the same thing as TimeSplitInput.tsx
+ // so can we please look to try to combine these 2 components together if possible
+@@ -109,6 +109,7 @@
+   const [isFocused, setIsFocused] = useState(false);
+   const [error, setError] = useState<string>();
+   const [time, setTime] = useState<Time>(defaultTime || { h: 0, m: 0, s: 0 });
++  const [previousDefaultTime, setPreviousDefaultTime] = useState<Time>();
+ 
+   const formattedMinimumTime = minimumTime
+     ? dayjs(formatTimeToTimeString(minimumTime), "HH:mm:ss", true)
+@@ -142,27 +143,27 @@
+ 
+   const minimumTimeKey = JSON.stringify(minimumTime);
+   const maximumTimeKey = JSON.stringify(maximumTime);
++  const [previousMinimumTimeKey, setPreviousMinimumTimeKey] = useState<string>();
++  const [previousMaximumTimeKey, setPreviousMaximumTimeKey] = useState<string>();
+ 
+-  const onBoundsChange = useEffectEvent(() => {
++  if (
++    minimumTimeKey !== previousMinimumTimeKey ||
++    maximumTimeKey !== previousMaximumTimeKey
++  ) {
++    setPreviousMinimumTimeKey(minimumTimeKey);
++    setPreviousMaximumTimeKey(maximumTimeKey);
+     if (minimumTime || maximumTime) {
+       validate(time);
+     }
+-  });
++  }
+ 
+-  const onDefaultTimeChange = useEffectEvent((value: Time) => validate(value));
+-
+-  useEffect(() => {
+-    if (minimumTimeKey || maximumTimeKey) {
+-      onBoundsChange();
+-    }
+-  }, [minimumTimeKey, maximumTimeKey]);
+-
+-  useEffect(() => {
++  if (defaultTime !== previousDefaultTime) {
++    setPreviousDefaultTime(defaultTime);
+     if (defaultTime) {
+       setTime(defaultTime);
+-      onDefaultTimeChange(defaultTime);
++      validate(defaultTime);
+     }
+-  }, [defaultTime]);
++  }
+ 
+   const onFocus = () => setIsFocused(true);
+ 
