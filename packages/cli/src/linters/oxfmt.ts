@@ -6,6 +6,7 @@ import { z } from "zod";
 import type { JsonObject } from "../data/types";
 import { parseJsoncStrict } from "../schemas";
 import { exists, resolveEsmConfigPath, writeProjectFile } from "../utils";
+import { BUN_CONFIG_MODULE } from "./bun";
 import {
   parseConfigModule,
   renderEntries,
@@ -31,6 +32,11 @@ const oxfmtRcPaths = ["./.oxfmtrc.json", "./.oxfmtrc.jsonc"];
 
 const ULTRACITE_OXFMT = "ultracite/oxfmt";
 
+interface OxfmtOptions {
+  /** Write the config for the Bun provider (see config/bun/index.mjs). */
+  bun?: boolean;
+}
+
 // Everything in an existing config that isn't Ultracite's: carried over into
 // the regenerated file as written.
 interface OxfmtExtras {
@@ -51,12 +57,34 @@ const emptyExtras = (): OxfmtExtras => ({
   ultraciteLocal: "ultracite",
 });
 
-const generateConfigContent = (extras: OxfmtExtras = emptyExtras()) => {
+// A Bun config imports defineConfig from ultracite/bun, so it loads (and
+// type checks) without oxfmt installed. Anything else the project imports
+// from oxfmt stays on its own import.
+const renderDefineConfigImports = (
+  bun: boolean,
+  oxfmtSpecifiers: string[]
+): string[] => {
+  if (!bun) {
+    return [renderImport("oxfmt", ["defineConfig", ...oxfmtSpecifiers])];
+  }
+
+  return [
+    oxfmtSpecifiers.length > 0 ? renderImport("oxfmt", oxfmtSpecifiers) : "",
+    renderImport(BUN_CONFIG_MODULE, ["defineConfig"]),
+  ];
+};
+
+const generateConfigContent = (
+  extras: OxfmtExtras = emptyExtras(),
+  bun = false
+) => {
   const imports = [
-    renderImport("oxfmt", ["defineConfig", ...extras.oxfmtSpecifiers]),
+    ...renderDefineConfigImports(bun, extras.oxfmtSpecifiers),
     `import ${extras.ultraciteLocal} from "${ULTRACITE_OXFMT}";`,
     ...extras.imports,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const statements = extras.statements.join("\n\n");
 
@@ -84,6 +112,12 @@ const readExistingConfig = (config: ConfigModule): OxfmtExtras | null => {
   const extras = emptyExtras();
 
   for (const moduleImport of config.imports) {
+    // The Bun provider's defineConfig, regenerated for whichever provider
+    // init is writing for.
+    if (!moduleImport.typeOnly && moduleImport.source === BUN_CONFIG_MODULE) {
+      continue;
+    }
+
     if (moduleImport.typeOnly) {
       extras.imports.push(moduleImport.text);
     } else if (moduleImport.source === "oxfmt") {
@@ -186,16 +220,16 @@ const readExistingOxfmtConfig = async (
 };
 
 export const oxfmt = {
-  create: async () =>
+  create: async (opts?: OxfmtOptions) =>
     await writeProjectFile(
       resolveOxfmtConfigPath().target,
-      generateConfigContent()
+      generateConfigContent(emptyExtras(), opts?.bun)
     ),
   exists: () =>
     exists(oxfmtTsConfigPath) ||
     exists(oxfmtMtsConfigPath) ||
     oxfmtRcPaths.some(exists),
-  update: async () => {
+  update: async (opts?: OxfmtOptions) => {
     const paths = resolveOxfmtConfigPath();
     const configFile = fileName(paths.target);
 
@@ -246,7 +280,10 @@ export const oxfmt = {
       mergeRcConfig(config, current.extras);
     }
 
-    await writeProjectFile(paths.target, generateConfigContent(current.extras));
+    await writeProjectFile(
+      paths.target,
+      generateConfigContent(current.extras, opts?.bun)
+    );
 
     // A .ts config in a "commonjs" package can't load, so it moved to .mts.
     const renamed =

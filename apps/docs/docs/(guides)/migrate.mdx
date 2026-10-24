@@ -31,6 +31,7 @@ npx ultracite@latest init
 - **Stylelint** (with ESLint): writes a `stylelint.config.mjs` that spreads Ultracite's config. A config that doesn't reference `ultracite/stylelint` is replaced, with a warning; one that builds on it and adds rules is left as it is.
 - **Biome**: adds Ultracite's presets to the `extends` list of your `biome.json` or `biome.jsonc`, editing it in place, so your rules, settings and comments stay.
 - **Oxlint**: adds Ultracite's presets to your `oxlint.config.ts`, keeping your own imports, `rules`, `overrides`, `ignorePatterns`, `jsPlugins` and `settings`. An `.oxlintrc.json` or `.oxfmtrc.json` is moved into the TypeScript configs and deleted, since Oxlint and Oxfmt refuse to run with two configs in one folder.
+- **Bun**: writes the same `oxlint.config.ts` and `oxfmt.config.ts` as Oxlint, keeping the same things, with `defineConfig` imported from `ultracite/bun`. Moving between Oxlint and Bun only rewrites that import and removes nothing. `init` doesn't touch `bunfig.toml`: carry any `[lint]` and `[fmt]` settings into the two configs (step 2), since the editor extension doesn't read `bunfig.toml`.
 
 Moving to another engine removes the ESLint, Prettier and Stylelint packages Ultracite would have installed, and their config files, including legacy `.eslintrc*` files and the `"prettier"` and `"stylelint"` keys in `package.json`. An interactive run lists them and asks first; with `--yes`, `init` removes them without asking. If you keep them, `init` warns when `ultracite check` would still find and run the old linter. Packages in `dependencies` or `peerDependencies`, and plugins Ultracite doesn't install, stay. Oxlint doesn't lint CSS (Oxfmt only formats it), so pick Biome or ESLint if you rely on Stylelint.
 
@@ -72,7 +73,7 @@ Rather than fixing everything in one pull request, turn off the rules that fail 
 
 List the rules that fail, then turn each one off after Ultracite's presets. Each engine shows them differently.
 
-**Oxlint.** `npx ultracite check -f json` prints each problem with its rule as `plugin(rule)`. In `oxlint.config.ts` that's `plugin/rule`, except Oxlint's core rules, `eslint(rule)`, which are just `rule`:
+**Oxlint and Bun.** `npx ultracite check -f json` prints each problem with its rule as `plugin(rule)`. In `oxlint.config.ts` that's `plugin/rule`, except Oxlint's core rules, `eslint(rule)`, which are just `rule`:
 
 ```ts title="oxlint.config.ts"
 export default defineConfig({

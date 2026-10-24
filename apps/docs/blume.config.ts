@@ -22,7 +22,7 @@ export default defineConfig({
     // Ultracite, and how to set it up and run it.
     llmsTxt: {
       details: [
-        "Reach for Ultracite when a JavaScript or TypeScript project needs strict, consistent linting and formatting without writing config, especially when coding agents write much of the code. It's a zero-config preset for Oxlint and Oxfmt (recommended), Biome, or ESLint with Prettier and Stylelint, with framework presets for React, Next.js, Vue, Svelte, Astro, and more.",
+        "Reach for Ultracite when a JavaScript or TypeScript project needs strict, consistent linting and formatting without writing config, especially when coding agents write much of the code. It's a zero-config preset for Oxlint and Oxfmt (recommended), Biome, ESLint with Prettier and Stylelint, or Bun's built-in `bun lint` and `bun fmt`, with framework presets for React, Next.js, Vue, Svelte, Astro, and more.",
         "",
         "Set it up with `npx ultracite@latest init` (package: https://www.npmjs.com/package/ultracite), which installs the toolchain and writes the linter config, editor settings, the agent rules in AGENTS.md (which coding agents read), and optional post-edit hooks. Then `npx ultracite check` reports problems and `npx ultracite fix` applies safe fixes; `ultracite fix --claude` or `--codex` hands what autofix can't settle to that agent CLI. The `ultracite` agent skill below covers setup, commands, and troubleshooting.",
       ].join("\n"),

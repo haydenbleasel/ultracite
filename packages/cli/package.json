@@ -31,6 +31,10 @@
   "type": "module",
   "exports": {
     "./biome/*": "./config/biome/*/biome.jsonc",
+    "./bun": {
+      "types": "./config/bun/index.d.mts",
+      "default": "./config/bun/index.mjs"
+    },
     "./eslint/*": "./config/eslint/*/eslint.config.mjs",
     "./oxlint/*": {
       "types": "./config/oxlint/*/index.d.mts",

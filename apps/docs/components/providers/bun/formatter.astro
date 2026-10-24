@@ -1,0 +1,76 @@
+---
+import BeforeAfter from "../before-after.astro";
+
+// The component from the other provider pages, and what `bun fmt` (Bun
+// 1.4.4-canary.1) made of it under ultracite/oxfmt, with tailwindcss 4.3.3
+// installed. Oxfmt 0.71.0 printed the same bytes for it (run for real;
+// regenerate when the config changes).
+const before = `import { cn } from '@/lib/utils'
+import { Slot } from '@radix-ui/react-slot'
+import type { ReactNode } from 'react'
+
+export function Button({ asChild, children }: { asChild?: boolean, children: ReactNode }) {
+  const Comp = asChild ? Slot : 'button'
+  return <Comp className={cn('text-sm px-4 bg-primary hover:bg-primary/90 rounded-md h-10 font-medium')}>{children}</Comp>
+}`;
+
+const after = `import { Slot } from "@radix-ui/react-slot";
+import type { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
+
+export function Button({
+  asChild,
+  children,
+}: {
+  asChild?: boolean;
+  children: ReactNode;
+}) {
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      className={cn(
+        "bg-primary hover:bg-primary/90 h-10 rounded-md px-4 text-sm font-medium"
+      )}
+    >
+      {children}
+    </Comp>
+  );
+}`;
+
+const sorts = [
+  {
+    description:
+      "Packages first, then your own aliases, with a blank line between the groups and A–Z order inside each.",
+    name: "sortImports",
+  },
+  {
+    description:
+      "Tailwind classes in Tailwind’s order, in className and in cn, clsx, cva, tw, twMerge, twJoin and tv calls. Bun reads the order from the `tailwindcss` package in your project, and leaves classes as written without it.",
+    name: "sortTailwindcss",
+  },
+  {
+    description:
+      "package.json keys in the conventional order, so a dependency an agent adds lands where a reviewer expects.",
+    name: "sortPackageJson",
+  },
+];
+---
+
+<BeforeAfter
+  after={after}
+  afterLabel="After bun fmt"
+  before={before}
+  id="bn-format"
+  items={sorts}
+  lang="tsx"
+  path="components/button.tsx"
+  title="bun fmt prints what Oxfmt prints"
+>
+  <code class="font-mono text-base">bun fmt</code> reimplements Oxfmt and
+  reads <code class="font-mono text-base">oxfmt.config.ts</code>, so
+  Ultracite’s formatting settings carry over: Prettier’s defaults at 80
+  columns, with imports, Tailwind classes and{" "}
+  <code class="font-mono text-base">package.json</code> sorted. On this file,
+  Bun and Oxfmt wrote the same bytes.
+</BeforeAfter>

@@ -4,7 +4,7 @@ import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
 import SectionHeading from "../../home/section-heading.astro";
 
 // Rules set to "error" per preset (packages/cli/config/oxlint), Ultracite
-// 7.12.4. Native presets run in Oxlint's Rust engine; the rest load ESLint
+// 8.0.1. Native presets run in Oxlint's Rust engine; the rest load ESLint
 // plugins through Oxlint's JS plugin API.
 const native = [
   { count: 474, description: "ESLint, TypeScript, Unicorn, imports, promises", name: "core" },
@@ -16,10 +16,10 @@ const native = [
 ];
 
 const jsPlugins = [
-  { count: 202, description: "eslint-plugin-sonarjs", name: "js-plugins" },
+  { count: 234, description: "eslint-plugin-sonarjs", name: "js-plugins" },
   { count: 149, description: "oxlint-plugin-react-doctor", name: "js-plugins" },
   { count: 21, description: "eslint-plugin-github", name: "js-plugins" },
-  { count: 15, description: "Escape hatches agents reach for, vendored", name: "anti-slop" },
+  { count: 18, description: "Escape hatches agents reach for, vendored", name: "anti-slop" },
   { count: 6, description: "@shadcn/lint, for Tailwind design systems", name: "shadcn" },
 ];
 
