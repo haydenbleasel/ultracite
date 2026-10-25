@@ -26,7 +26,7 @@ packages/cli/                 The published `ultracite` package
   src/dependencies.ts         Toolchain versions + peer ranges read from package.json; what `init` installs
   config/                     The presets (see "Presets" below)
   __tests__/                  bun:test suite, one file per source module, plus lint-for-real fixtures
-  scripts/                    generate-dts, copy-skill, compare-rule-parity, vendor-anti-slop
+  scripts/                    generate-dts, copy-skill, compare-rule-parity, vendor-anti-slop, and the Biome, ESLint and Stylelint smoke tests
   build.ts                    Bun.build -> dist/index.js (single minified ESM file, deps external)
 apps/docs/                    Docs + marketing site (blume on Astro, deployed to Cloudflare Workers)
   docs/**/*.mdx               Documentation content; meta.ts files order the sidebar
@@ -117,7 +117,7 @@ Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `drizzle
 
 1. Add `config/oxlint/<name>/index.mjs`, `config/eslint/<name>/eslint.config.mjs` and `config/biome/<name>/biome.jsonc`.
 2. Add the framework to `src/data/options.ts` and, for ESLint, the plugin versions to `src/dependencies.ts` (`eslintFrameworkDevDependencies`).
-3. Make sure each linter adapter in `src/linters/` extends the new preset when the framework is selected, and add tests in the matching `__tests__` file.
+3. Make sure each linter adapter in `src/linters/` extends the new preset when the framework is selected, and add tests in the matching `__tests__` file. Add a fixture to `packages/cli/scripts/biome-smoke.ts` (it fails for a preset without one) and, for an ESLint preset with rules, to `eslint-smoke.ts`; both load the preset with the installed linter and check that its rules report.
 4. Run `bun run validate:configs`; the parity script must pass or get an allowlisted, justified exception.
 5. Document it in `apps/docs/docs/languages.mdx` and the provider pages.
 

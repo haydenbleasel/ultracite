@@ -10,6 +10,13 @@ const main = async () => {
   const biome =
     await $`bun ${path.join(scriptsDir, "validate-biome.ts")}`.nothrow();
 
+  console.log("\nLinting fixtures with every Biome preset...\n");
+
+  const biomeSmoke = await $`bun ${path.join(
+    scriptsDir,
+    "../packages/cli/scripts/biome-smoke.ts"
+  )}`.nothrow();
+
   console.log("\nValidating ESLint configs...\n");
 
   const eslint =
@@ -45,9 +52,15 @@ const main = async () => {
     .cwd(path.join(scriptsDir, "../packages/cli"))
     .nothrow();
 
-  const failed = [biome, eslint, eslintSmoke, oxlint, stylelint, parity].filter(
-    (r) => r.exitCode !== 0
-  );
+  const failed = [
+    biome,
+    biomeSmoke,
+    eslint,
+    eslintSmoke,
+    oxlint,
+    stylelint,
+    parity,
+  ].filter((r) => r.exitCode !== 0);
 
   if (failed.length > 0) {
     process.exit(1);
