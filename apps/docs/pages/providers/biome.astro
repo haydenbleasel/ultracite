@@ -20,10 +20,11 @@ import Videos from "../../components/providers/biome/videos.astro";
 import { formatMs, runFor } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
-// Facts on this page were checked against Biome 2.5.15 and Ultracite 7.12.4
-// on this date. Rechecked for Ultracite 8.0.0: the rule counts, the
-// type-aware preset and the timings.
-const lastModified = "2026-10-10";
+// Facts on this page were checked against Biome 2.5.15 and Ultracite 7.12.4.
+// Rechecked for Ultracite 8.0.0: the rule counts, the type-aware preset and
+// the timings. Rechecked on this date for Biome 2.6.3 and Ultracite 8.0.3:
+// the rule counts and the assist actions; the timings are still 8.0.0's.
+const lastModified = "2026-10-25";
 const command = "npx ultracite@latest init --linter biome";
 const small = runFor(42);
 const large = runFor(420);
@@ -36,7 +37,7 @@ const breadcrumbs: Crumb[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "Biome turns on 215 rules from its recommended set. Ultracite’s core preset turns on 331: it keeps every default except `noAutofocus` and `noImportantStyles`, sets each rule it touches to `error`, and turns on nine assist actions that sort imports, object keys, JSX attributes and more. The React preset adds 12 rules and Next.js 7. `init` also writes editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
+      "Biome turns on 218 rules from its recommended set. Ultracite’s core preset turns on 351: it keeps every default except `noAutofocus` and `noImportantStyles`, sets each rule it touches to `error`, and turns on twelve assist actions that sort imports, object keys, JSX attributes, GraphQL documents and more. The React preset adds 17 rules and Next.js 7. `init` also writes editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
     question: "What does Ultracite add on top of Biome’s defaults?",
   },
   {
@@ -50,7 +51,7 @@ const faqs: FaqItem[] = [
     question: "Do I still need Prettier?",
   },
   {
-    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to ${formatMs(large.ms.biome)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (474 in its core preset to Biome’s 331), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, because it lints and formats in one process; at 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to ${formatMs(large.ms.biome)}. Pick Biome for one tool and one config file with sorting built in. Pick Oxlint for more rules (474 in its core preset to Biome’s 351), ESLint’s rule names and plugins, and type-aware rules on typescript-go.`,
     question: "Should I use Biome or Oxlint?",
   },
   {
@@ -108,7 +109,7 @@ const nextSteps: NextStep[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description={`Ultracite turns on 331 of Biome’s 565 rules (the default is 215), sorts imports, keys and Tailwind classes, sets up VS Code, Zed and your agents, and checks 420 files in ${formatMs(large.ms.biome)}.`}
+  description={`Ultracite turns on 351 of Biome’s 640 rules (the default is 218), sorts imports, keys and Tailwind classes, sets up VS Code, Zed and your agents, and checks 420 files in ${formatMs(large.ms.biome)}.`}
   faqs={faqs}
   lastModified={lastModified}
   title="Ultracite for Biome — Strict biome.jsonc Config"
@@ -120,7 +121,7 @@ const nextSteps: NextStep[] = [
     name="Biome"
     title="The strict Biome config, in one line of extends"
   >
-    Biome ships 565 rules and turns on 215. Ultracite turns on 331 and adds the
+    Biome ships 640 rules and turns on 218. Ultracite turns on 351 and adds the
     sorting, formatting and editor settings to match, all from one{" "}
     <code class="text-foreground font-mono text-base">biome.jsonc</code>.
     <Fragment slot="note">
@@ -138,7 +139,7 @@ const nextSteps: NextStep[] = [
         ESLint
       </a>
       <span aria-hidden="true">·</span>
-      <span>Checked against Biome 2.5</span>
+      <span>Checked against Biome 2.6</span>
     </Fragment>
     <ConfigFiles slot="visual" />
   </LandingHero>

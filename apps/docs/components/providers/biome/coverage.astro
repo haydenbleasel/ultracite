@@ -2,48 +2,49 @@
 import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
-// Biome 2.5.15's catalog (its configuration schema, with `biome explain` for
-// each rule's fix) against the rules on in Ultracite 8.0.0, counted with
-// `biome rage --linter`: once with an empty config in a project with no
-// framework dependencies, once with ultracite/biome/core. `defaults` counts
-// the default rules core keeps; it turns off two, a11y/noAutofocus and
-// complexity/noImportantStyles. Re-derive when either version moves.
-const catalogSize = 565;
-const defaultCount = 215;
-const coreCount = 331;
+// Biome 2.6.3's catalog (its configuration schema, without each group's
+// `recommended` and `preset` keys, with `biome explain` for each rule's fix)
+// against the rules on in Ultracite 8.0.3, counted with `biome rage --linter`:
+// once with an empty config in a project with no framework dependencies, once
+// with ultracite/biome/core. `defaults` counts the default rules core keeps;
+// it turns off two, a11y/noAutofocus and complexity/noImportantStyles.
+// Re-derive when either version moves.
+const catalogSize = 640;
+const defaultCount = 218;
+const coreCount = 351;
 const typeAwareCount = 6;
 
 const groups: CoverageRow[] = [
   {
-    available: 121,
+    available: 139,
     defaults: 75,
     description: "Code that’s likely wrong or useless",
-    enabled: 101,
+    enabled: 105,
     name: "Suspicious",
   },
   {
-    available: 100,
-    defaults: 52,
+    available: 112,
+    defaults: 53,
     description: "Code that’s guaranteed to be wrong or useless",
-    enabled: 59,
+    enabled: 60,
     name: "Correctness",
   },
   {
-    available: 100,
+    available: 117,
     defaults: 12,
     description: "One consistent, idiomatic way to write it",
-    enabled: 72,
+    enabled: 80,
     name: "Style",
   },
   {
-    available: 51,
-    defaults: 33,
+    available: 57,
+    defaults: 34,
     description: "Code that could be simpler",
-    enabled: 45,
+    enabled: 50,
     name: "Complexity",
   },
   {
-    available: 39,
+    available: 38,
     defaults: 36,
     description: "Accessibility problems in JSX and HTML",
     enabled: 37,
@@ -51,20 +52,20 @@ const groups: CoverageRow[] = [
   },
   {
     available: 16,
-    defaults: 2,
+    defaults: 3,
     description: "Code that could run faster",
-    enabled: 11,
+    enabled: 12,
     name: "Performance",
   },
   {
     available: 7,
     defaults: 3,
     description: "Potential security flaws",
-    enabled: 5,
+    enabled: 6,
     name: "Security",
   },
   {
-    available: 131,
+    available: 154,
     defaults: 0,
     description: "Rules still in development",
     enabled: 1,
@@ -72,19 +73,19 @@ const groups: CoverageRow[] = [
   },
 ];
 
-// What `ultracite fix` can do about each of the 331, by the fix kind Biome
+// What `ultracite fix` can do about each of the 351, by the fix kind Biome
 // gives it. Ultracite makes three unsafe fixes safe: noUnusedImports,
-// useBlockStatements and useSortedClasses.
+// useBlockStatements and useTailwindSortedClasses.
 const fixes = [
-  { label: "safe fix, applied by fix", value: "72" },
-  { label: "unsafe fix, with --unsafe", value: "73" },
-  { label: "no fix, for the agent", value: "186" },
+  { label: "safe fix, applied by fix", value: "74" },
+  { label: "unsafe fix, with --unsafe", value: "79" },
+  { label: "no fix, for the agent", value: "198" },
   { label: "type-aware, opt-in", value: String(typeAwareCount) },
 ];
 ---
 
 <Coverage
-  caption="Biome 2.5.15 and Ultracite 8.0.0, counted with `biome rage --linter`. Groups are drawn to one scale. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
+  caption="Biome 2.6.3 and Ultracite 8.0.3, counted with `biome rage --linter`. Groups are drawn to one scale. Biome also turns on a framework’s recommended rules when it finds that framework in your dependencies; Ultracite’s framework presets set those rules explicitly."
   id="bi-rules"
   notes={[
     {
@@ -98,7 +99,7 @@ const fixes = [
   ]}
   rows={groups}
   stats={[
-    { label: "Rules in Biome 2.5", value: String(catalogSize) },
+    { label: "Rules in Biome 2.6", value: String(catalogSize) },
     {
       label: "On by default, from Biome’s recommended set",
       value: String(defaultCount),

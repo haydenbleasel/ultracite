@@ -25,7 +25,8 @@ const breadcrumbs: Crumb[] = [{ href: "/providers", name: "Providers" }];
 
 const hrefFor = (id: ProviderId): string => `/providers/${id}`;
 
-// Rules on in each core preset (Ultracite 8.0.0): Oxlint's set to "error",
+// Rules on in each core preset (Ultracite 8.0.0; Biome's rechecked for 8.0.3
+// with Biome 2.6.3): Oxlint's set to "error",
 // Biome's from `biome rage --linter`, and ESLint's from `eslint
 // --print-config` on a TypeScript file. Rules that read types: Oxlint's
 // type-aware rules in core; Biome's type-aware preset; for ESLint, the 100
@@ -46,7 +47,7 @@ const engines = [
   },
   {
     check420: formatMs(large.ms.biome),
-    coreRules: 331,
+    coreRules: 351,
     id: "biome",
     name: "Biome",
     recommended: false,
@@ -76,7 +77,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
     label: "Runs on",
     values: ["Native Rust binaries", "One native Rust binary", "Node.js"],
   },
-  { label: "Rules on in the core preset", values: ["474", "331", "918"] },
+  { label: "Rules on in the core preset", values: ["474", "351", "918"] },
   {
     label: "`ultracite check`, 42 files",
     values: [

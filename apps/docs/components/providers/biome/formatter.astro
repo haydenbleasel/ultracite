@@ -2,8 +2,9 @@
 import BeforeAfter from "../before-after.astro";
 
 // The component from the Oxlint page, and what `ultracite fix` made of it
-// with Biome 2.5.15 under ultracite/biome/core (run for real; regenerate when
-// the config changes). Note Biome's Tailwind order puts variants last.
+// with Biome 2.6.3 under ultracite/biome/core (run for real; regenerate when
+// the config changes). Biome 2.6 sorts Tailwind classes in Tailwind CSS v4's
+// order, which gives this component the same order as Oxfmt.
 const before = `import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
 import type { ReactNode } from 'react'
@@ -28,7 +29,7 @@ export function Button({
   return (
     <Comp
       className={cn(
-        "h-10 rounded-md bg-primary px-4 font-medium text-sm hover:bg-primary/90"
+        "bg-primary hover:bg-primary/90 h-10 rounded-md px-4 text-sm font-medium"
       )}
     >
       {children}
@@ -44,7 +45,7 @@ const items = [
   },
   {
     description:
-      "Tailwind classes sorted in `class`, `className` and `cn`, `clsx`, `cva`, `tw`, `twMerge`, `twJoin` and `tv` calls. Biome’s order puts variants like `hover:` last.",
+      "Tailwind classes sorted in `class`, `className` and `cn`, `clsx`, `cva`, `tw`, `twMerge`, `twJoin` and `tv` calls, in Tailwind CSS v4’s order.",
     name: "useSortedClasses",
   },
   {

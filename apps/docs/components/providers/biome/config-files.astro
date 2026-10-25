@@ -2,8 +2,8 @@
 // The biome.jsonc `ultracite init --linter biome` writes for a React and
 // Next.js app (rendered by lib/providers.ts, as on the homepage), with the
 // rules each preset turns on, and what the core preset sets besides rules.
-// Counts are from `biome rage --linter` with Biome 2.5.15 and Ultracite
-// 8.0.0: core alone, then each preset added (React sets 15 rules, 3 of which
+// Counts are from `biome rage --linter` with Biome 2.6.3 and Ultracite
+// 8.0.3: core alone, then each preset added (React sets 20 rules, 3 of which
 // core already has on).
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
@@ -12,9 +12,9 @@ import Terminal from "../../landing/terminal.astro";
 const PRESETS = ["core", "react", "next"];
 
 const ruleCounts = new Map([
-  ["core", 331],
+  ["core", 351],
   ["next", 7],
-  ["react", 12],
+  ["react", 17],
 ]);
 
 let totalRules = 0;
@@ -48,7 +48,7 @@ const settings = [
   ["trailingCommas", '"es5"'],
   ["formatWithErrors", "true"],
   ["organizeImports", '"on"'],
-  ["useSortedClasses", '"error"'],
+  ["useTailwindSortedClasses", '"error"'],
 ];
 ---
 
