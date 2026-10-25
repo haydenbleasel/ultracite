@@ -46,6 +46,10 @@ const overrideRules = {
   "unicorn/no-nested-ternary": "off",
   "unicorn/no-null": "off",
   "unicorn/no-process-exit": "off",
+  // v79 stopped reporting unknown calls during module evaluation unless
+  // checkUnknownCalls is set; this keeps the check v77 ran. Known pure
+  // helpers such as defineConfig() and React's memo() stay allowed.
+  "unicorn/no-top-level-side-effects": ["error", { checkUnknownCalls: true }],
   // Upstream already skips call arguments in TypeScript files, since a
   // required `T | undefined` parameter needs an explicit `undefined` (#851).
   // Matches oxlint, which skips them everywhere.
@@ -57,10 +61,22 @@ const overrideRules = {
     { checkMultiStatementBodies: true },
   ],
   "unicorn/prefer-global-this": "off",
+  // Also merge branches that differ only in the callee or a computed member,
+  // as in (test ? a : b)(value). Both options are off by default upstream,
+  // and prefer-ternary takes the same two.
+  "unicorn/prefer-minimal-ternary": [
+    "error",
+    { checkComputedMemberAccess: true, checkVaryingBase: true },
+  ],
   "unicorn/prefer-string-raw": "off",
   // Enforces Temporal over Date, but Temporal still lacks broad runtime
   // support; unicorn ships it off by default. Premature to enforce.
   "unicorn/prefer-temporal": "off",
+  "unicorn/prefer-ternary": [
+    "error",
+    "always",
+    { checkComputedMemberAccess: true, checkVaryingBase: true },
+  ],
   "unicorn/prefer-top-level-await": "off",
   "unicorn/text-encoding-identifier-case": ["error", { withDash: true }],
 };

@@ -679,12 +679,12 @@ describe("initialize", () => {
       skipInstall: false,
     });
 
-    expect(installedPackages).toContain("@shadcn/lint@^0.2.0");
+    expect(installedPackages).toContain("@shadcn/lint@^0.2.3");
     expect(installedPackages).toContain("eslint-plugin-github@6.1.2");
-    expect(installedPackages).toContain("eslint-plugin-jsdoc@^65.1.0");
+    expect(installedPackages).toContain("eslint-plugin-jsdoc@^65.4.2");
     expect(installedPackages).toContain("eslint-plugin-sonarjs@^4.2.2");
     expect(installedPackages).toContain("eslint-plugin-tsdoc@^0.5.4");
-    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.16");
+    expect(installedPackages).toContain("oxlint-plugin-react-doctor@^0.9.18");
     // anti-slop is vendored inside ultracite — nothing to install for it.
     expect(installedPackages.every((pkg) => !pkg.includes("anti-slop"))).toBe(
       true
