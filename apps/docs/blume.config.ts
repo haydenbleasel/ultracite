@@ -274,7 +274,7 @@ export default defineConfig({
     },
     software: {
       license: "https://opensource.org/license/mit",
-      operatingSystem: "Node.js 22.18+",
+      operatingSystem: "Node.js 22.22.2+ or 24.15+",
       price: 0,
       sameAs: [
         "https://www.npmjs.com/package/ultracite",

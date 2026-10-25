@@ -3,14 +3,18 @@ import path from "node:path";
 
 import { z } from "zod";
 
+import packageJson from "../package.json" with { type: "json" };
 import { options } from "../src/data/options";
 import {
+  biomeVersion,
   buildEslintDevDependencies,
   dependencyNamesByLinter,
   eslintCoreDevDependencies,
   eslintFrameworkDevDependencies,
   eslintPeerOverridePackages,
   eslintPeerOverridesFor,
+  OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
+  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
   oxfmtFrameworkDevDependencies,
 } from "../src/dependencies";
 
@@ -164,6 +168,7 @@ describe("ESLint dependencies", () => {
 });
 
 const manifestSchema = z.looseObject({
+  engines: z.looseObject({ node: z.string().optional() }).optional(),
   peerDependencies: z.record(z.string(), z.string()).optional(),
   version: z.string(),
 });
@@ -212,5 +217,71 @@ describe("eslintPeerOverridePackages", () => {
     expect(eslintPeerOverridesFor(["eslint-plugin-jsx-a11y"])).toEqual([
       "eslint-plugin-jsx-a11y",
     ]);
+  });
+});
+
+// The lowest Node versions Ultracite's engines range allows, one per line:
+// "^22.22.2 || >=24.15.0" gives 22.22.2 and 24.15.0.
+const ENGINE_FLOOR_RE = /\d+\.\d+\.\d+/gu;
+const nodeFloors = packageJson.engines.node.match(ENGINE_FLOOR_RE) ?? [];
+
+// Packages init installs whose own engines field asks for more than
+// Ultracite's floor, with why that's accepted.
+const enginesAllowlist = {
+  // Declares Node 24 since 7.3, when its build moved to TypeScript 7; it runs
+  // on Node 22 (checked on 22.18). Only the ESLint NestJS preset installs it.
+  "@darraghor/eslint-plugin-nestjs-typed": "needs Node 24",
+  // Declares ^22.22.3 || ^24.16.0 in 3.2, a patch above the floor; it lints
+  // .astro files on Node 22.18. Only the ESLint Astro preset installs it.
+  "eslint-plugin-astro": "needs Node 22.22.3 or 24.16",
+} satisfies Record<string, string>;
+
+describe("Node engines floor", () => {
+  test("CI starts the built CLI on the lowest versions engines allows", () => {
+    const workflow = readFile(
+      path.join(
+        import.meta.dir,
+        "..",
+        "..",
+        "..",
+        ".github",
+        "workflows",
+        "validate.yml"
+      )
+    );
+
+    expect(nodeFloors.length).toBeGreaterThan(0);
+
+    for (const floor of nodeFloors) {
+      expect(Bun.semver.satisfies(floor, packageJson.engines.node)).toBe(true);
+      expect(workflow).toContain(`node-version: ${floor}`);
+    }
+  });
+
+  test("every package init installs supports the floor", () => {
+    const names = new Set([
+      "@biomejs/biome",
+      ...Object.keys(eslintCoreDevDependencies),
+      ...Object.values(eslintFrameworkDevDependencies).flatMap((deps) =>
+        Object.keys(deps)
+      ),
+      ...Object.keys(OXLINT_TOOLCHAIN_DEV_DEPENDENCIES),
+      ...Object.keys(OXLINT_JS_PLUGIN_DEV_DEPENDENCIES),
+      ...Object.values(oxfmtFrameworkDevDependencies).flatMap((deps) =>
+        Object.keys(deps ?? {})
+      ),
+    ]);
+
+    const behind = [...names].filter((name) => {
+      const range = installedManifest(name).engines?.node;
+
+      return (
+        range !== undefined &&
+        nodeFloors.some((floor) => !Bun.semver.satisfies(floor, range))
+      );
+    });
+
+    expect(biomeVersion).toBeDefined();
+    expect(behind.toSorted()).toEqual(Object.keys(enginesAllowlist).toSorted());
   });
 });

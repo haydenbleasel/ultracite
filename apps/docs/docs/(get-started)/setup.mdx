@@ -3,7 +3,11 @@ title: Setup
 description: Install Ultracite with your preferred package manager, choose the right presets, and generate editor and agent config for your project.
 ---
 
-Ultracite can be installed with all major package managers. You'll need Node.js 22.18 or later (or Bun) and a project with a `package.json` file. If you're new to Ultracite, the [introduction](/docs) covers what it is and which toolchains it supports.
+Ultracite can be installed with all major package managers. You'll need Node.js 22.22.2 or later, or 24.15 or later (or Bun), and a project with a `package.json` file. If you're new to Ultracite, the [introduction](/docs) covers what it is and which toolchains it supports.
+
+:::note
+Two ESLint framework plugins declare a newer Node.js than Ultracite: `@darraghor/eslint-plugin-nestjs-typed`, which the `nestjs` preset uses, asks for Node.js 24, and `eslint-plugin-astro`, which the `astro` preset uses, for 22.22.3 or 24.16. Both run on older versions, and npm and pnpm only warn, but Yarn 1 refuses to install them.
+:::
 
 ## Installation
 

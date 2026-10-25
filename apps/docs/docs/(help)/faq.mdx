@@ -90,7 +90,7 @@ Some users have encountered signature verification errors when running `pnpm dlx
 Here are the recommended solutions:
 
 - **Update corepack**: Upgrade to corepack version 0.34.0 or later. You can do this with `corepack prepare pnpm@latest --activate` or by following the [pnpm corepack setup guide](https://pnpm.io/installation#using-corepack).
-- **Update Node.js**: Ultracite needs Node.js 22.18 or later, or Bun. Newer Node.js releases bundle newer corepack versions, so updating Node.js can also fix the error.
+- **Update Node.js**: Ultracite needs Node.js 22.22.2 or later, 24.15 or later, or Bun. Newer Node.js releases bundle newer corepack versions, so updating Node.js can also fix the error.
 - **Use npx instead**: If corepack continues to cause issues, you can use `npx ultracite init` instead of `pnpm dlx ultracite init`.
 
 If none of these work, please open an issue on the [Ultracite GitHub repo](https://github.com/haydenbleasel/ultracite/issues) with details about your Node.js and corepack versions.
