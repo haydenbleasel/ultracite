@@ -53,29 +53,31 @@ const notes = [
 ---
 
 <section aria-labelledby="oc-plugin" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id="oc-plugin" title="The plugin: one file, every edit">
       OpenCode doesn’t run Claude Code-style hooks, but its plugins see every
-      tool call. This one closes the loop the way Ultracite’s hooks do in
-      Claude Code and Copilot.
+      tool call. This one closes the loop the way Ultracite’s hooks do in Claude
+      Code and Copilot.
     </SectionHeading>
-    <div
-      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-12"
-    >
+    <div class="border-border bg-border grid gap-px border-t bg-clip-padding lg:grid-cols-12">
       <ul class="flex flex-col gap-px lg:col-span-4" role="list">
-        {
-          notes.map((note) => (
-            <li class="flex flex-1 flex-col gap-2 bg-background px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
-              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{note.title}</h3>
-              <p class="text-pretty text-[15px]/6 text-muted-foreground">
-                <RichText text={note.body} />
-              </p>
-            </li>
-          ))
-        }
+        {notes.map((note) => (
+          <li class="bg-background flex flex-1 flex-col gap-2 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+            <h3 class="text-lg/7 font-medium tracking-[-0.01em]">
+              {note.title}
+            </h3>
+            <p class="text-muted-foreground text-[15px]/6 text-pretty">
+              <RichText text={note.body} />
+            </p>
+          </li>
+        ))}
       </ul>
-      <div class="lp-code min-w-0 bg-background p-2 sm:p-6 lg:col-span-8 lg:p-10">
-        <CodeBlock code={plugin} lang="ts" title=".opencode/plugins/ultracite.ts" />
+      <div class="lp-code bg-background min-w-0 p-2 sm:p-6 lg:col-span-8 lg:p-10">
+        <CodeBlock
+          code={plugin}
+          lang="ts"
+          title=".opencode/plugins/ultracite.ts"
+        />
       </div>
     </div>
   </div>

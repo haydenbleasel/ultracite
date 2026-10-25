@@ -29,7 +29,7 @@ const hookNames = new Intl.ListFormat("en", {
 ---
 
 <section aria-labelledby="hp-agents" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading
       id="hp-agents"
       title="Wired into the agent loop, start to finish"
@@ -38,61 +38,53 @@ const hookNames = new Intl.ListFormat("en", {
       edit, and takes over whatever autofix can’t settle. Nothing waits for CI.
     </SectionHeading>
     <ol
-      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+      class="border-border bg-border grid gap-px border-t bg-clip-padding md:grid-cols-2"
       role="list"
     >
-      <li class="flex min-w-0 flex-col bg-background">
-        <div
-          class="flex h-72 min-w-0 flex-col gap-3 border-border border-b bg-muted/60 p-4 sm:p-8"
-        >
-          <div
-            class="min-w-0 rounded-md bg-panel p-4 font-mono text-[12.5px]/6 text-panel-foreground ring-1 ring-black/20"
-          >
+      <li class="bg-background flex min-w-0 flex-col">
+        <div class="border-border bg-muted/60 flex h-72 min-w-0 flex-col gap-3 border-b p-4 sm:p-8">
+          <div class="bg-panel text-panel-foreground min-w-0 rounded-md p-4 font-mono text-[12.5px]/6 ring-1 ring-black/20">
             <p class="truncate">
-              <span class="text-signal">$</span> npx skills add haydenbleasel/ultracite
+              <span class="text-signal">$</span> npx skills add
+              haydenbleasel/ultracite
             </p>
           </div>
-          <div
-            class="min-h-0 min-w-0 flex-1 overflow-hidden rounded-md bg-code p-4 font-mono text-[12.5px]/6 text-muted-foreground ring-1 ring-foreground/10"
-          >
+          <div class="bg-code text-muted-foreground ring-foreground/10 min-h-0 min-w-0 flex-1 overflow-hidden rounded-md p-4 font-mono text-[12.5px]/6 ring-1">
             <p class="text-foreground">skills/ultracite/SKILL.md</p>
             <p class="mt-1 line-clamp-3">
-              <span class="text-foreground">description:</span> Ultracite is a zero-config
-              linting and formatting preset for JavaScript/TypeScript projects. Use
-              when setting up Ultracite, running check, fix or doctor, writing code
-              that follows its standards, or troubleshooting.
+              <span class="text-foreground">description:</span> Ultracite is a
+              zero-config linting and formatting preset for
+              JavaScript/TypeScript projects. Use when setting up Ultracite,
+              running check, fix or doctor, writing code that follows its
+              standards, or troubleshooting.
             </p>
           </div>
         </div>
         <div class="flex flex-col gap-2 p-6 sm:p-8">
-          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+          <p class="text-accent font-mono text-xs/5 tracking-wider uppercase">
             1 · Setup
           </p>
-          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+          <h3 class="text-xl/7 font-medium tracking-[-0.015em]">
             Let your agent install it
           </h3>
-          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
-            Add the Ultracite skill and ask for it. Your agent learns how to run <code
-              class="font-mono text-sm">init</code
-            >, <code class="font-mono text-sm">check</code>, <code
-              class="font-mono text-sm">fix</code
-            > and <code class="font-mono text-sm">doctor</code>, and how to
+          <p class="text-muted-foreground max-w-[48ch] text-base/7 text-pretty">
+            Add the Ultracite skill and ask for it. Your agent learns how to run{" "}
+            <code class="font-mono text-sm">init</code>,{" "}
+            <code class="font-mono text-sm">check</code>,{" "}
+            <code class="font-mono text-sm">fix</code> and{" "}
+            <code class="font-mono text-sm">doctor</code>, and how to
             troubleshoot the result.
           </p>
         </div>
       </li>
-      <li class="flex min-w-0 flex-col bg-background">
-        <div
-          class="flex h-72 min-w-0 flex-col gap-4 border-border border-b bg-muted/60 p-4 sm:p-8"
-        >
-          <div
-            class="min-h-0 min-w-0 flex-1 overflow-hidden rounded-md bg-code p-4 font-mono text-[12.5px]/6 text-muted-foreground ring-1 ring-foreground/10"
-          >
+      <li class="bg-background flex min-w-0 flex-col">
+        <div class="border-border bg-muted/60 flex h-72 min-w-0 flex-col gap-4 border-b p-4 sm:p-8">
+          <div class="bg-code text-muted-foreground ring-foreground/10 min-h-0 min-w-0 flex-1 overflow-hidden rounded-md p-4 font-mono text-[12.5px]/6 ring-1">
             <p class="text-foreground"># Ultracite Code Standards</p>
             <p class="mt-1 truncate">
-              - Prefer <span class="text-foreground">`unknown`</span> over <span
-                class="text-foreground">`any`</span
-              > when the type is genuinely unknown
+              - Prefer <span class="text-foreground">`unknown`</span> over{" "}
+              <span class="text-foreground">`any`</span> when the type is
+              genuinely unknown
             </p>
             <p class="truncate">
               - Specify all dependencies in hook dependency arrays correctly
@@ -100,53 +92,44 @@ const hookNames = new Intl.ListFormat("en", {
             <p class="truncate">- Provide meaningful alt text for images</p>
           </div>
           <ul class="flex items-center" role="list">
-            {
-              featuredAgents.map((agent, index) => (
-                <li class:list={["-mr-1.5", index > 5 && "max-sm:hidden"]}>
-                  <img
-                    alt={agent.name}
-                    class="size-9 rounded-lg ring-2 ring-muted"
-                    height="36"
-                    src={agent.logo}
-                    title={agent.name}
-                    width="36"
-                  />
-                </li>
-              ))
-            }
-            <li class="ml-4 font-mono text-muted-foreground text-xs/5">
+            {featuredAgents.map((agent, index) => (
+              <li class:list={["-mr-1.5", index > 5 && "max-sm:hidden"]}>
+                <img
+                  alt={agent.name}
+                  class="ring-muted size-9 rounded-lg ring-2"
+                  height="36"
+                  src={agent.logo}
+                  title={agent.name}
+                  width="36"
+                />
+              </li>
+            ))}
+            <li class="text-muted-foreground ml-4 font-mono text-xs/5">
               {agents.length} agents
             </li>
           </ul>
         </div>
         <div class="flex flex-col gap-2 p-6 sm:p-8">
-          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+          <p class="text-accent font-mono text-xs/5 tracking-wider uppercase">
             2 · Before it writes
           </p>
-          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+          <h3 class="text-xl/7 font-medium tracking-[-0.015em]">
             The standard, in your agent’s context
           </h3>
-          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
+          <p class="text-muted-foreground max-w-[48ch] text-base/7 text-pretty">
             <code class="font-mono text-sm">init</code> writes the rules into
             AGENTS.md, which all {agents.length} agents read, so generated code
             starts close to passing.
           </p>
         </div>
       </li>
-      <li class="flex min-w-0 flex-col bg-background">
-        <div
-          class="flex h-72 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-8"
-        >
-          <div
-            class="min-h-0 min-w-0 flex-1 overflow-x-auto rounded-md bg-code ring-1 ring-foreground/10"
-          >
-            <p
-              class="border-border border-b px-4 py-2 font-mono text-muted-foreground text-xs/5"
-            >
+      <li class="bg-background flex min-w-0 flex-col">
+        <div class="border-border bg-muted/60 flex h-72 min-w-0 flex-col border-b p-4 sm:p-8">
+          <div class="bg-code ring-foreground/10 min-h-0 min-w-0 flex-1 overflow-x-auto rounded-md ring-1">
+            <p class="border-border text-muted-foreground border-b px-4 py-2 font-mono text-xs/5">
               .claude/settings.json
             </p>
-            <pre
-              class="px-4 py-3 font-mono text-[12px]/[1.6] text-muted-foreground">{`{
+            <pre class="text-muted-foreground px-4 py-3 font-mono text-[12px]/[1.6]">{`{
   `}<span class="text-foreground">"hooks"</span>{`: {
     `}<span class="text-foreground">"PostToolUse"</span>{`: [
       {
@@ -159,28 +142,23 @@ const hookNames = new Intl.ListFormat("en", {
           </div>
         </div>
         <div class="flex flex-col gap-2 p-6 sm:p-8">
-          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+          <p class="text-accent font-mono text-xs/5 tracking-wider uppercase">
             3 · After every edit
           </p>
-          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+          <h3 class="text-xl/7 font-medium tracking-[-0.015em]">
             Hooks that check each file it touches
           </h3>
-          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
+          <p class="text-muted-foreground max-w-[48ch] text-base/7 text-pretty">
             A hook fixes every file your agent edits in {hookNames}. In Claude
             Code, CodeBuddy, Codex, Devin Desktop, Deep Agents, Grok Build and
             VS Code’s Local agent, it hands what it can’t fix back to the agent.
           </p>
         </div>
       </li>
-      <li class="flex min-w-0 flex-col bg-background">
-        <div
-          class="flex h-72 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-8"
-        >
-          <div
-            class="min-h-0 min-w-0 flex-1 overflow-x-auto rounded-md bg-panel p-4 ring-1 ring-black/20"
-          >
-            <pre
-              class="font-mono text-[12.5px]/[1.65] text-panel-foreground"><span class="text-signal">$</span>{` npx ultracite fix --codex
+      <li class="bg-background flex min-w-0 flex-col">
+        <div class="border-border bg-muted/60 flex h-72 min-w-0 flex-col border-b p-4 sm:p-8">
+          <div class="bg-panel min-h-0 min-w-0 flex-1 overflow-x-auto rounded-md p-4 ring-1 ring-black/20">
+            <pre class="text-panel-foreground font-mono text-[12.5px]/[1.65]"><span class="text-signal">$</span>{` npx ultracite fix --codex
 `}<span class="text-panel-muted">┌</span>{`  ultracite fix — powered by Codex
 `}<span class="text-ok">◇</span>{`  Autofix complete. 9 issues in 3 files left for Codex.
 `}<span class="text-ok">✓</span>{` `}<span class="text-panel-muted">src/queue.ts:2:22</span>{`  no-async-promise-executor
@@ -190,17 +168,17 @@ const hookNames = new Intl.ListFormat("en", {
           </div>
         </div>
         <div class="flex flex-col gap-2 p-6 sm:p-8">
-          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
+          <p class="text-accent font-mono text-xs/5 tracking-wider uppercase">
             4 · When autofix can’t
           </p>
-          <h3 class="font-medium text-xl/7 tracking-[-0.015em]">
+          <h3 class="text-xl/7 font-medium tracking-[-0.015em]">
             Your agent CLI fixes the rest
           </h3>
-          <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
-            <code class="font-mono text-sm">ultracite fix --claude</code> or <code
-              class="font-mono text-sm">--codex</code
-            > sends what’s left to Claude Code or Codex, which repairs the codebase
-            file by file with edit-only permissions.
+          <p class="text-muted-foreground max-w-[48ch] text-base/7 text-pretty">
+            <code class="font-mono text-sm">ultracite fix --claude</code> or{" "}
+            <code class="font-mono text-sm">--codex</code> sends what’s left to
+            Claude Code or Codex, which repairs the codebase file by file with
+            edit-only permissions.
           </p>
         </div>
       </li>

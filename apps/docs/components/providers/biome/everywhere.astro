@@ -28,13 +28,21 @@ const zedSettings = `"TSX": {
 }`;
 
 const diagnostics = [
-  { fixable: true, location: "src/api.ts:1:1", rule: "assist/source/organizeImports" },
+  {
+    fixable: true,
+    location: "src/api.ts:1:1",
+    rule: "assist/source/organizeImports",
+  },
   {
     fixable: false,
     location: "src/component.tsx:42:27",
     rule: "lint/performance/noJsxPropsBind",
   },
-  { fixable: true, location: "src/utils.ts:5:56", rule: "assist/source/useSortedKeys" },
+  {
+    fixable: true,
+    location: "src/utils.ts:5:56",
+    rule: "assist/source/useSortedKeys",
+  },
 ];
 ---
 
@@ -42,7 +50,11 @@ const diagnostics = [
   cards={[
     {
       body: "`init` makes Biome the formatter for 14 languages, from TypeScript and CSS to GraphQL and Vue, and applies its safe fixes and import sorting when you save.",
-      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      code: {
+        lang: "jsonc",
+        path: ".vscode/settings.json",
+        text: vscodeSettings,
+      },
       eyebrow: "VS Code, Cursor, Devin Desktop",
       title: "Fix and format on save",
     },
@@ -61,22 +73,19 @@ const diagnostics = [
   id="bi-everywhere"
   title="The same rules in your editor, your agent and CI"
 >
-  <code class="font-mono text-base">init</code> points your editor at Biome
-  and tells your agents how to run it, so a file passes or fails the same way
+  <code class="font-mono text-base">init</code> points your editor at Biome and
+  tells your agents how to run it, so a file passes or fails the same way
   wherever it’s checked.
   <Fragment slot="terminal">
-    <p class="mb-1 truncate text-panel-foreground">
+    <p class="text-panel-foreground mb-1 truncate">
       <span class="text-signal">$</span> npx ultracite check
     </p>
-    {
-      diagnostics.map((line) => (
-        <p class="text-pretty">
-          {line.location}{" "}
-          <span class="text-panel-foreground">{line.rule}</span>
-          {line.fixable && <span class="text-signal"> FIXABLE</span>}
-        </p>
-      ))
-    }
+    {diagnostics.map((line) => (
+      <p class="text-pretty">
+        {line.location} <span class="text-panel-foreground">{line.rule}</span>
+        {line.fixable && <span class="text-signal"> FIXABLE</span>}
+      </p>
+    ))}
     <p>…</p>
     <p>Found 10 errors.</p>
   </Fragment>

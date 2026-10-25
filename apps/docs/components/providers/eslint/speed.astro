@@ -37,9 +37,9 @@ const large = runFor(420);
   title="The trade-off is time"
   toolchains={["eslint", "oxlint", "biome"]}
 >
-  ESLint and its plugins run in Node, and Prettier and Stylelint each run as
-  a step of their own. That’s seconds where the native engines take a third
-  of one. In an agent’s loop it’s less, because the hook only fixes the file
-  that changed. The type-aware preset adds TypeScript’s type checker, which
-  took the 420 files to {formatMs(eslintTypeAwareMs)}.
+  ESLint and its plugins run in Node, and Prettier and Stylelint each run as a
+  step of their own. That’s seconds where the native engines take a third of
+  one. In an agent’s loop it’s less, because the hook only fixes the file that
+  changed. The type-aware preset adds TypeScript’s type checker, which took the
+  420 files to {formatMs(eslintTypeAwareMs)}.
 </Speed>

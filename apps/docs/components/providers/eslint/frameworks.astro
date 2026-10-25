@@ -17,17 +17,40 @@ const presets: {
   templates?: boolean;
   typeAware?: number;
 }[] = [
-  { count: 549, name: "react", plugins: "React, hooks, jsx-a11y, React Doctor" },
+  {
+    count: 549,
+    name: "react",
+    plugins: "React, hooks, jsx-a11y, React Doctor",
+  },
   { count: 208, name: "vue", plugins: "eslint-plugin-vue", templates: true },
   { count: 70, name: "vitest", plugins: "@vitest/eslint-plugin", typeAware: 1 },
-  { count: 69, name: "svelte", plugins: "eslint-plugin-svelte", templates: true },
+  {
+    count: 69,
+    name: "svelte",
+    plugins: "eslint-plugin-svelte",
+    templates: true,
+  },
   { count: 63, name: "jest", plugins: "eslint-plugin-jest", typeAware: 4 },
   { count: 53, name: "astro", plugins: "eslint-plugin-astro", templates: true },
-  { count: 47, name: "next", plugins: "@next/eslint-plugin-next, React Doctor" },
+  {
+    count: 47,
+    name: "next",
+    plugins: "@next/eslint-plugin-next, React Doctor",
+  },
   { count: 45, name: "angular", plugins: "@angular-eslint", typeAware: 6 },
   { count: 34, name: "solid", plugins: "eslint-plugin-solid" },
-  { count: 34, name: "tanstack", plugins: "Query, Router, React Doctor", typeAware: 2 },
-  { count: 22, name: "nestjs", plugins: "eslint-plugin-nestjs-typed", typeAware: 3 },
+  {
+    count: 34,
+    name: "tanstack",
+    plugins: "Query, Router, React Doctor",
+    typeAware: 2,
+  },
+  {
+    count: 22,
+    name: "nestjs",
+    plugins: "eslint-plugin-nestjs-typed",
+    typeAware: 3,
+  },
   { count: 16, name: "storybook", plugins: "eslint-plugin-storybook" },
   { count: 12, name: "cypress", plugins: "eslint-plugin-cypress" },
   { count: 11, name: "qwik", plugins: "eslint-plugin-qwik", typeAware: 1 },
@@ -57,7 +80,7 @@ defineProps<{ tasks: { id: string; title: string; notes: string }[] }>();
 const problems = [
   {
     location: "2:15",
-    message: "The \"tasks\" property should have a JSDoc comment",
+    message: 'The "tasks" property should have a JSDoc comment',
     rule: "vue/require-prop-comment",
   },
   {
@@ -74,76 +97,81 @@ const problems = [
 ---
 
 <section aria-labelledby="es-frameworks" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading
       id="es-frameworks"
       title="Fifteen framework presets, templates included"
     >
-      Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte
-      and Astro that includes its parser, so ESLint checks the markup, not just
-      the script block. Six also have a type-aware add-on for their plugin’s
-      rules that read types.
+      Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte and
+      Astro that includes its parser, so ESLint checks the markup, not just the
+      script block. Six also have a type-aware add-on for their plugin’s rules
+      that read types.
     </SectionHeading>
-    <div
-      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
-    >
-      <div class="flex flex-col bg-background">
-        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
-          <h3 class="font-medium text-lg/7">Rules per preset</h3>
-          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider"
-            >Add the ones you use</span
-          >
+    <div class="border-border bg-border grid gap-px border-t bg-clip-padding lg:grid-cols-2">
+      <div class="bg-background flex flex-col">
+        <div class="border-border flex items-center justify-between gap-4 border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="text-lg/7 font-medium">Rules per preset</h3>
+          <span class="text-muted-foreground font-mono text-xs/5 tracking-wider uppercase">
+            Add the ones you use
+          </span>
         </div>
         <ul class="flex flex-col gap-4 px-4 py-8 sm:px-6 lg:px-10" role="list">
-          {
-            presets.map((preset) => (
-              <li class="flex flex-col gap-1.5">
-                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
-                  <span class="min-w-0">
-                    <code class="font-mono text-sm">{preset.name}</code>
-                    <span class="text-muted-foreground"> · {preset.plugins}</span>
-                    {preset.templates && (
-                      <span class="ml-1.5 rounded-sm bg-foreground px-1 py-px font-mono text-[11px]/4 text-background">
-                        templates
-                      </span>
-                    )}
-                  </span>
-                  <span class="shrink-0 font-mono text-sm tabular-nums">
-                    {preset.count}
-                    {preset.typeAware && (
-                      <span class="ml-1 text-muted-foreground">+{preset.typeAware}</span>
-                    )}
-                  </span>
-                </p>
-                <span class="h-2 rounded-r-[2px] bg-signal" style={{ width: width(preset.count) }} />
-              </li>
-            ))
-          }
+          {presets.map((preset) => (
+            <li class="flex flex-col gap-1.5">
+              <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
+                <span class="min-w-0">
+                  <code class="font-mono text-sm">{preset.name}</code>
+                  <span class="text-muted-foreground"> · {preset.plugins}</span>
+                  {preset.templates && (
+                    <span class="bg-foreground text-background ml-1.5 rounded-sm px-1 py-px font-mono text-[11px]/4">
+                      templates
+                    </span>
+                  )}
+                </span>
+                <span class="shrink-0 font-mono text-sm tabular-nums">
+                  {preset.count}
+                  {preset.typeAware && (
+                    <span class="text-muted-foreground ml-1">
+                      +{preset.typeAware}
+                    </span>
+                  )}
+                </span>
+              </p>
+              <span
+                class="bg-signal h-2 rounded-r-[2px]"
+                style={{ width: width(preset.count) }}
+              />
+            </li>
+          ))}
         </ul>
-        <p class="mt-auto border-border border-t px-4 py-4 text-muted-foreground text-sm/6 sm:px-6 lg:px-10">
+        <p class="border-border text-muted-foreground mt-auto border-t px-4 py-4 text-sm/6 sm:px-6 lg:px-10">
           <span class="font-mono">+n</span> rules in the preset’s type-aware
-          add-on, which <code class="font-mono text-[13px]">init --type-aware</code> adds
+          add-on, which{" "}
+          <code class="font-mono text-[13px]">init --type-aware</code> adds
           after it.
         </p>
       </div>
-      <div class="flex min-w-0 flex-col gap-2 bg-muted/60 p-4 sm:gap-4 sm:p-6 lg:p-10">
-        <AnnotatedCode code={component} lang="vue" title="components/task-list.vue" />
+      <div class="bg-muted/60 flex min-w-0 flex-col gap-2 p-4 sm:gap-4 sm:p-6 lg:p-10">
+        <AnnotatedCode
+          code={component}
+          lang="vue"
+          title="components/task-list.vue"
+        />
         <Terminal>
-          <p class="mb-1 truncate text-panel-foreground">
-            <span class="text-signal">$</span> npx ultracite check components/task-list.vue
+          <p class="text-panel-foreground mb-1 truncate">
+            <span class="text-signal">$</span> npx ultracite check
+            components/task-list.vue
           </p>
           <p class="truncate">All matched files use Prettier code style!</p>
-          {
-            problems.map((problem) => (
-              <p class="flex min-w-0 gap-3">
-                <span class="w-10 shrink-0 tabular-nums">{problem.location}</span>
-                <span class="min-w-0 text-pretty">
-                  <span class="text-signal">error</span> {problem.message}{" "}
-                  <span class="text-panel-foreground">{problem.rule}</span>
-                </span>
-              </p>
-            ))
-          }
+          {problems.map((problem) => (
+            <p class="flex min-w-0 gap-3">
+              <span class="w-10 shrink-0 tabular-nums">{problem.location}</span>
+              <span class="min-w-0 text-pretty">
+                <span class="text-signal">error</span> {problem.message}{" "}
+                <span class="text-panel-foreground">{problem.rule}</span>
+              </span>
+            </p>
+          ))}
         </Terminal>
       </div>
     </div>

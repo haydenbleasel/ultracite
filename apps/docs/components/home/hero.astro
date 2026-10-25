@@ -29,62 +29,51 @@ const engines = [
 ---
 
 <section class="border-border border-y">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <div class="px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:px-10 lg:pt-24 lg:pb-14">
       <a
-        class="group inline-flex items-center gap-3 text-muted-foreground text-sm/6 hover:text-foreground"
+        class="group text-muted-foreground hover:text-foreground inline-flex items-center gap-3 text-sm/6"
         href={releaseHref}
       >
-        <span
-          class="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-background text-xs/5"
-          >v{version}</span
-        >
+        <span class="bg-foreground text-background rounded-sm px-1.5 py-0.5 font-mono text-xs/5">
+          v{version}
+        </span>
         <span>Read the latest release notes</span>
         <Icon
           class="size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
           name="arrow-right"
         />
       </a>
-      <h1
-        class="mt-8 max-w-[17ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:text-7xl xl:text-8xl"
-      >
+      <h1 class="mt-8 max-w-[17ch] text-5xl font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:text-7xl xl:text-8xl">
         The linter and formatter for agentic development
       </h1>
-      <div
-        class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10"
-      >
-        <p
-          class="max-w-[46ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
-        >
+      <div class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10">
+        <p class="text-muted-foreground max-w-[46ch] text-lg/8 text-pretty lg:col-span-6">
           Agents write most of the code now. Ultracite checks every edit they
           make against hundreds of strict rules in under half a second, so what
           reaches review is consistent, type-safe code instead of slop.
         </p>
         <div class="flex flex-col gap-3 lg:col-span-6 lg:items-end">
           <Installer />
-          <p
-            class="flex w-full max-w-[520px] flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-sm/6"
-          >
+          <p class="text-muted-foreground flex w-full max-w-[520px] flex-wrap items-center gap-x-3 gap-y-1 text-sm/6">
             <span>Zero-config for</span>
-            {
-              engines.map((engine) => (
-                <span class="flex items-center gap-1.5">
-                  <img
-                    alt=""
-                    class="size-4 rounded-[3px]"
-                    height="16"
-                    src={engine.logo}
-                    width="16"
-                  />
-                  {engine.name}
-                </span>
-              ))
-            }
+            {engines.map((engine) => (
+              <span class="flex items-center gap-1.5">
+                <img
+                  alt=""
+                  class="size-4 rounded-[3px]"
+                  height="16"
+                  src={engine.logo}
+                  width="16"
+                />
+                {engine.name}
+              </span>
+            ))}
           </p>
         </div>
       </div>
     </div>
-    <div class="border-border border-t bg-signal p-2 sm:p-6 lg:p-10">
+    <div class="border-border bg-signal border-t p-2 sm:p-6 lg:p-10">
       <AgentSession />
     </div>
   </div>

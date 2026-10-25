@@ -67,18 +67,14 @@ const formatterSettings = [
   >
     {/* The divider color is translucent, so the grid sits on the code
         background rather than showing the slab through its gaps. */}
-    <div class="overflow-hidden rounded-b-blume border border-border border-t-0 bg-code">
-      <dl
-        class="grid grid-cols-2 gap-px bg-border font-mono text-xs/5 sm:grid-cols-3"
-      >
-        {
-          formatterSettings.map(([key, value]) => (
-            <div class="flex flex-col gap-0.5 bg-code px-4 py-2.5">
-              <dt class="text-muted-foreground">{key}</dt>
-              <dd class="text-foreground">{value}</dd>
-            </div>
-          ))
-        }
+    <div class="rounded-b-blume border-border bg-code overflow-hidden border border-t-0">
+      <dl class="bg-border grid grid-cols-2 gap-px font-mono text-xs/5 sm:grid-cols-3">
+        {formatterSettings.map(([key, value]) => (
+          <div class="bg-code flex flex-col gap-0.5 px-4 py-2.5">
+            <dt class="text-muted-foreground">{key}</dt>
+            <dd class="text-foreground">{value}</dd>
+          </div>
+        ))}
       </dl>
     </div>
   </AnnotatedCode>

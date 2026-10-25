@@ -58,30 +58,34 @@ const options = [
 ---
 
 <section aria-labelledby="oc-options" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id="oc-options" title="More ways to wire it in">
-      None of these are required. Each one gives the agent another way to
-      reach the same standard.
+      None of these are required. Each one gives the agent another way to reach
+      the same standard.
     </SectionHeading>
     <ul
-      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+      class="border-border bg-border grid gap-px border-t bg-clip-padding md:grid-cols-2"
       role="list"
     >
-      {
-        options.map((option) => (
-          <li class="flex min-w-0 flex-col bg-background">
-            <div class="flex flex-col gap-2 px-4 pt-8 pb-6 sm:px-6 lg:px-10">
-              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{option.title}</h3>
-              <p class="max-w-[52ch] text-pretty text-[15px]/6 text-muted-foreground">
-                <RichText text={option.body} />
-              </p>
-            </div>
-            <div class="lp-code mt-auto min-w-0 px-4 pb-8 sm:px-6 lg:px-10">
-              <CodeBlock code={option.code} lang={option.lang} title={option.file} />
-            </div>
-          </li>
-        ))
-      }
+      {options.map((option) => (
+        <li class="bg-background flex min-w-0 flex-col">
+          <div class="flex flex-col gap-2 px-4 pt-8 pb-6 sm:px-6 lg:px-10">
+            <h3 class="text-lg/7 font-medium tracking-[-0.01em]">
+              {option.title}
+            </h3>
+            <p class="text-muted-foreground max-w-[52ch] text-[15px]/6 text-pretty">
+              <RichText text={option.body} />
+            </p>
+          </div>
+          <div class="lp-code mt-auto min-w-0 px-4 pb-8 sm:px-6 lg:px-10">
+            <CodeBlock
+              code={option.code}
+              lang={option.lang}
+              title={option.file}
+            />
+          </div>
+        </li>
+      ))}
     </ul>
   </div>
 </section>

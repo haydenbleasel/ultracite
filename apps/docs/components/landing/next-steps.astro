@@ -22,39 +22,37 @@ const { id, items, title } = Astro.props;
 ---
 
 <section aria-labelledby={id} class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id={id} title={title} />
     <ul
       class:list={[
-        "grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2",
+        "border-border bg-border grid gap-px border-t bg-clip-padding sm:grid-cols-2",
         items.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4",
       ]}
       role="list"
     >
-      {
-        items.map((item) => (
-          <li class="flex bg-background">
-            <a
-              class="group flex w-full flex-col gap-3 px-4 py-8 hover:bg-muted/50 sm:px-6 lg:px-8"
-              href={item.href}
-            >
-              <span class="font-mono text-accent text-xs/5 uppercase tracking-wider">
-                {item.label}
-              </span>
-              <span class="flex items-center justify-between gap-4 font-medium text-lg/7 tracking-[-0.01em]">
-                {item.title}
-                <Icon
-                  class="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
-                  name="arrow-right"
-                />
-              </span>
-              <span class="text-pretty text-[15px]/6 text-muted-foreground">
-                <RichText text={item.description} />
-              </span>
-            </a>
-          </li>
-        ))
-      }
+      {items.map((item) => (
+        <li class="bg-background flex">
+          <a
+            class="group hover:bg-muted/50 flex w-full flex-col gap-3 px-4 py-8 sm:px-6 lg:px-8"
+            href={item.href}
+          >
+            <span class="text-accent font-mono text-xs/5 tracking-wider uppercase">
+              {item.label}
+            </span>
+            <span class="flex items-center justify-between gap-4 text-lg/7 font-medium tracking-[-0.01em]">
+              {item.title}
+              <Icon
+                class="text-muted-foreground group-hover:text-foreground size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+                name="arrow-right"
+              />
+            </span>
+            <span class="text-muted-foreground text-[15px]/6 text-pretty">
+              <RichText text={item.description} />
+            </span>
+          </a>
+        </li>
+      ))}
     </ul>
   </div>
 </section>

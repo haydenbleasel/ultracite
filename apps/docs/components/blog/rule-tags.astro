@@ -10,17 +10,15 @@ interface Props {
 const { class: className, rules } = Astro.props;
 ---
 
-{
-  rules.length > 0 && (
-    <ul
-      class:list={["flex flex-wrap content-start items-start gap-1.5", className]}
-      role="list"
-    >
-      {rules.map((rule) => (
-        <li class="min-w-0 max-w-full truncate rounded-sm bg-muted px-1.5 py-0.5 font-mono text-muted-foreground text-xs/5">
-          {rule}
-        </li>
-      ))}
-    </ul>
-  )
-}
+{rules.length > 0 && (
+  <ul
+    class:list={["flex flex-wrap content-start items-start gap-1.5", className]}
+    role="list"
+  >
+    {rules.map((rule) => (
+      <li class="bg-muted text-muted-foreground max-w-full min-w-0 truncate rounded-sm px-1.5 py-0.5 font-mono text-xs/5">
+        {rule}
+      </li>
+    ))}
+  </ul>
+)}

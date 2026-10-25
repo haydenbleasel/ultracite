@@ -13,19 +13,17 @@ const { text } = Astro.props;
 const NOWRAP_MAX = 24;
 ---
 
-{
-  segments(text).map((segment) =>
-    segment.code ? (
-      <code
-        class:list={[
-          "font-mono text-[0.875em] text-foreground",
-          segment.text.length <= NOWRAP_MAX && "whitespace-nowrap",
-        ]}
-      >
-        {segment.text}
-      </code>
-    ) : (
-      segment.text
-    )
+{segments(text).map((segment) =>
+  segment.code ? (
+    <code
+      class:list={[
+        "text-foreground font-mono text-[0.875em]",
+        segment.text.length <= NOWRAP_MAX && "whitespace-nowrap",
+      ]}
+    >
+      {segment.text}
+    </code>
+  ) : (
+    segment.text
   )
-}
+)}

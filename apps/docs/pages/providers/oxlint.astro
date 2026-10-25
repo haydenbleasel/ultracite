@@ -3,7 +3,10 @@ import Cta from "../../components/home/cta.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingHero from "../../components/landing/landing-hero.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import NextSteps from "../../components/landing/next-steps.astro";
 import type { NextStep } from "../../components/landing/next-steps.astro";
 import ConfigFiles from "../../components/providers/oxlint/config-files.astro";
@@ -42,7 +45,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Set it in `rules` in your `oxlint.config.ts`. Oxlint applies the presets in `extends` first and your own rules after them, so `rules: { \"no-console\": \"off\" }` wins. For a single line, use `// oxlint-disable-next-line no-console`.",
+      'Set it in `rules` in your `oxlint.config.ts`. Oxlint applies the presets in `extends` first and your own rules after them, so `rules: { "no-console": "off" }` wins. For a single line, use `// oxlint-disable-next-line no-console`.',
     question: "How do I turn off a rule?",
   },
   {
@@ -51,8 +54,7 @@ const faqs: FaqItem[] = [
     question: "Do I still need Prettier?",
   },
   {
-    answer:
-      `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and Oxlint was slightly ahead at 420 files, ${formatMs(large.ms.oxlint)} to ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (474 core rules to Biome’s 331), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and Oxlint was slightly ahead at 420 files, ${formatMs(large.ms.oxlint)} to ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (474 core rules to Biome’s 331), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
     question: "Should I use Oxlint or Biome?",
   },
   {
@@ -88,13 +90,15 @@ const nextSteps: NextStep[] = [
     title: "Migrate to Ultracite",
   },
   {
-    description: "Run the 56 rules that read your types, and `tsc` diagnostics.",
+    description:
+      "Run the 56 rules that read your types, and `tsc` diagnostics.",
     href: "/docs/usage#type-aware-linting",
     label: "Guide",
     title: "Type-aware linting",
   },
   {
-    description: "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    description:
+      "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
     href: "/providers",
     label: "Providers",
     title: "Compare the engines",
@@ -116,14 +120,24 @@ const nextSteps: NextStep[] = [
     name="Oxlint"
     title="The strict Oxlint config, set up in one command"
   >
-    Oxlint ships 871 rules and turns on 111. Ultracite turns on 474 across
-    eight plugins, sets up Oxfmt to match, and wires both into your editor and
-    coding agents. Nothing to maintain but one line of{" "}
-    <code class="font-mono text-base text-foreground">extends</code>.
+    Oxlint ships 871 rules and turns on 111. Ultracite turns on 474 across eight
+    plugins, sets up Oxfmt to match, and wires both into your editor and coding
+    agents. Nothing to maintain but one line of{" "}
+    <code class="text-foreground font-mono text-base">extends</code>.
     <Fragment slot="note">
       <span>Also on</span>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/biome">Biome</a>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/eslint">ESLint</a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/biome"
+      >
+        Biome
+      </a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/eslint"
+      >
+        ESLint
+      </a>
       <span aria-hidden="true">·</span>
       <span>Checked against Oxlint 1.87</span>
     </Fragment>

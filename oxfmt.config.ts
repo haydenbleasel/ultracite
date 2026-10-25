@@ -4,6 +4,9 @@ import base from "./packages/cli/config/oxfmt/index.mjs";
 
 export default defineConfig({
   ...base,
+  // The docs site is on Astro 7, whose whitespace handling (compressHTML
+  // "jsx") is oxfmt's default.
+  astro: true,
   ignorePatterns: [
     "packages/design-system/components/ui",
     "packages/design-system/components/kibo-ui",

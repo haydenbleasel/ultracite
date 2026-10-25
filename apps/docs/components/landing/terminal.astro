@@ -13,19 +13,15 @@ const { class: className, title = "Terminal" } = Astro.props;
 
 <div
   class:list={[
-    "flex min-h-0 min-w-0 flex-col overflow-hidden rounded-blume border border-panel-border bg-panel",
+    "rounded-blume border-panel-border bg-panel flex min-h-0 min-w-0 flex-col overflow-hidden border",
     className,
   ]}
 >
-  <p
-    class="flex h-11 shrink-0 items-center gap-2.5 border-panel-border border-b px-4 font-medium text-panel-muted text-xs"
-  >
+  <p class="border-panel-border text-panel-muted flex h-11 shrink-0 items-center gap-2.5 border-b px-4 text-xs font-medium">
     <Icon class="size-3.5" name="bash" />
     {title}
   </p>
-  <div
-    class="flex min-w-0 flex-col px-5 py-4 font-mono text-[13px]/[1.55] text-panel-muted"
-  >
+  <div class="text-panel-muted flex min-w-0 flex-col px-5 py-4 font-mono text-[13px]/[1.55]">
     <slot />
   </div>
 </div>

@@ -58,131 +58,117 @@ const editorTiles = editors.map((editor) => ({
 ---
 
 <section aria-labelledby="hp-setup" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id="hp-setup" title="One command, your choice of engine">
-      <code class="font-mono text-base">ultracite init</code> detects your stack,
-      writes the config for the engine you pick, and sets up your editor, agents and
-      git hooks. Every rule stays yours to override.
+      <code class="font-mono text-base">ultracite init</code> detects your
+      stack, writes the config for the engine you pick, and sets up your editor,
+      agents and git hooks. Every rule stays yours to override.
     </SectionHeading>
-    <div class="grid border-border border-t lg:grid-cols-12">
-      <div
-        class="hp-tabs min-w-0 border-border p-2 sm:p-6 lg:col-span-8 lg:border-r lg:p-10"
-      >
+    <div class="border-border grid border-t lg:grid-cols-12">
+      <div class="hp-tabs border-border min-w-0 p-2 sm:p-6 lg:col-span-8 lg:border-r lg:p-10">
         <div
           aria-label="Engine"
           class="flex flex-wrap gap-1 pb-3"
           role="tablist"
         >
-          {
-            ordered.map((provider) => (
-              <button
-                aria-controls={`hp-panel-${provider.id}`}
-                aria-selected={String(provider.id === defaultProvider)}
-                class="flex items-center gap-2 rounded-md px-3 py-2 font-medium text-muted-foreground text-sm/5 hover:text-foreground aria-selected:bg-foreground aria-selected:text-background"
-                data-hp-tab={provider.id}
-                id={`hp-tab-${provider.id}`}
-                role="tab"
-                tabindex={provider.id === defaultProvider ? "0" : "-1"}
-                type="button"
-              >
-                <img
-                  alt=""
-                  class="size-4 rounded-[3px]"
-                  height="16"
-                  src={providerLogos[provider.id]}
-                  width="16"
-                />
-                {provider.name}
-              </button>
-            ))
-          }
-        </div>
-        {
-          ordered.map((provider) => (
-            <div
-              aria-labelledby={`hp-tab-${provider.id}`}
-              class="hp-codeblocks grid gap-3"
-              data-hp-panel={provider.id}
-              hidden={provider.id !== defaultProvider}
-              id={`hp-panel-${provider.id}`}
-              role="tabpanel"
+          {ordered.map((provider) => (
+            <button
+              aria-controls={`hp-panel-${provider.id}`}
+              aria-selected={String(provider.id === defaultProvider)}
+              class="text-muted-foreground hover:text-foreground aria-selected:bg-foreground aria-selected:text-background flex items-center gap-2 rounded-md px-3 py-2 text-sm/5 font-medium"
+              data-hp-tab={provider.id}
+              id={`hp-tab-${provider.id}`}
+              role="tab"
+              tabindex={provider.id === defaultProvider ? "0" : "-1"}
+              type="button"
             >
-              {provider.configFiles.map((file) => (
-                <div class="min-w-0">
-                  <CodeBlock
-                    code={file.code(PRESETS)}
-                    lang={file.lang === "json" ? "jsonc" : file.lang}
-                    title={file.name}
-                  />
-                </div>
-              ))}
-            </div>
-          ))
-        }
+              <img
+                alt=""
+                class="size-4 rounded-[3px]"
+                height="16"
+                src={providerLogos[provider.id]}
+                width="16"
+              />
+              {provider.name}
+            </button>
+          ))}
+        </div>
+        {ordered.map((provider) => (
+          <div
+            aria-labelledby={`hp-tab-${provider.id}`}
+            class="hp-codeblocks grid gap-3"
+            data-hp-panel={provider.id}
+            hidden={provider.id !== defaultProvider}
+            id={`hp-panel-${provider.id}`}
+            role="tabpanel"
+          >
+            {provider.configFiles.map((file) => (
+              <div class="min-w-0">
+                <CodeBlock
+                  code={file.code(PRESETS)}
+                  lang={file.lang === "json" ? "jsonc" : file.lang}
+                  title={file.name}
+                />
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
-      <div
-        class="flex flex-col divide-y divide-border border-border border-t lg:col-span-4 lg:border-t-0"
-      >
+      <div class="divide-border border-border flex flex-col divide-y border-t lg:col-span-4 lg:border-t-0">
         <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-          <p class="font-medium text-base/7">
+          <p class="text-base/7 font-medium">
             {frameworks.length} framework presets
           </p>
           <ul class="flex flex-wrap gap-1.5 text-sm/5" role="list">
-            {
-              frameworks.map((framework) => (
-                <li class="rounded-sm border border-border bg-code px-2 py-1">
-                  {frameworkNames[framework]}
-                </li>
-              ))
-            }
+            {frameworks.map((framework) => (
+              <li class="border-border bg-code rounded-sm border px-2 py-1">
+                {frameworkNames[framework]}
+              </li>
+            ))}
           </ul>
         </div>
         <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-          <p class="font-medium text-base/7">
+          <p class="text-base/7 font-medium">
             <a class="hover:underline" href="/editors">
               Format on save in {editors.length} editors
             </a>
           </p>
           <ul class="grid w-fit grid-cols-5 gap-2" role="list">
-            {
-              editorTiles.map((editor) => (
-                <li>
-                  <a
-                    class="block rounded-md transition-opacity hover:opacity-80"
-                    href={`/editors/${editor.id}`}
-                    title={editor.name}
-                  >
-                    {editor.logo ? (
-                      <img
-                        alt={editor.name}
-                        class="size-8 rounded-md"
-                        height="32"
-                        src={editor.logo}
-                        width="32"
-                      />
-                    ) : (
-                      <span
-                        aria-label={editor.name}
-                        class="flex size-8 items-center justify-center rounded-md border border-border bg-muted font-medium text-muted-foreground text-xs"
-                        role="img"
-                      >
-                        {editor.name.charAt(0)}
-                      </span>
-                    )}
-                  </a>
-                </li>
-              ))
-            }
+            {editorTiles.map((editor) => (
+              <li>
+                <a
+                  class="block rounded-md transition-opacity hover:opacity-80"
+                  href={`/editors/${editor.id}`}
+                  title={editor.name}
+                >
+                  {editor.logo ? (
+                    <img
+                      alt={editor.name}
+                      class="size-8 rounded-md"
+                      height="32"
+                      src={editor.logo}
+                      width="32"
+                    />
+                  ) : (
+                    <span
+                      aria-label={editor.name}
+                      class="border-border bg-muted text-muted-foreground flex size-8 items-center justify-center rounded-md border text-xs font-medium"
+                      role="img"
+                    >
+                      {editor.name.charAt(0)}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
         <div class="flex flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-          <p class="font-medium text-base/7">Pre-commit, your way</p>
-          <p class="font-mono text-[13px]/6 text-muted-foreground">
-            {
-              integrations
-                .map((integration) => integrationNames[integration])
-                .join(" · ")
-            }
+          <p class="text-base/7 font-medium">Pre-commit, your way</p>
+          <p class="text-muted-foreground font-mono text-[13px]/6">
+            {integrations
+              .map((integration) => integrationNames[integration])
+              .join(" · ")}
           </p>
         </div>
       </div>

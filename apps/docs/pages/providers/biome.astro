@@ -1,9 +1,13 @@
 ---
+import { hooks } from "../../../../packages/cli/src/data/hooks";
 import Cta from "../../components/home/cta.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingHero from "../../components/landing/landing-hero.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import NextSteps from "../../components/landing/next-steps.astro";
 import type { NextStep } from "../../components/landing/next-steps.astro";
 import AgentFixes from "../../components/providers/biome/agent-fixes.astro";
@@ -13,7 +17,6 @@ import Everywhere from "../../components/providers/biome/everywhere.astro";
 import Formatter from "../../components/providers/biome/formatter.astro";
 import Speed from "../../components/providers/biome/speed.astro";
 import Videos from "../../components/providers/biome/videos.astro";
-import { hooks } from "../../../../packages/cli/src/data/hooks";
 import { formatMs, runFor } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
@@ -38,7 +41,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Set it in `linter.rules` in your `biome.jsonc`, under its group: `\"style\": { \"noNestedTernary\": \"off\" }`. Your own settings apply after the presets in `extends`, so they win. For one line, add `// biome-ignore lint/style/noNestedTernary: <reason>` above it; Biome requires the reason.",
+      'Set it in `linter.rules` in your `biome.jsonc`, under its group: `"style": { "noNestedTernary": "off" }`. Your own settings apply after the presets in `extends`, so they win. For one line, add `// biome-ignore lint/style/noNestedTernary: <reason>` above it; Biome requires the reason.',
     question: "How do I turn off a rule?",
   },
   {
@@ -67,7 +70,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Add negated globs to `files.includes` in your `biome.jsonc`, after `\"**\"`: `[\"**\", \"!components/ui/**\", \"!public\"]`. Keep `\"**\"` first. Biome needs a positive glob to start from, so a list of only negated patterns matches no files at all. The core preset already leaves out build output, caches and generated files.",
+      'Add negated globs to `files.includes` in your `biome.jsonc`, after `"**"`: `["**", "!components/ui/**", "!public"]`. Keep `"**"` first. Biome needs a positive glob to start from, so a list of only negated patterns matches no files at all. The core preset already leaves out build output, caches and generated files.',
     question: "How do I exclude files?",
   },
 ];
@@ -88,14 +91,14 @@ const nextSteps: NextStep[] = [
     title: "Migrate to Ultracite",
   },
   {
-    description:
-      `Run \`ultracite fix\` after every edit your agent makes, in ${hooks.length} agents and editors.`,
+    description: `Run \`ultracite fix\` after every edit your agent makes, in ${hooks.length} agents and editors.`,
     href: "/docs/ai/hooks",
     label: "Guide",
     title: "Agent hooks",
   },
   {
-    description: "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    description:
+      "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
     href: "/providers",
     label: "Providers",
     title: "Compare the engines",
@@ -117,13 +120,23 @@ const nextSteps: NextStep[] = [
     name="Biome"
     title="The strict Biome config, in one line of extends"
   >
-    Biome ships 565 rules and turns on 215. Ultracite turns on 331 and adds
-    the sorting, formatting and editor settings to match, all from one{" "}
-    <code class="font-mono text-base text-foreground">biome.jsonc</code>.
+    Biome ships 565 rules and turns on 215. Ultracite turns on 331 and adds the
+    sorting, formatting and editor settings to match, all from one{" "}
+    <code class="text-foreground font-mono text-base">biome.jsonc</code>.
     <Fragment slot="note">
       <span>Also on</span>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/eslint">ESLint</a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/oxlint"
+      >
+        Oxlint
+      </a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/eslint"
+      >
+        ESLint
+      </a>
       <span aria-hidden="true">·</span>
       <span>Checked against Biome 2.5</span>
     </Fragment>

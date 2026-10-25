@@ -71,93 +71,83 @@ const versionList =
 ---
 
 <section aria-labelledby={id} class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id={id} title={title}>
       <slot />
     </SectionHeading>
-    <figure class="m-0 border-border border-t">
+    <figure class="border-border m-0 border-t">
       <div class="px-4 pt-10 pb-8 sm:px-6 lg:px-10 lg:pt-14">
         <div class="flex flex-col gap-8">
-          {
-            benchmarkRuns.map((run) => (
-              <div class="flex flex-col gap-3">
-                <p class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
-                  {run.files} files
-                </p>
-                {toolchains.map((key) => (
-                  <div class="grid items-center gap-x-6 gap-y-1.5 md:grid-cols-[15rem_1fr]">
-                    <p class="text-[15px]/6">{toolchainNames[key]}</p>
-                    <div class="flex items-center gap-3">
-                      <div class="relative h-8 flex-1">
-                        <span
-                          class:list={[
-                            "absolute inset-y-0 left-0 rounded-r-[3px]",
-                            key === highlight ? "bg-signal" : "bg-foreground/35",
-                          ]}
-                          style={{ width: width(run.ms[key]) }}
-                        />
-                      </div>
-                      <span class="w-16 shrink-0 text-right font-mono text-sm/6 tabular-nums">
-                        {formatMs(run.ms[key])}
-                      </span>
+          {benchmarkRuns.map((run) => (
+            <div class="flex flex-col gap-3">
+              <p class="text-muted-foreground font-mono text-xs/5 tracking-wider uppercase">
+                {run.files} files
+              </p>
+              {toolchains.map((key) => (
+                <div class="grid items-center gap-x-6 gap-y-1.5 md:grid-cols-[15rem_1fr]">
+                  <p class="text-[15px]/6">{toolchainNames[key]}</p>
+                  <div class="flex items-center gap-3">
+                    <div class="relative h-8 flex-1">
+                      <span
+                        class:list={[
+                          "absolute inset-y-0 left-0 rounded-r-[3px]",
+                          key === highlight ? "bg-signal" : "bg-foreground/35",
+                        ]}
+                        style={{ width: width(run.ms[key]) }}
+                      />
                     </div>
+                    <span class="w-16 shrink-0 text-right font-mono text-sm/6 tabular-nums">
+                      {formatMs(run.ms[key])}
+                    </span>
                   </div>
-                ))}
-              </div>
-            ))
-          }
+                </div>
+              ))}
+            </div>
+          ))}
           <div
             aria-hidden="true"
-            class="grid gap-x-6 md:grid-cols-[15rem_1fr] max-md:hidden"
+            class="grid gap-x-6 max-md:hidden md:grid-cols-[15rem_1fr]"
           >
             <span></span>
             <div class="flex items-center gap-3">
-              <div class="relative h-5 flex-1 border-foreground/20 border-t">
-                {
-                  ticks.map((tick) => (
-                    <span
-                      class="absolute top-1.5 -translate-x-1/2 font-mono text-[11px]/4 text-muted-foreground tabular-nums first:translate-x-0"
-                      style={{ left: width(tick) }}
-                    >
-                      {tickLabel(tick)}
-                    </span>
-                  ))
-                }
+              <div class="border-foreground/20 relative h-5 flex-1 border-t">
+                {ticks.map((tick) => (
+                  <span
+                    class="text-muted-foreground absolute top-1.5 -translate-x-1/2 font-mono text-[11px]/4 tabular-nums first:translate-x-0"
+                    style={{ left: width(tick) }}
+                  >
+                    {tickLabel(tick)}
+                  </span>
+                ))}
               </div>
               <span class="w-16 shrink-0"></span>
             </div>
           </div>
         </div>
       </div>
-      <dl
-        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-3"
-      >
-        {
-          stats.map((stat) => (
-            <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
-              <dt class="text-pretty text-[15px]/6 text-muted-foreground">
-                {stat.label}
-              </dt>
-              <dd class="order-first font-medium text-5xl tracking-[-0.04em] tabular-nums">
-                {stat.value}
-                {stat.unit && (
-                  <span class="ml-1 text-2xl text-muted-foreground tracking-normal">
-                    {stat.unit}
-                  </span>
-                )}
-              </dd>
-            </div>
-          ))
-        }
+      <dl class="border-border bg-border grid gap-px border-t bg-clip-padding sm:grid-cols-3">
+        {stats.map((stat) => (
+          <div class="bg-background flex flex-col gap-3 px-4 py-8 sm:px-6 lg:px-10">
+            <dt class="text-muted-foreground text-[15px]/6 text-pretty">
+              {stat.label}
+            </dt>
+            <dd class="order-first text-5xl font-medium tracking-[-0.04em] tabular-nums">
+              {stat.value}
+              {stat.unit && (
+                <span class="text-muted-foreground ml-1 text-2xl tracking-normal">
+                  {stat.unit}
+                </span>
+              )}
+            </dd>
+          </div>
+        ))}
       </dl>
-      <figcaption
-        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
-      >
-        Medians of five runs of <code class="font-mono text-[13px]">ultracite check</code>{" "}
-        on {benchmarkMachine}, through each toolchain’s core preset: {versionList},
+      <figcaption class="border-border text-muted-foreground border-t px-4 py-5 text-sm/6 text-pretty sm:px-6 lg:px-10">
+        Medians of five runs of{" "}
+        <code class="font-mono text-[13px]">ultracite check</code> on{" "}
+        {benchmarkMachine}, through each toolchain’s core preset: {versionList},
         on the repo’s benchmark fixture copied to 42 and 420 files. Times
-        include starting Node and the CLI.{" "}
-        <slot name="caption" />
+        include starting Node and the CLI. <slot name="caption" />
       </figcaption>
     </figure>
   </div>

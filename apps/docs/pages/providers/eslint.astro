@@ -1,9 +1,13 @@
 ---
+import { hooks } from "../../../../packages/cli/src/data/hooks";
 import Cta from "../../components/home/cta.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingHero from "../../components/landing/landing-hero.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import NextSteps from "../../components/landing/next-steps.astro";
 import type { NextStep } from "../../components/landing/next-steps.astro";
 import ConfigFiles from "../../components/providers/eslint/config-files.astro";
@@ -12,7 +16,6 @@ import Everywhere from "../../components/providers/eslint/everywhere.astro";
 import Formatter from "../../components/providers/eslint/formatter.astro";
 import Frameworks from "../../components/providers/eslint/frameworks.astro";
 import Speed from "../../components/providers/eslint/speed.astro";
-import { hooks } from "../../../../packages/cli/src/data/hooks";
 import {
   eslintSingleFileMs,
   eslintTypeAwareMs,
@@ -42,7 +45,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Add a config object after the presets in `eslint.config.mjs`, such as `{ rules: { \"no-console\": \"off\" } }`. In a flat config, later objects win. For one line, use `// eslint-disable-next-line no-console`.",
+      'Add a config object after the presets in `eslint.config.mjs`, such as `{ rules: { "no-console": "off" } }`. In a flat config, later objects win. For one line, use `// eslint-disable-next-line no-console`.',
     question: "How do I turn off a rule?",
   },
   {
@@ -73,27 +76,27 @@ const faqs: FaqItem[] = [
 
 const nextSteps: NextStep[] = [
   {
-    description:
-      "Framework presets, type-aware rules and overriding rules.",
+    description: "Framework presets, type-aware rules and overriding rules.",
     href: "/docs/configuration",
     label: "Reference",
     title: "Configuration",
   },
   {
-    description: "The same standard on a native engine, with ESLint’s rule names.",
+    description:
+      "The same standard on a native engine, with ESLint’s rule names.",
     href: "/providers/oxlint",
     label: "Provider",
     title: "Ultracite for Oxlint",
   },
   {
-    description:
-      `Run \`ultracite fix\` on just the file your agent edited, in ${hooks.length} agents and editors.`,
+    description: `Run \`ultracite fix\` on just the file your agent edited, in ${hooks.length} agents and editors.`,
     href: "/docs/ai/hooks",
     label: "Guide",
     title: "Agent hooks",
   },
   {
-    description: "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    description:
+      "Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
     href: "/providers",
     label: "Providers",
     title: "Compare the engines",
@@ -120,8 +123,18 @@ const nextSteps: NextStep[] = [
     Ultracite’s, so the only rules you maintain are your own.
     <Fragment slot="note">
       <span>Also on</span>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/biome">Biome</a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/oxlint"
+      >
+        Oxlint
+      </a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/biome"
+      >
+        Biome
+      </a>
       <span aria-hidden="true">·</span>
       <span>Checked against ESLint 10.12</span>
     </Fragment>

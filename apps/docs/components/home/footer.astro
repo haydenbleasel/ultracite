@@ -37,7 +37,10 @@ const footerNav = [
   {
     links: [
       { href: "/docs/migrate", label: "Migrate to Ultracite" },
-      { href: "/docs/migrate#progressive-migration", label: "Progressive Migration" },
+      {
+        href: "/docs/migrate#progressive-migration",
+        label: "Progressive Migration",
+      },
       { href: "/docs/upgrade", label: "Upgrade Ultracite" },
     ],
     title: "Migrations",
@@ -55,14 +58,20 @@ const footerNav = [
 ---
 
 <footer class="bg-panel text-panel-foreground">
-  <div class="hp-frame mx-auto max-w-7xl border-panel-border border-x">
+  <div class="hp-frame border-panel-border mx-auto max-w-7xl border-x">
     <div class="grid gap-10 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:px-10">
       <div class="flex flex-col gap-5 lg:col-span-3">
-        <a aria-label="Homepage" class="flex w-fit items-center gap-2.5" href="/">
+        <a
+          aria-label="Homepage"
+          class="flex w-fit items-center gap-2.5"
+          href="/"
+        >
           <Logo class="size-6 shrink-0" />
-          <span class="font-semibold text-lg tracking-[-0.02em]">Ultracite</span>
+          <span class="text-lg font-semibold tracking-[-0.02em]">
+            Ultracite
+          </span>
         </a>
-        <p class="max-w-[32ch] text-panel-muted text-sm/6">
+        <p class="text-panel-muted max-w-[32ch] text-sm/6">
           The linter and formatter for agentic development. Open source under
           the MIT license.
         </p>
@@ -93,27 +102,25 @@ const footerNav = [
         aria-label="Footer"
         class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-9 lg:grid-cols-5"
       >
-        {
-          footerNav.map((section) => (
-            <div class="flex flex-col gap-3">
-              <p class="font-mono text-panel-muted text-xs/5 uppercase tracking-wider">
-                {section.title}
-              </p>
-              <ul class="flex flex-col gap-2 text-sm/6" role="list">
-                {section.links.map((link) => (
-                  <li>
-                    <a
-                      class="text-panel-foreground/85 hover:text-panel-foreground"
-                      href={link.href}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
+        {footerNav.map((section) => (
+          <div class="flex flex-col gap-3">
+            <p class="text-panel-muted font-mono text-xs/5 tracking-wider uppercase">
+              {section.title}
+            </p>
+            <ul class="flex flex-col gap-2 text-sm/6" role="list">
+              {section.links.map((link) => (
+                <li>
+                  <a
+                    class="text-panel-foreground/85 hover:text-panel-foreground"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </nav>
     </div>
   </div>

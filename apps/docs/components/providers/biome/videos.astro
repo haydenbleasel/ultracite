@@ -10,7 +10,8 @@ const videos = [
     channel: "Better Stack",
     channelUrl: "https://www.youtube.com/@betterstack",
     id: "lEkXbneUnWg",
-    title: "The EASIEST Way To Switch From ESLint & Prettier to Biome — Ultracite",
+    title:
+      "The EASIEST Way To Switch From ESLint & Prettier to Biome — Ultracite",
   },
   {
     channel: "OrcDev",
@@ -22,44 +23,44 @@ const videos = [
 ---
 
 <section aria-labelledby="bi-videos" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id="bi-videos" title="Watch the switch from ESLint">
       Two community walkthroughs of replacing ESLint and Prettier with
       Ultracite’s Biome preset in a real project.
     </SectionHeading>
     <ul
-      class="grid gap-2 border-border border-t bg-muted/60 p-2 sm:gap-4 sm:p-6 md:grid-cols-2 lg:p-10"
+      class="border-border bg-muted/60 grid gap-2 border-t p-2 sm:gap-4 sm:p-6 md:grid-cols-2 lg:p-10"
       role="list"
     >
-      {
-        videos.map((video) => (
-          <li class="flex min-w-0 flex-col overflow-hidden rounded-blume border border-border bg-code">
-            <div class="aspect-video w-full bg-panel">
-              <iframe
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-                class="size-full"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                src={`https://www.youtube-nocookie.com/embed/${video.id}`}
-                title={video.title}
-              />
-            </div>
-            <p class="flex flex-col gap-1 border-border border-t px-5 py-4">
-              <span class="text-pretty font-medium text-[15px]/6">{video.title}</span>
-              <a
-                aria-describedby={NEW_TAB_HINT_ID}
-                class="w-fit text-muted-foreground text-sm/5 underline underline-offset-2 hover:text-foreground"
-                href={video.channelUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {video.channel}
-              </a>
-            </p>
-          </li>
-        ))
-      }
+      {videos.map((video) => (
+        <li class="rounded-blume border-border bg-code flex min-w-0 flex-col overflow-hidden border">
+          <div class="bg-panel aspect-video w-full">
+            <iframe
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              class="size-full"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+              title={video.title}
+            />
+          </div>
+          <p class="border-border flex flex-col gap-1 border-t px-5 py-4">
+            <span class="text-[15px]/6 font-medium text-pretty">
+              {video.title}
+            </span>
+            <a
+              aria-describedby={NEW_TAB_HINT_ID}
+              class="text-muted-foreground hover:text-foreground w-fit text-sm/5 underline underline-offset-2"
+              href={video.channelUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {video.channel}
+            </a>
+          </p>
+        </li>
+      ))}
     </ul>
   </div>
 </section>

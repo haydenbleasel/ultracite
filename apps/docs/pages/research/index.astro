@@ -64,18 +64,16 @@ const jsonLd: JsonLdNode = {
   title="Research — Ultracite"
 >
   <section aria-labelledby="blog-title" class="border-border border-y">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
-        <p class="font-mono text-muted-foreground text-xs/5">Research</p>
+        <p class="text-muted-foreground font-mono text-xs/5">Research</p>
         <h1
-          class="mt-10 max-w-[16ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:mt-12 lg:text-7xl"
+          class="mt-10 max-w-[16ch] text-5xl font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:mt-12 lg:text-7xl"
           id="blog-title"
         >
           {title}
         </h1>
-        <p
-          class="mt-10 max-w-[52ch] text-pretty text-lg/8 text-muted-foreground lg:mt-12"
-        >
+        <p class="text-muted-foreground mt-10 max-w-[52ch] text-lg/8 text-pretty lg:mt-12">
           {description}
         </p>
       </div>
@@ -83,41 +81,39 @@ const jsonLd: JsonLdNode = {
   </section>
 
   <section aria-label="Posts" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
-      {
-        posts.length > 0 ? (
-          <ol class="divide-y divide-border" role="list">
-            {posts.map((post) => (
-              <li>
-                <a
-                  class="group grid gap-4 px-4 py-8 hover:bg-muted/50 sm:px-6 sm:py-10 lg:grid-cols-12 lg:gap-10 lg:px-10"
-                  href={post.href}
-                >
-                  <p class="font-mono text-muted-foreground text-xs/5 lg:col-span-3 lg:pt-2">
-                    {post.readingMinutes} min read
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
+      {posts.length > 0 ? (
+        <ol class="divide-border divide-y" role="list">
+          {posts.map((post) => (
+            <li>
+              <a
+                class="group hover:bg-muted/50 grid gap-4 px-4 py-8 sm:px-6 sm:py-10 lg:grid-cols-12 lg:gap-10 lg:px-10"
+                href={post.href}
+              >
+                <p class="text-muted-foreground font-mono text-xs/5 lg:col-span-3 lg:pt-2">
+                  {post.readingMinutes} min read
+                </p>
+                <div class="lg:col-span-6">
+                  <h2 class="text-2xl font-medium tracking-[-0.03em] text-balance group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4 sm:text-3xl">
+                    {post.title}
+                  </h2>
+                  <p class="text-muted-foreground mt-3 max-w-[60ch] text-[15px]/7 text-pretty">
+                    {post.description}
                   </p>
-                  <div class="lg:col-span-6">
-                    <h2 class="text-balance font-medium text-2xl tracking-[-0.03em] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4 sm:text-3xl">
-                      {post.title}
-                    </h2>
-                    <p class="mt-3 max-w-[60ch] text-pretty text-[15px]/7 text-muted-foreground">
-                      {post.description}
-                    </p>
-                  </div>
-                  <RuleTags
-                    class="lg:col-span-3 lg:justify-end lg:pt-2"
-                    rules={post.rules}
-                  />
-                </a>
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <p class="px-4 py-16 text-muted-foreground sm:px-6 lg:px-10">
-            The first post is on its way.
-          </p>
-        )
-      }
+                </div>
+                <RuleTags
+                  class="lg:col-span-3 lg:justify-end lg:pt-2"
+                  rules={post.rules}
+                />
+              </a>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="text-muted-foreground px-4 py-16 sm:px-6 lg:px-10">
+          The first post is on its way.
+        </p>
+      )}
     </div>
   </section>
 </BlogLayout>

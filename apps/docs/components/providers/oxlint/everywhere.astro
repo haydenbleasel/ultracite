@@ -61,7 +61,11 @@ const diagnostics = [
   cards={[
     {
       body: "The Oxc extension formats 16 languages, from TypeScript and CSS to YAML and Markdown, and applies Oxlint’s safe fixes when you save.",
-      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      code: {
+        lang: "jsonc",
+        path: ".vscode/settings.json",
+        text: vscodeSettings,
+      },
       eyebrow: "VS Code, Cursor, Devin Desktop",
       title: "Fix and format on save",
     },
@@ -80,21 +84,18 @@ const diagnostics = [
   id="ox-everywhere"
   title="The same rules in your editor, your agent and CI"
 >
-  <code class="font-mono text-base">init</code> points your editor at Oxlint
-  and Oxfmt and tells your agents how to run them, so a file passes or fails
-  the same way wherever it’s checked.
+  <code class="font-mono text-base">init</code> points your editor at Oxlint and
+  Oxfmt and tells your agents how to run them, so a file passes or fails the
+  same way wherever it’s checked.
   <Fragment slot="terminal">
-    <p class="mb-1 truncate text-panel-foreground">
+    <p class="text-panel-foreground mb-1 truncate">
       <span class="text-signal">$</span> npx ultracite check
     </p>
-    {
-      diagnostics.map((line) => (
-        <p class="truncate">
-          {line.location}: <span class="text-signal">error</span>{" "}
-          <span class="text-panel-foreground">{line.rule}</span>:{" "}
-          {line.message}
-        </p>
-      ))
-    }
+    {diagnostics.map((line) => (
+      <p class="truncate">
+        {line.location}: <span class="text-signal">error</span>{" "}
+        <span class="text-panel-foreground">{line.rule}</span>: {line.message}
+      </p>
+    ))}
   </Fragment>
 </Everywhere>

@@ -26,43 +26,43 @@ const { cards, id, title } = Astro.props;
 ---
 
 <section aria-labelledby={id} class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id={id} title={title}>
       <slot />
     </SectionHeading>
     <ol
-      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-3"
+      class="border-border bg-border grid gap-px border-t bg-clip-padding lg:grid-cols-3"
       role="list"
     >
-      {
-        cards.map((card) => (
-          <li class="flex min-w-0 flex-col bg-background">
-            <div class="flex h-80 min-w-0 flex-col border-border border-b bg-muted/60 p-4 sm:p-6">
-              {card.code ? (
-                <AnnotatedCode
-                  class="lp-code-fill"
-                  code={card.code.text}
-                  lang={card.code.lang}
-                  title={card.code.path}
-                />
-              ) : (
-                <Terminal class="flex-1">
-                  <slot name="terminal" />
-                </Terminal>
-              )}
-            </div>
-            <div class="flex flex-col gap-2 p-6 sm:p-8">
-              <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
-                {card.eyebrow}
-              </p>
-              <h3 class="font-medium text-xl/7 tracking-[-0.015em]">{card.title}</h3>
-              <p class="max-w-[48ch] text-pretty text-base/7 text-muted-foreground">
-                <RichText text={card.body} />
-              </p>
-            </div>
-          </li>
-        ))
-      }
+      {cards.map((card) => (
+        <li class="bg-background flex min-w-0 flex-col">
+          <div class="border-border bg-muted/60 flex h-80 min-w-0 flex-col border-b p-4 sm:p-6">
+            {card.code ? (
+              <AnnotatedCode
+                class="lp-code-fill"
+                code={card.code.text}
+                lang={card.code.lang}
+                title={card.code.path}
+              />
+            ) : (
+              <Terminal class="flex-1">
+                <slot name="terminal" />
+              </Terminal>
+            )}
+          </div>
+          <div class="flex flex-col gap-2 p-6 sm:p-8">
+            <p class="text-accent font-mono text-xs/5 tracking-wider uppercase">
+              {card.eyebrow}
+            </p>
+            <h3 class="text-xl/7 font-medium tracking-[-0.015em]">
+              {card.title}
+            </h3>
+            <p class="text-muted-foreground max-w-[48ch] text-base/7 text-pretty">
+              <RichText text={card.body} />
+            </p>
+          </div>
+        </li>
+      ))}
     </ol>
   </div>
 </section>

@@ -23,12 +23,8 @@ const steps = [
 ---
 
 <div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
-  <figure
-    class="m-0 min-w-0 overflow-hidden rounded-blume border border-panel-border bg-panel text-panel-foreground lg:col-span-8"
-  >
-    <div
-      class="flex h-11 items-center justify-between gap-4 border-panel-border border-b px-4 font-medium text-panel-muted text-xs"
-    >
+  <figure class="rounded-blume border-panel-border bg-panel text-panel-foreground m-0 min-w-0 overflow-hidden border lg:col-span-8">
+    <div class="border-panel-border text-panel-muted flex h-11 items-center justify-between gap-4 border-b px-4 text-xs font-medium">
       <span class="flex items-center gap-2.5">
         <Icon class="size-3.5" name="bash" />
         opencode run
@@ -38,43 +34,57 @@ const steps = [
     <div class="overflow-x-auto px-5 py-4">
       <div class="w-max min-w-full font-mono text-[13px]/[1.65]">
         <p class="text-panel-muted">&gt; build</p>
-        <p class="mt-3"><span class="text-panel-muted">←</span> Write src/parse.ts</p>
+        <p class="mt-3">
+          <span class="text-panel-muted">←</span> Write src/parse.ts
+        </p>
         <p class="text-panel-muted">Wrote file successfully.</p>
-        <div class="mt-3 border-signal border-l-2 pl-3">
+        <div class="border-signal mt-3 border-l-2 pl-3">
           <p class="text-signal">
             Ultracite fixed what it could. Fix these, then re-read the file
             before editing it again:
           </p>
-          <p class="whitespace-pre text-panel-foreground">src/parse.ts:1:30: error typescript(no-explicit-any): Unexpected `any`. Specify a different type. <span class="text-panel-muted">help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.</span></p>
-          <p class="text-panel-muted">Finished in 31ms on 1 files using 10 threads.</p>
+          <p class="text-panel-foreground whitespace-pre">
+            src/parse.ts:1:30: error typescript(no-explicit-any): Unexpected
+            `any`. Specify a different type.{" "}
+            <span class="text-panel-muted">
+              help: Use `unknown` instead, this will force you to explicitly,
+              and safely, assert the type is correct.
+            </span>
+          </p>
+          <p class="text-panel-muted">
+            Finished in 31ms on 1 files using 10 threads.
+          </p>
         </div>
-        <p class="mt-4"><span class="text-panel-muted">←</span> Edit src/parse.ts</p>
+        <p class="mt-4">
+          <span class="text-panel-muted">←</span> Edit src/parse.ts
+        </p>
         <p class="text-panel-muted">@@ -1,4 +1,4 @@</p>
-        <p class="whitespace-pre text-[#ff8a80]">-export const parse = (input: any) =&gt; {"{"}</p>
-        <p class="whitespace-pre text-ok">+export const parse = (input: string): unknown =&gt; {"{"}</p>
-        <p class="whitespace-pre text-panel-muted">   const value = JSON.parse(input);</p>
-        <p class="whitespace-pre text-panel-muted">   return value;</p>
-        <p class="whitespace-pre text-panel-muted"> {"};"}</p>
-        <p class="mt-4 text-panel-foreground">Done.</p>
+        <p class="whitespace-pre text-[#ff8a80]">
+          -export const parse = (input: any) =&gt; {"{"}
+        </p>
+        <p class="text-ok whitespace-pre">
+          +export const parse = (input: string): unknown =&gt; {"{"}
+        </p>
+        <p class="text-panel-muted whitespace-pre">
+          {"   const value = JSON.parse(input);"}
+        </p>
+        <p class="text-panel-muted whitespace-pre">{"   return value;"}</p>
+        <p class="text-panel-muted whitespace-pre">{" };"}</p>
+        <p class="text-panel-foreground mt-4">Done.</p>
       </div>
     </div>
   </figure>
-  <ol
-    class="flex flex-col gap-2 sm:gap-4 lg:col-span-4"
-    role="list"
-  >
-    {
-      steps.map((step, index) => (
-        <li class="flex flex-1 flex-col gap-2 rounded-blume border border-border bg-code p-5 sm:p-6">
-          <p class="font-mono text-accent text-xs/5 uppercase tracking-wider">
-            {index + 1}
-          </p>
-          <p class="font-medium text-lg/6 tracking-[-0.01em]">{step.title}</p>
-          <p class="text-pretty text-[15px]/6 text-muted-foreground">
-            <RichText text={step.body} />
-          </p>
-        </li>
-      ))
-    }
+  <ol class="flex flex-col gap-2 sm:gap-4 lg:col-span-4" role="list">
+    {steps.map((step, index) => (
+      <li class="rounded-blume border-border bg-code flex flex-1 flex-col gap-2 border p-5 sm:p-6">
+        <p class="text-accent font-mono text-xs/5 tracking-wider uppercase">
+          {index + 1}
+        </p>
+        <p class="text-lg/6 font-medium tracking-[-0.01em]">{step.title}</p>
+        <p class="text-muted-foreground text-[15px]/6 text-pretty">
+          <RichText text={step.body} />
+        </p>
+      </li>
+    ))}
   </ol>
 </div>

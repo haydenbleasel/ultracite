@@ -41,7 +41,11 @@ export function Button({
 }`;
 
 const problems = [
-  { location: "5:8", message: "Expected a function expression", rule: "func-style" },
+  {
+    location: "5:8",
+    message: "Expected a function expression",
+    rule: "func-style",
+  },
 ];
 
 const items = [
@@ -77,24 +81,22 @@ const items = [
   path="components/button.tsx"
   title="Prettier formats it. ESLint finds one more."
 >
-  The same component as on the other engines’ pages. ESLint’s autofix sorts
-  the imports, then Prettier settles the formatting and class order. One rule
-  finds a problem no autofix can settle, and that goes back to the agent.
+  The same component as on the other engines’ pages. ESLint’s autofix sorts the
+  imports, then Prettier settles the formatting and class order. One rule finds
+  a problem no autofix can settle, and that goes back to the agent.
   <Terminal class="mt-2 sm:mt-4" slot="below">
-    <p class="mb-1 truncate text-panel-foreground">
+    <p class="text-panel-foreground mb-1 truncate">
       <span class="text-signal">$</span> npx ultracite fix components/button.tsx
     </p>
-    {
-      problems.map((problem) => (
-        <p class="flex min-w-0 gap-3">
-          <span class="w-12 shrink-0 tabular-nums">{problem.location}</span>
-          <span class="min-w-0 text-pretty">
-            <span class="text-signal">error</span> {problem.message}{" "}
-            <span class="text-panel-foreground">{problem.rule}</span>
-          </span>
-        </p>
-      ))
-    }
+    {problems.map((problem) => (
+      <p class="flex min-w-0 gap-3">
+        <span class="w-12 shrink-0 tabular-nums">{problem.location}</span>
+        <span class="min-w-0 text-pretty">
+          <span class="text-signal">error</span> {problem.message}{" "}
+          <span class="text-panel-foreground">{problem.rule}</span>
+        </span>
+      </p>
+    ))}
     <p class="mt-1">✖ 1 problem (1 error, 0 warnings)</p>
     <p class="mt-1 truncate">components/button.tsx 58ms</p>
   </Terminal>

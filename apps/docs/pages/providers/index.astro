@@ -5,7 +5,10 @@ import Installer from "../../components/home/installer.astro";
 import SectionHeading from "../../components/home/section-heading.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import RichText from "../../components/landing/rich-text.astro";
 import {
   benchmarkMachine,
@@ -69,15 +72,26 @@ const engines = [
 }[];
 
 const rows: { label: string; values: [string, string, string] }[] = [
-  { label: "Runs on", values: ["Native Rust binaries", "One native Rust binary", "Node.js"] },
+  {
+    label: "Runs on",
+    values: ["Native Rust binaries", "One native Rust binary", "Node.js"],
+  },
   { label: "Rules on in the core preset", values: ["474", "331", "918"] },
   {
     label: "`ultracite check`, 42 files",
-    values: [formatMs(small.ms.oxlint), formatMs(small.ms.biome), formatMs(small.ms.eslint)],
+    values: [
+      formatMs(small.ms.oxlint),
+      formatMs(small.ms.biome),
+      formatMs(small.ms.eslint),
+    ],
   },
   {
     label: "`ultracite check`, 420 files",
-    values: [formatMs(large.ms.oxlint), formatMs(large.ms.biome), formatMs(large.ms.eslint)],
+    values: [
+      formatMs(large.ms.oxlint),
+      formatMs(large.ms.biome),
+      formatMs(large.ms.eslint),
+    ],
   },
   {
     label: "Rules that read types",
@@ -91,7 +105,10 @@ const rows: { label: string; values: [string, string, string] }[] = [
     label: "ESLint plugins",
     values: ["Opt-in, through JS plugins", "No", "Any of them"],
   },
-  { label: "Formatter", values: ["Oxfmt", "Biome", "Prettier, with its plugins"] },
+  {
+    label: "Formatter",
+    values: ["Oxfmt", "Biome", "Prettier, with its plugins"],
+  },
   {
     label: "Files `init` writes",
     values: [
@@ -127,8 +144,7 @@ const faqs: FaqItem[] = [
     question: "Do all three enforce the same rules?",
   },
   {
-    answer:
-      `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
+    answer: `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
     question: "Is Biome faster than Oxlint?",
   },
 ];
@@ -142,20 +158,14 @@ const faqs: FaqItem[] = [
   title="Ultracite Providers — Oxlint, Biome and ESLint Compared"
 >
   <section class="border-border border-y">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
-        <p class="font-mono text-muted-foreground text-xs/5">Providers</p>
-        <h1
-          class="mt-10 max-w-[16ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:mt-12 lg:text-7xl"
-        >
+        <p class="text-muted-foreground font-mono text-xs/5">Providers</p>
+        <h1 class="mt-10 max-w-[16ch] text-5xl font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:mt-12 lg:text-7xl">
           One standard, three engines
         </h1>
-        <div
-          class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10"
-        >
-          <p
-            class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
-          >
+        <div class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10">
+          <p class="text-muted-foreground max-w-[48ch] text-lg/8 text-pretty lg:col-span-6">
             Ultracite is a preset, not a linter. It sets up the toolchain you
             pick with the same strict rules, editor settings and agent
             instructions, and you can switch engines with one command.
@@ -165,116 +175,124 @@ const faqs: FaqItem[] = [
           </div>
         </div>
       </div>
-      <div class="border-border border-t bg-signal p-2 sm:p-6 lg:p-10">
+      <div class="border-border bg-signal border-t p-2 sm:p-6 lg:p-10">
         <ul class="grid gap-2 sm:gap-4 lg:grid-cols-3" role="list">
-          {
-            engines.map((engine) => (
-              <li class="flex">
-                <a
-                  class="group flex w-full flex-col gap-6 rounded-blume border border-border bg-code p-6 hover:border-foreground/30 sm:p-8"
-                  href={hrefFor(engine.id)}
-                >
-                  <span class="flex items-center justify-between gap-4">
-                    <img
-                      alt=""
-                      class="size-9 rounded-md"
-                      height="36"
-                      src={providerLogos[engine.id]}
-                      width="36"
-                    />
-                    {engine.recommended && (
-                      <span class="rounded-sm bg-foreground px-1.5 py-0.5 font-mono text-background text-xs/5">
-                        Recommended
-                      </span>
-                    )}
+          {engines.map((engine) => (
+            <li class="flex">
+              <a
+                class="group rounded-blume border-border bg-code hover:border-foreground/30 flex w-full flex-col gap-6 border p-6 sm:p-8"
+                href={hrefFor(engine.id)}
+              >
+                <span class="flex items-center justify-between gap-4">
+                  <img
+                    alt=""
+                    class="size-9 rounded-md"
+                    height="36"
+                    src={providerLogos[engine.id]}
+                    width="36"
+                  />
+                  {engine.recommended && (
+                    <span class="bg-foreground text-background rounded-sm px-1.5 py-0.5 font-mono text-xs/5">
+                      Recommended
+                    </span>
+                  )}
+                </span>
+                <span class="flex flex-col gap-2">
+                  <span class="text-2xl font-medium tracking-[-0.02em]">
+                    {engine.name}
                   </span>
-                  <span class="flex flex-col gap-2">
-                    <span class="font-medium text-2xl tracking-[-0.02em]">
-                      {engine.name}
-                    </span>
-                    <span class="text-pretty text-[15px]/6 text-muted-foreground">
-                      {engine.summary}
-                    </span>
+                  <span class="text-muted-foreground text-[15px]/6 text-pretty">
+                    {engine.summary}
                   </span>
-                  <span class="mt-auto grid grid-cols-2 gap-4 border-border border-t pt-5">
-                    <span class="flex flex-col gap-1">
-                      <span class="font-medium text-2xl tabular-nums tracking-[-0.02em]">
-                        {engine.coreRules.toLocaleString("en-US")}
-                      </span>
-                      <span class="text-muted-foreground text-sm/5">core rules</span>
+                </span>
+                <span class="border-border mt-auto grid grid-cols-2 gap-4 border-t pt-5">
+                  <span class="flex flex-col gap-1">
+                    <span class="text-2xl font-medium tracking-[-0.02em] tabular-nums">
+                      {engine.coreRules.toLocaleString("en-US")}
                     </span>
-                    <span class="flex flex-col gap-1">
-                      <span class="font-medium text-2xl tabular-nums tracking-[-0.02em]">
-                        {engine.check420}
-                      </span>
-                      <span class="text-muted-foreground text-sm/5">to check 420 files</span>
+                    <span class="text-muted-foreground text-sm/5">
+                      core rules
                     </span>
                   </span>
-                  <span class="flex items-center gap-2 font-medium text-[15px]/6">
-                    Ultracite for {engine.name.split(" ")[0]}
-                    <Icon
-                      class="size-4 transition-transform group-hover:translate-x-0.5"
-                      name="arrow-right"
-                    />
+                  <span class="flex flex-col gap-1">
+                    <span class="text-2xl font-medium tracking-[-0.02em] tabular-nums">
+                      {engine.check420}
+                    </span>
+                    <span class="text-muted-foreground text-sm/5">
+                      to check 420 files
+                    </span>
                   </span>
-                </a>
-              </li>
-            ))
-          }
+                </span>
+                <span class="flex items-center gap-2 text-[15px]/6 font-medium">
+                  Ultracite for {engine.name.split(" ")[0]}
+                  <Icon
+                    class="size-4 transition-transform group-hover:translate-x-0.5"
+                    name="arrow-right"
+                  />
+                </span>
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
   </section>
 
   <section aria-labelledby="pv-compare" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="pv-compare" title="Side by side">
-        The same project, the same machine, each engine through Ultracite’s
-        core preset.
+        The same project, the same machine, each engine through Ultracite’s core
+        preset.
       </SectionHeading>
-      <div class="overflow-x-auto border-border border-t">
+      <div class="border-border overflow-x-auto border-t">
         <table class="w-full min-w-[56rem] border-collapse text-left text-[15px]/6">
           <thead>
             <tr class="border-border border-b">
-              <th class="w-[22%] px-4 py-4 font-normal text-muted-foreground sm:px-6 lg:px-10" scope="col">
+              <th
+                class="text-muted-foreground w-[22%] px-4 py-4 font-normal sm:px-6 lg:px-10"
+                scope="col"
+              >
                 <span class="sr-only">Property</span>
               </th>
-              {
-                engines.map((engine) => (
-                  <th class="w-[26%] px-4 py-4 font-medium sm:px-6" scope="col">
-                    <span class="flex items-center gap-2.5">
-                      <img alt="" class="size-5 rounded-[3px]" height="20" src={providerLogos[engine.id]} width="20" />
-                      {engine.name}
-                    </span>
-                  </th>
-                ))
-              }
+              {engines.map((engine) => (
+                <th class="w-[26%] px-4 py-4 font-medium sm:px-6" scope="col">
+                  <span class="flex items-center gap-2.5">
+                    <img
+                      alt=""
+                      class="size-5 rounded-[3px]"
+                      height="20"
+                      src={providerLogos[engine.id]}
+                      width="20"
+                    />
+                    {engine.name}
+                  </span>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {
-              rows.map((row) => (
-                <tr class="border-border border-b last:border-b-0">
-                  <th class="px-4 py-4 align-top font-normal text-muted-foreground sm:px-6 lg:px-10" scope="row">
-                    <RichText text={row.label} />
-                  </th>
-                  {row.values.map((value) => (
-                    <td class="text-pretty px-4 py-4 align-top tabular-nums sm:px-6">
-                      <RichText text={value} />
-                    </td>
-                  ))}
-                </tr>
-              ))
-            }
+            {rows.map((row) => (
+              <tr class="border-border border-b last:border-b-0">
+                <th
+                  class="text-muted-foreground px-4 py-4 align-top font-normal sm:px-6 lg:px-10"
+                  scope="row"
+                >
+                  <RichText text={row.label} />
+                </th>
+                {row.values.map((value) => (
+                  <td class="px-4 py-4 align-top text-pretty tabular-nums sm:px-6">
+                    <RichText text={value} />
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <p
-        class="text-pretty border-border border-t px-4 py-5 text-muted-foreground text-sm/6 sm:px-6 lg:px-10"
-      >
-        Ultracite 8.0.0. Times are medians of five runs of <code
-          class="font-mono text-[13px]">ultracite check</code
-        > on {benchmarkMachine} over the repo’s benchmark fixture, with
+      <p class="border-border text-muted-foreground border-t px-4 py-5 text-sm/6 text-pretty sm:px-6 lg:px-10">
+        Ultracite 8.0.0. Times are medians of five runs of{" "}
+        <code class="font-mono text-[13px]">ultracite check</code> on{" "}
+        {benchmarkMachine} over the repo’s benchmark fixture, with
         {toolchainVersions.oxlint}; {toolchainVersions.biome}; and
         {toolchainVersions.eslint}. They include starting Node and the CLI.
       </p>

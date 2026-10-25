@@ -3,6 +3,7 @@
 // (the default slot) in a prose column, with its sections and rules in a rail
 // beside it. pages/blog/<slug>.astro renders this around the post's MDX.
 import data from "blume:data";
+
 import "../../styles/blog.css";
 
 import { isoDate, postFor } from "../../lib/blog";
@@ -91,10 +92,10 @@ const jsonLd: JsonLdNode = {
 >
   <article aria-labelledby="post-title">
     <header class="border-border border-y">
-      <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+      <div class="hp-frame border-border mx-auto max-w-7xl border-x">
         <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
           <a
-            class="group inline-flex items-center gap-2 font-mono text-muted-foreground text-xs/5 hover:text-foreground"
+            class="group text-muted-foreground hover:text-foreground inline-flex items-center gap-2 font-mono text-xs/5"
             href="/research"
           >
             <Icon
@@ -104,22 +105,18 @@ const jsonLd: JsonLdNode = {
             Research
           </a>
           <h1
-            class="mt-10 max-w-[22ch] text-balance font-medium text-4xl tracking-[-0.045em] sm:text-5xl lg:mt-12 lg:text-6xl"
+            class="mt-10 max-w-[22ch] text-4xl font-medium tracking-[-0.045em] text-balance sm:text-5xl lg:mt-12 lg:text-6xl"
             id="post-title"
           >
             {post.title}
           </h1>
-          <p
-            class="mt-8 max-w-[56ch] text-pretty text-lg/8 text-muted-foreground"
-          >
+          <p class="text-muted-foreground mt-8 max-w-[56ch] text-lg/8 text-pretty">
             {post.description}
           </p>
-          <p
-            class="mt-10 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-muted-foreground text-xs/5"
-          >
-            <a class="text-foreground hover:underline" href={post.author.url}
-              >{post.author.name}</a
-            >
+          <p class="text-muted-foreground mt-10 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs/5">
+            <a class="text-foreground hover:underline" href={post.author.url}>
+              {post.author.name}
+            </a>
             <span aria-hidden="true">·</span>
             <span>{post.readingMinutes} min read</span>
           </p>
@@ -128,12 +125,8 @@ const jsonLd: JsonLdNode = {
     </header>
 
     <div class="border-border border-b">
-      <div
-        class="hp-frame mx-auto grid max-w-7xl border-border border-x lg:grid-cols-12"
-      >
-        <div
-          class="min-w-0 px-4 py-12 sm:px-6 sm:py-16 lg:col-span-8 lg:px-10 lg:py-20"
-        >
+      <div class="hp-frame border-border mx-auto grid max-w-7xl border-x lg:grid-cols-12">
+        <div class="min-w-0 px-4 py-12 sm:px-6 sm:py-16 lg:col-span-8 lg:px-10 lg:py-20">
           <div class="blog-prose prose max-w-[64ch]">
             <slot />
           </div>
@@ -143,42 +136,38 @@ const jsonLd: JsonLdNode = {
           class="border-border border-t px-4 py-10 sm:px-6 lg:col-span-4 lg:border-t-0 lg:border-l lg:px-10 lg:py-20"
         >
           <div class="flex flex-col gap-10 lg:sticky lg:top-24">
-            {
-              sections.length > 0 && (
-                <nav aria-labelledby="post-sections" class="max-lg:hidden">
-                  <p
-                    class="font-mono text-muted-foreground text-xs/5"
-                    id="post-sections"
-                  >
-                    In this post
-                  </p>
-                  <ol class="mt-4 flex flex-col gap-2.5" role="list">
-                    {sections.map((section) => (
-                      <li>
-                        <a
-                          class="text-pretty text-muted-foreground text-sm/6 hover:text-foreground"
-                          href={`#${section.slug}`}
-                        >
-                          {section.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
-                </nav>
-              )
-            }
-            {
-              post.rules.length > 0 && (
-                <div>
-                  <p class="font-mono text-muted-foreground text-xs/5">
-                    Rules in this post
-                  </p>
-                  <RuleTags class="mt-4" rules={post.rules} />
-                </div>
-              )
-            }
+            {sections.length > 0 && (
+              <nav aria-labelledby="post-sections" class="max-lg:hidden">
+                <p
+                  class="text-muted-foreground font-mono text-xs/5"
+                  id="post-sections"
+                >
+                  In this post
+                </p>
+                <ol class="mt-4 flex flex-col gap-2.5" role="list">
+                  {sections.map((section) => (
+                    <li>
+                      <a
+                        class="text-muted-foreground hover:text-foreground text-sm/6 text-pretty"
+                        href={`#${section.slug}`}
+                      >
+                        {section.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+            {post.rules.length > 0 && (
+              <div>
+                <p class="text-muted-foreground font-mono text-xs/5">
+                  Rules in this post
+                </p>
+                <RuleTags class="mt-4" rules={post.rules} />
+              </div>
+            )}
             <a
-              class="group inline-flex items-center gap-2 font-medium text-[15px]/6"
+              class="group inline-flex items-center gap-2 text-[15px]/6 font-medium"
               href="/research"
             >
               All research

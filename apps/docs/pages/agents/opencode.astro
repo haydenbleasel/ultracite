@@ -9,7 +9,10 @@ import Cta from "../../components/home/cta.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingHero from "../../components/landing/landing-hero.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import NextSteps from "../../components/landing/next-steps.astro";
 import type { NextStep } from "../../components/landing/next-steps.astro";
 import { agentLogos } from "../../lib/logos";
@@ -59,7 +62,8 @@ const faqs: FaqItem[] = [
 
 const nextSteps: NextStep[] = [
   {
-    description: "What `init` writes for each agent, and how to keep it current.",
+    description:
+      "What `init` writes for each agent, and how to keep it current.",
     href: "/docs/ai/rules",
     label: "Docs",
     title: "Agent rules",
@@ -71,7 +75,8 @@ const nextSteps: NextStep[] = [
     title: "Agent skills",
   },
   {
-    description: "The post-edit hooks init writes for other agents, and what each one does.",
+    description:
+      "The post-edit hooks init writes for other agents, and what each one does.",
     href: "/docs/ai/hooks",
     label: "Docs",
     title: "Agent hooks",
@@ -100,20 +105,22 @@ const nextSteps: NextStep[] = [
     title="Lint every file OpenCode writes"
   >
     OpenCode reads Ultracite’s rules from{" "}
-    <code class="font-mono text-base text-foreground">AGENTS.md</code>{" "}
-    before it writes. A one-file plugin runs{" "}
-    <code class="font-mono text-base text-foreground">ultracite fix</code>{" "}
-    after every edit and hands the model what’s left, so it fixes the problem
-    in the same turn instead of in review.
+    <code class="text-foreground font-mono text-base">AGENTS.md</code> before it
+    writes. A one-file plugin runs{" "}
+    <code class="text-foreground font-mono text-base">ultracite fix</code> after
+    every edit and hands the model what’s left, so it fixes the problem in the
+    same turn instead of in review.
     <Fragment slot="note">
       <span>For</span>
       <a
         aria-describedby={NEW_TAB_HINT_ID}
-        class="underline underline-offset-2 hover:text-foreground"
+        class="hover:text-foreground underline underline-offset-2"
         href="https://opencode.ai"
         rel="noopener noreferrer"
-        target="_blank">OpenCode</a
+        target="_blank"
       >
+        OpenCode
+      </a>
       <span>by Anomaly</span>
       <span aria-hidden="true">·</span>
       <span>Tested on 1.18.35</span>

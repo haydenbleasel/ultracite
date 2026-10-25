@@ -43,7 +43,10 @@ const logo = `/logos/${details?.logo ?? id}.svg`;
 const command = `npx ultracite@latest init --agents ${id}`;
 
 const slug = (text: string): string =>
-  text.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-").replaceAll(/^-|-$/gu, "");
+  text
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/gu, "-")
+    .replaceAll(/^-|-$/gu, "");
 
 const breadcrumbs: Crumb[] = [
   { href: "/agents", name: "Agents" },
@@ -66,7 +69,12 @@ const rulesExcerpt = `${rulesLines
 const hookCommand = `${ultracite} fix --hook`;
 
 const files: { code: string; lang: string; meta?: string; title: string }[] = [
-  { code: rulesExcerpt, lang: "md", meta: "Ultracite’s rules", title: "AGENTS.md" },
+  {
+    code: rulesExcerpt,
+    lang: "md",
+    meta: "Ultracite’s rules",
+    title: "AGENTS.md",
+  },
 ];
 
 if (agent.imports) {
@@ -89,7 +97,12 @@ if (agent.rulesCopy) {
 
 if (agent.settings) {
   files.push({
-    code: mergeAgentSettings("", agent.settings, "AGENTS.md", `${ultracite} fix`),
+    code: mergeAgentSettings(
+      "",
+      agent.settings,
+      "AGENTS.md",
+      `${ultracite} fix`
+    ),
     lang: agent.settings.path.endsWith(".json") ? "json" : "yaml",
     meta: "Merged",
     title: agent.settings.path,
@@ -117,7 +130,10 @@ const isWrittenByInit = (path: string): boolean =>
 
 const nextSteps: NextStep[] = [
   ...content.related.slice(0, 3).flatMap((relatedId) => {
-    const relatedAgent = cliAgents.find((candidate) => candidate.id === relatedId);
+    const relatedAgent = cliAgents.find(
+      (candidate) => candidate.id === relatedId
+    );
+
     const relatedDetails = directory.get(relatedId);
 
     return relatedAgent
@@ -132,7 +148,8 @@ const nextSteps: NextStep[] = [
       : [];
   }),
   {
-    description: "What `init` writes for every agent, and how to keep it current.",
+    description:
+      "What `init` writes for every agent, and how to keep it current.",
     href: "/docs/ai/rules",
     label: "Docs",
     title: "Agent rules",
@@ -163,147 +180,131 @@ const checkedAgainst = content.checked.version
   >
     <RichText text={content.intro} />
     <Fragment slot="note">
-      {details?.maker && <span>{name} by {details.maker}</span>}
+      {details?.maker && (
+        <span>
+          {name} by {details.maker}
+        </span>
+      )}
       <span aria-hidden="true">·</span>
       <span>Checked against {checkedAgainst}</span>
     </Fragment>
     <div class="grid gap-2 sm:gap-4 lg:grid-cols-12" slot="visual">
       <div class="flex min-w-0 flex-col gap-2 sm:gap-4 lg:col-span-7">
-        {
-          files.map((file) => (
-            <AnnotatedCode
-              code={file.code}
-              lang={file.lang}
-              meta={file.meta}
-              title={file.title}
-            />
-          ))
-        }
+        {files.map((file) => (
+          <AnnotatedCode
+            code={file.code}
+            lang={file.lang}
+            meta={file.meta}
+            title={file.title}
+          />
+        ))}
       </div>
-      <figure
-        class="m-0 flex min-w-0 flex-col overflow-hidden rounded-blume border border-border bg-code lg:col-span-5"
-      >
-        <figcaption
-          class="flex h-11 shrink-0 items-center gap-2.5 border-border border-b px-4 font-medium text-muted-foreground text-xs"
-        >
+      <figure class="rounded-blume border-border bg-code m-0 flex min-w-0 flex-col overflow-hidden border lg:col-span-5">
+        <figcaption class="border-border text-muted-foreground flex h-11 shrink-0 items-center gap-2.5 border-b px-4 text-xs font-medium">
           <Icon class="size-3.5" name="folder" />
           Where {name} looks for instructions
         </figcaption>
-        <ol class="flex flex-col divide-y divide-border" role="list">
-          {
-            content.rules.lookup.map((step, index) => (
-              <li class="flex gap-3 px-4 py-3">
-                <span class="w-4 shrink-0 font-mono text-muted-foreground text-xs/6 tabular-nums">
-                  {index + 1}
+        <ol class="divide-border flex flex-col divide-y" role="list">
+          {content.rules.lookup.map((step, index) => (
+            <li class="flex gap-3 px-4 py-3">
+              <span class="text-muted-foreground w-4 shrink-0 font-mono text-xs/6 tabular-nums">
+                {index + 1}
+              </span>
+              <span class="flex min-w-0 flex-col gap-0.5">
+                <span class="flex flex-wrap items-center gap-2">
+                  <code class="font-mono text-[13px]/6">{step.path}</code>
+                  {isWrittenByInit(step.path) && (
+                    <span class="bg-signal text-ink rounded-sm px-1.5 font-mono text-[11px]/5 tracking-wider uppercase">
+                      Ultracite
+                    </span>
+                  )}
                 </span>
-                <span class="flex min-w-0 flex-col gap-0.5">
-                  <span class="flex flex-wrap items-center gap-2">
-                    <code class="font-mono text-[13px]/6">{step.path}</code>
-                    {isWrittenByInit(step.path) && (
-                      <span class="rounded-sm bg-signal px-1.5 font-mono text-[11px]/5 text-ink uppercase tracking-wider">
-                        Ultracite
-                      </span>
-                    )}
-                  </span>
-                  <span class="text-pretty text-muted-foreground text-sm/5">
-                    <RichText text={step.note} />
-                  </span>
+                <span class="text-muted-foreground text-sm/5 text-pretty">
+                  <RichText text={step.note} />
                 </span>
-              </li>
-            ))
-          }
+              </span>
+            </li>
+          ))}
         </ol>
       </figure>
     </div>
   </LandingHero>
 
   <section aria-labelledby="ag-rules" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="ag-rules" title={`How ${name} reads the rules`}>
         <RichText text={content.rules.summary} />
       </SectionHeading>
-      <dl
-        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
-      >
-        {
-          content.rules.facts.map((fact) => (
-            <div class="flex flex-col gap-2 bg-background px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
-              <dt class="font-mono text-accent text-xs/5 uppercase tracking-wider">
-                {fact.label}
-              </dt>
-              <dd class="text-pretty text-[15px]/6">
-                <RichText text={fact.value} />
-              </dd>
-            </div>
-          ))
-        }
-        {
-          content.rules.facts.length % 3 !== 0 && (
-            <div
-              aria-hidden="true"
-              class="hatch bg-background max-lg:hidden"
-              style={{ gridColumn: `span ${3 - (content.rules.facts.length % 3)}` }}
-            />
-          )
-        }
+      <dl class="border-border bg-border grid gap-px border-t bg-clip-padding sm:grid-cols-2 lg:grid-cols-3">
+        {content.rules.facts.map((fact) => (
+          <div class="bg-background flex flex-col gap-2 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+            <dt class="text-accent font-mono text-xs/5 tracking-wider uppercase">
+              {fact.label}
+            </dt>
+            <dd class="text-[15px]/6 text-pretty">
+              <RichText text={fact.value} />
+            </dd>
+          </div>
+        ))}
+        {content.rules.facts.length % 3 !== 0 && (
+          <div
+            aria-hidden="true"
+            class="hatch bg-background max-lg:hidden"
+            style={{
+              gridColumn: `span ${3 - (content.rules.facts.length % 3)}`,
+            }}
+          />
+        )}
       </dl>
     </div>
   </section>
 
   <section aria-labelledby="ag-loop" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="ag-loop" title={content.loop.title}>
         <RichText text={content.loop.body} />
       </SectionHeading>
-      <div class="border-border border-t bg-muted/60 p-2 sm:p-6 lg:p-10">
+      <div class="border-border bg-muted/60 border-t p-2 sm:p-6 lg:p-10">
         <div class="grid gap-2 sm:gap-4 lg:grid-cols-12">
           <div class="flex min-w-0 flex-col gap-2 sm:gap-4 lg:col-span-7">
-          {
-            hookFile && (
+            {hookFile && (
               <AnnotatedCode
                 code={hookFile.code}
                 lang={hookFile.lang}
                 meta={`init --hooks ${id}`}
                 title={hookFile.title}
               />
-            )
-          }
-          {
-            (content.loop.snippets ?? []).map((snippet) => (
+            )}
+            {(content.loop.snippets ?? []).map((snippet) => (
               <AnnotatedCode
                 code={snippet.code}
                 lang={snippet.lang}
                 title={snippet.title}
               />
-            ))
-          }
-          {
-            !hookFile && !content.loop.snippets?.length && (
+            ))}
+            {!hookFile && !content.loop.snippets?.length && (
               <AnnotatedCode
                 code={quickReference}
                 lang="md"
                 meta="What the rules tell it to run"
                 title="AGENTS.md"
               />
-            )
-          }
+            )}
           </div>
           <ol
-            class="flex min-w-0 flex-col self-start overflow-hidden rounded-blume border border-border bg-code lg:col-span-5"
+            class="rounded-blume border-border bg-code flex min-w-0 flex-col self-start overflow-hidden border lg:col-span-5"
             role="list"
           >
-            {
-              content.loop.steps.map((step, index) => (
-                <li class="flex gap-4 border-border px-5 py-4 [&+&]:border-t">
-                  <span class="font-mono text-accent text-xs/6 tabular-nums">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span class="text-pretty text-[15px]/6">
-                    <RichText text={step} />
-                  </span>
-                </li>
-              ))
-            }
+            {content.loop.steps.map((step, index) => (
+              <li class="border-border flex gap-4 px-5 py-4 [&+&]:border-t">
+                <span class="text-accent font-mono text-xs/6 tabular-nums">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span class="text-[15px]/6 text-pretty">
+                  <RichText text={step} />
+                </span>
+              </li>
+            ))}
           </ol>
         </div>
       </div>
@@ -311,65 +312,63 @@ const checkedAgainst = content.checked.version
   </section>
 
   <section aria-labelledby="ag-notes" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="ag-notes" title={`Worth knowing about ${name}`} />
       <ul
-        class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+        class="border-border bg-border grid gap-px border-t bg-clip-padding md:grid-cols-2"
         role="list"
       >
-        {
-          content.highlights.map((highlight) => (
-            <li class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
-              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
-                {highlight.title}
-              </h3>
-              <p class="max-w-[60ch] text-pretty text-base/7 text-muted-foreground">
-                <RichText text={highlight.body} />
-              </p>
-            </li>
-          ))
-        }
-        <li class="flex flex-col gap-2 bg-background px-4 py-8 sm:px-6 lg:px-10">
-          <h3 class="font-medium text-lg/7 tracking-[-0.01em]">
+        {content.highlights.map((highlight) => (
+          <li class="bg-background flex flex-col gap-2 px-4 py-8 sm:px-6 lg:px-10">
+            <h3 class="text-lg/7 font-medium tracking-[-0.01em]">
+              {highlight.title}
+            </h3>
+            <p class="text-muted-foreground max-w-[60ch] text-base/7 text-pretty">
+              <RichText text={highlight.body} />
+            </p>
+          </li>
+        ))}
+        <li class="bg-background flex flex-col gap-2 px-4 py-8 sm:px-6 lg:px-10">
+          <h3 class="text-lg/7 font-medium tracking-[-0.01em]">
             The Ultracite skill
           </h3>
-          <p class="max-w-[60ch] text-pretty text-base/7 text-muted-foreground">
+          <p class="text-muted-foreground max-w-[60ch] text-base/7 text-pretty">
             <RichText text={content.skills} />
           </p>
         </li>
-        {
-          (content.highlights.length + 1) % 2 === 1 && (
-            <li aria-hidden="true" class="hatch bg-background max-md:hidden" />
-          )
-        }
+        {(content.highlights.length + 1) % 2 === 1 && (
+          <li aria-hidden="true" class="hatch bg-background max-md:hidden" />
+        )}
       </ul>
     </div>
   </section>
 
-  <Faq id={`ag-faq-${slug(id)}`} items={content.faqs} title={`${name} questions, answered`} />
+  <Faq
+    id={`ag-faq-${slug(id)}`}
+    items={content.faqs}
+    title={`${name} questions, answered`}
+  />
 
   <section aria-labelledby="ag-sources" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <div class="flex flex-col gap-4 px-4 py-10 sm:px-6 lg:flex-row lg:gap-10 lg:px-10">
-        <h2 class="shrink-0 font-medium text-lg/7 lg:w-56" id="ag-sources">
+        <h2 class="shrink-0 text-lg/7 font-medium lg:w-56" id="ag-sources">
           Sources
         </h2>
         <ul class="flex flex-col gap-1.5 text-[15px]/6" role="list">
-          {
-            content.sources.map((source) => (
-              <li>
-                <a
-                  aria-describedby={NEW_TAB_HINT_ID}
-                  class="text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                  href={source.url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {source.title}
-                </a>
-              </li>
-            ))
-          }
+          {content.sources.map((source) => (
+            <li>
+              <a
+                aria-describedby={NEW_TAB_HINT_ID}
+                class="text-muted-foreground hover:text-foreground underline underline-offset-2"
+                href={source.url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {source.title}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

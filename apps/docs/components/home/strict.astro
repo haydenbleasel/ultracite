@@ -69,7 +69,13 @@ const lines: Line[] = [
   { code: [["    <"], ["ul", "tag"], [">"]] },
   { code: [["      {users.map((user) => ("]] },
   {
-    code: [["        <"], ["li", "tag"], [" "], ["key", "type"], ["={user.id}>"]],
+    code: [
+      ["        <"],
+      ["li", "tag"],
+      [" "],
+      ["key", "type"],
+      ["={user.id}>"],
+    ],
   },
   {
     code: [
@@ -118,7 +124,10 @@ const families = [
     name: "React and hooks",
     rules: ["exhaustive-deps", "jsx-key", "button-has-type"],
   },
-  { name: "Accessibility", rules: ["alt-text", "anchor-is-valid", "aria-role"] },
+  {
+    name: "Accessibility",
+    rules: ["alt-text", "anchor-is-valid", "aria-role"],
+  },
   {
     name: "Async and correctness",
     rules: ["eqeqeq", "require-await", "no-await-in-loop"],
@@ -127,7 +136,7 @@ const families = [
 ---
 
 <section aria-labelledby="hp-strict" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading
       id="hp-strict"
       title="Strict enough to catch what agents get wrong"
@@ -137,80 +146,79 @@ const families = [
       safety, React, accessibility and async code, so those patterns fail the
       check instead of reaching your review queue.
     </SectionHeading>
-    <div class="border-border border-t bg-muted/60 p-2 sm:p-6 lg:p-10">
-      <div class="overflow-hidden rounded-lg bg-code ring-1 ring-foreground/10">
-        <div
-          class="flex h-10 items-center justify-between gap-4 border-border border-b px-4 font-mono text-muted-foreground text-xs/5"
-        >
+    <div class="border-border bg-muted/60 border-t p-2 sm:p-6 lg:p-10">
+      <div class="bg-code ring-foreground/10 overflow-hidden rounded-lg ring-1">
+        <div class="border-border text-muted-foreground flex h-10 items-center justify-between gap-4 border-b px-4 font-mono text-xs/5">
           <span class="flex items-center gap-2">
-            <span aria-hidden="true" class="size-1.5 rounded-full bg-signal"
+            <span
+              aria-hidden="true"
+              class="bg-signal size-1.5 rounded-full"
             ></span>
             src/components/user-list.tsx
           </span>
           <span class="text-accent">{problemCount} problems</span>
         </div>
         <div class="overflow-x-auto py-4">
-          <div
-            class="w-max min-w-full font-mono text-[13px]/[1.85] text-foreground"
-          >
-            {
-              lines.map((line, index) => (
-                <div
+          <div class="text-foreground w-max min-w-full font-mono text-[13px]/[1.85]">
+            {lines.map((line, index) => (
+              <div
+                class:list={[
+                  "flex pr-6",
+                  line.problems && "bg-signal/7 items-baseline",
+                ]}
+              >
+                <span
                   class:list={[
-                    "flex pr-6",
-                    line.problems && "items-baseline bg-signal/7",
+                    "w-13 shrink-0 pr-4 text-right select-none",
+                    line.problems ? "text-accent" : "text-muted-foreground/60",
                   ]}
                 >
-                  <span
-                    class:list={[
-                      "w-13 shrink-0 select-none pr-4 text-right",
-                      line.problems ? "text-accent" : "text-muted-foreground/60",
-                    ]}
-                  >
-                    {index + 1}
-                  </span>
-                  <code class="whitespace-pre">{line.code.map(([text, kind]) => (kind ? <span class={tokenClass[kind]}>{text}</span> : text))}</code>
-                  {line.problems && (
-                    <span class="ml-auto shrink-0 pl-10 text-accent text-xs">
-                      {line.problems}
-                    </span>
+                  {index + 1}
+                </span>
+                <code class="whitespace-pre">
+                  {line.code.map(([text, kind]) =>
+                    kind ? <span class={tokenClass[kind]}>{text}</span> : text
                   )}
-                </div>
-              ))
-            }
+                </code>
+                {line.problems && (
+                  <span class="text-accent ml-auto shrink-0 pl-10 text-xs">
+                    {line.problems}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
-    <dl
-      class="grid grid-cols-2 gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-5"
-    >
-      {
-        families.map((family) => (
-          <div class="flex flex-col gap-1.5 bg-background px-4 py-6 sm:px-6 lg:px-8">
-            <dt class="font-medium text-base/7">{family.name}</dt>
-            <dd class="flex flex-col font-mono text-[12.5px]/6 text-muted-foreground">
-              {family.rules.map((rule) => (
-                <span class="truncate">{rule}</span>
-              ))}
-            </dd>
-          </div>
-        ))
-      }
-      <div
-        class="hatch col-span-2 flex flex-col gap-1.5 bg-background px-4 py-6 sm:px-6 lg:col-span-1 lg:px-8"
-      >
-        <dt class="flex items-center gap-2 font-medium text-base/7">
+    <dl class="border-border bg-border grid grid-cols-2 gap-px border-t bg-clip-padding lg:grid-cols-5">
+      {families.map((family) => (
+        <div class="bg-background flex flex-col gap-1.5 px-4 py-6 sm:px-6 lg:px-8">
+          <dt class="text-base/7 font-medium">{family.name}</dt>
+          <dd class="text-muted-foreground flex flex-col font-mono text-[12.5px]/6">
+            {family.rules.map((rule) => (
+              <span class="truncate">{rule}</span>
+            ))}
+          </dd>
+        </div>
+      ))}
+      <div class="hatch bg-background col-span-2 flex flex-col gap-1.5 px-4 py-6 sm:px-6 lg:col-span-1 lg:px-8">
+        <dt class="flex items-center gap-2 text-base/7 font-medium">
           Anti-slop
-          <span
-            class="rounded-sm border border-foreground/20 px-1.5 font-mono text-[11px]/5 text-muted-foreground uppercase tracking-wider"
-            >Opt-in</span
-          >
+          <span class="border-foreground/20 text-muted-foreground rounded-sm border px-1.5 font-mono text-[11px]/5 tracking-wider uppercase">
+            Opt-in
+          </span>
         </dt>
-        <dd class="text-pretty text-[15px]/6 text-muted-foreground">
-          <a class="underline underline-offset-2 hover:text-foreground" href="/docs/presets#anti-slop-rules">Dillon Mulroy’s rules</a> against unjustified type assertions,{" "}
-          <code class="font-mono text-[13px]">unknown</code> leaking through signatures
-          and other escape hatches.
+        <dd class="text-muted-foreground text-[15px]/6 text-pretty">
+          <a
+            class="hover:text-foreground underline underline-offset-2"
+            href="/docs/presets#anti-slop-rules"
+          >
+            Dillon Mulroy’s rules
+          </a>{" "}
+          against unjustified type assertions,{" "}
+          <code class="font-mono text-[13px]">unknown</code> leaking through
+          signatures and other escape hatches.
         </dd>
       </div>
     </dl>

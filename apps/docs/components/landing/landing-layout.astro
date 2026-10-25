@@ -5,6 +5,7 @@
 // layout; these add the two shapes answer engines read for a landing page.
 import PageLayout from "blume/components/layout/PageLayout.astro";
 import data from "blume:data";
+
 import "../../styles/home.css";
 
 import { plainText } from "../../lib/inline-code";
@@ -30,8 +31,13 @@ interface Props {
   title: string;
 }
 
-const { breadcrumbs, description, faqs = [], lastModified, title } =
-  Astro.props;
+const {
+  breadcrumbs,
+  description,
+  faqs = [],
+  lastModified,
+  title,
+} = Astro.props;
 
 const { config } = data;
 const siteUrl = config.site ?? "";
@@ -80,12 +86,18 @@ const faqLd =
   themeMode={config.theme.mode}
   x={config.x}
 >
-  <script is:inline set:html={JSON.stringify(breadcrumbLd)} type="application/ld+json" />
-  {
-    faqLd && (
-      <script is:inline set:html={JSON.stringify(faqLd)} type="application/ld+json" />
-    )
-  }
+  <script
+    is:inline
+    set:html={JSON.stringify(breadcrumbLd)}
+    type="application/ld+json"
+  />
+  {faqLd && (
+    <script
+      is:inline
+      set:html={JSON.stringify(faqLd)}
+      type="application/ld+json"
+    />
+  )}
   <slot />
   <Footer slot="footer" />
 </PageLayout>

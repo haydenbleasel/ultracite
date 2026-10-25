@@ -11,7 +11,13 @@ interface Props {
   wide?: boolean;
 }
 
-const { class: className, command, tone = "default", wide = false } = Astro.props;
+const {
+  class: className,
+  command,
+  tone = "default",
+  wide = false,
+} = Astro.props;
+
 const inverse = tone === "inverse";
 
 const terminal = command ?? "npx ultracite@latest init";
@@ -48,54 +54,52 @@ const modes = [
     className,
   ]}
 >
-  {
-    prompt && (
-      <div aria-label="Install" class="flex gap-1" role="tablist">
-        {modes.map((mode) => (
-          <button
-            aria-selected={String(mode.id === "terminal")}
-            class:list={[
-              "rounded-md px-2.5 py-1 font-medium text-sm/5",
-              inverse
-                ? "text-ink/80 hover:text-ink aria-selected:bg-panel aria-selected:text-panel-foreground"
-                : "text-muted-foreground hover:text-foreground aria-selected:bg-foreground aria-selected:text-background",
-            ]}
-            data-hp-mode={mode.id}
-            role="tab"
-            tabindex={mode.id === "terminal" ? "0" : "-1"}
-            type="button"
-          >
-            {mode.label}
-          </button>
-        ))}
-      </div>
-    )
-  }
+  {prompt && (
+    <div aria-label="Install" class="flex gap-1" role="tablist">
+      {modes.map((mode) => (
+        <button
+          aria-selected={String(mode.id === "terminal")}
+          class:list={[
+            "rounded-md px-2.5 py-1 text-sm/5 font-medium",
+            inverse
+              ? "text-ink/80 hover:text-ink aria-selected:bg-panel aria-selected:text-panel-foreground"
+              : "text-muted-foreground hover:text-foreground aria-selected:bg-foreground aria-selected:text-background",
+          ]}
+          data-hp-mode={mode.id}
+          role="tab"
+          tabindex={mode.id === "terminal" ? "0" : "-1"}
+          type="button"
+        >
+          {mode.label}
+        </button>
+      ))}
+    </div>
+  )}
   <div
     class:list={[
       "flex h-14 items-center gap-3 rounded-md pr-1.5 pl-4 font-mono text-[15px]",
       inverse
         ? "bg-panel text-panel-foreground"
-        : "border border-foreground/90 bg-code text-foreground",
+        : "border-foreground/90 bg-code text-foreground border",
     ]}
   >
     <span
       aria-hidden="true"
       class:list={[inverse ? "text-signal" : "text-accent"]}
-      data-hp-only="terminal">$</span
+      data-hp-only="terminal"
     >
-    {
-      prompt && (
-        <span
-          aria-hidden="true"
-          class:list={[inverse ? "text-signal" : "text-accent"]}
-          data-hp-only="prompt"
-          hidden
-        >
-          &gt;
-        </span>
-      )
-    }
+      $
+    </span>
+    {prompt && (
+      <span
+        aria-hidden="true"
+        class:list={[inverse ? "text-signal" : "text-accent"]}
+        data-hp-only="prompt"
+        hidden
+      >
+        &gt;
+      </span>
+    )}
     {/*
       No outline-none here: Blume's base :focus-visible ring is the only focus
       indicator these read-only fields have.
@@ -107,22 +111,20 @@ const modes = [
       readonly
       value={terminal}
     />
-    {
-      prompt && (
-        <input
-          aria-label="Install prompt for a coding agent"
-          class="hp-prompt min-w-0 flex-1 truncate rounded-sm bg-transparent"
-          data-hp-copy={prompt}
-          data-hp-only="prompt"
-          hidden
-          readonly
-          value={prompt.replaceAll(/\s+/g, " ")}
-        />
-      )
-    }
+    {prompt && (
+      <input
+        aria-label="Install prompt for a coding agent"
+        class="hp-prompt min-w-0 flex-1 truncate rounded-sm bg-transparent"
+        data-hp-copy={prompt}
+        data-hp-only="prompt"
+        hidden
+        readonly
+        value={prompt.replaceAll(/\s+/g, " ")}
+      />
+    )}
     <button
       class:list={[
-        "hp-copy flex h-11 shrink-0 items-center gap-2 rounded-[5px] px-3.5 font-sans font-semibold text-sm sm:pr-4 sm:pl-3",
+        "hp-copy flex h-11 shrink-0 items-center gap-2 rounded-[5px] px-3.5 font-sans text-sm font-semibold sm:pr-4 sm:pl-3",
         inverse
           ? "bg-panel-foreground text-ink hover:bg-white"
           : "bg-signal text-ink hover:brightness-95",
@@ -222,7 +224,9 @@ const modes = [
 
       try {
         // The prompt field shows one flattened line; copy it as written.
-        await navigator.clipboard.writeText(field.dataset.hpCopy ?? field.value);
+        await navigator.clipboard.writeText(
+          field.dataset.hpCopy ?? field.value
+        );
       } catch {
         // Clipboard access can be blocked (permissions, insecure context).
         // Select the text so it can be copied by hand instead of flashing a

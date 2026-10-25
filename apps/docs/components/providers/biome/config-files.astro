@@ -63,28 +63,24 @@ const settings = [
   >
     {/* The divider color is translucent, so the grid sits on the code
         background rather than showing the slab through its gaps. */}
-    <div class="overflow-hidden rounded-b-blume border border-border border-t-0 bg-code">
-      <dl
-        class="grid grid-cols-2 gap-px bg-border font-mono text-xs/5 sm:grid-cols-3"
-      >
-        {
-          settings.map(([key, value]) => (
-            <div class="flex flex-col gap-0.5 bg-code px-4 py-2.5">
-              <dt class="text-muted-foreground">{key}</dt>
-              <dd class="text-foreground">{value}</dd>
-            </div>
-          ))
-        }
+    <div class="rounded-b-blume border-border bg-code overflow-hidden border border-t-0">
+      <dl class="bg-border grid grid-cols-2 gap-px font-mono text-xs/5 sm:grid-cols-3">
+        {settings.map(([key, value]) => (
+          <div class="bg-code flex flex-col gap-0.5 px-4 py-2.5">
+            <dt class="text-muted-foreground">{key}</dt>
+            <dd class="text-foreground">{value}</dd>
+          </div>
+        ))}
       </dl>
     </div>
   </AnnotatedCode>
   {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.5.15 printed
       it: one diagnostic in full, the other by its header, then the summary. */}
   <Terminal class="lg:col-span-5">
-    <p class="mb-3 truncate text-panel-foreground">
+    <p class="text-panel-foreground mb-3 truncate">
       <span class="text-signal">$</span> npx ultracite fix
     </p>
-    <p class="truncate text-panel-foreground">
+    <p class="text-panel-foreground truncate">
       src/component.tsx:42:27 lint/performance/noJsxPropsBind
     </p>
     <p class="mt-1 text-pretty">
@@ -94,7 +90,7 @@ const settings = [
     </p>
     <pre class="mt-2 overflow-hidden font-mono text-[13px]/[1.55]"><span class="text-signal">&gt;</span> 42 │   onChange={"{"}() =&gt; onToggle(task.id){"}"}
      │             <span class="text-signal">^^^^^^^^^^^^^^^^^^^^^^^</span></pre>
-    <p class="mt-3 truncate text-panel-foreground">
+    <p class="text-panel-foreground mt-3 truncate">
       src/utils.ts:62:14 lint/performance/noAwaitInLoops
     </p>
     <p class="mt-3">Checked 7 files in 7ms. Fixed 6 files.</p>

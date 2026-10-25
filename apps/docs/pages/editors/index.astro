@@ -6,7 +6,10 @@ import Installer from "../../components/home/installer.astro";
 import SectionHeading from "../../components/home/section-heading.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import RichText from "../../components/landing/rich-text.astro";
 import { agentDirectory } from "../../lib/agent-directory";
 import type { AgentEntry } from "../../lib/agent-directory";
@@ -77,7 +80,11 @@ const forks = entries
 
 const vscodeReaders = entries.filter((entry) => entry.vscodeExtensions);
 const hookFiles = entries.filter((entry) => entry.hook);
-const workingHooks = hookFiles.filter((entry) => !contentFor(entry.id)?.hookNote);
+
+const workingHooks = hookFiles.filter(
+  (entry) => !contentFor(entry.id)?.hookNote
+);
+
 const staleHooks = hookFiles.filter((entry) => contentFor(entry.id)?.hookNote);
 
 const staleHookNote = staleHooks
@@ -146,23 +153,21 @@ const faqs: FaqItem[] = [
   title={`Ultracite for Code Editors — Format and Fix on Save in ${entries.length} Editors`}
 >
   <section class="border-border border-y">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <div class="px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-10 lg:pt-16 lg:pb-14">
-        <p class="font-mono text-muted-foreground text-xs/5">Editors</p>
-        <h1
-          class="mt-10 max-w-[17ch] text-balance font-medium text-5xl tracking-[-0.045em] sm:text-6xl lg:mt-12 lg:text-7xl"
-        >
+        <p class="text-muted-foreground font-mono text-xs/5">Editors</p>
+        <h1 class="mt-10 max-w-[17ch] text-5xl font-medium tracking-[-0.045em] text-balance sm:text-6xl lg:mt-12 lg:text-7xl">
           Your linter on every save, in every editor
         </h1>
-        <div
-          class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10"
-        >
-          <p
-            class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground lg:col-span-6"
-          >
-            <code class="font-mono text-base text-foreground">ultracite init</code>{" "}
+        <div class="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end lg:gap-10">
+          <p class="text-muted-foreground max-w-[48ch] text-lg/8 text-pretty lg:col-span-6">
+            <code class="text-foreground font-mono text-base">
+              ultracite init
+            </code>{" "}
             writes your editor’s settings so it formats with the same tool as{" "}
-            <code class="font-mono text-base text-foreground">ultracite fix</code>{" "}
+            <code class="text-foreground font-mono text-base">
+              ultracite fix
+            </code>{" "}
             and applies its safe fixes when you save, then installs the
             extension where the editor lets it. {entries.length} editors, two
             settings files.
@@ -172,17 +177,15 @@ const faqs: FaqItem[] = [
           </div>
         </div>
       </div>
-      <div class="border-border border-t bg-signal p-2 sm:p-6 lg:p-10">
-        <figure
-          class="m-0 overflow-hidden rounded-blume border border-border bg-code"
-        >
-          <figcaption
-            class="flex h-11 items-center justify-between gap-4 border-border border-b px-4 font-medium text-muted-foreground text-xs"
-          >
+      <div class="border-border bg-signal border-t p-2 sm:p-6 lg:p-10">
+        <figure class="rounded-blume border-border bg-code m-0 overflow-hidden border">
+          <figcaption class="border-border text-muted-foreground flex h-11 items-center justify-between gap-4 border-b px-4 text-xs font-medium">
             <span>What init writes</span>
-            <span class="font-mono text-accent">{2 + hookFiles.length} files</span>
+            <span class="text-accent font-mono">
+              {2 + hookFiles.length} files
+            </span>
           </figcaption>
-          <ul class="divide-y divide-border" role="list">
+          <ul class="divide-border divide-y" role="list">
             <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
               <code class="font-mono text-[13px]/6">.vscode/settings.json</code>
               <span class="flex items-center gap-3">
@@ -190,7 +193,7 @@ const faqs: FaqItem[] = [
                   {vscodeReaders.slice(0, STACK_SIZE).map((reader) => (
                     <img
                       alt=""
-                      class="-mr-1.5 size-6 rounded-md ring-2 ring-code"
+                      class="ring-code -mr-1.5 size-6 rounded-md ring-2"
                       height="24"
                       loading="lazy"
                       src={reader.logo}
@@ -199,40 +202,56 @@ const faqs: FaqItem[] = [
                     />
                   ))}
                 </span>
-                <span class="ml-1.5 text-muted-foreground text-sm/6">
+                <span class="text-muted-foreground ml-1.5 text-sm/6">
                   {vscodeReaders.length} editors
                 </span>
               </span>
             </li>
-            {
-              entries
-                .filter((entry) => !entry.vscodeExtensions)
-                .map((entry) => (
-                  <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
-                    <code class="font-mono text-[13px]/6">{entry.settingsPath}</code>
-                    <span class="flex items-center gap-3">
-                      <img alt="" class="size-6 rounded-md" height="24" loading="lazy" src={entry.logo} width="24" />
-                      <span class="text-muted-foreground text-sm/6">{entry.name}</span>
-                    </span>
-                  </li>
-                ))
-            }
-            {
-              hookFiles.map((entry) => (
-                <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 bg-signal/7 px-4 py-3 sm:px-6">
+            {entries
+              .filter((entry) => !entry.vscodeExtensions)
+              .map((entry) => (
+                <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
+                  <code class="font-mono text-[13px]/6">
+                    {entry.settingsPath}
+                  </code>
                   <span class="flex items-center gap-3">
-                    <code class="font-mono text-[13px]/6">{entry.hook}</code>
-                    <span class="rounded-sm bg-foreground px-1.5 font-mono text-[11px]/5 text-background uppercase tracking-wider">
-                      Hook
+                    <img
+                      alt=""
+                      class="size-6 rounded-md"
+                      height="24"
+                      loading="lazy"
+                      src={entry.logo}
+                      width="24"
+                    />
+                    <span class="text-muted-foreground text-sm/6">
+                      {entry.name}
                     </span>
-                  </span>
-                  <span class="flex items-center gap-3">
-                    <img alt="" class="size-6 rounded-md" height="24" loading="lazy" src={entry.logo} width="24" />
-                    <span class="text-muted-foreground text-sm/6">{entry.name}</span>
                   </span>
                 </li>
-              ))
-            }
+              ))}
+            {hookFiles.map((entry) => (
+              <li class="bg-signal/7 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
+                <span class="flex items-center gap-3">
+                  <code class="font-mono text-[13px]/6">{entry.hook}</code>
+                  <span class="bg-foreground text-background rounded-sm px-1.5 font-mono text-[11px]/5 tracking-wider uppercase">
+                    Hook
+                  </span>
+                </span>
+                <span class="flex items-center gap-3">
+                  <img
+                    alt=""
+                    class="size-6 rounded-md"
+                    height="24"
+                    loading="lazy"
+                    src={entry.logo}
+                    width="24"
+                  />
+                  <span class="text-muted-foreground text-sm/6">
+                    {entry.name}
+                  </span>
+                </span>
+              </li>
+            ))}
           </ul>
         </figure>
       </div>
@@ -240,123 +259,128 @@ const faqs: FaqItem[] = [
   </section>
 
   <section aria-labelledby="ed-featured" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="ed-featured" title="Two settings files">
         Every editor here reads one of two files. VS Code’s is shared by the
-        editors built on it; Zed, which doesn’t run VS Code extensions, has
-        its own.
+        editors built on it; Zed, which doesn’t run VS Code extensions, has its
+        own.
       </SectionHeading>
       <ul
-        class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2"
+        class="border-border bg-border grid gap-px border-t bg-clip-padding md:grid-cols-2"
         role="list"
       >
-        {
-          featured.map((entry) => {
-            const details = [
-              {
-                label: "File",
-                note: entry.vscodeExtensions
-                  ? `Also read by ${vscodeReaders.length - 1} editors built on VS Code`
-                  : "Applied once you trust the project",
-                value: entry.settingsPath,
-              },
-              {
-                label: "Install",
-                note: entry.vscodeExtensions
-                  ? "The linter’s extension, when `init` creates the settings file"
-                  : "Oxc or Biome from Zed’s extensions view; ESLint and Prettier are built in",
-                value: entry.launcher
-                  ? `${entry.launcher} --install-extension`
-                  : "zed: extensions",
-              },
-              ...(entry.agent
-                ? [
-                    {
-                      label: "Agent",
-                      note: "Reads `AGENTS.md`, which `init --agents` writes",
-                      value: entry.agent,
-                    },
-                  ]
-                : [
-                    {
-                      label: "Agent",
-                      note: "Reads `AGENTS.md` and the lint errors your language servers report",
-                      value: "Zed Agent",
-                    },
-                  ]),
-            ];
-            return (
-              <li class="flex flex-col gap-8 bg-background px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-                <div class="flex items-center gap-4">
-                  <img
-                    alt=""
-                    class="size-14 shrink-0 rounded-xl ring-1 ring-foreground/10"
-                    height="56"
-                    src={entry.logo}
-                    width="56"
-                  />
-                  <p class="flex flex-col">
-                    <span class="font-medium text-3xl tracking-[-0.03em]">{entry.name}</span>
-                    {entry.maker && (
-                      <span class="text-muted-foreground text-sm/6">{entry.maker}</span>
-                    )}
-                  </p>
-                </div>
-                {entry.tagline && (
-                  <p class="max-w-[48ch] text-pretty text-lg/8 text-muted-foreground">
-                    <RichText text={entry.tagline} />
-                  </p>
-                )}
-                <dl class="flex flex-col divide-y divide-border border-border border-y">
-                  {details.map((detail) => (
-                    <div class="grid gap-x-6 gap-y-1 py-3.5 sm:grid-cols-[4rem_1fr]">
-                      <dt class="font-mono text-accent text-xs/6 uppercase tracking-wider">
-                        {detail.label}
-                      </dt>
-                      <dd class="flex min-w-0 flex-col">
-                        <code class="truncate font-mono text-[13px]/6">{detail.value}</code>
-                        <span class="text-pretty text-muted-foreground text-sm/6">
-                          <RichText text={detail.note} />
-                        </span>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                <p class="mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-                  {entry.landing && (
-                    <a
-                      class="group flex items-center gap-2 font-medium text-[15px]/6"
-                      href={`/editors/${entry.id}`}
-                    >
-                      Ultracite for {entry.name}
-                      <Icon
-                        class="size-4 transition-transform group-hover:translate-x-0.5"
-                        name="arrow-right"
-                      />
-                    </a>
-                  )}
-                  <span class="font-mono text-muted-foreground text-xs/5">
-                    --editors {entry.id}
+        {featured.map((entry) => {
+          const details = [
+            {
+              label: "File",
+              note: entry.vscodeExtensions
+                ? `Also read by ${vscodeReaders.length - 1} editors built on VS Code`
+                : "Applied once you trust the project",
+              value: entry.settingsPath,
+            },
+            {
+              label: "Install",
+              note: entry.vscodeExtensions
+                ? "The linter’s extension, when `init` creates the settings file"
+                : "Oxc or Biome from Zed’s extensions view; ESLint and Prettier are built in",
+              value: entry.launcher
+                ? `${entry.launcher} --install-extension`
+                : "zed: extensions",
+            },
+            ...(entry.agent
+              ? [
+                  {
+                    label: "Agent",
+                    note: "Reads `AGENTS.md`, which `init --agents` writes",
+                    value: entry.agent,
+                  },
+                ]
+              : [
+                  {
+                    label: "Agent",
+                    note: "Reads `AGENTS.md` and the lint errors your language servers report",
+                    value: "Zed Agent",
+                  },
+                ]),
+          ];
+          return (
+            <li class="bg-background flex flex-col gap-8 px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
+              <div class="flex items-center gap-4">
+                <img
+                  alt=""
+                  class="ring-foreground/10 size-14 shrink-0 rounded-xl ring-1"
+                  height="56"
+                  src={entry.logo}
+                  width="56"
+                />
+                <p class="flex flex-col">
+                  <span class="text-3xl font-medium tracking-[-0.03em]">
+                    {entry.name}
                   </span>
+                  {entry.maker && (
+                    <span class="text-muted-foreground text-sm/6">
+                      {entry.maker}
+                    </span>
+                  )}
                 </p>
-              </li>
-            );
-          })
-        }
+              </div>
+              {entry.tagline && (
+                <p class="text-muted-foreground max-w-[48ch] text-lg/8 text-pretty">
+                  <RichText text={entry.tagline} />
+                </p>
+              )}
+              <dl class="divide-border border-border flex flex-col divide-y border-y">
+                {details.map((detail) => (
+                  <div class="grid gap-x-6 gap-y-1 py-3.5 sm:grid-cols-[4rem_1fr]">
+                    <dt class="text-accent font-mono text-xs/6 tracking-wider uppercase">
+                      {detail.label}
+                    </dt>
+                    <dd class="flex min-w-0 flex-col">
+                      <code class="truncate font-mono text-[13px]/6">
+                        {detail.value}
+                      </code>
+                      <span class="text-muted-foreground text-sm/6 text-pretty">
+                        <RichText text={detail.note} />
+                      </span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <p class="mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                {entry.landing && (
+                  <a
+                    class="group flex items-center gap-2 text-[15px]/6 font-medium"
+                    href={`/editors/${entry.id}`}
+                  >
+                    Ultracite for {entry.name}
+                    <Icon
+                      class="size-4 transition-transform group-hover:translate-x-0.5"
+                      name="arrow-right"
+                    />
+                  </a>
+                )}
+                <span class="text-muted-foreground font-mono text-xs/5">
+                  --editors {entry.id}
+                </span>
+              </p>
+            </li>
+          );
+        })}
       </ul>
     </div>
   </section>
 
   <section aria-labelledby="ed-forks" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="ed-forks" title="Built on VS Code">
-        These read the same <code class="font-mono text-base">.vscode/settings.json</code>{" "}
-        and run the same extensions. {forksWithLauncher} of them have a
-        launcher <code class="font-mono text-base">init</code> installs the
-        extension with; for the rest you install it once yourself.
+        These read the same{" "}
+        <code class="font-mono text-base">.vscode/settings.json</code> and run
+        the same extensions. {forksWithLauncher} of them have a launcher{" "}
+        <code class="font-mono text-base">init</code> installs the extension
+        with; for the rest you install it once yourself.
       </SectionHeading>
       <ul
-        class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
+        class="border-border bg-border grid gap-px border-t bg-clip-padding sm:grid-cols-2 lg:grid-cols-3"
         role="list"
       >
         {forks.map((entry) => {
@@ -365,40 +389,46 @@ const faqs: FaqItem[] = [
               <span class="flex items-center gap-3">
                 <img
                   alt=""
-                  class="size-10 shrink-0 rounded-lg ring-1 ring-foreground/10"
+                  class="ring-foreground/10 size-10 shrink-0 rounded-lg ring-1"
                   height="40"
                   loading="lazy"
                   src={entry.logo}
                   width="40"
                 />
                 <span class="flex min-w-0 flex-col">
-                  <span class="font-medium text-lg/6 tracking-[-0.01em]">{entry.name}</span>
+                  <span class="text-lg/6 font-medium tracking-[-0.01em]">
+                    {entry.name}
+                  </span>
                   {entry.maker && (
-                    <span class="truncate text-muted-foreground text-sm/5">{entry.maker}</span>
+                    <span class="text-muted-foreground truncate text-sm/5">
+                      {entry.maker}
+                    </span>
                   )}
                 </span>
                 {entry.landing && (
                   <Icon
-                    class="ml-auto size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+                    class="text-muted-foreground group-hover:text-foreground ml-auto size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
                     name="arrow-right"
                   />
                 )}
               </span>
               {entry.tagline && (
-                <span class="text-pretty text-[15px]/6 text-muted-foreground">
+                <span class="text-muted-foreground text-[15px]/6 text-pretty">
                   <RichText text={entry.tagline} />
                 </span>
               )}
-              <span class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 font-mono text-muted-foreground text-xs/5">
+              <span class="text-muted-foreground mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 font-mono text-xs/5">
                 <span class="flex items-center gap-1.5">
                   <span class="text-foreground">
-                    {entry.launcher ? `${entry.launcher} --install-extension` : "Extension by hand"}
+                    {entry.launcher
+                      ? `${entry.launcher} --install-extension`
+                      : "Extension by hand"}
                   </span>
                 </span>
                 {entry.hook && (
                   <span class="flex items-center gap-1.5">
                     <span class="text-foreground">{entry.hook}</span>
-                    <span class="rounded-sm bg-foreground px-1.5 text-[11px]/5 text-background uppercase tracking-wider">
+                    <span class="bg-foreground text-background rounded-sm px-1.5 text-[11px]/5 tracking-wider uppercase">
                       Hook
                     </span>
                   </span>
@@ -408,10 +438,10 @@ const faqs: FaqItem[] = [
             </>
           );
           return (
-            <li class="flex bg-background">
+            <li class="bg-background flex">
               {entry.landing ? (
                 <a
-                  class="group flex w-full flex-col gap-3 px-4 py-6 hover:bg-muted/50 sm:px-6 lg:px-8"
+                  class="group hover:bg-muted/50 flex w-full flex-col gap-3 px-4 py-6 sm:px-6 lg:px-8"
                   href={`/editors/${entry.id}`}
                 >
                   {body}
@@ -436,49 +466,78 @@ const faqs: FaqItem[] = [
   </section>
 
   <section aria-labelledby="ed-toolchains" class="border-border border-b">
-    <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+    <div class="hp-frame border-border mx-auto max-w-7xl border-x">
       <SectionHeading id="ed-toolchains" title="What each toolchain needs">
         The settings point the editor at the same tool{" "}
         <code class="font-mono text-base">ultracite fix</code> runs, so a file
         saved in the editor and a file fixed on the command line come out the
         same.
       </SectionHeading>
-      <div class="overflow-x-auto border-border border-t">
+      <div class="border-border overflow-x-auto border-t">
         <table class="w-full min-w-[44rem] border-collapse text-left text-[15px]/6">
           <thead>
             <tr class="border-border border-b">
-              <th class="px-4 py-4 font-mono font-normal text-muted-foreground text-xs uppercase tracking-wider sm:px-6 lg:px-10" scope="col">
+              <th
+                class="text-muted-foreground px-4 py-4 font-mono text-xs font-normal tracking-wider uppercase sm:px-6 lg:px-10"
+                scope="col"
+              >
                 Toolchain
               </th>
-              <th class="px-4 py-4 font-mono font-normal text-muted-foreground text-xs uppercase tracking-wider sm:px-6" scope="col">
+              <th
+                class="text-muted-foreground px-4 py-4 font-mono text-xs font-normal tracking-wider uppercase sm:px-6"
+                scope="col"
+              >
                 VS Code and its forks
               </th>
-              <th class="px-4 py-4 font-mono font-normal text-muted-foreground text-xs uppercase tracking-wider sm:px-6" scope="col">
+              <th
+                class="text-muted-foreground px-4 py-4 font-mono text-xs font-normal tracking-wider uppercase sm:px-6"
+                scope="col"
+              >
                 Zed
               </th>
-              <th class="px-4 py-4 font-mono font-normal text-muted-foreground text-xs uppercase tracking-wider sm:px-6 lg:pr-10" scope="col">
+              <th
+                class="text-muted-foreground px-4 py-4 font-mono text-xs font-normal tracking-wider uppercase sm:px-6 lg:pr-10"
+                scope="col"
+              >
                 On save in VS Code
               </th>
             </tr>
           </thead>
           <tbody>
-            {
-              toolchainRows.map((row) => (
-                <tr class="border-border border-b last:border-b-0">
-                  <th class="px-4 py-4 align-top font-normal sm:px-6 lg:px-10" scope="row">
-                    <a class="flex items-center gap-3 hover:underline" href={`/providers/${row.id}`}>
-                      <img alt="" class="size-6 shrink-0 rounded-md" height="24" loading="lazy" src={`/logos/${row.id}.svg`} width="24" />
-                      {row.name}
-                    </a>
-                  </th>
-                  <td class="px-4 py-4 align-top font-mono text-[13px]/6 sm:px-6">
-                    {row.vscodeExtensions.map((extension) => <span class="block">{extension}</span>)}
-                  </td>
-                  <td class="px-4 py-4 align-top text-muted-foreground sm:px-6">{row.zedNeeds}</td>
-                  <td class="px-4 py-4 align-top font-mono text-[13px]/6 sm:px-6 lg:pr-10">{row.fixes}</td>
-                </tr>
-              ))
-            }
+            {toolchainRows.map((row) => (
+              <tr class="border-border border-b last:border-b-0">
+                <th
+                  class="px-4 py-4 align-top font-normal sm:px-6 lg:px-10"
+                  scope="row"
+                >
+                  <a
+                    class="flex items-center gap-3 hover:underline"
+                    href={`/providers/${row.id}`}
+                  >
+                    <img
+                      alt=""
+                      class="size-6 shrink-0 rounded-md"
+                      height="24"
+                      loading="lazy"
+                      src={`/logos/${row.id}.svg`}
+                      width="24"
+                    />
+                    {row.name}
+                  </a>
+                </th>
+                <td class="px-4 py-4 align-top font-mono text-[13px]/6 sm:px-6">
+                  {row.vscodeExtensions.map((extension) => (
+                    <span class="block">{extension}</span>
+                  ))}
+                </td>
+                <td class="text-muted-foreground px-4 py-4 align-top sm:px-6">
+                  {row.zedNeeds}
+                </td>
+                <td class="px-4 py-4 align-top font-mono text-[13px]/6 sm:px-6 lg:pr-10">
+                  {row.fixes}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

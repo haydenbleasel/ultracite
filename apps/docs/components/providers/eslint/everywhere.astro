@@ -55,7 +55,11 @@ const files = [
   cards={[
     {
       body: "ESLint applies its fixes and sorts imports when you save, and Prettier formats the file, through the editors’ own ESLint and Prettier extensions.",
-      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      code: {
+        lang: "jsonc",
+        path: ".vscode/settings.json",
+        text: vscodeSettings,
+      },
       eyebrow: "VS Code, Cursor, Devin Desktop",
       title: "Fix and format on save",
     },
@@ -74,27 +78,25 @@ const files = [
   id="es-everywhere"
   title="The same rules in your editor, your agent and CI"
 >
-  <code class="font-mono text-base">init</code> points your editor at ESLint
-  and Prettier and tells your agents how to run them, so a file passes or
-  fails the same way wherever it’s checked.
+  <code class="font-mono text-base">init</code> points your editor at ESLint and
+  Prettier and tells your agents how to run them, so a file passes or fails the
+  same way wherever it’s checked.
   <Fragment slot="terminal">
-    <p class="mb-1 truncate text-panel-foreground">
+    <p class="text-panel-foreground mb-1 truncate">
       <span class="text-signal">$</span> npx ultracite check
     </p>
     <p class="truncate">[warn] {unformatted}</p>
-    {
-      files.map((file) => (
-        <>
-          <p class="mt-1 truncate text-panel-foreground">{file.path}</p>
-          {file.problems.map((problem) => (
-            <p class="text-pretty">
-              {problem.location} <span class="text-signal">error</span>{" "}
-              {problem.message}{" "}
-              <span class="text-panel-foreground">{problem.rule}</span>
-            </p>
-          ))}
-        </>
-      ))
-    }
+    {files.map((file) => (
+      <>
+        <p class="text-panel-foreground mt-1 truncate">{file.path}</p>
+        {file.problems.map((problem) => (
+          <p class="text-pretty">
+            {problem.location} <span class="text-signal">error</span>{" "}
+            {problem.message}{" "}
+            <span class="text-panel-foreground">{problem.rule}</span>
+          </p>
+        ))}
+      </>
+    ))}
   </Fragment>
 </Everywhere>

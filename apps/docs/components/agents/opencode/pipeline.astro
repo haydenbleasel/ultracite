@@ -18,7 +18,8 @@ const stages = [
     default: "Always",
     on: true,
     title: "The agent edits",
-    ultracite: "The rules in context mean the first draft starts closer to passing.",
+    ultracite:
+      "The rules in context mean the first draft starts closer to passing.",
   },
   {
     body: "Prettier, Oxfmt or Biome run on the file. Their output is thrown away, and Biome’s only formats: it doesn’t apply lint fixes.",
@@ -28,7 +29,7 @@ const stages = [
     ultracite: "Leave them off. The plugin runs the whole `ultracite fix`.",
   },
   {
-    body: "With `\"lsp\": true`, Oxlint’s, Biome’s or ESLint’s language server reports on the file. Errors are added to the result, up to 20; warnings are dropped.",
+    body: 'With `"lsp": true`, Oxlint’s, Biome’s or ESLint’s language server reports on the file. Errors are added to the result, up to 20; warnings are dropped.',
     default: "Off by default",
     on: false,
     title: "LSP diagnostics",
@@ -45,7 +46,7 @@ const stages = [
 ---
 
 <section aria-labelledby="oc-pipeline" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading
       id="oc-pipeline"
       title="What happens when OpenCode writes a file"
@@ -54,40 +55,47 @@ const stages = [
       default, and only one tells the model about every problem it leaves.
     </SectionHeading>
     <ol
-      class="grid gap-px border-border border-t bg-border bg-clip-padding md:grid-cols-2 lg:grid-cols-5"
+      class="border-border bg-border grid gap-px border-t bg-clip-padding md:grid-cols-2 lg:grid-cols-5"
       role="list"
     >
-      {
-        stages.map((stage, index) => (
-          <li class:list={["flex min-w-0 flex-col bg-background", !stage.on && "hatch"]}>
-            <div class="flex flex-1 flex-col gap-3 px-4 pt-6 pb-6 sm:px-6 lg:pt-8">
-              <p class="flex items-center justify-between gap-3 font-mono text-xs/5">
-                <span class="text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
-                <span
-                  class:list={[
-                    "rounded-sm px-1.5 uppercase tracking-wider",
-                    stage.on
-                      ? "bg-foreground text-background"
-                      : "border border-foreground/20 bg-background text-muted-foreground",
-                  ]}
-                >
-                  {stage.default}
-                </span>
-              </p>
-              <h3 class="font-medium text-lg/7 tracking-[-0.01em]">{stage.title}</h3>
-              <p class="text-pretty text-[15px]/6 text-muted-foreground">
-                <RichText text={stage.body} />
-              </p>
-            </div>
-            <p class="text-pretty border-border border-t bg-background px-4 py-4 text-[15px]/6 sm:px-6 lg:min-h-37">
-              <span class="mb-1 block font-mono text-accent text-xs/5 uppercase tracking-wider">
-                Ultracite
+      {stages.map((stage, index) => (
+        <li
+          class:list={[
+            "bg-background flex min-w-0 flex-col",
+            !stage.on && "hatch",
+          ]}
+        >
+          <div class="flex flex-1 flex-col gap-3 px-4 pt-6 pb-6 sm:px-6 lg:pt-8">
+            <p class="flex items-center justify-between gap-3 font-mono text-xs/5">
+              <span class="text-muted-foreground">
+                {String(index + 1).padStart(2, "0")}
               </span>
-              <RichText text={stage.ultracite} />
+              <span
+                class:list={[
+                  "rounded-sm px-1.5 tracking-wider uppercase",
+                  stage.on
+                    ? "bg-foreground text-background"
+                    : "border-foreground/20 bg-background text-muted-foreground border",
+                ]}
+              >
+                {stage.default}
+              </span>
             </p>
-          </li>
-        ))
-      }
+            <h3 class="text-lg/7 font-medium tracking-[-0.01em]">
+              {stage.title}
+            </h3>
+            <p class="text-muted-foreground text-[15px]/6 text-pretty">
+              <RichText text={stage.body} />
+            </p>
+          </div>
+          <p class="border-border bg-background border-t px-4 py-4 text-[15px]/6 text-pretty sm:px-6 lg:min-h-37">
+            <span class="text-accent mb-1 block font-mono text-xs/5 tracking-wider uppercase">
+              Ultracite
+            </span>
+            <RichText text={stage.ultracite} />
+          </p>
+        </li>
+      ))}
     </ol>
   </div>
 </section>
