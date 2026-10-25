@@ -39,5 +39,21 @@
 				"useExpect": "error"
 			}
 		}
-	}
+	},
+	"overrides": [
+		{
+			// The files Playwright's default testMatch picks up. A hook that only
+			// needs testInfo takes an empty fixtures pattern,
+			// test.beforeEach(async ({}, testInfo) => ...), and noEmptyPattern has
+			// no option to allow it.
+			"includes": ["**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noEmptyPattern": "off"
+					}
+				}
+			}
+		}
+	]
 }

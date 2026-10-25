@@ -146,8 +146,10 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-cypress":
       packageJson.devDependencies["eslint-plugin-cypress"],
   },
-  // Playwright, React Native and Drizzle only have rules on Biome.
-  drizzle: {},
+  drizzle: {
+    "eslint-plugin-drizzle":
+      packageJson.devDependencies["eslint-plugin-drizzle"],
+  },
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
   },
@@ -161,7 +163,10 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-react-doctor":
       packageJson.devDependencies["eslint-plugin-react-doctor"],
   },
-  playwright: {},
+  playwright: {
+    "eslint-plugin-playwright":
+      packageJson.devDependencies["eslint-plugin-playwright"],
+  },
   qwik: {
     "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
   },
@@ -174,7 +179,15 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-react-hooks":
       packageJson.devDependencies["eslint-plugin-react-hooks"],
   },
-  "react-native": {},
+  "react-native": {
+    // eslint-plugin-react-native's rules call context.getSourceCode(), which
+    // ESLint 10 removed; the preset wraps the plugin with @eslint/compat.
+    "@eslint/compat": packageJson.devDependencies["@eslint/compat"],
+    "@react-native/eslint-plugin":
+      packageJson.devDependencies["@react-native/eslint-plugin"],
+    "eslint-plugin-react-native":
+      packageJson.devDependencies["eslint-plugin-react-native"],
+  },
   remix: {
     "eslint-plugin-remix": packageJson.devDependencies["eslint-plugin-remix"],
   },
@@ -252,6 +265,7 @@ export const eslintPeerOverridePackages: readonly string[] = [
   "@tanstack/eslint-plugin-start",
   "eslint-plugin-jsx-a11y",
   "eslint-plugin-react",
+  "eslint-plugin-react-native",
 ];
 
 /** The package name of a `name@version` spec. */

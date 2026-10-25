@@ -247,6 +247,29 @@ export const View = ({ name }: { readonly name: string }) => <p>{name}</p>;
     },
     presets: ["cypress"],
   },
+  drizzle: {
+    files: {
+      "src/cache.ts": {
+        content: `const cache = new Map<string, number>();
+
+export const forget = (key: string): boolean => cache.delete(key);
+`,
+        expect: [],
+        forbid: ["drizzle/enforce-delete-with-where"],
+      },
+      "src/db.ts": {
+        content: `import { db } from "./client";
+import { users } from "./schema";
+
+export const wipe = async (): Promise<void> => {
+  await db.delete(users);
+};
+`,
+        expect: ["drizzle/enforce-delete-with-where"],
+      },
+    },
+    presets: ["drizzle"],
+  },
   gdp: {
     files: {
       "src/forge.ts": {
@@ -376,6 +399,27 @@ export class AppController {
     },
     presets: ["react", "next"],
   },
+  playwright: {
+    files: {
+      "src/home.spec.ts": {
+        content: `import { expect, test } from "@playwright/test";
+
+test.beforeEach(async ({}, testInfo) => {
+  await Promise.resolve(testInfo.title);
+});
+
+test("shows the title", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForTimeout(500);
+  await expect(page).toHaveTitle("Home");
+});
+`,
+        expect: ["playwright/no-wait-for-timeout"],
+        forbid: ["no-empty-pattern"],
+      },
+    },
+    presets: ["playwright"],
+  },
   qwik: {
     files: {
       "src/component.tsx": {
@@ -418,6 +462,31 @@ export const Legacy = component$(() => {
       },
     },
     presets: ["react"],
+  },
+  "react-native": {
+    files: {
+      "src/app.jsx": {
+        content: `import { Text, View } from "react-native";
+
+export const App = () => (
+  <View>
+    {__DEV__ ? <Text>dev</Text> : null}
+    hello
+  </View>
+);
+`,
+        expect: ["react-native/no-raw-text"],
+        forbid: ["no-undef"],
+      },
+      "src/deep.ts": {
+        content: `import Foo from "react-native/Libraries/Foo";
+
+export const foo: unknown = Foo;
+`,
+        expect: ["@react-native/no-deep-imports"],
+      },
+    },
+    presets: ["react", "react-native"],
   },
   remix: {
     files: {

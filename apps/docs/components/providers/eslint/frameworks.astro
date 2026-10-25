@@ -4,9 +4,11 @@ import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
 
 // Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.0.0,
-// counted by importing each preset; for Vue, Svelte and Astro, only their
-// plugin's rules, as those presets also run core's rules on component
-// scripts). `typeAware` counts the rules in the preset's
+// and 8.1.0 for playwright, react-native and drizzle; counted by importing
+// each preset; for Vue, Svelte and Astro, only their plugin's rules, as those
+// presets also run core's rules on component scripts, and for Playwright only
+// its plugin's, not the no-empty-pattern option it sets). `typeAware` counts
+// the rules in the preset's
 // ultracite/eslint/<framework>/type-aware add-on. Vue, Svelte and Astro
 // register their plugin's template parser, so ESLint reads the markup as well
 // as the script.
@@ -30,6 +32,7 @@ const presets: {
     plugins: "eslint-plugin-svelte",
     templates: true,
   },
+  { count: 64, name: "playwright", plugins: "eslint-plugin-playwright" },
   { count: 63, name: "jest", plugins: "eslint-plugin-jest", typeAware: 4 },
   { count: 53, name: "astro", plugins: "eslint-plugin-astro", templates: true },
   {
@@ -54,6 +57,12 @@ const presets: {
   { count: 16, name: "storybook", plugins: "eslint-plugin-storybook" },
   { count: 12, name: "cypress", plugins: "eslint-plugin-cypress" },
   { count: 11, name: "qwik", plugins: "eslint-plugin-qwik", typeAware: 1 },
+  {
+    count: 9,
+    name: "react-native",
+    plugins: "eslint-plugin-react-native, @react-native/eslint-plugin",
+  },
+  { count: 2, name: "drizzle", plugins: "eslint-plugin-drizzle" },
   { count: 2, name: "remix", plugins: "eslint-plugin-remix" },
 ];
 
@@ -100,7 +109,7 @@ const problems = [
   <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading
       id="es-frameworks"
-      title="Fifteen framework presets, templates included"
+      title="Eighteen framework presets, templates included"
     >
       Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte and
       Astro that includes its parser, so ESLint checks the markup, not just the
