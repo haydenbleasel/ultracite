@@ -82,11 +82,8 @@ const LOWER_CASE_TOOL_RE = /^[a-z]/u;
 const PATCH_FILE_RE =
   /^\*\*\* (?:Add File|Update File|Move to): (?<file>.+)$/gmu;
 
-// `*** Delete File: ...`: a patch made only of these leaves nothing to fix.
-const PATCH_DELETE_RE = /^\*\*\* Delete File: /mu;
-
-// Strict: a lenient parser would recover a file path from a truncated payload
-// and lint one file where the whole-project run is the safe fallback.
+// Strict, so a payload cut off mid-stream is never taken for a complete one
+// (see readHookStdin), and names no file instead of a path recovered from it.
 const parseJson = (text: string): JsonValue | null => {
   try {
     const value: JsonValue = JSON.parse(text);
@@ -145,26 +142,20 @@ const patchPathsIn = (input: JsonValue | null): string[] =>
     )
   );
 
-const deletesFiles = (input: JsonValue | null): boolean =>
-  stringsIn(input).some((text) => PATCH_DELETE_RE.test(text));
-
 /**
- * The files an agent's post-edit hook payload names:
- * - a list of paths when the payload names the edited file(s): Claude Code
- *   sends `tool_input.file_path`, Cursor's `afterFileEdit` sends
- *   `file_path`, Windsurf sends `tool_info.file_path`, VS Code and CodeBuddy
- *   send `tool_input.filePath`, the Copilot CLI `toolArgs.path`, and Codex
- *   and Devin an `apply_patch` patch in `tool_input`;
- * - `[]` when a host without matchers ran the hook for a tool that edits
- *   nothing (e.g. VS Code's `read_file`), or a patch only deletes files, so
- *   there is nothing to fix;
- * - `null` when no file can be read from the payload (another shape, text
- *   that is not JSON, or an edit tool without a single path), which keeps
- *   the whole-project run.
+ * The files an agent's post-edit hook payload names: Claude Code sends
+ * `tool_input.file_path`, Cursor's `afterFileEdit` sends `file_path`,
+ * Windsurf sends `tool_info.file_path`, VS Code and CodeBuddy send
+ * `tool_input.filePath`, the Copilot CLI `toolArgs.path`, and Codex and
+ * Devin an `apply_patch` patch in `tool_input`.
+ *
+ * Empty when there is nothing to fix: a host without matchers ran the hook
+ * for a tool that edits nothing (e.g. VS Code's `read_file`), a patch only
+ * deletes files, or no file can be read from the payload (another shape,
+ * text that is not JSON, or an edit tool without a single path). Fixing the
+ * whole project instead would rewrite files the agent never touched.
  */
-export const editedFilesFromHookPayload = (
-  payload: string
-): string[] | null => {
+export const editedFilesFromHookPayload = (payload: string): string[] => {
   const parsed = parseJson(payload);
 
   const toolInfo = toolInfoPayloadSchema.safeParse(parsed);
@@ -203,15 +194,10 @@ export const editedFilesFromHookPayload = (
     input = parseJson(rawArgs) ?? rawArgs;
   }
 
-  const isPatch = toolName === "apply_patch";
-  const files = isPatch ? patchPathsIn(input) : pathsIn(input);
-  const unique = [...new Set(files.filter((file) => file !== ""))];
+  const files =
+    toolName === "apply_patch" ? patchPathsIn(input) : pathsIn(input);
 
-  if (unique.length > 0) {
-    return unique;
-  }
-
-  return isPatch && deletesFiles(input) ? [] : null;
+  return [...new Set(files.filter((file) => file !== ""))];
 };
 
 // The hosts that hand a post-edit hook's stderr to the agent when the hook
@@ -359,11 +345,6 @@ const targetsFromPayload = (
   }: Omit<HookTargetsOptions, "read">
 ): string[] | null => {
   const files = editedFilesFromHookPayload(payload);
-
-  if (files === null) {
-    return null;
-  }
-
   const root = resolvePath(cwd) ?? path.resolve(cwd);
 
   const resolved = files
@@ -412,7 +393,7 @@ export const readHook = async ({
   try {
     payload = await read();
   } catch {
-    return { report: "none", targets: null };
+    return { report: "none", targets: [] };
   }
 
   return {
@@ -426,12 +407,14 @@ export const readHook = async ({
  * - the edited files that exist inside the project, as paths relative to the
  *   project root.
  * - `[]` when every named file is gone, outside the project, or outside the
- *   command line's own targets, or the tool edited nothing, so there is
- *   nothing to fix. An agent editing its own notes or a temp file must not
- *   format them with this project's config.
- * - `null` when no file can be read from the payload, or the command line's
- *   targets are globs the files cannot be checked against, which keeps the
- *   run the command would have done without `--hook`.
+ *   command line's own targets, the tool edited nothing, or no file can be
+ *   read from the payload or stdin, so there is nothing to fix. An agent
+ *   editing its own notes or a temp file must not format them with this
+ *   project's config, and a payload the hook can't read must not reformat
+ *   the files the agent never touched.
+ * - `null` when the command line's targets are globs the files cannot be
+ *   checked against, which keeps the run of those globs the command would
+ *   have done without `--hook`.
  */
 export const hookTargets = async (
   options: HookTargetsOptions = {}

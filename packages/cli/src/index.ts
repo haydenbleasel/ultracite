@@ -176,7 +176,7 @@ program
         });
 
         // The agent edited a file outside the project or the command's own
-        // targets, or one that is gone.
+        // targets, or one that is gone, or the payload names no file.
         if (targets?.length === 0) {
           return;
         }

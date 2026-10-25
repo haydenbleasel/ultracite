@@ -41,16 +41,28 @@ describe("editedFilesFromHookPayload", () => {
   });
 
   test("names no file for an unknown shape, an empty path, or non-JSON", () => {
-    expect(editedFilesFromHookPayload('{"toolArgs":{"lines":3}}')).toBe(null);
-    expect(editedFilesFromHookPayload('{"tool_input":{"file_path":""}}')).toBe(
-      null
-    );
-    expect(editedFilesFromHookPayload("[]")).toBe(null);
-    expect(editedFilesFromHookPayload("not json")).toBe(null);
+    expect(editedFilesFromHookPayload('{"toolArgs":{"lines":3}}')).toEqual([]);
+    expect(
+      editedFilesFromHookPayload('{"tool_input":{"file_path":""}}')
+    ).toEqual([]);
+    expect(editedFilesFromHookPayload("[]")).toEqual([]);
+    expect(editedFilesFromHookPayload("not json")).toEqual([]);
     expect(
       editedFilesFromHookPayload('{"tool_input":{"file_path":"/repo/a.ts"')
-    ).toBe(null);
-    expect(editedFilesFromHookPayload("")).toBe(null);
+    ).toEqual([]);
+    expect(editedFilesFromHookPayload("")).toEqual([]);
+  });
+
+  test("names no file for a Claude Code edit without a path", () => {
+    expect(
+      editedFilesFromHookPayload(
+        JSON.stringify({
+          hook_event_name: "PostToolUse",
+          tool_input: {},
+          tool_name: "Edit",
+        })
+      )
+    ).toEqual([]);
   });
 });
 
@@ -246,12 +258,12 @@ describe("editedFilesFromHookPayload (Copilot and VS Code)", () => {
     ).toEqual([]);
   });
 
-  test("keeps the whole-project run for an edit tool without a path", () => {
+  test("names no file for an edit tool without a path", () => {
     expect(
       editedFilesFromHookPayload(
         JSON.stringify({ tool_input: {}, tool_name: "editFiles" })
       )
-    ).toBe(null);
+    ).toEqual([]);
   });
 });
 
@@ -407,13 +419,23 @@ describe("hookTargets", () => {
     ).toBe(null);
   });
 
-  test("keeps the whole-project run when the payload names no file", async () => {
+  test("targets nothing when the payload names no file", async () => {
     expect(
       await hookTargets({
         cwd: repo,
         read: () => '{"hook_event_name":"Stop"}',
       })
-    ).toBe(null);
+    ).toEqual([]);
+  });
+
+  test("targets nothing when the payload names no file and the targets are globs", async () => {
+    expect(
+      await hookTargets({
+        cwd: repo,
+        read: () => "not json",
+        targets: ["src/**/*.ts"],
+      })
+    ).toEqual([]);
   });
 
   test("targets a root file whose name starts with two dots", async () => {
@@ -459,13 +481,13 @@ describe("hookTargets", () => {
     ).toEqual([]);
   });
 
-  test("keeps the whole-project run when stdin cannot be read", async () => {
+  test("targets nothing when stdin cannot be read", async () => {
     expect(
       await hookTargets({
         cwd: repo,
         read: () => Promise.reject(new Error("EAGAIN")),
       })
-    ).toBe(null);
+    ).toEqual([]);
   });
 });
 
@@ -602,12 +624,12 @@ describe("readHook", () => {
     ).toEqual({ report: "stderr", targets: [edited] });
   });
 
-  test("keeps the whole-project run and the plain exit code when stdin fails", async () => {
+  test("targets nothing and keeps the plain exit code when stdin fails", async () => {
     expect(
       await readHook({
         cwd: repo,
         read: () => Promise.reject(new Error("EPIPE")),
       })
-    ).toEqual({ report: "none", targets: null });
+    ).toEqual({ report: "none", targets: [] });
   });
 });
