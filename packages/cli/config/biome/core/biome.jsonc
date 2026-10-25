@@ -179,12 +179,21 @@
             "maxAllowedComplexity": 20
           }
         },
+        // Matches max-nested-callbacks' default of 10 in the oxlint/ESLint
+        // configs. Biome's default is 5.
+        "noExcessiveNestedCallbacks": {
+          "level": "error",
+          "options": {
+            "max": 10
+          }
+        },
         "noExtraBooleanCast": "error",
         "noFlatMapIdentity": "error",
         "noForEach": "error",
         "noRedundantDefaultExport": "error",
         "noStaticOnlyClass": "error",
         "noThisInStatic": "error",
+        "noUnnecessaryTemplateExpression": "error",
         "noUselessCatch": "error",
         "noUselessCatchBinding": "error",
         "noUselessConstructor": "error",
@@ -206,14 +215,17 @@
         "noUselessUndefinedInitialization": "error",
         "noVoid": "error",
         "useArrayFind": "error",
+        "useArraySome": "error",
         "useArrowFunction": "error",
         "useDateNow": "error",
         "useFlatMap": "error",
         "useIndexOf": "error",
         "useLiteralKeys": "error",
+        "useMathMinMax": "error",
         "useNumericLiterals": "error",
         "useOptionalChain": "error",
         "useRegexLiterals": "error",
+        "useRegexpTest": "error",
         "useSimpleNumberKeys": "error",
         "useSimplifiedLogicExpression": "error",
         "useWhile": "error",
@@ -223,7 +235,10 @@
         "useMaxParams": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
-        "noImportantStyles": "off"
+        "noImportantStyles": "off",
+        // Has no default limit, so it does nothing until one is set, and the
+        // Stylelint preset sets no selector-max-class to match.
+        "noExcessiveSelectorClasses": "off"
       },
       "correctness": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -235,6 +250,7 @@
         "noDuplicateArgumentNames": "error",
         "noDuplicateAttributes": "error",
         "noDuplicateEnumValueNames": "error",
+        "noDuplicateFieldDefinitionNames": "error",
         "noDuplicateInputFieldNames": "error",
         "noDuplicateVariableNames": "error",
         "noEmptyCharacterClassInRegex": "error",
@@ -307,14 +323,11 @@
       },
       "nursery": {
         // Typically we don't enable nursery rules anymore (https://github.com/haydenbleasel/ultracite/issues/457)
-        // but this was requested specifically by a lot of people.
-        "useSortedClasses": {
+        // but this was requested specifically by a lot of people. Its
+        // functions are set in the top-level `tailwind` options.
+        "useTailwindSortedClasses": {
           "fix": "safe",
-          "level": "error",
-          "options": {
-            // class and className attributes are sorted by default.
-            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
-          }
+          "level": "error"
         }
       },
       "performance": {
@@ -329,6 +342,7 @@
         "noNamespaceImport": "error",
         "noSyncScripts": "error",
         "noUnwantedPolyfillio": "error",
+        "useDomNodeTextContent": "error",
         "useGoogleFontPreconnect": "error",
         "useTopLevelRegex": "error",
 
@@ -342,6 +356,7 @@
         "noDangerouslySetInnerHtmlWithChildren": "error",
         "noGlobalEval": "error",
         "noScriptUrl": "error",
+        "useIframeSandbox": "error",
 
         "noSecrets": "off"
       },
@@ -398,6 +413,7 @@
         "useDefaultSwitchClause": "error",
         "useDeprecatedReason": "error",
         "useDestructuring": "error",
+        "useDomQuerySelector": "error",
         "useEnumInitializers": "error",
         "useErrorCause": "error",
         "useExponentiationOperator": "error",
@@ -414,25 +430,31 @@
         "useGraphqlNamingConvention": "error",
         "useGroupedAccessorPairs": "error",
         "useImportType": "error",
+        "useImportsFirst": "error",
         "useInputName": "error",
         "useLiteralEnumMembers": "error",
         "useLoneExecutableDefinition": "error",
+        "useNamedCaptureGroup": "error",
         "useNodeAssertStrict": "error",
         "useNodejsImportProtocol": "error",
         "useNumberNamespace": "error",
         "useNumericSeparators": "error",
         "useObjectSpread": "error",
         "useReadonlyClassProperties": "error",
+        "useReduceTypeParameter": "error",
         "useSelfClosingElements": "error",
         "useShorthandAssign": "error",
         "useShorthandFunctionType": "error",
         "useSpreadOverApply": "error",
         "useSymbolDescription": "error",
         "useTemplate": "error",
+        "useThisInClassMethods": "error",
         "useThrowNewError": "error",
         "useThrowOnlyError": "error",
         "useTrimStartEnd": "error",
+        "useUnicodeRegex": "error",
         "useUnifiedTypeSignatures": "error",
+        "useVarsOnTop": "error",
 
         "noCommonJs": "off",
         "noContinue": "off",
@@ -442,6 +464,11 @@
         "noHexColors": "off",
         "noImplicitBoolean": "off",
         "noJsxLiterals": "off",
+        // Off outside Svelte, whose preset turns it on to match ESLint's
+        // svelte/no-inline-styles. It has no options, and in JSX the style
+        // prop is how runtime values and CSS variables reach CSS; Oxlint's
+        // React preset doesn't forbid it either.
+        "noInlineStyles": "off",
         // Matches unicorn/prefer-global-this being off in the oxlint config.
         "useGlobalThis": "off",
         "noMagicNumbers": "off",
@@ -456,7 +483,10 @@
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noDescendingSpecificity": "error",
-        "noValueAtRule": "error"
+        "noValueAtRule": "error",
+
+        /** ------------------------ JSON Rules ------------------------ **/
+        "noTopLevelLiterals": "error"
       },
       "suspicious": {
         /** ------------------------ JavaScript Rules ------------------------ **/
@@ -507,6 +537,7 @@
         "noImportAssign": "error",
         "noIrregularWhitespace": "error",
         "noLabelVar": "error",
+        "noLoopFunc": "error",
         "noMisleadingCharacterClass": "error",
         "noMisleadingInstantiator": "error",
         "noMisrefactoredShorthandAssign": "error",
@@ -566,11 +597,20 @@
         "noDuplicateCustomProperties": "error",
         "noDuplicateFontNames": "error",
         "noDuplicateProperties": "error",
+        "noDuplicateSelectors": "error",
         "noDuplicateSelectorsKeyframeBlock": "error",
         "noEmptyBlock": "error",
         "noImportantInKeyframe": "error",
         "noShorthandPropertyOverrides": "error",
         "noUnknownAtRules": "error",
+        "useBaseline": "error",
+
+        /** ------------------------ JSON Rules ------------------------ **/
+        "noEmptyObjectKeys": "error",
+
+        // Reads each dependency's package.json in node_modules, which this
+        // preset force-ignores (#737), so it can never report.
+        "noUntrustedLicenses": "off",
 
         /** ------------------ JavaScript, CSS, JSON and GraphQL ------------------ **/
         "noEmptySource": "error"
@@ -620,6 +660,26 @@
     "formatter": {
       "enabled": true
     }
+  },
+  "markdown": {
+    // Biome 2.6's Markdown formatter drops the space before some inline code
+    // spans ("`--unsafe`. `--corpus`" becomes "`--unsafe`.`--corpus`"), which
+    // changes the rendered text, so .md files stay unformatted as they were
+    // before 2.6. The linter stays on.
+    "formatter": {
+      "enabled": false
+    },
+    // Reads a leading `---` block as frontmatter instead of a thematic break
+    // followed by a heading.
+    "parser": {
+      "frontmatter": true
+    }
+  },
+  "tailwind": {
+    // Strings passed to these functions are sorted by useTailwindSortedClasses,
+    // as are the class and className attributes. Matches the Oxfmt preset's
+    // sortTailwindcss functions.
+    "mergeFunctions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
   },
   "vcs": {
     "enabled": true,

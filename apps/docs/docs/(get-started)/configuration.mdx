@@ -73,11 +73,11 @@ Oxlint runs the type-aware rules `core` lists, such as `typescript/no-floating-p
 
 With Biome, `ultracite fix` runs `biome check --write`, which applies every rule's safe fixes. Fixes that Biome marks as unsafe, because they can change behavior, only run with `ultracite fix --unsafe`. The Biome preset sets `"fix": "safe"` on a few rules whose fixes Biome marks unsafe by default, so plain `ultracite fix` applies them too. These fixes are non-breaking in practice:
 
-| Rule                 | Description                                           |
-| -------------------- | ----------------------------------------------------- |
-| `noUnusedImports`    | Removes unused import statements                      |
+| Rule | Description |
+| --- | --- |
+| `noUnusedImports` | Removes unused import statements |
 | `useBlockStatements` | Wraps single-line control flow bodies in curly braces |
-| `useSortedClasses`   | Sorts Tailwind CSS classes into a consistent order    |
+| `useTailwindSortedClasses` | Sorts Tailwind CSS classes into a consistent order |
 
 To stop `ultracite fix` applying one of these, override the rule in your config without the `fix` property (its fix goes back to Biome's default and only runs with `--unsafe`), or set `"fix": "none"` to turn the fix off entirely.
 

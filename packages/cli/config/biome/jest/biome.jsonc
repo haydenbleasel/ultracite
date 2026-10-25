@@ -7,14 +7,28 @@
         "noExcessiveNestedTestSuites": "error"
       },
       "style": {
-        "noDoneCallback": "error"
+        "noDoneCallback": "error",
+        // Matches consistent-test-it's defaults in the oxlint/ESLint configs.
+        // Biome's default for top-level tests is it().
+        "useConsistentTestIt": {
+          "level": "error",
+          "options": {
+            "function": "test",
+            "withinDescribe": "it"
+          }
+        },
+        "useTestHooksInOrder": "error",
+        "useTestHooksOnTop": "error"
       },
       "suspicious": {
+        "noConditionalExpect": "error",
         "noDuplicateTestHooks": "error",
         "noExportsInTest": "error",
         "noFocusedTests": "error",
+        "noIdenticalTestTitle": "error",
         "noMisplacedAssertion": "error",
-        "noSkippedTests": "error"
+        "noSkippedTests": "error",
+        "useExpect": "error"
       }
     }
   },

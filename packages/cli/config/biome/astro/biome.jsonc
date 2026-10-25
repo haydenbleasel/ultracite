@@ -16,7 +16,10 @@
 						"noUnusedImports": "off"
 					},
 					"suspicious": {
-						"noReactSpecificProps": "error"
+						"noReactSpecificProps": "error",
+						// Reports `<style is:global>`, which makes a component's styles
+						// apply to the whole page.
+						"useScopedStyles": "error"
 					}
 				}
 			}

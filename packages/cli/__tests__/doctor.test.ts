@@ -1169,10 +1169,10 @@ describe("doctor", () => {
   // ---------------------------------------------------------------------------
 
   test("passes when the installed biome satisfies the supported range", () => {
-    mockInstalledVersions({ "@biomejs/biome": "2.5.12" });
+    mockInstalledVersions({ "@biomejs/biome": "2.6.3" });
 
     expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
-      message: "@biomejs/biome 2.5.12 satisfies ^2.5.0",
+      message: "@biomejs/biome 2.6.3 satisfies ^2.6.2",
       status: "pass",
     });
   });
@@ -1181,11 +1181,11 @@ describe("doctor", () => {
     mock.module("../src/utils", () => ({
       detectLinter: () => "biome",
     }));
-    mockInstalledVersions({ "@biomejs/biome": "2.4.9" });
+    mockInstalledVersions({ "@biomejs/biome": "2.5.15" });
 
     expect(versionCheck("biome", "@biomejs/biome")).toMatchObject({
       message: expect.stringContaining(
-        "@biomejs/biome 2.4.9 is older than Ultracite"
+        "@biomejs/biome 2.5.15 is older than Ultracite"
       ),
       status: "fail",
     });
