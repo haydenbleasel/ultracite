@@ -35,17 +35,37 @@ const ULTRACITE_OXFMT = "ultracite/oxfmt";
 type Framework = (typeof options.frameworks)[number];
 
 interface OxfmtOptions {
+  // The major versions of Astro the project depends on.
+  astroMajorVersions?: number[];
   frameworks?: Framework[];
 }
 
 type OxfmtProperty = RenderedEntry & { key: string | null };
 
+const ASTRO_JSX_WHITESPACE_MAJOR = 7;
+
 // Options a framework needs that the preset can't set for every project.
-// oxfmt only formats .astro files with `astro` set, and its bundled
-// prettier-plugin-astro then loads @astrojs/compiler-rs from the project,
-// which init installs alongside; without it every .astro file fails.
-const frameworkProperties: Partial<Record<Framework, OxfmtProperty>> = {
-  astro: { comment: null, key: "astro", text: "astro: true" },
+const frameworkProperties: Partial<
+  Record<Framework, (opts: OxfmtOptions) => OxfmtProperty>
+> = {
+  // oxfmt only formats .astro files with `astro` set, and its bundled
+  // prettier-plugin-astro then loads @astrojs/compiler-rs from the project,
+  // which init installs alongside; without it every .astro file fails. Astro
+  // 7 drops whitespace that contains a line break, as oxfmt assumes by
+  // default. Earlier versions collapse it to a space, so line breaks oxfmt
+  // adds between tags would show up on the page unless it follows HTML's
+  // whitespace rules. A project mixing versions gets Astro 7's.
+  astro: ({ astroMajorVersions = [] }) => ({
+    comment: null,
+    key: "astro",
+    text:
+      astroMajorVersions.length > 0 &&
+      astroMajorVersions.every(
+        (version) => version < ASTRO_JSX_WHITESPACE_MAJOR
+      )
+        ? 'astro: { compressHTML: "html" }'
+        : "astro: true",
+  }),
 };
 
 // Everything in an existing config that isn't Ultracite's: carried over into
@@ -70,7 +90,7 @@ const emptyExtras = (): OxfmtExtras => ({
 
 const generateConfigContent = (
   extras: OxfmtExtras = emptyExtras(),
-  frameworks: Framework[] = []
+  opts: OxfmtOptions = {}
 ) => {
   const imports = [
     renderImport("oxfmt", ["defineConfig", ...extras.oxfmtSpecifiers]),
@@ -82,8 +102,8 @@ const generateConfigContent = (
 
   // A value the project already sets for one of these, such as
   // `astro: false`, is kept instead.
-  const frameworkEntries = frameworks.flatMap((framework) => {
-    const property = frameworkProperties[framework];
+  const frameworkEntries = (opts.frameworks ?? []).flatMap((framework) => {
+    const property = frameworkProperties[framework]?.(opts);
 
     return property &&
       !extras.properties.some(({ key }) => key === property.key)
@@ -224,7 +244,7 @@ export const oxfmt = {
   create: async (opts?: OxfmtOptions) =>
     await writeProjectFile(
       resolveOxfmtConfigPath().target,
-      generateConfigContent(emptyExtras(), opts?.frameworks)
+      generateConfigContent(emptyExtras(), opts)
     ),
   exists: () =>
     exists(oxfmtTsConfigPath) ||
@@ -283,7 +303,7 @@ export const oxfmt = {
 
     await writeProjectFile(
       paths.target,
-      generateConfigContent(current.extras, opts?.frameworks)
+      generateConfigContent(current.extras, opts)
     );
 
     // A .ts config in a "commonjs" package can't load, so it moved to .mts.

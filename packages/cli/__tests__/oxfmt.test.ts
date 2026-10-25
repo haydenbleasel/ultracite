@@ -285,6 +285,24 @@ describe("oxfmt framework options", () => {
     expect(content).toContain("  ...ultracite,\n  astro: true,\n");
   });
 
+  test("follows HTML whitespace rules for Astro 6 and earlier", async () => {
+    const project = mockOxfmtProject({});
+
+    await oxfmt.create({ astroMajorVersions: [5, 6], frameworks: ["astro"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('  astro: { compressHTML: "html" },\n');
+  });
+
+  test("uses Astro 7's whitespace rules when any workspace is on it", async () => {
+    const project = mockOxfmtProject({});
+
+    await oxfmt.create({ astroMajorVersions: [6, 7], frameworks: ["astro"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("  astro: true,\n");
+  });
+
   test("leaves astro unset for other frameworks", async () => {
     const project = mockOxfmtProject({});
 

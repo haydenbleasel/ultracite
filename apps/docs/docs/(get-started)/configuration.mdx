@@ -260,6 +260,8 @@ export default defineConfig({
 
 To set this up by hand, add `astro: true`. Astro 7 and later depend on the compiler already; on earlier versions, also install `@astrojs/compiler-rs` as a dev dependency. Set `astro: false` to leave `.astro` files alone. `init` keeps the `astro` value you set, including an object of plugin options.
 
+Oxfmt also needs to know which whitespace Astro keeps, or the line breaks it adds between tags can show up as spaces on the page. Its default matches Astro 7, which drops whitespace that contains a line break. Astro 6 and earlier collapse that whitespace to a space, as browsers do, so for them `init` writes `astro: { compressHTML: "html" }` instead. Change it to `astro: true` when you upgrade to Astro 7. If your Astro config sets `compressHTML`, match it in Oxfmt's: `true` is `"html"`, `false` is `"none"`, and `"jsx"` is the default.
+
 ### Adding Third-Party Plugins (Oxlint)
 
 Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):

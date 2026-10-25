@@ -16,6 +16,7 @@ import type { PackageManager, PackageManagerName } from "nypm";
 
 import packageJson from "../package.json" with { type: "json" };
 import { AGENTS_FILE, getAgentChoices, writeAgentFiles } from "./agents";
+import { detectAstroMajorVersions } from "./astro-version";
 import { UltraciteSetupError } from "./config-resolution";
 import { agents as agentTable } from "./data/agents";
 import { editors } from "./data/editors";
@@ -998,12 +999,16 @@ export const upsertOxfmtConfig = async (
     s.start("Checking for oxfmt configuration...");
   }
 
+  const astroMajorVersions = frameworks?.includes("astro")
+    ? await detectAstroMajorVersions()
+    : [];
+
   if (await oxfmt.exists()) {
     if (!quiet) {
       s.message("oxfmt configuration found, updating...");
     }
 
-    await oxfmt.update({ frameworks });
+    await oxfmt.update({ astroMajorVersions, frameworks });
 
     if (!quiet) {
       s.stop("oxfmt configuration updated.");
@@ -1016,7 +1021,7 @@ export const upsertOxfmtConfig = async (
     s.message("oxfmt configuration not found, creating...");
   }
 
-  await oxfmt.create({ frameworks });
+  await oxfmt.create({ astroMajorVersions, frameworks });
 
   if (!quiet) {
     s.stop("oxfmt configuration created.");
