@@ -97,6 +97,13 @@
         "useSortedTypeFields": "on",
         // Enforce alphabetical ordering of GraphQL selection sets.
         "useSortedSelectionSet": "on",
+        // Sort the named definitions of a GraphQL document (types,
+        // directives, fragments, operations).
+        "useGraphqlSortedDefinitions": "on",
+        // Sort the variable definitions of GraphQL operations.
+        "useGraphqlSortedVariables": "on",
+        // Sort the arguments of GraphQL fields and directives.
+        "useGraphqlSortedArguments": "on",
         // Enforce ordering of package.json keys.
         "useSortedPackageJson": "on"
       }
@@ -658,6 +665,13 @@
   },
   "html": {
     "formatter": {
+      "enabled": true
+    }
+  },
+  "graphql": {
+    // Biome runs no assist actions on GraphQL files unless this is set, so
+    // the GraphQL sorting actions above need it.
+    "assist": {
       "enabled": true
     }
   },
