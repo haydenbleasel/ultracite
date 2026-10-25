@@ -25,13 +25,21 @@ const examples = lib.readJson(join(lib.EXAMPLES_DIR, "examples.json"));
 const out = [];
 const h = (level, text) => out.push("", `${"#".repeat(level)} ${text}`, "");
 const p = (text) => out.push(text);
+// Escape pipes so they don't split the table cell. A backslash already before a
+// pipe would pair with the escape and free the pipe, so odd runs get one more.
+// Other backslashes stay as they are, since a code span shows them literally.
+const cell = (c) =>
+  c === null || c === undefined
+    ? "–"
+    : String(c).replace(
+        /(\\*)\|/g,
+        (_, run) => `${run}${run.length % 2 ? "\\" : ""}\\|`
+      );
 const table = (head, rows) => {
   out.push(`| ${head.join(" | ")} |`);
   out.push(`| ${head.map((_, i) => (i === 0 ? "---" : "---:")).join(" | ")} |`);
   for (const r of rows) {
-    out.push(
-      `| ${r.map((c) => (c === null || c === undefined ? "–" : String(c).replace(/\|/g, "\\|"))).join(" | ")} |`
-    );
+    out.push(`| ${r.map(cell).join(" | ")} |`);
   }
 };
 const fmt = (n) => (typeof n === "number" ? n.toLocaleString("en-US") : n);

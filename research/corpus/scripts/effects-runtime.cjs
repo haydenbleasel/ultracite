@@ -437,7 +437,15 @@ class Element extends Node {
     return this.childNodes.map((c) => serialise(c)).join("");
   }
   set innerHTML(v) {
-    this.textContent = String(v).replace(/<[^>]*>/g, "");
+    // No HTML parser: keep the text between tags, which serialise() escapes again. One pass
+    // already leaves no tag behind; repeating it until nothing changes says so to CodeQL.
+    let text = String(v);
+    let previous;
+    do {
+      previous = text;
+      text = text.replace(/<[^>]*>/g, "");
+    } while (text !== previous);
+    this.textContent = text;
   }
   focus() {
     const doc = this.ownerDocument;
@@ -970,10 +978,10 @@ const loadModule = (
   const map = JSON.parse(out.sourceMapText);
   const lineMap = decodeLines(map.mappings);
   const tag = `__effects_module_${Math.random().toString(36).slice(2)}.js`;
+  const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const tagPattern = new RegExp(`${escapedTag}:(\\d+):(\\d+)`);
   rt.setLabeller((stack) => {
-    const m = new RegExp(`${tag.replace(/\./g, "\\.")}:(\\d+):(\\d+)`).exec(
-      stack
-    );
+    const m = tagPattern.exec(stack);
     if (!m) {
       return null;
     }
