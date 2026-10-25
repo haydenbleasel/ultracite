@@ -2,7 +2,7 @@
 "ultracite": patch
 ---
 
-Update Biome to 2.6.3. Biome 2.6 renamed `useSortedClasses` to [`useTailwindSortedClasses`](https://biomejs.dev/linter/rules/use-tailwind-sorted-classes/) and moved its `functions` option to the top-level `tailwind.mergeFunctions`, so the 8.0 core preset failed to load with "Found an unknown key `useSortedClasses`". The core preset now uses the new name and sets `tailwind.mergeFunctions` to the same functions as before.
+Update Biome to 2.6.3. Biome 2.6 renamed `useSortedClasses` to [`useTailwindSortedClasses`](https://biomejs.dev/linter/rules/use-tailwind-sorted-classes/) and moved its `functions` option to the top-level `tailwind.mergeFunctions`, so the 8.0 core preset failed to load with "Found an unknown key `useSortedClasses`". The core preset now uses the new name and lists the same functions under `tailwind.mergeFunctions` and, for `cva` and `tv`, `tailwind.variantFunctions`, which sorts the classes in their variant objects. The rule also switched to Tailwind CSS v4's class order, so `ultracite fix` re-sorts class lists whose order changed the first time it runs with Biome 2.6.
 
 Biome 2.6 also promoted 59 nursery rules to stable groups. The presets turn on the ones that match rules the Oxlint presets enable, or that have no Oxlint counterpart and fit the preset:
 

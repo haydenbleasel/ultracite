@@ -689,11 +689,15 @@
       "frontmatter": true
     }
   },
+  // The functions whose classes useTailwindSortedClasses sorts, besides the
+  // class and className attributes. Together they match the Oxfmt preset's
+  // sortTailwindcss functions.
   "tailwind": {
-    // Strings passed to these functions are sorted by useTailwindSortedClasses,
-    // as are the class and className attributes. Matches the Oxfmt preset's
-    // sortTailwindcss functions.
-    "mergeFunctions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
+    // Every string passed to these, and the keys of objects passed to them.
+    "mergeFunctions": ["clsx", "tw", "twMerge", "cn", "twJoin"],
+    // These take an object describing a component's variants; Biome sorts
+    // the classes under base, variants, slots and the like, not its keys.
+    "variantFunctions": ["cva", "tv"]
   },
   "vcs": {
     "enabled": true,
