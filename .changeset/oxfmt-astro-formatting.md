@@ -1,5 +1,5 @@
 ---
-"ultracite": patch
+"ultracite": minor
 ---
 
 Format `.astro` files with Oxfmt. When the project or one of its workspaces uses Astro, `ultracite init` turns on Oxfmt's `astro` option in the root `oxfmt.config.ts` and installs `@astrojs/compiler-rs`, the compiler that Oxfmt's bundled `prettier-plugin-astro` loads. Until now, Oxfmt skipped `.astro` files. For Astro 6 and earlier, which keep line breaks between tags as spaces, it writes `astro: { compressHTML: "html" }` so formatting can't change what a page renders. An `astro` value already in the config is kept, so `astro: false` still opts out. `ultracite upgrade` keeps the compiler at the version this release was tested with, and switching from Oxlint to another linter removes it. Existing projects get it by re-running `ultracite init`, or by setting `astro: true` by hand as described in [Formatting Astro files](https://www.ultracite.ai/docs/configuration#formatting-astro-files-oxfmt). Oxfmt formats `.astro` files from 0.73.0; older releases ignore the option.
