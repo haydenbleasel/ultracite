@@ -20,6 +20,7 @@ import {
   eslintPeerOverridesFor,
   OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
   OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
+  oxfmtFrameworkDevDependencies,
 } from "../dependencies";
 import type { FixAgent } from "../linter-args";
 import {
@@ -231,9 +232,12 @@ export const getToolchainPackages = (
         );
       }
 
-      for (const [name, version] of Object.entries(
-        OXLINT_JS_PLUGIN_DEV_DEPENDENCIES
-      )) {
+      for (const [name, version] of [
+        ...Object.entries(OXLINT_JS_PLUGIN_DEV_DEPENDENCIES),
+        ...Object.values(oxfmtFrameworkDevDependencies).flatMap(
+          (dependencies) => Object.entries(dependencies ?? {})
+        ),
+      ]) {
         if (projectDependencies.has(name)) {
           packages.set(name, version);
         }

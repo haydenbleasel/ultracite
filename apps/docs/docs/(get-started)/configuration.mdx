@@ -244,6 +244,22 @@ export default defineConfig({
 
 If the root config is `oxfmt.config.mts`, import that file instead. In a workspace whose `package.json` doesn't set `"type": "module"`, name the workspace config `oxfmt.config.mts`.
 
+### Formatting Astro Files (Oxfmt)
+
+Oxfmt formats `.astro` files only when its `astro` option is set, through a copy of `prettier-plugin-astro` it ships with. That plugin loads `@astrojs/compiler-rs` from your project, and without it every `.astro` file fails to format, so Ultracite's preset leaves `astro` unset. When `init` sets up Astro, for the whole project or for one workspace, it turns the option on in the root config and installs the compiler:
+
+```ts title="oxfmt.config.ts"
+import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+  astro: true,
+});
+```
+
+To set this up by hand, add `astro: true`. Astro 7 and later depend on the compiler already; on earlier versions, also install `@astrojs/compiler-rs` as a dev dependency. Set `astro: false` to leave `.astro` files alone. `init` keeps the `astro` value you set, including an object of plugin options.
+
 ### Adding Third-Party Plugins (Oxlint)
 
 Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):

@@ -26,6 +26,7 @@ import {
   asDependencyVersionMap,
   biomeVersion,
   buildEslintDevDependencies,
+  buildOxfmtFrameworkDevDependencies,
   dependencyNamesByLinter,
   eslintPeerOverridesFor,
   isOxlintNpmJsPlugin,
@@ -294,6 +295,11 @@ const buildNoInstallDevDependencies = (
         devDependencies[jsPlugin] = OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin];
       }
     }
+
+    Object.assign(
+      devDependencies,
+      buildOxfmtFrameworkDevDependencies(frameworks)
+    );
   }
 
   return devDependencies;
@@ -552,6 +558,10 @@ export const installDependencies = async (
         isOxlintNpmJsPlugin(jsPlugin)
           ? [`${jsPlugin}@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[jsPlugin]}`]
           : []
+      ),
+      // What oxfmt needs to format the frameworks' files, such as .astro
+      ...Object.entries(buildOxfmtFrameworkDevDependencies(frameworks)).map(
+        ([name, version]) => `${name}@${version}`
       )
     );
   }
@@ -978,7 +988,10 @@ export const upsertStylelintConfig = async (quiet = false) => {
   }
 };
 
-export const upsertOxfmtConfig = async (quiet = false) => {
+export const upsertOxfmtConfig = async (
+  frameworks?: (typeof options.frameworks)[number][],
+  quiet = false
+) => {
   const s = spinner();
 
   if (!quiet) {
@@ -990,7 +1003,7 @@ export const upsertOxfmtConfig = async (quiet = false) => {
       s.message("oxfmt configuration found, updating...");
     }
 
-    await oxfmt.update();
+    await oxfmt.update({ frameworks });
 
     if (!quiet) {
       s.stop("oxfmt configuration updated.");
@@ -1003,7 +1016,7 @@ export const upsertOxfmtConfig = async (quiet = false) => {
     s.message("oxfmt configuration not found, creating...");
   }
 
-  await oxfmt.create();
+  await oxfmt.create({ frameworks });
 
   if (!quiet) {
     s.stop("oxfmt configuration created.");
@@ -1917,7 +1930,7 @@ const setupLinting = async ({
     // are written as .mts instead (see resolveEsmConfigPath).
     await upsertOxlintConfig(frameworks, quiet, jsPlugins, typeAware);
     // Oxlint is only a linter, so we need oxfmt for formatting
-    await upsertOxfmtConfig(quiet);
+    await upsertOxfmtConfig(allFrameworks, quiet);
   }
 
   await upsertWorkspaceConfigs(linter, workspaces, quiet);

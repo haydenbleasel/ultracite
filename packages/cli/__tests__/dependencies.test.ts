@@ -11,6 +11,7 @@ import {
   eslintFrameworkDevDependencies,
   eslintPeerOverridePackages,
   eslintPeerOverridesFor,
+  oxfmtFrameworkDevDependencies,
 } from "../src/dependencies";
 
 // The preload mocks node:fs; the real readers are stashed on globalThis.
@@ -141,6 +142,18 @@ describe("ESLint dependencies", () => {
     ];
 
     expect(versions).not.toContain("latest");
+  });
+
+  test("prunes what oxfmt needs for a framework when switching off Oxlint", () => {
+    const names = Object.values(oxfmtFrameworkDevDependencies).flatMap(
+      (dependencies) => Object.keys(dependencies ?? {})
+    );
+
+    expect(names).toContain("@astrojs/compiler-rs");
+
+    for (const name of names) {
+      expect(dependencyNamesByLinter.oxlint.has(name)).toBe(true);
+    }
   });
 
   test("installs the NestJS plugin with the nestjs preset", () => {

@@ -59,6 +59,19 @@ export const OXLINT_TOOLCHAIN_DEV_DEPENDENCIES = {
   "oxlint-tsgolint": packageJson.devDependencies["oxlint-tsgolint"],
 };
 
+/**
+ * Extra devDependencies oxfmt needs to format a framework's files, keyed by
+ * framework. Its bundled prettier-plugin-astro loads @astrojs/compiler-rs from
+ * the project, and Astro only depends on that compiler from version 7.
+ */
+export const oxfmtFrameworkDevDependencies: Partial<
+  Record<Frameworks, Record<string, string>>
+> = {
+  astro: {
+    "@astrojs/compiler-rs": packageJson.devDependencies["@astrojs/compiler-rs"],
+  },
+};
+
 export const OXLINT_JS_PLUGIN_DEV_DEPENDENCIES = {
   "@shadcn/lint": packageJson.devDependencies["@shadcn/lint"],
   "eslint-plugin-github": packageJson.devDependencies["eslint-plugin-github"],
@@ -211,6 +224,18 @@ export const buildEslintDevDependencies = (frameworks: Frameworks[]) => {
   return devDependencies;
 };
 
+export const buildOxfmtFrameworkDevDependencies = (
+  frameworks: Frameworks[]
+) => {
+  const devDependencies = asDependencyVersionMap({});
+
+  for (const framework of frameworks) {
+    Object.assign(devDependencies, oxfmtFrameworkDevDependencies[framework]);
+  }
+
+  return devDependencies;
+};
+
 /**
  * ESLint plugins whose `eslint` peer range stops before ESLint 10, though they
  * run on it. npm refuses to install them next to ESLint 10 (ERESOLVE), and
@@ -259,6 +284,7 @@ export const dependencyNamesByLinter = {
     "stylelint-prettier",
   ]),
   oxlint: new Set([
+    "@astrojs/compiler-rs",
     "@shadcn/lint",
     "eslint-plugin-github",
     "eslint-plugin-jsdoc",

@@ -3,6 +3,7 @@ import { readFile, rm } from "node:fs/promises";
 import { log } from "@clack/prompts";
 import { z } from "zod";
 
+import type { options } from "../data/options";
 import type { JsonObject } from "../data/types";
 import { parseJsoncStrict } from "../schemas";
 import { exists, resolveEsmConfigPath, writeProjectFile } from "../utils";
@@ -31,13 +32,29 @@ const oxfmtRcPaths = ["./.oxfmtrc.json", "./.oxfmtrc.jsonc"];
 
 const ULTRACITE_OXFMT = "ultracite/oxfmt";
 
+type Framework = (typeof options.frameworks)[number];
+
+interface OxfmtOptions {
+  frameworks?: Framework[];
+}
+
+type OxfmtProperty = RenderedEntry & { key: string | null };
+
+// Options a framework needs that the preset can't set for every project.
+// oxfmt only formats .astro files with `astro` set, and its bundled
+// prettier-plugin-astro then loads @astrojs/compiler-rs from the project,
+// which init installs alongside; without it every .astro file fails.
+const frameworkProperties: Partial<Record<Framework, OxfmtProperty>> = {
+  astro: { comment: null, key: "astro", text: "astro: true" },
+};
+
 // Everything in an existing config that isn't Ultracite's: carried over into
 // the regenerated file as written.
 interface OxfmtExtras {
   danglingComments: string[];
   imports: string[];
   oxfmtSpecifiers: string[];
-  properties: RenderedEntry[];
+  properties: OxfmtProperty[];
   statements: string[];
   ultraciteLocal: string;
 }
@@ -51,7 +68,10 @@ const emptyExtras = (): OxfmtExtras => ({
   ultraciteLocal: "ultracite",
 });
 
-const generateConfigContent = (extras: OxfmtExtras = emptyExtras()) => {
+const generateConfigContent = (
+  extras: OxfmtExtras = emptyExtras(),
+  frameworks: Framework[] = []
+) => {
   const imports = [
     renderImport("oxfmt", ["defineConfig", ...extras.oxfmtSpecifiers]),
     `import ${extras.ultraciteLocal} from "${ULTRACITE_OXFMT}";`,
@@ -60,9 +80,21 @@ const generateConfigContent = (extras: OxfmtExtras = emptyExtras()) => {
 
   const statements = extras.statements.join("\n\n");
 
+  // A value the project already sets for one of these, such as
+  // `astro: false`, is kept instead.
+  const frameworkEntries = frameworks.flatMap((framework) => {
+    const property = frameworkProperties[framework];
+
+    return property &&
+      !extras.properties.some(({ key }) => key === property.key)
+      ? [property]
+      : [];
+  });
+
   const entries = renderEntries(
     [
       { comment: null, text: `...${extras.ultraciteLocal}` },
+      ...frameworkEntries,
       ...extras.properties,
     ],
     extras.danglingComments
@@ -108,7 +140,11 @@ const readExistingConfig = (config: ConfigModule): OxfmtExtras | null => {
 
   for (const entry of config.entries) {
     if (entry.spreadOf !== extras.ultraciteLocal) {
-      extras.properties.push({ comment: entry.comment, text: entry.text });
+      extras.properties.push({
+        comment: entry.comment,
+        key: entry.key,
+        text: entry.text,
+      });
     }
   }
 
@@ -127,9 +163,7 @@ const ARRAY_ITEM_INDENT = "    ";
  * option the TS config already sets keeps the TS config's value.
  */
 const mergeRcConfig = (rc: JsonObject, extras: OxfmtExtras): void => {
-  const presentKeys = new Set(
-    extras.properties.map((property) => property.text.split(":")[0]?.trim())
-  );
+  const presentKeys = new Set(extras.properties.map(({ key }) => key));
 
   for (const [key, value] of Object.entries(rc)) {
     if (key === "$schema" || presentKeys.has(key)) {
@@ -145,13 +179,14 @@ const mergeRcConfig = (rc: JsonObject, extras: OxfmtExtras): void => {
 
         extras.properties.push({
           comment: null,
+          key,
           text: `ignorePatterns: [\n${items
             .map((item) => `${ARRAY_ITEM_INDENT}${item},`)
             .join("\n")}\n  ]`,
         });
       }
     } else {
-      extras.properties.push(renderJsonProperty(key, value));
+      extras.properties.push({ ...renderJsonProperty(key, value), key });
     }
   }
 };
@@ -186,16 +221,16 @@ const readExistingOxfmtConfig = async (
 };
 
 export const oxfmt = {
-  create: async () =>
+  create: async (opts?: OxfmtOptions) =>
     await writeProjectFile(
       resolveOxfmtConfigPath().target,
-      generateConfigContent()
+      generateConfigContent(emptyExtras(), opts?.frameworks)
     ),
   exists: () =>
     exists(oxfmtTsConfigPath) ||
     exists(oxfmtMtsConfigPath) ||
     oxfmtRcPaths.some(exists),
-  update: async () => {
+  update: async (opts?: OxfmtOptions) => {
     const paths = resolveOxfmtConfigPath();
     const configFile = fileName(paths.target);
 
@@ -246,7 +281,10 @@ export const oxfmt = {
       mergeRcConfig(config, current.extras);
     }
 
-    await writeProjectFile(paths.target, generateConfigContent(current.extras));
+    await writeProjectFile(
+      paths.target,
+      generateConfigContent(current.extras, opts?.frameworks)
+    );
 
     // A .ts config in a "commonjs" package can't load, so it moved to .mts.
     const renamed =

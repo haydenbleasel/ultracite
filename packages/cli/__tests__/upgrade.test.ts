@@ -326,6 +326,24 @@ describe("getToolchainPackages", () => {
       packages.some((pkg) => pkg.startsWith("eslint-plugin-github@"))
     ).toBe(false);
   });
+
+  test("oxlint re-pins the Astro compiler oxfmt uses when the project has it", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    const withCompiler = getToolchainPackages(
+      "oxlint",
+      new Set(["@astrojs/compiler-rs"])
+    );
+
+    const without = getToolchainPackages("oxlint", new Set());
+
+    expect(
+      withCompiler.some((pkg) => pkg.startsWith("@astrojs/compiler-rs@"))
+    ).toBe(true);
+    expect(without.some((pkg) => pkg.startsWith("@astrojs/compiler-rs@"))).toBe(
+      false
+    );
+  });
 });
 
 describe("upgrade", () => {

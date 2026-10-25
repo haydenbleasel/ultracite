@@ -275,6 +275,80 @@ export default defineConfig({
   });
 });
 
+describe("oxfmt framework options", () => {
+  test("formats .astro files in an Astro project", async () => {
+    const project = mockOxfmtProject({});
+
+    await oxfmt.create({ frameworks: ["astro", "react"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("  ...ultracite,\n  astro: true,\n");
+  });
+
+  test("leaves astro unset for other frameworks", async () => {
+    const project = mockOxfmtProject({});
+
+    await oxfmt.create({ frameworks: ["react"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).not.toContain("astro");
+  });
+
+  test("adds astro to an existing config once", async () => {
+    const project = mockOxfmtProject({
+      "./oxfmt.config.ts": `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+  semi: false,
+});
+`,
+    });
+
+    await oxfmt.update({ frameworks: ["astro"] });
+    const [[, first]] = project.writeFile.mock.calls;
+    expect(first).toContain("  ...ultracite,\n  astro: true,\n  semi: false,");
+
+    const rerun = mockOxfmtProject({ "./oxfmt.config.ts": first ?? "" });
+
+    await oxfmt.update({ frameworks: ["astro"] });
+    const [[, second]] = rerun.writeFile.mock.calls;
+    expect(second).toBe(first);
+  });
+
+  test("keeps the astro value the project set", async () => {
+    const project = mockOxfmtProject({
+      "./oxfmt.config.ts": `import { defineConfig } from "oxfmt";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+  astro: false,
+});
+`,
+    });
+
+    await oxfmt.update({ frameworks: ["astro"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("astro: false,");
+    expect(content).not.toContain("astro: true");
+  });
+
+  test("keeps the astro options an .oxfmtrc.json set", async () => {
+    const project = mockOxfmtProject({
+      "./.oxfmtrc.json": '{ "astro": { "compressHTML": "html" } }',
+    });
+
+    await oxfmt.update({ frameworks: ["astro"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('"compressHTML": "html"');
+    expect(content).not.toContain("astro: true");
+  });
+});
+
 describe("oxfmt config file name", () => {
   const config = `import { defineConfig } from "oxfmt";
 import ultracite from "ultracite/oxfmt";

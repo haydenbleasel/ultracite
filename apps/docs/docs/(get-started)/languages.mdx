@@ -57,7 +57,7 @@ This page summarizes what each tool supports natively today so you can choose a 
 | HTML       | ✅    | ✅    | ✅       |
 | Vue        | 🟡    | ✅    | ✅       |
 | Svelte     | 🟡    | 🟡    | 🔌       |
-| Astro      | 🟡    | 🟡    | 🔌       |
+| Astro      | 🟡    | 🔌    | 🔌       |
 | GraphQL    | ✅    | ✅    | ✅       |
 | Markdown   | ⌛    | ✅    | ✅       |
 | MDX        | ❌    | ✅    | ✅       |
@@ -75,7 +75,7 @@ Oxlint is a JavaScript and TypeScript linter — that's it. For framework files 
 
 ### Oxfmt
 
-Oxfmt targets Prettier-style formatting breadth and is much wider than Oxlint. Its docs list JavaScript, JSX, TypeScript, TSX, JSON, JSONC, JSON5, YAML, TOML, HTML, Angular, Vue, CSS, SCSS, Less, Markdown, MDX, GraphQL, Ember, and Handlebars as supported. Svelte and Astro currently land in the partial/experimental bucket across the Oxc stack.
+Oxfmt targets Prettier-style formatting breadth and is much wider than Oxlint. Its docs list JavaScript, JSX, TypeScript, TSX, JSON, JSONC, JSON5, YAML, TOML, HTML, Angular, Vue, CSS, SCSS, Less, Markdown, MDX, GraphQL, Ember, and Handlebars as supported. Svelte currently lands in the partial/experimental bucket across the Oxc stack. Astro files are formatted through a copy of `prettier-plugin-astro` that ships with Oxfmt and needs `@astrojs/compiler-rs` installed, which `init` sets up for Astro projects (see [Formatting Astro files](/docs/configuration#formatting-astro-files-oxfmt)).
 
 ### ESLint
 

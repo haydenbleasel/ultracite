@@ -3,7 +3,10 @@ import { afterAll, describe, expect, mock, test } from "bun:test";
 import type { PackageManager } from "nypm";
 
 import { UltraciteSetupError } from "../src/config-resolution";
-import { OXLINT_TOOLCHAIN_DEV_DEPENDENCIES } from "../src/dependencies";
+import {
+  OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
+  oxfmtFrameworkDevDependencies,
+} from "../src/dependencies";
 import {
   initialize,
   initializeLefthook,
@@ -2318,6 +2321,42 @@ describe("helper functions", () => {
       expect(installedPackages).not.toContain(
         `oxlint-tsgolint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES["oxlint-tsgolint"]}`
       );
+    });
+
+    test("installs the Astro compiler oxfmt needs only for Astro projects", async () => {
+      const installedPackages: string[] = [];
+
+      const mockAddDep = mock((pkg: string | string[]) => {
+        installedPackages.push(...(Array.isArray(pkg) ? pkg : [pkg]));
+
+        return Promise.resolve();
+      });
+
+      mock.module("nypm", () => ({
+        addDevDependency: mockAddDep,
+        detectPackageManager: mock(() =>
+          Promise.resolve({ name: "npm", warnings: [] })
+        ),
+        dlxCommand: mock(() => "npx ultracite fix"),
+        removeDependency: mock(() => Promise.resolve()),
+      }));
+
+      mock.module("@clack/prompts", () => ({
+        spinner: mock(() => ({
+          message: mock(noop),
+          start: mock(noop),
+          stop: mock(noop),
+        })),
+      }));
+
+      const compiler = `@astrojs/compiler-rs@${oxfmtFrameworkDevDependencies.astro?.["@astrojs/compiler-rs"]}`;
+
+      await installDependencies(npmPm, "oxlint", true, true, false, ["astro"]);
+      expect(installedPackages).toContain(compiler);
+
+      installedPackages.length = 0;
+      await installDependencies(npmPm, "oxlint", true, true, false, ["react"]);
+      expect(installedPackages).not.toContain(compiler);
     });
 
     test("updates package.json with oxlint-tsgolint when type-aware and install is false", async () => {
