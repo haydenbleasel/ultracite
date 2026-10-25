@@ -73,7 +73,7 @@ try {
   );
 
   const rawBundle = await build.outputs[0].text();
-  const bundle = rawBundle.replace(cloneDirPattern, "// ");
+  const bundle = rawBundle.replaceAll(cloneDirPattern, "// ");
 
   const banner = `// Vendored build of the anti-slop oxlint plugin.
 // Source: https://github.com/dmmulroy/anti-slop (MIT) at commit ${commit}.

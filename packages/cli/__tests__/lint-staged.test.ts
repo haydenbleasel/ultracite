@@ -1473,6 +1473,7 @@ lint-staged:
     test("widens the glob an earlier init wrote, in place", async () => {
       const written = mockProject({
         "./package.json": JSON.stringify({
+          // oxlint-disable-next-line sort-keys -- the legacy glob must come first, or replacing it in place looks the same as appending
           "lint-staged": {
             [LEGACY_PATTERN]: ["npx ultracite fix"],
             "*.py": ["ruff check"],
