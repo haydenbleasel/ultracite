@@ -1,0 +1,43 @@
+{
+	"root": false,
+	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"linter": {
+		"rules": {
+			"complexity": {
+				"noExcessiveNestedTestSuites": "error",
+				"noPlaywrightUselessAwait": "error"
+			},
+			"correctness": {
+				"noPlaywrightMissingAwait": "error",
+				"usePlaywrightValidDescribeCallback": "error"
+			},
+			"style": {
+				"noDoneCallback": "error",
+				"noPlaywrightElementHandle": "error",
+				"noPlaywrightEval": "error",
+				"noPlaywrightWaitForSelector": "error",
+				"useTestHooksInOrder": "error",
+				"useTestHooksOnTop": "error"
+				// useConsistentTestIt is left out: Playwright has no it(), so a
+				// test inside test.describe() can't follow the it() the Jest and
+				// Vitest presets ask for there, and turning it off here would
+				// turn it off for their tests too.
+			},
+			"suspicious": {
+				"noConditionalExpect": "error",
+				"noDuplicateTestHooks": "error",
+				"noExportsInTest": "error",
+				"noFocusedTests": "error",
+				"noIdenticalTestTitle": "error",
+				"noMisplacedAssertion": "error",
+				"noPlaywrightForceOption": "error",
+				"noPlaywrightNetworkidle": "error",
+				"noPlaywrightPagePause": "error",
+				"noPlaywrightWaitForNavigation": "error",
+				"noPlaywrightWaitForTimeout": "error",
+				"noSkippedTests": "error",
+				"useExpect": "error"
+			}
+		}
+	}
+}

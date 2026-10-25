@@ -1448,6 +1448,9 @@ const selectFrameworks = async (
       { label: "Vitest / Bun", value: "vitest" },
       { label: "Cypress", value: "cypress" },
       { label: "Storybook", value: "storybook" },
+      { label: "Playwright", value: "playwright" },
+      { label: "React Native", value: "react-native" },
+      { label: "Drizzle", value: "drizzle" },
     ],
     required: false,
   });

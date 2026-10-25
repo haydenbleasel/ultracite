@@ -146,6 +146,8 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-cypress":
       packageJson.devDependencies["eslint-plugin-cypress"],
   },
+  // Playwright, React Native and Drizzle only have rules on Biome.
+  drizzle: {},
   jest: {
     "eslint-plugin-jest": packageJson.devDependencies["eslint-plugin-jest"],
   },
@@ -159,6 +161,7 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-react-doctor":
       packageJson.devDependencies["eslint-plugin-react-doctor"],
   },
+  playwright: {},
   qwik: {
     "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
   },
@@ -171,6 +174,7 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-react-hooks":
       packageJson.devDependencies["eslint-plugin-react-hooks"],
   },
+  "react-native": {},
   remix: {
     "eslint-plugin-remix": packageJson.devDependencies["eslint-plugin-remix"],
   },

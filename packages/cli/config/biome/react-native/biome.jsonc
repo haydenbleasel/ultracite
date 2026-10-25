@@ -1,0 +1,22 @@
+{
+	"root": false,
+	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"javascript": {
+		// React Native defines __DEV__ for development builds.
+		"globals": ["__DEV__"]
+	},
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noReactNativeRawText": "error",
+				"useReactNativePlatformComponents": "error"
+			},
+			"style": {
+				"noReactNativeLiteralColors": "error"
+			},
+			"suspicious": {
+				"noReactNativeDeepImports": "error"
+			}
+		}
+	}
+}

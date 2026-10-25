@@ -676,6 +676,20 @@ describe("detectFrameworks", () => {
     expect(new Set(result)).toEqual(new Set(["cypress", "storybook"]));
   });
 
+  test("detects Playwright, React Native and Drizzle", async () => {
+    mockDetectFrameworkFs({
+      "package.json": JSON.stringify({
+        dependencies: { "drizzle-orm": "^0.44.0", "react-native": "^0.81.0" },
+        devDependencies: { "@playwright/test": "^1.56.0" },
+      }),
+    });
+
+    const result = await detectFrameworks();
+    expect(new Set(result)).toEqual(
+      new Set(["drizzle", "playwright", "react", "react-native"])
+    );
+  });
+
   test("expands meta-framework deps to implied frameworks", async () => {
     mockDetectFrameworkFs({
       "package.json": JSON.stringify({

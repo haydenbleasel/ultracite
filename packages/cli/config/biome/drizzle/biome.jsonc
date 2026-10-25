@@ -1,0 +1,24 @@
+{
+	"root": false,
+	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
+	"linter": {
+		"rules": {
+			"suspicious": {
+				// Without drizzleObjectName the rules report nothing. db and tx are
+				// the names Drizzle uses for a database and a transaction.
+				"noDrizzleDeleteWithoutWhere": {
+					"level": "error",
+					"options": {
+						"drizzleObjectName": ["db", "tx"]
+					}
+				},
+				"noDrizzleUpdateWithoutWhere": {
+					"level": "error",
+					"options": {
+						"drizzleObjectName": ["db", "tx"]
+					}
+				}
+			}
+		}
+	}
+}

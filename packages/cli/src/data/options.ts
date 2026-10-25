@@ -20,6 +20,9 @@ export const frameworks = [
   "vitest",
   "cypress",
   "storybook",
+  "playwright",
+  "react-native",
+  "drizzle",
 ] as const;
 
 export type Framework = (typeof frameworks)[number];

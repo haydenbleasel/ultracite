@@ -95,7 +95,7 @@ config/stylelint/stylelint.config.mjs ->  "ultracite/stylelint"
 config/shared/ignores.mjs             ->  canonical ignore list for every tool
 ```
 
-Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `jest`, `nestjs`, `next`, `qwik`, `react`, `remix`, `solid`, `storybook`, `svelte`, `tanstack`, `vitest`, `vue`; `cypress` and `storybook` only have rules on ESLint), for oxlint and eslint also `gdp` (opt-in, never added by init), for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for eslint and biome `type-aware`, plus `<framework>/type-aware` add-ons on eslint for frameworks whose plugins have type-aware rules.
+Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `drizzle`, `jest`, `nestjs`, `next`, `playwright`, `qwik`, `react`, `react-native`, `remix`, `solid`, `storybook`, `svelte`, `tanstack`, `vitest`, `vue`; `cypress` and `storybook` only have rules on ESLint, `drizzle`, `playwright` and `react-native` only on Biome), for oxlint and eslint also `gdp` (opt-in, never added by init), for oxlint also `js-plugins`, `next/js-plugins`, `anti-slop`, `shadcn`, and for eslint and biome `type-aware`, plus `<framework>/type-aware` add-ons on eslint for frameworks whose plugins have type-aware rules.
 
 ### Rules for changing rules
 
