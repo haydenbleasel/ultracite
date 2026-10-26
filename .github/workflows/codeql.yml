@@ -1,0 +1,55 @@
+name: CodeQL
+permissions:
+  contents: read
+
+# Replaces CodeQL default setup, which can't exclude paths. Default setup
+# must stay off in the repository settings, or uploads from this workflow
+# are rejected.
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "27 4 * * 1"
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # No python: the repo's only Python is under research/, which is
+        # excluded below.
+        language: [actions, javascript-typescript]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          # research/ is measured data, not shipped code: agent outputs (one
+          # fails to parse on purpose), verbatim copies of third-party code
+          # and the corpus scripts.
+          config: |
+            paths-ignore:
+              - research
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          category: /language:${{ matrix.language }}
