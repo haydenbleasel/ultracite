@@ -353,6 +353,15 @@ const reportSchema = z.looseObject({
   ),
 });
 
+// The environment without git's own variables. The repo's pre-commit hook
+// runs this script, and in a linked worktree git hands hooks an absolute
+// GIT_DIR. Inherited, it points `git init` at this repository instead of the
+// temp project, which marks the repository bare and leaves the project
+// without a .git for Biome's vcs integration.
+const cleanEnv = Object.fromEntries(
+  Object.entries(process.env).filter(([key]) => !key.startsWith("GIT_"))
+);
+
 const presetPath = (name: string): string =>
   path.join(configDir, name, "biome.jsonc");
 
@@ -381,7 +390,7 @@ const checkPreset = async (
 ): Promise<string[]> => {
   const root = path.join(tempRoot, name);
   await mkdir(root, { recursive: true });
-  Bun.spawnSync(["git", "init", "-q"], { cwd: root });
+  Bun.spawnSync(["git", "init", "-q"], { cwd: root, env: cleanEnv });
   await writeFixture(root, preset);
 
   // `biome check` runs the linter, the formatter and the assist actions, so
