@@ -1,0 +1,14 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -178,7 +178,10 @@
+   insertSpaces: boolean;
+ }
+ 
+-const getLineIndentation = function getLineIndentation(source: ITextBuffer, lineNumber: number) {
++const getLineIndentation = function getLineIndentation(
++  source: ITextBuffer,
++  lineNumber: number
++) {
+   const currentLineLength = source.getLineLength(lineNumber);
+   const currentLineText = source.getLineContent(lineNumber);
+ 

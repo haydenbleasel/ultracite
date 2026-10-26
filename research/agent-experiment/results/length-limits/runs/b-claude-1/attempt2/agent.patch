@@ -1,0 +1,65 @@
+--- a/revalidation-utils.ts
++++ b/revalidation-utils.ts
+@@ -179,7 +179,6 @@
+       return key;
+     }
+   }
+-  return;
+ }
+ 
+ function groupTagsByProfile(
+@@ -204,10 +203,10 @@
+   return tagsByProfile;
+ }
+ 
+-function getProfileDurations(
++const getProfileDurations = (
+   profile: string | { stale?: number; revalidate?: number; expire?: number },
+   workStore?: WorkStore
+-): { expire?: number } | undefined {
++): { expire?: number } | undefined => {
+   let cacheLife:
+     | { stale?: number; revalidate?: number; expire?: number }
+     | undefined;
+@@ -232,16 +231,16 @@
+     };
+   }
+   return undefined;
+-}
++};
+ 
+-async function revalidateTags(
++const revalidateTags = async (
+   tagsWithProfile: {
+     tag: string;
+     profile?: string | { expire?: number };
+   }[],
+   incrementalCache: IncrementalCache | undefined,
+   workStore?: WorkStore
+-): Promise<void> {
++): Promise<void> => {
+   if (tagsWithProfile.length === 0) {
+     return;
+   }
+@@ -277,12 +276,12 @@
+   }
+ 
+   await Promise.all(promises);
+-}
++};
+ 
+-export function executeRevalidates(
++export const executeRevalidates = (
+   workStore: WorkStore,
+   state?: RevalidationState
+-): false | Promise<void> {
++): false | Promise<void> => {
+   const promises: Promise<unknown>[] = [];
+ 
+   const pendingRevalidatedTags =
+@@ -314,4 +313,4 @@
+   }
+ 
+   return Promise.all(promises).then(() => {});
+-}
++};

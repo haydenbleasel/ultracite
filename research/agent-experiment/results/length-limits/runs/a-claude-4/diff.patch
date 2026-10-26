@@ -1,0 +1,102 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,9 +220,7 @@
+   return () => jsonValue;
+ }
+ 
+-async function createClientConfigValueReplacer(
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> {
++async function resolveClientConfigValues(config: ResolvedConfig) {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+   const resolvedServerPort = config.server.port!;
+@@ -230,11 +228,12 @@
+ 
+   const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+ 
+-  const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+-  const host = wsConfig?.host || null;
+-  const protocol = wsConfig?.protocol || null;
+-  const timeout = wsConfig?.timeout || 30_000;
+-  const isWsServerSpecified = !!wsConfig?.server;
++  const wsConfig: Exclude<typeof config.server.ws, false | undefined> =
++    isObject(config.server.ws) ? config.server.ws : {};
++  const host = wsConfig.host || null;
++  const protocol = wsConfig.protocol || null;
++  const timeout = wsConfig.timeout || 30_000;
++  const isWsServerSpecified = !!wsConfig.server;
+   const hmrConfigName = path.basename(config.configFile || "vite.config.js");
+ 
+   const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+@@ -242,31 +241,50 @@
+ 
+   // ws.clientPort -> ws.port
+   // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+-  let port = wsConfig?.clientPort || wsConfig?.port || null;
++  let port = wsConfig.clientPort || wsConfig.port || null;
+   if (config.server.middlewareMode && !isWsServerSpecified) {
+     port ||= 24_678;
+   }
+ 
+-  let directTarget = wsConfig?.host || resolvedServerHostname;
+-  directTarget += `:${wsConfig?.port || resolvedServerPort}`;
++  let directTarget = wsConfig.host || resolvedServerHostname;
++  directTarget += `:${wsConfig.port || resolvedServerPort}`;
+   directTarget += devBase;
+ 
+   let hmrBase = devBase;
+-  if (wsConfig?.path) {
++  if (wsConfig.path) {
+     hmrBase = path.posix.join(hmrBase, wsConfig.path);
+   }
++
++  return {
++    devBase,
++    directTarget,
++    hmrBase,
++    hmrConfigName,
++    host,
++    overlay,
++    port,
++    protocol,
++    serverHost,
++    timeout,
++  };
++}
+ 
++const createClientConfigValueReplacer = async (
++  config: ResolvedConfig
++): Promise<(code: string) => string> => {
++  const values = await resolveClientConfigValues(config);
++
+   const modeReplacement = escapeReplacement(config.mode);
+-  const baseReplacement = escapeReplacement(devBase);
+-  const serverHostReplacement = escapeReplacement(serverHost);
+-  const hmrProtocolReplacement = escapeReplacement(protocol);
+-  const hmrHostnameReplacement = escapeReplacement(host);
+-  const hmrPortReplacement = escapeReplacement(port);
+-  const hmrDirectTargetReplacement = escapeReplacement(directTarget);
+-  const hmrBaseReplacement = escapeReplacement(hmrBase);
+-  const hmrTimeoutReplacement = escapeReplacement(timeout);
+-  const hmrEnableOverlayReplacement = escapeReplacement(overlay);
+-  const hmrConfigNameReplacement = escapeReplacement(hmrConfigName);
++  const baseReplacement = escapeReplacement(values.devBase);
++  const serverHostReplacement = escapeReplacement(values.serverHost);
++  const hmrProtocolReplacement = escapeReplacement(values.protocol);
++  const hmrHostnameReplacement = escapeReplacement(values.host);
++  const hmrPortReplacement = escapeReplacement(values.port);
++  const hmrDirectTargetReplacement = escapeReplacement(values.directTarget);
++  const hmrBaseReplacement = escapeReplacement(values.hmrBase);
++  const hmrTimeoutReplacement = escapeReplacement(values.timeout);
++  const hmrEnableOverlayReplacement = escapeReplacement(values.overlay);
++  const hmrConfigNameReplacement = escapeReplacement(values.hmrConfigName);
+   const hmrPartialAcceptReplacement = escapeReplacement(
+     config.experimental.hmrPartialAccept
+   );
+@@ -291,4 +309,4 @@
+       .replace(`__HMR_PARTIAL_ACCEPT__`, hmrPartialAcceptReplacement)
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
+-}
++};

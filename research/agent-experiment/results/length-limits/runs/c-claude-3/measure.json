@@ -1,0 +1,5191 @@
+{
+  "runId": "c-claude-3",
+  "topic": "length-limits",
+  "subject": "c",
+  "base": "c",
+  "label": "C, a trap",
+  "config": "oxlint core, max-lines-per-function on",
+  "agent": "claude",
+  "cliVersion": "2.1.310 (Claude Code)",
+  "wallSeconds": 317.6,
+  "attemptCount": 2,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 51,
+    "leftOutByFilter": {
+      "complexity": 1,
+      "func-style": 2,
+      "no-inline-comments": 11,
+      "no-plusplus": 14,
+      "no-shadow": 1,
+      "no-useless-return": 1,
+      "typescript/method-signature-style": 4,
+      "typescript/no-inferrable-types": 2,
+      "unicorn/filename-case": 1,
+      "unicorn/no-array-for-each": 1,
+      "unicorn/no-lonely-if": 3,
+      "unicorn/prefer-code-point": 8
+    },
+    "given": [
+      {
+        "rule": "max-lines-per-function",
+        "line": 65,
+        "message": "The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "help": "Consider splitting it into smaller functions.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      },
+      {
+        "rule": "max-lines-per-function",
+        "line": 168,
+        "message": "The function `guessIndentation` has too many lines (134). Maximum allowed is 50.",
+        "help": "Consider splitting it into smaller functions.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "62cc26d53f1c18a6f56286f14412d185d69c7ec7ab4a730a2cd4cd96bfc08fb3",
+    "parseError": false,
+    "measureError": null,
+    "views": {
+      "oxlint user": {
+        "sizeHonor": {
+          "lines": [
+            "spacesDiff: max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "guessIndentation: max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "spacesDiff: complexity: function `spacesDiff` has a complexity of 21. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "spacesDiff: max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "guessIndentation: max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "spacesDiff: complexity: function `spacesDiff` has a complexity of 21. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "complexity": 1,
+          "func-style": 2,
+          "max-lines-per-function": 2,
+          "no-inline-comments": 11,
+          "no-plusplus": 14,
+          "no-shadow": 1,
+          "no-useless-return": 1,
+          "typescript/method-signature-style": 4,
+          "typescript/no-inferrable-types": 2,
+          "unicorn/filename-case": 1,
+          "unicorn/no-array-for-each": 1,
+          "unicorn/no-lonely-if": 3,
+          "unicorn/prefer-code-point": 8
+        }
+      },
+      "oxlint strict": {
+        "sizeHonor": {
+          "lines": [
+            "spacesDiff: max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "guessIndentation: max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "params": [
+            "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3."
+          ],
+          "statements": [
+            "spacesDiff: max-statements: function `spacesDiff` has too many statements (38). Maximum allowed is 10.",
+            "guessIndentation: max-statements: function `guessIndentation` has too many statements (49). Maximum allowed is 10."
+          ],
+          "fileLines": [
+            "(file): max-lines: File has too many lines (301)."
+          ],
+          "complexity": [
+            "spacesDiff: complexity: function `spacesDiff` has a complexity of 21. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "spacesDiff: max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "guessIndentation: max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "params": [
+            "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3."
+          ],
+          "statements": [
+            "spacesDiff: max-statements: function `spacesDiff` has too many statements (38). Maximum allowed is 10.",
+            "guessIndentation: max-statements: function `guessIndentation` has too many statements (49). Maximum allowed is 10."
+          ],
+          "fileLines": [
+            "(file): max-lines: File has too many lines (301)."
+          ],
+          "complexity": [
+            "spacesDiff: complexity: function `spacesDiff` has a complexity of 21. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "complexity": 1,
+          "func-style": 2,
+          "max-lines": 1,
+          "max-lines-per-function": 2,
+          "max-params": 1,
+          "max-statements": 2,
+          "no-inline-comments": 11,
+          "no-plusplus": 14,
+          "no-shadow": 1,
+          "no-useless-return": 1,
+          "typescript/method-signature-style": 4,
+          "typescript/no-inferrable-types": 2,
+          "unicorn/filename-case": 1,
+          "unicorn/no-array-for-each": 1,
+          "unicorn/no-lonely-if": 3,
+          "unicorn/prefer-code-point": 8
+        }
+      },
+      "oxlint sonarjs": {
+        "sizeHonor": {
+          "lines": [],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "spacesDiff: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed.",
+            "guessIndentation: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "spacesDiff: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed.",
+            "guessIndentation: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "sonarjs/cognitive-complexity": 2
+        }
+      },
+      "eslint length": {
+        "sizeHonor": {
+          "lines": [
+            "spacesDiff: max-lines-per-function: Function 'spacesDiff' has too many lines (88). Maximum allowed is 50.",
+            "guessIndentation: max-lines-per-function: Function 'guessIndentation' has too many lines (134). Maximum allowed is 50."
+          ],
+          "params": [
+            "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3."
+          ],
+          "statements": [
+            "spacesDiff: max-statements: Function 'spacesDiff' has too many statements (38). Maximum allowed is 10.",
+            "guessIndentation: max-statements: Function 'guessIndentation' has too many statements (49). Maximum allowed is 10."
+          ],
+          "fileLines": [
+            "(file): max-lines: File has too many lines (301). Maximum allowed is 300."
+          ],
+          "complexity": [
+            "spacesDiff: complexity: Function 'spacesDiff' has a complexity of 21. Maximum allowed is 20.",
+            "spacesDiff: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed.",
+            "guessIndentation: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "spacesDiff: max-lines-per-function: Function 'spacesDiff' has too many lines (88). Maximum allowed is 50.",
+            "guessIndentation: max-lines-per-function: Function 'guessIndentation' has too many lines (134). Maximum allowed is 50."
+          ],
+          "params": [
+            "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3."
+          ],
+          "statements": [
+            "spacesDiff: max-statements: Function 'spacesDiff' has too many statements (38). Maximum allowed is 10.",
+            "guessIndentation: max-statements: Function 'guessIndentation' has too many statements (49). Maximum allowed is 10."
+          ],
+          "fileLines": [
+            "(file): max-lines: File has too many lines (301). Maximum allowed is 300."
+          ],
+          "complexity": [
+            "spacesDiff: complexity: Function 'spacesDiff' has a complexity of 21. Maximum allowed is 20.",
+            "spacesDiff: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed.",
+            "guessIndentation: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/method-signature-style": 4,
+          "@typescript-eslint/no-inferrable-types": 2,
+          "@typescript-eslint/no-shadow": 1,
+          "complexity": 1,
+          "func-style": 2,
+          "github/array-foreach": 1,
+          "max-lines": 1,
+          "max-lines-per-function": 2,
+          "max-params": 1,
+          "max-statements": 2,
+          "no-inline-comments": 11,
+          "no-plusplus": 14,
+          "no-useless-return": 1,
+          "sonarjs/cognitive-complexity": 2,
+          "sonarjs/no-collapsible-if": 3,
+          "sonarjs/no-commented-code": 1,
+          "sonarjs/no-redundant-jump": 1,
+          "sonarjs/too-many-break-or-continue-in-loop": 1,
+          "unicorn/consistent-boolean-name": 4,
+          "unicorn/name-replacements": 6,
+          "unicorn/no-break-in-nested-loop": 1,
+          "unicorn/no-for-each": 1,
+          "unicorn/no-lonely-if": 3,
+          "unicorn/no-subtraction-comparison": 1,
+          "unicorn/prefer-code-point": 8,
+          "unicorn/prefer-early-return": 2,
+          "unicorn/prefer-ternary": 1
+        }
+      },
+      "biome length": {
+        "sizeHonor": {
+          "lines": [
+            "spacesDiff: complexity/noExcessiveLinesPerFunction: This function has too many lines (65). Maximum allowed is 50.",
+            "guessIndentation: complexity/noExcessiveLinesPerFunction: This function has too many lines (111). Maximum allowed is 50."
+          ],
+          "params": [
+            "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+          ],
+          "statements": [
+            "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (38). Maximum allowed is 10.",
+            "guessIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (49). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "spacesDiff: complexity/noExcessiveCognitiveComplexity: Excessive complexity of 29 detected (max: 20).",
+            "guessIndentation: complexity/noExcessiveCognitiveComplexity: Excessive complexity of 26 detected (max: 20)."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "spacesDiff: complexity/noExcessiveLinesPerFunction: This function has too many lines (65). Maximum allowed is 50.",
+            "guessIndentation: complexity/noExcessiveLinesPerFunction: This function has too many lines (111). Maximum allowed is 50."
+          ],
+          "params": [
+            "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+          ],
+          "statements": [
+            "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (38). Maximum allowed is 10.",
+            "guessIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (49). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "spacesDiff: complexity/noExcessiveCognitiveComplexity: Excessive complexity of 29 detected (max: 20).",
+            "guessIndentation: complexity/noExcessiveCognitiveComplexity: Excessive complexity of 26 detected (max: 20)."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "assist/source/useSortedInterfaceMembers": 2,
+          "complexity/noExcessiveCognitiveComplexity": 2,
+          "complexity/noExcessiveLinesPerFunction": 2,
+          "complexity/noForEach": 1,
+          "complexity/noUselessReturn": 1,
+          "complexity/useMaxParams": 1,
+          "nursery/noExcessiveStatementsPerFunction": 2,
+          "style/noEnum": 1,
+          "style/noIncrementDecrement": 14,
+          "style/noInferrableTypes": 2,
+          "style/useCollapsedIf": 3,
+          "style/useConsistentMemberAccessibility": 2,
+          "style/useConsistentMethodSignatures": 4,
+          "style/useFilenamingConvention": 1,
+          "suspicious/noShadow": 1
+        }
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "ignore": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "functions": [
+      {
+        "name": "spacesDiff",
+        "lines": 88,
+        "statements": 38,
+        "params": 5,
+        "cognitive": 29,
+        "depth": 0
+      },
+      {
+        "name": "guessIndentation",
+        "lines": 134,
+        "statements": 49,
+        "params": 3,
+        "cognitive": 29,
+        "depth": 0
+      },
+      {
+        "name": "<callback to ALLOWED_TAB_SIZE_GUESSES.forEach>",
+        "lines": 7,
+        "statements": 4,
+        "params": 1,
+        "cognitive": 1,
+        "depth": 1
+      }
+    ],
+    "over50": [
+      "spacesDiff (88)",
+      "guessIndentation (134)"
+    ],
+    "fileLines": 302,
+    "typeErrors": [],
+    "oracle": {
+      "verdict": "same",
+      "scenarios": 1938,
+      "differing": 0,
+      "onceDiffering": 0,
+      "crashed": 0,
+      "arityOnly": 0,
+      "why": null,
+      "differences": [],
+      "ignoringKeyOrder": "same"
+    },
+    "structure": {
+      "guessIndentation": {
+        "entry": {
+          "cognitive": 29,
+          "lines": 134,
+          "params": 3,
+          "statements": 49
+        },
+        "fileLines": 302,
+        "functions": 3,
+        "functionsBefore": 3,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 2
+      },
+      "spacesDiff": {
+        "entry": {
+          "cognitive": 29,
+          "lines": 88,
+          "params": 5,
+          "statements": 38
+        },
+        "fileLines": 302,
+        "functions": 3,
+        "functionsBefore": 3,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 2
+      }
+    },
+    "formatted": {
+      "error": null,
+      "changed": false,
+      "fileLines": 302,
+      "joinedLines": 0,
+      "size": {
+        "lines": [
+          "spacesDiff: max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+          "guessIndentation: max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+        ],
+        "params": [
+          "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3."
+        ],
+        "statements": [
+          "spacesDiff: max-statements: function `spacesDiff` has too many statements (38). Maximum allowed is 10.",
+          "guessIndentation: max-statements: function `guessIndentation` has too many statements (49). Maximum allowed is 10."
+        ],
+        "fileLines": [
+          "(file): max-lines: File has too many lines (301)."
+        ],
+        "complexity": [
+          "spacesDiff: complexity: function `spacesDiff` has a complexity of 21. Maximum allowed is 20."
+        ]
+      },
+      "handoffLeft": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "structure": {
+        "guessIndentation": {
+          "entry": {
+            "cognitive": 29,
+            "lines": 134,
+            "params": 3,
+            "statements": 49
+          },
+          "fileLines": 302,
+          "functions": 3,
+          "functionsBefore": 3,
+          "helperCallsFromEntry": 0,
+          "helpers": [],
+          "helpersCalledOnce": 0,
+          "helpersInCallOrder": true,
+          "paramsPassedToHelpers": 0,
+          "topLevelFunctions": 2
+        },
+        "spacesDiff": {
+          "entry": {
+            "cognitive": 29,
+            "lines": 88,
+            "params": 5,
+            "statements": 38
+          },
+          "fileLines": 302,
+          "functions": 3,
+          "functionsBefore": 3,
+          "helperCallsFromEntry": 0,
+          "helpers": [],
+          "helpersCalledOnce": 0,
+          "helpersInCallOrder": true,
+          "paramsPassedToHelpers": 0,
+          "topLevelFunctions": 2
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": []
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "max-lines-per-function L65: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "max-lines-per-function L168: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 253,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "helpers extracted",
+        "kinds": [
+          "helpers",
+          "single-use helpers",
+          "shared mutable state",
+          "helper with 4+ parameters",
+          "continue statements changed",
+          "loops changed",
+          "data moved to module scope",
+          "comments added"
+        ],
+        "helpers": [
+          {
+            "name": "commonPrefixLength",
+            "lines": 19,
+            "params": 4,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "countSpacesAndTabs",
+            "lines": 17,
+            "params": 3,
+            "callSites": 2,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "looksLikeAlignment",
+            "lines": 20,
+            "params": 3,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "readLineIndentation",
+            "lines": 40,
+            "params": 2,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "scoreLine",
+            "lines": 39,
+            "params": 4,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [
+              "stats"
+            ],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "collectIndentationStats",
+            "lines": 36,
+            "params": 3,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "guessTabSize",
+            "lines": 28,
+            "params": 2,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          }
+        ],
+        "removed": [],
+        "entries": {
+          "guessIndentation": {
+            "linesGiven": 134,
+            "linesNow": 33,
+            "blankLinesGiven": 21,
+            "blankLinesNow": 5
+          },
+          "spacesDiff": {
+            "linesGiven": 88,
+            "linesNow": 43,
+            "blankLinesGiven": 10,
+            "blankLinesNow": 6
+          }
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "39bdea685c6a2cb1e71c35a3650791234ffd5941cf25e28aa319ab19d98737e9",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 9,
+              "no-inline-comments": 16,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function `spacesDiff` has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function `readLineIndentation` has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function `collectIndentationStats` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function `spacesDiff` has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function `readLineIndentation` has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function `collectIndentationStats` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 9,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 16,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Function 'spacesDiff' has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Function 'readLineIndentation' has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Function 'collectIndentationStats' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Function 'spacesDiff' has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Function 'readLineIndentation' has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Function 'collectIndentationStats' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 4,
+              "@typescript-eslint/no-inferrable-types": 2,
+              "@typescript-eslint/no-shadow": 1,
+              "func-style": 9,
+              "github/array-foreach": 1,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 16,
+              "no-plusplus": 11,
+              "no-useless-return": 1,
+              "sonarjs/no-collapsible-if": 3,
+              "sonarjs/no-commented-code": 1,
+              "sonarjs/no-redundant-jump": 1,
+              "unicorn/consistent-boolean-name": 7,
+              "unicorn/name-replacements": 6,
+              "unicorn/no-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/no-subtraction-comparison": 1,
+              "unicorn/prefer-code-point": 7,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/prefer-ternary": 2
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (340). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (340). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 3,
+              "complexity/noForEach": 1,
+              "complexity/noUselessReturn": 1,
+              "complexity/useMaxParams": 1,
+              "nursery/noExcessiveStatementsPerFunction": 3,
+              "style/noEnum": 1,
+              "style/noExcessiveLinesPerFile": 1,
+              "style/noIncrementDecrement": 11,
+              "style/noInferrableTypes": 2,
+              "style/useCollapsedIf": 3,
+              "style/useConsistentMemberAccessibility": 2,
+              "style/useConsistentMethodSignatures": 4,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noShadow": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "commonPrefixLength",
+            "lines": 19,
+            "statements": 7,
+            "params": 4,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "countSpacesAndTabs",
+            "lines": 17,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "looksLikeAlignment",
+            "lines": 20,
+            "statements": 5,
+            "params": 3,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "spacesDiff",
+            "lines": 43,
+            "statements": 18,
+            "params": 5,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "readLineIndentation",
+            "lines": 40,
+            "statements": 16,
+            "params": 2,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "scoreLine",
+            "lines": 39,
+            "statements": 10,
+            "params": 4,
+            "cognitive": 5,
+            "depth": 0
+          },
+          {
+            "name": "collectIndentationStats",
+            "lines": 36,
+            "statements": 11,
+            "params": 3,
+            "cognitive": 6,
+            "depth": 0
+          },
+          {
+            "name": "guessTabSize",
+            "lines": 28,
+            "statements": 6,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "<callback to ALLOWED_TAB_SIZE_GUESSES.forEach>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "guessIndentation",
+            "lines": 33,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 2,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 391,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 1938,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "guessIndentation": {
+            "entry": {
+              "cognitive": 2,
+              "lines": 33,
+              "params": 3,
+              "statements": 8
+            },
+            "fileLines": 391,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 20,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 40,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          },
+          "spacesDiff": {
+            "entry": {
+              "cognitive": 7,
+              "lines": 43,
+              "params": 5,
+              "statements": 18
+            },
+            "fileLines": 391,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 3,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 20,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 40,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 391,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [
+              "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+              "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+              "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+            ],
+            "statements": [
+              "spacesDiff: max-statements: function `spacesDiff` has too many statements (18). Maximum allowed is 10.",
+              "readLineIndentation: max-statements: function `readLineIndentation` has too many statements (16). Maximum allowed is 10.",
+              "collectIndentationStats: max-statements: function `collectIndentationStats` has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (390)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers",
+            "shared mutable state",
+            "helper with 4+ parameters",
+            "continue statements changed",
+            "loops changed",
+            "data moved to module scope",
+            "comments added"
+          ],
+          "helpers": [
+            {
+              "name": "commonPrefixLength",
+              "lines": 19,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "countSpacesAndTabs",
+              "lines": 17,
+              "params": 3,
+              "callSites": 2,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "looksLikeAlignment",
+              "lines": 20,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "readLineIndentation",
+              "lines": 40,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "scoreLine",
+              "lines": 39,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [
+                "stats"
+              ],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "collectIndentationStats",
+              "lines": 36,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "guessTabSize",
+              "lines": 28,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          },
+          "entries": {
+            "guessIndentation": {
+              "linesGiven": 134,
+              "linesNow": 33,
+              "blankLinesGiven": 21,
+              "blankLinesNow": 5
+            },
+            "spacesDiff": {
+              "linesGiven": 88,
+              "linesNow": 43,
+              "blankLinesGiven": 10,
+              "blankLinesNow": 6
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 6,
+              "continues": 2,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 5,
+              "continues": 1,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 2,
+              "topLevelDataVariables": 2
+            }
+          },
+          "commentLines": {
+            "given": 96,
+            "now": 110
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ],
+            "now": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {
+            "func-style": 7,
+            "no-inline-comments": 5
+          },
+          "oxlint strict": {
+            "func-style": 7,
+            "max-params": 2,
+            "max-statements": 1,
+            "no-inline-comments": 5
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "func-style": 7,
+            "max-params": 2,
+            "max-statements": 1,
+            "no-inline-comments": 5,
+            "unicorn/consistent-boolean-name": 3,
+            "unicorn/prefer-ternary": 1
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 1,
+            "style/noExcessiveLinesPerFile": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "39bdea685c6a2cb1e71c35a3650791234ffd5941cf25e28aa319ab19d98737e9",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 9,
+              "no-inline-comments": 16,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function `spacesDiff` has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function `readLineIndentation` has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function `collectIndentationStats` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function `spacesDiff` has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function `readLineIndentation` has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function `collectIndentationStats` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 9,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 16,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Function 'spacesDiff' has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Function 'readLineIndentation' has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Function 'collectIndentationStats' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Function 'spacesDiff' has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Function 'readLineIndentation' has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Function 'collectIndentationStats' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (390). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 4,
+              "@typescript-eslint/no-inferrable-types": 2,
+              "@typescript-eslint/no-shadow": 1,
+              "func-style": 9,
+              "github/array-foreach": 1,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 16,
+              "no-plusplus": 11,
+              "no-useless-return": 1,
+              "sonarjs/no-collapsible-if": 3,
+              "sonarjs/no-commented-code": 1,
+              "sonarjs/no-redundant-jump": 1,
+              "unicorn/consistent-boolean-name": 7,
+              "unicorn/name-replacements": 6,
+              "unicorn/no-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/no-subtraction-comparison": 1,
+              "unicorn/prefer-code-point": 7,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/prefer-ternary": 2
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (340). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (340). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 3,
+              "complexity/noForEach": 1,
+              "complexity/noUselessReturn": 1,
+              "complexity/useMaxParams": 1,
+              "nursery/noExcessiveStatementsPerFunction": 3,
+              "style/noEnum": 1,
+              "style/noExcessiveLinesPerFile": 1,
+              "style/noIncrementDecrement": 11,
+              "style/noInferrableTypes": 2,
+              "style/useCollapsedIf": 3,
+              "style/useConsistentMemberAccessibility": 2,
+              "style/useConsistentMethodSignatures": 4,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noShadow": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "commonPrefixLength",
+            "lines": 19,
+            "statements": 7,
+            "params": 4,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "countSpacesAndTabs",
+            "lines": 17,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "looksLikeAlignment",
+            "lines": 20,
+            "statements": 5,
+            "params": 3,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "spacesDiff",
+            "lines": 43,
+            "statements": 18,
+            "params": 5,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "readLineIndentation",
+            "lines": 40,
+            "statements": 16,
+            "params": 2,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "scoreLine",
+            "lines": 39,
+            "statements": 10,
+            "params": 4,
+            "cognitive": 5,
+            "depth": 0
+          },
+          {
+            "name": "collectIndentationStats",
+            "lines": 36,
+            "statements": 11,
+            "params": 3,
+            "cognitive": 6,
+            "depth": 0
+          },
+          {
+            "name": "guessTabSize",
+            "lines": 28,
+            "statements": 6,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "<callback to ALLOWED_TAB_SIZE_GUESSES.forEach>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "guessIndentation",
+            "lines": 33,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 2,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 391,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 1938,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "guessIndentation": {
+            "entry": {
+              "cognitive": 2,
+              "lines": 33,
+              "params": 3,
+              "statements": 8
+            },
+            "fileLines": 391,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 20,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 40,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          },
+          "spacesDiff": {
+            "entry": {
+              "cognitive": 7,
+              "lines": 43,
+              "params": 5,
+              "statements": 18
+            },
+            "fileLines": 391,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 3,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 20,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 40,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 391,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [
+              "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+              "spacesDiff: max-params: Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+              "scoreLine: max-params: Function 'scoreLine' has too many parameters (4). Maximum allowed is 3."
+            ],
+            "statements": [
+              "spacesDiff: max-statements: function `spacesDiff` has too many statements (18). Maximum allowed is 10.",
+              "readLineIndentation: max-statements: function `readLineIndentation` has too many statements (16). Maximum allowed is 10.",
+              "collectIndentationStats: max-statements: function `collectIndentationStats` has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (390)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers",
+            "shared mutable state",
+            "helper with 4+ parameters",
+            "continue statements changed",
+            "loops changed",
+            "data moved to module scope",
+            "comments added"
+          ],
+          "helpers": [
+            {
+              "name": "commonPrefixLength",
+              "lines": 19,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "countSpacesAndTabs",
+              "lines": 17,
+              "params": 3,
+              "callSites": 2,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "looksLikeAlignment",
+              "lines": 20,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "readLineIndentation",
+              "lines": 40,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "scoreLine",
+              "lines": 39,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [
+                "stats"
+              ],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "collectIndentationStats",
+              "lines": 36,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "guessTabSize",
+              "lines": 28,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 391,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 20,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 40,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          },
+          "entries": {
+            "guessIndentation": {
+              "linesGiven": 134,
+              "linesNow": 33,
+              "blankLinesGiven": 21,
+              "blankLinesNow": 5
+            },
+            "spacesDiff": {
+              "linesGiven": 88,
+              "linesNow": 43,
+              "blankLinesGiven": 10,
+              "blankLinesNow": 6
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 6,
+              "continues": 2,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 5,
+              "continues": 1,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 2,
+              "topLevelDataVariables": 2
+            }
+          },
+          "commentLines": {
+            "given": 96,
+            "now": 110
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ],
+            "now": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {
+            "func-style": 7,
+            "no-inline-comments": 5
+          },
+          "oxlint strict": {
+            "func-style": 7,
+            "max-params": 2,
+            "max-statements": 1,
+            "no-inline-comments": 5
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "func-style": 7,
+            "max-params": 2,
+            "max-statements": 1,
+            "no-inline-comments": 5,
+            "unicorn/consistent-boolean-name": 3,
+            "unicorn/prefer-ternary": 1
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 1,
+            "style/noExcessiveLinesPerFile": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [
+          "no-inline-comments L207: Unexpected comment inline with code",
+          "no-inline-comments L222: Unexpected comment inline with code",
+          "no-inline-comments L223: Unexpected comment inline with code",
+          "no-inline-comments L224: Unexpected comment inline with code",
+          "no-inline-comments L225: Unexpected comment inline with code",
+          "func-style L109: Expected a function expression.",
+          "func-style L133: Expected a function expression.",
+          "func-style L211: Expected a function expression.",
+          "func-style L252: Expected a function expression.",
+          "func-style L292: Expected a function expression.",
+          "func-style L329: Expected a function expression.",
+          "func-style L358: Expected a function expression."
+        ],
+        "remainingDetail": [
+          {
+            "rule": "no-inline-comments",
+            "line": 207,
+            "message": "Unexpected comment inline with code"
+          },
+          {
+            "rule": "no-inline-comments",
+            "line": 222,
+            "message": "Unexpected comment inline with code"
+          },
+          {
+            "rule": "no-inline-comments",
+            "line": 223,
+            "message": "Unexpected comment inline with code"
+          },
+          {
+            "rule": "no-inline-comments",
+            "line": 224,
+            "message": "Unexpected comment inline with code"
+          },
+          {
+            "rule": "no-inline-comments",
+            "line": 225,
+            "message": "Unexpected comment inline with code"
+          },
+          {
+            "rule": "func-style",
+            "line": 109,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 133,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 211,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 252,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 292,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 329,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 358,
+            "message": "Expected a function expression."
+          }
+        ],
+        "remainingLengthRuleOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": [
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ]
+        },
+        "vsHandoff": {
+          "cleared": [
+            "max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": [
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ]
+        },
+        "retried": true
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 14,
+        "costUSD": 1.2880592000000002,
+        "tokens": {
+          "input": 28,
+          "output": 28880,
+          "cacheCreation": 68764,
+          "cacheRead": 801176
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Bash",
+          "Glob",
+          "Read",
+          "Read",
+          "Glob",
+          "Bash",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Bash",
+          "Bash",
+          "Read",
+          "Edit",
+          "Edit",
+          "Edit"
+        ],
+        "toolNames": [
+          "Read",
+          "Bash",
+          "Glob",
+          "Edit"
+        ],
+        "toolCallTargets": [
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts.83d0de0e.json",
+          "ls -la && ls .. && cat .oxlintrc.json 2>/dev/null | head -50; which oxlint npx",
+          "<run-root>/c-claude-3",
+          "<run-root>/c-claude-3/oxlint.config.ts",
+          "<run-root>/c-claude-3/package.json",
+          "<run-root>/c-claude-3",
+          "which oxlint oxfmt npx bunx 2>&1",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity <run-root>/c-claude-3/indentationGuesser.ts 2>&1 | tail -40",
+          "npx -y oxlint@1 --disable-nested-config -D max-lines-per-function <run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts"
+        ],
+        "toolErrors": [
+          "This Bash command contains multiple operations. The following part requires approval: ls -la && ls .. && cat .oxlintrc.json",
+          "Exit code 1\noxlint not found\noxfmt not found\n~/.nvm/versions/node/v24.14.1/bin/npx\n/opt/homebrew/bin/bunx",
+          "This Bash command contains multiple operations. The following part requires approval: cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity <run-root",
+          "This command requires approval"
+        ],
+        "commands": [
+          {
+            "command": "ls -la && ls .. && cat .oxlintrc.json 2>/dev/null | head -50; which oxlint npx",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: ls -la && ls .. && cat .oxlintrc.json"
+          },
+          {
+            "command": "which oxlint oxfmt npx bunx 2>&1",
+            "refused": true,
+            "refusal": "Exit code 1\noxlint not found\noxfmt not found\n~/.nvm/versions/node/v24.14.1/bin/npx\n/opt/homebrew/bin/bunx"
+          },
+          {
+            "command": "cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity <run-root>/c-claude-3/indentationGuesser.ts 2>&1 | tail -40",
+            "refused": true,
+            "refusal": "This Bash command contains multiple operations. The following part requires approval: cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity /private/"
+          },
+          {
+            "command": "npx -y oxlint@1 --disable-nested-config -D max-lines-per-function <run-root>/c-claude-3/indentationGuesser.ts",
+            "refused": true,
+            "refusal": "This command requires approval"
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "ls -la && ls .. && cat .oxlintrc.json 2>/dev/null | head -50; which oxlint npx",
+          "which oxlint oxfmt npx bunx 2>&1",
+          "cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity <run-root>/c-claude-3/indentationGuesser.ts 2>&1 | tail -40",
+          "npx -y oxlint@1 --disable-nested-config -D max-lines-per-function <run-root>/c-claude-3/indentationGuesser.ts"
+        ],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "/**\n * Compute the length of the common prefix of two line's indentation.\n */\nfunction commonPrefixLength(\n  a: string,\n  aLength: number,\n  b: string,\n  bLength: number\n): number {\n  let i: number;\n\n  for (i = 0; i < aLength && i < bLength; i++) {\n    const aCharCode = a.charCodeAt(i);\n    const bCharCode = b.charCodeAt(i);\n\n    if (aCharCode !== bCharCode) {\n      break;\n    }\n  }\n\n  return i;\n}\n\n/**\n * Count the spaces and the tabs found in `str` between `start` and `end`.\n */\nfunction countSpacesAndTabs(\n  str: string,\n  start: number,\n  end: number\n): { spacesCnt: number; tabsCount: number } {\n  let spacesCnt = 0;\n  let tabsCount = 0;\n  for (let j = start; j < end; j++) {\n    const charCode = str.charCodeAt(j);\n    if (charCode === CharCode.Space) {\n      spacesCnt++;\n    } else {\n   ",
+          "const ALLOWED_TAB_SIZE_GUESSES = [2, 4, 6, 8, 3, 5, 7]; // prefer even guesses for `tabSize`, limit to [2, 8].\nconst MAX_ALLOWED_TAB_SIZE_GUESS = 8; // max(ALLOWED_TAB_SIZE_GUESSES) = 8\n\ninterface ILineIndentation {\n  text: string; // content of the line\n  hasContent: boolean; // does `text` contain non-whitespace chars\n  indentation: number; // index at which `text` contains the first non-whitespace char\n  spacesCount: number; // count of spaces found in `text` indentation\n  tabsCount: number; // count of tabs found in `text` indentation\n}\n\ninterface IIndentationStats {\n  linesIndentedWithTabsCount: number; // number of lines that contain at least one tab in indentation\n  linesIndentedWithSpacesCount: number; // number of lines that contain only spaces in indentation\n  previousLineText: s",
+          "interface ILineIndentation {\n  hasContent: boolean; // does `text` contain non-whitespace chars\n  indentation: number; // index at which `text` contains the first non-whitespace char\n  spacesCount: number; // count of spaces found in `text` indentation\n  tabsCount: number; // count of tabs found in `text` indentation\n  text: string; // content of the line\n}",
+          "/**\n * Count the spaces and the tabs found in `str` between `start` and `end`.\n */\nfunction countSpacesAndTabs(\n  str: string,\n  start: number,\n  end: number\n): [spacesCnt: number, tabsCount: number] {\n  let spacesCnt = 0;\n  let tabsCount = 0;\n  for (let j = start; j < end; j++) {\n    const charCode = str.charCodeAt(j);\n    if (charCode === CharCode.Space) {\n      spacesCnt++;\n    } else {\n      tabsCount++;\n    }\n  }\n  return [spacesCnt, tabsCount];\n}",
+          "  const [aSpacesCnt, aTabsCount] = countSpacesAndTabs(a, i, aLength);\n  const [bSpacesCnt, bTabsCount] = countSpacesAndTabs(b, i, bLength);",
+          "function guessTabSize(\n  spacesDiffCount: number[],\n  defaultTabSize: number\n): number {"
+        ],
+        "finalMessage": "I split both long functions into helpers in `indentationGuesser.ts`. Behaviour should be unchanged. I couldn't run oxlint, tsc or any tests here because those commands needed approval in this non-interactive session. So I checked the function lengths by reading the file, and the line ranges below are my own count.\n\n**1. `spacesDiff` (was 88 lines, now about 43)** — I moved three pieces out into helpers:\n- `commonPrefixLength()` finds how long the shared indentation is.\n- `countSpacesAndTabs()` replaces the two copied counting loops. It returns a `[spaces, tabs]` pair, so each call fits on one line.\n- `looksLikeAlignment()` holds the nested alignment check and its comment. `spacesDiff` still checks `spacesDiff > 0` first, as before.\n\n**2. `guessIndentation` (was 134 lines, now about 33)** — it now just calls the helpers and decides tabs or spaces:\n- `readLineIndentation()` reads one line's indentation. It calls the text buffer in the same order as before: line length, then content, then individual character codes.\n- `collectIndentationStats()` loops over the first 10k lines, skips blank ones and counts tab-indented and space-indented lines.\n- `scoreLine()` compares each line with the previous one and records the result. Each `continue` in the old loop is now a `return`, so skipped alignment lines still don't count and don't become the \"previous line\".\n- `guessTabSize()` picks the best tab size and keeps the rule that lets 2 beat 4.\n- I moved `ALLOWED_TAB_SIZE_GUESSES` and `MAX_ALLOWED_TAB_SIZE_GUESS` to the top level of the file. Neither is ever modified, so this changes nothing.\n\nAll new functions are under 50 lines, the longest being `readLineIndentation` at about 40. I added no suppression comments and touched no other file.",
+        "understood": {
+          "fineAsIs": [],
+          "behaviourRisk": [
+            "It returns a `[spaces, tabs]` pair, so each call fits on one line. - `looksLikeAlignment()` holds the nested alignment check and its comment.",
+            "It calls the text buffer in the same order as before: line length, then content, then individual character codes. - `collectIndentationStats()` loops over the first 10k lines, skips blank ones and counts tab-indented and space-indented lines. - `scoreLine()` compares each line with the previous one and records the result.",
+            "Each `continue` in the old loop is now a `return`, so skipped alignment lines still don't count and don't become the \"previous line\". - `guessTabSize()` picks the best tab size and keeps the rule that lets 2 beat 4. - I moved `ALLOWED_TAB_SIZE_GUESSES` and `MAX_ALLOWED_TAB_SIZE_GUESS` to the top level of the file."
+          ],
+          "preserveBehaviour": [
+            "It calls the text buffer in the same order as before: line length, then content, then individual character codes. - `collectIndentationStats()` loops over the first 10k lines, skips blank ones and counts tab-indented and space-indented lines. - `scoreLine()` compares each line with the previous one and records the result."
+          ],
+          "review": [
+            "`guessIndentation` (was 134 lines, now about 33)** — it now just calls the helpers and decides tabs or spaces: - `readLineIndentation()` reads one line's indentation."
+          ],
+          "whySplit": [],
+          "params": [],
+          "lineCount": [
+            "`spacesDiff` (was 88 lines, now about 43)** — I moved three pieces out into helpers: - `commonPrefixLength()` finds how long the shared indentation is. - `countSpacesAndTabs()` replaces the two copied counting loops.",
+            "`guessIndentation` (was 134 lines, now about 33)** — it now just calls the helpers and decides tabs or spaces: - `readLineIndentation()` reads one line's indentation.",
+            "All new functions are under 50 lines, the longest being `readLineIndentation` at about 40.",
+            "`spacesDiff` now runs lines 133–183, which is 51 lines and still one over the limit.",
+            "All functions are now under 50 lines."
+          ],
+          "formatter": [
+            "First checking whether a linter/formatter is available locally to verify.",
+            "One signature runs past the 80-column width the rest of the file uses, so I'll wrap it the way the formatter would."
+          ],
+          "tests": [
+            "I couldn't run oxlint, tsc or any tests here because those commands needed approval in this non-interactive session."
+          ],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "webAccess": 88,
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {
+          "webAccess": 4
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": [
+          {
+            "tool": "Bash",
+            "target": "cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity <run-root>/c-claude-3/indentationGuesser.ts 2>&1 | tail -40"
+          }
+        ]
+      }
+    },
+    {
+      "attempt": 2,
+      "prompt": "buildRetryPrompt",
+      "promptKind": "retry: new since the edit",
+      "given": [
+        "no-inline-comments L207: Unexpected comment inline with code",
+        "no-inline-comments L222: Unexpected comment inline with code",
+        "no-inline-comments L223: Unexpected comment inline with code",
+        "no-inline-comments L224: Unexpected comment inline with code",
+        "no-inline-comments L225: Unexpected comment inline with code",
+        "func-style L109: Expected a function expression.",
+        "func-style L133: Expected a function expression.",
+        "func-style L211: Expected a function expression.",
+        "func-style L252: Expected a function expression.",
+        "func-style L292: Expected a function expression.",
+        "func-style L329: Expected a function expression.",
+        "func-style L358: Expected a function expression."
+      ],
+      "retryIssues": {
+        "still": [],
+        "introduced": [
+          "no-inline-comments L207",
+          "no-inline-comments L222",
+          "no-inline-comments L223",
+          "no-inline-comments L224",
+          "no-inline-comments L225",
+          "func-style L109",
+          "func-style L133",
+          "func-style L211",
+          "func-style L252",
+          "func-style L292",
+          "func-style L329",
+          "func-style L358"
+        ]
+      },
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 64.6,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "edited in place",
+        "kinds": [],
+        "helpers": [],
+        "removed": [],
+        "entries": {
+          "guessIndentation": {
+            "linesGiven": 33,
+            "linesNow": 33,
+            "blankLinesGiven": 5,
+            "blankLinesNow": 5
+          },
+          "spacesDiff": {
+            "linesGiven": 43,
+            "linesNow": 43,
+            "blankLinesGiven": 6,
+            "blankLinesNow": 6
+          }
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "170c3d7454e37076e44ba55ce27026904a7d4ab9957781b0ab25876fc1255c40",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 2,
+              "no-inline-comments": 11,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 2,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 11,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Arrow function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Arrow function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Arrow function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Arrow function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Arrow function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Arrow function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 4,
+              "@typescript-eslint/no-inferrable-types": 2,
+              "@typescript-eslint/no-shadow": 1,
+              "func-style": 2,
+              "github/array-foreach": 1,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 11,
+              "no-plusplus": 11,
+              "no-useless-return": 1,
+              "sonarjs/no-collapsible-if": 3,
+              "sonarjs/no-commented-code": 1,
+              "sonarjs/no-redundant-jump": 1,
+              "unicorn/consistent-boolean-name": 7,
+              "unicorn/name-replacements": 6,
+              "unicorn/no-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/no-subtraction-comparison": 1,
+              "unicorn/prefer-code-point": 7,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/prefer-ternary": 2
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (349). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (349). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 3,
+              "complexity/noForEach": 1,
+              "complexity/noUselessReturn": 1,
+              "complexity/useMaxParams": 1,
+              "nursery/noExcessiveStatementsPerFunction": 3,
+              "style/noEnum": 1,
+              "style/noExcessiveLinesPerFile": 1,
+              "style/noIncrementDecrement": 11,
+              "style/noInferrableTypes": 2,
+              "style/useCollapsedIf": 3,
+              "style/useConsistentMemberAccessibility": 2,
+              "style/useConsistentMethodSignatures": 4,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noShadow": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "commonPrefixLength",
+            "lines": 19,
+            "statements": 7,
+            "params": 4,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "countSpacesAndTabs",
+            "lines": 17,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "looksLikeAlignment",
+            "lines": 24,
+            "statements": 5,
+            "params": 3,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "spacesDiff",
+            "lines": 43,
+            "statements": 18,
+            "params": 5,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "readLineIndentation",
+            "lines": 44,
+            "statements": 16,
+            "params": 2,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "scoreLine",
+            "lines": 39,
+            "statements": 10,
+            "params": 4,
+            "cognitive": 5,
+            "depth": 0
+          },
+          {
+            "name": "collectIndentationStats",
+            "lines": 36,
+            "statements": 11,
+            "params": 3,
+            "cognitive": 6,
+            "depth": 0
+          },
+          {
+            "name": "guessTabSize",
+            "lines": 28,
+            "statements": 6,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "<callback to ALLOWED_TAB_SIZE_GUESSES.forEach>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "guessIndentation",
+            "lines": 33,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 2,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 400,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 1938,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "guessIndentation": {
+            "entry": {
+              "cognitive": 2,
+              "lines": 33,
+              "params": 3,
+              "statements": 8
+            },
+            "fileLines": 400,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 24,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 44,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          },
+          "spacesDiff": {
+            "entry": {
+              "cognitive": 7,
+              "lines": 43,
+              "params": 5,
+              "statements": 18
+            },
+            "fileLines": 400,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 3,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 24,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 44,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 400,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [
+              "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+              "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+              "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+            ],
+            "statements": [
+              "spacesDiff: max-statements: function has too many statements (18). Maximum allowed is 10.",
+              "readLineIndentation: max-statements: function has too many statements (16). Maximum allowed is 10.",
+              "collectIndentationStats: max-statements: function has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (399)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers",
+            "shared mutable state",
+            "helper with 4+ parameters",
+            "continue statements changed",
+            "loops changed",
+            "data moved to module scope",
+            "comments added"
+          ],
+          "helpers": [
+            {
+              "name": "commonPrefixLength",
+              "lines": 19,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "countSpacesAndTabs",
+              "lines": 17,
+              "params": 3,
+              "callSites": 2,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "looksLikeAlignment",
+              "lines": 24,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "readLineIndentation",
+              "lines": 44,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "scoreLine",
+              "lines": 39,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [
+                "stats"
+              ],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "collectIndentationStats",
+              "lines": 36,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "guessTabSize",
+              "lines": 28,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          },
+          "entries": {
+            "guessIndentation": {
+              "linesGiven": 134,
+              "linesNow": 33,
+              "blankLinesGiven": 21,
+              "blankLinesNow": 5
+            },
+            "spacesDiff": {
+              "linesGiven": 88,
+              "linesNow": 43,
+              "blankLinesGiven": 10,
+              "blankLinesNow": 6
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 6,
+              "continues": 2,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 5,
+              "continues": 1,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 8,
+              "topLevelDataVariables": 2
+            }
+          },
+          "commentLines": {
+            "given": 96,
+            "now": 110
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ],
+            "now": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {},
+          "oxlint strict": {
+            "max-params": 2,
+            "max-statements": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "max-params": 2,
+            "max-statements": 1,
+            "unicorn/consistent-boolean-name": 3,
+            "unicorn/prefer-ternary": 1
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 1,
+            "style/noExcessiveLinesPerFile": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "170c3d7454e37076e44ba55ce27026904a7d4ab9957781b0ab25876fc1255c40",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 2,
+              "no-inline-comments": 11,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 2,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 11,
+              "no-plusplus": 11,
+              "no-shadow": 1,
+              "no-useless-return": 1,
+              "typescript/method-signature-style": 4,
+              "typescript/no-inferrable-types": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/prefer-code-point": 7
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Arrow function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Arrow function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Arrow function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+                "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+                "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+              ],
+              "statements": [
+                "spacesDiff: max-statements: Arrow function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: max-statements: Arrow function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: max-statements: Arrow function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (399). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 4,
+              "@typescript-eslint/no-inferrable-types": 2,
+              "@typescript-eslint/no-shadow": 1,
+              "func-style": 2,
+              "github/array-foreach": 1,
+              "max-lines": 1,
+              "max-params": 3,
+              "max-statements": 3,
+              "no-inline-comments": 11,
+              "no-plusplus": 11,
+              "no-useless-return": 1,
+              "sonarjs/no-collapsible-if": 3,
+              "sonarjs/no-commented-code": 1,
+              "sonarjs/no-redundant-jump": 1,
+              "unicorn/consistent-boolean-name": 7,
+              "unicorn/name-replacements": 6,
+              "unicorn/no-for-each": 1,
+              "unicorn/no-lonely-if": 3,
+              "unicorn/no-subtraction-comparison": 1,
+              "unicorn/prefer-code-point": 7,
+              "unicorn/prefer-early-return": 2,
+              "unicorn/prefer-ternary": 2
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (349). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [
+                "spacesDiff: complexity/useMaxParams: Function has 5 parameters, but only 4 are allowed."
+              ],
+              "statements": [
+                "spacesDiff: nursery/noExcessiveStatementsPerFunction: This function has too many statements (18). Maximum allowed is 10.",
+                "readLineIndentation: nursery/noExcessiveStatementsPerFunction: This function has too many statements (16). Maximum allowed is 10.",
+                "collectIndentationStats: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): style/noExcessiveLinesPerFile: This file has too many lines (349). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 3,
+              "complexity/noForEach": 1,
+              "complexity/noUselessReturn": 1,
+              "complexity/useMaxParams": 1,
+              "nursery/noExcessiveStatementsPerFunction": 3,
+              "style/noEnum": 1,
+              "style/noExcessiveLinesPerFile": 1,
+              "style/noIncrementDecrement": 11,
+              "style/noInferrableTypes": 2,
+              "style/useCollapsedIf": 3,
+              "style/useConsistentMemberAccessibility": 2,
+              "style/useConsistentMethodSignatures": 4,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noShadow": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "commonPrefixLength",
+            "lines": 19,
+            "statements": 7,
+            "params": 4,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "countSpacesAndTabs",
+            "lines": 17,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "looksLikeAlignment",
+            "lines": 24,
+            "statements": 5,
+            "params": 3,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "spacesDiff",
+            "lines": 43,
+            "statements": 18,
+            "params": 5,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "readLineIndentation",
+            "lines": 44,
+            "statements": 16,
+            "params": 2,
+            "cognitive": 7,
+            "depth": 0
+          },
+          {
+            "name": "scoreLine",
+            "lines": 39,
+            "statements": 10,
+            "params": 4,
+            "cognitive": 5,
+            "depth": 0
+          },
+          {
+            "name": "collectIndentationStats",
+            "lines": 36,
+            "statements": 11,
+            "params": 3,
+            "cognitive": 6,
+            "depth": 0
+          },
+          {
+            "name": "guessTabSize",
+            "lines": 28,
+            "statements": 6,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "<callback to ALLOWED_TAB_SIZE_GUESSES.forEach>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "guessIndentation",
+            "lines": 33,
+            "statements": 8,
+            "params": 3,
+            "cognitive": 2,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 400,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 1938,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "guessIndentation": {
+            "entry": {
+              "cognitive": 2,
+              "lines": 33,
+              "params": 3,
+              "statements": 8
+            },
+            "fileLines": 400,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 24,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 44,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          },
+          "spacesDiff": {
+            "entry": {
+              "cognitive": 7,
+              "lines": 43,
+              "params": 5,
+              "statements": 18
+            },
+            "fileLines": 400,
+            "functions": 10,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 3,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "commonPrefixLength",
+                "params": 4,
+                "statements": 7
+              },
+              {
+                "callSites": 2,
+                "lines": 17,
+                "name": "countSpacesAndTabs",
+                "params": 3,
+                "statements": 8
+              },
+              {
+                "callSites": 1,
+                "lines": 24,
+                "name": "looksLikeAlignment",
+                "params": 3,
+                "statements": 5
+              },
+              {
+                "callSites": 1,
+                "lines": 44,
+                "name": "readLineIndentation",
+                "params": 2,
+                "statements": 16
+              },
+              {
+                "callSites": 1,
+                "lines": 39,
+                "name": "scoreLine",
+                "params": 4,
+                "statements": 10
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "collectIndentationStats",
+                "params": 3,
+                "statements": 11
+              },
+              {
+                "callSites": 1,
+                "lines": 28,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 6,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 21,
+            "topLevelFunctions": 9
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 400,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [
+              "commonPrefixLength: max-params: Function 'commonPrefixLength' has too many parameters (4). Maximum allowed is 3.",
+              "spacesDiff: max-params: Arrow function has too many parameters (5). Maximum allowed is 3.",
+              "scoreLine: max-params: Arrow function has too many parameters (4). Maximum allowed is 3."
+            ],
+            "statements": [
+              "spacesDiff: max-statements: function has too many statements (18). Maximum allowed is 10.",
+              "readLineIndentation: max-statements: function has too many statements (16). Maximum allowed is 10.",
+              "collectIndentationStats: max-statements: function has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (399)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers",
+            "shared mutable state",
+            "helper with 4+ parameters",
+            "continue statements changed",
+            "loops changed",
+            "data moved to module scope",
+            "comments added"
+          ],
+          "helpers": [
+            {
+              "name": "commonPrefixLength",
+              "lines": 19,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "countSpacesAndTabs",
+              "lines": 17,
+              "params": 3,
+              "callSites": 2,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "looksLikeAlignment",
+              "lines": 24,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "readLineIndentation",
+              "lines": 44,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "scoreLine",
+              "lines": 39,
+              "params": 4,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [
+                "stats"
+              ],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "collectIndentationStats",
+              "lines": 36,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "guessTabSize",
+              "lines": 28,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "guessIndentation": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 33,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            },
+            "spacesDiff": {
+              "entry": {
+                "cognitive": 7,
+                "lines": 43,
+                "params": 5,
+                "statements": 18
+              },
+              "fileLines": 400,
+              "functions": 10,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "commonPrefixLength",
+                  "params": 4,
+                  "statements": 7
+                },
+                {
+                  "callSites": 2,
+                  "lines": 17,
+                  "name": "countSpacesAndTabs",
+                  "params": 3,
+                  "statements": 8
+                },
+                {
+                  "callSites": 1,
+                  "lines": 24,
+                  "name": "looksLikeAlignment",
+                  "params": 3,
+                  "statements": 5
+                },
+                {
+                  "callSites": 1,
+                  "lines": 44,
+                  "name": "readLineIndentation",
+                  "params": 2,
+                  "statements": 16
+                },
+                {
+                  "callSites": 1,
+                  "lines": 39,
+                  "name": "scoreLine",
+                  "params": 4,
+                  "statements": 10
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "collectIndentationStats",
+                  "params": 3,
+                  "statements": 11
+                },
+                {
+                  "callSites": 1,
+                  "lines": 28,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 6,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 21,
+              "topLevelFunctions": 9
+            }
+          },
+          "entries": {
+            "guessIndentation": {
+              "linesGiven": 134,
+              "linesNow": 33,
+              "blankLinesGiven": 21,
+              "blankLinesNow": 5
+            },
+            "spacesDiff": {
+              "linesGiven": 88,
+              "linesNow": 43,
+              "blankLinesGiven": 10,
+              "blankLinesNow": 6
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 6,
+              "continues": 2,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 5,
+              "continues": 1,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 8,
+              "topLevelDataVariables": 2
+            }
+          },
+          "commentLines": {
+            "given": 96,
+            "now": 110
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ],
+            "now": [
+              "TSInterfaceDeclaration IGuessedIndentation",
+              "guessIndentation(source, defaultTabSize, defaultInsertSpaces)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {},
+          "oxlint strict": {
+            "max-params": 2,
+            "max-statements": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "max-params": 2,
+            "max-statements": 1,
+            "unicorn/consistent-boolean-name": 3,
+            "unicorn/prefer-ternary": 1
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 1,
+            "style/noExcessiveLinesPerFile": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingLengthRuleOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "no-inline-comments: Unexpected comment inline with code",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "max-lines-per-function: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+            "max-lines-per-function: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 6,
+        "costUSD": 0.5362306,
+        "tokens": {
+          "input": 12,
+          "output": 5756,
+          "cacheCreation": 45468,
+          "cacheRead": 286593
+        },
+        "tokensUsedReportedOnStderr": null,
+        "thinkingBlocks": 0,
+        "toolCalls": [
+          "Read",
+          "Read",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Edit",
+          "Bash",
+          "Bash",
+          "Grep"
+        ],
+        "toolNames": [
+          "Read",
+          "Edit",
+          "Bash",
+          "Grep"
+        ],
+        "toolCallTargets": [
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts.83d0de0e.json",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts",
+          "ls; (npx --no-install oxlint indentationGuesser.ts 2>&1 | tail -40) ; (npx --no-install tsc --noEmit --target es2020 indentationGuesser.ts 2>&1 | tail -20)",
+          "npx --no-install oxlint <run-root>/c-claude-3/indentationGuesser.ts",
+          "<run-root>/c-claude-3/indentationGuesser.ts"
+        ],
+        "toolErrors": [
+          "This command uses shell operators that require approval for safety",
+          "This command requires approval"
+        ],
+        "commands": [
+          {
+            "command": "ls; (npx --no-install oxlint indentationGuesser.ts 2>&1 | tail -40) ; (npx --no-install tsc --noEmit --target es2020 indentationGuesser.ts 2>&1 | tail -20)",
+            "refused": true,
+            "refusal": "This command uses shell operators that require approval for safety"
+          },
+          {
+            "command": "npx --no-install oxlint <run-root>/c-claude-3/indentationGuesser.ts",
+            "refused": true,
+            "refusal": "This command requires approval"
+          }
+        ],
+        "ranLinterOrTests": [],
+        "refusedCommands": [
+          "ls; (npx --no-install oxlint indentationGuesser.ts 2>&1 | tail -40) ; (npx --no-install tsc --noEmit --target es2020 indentationGuesser.ts 2>&1 | tail -20)",
+          "npx --no-install oxlint <run-root>/c-claude-3/indentationGuesser.ts"
+        ],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "const looksLikeAlignment = (\n  a: string,\n  b: string,\n  bSpacesCnt: number\n): boolean => {\n  if (",
+          "        return true;\n      }\n    }\n  }\n  return false;\n};",
+          "const spacesDiff = (\n  a: string,\n  aLength: number,\n  b: string,\n  bLength: number,\n  result: SpacesDiffResult\n): void => {",
+          "  if (spacesDiff % tabsDiff === 0) {\n    result.spacesDiff = spacesDiff / tabsDiff;\n    return;\n  }\n};",
+          "  // `tabSize` scores\n  spacesDiffCount: number[];\n  tmp: SpacesDiffResult;\n}\n\nconst readLineIndentation = (\n  source: ITextBuffer,\n  lineNumber: number\n): ILineIndentation => {",
+          "  // does `currentLineText` contain non-whitespace chars\n  let currentLineHasContent = false;\n  // index at which `currentLineText` contains the first non-whitespace char\n  let currentLineIndentation = 0;\n  // count of spaces found in `currentLineText` indentation\n  let currentLineSpacesCount = 0;\n  // count of tabs found in `currentLineText` indentation\n  let currentLineTabsCount = 0;",
+          "    text: currentLineText,\n  };\n};\n\nconst scoreLine = (\n  stats: IIndentationStats,\n  line: ILineIndentation,\n  defaultTabSize: number,\n  defaultInsertSpaces: boolean\n): void => {",
+          "  stats.previousLineIndentation = line.indentation;\n};\n\nconst collectIndentationStats = (\n  source: ITextBuffer,\n  defaultTabSize: number,\n  defaultInsertSpaces: boolean\n): IIndentationStats => {",
+          "  return stats;\n};\n\nconst guessTabSize = (\n  spacesDiffCount: number[],\n  defaultTabSize: number\n): number => {",
+          "  return tabSize;\n};\n\nexport const guessIndentation = (\n  source: ITextBuffer,\n  defaultTabSize: number,\n  defaultInsertSpaces: boolean\n): IGuessedIndentation => {",
+          "    insertSpaces,\n    tabSize,\n  };\n};"
+        ],
+        "finalMessage": "I've fixed all 12 issues. I couldn't re-run the linter or type checker because both commands needed approval in this session. Instead I checked the file's structure by hand, and every block opens and closes cleanly.\n\n- **Inline comments (1–5):** I moved the comments on lines 207 and 222–225 onto their own lines, directly above the code they describe. The wording is unchanged.\n- **Function style (6–12):** I turned `looksLikeAlignment`, `spacesDiff`, `readLineIndentation`, `scoreLine`, `collectIndentationStats`, `guessTabSize` and the exported `guessIndentation` into `const` arrow functions, and kept their parameter and return types. This doesn't change behavior:\n  - None of them use `this` or `arguments`.\n  - Each one is defined before any function that calls it, so they still work without being hoisted.\n  - Inside `spacesDiff`, the local `const spacesDiff` still hides the outer name, just as it did before.\n\nThe linter didn't report `commonPrefixLength` or `countSpacesAndTabs` (also function declarations), or the end-of-line comments on lines 195–206. To keep the change minimal I left them as they are, but the same two rules may flag them later.",
+        "understood": {
+          "fineAsIs": [],
+          "behaviourRisk": [
+            "The wording is unchanged. - **Function style (6–12):** I turned `looksLikeAlignment`, `spacesDiff`, `readLineIndentation`, `scoreLine`, `collectIndentationStats`, `guessTabSize` and the exported `guessIndentation` into `const` arrow functions, and kept their parameter and return types."
+          ],
+          "preserveBehaviour": [],
+          "review": [],
+          "whySplit": [],
+          "params": [
+            "The wording is unchanged. - **Function style (6–12):** I turned `looksLikeAlignment`, `spacesDiff`, `readLineIndentation`, `scoreLine`, `collectIndentationStats`, `guessTabSize` and the exported `guessIndentation` into `const` arrow functions, and kept their parameter and return types.",
+            "This doesn't change behavior: - None of them use `this` or `arguments`. - Each one is defined before any function that calls it, so they still work without being hoisted. - Inside `spacesDiff`, the local `const spacesDiff` still hides the outer name, just as it did before."
+          ],
+          "lineCount": [],
+          "formatter": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "webAccess": 135,
+          "sessionLogs": 4
+        },
+        "exposureInToolCalls": {
+          "webAccess": 24
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": []
+      }
+    }
+  ],
+  "final": {
+    "outcome": "helpers extracted",
+    "response": "behaviour kept, limit cleared",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 2,
+    "remaining": 0,
+    "notes": [
+      "Took 2 attempts."
+    ],
+    "issueFixed": [
+      true,
+      true
+    ],
+    "outro": "Fixed 2 of 2 issues with Claude Code.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": 1.82429,
+    "tokensUsedReportedOnStderr": null,
+    "totalTokens": 1236677
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "webAccess": 223,
+      "sessionLogs": 8
+    },
+    "exposureInToolCalls": {
+      "webAccess": 28
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "Bash",
+        "target": "cd /tmp && npx -y oxlint@1 --disable-nested-config -D max-lines-per-function -D max-params -D complexity <run-root>/c-claude-3/indentationGuesser.ts 2>&1 | tail -40"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/c-claude-3/handoff",
+      "../corpus/examples/length-limits",
+      "../corpus/results/length-limits",
+      "../corpus/calibration/length-limits",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/length-agent-runs.cjs",
+      "../corpus/scripts/length-calibration.cjs",
+      "../corpus/scripts/length-census.cjs",
+      "../corpus/scripts/length-complexity.cjs",
+      "../corpus/scripts/length-disagreements.cjs",
+      "../corpus/scripts/length-examples.cjs",
+      "../corpus/scripts/length-format-lib.cjs",
+      "../corpus/scripts/length-format.cjs",
+      "../corpus/scripts/length-history-check.cjs",
+      "../corpus/scripts/length-history.cjs",
+      "../corpus/scripts/length-lib.cjs",
+      "../corpus/scripts/length-linters.cjs",
+      "../corpus/scripts/length-markers.cjs",
+      "../corpus/scripts/length-oracle.cjs",
+      "../corpus/scripts/length-rules.cjs",
+      "../corpus/scripts/length-run-all.cjs",
+      "../corpus/scripts/length-sample.cjs",
+      "../corpus/scripts/length-tables.cjs",
+      "../bibliography/length-limits.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/react-effects",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-length-limits-batch-logs",
+      "<outside-repo>/plans",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-codex-1",
+      "<run-root>/b-codex-2",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-2",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/b-codex-2",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-2",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-pilot",
+      "<run-root>/.staging/c-claude-3/attempt1"
+    ]
+  }
+}

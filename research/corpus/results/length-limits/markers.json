@@ -1,0 +1,353 @@
+{
+  "generated": "2026-10-25T19:37:55.009Z",
+  "note": "configs: every lint config at the pinned commit (test, fixture, example, template, bench, eval and docs paths skipped) and its lines naming a length or structure rule; `added` is the first commit whose diff of that file contains the setting (git log -S). directives: every disable comment in the measured files naming one of these rules; `covers` is the function that starts on the next line (next-line), the same line (line) or the whole file (block at the top).",
+  "repos": {
+    "zod": {
+      "configs": [
+        {
+          "file": "biome.jsonc",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "hono": {
+      "configs": [],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "trpc": {
+      "configs": [
+        {
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "line": 85,
+              "text": "'max-params': ['error', 3],",
+              "added": {
+                "date": "2024-10-30",
+                "sha": "84e267ebb09195257a6b1e88dff237af929b3f7f",
+                "subject": "chore(deps): modernize deps & tooling (#6164)"
+              },
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L85"
+            }
+          ]
+        }
+      ],
+      "directives": [
+        {
+          "covers": null,
+          "file": "packages/react-query/src/internals/context.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 300,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/internals/context.tsx#L300",
+          "reason": "mirrors TanStack Query's own signature",
+          "rules": [
+            "max-params"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-params -- mirrors TanStack Query's own signature"
+        },
+        {
+          "covers": {
+            "cognitive": 0,
+            "lines": 10,
+            "name": "setQueriesData",
+            "params": 4,
+            "statements": 1
+          },
+          "file": "packages/react-query/src/utils/createUtilityFunctions.ts",
+          "kind": "eslint-disable-next-line",
+          "line": 219,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/utils/createUtilityFunctions.ts#L219",
+          "reason": null,
+          "rules": [
+            "max-params"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-params"
+        },
+        {
+          "covers": "block",
+          "file": "packages/openapi/test/types.ts",
+          "kind": "eslint-disable",
+          "line": 1,
+          "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/openapi/test/types.ts#L1",
+          "reason": null,
+          "rules": [
+            "max-params"
+          ],
+          "test": true,
+          "text": "/* eslint-disable max-params */"
+        }
+      ],
+      "directivesByRule": {
+        "max-params": 3
+      }
+    },
+    "vite": {
+      "configs": [
+        {
+          "file": "eslint.config.js",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "astro": {
+      "configs": [
+        {
+          "file": "biome.jsonc",
+          "lines": []
+        },
+        {
+          "file": "eslint.config.js",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "excalidraw": {
+      "configs": [
+        {
+          "file": ".eslintrc.json",
+          "lines": []
+        },
+        {
+          "file": "packages/common/.eslintrc.json",
+          "lines": []
+        },
+        {
+          "file": "packages/element/.eslintrc.json",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "next.js": {
+      "configs": [
+        {
+          "file": "eslint.config.mjs",
+          "lines": []
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat-with-other-compat/eslint.config.mjs",
+          "lines": []
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat/eslint.config.mjs",
+          "lines": []
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config/eslint.config.mjs",
+          "lines": []
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "vscode": {
+      "configs": [
+        {
+          "file": "eslint.config.js",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "shadcn": {
+      "configs": [
+        {
+          "file": ".eslintrc.json",
+          "lines": []
+        },
+        {
+          "file": "apps/v4/eslint.config.mjs",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "radix": {
+      "configs": [
+        {
+          "file": ".oxlintrc.json",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "react-aria": {
+      "configs": [
+        {
+          "file": ".oxlintrc.json",
+          "lines": [
+            {
+              "line": 145,
+              "text": "\"max-depth\": [\"warn\", 4],",
+              "added": null,
+              "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L145"
+            }
+          ]
+        }
+      ],
+      "directives": [
+        {
+          "covers": null,
+          "file": "packages/react-aria-components/src/DragAndDrop.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 121,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DragAndDrop.tsx#L121",
+          "reason": null,
+          "rules": [
+            "max-depth"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-depth"
+        },
+        {
+          "covers": null,
+          "file": "packages/react-aria-components/src/DragAndDrop.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 126,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DragAndDrop.tsx#L126",
+          "reason": null,
+          "rules": [
+            "max-depth"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-depth"
+        },
+        {
+          "covers": null,
+          "file": "packages/react-aria-components/src/DragAndDrop.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 133,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/DragAndDrop.tsx#L133",
+          "reason": null,
+          "rules": [
+            "max-depth"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-depth"
+        },
+        {
+          "covers": null,
+          "file": "packages/react-aria-components/src/HiddenDateInput.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 134,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/HiddenDateInput.tsx#L134",
+          "reason": null,
+          "rules": [
+            "max-depth"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-depth"
+        },
+        {
+          "covers": null,
+          "file": "packages/react-aria-components/src/HiddenDateInput.tsx",
+          "kind": "eslint-disable-next-line",
+          "line": 138,
+          "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/HiddenDateInput.tsx#L138",
+          "reason": null,
+          "rules": [
+            "max-depth"
+          ],
+          "test": false,
+          "text": "// eslint-disable-next-line max-depth"
+        }
+      ],
+      "directivesByRule": {
+        "max-depth": 5
+      }
+    },
+    "supabase": {
+      "configs": [
+        {
+          "file": "apps/design-system/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/design-system/registry/.eslintrc.json",
+          "lines": []
+        },
+        {
+          "file": "apps/learn/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/ui-library/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/www/eslint.config.cjs",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    },
+    "ultracite": {
+      "configs": [
+        {
+          "file": "oxlint.config.ts",
+          "lines": [
+            {
+              "line": 74,
+              "text": "complexity: \"off\",",
+              "added": null,
+              "permalink": "https://github.com/haydenbleasel/ultracite/blob/d51d58bd2a90219ed6c7702b1ddab9e85e510059/oxlint.config.ts#L74"
+            },
+            {
+              "line": 75,
+              "text": "\"max-statements\": \"off\",",
+              "added": null,
+              "permalink": "https://github.com/haydenbleasel/ultracite/blob/d51d58bd2a90219ed6c7702b1ddab9e85e510059/oxlint.config.ts#L75"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {}
+    }
+  },
+  "rules": [
+    "max-lines",
+    "max-lines-per-function",
+    "max-statements",
+    "max-params",
+    "max-depth",
+    "max-nested-callbacks",
+    "max-classes-per-file",
+    "complexity",
+    "sonarjs/max-lines",
+    "sonarjs/max-lines-per-function",
+    "sonarjs/max-switch-cases",
+    "sonarjs/max-union-size",
+    "sonarjs/nested-control-flow",
+    "sonarjs/cognitive-complexity",
+    "noExcessiveLinesPerFunction",
+    "noExcessiveLinesPerFile",
+    "noExcessiveStatementsPerFunction",
+    "noExcessiveNestedCallbacks",
+    "noExcessiveClassesPerFile",
+    "noExcessiveCognitiveComplexity",
+    "useMaxParams"
+  ]
+}

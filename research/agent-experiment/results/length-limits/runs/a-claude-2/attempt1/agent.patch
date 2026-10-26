@@ -1,0 +1,84 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,16 +220,10 @@
+   return () => jsonValue;
+ }
+ 
+-async function createClientConfigValueReplacer(
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> {
+-  const resolvedServerHostname = (await resolveHostname(config.server.host))
+-    .name;
+-  const resolvedServerPort = config.server.port!;
+-  const devBase = config.base;
+-
+-  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+-
++function resolveHmrClientValues(
++  config: ResolvedConfig,
++  resolvedServerHostname: string
++) {
+   const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+   const host = wsConfig?.host || null;
+   const protocol = wsConfig?.protocol || null;
+@@ -248,25 +242,49 @@
+   }
+ 
+   let directTarget = wsConfig?.host || resolvedServerHostname;
+-  directTarget += `:${wsConfig?.port || resolvedServerPort}`;
+-  directTarget += devBase;
++  directTarget += `:${wsConfig?.port || config.server.port}`;
++  directTarget += config.base;
+ 
+-  let hmrBase = devBase;
++  let hmrBase = config.base;
+   if (wsConfig?.path) {
+     hmrBase = path.posix.join(hmrBase, wsConfig.path);
+   }
++
++  return {
++    directTarget,
++    hmrBase,
++    hmrConfigName,
++    host,
++    overlay,
++    port,
++    protocol,
++    timeout,
++  };
++}
+ 
++async function createClientConfigValueReplacer(
++  config: ResolvedConfig
++): Promise<(code: string) => string> {
++  const resolvedServerHostname = (await resolveHostname(config.server.host))
++    .name;
++  const resolvedServerPort = config.server.port!;
++  const devBase = config.base;
++
++  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
++
++  const hmr = resolveHmrClientValues(config, resolvedServerHostname);
++
+   const modeReplacement = escapeReplacement(config.mode);
+   const baseReplacement = escapeReplacement(devBase);
+   const serverHostReplacement = escapeReplacement(serverHost);
+-  const hmrProtocolReplacement = escapeReplacement(protocol);
+-  const hmrHostnameReplacement = escapeReplacement(host);
+-  const hmrPortReplacement = escapeReplacement(port);
+-  const hmrDirectTargetReplacement = escapeReplacement(directTarget);
+-  const hmrBaseReplacement = escapeReplacement(hmrBase);
+-  const hmrTimeoutReplacement = escapeReplacement(timeout);
+-  const hmrEnableOverlayReplacement = escapeReplacement(overlay);
+-  const hmrConfigNameReplacement = escapeReplacement(hmrConfigName);
++  const hmrProtocolReplacement = escapeReplacement(hmr.protocol);
++  const hmrHostnameReplacement = escapeReplacement(hmr.host);
++  const hmrPortReplacement = escapeReplacement(hmr.port);
++  const hmrDirectTargetReplacement = escapeReplacement(hmr.directTarget);
++  const hmrBaseReplacement = escapeReplacement(hmr.hmrBase);
++  const hmrTimeoutReplacement = escapeReplacement(hmr.timeout);
++  const hmrEnableOverlayReplacement = escapeReplacement(hmr.overlay);
++  const hmrConfigNameReplacement = escapeReplacement(hmr.hmrConfigName);
+   const hmrPartialAcceptReplacement = escapeReplacement(
+     config.experimental.hmrPartialAccept
+   );

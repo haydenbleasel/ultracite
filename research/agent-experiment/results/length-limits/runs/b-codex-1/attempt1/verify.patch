@@ -1,0 +1,11 @@
+--- a/revalidation-utils.ts
++++ b/revalidation-utils.ts
+@@ -166,7 +166,7 @@
+   for (const item of tagsWithProfile) {
+     const { profile } = item;
+     // Find existing profile by comparing values
+-    let existingKey = undefined;
++    let existingKey;
+     for (const [key] of tagsByProfile) {
+       if (
+         typeof key === "string" &&

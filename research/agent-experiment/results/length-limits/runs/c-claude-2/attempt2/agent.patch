@@ -1,0 +1,249 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -62,12 +62,12 @@
+ /**
+  * Find the index of the first char code that differs between the two indentations.
+  */
+-function commonPrefixLength(
++const commonPrefixLength = (
+   a: string,
+   aLength: number,
+   b: string,
+   bLength: number
+-): number {
++): number => {
+   let i: number;
+ 
+   for (i = 0; i < aLength && i < bLength; i++) {
+@@ -80,16 +80,16 @@
+   }
+ 
+   return i;
+-}
++};
+ 
+ /**
+  * Count the spaces and tabs in `str` between `start` and `length`.
+  */
+-function countSpacesAndTabs(
++const countSpacesAndTabs = (
+   str: string,
+   start: number,
+   length: number
+-): { spacesCount: number; tabsCount: number } {
++): { spacesCount: number; tabsCount: number } => {
+   let spacesCount = 0;
+   let tabsCount = 0;
+   for (let j = start; j < length; j++) {
+@@ -101,17 +101,17 @@
+     }
+   }
+   return { spacesCount, tabsCount };
+-}
++};
+ 
+ /**
+  * Check if the indentation difference might be caused by alignment reasons.
+  */
+-function looksLikeAlignment(
++const looksLikeAlignment = (
+   a: string,
+   b: string,
+   bSpacesCnt: number,
+   spacesDiff: number
+-): boolean {
++): boolean => {
+   if (
+     spacesDiff > 0 &&
+     bSpacesCnt - 1 >= 0 &&
+@@ -131,18 +131,18 @@
+     }
+   }
+   return false;
+-}
++};
+ 
+ /**
+  * Compute the diff in spaces between two line's indentation.
+  */
+-function spacesDiff(
++const computeSpacesDiff = (
+   a: string,
+   aLength: number,
+   b: string,
+   bLength: number,
+   result: SpacesDiffResult
+-): void {
++): void => {
+   result.spacesDiff = 0;
+   result.looksLikeAlignment = false;
+ 
+@@ -153,16 +153,10 @@
+ 
+   const i = commonPrefixLength(a, aLength, b, bLength);
+ 
+-  const { spacesCount: aSpacesCnt, tabsCount: aTabsCount } = countSpacesAndTabs(
+-    a,
+-    i,
+-    aLength
+-  );
+-  const { spacesCount: bSpacesCnt, tabsCount: bTabsCount } = countSpacesAndTabs(
+-    b,
+-    i,
+-    bLength
+-  );
++  const aCounts = countSpacesAndTabs(a, i, aLength);
++  const bCounts = countSpacesAndTabs(b, i, bLength);
++  const { spacesCount: aSpacesCnt, tabsCount: aTabsCount } = aCounts;
++  const { spacesCount: bSpacesCnt, tabsCount: bTabsCount } = bCounts;
+ 
+   if (aSpacesCnt > 0 && aTabsCount > 0) {
+     return;
+@@ -190,7 +184,7 @@
+     result.spacesDiff = spacesDiff / tabsDiff;
+     return;
+   }
+-}
++};
+ 
+ /**
+  * Result for a guessIndentation
+@@ -217,10 +211,10 @@
+   tabsCount: number; // count of tabs found in `text` indentation
+ }
+ 
+-function scanLineIndentation(
++const scanLineIndentation = (
+   source: ITextBuffer,
+   lineNumber: number
+-): ILineIndentation {
++): ILineIndentation => {
+   const currentLineLength = source.getLineLength(lineNumber);
+   const currentLineText = source.getLineContent(lineNumber);
+ 
+@@ -256,35 +250,38 @@
+     tabsCount: currentLineTabsCount,
+     text: currentLineText,
+   };
+-}
++};
+ 
+ interface IIndentationStats {
+-  linesIndentedWithTabsCount: number; // number of lines that contain at least one tab in indentation
+-  linesIndentedWithSpacesCount: number; // number of lines that contain only spaces in indentation
+-  spacesDiffCount: number[]; // `tabSize` scores
++  // number of lines that contain at least one tab in indentation
++  linesIndentedWithTabsCount: number;
++  // number of lines that contain only spaces in indentation
++  linesIndentedWithSpacesCount: number;
++  // `tabSize` scores
++  spacesDiffCount: number[];
+ }
+ 
+-function countIndentedLine(
++const countIndentedLine = (
+   stats: IIndentationStats,
+   line: ILineIndentation
+-): void {
++): void => {
+   if (line.tabsCount > 0) {
+     stats.linesIndentedWithTabsCount++;
+   } else if (line.spacesCount > 1) {
+     stats.linesIndentedWithSpacesCount++;
+   }
+-}
++};
+ 
+ /**
+  * Add the spaces diff to the `tabSize` scores.
+  * Returns false if the line should be skipped entirely.
+  */
+-function scoreSpacesDiff(
++const scoreSpacesDiff = (
+   stats: IIndentationStats,
+   diff: SpacesDiffResult,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): boolean {
++): boolean => {
+   if (diff.looksLikeAlignment) {
+     // if defaultInsertSpaces === true && the spaces count == tabSize, we may want to count it as valid indentation
+     //
+@@ -306,13 +303,13 @@
+     stats.spacesDiffCount[currentSpacesDiff]++;
+   }
+   return true;
+-}
++};
+ 
+-function collectIndentationStats(
++const collectIndentationStats = (
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): IIndentationStats {
++): IIndentationStats => {
+   // Look at most at the first 10k lines
+   const linesCount = Math.min(source.getLineCount(), 10_000);
+ 
+@@ -322,8 +319,10 @@
+     spacesDiffCount: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+   };
+ 
+-  let previousLineText = ""; // content of latest line that contained non-whitespace chars
+-  let previousLineIndentation = 0; // index at which latest line contained the first non-whitespace char
++  // content of latest line that contained non-whitespace chars
++  let previousLineText = "";
++  // index at which latest line contained the first non-whitespace char
++  let previousLineIndentation = 0;
+ 
+   const tmp = new SpacesDiffResult();
+ 
+@@ -337,7 +336,7 @@
+ 
+     countIndentedLine(stats, currentLine);
+ 
+-    spacesDiff(
++    computeSpacesDiff(
+       previousLineText,
+       previousLineIndentation,
+       currentLine.text,
+@@ -354,12 +353,12 @@
+   }
+ 
+   return stats;
+-}
++};
+ 
+-function guessTabSize(
++const guessTabSize = (
+   spacesDiffCount: number[],
+   defaultTabSize: number
+-): number {
++): number => {
+   let tabSize = defaultTabSize;
+   let tabSizeScore = 0;
+   ALLOWED_TAB_SIZE_GUESSES.forEach((possibleTabSize) => {
+@@ -383,13 +382,13 @@
+   }
+ 
+   return tabSize;
+-}
++};
+ 
+-export function guessIndentation(
++export const guessIndentation = (
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): IGuessedIndentation {
++): IGuessedIndentation => {
+   const {
+     linesIndentedWithTabsCount,
+     linesIndentedWithSpacesCount,
+@@ -417,4 +416,4 @@
+     insertSpaces,
+     tabSize,
+   };
+-}
++};

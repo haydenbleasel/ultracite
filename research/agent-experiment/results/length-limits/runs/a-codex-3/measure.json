@@ -1,0 +1,3658 @@
+{
+  "runId": "a-codex-3",
+  "topic": "length-limits",
+  "subject": "a",
+  "base": "a",
+  "label": "A, long and fine as it is",
+  "config": "oxlint core, max-lines-per-function on",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.155.1",
+  "wallSeconds": 165.1,
+  "attemptCount": 2,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 29,
+    "leftOutByFilter": {
+      "complexity": 1,
+      "func-names": 1,
+      "func-style": 9,
+      "jsdoc/check-tag-names": 1,
+      "no-nested-ternary": 1,
+      "no-plusplus": 1,
+      "no-unused-vars": 1,
+      "no-use-before-define": 1,
+      "require-await": 1,
+      "require-unicode-regexp": 1,
+      "typescript/no-explicit-any": 5,
+      "typescript/no-non-null-assertion": 2,
+      "unicorn/filename-case": 1,
+      "unicorn/no-array-sort": 1,
+      "unicorn/no-await-expression-member": 1
+    },
+    "given": [
+      {
+        "rule": "max-lines-per-function",
+        "line": 223,
+        "message": "The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50.",
+        "help": "Consider splitting it into smaller functions.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "8e78a2f328edc05a1c0d8e811e361e2737faa03ab3f0844608beedabb685e5eb",
+    "parseError": false,
+    "measureError": null,
+    "views": {
+      "oxlint user": {
+        "sizeHonor": {
+          "lines": [
+            "createClientConfigValueReplacer: max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "createClientConfigValueReplacer: complexity: async function `createClientConfigValueReplacer` has a complexity of 25. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "createClientConfigValueReplacer: max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "createClientConfigValueReplacer: complexity: async function `createClientConfigValueReplacer` has a complexity of 25. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "complexity": 1,
+          "func-names": 1,
+          "func-style": 9,
+          "jsdoc/check-tag-names": 1,
+          "max-lines-per-function": 1,
+          "no-nested-ternary": 1,
+          "no-plusplus": 1,
+          "no-unused-vars": 1,
+          "no-use-before-define": 1,
+          "require-await": 1,
+          "require-unicode-regexp": 1,
+          "typescript/no-explicit-any": 5,
+          "typescript/no-non-null-assertion": 2,
+          "unicorn/filename-case": 1,
+          "unicorn/no-array-sort": 1,
+          "unicorn/no-await-expression-member": 1
+        }
+      },
+      "oxlint strict": {
+        "sizeHonor": {
+          "lines": [
+            "createClientConfigValueReplacer: max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (36). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "createClientConfigValueReplacer: complexity: async function `createClientConfigValueReplacer` has a complexity of 25. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "createClientConfigValueReplacer: max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (36). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "createClientConfigValueReplacer: complexity: async function `createClientConfigValueReplacer` has a complexity of 25. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "complexity": 1,
+          "func-names": 1,
+          "func-style": 9,
+          "jsdoc/check-tag-names": 1,
+          "max-lines-per-function": 1,
+          "max-statements": 1,
+          "no-nested-ternary": 1,
+          "no-plusplus": 1,
+          "no-unused-vars": 1,
+          "no-use-before-define": 1,
+          "require-await": 1,
+          "require-unicode-regexp": 1,
+          "typescript/no-explicit-any": 5,
+          "typescript/no-non-null-assertion": 2,
+          "unicorn/filename-case": 1,
+          "unicorn/no-array-sort": 1,
+          "unicorn/no-await-expression-member": 1
+        }
+      },
+      "oxlint sonarjs": {
+        "sizeHonor": {
+          "lines": [],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": []
+        },
+        "sizeIgnore": {
+          "lines": [],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": []
+        },
+        "parseError": false,
+        "all": {}
+      },
+      "eslint length": {
+        "sizeHonor": {
+          "lines": [
+            "createClientConfigValueReplacer: max-lines-per-function: Async function 'createClientConfigValueReplacer' has too many lines (72). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "createClientConfigValueReplacer: max-statements: Async function 'createClientConfigValueReplacer' has too many statements (36). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "createClientConfigValueReplacer: complexity: Async function 'createClientConfigValueReplacer' has a complexity of 25. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "createClientConfigValueReplacer: max-lines-per-function: Async function 'createClientConfigValueReplacer' has too many lines (72). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "createClientConfigValueReplacer: max-statements: Async function 'createClientConfigValueReplacer' has too many statements (36). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "createClientConfigValueReplacer: complexity: Async function 'createClientConfigValueReplacer' has a complexity of 25. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/no-explicit-any": 5,
+          "@typescript-eslint/no-non-null-assertion": 2,
+          "@typescript-eslint/no-unused-vars": 1,
+          "@typescript-eslint/no-use-before-define": 1,
+          "complexity": 1,
+          "func-names": 1,
+          "func-style": 9,
+          "jsdoc/check-tag-names": 1,
+          "max-lines-per-function": 1,
+          "max-statements": 1,
+          "no-nested-ternary": 1,
+          "no-plusplus": 1,
+          "require-await": 1,
+          "require-unicode-regexp": 1,
+          "sonarjs/max-union-size": 1,
+          "sonarjs/no-hardcoded-ip": 1,
+          "sonarjs/no-inconsistent-returns": 1,
+          "sonarjs/no-nested-conditional": 1,
+          "sonarjs/no-undefined-assignment": 1,
+          "sonarjs/super-linear-regex": 1,
+          "unicorn/consistent-arrow-return-style": 2,
+          "unicorn/consistent-boolean-name": 2,
+          "unicorn/name-replacements": 8,
+          "unicorn/no-array-sort": 1,
+          "unicorn/no-await-expression-member": 1,
+          "unicorn/no-this-outside-of-class": 4,
+          "unicorn/no-top-level-side-effects": 4,
+          "unicorn/no-unsafe-string-replacement": 15,
+          "unicorn/no-useless-else": 1,
+          "unicorn/prefer-short-arrow-method": 1,
+          "unicorn/prefer-simple-condition-first": 1,
+          "unicorn/require-array-sort-compare": 1
+        }
+      },
+      "biome length": {
+        "sizeHonor": {
+          "lines": [
+            "createClientConfigValueReplacer: complexity/noExcessiveLinesPerFunction: This function has too many lines (66). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (36). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": []
+        },
+        "sizeIgnore": {
+          "lines": [
+            "createClientConfigValueReplacer: complexity/noExcessiveLinesPerFunction: This function has too many lines (66). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (36). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": []
+        },
+        "parseError": false,
+        "all": {
+          "assist/source/useSortedInterfaceMembers": 2,
+          "complexity/noExcessiveLinesPerFunction": 1,
+          "complexity/useArrowFunction": 1,
+          "correctness/noUnusedVariables": 1,
+          "nursery/noExcessiveStatementsPerFunction": 1,
+          "style/noIncrementDecrement": 1,
+          "style/noNestedTernary": 1,
+          "style/noNonNullAssertion": 2,
+          "style/noUnusedTemplateLiteral": 16,
+          "style/noUselessElse": 1,
+          "style/useFilenamingConvention": 1,
+          "style/useUnicodeRegex": 1,
+          "suspicious/noExplicitAny": 5,
+          "suspicious/noForIn": 1,
+          "suspicious/useAwait": 1
+        }
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "ignore": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "functions": [
+      {
+        "name": "cleanUrl",
+        "lines": 3,
+        "statements": 1,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "normalizePath",
+        "lines": 3,
+        "statements": 1,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "isObject",
+        "lines": 3,
+        "statements": 1,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "resolveHostname",
+        "lines": 15,
+        "statements": 7,
+        "params": 1,
+        "cognitive": 4,
+        "depth": 0
+      },
+      {
+        "name": "perEnvironmentState",
+        "lines": 12,
+        "statements": 2,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "<anonymous>",
+        "lines": 7,
+        "statements": 4,
+        "params": 1,
+        "cognitive": 1,
+        "depth": 1
+      },
+      {
+        "name": "serializeDefine",
+        "lines": 19,
+        "statements": 10,
+        "params": 1,
+        "cognitive": 8,
+        "depth": 0
+      },
+      {
+        "name": "replaceDefine",
+        "lines": 9,
+        "statements": 0,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "clientInjectionsPlugin",
+        "lines": 46,
+        "statements": 3,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "<callback to perEnvironmentState>",
+        "lines": 12,
+        "statements": 7,
+        "params": 1,
+        "cognitive": 3,
+        "depth": 1
+      },
+      {
+        "name": "applyToEnvironment",
+        "lines": 3,
+        "statements": 1,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 1
+      },
+      {
+        "name": "buildStart",
+        "lines": 3,
+        "statements": 1,
+        "params": 0,
+        "cognitive": 0,
+        "depth": 1
+      },
+      {
+        "name": "transform",
+        "lines": 20,
+        "statements": 7,
+        "params": 2,
+        "cognitive": 3,
+        "depth": 1
+      },
+      {
+        "name": "escapeReplacement",
+        "lines": 4,
+        "statements": 2,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "createClientConfigValueReplacer",
+        "lines": 72,
+        "statements": 36,
+        "params": 1,
+        "cognitive": 5,
+        "depth": 0
+      },
+      {
+        "name": "<anonymous>",
+        "lines": 16,
+        "statements": 0,
+        "params": 1,
+        "cognitive": 0,
+        "depth": 1
+      }
+    ],
+    "over50": [
+      "createClientConfigValueReplacer (72)"
+    ],
+    "fileLines": 295,
+    "typeErrors": [],
+    "oracle": {
+      "verdict": "same",
+      "scenarios": 400,
+      "differing": 0,
+      "onceDiffering": 0,
+      "crashed": 0,
+      "arityOnly": 0,
+      "why": null,
+      "differences": [],
+      "ignoringKeyOrder": "same"
+    },
+    "structure": {
+      "createClientConfigValueReplacer": {
+        "entry": {
+          "cognitive": 5,
+          "lines": 72,
+          "params": 1,
+          "statements": 36
+        },
+        "fileLines": 295,
+        "functions": 19,
+        "functionsBefore": 19,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 10
+      }
+    },
+    "formatted": {
+      "error": null,
+      "changed": false,
+      "fileLines": 295,
+      "joinedLines": 0,
+      "size": {
+        "lines": [
+          "createClientConfigValueReplacer: max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+        ],
+        "params": [],
+        "statements": [
+          "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (36). Maximum allowed is 10."
+        ],
+        "fileLines": [],
+        "complexity": [
+          "createClientConfigValueReplacer: complexity: async function `createClientConfigValueReplacer` has a complexity of 25. Maximum allowed is 20."
+        ]
+      },
+      "handoffLeft": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "structure": {
+        "createClientConfigValueReplacer": {
+          "entry": {
+            "cognitive": 5,
+            "lines": 72,
+            "params": 1,
+            "statements": 36
+          },
+          "fileLines": 295,
+          "functions": 19,
+          "functionsBefore": 19,
+          "helperCallsFromEntry": 0,
+          "helpers": [],
+          "helpersCalledOnce": 0,
+          "helpersInCallOrder": true,
+          "paramsPassedToHelpers": 0,
+          "topLevelFunctions": 10
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": []
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "max-lines-per-function L223: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 66.5,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "helpers extracted",
+        "kinds": [
+          "helpers",
+          "single-use helpers"
+        ],
+        "helpers": [
+          {
+            "name": "resolveClientConnectionValues",
+            "lines": 48,
+            "params": 2,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          }
+        ],
+        "removed": [],
+        "entries": {
+          "createClientConfigValueReplacer": {
+            "linesGiven": 72,
+            "linesNow": 43,
+            "blankLinesGiven": 8,
+            "blankLinesNow": 2
+          }
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "a498fab55e4f18b0afff07df695dc5a2bf4903c1839fe0c0a0db82181551a637",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "parseError": false,
+            "all": {
+              "complexity": 1,
+              "func-names": 1,
+              "func-style": 10,
+              "jsdoc/check-tag-names": 1,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function `resolveClientConnectionValues` has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314)."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function `resolveClientConnectionValues` has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314)."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "parseError": false,
+            "all": {
+              "complexity": 1,
+              "func-names": 1,
+              "func-style": 10,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Function 'resolveClientConnectionValues' has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async function 'createClientConfigValueReplacer' has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314). Maximum allowed is 300."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: Function 'resolveClientConnectionValues' has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Function 'resolveClientConnectionValues' has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async function 'createClientConfigValueReplacer' has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314). Maximum allowed is 300."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: Function 'resolveClientConnectionValues' has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-explicit-any": 5,
+              "@typescript-eslint/no-non-null-assertion": 2,
+              "@typescript-eslint/no-unused-vars": 1,
+              "@typescript-eslint/no-use-before-define": 1,
+              "complexity": 1,
+              "func-names": 1,
+              "func-style": 10,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "sonarjs/max-union-size": 1,
+              "sonarjs/no-hardcoded-ip": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "sonarjs/no-undefined-assignment": 1,
+              "sonarjs/super-linear-regex": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 8,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-this-outside-of-class": 4,
+              "unicorn/no-top-level-side-effects": 4,
+              "unicorn/no-unsafe-string-replacement": 15,
+              "unicorn/no-useless-else": 1,
+              "unicorn/prefer-short-arrow-method": 1,
+              "unicorn/prefer-simple-condition-first": 1,
+              "unicorn/require-array-sort-compare": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "complexity/useArrowFunction": 1,
+              "correctness/noUnusedVariables": 1,
+              "nursery/noExcessiveStatementsPerFunction": 2,
+              "style/noIncrementDecrement": 1,
+              "style/noNestedTernary": 1,
+              "style/noNonNullAssertion": 2,
+              "style/noUnusedTemplateLiteral": 16,
+              "style/noUselessElse": 1,
+              "style/useFilenamingConvention": 1,
+              "style/useUnicodeRegex": 1,
+              "suspicious/noExplicitAny": 5,
+              "suspicious/noForIn": 1,
+              "suspicious/useAwait": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "cleanUrl",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "normalizePath",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "isObject",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveHostname",
+            "lines": 15,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "perEnvironmentState",
+            "lines": 12,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "serializeDefine",
+            "lines": 19,
+            "statements": 10,
+            "params": 1,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "replaceDefine",
+            "lines": 9,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "clientInjectionsPlugin",
+            "lines": 46,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to perEnvironmentState>",
+            "lines": 12,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "applyToEnvironment",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "buildStart",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "transform",
+            "lines": 20,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "escapeReplacement",
+            "lines": 4,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveClientConnectionValues",
+            "lines": 48,
+            "statements": 21,
+            "params": 2,
+            "cognitive": 5,
+            "depth": 0
+          },
+          {
+            "name": "createClientConfigValueReplacer",
+            "lines": 43,
+            "statements": 17,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 16,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          }
+        ],
+        "over50": [],
+        "fileLines": 315,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 400,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "createClientConfigValueReplacer": {
+            "entry": {
+              "cognitive": 0,
+              "lines": 43,
+              "params": 1,
+              "statements": 17
+            },
+            "fileLines": 315,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 48,
+                "name": "resolveClientConnectionValues",
+                "params": 2,
+                "statements": 21
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 2,
+            "topLevelFunctions": 11
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 315,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "resolveClientConnectionValues: max-statements: function `resolveClientConnectionValues` has too many statements (21). Maximum allowed is 10.",
+              "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (17). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (314)."
+            ],
+            "complexity": [
+              "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+            ]
+          },
+          "handoffLeft": [],
+          "structure": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 315,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 48,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 21
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 2,
+              "topLevelFunctions": 11
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "resolveClientConnectionValues",
+              "lines": 48,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 315,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 48,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 21
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 2,
+              "topLevelFunctions": 11
+            }
+          },
+          "entries": {
+            "createClientConfigValueReplacer": {
+              "linesGiven": 72,
+              "linesNow": 43,
+              "blankLinesGiven": 8,
+              "blankLinesNow": 2
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 9,
+              "topLevelDataVariables": 8
+            },
+            "now": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 9,
+              "topLevelDataVariables": 8
+            }
+          },
+          "commentLines": {
+            "given": 52,
+            "now": 52
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "clientInjectionsPlugin(config)"
+            ],
+            "now": [
+              "clientInjectionsPlugin(config)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {
+            "func-style": 1
+          },
+          "oxlint strict": {
+            "func-style": 1,
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "func-style": 1,
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "biome length": {
+            "nursery/noExcessiveStatementsPerFunction": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "a498fab55e4f18b0afff07df695dc5a2bf4903c1839fe0c0a0db82181551a637",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "parseError": false,
+            "all": {
+              "complexity": 1,
+              "func-names": 1,
+              "func-style": 10,
+              "jsdoc/check-tag-names": 1,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function `resolveClientConnectionValues` has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314)."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function `resolveClientConnectionValues` has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314)."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "parseError": false,
+            "all": {
+              "complexity": 1,
+              "func-names": 1,
+              "func-style": 10,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Function 'resolveClientConnectionValues' has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async function 'createClientConfigValueReplacer' has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314). Maximum allowed is 300."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: Function 'resolveClientConnectionValues' has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Function 'resolveClientConnectionValues' has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async function 'createClientConfigValueReplacer' has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (314). Maximum allowed is 300."
+              ],
+              "complexity": [
+                "resolveClientConnectionValues: complexity: Function 'resolveClientConnectionValues' has a complexity of 25. Maximum allowed is 20."
+              ]
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-explicit-any": 5,
+              "@typescript-eslint/no-non-null-assertion": 2,
+              "@typescript-eslint/no-unused-vars": 1,
+              "@typescript-eslint/no-use-before-define": 1,
+              "complexity": 1,
+              "func-names": 1,
+              "func-style": 10,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "sonarjs/max-union-size": 1,
+              "sonarjs/no-hardcoded-ip": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "sonarjs/no-undefined-assignment": 1,
+              "sonarjs/super-linear-regex": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 8,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-this-outside-of-class": 4,
+              "unicorn/no-top-level-side-effects": 4,
+              "unicorn/no-unsafe-string-replacement": 15,
+              "unicorn/no-useless-else": 1,
+              "unicorn/prefer-short-arrow-method": 1,
+              "unicorn/prefer-simple-condition-first": 1,
+              "unicorn/require-array-sort-compare": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (21). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "complexity/useArrowFunction": 1,
+              "correctness/noUnusedVariables": 1,
+              "nursery/noExcessiveStatementsPerFunction": 2,
+              "style/noIncrementDecrement": 1,
+              "style/noNestedTernary": 1,
+              "style/noNonNullAssertion": 2,
+              "style/noUnusedTemplateLiteral": 16,
+              "style/noUselessElse": 1,
+              "style/useFilenamingConvention": 1,
+              "style/useUnicodeRegex": 1,
+              "suspicious/noExplicitAny": 5,
+              "suspicious/noForIn": 1,
+              "suspicious/useAwait": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "cleanUrl",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "normalizePath",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "isObject",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveHostname",
+            "lines": 15,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "perEnvironmentState",
+            "lines": 12,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "serializeDefine",
+            "lines": 19,
+            "statements": 10,
+            "params": 1,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "replaceDefine",
+            "lines": 9,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "clientInjectionsPlugin",
+            "lines": 46,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to perEnvironmentState>",
+            "lines": 12,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "applyToEnvironment",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "buildStart",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "transform",
+            "lines": 20,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "escapeReplacement",
+            "lines": 4,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveClientConnectionValues",
+            "lines": 48,
+            "statements": 21,
+            "params": 2,
+            "cognitive": 5,
+            "depth": 0
+          },
+          {
+            "name": "createClientConfigValueReplacer",
+            "lines": 43,
+            "statements": 17,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 16,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          }
+        ],
+        "over50": [],
+        "fileLines": 315,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 400,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "createClientConfigValueReplacer": {
+            "entry": {
+              "cognitive": 0,
+              "lines": 43,
+              "params": 1,
+              "statements": 17
+            },
+            "fileLines": 315,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 48,
+                "name": "resolveClientConnectionValues",
+                "params": 2,
+                "statements": 21
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 2,
+            "topLevelFunctions": 11
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 315,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "resolveClientConnectionValues: max-statements: function `resolveClientConnectionValues` has too many statements (21). Maximum allowed is 10.",
+              "createClientConfigValueReplacer: max-statements: function `createClientConfigValueReplacer` has too many statements (17). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (314)."
+            ],
+            "complexity": [
+              "resolveClientConnectionValues: complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+            ]
+          },
+          "handoffLeft": [],
+          "structure": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 315,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 48,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 21
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 2,
+              "topLevelFunctions": 11
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "resolveClientConnectionValues",
+              "lines": 48,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 315,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 48,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 21
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 2,
+              "topLevelFunctions": 11
+            }
+          },
+          "entries": {
+            "createClientConfigValueReplacer": {
+              "linesGiven": 72,
+              "linesNow": 43,
+              "blankLinesGiven": 8,
+              "blankLinesNow": 2
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 9,
+              "topLevelDataVariables": 8
+            },
+            "now": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 9,
+              "topLevelDataVariables": 8
+            }
+          },
+          "commentLines": {
+            "given": 52,
+            "now": 52
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "clientInjectionsPlugin(config)"
+            ],
+            "now": [
+              "clientInjectionsPlugin(config)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {
+            "func-style": 1
+          },
+          "oxlint strict": {
+            "func-style": 1,
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "func-style": 1,
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "biome length": {
+            "nursery/noExcessiveStatementsPerFunction": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [
+          "complexity L223: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20.",
+          "func-style L272: Expected a function expression."
+        ],
+        "remainingDetail": [
+          {
+            "rule": "complexity",
+            "line": 223,
+            "message": "function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20."
+          },
+          {
+            "rule": "func-style",
+            "line": 272,
+            "message": "Expected a function expression."
+          }
+        ],
+        "remainingLengthRuleOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": [
+            "complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20.",
+            "func-style: Expected a function expression."
+          ]
+        },
+        "vsHandoff": {
+          "cleared": [
+            "max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": [
+            "complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20.",
+            "func-style: Expected a function expression."
+          ]
+        },
+        "retried": true
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 9,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 345498,
+          "cached_input_tokens": 313984,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4272,
+          "reasoning_output_tokens": 1461,
+          "total_tokens": 349770
+        },
+        "tokensUsedReportedOnStderr": 35786,
+        "thinkingBlocks": 8,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*config*' -g '!node_modules' -g '!\\\\.git' .; sed -n '1,340p' clie",
+          "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp",
+          "const r = await tools.exec_command({cmd:\"command -v node bun oxlint ultracite; node --version; ls -a ..; ls -a ../..; ls -a ../../..; ls -d /tmp/node_modules /private/tmp/node_modules ~/node_modules ~",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/a-codex-3/clientInjections.ts\\n@@\\n-async function createClientConfigValueReplacer(\\n-  config: ResolvedConfig\\n-): Promise<(",
+          "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/package.json; rg --files ~/GitHub/ultracite/packages | rg '/(core\\\\.(ts|js|json)|package.json)$'; head -n 90 ~/GitHub/ultracite/node_modules/",
+          "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/packages/cli/package.json; rg --files ~/GitHub/ultracite/packages/cli | rg '/(oxlint|oxfmt)/.*core|dist/index|config/oxlint|configs/oxlint' |",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { registerHooks } from 'node:module';\\nregisterHooks({ resolve(specifier, context, nextResolve) {\\n  if (specifier === 'ox",
+          "const original = load(\"originalSource\");\nconst script = `import assert from 'node:assert/strict';\nimport { readFileSync } from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nconst orig"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*config*' -g '!node_modules' -g '!\\\\.git' .; sed -n '1,340p' clientInjections.ts; cat clientInjections.ts.d6719a38.json\",\"max_output_tokens\":10000}),\n  tools.exec_co",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$di",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const r = await tools.exec_command({cmd:\"command -v node bun oxlint ultracite; node --version; ls -a ..; ls -a ../..; ls -a ../../..; ls -d /tmp/node_modules /private/tmp/node_modules ~/node_modules ~/GitHub/ultracite/node_modules 2>/dev/null\",\"max_output_tokens\":2500});text(r);\nstore(\"originalSourc",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/package.json; rg --files ~/GitHub/ultracite/packages | rg '/(core\\\\.(ts|js|json)|package.json)$'; head -n 90 ~/GitHub/ultracite/node_modules/.bin/oxlint; sed -n '215,350p' clientInjections.ts\",\"max_output_tokens\":4000}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/packages/cli/package.json; rg --files ~/GitHub/ultracite/packages/cli | rg '/(oxlint|oxfmt)/.*core|dist/index|config/oxlint|configs/oxlint' | head -n 15; ls -l ~/GitHub/ultracite/node_modules/ultracite\",\"max_output_tokens\":2200}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { registerHooks } from 'node:module';\\nregisterHooks({ resolve(specifier, context, nextResolve) {\\n  if (specifier === 'oxlint') return nextResolve('~/GitHub/ultracite/node_modules/oxlint/dist/index.js', context);\\n  if (s",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const original = load(\"originalSource\");\nconst script = `import assert from 'node:assert/strict';\nimport { readFileSync } from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nconst original = ${JSON.stringify(original)};\nconst revised = readFileSync('clientInjections.ts', 'utf8');\nasy",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "const r = await tools.exec_command({cmd:\"command -v node bun oxlint ultracite; node --version; ls -a ..; ls -a ../..; ls -a ../../..; ls -d /tmp/node_modules /private/tmp/node_modules ~/node_modules ~/GitHub/ultracite/node_modules 2>/dev/null\",\"max_output_tokens\":2500});text(r);\nstore(\"originalSourc",
+          "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/package.json; rg --files ~/GitHub/ultracite/packages | rg '/(core\\\\.(ts|js|json)|package.json)$'; head -n 90 ~/GitHub/ultracite/node_modules/.bin/oxlint; sed -n '215,350p' clientInjections.ts\",\"max_output_tokens\":4000}));\n",
+          "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/packages/cli/package.json; rg --files ~/GitHub/ultracite/packages/cli | rg '/(oxlint|oxfmt)/.*core|dist/index|config/oxlint|configs/oxlint' | head -n 15; ls -l ~/GitHub/ultracite/node_modules/ultracite\",\"max_output_tokens\":2200}));\n",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { registerHooks } from 'node:module';\\nregisterHooks({ resolve(specifier, context, nextResolve) {\\n  if (specifier === 'oxlint') return nextResolve('~/GitHub/ultracite/node_modules/oxlint/dist/index.js', context);\\n  if (s"
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.exec_command({cmd:\\\"node --input-type=module <<'NODE'\\\\nimport { registerHooks } from 'node:module';\\\\nregisterHooks({ resolve(specifier, context, nextResolve)",
+          "{\"tool\":\"exec\",\"input\":\"const original = load(\\\"originalSource\\\");\\nconst script = `import assert from 'node:assert/strict';\\nimport { readFileSync } from 'node:fs';\\nimport { stripTypeScriptTypes } f"
+        ],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-async function createClientConfigValueReplacer(\n-  config: ResolvedConfig\n-): Promise<(code: string) => string> {\n-  const resolvedServerHostname = (await resolveHostname(config.server.host))\n-    .name;\n+function resolveClientConnectionValues(\n+  config: ResolvedConfig,\n+  resolvedServerHostname: string\n+) {\n+  return {\n+    devBase,\n+    directTarget,\n+    hmrBase,\n+    hmrConfigName,\n+    host,\n+    overlay,\n+    port,\n+    protocol,\n+    serverHost,\n+    timeout,\n+  };\n+}\n+\n+async function createClientConfigValueReplacer(\n+  config: ResolvedConfig\n+): Promise<(code: string) => string> {\n+  const resolvedServerHostname = (await resolveHostname(config.server.host))\n+    .name;\n+  const values = resolveClientConnectionValues(config, resolvedServerHostname);\n+\n-  const baseReplacement = e"
+        ],
+        "finalMessage": "Fixed by extracting connection-setting calculations into a helper. Only `clientInjections.ts` changed.\n\nThe requested lint rule passes, and runtime output matches the original across 210 configurations.",
+        "understood": {
+          "fineAsIs": [],
+          "behaviourRisk": [],
+          "preserveBehaviour": [],
+          "review": [],
+          "whySplit": [],
+          "params": [],
+          "lineCount": [],
+          "formatter": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "corpusNotes": 2,
+          "mainCheckout": 159,
+          "webAccess": 25,
+          "sessionLogs": 19
+        },
+        "exposureInToolCalls": {
+          "mainCheckout": 43,
+          "webAccess": 6,
+          "sessionLogs": 1
+        },
+        "exposureInToolInputs": {
+          "mainCheckout": 19,
+          "sessionLogs": 1
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*config*' -g '!node_modules' -g '!\\\\.git' .; sed -n '1,340p' clientInjections.ts; cat clientInjections.ts.d6719a38.json\",\"max_output_tokens\":10000}),\n  tools.exec_command({cmd:\"rg -n 'length-limits|clientInjections|max-lines-per-function' ~/.codex/memories/MEMORY.md\",\"max_output_tokens\":1500})\n]);\nfor (let i = 0; i < results.length; i++) text({i,...results[i]});\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done; cat package.json oxlint.config.ts tsconfig.json; git status --short; ls node_modules/.bin\",\"max_output_tokens\":6500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "const r = await tools.exec_command({cmd:\"command -v node bun oxlint ultracite; node --version; ls -a ..; ls -a ../..; ls -a ../../..; ls -d /tmp/node_modules /private/tmp/node_modules ~/node_modules ~/GitHub/ultracite/node_modules 2>/dev/null\",\"max_output_tokens\":2500});text(r);\nstore(\"originalSource\", (await tools.exec_command({cmd:\"cat clientInjections.ts\",\"max_output_tokens\":6500})).output);\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/package.json; rg --files ~/GitHub/ultracite/packages | rg '/(core\\\\.(ts|js|json)|package.json)$'; head -n 90 ~/GitHub/ultracite/node_modules/.bin/oxlint; sed -n '215,350p' clientInjections.ts\",\"max_output_tokens\":4000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/packages/cli/package.json; rg --files ~/GitHub/ultracite/packages/cli | rg '/(oxlint|oxfmt)/.*core|dist/index|config/oxlint|configs/oxlint' | head -n 15; ls -l ~/GitHub/ultracite/node_modules/ultracite\",\"max_output_tokens\":2200}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { registerHooks } from 'node:module';\\nregisterHooks({ resolve(specifier, context, nextResolve) {\\n  if (specifier === 'oxlint') return nextResolve('~/GitHub/ultracite/node_modules/oxlint/dist/index.js', context);\\n  if (specifier === 'ultracite/oxlint/core') return nextResolve('~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs', context);\\n  return nextResolve(specifier, context);\\n}});\\nprocess.argv = [process.execPath, '~/GitHub/ultracite/node_modules/oxlint/bin/oxlin"
+          }
+        ]
+      }
+    },
+    {
+      "attempt": 2,
+      "prompt": "buildRetryPrompt",
+      "promptKind": "retry: new since the edit",
+      "given": [
+        "complexity L223: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20.",
+        "func-style L272: Expected a function expression."
+      ],
+      "retryIssues": {
+        "still": [],
+        "introduced": [
+          "complexity L223",
+          "func-style L272"
+        ]
+      },
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 98.6,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "helpers added",
+        "kinds": [
+          "helpers",
+          "single-use helpers"
+        ],
+        "helpers": [
+          {
+            "name": "resolveClientPort",
+            "lines": 13,
+            "params": 3,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          }
+        ],
+        "removed": [],
+        "entries": {
+          "createClientConfigValueReplacer": {
+            "linesGiven": 43,
+            "linesNow": 43,
+            "blankLinesGiven": 2,
+            "blankLinesNow": 2
+          }
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "3efbabe1533c68a3da58c4c41857c56b31e71ff9acf4c67156db7c1046e0c76c",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-names": 1,
+              "func-style": 8,
+              "jsdoc/check-tag-names": 1,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-names": 1,
+              "func-style": 8,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Arrow function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async arrow function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Arrow function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async arrow function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-explicit-any": 5,
+              "@typescript-eslint/no-non-null-assertion": 2,
+              "@typescript-eslint/no-unused-vars": 1,
+              "@typescript-eslint/no-use-before-define": 1,
+              "func-names": 1,
+              "func-style": 8,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "sonarjs/max-union-size": 1,
+              "sonarjs/no-hardcoded-ip": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "sonarjs/no-undefined-assignment": 1,
+              "sonarjs/super-linear-regex": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 8,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-this-outside-of-class": 4,
+              "unicorn/no-top-level-side-effects": 4,
+              "unicorn/no-unsafe-string-replacement": 15,
+              "unicorn/no-useless-else": 1,
+              "unicorn/prefer-short-arrow-method": 1,
+              "unicorn/prefer-simple-condition-first": 1,
+              "unicorn/require-array-sort-compare": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "complexity/useArrowFunction": 1,
+              "correctness/noUnusedVariables": 1,
+              "nursery/noExcessiveStatementsPerFunction": 2,
+              "style/noIncrementDecrement": 1,
+              "style/noNestedTernary": 1,
+              "style/noNonNullAssertion": 2,
+              "style/noUnusedTemplateLiteral": 16,
+              "style/noUselessElse": 1,
+              "style/useFilenamingConvention": 1,
+              "style/useUnicodeRegex": 1,
+              "suspicious/noExplicitAny": 5,
+              "suspicious/noForIn": 1,
+              "suspicious/useAwait": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "cleanUrl",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "normalizePath",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "isObject",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveHostname",
+            "lines": 15,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "perEnvironmentState",
+            "lines": 12,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "serializeDefine",
+            "lines": 19,
+            "statements": 10,
+            "params": 1,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "replaceDefine",
+            "lines": 9,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "clientInjectionsPlugin",
+            "lines": 46,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to perEnvironmentState>",
+            "lines": 12,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "applyToEnvironment",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "buildStart",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "transform",
+            "lines": 20,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "escapeReplacement",
+            "lines": 4,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveClientPort",
+            "lines": 13,
+            "statements": 4,
+            "params": 3,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "resolveClientConnectionValues",
+            "lines": 43,
+            "statements": 19,
+            "params": 2,
+            "cognitive": 3,
+            "depth": 0
+          },
+          {
+            "name": "createClientConfigValueReplacer",
+            "lines": 43,
+            "statements": 17,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 16,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          }
+        ],
+        "over50": [],
+        "fileLines": 324,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 400,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "createClientConfigValueReplacer": {
+            "entry": {
+              "cognitive": 0,
+              "lines": 43,
+              "params": 1,
+              "statements": 17
+            },
+            "fileLines": 324,
+            "functions": 21,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 13,
+                "name": "resolveClientPort",
+                "params": 3,
+                "statements": 4
+              },
+              {
+                "callSites": 1,
+                "lines": 43,
+                "name": "resolveClientConnectionValues",
+                "params": 2,
+                "statements": 19
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 5,
+            "topLevelFunctions": 12
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 324,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "resolveClientConnectionValues: max-statements: function has too many statements (19). Maximum allowed is 10.",
+              "createClientConfigValueReplacer: max-statements: function has too many statements (17). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (323)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 324,
+              "functions": 21,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 13,
+                  "name": "resolveClientPort",
+                  "params": 3,
+                  "statements": 4
+                },
+                {
+                  "callSites": 1,
+                  "lines": 43,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 19
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 5,
+              "topLevelFunctions": 12
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "resolveClientPort",
+              "lines": 13,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "resolveClientConnectionValues",
+              "lines": 43,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 324,
+              "functions": 21,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 13,
+                  "name": "resolveClientPort",
+                  "params": 3,
+                  "statements": 4
+                },
+                {
+                  "callSites": 1,
+                  "lines": 43,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 19
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 5,
+              "topLevelFunctions": 12
+            }
+          },
+          "entries": {
+            "createClientConfigValueReplacer": {
+              "linesGiven": 72,
+              "linesNow": 43,
+              "blankLinesGiven": 8,
+              "blankLinesNow": 2
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 9,
+              "topLevelDataVariables": 8
+            },
+            "now": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 12,
+              "topLevelDataVariables": 8
+            }
+          },
+          "commentLines": {
+            "given": 52,
+            "now": 52
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "clientInjectionsPlugin(config)"
+            ],
+            "now": [
+              "clientInjectionsPlugin(config)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {},
+          "oxlint strict": {
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "biome length": {
+            "nursery/noExcessiveStatementsPerFunction": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "3efbabe1533c68a3da58c4c41857c56b31e71ff9acf4c67156db7c1046e0c76c",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-names": 1,
+              "func-style": 8,
+              "jsdoc/check-tag-names": 1,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-names": 1,
+              "func-style": 8,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "no-unused-vars": 1,
+              "no-use-before-define": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "typescript/no-explicit-any": 5,
+              "typescript/no-non-null-assertion": 2,
+              "unicorn/filename-case": 1,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Arrow function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async arrow function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: max-statements: Arrow function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: max-statements: Async arrow function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (323). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-explicit-any": 5,
+              "@typescript-eslint/no-non-null-assertion": 2,
+              "@typescript-eslint/no-unused-vars": 1,
+              "@typescript-eslint/no-use-before-define": 1,
+              "func-names": 1,
+              "func-style": 8,
+              "jsdoc/check-tag-names": 1,
+              "max-lines": 1,
+              "max-statements": 2,
+              "no-nested-ternary": 1,
+              "no-plusplus": 1,
+              "require-await": 1,
+              "require-unicode-regexp": 1,
+              "sonarjs/max-union-size": 1,
+              "sonarjs/no-hardcoded-ip": 1,
+              "sonarjs/no-inconsistent-returns": 1,
+              "sonarjs/no-nested-conditional": 1,
+              "sonarjs/no-undefined-assignment": 1,
+              "sonarjs/super-linear-regex": 1,
+              "unicorn/consistent-arrow-return-style": 2,
+              "unicorn/consistent-boolean-name": 2,
+              "unicorn/name-replacements": 8,
+              "unicorn/no-array-sort": 1,
+              "unicorn/no-await-expression-member": 1,
+              "unicorn/no-this-outside-of-class": 4,
+              "unicorn/no-top-level-side-effects": 4,
+              "unicorn/no-unsafe-string-replacement": 15,
+              "unicorn/no-useless-else": 1,
+              "unicorn/prefer-short-arrow-method": 1,
+              "unicorn/prefer-simple-condition-first": 1,
+              "unicorn/require-array-sort-compare": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "resolveClientConnectionValues: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "createClientConfigValueReplacer: nursery/noExcessiveStatementsPerFunction: This function has too many statements (17). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "complexity/useArrowFunction": 1,
+              "correctness/noUnusedVariables": 1,
+              "nursery/noExcessiveStatementsPerFunction": 2,
+              "style/noIncrementDecrement": 1,
+              "style/noNestedTernary": 1,
+              "style/noNonNullAssertion": 2,
+              "style/noUnusedTemplateLiteral": 16,
+              "style/noUselessElse": 1,
+              "style/useFilenamingConvention": 1,
+              "style/useUnicodeRegex": 1,
+              "suspicious/noExplicitAny": 5,
+              "suspicious/noForIn": 1,
+              "suspicious/useAwait": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "cleanUrl",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "normalizePath",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "isObject",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveHostname",
+            "lines": 15,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 4,
+            "depth": 0
+          },
+          {
+            "name": "perEnvironmentState",
+            "lines": 12,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 7,
+            "statements": 4,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "serializeDefine",
+            "lines": 19,
+            "statements": 10,
+            "params": 1,
+            "cognitive": 8,
+            "depth": 0
+          },
+          {
+            "name": "replaceDefine",
+            "lines": 9,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "clientInjectionsPlugin",
+            "lines": 46,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to perEnvironmentState>",
+            "lines": 12,
+            "statements": 7,
+            "params": 1,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "applyToEnvironment",
+            "lines": 3,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "buildStart",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 1
+          },
+          {
+            "name": "transform",
+            "lines": 20,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 3,
+            "depth": 1
+          },
+          {
+            "name": "escapeReplacement",
+            "lines": 4,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "resolveClientPort",
+            "lines": 13,
+            "statements": 4,
+            "params": 3,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "resolveClientConnectionValues",
+            "lines": 43,
+            "statements": 19,
+            "params": 2,
+            "cognitive": 3,
+            "depth": 0
+          },
+          {
+            "name": "createClientConfigValueReplacer",
+            "lines": 43,
+            "statements": 17,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<anonymous>",
+            "lines": 16,
+            "statements": 0,
+            "params": 1,
+            "cognitive": 0,
+            "depth": 1
+          }
+        ],
+        "over50": [],
+        "fileLines": 324,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 400,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "createClientConfigValueReplacer": {
+            "entry": {
+              "cognitive": 0,
+              "lines": 43,
+              "params": 1,
+              "statements": 17
+            },
+            "fileLines": 324,
+            "functions": 21,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 13,
+                "name": "resolveClientPort",
+                "params": 3,
+                "statements": 4
+              },
+              {
+                "callSites": 1,
+                "lines": 43,
+                "name": "resolveClientConnectionValues",
+                "params": 2,
+                "statements": 19
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 5,
+            "topLevelFunctions": 12
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 324,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "resolveClientConnectionValues: max-statements: function has too many statements (19). Maximum allowed is 10.",
+              "createClientConfigValueReplacer: max-statements: function has too many statements (17). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (323)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 324,
+              "functions": 21,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 13,
+                  "name": "resolveClientPort",
+                  "params": 3,
+                  "statements": 4
+                },
+                {
+                  "callSites": 1,
+                  "lines": 43,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 19
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 5,
+              "topLevelFunctions": 12
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "resolveClientPort",
+              "lines": 13,
+              "params": 3,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "resolveClientConnectionValues",
+              "lines": 43,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "createClientConfigValueReplacer": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 43,
+                "params": 1,
+                "statements": 17
+              },
+              "fileLines": 324,
+              "functions": 21,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 13,
+                  "name": "resolveClientPort",
+                  "params": 3,
+                  "statements": 4
+                },
+                {
+                  "callSites": 1,
+                  "lines": 43,
+                  "name": "resolveClientConnectionValues",
+                  "params": 2,
+                  "statements": 19
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 5,
+              "topLevelFunctions": 12
+            }
+          },
+          "entries": {
+            "createClientConfigValueReplacer": {
+              "linesGiven": 72,
+              "linesNow": 43,
+              "blankLinesGiven": 8,
+              "blankLinesNow": 2
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 9,
+              "topLevelDataVariables": 8
+            },
+            "now": {
+              "loops": 2,
+              "continues": 0,
+              "replaceCalls": 15,
+              "replaceAllCalls": 1,
+              "reduceCalls": 0,
+              "topLevelVariables": 12,
+              "topLevelDataVariables": 8
+            }
+          },
+          "commentLines": {
+            "given": 52,
+            "now": 52
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "clientInjectionsPlugin(config)"
+            ],
+            "now": [
+              "clientInjectionsPlugin(config)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {},
+          "oxlint strict": {
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "max-lines": 1,
+            "max-statements": 1
+          },
+          "biome length": {
+            "nursery/noExcessiveStatementsPerFunction": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingLengthRuleOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "complexity: function `resolveClientConnectionValues` has a complexity of 25. Maximum allowed is 20.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "max-lines-per-function: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 15,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 632961,
+          "cached_input_tokens": 592640,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 6425,
+          "reasoning_output_tokens": 2467,
+          "total_tokens": 639386
+        },
+        "tokensUsedReportedOnStderr": 46746,
+        "thinkingBlocks": 14,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const r = await tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*oxlint*' -g '*eslint*' -g 'clientInjections.ts*' -g '!node_modules' -g '!.git'\",\"max_output_t",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts; ls -la\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for dir in / /private /private/v",
+          "text((await tools.exec_command({cmd:\"command -v node; command -v bun; command -v oxlint; for dir in . .. ../.. ../../.. ../../../..; do if [ -d \\\"$dir/node_modules/.bin\\\" ]; then printf '%s\\\\n' \\\"$dir",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/a-codex-3/clientInjections.ts\\n@@\\n-function resolveClientConnectionValues(\\n+const resolveClientPort = (\\n+  config: Resolve",
+          "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nfor (const p of ['oxlint', 'typescript', 'ultracite/oxlint/core']) {\\n  tr",
+          "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nconst cache = os.homedir() + '/.bun/install/cache';\\nconsole.log(fs.readdi",
+          "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nfor (const dir of [os.homedir() + '/.bun/install/cache/@oxlint', process.e",
+          "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/package.json; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/bin; cat ~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.",
+          "text((await tools.exec_command({cmd:\"rg -n 'NATIVE|binding|process.env|runCli|lint' ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/index.js ~/.bun/instal",
+          "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint; rg -n 'NATIVE|process.env|runCli' ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/bindings.js ~/.bun/install/cac",
+          "text((await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/o",
+          "text(await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/ox",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/a-codex-3/clientInjections.ts\\n@@\\n-function resolveClientConnectionValues(\\n+const resolveClientConnectionValues = (\\n   con",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { spawnSync } from 'node:child_process';\\nimport { readFileSync } from 'node:fs';\\nconst result = spawnSync(process.execPa"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const r = await tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*oxlint*' -g '*eslint*' -g 'clientInjections.ts*' -g '!node_modules' -g '!.git'\",\"max_output_tokens\":4000}); text(r.output);\ntext((await tools.exec_command({cmd:\"cat clientInjections.ts; cat cli",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts; ls -la\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"command -v node; command -v bun; command -v oxlint; for dir in . .. ../.. ../../.. ../../../..; do if [ -d \\\"$dir/node_modules/.bin\\\" ]; then printf '%s\\\\n' \\\"$dir/node_modules/.bin\\\"; ls \\\"$dir/node_modules/.bin\\\"; fi; done; cat tsconfig.json\",\"max_output_tokens",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nfor (const p of ['oxlint', 'typescript', 'ultracite/oxlint/core']) {\\n  try { console.log(p, import.meta.resolve(p)); } catch { console.log(p, 'not found'); }\\n}\\nfor (const ",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nconst cache = os.homedir() + '/.bun/install/cache';\\nconsole.log(fs.readdirSync(cache).filter(name => /^ultracite@8\\\\.0\\\\.2|^@oxlint|^typescript@6/.test(name)));\\nfor (const ",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nfor (const dir of [os.homedir() + '/.bun/install/cache/@oxlint', process.env.TMPDIR + 'bunx-501-ultracite@latest/node_modules', os.homedir() + '/.npm/_npx']) {\\n  try {\\n    ",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/package.json; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/bin; cat ~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/package.json; cat \\\"$TMPDIR/bunx-501-ultracite@latest/node_modules/ultracite/package.json\\\"\",\"",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"rg -n 'NATIVE|binding|process.env|runCli|lint' ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/index.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/*.d.ts; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/dist\",\"max_output_t",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint; rg -n 'NATIVE|process.env|runCli' ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/bindings.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/cli.js; node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimpo",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text((await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --help\",\"max_output_tokens\":4500})).output);\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --config /dev/stdin --disable-nested-config --format json clientInjections.ts <<'JSON'\\n{\\\"rule",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { spawnSync } from 'node:child_process';\\nimport { readFileSync } from 'node:fs';\\nconst result = spawnSync(process.execPath, ['~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint', '--config', '/dev/stdin', '--disable-neste",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nfor (const p of ['oxlint', 'typescript', 'ultracite/oxlint/core']) {\\n  try { console.log(p, import.meta.resolve(p)); } catch { console.log(p, 'not found'); }\\n}\\nfor (const ",
+          "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nconst cache = os.homedir() + '/.bun/install/cache';\\nconsole.log(fs.readdirSync(cache).filter(name => /^ultracite@8\\\\.0\\\\.2|^@oxlint|^typescript@6/.test(name)));\\nfor (const ",
+          "text((await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nfor (const dir of [os.homedir() + '/.bun/install/cache/@oxlint', process.env.TMPDIR + 'bunx-501-ultracite@latest/node_modules', os.homedir() + '/.npm/_npx']) {\\n  try {\\n    ",
+          "text((await tools.exec_command({cmd:\"rg -n 'NATIVE|binding|process.env|runCli|lint' ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/index.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/*.d.ts; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/dist\",\"max_output_t",
+          "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint; rg -n 'NATIVE|process.env|runCli' ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/bindings.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/cli.js; node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimpo",
+          "text((await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --help\",\"max_output_tokens\":4500})).output);\n",
+          "text(await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --config /dev/stdin --disable-nested-config --format json clientInjections.ts <<'JSON'\\n{\\\"rule",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { spawnSync } from 'node:child_process';\\nimport { readFileSync } from 'node:fs';\\nconst result = spawnSync(process.execPath, ['~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint', '--config', '/dev/stdin', '--disable-neste"
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.apply_patch(\\\"*** Begin Patch\\\\n*** Update File: <run-root>/a-codex-3/clientInjections.ts\\\\n@@\\\\n-function resolveClientConnectionValues(\\\\n+const resolveClien",
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.apply_patch(\\\"*** Begin Patch\\\\n*** Update File: <run-root>/a-codex-3/clientInjections.ts\\\\n@@\\\\n-function resolveClientConnectionValues(\\\\n+const resolveClien",
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.exec_command({cmd:\\\"node --input-type=module <<'NODE'\\\\nimport { spawnSync } from 'node:child_process';\\\\nimport { readFileSync } from 'node:fs';\\\\nconst resul"
+        ],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-function resolveClientConnectionValues(\n+const resolveClientPort = (\n+  config: ResolvedConfig,\n+  wsConfig: Exclude<ResolvedConfig[\"server\"][\"ws\"], false>,\n+  isWsServerSpecified: boolean\n+) => {\n+  // ws.clientPort -> ws.port\n+  // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port\n+  let port = wsConfig?.clientPort || wsConfig?.port || null;\n+  if (config.server.middlewareMode && !isWsServerSpecified) {\n+    port ||= 24_678;\n+  }\n+  return port;\n+};\n+\n+function resolveClientConnectionValues(\n-  // ws.clientPort -> ws.port\n-  // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port\n-  let port = wsConfig?.clientPort || wsConfig?.port || null;\n-  if (config.server.middlewareMode && !isWsServerSpecified) {\n",
+          "-function resolveClientConnectionValues(\n+const resolveClientConnectionValues = (\n-) {\n+) => {\n-}\n+};",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\nimport { spawnSync } from 'node:child_process';\nimport { readFileSync } from 'node:fs';\nconst result = spawnSync(process.execPath, ['~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint', '--config', '/dev/stdin', '--disable-nested-config', '--format', 'json', 'clientInjections.ts'], {\n  env: { ...process.env, NAPI_RS_NATIVE_LIBRARY_PATH: '~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node' },\n  input: JSON.stringify({ rules: { complexity: ['error', 20], 'func-style': ['error', 'expression'], 'max-lines-per-function': 'error' } }),\n  encoding: 'utf8'\n});\nif (!result.stdout) throw new Error(result.stderr);\nconst diagnostics = JSON.parse(result.stdout).diagnostics;\nconst changedStart = readF"
+        ],
+        "finalMessage": "Fixed both reported issues in `clientInjections.ts` by extracting port resolution and using function expressions.\n\nFocused lint checks pass for the updated functions. Runtime output matched the original across 672 configurations. No other files changed.",
+        "understood": {
+          "fineAsIs": [],
+          "behaviourRisk": [],
+          "preserveBehaviour": [
+            "I’ll read the current file and diagnostics, then make the smallest change that addresses both rules while preserving behavior."
+          ],
+          "review": [],
+          "whySplit": [],
+          "params": [],
+          "lineCount": [],
+          "formatter": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "corpusNotes": 13,
+          "mainCheckout": 3,
+          "webAccess": 121,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "corpusNotes": 3,
+          "webAccess": 30
+        },
+        "exposureInToolInputs": {
+          "corpusNotes": 1
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts; ls -la\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <tmp>/u"
+          },
+          {
+            "tool": "exec",
+            "target": "text((await tools.exec_command({cmd:\"command -v node; command -v bun; command -v oxlint; for dir in . .. ../.. ../../.. ../../../..; do if [ -d \\\"$dir/node_modules/.bin\\\" ]; then printf '%s\\\\n' \\\"$dir/node_modules/.bin\\\"; ls \\\"$dir/node_modules/.bin\\\"; fi; done; cat tsconfig.json\",\"max_output_tokens\":4000})).output);\nstore(\"originalClientInjections\", (await tools.exec_command({cmd:\"cat clientInjections.ts\",\"max_output_tokens\":16000})).output);\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/package.json; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/bin; cat ~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/package.json; cat \\\"$TMPDIR/bunx-501-ultracite@latest/node_modules/ultracite/package.json\\\"\",\"max_output_tokens\":4000})).output);\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text((await tools.exec_command({cmd:\"rg -n 'NATIVE|binding|process.env|runCli|lint' ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/index.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/*.d.ts; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/dist\",\"max_output_tokens\":5000})).output);\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint; rg -n 'NATIVE|process.env|runCli' ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/bindings.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/cli.js; node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nconst cache = os.homedir() + '/.bun/install/cache';\\nconsole.log(fs.readdirSync(cache).filter(name => name.startsWith('ultracite')));\\nNODE\",\"max_output_tokens\":2000})).output);\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text((await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --help\",\"max_output_tokens\":4500})).output);\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --config /dev/stdin --disable-nested-config --format json clientInjections.ts <<'JSON'\\n{\\\"rules\\\":{\\\"complexity\\\":[\\\"error\\\",20],\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"max-lines-per-function\\\":\\\"error\\\"}}\\nJSON\",\"max_output_tokens\":5000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { spawnSync } from 'node:child_process';\\nimport { readFileSync } from 'node:fs';\\nconst result = spawnSync(process.execPath, ['~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint', '--config', '/dev/stdin', '--disable-nested-config', '--format', 'json', 'clientInjections.ts'], {\\n  env: { ...process.env, NAPI_RS_NATIVE_LIBRARY_PATH: '~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node' },\\n  input: JSON.stringify({ rules: { complexity: ['error', 20], 'func-styl"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "helpers extracted",
+    "response": "behaviour kept, limit cleared",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 1,
+    "remaining": 0,
+    "notes": [
+      "Took 2 attempts."
+    ],
+    "issueFixed": [
+      true
+    ],
+    "outro": "Fixed 1 of 1 issue with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 82532,
+    "totalTokens": 989156
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "corpusNotes": 15,
+      "mainCheckout": 162,
+      "webAccess": 146,
+      "sessionLogs": 35
+    },
+    "exposureInToolCalls": {
+      "mainCheckout": 43,
+      "webAccess": 36,
+      "sessionLogs": 1,
+      "corpusNotes": 3
+    },
+    "exposureInToolInputs": {
+      "mainCheckout": 19,
+      "sessionLogs": 1,
+      "corpusNotes": 1
+    },
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*config*' -g '!node_modules' -g '!\\\\.git' .; sed -n '1,340p' clientInjections.ts; cat clientInjections.ts.d6719a38.json\",\"max_output_tokens\":10000}),\n  tools.exec_command({cmd:\"rg -n 'length-limits|clientInjections|max-lines-per-function' ~/.codex/memories/MEMORY.md\",\"max_output_tokens\":1500})\n]);\nfor (let i = 0; i < results.length; i++) text({i,...results[i]});\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done; cat package.json oxlint.config.ts tsconfig.json; git status --short; ls node_modules/.bin\",\"max_output_tokens\":6500}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const r = await tools.exec_command({cmd:\"command -v node bun oxlint ultracite; node --version; ls -a ..; ls -a ../..; ls -a ../../..; ls -d /tmp/node_modules /private/tmp/node_modules ~/node_modules ~/GitHub/ultracite/node_modules 2>/dev/null\",\"max_output_tokens\":2500});text(r);\nstore(\"originalSource\", (await tools.exec_command({cmd:\"cat clientInjections.ts\",\"max_output_tokens\":6500})).output);\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/package.json; rg --files ~/GitHub/ultracite/packages | rg '/(core\\\\.(ts|js|json)|package.json)$'; head -n 90 ~/GitHub/ultracite/node_modules/.bin/oxlint; sed -n '215,350p' clientInjections.ts\",\"max_output_tokens\":4000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"cat ~/GitHub/ultracite/packages/cli/package.json; rg --files ~/GitHub/ultracite/packages/cli | rg '/(oxlint|oxfmt)/.*core|dist/index|config/oxlint|configs/oxlint' | head -n 15; ls -l ~/GitHub/ultracite/node_modules/ultracite\",\"max_output_tokens\":2200}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { registerHooks } from 'node:module';\\nregisterHooks({ resolve(specifier, context, nextResolve) {\\n  if (specifier === 'oxlint') return nextResolve('~/GitHub/ultracite/node_modules/oxlint/dist/index.js', context);\\n  if (specifier === 'ultracite/oxlint/core') return nextResolve('~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs', context);\\n  return nextResolve(specifier, context);\\n}});\\nprocess.argv = [process.execPath, '~/GitHub/ultracite/node_modules/oxlint/bin/oxlin"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts; ls -la\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <tmp>/u"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text((await tools.exec_command({cmd:\"command -v node; command -v bun; command -v oxlint; for dir in . .. ../.. ../../.. ../../../..; do if [ -d \\\"$dir/node_modules/.bin\\\" ]; then printf '%s\\\\n' \\\"$dir/node_modules/.bin\\\"; ls \\\"$dir/node_modules/.bin\\\"; fi; done; cat tsconfig.json\",\"max_output_tokens\":4000})).output);\nstore(\"originalClientInjections\", (await tools.exec_command({cmd:\"cat clientInjections.ts\",\"max_output_tokens\":16000})).output);\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/package.json; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/bin; cat ~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/package.json; cat \\\"$TMPDIR/bunx-501-ultracite@latest/node_modules/ultracite/package.json\\\"\",\"max_output_tokens\":4000})).output);\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text((await tools.exec_command({cmd:\"rg -n 'NATIVE|binding|process.env|runCli|lint' ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/index.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/*.d.ts; ls ~/.bun/install/cache/oxlint@1.89.0@@@1/dist\",\"max_output_tokens\":5000})).output);\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text((await tools.exec_command({cmd:\"cat ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint; rg -n 'NATIVE|process.env|runCli' ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/bindings.js ~/.bun/install/cache/oxlint@1.89.0@@@1/dist/cli.js; node --input-type=module <<'NODE'\\nimport fs from 'node:fs';\\nimport os from 'node:os';\\nconst cache = os.homedir() + '/.bun/install/cache';\\nconsole.log(fs.readdirSync(cache).filter(name => name.startsWith('ultracite')));\\nNODE\",\"max_output_tokens\":2000})).output);\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text((await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --help\",\"max_output_tokens\":4500})).output);\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"NAPI_RS_NATIVE_LIBRARY_PATH=~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node node ~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --config /dev/stdin --disable-nested-config --format json clientInjections.ts <<'JSON'\\n{\\\"rules\\\":{\\\"complexity\\\":[\\\"error\\\",20],\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"max-lines-per-function\\\":\\\"error\\\"}}\\nJSON\",\"max_output_tokens\":5000}));\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"node --input-type=module <<'NODE'\\nimport { spawnSync } from 'node:child_process';\\nimport { readFileSync } from 'node:fs';\\nconst result = spawnSync(process.execPath, ['~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint', '--config', '/dev/stdin', '--disable-nested-config', '--format', 'json', 'clientInjections.ts'], {\\n  env: { ...process.env, NAPI_RS_NATIVE_LIBRARY_PATH: '~/.bun/install/cache/@oxlint/binding-darwin-arm64@1.89.0@@@1/oxlint.darwin-arm64.node' },\\n  input: JSON.stringify({ rules: { complexity: ['error', 20], 'func-styl"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/a-codex-3/handoff",
+      "../corpus/examples/length-limits",
+      "../corpus/results/length-limits",
+      "../corpus/calibration/length-limits",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/length-agent-runs.cjs",
+      "../corpus/scripts/length-calibration.cjs",
+      "../corpus/scripts/length-census.cjs",
+      "../corpus/scripts/length-complexity.cjs",
+      "../corpus/scripts/length-disagreements.cjs",
+      "../corpus/scripts/length-examples.cjs",
+      "../corpus/scripts/length-format-lib.cjs",
+      "../corpus/scripts/length-format.cjs",
+      "../corpus/scripts/length-history-check.cjs",
+      "../corpus/scripts/length-history.cjs",
+      "../corpus/scripts/length-lib.cjs",
+      "../corpus/scripts/length-linters.cjs",
+      "../corpus/scripts/length-markers.cjs",
+      "../corpus/scripts/length-oracle.cjs",
+      "../corpus/scripts/length-rules.cjs",
+      "../corpus/scripts/length-run-all.cjs",
+      "../corpus/scripts/length-sample.cjs",
+      "../corpus/scripts/length-tables.cjs",
+      "../bibliography/length-limits.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/react-effects",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-length-limits-batch-logs",
+      "<outside-repo>/plans",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-codex-1",
+      "<run-root>/b-codex-2",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-2",
+      "<run-root>/c-claude-3",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/b-codex-2",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-2",
+      "<run-root>/.staging/c-claude-3",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-pilot",
+      "<run-root>/.staging/a-codex-3/attempt1"
+    ]
+  }
+}

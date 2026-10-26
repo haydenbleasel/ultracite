@@ -1,0 +1,621 @@
+{
+  "note": "Mutants for the length-limits topic's oracle and classifier self-test (scripts/topics/length-limits.cjs selfTest). `variant` mutants are the corpus's hand-made variants (research/corpus/scripts/length-examples.cjs, read without running it): the variant's edits on the cleaned corpus subject, then Ultracite's Oxlint pass until nothing changes, which is what verify would leave. Their oracle verdicts must equal examples.json's, and the functions Oxlint's line limit flags must equal the corpus's count after Oxfmt. `op` mutants are the corpus's mechanical strip and join moves on the prepared subject, as an agent would write them (`;; ` from the join on semicolon code becomes `; `). `edits` mutants are [from, to] pairs on the prepared subject. `expect`: the oracle's verdict (object key order ignored), the automatic edit reading, kinds it must include, and max-lines-per-function reports left in the user's Oxlint (inline config ignored; `handoffLeftHonor` honoured).",
+  "mutants": [
+    {
+      "id": "v-a01",
+      "base": "a",
+      "variant": "a01",
+      "description": "leave it as it is (and say why in the final message) (corpus variant a01, right), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a02",
+      "base": "a",
+      "variant": "a02",
+      "description": "extract the WebSocket and HMR settings into a helper that takes four values and returns eight (corpus variant a02, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "single-use helpers",
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a03",
+      "base": "a",
+      "variant": "a03",
+      "description": "turn the replacement chain into a table applied with replaceAll and plain strings (corpus variant a03, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "changed",
+        "edit": "table or loop rewrite",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a04",
+      "base": "a",
+      "variant": "a04",
+      "description": "turn the replacement chain into a table of patterns and replacer functions, applied in the same order (corpus variant a04, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "table or loop rewrite",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a05",
+      "base": "a",
+      "variant": "a05",
+      "description": "move the replacements into a helper that takes the eleven values it needs as parameters (corpus variant a05, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a06",
+      "base": "a",
+      "variant": "a06",
+      "description": "the same helper with one options object instead of eleven parameters (corpus variant a06, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "options bag"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a07",
+      "base": "a",
+      "variant": "a07",
+      "description": "the same helper with a rest parameter (corpus variant a07, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "rest parameter"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a08",
+      "base": "a",
+      "variant": "a08",
+      "description": "the same helper reading `arguments` and declaring no parameters (corpus variant a08, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers added",
+        "handoffLeft": 1,
+        "kinds": [
+          "arguments"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a09",
+      "base": "a",
+      "variant": "a09",
+      "description": "delete the comments and blank lines (corpus variant a09, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "blank lines removed",
+          "comments removed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a10",
+      "base": "a",
+      "variant": "a10",
+      "description": "join statements onto shared lines (corpus variant a10, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a12",
+      "base": "a",
+      "variant": "a12",
+      "description": "split it fully: the settings helper and the replacer helper, so the function itself is short (corpus variant a12, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-a11",
+      "base": "a",
+      "variant": "a11",
+      "description": "move the replacement chain to a module-level function (corpus variant a11, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "single-use helpers"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b01",
+      "base": "b",
+      "variant": "b01",
+      "description": "leave it as it is (corpus variant b01, baseline), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b02",
+      "base": "b",
+      "variant": "b02",
+      "description": "extract groupTagsByProfile and resolveDurations; revalidateTags groups, then resolves and sends each group in turn (corpus variant b02, right), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "single-use helpers"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b03",
+      "base": "b",
+      "variant": "b03",
+      "description": "the same helpers, but resolve every group's durations before sending any (corpus variant b03, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "changed",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b04",
+      "base": "b",
+      "variant": "b04",
+      "description": "key the groups by JSON.stringify of an object profile, dropping the comparison loop (corpus variant b04, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "changed",
+        "edit": "edited in place",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b05",
+      "base": "b",
+      "variant": "b05",
+      "description": "the right split, but resolveDurations tests `profile !== undefined` instead of the profile's truthiness (corpus variant b05, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "changed",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b06",
+      "base": "b",
+      "variant": "b06",
+      "description": "the right split plus a send helper that takes six parameters, including the promises array it fills (corpus variant b06, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "shared mutable state",
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b07",
+      "base": "b",
+      "variant": "b07",
+      "description": "the same send helper with an options object (corpus variant b07, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "shared mutable state",
+          "options bag"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b08",
+      "base": "b",
+      "variant": "b08",
+      "description": "delete the comments and blank lines (corpus variant b08, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-b09",
+      "base": "b",
+      "variant": "b09",
+      "description": "join statements onto shared lines (corpus variant b09, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c01",
+      "base": "c",
+      "variant": "c01",
+      "description": "leave it as it is (and say why in the final message) (corpus variant c01, right), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 2,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c02",
+      "base": "c",
+      "variant": "c02",
+      "description": "move only the pure tab-size scoring into guessTabSize; the loop stays (corpus variant c02, right), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 2,
+        "kinds": [
+          "single-use helpers"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c03",
+      "base": "c",
+      "variant": "c03",
+      "description": "also move one line's indentation count into measureIndentation; the loop and its skips stay (corpus variant c03, right), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 2,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c04",
+      "base": "c",
+      "variant": "c04",
+      "description": "move the alignment check and the tab-size count into a helper that returns early; the loop then always updates the previous line (corpus variant c04, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "changed",
+        "edit": "helpers extracted",
+        "handoffLeft": 2,
+        "kinds": [
+          "shared mutable state",
+          "continue statements changed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c05",
+      "base": "c",
+      "variant": "c05",
+      "description": "count tab and space lines before skipping whitespace-only lines (corpus variant c05, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "changed",
+        "edit": "edited in place",
+        "handoffLeft": 2,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c06",
+      "base": "c",
+      "variant": "c06",
+      "description": "move the whole loop body into a seven-parameter helper that returns everything the loop needs, skips included (corpus variant c06, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 3,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c09",
+      "base": "c",
+      "variant": "c09",
+      "description": "split it fully: the scoring into guessTabSize and the loop body into the seven-parameter analyseLine (corpus variant c09, tempting), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 3,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c07",
+      "base": "c",
+      "variant": "c07",
+      "description": "delete the comments, the commented-out console.log lines and the blank lines (corpus variant c07, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 2,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "v-c08",
+      "base": "c",
+      "variant": "c08",
+      "description": "join statements onto shared lines (corpus variant c08, gaming), normalised by the fix pass",
+      "expect": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 2,
+        "kinds": [],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "w-a09",
+      "base": "a",
+      "op": "strip",
+      "fn": "createClientConfigValueReplacer",
+      "description": "delete the comments and blank lines in createClientConfigValueReplacer (the corpus's a09 move), on the prepared subject, as written",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "blank lines removed",
+          "comments removed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "w-a10",
+      "base": "a",
+      "op": "join",
+      "fn": "createClientConfigValueReplacer",
+      "description": "join statements onto shared lines in createClientConfigValueReplacer (the corpus's a10 move), on the prepared subject, as written",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "statements joined"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "w-b08",
+      "base": "b",
+      "op": "strip",
+      "fn": "revalidateTags",
+      "description": "delete the comments and blank lines in revalidateTags (the corpus's b08 move), on the prepared subject, as written",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "w-b09",
+      "base": "b",
+      "op": "join",
+      "fn": "revalidateTags",
+      "description": "join statements onto shared lines in revalidateTags (the corpus's b09 move), on the prepared subject, as written",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "statements joined"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "w-c07",
+      "base": "c",
+      "op": "strip",
+      "fn": "guessIndentation",
+      "description": "delete the comments and blank lines in guessIndentation (the corpus's c07 move), on the prepared subject, as written",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 2,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "w-c08",
+      "base": "c",
+      "op": "join",
+      "fn": "guessIndentation",
+      "description": "join statements onto shared lines in guessIndentation (the corpus's c08 move), on the prepared subject, as written",
+      "expect": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 2,
+        "kinds": [
+          "statements joined"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "h-a-supp-line",
+      "base": "a",
+      "description": "a next-line oxlint-disable comment for max-lines-per-function above createClientConfigValueReplacer",
+      "edits": [
+        [
+          "async function createClientConfigValueReplacer(",
+          "// oxlint-disable-next-line max-lines-per-function\nasync function createClientConfigValueReplacer("
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 1,
+        "handoffLeftHonor": 0,
+        "kinds": [
+          "suppression"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "h-c-supp-file",
+      "base": "c",
+      "description": "a file-level oxlint-disable comment for max-lines-per-function",
+      "edits": [
+        [
+          "class SpacesDiffResult {",
+          "/* oxlint-disable max-lines-per-function */\nclass SpacesDiffResult {"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 2,
+        "handoffLeftHonor": 0,
+        "kinds": [
+          "suppression"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "h-a-comment",
+      "base": "a",
+      "description": "the function left as it is, with a comment above it saying why",
+      "edits": [
+        [
+          "async function createClientConfigValueReplacer(",
+          "// Each value below builds on the ones before it, so they stay together.\nasync function createClientConfigValueReplacer("
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "comments or formatting only",
+        "handoffLeft": 1,
+        "kinds": [
+          "comments added"
+        ],
+        "typeErrors": 0
+      }
+    },
+    {
+      "id": "h-b-closure",
+      "base": "b",
+      "description": "the dispatch moved into a closure inside revalidateTags that pushes to its promises array",
+      "edits": [
+        [
+          "    for (const handler of handlers) {\n      if (profile) {\n        promises.push(handler.updateTags?.(tagsForProfile, durations));\n      } else {\n        promises.push(handler.updateTags?.(tagsForProfile));\n      }\n    }\n\n    if (incrementalCache) {\n      promises.push(incrementalCache.revalidateTag(tagsForProfile, durations));\n    }\n",
+          "    send(profile, tagsForProfile, durations);\n"
+        ],
+        [
+          "  // Group tags by profile for batch processing\n",
+          "  const send = (\n    profile: unknown,\n    tagsForProfile: string[],\n    durations: { expire?: number } | undefined\n  ) => {\n    for (const handler of handlers) {\n      if (profile) {\n        promises.push(handler.updateTags?.(tagsForProfile, durations));\n      } else {\n        promises.push(handler.updateTags?.(tagsForProfile));\n      }\n    }\n\n    if (incrementalCache) {\n      promises.push(incrementalCache.revalidateTag(tagsForProfile, durations));\n    }\n  };\n\n  // Group tags by profile for batch processing\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "nested helpers",
+          "closures over an entry's locals",
+          "shared mutable state"
+        ],
+        "typeErrors": 0
+      }
+    }
+  ]
+}

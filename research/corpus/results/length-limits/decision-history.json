@@ -1,0 +1,93 @@
+{
+  "note": "How Ultracite came to turn the size limits off and the structural limits on. From `git log -S <rule>` over packages/cli/config and the older root biome.jsonc in this repository, the commits' diffs, and the issues they name (read with `gh issue view`, read-only), on 2026-10-25. One reader. Hayden gave their reasons in the coordinating session on 2026-10-25; no issue or commit message records them.",
+  "events": [
+    {
+      "date": "2025-08-14",
+      "commit": "1c34286e",
+      "subject": "Upgrade to Biome 2.2.0 (#245)",
+      "change": "Biome's preset turns on noExcessiveLinesPerFunction (\"error\", default maxLines 50) and useMaxParams (\"error\"), both new in Biome 2.2.0, where useMaxParams was a nursery rule."
+    },
+    {
+      "date": "2025-08-15",
+      "commit": "4438b762",
+      "subject": "Resolves #246",
+      "change": "noExcessiveLinesPerFunction set to \"off\" a day later, in a commit about an unrelated issue (#246: Solid rules in non-Solid projects). The commit records no reason for it."
+    },
+    {
+      "date": "2025-10-08",
+      "issue": 307,
+      "change": "A user's older Biome rejected the preset's unknown keys, useMaxParams among them."
+    },
+    {
+      "date": "2025-12-21",
+      "commit": "628a5c39",
+      "subject": "Resolves #457",
+      "issue": 457,
+      "change": "useMaxParams removed from the Biome preset with the other nursery rules, after a Biome maintainer asked Ultracite not to turn nursery rules on by default."
+    },
+    {
+      "date": "2025-12-28",
+      "commit": "c4a205f8",
+      "subject": "V7 (#466)",
+      "change": "The ESLint and Oxlint presets arrive. ESLint core (@eslint/js configs.all with overrides) turns off max-lines, max-lines-per-function, max-params and max-statements; Oxlint core's .oxlintrc.json turns off max-lines, max-lines-per-function, max-depth and max-params."
+    },
+    {
+      "date": "2026-03-10",
+      "commit": "42804847",
+      "subject": "Resolves #601",
+      "issue": 601,
+      "change": "max-statements turned off in Oxlint core: a user reported that Oxlint's style category enabled it while the ESLint preset turned it off, so the fix was parity with ESLint."
+    },
+    {
+      "date": "2026-04-13",
+      "commit": "a63d9c57",
+      "subject": "Resolves #660",
+      "change": "Oxlint core lists every rule explicitly: max-classes-per-file and max-nested-callbacks \"error\" (defaults 1 and 10), max-lines and max-lines-per-function \"off\"."
+    },
+    {
+      "date": "2026-04-16",
+      "commit": "67227c95",
+      "subject": "Add new Biome rules",
+      "change": "useMaxParams, now out of nursery, listed as \"off\"."
+    },
+    {
+      "date": "2026-07-04",
+      "commits": [
+        "44403937",
+        "29e30ce9",
+        "d186c53c"
+      ],
+      "subject": "sonarjs through Oxlint's JS plugins, then opt-in (#742)",
+      "change": "sonarjs/max-lines and sonarjs/max-lines-per-function off (\"The preset disables max-lines everywhere\"), sonarjs/nested-control-flow off as \"a duplicate of max-depth, which is off\", sonarjs/max-switch-cases and max-union-size on; the sonarjs rules moved to the opt-in js-plugins preset for Oxlint (#742)."
+    },
+    {
+      "date": "2026-07-04",
+      "commit": "2687cf9f",
+      "subject": "Align ESLint and Biome presets to the oxlint benchmark",
+      "change": "ESLint's max-depth turned off, matching Oxlint."
+    },
+    {
+      "date": "2026-09-28",
+      "commit": "efa80e8c",
+      "subject": "Stop duplicate and false-positive ESLint reports on TypeScript files",
+      "change": "@typescript-eslint/max-params turned off. The ESLint preset enables every non-deprecated typescript-eslint rule, so from V7 until this commit it \"enforced a three-parameter limit on TypeScript files although max-params is off in the oxlint benchmark\" (the commit message)."
+    },
+    {
+      "date": "2026-09-28",
+      "commit": "4d28cf90",
+      "subject": "Enable every oxlint Vue rule and exempt Nuxt route filenames",
+      "change": "vue/max-props off: \"Defaults to a single prop per component, which no real component library meets; the core presets leave max-params off for the same reason.\""
+    },
+    {
+      "date": "2026-10-25",
+      "commit": "daf7b0ff",
+      "subject": "Update Biome to 2.6.3",
+      "change": "Biome's noExcessiveNestedCallbacks turned on at max 10, \"matches max-nested-callbacks' default of 10\" (Biome's own default is 5)."
+    }
+  ],
+  "hayden": {
+    "source": "Hayden's message in the coordinating session, 2026-10-25, verbatim",
+    "text": "Mostly because people kept running into walls with these rules and having to refactor code that they deemed fine - max parameters, lines, etc. really depend on the scope of what you're building e.g. a long init function can be fine because you can read it end to end. And there was no autofix so enabling them meant huge architectural refactoring. But these rules are less problematic now that agents can very easily refactor."
+  },
+  "notRecorded": "No issue, PR or commit message discusses the size limits' merits. The day-long Biome noExcessiveLinesPerFunction episode (2025-08-14 to 2025-08-15) and #601's parity fix are the only recorded changes to them."
+}

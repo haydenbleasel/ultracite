@@ -1,0 +1,85 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -113,7 +113,7 @@
+ /**
+  * Compute the diff in spaces between two line's indentation.
+  */
+-function spacesDiff(
++const spacesDiff = function spacesDiff(
+   a: string,
+   aLength: number,
+   b: string,
+@@ -161,7 +161,7 @@
+     result.spacesDiff = spacesDiff / tabsDiff;
+     return;
+   }
+-}
++};
+ 
+ /**
+  * Result for a guessIndentation
+@@ -184,7 +184,7 @@
+   tabsCount: number;
+ }
+ 
+-function createIndentationStats() {
++const createIndentationStats = function createIndentationStats() {
+   return {
+     // number of lines that contain only spaces in indentation
+     linesIndentedWithSpacesCount: 0,
+@@ -197,11 +197,11 @@
+     spacesDiffCount: [0, 0, 0, 0, 0, 0, 0, 0, 0], // `tabSize` scores
+     tmp: new SpacesDiffResult(),
+   };
+-}
++};
+ 
+ type IndentationStats = ReturnType<typeof createIndentationStats>;
+ 
+-function getLineIndentation(
++const getLineIndentation = function getLineIndentation(
+   source: ITextBuffer,
+   lineNumber: number
+ ): LineIndentation | undefined {
+@@ -234,9 +234,9 @@
+     }
+   }
+   return undefined;
+-}
++};
+ 
+-function recordIndentationDiff(
++const recordIndentationDiff = function recordIndentationDiff(
+   stats: IndentationStats,
+   line: LineIndentation,
+   defaultTabSize: number,
+@@ -275,9 +275,9 @@
+ 
+   stats.previousLineText = line.text;
+   stats.previousLineIndentation = line.indentation;
+-}
++};
+ 
+-function guessTabSize(
++const guessTabSize = function guessTabSize(
+   spacesDiffCount: number[],
+   defaultTabSize: number
+ ): number {
+@@ -305,9 +305,9 @@
+   }
+ 
+   return tabSize;
+-}
++};
+ 
+-export function guessIndentation(
++export const guessIndentation = function guessIndentation(
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+@@ -352,4 +352,4 @@
+     insertSpaces,
+     tabSize,
+   };
+-}
++};

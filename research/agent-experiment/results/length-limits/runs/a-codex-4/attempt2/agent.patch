@@ -1,0 +1,152 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -164,62 +164,19 @@
+ const normalizedBundledDevClientEntry = normalizePath(BUNDLED_DEV_CLIENT_ENTRY);
+ const normalizedEnvEntry = normalizePath(ENV_ENTRY);
+ 
+-/**
+- * some values used by the client needs to be dynamically injected by the server
+- * @server-only
+- */
+-export function clientInjectionsPlugin(config: ResolvedConfig): Plugin {
+-  let injectConfigValues: (code: string) => string;
+-
+-  const getDefineReplacer = perEnvironmentState((environment) => {
+-    const userDefine: Record<string, any> = {};
+-    for (const key in environment.config.define) {
+-      // import.meta.env.* is handled in `importAnalysis` plugin
+-      if (!key.startsWith("import.meta.env.")) {
+-        userDefine[key] = environment.config.define[key];
+-      }
+-    }
+-    const serializedDefines = serializeDefine(userDefine);
+-    const definesReplacement = () => serializedDefines;
+-    return (code: string) => code.replace(`__DEFINES__`, definesReplacement);
+-  });
+-
+-  return {
+-    applyToEnvironment(environment) {
+-      return !environment.config.isBundled;
+-    },
+-    async buildStart() {
+-      injectConfigValues = await createClientConfigValueReplacer(config);
+-    },
+-    name: "vite:client-inject",
+-    transform(code, id) {
+-      const ssr = this.environment.config.consumer === "server";
+-      const cleanId = cleanUrl(id);
+-      if (cleanId === normalizedClientEntry || cleanId === normalizedEnvEntry) {
+-        const defineReplacer = getDefineReplacer(this);
+-        return defineReplacer(injectConfigValues(code));
+-      } else if (!ssr && code.includes("process.env.NODE_ENV")) {
+-        // replace process.env.NODE_ENV instead of defining a global
+-        // for it to avoid shimming a `process` object during dev,
+-        // avoiding inconsistencies between dev and build
+-        const nodeEnv =
+-          this.environment.config.define?.["process.env.NODE_ENV"] ||
+-          JSON.stringify(process.env.NODE_ENV || config.mode);
+-        return replaceDefine(this.environment, code, id, {
+-          "global.process.env.NODE_ENV": nodeEnv,
+-          "globalThis.process.env.NODE_ENV": nodeEnv,
+-          "process.env.NODE_ENV": nodeEnv,
+-        });
+-      }
+-    },
+-  };
+-}
+-
+ function escapeReplacement(value: string | number | boolean | null) {
+   const jsonValue = JSON.stringify(value);
+   return () => jsonValue;
+ }
+ 
++const resolveWebSocketDefaults = (
++  wsConfig: Exclude<ResolvedConfig["server"]["ws"], false>
++) => ({
++  host: wsConfig?.host || null,
++  protocol: wsConfig?.protocol || null,
++  timeout: wsConfig?.timeout || 30_000,
++});
++
+ function resolveClientConfigValues(
+   config: ResolvedConfig,
+   resolvedServerHostname: string
+@@ -230,9 +187,7 @@
+   const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+ 
+   const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+-  const host = wsConfig?.host || null;
+-  const protocol = wsConfig?.protocol || null;
+-  const timeout = wsConfig?.timeout || 30_000;
++  const { host, protocol, timeout } = resolveWebSocketDefaults(wsConfig);
+   const isWsServerSpecified = !!wsConfig?.server;
+   const hmrConfigName = path.basename(config.configFile || "vite.config.js");
+ 
+@@ -269,9 +224,9 @@
+   };
+ }
+ 
+-async function createClientConfigValueReplacer(
++const createClientConfigValueReplacer = async (
+   config: ResolvedConfig
+-): Promise<(code: string) => string> {
++): Promise<(code: string) => string> => {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+   const values = resolveClientConfigValues(config, resolvedServerHostname);
+@@ -311,4 +266,55 @@
+       .replace(`__HMR_PARTIAL_ACCEPT__`, hmrPartialAcceptReplacement)
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
++};
++
++/**
++ * some values used by the client needs to be dynamically injected by the server
++ * @server-only
++ */
++export function clientInjectionsPlugin(config: ResolvedConfig): Plugin {
++  let injectConfigValues: (code: string) => string;
++
++  const getDefineReplacer = perEnvironmentState((environment) => {
++    const userDefine: Record<string, any> = {};
++    for (const key in environment.config.define) {
++      // import.meta.env.* is handled in `importAnalysis` plugin
++      if (!key.startsWith("import.meta.env.")) {
++        userDefine[key] = environment.config.define[key];
++      }
++    }
++    const serializedDefines = serializeDefine(userDefine);
++    const definesReplacement = () => serializedDefines;
++    return (code: string) => code.replace(`__DEFINES__`, definesReplacement);
++  });
++
++  return {
++    applyToEnvironment(environment) {
++      return !environment.config.isBundled;
++    },
++    async buildStart() {
++      injectConfigValues = await createClientConfigValueReplacer(config);
++    },
++    name: "vite:client-inject",
++    transform(code, id) {
++      const ssr = this.environment.config.consumer === "server";
++      const cleanId = cleanUrl(id);
++      if (cleanId === normalizedClientEntry || cleanId === normalizedEnvEntry) {
++        const defineReplacer = getDefineReplacer(this);
++        return defineReplacer(injectConfigValues(code));
++      } else if (!ssr && code.includes("process.env.NODE_ENV")) {
++        // replace process.env.NODE_ENV instead of defining a global
++        // for it to avoid shimming a `process` object during dev,
++        // avoiding inconsistencies between dev and build
++        const nodeEnv =
++          this.environment.config.define?.["process.env.NODE_ENV"] ||
++          JSON.stringify(process.env.NODE_ENV || config.mode);
++        return replaceDefine(this.environment, code, id, {
++          "global.process.env.NODE_ENV": nodeEnv,
++          "globalThis.process.env.NODE_ENV": nodeEnv,
++          "process.env.NODE_ENV": nodeEnv,
++        });
++      }
++    },
++  };
+ }

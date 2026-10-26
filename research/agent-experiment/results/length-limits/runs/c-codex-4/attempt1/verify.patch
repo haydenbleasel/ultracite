@@ -1,0 +1,48 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -219,10 +219,10 @@
+   }
+ 
+   return {
+-    currentLineText,
+     currentLineIndentation,
+     currentLineSpacesCount,
+     currentLineTabsCount,
++    currentLineText,
+   };
+ }
+ 
+@@ -242,7 +242,7 @@
+   defaultInsertSpaces: boolean
+ ): void {
+   const MAX_ALLOWED_TAB_SIZE_GUESS = 8; // max(ALLOWED_TAB_SIZE_GUESSES) = 8
+-  const tmp = stats.tmp;
++  const { tmp } = stats;
+   if (line.currentLineTabsCount > 0) {
+     stats.linesIndentedWithTabsCount++;
+   } else if (line.currentLineSpacesCount > 1) {
+@@ -282,7 +282,10 @@
+   stats.previousLineIndentation = line.currentLineIndentation;
+ }
+ 
+-function guessTabSize(spacesDiffCount: number[], defaultTabSize: number): number {
++function guessTabSize(
++  spacesDiffCount: number[],
++  defaultTabSize: number
++): number {
+   const ALLOWED_TAB_SIZE_GUESSES = [2, 4, 6, 8, 3, 5, 7]; // prefer even guesses for `tabSize`, limit to [2, 8].
+   let tabSize = defaultTabSize;
+   let tabSizeScore = 0;
+@@ -316,10 +319,10 @@
+   // Look at most at the first 10k lines
+   const linesCount = Math.min(source.getLineCount(), 10_000);
+   const stats: IndentationStats = {
+-    linesIndentedWithTabsCount: 0,
+     linesIndentedWithSpacesCount: 0,
+-    previousLineText: "",
++    linesIndentedWithTabsCount: 0,
+     previousLineIndentation: 0,
++    previousLineText: "",
+     spacesDiffCount: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+     tmp: new SpacesDiffResult(),
+   };

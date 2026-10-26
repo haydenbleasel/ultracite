@@ -1,0 +1,156 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -59,11 +59,11 @@
+   public looksLikeAlignment: boolean = false;
+ }
+ 
+-function countIndentation(
++const countIndentation = (
+   text: string,
+   start: number,
+   end: number
+-): [number, number] {
++): [number, number] => {
+   let spacesCount = 0;
+   let tabsCount = 0;
+   for (let j = start; j < end; j++) {
+@@ -75,15 +75,15 @@
+     }
+   }
+   return [spacesCount, tabsCount];
+-}
++};
+ 
+-function setSpacesDiffWithAlignment(
++const setSpacesDiffWithAlignment = (
+   a: string,
+   b: string,
+   bSpacesCnt: number,
+   spacesDiff: number,
+   result: SpacesDiffResult
+-): void {
++): void => {
+   // check if the indentation difference might be caused by alignment reasons
+   // sometime folks like to align their code, but this should not be used as a hint
+   result.spacesDiff = spacesDiff;
+@@ -106,18 +106,18 @@
+       }
+     }
+   }
+-}
++};
+ 
+ /**
+  * Compute the diff in spaces between two line's indentation.
+  */
+-function spacesDiff(
++const spacesDiff = (
+   a: string,
+   aLength: number,
+   b: string,
+   bLength: number,
+   result: SpacesDiffResult
+-): void {
++): void => {
+   result.spacesDiff = 0;
+   result.looksLikeAlignment = false;
+ 
+@@ -148,17 +148,17 @@
+   }
+ 
+   const tabsDiff = Math.abs(aTabsCount - bTabsCount);
+-  const spacesDiff = Math.abs(aSpacesCnt - bSpacesCnt);
++  const spacesDelta = Math.abs(aSpacesCnt - bSpacesCnt);
+ 
+   if (tabsDiff === 0) {
+-    setSpacesDiffWithAlignment(a, b, bSpacesCnt, spacesDiff, result);
++    setSpacesDiffWithAlignment(a, b, bSpacesCnt, spacesDelta, result);
+     return;
+   }
+-  if (spacesDiff % tabsDiff === 0) {
+-    result.spacesDiff = spacesDiff / tabsDiff;
++  if (spacesDelta % tabsDiff === 0) {
++    result.spacesDiff = spacesDelta / tabsDiff;
+     return;
+   }
+-}
++};
+ 
+ /**
+  * Result for a guessIndentation
+@@ -181,10 +181,10 @@
+   currentLineTabsCount: number;
+ }
+ 
+-function readLineIndentation(
++const readLineIndentation = (
+   source: ITextBuffer,
+   lineNumber: number
+-): LineIndentation | undefined {
++): LineIndentation | undefined => {
+   const currentLineLength = source.getLineLength(lineNumber);
+   const currentLineText = source.getLineContent(lineNumber);
+ 
+@@ -224,7 +224,7 @@
+     currentLineTabsCount,
+     currentLineText,
+   };
+-}
++};
+ 
+ interface IndentationStats {
+   linesIndentedWithTabsCount: number; // number of lines that contain at least one tab in indentation
+@@ -235,12 +235,12 @@
+   tmp: SpacesDiffResult;
+ }
+ 
+-function updateIndentationStats(
++const updateIndentationStats = (
+   stats: IndentationStats,
+   line: LineIndentation,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): void {
++): void => {
+   const MAX_ALLOWED_TAB_SIZE_GUESS = 8; // max(ALLOWED_TAB_SIZE_GUESSES) = 8
+   const { tmp } = stats;
+   if (line.currentLineTabsCount > 0) {
+@@ -280,12 +280,12 @@
+ 
+   stats.previousLineText = line.currentLineText;
+   stats.previousLineIndentation = line.currentLineIndentation;
+-}
++};
+ 
+-function guessTabSize(
++const guessTabSize = (
+   spacesDiffCount: number[],
+   defaultTabSize: number
+-): number {
++): number => {
+   const ALLOWED_TAB_SIZE_GUESSES = [2, 4, 6, 8, 3, 5, 7]; // prefer even guesses for `tabSize`, limit to [2, 8].
+   let tabSize = defaultTabSize;
+   let tabSizeScore = 0;
+@@ -309,13 +309,13 @@
+     tabSize = 2;
+   }
+   return tabSize;
+-}
++};
+ 
+-export function guessIndentation(
++export const guessIndentation = (
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): IGuessedIndentation {
++): IGuessedIndentation => {
+   // Look at most at the first 10k lines
+   const linesCount = Math.min(source.getLineCount(), 10_000);
+   const stats: IndentationStats = {
+@@ -352,4 +352,4 @@
+       ? guessTabSize(stats.spacesDiffCount, defaultTabSize)
+       : defaultTabSize,
+   };
+-}
++};

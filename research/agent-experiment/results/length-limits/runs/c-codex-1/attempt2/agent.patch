@@ -1,0 +1,98 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -93,7 +93,7 @@
+   return [spacesCount, tabsCount];
+ }
+ 
+-function looksLikeAlignment(
++const looksLikeAlignment = function looksLikeAlignment(
+   a: string,
+   b: string,
+   difference: number,
+@@ -111,12 +111,12 @@
+     a.charCodeAt(bSpacesCnt - 1) === CharCode.Space &&
+     a.charCodeAt(a.length - 1) === CharCode.Comma
+   );
+-}
++};
+ 
+ /**
+  * Compute the diff in spaces between two line's indentation.
+  */
+-function spacesDiff(
++const spacesDiff = function spacesDiff(
+   a: string,
+   aLength: number,
+   b: string,
+@@ -162,7 +162,7 @@
+     result.spacesDiff = spacesDiff / tabsDiff;
+     return;
+   }
+-}
++};
+ 
+ /**
+  * Result for a guessIndentation
+@@ -178,7 +178,7 @@
+   insertSpaces: boolean;
+ }
+ 
+-function getLineIndentation(source: ITextBuffer, lineNumber: number) {
++const getLineIndentation = function getLineIndentation(source: ITextBuffer, lineNumber: number) {
+   const currentLineLength = source.getLineLength(lineNumber);
+   const currentLineText = source.getLineContent(lineNumber);
+ 
+@@ -213,9 +213,9 @@
+     tabsCount: currentLineTabsCount,
+     text: currentLineText,
+   };
+-}
++};
+ 
+-function shouldSkipAlignment(
++const shouldSkipAlignment = function shouldSkipAlignment(
+   diff: SpacesDiffResult,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+@@ -233,9 +233,9 @@
+     diff.looksLikeAlignment &&
+     !(defaultInsertSpaces && defaultTabSize === diff.spacesDiff)
+   );
+-}
++};
+ 
+-function collectIndentationStatistics(
++const collectIndentationStatistics = function collectIndentationStatistics(
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+@@ -283,9 +283,9 @@
+     linesIndentedWithTabsCount,
+     spacesDiffCount,
+   };
+-}
++};
+ 
+-function guessTabSize(
++const guessTabSize = function guessTabSize(
+   spacesDiffCount: number[],
+   defaultTabSize: number
+ ): number {
+@@ -312,9 +312,9 @@
+     tabSize = 2;
+   }
+   return tabSize;
+-}
++};
+ 
+-export function guessIndentation(
++export const guessIndentation = function guessIndentation(
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+@@ -346,4 +346,4 @@
+     insertSpaces,
+     tabSize,
+   };
+-}
++};

@@ -1,0 +1,3337 @@
+{
+  "runId": "b-codex-3",
+  "topic": "length-limits",
+  "subject": "b",
+  "base": "b",
+  "label": "B, two jobs in one",
+  "config": "oxlint core, max-lines-per-function on",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.155.1",
+  "wallSeconds": 163.1,
+  "attemptCount": 2,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 22,
+    "leftOutByFilter": {
+      "complexity": 1,
+      "func-style": 6,
+      "no-empty-function": 1,
+      "no-use-before-define": 4,
+      "promise/always-return": 1,
+      "promise/prefer-await-to-callbacks": 3,
+      "sort-keys": 1,
+      "typescript/method-signature-style": 2,
+      "typescript/no-explicit-any": 1,
+      "typescript/no-non-null-assertion": 1
+    },
+    "given": [
+      {
+        "rule": "max-lines-per-function",
+        "line": 153,
+        "message": "The async function `revalidateTags` has too many lines (105). Maximum allowed is 50.",
+        "help": "Consider splitting it into smaller functions.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "87ca0b005ec2d41d7f4914a457c56b28f1da525a790a5853fef24cd6048c6121",
+    "parseError": false,
+    "measureError": null,
+    "views": {
+      "oxlint user": {
+        "sizeHonor": {
+          "lines": [
+            "revalidateTags: max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity: async function `revalidateTags` has a complexity of 26. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "revalidateTags: max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity: async function `revalidateTags` has a complexity of 26. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "complexity": 1,
+          "func-style": 6,
+          "max-lines-per-function": 1,
+          "no-empty-function": 1,
+          "no-use-before-define": 4,
+          "promise/always-return": 1,
+          "promise/prefer-await-to-callbacks": 3,
+          "sort-keys": 1,
+          "typescript/method-signature-style": 2,
+          "typescript/no-explicit-any": 1,
+          "typescript/no-non-null-assertion": 1
+        }
+      },
+      "oxlint strict": {
+        "sizeHonor": {
+          "lines": [
+            "revalidateTags: max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "revalidateTags: max-statements: function `revalidateTags` has too many statements (40). Maximum allowed is 10.",
+            "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity: async function `revalidateTags` has a complexity of 26. Maximum allowed is 20."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "revalidateTags: max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "revalidateTags: max-statements: function `revalidateTags` has too many statements (40). Maximum allowed is 10.",
+            "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity: async function `revalidateTags` has a complexity of 26. Maximum allowed is 20."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "complexity": 1,
+          "func-style": 6,
+          "max-lines-per-function": 1,
+          "max-statements": 2,
+          "no-empty-function": 1,
+          "no-use-before-define": 4,
+          "promise/always-return": 1,
+          "promise/prefer-await-to-callbacks": 3,
+          "sort-keys": 1,
+          "typescript/method-signature-style": 2,
+          "typescript/no-explicit-any": 1,
+          "typescript/no-non-null-assertion": 1
+        }
+      },
+      "oxlint sonarjs": {
+        "sizeHonor": {
+          "lines": [],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 39 to the 20 allowed."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [],
+          "params": [],
+          "statements": [],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 39 to the 20 allowed."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "sonarjs/cognitive-complexity": 1
+        }
+      },
+      "eslint length": {
+        "sizeHonor": {
+          "lines": [
+            "revalidateTags: max-lines-per-function: Async function 'revalidateTags' has too many lines (105). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (40). Maximum allowed is 10.",
+            "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity: Async function 'revalidateTags' has a complexity of 26. Maximum allowed is 20.",
+            "revalidateTags: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 39 to the 20 allowed."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "revalidateTags: max-lines-per-function: Async function 'revalidateTags' has too many lines (105). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (40). Maximum allowed is 10.",
+            "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity: Async function 'revalidateTags' has a complexity of 26. Maximum allowed is 20.",
+            "revalidateTags: sonarjs/cognitive-complexity: Refactor this function to reduce its Cognitive Complexity from 39 to the 20 allowed."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/method-signature-style": 2,
+          "@typescript-eslint/no-empty-function": 1,
+          "@typescript-eslint/no-explicit-any": 1,
+          "@typescript-eslint/no-non-null-assertion": 1,
+          "@typescript-eslint/no-use-before-define": 4,
+          "complexity": 1,
+          "func-style": 6,
+          "max-lines-per-function": 1,
+          "max-statements": 2,
+          "no-undef-init": 1,
+          "promise/always-return": 1,
+          "promise/prefer-await-to-callbacks": 3,
+          "sonarjs/cognitive-complexity": 1,
+          "sonarjs/no-undefined-assignment": 1,
+          "sonarjs/too-many-break-or-continue-in-loop": 1,
+          "sort-keys": 1,
+          "unicorn/name-replacements": 5,
+          "unicorn/no-break-in-nested-loop": 3,
+          "unicorn/no-computed-property-existence-check": 1,
+          "unicorn/no-useless-undefined": 1,
+          "unicorn/prefer-ternary": 1,
+          "unicorn/single-line-block-comment-style": 1
+        }
+      },
+      "biome length": {
+        "sizeHonor": {
+          "lines": [
+            "revalidateTags: complexity/noExcessiveLinesPerFunction: This function has too many lines (78). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (40). Maximum allowed is 10.",
+            "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity/noExcessiveCognitiveComplexity: Excessive complexity of 42 detected (max: 20)."
+          ]
+        },
+        "sizeIgnore": {
+          "lines": [
+            "revalidateTags: complexity/noExcessiveLinesPerFunction: This function has too many lines (78). Maximum allowed is 50."
+          ],
+          "params": [],
+          "statements": [
+            "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (40). Maximum allowed is 10.",
+            "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+          ],
+          "fileLines": [],
+          "complexity": [
+            "revalidateTags: complexity/noExcessiveCognitiveComplexity: Excessive complexity of 42 detected (max: 20)."
+          ]
+        },
+        "parseError": false,
+        "all": {
+          "assist/source/useSortedInterfaceMembers": 1,
+          "assist/source/useSortedKeys": 1,
+          "complexity/noExcessiveCognitiveComplexity": 1,
+          "complexity/noExcessiveLinesPerFunction": 1,
+          "complexity/noUselessUndefined": 1,
+          "complexity/noUselessUndefinedInitialization": 1,
+          "nursery/noExcessiveStatementsPerFunction": 2,
+          "style/noNonNullAssertion": 1,
+          "style/useConsistentMethodSignatures": 2,
+          "suspicious/noEmptyBlockStatements": 1,
+          "suspicious/noExplicitAny": 1
+        }
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "ignore": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "functions": [
+      {
+        "name": "getCacheHandlers",
+        "lines": 3,
+        "statements": 1,
+        "params": 0,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "withExecuteRevalidates",
+        "lines": 21,
+        "statements": 7,
+        "params": 2,
+        "cognitive": 1,
+        "depth": 0
+      },
+      {
+        "name": "cloneRevalidationState",
+        "lines": 13,
+        "statements": 1,
+        "params": 1,
+        "cognitive": 2,
+        "depth": 0
+      },
+      {
+        "name": "diffRevalidationState",
+        "lines": 38,
+        "statements": 3,
+        "params": 2,
+        "cognitive": 0,
+        "depth": 0
+      },
+      {
+        "name": "<callback to prev.pendingRevalidatedTags.map>",
+        "lines": 7,
+        "statements": 2,
+        "params": 1,
+        "cognitive": 1,
+        "depth": 1
+      },
+      {
+        "name": "<callback to curr.pendingRevalidatedTags.filter>",
+        "lines": 13,
+        "statements": 3,
+        "params": 1,
+        "cognitive": 1,
+        "depth": 1
+      },
+      {
+        "name": "revalidateTags",
+        "lines": 105,
+        "statements": 40,
+        "params": 3,
+        "cognitive": 39,
+        "depth": 0
+      },
+      {
+        "name": "executeRevalidates",
+        "lines": 36,
+        "statements": 11,
+        "params": 2,
+        "cognitive": 2,
+        "depth": 0
+      }
+    ],
+    "over50": [
+      "revalidateTags (105)"
+    ],
+    "fileLines": 295,
+    "typeErrors": [],
+    "oracle": {
+      "verdict": "same",
+      "scenarios": 300,
+      "differing": 0,
+      "onceDiffering": 0,
+      "crashed": 0,
+      "arityOnly": 0,
+      "why": null,
+      "differences": [],
+      "ignoringKeyOrder": "same"
+    },
+    "structure": {
+      "revalidateTags": {
+        "entry": {
+          "cognitive": 39,
+          "lines": 105,
+          "params": 3,
+          "statements": 40
+        },
+        "fileLines": 295,
+        "functions": 12,
+        "functionsBefore": 12,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 6
+      }
+    },
+    "formatted": {
+      "error": null,
+      "changed": false,
+      "fileLines": 295,
+      "joinedLines": 0,
+      "size": {
+        "lines": [
+          "revalidateTags: max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+        ],
+        "params": [],
+        "statements": [
+          "revalidateTags: max-statements: function `revalidateTags` has too many statements (40). Maximum allowed is 10.",
+          "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+        ],
+        "fileLines": [],
+        "complexity": [
+          "revalidateTags: complexity: async function `revalidateTags` has a complexity of 26. Maximum allowed is 20."
+        ]
+      },
+      "handoffLeft": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "structure": {
+        "revalidateTags": {
+          "entry": {
+            "cognitive": 39,
+            "lines": 105,
+            "params": 3,
+            "statements": 40
+          },
+          "fileLines": 295,
+          "functions": 12,
+          "functionsBefore": 12,
+          "helperCallsFromEntry": 0,
+          "helpers": [],
+          "helpersCalledOnce": 0,
+          "helpersInCallOrder": true,
+          "paramsPassedToHelpers": 0,
+          "topLevelFunctions": 6
+        }
+      }
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": []
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "max-lines-per-function L153: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 94.1,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "helpers extracted",
+        "kinds": [
+          "helpers",
+          "single-use helpers"
+        ],
+        "helpers": [
+          {
+            "name": "groupTagsByProfile",
+            "lines": 45,
+            "params": 1,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          },
+          {
+            "name": "getRevalidationDurations",
+            "lines": 36,
+            "params": 2,
+            "callSites": 1,
+            "nestedIn": null,
+            "readsEnclosingLocals": [],
+            "writesEnclosingLocals": [],
+            "mutatesEnclosingLocals": [],
+            "mutatesParams": [],
+            "writesModuleState": [],
+            "optionsBag": false,
+            "restParam": false,
+            "usesArguments": false
+          }
+        ],
+        "removed": [],
+        "entries": {
+          "revalidateTags": {
+            "linesGiven": 105,
+            "linesNow": 32,
+            "blankLinesGiven": 12,
+            "blankLinesNow": 5
+          }
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "3485e4dbc0a2de5d611bc1da28eca5a8599bc32f71b398147fbd071f353cc493",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 8,
+              "no-empty-function": 1,
+              "no-use-before-define": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1,
+              "unicorn/no-useless-undefined": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 8,
+              "max-lines": 1,
+              "max-statements": 4,
+              "no-empty-function": 1,
+              "no-use-before-define": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1,
+              "unicorn/no-useless-undefined": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-explicit-any": 1,
+              "@typescript-eslint/no-non-null-assertion": 1,
+              "@typescript-eslint/no-use-before-define": 4,
+              "func-style": 8,
+              "max-lines": 1,
+              "max-statements": 4,
+              "no-undef-init": 1,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sonarjs/no-undefined-assignment": 1,
+              "sonarjs/too-many-break-or-continue-in-loop": 1,
+              "sort-keys": 1,
+              "unicorn/name-replacements": 5,
+              "unicorn/no-break-in-nested-loop": 3,
+              "unicorn/no-computed-property-existence-check": 1,
+              "unicorn/no-useless-undefined": 1,
+              "unicorn/prefer-ternary": 1,
+              "unicorn/single-line-block-comment-style": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "assist/source/useSortedKeys": 1,
+              "complexity/noUselessUndefined": 1,
+              "complexity/noUselessUndefinedInitialization": 1,
+              "nursery/noExcessiveStatementsPerFunction": 4,
+              "style/noNonNullAssertion": 1,
+              "style/useConsistentMethodSignatures": 2,
+              "suspicious/noEmptyBlockStatements": 1,
+              "suspicious/noExplicitAny": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "getCacheHandlers",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "withExecuteRevalidates",
+            "lines": 21,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 1,
+            "depth": 0
+          },
+          {
+            "name": "cloneRevalidationState",
+            "lines": 13,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "diffRevalidationState",
+            "lines": 38,
+            "statements": 3,
+            "params": 2,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to prev.pendingRevalidatedTags.map>",
+            "lines": 7,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "<callback to curr.pendingRevalidatedTags.filter>",
+            "lines": 13,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "groupTagsByProfile",
+            "lines": 45,
+            "statements": 19,
+            "params": 1,
+            "cognitive": 16,
+            "depth": 0
+          },
+          {
+            "name": "getRevalidationDurations",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 9,
+            "depth": 0
+          },
+          {
+            "name": "revalidateTags",
+            "lines": 32,
+            "statements": 14,
+            "params": 3,
+            "cognitive": 10,
+            "depth": 0
+          },
+          {
+            "name": "executeRevalidates",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 310,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 300,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "revalidateTags": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 32,
+              "params": 3,
+              "statements": 14
+            },
+            "fileLines": 310,
+            "functions": 14,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 45,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "getRevalidationDurations",
+                "params": 2,
+                "statements": 11
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 310,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+              "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+              "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+              "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (309)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "groupTagsByProfile",
+              "lines": 45,
+              "params": 1,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "getRevalidationDurations",
+              "lines": 36,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "entries": {
+            "revalidateTags": {
+              "linesGiven": 105,
+              "linesNow": 32,
+              "blankLinesGiven": 12,
+              "blankLinesNow": 5
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            }
+          },
+          "commentLines": {
+            "given": 55,
+            "now": 55
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "withExecuteRevalidates(store, callback)",
+              "executeRevalidates(workStore, state)"
+            ],
+            "now": [
+              "withExecuteRevalidates(store, callback)",
+              "executeRevalidates(workStore, state)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {
+            "func-style": 2,
+            "unicorn/no-useless-undefined": 1
+          },
+          "oxlint strict": {
+            "func-style": 2,
+            "max-lines": 1,
+            "max-statements": 2,
+            "unicorn/no-useless-undefined": 1
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "func-style": 2,
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 2
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "38abd5cf1382e41c315a5ce7096ed58cdff4a98926df9e229e7fff0cf45b0265",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 8,
+              "no-empty-function": 1,
+              "no-use-before-define": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 8,
+              "max-lines": 1,
+              "max-statements": 4,
+              "no-empty-function": 1,
+              "no-use-before-define": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-explicit-any": 1,
+              "@typescript-eslint/no-non-null-assertion": 1,
+              "@typescript-eslint/no-use-before-define": 4,
+              "func-style": 8,
+              "max-lines": 1,
+              "max-statements": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sonarjs/too-many-break-or-continue-in-loop": 1,
+              "sort-keys": 1,
+              "unicorn/name-replacements": 5,
+              "unicorn/no-break-in-nested-loop": 3,
+              "unicorn/no-computed-property-existence-check": 1,
+              "unicorn/prefer-ternary": 1,
+              "unicorn/single-line-block-comment-style": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "assist/source/useSortedKeys": 1,
+              "nursery/noExcessiveStatementsPerFunction": 4,
+              "style/noNonNullAssertion": 1,
+              "style/useConsistentMethodSignatures": 2,
+              "suspicious/noEmptyBlockStatements": 1,
+              "suspicious/noEvolvingTypes": 1,
+              "suspicious/noExplicitAny": 1,
+              "suspicious/noImplicitAnyLet": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "getCacheHandlers",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "withExecuteRevalidates",
+            "lines": 21,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 1,
+            "depth": 0
+          },
+          {
+            "name": "cloneRevalidationState",
+            "lines": 13,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "diffRevalidationState",
+            "lines": 38,
+            "statements": 3,
+            "params": 2,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to prev.pendingRevalidatedTags.map>",
+            "lines": 7,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "<callback to curr.pendingRevalidatedTags.filter>",
+            "lines": 13,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "groupTagsByProfile",
+            "lines": 45,
+            "statements": 19,
+            "params": 1,
+            "cognitive": 16,
+            "depth": 0
+          },
+          {
+            "name": "getRevalidationDurations",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 9,
+            "depth": 0
+          },
+          {
+            "name": "revalidateTags",
+            "lines": 32,
+            "statements": 14,
+            "params": 3,
+            "cognitive": 10,
+            "depth": 0
+          },
+          {
+            "name": "executeRevalidates",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 310,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 300,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "revalidateTags": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 32,
+              "params": 3,
+              "statements": 14
+            },
+            "fileLines": 310,
+            "functions": 14,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 45,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "getRevalidationDurations",
+                "params": 2,
+                "statements": 11
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 310,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+              "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+              "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+              "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (309)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "groupTagsByProfile",
+              "lines": 45,
+              "params": 1,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "getRevalidationDurations",
+              "lines": 36,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "entries": {
+            "revalidateTags": {
+              "linesGiven": 105,
+              "linesNow": 32,
+              "blankLinesGiven": 12,
+              "blankLinesNow": 5
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            }
+          },
+          "commentLines": {
+            "given": 55,
+            "now": 55
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "withExecuteRevalidates(store, callback)",
+              "executeRevalidates(workStore, state)"
+            ],
+            "now": [
+              "withExecuteRevalidates(store, callback)",
+              "executeRevalidates(workStore, state)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {
+            "func-style": 2
+          },
+          "oxlint strict": {
+            "func-style": 2,
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "func-style": 2,
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 2,
+            "suspicious/noEvolvingTypes": 1,
+            "suspicious/noImplicitAnyLet": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verifyChangedTheFile": true,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [
+          "func-style L241: Expected a function expression.",
+          "func-style L274: Expected a function expression."
+        ],
+        "remainingDetail": [
+          {
+            "rule": "func-style",
+            "line": 241,
+            "message": "Expected a function expression."
+          },
+          {
+            "rule": "func-style",
+            "line": 274,
+            "message": "Expected a function expression."
+          }
+        ],
+        "remainingLengthRuleOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": [
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ]
+        },
+        "vsHandoff": {
+          "cleared": [
+            "max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": [
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ]
+        },
+        "retried": true
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 12,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 476532,
+          "cached_input_tokens": 442368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 5635,
+          "reasoning_output_tokens": 1928,
+          "total_tokens": 482167
+        },
+        "tokensUsedReportedOnStderr": 39799,
+        "thinkingBlocks": 10,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*revalidation*' -g '*lock*' -g '*oxlint*' -g '*biome*' -g '*tsconfig*'\",max_o",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor directory in reversed([p, *p.parents]):\\n    instructions=directory ",
+          "text(await tools.exec_command({cmd:\"command -v node bun pnpm ultracite oxlint tsc; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor directory in [p, *p.parents]:\\n    modules=directory / ",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\n@@\\n-async function revalidateTags(\\n-  tagsWithProfile: {\\n-    tag: string;\\n-    profile?",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pnpm exec ultracite check revalidation-utils.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"ls -la .. ../.. ../../..; ",
+          "const results=await Promise.allSettled([\ntools.write_stdin({session_id:60440,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:600}),\ntools.write_stdin({session_id:58923,chars:\"\\u0003\",yield_time_ms",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help | head -75; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('~/GitHub/ultracite/node_modules/.bin/oxlint')\\npr",
+          "const original=load(\"originalSource\");\nconst script = `\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nimport ts from '~/.nvm/ve",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --deny max-lines-per-funct",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\n@@\\n-type TagWithProfile = {\\n+interface TagWithProfile {\\n   tag: string;\\n   profile?: str",
+          "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-con"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*revalidation*' -g '*lock*' -g '*oxlint*' -g '*biome*' -g '*tsconfig*'\",max_output_tokens:4000}),\n  tools.exec_command({cmd:\"cat revalidation-utils.ts; cat revalidation-utils.ts",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor directory in reversed([p, *p.parents]):\\n    instructions=directory / 'AGENTS.md'\\n    if instructions.is_file():\\n        print(str(instructions))\\n        print(instr",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"command -v node bun pnpm ultracite oxlint tsc; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor directory in [p, *p.parents]:\\n    modules=directory / 'node_modules'\\n    if modules.exists():\\n        print(str(modules))\\n        bins=modules / '.bin'",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pnpm exec ultracite check revalidation-utils.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"ls -la .. ../.. ../../..; sed -n '145,315p' revalidation-utils.ts; npm root -g\",\"max_output_tokens\":5000})\n]);for(let i=0;i<re",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results=await Promise.allSettled([\ntools.write_stdin({session_id:60440,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:600}),\ntools.write_stdin({session_id:58923,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:300}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help | head -75; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('~/GitHub/ultracite/node_modules/.bin/oxlint')\\nprint('Oxlint:', p.resolve())\\nfor p in Path('~/GitHub/ultracite').glob('packages/*/package.json'):\\n ",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const original=load(\"originalSource\");\nconst script = `\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nimport ts from '~/.nvm/versions/node/v24.14.1/lib/node_modules/typescript/lib/typescript.js';\nconst file = 'revalidation-util",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":2500}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --allow all --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":1000}),\ntoo",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor directory in reversed([p, *p.parents]):\\n    instructions=directory / 'AGENTS.md'\\n    if instructions.is_file():\\n        print(str(instructions))\\n        print(instr",
+          "text(await tools.exec_command({cmd:\"command -v node bun pnpm ultracite oxlint tsc; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path.cwd()\\nfor directory in [p, *p.parents]:\\n    modules=directory / 'node_modules'\\n    if modules.exists():\\n        print(str(modules))\\n        bins=modules / '.bin'",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pnpm exec ultracite check revalidation-utils.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"ls -la .. ../.. ../../..; sed -n '145,315p' revalidation-utils.ts; npm root -g\",\"max_output_tokens\":5000})\n]);for(let i=0;i<re",
+          "const results=await Promise.allSettled([\ntools.write_stdin({session_id:60440,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:600}),\ntools.write_stdin({session_id:58923,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:300}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help | head -75; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('~/GitHub/ultracite/node_modules/.bin/oxlint')\\nprint('Oxlint:', p.resolve())\\nfor p in Path('~/GitHub/ultracite').glob('packages/*/package.json'):\\n ",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":2500}));\n",
+          "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --allow all --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":1000}),\ntoo"
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.apply_patch(\\\"*** Begin Patch\\\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\\\n@@\\\\n-async function revalidateTags(\\\\n-  tagsWithProfile: {\\\\n- ",
+          "{\"tool\":\"exec\",\"input\":\"const original=load(\\\"originalSource\\\");\\nconst script = `\\nimport assert from 'node:assert/strict';\\nimport fs from 'node:fs';\\nimport { stripTypeScriptTypes } from 'node:modu"
+        ],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"python3 - <<'PY'\nfrom pathlib import Path\np=Path.cwd()\nfor directory in reversed([p, *p.parents]):\n    instructions=directory / 'AGENTS.md'\n    if instructions.is_file():\n        print(str(instructions))\n        print(instructions.read_text())\nPY\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts tsconfig.json; git status --short; ls -ld node_modules node_modules/.bin/*\",\"max_output_tokens\":4000})\n]); for (let i=0;i<results.length;i++) text({i,...results[i]});\n",
+          "-async function revalidateTags(\n-  tagsWithProfile: {\n-    tag: string;\n-    profile?: string | { expire?: number };\n-  }[],\n-  incrementalCache: IncrementalCache | undefined,\n-  workStore?: WorkStore\n-): Promise<void> {\n-  if (tagsWithProfile.length === 0) {\n-    return;\n-  }\n-\n-  const handlers = getCacheHandlers() ?? [];\n-  const promises: Promise<void>[] = [];\n+type TagWithProfile = {\n+  tag: string;\n+  profile?: string | { expire?: number };\n+};\n+function groupTagsByProfile(tagsWithProfile: TagWithProfile[]) {\n-  // Process each profile group\n-  for (const [profile, tagsForProfile] of tagsByProfile) {\n-    // Look up the cache profile from workStore if available\n-    let durations: { expire?: number } | undefined;\n+  return tagsByProfile;\n+}\n-    if (profile) {\n-      let cacheLife:\n-",
+          "const results=await Promise.allSettled([\ntools.write_stdin({session_id:60440,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:600}),\ntools.write_stdin({session_id:58923,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:300}),\ntools.exec_command({cmd:\"python3 - <<'PY'\nfrom pathlib import Path\nfor p in Path.cwd().iterdir():\n    print(p.name)\nfor p in [Path('~/.nvm/versions/node/v24.14.1/lib/node_modules/typescript/lib/typescript.js'), Path('~/GitHub/ultracite/node_modules/.bin/oxlint')]:\n    print(str(p), p.exists())\nPY\",\"max_output_tokens\":1000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help | head -75; python3 - <<'PY'\nfrom pathlib import Path\np=Path('~/GitHub/ultracite/node_modules/.bin/oxlint')\nprint('Oxlint:', p.resolve())\nfor p in Path('~/GitHub/ultracite').glob('packages/*/package.json'):\n    print(p)\nPY\",max_output_tokens:2500}));\n",
+          "-type TagWithProfile = {\n+interface TagWithProfile {\n-};\n+}"
+        ],
+        "finalMessage": "Fixed by extracting grouping and duration helpers. `revalidateTags` is now 32 lines; both helpers are under 50.\n\nThe targeted lint check, TypeScript check, and eight before/after behavior comparisons passed. Only `revalidation-utils.ts` was edited.",
+        "understood": {
+          "fineAsIs": [],
+          "behaviourRisk": [],
+          "preserveBehaviour": [],
+          "review": [],
+          "whySplit": [],
+          "params": [],
+          "lineCount": [
+            "`revalidateTags` is now 32 lines; both helpers are under 50."
+          ],
+          "formatter": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "mainCheckout": 63,
+          "webAccess": 1038,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "mainCheckout": 18,
+          "webAccess": 87
+        },
+        "exposureInToolInputs": {
+          "mainCheckout": 12
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pnpm exec ultracite check revalidation-utils.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"ls -la .. ../.. ../../..; sed -n '145,315p' revalidation-utils.ts; npm root -g\",\"max_output_tokens\":5000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n"
+          },
+          {
+            "tool": "exec",
+            "target": "const results=await Promise.allSettled([\ntools.write_stdin({session_id:60440,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:600}),\ntools.write_stdin({session_id:58923,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:300}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nfor p in Path.cwd().iterdir():\\n    print(p.name)\\nfor p in [Path('~/.nvm/versions/node/v24.14.1/lib/node_modules/typescript/lib/typescript.js'), Path('~/GitHub/ultracite/node_modules/.bin/oxlint')]:\\n    print(str(p), p.exists())\\nPY\",\"max_output_tokens\":1000})\n]);for(let i="
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help | head -75; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('~/GitHub/ultracite/node_modules/.bin/oxlint')\\nprint('Oxlint:', p.resolve())\\nfor p in Path('~/GitHub/ultracite').glob('packages/*/package.json'):\\n    print(p)\\nPY\",max_output_tokens:2500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "const original=load(\"originalSource\");\nconst script = `\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nimport ts from '~/.nvm/versions/node/v24.14.1/lib/node_modules/typescript/lib/typescript.js';\nconst file = 'revalidation-utils.ts';\nconst original = ${JSON.stringify(original)};\nconst current = fs.readFileSync(file, 'utf8');\nassert.equal(current.slice(0,current.indexOf('type TagWithProfile')), original.slice(0,original.indexOf('async function revalidateTags')));\nassert.equal(current.slice(current.indexOf('expo"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":2500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\n@@\\n-type TagWithProfile = {\\n+interface TagWithProfile {\\n   tag: string;\\n   profile?: string | { expire?: number };\\n-};\\n+}\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --allow all --deny max-lines-per-function revalidation-utils"
+          },
+          {
+            "tool": "exec",
+            "target": "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --allow all --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":1000}),\ntools.exec_command({cmd:\"~/.nvm/versions/node/v24.14.1/bin/tsc --noEmit --strict --target es2023 --module esnext revalidation-utils.ts\",\"max_output_tokens\":1000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n"
+          }
+        ]
+      }
+    },
+    {
+      "attempt": 2,
+      "prompt": "buildRetryPrompt",
+      "promptKind": "retry: new since the edit",
+      "given": [
+        "func-style L241: Expected a function expression.",
+        "func-style L274: Expected a function expression."
+      ],
+      "retryIssues": {
+        "still": [],
+        "introduced": [
+          "func-style L241",
+          "func-style L274"
+        ]
+      },
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 69,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "edited in place",
+        "kinds": [],
+        "helpers": [],
+        "removed": [],
+        "entries": {
+          "revalidateTags": {
+            "linesGiven": 32,
+            "linesNow": 32,
+            "blankLinesGiven": 5,
+            "blankLinesNow": 5
+          }
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "918c834770ea6c0e2e5ae890326459c0cc35fcbbcfc44af930e25e0e262384ea",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 6,
+              "no-empty-function": 1,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 6,
+              "max-lines": 1,
+              "max-statements": 4,
+              "no-empty-function": 1,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-explicit-any": 1,
+              "@typescript-eslint/no-non-null-assertion": 1,
+              "func-style": 6,
+              "max-lines": 1,
+              "max-statements": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sonarjs/too-many-break-or-continue-in-loop": 1,
+              "sort-keys": 1,
+              "unicorn/name-replacements": 5,
+              "unicorn/no-break-in-nested-loop": 3,
+              "unicorn/no-computed-property-existence-check": 1,
+              "unicorn/prefer-ternary": 1,
+              "unicorn/single-line-block-comment-style": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "assist/source/useSortedKeys": 1,
+              "nursery/noExcessiveStatementsPerFunction": 4,
+              "style/noNonNullAssertion": 1,
+              "style/useConsistentMethodSignatures": 2,
+              "suspicious/noEmptyBlockStatements": 1,
+              "suspicious/noEvolvingTypes": 1,
+              "suspicious/noExplicitAny": 1,
+              "suspicious/noImplicitAnyLet": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "getCacheHandlers",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "cloneRevalidationState",
+            "lines": 13,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "diffRevalidationState",
+            "lines": 38,
+            "statements": 3,
+            "params": 2,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to prev.pendingRevalidatedTags.map>",
+            "lines": 7,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "<callback to curr.pendingRevalidatedTags.filter>",
+            "lines": 13,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "groupTagsByProfile",
+            "lines": 45,
+            "statements": 19,
+            "params": 1,
+            "cognitive": 16,
+            "depth": 0
+          },
+          {
+            "name": "getRevalidationDurations",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 9,
+            "depth": 0
+          },
+          {
+            "name": "revalidateTags",
+            "lines": 32,
+            "statements": 14,
+            "params": 3,
+            "cognitive": 10,
+            "depth": 0
+          },
+          {
+            "name": "executeRevalidates",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "withExecuteRevalidates",
+            "lines": 21,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 1,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 310,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 300,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "revalidateTags": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 32,
+              "params": 3,
+              "statements": 14
+            },
+            "fileLines": 310,
+            "functions": 14,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 45,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "getRevalidationDurations",
+                "params": 2,
+                "statements": 11
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 310,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+              "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+              "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+              "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (309)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "groupTagsByProfile",
+              "lines": 45,
+              "params": 1,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "getRevalidationDurations",
+              "lines": 36,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "entries": {
+            "revalidateTags": {
+              "linesGiven": 105,
+              "linesNow": 32,
+              "blankLinesGiven": 12,
+              "blankLinesNow": 5
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 1,
+              "topLevelDataVariables": 0
+            }
+          },
+          "commentLines": {
+            "given": 55,
+            "now": 55
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "withExecuteRevalidates(store, callback)",
+              "executeRevalidates(workStore, state)"
+            ],
+            "now": [
+              "executeRevalidates(workStore, state)",
+              "withExecuteRevalidates(store, callback)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {},
+          "oxlint strict": {
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 2,
+            "suspicious/noEvolvingTypes": 1,
+            "suspicious/noImplicitAnyLet": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "918c834770ea6c0e2e5ae890326459c0cc35fcbbcfc44af930e25e0e262384ea",
+        "parseError": false,
+        "measureError": null,
+        "views": {
+          "oxlint user": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 6,
+              "no-empty-function": 1,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1
+            }
+          },
+          "oxlint strict": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309)."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "func-style": 6,
+              "max-lines": 1,
+              "max-statements": 4,
+              "no-empty-function": 1,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sort-keys": 1,
+              "typescript/method-signature-style": 2,
+              "typescript/no-explicit-any": 1,
+              "typescript/no-non-null-assertion": 1
+            }
+          },
+          "oxlint sonarjs": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {}
+          },
+          "eslint length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: max-statements: Function 'groupTagsByProfile' has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: max-statements: Function 'getRevalidationDurations' has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: max-statements: Async function 'revalidateTags' has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: max-statements: Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [
+                "(file): max-lines: File has too many lines (309). Maximum allowed is 300."
+              ],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/method-signature-style": 2,
+              "@typescript-eslint/no-empty-function": 1,
+              "@typescript-eslint/no-explicit-any": 1,
+              "@typescript-eslint/no-non-null-assertion": 1,
+              "func-style": 6,
+              "max-lines": 1,
+              "max-statements": 4,
+              "promise/always-return": 1,
+              "promise/prefer-await-to-callbacks": 3,
+              "sonarjs/too-many-break-or-continue-in-loop": 1,
+              "sort-keys": 1,
+              "unicorn/name-replacements": 5,
+              "unicorn/no-break-in-nested-loop": 3,
+              "unicorn/no-computed-property-existence-check": 1,
+              "unicorn/prefer-ternary": 1,
+              "unicorn/single-line-block-comment-style": 1
+            }
+          },
+          "biome length": {
+            "sizeHonor": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "sizeIgnore": {
+              "lines": [],
+              "params": [],
+              "statements": [
+                "groupTagsByProfile: nursery/noExcessiveStatementsPerFunction: This function has too many statements (19). Maximum allowed is 10.",
+                "getRevalidationDurations: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10.",
+                "revalidateTags: nursery/noExcessiveStatementsPerFunction: This function has too many statements (14). Maximum allowed is 10.",
+                "executeRevalidates: nursery/noExcessiveStatementsPerFunction: This function has too many statements (11). Maximum allowed is 10."
+              ],
+              "fileLines": [],
+              "complexity": []
+            },
+            "parseError": false,
+            "all": {
+              "assist/source/useSortedInterfaceMembers": 2,
+              "assist/source/useSortedKeys": 1,
+              "nursery/noExcessiveStatementsPerFunction": 4,
+              "style/noNonNullAssertion": 1,
+              "style/useConsistentMethodSignatures": 2,
+              "suspicious/noEmptyBlockStatements": 1,
+              "suspicious/noEvolvingTypes": 1,
+              "suspicious/noExplicitAny": 1,
+              "suspicious/noImplicitAnyLet": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "functions": [
+          {
+            "name": "getCacheHandlers",
+            "lines": 3,
+            "statements": 1,
+            "params": 0,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "cloneRevalidationState",
+            "lines": 13,
+            "statements": 1,
+            "params": 1,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "diffRevalidationState",
+            "lines": 38,
+            "statements": 3,
+            "params": 2,
+            "cognitive": 0,
+            "depth": 0
+          },
+          {
+            "name": "<callback to prev.pendingRevalidatedTags.map>",
+            "lines": 7,
+            "statements": 2,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "<callback to curr.pendingRevalidatedTags.filter>",
+            "lines": 13,
+            "statements": 3,
+            "params": 1,
+            "cognitive": 1,
+            "depth": 1
+          },
+          {
+            "name": "groupTagsByProfile",
+            "lines": 45,
+            "statements": 19,
+            "params": 1,
+            "cognitive": 16,
+            "depth": 0
+          },
+          {
+            "name": "getRevalidationDurations",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 9,
+            "depth": 0
+          },
+          {
+            "name": "revalidateTags",
+            "lines": 32,
+            "statements": 14,
+            "params": 3,
+            "cognitive": 10,
+            "depth": 0
+          },
+          {
+            "name": "executeRevalidates",
+            "lines": 36,
+            "statements": 11,
+            "params": 2,
+            "cognitive": 2,
+            "depth": 0
+          },
+          {
+            "name": "withExecuteRevalidates",
+            "lines": 21,
+            "statements": 7,
+            "params": 2,
+            "cognitive": 1,
+            "depth": 0
+          }
+        ],
+        "over50": [],
+        "fileLines": 310,
+        "typeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "scenarios": 300,
+          "differing": 0,
+          "onceDiffering": 0,
+          "crashed": 0,
+          "arityOnly": 0,
+          "why": null,
+          "differences": [],
+          "ignoringKeyOrder": "same"
+        },
+        "structure": {
+          "revalidateTags": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 32,
+              "params": 3,
+              "statements": 14
+            },
+            "fileLines": 310,
+            "functions": 14,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 45,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 36,
+                "name": "getRevalidationDurations",
+                "params": 2,
+                "statements": 11
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          }
+        },
+        "formatted": {
+          "error": null,
+          "changed": false,
+          "fileLines": 310,
+          "joinedLines": 0,
+          "size": {
+            "lines": [],
+            "params": [],
+            "statements": [
+              "groupTagsByProfile: max-statements: function `groupTagsByProfile` has too many statements (19). Maximum allowed is 10.",
+              "getRevalidationDurations: max-statements: function `getRevalidationDurations` has too many statements (11). Maximum allowed is 10.",
+              "revalidateTags: max-statements: function `revalidateTags` has too many statements (14). Maximum allowed is 10.",
+              "executeRevalidates: max-statements: function `executeRevalidates` has too many statements (11). Maximum allowed is 10."
+            ],
+            "fileLines": [
+              "(file): max-lines: File has too many lines (309)."
+            ],
+            "complexity": []
+          },
+          "handoffLeft": [],
+          "structure": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          }
+        },
+        "edit": {
+          "edit": "helpers extracted",
+          "kinds": [
+            "helpers",
+            "single-use helpers"
+          ],
+          "helpers": [
+            {
+              "name": "groupTagsByProfile",
+              "lines": 45,
+              "params": 1,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            },
+            {
+              "name": "getRevalidationDurations",
+              "lines": 36,
+              "params": 2,
+              "callSites": 1,
+              "nestedIn": null,
+              "readsEnclosingLocals": [],
+              "writesEnclosingLocals": [],
+              "mutatesEnclosingLocals": [],
+              "mutatesParams": [],
+              "writesModuleState": [],
+              "optionsBag": false,
+              "restParam": false,
+              "usesArguments": false
+            }
+          ],
+          "removed": [],
+          "structures": {
+            "revalidateTags": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 14
+              },
+              "fileLines": 310,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 45,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 36,
+                  "name": "getRevalidationDurations",
+                  "params": 2,
+                  "statements": 11
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "entries": {
+            "revalidateTags": {
+              "linesGiven": 105,
+              "linesNow": 32,
+              "blankLinesGiven": 12,
+              "blankLinesNow": 5
+            }
+          },
+          "counts": {
+            "given": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 0,
+              "topLevelDataVariables": 0
+            },
+            "now": {
+              "loops": 4,
+              "continues": 0,
+              "replaceCalls": 0,
+              "replaceAllCalls": 0,
+              "reduceCalls": 0,
+              "topLevelVariables": 1,
+              "topLevelDataVariables": 0
+            }
+          },
+          "commentLines": {
+            "given": 55,
+            "now": 55
+          },
+          "joinedLines": {
+            "given": 0,
+            "now": 0
+          },
+          "exports": {
+            "given": [
+              "withExecuteRevalidates(store, callback)",
+              "executeRevalidates(workStore, state)"
+            ],
+            "now": [
+              "executeRevalidates(workStore, state)",
+              "withExecuteRevalidates(store, callback)"
+            ]
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint user": {},
+          "oxlint strict": {
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "oxlint sonarjs": {},
+          "eslint length": {
+            "max-lines": 1,
+            "max-statements": 2
+          },
+          "biome length": {
+            "assist/source/useSortedInterfaceMembers": 1,
+            "nursery/noExcessiveStatementsPerFunction": 2,
+            "suspicious/noEvolvingTypes": 1,
+            "suspicious/noImplicitAnyLet": 1
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "helpers extracted"
+      },
+      "verifyChangedTheFile": false,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingLengthRuleOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "max-lines-per-function: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 11,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 349297,
+          "cached_input_tokens": 326144,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4232,
+          "reasoning_output_tokens": 1723,
+          "total_tokens": 353529
+        },
+        "tokensUsedReportedOnStderr": 27385,
+        "thinkingBlocks": 10,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "text(await tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*oxlint*' -g '*eslint*' -g 'revalidation-utils.ts*' -g '!node_modules' -g '!.git'\",\"max_output_toke",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts\",\"max_output_tokens\":6000}),\n  tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\"",
+          "text(await tools.exec_command({cmd:\"command -v node bun pnpm npm oxlint ultracite; for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirnam",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"sed -n '236,320p' revalidation-utils.ts\",\"max_output_tokens\":2500}),\n  tools.exec_command({cmd:\"ls -a <tmp>/ultracite-agent-experi",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts revalidation-utils.ts\",\"max_output_tokens\":5000}));\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help; rg -n 'func-style|func-names|prefer-arrow|function' ~/GitHub/ultracite/packages/ultracite/configs/oxlint/core* ~",
+          "text(await tools.exec_command({cmd:\"rg --files ~/GitHub/ultracite | rg 'oxlint(/core|\\\\.config)|core\\\\.json'; ~/GitHub/ultracite/node_modules/.bin/oxlint --config /dev/stdin --disable-nested-config -A",
+          "text(await tools.exec_command({cmd:\"sed -n '1,50p' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs; rg -n 'func-style|func-names|prefer-arrow|max-lines' ~/GitHub/ultracite/packages/cli/co",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'JS'\\nimport core from '~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs';\\nimport { spawnSync } from 'node:child_process';\\n",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\n@@\\n-/** Run a callback, and execute any *new* revalidations added during its runtime. */\\n-"
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "text(await tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*oxlint*' -g '*eslint*' -g 'revalidation-utils.ts*' -g '!node_modules' -g '!.git'\",\"max_output_tokens\":4000}));\ntext(await tools.exec_command({cmd:\"cat revalidation-utils.ts; cat revalidation-utils.t",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts\",\"max_output_tokens\":6000}),\n  tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tm",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"sed -n '236,320p' revalidation-utils.ts\",\"max_output_tokens\":2500}),\n  tools.exec_command({cmd:\"ls -a <tmp>/ultracite-agent-experiment; if [ -d ~/GitHub/ultracite/node_modules/.bin ]; then ls ~/GitHub/ultracite/node_modules/.bin; ",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts revalidation-utils.ts\",\"max_output_tokens\":5000}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help; rg -n 'func-style|func-names|prefer-arrow|function' ~/GitHub/ultracite/packages/ultracite/configs/oxlint/core* ~/GitHub/ultracite/packages/ultracite/src/configs/oxlint/core*\",\"max_output_tokens\":7000}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"rg --files ~/GitHub/ultracite | rg 'oxlint(/core|\\\\.config)|core\\\\.json'; ~/GitHub/ultracite/node_modules/.bin/oxlint --config /dev/stdin --disable-nested-config -A all -D func-style --format json revalidation-utils.ts <<'JSON'\\n{}\\nJSON\",\"max_output_tokens\":4500}",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"sed -n '1,50p' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs; rg -n 'func-style|func-names|prefer-arrow|max-lines' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs\",\"max_output_tokens\":2500}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"node --input-type=module <<'JS'\\nimport core from '~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs';\\nimport { spawnSync } from 'node:child_process';\\nconst config = { ...core, rules: { ...core.rules, 'max-lines-per-function': 'error' } };\\nconst run ",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts revalidation-utils.ts\",\"max_output_tokens\":5000}));\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help; rg -n 'func-style|func-names|prefer-arrow|function' ~/GitHub/ultracite/packages/ultracite/configs/oxlint/core* ~/GitHub/ultracite/packages/ultracite/src/configs/oxlint/core*\",\"max_output_tokens\":7000}));\n",
+          "text(await tools.exec_command({cmd:\"rg --files ~/GitHub/ultracite | rg 'oxlint(/core|\\\\.config)|core\\\\.json'; ~/GitHub/ultracite/node_modules/.bin/oxlint --config /dev/stdin --disable-nested-config -A all -D func-style --format json revalidation-utils.ts <<'JSON'\\n{}\\nJSON\",\"max_output_tokens\":4500}",
+          "text(await tools.exec_command({cmd:\"node --input-type=module <<'JS'\\nimport core from '~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs';\\nimport { spawnSync } from 'node:child_process';\\nconst config = { ...core, rules: { ...core.rules, 'max-lines-per-function': 'error' } };\\nconst run "
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "ownBehaviourChecks": [
+          "{\"tool\":\"exec\",\"input\":\"const results = await Promise.allSettled([\\n  tools.exec_command({cmd:\\\"sed -n '236,320p' revalidation-utils.ts\\\",\\\"max_output_tokens\\\":2500}),\\n  tools.exec_command({cmd:\\\"ls ",
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.exec_command({cmd:\\\"node --input-type=module <<'JS'\\\\nimport core from '~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs';\\\\nimport { spawnSync } f",
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.apply_patch(\\\"*** Begin Patch\\\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\\\n@@\\\\n-/** Run a callback, and execute any *new* revalidations add"
+        ],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-async function revalidateTags(\n+const revalidateTags = async function (\n-}\n+};\n-export function executeRevalidates(\n+export const executeRevalidates = function (\n-}\n+};",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"sed -n '236,320p' revalidation-utils.ts\",\"max_output_tokens\":2500}),\n  tools.exec_command({cmd:\"ls -a <tmp>/ultracite-agent-experiment; if [ -d ~/GitHub/ultracite/node_modules/.bin ]; then ls ~/GitHub/ultracite/node_modules/.bin; fi; node -e 'for (const pkg of [\"oxlint\", \"ultracite\", \"typescript\"]) { try { console.log(pkg, import.meta.resolve(pkg)); } catch { console.log(pkg + \": not available from this directory\"); } }'\",\"max_output_tokens\":3000})\n]);for(const r of results)text(r);\n",
+          "-/** Run a callback, and execute any *new* revalidations added during its runtime. */\n-export async function withExecuteRevalidates<T>(\n-  store: WorkStore | undefined,\n-  callback: () => Promise<T>\n-): Promise<T> {\n-  if (!store) {\n-    return callback();\n-  }\n-  // If we executed any revalidates during the request, then we don't want to execute them again.\n-  // save the state so we can check if anything changed after we're done running callbacks.\n-  const savedRevalidationState = cloneRevalidationState(store);\n-  try {\n-    return await callback();\n-  } finally {\n-    // Check if we have any new revalidates, and if so, wait until they are all resolved.\n-    const newRevalidates = diffRevalidationState(\n-      savedRevalidationState,\n-      cloneRevalidationState(store)\n-    );\n-    awai"
+        ],
+        "finalMessage": "Fixed both reported issues using named function expressions. Moved the caller below them to avoid a new use-before-define error.\n\nOnly the specified file changed; function bodies are unchanged. Lint verification confirms both reported errors are resolved.",
+        "understood": {
+          "fineAsIs": [],
+          "behaviourRisk": [],
+          "preserveBehaviour": [
+            "I’ll read the current file and diagnostic help, then make the smallest change that preserves behavior."
+          ],
+          "review": [],
+          "whySplit": [],
+          "params": [],
+          "lineCount": [],
+          "formatter": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "pristineSubjects": 3,
+          "plans": 1,
+          "mainCheckout": 53,
+          "webAccess": 47,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "pristineSubjects": 3,
+          "plans": 1,
+          "mainCheckout": 22,
+          "webAccess": 16
+        },
+        "exposureInToolInputs": {
+          "mainCheckout": 14
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts\",\"max_output_tokens\":6000}),\n  tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":6000}),\n  tools.exec_command("
+          },
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"sed -n '236,320p' revalidation-utils.ts\",\"max_output_tokens\":2500}),\n  tools.exec_command({cmd:\"ls -a <tmp>/ultracite-agent-experiment; if [ -d ~/GitHub/ultracite/node_modules/.bin ]; then ls ~/GitHub/ultracite/node_modules/.bin; fi; node -e 'for (const pkg of [\\\"oxlint\\\", \\\"ultracite\\\", \\\"typescript\\\"]) { try { console.log(pkg, import.meta.resolve(pkg)); } catch { console.log(pkg + \\\": not available from this directory\\\"); } }'\",\"max_output_tokens\":3"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts revalidation-utils.ts\",\"max_output_tokens\":5000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help; rg -n 'func-style|func-names|prefer-arrow|function' ~/GitHub/ultracite/packages/ultracite/configs/oxlint/core* ~/GitHub/ultracite/packages/ultracite/src/configs/oxlint/core*\",\"max_output_tokens\":7000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"rg --files ~/GitHub/ultracite | rg 'oxlint(/core|\\\\.config)|core\\\\.json'; ~/GitHub/ultracite/node_modules/.bin/oxlint --config /dev/stdin --disable-nested-config -A all -D func-style --format json revalidation-utils.ts <<'JSON'\\n{}\\nJSON\",\"max_output_tokens\":4500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"sed -n '1,50p' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs; rg -n 'func-style|func-names|prefer-arrow|max-lines' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs\",\"max_output_tokens\":2500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"node --input-type=module <<'JS'\\nimport core from '~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs';\\nimport { spawnSync } from 'node:child_process';\\nconst config = { ...core, rules: { ...core.rules, 'max-lines-per-function': 'error' } };\\nconst run = spawnSync('~/GitHub/ultracite/node_modules/.bin/oxlint', ['--config', '/dev/stdin', '--disable-nested-config', '--format', 'json', 'revalidation-utils.ts'], { input: JSON.stringify(config), encoding: 'utf8' });\\nif (run.stderr) process.stderr.write(run.stderr);\\nconst resul"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "helpers extracted",
+    "response": "behaviour kept, limit cleared",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 1,
+    "remaining": 0,
+    "notes": [
+      "Took 2 attempts."
+    ],
+    "issueFixed": [
+      true
+    ],
+    "outro": "Fixed 1 of 1 issue with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 67184,
+    "totalTokens": 835696
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "mainCheckout": 116,
+      "webAccess": 1085,
+      "sessionLogs": 32,
+      "pristineSubjects": 3,
+      "plans": 1
+    },
+    "exposureInToolCalls": {
+      "mainCheckout": 40,
+      "webAccess": 103,
+      "pristineSubjects": 3,
+      "plans": 1
+    },
+    "exposureInToolInputs": {
+      "mainCheckout": 26
+    },
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pnpm exec ultracite check revalidation-utils.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"ls -la .. ../.. ../../..; sed -n '145,315p' revalidation-utils.ts; npm root -g\",\"max_output_tokens\":5000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results=await Promise.allSettled([\ntools.write_stdin({session_id:60440,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:600}),\ntools.write_stdin({session_id:58923,chars:\"\\u0003\",yield_time_ms:1000,max_output_tokens:300}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nfor p in Path.cwd().iterdir():\\n    print(p.name)\\nfor p in [Path('~/.nvm/versions/node/v24.14.1/lib/node_modules/typescript/lib/typescript.js'), Path('~/GitHub/ultracite/node_modules/.bin/oxlint')]:\\n    print(str(p), p.exists())\\nPY\",\"max_output_tokens\":1000})\n]);for(let i="
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help | head -75; python3 - <<'PY'\\nfrom pathlib import Path\\np=Path('~/GitHub/ultracite/node_modules/.bin/oxlint')\\nprint('Oxlint:', p.resolve())\\nfor p in Path('~/GitHub/ultracite').glob('packages/*/package.json'):\\n    print(p)\\nPY\",max_output_tokens:2500}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const original=load(\"originalSource\");\nconst script = `\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport { stripTypeScriptTypes } from 'node:module';\nimport ts from '~/.nvm/versions/node/v24.14.1/lib/node_modules/typescript/lib/typescript.js';\nconst file = 'revalidation-utils.ts';\nconst original = ${JSON.stringify(original)};\nconst current = fs.readFileSync(file, 'utf8');\nassert.equal(current.slice(0,current.indexOf('type TagWithProfile')), original.slice(0,original.indexOf('async function revalidateTags')));\nassert.equal(current.slice(current.indexOf('expo"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":2500}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/b-codex-3/revalidation-utils.ts\\n@@\\n-type TagWithProfile = {\\n+interface TagWithProfile {\\n   tag: string;\\n   profile?: string | { expire?: number };\\n-};\\n+}\\n*** End Patch\"));\ntext(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --allow all --deny max-lines-per-function revalidation-utils"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs --disable-nested-config --allow all --deny max-lines-per-function revalidation-utils.ts\",\"max_output_tokens\":1000}),\ntools.exec_command({cmd:\"~/.nvm/versions/node/v24.14.1/bin/tsc --noEmit --strict --target es2023 --module esnext revalidation-utils.ts\",\"max_output_tokens\":1000})\n]);for(let i=0;i<results.length;i++)text({i,...results[i]});\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts\",\"max_output_tokens\":6000}),\n  tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\",\"max_output_tokens\":6000}),\n  tools.exec_command("
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"sed -n '236,320p' revalidation-utils.ts\",\"max_output_tokens\":2500}),\n  tools.exec_command({cmd:\"ls -a <tmp>/ultracite-agent-experiment; if [ -d ~/GitHub/ultracite/node_modules/.bin ]; then ls ~/GitHub/ultracite/node_modules/.bin; fi; node -e 'for (const pkg of [\\\"oxlint\\\", \\\"ultracite\\\", \\\"typescript\\\"]) { try { console.log(pkg, import.meta.resolve(pkg)); } catch { console.log(pkg + \\\": not available from this directory\\\"); } }'\",\"max_output_tokens\":3"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts revalidation-utils.ts\",\"max_output_tokens\":5000}));\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help; rg -n 'func-style|func-names|prefer-arrow|function' ~/GitHub/ultracite/packages/ultracite/configs/oxlint/core* ~/GitHub/ultracite/packages/ultracite/src/configs/oxlint/core*\",\"max_output_tokens\":7000}));\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"rg --files ~/GitHub/ultracite | rg 'oxlint(/core|\\\\.config)|core\\\\.json'; ~/GitHub/ultracite/node_modules/.bin/oxlint --config /dev/stdin --disable-nested-config -A all -D func-style --format json revalidation-utils.ts <<'JSON'\\n{}\\nJSON\",\"max_output_tokens\":4500}));\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"sed -n '1,50p' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs; rg -n 'func-style|func-names|prefer-arrow|max-lines' ~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs\",\"max_output_tokens\":2500}));\n"
+      },
+      {
+        "attempt": 2,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"node --input-type=module <<'JS'\\nimport core from '~/GitHub/ultracite/packages/cli/config/oxlint/core/index.mjs';\\nimport { spawnSync } from 'node:child_process';\\nconst config = { ...core, rules: { ...core.rules, 'max-lines-per-function': 'error' } };\\nconst run = spawnSync('~/GitHub/ultracite/node_modules/.bin/oxlint', ['--config', '/dev/stdin', '--disable-nested-config', '--format', 'json', 'revalidation-utils.ts'], { input: JSON.stringify(config), encoding: 'utf8' });\\nif (run.stderr) process.stderr.write(run.stderr);\\nconst resul"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "biome-input",
+      "results",
+      "<run-root>/.staging/b-codex-3/handoff",
+      "../corpus/examples/length-limits",
+      "../corpus/results/length-limits",
+      "../corpus/calibration/length-limits",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/length-agent-runs.cjs",
+      "../corpus/scripts/length-calibration.cjs",
+      "../corpus/scripts/length-census.cjs",
+      "../corpus/scripts/length-complexity.cjs",
+      "../corpus/scripts/length-disagreements.cjs",
+      "../corpus/scripts/length-examples.cjs",
+      "../corpus/scripts/length-format-lib.cjs",
+      "../corpus/scripts/length-format.cjs",
+      "../corpus/scripts/length-history-check.cjs",
+      "../corpus/scripts/length-history.cjs",
+      "../corpus/scripts/length-lib.cjs",
+      "../corpus/scripts/length-linters.cjs",
+      "../corpus/scripts/length-markers.cjs",
+      "../corpus/scripts/length-oracle.cjs",
+      "../corpus/scripts/length-rules.cjs",
+      "../corpus/scripts/length-run-all.cjs",
+      "../corpus/scripts/length-sample.cjs",
+      "../corpus/scripts/length-tables.cjs",
+      "../bibliography/length-limits.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-accessibility",
+      "<outside-repo>/ultracite-research-import-cycles",
+      "<outside-repo>/ultracite-research-length-limits",
+      "<outside-repo>/ultracite-research-sort-keys",
+      "<outside-repo>/ultracite-research-todo-comments",
+      "<outside-repo>/accessibility",
+      "<outside-repo>/dead-code",
+      "<outside-repo>/floating-promises",
+      "<outside-repo>/import-cycles",
+      "<outside-repo>/react-effects",
+      "<outside-repo>/security-rules",
+      "<outside-repo>/sort-keys",
+      "<outside-repo>/todo-comments",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/ultracite-length-limits-batch-logs",
+      "<outside-repo>/plans",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-claude-2",
+      "<run-root>/a-claude-3",
+      "<run-root>/a-codex-1",
+      "<run-root>/a-codex-2",
+      "<run-root>/a-codex-3",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-claude-3",
+      "<run-root>/b-codex-1",
+      "<run-root>/b-codex-2",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-2",
+      "<run-root>/c-claude-3",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-3",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-claude-2",
+      "<run-root>/.staging/a-claude-3",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/a-codex-2",
+      "<run-root>/.staging/a-codex-3",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-claude-3",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/b-codex-2",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-2",
+      "<run-root>/.staging/c-claude-3",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-3",
+      "<run-root>/.staging/c-codex-pilot",
+      "<run-root>/.staging/b-codex-3/attempt1"
+    ]
+  }
+}

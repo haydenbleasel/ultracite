@@ -1,0 +1,589 @@
+{
+  "generated": "2026-10-25T20:12:17.974Z",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/typescript-estree": "8.72.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.3",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.74.0"
+  },
+  "oxlint": {
+    "core": {
+      "max-lines": "off",
+      "max-lines-per-function": "off",
+      "max-statements": "off",
+      "max-params": "off",
+      "max-depth": "off",
+      "max-nested-callbacks": "error",
+      "max-classes-per-file": "error",
+      "complexity": "error"
+    },
+    "js-plugins": {
+      "sonarjs/max-lines": "off",
+      "sonarjs/max-lines-per-function": "off",
+      "sonarjs/max-switch-cases": "error",
+      "sonarjs/max-union-size": "error",
+      "sonarjs/nested-control-flow": "off",
+      "sonarjs/cognitive-complexity": [
+        "error",
+        20
+      ],
+      "sonarjs/no-nested-functions": [
+        "error",
+        {
+          "threshold": 4
+        }
+      ],
+      "sonarjs/expression-complexity": "error"
+    }
+  },
+  "oxlintRules": [
+    {
+      "category": "restriction",
+      "fix": "none",
+      "rule": "eslint/complexity",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/max-classes-per-file",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/max-depth",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/max-lines",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/max-lines-per-function",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/max-nested-callbacks",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "eslint/max-params",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "eslint/max-statements",
+      "typeAware": false
+    }
+  ],
+  "eslint": {
+    "src/example.ts": {
+      "max-lines": [
+        0,
+        300
+      ],
+      "max-lines-per-function": [
+        0,
+        50
+      ],
+      "max-statements": [
+        0,
+        10
+      ],
+      "max-params": [
+        0,
+        3
+      ],
+      "max-depth": [
+        0,
+        4
+      ],
+      "max-nested-callbacks": [
+        2,
+        10
+      ],
+      "max-classes-per-file": [
+        2,
+        1
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "sonarjs/max-lines": [
+        0,
+        {
+          "maximum": 1000
+        }
+      ],
+      "sonarjs/max-lines-per-function": [
+        0,
+        {
+          "maximum": 200
+        }
+      ],
+      "sonarjs/max-switch-cases": [
+        2,
+        30
+      ],
+      "sonarjs/max-union-size": [
+        2,
+        {
+          "threshold": 3
+        }
+      ],
+      "sonarjs/nested-control-flow": [
+        0,
+        {
+          "maximumNestingLevel": 3
+        }
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/no-nested-functions": [
+        2,
+        {
+          "threshold": 4
+        }
+      ],
+      "sonarjs/expression-complexity": [
+        2,
+        {
+          "max": 3
+        }
+      ],
+      "@typescript-eslint/max-params": [
+        0
+      ]
+    },
+    "src/example.tsx": {
+      "max-lines": [
+        0,
+        300
+      ],
+      "max-lines-per-function": [
+        0,
+        50
+      ],
+      "max-statements": [
+        0,
+        10
+      ],
+      "max-params": [
+        0,
+        3
+      ],
+      "max-depth": [
+        0,
+        4
+      ],
+      "max-nested-callbacks": [
+        2,
+        10
+      ],
+      "max-classes-per-file": [
+        2,
+        1
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "sonarjs/max-lines": [
+        0,
+        {
+          "maximum": 1000
+        }
+      ],
+      "sonarjs/max-lines-per-function": [
+        0,
+        {
+          "maximum": 200
+        }
+      ],
+      "sonarjs/max-switch-cases": [
+        2,
+        30
+      ],
+      "sonarjs/max-union-size": [
+        2,
+        {
+          "threshold": 3
+        }
+      ],
+      "sonarjs/nested-control-flow": [
+        0,
+        {
+          "maximumNestingLevel": 3
+        }
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/no-nested-functions": [
+        2,
+        {
+          "threshold": 4
+        }
+      ],
+      "sonarjs/expression-complexity": [
+        2,
+        {
+          "max": 3
+        }
+      ],
+      "@typescript-eslint/max-params": [
+        0
+      ]
+    },
+    "src/example.test.ts": {
+      "max-lines": [
+        0,
+        300
+      ],
+      "max-lines-per-function": [
+        0,
+        50
+      ],
+      "max-statements": [
+        0,
+        10
+      ],
+      "max-params": [
+        0,
+        3
+      ],
+      "max-depth": [
+        0,
+        4
+      ],
+      "max-nested-callbacks": [
+        2,
+        10
+      ],
+      "max-classes-per-file": [
+        2,
+        1
+      ],
+      "complexity": [
+        2,
+        20
+      ],
+      "sonarjs/max-lines": [
+        0,
+        {
+          "maximum": 1000
+        }
+      ],
+      "sonarjs/max-lines-per-function": [
+        0,
+        {
+          "maximum": 200
+        }
+      ],
+      "sonarjs/max-switch-cases": [
+        2,
+        30
+      ],
+      "sonarjs/max-union-size": [
+        2,
+        {
+          "threshold": 3
+        }
+      ],
+      "sonarjs/nested-control-flow": [
+        0,
+        {
+          "maximumNestingLevel": 3
+        }
+      ],
+      "sonarjs/cognitive-complexity": [
+        2,
+        20
+      ],
+      "sonarjs/no-nested-functions": [
+        2,
+        {
+          "threshold": 4
+        }
+      ],
+      "sonarjs/expression-complexity": [
+        2,
+        {
+          "max": 3
+        }
+      ],
+      "@typescript-eslint/max-params": [
+        0
+      ]
+    }
+  },
+  "biome": {
+    "core": {
+      "complexity/noExcessiveLinesPerFunction": "off",
+      "complexity/useMaxParams": "off",
+      "complexity/noExcessiveNestedCallbacks": {
+        "level": "error",
+        "options": {
+          "max": 10
+        }
+      },
+      "complexity/noExcessiveCognitiveComplexity": {
+        "level": "error",
+        "options": {
+          "maxAllowedComplexity": 20
+        }
+      },
+      "complexity/noExcessiveCognitiveComplexity (override [\"**__tests__*\"])": "off",
+      "style/noExcessiveLinesPerFile": "off",
+      "style/noExcessiveClassesPerFile": "off"
+    }
+  },
+  "biomeCoreRecommended": null,
+  "biomeExplain": {
+    "noExcessiveLinesPerFunction": {
+      "category": "lint/complexity/noExcessiveLinesPerFunction",
+      "defaultSeverity": "info",
+      "since": "2.0.0"
+    },
+    "useMaxParams": {
+      "category": "lint/complexity/useMaxParams",
+      "defaultSeverity": "warn",
+      "since": "2.2.0"
+    },
+    "noExcessiveNestedCallbacks": {
+      "category": "lint/complexity/noExcessiveNestedCallbacks",
+      "defaultSeverity": "info",
+      "since": "2.4.14"
+    },
+    "noExcessiveCognitiveComplexity": {
+      "category": "lint/complexity/noExcessiveCognitiveComplexity",
+      "defaultSeverity": "info",
+      "since": "1.0.0"
+    },
+    "noExcessiveStatementsPerFunction": {
+      "category": "lint/nursery/noExcessiveStatementsPerFunction",
+      "defaultSeverity": "warn",
+      "since": "2.6.0"
+    },
+    "noExcessiveLinesPerFile": {
+      "category": "lint/style/noExcessiveLinesPerFile",
+      "defaultSeverity": "info",
+      "since": "2.3.12"
+    },
+    "noExcessiveClassesPerFile": {
+      "category": "lint/style/noExcessiveClassesPerFile",
+      "defaultSeverity": "info",
+      "since": "2.3.12"
+    }
+  },
+  "sonarjs": {
+    "max-lines": {
+      "description": "Files should not have too many lines of code",
+      "messages": {
+        "maxFileLine": "This file has {{lineCount}} lines, which is greater than {{threshold}} authorized. Split it into smaller files."
+      },
+      "recommended": false,
+      "url": "https://sonarsource.github.io/rspec/#/rspec/S104/javascript"
+    },
+    "max-lines-per-function": {
+      "description": "Functions should not have too many lines of code",
+      "messages": {
+        "functionMaxLine": "This function has {{lineCount}} lines, which is greater than the {{threshold}} lines authorized. Split it into smaller functions."
+      },
+      "recommended": false,
+      "url": "https://sonarsource.github.io/rspec/#/rspec/S138/javascript"
+    },
+    "max-switch-cases": {
+      "description": "\"switch\" statements should not have too many \"case\" clauses",
+      "messages": {
+        "reduceNumberOfNonEmptySwitchCases": "Reduce the number of non-empty switch cases from {{numSwitchCases}} to at most {{maxSwitchCases}}."
+      },
+      "recommended": true,
+      "url": "https://sonarsource.github.io/rspec/#/rspec/S1479/javascript"
+    },
+    "max-union-size": {
+      "description": "Union types should not have too many elements",
+      "messages": {
+        "refactorUnion": "Refactor this union type to have less than {{threshold}} elements."
+      },
+      "recommended": false,
+      "url": "https://sonarsource.github.io/rspec/#/rspec/S4622/javascript"
+    },
+    "nested-control-flow": {
+      "description": "Control flow statements \"if\", \"for\", \"while\", \"switch\" and \"try\" should not be nested too deeply",
+      "messages": {
+        "sonarRuntime": "{{sonarRuntimeData}}"
+      },
+      "recommended": false,
+      "url": "https://sonarsource.github.io/rspec/#/rspec/S134/javascript"
+    },
+    "cognitive-complexity": {
+      "description": "Cognitive Complexity of functions should not be too high",
+      "messages": {
+        "refactorFunction": "Refactor this function to reduce its Cognitive Complexity from {{complexityAmount}} to the {{threshold}} allowed.",
+        "sonarRuntime": "{{sonarRuntimeData}}"
+      },
+      "recommended": true,
+      "url": "https://sonarsource.github.io/rspec/#/rspec/S3776/javascript"
+    }
+  },
+  "defaults": {
+    "biome": {
+      "noExcessiveClassesPerFile": {
+        "maxClasses": 1
+      },
+      "noExcessiveCognitiveComplexity": {
+        "maxAllowedComplexity": 15
+      },
+      "noExcessiveLinesPerFile": {
+        "maxLines": 300,
+        "skipBlankLines": false
+      },
+      "noExcessiveLinesPerFunction": {
+        "maxLines": 50,
+        "skipBlankLines": false,
+        "skipIifes": false
+      },
+      "noExcessiveNestedCallbacks": {
+        "max": 5
+      },
+      "noExcessiveStatementsPerFunction": {
+        "ignoreTopLevelFunctions": false,
+        "max": 10
+      },
+      "useMaxParams": {
+        "max": 4
+      }
+    },
+    "eslint": {
+      "@typescript-eslint/max-params": {
+        "countVoidThis": false,
+        "max": 3
+      },
+      "complexity": {
+        "max": 20
+      },
+      "max-classes-per-file": {
+        "ignoreExpressions": false,
+        "max": 1
+      },
+      "max-depth": {
+        "max": 4
+      },
+      "max-lines": {
+        "max": 300,
+        "skipBlankLines": false,
+        "skipComments": false
+      },
+      "max-lines-per-function": {
+        "IIFEs": false,
+        "max": 50,
+        "skipBlankLines": false,
+        "skipComments": false
+      },
+      "max-nested-callbacks": {
+        "max": 10
+      },
+      "max-params": {
+        "countThis": "except-void",
+        "max": 3
+      },
+      "max-statements": {
+        "ignoreTopLevelFunctions": false,
+        "max": 10
+      }
+    },
+    "oxlint": {
+      "max-classes-per-file": {
+        "ignoreExpressions": false,
+        "max": 1
+      },
+      "max-depth": {
+        "max": 4
+      },
+      "max-lines": {
+        "max": 300,
+        "skipBlankLines": false,
+        "skipComments": false
+      },
+      "max-lines-per-function": {
+        "IIFEs": false,
+        "max": 50,
+        "skipBlankLines": false,
+        "skipComments": false
+      },
+      "max-nested-callbacks": {
+        "max": 10
+      },
+      "max-params": {
+        "countThis": "except-void",
+        "max": 3
+      },
+      "max-statements": {
+        "ignoreTopLevelFunctions": false,
+        "max": 10
+      }
+    },
+    "sonarjs": {
+      "cognitive-complexity": {
+        "threshold": 15
+      },
+      "max-lines": {
+        "maximum": 1000
+      },
+      "max-lines-per-function": {
+        "maximum": 200
+      },
+      "max-switch-cases": {
+        "maximum": 30
+      },
+      "max-union-size": {
+        "threshold": 3
+      },
+      "nested-control-flow": {
+        "maximumNestingLevel": 3
+      }
+    }
+  },
+  "prompt": [
+    "`Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: ${jsonPath}`,",
+    "- Edit only the file above. Do not create, delete, or modify any other file.",
+    "- Make the minimal change that resolves each issue while preserving runtime behavior.",
+    "- Fix the underlying problem — the file is re-linted after your edit, and a diagnostic that still fires is a failed fix. Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it; rework the code so the rule genuinely no longer applies.",
+    "- Follow the rule's help text from the JSON file where provided.",
+    "- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.",
+    "`- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. If an issue needs a person's decision, leave it, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like \\`${LEFT_FOR_REVIEW_LABEL}: 2, 3\\`.`,"
+  ],
+  "notes": [
+    "Biome's noExcessiveClassesPerFile (style, since 2.3.12, default 1) is \"off\" in the Biome core preset (added with the Biome 2.5.2 upgrade, aea7fc06, 2026-07-04, without a comment), while max-classes-per-file is \"error\" (1) in the Oxlint and ESLint presets, so a Biome user gets no one-class-per-file limit. Checked by linting calibration/length-limits/classes.ts with the core preset: no report.",
+    "sonarjs/nested-control-flow is off as \"a duplicate of max-depth\". It isn't one: it counts nesting across function boundaries (a callback inside two loops starts at depth 2) and defaults to 3, where max-depth resets at each function and defaults to 4 (corpus-lint.json, calibration L21)."
+  ]
+}

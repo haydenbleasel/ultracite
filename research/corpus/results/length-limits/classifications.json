@@ -1,0 +1,3731 @@
+{
+  "agreement": {
+    "long": {
+      "whyLong": {
+        "kappa": 0.96,
+        "n": 30,
+        "same": 29
+      },
+      "readsEndToEnd": {
+        "kappa": 0.91,
+        "n": 30,
+        "same": 29
+      },
+      "splitHelps": {
+        "kappa": 0.94,
+        "n": 30,
+        "same": 29
+      },
+      "splitCost": {
+        "kappa": 0.42,
+        "n": 30,
+        "same": 15
+      },
+      "hardOtherwise": {
+        "kappa": 0.73,
+        "n": 30,
+        "same": 25
+      },
+      "splitCostAny": {
+        "kappa": 0.49,
+        "n": 30,
+        "same": 23
+      }
+    },
+    "params": {
+      "swappable": {
+        "kappa": 0.51,
+        "n": 10,
+        "same": 7
+      },
+      "optionsObjectHelps": {
+        "kappa": 0.63,
+        "n": 10,
+        "same": 8
+      },
+      "signature": {
+        "kappa": 1,
+        "n": 10,
+        "same": 10
+      }
+    }
+  },
+  "codebook": {
+    "long": "## Codebook (long functions)\n\nLabel each function with a JSON object: `{ \"id\": \"L001\", \"whyLong\": ..., \"readsEndToEnd\": ..., \"splitHelps\": ..., \"splitPoints\": ..., \"splitCost\": [...], \"hardOtherwise\": ..., \"note\": ... }`.\n\n- **whyLong** (the one reason that accounts for most of its length):\n  - `dispatch`: a flat `switch` or if/else chain choosing one of many independent branches\n  - `data`: data or a config table (object or array literals, a schema, a list of entries)\n  - `markup`: JSX markup\n  - `sequence`: sequential steps of one task, read top to bottom\n  - `several`: several separable tasks in one function\n  - `errors`: error handling (validation, try/catch, fallbacks) dominates\n  - `setup`: setup or wiring (registering handlers, building a plugin or object of closures, test-like setup)\n  - `nested`: most of its length is functions it defines (a factory, a hook or a class-like closure)\n  - `generated`: generated or mechanical code\n- **readsEndToEnd**: can a reader follow it end to end as written, top to bottom, without jumping around or holding much in mind? `yes`, `partly`, `no`\n- **splitHelps**: would splitting it help a reader? `yes`, `partly` (one or two extractions would), `no`\n- **splitPoints**: where the natural split points are (line ranges or a short description), or `null`\n- **splitCost**: what splitting would cost, a list of any of `none`, `many-params` (helpers would need many parameters), `shared-state` (pieces share mutable locals, or depend on order or early returns), `jumping` (the reader would jump between functions to follow one flow), `api-change` (a public signature or a framework's contract would change), `other`\n- **hardOtherwise**: is it hard to read for reasons length doesn't capture? `none`, `naming`, `state` (mutable state, aliasing), `control-flow` (nesting, early exits, async), `types`, `domain` (needs domain knowledge), `other`\n- **note**: one sentence\n\nRead the code where it is (the clone path is given; read-only). Never run anything.\n",
+    "params": "## Codebook (parameter lists)\n\nLabel each function with `{ \"id\": \"P001\", \"swappable\": ..., \"optionsObjectHelps\": ..., \"signature\": ..., \"note\": ... }`.\n\n- **swappable**: are there two or more parameters of the same type next to each other, so a caller could pass them in the wrong order without a type error (Rice et al.'s argument selection defects)? `yes`, `partly` (some, but the names or types make a swap unlikely), `no`\n- **optionsObjectHelps**: would an options object (named parameters) help callers? `yes`, `no`, `already` (it already takes one, or most parameters are already one object)\n- **signature**: who decides this signature? `public-api` (exported and used by other packages or users), `framework` (a callback, handler, override or interface implementation whose parameters someone else fixed), `internal` (only this package calls it)\n- **note**: one sentence\n"
+  },
+  "crossTabs": {
+    "readsEndToEndBySplitHelps": {
+      "yes / no": 35,
+      "yes / partly": 33,
+      "partly / partly": 14,
+      "partly / yes": 12,
+      "no / yes": 2,
+      "yes / yes": 2,
+      "no / partly": 1,
+      "partly / no": 1
+    },
+    "whyLongBySplitHelps": {
+      "sequence / partly": 17,
+      "markup / no": 15,
+      "markup / partly": 12,
+      "sequence / no": 7,
+      "several / yes": 7,
+      "setup / partly": 6,
+      "dispatch / partly": 5,
+      "markup / yes": 5,
+      "nested / no": 5,
+      "data / no": 4,
+      "dispatch / no": 4,
+      "errors / partly": 4,
+      "nested / partly": 3,
+      "sequence / yes": 2,
+      "dispatch / yes": 1,
+      "nested / yes": 1,
+      "setup / no": 1,
+      "several / partly": 1
+    },
+    "swappableBySignature": {
+      "partly / internal": 9,
+      "no / internal": 8,
+      "yes / internal": 8,
+      "yes / framework": 2,
+      "no / public-api": 1,
+      "partly / public-api": 1,
+      "yes / public-api": 1
+    }
+  },
+  "generated": "2026-10-25T19:44:00.443Z",
+  "items": [
+    {
+      "fn": "astro:packages/astro/src/actions/vite-plugin-actions.ts:61:7",
+      "id": "L001",
+      "stratum": "astro|data",
+      "cognitive": 0,
+      "lines": 115,
+      "name": "vitePluginActions",
+      "params": 1,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/actions/vite-plugin-actions.ts#L61-L175",
+      "rater1": {
+        "id": "L001",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the configureServer watcher callback and the load handler's per-id code generation could be named helpers",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A Vite plugin object whose hooks are short and flat; resolvedActionsId is written in resolveId and read in load, so the hooks are coupled through a closure variable."
+      },
+      "rater2": null,
+      "repo": "astro",
+      "statements": 3
+    },
+    {
+      "fn": "astro:packages/astro/src/cli/add/index.ts:93:7",
+      "id": "L002",
+      "stratum": "astro|other",
+      "cognitive": 89,
+      "lines": 382,
+      "name": "add",
+      "params": 2,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/cli/add/index.ts#L93-L474",
+      "rater1": {
+        "id": "L002",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "help table (lines 166-203); per-integration scaffolding in the 'updated' case (cloudflare, tailwind, svelte, lit, vercel, each a helper); config AST modification (try block); config/tsconfig result reporting switches",
+        "splitCost": [
+          "many-params",
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "A CLI command that runs install, per-integration scaffolding, config rewriting and tsconfig updates in one body; each integration block is an independent task that only shares flags, logger, root and the lazy package.json cache."
+      },
+      "rater2": null,
+      "repo": "astro",
+      "statements": 121
+    },
+    {
+      "fn": "astro:packages/astro/src/content/watcher.ts:12:7",
+      "id": "L003",
+      "stratum": "astro|nested",
+      "cognitive": 0,
+      "lines": 51,
+      "name": "createWatcherWrapper",
+      "params": 1,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/content/watcher.ts#L12-L62",
+      "rater1": {
+        "id": "L003",
+        "whyLong": "nested",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "other",
+        "note": "A Proxy factory whose get trap intercepts three method names; short, but Proxy/Reflect indirection is the real reading cost, not length."
+      },
+      "rater2": null,
+      "repo": "astro",
+      "statements": 3
+    },
+    {
+      "fn": "astro:packages/astro/src/core/fetch/fetch-state.ts:328:12",
+      "id": "L004",
+      "stratum": "astro|other",
+      "cognitive": 5,
+      "lines": 90,
+      "name": "FetchState.constructor",
+      "params": 4,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/fetch/fetch-state.ts#L328-L417",
+      "rater1": {
+        "id": "L004",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "URL and pathname derivation (lines 484-509) could be one private helper",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A constructor assigning fields in order with explanatory comments; field initialisation order matters (forwarded headers rewrite this.request before origin tracking)."
+      },
+      "rater2": {
+        "id": "L004",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "URL parsing and pathname derivation, including the domain-based i18n override (lines 360-386)",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Linear, well-commented field initialisation; only the pathname block extracts cleanly, and the private methods called at the end read fields set earlier, so order matters."
+      },
+      "repo": "astro",
+      "statements": 32
+    },
+    {
+      "fn": "astro:packages/astro/src/vite-plugin-astro-server/vite.ts:17:7",
+      "id": "L005",
+      "stratum": "astro|other",
+      "cognitive": 43,
+      "lines": 100,
+      "name": "crawlGraph",
+      "params": 4,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-astro-server/vite.ts#L17-L116",
+      "rater1": {
+        "id": "L005",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the per-importedModule body (SSR-load check and is-imported-by filter) could be a helper",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A recursive async generator with six levels of nesting and several continue guards; mostly long because of explanatory comments around a two-phase collect-then-recurse traversal."
+      },
+      "rater2": null,
+      "repo": "astro",
+      "statements": 29
+    },
+    {
+      "fn": "astro:packages/astro/src/vite-plugin-head/index.ts:220:7",
+      "id": "L006",
+      "stratum": "astro|data",
+      "cognitive": 0,
+      "lines": 77,
+      "name": "astroHeadBuildPlugin",
+      "params": 1,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/vite-plugin-head/index.ts#L220-L296",
+      "rater1": {
+        "id": "L006",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the generateBundle body (seed collection loop, then ancestor propagation) could be a standalone function taking the plugin context",
+        "splitCost": [
+          "shared-state",
+          "other"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A plugin object whose single generateBundle hook holds a clear two-phase algorithm; extraction would need the rollup `this` context passed through."
+      },
+      "rater2": {
+        "id": "L006",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the chunk/module scan in generateBundle that collects the seed sets (lines 246-275)",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A plugin object whose length is one generateBundle hook that scans modules and then propagates head metadata to ancestors; it reads in order and the scan loop is the one clean extraction."
+      },
+      "repo": "astro",
+      "statements": 1
+    },
+    {
+      "fn": "excalidraw:packages/element/src/linearElementEditor.ts:2269:25",
+      "id": "L007",
+      "stratum": "excalidraw|other",
+      "cognitive": 11,
+      "lines": 84,
+      "name": "LinearElementEditor.moveFixedSegment",
+      "params": 5,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/linearElementEditor.ts#L2269-L2352",
+      "rater1": {
+        "id": "L007",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "building nextFixedSegments (lines 772-792) and computing the segment midpoint (802-811)",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Straight-line geometry for elbow-arrow segments; the length comes from point arithmetic and the returned state object, and the hard part is the coordinate reasoning."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 14
+    },
+    {
+      "fn": "excalidraw:packages/element/src/renderElement.ts:762:30",
+      "id": "L008",
+      "stratum": "excalidraw|other",
+      "cognitive": 16,
+      "lines": 173,
+      "name": "drawElementFromCanvas",
+      "params": 6,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/renderElement.ts#L762-L934",
+      "rater1": {
+        "id": "L008",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "arrow label clip (lines 862-894), pixel-snapping transform (924-976), debug bounding box (988-1006)",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Canvas transform steps that must run in order on one context; the pixel-snapping block is dense matrix math that comments explain but a reader still has to hold the transform state in mind."
+      },
+      "rater2": {
+        "id": "L008",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "arrow-label clip (lines 786-818), device-pixel snapping transform (lines 848-900), debug bounding box (lines 912-930)",
+        "splitCost": [
+          "many-params",
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Ordered canvas save/transform/blit/restore steps where the snapping block reassigns drawX/drawY and the context transform, so helpers would need most of the locals and must run in order."
+      },
+      "repo": "excalidraw",
+      "statements": 48
+    },
+    {
+      "fn": "excalidraw:packages/element/src/transformHandles.ts:272:35",
+      "id": "L009",
+      "stratum": "excalidraw|other",
+      "cognitive": 20,
+      "lines": 55,
+      "name": "getTransformHandles",
+      "params": 5,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/transformHandles.ts#L272-L326",
+      "rater1": {
+        "id": "L009",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the two-point line quadrant chain choosing omitSides (lines 1038-1053)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Short function whose bulk is an if/else chain picking which handles to omit by element type and line direction; it reassigns a parameter but is otherwise plain."
+      },
+      "rater2": {
+        "id": "L009",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the two-point line direction chain that picks omitSides (lines 291-305)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A guard, an if/else chain mapping a line's direction to which handles to omit, then one call; it reads fine and only the direction chain is worth naming."
+      },
+      "repo": "excalidraw",
+      "statements": 14
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/charts/charts.helpers.ts:165:31",
+      "id": "L010",
+      "stratum": "excalidraw|other",
+      "cognitive": 8,
+      "lines": 52,
+      "name": "getSeriesColors",
+      "params": 2,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/charts/charts.helpers.ts#L165-L216",
+      "rater1": {
+        "id": "L010",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "A compact greedy max-min palette selection; one algorithm, already about as small as it can be."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 22
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/components/App.tsx:3381:41",
+      "id": "L011",
+      "stratum": "excalidraw|other",
+      "cognitive": 26,
+      "lines": 101,
+      "name": "App.handleInteractionStateChange",
+      "params": 2,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.tsx#L3381-L3481",
+      "rater1": {
+        "id": "L011",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "view-mode sync (1158-1166), links/embeds toggles (1187-1199), tool support reset (1201-1226), listener refresh (1228-1244)",
+        "splitCost": [
+          "shared-state",
+          "jumping"
+        ],
+        "hardOtherwise": "state",
+        "note": "A list of independent 'if this prop changed, react' blocks; each is simple but the reader must track prev vs current props/state and that setState is not synchronous."
+      },
+      "rater2": {
+        "id": "L011",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "view-mode sync at the top (lines 3391-3402); the links/embeds/tool-support reactions (lines 3423-3462)",
+        "splitCost": [
+          "shared-state",
+          "jumping"
+        ],
+        "hardOtherwise": "state",
+        "note": "A componentDidUpdate-style list of independent 'if this capability changed, react' blocks; each is simple, but comparing previous and current props and state around setState calls takes care."
+      },
+      "repo": "excalidraw",
+      "statements": 39
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/components/LibraryMenu.tsx:191:31",
+      "id": "L012",
+      "stratum": "excalidraw|nested",
+      "cognitive": 0,
+      "lines": 68,
+      "name": "usePendingElementsMemo",
+      "params": 2,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/LibraryMenu.tsx#L191-L258",
+      "rater1": {
+        "id": "L012",
+        "whyLong": "nested",
+        "readsEndToEnd": "partly",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "A hook with two effects sharing a ref; the comments about StrictMode double render and non-reactive app.state are what make it hard, not its length."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 6
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/components/Stats/Angle.tsx:31:74",
+      "id": "L013",
+      "stratum": "excalidraw|other",
+      "cognitive": 17,
+      "lines": 55,
+      "name": "handleDegreeChange",
+      "params": 1,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/Stats/Angle.tsx#L31-L85",
+      "rater1": {
+        "id": "L013",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the duplicated 'mutate angle, update bindings, rotate bound text' block appears twice and could be one helper",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Two paths (typed value vs drag delta) that end in the same three mutation steps; deduplication would shorten it more than splitting."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 26
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/components/TTDDialog/TextToDiagram.tsx:35:29",
+      "id": "L014",
+      "stratum": "excalidraw|component",
+      "cognitive": 1,
+      "lines": 204,
+      "name": "TextToDiagramContent",
+      "params": 1,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TTDDialog/TextToDiagram.tsx#L35-L238",
+      "rater1": {
+        "id": "L014",
+        "whyLong": "nested",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the message handlers (handleInsertMessage, handleAiRepairClick, handleRetry, handleDeleteMessage) could move into a custom hook",
+        "splitCost": [
+          "many-params",
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A component that wires several hooks, defines eight small handlers and passes them all to one panel; each handler reads fine on its own."
+      },
+      "rater2": {
+        "id": "L014",
+        "whyLong": "nested",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the chat message handlers (lines 91-191) could move into a custom hook",
+        "splitCost": [
+          "many-params",
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A component that is mostly small, self-contained event handlers closing over atoms and hook results, followed by one prop-heavy JSX tree."
+      },
+      "repo": "excalidraw",
+      "statements": 21
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/components/TextField.tsx:35:2",
+      "id": "L015",
+      "stratum": "excalidraw|component",
+      "cognitive": 4,
+      "lines": 82,
+      "name": "<callback to forwardRef>",
+      "params": 2,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/TextField.tsx#L35-L116",
+      "rater1": {
+        "id": "L015",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "A forwardRef text field that is mostly JSX with a redaction toggle; nothing to gain from splitting."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 5
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/data/restore.ts:430:37",
+      "id": "L016",
+      "stratum": "excalidraw|data",
+      "cognitive": 12,
+      "lines": 86,
+      "name": "restoreElementWithProperties",
+      "params": 2,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/data/restore.ts#L430-L515",
+      "rater1": {
+        "id": "L016",
+        "whyLong": "data",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "types",
+        "note": "One object literal of per-property defaults; the generic signature with a @ts-ignore is harder to read than the body."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 7
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/renderer/renderSnaps.ts:127:20",
+      "id": "L017",
+      "stratum": "excalidraw|other",
+      "cognitive": 10,
+      "lines": 87,
+      "name": "drawGapLine",
+      "params": 5,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/renderer/renderSnaps.ts#L127-L213",
+      "rater1": {
+        "id": "L017",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the horizontal and vertical branches mirror each other and could be one axis-parameterised routine",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Two mirrored branches of drawLine calls annotated against an ASCII diagram; length is duplication, not complexity."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 20
+    },
+    {
+      "fn": "hono:src/jsx/dom/render.ts:164:19",
+      "id": "L018",
+      "stratum": "hono|other",
+      "cognitive": 107,
+      "lines": 111,
+      "name": "applyProps",
+      "params": 3,
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/jsx/dom/render.ts#L164-L274",
+      "rater1": {
+        "id": "L018",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "per-key handlers inside the first loop (events, ref, style, form value/attributes) and the stale-attribute removal loop (1978-2000)",
+        "splitCost": [
+          "shared-state",
+          "other"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A DOM prop diff that dispatches on the prop key six levels deep, with continue statements inside nested branches and a reassigned loop variable; a hot path where extra calls may be a concern."
+      },
+      "rater2": {
+        "id": "L018",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "per-key branches: events (175-186), ref (189-198), style (199-208), value and attribute write (209-248); the stale-attribute removal loop (251-273)",
+        "splitCost": [
+          "shared-state",
+          "other"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A deep if/else chain on the prop key where the value branch uses continue to skip the setAttribute fall-through, so the branches are separable but the fall-through rules and hot-path cost need care."
+      },
+      "repo": "hono",
+      "statements": 62
+    },
+    {
+      "fn": "hono:src/middleware/ip-restriction/index.ts:218:29",
+      "id": "L019",
+      "stratum": "hono|nested",
+      "cognitive": 0,
+      "lines": 62,
+      "name": "ipRestriction",
+      "params": 3,
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/ip-restriction/index.ts#L218-L279",
+      "rater1": {
+        "id": "L019",
+        "whyLong": "nested",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A middleware factory returning a closure; the deny/allow/fallthrough logic with try/catch and returns from inside it takes a moment, but it is short."
+      },
+      "rater2": null,
+      "repo": "hono",
+      "statements": 5
+    },
+    {
+      "fn": "hono:src/utils/jwt/jwt.ts:198:30",
+      "id": "L020",
+      "stratum": "hono|other",
+      "cognitive": 16,
+      "lines": 66,
+      "name": "verifyWithJwks",
+      "params": 3,
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/utils/jwt/jwt.ts#L198-L263",
+      "rater1": {
+        "id": "L020",
+        "whyLong": "errors",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "fetching and validating the JWKS response (lines 2115-2131)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A linear chain of validation throws around one key lookup; reads top to bottom as a checklist."
+      },
+      "rater2": {
+        "id": "L020",
+        "whyLong": "errors",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "fetching and validating the remote JWKS (lines 231-247)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A straight run of guard clauses that each throw a specific JWT error, with one fetch block that would extract cleanly."
+      },
+      "repo": "hono",
+      "statements": 29
+    },
+    {
+      "fn": "next.js:packages/next/src/build/analyze/index.ts:171:0",
+      "id": "L021",
+      "stratum": "next.js|other",
+      "cognitive": 6,
+      "lines": 69,
+      "name": "collectRoutesForAnalyze",
+      "params": 3,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/analyze/index.ts#L171-L239",
+      "rater1": {
+        "id": "L021",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "Straight-line glue: find dirs, discover routes, load custom routes, generate a manifest, return pages."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 14
+    },
+    {
+      "fn": "next.js:packages/next/src/build/babel/plugins/next-ssg-transform.ts:97:15",
+      "id": "L022",
+      "stratum": "next.js|nested",
+      "cognitive": 0,
+      "lines": 359,
+      "name": "nextTransformSsg",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/babel/plugins/next-ssg-transform.ts#L97-L455",
+      "rater1": {
+        "id": "L022",
+        "whyLong": "nested",
+        "readsEndToEnd": "no",
+        "splitHelps": "yes",
+        "splitPoints": "hoist getIdentifier/isIdentifierReferenced/markFunction/markImport to module scope taking `t`; separate the mark visitor (traverse in Program.enter) from the sweep loop (do/while with sweepFunction/sweepImport)",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A Babel plugin factory whose Program.enter holds a mark-and-sweep pass with duplicated object/array pattern handling and a counter shared by closures; needs Babel scope and binding knowledge."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 5
+    },
+    {
+      "fn": "next.js:packages/next/src/build/entries.ts:158:7",
+      "id": "L023",
+      "stratum": "next.js|data",
+      "cognitive": 17,
+      "lines": 111,
+      "name": "getEdgeServerEntry",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/entries.ts#L158-L268",
+      "rater1": {
+        "id": "L023",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "one builder per entry kind (app route, middleware, API, SSR); the repeated base64 middlewareConfig encoding",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Four early-return branches each building a loader-params literal; flat and repetitive, needing webpack loader/layer knowledge rather than effort."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 12
+    },
+    {
+      "fn": "next.js:packages/next/src/build/handle-externals.ts:45:7",
+      "id": "L024",
+      "stratum": "next.js|other",
+      "cognitive": 25,
+      "lines": 87,
+      "name": "resolveExternal",
+      "params": 12,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/handle-externals.ts#L45-L131",
+      "rater1": {
+        "id": "L024",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the base-resolve check (lines 2645-2667) could be a helper returning whether the resolution is consistent",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A resolution loop over ESM preferences with continue/break, mutable res/isEsm and swallowed errors; twelve parameters already signal the coupling."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 31
+    },
+    {
+      "fn": "next.js:packages/next/src/build/output/index.ts:40:21",
+      "id": "L025",
+      "stratum": "next.js|data",
+      "cognitive": 16,
+      "lines": 84,
+      "name": "<callback to buildStore.subscribe>",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/output/index.ts#L40-L123",
+      "rater1": {
+        "id": "L025",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the three near-identical error branches could collapse into one lookup over compilers",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "A store subscriber that picks one of several state shapes; it reads and writes module-level WasLoading flags, which is what a reader has to track."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 17
+    },
+    {
+      "fn": "next.js:packages/next/src/build/static-paths/pages.ts:86:22",
+      "id": "L026",
+      "stratum": "next.js|other",
+      "cognitive": 31,
+      "lines": 139,
+      "name": "<callback to toPrerender.forEach>",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/static-paths/pages.ts#L86-L224",
+      "rater1": {
+        "id": "L026",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "string-entry handling (2777-2817) and object-entry handling (2820-2911); the per-param substitution forEach (2840-2879)",
+        "splitCost": [
+          "many-params",
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Two different input forms handled in one callback, both validating, building pathnames with locale prefixes and writing to a shared map; the callback reassigns its own parameter."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 28
+    },
+    {
+      "fn": "next.js:packages/next/src/build/webpack/loaders/next-edge-ssr-loader/index.ts:105:2",
+      "id": "L027",
+      "stratum": "next.js|other",
+      "cognitive": 8,
+      "lines": 124,
+      "name": "edgeSSRLoader",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/loaders/next-edge-ssr-loader/index.ts#L105-L228",
+      "rater1": {
+        "id": "L027",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the four repeated optional contextify(swapDistFolder...) ternaries could be one helper",
+        "splitCost": [
+          "other"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A webpack loader that decodes options, records build info, contextifies paths and picks one of two entrypoint templates; repetitive rather than hard."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 19
+    },
+    {
+      "fn": "next.js:packages/next/src/build/webpack/plugins/next-trace-entrypoints-plugin.ts:673:43",
+      "id": "L028",
+      "stratum": "next.js|nested",
+      "cognitive": 0,
+      "lines": 75,
+      "name": "<callback to Promise>",
+      "params": 2,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/plugins/next-trace-entrypoints-plugin.ts#L673-L747",
+      "rater1": {
+        "id": "L028",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the walk up to emit parent package.json files (lines 3085-3121)",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A callback-in-a-promise five levels deep, with an assignment inside a while condition and a swallowed try/catch; the package.json walk is the separable part."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 2
+    },
+    {
+      "fn": "next.js:packages/next/src/cli/next-test.ts:34:7",
+      "id": "L029",
+      "stratum": "next.js|other",
+      "cognitive": 4,
+      "lines": 62,
+      "name": "nextTest",
+      "params": 3,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/cli/next-test.ts#L34-L95",
+      "rater1": {
+        "id": "L029",
+        "whyLong": "errors",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "resolving baseDir/nextConfig with the two fallback try/catch blocks could be one helper",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "Most of the length is a comment and two exception-driven fallbacks that reinterpret the directory argument as a test runner argument."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 15
+    },
+    {
+      "fn": "next.js:packages/next/src/client/dev/hot-middleware-client.ts:27:32",
+      "id": "L030",
+      "stratum": "next.js|other",
+      "cognitive": 8,
+      "lines": 73,
+      "name": "<callback to devClient.subscribeToHmrEvent>",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/dev/hot-middleware-client.ts#L27-L99",
+      "rater1": {
+        "id": "L030",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "A switch over HMR message types with an exhaustive default; each case is short and independent."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 22
+    },
+    {
+      "fn": "next.js:packages/next/src/client/legacy/image.tsx:508:0",
+      "id": "L031",
+      "stratum": "next.js|nested",
+      "cognitive": 2,
+      "lines": 55,
+      "name": "handleLoading",
+      "params": 6,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/legacy/image.tsx#L508-L562",
+      "rater1": {
+        "id": "L031",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the dev-only parent layout warnings (lines 3324-3344)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Guard, decode, then a then-callback that updates state and emits dev warnings; the dev warning block is the obvious extraction."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 5
+    },
+    {
+      "fn": "next.js:packages/next/src/client/react-client-callbacks/error-boundary-callbacks.ts:20:7",
+      "id": "L032",
+      "stratum": "next.js|other",
+      "cognitive": 34,
+      "lines": 109,
+      "name": "onCaughtError",
+      "params": 2,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/react-client-callbacks/error-boundary-callbacks.ts#L20-L128",
+      "rater1": {
+        "id": "L032",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "dev boundary classification for HMR (3365-3397); skip checks (3399-3425); dev error-location message building and reporting (3427-3460)",
+        "splitCost": [
+          "shared-state",
+          "other"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Three dev-gated blocks with require() calls kept inline for dead-code elimination; isImplicitErrorBoundary is assigned in two places, which the reader has to reconcile."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 38
+    },
+    {
+      "fn": "next.js:packages/next/src/lib/find-root.ts:145:7",
+      "id": "L033",
+      "stratum": "next.js|other",
+      "cognitive": 25,
+      "lines": 89,
+      "name": "findRootDirAndLockFiles",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/find-root.ts#L145-L233",
+      "rater1": {
+        "id": "L033",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "collecting candidates up the tree (while loop) and filtering them by git/home boundary (for loop)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "Two well-commented phases, each a loop with several breaks; the phases only share the candidates array."
+      },
+      "rater2": {
+        "id": "L033",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "collecting root candidates upward (lines 157-177); filtering them at the git/home boundary (lines 181-222)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Two clear phases, walking up for workspace markers and then cutting at the git or home boundary, each commented and each a natural function."
+      },
+      "repo": "next.js",
+      "statements": 31
+    },
+    {
+      "fn": "next.js:packages/next/src/lib/upgrade/prompt.ts:8:7",
+      "id": "L034",
+      "stratum": "next.js|other",
+      "cognitive": 19,
+      "lines": 139,
+      "name": "promptUpgrade",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/upgrade/prompt.ts#L8-L146",
+      "rater1": {
+        "id": "L034",
+        "whyLong": "setup",
+        "readsEndToEnd": "no",
+        "splitHelps": "partly",
+        "splitPoints": "terminal setup/restore (restore closure and listener registration) could be a small object; the select loop stays",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "Five closures share six mutable flags (interrupted, cancelled, resized, restored, shown, selectedIndex) across key, resize and abort events and a retry loop; `restored` is read in a closure before it is declared."
+      },
+      "rater2": {
+        "id": "L034",
+        "whyLong": "setup",
+        "readsEndToEnd": "no",
+        "splitHelps": "partly",
+        "splitPoints": "capturing and restoring terminal state (lines 81-100) as a helper that returns its cleanup",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "state",
+        "note": "Six mutable flags are shared by renderValue, onKey, onResize, cancel, restore and a retry loop that reopens cli-select on resize, so following it means tracking which handler sets which flag."
+      },
+      "repo": "next.js",
+      "statements": 43
+    },
+    {
+      "fn": "next.js:packages/next/src/next-devtools/dev-overlay/components/errors/error-message/error-message.tsx:11:7",
+      "id": "L035",
+      "stratum": "next.js|component",
+      "cognitive": 5,
+      "lines": 51,
+      "name": "ErrorMessage",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/next-devtools/dev-overlay/components/errors/error-message/error-message.tsx#L11-L61",
+      "rater1": {
+        "id": "L035",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A small component with a measure effect and a truncation toggle; barely over the limit."
+      },
+      "rater2": {
+        "id": "L035",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A small component, two state hooks, a layout effect and short JSX, that is only just over the limit."
+      },
+      "repo": "next.js",
+      "statements": 9
+    },
+    {
+      "fn": "next.js:packages/next/src/server/api-utils/node/api-resolver.ts:58:0",
+      "id": "L036",
+      "stratum": "next.js|other",
+      "cognitive": 14,
+      "lines": 55,
+      "name": "sendData",
+      "params": 3,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/api-utils/node/api-resolver.ts#L58-L112",
+      "rater1": {
+        "id": "L036",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "Early-return branches by body type; the order of checks (etag before Buffer) matters, which splitting would hide."
+      },
+      "rater2": {
+        "id": "L036",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A flat run of early returns by response kind (empty, 204/304, stream, ETag hit, buffer, JSON or string) that reads straight down."
+      },
+      "repo": "next.js",
+      "statements": 32
+    },
+    {
+      "fn": "next.js:packages/next/src/server/app-render/action-handler.ts:222:0",
+      "id": "L037",
+      "stratum": "next.js|other",
+      "cognitive": 26,
+      "lines": 133,
+      "name": "createForwardedActionResponse",
+      "params": 6,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/action-handler.ts#L222-L354",
+      "rater1": {
+        "id": "L037",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "origin resolution (3866-3882) and request-body selection (3887-3925)",
+        "splitCost": [
+          "shared-state",
+          "other"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Origin lookup, body selection by runtime, forward fetch, response mapping; the body branch mutates the forwarded headers and the env checks exist for dead-code elimination."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 42
+    },
+    {
+      "fn": "next.js:packages/next/src/server/app-render/app-render.tsx:6617:0",
+      "id": "L038",
+      "stratum": "next.js|other",
+      "cognitive": 7,
+      "lines": 62,
+      "name": "runWithDevValidationLogging",
+      "params": 3,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/app-render.tsx#L6617-L6678",
+      "rater1": {
+        "id": "L038",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the abortable delay promise (lines 4016-4033)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "Test-only logging around a run callback with an abortable delay inlined; extracting the delay leaves a short wrapper."
+      },
+      "rater2": {
+        "id": "L038",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the abortable delay promise (lines 6652-6663) as a sleep(ms, signal) helper",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A test-only logging wrapper whose bulk is an inline abortable timeout inside try/finally; pulling the delay out would leave a short, obvious function."
+      },
+      "repo": "next.js",
+      "statements": 15
+    },
+    {
+      "fn": "next.js:packages/next/src/server/dev/hot-reloader-webpack.ts:708:42",
+      "id": "L039",
+      "stratum": "next.js|nested",
+      "cognitive": 1,
+      "lines": 93,
+      "name": "<callback to webpackConfigSpan.traceAsyncFn>",
+      "params": 0,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/dev/hot-reloader-webpack.ts#L708-L800",
+      "rater1": {
+        "id": "L039",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "other",
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A traced sequence of build steps ending in three near-identical config calls; it leans on `this` throughout and reads in one pass."
+      },
+      "rater2": {
+        "id": "L039",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "Four traced async steps that each already delegate to a helper; the length is option objects and three near-identical getBaseWebpackConfig calls, not logic."
+      },
+      "repo": "next.js",
+      "statements": 5
+    },
+    {
+      "fn": "next.js:packages/next/src/server/revalidation-utils.ts:88:0",
+      "id": "L040",
+      "stratum": "next.js|other",
+      "cognitive": 39,
+      "lines": 105,
+      "name": "revalidateTags",
+      "params": 3,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/revalidation-utils.ts#L88-L192",
+      "rater1": {
+        "id": "L040",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "grouping tags by profile (4175-4214) and resolving a profile to durations (4219-4245)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "types",
+        "note": "Group-then-process over a key that is a string, an object or undefined, compared by typeof and JSON.stringify; both phases extract cleanly."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 40
+    },
+    {
+      "fn": "next.js:packages/next/src/server/server-utils.ts:216:7",
+      "id": "L041",
+      "stratum": "next.js|nested",
+      "cognitive": 1,
+      "lines": 278,
+      "name": "getServerUtils",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/server-utils.ts#L216-L493",
+      "rater1": {
+        "id": "L041",
+        "whyLong": "nested",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "handleRewrites (with checkRewrite) and getParamsFromRouteMatches could be module-level functions taking the route regex/matcher explicitly",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "state",
+        "note": "A factory returning route utilities; handleRewrites mutates fsPathname, rewrittenParsedUrl and params through Object.assign inside a nested checkRewrite closure."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 11
+    },
+    {
+      "fn": "next.js:packages/next/src/server/stream-utils/node-web-streams-helper.ts:245:7",
+      "id": "L042",
+      "stratum": "next.js|nested",
+      "cognitive": 0,
+      "lines": 70,
+      "name": "createBufferedTransformStream",
+      "params": 1,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/stream-utils/node-web-streams-helper.ts#L245-L314",
+      "rater1": {
+        "id": "L042",
+        "whyLong": "nested",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "A transform-stream factory whose closures share a buffer and a pending flush; small and coherent."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 7
+    },
+    {
+      "fn": "next.js:packages/next/src/server/typescript/rules/metadata.ts:149:46",
+      "id": "L043",
+      "stratum": "next.js|data",
+      "cognitive": 43,
+      "lines": 92,
+      "name": "getSemanticDiagnosticsForExportDeclaration",
+      "params": 2,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/typescript/rules/metadata.ts#L149-L240",
+      "rater1": {
+        "id": "L043",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "an isAsyncDeclaration helper (lines 4623-4650) and a single diagnostic push for both export names",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A loop of continue guards then one of two diagnostics; linear, with TypeScript compiler API knowledge as the main barrier."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 36
+    },
+    {
+      "fn": "next.js:packages/next/src/server/use-cache/use-cache-wrapper.ts:1867:7",
+      "id": "L044",
+      "stratum": "next.js|dispatch",
+      "cognitive": 574,
+      "lines": 1987,
+      "name": "cache",
+      "params": 5,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/use-cache/use-cache-wrapper.ts#L1867-L3853",
+      "rater1": {
+        "id": "L044",
+        "whyLong": "several",
+        "readsEndToEnd": "no",
+        "splitHelps": "yes",
+        "splitPoints": "handler selection; cache context by work unit type; page/layout arg rewriting; bound-arg decryption; key encoding; dev probe path; resume data cache lookup; intra-request join; cross-request leader loop; cache handler read and staleness checks; generation and saving; background revalidation; final deserialisation",
+        "splitCost": [
+          "shared-state",
+          "many-params",
+          "other"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A ~2,000-line function with a dozen phases that share mutable locals (stream, cacheHandlerKey, cacheSignalReadEnded) and return hanging promises from deep inside repeated work-unit-type switches; some errors must be constructed while cache() is on the synchronous stack."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 413
+    },
+    {
+      "fn": "radix:packages/react/dialog/src/dialog.tsx:374:2",
+      "id": "L045",
+      "stratum": "radix|component",
+      "cognitive": 0,
+      "lines": 51,
+      "name": "DialogContentNonModal",
+      "params": 2,
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/dialog/src/dialog.tsx#L374-L424",
+      "rater1": {
+        "id": "L045",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "One JSX element with two inline handlers coordinating two refs; the Safari focus quirk is the hard part, not length."
+      },
+      "rater2": null,
+      "repo": "radix",
+      "statements": 4
+    },
+    {
+      "fn": "radix:packages/react/slider/src/slider.tsx:727:2",
+      "id": "L046",
+      "stratum": "radix|component",
+      "cognitive": 4,
+      "lines": 51,
+      "name": "SliderThumbTrigger",
+      "params": 2,
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/slider/src/slider.tsx#L727-L777",
+      "rater1": {
+        "id": "L046",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Context reads and a span with ARIA attributes; just over the limit."
+      },
+      "rater2": null,
+      "repo": "radix",
+      "statements": 9
+    },
+    {
+      "fn": "radix:packages/react/switch/src/switch.tsx:130:2",
+      "id": "L047",
+      "stratum": "radix|component",
+      "cognitive": 1,
+      "lines": 58,
+      "name": "SwitchTrigger",
+      "params": 2,
+      "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/switch/src/switch.tsx#L130-L187",
+      "rater1": {
+        "id": "L047",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A button with ARIA attributes, a form-reset effect and one click handler."
+      },
+      "rater2": null,
+      "repo": "radix",
+      "statements": 5
+    },
+    {
+      "fn": "react-aria:packages/react-aria-components/src/Calendar.tsx:176:69",
+      "id": "L048",
+      "stratum": "react-aria|component",
+      "cognitive": 0,
+      "lines": 83,
+      "name": "Calendar",
+      "params": 2,
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Calendar.tsx#L176-L258",
+      "rater1": {
+        "id": "L048",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Hook calls then a Provider values table and visually hidden accessibility helpers."
+      },
+      "rater2": null,
+      "repo": "react-aria",
+      "statements": 7
+    },
+    {
+      "fn": "react-aria:packages/react-aria-components/src/GridList.tsx:529:72",
+      "id": "L049",
+      "stratum": "react-aria|component",
+      "cognitive": 10,
+      "lines": 203,
+      "name": "GridListItem",
+      "params": 3,
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L529-L731",
+      "rater1": {
+        "id": "L049",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the drop indicator row could be its own component; drag/drop hook wiring could be a custom hook",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A long but linear list of hook calls feeding one large JSX tree with a slot Provider; the length is the number of behaviours the item composes."
+      },
+      "rater2": null,
+      "repo": "react-aria",
+      "statements": 28
+    },
+    {
+      "fn": "react-aria:packages/react-aria-components/src/Select.tsx:177:0",
+      "id": "L050",
+      "stratum": "react-aria|component",
+      "cognitive": 1,
+      "lines": 117,
+      "name": "SelectInner",
+      "params": 1,
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Select.tsx#L177-L293",
+      "rater1": {
+        "id": "L050",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Hook calls feeding a Provider values table and a wrapper div; the length is the context list."
+      },
+      "rater2": null,
+      "repo": "react-aria",
+      "statements": 13
+    },
+    {
+      "fn": "shadcn:apps/v4/registry/new-york-v4/blocks/sidebar-16/components/nav-user.tsx:33:7",
+      "id": "L051",
+      "stratum": "shadcn|component",
+      "cognitive": 1,
+      "lines": 82,
+      "name": "NavUser",
+      "params": 1,
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/sidebar-16/components/nav-user.tsx#L33-L114",
+      "rater1": {
+        "id": "L051",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the avatar + name/email block is repeated in the trigger and the label",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Static dropdown markup for a template block; the only real extraction is the duplicated user summary."
+      },
+      "rater2": null,
+      "repo": "shadcn",
+      "statements": 2
+    },
+    {
+      "fn": "shadcn:apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx:14:7",
+      "id": "L052",
+      "stratum": "shadcn|component",
+      "cognitive": 0,
+      "lines": 102,
+      "name": "SignupForm",
+      "params": 1,
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/signup-04/components/signup-form.tsx#L14-L115",
+      "rater1": {
+        "id": "L052",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A static signup form template, mostly long SVG path data for social buttons."
+      },
+      "rater2": {
+        "id": "L052",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the three social sign-up buttons with inline SVG paths (lines 66-94)",
+        "splitCost": [
+          "other"
+        ],
+        "hardOtherwise": "none",
+        "note": "Static form markup with no logic, where inline SVG path data is the main noise; it is a registry block meant to be copied as one self-contained file."
+      },
+      "repo": "shadcn",
+      "statements": 1
+    },
+    {
+      "fn": "shadcn:apps/v4/registry/new-york-v4/ui/chart.tsx:118:0",
+      "id": "L053",
+      "stratum": "shadcn|component",
+      "cognitive": 3,
+      "lines": 153,
+      "name": "ChartTooltipContent",
+      "params": 1,
+      "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/ui/chart.tsx#L118-L270",
+      "rater1": {
+        "id": "L053",
+        "whyLong": "markup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the per-item row inside payload.map (lines 5815-5879) as a component",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "JSX with nested ternaries (formatter vs icon vs indicator, nestLabel placement) inside a map; the row would need most of the props passed down."
+      },
+      "rater2": {
+        "id": "L053",
+        "whyLong": "markup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the per-item row inside payload.map (lines 201-266) as its own component",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "The item row nests ternaries for formatter, icon or indicator, and nestLabel placement, and an extracted row would need most of the props plus the memoised label."
+      },
+      "repo": "shadcn",
+      "statements": 6
+    },
+    {
+      "fn": "supabase:apps/studio/components/grid/components/formatter/ReferenceRecordPeek.tsx:38:35",
+      "id": "L054",
+      "stratum": "supabase|component",
+      "cognitive": 0,
+      "lines": 140,
+      "name": "ReferenceRecordPeek",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/grid/components/formatter/ReferenceRecordPeek.tsx#L38-L177",
+      "rater1": {
+        "id": "L054",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the columns useMemo (lines 5924-5975) as a column-definition builder",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A query, a column builder with header and cell renderers, and a grid; the column builder is the separable part."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 9
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Account/TOTPFactors/AddNewFactorModal.tsx:109:18",
+      "id": "L055",
+      "stratum": "supabase|component",
+      "cognitive": 0,
+      "lines": 53,
+      "name": "FirstStep",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Account/TOTPFactors/AddNewFactorModal.tsx#L109-L161",
+      "rater1": {
+        "id": "L055",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A form with one field inside a modal; just over the limit."
+      },
+      "rater2": {
+        "id": "L055",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A form hook, a reset effect and a modal with one form field; nothing to split."
+      },
+      "repo": "supabase",
+      "statements": 4
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/App/CommandMenu/FeaturePreviews.tsx:29:7",
+      "id": "L056",
+      "stratum": "supabase|nested",
+      "cognitive": 0,
+      "lines": 130,
+      "name": "useFeaturePreviewCommands",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/App/CommandMenu/FeaturePreviews.tsx#L29-L158",
+      "rater1": {
+        "id": "L056",
+        "whyLong": "setup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "building the page sections (the useRegisterPage payload) and toggleFeaturePreview could be separate functions",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "state",
+        "note": "A hook registering command pages; the long comment about reading flags and route through refs to avoid stale closures is the real difficulty."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 15
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Auth/Hooks/AddHookDropdown.tsx:33:31",
+      "id": "L057",
+      "stratum": "supabase|component",
+      "cognitive": 1,
+      "lines": 97,
+      "name": "AddHookDropdown",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Hooks/AddHookDropdown.tsx#L33-L129",
+      "rater1": {
+        "id": "L057",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A memoised hook list split into available and unavailable, then a permission early return and dropdown markup."
+      },
+      "rater2": {
+        "id": "L057",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "Data hooks, one memo that partitions hooks by entitlement, a permission early return and a dropdown; it reads top to bottom."
+      },
+      "repo": "supabase",
+      "statements": 10
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/BranchManagement/EdgeFunctionsDiffPanel.tsx:66:21",
+      "id": "L058",
+      "stratum": "supabase|component",
+      "cognitive": 2,
+      "lines": 99,
+      "name": "FunctionDiff",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/BranchManagement/EdgeFunctionsDiffPanel.tsx#L66-L164",
+      "rater1": {
+        "id": "L058",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the file list sidebar as a component; language detection as a pure helper",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A tabbed diff viewer; the file list and the extension-to-language chain are both easy extractions."
+      },
+      "rater2": {
+        "id": "L058",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "language detection from the file extension (lines 92-103) as a pure helper; optionally the file list sidebar (lines 122-151)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Mostly a card of JSX with a file list and a diff editor; the extension-to-language memo is pure logic that belongs in a utility."
+      },
+      "repo": "supabase",
+      "statements": 8
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/ConnectSheet/ConnectSheet.utils.ts:61:7",
+      "id": "L059",
+      "stratum": "supabase|other",
+      "cognitive": 44,
+      "lines": 61,
+      "name": "resolveConnectSheetHydration",
+      "params": 3,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/ConnectSheet.utils.ts#L61-L121",
+      "rater1": {
+        "id": "L059",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "a helper that pushes a field update and fills the URL param when missing, used in every branch",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "An if/else chain on mode that repeats the same push-and-maybe-update-URL pattern; table-driving it would shrink it more than splitting."
+      },
+      "rater2": {
+        "id": "L059",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the repeated 'push a field update and write it back to the URL if absent' step in each mode branch (lines 83-118), as one helper or a per-mode table",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "High cognitive complexity comes from a repetitive if/else over modes that is easy to read; the repetition, not the length, is the thing to fix."
+      },
+      "repo": "supabase",
+      "statements": 34
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/ConnectSheet/content/prisma/content.tsx:15:0",
+      "id": "L060",
+      "stratum": "supabase|other",
+      "cognitive": 1,
+      "lines": 70,
+      "name": "getEnvCode",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/prisma/content.tsx#L15-L84",
+      "rater1": {
+        "id": "L060",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A switch returning one env template string per scenario; long only because of the templates."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 2
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/ConnectSheet/content/tanstack/supabasejs/content.tsx:5:20",
+      "id": "L061",
+      "stratum": "supabase|component",
+      "cognitive": 0,
+      "lines": 54,
+      "name": "ContentFile",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConnectSheet/content/tanstack/supabasejs/content.tsx#L5-L58",
+      "rater1": {
+        "id": "L061",
+        "whyLong": "data",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "An array of three code-sample files and a one-line render."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 2
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Database/Functions/FunctionsList/FunctionList.tsx:107:22",
+      "id": "L062",
+      "stratum": "supabase|other",
+      "cognitive": 10,
+      "lines": 157,
+      "name": "<callback to _functions.map>",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Database/Functions/FunctionsList/FunctionList.tsx#L107-L263",
+      "rater1": {
+        "id": "L062",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the row as a FunctionRow component; the actions dropdown (6726-6807) and its AI-assistant prompt config",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "One table row's JSX inside a map, with a large actions menu; the row closes over many handlers and flags from the parent."
+      },
+      "rater2": {
+        "id": "L062",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the row-actions dropdown cell (lines 160-260), especially the inline AI-assistant newChat payload (lines 200-226)",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "A table row rendered inline in map, where a FunctionRow or actions component would be natural but would need the permission flags, handlers, router and assistant state as props."
+      },
+      "repo": "supabase",
+      "statements": 3
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Integrations/CronJobs/CronJobPage.tsx:38:27",
+      "id": "L063",
+      "stratum": "supabase|component",
+      "cognitive": 6,
+      "lines": 159,
+      "name": "CronJobPage",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Integrations/CronJobs/CronJobPage.tsx#L38-L196",
+      "rater1": {
+        "id": "L063",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the pageSubtitle JSX (lines 6863-6909) as a component",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A page header with breadcrumbs, a schedule/command subtitle and action buttons; linear markup."
+      },
+      "rater2": {
+        "id": "L063",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the schedule and command subtitle with its two tooltips (lines 65-111)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A page header built from JSX variables; the subtitle needs only the job and would extract as a small component."
+      },
+      "repo": "supabase",
+      "statements": 16
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/LogDrains/OrgAuditLogDrains.tsx:38:7",
+      "id": "L064",
+      "stratum": "supabase|component",
+      "cognitive": 6,
+      "lines": 248,
+      "name": "OrgAuditLogDrains",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/LogDrains/OrgAuditLogDrains.tsx#L38-L285",
+      "rater1": {
+        "id": "L064",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the add-destination split button with its dropdown (7112-7161); the four mutation hooks into a custom hook",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "A settings page: permission and entitlement early returns, mutations with toasts, and markup for a sheet, list and confirm modal."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 25
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Organization/OAuthApps/Consent/ProjectMultiSelect.tsx:29:34",
+      "id": "L065",
+      "stratum": "supabase|component",
+      "cognitive": 2,
+      "lines": 91,
+      "name": "ProjectMultiSelect",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/OAuthApps/Consent/ProjectMultiSelect.tsx#L29-L119",
+      "rater1": {
+        "id": "L065",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A multi-select with a counter and status messages; plain markup."
+      },
+      "rater2": {
+        "id": "L065",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A few derived booleans and a flat JSX tree of a label, a checkbox, a multi-select and status lines."
+      },
+      "repo": "supabase",
+      "statements": 6
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Organization/SSO/SSOConfig.tsx:99:25",
+      "id": "L066",
+      "stratum": "supabase|component",
+      "cognitive": 22,
+      "lines": 362,
+      "name": "SSOConfig",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/SSO/SSOConfig.tsx#L99-L460",
+      "rater1": {
+        "id": "L066",
+        "whyLong": "markup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "the loading/error/upgrade/form ternary chain into early returns; the SP-initiated explainer admonition; the delete confirmation modal body; form sync effects into a hook",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A 360-line component whose JSX is selected by a four-way nested ternary and holds a whole form plus a destructive-confirm modal."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 21
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Organization/SSO/SSOMetadata.tsx:20:27",
+      "id": "L067",
+      "stratum": "supabase|component",
+      "cognitive": 0,
+      "lines": 109,
+      "name": "SSOMetadata",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/SSO/SSOMetadata.tsx#L20-L128",
+      "rater1": {
+        "id": "L067",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A two-tab metadata input with a file upload handler; straightforward."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 6
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Organization/TeamSettings/InviteMemberButton.tsx:70:34",
+      "id": "L068",
+      "stratum": "supabase|component",
+      "cognitive": 10,
+      "lines": 466,
+      "name": "InviteMemberButton",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/TeamSettings/InviteMemberButton.tsx#L70-L535",
+      "rater1": {
+        "id": "L068",
+        "whyLong": "markup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "permission and role derivation (lines 7714-7745) into a hook; onInviteMember into a hook or util; the role radio item with its disabled-reason chain as a component; each FormField as a small component",
+        "splitCost": [
+          "many-params",
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A 466-line sheet that mixes role/permission logic, a zod schema defined in render, a batch-invite submit flow and a long form; closeInviteSheet is used before it is declared."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 38
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/ProjectAPIDocs/ProjectAPIDocs.constants.ts:959:10",
+      "id": "L069",
+      "stratum": "supabase|data",
+      "cognitive": 0,
+      "lines": 79,
+      "name": "code",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectAPIDocs/ProjectAPIDocs.constants.ts#L959-L1037",
+      "rater1": {
+        "id": "L069",
+        "whyLong": "data",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Five near-identical snippet objects that differ only in event name; a table, not logic."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 1
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/ProjectHome/ProjectUsageSection.tsx:53:35",
+      "id": "L070",
+      "stratum": "supabase|component",
+      "cognitive": 2,
+      "lines": 253,
+      "name": "ProjectUsageSection",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectHome/ProjectUsageSection.tsx#L53-L305",
+      "rater1": {
+        "id": "L070",
+        "whyLong": "several",
+        "readsEndToEnd": "yes",
+        "splitHelps": "yes",
+        "splitPoints": "the service table (8066-8102) as a module-level builder; the per-service data transform (8104-8138) as a pure util; the bar-click navigation; the service card as a component",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "One component that configures services, fetches and gap-fills stats, transforms them per service, handles navigation and renders cards; each part is simple and separable."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 20
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/ProjectHome/ProjectUsageSectionDeltas.tsx:47:41",
+      "id": "L071",
+      "stratum": "supabase|component",
+      "cognitive": 2,
+      "lines": 224,
+      "name": "ProjectUsageSectionDeltas",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ProjectHome/ProjectUsageSectionDeltas.tsx#L47-L270",
+      "rater1": {
+        "id": "L071",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the service card (8375-8447) as a component; the service table as a module-level builder",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "The successor of L070 with the data work already moved into helpers; what remains is a service table and card markup."
+      },
+      "rater2": {
+        "id": "L071",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the per-service card in services.map (lines 189-266) as a ServiceCard component; the serviceBase table (lines 74-126) as a module-level builder",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "Hooks, a six-entry service table, totals, a click handler and a large card grid; it is linear, and the card is the one obvious component."
+      },
+      "repo": "supabase",
+      "statements": 22
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/SQLEditor/MoveQueryModal.tsx:62:30",
+      "id": "L072",
+      "stratum": "supabase|component",
+      "cognitive": 9,
+      "lines": 306,
+      "name": "MoveQueryModal",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/MoveQueryModal.tsx#L62-L367",
+      "rater1": {
+        "id": "L072",
+        "whyLong": "markup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "onConfirmMove (8519-8594) into a hook; the folder picker popover as a component",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "state",
+        "note": "A dialog whose submit handler branches between platform and self-hosted state updates (removing and re-adding snippets and tabs); it also computes the same boolean twice under two names."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 18
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/SQLEditor/SqlEditorManualSaveNoticeDialog.tsx:26:47",
+      "id": "L073",
+      "stratum": "supabase|component",
+      "cognitive": 1,
+      "lines": 62,
+      "name": "SqlEditorManualSaveNoticeDialog",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/SqlEditorManualSaveNoticeDialog.tsx#L26-L87",
+      "rater1": {
+        "id": "L073",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A notice dialog with one effect and a derived open flag."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 7
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/SQLEditor/UtilityPanel/UtilityActions.tsx:59:30",
+      "id": "L074",
+      "stratum": "supabase|component",
+      "cognitive": 20,
+      "lines": 261,
+      "name": "UtilityActions",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/SQLEditor/UtilityPanel/UtilityActions.tsx#L59-L319",
+      "rater1": {
+        "id": "L074",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the narrow-screen overflow menu (8821-8878), the wide-screen inline actions (8880-8954) and the run controls as components",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "A toolbar that renders the same actions twice, once in a dropdown and once inline, depending on whether the AI panel is open."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 21
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Settings/Database/ConnectionPooling/ConnectionPooling.tsx:69:33",
+      "id": "L075",
+      "stratum": "supabase|component",
+      "cognitive": 9,
+      "lines": 373,
+      "name": "ConnectionPooling",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Database/ConnectionPooling/ConnectionPooling.tsx#L69-L441",
+      "rater1": {
+        "id": "L075",
+        "whyLong": "markup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "loading/error/unavailable states; the pool size field and the max client connections field as components; the HA notice",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "A settings form where isHighAvailability ternaries are threaded through almost every element, so each field has two versions interleaved."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 28
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Support/AIAssistantOption.tsx:16:33",
+      "id": "L076",
+      "stratum": "supabase|component",
+      "cognitive": 3,
+      "lines": 95,
+      "name": "AIAssistantOption",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Support/AIAssistantOption.tsx#L16-L110",
+      "rater1": {
+        "id": "L076",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the decorative chat-bubble background (9287-9309) as a component",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A delayed-appearing callout; a third of it is decorative markup."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 7
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/TableGridEditor/DeleteConfirmationDialogs.tsx:26:34",
+      "id": "L077",
+      "stratum": "supabase|component",
+      "cognitive": 7,
+      "lines": 406,
+      "name": "DeleteConfirmationDialogs",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/DeleteConfirmationDialogs.tsx#L26-L431",
+      "rater1": {
+        "id": "L077",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "one component per dialog kind (column, table, view, materialized view, rows), each with its own mutation and confirm handler; column/table could reuse DropEntityConfirmationModal as views already do",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "Five delete dialogs in one component, with seven mutation hooks whose callbacks are near-copies and repeated narrowing on snap.confirmationDialog.type."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 21
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SidePanelEditor.utils.tsx:953:21",
+      "id": "L078",
+      "stratum": "supabase|data",
+      "cognitive": 1,
+      "lines": 87,
+      "name": "<callback to Promise>",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SidePanelEditor.utils.tsx#L953-L1039",
+      "rater1": {
+        "id": "L078",
+        "whyLong": "setup",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the identity sequence reset in complete (9604-9635)",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "Parser options with async chunk and complete callbacks that share outer mutable insertError/chunkNumber, pause/resume/abort the parser and resolve the promise from three places."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 1
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SpreadsheetImport/SpreadsheetPreviewGrid.tsx:14:31",
+      "id": "L079",
+      "stratum": "supabase|component",
+      "cognitive": 0,
+      "lines": 52,
+      "name": "SpreadsheetPreviewGrid",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SpreadsheetImport/SpreadsheetPreviewGrid.tsx#L14-L65",
+      "rater1": {
+        "id": "L079",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A preview grid whose column definitions are computed inline; just over the limit."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 3
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SpreadsheetImport/useSpreadsheetImport.ts:100:7",
+      "id": "L080",
+      "stratum": "supabase|nested",
+      "cognitive": 1,
+      "lines": 235,
+      "name": "useSpreadsheetImport",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/TableGridEditor/SidePanelEditor/SpreadsheetImport/useSpreadsheetImport.ts#L100-L334",
+      "rater1": {
+        "id": "L080",
+        "whyLong": "nested",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the abort-controller handling into a small hook; processFile/processText result-to-state mapping as pure functions",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "A hook of a dozen useCallback handlers over a tagged state machine with an abort controller, a debounced latest-ref and mount-time effects."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 23
+    },
+    {
+      "fn": "supabase:apps/studio/components/layouts/TableEditorLayout/EntityListItem.tsx:77:30",
+      "id": "L081",
+      "stratum": "supabase|component",
+      "cognitive": 6,
+      "lines": 474,
+      "name": "EntityListItem",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/TableEditorLayout/EntityListItem.tsx#L77-L550",
+      "rater1": {
+        "id": "L081",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "yes",
+        "splitPoints": "the actions dropdown (10110-end) as a component, with per-entity-type sections; the copy-schema and copy-definition async handlers as functions; the five lint lookups as a hook",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "A 474-line list item whose bulk is a context menu repeated per entity type, with async clipboard handlers inlined in JSX; flat but very long."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 24
+    },
+    {
+      "fn": "supabase:apps/studio/components/layouts/TableEditorLayout/ExportAllRows.tsx:75:21",
+      "id": "L082",
+      "stratum": "supabase|other",
+      "cognitive": 19,
+      "lines": 107,
+      "name": "fetchAllRows",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/layouts/TableEditorLayout/ExportAllRows.tsx#L75-L181",
+      "rater1": {
+        "id": "L082",
+        "whyLong": "errors",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the per-entity-type confirmation reasons (10210-10225) and the row-count limit check (10227-10239)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A sequence of guards that each return an error or confirmation result before the fetch; reads as a checklist."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 30
+    },
+    {
+      "fn": "supabase:apps/studio/components/ui/BannerStack/Banners/BannerTermsOfServiceUpdate.tsx:21:42",
+      "id": "L083",
+      "stratum": "supabase|component",
+      "cognitive": 0,
+      "lines": 63,
+      "name": "BannerTermsOfServiceUpdate",
+      "params": 0,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/BannerStack/Banners/BannerTermsOfServiceUpdate.tsx#L21-L83",
+      "rater1": {
+        "id": "L083",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A banner with a static dialog of terms text."
+      },
+      "rater2": {
+        "id": "L083",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "A banner and dialog that are almost all static copy."
+      },
+      "repo": "supabase",
+      "statements": 4
+    },
+    {
+      "fn": "supabase:apps/studio/components/ui/Charts/ComposedChart.utils.tsx:170:29",
+      "id": "L084",
+      "stratum": "supabase|component",
+      "cognitive": 23,
+      "lines": 167,
+      "name": "CustomTooltip",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/Charts/ComposedChart.utils.tsx#L170-L336",
+      "rater1": {
+        "id": "L084",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "chart-type and byte-format detection (10385-10402) and formatNumeric as pure utils; LabelItem as a module-level component; total row",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "other",
+        "note": "Infers the chart type by sniffing dataKey substrings, defines a formatter and a component inside render, and renders the tooltip, all inside one if (active) block."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 29
+    },
+    {
+      "fn": "supabase:apps/studio/components/ui/DevToolbar/ResourceWarningsTab.tsx:105:25",
+      "id": "L085",
+      "stratum": "supabase|other",
+      "cognitive": 10,
+      "lines": 67,
+      "name": "applyOverrides",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DevToolbar/ResourceWarningsTab.tsx#L105-L171",
+      "rater1": {
+        "id": "L085",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "building the overdue invoices list (10585-10598)",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Writes mock data into three query caches in turn; the comments carry the knowledge of which consumers read which key."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 17
+    },
+    {
+      "fn": "supabase:apps/studio/components/ui/HelpPanel/HelpPanel.tsx:23:25",
+      "id": "L086",
+      "stratum": "supabase|component",
+      "cognitive": 2,
+      "lines": 117,
+      "name": "HelpPanel",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/HelpPanel/HelpPanel.tsx#L23-L139",
+      "rater1": {
+        "id": "L086",
+        "whyLong": "markup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the Discord community card (10683-10722) as a component",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A two-view panel header plus a static community card."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 9
+    },
+    {
+      "fn": "supabase:apps/studio/components/ui/PartnerManagedResource.tsx:31:0",
+      "id": "L087",
+      "stratum": "supabase|component",
+      "cognitive": 9,
+      "lines": 67,
+      "name": "PartnerManagedResource",
+      "params": 1,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/PartnerManagedResource.tsx#L31-L97",
+      "rater1": {
+        "id": "L087",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the two partner redirect queries and URL selection as a usePartnerRedirectUrl hook",
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Derives a CTA URL and heading per partner, then renders a small alert."
+      },
+      "rater2": null,
+      "repo": "supabase",
+      "statements": 11
+    },
+    {
+      "fn": "trpc:packages/react-query/src/rsc.tsx:95:7",
+      "id": "L088",
+      "stratum": "trpc|data",
+      "cognitive": 0,
+      "lines": 103,
+      "name": "createHydrationHelpers",
+      "params": 2,
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/rsc.tsx#L95-L197",
+      "rater1": {
+        "id": "L088",
+        "whyLong": "nested",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "types",
+        "note": "A factory returning a recursive proxy and a component; nearly half its lines are JSDoc examples, and the generic/proxy typing (with a @ts-expect-error) is the hard part."
+      },
+      "rater2": null,
+      "repo": "trpc",
+      "statements": 4
+    },
+    {
+      "fn": "trpc:packages/server/src/adapters/ws.ts:453:25",
+      "id": "L089",
+      "stratum": "trpc|other",
+      "cognitive": 11,
+      "lines": 95,
+      "name": "<callback to client.on>",
+      "params": 2,
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/ws.ts#L453-L547",
+      "rater1": {
+        "id": "L089",
+        "whyLong": "errors",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "a respondWithParseError helper for the two identical getErrorShape blocks; the connection-params first-message branch",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "control-flow",
+        "note": "Ping/pong, format check, first-message connection params and batch parsing, each with an early return; two copies of the error response make up much of the length."
+      },
+      "rater2": null,
+      "repo": "trpc",
+      "statements": 18
+    },
+    {
+      "fn": "trpc:packages/upgrade/src/transforms/hooksToOptions.ts:375:2",
+      "id": "L090",
+      "stratum": "trpc|nested",
+      "cognitive": 0,
+      "lines": 66,
+      "name": "removeSuspenseDestructuring",
+      "params": 1,
+      "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L375-L440",
+      "rater1": {
+        "id": "L090",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "A jscodeshift visitor: match the suspense hook call, read the tuple names, rewrite by one of three cases, and set an outer dirty flag."
+      },
+      "rater2": null,
+      "repo": "trpc",
+      "statements": 1
+    },
+    {
+      "fn": "vite:packages/vite/src/node/optimizer/pluginConverter.ts:41:16",
+      "id": "L091",
+      "stratum": "vite|data",
+      "cognitive": 0,
+      "lines": 71,
+      "name": "setup",
+      "params": 2,
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/pluginConverter.ts#L41-L111",
+      "rater1": {
+        "id": "L091",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Builds a fake esbuild PluginBuild object that records callbacks, runs the plugin's setup, then converts the callbacks; all wiring."
+      },
+      "rater2": {
+        "id": "L091",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "many-params",
+          "shared-state"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Builds a stub esbuild PluginBuild of closures that push into callback arrays, runs the plugin's setup and assigns handler lists in the enclosing scope; it is one cohesive shim."
+      },
+      "repo": "vite",
+      "statements": 7
+    },
+    {
+      "fn": "vite:packages/vite/src/node/plugins/css.ts:1435:0",
+      "id": "L092",
+      "stratum": "vite|other",
+      "cognitive": 3,
+      "lines": 56,
+      "name": "compileCSSPreprocessors",
+      "params": 5,
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/css.ts#L1435-L1490",
+      "rater1": {
+        "id": "L092",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "none",
+        "note": "Build options, run the preprocessor, filter deps, return; barely over the limit."
+      },
+      "rater2": null,
+      "repo": "vite",
+      "statements": 13
+    },
+    {
+      "fn": "vite:packages/vite/src/node/server/bundledDev.ts:467:25",
+      "id": "L093",
+      "stratum": "vite|other",
+      "cognitive": 8,
+      "lines": 67,
+      "name": "BundledDev.handleHmrOutput",
+      "params": 3,
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/bundledDev.ts#L467-L533",
+      "rater1": {
+        "id": "L093",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "other"
+        ],
+        "hardOtherwise": "none",
+        "note": "Two early-return cases then a straight sequence of cache writes, a send and a log; a long security comment accounts for much of the length."
+      },
+      "rater2": {
+        "id": "L093",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "jumping"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Two early-return cases (noop, full reload) and then a linear patch path, padded by a long security comment and logger option objects."
+      },
+      "repo": "vite",
+      "statements": 16
+    },
+    {
+      "fn": "vite:packages/vite/src/node/server/middlewares/indexHtml.ts:208:44",
+      "id": "L094",
+      "stratum": "vite|nested",
+      "cognitive": 9,
+      "lines": 252,
+      "name": "devHtmlHook",
+      "params": 2,
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/middlewares/indexHtml.ts#L208-L459",
+      "rater1": {
+        "id": "L094",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "proxy module path resolution (11341-11362); the traverseHtml callback per node kind (scripts, inline styles, style tags, asset attributes); post-traversal CSS transforms (11517-end)",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "One dev-HTML transform in phases that share a MagicString, an index counter incremented in two places and arrays collected during traversal and consumed afterwards."
+      },
+      "rater2": {
+        "id": "L094",
+        "whyLong": "several",
+        "readsEndToEnd": "partly",
+        "splitHelps": "yes",
+        "splitPoints": "proxy module path/URL resolution (lines 223-244); the traverseHtml node visitor for scripts, styles and asset attributes (lines 294-384); inline-module invalidation and style transforms (lines 387-439)",
+        "splitCost": [
+          "shared-state",
+          "many-params"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Resolves the proxy module, rewrites the HTML in a large visitor that fills accumulators and bumps a shared index counter, then transforms the collected styles; the phases are separable but share the MagicString and accumulators."
+      },
+      "repo": "vite",
+      "statements": 30
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/model/guidesTextModelPart.ts:471:28",
+      "id": "L095",
+      "stratum": "vscode|other",
+      "cognitive": 25,
+      "lines": 90,
+      "name": "GuidesTextModelPart.getLinesIndentGuides",
+      "params": 2,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/guidesTextModelPart.ts#L471-L560",
+      "rater1": {
+        "id": "L095",
+        "whyLong": "sequence",
+        "readsEndToEnd": "partly",
+        "splitHelps": "partly",
+        "splitPoints": "the backward and forward searches for the nearest content line (11605-11636)",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "state",
+        "note": "A loop that caches the nearest content line above and below using -2/-1 sentinel values; the sentinels, not the length, are what a reader must decode."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 42
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/viewModel/viewModelImpl.ts:69:12",
+      "id": "L096",
+      "stratum": "vscode|other",
+      "cognitive": 3,
+      "lines": 104,
+      "name": "ViewModel.constructor",
+      "params": 10,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/viewModelImpl.ts#L69-L172",
+      "rater1": {
+        "id": "L096",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "the _lines construction branch (11680-11708) and the event registrations (11716-11754)",
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "none",
+        "note": "A constructor that assigns fields and registers listeners in a required order; flat wiring with one branch."
+      },
+      "rater2": {
+        "id": "L096",
+        "whyLong": "setup",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "building _lines from editor options (lines 94-122); the viewLayout, configuration, minimap and theme listener registrations (lines 130-168)",
+        "splitCost": [
+          "shared-state",
+          "other"
+        ],
+        "hardOtherwise": "domain",
+        "note": "Field assignments and listener wiring in dependency order (lines, then coordinates converter, cursor, layout); extraction is possible but readonly fields must be assigned in the constructor."
+      },
+      "repo": "vscode",
+      "statements": 34
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/viewModel/viewModelLines.ts:934:29",
+      "id": "L097",
+      "stratum": "vscode|other",
+      "cognitive": 19,
+      "lines": 67,
+      "name": "ViewModelLinesFromProjectedModel.getDecorationsInRange",
+      "params": 6,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/viewModelLines.ts#L934-L1000",
+      "rater1": {
+        "id": "L097",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "partly",
+        "splitPoints": "sort-and-dedupe of the result (11805-11831)",
+        "splitCost": [
+          "many-params"
+        ],
+        "hardOtherwise": "none",
+        "note": "Fast path, then merge visible-line runs into range requests, then sort and dedupe; the slow-path calls drop the onlyMarginDecorations argument, which the six-argument call lines make easy to miss."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 31
+    },
+    {
+      "fn": "zod:packages/zod/src/v4/core/api.ts:1787:7",
+      "id": "L098",
+      "stratum": "zod|other",
+      "cognitive": 1,
+      "lines": 66,
+      "name": "_stringbool",
+      "params": 2,
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/api.ts#L1787-L1852",
+      "rater1": {
+        "id": "L098",
+        "whyLong": "sequence",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "shared-state"
+        ],
+        "hardOtherwise": "types",
+        "note": "Normalise options, build two schemas, build a codec whose transform refers to the codec itself; the `as any` casts are the only friction."
+      },
+      "rater2": null,
+      "repo": "zod",
+      "statements": 18
+    },
+    {
+      "fn": "zod:packages/zod/src/v4/locales/id.ts:61:9",
+      "id": "L099",
+      "stratum": "zod|dispatch",
+      "cognitive": 23,
+      "lines": 53,
+      "name": "<anonymous>",
+      "params": 1,
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/locales/id.ts#L61-L113",
+      "rater1": {
+        "id": "L099",
+        "whyLong": "dispatch",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "A flat switch from issue code to a localised message; one locale file among many with the same shape."
+      },
+      "rater2": null,
+      "repo": "zod",
+      "statements": 22
+    },
+    {
+      "fn": "zod:packages/zod/src/v4/locales/uk.ts:5:41",
+      "id": "L100",
+      "stratum": "zod|data",
+      "cognitive": 0,
+      "lines": 112,
+      "name": "error",
+      "params": 0,
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/locales/uk.ts#L5-L116",
+      "rater1": {
+        "id": "L100",
+        "whyLong": "data",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "none"
+        ],
+        "hardOtherwise": "none",
+        "note": "Translation dictionaries plus a switch of message templates; it is a locale table in function form."
+      },
+      "rater2": {
+        "id": "L100",
+        "whyLong": "data",
+        "readsEndToEnd": "yes",
+        "splitHelps": "no",
+        "splitPoints": null,
+        "splitCost": [
+          "other"
+        ],
+        "hardOtherwise": "none",
+        "note": "Locale dictionaries plus a switch of translated messages, one of about sixty near-identical locale files, so its shape is fixed by the template rather than by the logic."
+      },
+      "repo": "zod",
+      "statements": 5
+    },
+    {
+      "fn": "astro:packages/astro/src/runtime/server/render/component.ts:75:0",
+      "id": "P001",
+      "stratum": "astro",
+      "cognitive": 106,
+      "lines": 338,
+      "name": "renderFrameworkComponent",
+      "params": 5,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/render/component.ts#L75-L412",
+      "rater1": {
+        "id": "P001",
+        "swappable": "yes",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "Single-caller helper that forwards renderComponent's (result, displayName, Component, props, slots) tuple, where slots is typed any so swapping it with _props compiles (a displayName/Component swap would fail in one direction)."
+      },
+      "rater2": {
+        "id": "P001",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "_props (a record) and slots (any) are adjacent and Component is unknown, so a swap would type-check, but the single caller forwards renderComponent's identically named arguments in the same order."
+      },
+      "repo": "astro",
+      "statements": 96
+    },
+    {
+      "fn": "astro:packages/astro/src/transitions/events.ts:63:12",
+      "id": "P002",
+      "stratum": "astro",
+      "cognitive": 0,
+      "lines": 31,
+      "name": "TransitionBeforePreparationEvent.constructor",
+      "params": 10,
+      "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/transitions/events.ts#L63-L93",
+      "rater1": {
+        "id": "P002",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "public-api",
+        "note": "Ten positional constructor arguments (from/to both URL, info typed any next to Element and Document) forwarded straight into BeforeEvent's equally long constructor; the class is exported from astro:transitions/client though only doPreparation constructs it."
+      },
+      "rater2": null,
+      "repo": "astro",
+      "statements": 4
+    },
+    {
+      "fn": "excalidraw:packages/element/src/binding.ts:267:53",
+      "id": "P003",
+      "stratum": "excalidraw",
+      "cognitive": 2,
+      "lines": 51,
+      "name": "bindingStrategyForElbowArrowEndpointDragging",
+      "params": 5,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/binding.ts#L267-L317",
+      "rater1": {
+        "id": "P003",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "Five distinct arrow, update-map, elements-map, element-array and zoom types make any swap a type error, and the callers pass matching locals."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 9
+    },
+    {
+      "fn": "excalidraw:packages/element/src/elbowArrow.ts:1851:22",
+      "id": "P004",
+      "stratum": "excalidraw",
+      "cognitive": 4,
+      "lines": 56,
+      "name": "calculateGrid",
+      "params": 6,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/elbowArrow.ts#L1851-L1906",
+      "rater1": {
+        "id": "P004",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "No neighbours share a type, but start/end (GlobalPoint) and startHeading/endHeading (Heading) are interleaved pairs that would compile if swapped as a pair; one caller."
+      },
+      "rater2": {
+        "id": "P004",
+        "swappable": "no",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "No two neighbours share a type, though the start and end point/heading pairs repeat (a whole-pair swap would type-check), and the one caller passes ternary expressions that named fields would label."
+      },
+      "repo": "excalidraw",
+      "statements": 16
+    },
+    {
+      "fn": "excalidraw:packages/element/src/utils.ts:810:45",
+      "id": "P005",
+      "stratum": "excalidraw",
+      "cognitive": 22,
+      "lines": 94,
+      "name": "projectFixedPointOntoDiagonal",
+      "params": 7,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/src/utils.ts#L810-L903",
+      "rater1": {
+        "id": "P005",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "public-api",
+        "note": "Every parameter has a distinct type and the trailing boolean is passed as a descriptive expression; it is re-exported from the published @excalidraw/element package and used by packages/excalidraw."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 28
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/charts/charts.helpers.ts:774:19",
+      "id": "P006",
+      "stratum": "excalidraw",
+      "cognitive": 0,
+      "lines": 42,
+      "name": "chartLines",
+      "params": 5,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/charts/charts.helpers.ts#L774-L815",
+      "rater1": {
+        "id": "P006",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "x and y are adjacent numbers but follow the near-universal x-then-y order, and the helper shares the same (spreadsheet, x, y, backgroundColor, layout) tuple with its sibling chart helpers and one caller."
+      },
+      "rater2": null,
+      "repo": "excalidraw",
+      "statements": 5
+    },
+    {
+      "fn": "excalidraw:packages/excalidraw/components/App.viewport.ts:324:26",
+      "id": "P007",
+      "stratum": "excalidraw",
+      "cognitive": 0,
+      "lines": 33,
+      "name": "animateToViewport",
+      "params": 5,
+      "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/excalidraw/components/App.viewport.ts#L324-L356",
+      "rater1": {
+        "id": "P007",
+        "swappable": "partly",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "from and target are both Viewport in conventional order, and the two trailing inline callbacks would read better as named onFrame/onComplete fields, the way the neighbouring interpolateViewport({ from, target, factor }) already works."
+      },
+      "rater2": {
+        "id": "P007",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "from and target are adjacent Viewports, so reversing them type-checks and silently animates backwards, and the one caller passes two inline callbacks positionally."
+      },
+      "repo": "excalidraw",
+      "statements": 1
+    },
+    {
+      "fn": "hono:src/middleware/timing/timing.ts:149:36",
+      "id": "P008",
+      "stratum": "hono",
+      "cognitive": 7,
+      "lines": 25,
+      "name": "setMetric",
+      "params": 5,
+      "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/middleware/timing/timing.ts#L149-L173",
+      "rater1": {
+        "id": "P008",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "public-api",
+        "note": "Documented hono timing API whose main overload alternates string and number, but the value-less overload (c, name, description) puts two strings side by side; the common three- and four-argument calls read fine positionally."
+      },
+      "rater2": null,
+      "repo": "hono",
+      "statements": 10
+    },
+    {
+      "fn": "next.js:packages/next/src/build/adapter/build-complete.ts:441:0",
+      "id": "P009",
+      "stratum": "next.js",
+      "cognitive": 4,
+      "lines": 33,
+      "name": "getPrerenderClassification",
+      "params": 5,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/adapter/build-complete.ts#L441-L473",
+      "rater1": {
+        "id": "P009",
+        "swappable": "no",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "The classification arguments have distinct literal-union and number types, but both callers pull them off the same prerender route object and pass them back one by one, so taking that object would be simpler."
+      },
+      "rater2": {
+        "id": "P009",
+        "swappable": "no",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "routeType, response and compute are distinct string-literal unions and htmlSize is a number, so swaps fail to compile; both callers destructure these fields from the same manifest entry, which could be passed as one object."
+      },
+      "repo": "next.js",
+      "statements": 5
+    },
+    {
+      "fn": "next.js:packages/next/src/build/route-bundle-stats.ts:131:0",
+      "id": "P010",
+      "stratum": "next.js",
+      "cognitive": 6,
+      "lines": 53,
+      "name": "collectAppRouterStats",
+      "params": 5,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/route-bundle-stats.ts#L131-L183",
+      "rater1": {
+        "id": "P010",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "distDir and dir are adjacent path strings, and the sibling toProjectRelativePaths in the same file takes them in the opposite order (dir, distDir), which makes a silent swap easy."
+      },
+      "rater2": {
+        "id": "P010",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "distDir and dir are adjacent strings, an easy swap that type-checks, and the sibling collectPagesRouterStats takes the same five arguments, so a shared context object would suit both."
+      },
+      "repo": "next.js",
+      "statements": 20
+    },
+    {
+      "fn": "next.js:packages/next/src/build/static-paths/app.ts:333:0",
+      "id": "P011",
+      "stratum": "next.js",
+      "cognitive": 30,
+      "lines": 83,
+      "name": "validateParams",
+      "params": 5,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/static-paths/app.ts#L333-L415",
+      "rater1": {
+        "id": "P011",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "All five types differ (string, boolean, segment array, string[], Params[]), so a swap would not compile, and the one caller passes same-named locals."
+      },
+      "rater2": {
+        "id": "P011",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "Each neighbour has a different type (string, boolean, segment array, string array, params array) and the single caller passes same-named locals, so positional arguments stay clear."
+      },
+      "repo": "next.js",
+      "statements": 23
+    },
+    {
+      "fn": "next.js:packages/next/src/build/utils.ts:1395:7",
+      "id": "P012",
+      "stratum": "next.js",
+      "cognitive": 20,
+      "lines": 307,
+      "name": "copyTracedFiles",
+      "params": 10,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/utils.ts#L1395-L1701",
+      "rater1": {
+        "id": "P012",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "Ten positional parameters with adjacent dir/distDir strings, pageKeys/appPageKeys string arrays and two adjacent booleans, exported from build/utils but called once from build/index."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 55
+    },
+    {
+      "fn": "next.js:packages/next/src/client/dev/report-hmr-latency.ts:18:15",
+      "id": "P013",
+      "stratum": "next.js",
+      "cognitive": 2,
+      "lines": 29,
+      "name": "reportHmrLatency",
+      "params": 5,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/dev/report-hmr-latency.ts#L18-L46",
+      "rater1": {
+        "id": "P013",
+        "swappable": "partly",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "startMsSinceEpoch and endMsSinceEpoch are adjacent numbers in natural order, and callers either unpack them and hasUpdates from an hmrUpdate object or pass Date.now() positionally."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 7
+    },
+    {
+      "fn": "next.js:packages/next/src/lib/metadata/resolve-metadata-parallel.ts:337:0",
+      "id": "P014",
+      "stratum": "next.js",
+      "cognitive": 8,
+      "lines": 45,
+      "name": "accumulateMetadataLayer",
+      "params": 7,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/resolve-metadata-parallel.ts#L337-L381",
+      "rater1": {
+        "id": "P014",
+        "swappable": "no",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "The seven types are distinct, but both callers pass context.route, context.pathname and context.metadataContext separately, so passing the context object would shorten the list."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 14
+    },
+    {
+      "fn": "next.js:packages/next/src/server/api-utils/node/api-resolver.ts:331:7",
+      "id": "P015",
+      "stratum": "next.js",
+      "cognitive": 30,
+      "lines": 159,
+      "name": "apiResolver",
+      "params": 9,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/api-utils/node/api-resolver.ts#L331-L489",
+      "rater1": {
+        "id": "P015",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "query and resolverModule are both any and propagateError/dev are adjacent booleans; the only in-repo caller (PagesAPIRouteModule) unpacks a context object into them and even types onError as Parameters<typeof apiResolver>[8]."
+      },
+      "rater2": {
+        "id": "P015",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "query and resolverModule are adjacent any parameters and propagateError and dev are adjacent booleans; the only caller in the repo (the pages-api route module) passes nine positional arguments, and onError's type is read as Parameters<typeof apiResolver>[8]."
+      },
+      "repo": "next.js",
+      "statements": 55
+    },
+    {
+      "fn": "next.js:packages/next/src/server/app-render/instant-validation/instant-validation.tsx:1264:2",
+      "id": "P016",
+      "stratum": "next.js",
+      "cognitive": 30,
+      "lines": 158,
+      "name": "buildNewTransportTree",
+      "params": 5,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/app-render/instant-validation/instant-validation.tsx#L1264-L1421",
+      "rater1": {
+        "id": "P016",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "parentPath is a branded SegmentPath next to key (string), so passing them reversed fails to compile in one direction; it is a recursive nested helper with two call sites."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 64
+    },
+    {
+      "fn": "next.js:packages/next/src/shared/lib/router/utils/resolve-rewrites.ts:12:15",
+      "id": "P017",
+      "stratum": "next.js",
+      "cognitive": 22,
+      "lines": 145,
+      "name": "resolveRewrites",
+      "params": 6,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/router/utils/resolve-rewrites.ts#L12-L156",
+      "rater1": {
+        "id": "P017",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "No adjacent parameters share a type and the three rewrite lists are already grouped into one object; all three callers in router.ts pass the same shape."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 26
+    },
+    {
+      "fn": "next.js:packages/next/src/shared/lib/router/utils/route-regex.ts:268:0",
+      "id": "P018",
+      "stratum": "next.js",
+      "cognitive": 49,
+      "lines": 101,
+      "name": "getNamedParametrizedRoute",
+      "params": 6,
+      "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/shared/lib/router/utils/route-regex.ts#L268-L368",
+      "rater1": {
+        "id": "P018",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "Four adjacent booleans: one caller passes false, false, false, false, undefined and the other unpacks an options object field by field."
+      },
+      "rater2": null,
+      "repo": "next.js",
+      "statements": 36
+    },
+    {
+      "fn": "react-aria:packages/react-aria-components/src/TreeDropTargetDelegate.ts:264:22",
+      "id": "P019",
+      "stratum": "react-aria",
+      "cognitive": 41,
+      "lines": 97,
+      "name": "TreeDropTargetDelegate.selectTarget",
+      "params": 6,
+      "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/TreeDropTargetDelegate.ts#L264-L360",
+      "rater1": {
+        "id": "P019",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "x and y are adjacent numbers in conventional order, while the Y and X movement parameters (listed Y first) are distinct literal unions that cannot be swapped; private method with one caller."
+      },
+      "rater2": null,
+      "repo": "react-aria",
+      "statements": 39
+    },
+    {
+      "fn": "supabase:apps/studio/components/interfaces/Reports/Reports.constants.ts:694:17",
+      "id": "P020",
+      "stratum": "supabase",
+      "cognitive": 2,
+      "lines": 50,
+      "name": "safeSql",
+      "params": 5,
+      "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Reports/Reports.constants.ts#L694-L743",
+      "rater1": {
+        "id": "P020",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "framework",
+        "note": "Implements the safeSql signature fixed by ReportQueryDb in Reports.types.ts, which puts two optional SafeSqlFragments and then two optional booleans side by side, and tests call it with undefined placeholders."
+      },
+      "rater2": {
+        "id": "P020",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "framework",
+        "note": "Implements ReportQueryDb.safeSql, whose positional list puts two SafeSqlFragment parameters (where, orderBy) and two booleans side by side, so the interface rather than this function would need to change."
+      },
+      "repo": "supabase",
+      "statements": 0
+    },
+    {
+      "fn": "vite:packages/vite/src/node/packages.ts:318:0",
+      "id": "P021",
+      "stratum": "vite",
+      "cognitive": 1,
+      "lines": 16,
+      "name": "getRpdCache",
+      "params": 5,
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/packages.ts#L318-L333",
+      "rater1": {
+        "id": "P021",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "pkgName, basedir and originalBasedir are three adjacent strings, and traverseBetweenDirs inside takes the two directories in the reverse order (originalBasedir, basedir)."
+      },
+      "rater2": null,
+      "repo": "vite",
+      "statements": 5
+    },
+    {
+      "fn": "vite:packages/vite/src/node/ssr/ssrStacktrace.ts:38:8",
+      "id": "P022",
+      "stratum": "vite",
+      "cognitive": 6,
+      "lines": 35,
+      "name": "<callback to line.replace>",
+      "params": 5,
+      "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/ssr/ssrStacktrace.ts#L38-L72",
+      "rater1": {
+        "id": "P022",
+        "swappable": "yes",
+        "optionsObjectHelps": "no",
+        "signature": "framework",
+        "note": "A String.prototype.replace callback whose five string parameters are bound to the regex's capture-group order, which nothing type-checks; named capture groups would be the closest thing to named parameters."
+      },
+      "rater2": {
+        "id": "P022",
+        "swappable": "yes",
+        "optionsObjectHelps": "no",
+        "signature": "framework",
+        "note": "String.prototype.replace passes the match and capture groups as positional strings, so they are swappable by type but their order is fixed by the regex and cannot be named."
+      },
+      "repo": "vite",
+      "statements": 21
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/core/wordHelper.ts:98:7",
+      "id": "P023",
+      "stratum": "vscode",
+      "cognitive": 14,
+      "lines": 65,
+      "name": "getWordAtText",
+      "params": 5,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/wordHelper.ts#L98-L162",
+      "rater1": {
+        "id": "P023",
+        "swappable": "no",
+        "optionsObjectHelps": "already",
+        "signature": "internal",
+        "note": "Types are distinct apart from column and textOffset, which are not adjacent, and the tuning knobs already live in the optional IGetWordAtTextConfig object; callers are all in vs/editor/common."
+      },
+      "rater2": {
+        "id": "P023",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "Neighbours differ in type (number, RegExp, string, number), though column and textOffset are both numbers two places apart; it recurses on itself and is called only from inside the editor."
+      },
+      "repo": "vscode",
+      "statements": 31
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/cursor/cursorTypeEditOperations.ts:117:23",
+      "id": "P024",
+      "stratum": "vscode",
+      "cognitive": 1,
+      "lines": 6,
+      "name": "AutoClosingOvertypeOperation.getEdits",
+      "params": 6,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/cursor/cursorTypeEditOperations.ts#L117-L122",
+      "rater1": {
+        "id": "P024",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "One of a family of static getEdits helpers with one caller, where Selection[] sits next to Range[] so passing selections as autoClosedCharacters compiles but the reverse does not."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 3
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/tokenizer.ts:34:12",
+      "id": "P025",
+      "stratum": "vscode",
+      "cognitive": 0,
+      "lines": 17,
+      "name": "Token.constructor",
+      "params": 5,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/tokenizer.ts#L34-L50",
+      "rater1": {
+        "id": "P025",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "Parameter-property value class built in hot tokenizer loops, where kind (a numeric const enum) sits next to bracketId (number), so a numeric variable fits either slot though literals like -1 do not fit TokenKind."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 0
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/model/indentationGuesser.ts:17:0",
+      "id": "P026",
+      "stratum": "vscode",
+      "cognitive": 29,
+      "lines": 73,
+      "name": "spacesDiff",
+      "params": 5,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/indentationGuesser.ts#L17-L89",
+      "rater1": {
+        "id": "P026",
+        "swappable": "partly",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "a/aLength and b/bLength are matching string/number pairs that are not adjacent, so only swapping a whole pair would compile; one caller in a hot loop that reuses an out-parameter."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 36
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/model/textModel.ts:495:31",
+      "id": "P027",
+      "stratum": "vscode",
+      "cognitive": 0,
+      "lines": 18,
+      "name": "TextModel._createContentChanged2",
+      "params": 10,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/textModel.ts#L495-L512",
+      "rater1": {
+        "id": "P027",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "Private event builder with ten positional parameters, including adjacent rangeOffset/rangeLength numbers and four adjacent booleans that both callers pass as bare literals like false, false, true, false."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 1
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/viewModel.ts:284:12",
+      "id": "P028",
+      "stratum": "vscode",
+      "cognitive": 0,
+      "lines": 17,
+      "name": "ViewLineData.constructor",
+      "params": 7,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel.ts#L284-L300",
+      "rater1": {
+        "id": "P028",
+        "swappable": "yes",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "minColumn, maxColumn and startVisibleColumn are three adjacent numbers, and one of the three constructions passes false, 1, length + 1, 0 and null as bare literals."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 7
+    },
+    {
+      "fn": "vscode:src/vs/editor/common/viewModel/viewModelImpl.ts:1225:13",
+      "id": "P029",
+      "stratum": "vscode",
+      "cognitive": 0,
+      "lines": 3,
+      "name": "ViewModel.paste",
+      "params": 5,
+      "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/viewModelImpl.ts#L1225-L1227",
+      "rater1": {
+        "id": "P029",
+        "swappable": "no",
+        "optionsObjectHelps": "yes",
+        "signature": "internal",
+        "note": "No neighbours share a type, but the optional multicursorText, source and isBlock are forwarded positionally through Cursor.paste to TypeOperations.paste, so a caller that wants isBlock must fill both optionals first."
+      },
+      "rater2": null,
+      "repo": "vscode",
+      "statements": 1
+    },
+    {
+      "fn": "zod:packages/zod/src/v4/core/compile.ts:1535:0",
+      "id": "P030",
+      "stratum": "zod",
+      "cognitive": 2,
+      "lines": 18,
+      "name": "generateNullableCheck",
+      "params": 5,
+      "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/compile.ts#L1535-L1552",
+      "rater1": {
+        "id": "P030",
+        "swappable": "no",
+        "optionsObjectHelps": "no",
+        "signature": "internal",
+        "note": "Distinct types in the same (doc, ctx, schema, accessor, buildsValue) order as generateCheck and its siblings, with one caller."
+      },
+      "rater2": null,
+      "repo": "zod",
+      "statements": 7
+    }
+  ],
+  "missing": [],
+  "note": "Rater 1 (a Claude subagent with read-only access to the clones) labelled every item; rater 2 (a separate Claude subagent, blind to rater 1) labelled the seeded subsets in sample.json `blind`. Both raters are Claude models, so agreement measures how consistently the codebook applies, not independent human judgement. `weighted` shares are weighted to the population (functions over 50 lines, or with five or more parameters, in the twelve repos' source) by stratum; `raw` are the sample's own counts. splitCost is a set: its kappa compares whole sets, and splitCostAny compares 'any cost' against 'none'.",
+  "raw": {
+    "long": {
+      "whyLong": {
+        "markup": 32,
+        "sequence": 26,
+        "dispatch": 10,
+        "nested": 9,
+        "several": 8,
+        "setup": 7,
+        "data": 4,
+        "errors": 4
+      },
+      "readsEndToEnd": {
+        "yes": 70,
+        "partly": 27,
+        "no": 3
+      },
+      "splitHelps": {
+        "partly": 48,
+        "no": 36,
+        "yes": 16
+      },
+      "splitCost": {
+        "none": 38,
+        "shared-state": 38,
+        "many-params": 28,
+        "other": 8,
+        "jumping": 6
+      },
+      "hardOtherwise": {
+        "none": 50,
+        "domain": 20,
+        "control-flow": 13,
+        "state": 11,
+        "types": 4,
+        "other": 2
+      }
+    },
+    "params": {
+      "swappable": {
+        "yes": 11,
+        "partly": 10,
+        "no": 9
+      },
+      "optionsObjectHelps": {
+        "no": 15,
+        "yes": 14,
+        "already": 1
+      },
+      "signature": {
+        "internal": 25,
+        "public-api": 3,
+        "framework": 2
+      }
+    }
+  },
+  "weighted": {
+    "long": {
+      "whyLong": {
+        "markup": 29.1,
+        "sequence": 27.6,
+        "dispatch": 9.9,
+        "several": 8.8,
+        "setup": 8.3,
+        "nested": 8.3,
+        "data": 5,
+        "errors": 3
+      },
+      "readsEndToEnd": {
+        "yes": 69.5,
+        "partly": 27.2,
+        "no": 3.4
+      },
+      "splitHelps": {
+        "partly": 47.1,
+        "no": 36.2,
+        "yes": 16.7
+      },
+      "splitCost": {
+        "shared-state": 39.3,
+        "none": 38.1,
+        "many-params": 27.5,
+        "other": 8.3,
+        "jumping": 5.5
+      },
+      "hardOtherwise": {
+        "none": 50.6,
+        "domain": 21.4,
+        "control-flow": 11.7,
+        "state": 10.7,
+        "types": 3.6,
+        "other": 2.1
+      }
+    },
+    "params": {
+      "swappable": {
+        "yes": 36.7,
+        "partly": 32,
+        "no": 31.4
+      },
+      "optionsObjectHelps": {
+        "yes": 48.7,
+        "no": 47.6,
+        "already": 3.7
+      },
+      "signature": {
+        "internal": 85.5,
+        "public-api": 8.2,
+        "framework": 6.3
+      }
+    }
+  }
+}

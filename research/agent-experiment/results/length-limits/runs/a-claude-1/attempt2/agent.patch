@@ -1,0 +1,61 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -226,11 +226,13 @@
+   resolvedServerPort: number
+ ) {
+   const devBase = config.base;
+-  const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+-  const host = wsConfig?.host || null;
+-  const protocol = wsConfig?.protocol || null;
+-  const timeout = wsConfig?.timeout || 30_000;
+-  const isWsServerSpecified = !!wsConfig?.server;
++  // a missing ws config becomes {} so its fields read as undefined
++  const wsConfig: Exclude<ResolvedConfig["server"]["ws"], false | undefined> =
++    isObject(config.server.ws) ? config.server.ws : {};
++  const host = wsConfig.host || null;
++  const protocol = wsConfig.protocol || null;
++  const timeout = wsConfig.timeout || 30_000;
++  const isWsServerSpecified = !!wsConfig.server;
+   const hmrConfigName = path.basename(config.configFile || "vite.config.js");
+ 
+   const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined;
+@@ -238,17 +240,17 @@
+ 
+   // ws.clientPort -> ws.port
+   // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+-  let port = wsConfig?.clientPort || wsConfig?.port || null;
++  let port = wsConfig.clientPort || wsConfig.port || null;
+   if (config.server.middlewareMode && !isWsServerSpecified) {
+     port ||= 24_678;
+   }
+ 
+-  let directTarget = wsConfig?.host || resolvedServerHostname;
+-  directTarget += `:${wsConfig?.port || resolvedServerPort}`;
++  let directTarget = wsConfig.host || resolvedServerHostname;
++  directTarget += `:${wsConfig.port || resolvedServerPort}`;
+   directTarget += devBase;
+ 
+   let hmrBase = devBase;
+-  if (wsConfig?.path) {
++  if (wsConfig.path) {
+     hmrBase = path.posix.join(hmrBase, wsConfig.path);
+   }
+ 
+@@ -265,9 +267,9 @@
+   };
+ }
+ 
+-async function createClientConfigValueReplacer(
++const createClientConfigValueReplacer = async (
+   config: ResolvedConfig
+-): Promise<(code: string) => string> {
++): Promise<(code: string) => string> => {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+   const resolvedServerPort = config.server.port!;
+@@ -305,4 +307,4 @@
+       .replace(`__HMR_PARTIAL_ACCEPT__`, hmr.partialAccept)
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
+-}
++};

@@ -1,0 +1,81 @@
+--- a/revalidation-utils.ts
++++ b/revalidation-utils.ts
+@@ -66,29 +66,6 @@
+   return (globalThis as { __cacheHandlers?: CacheHandler[] }).__cacheHandlers;
+ }
+ // ── end of STUB ────────────────────────────────────────────────────────
+-
+-/** Run a callback, and execute any *new* revalidations added during its runtime. */
+-export async function withExecuteRevalidates<T>(
+-  store: WorkStore | undefined,
+-  callback: () => Promise<T>
+-): Promise<T> {
+-  if (!store) {
+-    return callback();
+-  }
+-  // If we executed any revalidates during the request, then we don't want to execute them again.
+-  // save the state so we can check if anything changed after we're done running callbacks.
+-  const savedRevalidationState = cloneRevalidationState(store);
+-  try {
+-    return await callback();
+-  } finally {
+-    // Check if we have any new revalidates, and if so, wait until they are all resolved.
+-    const newRevalidates = diffRevalidationState(
+-      savedRevalidationState,
+-      cloneRevalidationState(store)
+-    );
+-    await executeRevalidates(store, newRevalidates);
+-  }
+-}
+ 
+ type RevalidationState = Required<
+   Pick<
+@@ -238,7 +215,7 @@
+   return durations;
+ }
+ 
+-async function revalidateTags(
++const revalidateTags = async function revalidateTags(
+   tagsWithProfile: TagWithProfile[],
+   incrementalCache: IncrementalCache | undefined,
+   workStore?: WorkStore
+@@ -269,9 +246,9 @@
+   }
+ 
+   await Promise.all(promises);
+-}
++};
+ 
+-export function executeRevalidates(
++export const executeRevalidates = function executeRevalidates(
+   workStore: WorkStore,
+   state?: RevalidationState
+ ): false | Promise<void> {
+@@ -306,4 +283,27 @@
+   }
+ 
+   return Promise.all(promises).then(() => {});
++};
++
++/** Run a callback, and execute any *new* revalidations added during its runtime. */
++export async function withExecuteRevalidates<T>(
++  store: WorkStore | undefined,
++  callback: () => Promise<T>
++): Promise<T> {
++  if (!store) {
++    return callback();
++  }
++  // If we executed any revalidates during the request, then we don't want to execute them again.
++  // save the state so we can check if anything changed after we're done running callbacks.
++  const savedRevalidationState = cloneRevalidationState(store);
++  try {
++    return await callback();
++  } finally {
++    // Check if we have any new revalidates, and if so, wait until they are all resolved.
++    const newRevalidates = diffRevalidationState(
++      savedRevalidationState,
++      cloneRevalidationState(store)
++    );
++    await executeRevalidates(store, newRevalidates);
++  }
+ }

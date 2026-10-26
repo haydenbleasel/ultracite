@@ -385,6 +385,48 @@ node research/corpus/scripts/effects-run-all.cjs        # about 10 min; --skip-h
 
 The method, findings and caveats are in `corpus/results/react-effects/REPORT.md`.
 
+### Length limits (eleventh post)
+
+The length scripts are prefixed `length-` and share `length-lib.cjs`. It holds the topic's paths and repos, the test-file collection (the files `collect-files.cjs` drops for being tests, plus the sibling test trees in the clones), the census rule (every function measured the way each rule counts it, reimplemented from each rule's source: max-lines-per-function and its options, Oxlint's span, SonarJS's lines of code and exemptions, Biome's body-token count, max-statements, max-params with and without `this`, max-depth, S134's nesting, max-nested-callbacks and Oxlint's and Biome's definitions of a callback), the real rules at threshold 0 under local aliases so every function reports its count, and runners for Oxlint and Biome with each rule alone that keep every message and help text.
+
+The rules: ESLint's `max-lines`, `max-lines-per-function`, `max-statements`, `max-params` (and `@typescript-eslint/max-params`), `max-depth`, `max-nested-callbacks` and `max-classes-per-file`, Oxlint's ports, Biome's `noExcessiveLinesPerFunction`, `useMaxParams`, `noExcessiveNestedCallbacks`, `noExcessiveLinesPerFile`, `noExcessiveClassesPerFile` and the nursery `noExcessiveStatementsPerFunction`, and SonarJS's `max-lines`, `max-lines-per-function`, `max-switch-cases`, `max-union-size` and `nested-control-flow`. Ultracite turns the size limits off and keeps `max-nested-callbacks`, `max-classes-per-file` (not in Biome), `max-switch-cases`, `max-union-size` and cognitive complexity on.
+
+The eight corpus repos are measured as in every topic, the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set, and Ultracite's CLI apart. Source and tests are kept apart throughout. History uses the TODO post's history clones (the eight corpus repos).
+
+| Script | What it does |
+| --- | --- |
+| `length-rules.cjs` | The rules per linter and preset: every Oxlint preset and `oxlint --rules`, ESLint core resolved with `calculateConfigForFile` for `.ts`, `.tsx` and a test file, every Biome preset with `biome explain`, each rule's defaults from its source, SonarJS's rule meta, the agent prompt's lines, and the preset inconsistencies found. |
+| `length-census.cjs` | Every function and file in every repo, source and tests: every count each rule makes, IIFEs, callbacks and their callee, components, test callbacks, dispatchers, data and nested lines, free variables, cognitive and cyclomatic complexity. Checks each count against the real rule's message (0 mismatches, 0 unmatched reports). |
+| `length-linters.cjs` | Oxlint and Biome with each rule alone at its minimum, default and the common settings, and ESLint and SonarJS at the defaults and settings, on a mirror with disable directives neutralised; every diagnostic joined exactly to its function or file, and ESLint's flags checked against the census. |
+| `length-disagreements.cjs` | Reports per repo and pool, linter and setting; every function two implementations count or flag differently, with the reason and an example; where every line break Biome doesn't count is; every linter's messages and help. |
+| `length-calibration.cjs` | `calibration/length-limits/` (31 TypeScript cases, 5 JSX cases, 4 declaration cases, a four-class file and a printWidth case) through ESLint, SonarJS, Oxlint and Biome at each rule's minimum, with the option variants, and at the defaults. |
+| `length-format.cjs`, `length-format-lib.cjs` | Copies of every file formatted with Oxfmt (Ultracite's preset minus its ignore patterns, then printWidth 100 and 120), parsed and measured again, functions matched to themselves. |
+| `length-history.cjs` | `--track`: each function's line range followed back through three years of mainline commits (`git log -p -U0 -M -w --first-parent`), as `git log -L` does; changes and bug-fix commits attributed to the innermost function. `--analyse`: rates by length, logistic regressions with size controlled and file-clustered errors, partial Spearman. Missing blobs are never fetched (`GIT_NO_LAZY_FETCH=1`). |
+| `length-history-check.cjs` | The hand check of the bug-fix heuristic: 60 commits it calls fixes and 40 it doesn't (seeded), a worksheet, and `--compute` (precision and miss rate). |
+| `length-complexity.cjs` | Length against cognitive complexity: Spearman, the overlap with Ultracite's threshold, scores with nested functions included, and examples with permalinks. |
+| `length-markers.cjs` | Each repo's lint configs at its pinned commit (`git show`) for these rules and the commit that added each line, and every disable comment naming one, with its reason and what it covers. |
+| `length-sample.cjs` | The hand classification: 100 functions over 50 lines and 30 with five or more parameters, stratified (frozen in `sample.json`); `--worksheet`, the blind subsets of 30 and 10, `--compute` (both raters, weighted shares, κ). |
+| `length-agent-runs.cjs` | Length, statements, parameters and depth in every committed agent-experiment run, before and after and attempt by attempt, and the functions the agents added. |
+| `length-oracle.cjs` | The behaviour oracle for the three subjects: transpiles a file, runs it in a fresh Node process against generated scenarios through its public API, and returns a trace and a verdict; also measures what a split costs a reader (functions, helpers' parameters and call sites, call order). |
+| `length-examples.cjs` | Checks the subjects' verbatim lines against their commits, type-checks them, lints them at the defaults before and after Oxfmt, and runs the oracle and the structure measure on 30 hand-made variants. |
+| `length-tables.cjs` | Generates `results/length-limits/tables.md`. |
+| `length-run-all.cjs` | Runs all of the above in order, and the shared rule census. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+LENGTH_TMP=<scratch dir> node research/corpus/scripts/length-run-all.cjs   # --skip-history, --skip-census, --skip-format
+```
+
+- **The reimplementations match the rules.** Over 111,243 functions, the census's counts equal the real ESLint and SonarJS rules' for every rule and option variant, and the Biome reimplementation predicts every count Biome reports at its minimum.
+- **Copies outside `out/`.** Mirrors, formatted copies, calibration and oracle runs live under `$LENGTH_TMP` (default: the system temp directory's `ultracite-research-length-limits/`), because Ultracite's presets ignore `**/out`. The Oxfmt preset's ignore patterns are dropped because they include `**/build` (Next.js's `packages/next/src/build`).
+- **Each rule runs alone.** Oxlint (every category off) and Biome (`recommended: false`) run one rule per pass, so the counts are each rule's; the shared rule census runs Ultracite's core, react and js-plugins presets unchanged for the structural rules.
+- **The hand labels are Claude models.** Rater 1 labelled all 130 items; rater 2, a separate subagent working blind, 30 long functions and 10 parameter lists. The history check and `decision-history.json` have one rater.
+- **Hand inputs:** `decision-history.json`, and the rater labels (`out/length-limits/labels-*.json`, kept in `classifications.json` and `history-check.json`; the compute steps leave those files alone when the labels aren't there).
+- **No shared script changed.** The topic reads `collect-files.cjs`, `tools.cjs`, `dead-code-lib.cjs` and `sort-keys-lib.cjs`, and runs `rule-census.cjs` unchanged with `CORPUS_REPO_LISTS=repos-accessibility.json`.
+
+The method, findings and caveats are in `corpus/results/length-limits/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -985,3 +1027,96 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
   - security-rules and dead-code differ only by the known preset drift;
   - accessibility, todo-comments and sort-keys differ in `hasSessionLog`, because their gitignored session logs aren't in this worktree;
   - floating-promises and todo-comments also show new drift from 947ca03e (`promise/prefer-await-to-then`, `github/no-then` and `unicorn/prefer-await` turned off after their runs).
+
+### Length limits (eleventh post)
+
+Ultracite turns the size limits off. A user who turns one on gets no autofix, so `ultracite fix --claude` or `--codex` hands the report to an agent. This topic asks whether the agent's refactor keeps behaviour, and whether it helps a reader or only satisfies the count. The user's project is what `ultracite init --linter oxlint` leaves, with `"max-lines-per-function": "error"` (its default, 50) added to `oxlint.config.ts`; every other rule is as the preset sets it.
+
+Subjects are three long functions from `corpus/examples/length-limits/` that need three different responses:
+
+- **a:** Vite's `createClientConfigValueReplacer` (`clientInjections.ts`, 72 lines), config building that reads top to bottom. Right: leave it for review and say why, or a change that keeps the output and isn't harder to follow.
+- **b:** Next.js's `revalidateTags` (`revalidation-utils.ts`, 105 lines), two jobs one after the other. Right: extract the two jobs, keeping every call and rejection.
+- **c:** VS Code's `guessIndentation` and `spacesDiff` (`indentationGuesser.ts`; 134 and 88 lines after Oxfmt, 117 and 73 as written). The loop's `continue`s skip state updates. Right: keep the guess and the API; leave it for review, or extract only what's safe.
+
+**The run dir is what `ultracite init --linter oxlint` leaves, plus the user's limit.** `prepareSubjects` runs the CLI's own `init` (under Bun, `--skip-install --yes`) for Oxlint, Biome and ESLint in scratch projects. It keeps each linter's files (`subjects/length-limits/init/`), the same files with that linter's limit on (`user/`), and Oxlint's as the run files, formatted by the fix pass, with the subjects' `tsconfig.json` (`run-files/`). Oxlint's two configs and Biome's are stored with a `.txt` suffix.
+
+**Subjects.** `prepareSubjects`:
+
+- removes the `stripFields` fields; 16 `TEXT_EDITS` cut the `Function:` descriptions to an identification, rewrite "copied verbatim", write source ranges as `L21-153`, and drop the license lines that pointed into `research/`;
+- checks every comment line against 15 patterns: length and its synonyms, splitting, readability, the rule and linter names, the trap's mechanics, the gaming moves, the history's PRs and commits, and the analysis. Six upstream comments in C about the text lines it reads are allowed by name, and the same patterns match 29, 21 and 34 lines of the unstripped subjects;
+- runs Ultracite's Oxlint pass (`oxlint --fix`, `oxfmt --write`) until nothing changes, and checks that:
+  - the oracle's trace equals the corpus subject's. A's differs only in the key order `sort-keys` gave an object it returns, and the prepared subject is the reference;
+  - `tsc` is clean;
+  - the handoff is exactly the length reports.
+
+**The handoff is filtered** in the collect and in every re-lint, as in the todo-comments, sort-keys and react-effects topics: `max-lines-per-function`, plus any diagnostic that isn't the prepared project's own, by rule and message. A real project would hand over 29, 22 and 51 issues. Here the filter shaped the runs: 20 of 21 retries were for rules outside it (`func-style` on new helper declarations, complexity moving with the code), and a length-only filter would have retried one run.
+
+**Retry loop:** `runWithRetries` and `scripts/ultracite-adapters.cjs`, unchanged. The self-test runs Ultracite's real Oxlint adapter under Bun in a project with init's config, the user's rule and `node_modules` links, next to the mirror: all 43 comparisons match.
+
+**Measurement.** Each attempt is measured as the agent left the file, as Oxfmt alone would leave it, and as verify left it:
+
+- the size and complexity rules, attributed to functions, in five views, inline config honoured and ignored:
+  - the user's Oxlint;
+  - Oxlint with `max-lines`, `max-params` and `max-statements` on too;
+  - Oxlint with SonarJS's cognitive complexity;
+  - ESLint core with its length rules on;
+  - Biome core with its length rules on;
+- `tsc`;
+- the oracle, exactly and ignoring object key order, and its structure measure (functions, entry lines, helpers' parameters, lines and call sites, call order);
+- what the edit did: helpers, single-use, parameters, closures and shared mutable state (scope analysis), table or loop rewrites, `continue`s, the gaming moves, suppressions and exports;
+- Ultracite's partition and what it would print;
+- from the session log: commands run or refused, the agent's own checks, searches for tests, reads of an installed Vite, Next.js or VS Code copy, the final message, sentences about the function, behaviour risks, review, where to split, and exposure.
+
+The hand classification is in `classifications.json`. It includes a reader judgement (easier, about the same or harder to follow than the original) by two raters, made from a blind packet. Rater 1 is the model that ran the experiment; rater 2 is a separate subagent that saw only the code.
+
+**The deterministic paths.** `aggregate` runs `ultracite fix` and `--unsafe` with Oxlint, Biome and ESLint, each with its limit on, on each subject as upstream wrote it and as handed over. It uses the mirror and Ultracite's real adapters, which agree in all 36 cases.
+
+**Oracle:** `corpus/scripts/length-oracle.cjs`, imported unchanged. The self-test has 43 cases, all as expected:
+
+- the prepared subjects;
+- the corpus's 30 variants, read from `length-examples.cjs` without running it, applied to the cleaned subject and normalised. Their verdicts and flagged functions match `examples.json`;
+- the corpus's strip and join moves on the prepared subjects, as written;
+- four hand-made cases.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=length-limits
+node scripts/prepare-subjects.cjs        # subjects/length-limits/ (runs ultracite init for each linter and adds the limit; stripped, checked, normalised; ~1 min)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (43) and the mirror against the CLI (43) -> results/length-limits/oracle-self-test.json (~3 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a:claude:1 b:codex:1 c:claude:1 ...   # 4 of each subject and agent
+node scripts/aggregate.cjs               # results.json, with the deterministic paths and the mutant matrix (~6 min)
+node scripts/report-tables.cjs > results/length-limits/tables.md
+```
+
+The oracle's C inputs include 200 files from the corpus clones, read as text, so `corpus/repos/` must be cloned to re-measure.
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.85–2.22 a run (median $1.18, $15.45 for 12 runs).
+- Codex used 34.6k–95.2k tokens a run (median 81.7k).
+- Runs took 72–433 s (45 attempts in all), and measuring one takes about a minute.
+- Two of the twelve Claude runs (both on C), and the Claude pilot, hit Ultracite's 5-minute timeout.
+- The pilot (one run per agent on C) is in `results/length-limits/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's length-limits examples, results and calibration, every `length-*` corpus script, and the whole corpus `out/` and `repos/`, history clones included;
+- `research/bibliography/length-limits.md` and the bibliography README;
+- `plans/`, `lint-configs/`, the temp directory's `ultracite-research-*` folders (the oracle's inputs among them) and the other topics' run roots;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: the orchestrating session's scratchpad, the batch-log folder, the main checkout's `research/agent-experiment/plans`, and the other worktrees' corpus `repos/` and `out/`.
+
+`node_modules` isn't locked, though the main checkout's has Vite 8 (with a later version of A's function), the Bun cache has Next.js 16.x builds, and an npx cache has a copy of VS Code's indentation guesser. Reads were checked instead, and there were none.
+
+The method, numbers and caveats are in `agent-experiment/results/length-limits/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/length-limits.cjs` (new), which imports the corpus's `length-oracle.cjs` and `length-lib.cjs` unchanged and reads `length-examples.cjs`'s variants without running it.
+- `harness-tests/length-limits/mutants.json` (new): 40 mutants.
+- `.gitignore` comments name the topic and pilots; the per-attempt patterns cover its logs.
+- **Earlier topics, re-measured and re-aggregated from their committed runs** before and after these changes: before and after match exactly for all nine. Against the committed files:
+  - cognitive-complexity differs only in the tool versions in `results.json`;
+  - floating-promises, security-rules, dead-code and todo-comments show the known drift;
+  - accessibility, todo-comments, sort-keys and react-effects differ in `hasSessionLog`, because their gitignored session logs aren't in this worktree;
+  - every topic also shows new drift from toolchain updates committed after the react-effects runs (1fa337e6 Oxlint 1.89, daf7b0ff Biome 2.6.3, 72890bec Unicorn 79 and the ESLint plugins). It's in rule counts, messages, line numbers and tool versions; no run's response, outcome or oracle verdict changes.

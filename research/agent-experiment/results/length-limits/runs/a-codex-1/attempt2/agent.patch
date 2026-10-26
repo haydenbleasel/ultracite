@@ -1,0 +1,28 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -219,6 +219,14 @@
+   const jsonValue = JSON.stringify(value);
+   return () => jsonValue;
+ }
++
++const resolveWebSocketOptions = (
++  wsConfig: Exclude<ResolvedConfig["server"]["ws"], false>
++) => ({
++  host: wsConfig?.host || null,
++  protocol: wsConfig?.protocol || null,
++  timeout: wsConfig?.timeout || 30_000,
++});
+ 
+ const resolveClientConfigValues = (
+   config: ResolvedConfig,
+@@ -230,9 +238,7 @@
+   const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+ 
+   const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+-  const host = wsConfig?.host || null;
+-  const protocol = wsConfig?.protocol || null;
+-  const timeout = wsConfig?.timeout || 30_000;
++  const { host, protocol, timeout } = resolveWebSocketOptions(wsConfig);
+   const isWsServerSpecified = !!wsConfig?.server;
+   const hmrConfigName = path.basename(config.configFile || "vite.config.js");
+ 

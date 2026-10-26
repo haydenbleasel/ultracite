@@ -1,0 +1,31 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -78,20 +78,17 @@
+   b: string,
+   difference: number,
+   bSpacesCnt: number
+-): boolean => {
++): boolean =>
+   // This looks like an alignment desire: e.g.
+   // const a = b + c,
+   //       d = b - c;
+-  return (
+-    difference > 0 &&
+-    bSpacesCnt - 1 >= 0 &&
+-    bSpacesCnt - 1 < a.length &&
+-    bSpacesCnt < b.length &&
+-    b.charCodeAt(bSpacesCnt) !== CharCode.Space &&
+-    a.charCodeAt(bSpacesCnt - 1) === CharCode.Space &&
+-    a.charCodeAt(a.length - 1) === CharCode.Comma
+-  );
+-};
++  difference > 0 &&
++  bSpacesCnt - 1 >= 0 &&
++  bSpacesCnt - 1 < a.length &&
++  bSpacesCnt < b.length &&
++  b.charCodeAt(bSpacesCnt) !== CharCode.Space &&
++  a.charCodeAt(bSpacesCnt - 1) === CharCode.Space &&
++  a.charCodeAt(a.length - 1) === CharCode.Comma;
+ 
+ const commonIndentationLength = (
+   a: string,

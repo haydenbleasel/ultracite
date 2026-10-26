@@ -1,0 +1,158 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -106,7 +106,11 @@
+ /**
+  * Check if a spaces-only indentation difference looks like an alignment desire.
+  */
+-function looksLikeAlignment(a: string, b: string, bSpacesCnt: number): boolean {
++const looksLikeAlignment = (
++  a: string,
++  b: string,
++  bSpacesCnt: number
++): boolean => {
+   if (
+     bSpacesCnt - 1 >= 0 &&
+     bSpacesCnt - 1 < a.length &&
+@@ -125,18 +129,18 @@
+     }
+   }
+   return false;
+-}
++};
+ 
+ /**
+  * Compute the diff in spaces between two line's indentation.
+  */
+-function spacesDiff(
++const spacesDiff = (
+   a: string,
+   aLength: number,
+   b: string,
+   bLength: number,
+   result: SpacesDiffResult
+-): void {
++): void => {
+   result.spacesDiff = 0;
+   result.looksLikeAlignment = false;
+ 
+@@ -172,7 +176,7 @@
+     result.spacesDiff = spacesDiff / tabsDiff;
+     return;
+   }
+-}
++};
+ 
+ /**
+  * Result for a guessIndentation
+@@ -204,14 +208,15 @@
+   linesIndentedWithSpacesCount: number; // number of lines that contain only spaces in indentation
+   previousLineText: string; // content of latest line that contained non-whitespace chars
+   previousLineIndentation: number; // index at which latest line contained the first non-whitespace char
+-  spacesDiffCount: number[]; // `tabSize` scores
++  // `tabSize` scores
++  spacesDiffCount: number[];
+   tmp: SpacesDiffResult;
+ }
+ 
+-function readLineIndentation(
++const readLineIndentation = (
+   source: ITextBuffer,
+   lineNumber: number
+-): ILineIndentation {
++): ILineIndentation => {
+   const currentLineLength = source.getLineLength(lineNumber);
+   const currentLineText = source.getLineContent(lineNumber);
+ 
+@@ -219,10 +224,14 @@
+   // checking charCode on chunks directly is cheaper.
+   const useCurrentLineText = currentLineLength <= 65_536;
+ 
+-  let currentLineHasContent = false; // does `currentLineText` contain non-whitespace chars
+-  let currentLineIndentation = 0; // index at which `currentLineText` contains the first non-whitespace char
+-  let currentLineSpacesCount = 0; // count of spaces found in `currentLineText` indentation
+-  let currentLineTabsCount = 0; // count of tabs found in `currentLineText` indentation
++  // does `currentLineText` contain non-whitespace chars
++  let currentLineHasContent = false;
++  // index at which `currentLineText` contains the first non-whitespace char
++  let currentLineIndentation = 0;
++  // count of spaces found in `currentLineText` indentation
++  let currentLineSpacesCount = 0;
++  // count of tabs found in `currentLineText` indentation
++  let currentLineTabsCount = 0;
+   for (let j = 0, lenJ = currentLineLength; j < lenJ; j++) {
+     const charCode = useCurrentLineText
+       ? currentLineText.charCodeAt(j)
+@@ -247,14 +256,14 @@
+     tabsCount: currentLineTabsCount,
+     text: currentLineText,
+   };
+-}
++};
+ 
+-function scoreLine(
++const scoreLine = (
+   stats: IIndentationStats,
+   line: ILineIndentation,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): void {
++): void => {
+   const { tmp } = stats;
+   spacesDiff(
+     stats.previousLineText,
+@@ -287,13 +296,13 @@
+ 
+   stats.previousLineText = line.text;
+   stats.previousLineIndentation = line.indentation;
+-}
++};
+ 
+-function collectIndentationStats(
++const collectIndentationStats = (
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): IIndentationStats {
++): IIndentationStats => {
+   // Look at most at the first 10k lines
+   const linesCount = Math.min(source.getLineCount(), 10_000);
+ 
+@@ -324,12 +333,12 @@
+   }
+ 
+   return stats;
+-}
++};
+ 
+-function guessTabSize(
++const guessTabSize = (
+   spacesDiffCount: number[],
+   defaultTabSize: number
+-): number {
++): number => {
+   let tabSize = defaultTabSize;
+   let tabSizeScore = 0;
+   ALLOWED_TAB_SIZE_GUESSES.forEach((possibleTabSize) => {
+@@ -353,13 +362,13 @@
+   }
+ 
+   return tabSize;
+-}
++};
+ 
+-export function guessIndentation(
++export const guessIndentation = (
+   source: ITextBuffer,
+   defaultTabSize: number,
+   defaultInsertSpaces: boolean
+-): IGuessedIndentation {
++): IGuessedIndentation => {
+   const {
+     linesIndentedWithTabsCount,
+     linesIndentedWithSpacesCount,
+@@ -387,4 +396,4 @@
+     insertSpaces,
+     tabSize,
+   };
+-}
++};

@@ -1,0 +1,92 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,16 +220,12 @@
+   return () => jsonValue;
+ }
+ 
+-async function createClientConfigValueReplacer(
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> {
+-  const resolvedServerHostname = (await resolveHostname(config.server.host))
+-    .name;
+-  const resolvedServerPort = config.server.port!;
+-  const devBase = config.base;
+-
+-  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
+-
++function resolveHmrClientValues(
++  config: ResolvedConfig,
++  resolvedServerHostname: string,
++  resolvedServerPort: number,
++  devBase: string
++) {
+   const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined;
+   const host = wsConfig?.host || null;
+   const protocol = wsConfig?.protocol || null;
+@@ -256,17 +252,34 @@
+     hmrBase = path.posix.join(hmrBase, wsConfig.path);
+   }
+ 
++  return {
++    directTarget,
++    hmrBase,
++    hmrConfigName,
++    host,
++    overlay,
++    port,
++    protocol,
++    timeout,
++  };
++}
++
++function createConfigValueReplacer(
++  config: ResolvedConfig,
++  serverHost: string,
++  hmr: ReturnType<typeof resolveHmrClientValues>
++): (code: string) => string {
+   const modeReplacement = escapeReplacement(config.mode);
+-  const baseReplacement = escapeReplacement(devBase);
++  const baseReplacement = escapeReplacement(config.base);
+   const serverHostReplacement = escapeReplacement(serverHost);
+-  const hmrProtocolReplacement = escapeReplacement(protocol);
+-  const hmrHostnameReplacement = escapeReplacement(host);
+-  const hmrPortReplacement = escapeReplacement(port);
+-  const hmrDirectTargetReplacement = escapeReplacement(directTarget);
+-  const hmrBaseReplacement = escapeReplacement(hmrBase);
+-  const hmrTimeoutReplacement = escapeReplacement(timeout);
+-  const hmrEnableOverlayReplacement = escapeReplacement(overlay);
+-  const hmrConfigNameReplacement = escapeReplacement(hmrConfigName);
++  const hmrProtocolReplacement = escapeReplacement(hmr.protocol);
++  const hmrHostnameReplacement = escapeReplacement(hmr.host);
++  const hmrPortReplacement = escapeReplacement(hmr.port);
++  const hmrDirectTargetReplacement = escapeReplacement(hmr.directTarget);
++  const hmrBaseReplacement = escapeReplacement(hmr.hmrBase);
++  const hmrTimeoutReplacement = escapeReplacement(hmr.timeout);
++  const hmrEnableOverlayReplacement = escapeReplacement(hmr.overlay);
++  const hmrConfigNameReplacement = escapeReplacement(hmr.hmrConfigName);
+   const hmrPartialAcceptReplacement = escapeReplacement(
+     config.experimental.hmrPartialAccept
+   );
+@@ -292,3 +305,22 @@
+       .replace(`__WS_TOKEN__`, wsTokenReplacement)
+       .replace(`__SERVER_FORWARD_CONSOLE__`, serverForwardConsoleReplacement);
+ }
++
++async function createClientConfigValueReplacer(
++  config: ResolvedConfig
++): Promise<(code: string) => string> {
++  const resolvedServerHostname = (await resolveHostname(config.server.host))
++    .name;
++  const resolvedServerPort = config.server.port!;
++  const devBase = config.base;
++
++  const serverHost = `${resolvedServerHostname}:${resolvedServerPort}${devBase}`;
++
++  const hmr = resolveHmrClientValues(
++    config,
++    resolvedServerHostname,
++    resolvedServerPort,
++    devBase
++  );
++  return createConfigValueReplacer(config, serverHost, hmr);
++}

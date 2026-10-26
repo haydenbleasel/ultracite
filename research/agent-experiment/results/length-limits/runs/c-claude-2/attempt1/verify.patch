@@ -1,0 +1,46 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -153,10 +153,16 @@
+ 
+   const i = commonPrefixLength(a, aLength, b, bLength);
+ 
+-  const { spacesCount: aSpacesCnt, tabsCount: aTabsCount } =
+-    countSpacesAndTabs(a, i, aLength);
+-  const { spacesCount: bSpacesCnt, tabsCount: bTabsCount } =
+-    countSpacesAndTabs(b, i, bLength);
++  const { spacesCount: aSpacesCnt, tabsCount: aTabsCount } = countSpacesAndTabs(
++    a,
++    i,
++    aLength
++  );
++  const { spacesCount: bSpacesCnt, tabsCount: bTabsCount } = countSpacesAndTabs(
++    b,
++    i,
++    bLength
++  );
+ 
+   if (aSpacesCnt > 0 && aTabsCount > 0) {
+     return;
+@@ -244,11 +250,11 @@
+   }
+ 
+   return {
+-    text: currentLineText,
+     hasContent: currentLineHasContent,
+     indentation: currentLineIndentation,
+     spacesCount: currentLineSpacesCount,
+     tabsCount: currentLineTabsCount,
++    text: currentLineText,
+   };
+ }
+ 
+@@ -311,8 +317,8 @@
+   const linesCount = Math.min(source.getLineCount(), 10_000);
+ 
+   const stats: IIndentationStats = {
+-    linesIndentedWithTabsCount: 0,
+     linesIndentedWithSpacesCount: 0,
++    linesIndentedWithTabsCount: 0,
+     spacesDiffCount: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+   };
+ 

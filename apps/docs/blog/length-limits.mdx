@@ -1,0 +1,343 @@
+---
+title: A length limit can't tell a long function from a bad one
+description: Where the line, statement and parameter limits came from, what they'd report on 52,834 functions in twelve codebases, how much of the count is the formatter's, and what coding agents did when a user turned one on.
+date: 2026-10-25
+author: hayden
+next:
+  - label: Turn a limit on for your project
+    href: /docs/configuration#overriding-rules
+  - label: Tell agents when a long function is fine
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - max-lines-per-function
+  - max-lines
+  - max-statements
+  - max-params
+  - noExcessiveLinesPerFunction
+  - useMaxParams
+---
+
+A length limit counts something about a function and reports it when the count passes a number. `max-lines-per-function` counts lines, `max-statements` counts statements, `max-params` counts parameters and `max-lines` counts the lines in a file. ESLint has had them for over a decade, Oxlint and Biome have their own, and SonarJS adds more. Ultracite turns the size limits off, while keeping limits on complexity, which measure how a function is structured rather than how long it is.
+
+We leave them off because people kept running into walls with them, refactoring code they thought was fine. The right size depends on what you're building: a long init function can be fine, because you can read it end to end. And no linter can fix a length limit for you, so turning one on meant a large refactor by hand. That last reason has weakened, because a coding agent can now split a function in a couple of minutes.
+
+So we tested both halves. Is a long function the problem these limits assume it is, and what happens when an agent is held to one? We read where the limits and their numbers came from and what the research says about size. We measured 52,834 functions in twelve codebases with each linter's version of each limit, and followed eight of those codebases' functions through three years of bug fixes. Then we turned the limit on in a default Ultracite project and handed three long functions to Claude Code and Codex.
+
+## Numbers picked in review threads
+
+ESLint's first size rules came in 2013, as ports of JSHint options that had no defaults. The [issue](https://github.com/eslint/eslint/issues/115) that proposed `max-params` gives no reason for its number beyond "Default value is 3." `max-statements` got 10 and `max-depth` got 4 from the contributors who ported them. Those are still ESLint's defaults.
+
+The one default with a written reason is `max-nested-callbacks`. When an [issue](https://github.com/eslint/eslint/issues/4297) in 2015 pointed out it had none, Nicholas Zakas suggested 10: "Double digits are scary to start without being too restrictive". Zakas added that it was "unlikely to create debates about the number being too low."
+
+`max-lines` arrived in 2016. The [proposal](https://github.com/eslint/eslint/issues/6078) said 300 lines per file, and the [pull request](https://github.com/eslint/eslint/pull/6321) used 100. Asked why the number had changed, the proposal's author replied: "I'm sorry, I'm not sure why I changed it. No reason." A reviewer linked a blog post that recommends 200 to 400 lines, and the PR's author agreed that 300 "seems like the sweet spot" "according to the article you linked."
+
+`max-lines-per-function` came in 2018, because statement counts miss code that is long without many statements. Its [proposal](https://github.com/eslint/eslint/issues/9842) named "long method chains, JSX/hyperscript trees, functional pipelines", which `max-statements` sees as a few statements. The [pull request](https://github.com/eslint/eslint/pull/10188) started higher, and its author took the proposer's suggestion: "I've changed the default to 50 but this is very subjective". No maintainer revisited it. The rule counts every physical line, blank lines and comments included, and a nested function's lines count toward both it and its parent.
+
+Oxlint copied ESLint's numbers. Biome kept 50 lines and chose 4 parameters. For nested callbacks it chose 5, because the rule's author thought ESLint's 10 "is too high".
+
+## A sweet spot its author withdrew
+
+The blog post behind ESLint's 300 cited Eric Raymond's _The Art of Unix Programming_, and Raymond cited Les Hatton. In 1997 Hatton [argued](https://doi.org/10.1109/52.582978) that defect density follows a U-shaped curve with component size. Small and large components both have more faults per line, and the best size is "around the 200-400 line mark". The lines in that data were Ada statements and assembler, not formatted JavaScript. In 2009 Hatton added a note to the paper's page: "I no longer believe in the U-bend described in this paper."
+
+The curve's critics had already explained the small-module half. Plot bugs per line against lines, and a short module with one bug has a high density: Jarrett Rosenberg called it "an arithmetic artifact of plotting bugs-per-SLOC against SLOC". Khaled El Emam and colleagues found "unambiguous evidence that there is no threshold effect of class size". A hard limit assumes a cliff at some size, and none of these studies found one.
+
+The first study we found that tested a size limit directly was at NASA. In 1986, David Card, Victor Church and William Agresti [set out](https://doi.org/10.1109/TSE.1986.6312942) to test the common standard of limiting a module to one page, 50 to 60 lines. Across 453 Fortran modules from flight dynamics projects, they found "No significant relationship" between module size and fault rate. Larger modules were cheaper to build per statement, and their conclusion was blunt: "Arbitrary module size limitations can increase module cost."
+
+Size does predict something. In a 2001 [study](https://doi.org/10.1109/32.935855) of C++ classes, El Emam and colleagues found that once size was controlled, "none of the metrics we studied were" "associated with fault-proneness anymore." Bigger code has more faults because it has more code. More recent work on Java methods agrees that longer methods change more, and Shaiful Chowdhury, Gias Uddin and Reid Holmes [suggest](https://doi.org/10.1145/3524842.3527975) keeping methods "under 24 lines". But their 24 is a percentile, the size that covers 70% of the code in their benchmark, not a point where risk jumps.
+
+## Small pieces aren't always easier
+
+The case for a length limit is that short functions are easier to read. Controlled experiments say that depends on what's being split.
+
+Ahmad Jbara and Dror Feitelson [gave](https://doi.org/10.1145/2597008.2597140) students regular and irregular versions of the same functions. The regular versions led to "better" comprehension "despite being longer", and the authors renounced "direct use of MCC and LOC as major guidelines". In one of their examples, a 49-line version was easier than a 33-line one. Eye tracking showed why: readers looked hard at the first repetitions and skimmed the rest.
+
+A 2026 [eye-tracking study](https://doi.org/10.1016/j.jss.2026.112825) gave 32 Java novices the same small programs with a method extracted or inlined. Extraction cut time by up to 78.8% on two tasks, and raised it by up to 166.9% on simpler ones. The authors found that "even well-named methods can disrupt novices' linear reasoning".
+
+Splitting isn't one obvious edit, either. Alexey Braver and Feitelson [asked](https://www.cse.huji.ac.il/~feit/papers/Func23PPIG.pdf) developers to split a 208-line function. They extracted anywhere from 3 to 10 functions, mostly along `if` and `try` blocks, which the authors note "doesn't even require the participants to understand the code's logic." Asked for an ideal function length, the most common answer was that there isn't one.
+
+The best-known advocates of short functions agree that splitting can go too far. In a [written debate](https://github.com/johnousterhout/aposd-vs-clean-code), John Ousterhout calls small pieces with complicated interfaces "shallow", and argues that "Setting arbitrary numerical limits such as 2-4 lines in a method" makes it worse. Robert C. Martin, whose _Clean Code_ says functions should be small, signed the joint summary: "We agree that it is possible to over-decompose," and the book "doesn't provide much guidance on how to recognize over-decomposition."
+
+What makes a function hard to read is mostly its structure: nesting, breaks in the flow, and how much a reader has to hold in mind. Those are what [cognitive complexity](/research/cognitive-complexity#why-nesting-costs-more) scores, and length is only loosely related to them.
+
+## Linters that stopped counting
+
+Other ecosystems have moved the same way. RuboCop, Ruby's most used linter, [measured](https://github.com/rubocop/rubocop/issues/15363) what the 500 most-starred Ruby projects do with its size limits. Projects that turned a limit off outnumbered those that raised it "by roughly two to one, on every cop," says the [commit](https://github.com/rubocop/rubocop/commit/d2ac4ac8ef0ac4907f35f3c48de22653a9da2b9e) that acted on it. Its `Metrics` cops now carry a note: "Expected to be disabled by default in the next major release."
+
+- **Ruff** left every size rule out of its default set, in a category for rules that are "highly opinionated or prone to false positives". It [refused](https://github.com/astral-sh/ruff/pull/10262) a file-length rule because "the formatter can introduce new violations".
+- **Rust's Clippy** made its function-length lint pedantic before it [shipped](https://github.com/rust-lang/rust-clippy/pull/2857), after a maintainer noted it "can be inactionable", as on a function that matches every variant of a 50-variant enum. Its parameter-count lint is one of its two most [suppressed](https://github.com/rust-lang/rust-clippy/issues/7666).
+- **Go's [code review guide](https://go.dev/wiki/CodeReviewComments#line-length)** says "There's no rule 'never have a function more than N lines long'," and that the fix for a function that's too long is to change its boundaries, "not to start counting lines."
+- **Google's [style guides](https://google.github.io/styleguide/cppguide.html#Write_Short_Functions)** recognize "that long functions are sometimes appropriate, so no hard limit is" set. Past about 40 lines, they ask you to think about splitting "without harming the structure of the program." A lint rule can't check that condition.
+
+ESLint's issue tracker shows where the limits meet code people consider fine. Users asked for exemptions for [JSX render functions](https://github.com/eslint/eslint/issues/12236), [test suites](https://github.com/eslint/eslint/issues/15981), [constructors](https://github.com/eslint/eslint/issues/7392) and [callbacks](https://github.com/eslint/eslint/issues/17727) whose signature someone else fixed. Most were refused. For the JSX request, the answer was: "This sort of thing is exactly what ESLint disable comments are for."
+
+Ultracite's first ESLint config had the size limits off, with no comment, and they stayed off through every linter Ultracite moved to. A few came on by accident, when a preset turned on everything a plugin or category offered, and each was turned off again. The only public reports from Ultracite's users were about two of those accidents. One called a JSX depth limit "too aggressive"; the other hit a statement limit on a React hook with "a few pieces of state, refs, and effects".
+
+## 52,834 functions, four ways of counting
+
+Because Ultracite leaves these limits off, its usual rule census can't show what they'd report. So we ran each limit on its own at its default, in Oxlint, ESLint, Biome and SonarJS, on the source of twelve codebases at pinned commits. These were the eight we use for every post (zod, Hono, tRPC, Vite, Astro, Excalidraw, Next.js and VS Code), and four React codebases (shadcn/ui, Radix, React Aria and Supabase). That's 52,834 functions in 1.1 million lines, with tests counted apart.
+
+| Limit at its default | Reports | Share |
+| --- | --: | --: |
+| `max-lines-per-function`, 50 lines (ESLint, Oxlint) | 4,842 functions | 9.2% |
+| `noExcessiveLinesPerFunction`, 50 lines (Biome) | 3,190 functions | 6.0% |
+| `sonarjs/max-lines-per-function`, 200 lines | 269 functions | 0.5% |
+| `max-statements`, 10 statements | 4,887 functions | 9.2% |
+| `max-params`, 3 parameters (ESLint, Oxlint) | 1,692 functions | 3.2% |
+| `useMaxParams`, 4 parameters (Biome) | 769 functions | 1.5% |
+| `max-depth`, 4 levels | 226 functions | 0.4% |
+| `max-lines`, 300 lines | 896 files | 13.8% |
+
+The median function is 6 lines long, with 1 statement and 1 parameter. One in a hundred is 235 lines or longer, and the longest is Next.js's `build`, at 3,830. The share over 50 lines ranged from 4.1% of functions in VS Code to 15.2% in React Aria. Nobody wrote code to these limits except tRPC, which enforces three parameters and has one function over that, and React Aria, which warns on nesting depth.
+
+The structural limits fire far less. `max-nested-callbacks` at 10 found nothing: the deepest callback nesting in source was 5 levels. `max-classes-per-file` flagged 177 files, about half of them in VS Code.
+
+ESLint and Oxlint count the same way. Biome doesn't. It counts only a function's body, and skips lines that start with `{` or `}`, line breaks inside JSX text, and the inside of comments and strings. It counted 71% of the line breaks ESLint counts, so 50 lines to Biome is roughly 70 to ESLint. On markup the gap is far wider: a 54-line component in our test cases is 4 lines to Biome. SonarJS counts lines of code and exempts React components entirely. The same rule name reports different functions depending on which linter runs it.
+
+A third of a long function's lines aren't its own. Of the lines in functions over 50, 31.5% are inside functions they define, and both ESLint and Oxlint count those lines toward the parent as well. In tests the share is 77%: a `describe` callback is long because of the `it` callbacks inside it.
+
+## The formatter writes part of the count
+
+A line count depends on where the formatter breaks lines. We formatted copies of every codebase with Ultracite's formatter and counted again.
+
+Across the eight core codebases, source grew by 5.4%, from 690,976 lines to 728,472. VS Code grew by a third, because its own style allows long lines. Formatting alone pushed 182 functions in those eight codebases over 50 lines, and 240 in the React codebases, while one went back under. Formatted at 120 columns instead, 452 functions that were over 50 lines as written came in under it.
+
+The statement and parameter counts didn't move. No parameter count changed, and the only statement counts that changed were the empty statements the formatter removed. So of the size limits, only the line limits measure the formatter, and they measure it a lot. Subject C in our experiment is VS Code's `guessIndentation`: 117 lines as VS Code wrote it, 134 after Ultracite's formatter, and 137 after Prettier.
+
+Formatting doesn't undo much gaming, either. Deleting blank lines and comments shortened every subject but left each one still flagged. Joining statements onto one line got further, and the formatter split them apart again on the first subject. An options object dodges `max-params`, until the formatter puts each destructured name on its own line and the helper goes over the line limit instead.
+
+## More fixes per function, fewer per line
+
+If long functions were worse code, they'd attract more bug fixes than their size explains. We followed every function in the eight core codebases back through three years of history, through renames, and counted the commits that changed it. Fixes were commits whose messages say so, a convention that was 74% precise when we checked a sample by hand. That gave 29,787 functions with at least a month of history.
+
+| Lines    | Functions | Changed by a fix | Fixes per 100 line-years |
+| -------- | --------: | ---------------: | -----------------------: |
+| 1–10     |    17,819 |            10.0% |                     1.52 |
+| 11–25    |     6,159 |            21.3% |                     0.97 |
+| 26–50    |     2,989 |            33.4% |                     0.90 |
+| 51–100   |     1,730 |            44.4% |                     0.89 |
+| 101–200  |       743 |            61.8% |                     0.87 |
+| over 200 |       347 |            74.1% |                     0.76 |
+
+Per function, longer means more fixes: three in four functions over 200 lines were changed by a fix, against one in ten of the shortest. Per line, it's the other way round. The longest functions had half the fixes per line of the shortest. That's the arithmetic Hatton's critics pointed to: a short function with one fix has a high rate per line.
+
+Then we asked whether anything predicts fixes beyond size. With a function's own lines and how long it had existed in the model, statement count added nothing (odds ratio 1.01) and neither did nesting depth (1.02). Cognitive complexity added a little (1.08), cyclomatic complexity a bit more (1.18), and each extra parameter about 7%. Among functions that changed at all, the long ones were fixed barely more often than their number of changes predicts (1.10), and not at all once complexity was in the model.
+
+These are associations in eight codebases, with a commit-message heuristic and survivors only. But they match the size studies: a long function is more code, and more code gets more fixes. Nothing here says a function past 50 lines is riskier per line than one under it.
+
+## Long, flat and readable
+
+Counts can't say whether a long function reads well, so we read 100 of them. We drew a sample of functions over 50 lines from across the codebases and labeled why each was long, whether a reader could follow it end to end, and whether splitting it would help. A second rater labeled 30 of them blind, and agreement on those fields was high (κ 0.91 to 0.96). Both raters were Claude models.
+
+- **Why they were long:** JSX markup (29%), one task's steps in order (28%), a dispatcher (10%), several separate tasks (9%), setup (8%), nested closures (8%) and data (5%).
+- **Readable as written:** 70% could be followed end to end, 27% partly, 3% not.
+- **Whether splitting helps:** it would fully help 17%, partly help 47%, and not help 36%. It fully helped seven of the eight functions doing several tasks, and five of the 32 that were mostly markup.
+- **What splitting costs:** the pieces would share mutable state in 39%, and need many parameters in 28%. Our raters agreed less on this (κ 0.42).
+
+The complexity scores agree. Lines and cognitive complexity are correlated (Spearman's ρ 0.63), but they overlap only at the top. Of the 4,842 functions over 50 lines, 83% score 20 or less on cognitive complexity, the threshold we measured against, and 991 score zero. Of the 912 functions over that threshold, 91% are also over 50 lines. A complexity limit already catches most of the long functions that are hard to follow. What a length limit adds is the long ones that aren't.
+
+## Parameters that swap
+
+The best evidence about parameters comes from Google. Andrew Rice and colleagues [ran](https://doi.org/10.1145/3133928) a checker for swapped arguments over 200 million lines of Google's Java. They found "the probability of an argument selection defect increases markedly" "when methods have more than five arguments." But 71% of the defects they found involved parameters named `expected` and `actual`, mostly in assertion calls with two or three parameters. A parameter limit doesn't touch the commonest swap. Naming the arguments does, and in JavaScript that means an options object.
+
+In our sample of 30 functions with five or more parameters, 37% had neighbors of the same type that a caller could swap, and an options object would have helped about half. Our raters agreed less on these than on long functions, and the blind check covered only ten. Most (86%) were internal signatures, which the project could change. tRPC is the one codebase that enforces three parameters, and it has a single function over the limit, against 5.3% across the eight core codebases. Its two suppressions include one whose signature "mirrors TanStack Query's own signature".
+
+## A config builder, a cache call and an indentation guesser
+
+Ultracite's argument against these limits was partly about cost. Without an autofix, turning one on means refactoring by hand. With an agent, that cost is a few minutes. So in October 2026 we tested whether the refactor is any good. We set up a project the way Ultracite's setup leaves it for Oxlint, and made the one change a user wanting a limit would make: `max-lines-per-function` turned on at its default of 50. Then we picked three real functions that it flags, each needing a different response:
+
+- **A, long and fine.** Vite's [`createClientConfigValueReplacer`](https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/clientInjections.ts#L82-L153) is 72 lines. It works out the values Vite's dev server injects into its browser client, one after another, and returns a function that replaces each placeholder. It reads top to bottom, and the project has never split it. The right response is to leave it and say why, or to make a change that keeps the output and isn't harder to follow.
+- **B, two jobs.** Next.js's [`revalidateTags`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/revalidation-utils.ts#L88-L192) is 105 lines. It groups tags by cache profile, then resolves each group's durations and sends them to every cache handler. One clean split exists. Three tempting ones change when an unknown profile throws, how profiles are matched, or what an empty profile name does.
+- **C, a trap.** VS Code's [`guessIndentation`](https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/indentationGuesser.ts#L105-L221) reads a file's lines and guesses its tab size, and `spacesDiff`, which it calls, compares two lines. Both are flagged. The loop's `continue`s skip a line without updating the previous line it compares against, so the obvious extractions change the guess. The right response keeps the guess and the exported signature.
+
+A's first half, as Vite wrote it:
+
+{/* prettier-ignore */}
+```ts title="clientInjections.ts (Vite)"
+  const wsConfig = isObject(config.server.ws) ? config.server.ws : undefined
+  const host = wsConfig?.host || null
+  const protocol = wsConfig?.protocol || null
+  const timeout = wsConfig?.timeout || 30000
+  const isWsServerSpecified = !!wsConfig?.server
+  const hmrConfigName = path.basename(config.configFile || 'vite.config.js')
+
+  const hmrConfig = isObject(config.server.hmr) ? config.server.hmr : undefined
+  const overlay = hmrConfig?.overlay !== false
+
+  // ws.clientPort -> ws.port
+  // -> (24678 if middleware mode and WS server is not specified) -> new URL(import.meta.url).port
+  let port = wsConfig?.clientPort || wsConfig?.port || null
+  if (config.server.middlewareMode && !isWsServerSpecified) {
+    port ||= 24678
+  }
+```
+
+Each value comes from the config or the one before it. The second half escapes every value and chains 14 `replace` calls, one per placeholder. Turning that chain into a loop is tempting, and with `replaceAll` it changes the output in every one of our 400 configurations, because Vite replaces most placeholders only once.
+
+Without an agent, nothing happens. No linter has a fix for a length limit, so Ultracite's fix pass, safe and unsafe, reformatted the files and fixed other rules with Oxlint, Biome and ESLint, but split nothing. The limit kept reporting in all 36 cases.
+
+So we ran each subject four times with Claude Code and four times with Codex, 24 runs, through Ultracite's agent loop. The agent gets the file, the diagnostic and its help text, and Ultracite's prompt, which asks for "the minimal change that resolves each issue while preserving runtime behavior". The prompt also says to follow the help text, not to add suppression comments, and to leave an issue for review when it "needs a person's decision". After each edit, the file is fixed, formatted and linted again, and anything still reported goes back to the agent, for up to three attempts. The subjects trip other rules too, so the handoff kept only the length rule and anything an edit added. We checked behavior by running every result against the original on 400 configurations for A, 300 tag lists for B, and 1,938 texts and settings for C.
+
+## Every run split, and none asked why
+
+All 24 runs kept the behavior. No final file differed from the original in any scenario, and no intermediate attempt did either. No run added a suppression, changed a config or touched another file. Every run but one cleared the limit; the exception timed out.
+
+Every run also split, on every subject. The 24 runs added 86 helpers, and 78 of them were called once. No run said a function was fine as it was, no run considered leaving one for review, and none used the review line Ultracite's prompt allows. That includes A, where leaving it was the right answer. The only advice the agents had on length was the help text, and Oxlint's says: "Consider splitting it into smaller functions."
+
+| Subject | Claude Code | Codex |
+| --- | --- | --- |
+| A, long and fine | split 4: one helper 3, three helpers 1 | split 4: a values helper and a smaller one |
+| B, two jobs | the clean split 4, plus a third helper in 3 | the clean split 4 |
+| C, a trap | 3 to 9 helpers, behavior kept 4; 2 timed out | 5 to 7 helpers, behavior kept 4 |
+
+On A, every run moved part of the sequence into helpers and read the values back through an object, as `hmr.port` or `values.port`. The chain of `replace` calls was never touched, so no run fell into the `replaceAll` trap. Every run said it had kept the order, and one Claude run said why: "each `.replace` only changes the first match". All four Codex runs needed a second helper, because the code they moved took its cyclomatic complexity score with it, and Ultracite reported the score again under the new function's name. One Codex run's second helper:
+
+{/* prettier-ignore */}
+```ts title="clientInjections.ts, one Codex run"
+const resolveWebSocketOptions = (
+  wsConfig: Exclude<ResolvedConfig["server"]["ws"], false>
+) => ({
+  host: wsConfig?.host || null,
+  protocol: wsConfig?.protocol || null,
+  timeout: wsConfig?.timeout || 30_000,
+});
+```
+
+It's called once, by the helper that computes the other values, which returns ten of them to the original function. A value is now two hops from where it's used.
+
+On B, all eight made the split we'd found: one helper groups the tags, one resolves a group's durations, each called once. The original function reads as group, then resolve and send:
+
+{/* prettier-ignore */}
+```ts title="revalidation-utils.ts, one Codex run"
+  const tagsByProfile = groupTagsByProfile(tagsWithProfile);
+
+  // Process each profile group
+  for (const [profile, tagsForProfile] of tagsByProfile) {
+    const durations = getRevalidationDurations(profile, workStore);
+
+    for (const handler of handlers) {
+      if (profile) {
+        promises.push(handler.updateTags?.(tagsForProfile, durations));
+      } else {
+        promises.push(handler.updateTags?.(tagsForProfile));
+      }
+    }
+
+    if (incrementalCache) {
+      promises.push(incrementalCache.revalidateTag(tagsForProfile, durations));
+    }
+  }
+```
+
+The durations stay inside the loop, so an unknown profile still throws after the earlier groups' calls have been made, as in the original. Every Claude run said so, for example "an invalid profile still throws after the earlier groups' promises have already been added". Codex said why it cut where it did: "The function has two self-contained sections: grouping tags and resolving cache durations."
+
+On C, every final file gave the same guess on all 1,938 inputs. Four runs kept the line loop and the state it carries in one function, and moved line reading and scoring out. Three moved the loop body into a helper that updates a shared stats object and returns early to skip a line. One of our own hand-made variants had broken the guess that way, and all three agents got the skip right: "Each `continue` in the old loop is now a `return`," one Claude run explained. The eighth run timed out before it reached `guessIndentation`. The splits added parameters: 19 of C's 53 helpers take four or five.
+
+## Easier to follow on one subject in three
+
+Keeping behavior is half the question. The other half is whether a reader is better off. We put the 24 final files and the originals in a blind packet, without run names or agents, and asked two raters whether a developer new to the code would find each final file easier to follow, about the same, or harder. Rater 1 had run the experiment. Rater 2 was a separate model that saw only the packet. Both are Claude models.
+
+| Subject | Rater 1: easier / same / harder | Rater 2: easier / same / harder |
+| --- | --- | --- |
+| A, long and fine | 0 / 3 / 5 | 1 / 4 / 3 |
+| B, two jobs | 8 / 0 / 0 | 8 / 0 / 0 |
+| C, a trap | 3 / 2 / 3 | 6 / 2 / 0 |
+
+Both raters called all eight B splits easier. Neither found much to like in A's. Rater 1 on a four-function version: "finding what fills a placeholder takes three hops." On C the raters split by method more than by agent. Both called two of the versions that kept the loop together easier, and two of the stats-object versions no better than the original. The raters agreed on 16 of 24 files (κ 0.46), and rater 2 was the more lenient. Two raters from one model family are a small panel, and no person rated these files.
+
+The splits also cost what the other limits count. Every split added lines, and every A and B file went past `max-lines`' 300. More functions went over `max-statements`' 10, and C's new helpers went over `max-params`. A user with those limits on as well would get new reports from fixing this one.
+
+So the argument about agents is half right. They remove most of the cost of complying with a length limit: a run took a median of under three minutes, and $1.18 for Claude Code, with behavior kept every time. They don't remove the question of whether to comply. When a split helped, as on B, the agents found the same seam a careful person would. When a function was fine, they split it anyway, because that's what the limit and its help text asked for.
+
+That's the pattern others have seen. Birgitta Böckeler [ran](https://martinfowler.com/articles/sensors-for-coding-agents.html) an agent under ESLint's length rules and saw "quite a bit of useful refactoring", along with React components that ended up with "lots and lots of properties" passed down the chain. In AIDev, a [study](https://doi.org/10.1145/3805760.3814886) of agent pull requests found agents clearing Pylint's argument limit by collecting parameters into `**kwargs`, and reviewers merged 73.5% of the pull requests it studied. Anthropic's own [prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) suggests telling Claude "Don't create helpers, utilities, or abstractions for one-time" operations, the opposite of what a length limit asks.
+
+## What the retry loop called fixed
+
+For 22 of the 24 runs, Ultracite printed "Fixed 1 of 1 issue" or "Fixed 2 of 2 issues" and finished cleanly, whether or not the split helped. 21 runs took a second attempt, and 20 of those retries were about other rules. The new helpers were function declarations, which another rule Ultracite has on reports, and moved code took its complexity score with it under a new name. The one retry about length was counted wrong.
+
+That run shortened `spacesDiff` from 88 lines to 55, still over the limit. Oxlint's message includes the line count, and Ultracite matches diagnostics by their message, so the 55-line report looked like a new issue and the 88-line one looked fixed. The retry prompt told the agent "The previous edit resolved the issues it was given". The agent finished the job anyway, partly by reshaping two calls: "That brings the function from 55 lines to 49, under the limit of 50."
+
+Two Claude runs on C hit the five-minute limit Ultracite set on each attempt, and Ultracite didn't retry after a timeout. One stopped half done, with its last message: "Splitting `spacesDiff` into helpers is half done." The other had finished but left 17 new diagnostics. Both files still behaved like the original, and both runs exited with an error. None of the agents' explanations reached the user unless they left something for review, and none did.
+
+The harness had its limits. Claude Code's permissions in Ultracite's loop refused every lint command it tried, so no Claude run could check its own edit, while Codex linted and ran its own behavior checks in every run. The handoff was filtered: a real project with these files would have handed over 22 to 51 issues at once, and an agent working through all of them in five minutes might split differently. And these were four runs per agent per subject, on famous code. No run read the projects' later versions or their history.
+
+## What a count can't see
+
+A length limit can't see why a function is long. JSX markup, a sequence of steps, a dispatcher and a table all look the same to it, and in our sample those were most of what it flagged. It can't see whether the pieces would share state or need a dozen parameters. And it can't see the formatter, which decided whether hundreds of functions in our corpus were over 50 lines.
+
+The implementations disagree. Biome's 50 lines is roughly ESLint's 70, SonarJS skips components, ESLint and Oxlint count a nested function's lines twice, and the line limits move whenever the formatter's width does. Gaming is cheap: removing blank lines and comments, joining lines, or moving code to module scope all lower the count without changing what a reader has to understand. An options object hides parameters from `max-params` without making the signature simpler.
+
+The evidence is thin in places, and some of it is ours. Our history uses commit messages to find fixes, keeps only functions that survived, and shows associations, not causes. Our raters are Claude models, and the reader judgment rests on 24 files. The experiment's filtered handoff made every retry about something other than length. And no codebase we measured limited lines or statements, so we saw code written without these limits, not code shaped by them.
+
+What a length limit does well is find the outliers, like Next.js's 3,830-line `build`. A threshold high enough to catch only those leaves most code alone. At 50 lines the limit mostly reports code that reads fine, and asks for a split that helps about one time in six.
+
+## Limit what's hard to read, not what's long
+
+**Keep a complexity limit, and let it find the long functions that matter.** Nine in ten functions over a cognitive complexity threshold of 20 were also long, and most long functions were under it. A [cognitive complexity](/research/cognitive-complexity) limit asks a better question of the same code.
+
+**If you want a size limit, aim it at outliers.** Use a number that flags a few percent of functions, not one in ten: at 100 lines, `max-lines-per-function` flagged 3.8% of our corpus. Exempt tests, where `describe` blocks are long by design, and remember that Biome counts fewer lines than ESLint and Oxlint. The [configuration docs](/docs/configuration#overriding-rules) show how to turn a rule on, set its options and limit it to some files.
+
+**Prefer statement counts to line counts.** If you must count something, statements don't change when you reformat. Lines do, by as much as a third.
+
+**For parameters, name them.** Swapped arguments of the same type are the bug, and an options object with named fields prevents them where a count can't. Watch for an options object that's only there to dodge the count.
+
+**Tell agents when long is fine.** Our agents split everything they were handed, and made B's one good split as well as anyone would. A line in `AGENTS.md`, such as "A long function that reads top to bottom is fine; if splitting it would add single-use helpers or pass many values between them, leave it for review and say why," gives them the option the help text doesn't. We didn't test that line here.
+
+**Review splits for what moved, not what shrank.** A split that passes a ten-field object between single-use helpers has made the count smaller and the code longer. Splitting a function in place is also the cheap kind of refactor: across 103 Java projects, commits with an Extract Method were [less](https://doi.org/10.1145/3368089.3409695) likely than others to need a later fix, and commits with an Extract And Move Method more likely. A per-file limit can only be met by moving code to another file.
+
+A length limit can't tell a long function from a bad one. It reports both, and an agent will split both. In our experiment that cost a few minutes and kept behavior every time. But on the function that was fine as written, all eight runs split it, and every one of them was reported as fixed.
+
+<NextSteps />
+
+## References
+
+**The rules and their defaults**
+
+- ESLint. [`max-params`](https://eslint.org/docs/latest/rules/max-params), [`max-statements`](https://eslint.org/docs/latest/rules/max-statements), [`max-depth`](https://eslint.org/docs/latest/rules/max-depth), [`max-nested-callbacks`](https://eslint.org/docs/latest/rules/max-nested-callbacks), [`max-lines`](https://eslint.org/docs/latest/rules/max-lines) and [`max-lines-per-function`](https://eslint.org/docs/latest/rules/max-lines-per-function) rule documentation.
+- Ilya Volodin. [Rule: Function has too many parameters](https://github.com/eslint/eslint/issues/115). eslint/eslint #115, 2013.
+- Ian VanSchooten. [`max-nested-callbacks` has no default](https://github.com/eslint/eslint/issues/4297). eslint/eslint #4297, 2015.
+- Toru Nagashima. [Rule Proposal: max-lines](https://github.com/eslint/eslint/issues/6078). eslint/eslint #6078, 2016, and [#6321](https://github.com/eslint/eslint/pull/6321).
+- Claudia Meadows. [New `max-lines-per-function` rule](https://github.com/eslint/eslint/issues/9842). eslint/eslint #9842, 2018, and Pete Ward, [#10188](https://github.com/eslint/eslint/pull/10188).
+- ESLint users' requests: [#12236](https://github.com/eslint/eslint/issues/12236) (JSX), [#15981](https://github.com/eslint/eslint/issues/15981) (tests), [#7392](https://github.com/eslint/eslint/issues/7392) (constructors) and [#17727](https://github.com/eslint/eslint/issues/17727) (callbacks).
+- Oxc. [`max-lines-per-function`](https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html) rule documentation.
+- Biome. [`noExcessiveLinesPerFunction`](https://biomejs.dev/linter/rules/no-excessive-lines-per-function/), [`useMaxParams`](https://biomejs.dev/linter/rules/use-max-params/) and [`noExcessiveNestedCallbacks`](https://biomejs.dev/linter/rules/no-excessive-nested-callbacks/) rule documentation.
+
+**Other linters and guides**
+
+- Bozhidar Batsov. [Tuning RuboCop's defaults from real-world usage data](https://github.com/rubocop/rubocop/issues/15363). rubocop/rubocop #15363, 2026, and [Disable the `Metrics` cops under `Preview`](https://github.com/rubocop/rubocop/commit/d2ac4ac8ef0ac4907f35f3c48de22653a9da2b9e).
+- Ruff. [Implement `too-many-lines`](https://github.com/astral-sh/ruff/pull/10262). astral-sh/ruff #10262, 2024.
+- Rust Clippy. [Adding lint test for excessive LOC](https://github.com/rust-lang/rust-clippy/pull/2857). rust-lang/rust-clippy #2857, 2018–2019, and David Tolnay, [Most commonly ignored lints on crates.io](https://github.com/rust-lang/rust-clippy/issues/7666), #7666, 2021.
+- Go. [Code Review Comments: Line Length](https://go.dev/wiki/CodeReviewComments#line-length).
+- Google. [C++ Style Guide: Write Short Functions](https://google.github.io/styleguide/cppguide.html#Write_Short_Functions).
+- John Ousterhout and Robert C. Martin. [A Philosophy of Software Design vs Clean Code](https://github.com/johnousterhout/aposd-vs-clean-code). 2024–2025.
+
+**Size and defects**
+
+- Les Hatton. [Reexamining the fault density–component size connection](https://doi.org/10.1109/52.582978). _IEEE Software_ 14(2), 1997, and the author's [2009 note](http://web.archive.org/web/20260509232839/https://www.leshatton.org/IEEE_Soft_97b.html).
+- Jarrett Rosenberg. [Some misconceptions about lines of code](https://doi.org/10.1109/METRIC.1997.637174). METRICS 1997.
+- Khaled El Emam, Saïda Benlarbi, Nishith Goel, Walcélio Melo, Hakim Lounis and Shesh N. Rai. [The optimal class size for object-oriented software](https://doi.org/10.1109/TSE.2002.1000452). _IEEE TSE_ 28(5), 2002.
+- David N. Card, Victor E. Church and William W. Agresti. [An empirical study of software design practices](https://doi.org/10.1109/TSE.1986.6312942). _IEEE TSE_ SE-12(2), 1986.
+- Khaled El Emam, Saïda Benlarbi, Nishith Goel and Shesh N. Rai. [The confounding effect of class size on the validity of object-oriented metrics](https://doi.org/10.1109/32.935855). _IEEE TSE_ 27(7), 2001.
+- Shaiful Alam Chowdhury, Gias Uddin and Reid Holmes. [An empirical study on maintainable method size in Java](https://doi.org/10.1145/3524842.3527975). MSR 2022.
+- Massimiliano Di Penta, Gabriele Bavota and Fiorella Zampetti. [On the relationship between refactoring actions and bugs: a differentiated replication](https://doi.org/10.1145/3368089.3409695). ESEC/FSE 2020.
+- Andrew Rice, Edward Aftandilian, Ciera Jaspan, Emily Johnston, Michael Pradel and Yulissa Arroyo-Paredes. [Detecting argument selection defects](https://doi.org/10.1145/3133928). _Proc. ACM Program. Lang._ 1 (OOPSLA), 2017.
+
+**Reading and splitting**
+
+- Ahmad Jbara and Dror G. Feitelson. [On the effect of code regularity on comprehension](https://doi.org/10.1145/2597008.2597140). ICPC 2014.
+- José Aldo Silva da Costa, Rohit Gheyi, José Júnior Silva da Costa, Márcio Ribeiro, Rodrigo Bonifácio, Hyggo Almeida, Ana Carla Bibiano and Alessandro Garcia. [Refactoring for novices in Java: an eye tracking study on the extract vs. inline methods](https://doi.org/10.1016/j.jss.2026.112825). _Journal of Systems and Software_ 237, 2026.
+- Alexey Braver and Dror G. Feitelson. [How developers extract functions: an experiment](https://www.cse.huji.ac.il/~feit/papers/Func23PPIG.pdf). PPIG 2023.
+
+**Agents**
+
+- Birgitta Böckeler. [Maintainability sensors for coding agents](https://martinfowler.com/articles/sensors-for-coding-agents.html). martinfowler.com, 2026.
+- Mohamed Almukhtar, Anwar Ghammam and Hua Ming. [Quality and security signals in AI-generated Python refactoring pull requests](https://doi.org/10.1145/3805760.3814886). AIware 2026.
+- Anthropic. [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+
+**The subjects**
+
+- Vite. [`clientInjections.ts`](https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/clientInjections.ts#L82-L153) and [#21235](https://github.com/vitejs/vite/pull/21235).
+- Next.js. [`revalidation-utils.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/revalidation-utils.ts#L88-L192), [#83822](https://github.com/vercel/next.js/pull/83822) and [#99359](https://github.com/vercel/next.js/pull/99359).
+- VS Code. [`indentationGuesser.ts`](https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/indentationGuesser.ts#L105-L221) and [#284371](https://github.com/microsoft/vscode/pull/284371).

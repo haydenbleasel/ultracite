@@ -1,0 +1,60 @@
+--- a/clientInjections.ts
++++ b/clientInjections.ts
+@@ -220,9 +220,7 @@
+   return () => jsonValue;
+ }
+ 
+-async function createClientConfigValueReplacer(
+-  config: ResolvedConfig
+-): Promise<(code: string) => string> {
++async function resolveClientConfigValues(config: ResolvedConfig) {
+   const resolvedServerHostname = (await resolveHostname(config.server.host))
+     .name;
+   const resolvedServerPort = config.server.port!;
+@@ -256,17 +254,36 @@
+     hmrBase = path.posix.join(hmrBase, wsConfig.path);
+   }
+ 
++  return {
++    devBase,
++    directTarget,
++    hmrBase,
++    hmrConfigName,
++    host,
++    overlay,
++    port,
++    protocol,
++    serverHost,
++    timeout,
++  };
++}
++
++async function createClientConfigValueReplacer(
++  config: ResolvedConfig
++): Promise<(code: string) => string> {
++  const values = await resolveClientConfigValues(config);
++
+   const modeReplacement = escapeReplacement(config.mode);
+-  const baseReplacement = escapeReplacement(devBase);
+-  const serverHostReplacement = escapeReplacement(serverHost);
+-  const hmrProtocolReplacement = escapeReplacement(protocol);
+-  const hmrHostnameReplacement = escapeReplacement(host);
+-  const hmrPortReplacement = escapeReplacement(port);
+-  const hmrDirectTargetReplacement = escapeReplacement(directTarget);
+-  const hmrBaseReplacement = escapeReplacement(hmrBase);
+-  const hmrTimeoutReplacement = escapeReplacement(timeout);
+-  const hmrEnableOverlayReplacement = escapeReplacement(overlay);
+-  const hmrConfigNameReplacement = escapeReplacement(hmrConfigName);
++  const baseReplacement = escapeReplacement(values.devBase);
++  const serverHostReplacement = escapeReplacement(values.serverHost);
++  const hmrProtocolReplacement = escapeReplacement(values.protocol);
++  const hmrHostnameReplacement = escapeReplacement(values.host);
++  const hmrPortReplacement = escapeReplacement(values.port);
++  const hmrDirectTargetReplacement = escapeReplacement(values.directTarget);
++  const hmrBaseReplacement = escapeReplacement(values.hmrBase);
++  const hmrTimeoutReplacement = escapeReplacement(values.timeout);
++  const hmrEnableOverlayReplacement = escapeReplacement(values.overlay);
++  const hmrConfigNameReplacement = escapeReplacement(values.hmrConfigName);
+   const hmrPartialAcceptReplacement = escapeReplacement(
+     config.experimental.hmrPartialAccept
+   );

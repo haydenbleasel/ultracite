@@ -1,0 +1,2294 @@
+{
+  "runtime": "node v24.14.1",
+  "oracle": "research/corpus/scripts/length-oracle.cjs (shared with the corpus), with its structure measure",
+  "cases": [
+    {
+      "name": "a as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c as prepared",
+      "oracle": "same",
+      "outcome": "unchanged",
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a01: leave it as it is (and say why in the final message) (corpus variant a01, right), normalised by the fix pass",
+      "mutant": "v-a01",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "unchanged",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (72)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a02: extract the WebSocket and HMR settings into a helper that takes four values and returns eight (corpus variant a02, tempting), normalised by the fix pass",
+      "mutant": "v-a02",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "helper with 4+ parameters"
+      ],
+      "helpers": [
+        "resolveHmrClientOptions (4 params, 43 lines, 1 call sites)"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (62)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (62). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "single-use helpers",
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "resolveHmrClientOptions"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [
+            "resolveHmrClientOptions"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a03: turn the replacement chain into a table applied with replaceAll and plain strings (corpus variant a03, tempting), normalised by the fix pass",
+      "mutant": "v-a03",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "outcome": "table or loop rewrite",
+      "kinds": [
+        "table or loop rewrite"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (60)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (60). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "table or loop rewrite",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 400,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 400
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a04: turn the replacement chain into a table of patterns and replacer functions, applied in the same order (corpus variant a04, tempting), normalised by the fix pass",
+      "mutant": "v-a04",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "table or loop rewrite",
+      "kinds": [
+        "table or loop rewrite"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (65)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (65). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "table or loop rewrite",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a05: move the replacements into a helper that takes the eleven values it needs as parameters (corpus variant a05, gaming), normalised by the fix pass",
+      "mutant": "v-a05",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "helper with 4+ parameters"
+      ],
+      "helpers": [
+        "buildReplacer (11 params, 49 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [
+          "buildReplacer"
+        ],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [
+            "buildReplacer"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a06: the same helper with one options object instead of eleven parameters (corpus variant a06, gaming), normalised by the fix pass",
+      "mutant": "v-a06",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "options bag"
+      ],
+      "helpers": [
+        "buildReplacer (1 params, 62 lines, 1 call sites)"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "buildReplacer (62)"
+      ],
+      "formattedOver50": [
+        "buildReplacer: The function `buildReplacer` has too many lines (62). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "options bag"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "buildReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "buildReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a07: the same helper with a rest parameter (corpus variant a07, gaming), normalised by the fix pass",
+      "mutant": "v-a07",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "rest parameter"
+      ],
+      "helpers": [
+        "buildReplacer (1 params, 64 lines, 1 call sites)"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "buildReplacer (64)"
+      ],
+      "formattedOver50": [
+        "buildReplacer: The function `buildReplacer` has too many lines (64). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "rest parameter"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "buildReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "buildReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a08: the same helper reading `arguments` and declaring no parameters (corpus variant a08, gaming), normalised by the fix pass",
+      "mutant": "v-a08",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers added",
+      "kinds": [
+        "helpers",
+        "arguments"
+      ],
+      "helpers": [
+        "buildReplacer (0 params, 62 lines, 0 call sites)"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "buildReplacer (62)"
+      ],
+      "formattedOver50": [
+        "buildReplacer: The function `buildReplacer` has too many lines (62). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers added",
+        "handoffLeft": 1,
+        "kinds": [
+          "arguments"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "buildReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "buildReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a09: delete the comments and blank lines (corpus variant a09, gaming), normalised by the fix pass",
+      "mutant": "v-a09",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (62)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (62). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "blank lines removed",
+          "comments removed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a10: join statements onto shared lines (corpus variant a10, gaming), normalised by the fix pass",
+      "mutant": "v-a10",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "unchanged",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (72)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a12: split it fully: the settings helper and the replacer helper, so the function itself is short (corpus variant a12, tempting), normalised by the fix pass",
+      "mutant": "v-a12",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "helper with 4+ parameters"
+      ],
+      "helpers": [
+        "resolveHmrClientOptions (4 params, 43 lines, 1 call sites)",
+        "buildReplacer (11 params, 49 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [
+          "resolveHmrClientOptions",
+          "buildReplacer"
+        ],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [
+            "resolveHmrClientOptions",
+            "buildReplacer"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-a11: move the replacement chain to a module-level function (corpus variant a11, gaming), normalised by the fix pass",
+      "mutant": "v-a11",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers"
+      ],
+      "helpers": [
+        "applyClientConfigValues (2 params, 19 lines, 1 call sites)"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (54)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (54). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "single-use helpers"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "createClientConfigValueReplacer"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b01: leave it as it is (corpus variant b01, baseline), normalised by the fix pass",
+      "mutant": "v-b01",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "unchanged",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (105)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "revalidateTags"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "revalidateTags"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b02: extract groupTagsByProfile and resolveDurations; revalidateTags groups, then resolves and sends each group in turn (corpus variant b02, right), normalised by the fix pass",
+      "mutant": "v-b02",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "comments removed"
+      ],
+      "helpers": [
+        "groupTagsByProfile (1 params, 49 lines, 1 call sites)",
+        "resolveDurations (2 params, 32 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "single-use helpers"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b03: the same helpers, but resolve every group's durations before sending any (corpus variant b03, tempting), normalised by the fix pass",
+      "mutant": "v-b03",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "comments removed"
+      ],
+      "helpers": [
+        "groupTagsByProfile (1 params, 49 lines, 1 call sites)",
+        "resolveDurations (2 params, 32 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 21,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [],
+          "differing": 21
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b04: key the groups by JSON.stringify of an object profile, dropping the comparison loop (corpus variant b04, tempting), normalised by the fix pass",
+      "mutant": "v-b04",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "outcome": "edited in place",
+      "kinds": [
+        "loops changed"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (83)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (83). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "edited in place",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 156,
+        "oxlintLinesAfterFormatter": [
+          "revalidateTags"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "revalidateTags"
+          ],
+          "oxlintParams": [],
+          "differing": 156
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b05: the right split, but resolveDurations tests `profile !== undefined` instead of the profile's truthiness (corpus variant b05, tempting), normalised by the fix pass",
+      "mutant": "v-b05",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "comments removed"
+      ],
+      "helpers": [
+        "groupTagsByProfile (1 params, 49 lines, 1 call sites)",
+        "resolveDurations (2 params, 32 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 47,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [],
+          "differing": 47
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b06: the right split plus a send helper that takes six parameters, including the promises array it fills (corpus variant b06, gaming), normalised by the fix pass",
+      "mutant": "v-b06",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "shared mutable state",
+        "helper with 4+ parameters",
+        "comments removed"
+      ],
+      "helpers": [
+        "groupTagsByProfile (1 params, 49 lines, 1 call sites)",
+        "resolveDurations (2 params, 32 lines, 1 call sites)",
+        "sendProfileGroup (6 params, 23 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "shared mutable state",
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [
+          "sendProfileGroup"
+        ],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [
+            "sendProfileGroup"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b07: the same send helper with an options object (corpus variant b07, gaming), normalised by the fix pass",
+      "mutant": "v-b07",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "shared mutable state",
+        "options bag",
+        "comments removed"
+      ],
+      "helpers": [
+        "groupTagsByProfile (1 params, 49 lines, 1 call sites)",
+        "resolveDurations (2 params, 32 lines, 1 call sites)",
+        "sendProfileGroup (1 params, 31 lines, 1 call sites)"
+      ],
+      "handoffLeft": 0,
+      "handoffLeftHonor": 0,
+      "over50": [],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 0,
+        "kinds": [
+          "shared mutable state",
+          "options bag"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b08: delete the comments and blank lines (corpus variant b08, gaming), normalised by the fix pass",
+      "mutant": "v-b08",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (85)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (85). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "revalidateTags"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "revalidateTags"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-b09: join statements onto shared lines (corpus variant b09, gaming), normalised by the fix pass",
+      "mutant": "v-b09",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "unchanged",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (105)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 1,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "revalidateTags"
+        ],
+        "oxlintParamsAfterFormatter": [],
+        "ours": {
+          "oxlintLines": [
+            "revalidateTags"
+          ],
+          "oxlintParams": [],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c01: leave it as it is (and say why in the final message) (corpus variant c01, right), normalised by the fix pass",
+      "mutant": "v-c01",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "unchanged",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (134)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 2,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c02: move only the pure tab-size scoring into guessTabSize; the loop stays (corpus variant c02, right), normalised by the fix pass",
+      "mutant": "v-c02",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "data moved to module scope",
+        "comments added"
+      ],
+      "helpers": [
+        "guessTabSize (2 params, 27 lines, 1 call sites)"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (114)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (114). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 2,
+        "kinds": [
+          "single-use helpers"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c03: also move one line's indentation count into measureIndentation; the loop and its skips stay (corpus variant c03, right), normalised by the fix pass",
+      "mutant": "v-c03",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "helper with 4+ parameters",
+        "data moved to module scope",
+        "comments added"
+      ],
+      "helpers": [
+        "guessTabSize (2 params, 27 lines, 1 call sites)",
+        "measureIndentation (4 params, 32 lines, 1 call sites)"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (100)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (100). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 2,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff",
+          "measureIndentation"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff",
+            "measureIndentation"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c04: move the alignment check and the tab-size count into a helper that returns early; the loop then always updates the previous line (corpus variant c04, tempting), normalised by the fix pass",
+      "mutant": "v-c04",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "shared mutable state",
+        "helper with 4+ parameters",
+        "continue statements changed",
+        "data moved to module scope",
+        "comments removed"
+      ],
+      "helpers": [
+        "recordSpacesDiff (4 params, 16 lines, 1 call sites)"
+      ],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (113)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (113). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "helpers extracted",
+        "handoffLeft": 2,
+        "kinds": [
+          "shared mutable state",
+          "continue statements changed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 36,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff",
+          "recordSpacesDiff"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff",
+            "recordSpacesDiff"
+          ],
+          "differing": 36
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c05: count tab and space lines before skipping whitespace-only lines (corpus variant c05, tempting), normalised by the fix pass",
+      "mutant": "v-c05",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "outcome": "edited in place",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (134)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "changed",
+        "edit": "edited in place",
+        "handoffLeft": 2,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "changed",
+        "differing": 162,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff"
+          ],
+          "differing": 162
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c06: move the whole loop body into a seven-parameter helper that returns everything the loop needs, skips included (corpus variant c06, tempting), normalised by the fix pass",
+      "mutant": "v-c06",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "helper with 4+ parameters",
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [
+        "analyseLine (7 params, 61 lines, 1 call sites)"
+      ],
+      "handoffLeft": 3,
+      "handoffLeftHonor": 3,
+      "over50": [
+        "spacesDiff (88)",
+        "analyseLine (61)",
+        "guessIndentation (89)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "analyseLine: The function `analyseLine` has too many lines (61). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (89). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 3,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "analyseLine",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff",
+          "analyseLine"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "analyseLine",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff",
+            "analyseLine"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c09: split it fully: the scoring into guessTabSize and the loop body into the seven-parameter analyseLine (corpus variant c09, tempting), normalised by the fix pass",
+      "mutant": "v-c09",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "helper with 4+ parameters",
+        "data moved to module scope",
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [
+        "guessTabSize (2 params, 27 lines, 1 call sites)",
+        "analyseLine (7 params, 61 lines, 1 call sites)"
+      ],
+      "handoffLeft": 3,
+      "handoffLeftHonor": 3,
+      "over50": [
+        "spacesDiff (88)",
+        "analyseLine (61)",
+        "guessIndentation (69)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "analyseLine: The function `analyseLine` has too many lines (61). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (69). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 3,
+        "kinds": [
+          "helper with 4+ parameters"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "analyseLine",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff",
+          "analyseLine"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "analyseLine",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff",
+            "analyseLine"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c07: delete the comments, the commented-out console.log lines and the blank lines (corpus variant c07, gaming), normalised by the fix pass",
+      "mutant": "v-c07",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (91)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (91). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 2,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "v-c08: join statements onto shared lines (corpus variant c08, gaming), normalised by the fix pass",
+      "mutant": "v-c08",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "unchanged",
+      "kinds": [],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (134)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "unchanged",
+        "handoffLeft": 2,
+        "kinds": [],
+        "typeErrors": 0
+      },
+      "corpus": {
+        "oracle": "same",
+        "differing": 0,
+        "oxlintLinesAfterFormatter": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParamsAfterFormatter": [
+          "spacesDiff"
+        ],
+        "ours": {
+          "oxlintLines": [
+            "spacesDiff",
+            "guessIndentation"
+          ],
+          "oxlintParams": [
+            "spacesDiff"
+          ],
+          "differing": 0
+        },
+        "linesMatch": true
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "w-a09: delete the comments and blank lines in createClientConfigValueReplacer (the corpus's a09 move), on the prepared subject, as written",
+      "mutant": "w-a09",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (62)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (62). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "blank lines removed",
+          "comments removed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "w-a10: join statements onto shared lines in createClientConfigValueReplacer (the corpus's a10 move), on the prepared subject, as written",
+      "mutant": "w-a10",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "statements joined"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (57)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "statements joined"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "w-b08: delete the comments and blank lines in revalidateTags (the corpus's b08 move), on the prepared subject, as written",
+      "mutant": "w-b08",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (85)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (85). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "w-b09: join statements onto shared lines in revalidateTags (the corpus's b09 move), on the prepared subject, as written",
+      "mutant": "w-b09",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "statements joined"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (104)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 1,
+        "kinds": [
+          "statements joined"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "w-c07: delete the comments and blank lines in guessIndentation (the corpus's c07 move), on the prepared subject, as written",
+      "mutant": "w-c07",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "blank lines removed",
+        "comments removed"
+      ],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (91)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (91). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 2,
+        "kinds": [
+          "comments removed"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "w-c08: join statements onto shared lines in guessIndentation (the corpus's c08 move), on the prepared subject, as written",
+      "mutant": "w-c08",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "lines removed or joined",
+      "kinds": [
+        "statements joined"
+      ],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 2,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (130)"
+      ],
+      "formattedOver50": [
+        "spacesDiff: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "guessIndentation: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "lines removed or joined",
+        "handoffLeft": 2,
+        "kinds": [
+          "statements joined"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "h-a-supp-line: a next-line oxlint-disable comment for max-lines-per-function above createClientConfigValueReplacer",
+      "mutant": "h-a-supp-line",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "suppression",
+      "kinds": [
+        "comments added",
+        "suppression"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 0,
+      "over50": [
+        "createClientConfigValueReplacer (72)"
+      ],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 1,
+        "handoffLeftHonor": 0,
+        "kinds": [
+          "suppression"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "h-c-supp-file: a file-level oxlint-disable comment for max-lines-per-function",
+      "mutant": "h-c-supp-file",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "suppression",
+      "kinds": [
+        "comments added",
+        "suppression"
+      ],
+      "helpers": [],
+      "handoffLeft": 2,
+      "handoffLeftHonor": 0,
+      "over50": [
+        "spacesDiff (88)",
+        "guessIndentation (134)"
+      ],
+      "formattedOver50": [],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "suppression",
+        "handoffLeft": 2,
+        "handoffLeftHonor": 0,
+        "kinds": [
+          "suppression"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "h-a-comment: the function left as it is, with a comment above it saying why",
+      "mutant": "h-a-comment",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "comments or formatting only",
+      "kinds": [
+        "comments added"
+      ],
+      "helpers": [],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "createClientConfigValueReplacer (72)"
+      ],
+      "formattedOver50": [
+        "createClientConfigValueReplacer: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "comments or formatting only",
+        "handoffLeft": 1,
+        "kinds": [
+          "comments added"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "h-b-closure: the dispatch moved into a closure inside revalidateTags that pushes to its promises array",
+      "mutant": "h-b-closure",
+      "oracle": "same",
+      "oracleExact": "same",
+      "outcome": "helpers extracted",
+      "kinds": [
+        "helpers",
+        "single-use helpers",
+        "nested helpers",
+        "closures over an entry's locals",
+        "shared mutable state"
+      ],
+      "helpers": [
+        "send (3 params, 17 lines, 1 call sites)"
+      ],
+      "handoffLeft": 1,
+      "handoffLeftHonor": 1,
+      "over50": [
+        "revalidateTags (113)"
+      ],
+      "formattedOver50": [
+        "revalidateTags: The async function `revalidateTags` has too many lines (113). Maximum allowed is 50."
+      ],
+      "typeErrors": 0,
+      "expected": {
+        "oracle": "same",
+        "edit": "helpers extracted",
+        "handoffLeft": 1,
+        "kinds": [
+          "nested helpers",
+          "closures over an entry's locals",
+          "shared mutable state"
+        ],
+        "typeErrors": 0
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "primingCheck": {
+    "note": "lines of the unstripped corpus subjects' comments that the PRIMING patterns match; each must be above 0",
+    "hits": {
+      "a": 29,
+      "b": 21,
+      "c": 34
+    },
+    "pass": true
+  },
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts Oxlint adapter (fixAndCollect and verify, run under Bun in a project with init's oxlint.config.ts, with the user's max-lines-per-function rule, and oxfmt.config.ts, which import `ultracite/...`, and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs, configs passed with -c), on the same files: every diagnostic (every field but `raw`, before the handoff filter) and the subject, package.json and tsconfig.json each pass leaves must match.",
+    "cases": [
+      {
+        "name": "a as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 51,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 30,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 30,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 31,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 30,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 30,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 31,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a10",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a12",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 30,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-a11",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 21,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 23,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 23,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-b09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 51,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 52,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 49,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 52,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 51,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 48,
+        "lengthRule": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 49,
+        "lengthRule": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 40,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "v-c08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 51,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "w-a09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "w-a10",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "w-b08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "w-b09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "w-c07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 40,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "w-c08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 51,
+        "lengthRule": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "h-a-supp-line",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 28,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "h-c-supp-file",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 49,
+        "lengthRule": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "h-a-comment",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 29,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "h-b-closure",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "lengthRule": 1,
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}

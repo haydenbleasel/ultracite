@@ -1,0 +1,23 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -138,10 +138,16 @@
+   //  => This should count 1 tab and 4 spaces
+ 
+   const i = commonPrefixLength(a, aLength, b, bLength);
+-  const { spacesCount: aSpacesCnt, tabsCount: aTabsCount } =
+-    countSpacesAndTabs(a, i, aLength);
+-  const { spacesCount: bSpacesCnt, tabsCount: bTabsCount } =
+-    countSpacesAndTabs(b, i, bLength);
++  const { spacesCount: aSpacesCnt, tabsCount: aTabsCount } = countSpacesAndTabs(
++    a,
++    i,
++    aLength
++  );
++  const { spacesCount: bSpacesCnt, tabsCount: bTabsCount } = countSpacesAndTabs(
++    b,
++    i,
++    bLength
++  );
+ 
+   if (aSpacesCnt > 0 && aTabsCount > 0) {
+     return;

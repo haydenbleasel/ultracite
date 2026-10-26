@@ -1,0 +1,566 @@
+[
+  {
+    "id": "a",
+    "base": "a",
+    "example": "length-a-vite-client-config.ts",
+    "basename": "clientInjections.ts",
+    "kind": "long and fine as it is",
+    "label": "A, long and fine as it is",
+    "linter": "oxlint",
+    "config": "oxlint core, max-lines-per-function on",
+    "entries": [
+      "createClientConfigValueReplacer"
+    ],
+    "exported": [
+      "clientInjectionsPlugin"
+    ],
+    "expected": [
+      "max-lines-per-function"
+    ],
+    "source": "vitejs/vite packages/vite/src/node/plugins/clientInjections.ts @ 3b72997d, L21-153 (createClientConfigValueReplacer and the plugin around it); its imports as a STUB",
+    "right": "leave it for review and say why, or make a change that keeps the output in every scenario and doesn't make it harder to follow",
+    "path": "subjects/length-limits/a/clientInjections.ts",
+    "sha256": "8e78a2f328edc05a1c0d8e811e361e2737faa03ab3f0844608beedabb685e5eb",
+    "originalSha256": "d570b7a636d308e199f6dea7106d151e7dc89fb4fc827af125492f21f20d48fe",
+    "cleanedSha256": "7d191b6fa4ff13fc5f2e2f4d6bfc577db996b8350051c48eeaf3a3b6a140e103",
+    "headerLinesRemoved": 37,
+    "textEdits": [
+      {
+        "from": " * Source:    vitejs/vite — packages/vite/src/node/plugins/clientInjections.ts, lines 21-153 (the\n *            file up to the end of createClientConfigValueReplacer, without its imports)",
+        "to": " * Source:    vitejs/vite — packages/vite/src/node/plugins/clientInjections.ts, L21-153 (the file up\n *            to the end of createClientConfigValueReplacer, without its imports)",
+        "why": "a source range written as 'lines'"
+      },
+      {
+        "from": " * Function:  createClientConfigValueReplacer(config), which works out the values Vite's dev server\n *   injects into its browser client (the server host, the HMR WebSocket's protocol, host, port,\n *   direct target, base and timeout, the overlay switch, the config file name, the WebSocket token\n *   and the console-forwarding option) and returns a function that replaces each placeholder in the\n *   client's code with its value. clientInjectionsPlugin's buildStart() calls it once; transform()\n *   applies it to the client entry and the env entry.",
+        "to": " * Function:  createClientConfigValueReplacer(config), in Vite's clientInjectionsPlugin, which\n *   injects config values into the dev server's browser client.",
+        "why": "described, step by step, what the function computes and what the oracle checks"
+      },
+      {
+        "from": " * Lines 21-153 are copied verbatim. The stubs above them replace its imports (lines 1-19). Anything\n * marked STUB is not part of the original source.",
+        "to": " * L21-153 are copied, with their formatting changed. The stubs above them replace its imports\n * (L1-19). Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'; a source range written as 'lines'"
+      },
+      {
+        "from": " * License of the source repository (vitejs/vite/LICENSE at the commit above), reproduced in full\n * (also in research/corpus/examples/licenses/vite-3b72997d-LICENSE):",
+        "to": " * License of the source repository (vitejs/vite/LICENSE at the commit above), reproduced in full:",
+        "why": "named this repo's research folder (the license's copy there)"
+      },
+      {
+        "from": "// STUB (not part of the original source): what lines 1-19 import, reduced to what lines 21-153\n// use.",
+        "to": "// STUB (not part of the original source): what L1-19 import, reduced to what L21-153 use.",
+        "why": "source ranges written as 'lines'"
+      },
+      {
+        "from": "// fixed strings instead of paths resolved from the installed package.",
+        "to": "// constant strings instead of paths resolved from the installed package.",
+        "why": "'fixed' (meaning constant) reads as the word for a repair"
+      }
+    ],
+    "primingPatterns": [
+      "/\\blength\\b|\\blong(er|est)?\\b|\\blines\\b|line count|\\bLOC\\b|too many|\\bshort(er|en)?\\b/i",
+      "/\\bsplit|\\bextract|refactor|\\bhelpers?\\b|decompos|break (it )?(up|down|apart)/i",
+      "/readab|end to end|top to bottom|reads? (top|down|linearly|straight)|easy to follow|cohesive|\\bsequence|one pass|\\bjobs?\\b|separab|single (task|responsibility)/i",
+      "/\\bmax-[a-z]|\\bmaximum\\b|\\blimits?\\b|\\bstatements?\\b|\\bparam(eter)?s\\b|complex|cognitive|\\bsize\\b/i",
+      "/21235|83d8c9975|20916|2540ed06d|21357|9ce3036d3|12486|37650678d|83822|e598a4f976|99359|a1de339f74|12393db6|1155cdf6|284371|7f4d1c33|65668|62143/",
+      "/deliberate|intentional|on purpose|by design/i",
+      "/eslint|oxlint|oxfmt|biome|sonar|\\blint(s|er|ers|ing)?\\b|ultracite|prettier/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it's|Why splitting|What the project did|Gaming/",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|scenario/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b|never been|\\bgrown\\b|\\bappend/i",
+      "/\\bcontinue\\b|early return|replaceAll|first occurrence|\\$&|iterator|used up/i",
+      "/gaming|game the|dodge|options (object|bag)|rest parameter|\\barguments\\b/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 3,
+      "linesChanged": {
+        "removed": 122,
+        "added": 139
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "max-lines-per-function L223: The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50."
+      ],
+      "help": [
+        "Consider splitting it into smaller functions."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      ],
+      "reportedBeforeFilter": 29,
+      "leftOutByFilter": {
+        "complexity": 1,
+        "func-names": 1,
+        "func-style": 9,
+        "jsdoc/check-tag-names": 1,
+        "no-nested-ternary": 1,
+        "no-plusplus": 1,
+        "no-unused-vars": 1,
+        "no-use-before-define": 1,
+        "require-await": 1,
+        "require-unicode-regexp": 1,
+        "typescript/no-explicit-any": 5,
+        "typescript/no-non-null-assertion": 2,
+        "unicorn/filename-case": 1,
+        "unicorn/no-array-sort": 1,
+        "unicorn/no-await-expression-member": 1
+      },
+      "entryLines": {
+        "createClientConfigValueReplacer": {
+          "corpus": 72,
+          "prepared": 72
+        }
+      },
+      "functionsOver50": [
+        "createClientConfigValueReplacer"
+      ],
+      "fileLines": {
+        "corpus": 319,
+        "prepared": 295
+      },
+      "oracle": {
+        "scenarios": 400,
+        "exactVerdictAgainstCorpusSubject": "changed",
+        "exactDiffering": 400,
+        "ignoringKeyOrder": "same",
+        "note": "the prepared subject's trace differs from the corpus subject's only in object key order (Oxlint's sort-keys fix on an object the code returns); the prepared subject is the reference"
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "3452c980268aac42e688cfa07145378a7a73c74ec952e95f3fb21b042c041975",
+      "package.json": "68477490b0bf693e9e7b78a996c9d1d7b79d2faaf07233d1b9fe883de01d7fa0",
+      "tsconfig.json": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817"
+    },
+    "corpus": {
+      "flagged": {
+        "biomeLines": [
+          "createClientConfigValueReplacer"
+        ],
+        "biomeParams": [],
+        "eslintLines": [
+          "createClientConfigValueReplacer"
+        ],
+        "eslintParams": [],
+        "eslintStatements": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintLines": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParams": [],
+        "sonarLines": []
+      },
+      "structure": {
+        "entry": {
+          "cognitive": 5,
+          "lines": 72,
+          "params": 1,
+          "statements": 36
+        },
+        "fileLines": 319,
+        "functions": 19,
+        "functionsBefore": 19,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 10
+      },
+      "oracleScenarios": 400
+    }
+  },
+  {
+    "id": "b",
+    "base": "b",
+    "example": "length-b-next-revalidate-tags.ts",
+    "basename": "revalidation-utils.ts",
+    "kind": "long because it does two things",
+    "label": "B, two jobs in one",
+    "linter": "oxlint",
+    "config": "oxlint core, max-lines-per-function on",
+    "entries": [
+      "revalidateTags"
+    ],
+    "exported": [
+      "withExecuteRevalidates",
+      "executeRevalidates"
+    ],
+    "expected": [
+      "max-lines-per-function"
+    ],
+    "source": "vercel/next.js packages/next/src/server/revalidation-utils.ts @ d8bfc3c9, L5-229 (the whole file but its imports); its imports as a STUB",
+    "right": "extract the two jobs (group the tags; resolve each group's durations, and send it), called in the same order, keeping every call and rejection",
+    "path": "subjects/length-limits/b/revalidation-utils.ts",
+    "sha256": "87ca0b005ec2d41d7f4914a457c56b28f1da525a790a5853fef24cd6048c6121",
+    "originalSha256": "5d68424708b35655f8a14ef66c13fbeb4dd27042f9ff6418281e4d806e4b86ac",
+    "cleanedSha256": "c8a39a054568d0bc11c64f74616d5bee0eb4424bbf5691a7cc5981a3d61c972f",
+    "headerLinesRemoved": 32,
+    "textEdits": [
+      {
+        "from": " * Source:    vercel/next.js — packages/next/src/server/revalidation-utils.ts, lines 5-229 (the whole\n *            file but its imports)",
+        "to": " * Source:    vercel/next.js — packages/next/src/server/revalidation-utils.ts, L5-229 (the whole file\n *            but its imports)",
+        "why": "a source range written as 'lines'"
+      },
+      {
+        "from": " * Function:  revalidateTags(tagsWithProfile, incrementalCache, workStore), which Next.js runs after a\n *   request to send the tags revalidated during it to the cache handlers: it groups the tags by\n *   cache profile, then for each group looks up the profile's expiry and calls every cache\n *   handler's updateTags and the incremental cache's revalidateTag with the group's tags, and waits\n *   for all of them. executeRevalidates() (the file's exported entry point) calls it.",
+        "to": " * Function:  revalidateTags(tagsWithProfile, incrementalCache, workStore), which Next.js runs after a\n *   request to send the tags revalidated during it to the cache handlers. executeRevalidates() (the\n *   file's exported entry point) calls it.",
+        "why": "laid out the function's steps, which is the expected split"
+      },
+      {
+        "from": " * Lines 5-229 are copied verbatim. The stubs above them replace its imports (lines 1-3). Anything\n * marked STUB is not part of the original source.",
+        "to": " * L5-229 are copied, with their formatting changed. The stubs above them replace its imports (L1-3).\n * Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'; a source range written as 'lines'"
+      },
+      {
+        "from": " * License of the source repository (vercel/next.js/license.md), reproduced in full (also in\n * research/corpus/examples/licenses/next.js-license.md):",
+        "to": " * License of the source repository (vercel/next.js/license.md), reproduced in full:",
+        "why": "named this repo's research folder (the license's copy there)"
+      },
+      {
+        "from": "// STUB (not part of the original source): what lines 1-3 import.",
+        "to": "// STUB (not part of the original source): what L1-3 import.",
+        "why": "a source range written as 'lines'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\blength\\b|\\blong(er|est)?\\b|\\blines\\b|line count|\\bLOC\\b|too many|\\bshort(er|en)?\\b/i",
+      "/\\bsplit|\\bextract|refactor|\\bhelpers?\\b|decompos|break (it )?(up|down|apart)/i",
+      "/readab|end to end|top to bottom|reads? (top|down|linearly|straight)|easy to follow|cohesive|\\bsequence|one pass|\\bjobs?\\b|separab|single (task|responsibility)/i",
+      "/\\bmax-[a-z]|\\bmaximum\\b|\\blimits?\\b|\\bstatements?\\b|\\bparam(eter)?s\\b|complex|cognitive|\\bsize\\b/i",
+      "/21235|83d8c9975|20916|2540ed06d|21357|9ce3036d3|12486|37650678d|83822|e598a4f976|99359|a1de339f74|12393db6|1155cdf6|284371|7f4d1c33|65668|62143/",
+      "/deliberate|intentional|on purpose|by design/i",
+      "/eslint|oxlint|oxfmt|biome|sonar|\\blint(s|er|ers|ing)?\\b|ultracite|prettier/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it's|Why splitting|What the project did|Gaming/",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|scenario/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b|never been|\\bgrown\\b|\\bappend/i",
+      "/\\bcontinue\\b|early return|replaceAll|first occurrence|\\$&|iterator|used up/i",
+      "/gaming|game the|dodge|options (object|bag)|rest parameter|\\barguments\\b/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 68,
+        "added": 77
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "max-lines-per-function L153: The async function `revalidateTags` has too many lines (105). Maximum allowed is 50."
+      ],
+      "help": [
+        "Consider splitting it into smaller functions."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      ],
+      "reportedBeforeFilter": 22,
+      "leftOutByFilter": {
+        "complexity": 1,
+        "func-style": 6,
+        "no-empty-function": 1,
+        "no-use-before-define": 4,
+        "promise/always-return": 1,
+        "promise/prefer-await-to-callbacks": 3,
+        "sort-keys": 1,
+        "typescript/method-signature-style": 2,
+        "typescript/no-explicit-any": 1,
+        "typescript/no-non-null-assertion": 1
+      },
+      "entryLines": {
+        "revalidateTags": {
+          "corpus": 105,
+          "prepared": 105
+        }
+      },
+      "functionsOver50": [
+        "revalidateTags"
+      ],
+      "fileLines": {
+        "corpus": 324,
+        "prepared": 295
+      },
+      "oracle": {
+        "scenarios": 300,
+        "exactVerdictAgainstCorpusSubject": "same",
+        "exactDiffering": 0,
+        "ignoringKeyOrder": "same",
+        "note": "the prepared subject's trace equals the corpus subject's in every scenario"
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "3452c980268aac42e688cfa07145378a7a73c74ec952e95f3fb21b042c041975",
+      "package.json": "68477490b0bf693e9e7b78a996c9d1d7b79d2faaf07233d1b9fe883de01d7fa0",
+      "tsconfig.json": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817"
+    },
+    "corpus": {
+      "flagged": {
+        "biomeLines": [
+          "revalidateTags"
+        ],
+        "biomeParams": [],
+        "eslintLines": [
+          "revalidateTags"
+        ],
+        "eslintParams": [],
+        "eslintStatements": [
+          "revalidateTags",
+          "executeRevalidates"
+        ],
+        "oxlintLines": [
+          "revalidateTags"
+        ],
+        "oxlintParams": [],
+        "sonarLines": []
+      },
+      "structure": {
+        "entry": {
+          "cognitive": 39,
+          "lines": 105,
+          "params": 3,
+          "statements": 40
+        },
+        "fileLines": 324,
+        "functions": 12,
+        "functionsBefore": 12,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 6
+      },
+      "oracleScenarios": 300
+    }
+  },
+  {
+    "id": "c",
+    "base": "c",
+    "example": "length-c-vscode-guess-indentation.ts",
+    "basename": "indentationGuesser.ts",
+    "kind": "a trap",
+    "label": "C, a trap",
+    "linter": "oxlint",
+    "config": "oxlint core, max-lines-per-function on",
+    "entries": [
+      "guessIndentation",
+      "spacesDiff"
+    ],
+    "exported": [
+      "guessIndentation"
+    ],
+    "expected": [
+      "max-lines-per-function",
+      "max-lines-per-function"
+    ],
+    "source": "microsoft/vscode src/vs/editor/common/model/indentationGuesser.ts @ 95903124, L1-4 and L9-221 (the whole file but its imports); its imports as a STUB",
+    "right": "keep the guess and the exported signature: leave it for review with a reason, or move out only what is safe (the tab-size scoring, one line's indentation count) and say the loop stays",
+    "path": "subjects/length-limits/c/indentationGuesser.ts",
+    "sha256": "62cc26d53f1c18a6f56286f14412d185d69c7ec7ab4a730a2cd4cd96bfc08fb3",
+    "originalSha256": "3e64fe7f8dd154cb3364b62ac524ae3dc79c1bdec112e14d5332060cb0e6b31f",
+    "cleanedSha256": "e5467ca510716f24f7844b65c14430d604461b406f6cd9c09c6d400d6dce5337",
+    "headerLinesRemoved": 30,
+    "textEdits": [
+      {
+        "from": " * Source:    microsoft/vscode — src/vs/editor/common/model/indentationGuesser.ts, lines 1-4 and 9-221\n *            (the whole file but its imports)",
+        "to": " * Source:    microsoft/vscode — src/vs/editor/common/model/indentationGuesser.ts, L1-4 and L9-221 (the\n *            whole file but its imports)",
+        "why": "a source range written as 'lines'"
+      },
+      {
+        "from": " * Function:  guessIndentation(source, defaultTabSize, defaultInsertSpaces), which the editor uses\n *   to guess whether a file is indented with tabs or spaces, and how many spaces make an indent,\n *   from the first 10,000 lines. spacesDiff(), above it, compares two lines' indentation.",
+        "to": " * Function:  guessIndentation(source, defaultTabSize, defaultInsertSpaces), which the editor uses\n *   to guess whether a file is indented with tabs or spaces, and how many spaces make an indent.",
+        "why": "described the function's input in the word the limit counts, and named spacesDiff's job"
+      },
+      {
+        "from": " * Lines 1-4 and 9-221 are copied verbatim. The stubs between them replace its imports (lines 6-7).\n * Anything marked STUB is not part of the original source.",
+        "to": " * L1-4 and L9-221 are copied, with their formatting changed. The stubs between them replace its\n * imports (L6-7). Anything marked STUB is not part of the original source.",
+        "why": "said 'verbatim'; source ranges written as 'lines'"
+      },
+      {
+        "from": " * License of the source repository (microsoft/vscode/LICENSE.txt), reproduced in full (also in\n * research/corpus/examples/licenses/vscode-LICENSE.txt):",
+        "to": " * License of the source repository (microsoft/vscode/LICENSE.txt), reproduced in full:",
+        "why": "named this repo's research folder (the license's copy there)"
+      },
+      {
+        "from": "// STUB (not part of the original source): what lines 6-7 import.",
+        "to": "// STUB (not part of the original source): what L6-7 import.",
+        "why": "a source range written as 'lines'"
+      }
+    ],
+    "primingPatterns": [
+      "/\\blength\\b|\\blong(er|est)?\\b|\\blines\\b|line count|\\bLOC\\b|too many|\\bshort(er|en)?\\b/i",
+      "/\\bsplit|\\bextract|refactor|\\bhelpers?\\b|decompos|break (it )?(up|down|apart)/i",
+      "/readab|end to end|top to bottom|reads? (top|down|linearly|straight)|easy to follow|cohesive|\\bsequence|one pass|\\bjobs?\\b|separab|single (task|responsibility)/i",
+      "/\\bmax-[a-z]|\\bmaximum\\b|\\blimits?\\b|\\bstatements?\\b|\\bparam(eter)?s\\b|complex|cognitive|\\bsize\\b/i",
+      "/21235|83d8c9975|20916|2540ed06d|21357|9ce3036d3|12486|37650678d|83822|e598a4f976|99359|a1de339f74|12393db6|1155cdf6|284371|7f4d1c33|65668|62143/",
+      "/deliberate|intentional|on purpose|by design/i",
+      "/eslint|oxlint|oxfmt|biome|sonar|\\blint(s|er|ers|ing)?\\b|ultracite|prettier/i",
+      "/Expected|Tempting|Behaviou?r to preserve|Rules it hits|Why it's|Why splitting|What the project did|Gaming/",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|scenario/i",
+      "/left for review|for a person|\\breview\\b|\\bdecid|decision/i",
+      "/verbatim/i",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b|never been|\\bgrown\\b|\\bappend/i",
+      "/\\bcontinue\\b|early return|replaceAll|first occurrence|\\$&|iterator|used up/i",
+      "/gaming|game the|dodge|options (object|bag)|rest parameter|\\barguments\\b/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "Look at most at the first 10k lines",
+        "why": "upstream code comment: the text lines the guess reads"
+      },
+      {
+        "text": "number of lines that contain at least one tab in indentation",
+        "why": "upstream code comment: the text lines the guess counts"
+      },
+      {
+        "text": "number of lines that contain only spaces in indentation",
+        "why": "upstream code comment: the text lines the guess counts"
+      },
+      {
+        "text": "if the text buffer is chunk based, so long lines are cons-string, v8 will flattern the string when we check charCode.",
+        "why": "upstream code comment: long text lines in the editor's buffer"
+      },
+      {
+        "text": "Ignore empty or only whitespace lines",
+        "why": "upstream code comment: the text lines the loop skips"
+      },
+      {
+        "text": "prefer even guesses for `tabSize`, limit to [2, 8].",
+        "why": "upstream code comment: the tab sizes the guess tries"
+      }
+    ],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 174,
+        "added": 207
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "max-lines-per-function L65: The function `spacesDiff` has too many lines (88). Maximum allowed is 50.",
+        "max-lines-per-function L168: The function `guessIndentation` has too many lines (134). Maximum allowed is 50."
+      ],
+      "help": [
+        "Consider splitting it into smaller functions."
+      ],
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/max-lines-per-function.html"
+      ],
+      "reportedBeforeFilter": 51,
+      "leftOutByFilter": {
+        "complexity": 1,
+        "func-style": 2,
+        "no-inline-comments": 11,
+        "no-plusplus": 14,
+        "no-shadow": 1,
+        "no-useless-return": 1,
+        "typescript/method-signature-style": 4,
+        "typescript/no-inferrable-types": 2,
+        "unicorn/filename-case": 1,
+        "unicorn/no-array-for-each": 1,
+        "unicorn/no-lonely-if": 3,
+        "unicorn/prefer-code-point": 8
+      },
+      "entryLines": {
+        "guessIndentation": {
+          "corpus": 117,
+          "prepared": 134
+        },
+        "spacesDiff": {
+          "corpus": 73,
+          "prepared": 88
+        }
+      },
+      "functionsOver50": [
+        "spacesDiff",
+        "guessIndentation"
+      ],
+      "fileLines": {
+        "corpus": 300,
+        "prepared": 302
+      },
+      "oracle": {
+        "scenarios": 1938,
+        "exactVerdictAgainstCorpusSubject": "same",
+        "exactDiffering": 0,
+        "ignoringKeyOrder": "same",
+        "note": "the prepared subject's trace equals the corpus subject's in every scenario"
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "3452c980268aac42e688cfa07145378a7a73c74ec952e95f3fb21b042c041975",
+      "package.json": "68477490b0bf693e9e7b78a996c9d1d7b79d2faaf07233d1b9fe883de01d7fa0",
+      "tsconfig.json": "bcbea00d228e21ca7f961cf83b7f66002cd334eb025b62d0c409b463a92c7817"
+    },
+    "corpus": {
+      "flagged": {
+        "biomeLines": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "biomeParams": [
+          "spacesDiff"
+        ],
+        "eslintLines": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "eslintParams": [
+          "spacesDiff"
+        ],
+        "eslintStatements": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintLines": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParams": [
+          "spacesDiff"
+        ],
+        "sonarLines": []
+      },
+      "structure": {
+        "entry": {
+          "cognitive": 29,
+          "lines": 117,
+          "params": 3,
+          "statements": 49
+        },
+        "fileLines": 300,
+        "functions": 3,
+        "functionsBefore": 3,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 2
+      },
+      "oracleScenarios": 1938
+    }
+  }
+]

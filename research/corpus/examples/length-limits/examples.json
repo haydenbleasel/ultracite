@@ -1,0 +1,4744 @@
+{
+  "generated": "2026-10-25T20:04:24.911Z",
+  "note": "Each subject as committed: its verbatim lines checked against the pinned commit, tsc, every linter's length rules at their defaults (with the messages and help an agent is handed), the oracle's scenarios, and what the subject costs a reader. Each variant: tsc, the oracle's verdict against the subject, the reader cost, which functions each linter's limits flag, and the same after Oxfmt formats it with Ultracite's preset. `stripFields` are the header fields that name the rules, the analysis or the expected answer, for the experiment to remove before an agent sees a subject.",
+  "stripFields": [
+    "Length subject",
+    "Rules it hits",
+    "Why it's long",
+    "Why splitting is risky",
+    "What the project did",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses",
+    "Gaming moves"
+  ],
+  "subjects": {
+    "a": {
+      "entry": "createClientConfigValueReplacer",
+      "file": "length-a-vite-client-config.ts",
+      "flagged": {
+        "biomeLines": [
+          "createClientConfigValueReplacer"
+        ],
+        "biomeParams": [],
+        "eslintLines": [
+          "createClientConfigValueReplacer"
+        ],
+        "eslintParams": [],
+        "eslintStatements": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintLines": [
+          "createClientConfigValueReplacer"
+        ],
+        "oxlintParams": [],
+        "sonarLines": []
+      },
+      "lint": {
+        "biome": [
+          {
+            "line": 247,
+            "message": "This function has too many statements (36). Maximum allowed is 10.",
+            "notes": [
+              "Functions with many statements are harder to read, test, and maintain.",
+              "Consider splitting this function into smaller functions.",
+              "This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information."
+            ],
+            "rule": "nursery/noExcessiveStatementsPerFunction"
+          },
+          {
+            "line": 247,
+            "message": "This function has too many lines (66). Maximum allowed is 50.",
+            "notes": [
+              "Consider refactoring this function to split it into smaller functions."
+            ],
+            "rule": "complexity/noExcessiveLinesPerFunction"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 247,
+            "message": "Async function 'createClientConfigValueReplacer' has too many lines (72). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          },
+          {
+            "line": 247,
+            "message": "Async function 'createClientConfigValueReplacer' has too many statements (36). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "line": 301,
+            "message": "File has too many lines (318). Maximum allowed is 300.",
+            "rule": "max-lines"
+          }
+        ],
+        "oxlint": [
+          {
+            "help": "Maximum allowed is 300.",
+            "line": 318,
+            "message": "File has too many lines (318).",
+            "rule": "max-lines"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 247,
+            "message": "function `createClientConfigValueReplacer` has too many statements (36). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 247,
+            "message": "The async function `createClientConfigValueReplacer` has too many lines (72). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          }
+        ]
+      },
+      "oracle": {
+        "errors": 0,
+        "loadError": null,
+        "scenarios": 400
+      },
+      "source": {
+        "path": "packages/vite/src/node/plugins/clientInjections.ts",
+        "repo": "vite",
+        "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6",
+        "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/clientInjections.ts#L1"
+      },
+      "structure": {
+        "entry": {
+          "cognitive": 5,
+          "lines": 72,
+          "params": 1,
+          "statements": 36
+        },
+        "fileLines": 319,
+        "functions": 19,
+        "functionsBefore": 19,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 10
+      },
+      "tsc": [],
+      "variants": [
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 72,
+                "params": 1,
+                "statements": 36
+              },
+              "fileLines": 332,
+              "functions": 19,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 10
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a01",
+          "intent": "right",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 72,
+              "params": 1,
+              "statements": 36
+            },
+            "fileLines": 319,
+            "functions": 19,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 10
+          },
+          "tsc": [],
+          "what": "leave it as it is (and say why in the final message)"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [
+                "resolveHmrClientOptions"
+              ],
+              "eslintStatements": [
+                "resolveHmrClientOptions",
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [
+                "resolveHmrClientOptions"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 62,
+                "params": 1,
+                "statements": 20
+              },
+              "fileLines": 366,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 43,
+                  "name": "resolveHmrClientOptions",
+                  "params": 4,
+                  "statements": 18
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 4,
+              "topLevelFunctions": 11
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [
+              "resolveHmrClientOptions"
+            ],
+            "eslintStatements": [
+              "resolveHmrClientOptions",
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [
+              "resolveHmrClientOptions"
+            ],
+            "sonarLines": []
+          },
+          "id": "a02",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 0,
+              "lines": 62,
+              "params": 1,
+              "statements": 20
+            },
+            "fileLines": 353,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 43,
+                "name": "resolveHmrClientOptions",
+                "params": 4,
+                "statements": 18
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 4,
+            "topLevelFunctions": 11
+          },
+          "tsc": [],
+          "what": "extract the WebSocket and HMR settings into a helper that takes four values and returns eight"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 60,
+                "params": 1,
+                "statements": 23
+              },
+              "fileLines": 320,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 10
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a03",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [
+              {
+                "edited": {
+                  "id": "a0",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"production\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:3000/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = false;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = false;\nconst second0 = \"production\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:3000/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24679;\nconst second6 = \"localhost:24679/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = false;\nconst second10 = \"vite.config.js\";\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = false;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"production\";\nconst once1 = \"/app/\";\nconst once2 = \"localhost:3000/app/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = 24679;\nconst once6 = \"localhost:24679/app/\";\nconst once7 = \"/app/\";\nconst once8 = 30000;\nconst once9 = false;\nconst once10 = \"vite.config.js\";\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = false;\nconst defines = {\"N\": 2, \"__X__\": 1};",
+                    "env": "const first0 = \"production\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:3000/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = false;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = false;\nconst second0 = \"production\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:3000/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24679;\nconst second6 = \"localhost:24679/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = false;\nconst second10 = \"vite.config.js\";\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = false;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"production\"",
+                          "global.process.env.NODE_ENV": "\"production\"",
+                          "globalThis.process.env.NODE_ENV": "\"production\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                },
+                "id": "a0",
+                "original": {
+                  "id": "a0",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"production\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:3000/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = false;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = false;\nconst second0 = __MODE__;\nconst second1 = \"/app/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"production\";\nconst once1 = \"/app/\";\nconst once2 = \"localhost:3000/app/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = 24679;\nconst once6 = \"localhost:24679/app/\";\nconst once7 = \"/app/\";\nconst once8 = 30000;\nconst once9 = false;\nconst once10 = \"vite.config.js\";\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = false;\nconst defines = {\"N\": 2, \"__X__\": 1};",
+                    "env": "const first0 = \"production\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:3000/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = false;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = false;\nconst second0 = __MODE__;\nconst second1 = \"/app/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"production\"",
+                          "global.process.env.NODE_ENV": "\"production\"",
+                          "globalThis.process.env.NODE_ENV": "\"production\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "a1",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"a__MODE__b\";\nconst first1 = \"/__BASE__/\";\nconst first2 = \"localhost:5173/__SERVER_HOST__/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst first7 = \"/__HMR_BASE__/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = undefined;\nconst second0 = \"a__MODE__b\";\nconst second1 = \"/__BASE__/\";\nconst second2 = \"localhost:5173/__SERVER_HOST__/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = null;\nconst second6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst second7 = \"/__HMR_BASE__/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"vite.config.js\";\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = undefined;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"a__MODE__b\";\nconst once1 = \"/__BASE__/\";\nconst once2 = \"localhost:5173/__SERVER_HOST__/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = null;\nconst once6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst once7 = \"/__HMR_BASE__/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"vite.config.js\";\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = undefined;\nconst defines = {\"N\": 2, \"__X__\": 1};",
+                    "env": "const first0 = \"a__MODE__b\";\nconst first1 = \"/__BASE__/\";\nconst first2 = \"localhost:5173/__SERVER_HOST__/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst first7 = \"/__HMR_BASE__/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = undefined;\nconst second0 = \"a__MODE__b\";\nconst second1 = \"/__BASE__/\";\nconst second2 = \"localhost:5173/__SERVER_HOST__/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = null;\nconst second6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst second7 = \"/__HMR_BASE__/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"vite.config.js\";\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = undefined;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"a$&b\"",
+                          "global.process.env.NODE_ENV": "\"a$&b\"",
+                          "globalThis.process.env.NODE_ENV": "\"a$&b\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                },
+                "id": "a1",
+                "original": {
+                  "id": "a1",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"a$&b\";\nconst first1 = \"/$&/\";\nconst first2 = \"localhost:5173/$&/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/$&/\";\nconst first7 = \"/$&/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = undefined;\nconst second0 = __MODE__;\nconst second1 = \"/$&/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"a$&b\";\nconst once1 = \"/$&/\";\nconst once2 = \"localhost:5173/$&/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = null;\nconst once6 = \"localhost:5173/$&/\";\nconst once7 = \"/$&/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"vite.config.js\";\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = undefined;\nconst defines = {\"N\": 2, \"__X__\": 1};",
+                    "env": "const first0 = \"a$&b\";\nconst first1 = \"/$&/\";\nconst first2 = \"localhost:5173/$&/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/$&/\";\nconst first7 = \"/$&/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"vite.config.js\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = undefined;\nconst second0 = __MODE__;\nconst second1 = \"/$&/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"a$&b\"",
+                          "global.process.env.NODE_ENV": "\"a$&b\"",
+                          "globalThis.process.env.NODE_ENV": "\"a$&b\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "a2",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"development\";\nconst first1 = \"/__BASE__/\";\nconst first2 = \"localhost:5173/__SERVER_HOST__/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst first7 = \"/__HMR_BASE__/nested/path/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my;\nconst first11 = true;\nconst first12 = \"$\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"development\";\nconst second1 = \"/__BASE__/\";\nconst second2 = \"localhost:5173/__SERVER_HOST__/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = null;\nconst second6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst second7 = \"/__HMR_BASE__/nested/path/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = true;\nconst second12 = \"$\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;config.mjs\";\nconst first11 = true;\nconst first12 = \"$\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"development\";\nconst second1 = \"/__BASE__/\";\nconst second2 = \"localhost:5173/__SERVER_HOST__/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = null;\nconst second6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst second7 = \"/__HMR_BASE__/nested/path/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"my;\nconst second11 = true;\nconst second12 = \"$\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;config.mjs\";\nconst second11 = true;\nconst second12 = \"$\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"development\";\nconst once1 = \"/__BASE__/\";\nconst once2 = \"localhost:5173/__SERVER_HOST__/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = null;\nconst once6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst once7 = \"/__HMR_BASE__/nested/path/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"my;\nconst once11 = true;\nconst once12 = \"$\";\nconst once13 = {\"unhandledErrors\":true};\nconst defines = {\"N\": 2, \"__X__\": 1};config.mjs\";\nconst once11 = true;\nconst once12 = \"$\";\nconst once13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;",
+                    "env": "const first0 = \"development\";\nconst first1 = \"/__BASE__/\";\nconst first2 = \"localhost:5173/__SERVER_HOST__/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst first7 = \"/__HMR_BASE__/nested/path/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my;\nconst first11 = true;\nconst first12 = \"$\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"development\";\nconst second1 = \"/__BASE__/\";\nconst second2 = \"localhost:5173/__SERVER_HOST__/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = null;\nconst second6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst second7 = \"/__HMR_BASE__/nested/path/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = true;\nconst second12 = \"$\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;config.mjs\";\nconst first11 = true;\nconst first12 = \"$\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"development\";\nconst second1 = \"/__BASE__/\";\nconst second2 = \"localhost:5173/__SERVER_HOST__/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = null;\nconst second6 = \"localhost:5173/__HMR_DIRECT_TARGET__/\";\nconst second7 = \"/__HMR_BASE__/nested/path/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"my;\nconst second11 = true;\nconst second12 = \"$\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;config.mjs\";\nconst second11 = true;\nconst second12 = \"$\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"development\"",
+                          "global.process.env.NODE_ENV": "\"development\"",
+                          "globalThis.process.env.NODE_ENV": "\"development\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                },
+                "id": "a2",
+                "original": {
+                  "id": "a2",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"development\";\nconst first1 = \"/$&/\";\nconst first2 = \"localhost:5173/$&/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/$&/\";\nconst first7 = \"/$&/nested/path/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my$'config.mjs\";\nconst first11 = true;\nconst first12 = \"$$\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = __MODE__;\nconst second1 = \"/$&/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"development\";\nconst once1 = \"/$&/\";\nconst once2 = \"localhost:5173/$&/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = null;\nconst once6 = \"localhost:5173/$&/\";\nconst once7 = \"/$&/nested/path/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"my$'config.mjs\";\nconst once11 = true;\nconst once12 = \"$$\";\nconst once13 = {\"unhandledErrors\":true};\nconst defines = {\"N\": 2, \"__X__\": 1};",
+                    "env": "const first0 = \"development\";\nconst first1 = \"/$&/\";\nconst first2 = \"localhost:5173/$&/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = null;\nconst first6 = \"localhost:5173/$&/\";\nconst first7 = \"/$&/nested/path/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my$'config.mjs\";\nconst first11 = true;\nconst first12 = \"$$\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = __MODE__;\nconst second1 = \"/$&/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {\"N\": 2, \"__X__\": 1};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"development\"",
+                          "global.process.env.NODE_ENV": "\"development\"",
+                          "globalThis.process.env.NODE_ENV": "\"development\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "a3",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"a__MODE__b\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24678;\nconst first6 = \"localhost:5173/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my;\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"a__MODE__b\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24678;\nconst second6 = \"localhost:5173/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = {};\nconst defines2 = __DEFINES__;config.mjs\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"a__MODE__b\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24678;\nconst second6 = \"localhost:5173/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"my;\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;config.mjs\";\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"a__MODE__b\";\nconst once1 = \"/app/\";\nconst once2 = \"localhost:5173/app/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = 24678;\nconst once6 = \"localhost:5173/app/\";\nconst once7 = \"/app/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"my;\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = {\"unhandledErrors\":true};\nconst defines = {};config.mjs\";\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;",
+                    "env": "const first0 = \"a__MODE__b\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24678;\nconst first6 = \"localhost:5173/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my;\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"a__MODE__b\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24678;\nconst second6 = \"localhost:5173/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = {};\nconst defines2 = __DEFINES__;config.mjs\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = \"a__MODE__b\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24678;\nconst second6 = \"localhost:5173/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"my;\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;config.mjs\";\nconst second11 = false;\nconst second12 = \"tok\";\nconst second13 = {\"unhandledErrors\":true};\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"a$&b\"",
+                          "global.process.env.NODE_ENV": "\"a$&b\"",
+                          "globalThis.process.env.NODE_ENV": "\"a$&b\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                },
+                "id": "a3",
+                "original": {
+                  "id": "a3",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"a$&b\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24678;\nconst first6 = \"localhost:5173/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my$'config.mjs\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = __MODE__;\nconst second1 = \"/app/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"a$&b\";\nconst once1 = \"/app/\";\nconst once2 = \"localhost:5173/app/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = 24678;\nconst once6 = \"localhost:5173/app/\";\nconst once7 = \"/app/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"my$'config.mjs\";\nconst once11 = false;\nconst once12 = \"tok\";\nconst once13 = {\"unhandledErrors\":true};\nconst defines = {};",
+                    "env": "const first0 = \"a$&b\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24678;\nconst first6 = \"localhost:5173/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my$'config.mjs\";\nconst first11 = false;\nconst first12 = \"tok\";\nconst first13 = {\"unhandledErrors\":true};\nconst second0 = __MODE__;\nconst second1 = \"/app/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"a$&b\"",
+                          "global.process.env.NODE_ENV": "\"a$&b\"",
+                          "globalThis.process.env.NODE_ENV": "\"a$&b\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "a4",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"development\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my;\nconst first11 = false;\nconst first12 = \"$\";\nconst first13 = undefined;\nconst second0 = \"development\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24679;\nconst second6 = \"localhost:24679/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = false;\nconst second12 = \"$\";\nconst second13 = undefined;\nconst defines = {};\nconst defines2 = __DEFINES__;config.mjs\";\nconst first11 = false;\nconst first12 = \"$\";\nconst first13 = undefined;\nconst second0 = \"development\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24679;\nconst second6 = \"localhost:24679/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"my;\nconst second11 = false;\nconst second12 = \"$\";\nconst second13 = undefined;\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;config.mjs\";\nconst second11 = false;\nconst second12 = \"$\";\nconst second13 = undefined;\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"development\";\nconst once1 = \"/app/\";\nconst once2 = \"localhost:5173/app/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = 24679;\nconst once6 = \"localhost:24679/app/\";\nconst once7 = \"/app/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"my;\nconst once11 = false;\nconst once12 = \"$\";\nconst once13 = undefined;\nconst defines = {};config.mjs\";\nconst once11 = false;\nconst once12 = \"$\";\nconst once13 = undefined;\nconst defines = __DEFINES__;",
+                    "env": "const first0 = \"development\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my;\nconst first11 = false;\nconst first12 = \"$\";\nconst first13 = undefined;\nconst second0 = \"development\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24679;\nconst second6 = \"localhost:24679/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = false;\nconst second12 = \"$\";\nconst second13 = undefined;\nconst defines = {};\nconst defines2 = __DEFINES__;config.mjs\";\nconst first11 = false;\nconst first12 = \"$\";\nconst first13 = undefined;\nconst second0 = \"development\";\nconst second1 = \"/app/\";\nconst second2 = \"localhost:5173/app/\";\nconst second3 = null;\nconst second4 = null;\nconst second5 = 24679;\nconst second6 = \"localhost:24679/app/\";\nconst second7 = \"/app/\";\nconst second8 = 30000;\nconst second9 = true;\nconst second10 = \"my;\nconst second11 = false;\nconst second12 = \"$\";\nconst second13 = undefined;\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;config.mjs\";\nconst second11 = false;\nconst second12 = \"$\";\nconst second13 = undefined;\nconst defines = __DEFINES__;\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"development\"",
+                          "global.process.env.NODE_ENV": "\"development\"",
+                          "globalThis.process.env.NODE_ENV": "\"development\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                },
+                "id": "a4",
+                "original": {
+                  "id": "a4",
+                  "ok": {
+                    "apply": [
+                      true,
+                      false
+                    ],
+                    "client": "const first0 = \"development\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my$'config.mjs\";\nconst first11 = false;\nconst first12 = \"$$\";\nconst first13 = undefined;\nconst second0 = __MODE__;\nconst second1 = \"/app/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {};\nconst defines2 = __DEFINES__;",
+                    "clientOnce": "const once0 = \"development\";\nconst once1 = \"/app/\";\nconst once2 = \"localhost:5173/app/\";\nconst once3 = null;\nconst once4 = null;\nconst once5 = 24679;\nconst once6 = \"localhost:24679/app/\";\nconst once7 = \"/app/\";\nconst once8 = 30000;\nconst once9 = true;\nconst once10 = \"my$'config.mjs\";\nconst once11 = false;\nconst once12 = \"$$\";\nconst once13 = undefined;\nconst defines = {};",
+                    "env": "const first0 = \"development\";\nconst first1 = \"/app/\";\nconst first2 = \"localhost:5173/app/\";\nconst first3 = null;\nconst first4 = null;\nconst first5 = 24679;\nconst first6 = \"localhost:24679/app/\";\nconst first7 = \"/app/\";\nconst first8 = 30000;\nconst first9 = true;\nconst first10 = \"my$'config.mjs\";\nconst first11 = false;\nconst first12 = \"$$\";\nconst first13 = undefined;\nconst second0 = __MODE__;\nconst second1 = \"/app/\";\nconst second2 = __SERVER_HOST__;\nconst second3 = __HMR_PROTOCOL__;\nconst second4 = __HMR_HOSTNAME__;\nconst second5 = __HMR_PORT__;\nconst second6 = __HMR_DIRECT_TARGET__;\nconst second7 = __HMR_BASE__;\nconst second8 = __HMR_TIMEOUT__;\nconst second9 = __HMR_ENABLE_OVERLAY__;\nconst second10 = __HMR_CONFIG_NAME__;\nconst second11 = __HMR_PARTIAL_ACCEPT__;\nconst second12 = __WS_TOKEN__;\nconst second13 = __SERVER_FORWARD_CONSOLE__;\nconst defines = {};\nconst defines2 = __DEFINES__;",
+                    "other": {
+                      "code": "if (process.env.NODE_ENV) {}",
+                      "replaceDefine": {
+                        "define": {
+                          "process.env.NODE_ENV": "\"development\"",
+                          "global.process.env.NODE_ENV": "\"development\"",
+                          "globalThis.process.env.NODE_ENV": "\"development\""
+                        },
+                        "id": "/src/main.ts"
+                      }
+                    },
+                    "ssr": null
+                  }
+                }
+              }
+            ],
+            "differing": 400,
+            "onceDiffering": 364,
+            "scenarios": 400,
+            "verdict": "changed"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 60,
+              "params": 1,
+              "statements": 23
+            },
+            "fileLines": 307,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 10
+          },
+          "tsc": [],
+          "what": "turn the replacement chain into a table applied with replaceAll and plain strings"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 65,
+                "params": 1,
+                "statements": 23
+              },
+              "fileLines": 325,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 10
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a04",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 56,
+              "params": 1,
+              "statements": 23
+            },
+            "fileLines": 303,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 10
+          },
+          "tsc": [],
+          "what": "turn the replacement chain into a table of patterns and replacer functions, applied in the same order"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [
+                "buildReplacer"
+              ],
+              "eslintLines": [],
+              "eslintParams": [
+                "buildReplacer"
+              ],
+              "eslintStatements": [
+                "buildReplacer",
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [
+                "buildReplacer"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 50,
+                "params": 1,
+                "statements": 22
+              },
+              "fileLines": 360,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "buildReplacer",
+                  "params": 11,
+                  "statements": 15
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 11,
+              "topLevelFunctions": 11
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [
+              "buildReplacer"
+            ],
+            "eslintLines": [],
+            "eslintParams": [
+              "buildReplacer"
+            ],
+            "eslintStatements": [
+              "buildReplacer",
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [
+              "buildReplacer"
+            ],
+            "sonarLines": []
+          },
+          "id": "a05",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 38,
+              "params": 1,
+              "statements": 22
+            },
+            "fileLines": 335,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "buildReplacer",
+                "params": 11,
+                "statements": 15
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 11,
+            "topLevelFunctions": 11
+          },
+          "tsc": [],
+          "what": "move the replacements into a helper that takes the eleven values it needs as parameters"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [
+                "buildReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "buildReplacer",
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "buildReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 50,
+                "params": 1,
+                "statements": 22
+              },
+              "fileLines": 373,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 62,
+                  "name": "buildReplacer",
+                  "params": 1,
+                  "statements": 16
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 1,
+              "topLevelFunctions": 11
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "buildReplacer",
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a06",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 38,
+              "params": 1,
+              "statements": 22
+            },
+            "fileLines": 336,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 50,
+                "name": "buildReplacer",
+                "params": 1,
+                "statements": 16
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 1,
+            "topLevelFunctions": 11
+          },
+          "tsc": [],
+          "what": "the same helper with one options object instead of eleven parameters"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [
+                "buildReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "buildReplacer",
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "buildReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 50,
+                "params": 1,
+                "statements": 22
+              },
+              "fileLines": 375,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 64,
+                  "name": "buildReplacer",
+                  "params": 1,
+                  "statements": 16
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 1,
+              "topLevelFunctions": 11
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "buildReplacer",
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a07",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 38,
+              "params": 1,
+              "statements": 22
+            },
+            "fileLines": 324,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 38,
+                "name": "buildReplacer",
+                "params": 1,
+                "statements": 16
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 1,
+            "topLevelFunctions": 11
+          },
+          "tsc": [],
+          "what": "the same helper with a rest parameter"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "buildReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "buildReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "buildReplacer",
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "buildReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 50,
+                "params": 1,
+                "statements": 22
+              },
+              "fileLines": 373,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 0,
+              "helpers": [
+                {
+                  "callSites": 0,
+                  "lines": 62,
+                  "name": "buildReplacer",
+                  "params": 0,
+                  "statements": 16
+                }
+              ],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 11
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "buildReplacer",
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a08",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 38,
+              "params": 1,
+              "statements": 22
+            },
+            "fileLines": 324,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 0,
+            "helpers": [
+              {
+                "callSites": 0,
+                "lines": 38,
+                "name": "buildReplacer",
+                "params": 0,
+                "statements": 16
+              }
+            ],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 11
+          },
+          "tsc": [],
+          "what": "the same helper reading `arguments` and declaring no parameters"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 62,
+                "params": 1,
+                "statements": 36
+              },
+              "fileLines": 322,
+              "functions": 19,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 10
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a09",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 62,
+              "params": 1,
+              "statements": 36
+            },
+            "fileLines": 309,
+            "functions": 19,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 10
+          },
+          "tsc": [],
+          "what": "delete the comments and blank lines"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 72,
+                "params": 1,
+                "statements": 36
+              },
+              "fileLines": 332,
+              "functions": 19,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 10
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a10",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 58,
+              "params": 1,
+              "statements": 36
+            },
+            "fileLines": 305,
+            "functions": 19,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 10
+          },
+          "tsc": [],
+          "what": "join statements onto shared lines"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [
+                "buildReplacer"
+              ],
+              "eslintLines": [],
+              "eslintParams": [
+                "resolveHmrClientOptions",
+                "buildReplacer"
+              ],
+              "eslintStatements": [
+                "resolveHmrClientOptions",
+                "buildReplacer"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [
+                "resolveHmrClientOptions",
+                "buildReplacer"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 0,
+                "lines": 40,
+                "params": 1,
+                "statements": 6
+              },
+              "fileLines": 394,
+              "functions": 21,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 43,
+                  "name": "resolveHmrClientOptions",
+                  "params": 4,
+                  "statements": 18
+                },
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "buildReplacer",
+                  "params": 11,
+                  "statements": 15
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 15,
+              "topLevelFunctions": 12
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [
+              "buildReplacer"
+            ],
+            "eslintLines": [],
+            "eslintParams": [
+              "resolveHmrClientOptions",
+              "buildReplacer"
+            ],
+            "eslintStatements": [
+              "resolveHmrClientOptions",
+              "buildReplacer"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [
+              "resolveHmrClientOptions",
+              "buildReplacer"
+            ],
+            "sonarLines": []
+          },
+          "id": "a12",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 0,
+              "lines": 28,
+              "params": 1,
+              "statements": 6
+            },
+            "fileLines": 369,
+            "functions": 21,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 43,
+                "name": "resolveHmrClientOptions",
+                "params": 4,
+                "statements": 18
+              },
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "buildReplacer",
+                "params": 11,
+                "statements": 15
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 15,
+            "topLevelFunctions": 12
+          },
+          "tsc": [],
+          "what": "split it fully: the settings helper and the replacer helper, so the function itself is short"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintLines": [
+                "createClientConfigValueReplacer"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 5,
+                "lines": 54,
+                "params": 1,
+                "statements": 22
+              },
+              "fileLines": 334,
+              "functions": 20,
+              "functionsBefore": 19,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 19,
+                  "name": "applyClientConfigValues",
+                  "params": 2,
+                  "statements": 0
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 2,
+              "topLevelFunctions": 11
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintLines": [
+              "createClientConfigValueReplacer"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "a11",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 400,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 5,
+              "lines": 54,
+              "params": 1,
+              "statements": 22
+            },
+            "fileLines": 318,
+            "functions": 20,
+            "functionsBefore": 19,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 16,
+                "name": "applyClientConfigValues",
+                "params": 2,
+                "statements": 0
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 2,
+            "topLevelFunctions": 11
+          },
+          "tsc": [],
+          "what": "move the replacement chain to a module-level function"
+        }
+      ],
+      "verbatim": [
+        {
+          "firstLineInSubject": 186,
+          "lines": 133,
+          "matches": true,
+          "source": "21-153"
+        }
+      ]
+    },
+    "b": {
+      "entry": "revalidateTags",
+      "file": "length-b-next-revalidate-tags.ts",
+      "flagged": {
+        "biomeLines": [
+          "revalidateTags"
+        ],
+        "biomeParams": [],
+        "eslintLines": [
+          "revalidateTags"
+        ],
+        "eslintParams": [],
+        "eslintStatements": [
+          "revalidateTags",
+          "executeRevalidates"
+        ],
+        "oxlintLines": [
+          "revalidateTags"
+        ],
+        "oxlintParams": [],
+        "sonarLines": []
+      },
+      "lint": {
+        "biome": [
+          {
+            "line": 182,
+            "message": "This function has too many statements (40). Maximum allowed is 10.",
+            "notes": [
+              "Functions with many statements are harder to read, test, and maintain.",
+              "Consider splitting this function into smaller functions.",
+              "This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information."
+            ],
+            "rule": "nursery/noExcessiveStatementsPerFunction"
+          },
+          {
+            "line": 288,
+            "message": "This function has too many statements (11). Maximum allowed is 10.",
+            "notes": [
+              "Functions with many statements are harder to read, test, and maintain.",
+              "Consider splitting this function into smaller functions.",
+              "This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information."
+            ],
+            "rule": "nursery/noExcessiveStatementsPerFunction"
+          },
+          {
+            "line": 182,
+            "message": "This function has too many lines (78). Maximum allowed is 50.",
+            "notes": [
+              "Consider refactoring this function to split it into smaller functions."
+            ],
+            "rule": "complexity/noExcessiveLinesPerFunction"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 182,
+            "message": "Async function 'revalidateTags' has too many lines (105). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          },
+          {
+            "line": 182,
+            "message": "Async function 'revalidateTags' has too many statements (40). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "line": 182,
+            "message": "Refactor this function to reduce its Cognitive Complexity from 39 to the 20 allowed.",
+            "rule": "sonarjs/cognitive-complexity"
+          },
+          {
+            "line": 288,
+            "message": "Function 'executeRevalidates' has too many statements (11). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "line": 301,
+            "message": "File has too many lines (323). Maximum allowed is 300.",
+            "rule": "max-lines"
+          }
+        ],
+        "oxlint": [
+          {
+            "help": "Maximum allowed is 300.",
+            "line": 323,
+            "message": "File has too many lines (323).",
+            "rule": "max-lines"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 182,
+            "message": "function `revalidateTags` has too many statements (40). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 288,
+            "message": "function `executeRevalidates` has too many statements (11). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 182,
+            "message": "The async function `revalidateTags` has too many lines (105). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          }
+        ]
+      },
+      "oracle": {
+        "errors": 0,
+        "loadError": null,
+        "scenarios": 300
+      },
+      "source": {
+        "path": "packages/next/src/server/revalidation-utils.ts",
+        "repo": "next.js",
+        "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85",
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/server/revalidation-utils.ts#L1"
+      },
+      "structure": {
+        "entry": {
+          "cognitive": 39,
+          "lines": 105,
+          "params": 3,
+          "statements": 40
+        },
+        "fileLines": 324,
+        "functions": 12,
+        "functionsBefore": 12,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 6
+      },
+      "tsc": [],
+      "variants": [
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "revalidateTags"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "revalidateTags"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [
+                "revalidateTags"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 39,
+                "lines": 105,
+                "params": 3,
+                "statements": 40
+              },
+              "fileLines": 327,
+              "functions": 12,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 6
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "revalidateTags"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "revalidateTags"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [
+              "revalidateTags"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b01",
+          "intent": "baseline",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 39,
+              "lines": 105,
+              "params": 3,
+              "statements": 40
+            },
+            "fileLines": 324,
+            "functions": 12,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 6
+          },
+          "tsc": [],
+          "what": "leave it as it is"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [],
+              "eslintParams": [],
+              "eslintStatements": [
+                "groupTagsByProfile",
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 13
+              },
+              "fileLines": 337,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 32,
+                  "name": "resolveDurations",
+                  "params": 2,
+                  "statements": 9
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "groupTagsByProfile",
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b02",
+          "intent": "right",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 32,
+              "params": 3,
+              "statements": 13
+            },
+            "fileLines": 331,
+            "functions": 14,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 29,
+                "name": "resolveDurations",
+                "params": 2,
+                "statements": 9
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          },
+          "tsc": [],
+          "what": "extract groupTagsByProfile and resolveDurations; revalidateTags groups, then resolves and sends each group in turn"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [],
+              "eslintParams": [],
+              "eslintStatements": [
+                "groupTagsByProfile",
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 40,
+                "params": 3,
+                "statements": 13
+              },
+              "fileLines": 345,
+              "functions": 15,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 32,
+                  "name": "resolveDurations",
+                  "params": 2,
+                  "statements": 9
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "groupTagsByProfile",
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b03",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [
+              {
+                "edited": {
+                  "id": "b2",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b2",
+                "original": {
+                  "id": "b2",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t3"
+                      ],
+                      "{}"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                }
+              },
+              {
+                "edited": {
+                  "id": "b9",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b9",
+                "original": {
+                  "id": "b9",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                }
+              },
+              {
+                "edited": {
+                  "id": "b11",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b11",
+                "original": {
+                  "id": "b11",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t3",
+                        "t3"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t3",
+                        "t3"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t3"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t3"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t0"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t0"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                }
+              },
+              {
+                "edited": {
+                  "id": "b27",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b27",
+                "original": {
+                  "id": "b27",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                }
+              },
+              {
+                "edited": {
+                  "id": "b35",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b35",
+                "original": {
+                  "id": "b35",
+                  "log": [
+                    [
+                      "incrementalCache",
+                      [
+                        "t3"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"unknown\" must be configured under cacheLife in next.config or be \"max\""
+                }
+              }
+            ],
+            "differing": 21,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "changed"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 40,
+              "params": 3,
+              "statements": 13
+            },
+            "fileLines": 339,
+            "functions": 15,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 29,
+                "name": "resolveDurations",
+                "params": 2,
+                "statements": 9
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          },
+          "tsc": [],
+          "what": "the same helpers, but resolve every group's durations before sending any"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "revalidateTags"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "revalidateTags"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [
+                "revalidateTags"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 28,
+                "lines": 83,
+                "params": 3,
+                "statements": 28
+              },
+              "fileLines": 305,
+              "functions": 12,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 6
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "revalidateTags"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "revalidateTags"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [
+              "revalidateTags"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b04",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [
+              {
+                "edited": {
+                  "id": "b1",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"{\"stale\":5,\"expire\":10}\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b1",
+                "original": {
+                  "id": "b1",
+                  "log": [
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b3",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"{\"expire\":10,\"stale\":5}\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b3",
+                "original": {
+                  "id": "b3",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b4",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t3",
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t3",
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"{\"expire\":10,\"stale\":5}\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b4",
+                "original": {
+                  "id": "b4",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t3",
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t3",
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b5",
+                  "log": [],
+                  "outcome": "threw: Invalid profile provided \"{\"expire\":10}\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b5",
+                "original": {
+                  "id": "b5",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t3"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t3"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t0",
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t0",
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "resolved done"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b6",
+                  "log": [
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "undefined"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"{\"stale\":5,\"expire\":10}\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b6",
+                "original": {
+                  "id": "b6",
+                  "log": [
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              }
+            ],
+            "differing": 156,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "changed"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 28,
+              "lines": 83,
+              "params": 3,
+              "statements": 28
+            },
+            "fileLines": 302,
+            "functions": 12,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 6
+          },
+          "tsc": [],
+          "what": "key the groups by JSON.stringify of an object profile, dropping the comparison loop"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [],
+              "eslintParams": [],
+              "eslintStatements": [
+                "groupTagsByProfile",
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 10,
+                "lines": 32,
+                "params": 3,
+                "statements": 13
+              },
+              "fileLines": 337,
+              "functions": 14,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 32,
+                  "name": "resolveDurations",
+                  "params": 2,
+                  "statements": 9
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 3,
+              "topLevelFunctions": 8
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "groupTagsByProfile",
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b05",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [
+              {
+                "edited": {
+                  "id": "b6",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b6",
+                "original": {
+                  "id": "b6",
+                  "log": [
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":10}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b7",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b7",
+                "original": {
+                  "id": "b7",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":10}"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t0"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t0"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t0"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":60}"
+                    ],
+                    [
+                      "handler1",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":60}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t1"
+                      ],
+                      "{\"expire\":60}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b15",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b15",
+                "original": {
+                  "id": "b15",
+                  "log": [],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b17",
+                  "log": [],
+                  "outcome": "rejected: Invalid profile provided \"\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b17",
+                "original": {
+                  "id": "b17",
+                  "log": [],
+                  "outcome": "resolved"
+                }
+              },
+              {
+                "edited": {
+                  "id": "b18",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "undefined"
+                    ]
+                  ],
+                  "outcome": "rejected: Invalid profile provided \"\" must be configured under cacheLife in next.config or be \"max\""
+                },
+                "id": "b18",
+                "original": {
+                  "id": "b18",
+                  "log": [
+                    [
+                      "handler0",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2",
+                        "t2"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t3"
+                      ],
+                      "absent"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t3"
+                      ],
+                      "undefined"
+                    ],
+                    [
+                      "handler0",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ],
+                    [
+                      "incrementalCache",
+                      [
+                        "t2"
+                      ],
+                      "{\"expire\":4294967294}"
+                    ]
+                  ],
+                  "outcome": "resolved"
+                }
+              }
+            ],
+            "differing": 47,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "changed"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 10,
+              "lines": 32,
+              "params": 3,
+              "statements": 13
+            },
+            "fileLines": 331,
+            "functions": 14,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 29,
+                "name": "resolveDurations",
+                "params": 2,
+                "statements": 9
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 3,
+            "topLevelFunctions": 8
+          },
+          "tsc": [],
+          "what": "the right split, but resolveDurations tests `profile !== undefined` instead of the profile's truthiness"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [
+                "sendProfileGroup"
+              ],
+              "eslintLines": [],
+              "eslintParams": [
+                "sendProfileGroup"
+              ],
+              "eslintStatements": [
+                "groupTagsByProfile",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [
+                "sendProfileGroup"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 29,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 358,
+              "functions": 15,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 32,
+                  "name": "resolveDurations",
+                  "params": 2,
+                  "statements": 9
+                },
+                {
+                  "callSites": 1,
+                  "lines": 23,
+                  "name": "sendProfileGroup",
+                  "params": 6,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 3,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 9,
+              "topLevelFunctions": 9
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [
+              "sendProfileGroup"
+            ],
+            "eslintLines": [],
+            "eslintParams": [
+              "sendProfileGroup"
+            ],
+            "eslintStatements": [
+              "groupTagsByProfile",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [
+              "sendProfileGroup"
+            ],
+            "sonarLines": []
+          },
+          "id": "b06",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 2,
+              "lines": 22,
+              "params": 3,
+              "statements": 8
+            },
+            "fileLines": 342,
+            "functions": 15,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 3,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 29,
+                "name": "resolveDurations",
+                "params": 2,
+                "statements": 9
+              },
+              {
+                "callSites": 1,
+                "lines": 20,
+                "name": "sendProfileGroup",
+                "params": 6,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 3,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 9,
+            "topLevelFunctions": 9
+          },
+          "tsc": [],
+          "what": "the right split plus a send helper that takes six parameters, including the promises array it fills"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [],
+              "biomeParams": [],
+              "eslintLines": [],
+              "eslintParams": [],
+              "eslintStatements": [
+                "groupTagsByProfile",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 2,
+                "lines": 29,
+                "params": 3,
+                "statements": 8
+              },
+              "fileLines": 366,
+              "functions": 15,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 3,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 49,
+                  "name": "groupTagsByProfile",
+                  "params": 1,
+                  "statements": 19
+                },
+                {
+                  "callSites": 1,
+                  "lines": 32,
+                  "name": "resolveDurations",
+                  "params": 2,
+                  "statements": 9
+                },
+                {
+                  "callSites": 1,
+                  "lines": 31,
+                  "name": "sendProfileGroup",
+                  "params": 1,
+                  "statements": 7
+                }
+              ],
+              "helpersCalledOnce": 3,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 4,
+              "topLevelFunctions": 9
+            }
+          },
+          "flagged": {
+            "biomeLines": [],
+            "biomeParams": [],
+            "eslintLines": [],
+            "eslintParams": [],
+            "eslintStatements": [
+              "groupTagsByProfile",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b07",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 2,
+              "lines": 22,
+              "params": 3,
+              "statements": 8
+            },
+            "fileLines": 343,
+            "functions": 15,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 3,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 49,
+                "name": "groupTagsByProfile",
+                "params": 1,
+                "statements": 19
+              },
+              {
+                "callSites": 1,
+                "lines": 29,
+                "name": "resolveDurations",
+                "params": 2,
+                "statements": 9
+              },
+              {
+                "callSites": 1,
+                "lines": 21,
+                "name": "sendProfileGroup",
+                "params": 1,
+                "statements": 7
+              }
+            ],
+            "helpersCalledOnce": 3,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 4,
+            "topLevelFunctions": 9
+          },
+          "tsc": [],
+          "what": "the same send helper with an options object"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "revalidateTags"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "revalidateTags"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [
+                "revalidateTags"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 39,
+                "lines": 85,
+                "params": 3,
+                "statements": 40
+              },
+              "fileLines": 307,
+              "functions": 12,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 6
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "revalidateTags"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "revalidateTags"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [
+              "revalidateTags"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b08",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 39,
+              "lines": 85,
+              "params": 3,
+              "statements": 40
+            },
+            "fileLines": 304,
+            "functions": 12,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 6
+          },
+          "tsc": [],
+          "what": "delete the comments and blank lines"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "revalidateTags"
+              ],
+              "biomeParams": [],
+              "eslintLines": [
+                "revalidateTags"
+              ],
+              "eslintParams": [],
+              "eslintStatements": [
+                "revalidateTags",
+                "executeRevalidates"
+              ],
+              "oxlintLines": [
+                "revalidateTags"
+              ],
+              "oxlintParams": [],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 39,
+                "lines": 105,
+                "params": 3,
+                "statements": 40
+              },
+              "fileLines": 327,
+              "functions": 12,
+              "functionsBefore": 12,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 6
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "revalidateTags"
+            ],
+            "biomeParams": [],
+            "eslintLines": [
+              "revalidateTags"
+            ],
+            "eslintParams": [],
+            "eslintStatements": [
+              "revalidateTags",
+              "executeRevalidates"
+            ],
+            "oxlintLines": [
+              "revalidateTags"
+            ],
+            "oxlintParams": [],
+            "sonarLines": []
+          },
+          "id": "b09",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 300,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 39,
+              "lines": 104,
+              "params": 3,
+              "statements": 40
+            },
+            "fileLines": 323,
+            "functions": 12,
+            "functionsBefore": 12,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 6
+          },
+          "tsc": [],
+          "what": "join statements onto shared lines"
+        }
+      ],
+      "verbatim": [
+        {
+          "firstLineInSubject": 99,
+          "lines": 225,
+          "matches": true,
+          "source": "5-229"
+        }
+      ]
+    },
+    "c": {
+      "entry": "guessIndentation",
+      "file": "length-c-vscode-guess-indentation.ts",
+      "flagged": {
+        "biomeLines": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "biomeParams": [
+          "spacesDiff"
+        ],
+        "eslintLines": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "eslintParams": [
+          "spacesDiff"
+        ],
+        "eslintStatements": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintLines": [
+          "spacesDiff",
+          "guessIndentation"
+        ],
+        "oxlintParams": [
+          "spacesDiff"
+        ],
+        "sonarLines": []
+      },
+      "lint": {
+        "biome": [
+          {
+            "line": 95,
+            "message": "This function has too many statements (36). Maximum allowed is 10.",
+            "notes": [
+              "Functions with many statements are harder to read, test, and maintain.",
+              "Consider splitting this function into smaller functions.",
+              "This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information."
+            ],
+            "rule": "nursery/noExcessiveStatementsPerFunction"
+          },
+          {
+            "line": 95,
+            "message": "Function has 5 parameters, but only 4 are allowed.",
+            "notes": [
+              "Functions with many parameters are hard to read and maintain.",
+              "Consider using an options object, splitting into smaller functions, or grouping related parameters."
+            ],
+            "rule": "complexity/useMaxParams"
+          },
+          {
+            "line": 183,
+            "message": "This function has too many statements (49). Maximum allowed is 10.",
+            "notes": [
+              "Functions with many statements are harder to read, test, and maintain.",
+              "Consider splitting this function into smaller functions.",
+              "This rule belongs to the nursery group, which means it is not yet stable and may change in the future. Visit https://biomejs.dev/linter/#nursery for more information."
+            ],
+            "rule": "nursery/noExcessiveStatementsPerFunction"
+          },
+          {
+            "line": 95,
+            "message": "This function has too many lines (56). Maximum allowed is 50.",
+            "notes": [
+              "Consider refactoring this function to split it into smaller functions."
+            ],
+            "rule": "complexity/noExcessiveLinesPerFunction"
+          },
+          {
+            "line": 183,
+            "message": "This function has too many lines (98). Maximum allowed is 50.",
+            "notes": [
+              "Consider refactoring this function to split it into smaller functions."
+            ],
+            "rule": "complexity/noExcessiveLinesPerFunction"
+          }
+        ],
+        "eslint": [
+          {
+            "line": 95,
+            "message": "Function 'spacesDiff' has too many lines (73). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          },
+          {
+            "line": 95,
+            "message": "Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+            "rule": "max-params"
+          },
+          {
+            "line": 95,
+            "message": "Function 'spacesDiff' has too many statements (36). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "line": 95,
+            "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed.",
+            "rule": "sonarjs/cognitive-complexity"
+          },
+          {
+            "line": 183,
+            "message": "Function 'guessIndentation' has too many lines (117). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          },
+          {
+            "line": 183,
+            "message": "Function 'guessIndentation' has too many statements (49). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "line": 183,
+            "message": "Refactor this function to reduce its Cognitive Complexity from 29 to the 20 allowed.",
+            "rule": "sonarjs/cognitive-complexity"
+          }
+        ],
+        "oxlint": [
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 95,
+            "message": "function `spacesDiff` has too many statements (36). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 183,
+            "message": "function `guessIndentation` has too many statements (49). Maximum allowed is 10.",
+            "rule": "max-statements"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 95,
+            "message": "The function `spacesDiff` has too many lines (73). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          },
+          {
+            "help": "This rule enforces a maximum number of parameters allowed in function definitions.",
+            "line": 95,
+            "message": "Function 'spacesDiff' has too many parameters (5). Maximum allowed is 3.",
+            "rule": "max-params"
+          },
+          {
+            "help": "Consider splitting it into smaller functions.",
+            "line": 183,
+            "message": "The function `guessIndentation` has too many lines (117). Maximum allowed is 50.",
+            "rule": "max-lines-per-function"
+          }
+        ]
+      },
+      "oracle": {
+        "errors": 0,
+        "loadError": null,
+        "scenarios": 1938
+      },
+      "source": {
+        "path": "src/vs/editor/common/model/indentationGuesser.ts",
+        "repo": "vscode",
+        "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4",
+        "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/indentationGuesser.ts#L1"
+      },
+      "structure": {
+        "entry": {
+          "cognitive": 29,
+          "lines": 117,
+          "params": 3,
+          "statements": 49
+        },
+        "fileLines": 300,
+        "functions": 3,
+        "functionsBefore": 3,
+        "helperCallsFromEntry": 0,
+        "helpers": [],
+        "helpersCalledOnce": 0,
+        "helpersInCallOrder": true,
+        "paramsPassedToHelpers": 0,
+        "topLevelFunctions": 2
+      },
+      "tsc": [],
+      "variants": [
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 29,
+                "lines": 134,
+                "params": 3,
+                "statements": 49
+              },
+              "fileLines": 332,
+              "functions": 3,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 2
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff"
+            ],
+            "sonarLines": []
+          },
+          "id": "c01",
+          "intent": "right",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 29,
+              "lines": 117,
+              "params": 3,
+              "statements": 49
+            },
+            "fileLines": 300,
+            "functions": 3,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 2
+          },
+          "tsc": [],
+          "what": "leave it as it is (and say why in the final message)"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 26,
+                "lines": 114,
+                "params": 3,
+                "statements": 45
+              },
+              "fileLines": 346,
+              "functions": 4,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 27,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 2,
+              "topLevelFunctions": 3
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff"
+            ],
+            "sonarLines": []
+          },
+          "id": "c02",
+          "intent": "right",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 26,
+              "lines": 102,
+              "params": 3,
+              "statements": 45
+            },
+            "fileLines": 311,
+            "functions": 4,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 2,
+            "topLevelFunctions": 3
+          },
+          "tsc": [],
+          "what": "move only the pure tab-size scoring into guessTabSize; the loop stays"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff",
+                "measureIndentation"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "measureIndentation",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff",
+                "measureIndentation"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 16,
+                "lines": 100,
+                "params": 3,
+                "statements": 37
+              },
+              "fileLines": 369,
+              "functions": 5,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 27,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                },
+                {
+                  "callSites": 1,
+                  "lines": 32,
+                  "name": "measureIndentation",
+                  "params": 4,
+                  "statements": 14
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": false,
+              "paramsPassedToHelpers": 6,
+              "topLevelFunctions": 4
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff",
+              "measureIndentation"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "measureIndentation",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff",
+              "measureIndentation"
+            ],
+            "sonarLines": []
+          },
+          "id": "c03",
+          "intent": "right",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 16,
+              "lines": 85,
+              "params": 3,
+              "statements": 37
+            },
+            "fileLines": 324,
+            "functions": 5,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              },
+              {
+                "callSites": 1,
+                "lines": 25,
+                "name": "measureIndentation",
+                "params": 4,
+                "statements": 14
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": false,
+            "paramsPassedToHelpers": 6,
+            "topLevelFunctions": 4
+          },
+          "tsc": [],
+          "what": "also move one line's indentation count into measureIndentation; the loop and its skips stay"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff",
+                "recordSpacesDiff"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff",
+                "recordSpacesDiff"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 21,
+                "lines": 113,
+                "params": 3,
+                "statements": 43
+              },
+              "fileLines": 333,
+              "functions": 4,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 16,
+                  "name": "recordSpacesDiff",
+                  "params": 4,
+                  "statements": 5
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 4,
+              "topLevelFunctions": 3
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff",
+              "recordSpacesDiff"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff",
+              "recordSpacesDiff"
+            ],
+            "sonarLines": []
+          },
+          "id": "c04",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [
+              {
+                "edited": {
+                  "id": "t3:2:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 6
+                  }
+                },
+                "id": "t3:2:true",
+                "original": {
+                  "id": "t3:2:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t3:2:false",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 6
+                  }
+                },
+                "id": "t3:2:false",
+                "original": {
+                  "id": "t3:2:false",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t3:4:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 6
+                  }
+                },
+                "id": "t3:4:true",
+                "original": {
+                  "id": "t3:4:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t3:4:false",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 6
+                  }
+                },
+                "id": "t3:4:false",
+                "original": {
+                  "id": "t3:4:false",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t3:8:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 6
+                  }
+                },
+                "id": "t3:8:true",
+                "original": {
+                  "id": "t3:8:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              }
+            ],
+            "differing": 36,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "changed"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 21,
+              "lines": 96,
+              "params": 3,
+              "statements": 43
+            },
+            "fileLines": 296,
+            "functions": 4,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 11,
+                "name": "recordSpacesDiff",
+                "params": 4,
+                "statements": 5
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 4,
+            "topLevelFunctions": 3
+          },
+          "tsc": [],
+          "what": "move the alignment check and the tab-size count into a helper that returns early; the loop then always updates the previous line"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 29,
+                "lines": 134,
+                "params": 3,
+                "statements": 49
+              },
+              "fileLines": 332,
+              "functions": 3,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 2
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff"
+            ],
+            "sonarLines": []
+          },
+          "id": "c05",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [
+              {
+                "edited": {
+                  "id": "t15:2:true",
+                  "ok": {
+                    "insertSpaces": false,
+                    "tabSize": 2
+                  }
+                },
+                "id": "t15:2:true",
+                "original": {
+                  "id": "t15:2:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t15:2:false",
+                  "ok": {
+                    "insertSpaces": false,
+                    "tabSize": 2
+                  }
+                },
+                "id": "t15:2:false",
+                "original": {
+                  "id": "t15:2:false",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t15:4:true",
+                  "ok": {
+                    "insertSpaces": false,
+                    "tabSize": 4
+                  }
+                },
+                "id": "t15:4:true",
+                "original": {
+                  "id": "t15:4:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t15:4:false",
+                  "ok": {
+                    "insertSpaces": false,
+                    "tabSize": 4
+                  }
+                },
+                "id": "t15:4:false",
+                "original": {
+                  "id": "t15:4:false",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              },
+              {
+                "edited": {
+                  "id": "t15:8:true",
+                  "ok": {
+                    "insertSpaces": false,
+                    "tabSize": 8
+                  }
+                },
+                "id": "t15:8:true",
+                "original": {
+                  "id": "t15:8:true",
+                  "ok": {
+                    "insertSpaces": true,
+                    "tabSize": 2
+                  }
+                }
+              }
+            ],
+            "differing": 162,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "changed"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 29,
+              "lines": 117,
+              "params": 3,
+              "statements": 49
+            },
+            "fileLines": 300,
+            "functions": 3,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 2
+          },
+          "tsc": [],
+          "what": "count tab and space lines before skipping whitespace-only lines"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff",
+                "analyseLine"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "analyseLine",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff",
+                "analyseLine"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "analyseLine",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "analyseLine",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff",
+                "analyseLine"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 15,
+                "lines": 89,
+                "params": 3,
+                "statements": 32
+              },
+              "fileLines": 352,
+              "functions": 4,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 1,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 61,
+                  "name": "analyseLine",
+                  "params": 7,
+                  "statements": 20
+                }
+              ],
+              "helpersCalledOnce": 1,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 7,
+              "topLevelFunctions": 3
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff",
+              "analyseLine"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff",
+              "analyseLine"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "analyseLine",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff",
+              "analyseLine"
+            ],
+            "sonarLines": []
+          },
+          "id": "c06",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 15,
+              "lines": 72,
+              "params": 3,
+              "statements": 32
+            },
+            "fileLines": 286,
+            "functions": 4,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 1,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 27,
+                "name": "analyseLine",
+                "params": 7,
+                "statements": 20
+              }
+            ],
+            "helpersCalledOnce": 1,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 7,
+            "topLevelFunctions": 3
+          },
+          "tsc": [],
+          "what": "move the whole loop body into a seven-parameter helper that returns everything the loop needs, skips included"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff",
+                "analyseLine"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "analyseLine",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff",
+                "analyseLine"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "analyseLine",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "analyseLine",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff",
+                "analyseLine"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 12,
+                "lines": 69,
+                "params": 3,
+                "statements": 28
+              },
+              "fileLines": 366,
+              "functions": 5,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 2,
+              "helpers": [
+                {
+                  "callSites": 1,
+                  "lines": 27,
+                  "name": "guessTabSize",
+                  "params": 2,
+                  "statements": 6
+                },
+                {
+                  "callSites": 1,
+                  "lines": 61,
+                  "name": "analyseLine",
+                  "params": 7,
+                  "statements": 20
+                }
+              ],
+              "helpersCalledOnce": 2,
+              "helpersInCallOrder": false,
+              "paramsPassedToHelpers": 9,
+              "topLevelFunctions": 4
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff"
+            ],
+            "biomeParams": [
+              "spacesDiff",
+              "analyseLine"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff",
+              "analyseLine"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "analyseLine",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff",
+              "analyseLine"
+            ],
+            "sonarLines": []
+          },
+          "id": "c09",
+          "intent": "tempting",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 12,
+              "lines": 57,
+              "params": 3,
+              "statements": 28
+            },
+            "fileLines": 297,
+            "functions": 5,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 2,
+            "helpers": [
+              {
+                "callSites": 1,
+                "lines": 19,
+                "name": "guessTabSize",
+                "params": 2,
+                "statements": 6
+              },
+              {
+                "callSites": 1,
+                "lines": 27,
+                "name": "analyseLine",
+                "params": 7,
+                "statements": 20
+              }
+            ],
+            "helpersCalledOnce": 2,
+            "helpersInCallOrder": false,
+            "paramsPassedToHelpers": 9,
+            "topLevelFunctions": 4
+          },
+          "tsc": [],
+          "what": "split it fully: the scoring into guessTabSize and the loop body into the seven-parameter analyseLine"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 29,
+                "lines": 91,
+                "params": 3,
+                "statements": 49
+              },
+              "fileLines": 289,
+              "functions": 3,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 2
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff"
+            ],
+            "sonarLines": []
+          },
+          "id": "c07",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 29,
+              "lines": 74,
+              "params": 3,
+              "statements": 49
+            },
+            "fileLines": 257,
+            "functions": 3,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 2
+          },
+          "tsc": [],
+          "what": "delete the comments, the commented-out console.log lines and the blank lines"
+        },
+        {
+          "afterFormatter": {
+            "flagged": {
+              "biomeLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "biomeParams": [
+                "spacesDiff"
+              ],
+              "eslintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "eslintParams": [
+                "spacesDiff"
+              ],
+              "eslintStatements": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintLines": [
+                "spacesDiff",
+                "guessIndentation"
+              ],
+              "oxlintParams": [
+                "spacesDiff"
+              ],
+              "sonarLines": []
+            },
+            "structure": {
+              "entry": {
+                "cognitive": 29,
+                "lines": 134,
+                "params": 3,
+                "statements": 49
+              },
+              "fileLines": 332,
+              "functions": 3,
+              "functionsBefore": 3,
+              "helperCallsFromEntry": 0,
+              "helpers": [],
+              "helpersCalledOnce": 0,
+              "helpersInCallOrder": true,
+              "paramsPassedToHelpers": 0,
+              "topLevelFunctions": 2
+            }
+          },
+          "flagged": {
+            "biomeLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "biomeParams": [
+              "spacesDiff"
+            ],
+            "eslintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "eslintParams": [
+              "spacesDiff"
+            ],
+            "eslintStatements": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintLines": [
+              "spacesDiff",
+              "guessIndentation"
+            ],
+            "oxlintParams": [
+              "spacesDiff"
+            ],
+            "sonarLines": []
+          },
+          "id": "c08",
+          "intent": "gaming",
+          "oracle": {
+            "arityOnly": 0,
+            "crashed": 0,
+            "differences": [],
+            "differing": 0,
+            "onceDiffering": 0,
+            "scenarios": 1938,
+            "verdict": "same"
+          },
+          "structure": {
+            "entry": {
+              "cognitive": 29,
+              "lines": 113,
+              "params": 3,
+              "statements": 49
+            },
+            "fileLines": 296,
+            "functions": 3,
+            "functionsBefore": 3,
+            "helperCallsFromEntry": 0,
+            "helpers": [],
+            "helpersCalledOnce": 0,
+            "helpersInCallOrder": true,
+            "paramsPassedToHelpers": 0,
+            "topLevelFunctions": 2
+          },
+          "tsc": [],
+          "what": "join statements onto shared lines"
+        }
+      ],
+      "verbatim": [
+        {
+          "firstLineInSubject": 66,
+          "lines": 4,
+          "matches": true,
+          "source": "1-4"
+        },
+        {
+          "firstLineInSubject": 87,
+          "lines": 213,
+          "matches": true,
+          "source": "9-221"
+        }
+      ]
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/typescript-estree": "8.72.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.3",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.0",
+    "git": "git version 2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.74.0"
+  }
+}

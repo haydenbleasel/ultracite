@@ -1,0 +1,28 @@
+--- a/indentationGuesser.ts
++++ b/indentationGuesser.ts
+@@ -228,11 +228,11 @@
+   }
+ 
+   return {
+-    currentLineText,
+     currentLineHasContent,
+     currentLineIndentation,
+     currentLineSpacesCount,
+     currentLineTabsCount,
++    currentLineText,
+   };
+ }
+ 
+@@ -285,10 +285,10 @@
+   // Look at most at the first 10k lines
+   const linesCount = Math.min(source.getLineCount(), 10_000);
+   const statistics: IndentationStatistics = {
+-    linesIndentedWithTabsCount: 0, // number of lines that contain at least one tab in indentation
+     linesIndentedWithSpacesCount: 0, // number of lines that contain only spaces in indentation
+-    previousLineText: "", // content of latest line that contained non-whitespace chars
++    linesIndentedWithTabsCount: 0, // number of lines that contain at least one tab in indentation
+     previousLineIndentation: 0, // index at which latest line contained the first non-whitespace char
++    previousLineText: "", // content of latest line that contained non-whitespace chars
+     spacesDiffCount: [0, 0, 0, 0, 0, 0, 0, 0, 0], // `tabSize` scores
+   };
+   const tmp = new SpacesDiffResult();

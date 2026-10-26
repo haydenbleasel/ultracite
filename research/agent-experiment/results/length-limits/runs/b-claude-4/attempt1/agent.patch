@@ -1,0 +1,185 @@
+--- a/revalidation-utils.ts
++++ b/revalidation-utils.ts
+@@ -148,6 +148,101 @@
+       )
+     ),
+   };
++}
++
++type ProfileKey =
++  | string
++  | { stale?: number; revalidate?: number; expire?: number }
++  | undefined;
++
++// Find existing profile by comparing values
++function findExistingProfileKey(
++  tagsByProfile: Map<ProfileKey, string[]>,
++  profile: ProfileKey
++): ProfileKey {
++  let existingKey: ProfileKey;
++  for (const [key] of tagsByProfile) {
++    if (
++      typeof key === "string" &&
++      typeof profile === "string" &&
++      key === profile
++    ) {
++      existingKey = key;
++      break;
++    }
++    if (
++      typeof key === "object" &&
++      typeof profile === "object" &&
++      JSON.stringify(key) === JSON.stringify(profile)
++    ) {
++      existingKey = key;
++      break;
++    }
++    if (key === profile) {
++      existingKey = key;
++      break;
++    }
++  }
++  return existingKey;
++}
++
++// Group tags by profile for batch processing
++function groupTagsByProfile(
++  tagsWithProfile: {
++    tag: string;
++    profile?: string | { expire?: number };
++  }[]
++): Map<ProfileKey, string[]> {
++  const tagsByProfile = new Map<ProfileKey, string[]>();
++
++  for (const item of tagsWithProfile) {
++    const { profile } = item;
++    const existingKey = findExistingProfileKey(tagsByProfile, profile);
++
++    const profileKey = existingKey || profile;
++    if (!tagsByProfile.has(profileKey)) {
++      tagsByProfile.set(profileKey, []);
++    }
++    tagsByProfile.get(profileKey)!.push(item.tag);
++  }
++
++  return tagsByProfile;
++}
++
++// Look up the cache profile from workStore if available
++function resolveDurations(
++  profile: ProfileKey,
++  workStore: WorkStore | undefined
++): { expire?: number } | undefined {
++  let durations: { expire?: number } | undefined;
++
++  if (profile) {
++    let cacheLife:
++      | { stale?: number; revalidate?: number; expire?: number }
++      | undefined;
++
++    if (typeof profile === "object") {
++      // Profile is already a cacheLife configuration object
++      cacheLife = profile;
++    } else if (typeof profile === "string") {
++      // Profile is a string key, look it up in workStore
++      cacheLife = workStore?.cacheLifeProfiles[profile];
++
++      if (!cacheLife) {
++        throw new Error(
++          `Invalid profile provided "${profile}" must be configured under cacheLife in next.config or be "max"`
++        );
++      }
++    }
++
++    if (cacheLife) {
++      durations = {
++        expire: cacheLife.expire,
++      };
++    }
++  }
++
++  return durations;
+ }
+ 
+ async function revalidateTags(
+@@ -165,78 +260,11 @@
+   const handlers = getCacheHandlers() ?? [];
+   const promises: Promise<void>[] = [];
+ 
+-  // Group tags by profile for batch processing
+-  const tagsByProfile = new Map<
+-    | string
+-    | { stale?: number; revalidate?: number; expire?: number }
+-    | undefined,
+-    string[]
+-  >();
++  const tagsByProfile = groupTagsByProfile(tagsWithProfile);
+ 
+-  for (const item of tagsWithProfile) {
+-    const { profile } = item;
+-    // Find existing profile by comparing values
+-    let existingKey = undefined;
+-    for (const [key] of tagsByProfile) {
+-      if (
+-        typeof key === "string" &&
+-        typeof profile === "string" &&
+-        key === profile
+-      ) {
+-        existingKey = key;
+-        break;
+-      }
+-      if (
+-        typeof key === "object" &&
+-        typeof profile === "object" &&
+-        JSON.stringify(key) === JSON.stringify(profile)
+-      ) {
+-        existingKey = key;
+-        break;
+-      }
+-      if (key === profile) {
+-        existingKey = key;
+-        break;
+-      }
+-    }
+-
+-    const profileKey = existingKey || profile;
+-    if (!tagsByProfile.has(profileKey)) {
+-      tagsByProfile.set(profileKey, []);
+-    }
+-    tagsByProfile.get(profileKey)!.push(item.tag);
+-  }
+-
+   // Process each profile group
+   for (const [profile, tagsForProfile] of tagsByProfile) {
+-    // Look up the cache profile from workStore if available
+-    let durations: { expire?: number } | undefined;
+-
+-    if (profile) {
+-      let cacheLife:
+-        | { stale?: number; revalidate?: number; expire?: number }
+-        | undefined;
+-
+-      if (typeof profile === "object") {
+-        // Profile is already a cacheLife configuration object
+-        cacheLife = profile;
+-      } else if (typeof profile === "string") {
+-        // Profile is a string key, look it up in workStore
+-        cacheLife = workStore?.cacheLifeProfiles[profile];
+-
+-        if (!cacheLife) {
+-          throw new Error(
+-            `Invalid profile provided "${profile}" must be configured under cacheLife in next.config or be "max"`
+-          );
+-        }
+-      }
+-
+-      if (cacheLife) {
+-        durations = {
+-          expire: cacheLife.expire,
+-        };
+-      }
+-    }
++    const durations = resolveDurations(profile, workStore);
+     // If profile is not found and not 'max', durations will be undefined
+     // which will trigger immediate expiration in the cache handler
+ 
