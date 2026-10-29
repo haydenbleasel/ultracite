@@ -3,42 +3,14 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
-import { combineProcessOutput } from "../packages/cli/scripts/typecheck-output";
+import { intFromEnv } from "./config";
 import { median } from "./stats";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT_DIR = path.join(ROOT, "benchmark", "results");
 
-const integerAtLeastFromEnv = (
-  name: string,
-  fallback: number,
-  minimum: number
-): number => {
-  const raw = process.env[name];
-
-  if (raw === undefined || raw.trim() === "") {
-    return fallback;
-  }
-
-  if (!/^\d+$/u.test(raw)) {
-    throw new Error(
-      `${name} must be an integer greater than or equal to ${minimum}`
-    );
-  }
-
-  const value = Number(raw);
-
-  if (!Number.isSafeInteger(value) || value < minimum) {
-    throw new Error(
-      `${name} must be an integer greater than or equal to ${minimum}`
-    );
-  }
-
-  return value;
-};
-
-const WARMUPS = integerAtLeastFromEnv("TYPECHECK_WARMUPS", 2, 0);
-const SAMPLES = integerAtLeastFromEnv("TYPECHECK_SAMPLES", 7, 1);
+const WARMUPS = intFromEnv("TYPECHECK_WARMUPS", 2, 0);
+const SAMPLES = intFromEnv("TYPECHECK_SAMPLES", 7);
 const COMPILERS = ["tsgo", "tsrs"] as const;
 
 type Compiler = (typeof COMPILERS)[number];
@@ -58,6 +30,9 @@ const COMPILER_BINARIES: Record<Compiler, string> = {
 const decoder = new TextDecoder();
 
 const decode = (output: Uint8Array): string => decoder.decode(output).trim();
+
+const combineProcessOutput = (stderr: Uint8Array, stdout: Uint8Array): string =>
+  [decode(stderr), decode(stdout)].filter(Boolean).join("\n");
 
 // Alternate which compiler runs first to reduce order effects.
 const orderFor = (index: number): readonly Compiler[] =>

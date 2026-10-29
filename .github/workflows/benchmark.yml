@@ -39,16 +39,21 @@ jobs:
       # Compare tsrs with the compiler it replaces, on the same PR sources and
       # runner. Both compiler packages are installed with the workspace.
       - name: Benchmark tsgo against tsrs
+        id: typecheck-benchmark
+        env:
+          TYPECHECK_WARMUPS: "1"
+          TYPECHECK_SAMPLES: "5"
         run: bun ./benchmark/typecheck.ts
 
       - name: Upload type-check benchmark report
+        if: always() && steps.typecheck-benchmark.outcome != 'skipped'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: typecheck-benchmark
           path: |
             benchmark/results/typecheck.html
             benchmark/results/typecheck.json
-          if-no-files-found: error
+          if-no-files-found: ignore
 
       # Build + pack the PR (head) build under test. This follows the compiler
       # report so type-check benchmark failures still leave an artifact.
