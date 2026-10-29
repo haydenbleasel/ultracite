@@ -6,6 +6,19 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - .github/workflows/benchmark.yml
+      - benchmark/**
+      - bun.lock
+      - bunfig.toml
+      - oxlint.config.ts
+      - oxfmt.config.ts
+      - package.json
+      - packages/cli/**
+      - packages/typescript-config/**
+      - scripts/**
+      - tsconfig.json
+      - turbo.json
 
 # Only the latest commit on a PR needs benchmarking.
 concurrency:

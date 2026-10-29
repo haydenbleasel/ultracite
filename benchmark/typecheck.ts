@@ -3,6 +3,14 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
+import {
+  resolveCompilerExecutable,
+  spawnCompiler,
+} from "../packages/cli/scripts/typecheck-tools";
+import type {
+  CompilerExecutable,
+  CompilerName,
+} from "../packages/cli/scripts/typecheck-tools";
 import { intFromEnv } from "./config";
 import { median } from "./stats";
 
@@ -13,18 +21,21 @@ const WARMUPS = intFromEnv("TYPECHECK_WARMUPS", 2, 0);
 const SAMPLES = intFromEnv("TYPECHECK_SAMPLES", 7);
 const COMPILERS = ["tsgo", "tsrs"] as const;
 
-type Compiler = (typeof COMPILERS)[number];
+type Compiler = CompilerName;
 
-const COMPILER_BINARIES: Record<Compiler, string> = {
-  tsgo: path.join(
-    ROOT,
-    "node_modules",
-    "@typescript",
-    "native-preview",
-    "bin",
-    "tsgo"
-  ),
-  tsrs: path.join(ROOT, "node_modules", "tsrs", "bin", "tsrs"),
+const resolveBenchmarkCompiler = (name: Compiler): CompilerExecutable => {
+  const executable = resolveCompilerExecutable(name);
+
+  if (!executable) {
+    throw new Error(`The ${name} compiler is unavailable on this platform.`);
+  }
+
+  return executable;
+};
+
+const COMPILER_EXECUTABLES: Record<Compiler, CompilerExecutable> = {
+  tsgo: resolveBenchmarkCompiler("tsgo"),
+  tsrs: resolveBenchmarkCompiler("tsrs"),
 };
 
 const decoder = new TextDecoder();
@@ -56,14 +67,11 @@ class CompilerFailureError extends Error {
 }
 
 const invoke = (compiler: Compiler, args: string[]): string => {
-  const result = Bun.spawnSync(
-    [process.execPath, COMPILER_BINARIES[compiler], ...args],
-    {
-      cwd: path.join(ROOT, "packages", "cli"),
-      env: process.env,
-      stderr: "pipe",
-      stdout: "pipe",
-    }
+  const result = spawnCompiler(
+    COMPILER_EXECUTABLES[compiler],
+    args,
+    path.join(ROOT, "packages", "cli"),
+    "pipe"
   );
 
   if (result.exitCode !== 0) {
@@ -178,16 +186,14 @@ const measureOrReport = (): CompilerResult[] => {
   try {
     return measure();
   } catch (error) {
-    if (process.env.GITHUB_ACTIONS !== "true") {
+    if (
+      process.env.GITHUB_ACTIONS !== "true" ||
+      !(error instanceof CompilerFailureError)
+    ) {
       throw error;
     }
 
-    const failedCompiler =
-      error instanceof CompilerFailureError ? error.compiler : undefined;
-
-    const message = error instanceof Error ? error.message : String(error);
-
-    return reportFailure(message, failedCompiler);
+    return reportFailure(error.message, error.compiler);
   }
 };
 
@@ -277,30 +283,24 @@ const html = `<!doctype html>
 
 writeFileSync(`${OUTPUT_DIR}/typecheck.html`, html);
 
-const formatted = Bun.spawnSync(
-  [
-    "bun",
-    "run",
-    "oxfmt",
-    "--write",
-    "benchmark/results/typecheck.html",
-    "benchmark/results/typecheck.json",
-  ],
-  { cwd: ROOT, stderr: "inherit", stdout: "inherit" }
-);
-
-// Formatting only matters for the committed copies of the report, so in CI a
-// formatter failure leaves the report unformatted instead of failing the step.
-if (formatted.exitCode !== 0) {
-  const message = `Could not format benchmark report (exit ${formatted.exitCode})`;
-
-  if (process.env.GITHUB_ACTIONS !== "true") {
-    throw new Error(message);
-  }
-
-  console.log(
-    `::warning title=Type-checker benchmark::${message}. The report was written unformatted.`
+if (process.env.GITHUB_ACTIONS !== "true") {
+  const formatted = Bun.spawnSync(
+    [
+      "bun",
+      "run",
+      "oxfmt",
+      "--write",
+      "benchmark/results/typecheck.html",
+      "benchmark/results/typecheck.json",
+    ],
+    { cwd: ROOT, stderr: "inherit", stdout: "inherit" }
   );
+
+  if (formatted.exitCode !== 0) {
+    throw new Error(
+      `Could not format benchmark report (exit ${formatted.exitCode})`
+    );
+  }
 }
 
 console.log(
