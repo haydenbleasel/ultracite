@@ -63,17 +63,21 @@
         font-size: 12px;
         font-weight: 800;
         box-shadow: 0 6px 20px #0008;
-        animation: race 3.8s cubic-bezier(0.12, 0.72, 0.17, 1) both;
+        animation-name: race;
+        animation-timing-function: cubic-bezier(0.12, 0.72, 0.17, 1);
+        animation-fill-mode: both;
       }
       .tsgo {
         background: #3178c6;
         color: white;
         animation-delay: 0.2s;
+        animation-duration: 6.27s;
       }
       .tsrs {
         background: #df6a38;
         color: white;
         animation-delay: 0.2s;
+        animation-duration: 3.2s;
       }
       .finish {
         position: absolute;
@@ -108,10 +112,12 @@
       }
       @keyframes race {
         from {
-          transform: translateX(0) rotate(0);
+          left: 0;
+          transform: rotate(0);
         }
         to {
-          transform: translateX(calc(100% - 100px)) rotate(900deg);
+          left: calc(100% - 64px);
+          transform: rotate(900deg);
         }
       }
       @media (max-width: 560px) {
@@ -136,18 +142,18 @@
       <section class="race" aria-label="Animated compiler speed comparison">
         <div class="finish" aria-hidden="true"></div>
         <div class="lane">
-          <span class="label">TypeScript Go · 0.78s median</span
+          <span class="label">TypeScript Go · 0.75s median</span
           ><span class="ball tsgo" aria-label="tsgo">Go</span>
         </div>
         <div class="lane">
-          <span class="label">tsrs · 0.40s median</span
+          <span class="label">tsrs · 0.38s median</span
           ><span class="ball tsrs" aria-label="tsrs">rs</span>
         </div>
       </section>
       <section class="stats" aria-label="Benchmark results">
-        <div class="stat">tsgo median<strong>0.78s</strong></div>
-        <div class="stat">tsrs median<strong>0.40s</strong></div>
-        <div class="stat">tsrs speed<strong>1.94×</strong></div>
+        <div class="stat">tsgo median<strong>0.75s</strong></div>
+        <div class="stat">tsrs median<strong>0.38s</strong></div>
+        <div class="stat">tsrs speed<strong>1.96×</strong></div>
       </section>
       <p class="caption">
         7 measured runs per compiler after 2 warmups. The order alternates to

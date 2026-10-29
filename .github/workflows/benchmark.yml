@@ -42,6 +42,22 @@ jobs:
           npm pack --loglevel=error
           mv ultracite-*.tgz "$GITHUB_WORKSPACE/head.tgz"
 
+      # Compare tsrs with the compiler it replaces, on the same PR sources and
+      # runner. Keep the baseline compiler out of the manifest and lockfile.
+      - name: Benchmark tsgo against tsrs
+        run: |
+          bun add --no-save @typescript/native-preview@7.0.0-dev.20260707.2
+          bun ./benchmark/typecheck.ts
+
+      - name: Upload type-check benchmark report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: typecheck-benchmark
+          path: |
+            benchmark/results/typecheck.html
+            benchmark/results/typecheck.json
+          if-no-files-found: error
+
       # Build + pack the PR's base (main) build in a worktree, on the same
       # runner, so the comparison cancels out machine speed.
       - name: Build and pack base

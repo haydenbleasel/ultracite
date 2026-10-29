@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
@@ -129,6 +129,13 @@ writeFileSync(
 
 const beforeSeconds = (before.medianMs / 1000).toFixed(2);
 const afterSeconds = (after.medianMs / 1000).toFixed(2);
+const fastestDuration = 3.2;
+
+const tsgoDuration =
+  fastestDuration * Math.max(1, before.medianMs / after.medianMs);
+
+const tsrsDuration =
+  fastestDuration * Math.max(1, after.medianMs / before.medianMs);
 
 const html = `<!doctype html>
 <html lang="en">
@@ -145,15 +152,15 @@ const html = `<!doctype html>
     .race { position: relative; display: grid; gap: 28px; padding: 24px; border: 1px solid #303b46; border-radius: 18px; background: #171e26; overflow: hidden; }
     .lane { position: relative; height: 68px; display: flex; align-items: center; border-bottom: 2px dashed #364451; }
     .label { position: absolute; left: 0; top: -14px; color: #bdc7d1; font-size: 13px; }
-    .ball { width: 42px; height: 42px; border-radius: 50%; position: absolute; left: 0; display: grid; place-items: center; font-size: 12px; font-weight: 800; box-shadow: 0 6px 20px #0008; animation: race 3.8s cubic-bezier(.12,.72,.17,1) both; }
-    .tsgo { background: #3178c6; color: white; animation-delay: .2s; }
-    .tsrs { background: #df6a38; color: white; animation-delay: .2s; }
+    .ball { width: 42px; height: 42px; border-radius: 50%; position: absolute; left: 0; display: grid; place-items: center; font-size: 12px; font-weight: 800; box-shadow: 0 6px 20px #0008; animation-name: race; animation-timing-function: cubic-bezier(.12,.72,.17,1); animation-fill-mode: both; }
+    .tsgo { background: #3178c6; color: white; animation-delay: .2s; animation-duration: ${tsgoDuration.toFixed(2)}s; }
+    .tsrs { background: #df6a38; color: white; animation-delay: .2s; animation-duration: ${tsrsDuration.toFixed(2)}s; }
     .finish { position: absolute; top: 20px; bottom: 20px; right: 46px; border-left: 3px solid #e8edf2; opacity: .75; }
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
     .stat { padding: 18px; border-radius: 14px; background: #171e26; border: 1px solid #303b46; }
     .stat strong { display: block; margin-top: 5px; font-size: 1.45rem; }
     .caption { color: #a9b4bf; font-size: 13px; margin-top: 24px; line-height: 1.6; }
-    @keyframes race { from { transform: translateX(0) rotate(0); } to { transform: translateX(calc(100% - 100px)) rotate(900deg); } }
+    @keyframes race { from { left: 0; transform: rotate(0); } to { left: calc(100% - 64px); transform: rotate(900deg); } }
     @media (max-width: 560px) { .stats { grid-template-columns: 1fr; } body { padding: 28px 14px; } }
     @media (prefers-reduced-motion: reduce) { .ball { animation-duration: .01ms; } }
   </style>
@@ -201,3 +208,10 @@ if (formatted.exitCode !== 0) {
 console.log(
   `tsgo ${beforeSeconds}s → tsrs ${afterSeconds}s (${speedup.toFixed(2)}×); wrote benchmark/results/typecheck.html and typecheck.json`
 );
+
+if (process.env.GITHUB_STEP_SUMMARY) {
+  appendFileSync(
+    process.env.GITHUB_STEP_SUMMARY,
+    `\n## Type-checker benchmark\n\n| Compiler | Median |\n| --- | ---: |\n| ${before.name} (${before.version}) | ${before.medianMs.toFixed(0)} ms |\n| ${after.name} (${after.version}) | ${after.medianMs.toFixed(0)} ms |\n\n**${after.name} speedup: ${speedup.toFixed(2)}×.** The animated report and raw samples are available in the typecheck-benchmark workflow artifact.\n`
+  );
+}
