@@ -38,6 +38,16 @@ const WARMUPS = positiveIntegerFromEnv("TYPECHECK_WARMUPS", 2, 0);
 const SAMPLES = positiveIntegerFromEnv("TYPECHECK_SAMPLES", 7, 1);
 const COMPILERS = ["tsgo", "tsrs"] as const;
 
+type Compiler = (typeof COMPILERS)[number];
+
+const decoder = new TextDecoder();
+
+const decode = (output: Uint8Array): string => decoder.decode(output).trim();
+
+// Alternate which compiler runs first to reduce order effects.
+const orderFor = (index: number): readonly Compiler[] =>
+  index % 2 === 0 ? COMPILERS : [...COMPILERS].toReversed();
+
 interface CompilerResult {
   medianMs: number;
   name: string;
@@ -63,7 +73,7 @@ const median = (values: number[]): number => {
   return (lower + upper) / 2;
 };
 
-const run = (compiler: (typeof COMPILERS)[number]): number => {
+const run = (compiler: Compiler): number => {
   const start = performance.now();
 
   const result = Bun.spawnSync(
@@ -77,9 +87,10 @@ const run = (compiler: (typeof COMPILERS)[number]): number => {
   );
 
   if (result.exitCode !== 0) {
-    const stderr = new TextDecoder().decode(result.stderr).trim();
-    const stdout = new TextDecoder().decode(result.stdout).trim();
-    const diagnostics = [stderr, stdout].filter(Boolean).join("\n");
+    const diagnostics = [decode(result.stderr), decode(result.stdout)]
+      .filter(Boolean)
+      .join("\n");
+
     throw new Error(
       `${compiler} --noEmit failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
     );
@@ -88,64 +99,43 @@ const run = (compiler: (typeof COMPILERS)[number]): number => {
   return performance.now() - start;
 };
 
-const version = (compiler: (typeof COMPILERS)[number]): string => {
+const version = (compiler: Compiler): string => {
   const result = Bun.spawnSync(
     ["bun", "run", "--cwd", "packages/cli", compiler, "--version"],
     { cwd: ROOT, stderr: "pipe", stdout: "pipe" }
   );
 
   if (result.exitCode !== 0) {
-    const stderr = new TextDecoder().decode(result.stderr).trim();
+    const stderr = decode(result.stderr);
     throw new Error(
       `${compiler} --version failed with exit code ${result.exitCode}${stderr ? `:\n${stderr}` : ""}`
     );
   }
 
-  return new TextDecoder().decode(result.stdout).trim();
+  return decode(result.stdout);
 };
 
 const measure = (): CompilerResult[] => {
   for (let index = 0; index < WARMUPS; index += 1) {
-    const order = index % 2 === 0 ? COMPILERS : [...COMPILERS].toReversed();
-
-    for (const compiler of order) {
+    for (const compiler of orderFor(index)) {
       run(compiler);
     }
   }
 
-  const samples = new Map<(typeof COMPILERS)[number], number[]>([
-    ["tsgo", []],
-    ["tsrs", []],
-  ]);
+  const samples: Record<Compiler, number[]> = { tsgo: [], tsrs: [] };
 
   for (let index = 0; index < SAMPLES; index += 1) {
-    const order = index % 2 === 0 ? COMPILERS : [...COMPILERS].toReversed();
-
-    for (const compiler of order) {
-      const compilerSamples = samples.get(compiler);
-
-      if (!compilerSamples) {
-        throw new Error(`Missing sample bucket for ${compiler}`);
-      }
-
-      compilerSamples.push(run(compiler));
+    for (const compiler of orderFor(index)) {
+      samples[compiler].push(run(compiler));
     }
   }
 
-  return COMPILERS.map((name) => {
-    const samplesMs = samples.get(name);
-
-    if (!samplesMs) {
-      throw new Error(`Missing samples for ${name}`);
-    }
-
-    return {
-      medianMs: median(samplesMs),
-      name,
-      samplesMs,
-      version: version(name),
-    };
-  });
+  return COMPILERS.map((name) => ({
+    medianMs: median(samples[name]),
+    name,
+    samplesMs: samples[name],
+    version: version(name),
+  }));
 };
 
 const environment = {
@@ -156,10 +146,12 @@ const environment = {
 
 const method = `${WARMUPS} warmups, ${SAMPLES} measured runs per compiler, alternating run order. Each run executes the CLI package's --noEmit check without Turbo caching.`;
 
-// The comparison is informational, not a gate. In CI, a compiler failure (for
-// example tsgo and the tsrs beta disagreeing on the PR's code) is reported as a
-// warning so the job still reaches the base-versus-head lint regression gate.
-// The failure report keeps the artifact upload step from failing.
+// The comparison is informational, not a gate. In CI, a compiler failure here
+// is reported as a warning so the job still reaches the base-versus-head lint
+// regression gate. The head build type checks with tsrs first, so a tsrs type
+// error fails that earlier step; this path covers tsgo-only failures (tsgo
+// rejecting code tsrs accepts) and compiler crashes. The failure report keeps
+// the artifact upload step from failing.
 const reportFailure = (message: string): never => {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -313,9 +305,17 @@ const formatted = Bun.spawnSync(
   { cwd: ROOT, stderr: "inherit", stdout: "inherit" }
 );
 
+// Formatting only matters for the committed copies of the report, so in CI a
+// formatter failure leaves the report unformatted instead of failing the step.
 if (formatted.exitCode !== 0) {
-  throw new Error(
-    `Could not format benchmark report (exit ${formatted.exitCode})`
+  const message = `Could not format benchmark report (exit ${formatted.exitCode})`;
+
+  if (process.env.GITHUB_ACTIONS !== "true") {
+    throw new Error(message);
+  }
+
+  console.log(
+    `::warning title=Type-checker benchmark::${message}. The report was written unformatted.`
   );
 }
 
