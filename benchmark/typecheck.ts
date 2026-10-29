@@ -79,8 +79,9 @@ const run = (compiler: (typeof COMPILERS)[number]): number => {
   if (result.exitCode !== 0) {
     const stderr = new TextDecoder().decode(result.stderr).trim();
     const stdout = new TextDecoder().decode(result.stdout).trim();
+    const diagnostics = [stderr, stdout].filter(Boolean).join("\n");
     throw new Error(
-      `${compiler} --noEmit failed with exit code ${result.exitCode}${stderr || stdout ? `:\n${stderr || stdout}` : ""}`
+      `${compiler} --noEmit failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
     );
   }
 
