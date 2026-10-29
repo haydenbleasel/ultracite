@@ -6,6 +6,19 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - .github/workflows/benchmark.yml
+      - benchmark/**
+      - bun.lock
+      - bunfig.toml
+      - oxlint.config.ts
+      - oxfmt.config.ts
+      - package.json
+      - packages/cli/**
+      - packages/typescript-config/**
+      - scripts/**
+      - tsconfig.json
+      - turbo.json
 
 # Only the latest commit on a PR needs benchmarking.
 concurrency:
@@ -33,10 +46,32 @@ jobs:
         with:
           bun-version: 1.4.0
 
-      # Build + pack the PR (head) build under test.
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Compare tsrs with the compiler it replaces, on the same PR sources and
+      # runner. Both compiler packages are installed with the workspace.
+      - name: Benchmark tsgo against tsrs
+        id: typecheck-benchmark
+        env:
+          TYPECHECK_WARMUPS: "1"
+          TYPECHECK_SAMPLES: "5"
+        run: bun ./benchmark/typecheck.ts
+
+      - name: Upload type-check benchmark report
+        if: always() && steps.typecheck-benchmark.outcome != 'skipped'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: typecheck-benchmark
+          path: |
+            benchmark/results/typecheck.html
+            benchmark/results/typecheck.json
+          if-no-files-found: ignore
+
+      # Build + pack the PR (head) build under test. This follows the compiler
+      # report so type-check benchmark failures still leave an artifact.
       - name: Build and pack head
         run: |
-          bun install --frozen-lockfile
           bun run build --filter ultracite
           cd packages/cli
           npm pack --loglevel=error

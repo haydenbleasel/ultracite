@@ -2,6 +2,14 @@
 
 Guards against performance regressions in `ultracite check` / `ultracite fix` across all three providers — **oxlint**, **biome**, and **eslint**. It exists because [#741](https://github.com/haydenbleasel/ultracite/issues/741) shipped a ~40x oxlint slowdown (JS plugins folded into the core preset) that no automated check caught.
 
+## Type-checker comparison
+
+`bun benchmark/typecheck.ts` compares `tsgo --noEmit` with `tsrs --noEmit` for `packages/cli`, alternating the run order after warmups. It invokes each compiler binary directly, writes raw samples and compiler versions to `benchmark/results/typecheck.json`, and an animated race report to `benchmark/results/typecheck.html`. Timings exclude package-manager wrapper startup and do not use Turbo's cache. Both compilers are installed with the workspace, so a frozen install is enough to run the comparison. Local defaults are two warmups and seven measured runs; the PR workflow uses one warmup and five measured runs to keep the CI step short.
+
+The PR benchmark workflow runs this comparison on pull requests that change the CLI, benchmark, or build configuration and uploads the HTML and JSON reports as the `typecheck-benchmark` artifact. It also adds the medians and speedup to the workflow summary. This is a compiler-to-compiler measurement on the PR's sources; the separate lint benchmark below remains the base-versus-head regression gate. In GitHub Actions, a compiler failure is identified by compiler name and reported as a warning with details in the summary and JSON report; the informational comparison step exits successfully so the authoritative head build can run. That build still requires `tsrs`, so if `tsrs` rejects the code, the job fails after the report is uploaded. Unexpected benchmark-script failures still fail the step, and the upload step runs after them to upload any report files already written. CI skips formatting the generated report; local runs format it for committed copies. Locally, compiler failures fail the script too.
+
+Set `TYPECHECK_WARMUPS` and `TYPECHECK_SAMPLES` to adjust the run counts. The committed HTML and JSON are one machine's dated measurement, not a CI performance gate.
+
 ## How it works
 
 For each provider the harness builds a self-contained project in the OS temp directory (`ultracite-benchmark`, cleared at the start of each run), installs the provider's real tools, runs `ultracite init` to generate the actual config, and copies in a fixed fixture tree (`fixtures/`). It then times the real `ultracite check` / `ultracite fix` command many times and reports the median.
