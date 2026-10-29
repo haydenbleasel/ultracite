@@ -103,45 +103,116 @@ const version = (compiler: (typeof COMPILERS)[number]): string => {
   return new TextDecoder().decode(result.stdout).trim();
 };
 
-for (let index = 0; index < WARMUPS; index += 1) {
-  for (const compiler of COMPILERS) {
-    run(compiler);
+const measure = (): CompilerResult[] => {
+  for (let index = 0; index < WARMUPS; index += 1) {
+    for (const compiler of COMPILERS) {
+      run(compiler);
+    }
   }
-}
 
-const samples = new Map<(typeof COMPILERS)[number], number[]>([
-  ["tsgo", []],
-  ["tsrs", []],
-]);
+  const samples = new Map<(typeof COMPILERS)[number], number[]>([
+    ["tsgo", []],
+    ["tsrs", []],
+  ]);
 
-for (let index = 0; index < SAMPLES; index += 1) {
-  const order = index % 2 === 0 ? COMPILERS : [...COMPILERS].toReversed();
+  for (let index = 0; index < SAMPLES; index += 1) {
+    const order = index % 2 === 0 ? COMPILERS : [...COMPILERS].toReversed();
 
-  for (const compiler of order) {
-    const compilerSamples = samples.get(compiler);
+    for (const compiler of order) {
+      const compilerSamples = samples.get(compiler);
 
-    if (!compilerSamples) {
-      throw new Error(`Missing sample bucket for ${compiler}`);
+      if (!compilerSamples) {
+        throw new Error(`Missing sample bucket for ${compiler}`);
+      }
+
+      compilerSamples.push(run(compiler));
+    }
+  }
+
+  return COMPILERS.map((name) => {
+    const samplesMs = samples.get(name);
+
+    if (!samplesMs) {
+      throw new Error(`Missing samples for ${name}`);
     }
 
-    compilerSamples.push(run(compiler));
+    return {
+      medianMs: median(samplesMs),
+      name,
+      samplesMs,
+      version: version(name),
+    };
+  });
+};
+
+const environment = {
+  arch: process.arch,
+  bunVersion: Bun.version,
+  platform: process.platform,
+};
+
+const method = `${WARMUPS} warmups, ${SAMPLES} measured runs per compiler, alternating run order. Each run executes the CLI package's --noEmit check without Turbo caching.`;
+
+// The comparison is informational, not a gate. In CI, a compiler failure (for
+// example tsgo and the tsrs beta disagreeing on the PR's code) is reported as a
+// warning so the job still reaches the base-versus-head lint regression gate.
+// The failure report keeps the artifact upload step from failing.
+const reportFailure = (message: string): never => {
+  mkdirSync(OUTPUT_DIR, { recursive: true });
+
+  writeFileSync(
+    `${OUTPUT_DIR}/typecheck.json`,
+    `${JSON.stringify({ environment, error: message, generatedAt: new Date().toISOString(), method }, null, 2)}\n`
+  );
+
+  writeFileSync(
+    `${OUTPUT_DIR}/typecheck.html`,
+    `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ultracite type-check race</title>
+</head>
+<body>
+  <main>
+    <h1>Type-check race</h1>
+    <p>The comparison did not complete because a compiler failed. See typecheck.json or the workflow log for the error.</p>
+  </main>
+</body>
+</html>
+`
+  );
+
+  console.error(message);
+  console.log(
+    "::warning title=Type-checker benchmark::A compiler failed, so the tsgo/tsrs comparison was skipped. See the step log for the error."
+  );
+
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    appendFileSync(
+      process.env.GITHUB_STEP_SUMMARY,
+      `\n## Type-checker benchmark\n\nThe comparison did not complete, so no timings were recorded:\n\n\`\`\`text\n${message}\n\`\`\`\n`
+    );
   }
-}
 
-const results: CompilerResult[] = COMPILERS.map((name) => {
-  const samplesMs = samples.get(name);
+  process.exit(0);
+};
 
-  if (!samplesMs) {
-    throw new Error(`Missing samples for ${name}`);
+const measureOrReport = (): CompilerResult[] => {
+  try {
+    return measure();
+  } catch (error) {
+    if (process.env.GITHUB_ACTIONS !== "true") {
+      throw error;
+    }
+
+    return reportFailure(
+      error instanceof Error ? error.message : String(error)
+    );
   }
+};
 
-  return {
-    medianMs: median(samplesMs),
-    name,
-    samplesMs,
-    version: version(name),
-  };
-});
+const results = measureOrReport();
 
 const [before, after] = results;
 
@@ -154,13 +225,9 @@ const speedup = before.medianMs / after.medianMs;
 const report = {
   after,
   before,
-  environment: {
-    arch: process.arch,
-    bunVersion: Bun.version,
-    platform: process.platform,
-  },
+  environment,
   generatedAt: new Date().toISOString(),
-  method: `${WARMUPS} warmups, ${SAMPLES} measured runs per compiler, alternating run order. Each run executes the CLI package's --noEmit check without Turbo caching.`,
+  method,
   speedup,
 };
 
