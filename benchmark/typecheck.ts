@@ -106,7 +106,9 @@ const version = (compiler: (typeof COMPILERS)[number]): string => {
 
 const measure = (): CompilerResult[] => {
   for (let index = 0; index < WARMUPS; index += 1) {
-    for (const compiler of COMPILERS) {
+    const order = index % 2 === 0 ? COMPILERS : [...COMPILERS].toReversed();
+
+    for (const compiler of order) {
       run(compiler);
     }
   }
