@@ -27,16 +27,17 @@ if (!usesTsrs) {
     .join("\n");
 
   const details = reason ? `\n${reason}` : "";
+  const exitCode = probe.exitCode ?? "none";
 
   if (process.env.CI === "true" || process.env.CI === "1") {
     console.error(
-      `tsrs --version failed with exit code ${probe.exitCode}. CI type checks require tsrs, so this does not fall back to tsgo.${details}`
+      `tsrs --version failed with exit code ${exitCode}. CI type checks require tsrs, so this does not fall back to tsgo.${details}`
     );
     process.exit(1);
   }
 
   console.warn(
-    `tsrs is not available on this machine; type checking with tsgo instead. tsgo targets a different TypeScript version than tsrs, which CI uses, so results can differ.${details}`
+    `tsrs probe failed with exit code ${exitCode}; type checking with tsgo instead. tsgo targets a different TypeScript version than tsrs, which CI uses, so results can differ.${details}`
   );
 }
 

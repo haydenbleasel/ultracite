@@ -3,6 +3,8 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
+import { median } from "./stats";
+
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT_DIR = path.join(ROOT, "benchmark", "results");
 
@@ -55,24 +57,6 @@ interface CompilerResult {
   version: string;
 }
 
-const median = (values: number[]): number => {
-  const sorted = values.toSorted((left, right) => left - right);
-  const middle = Math.floor(sorted.length / 2);
-  const upper = sorted[middle];
-
-  if (upper === undefined) {
-    throw new Error("Cannot compute the median of an empty sample");
-  }
-
-  if (sorted.length % 2 !== 0) {
-    return upper;
-  }
-
-  const lower = sorted[middle - 1] ?? upper;
-
-  return (lower + upper) / 2;
-};
-
 const run = (compiler: Compiler): number => {
   const start = performance.now();
 
@@ -102,13 +86,21 @@ const run = (compiler: Compiler): number => {
 const version = (compiler: Compiler): string => {
   const result = Bun.spawnSync(
     ["bun", "run", "--cwd", "packages/cli", compiler, "--version"],
-    { cwd: ROOT, stderr: "pipe", stdout: "pipe" }
+    {
+      cwd: ROOT,
+      env: process.env,
+      stderr: "pipe",
+      stdout: "pipe",
+    }
   );
 
   if (result.exitCode !== 0) {
-    const stderr = decode(result.stderr);
+    const diagnostics = [decode(result.stderr), decode(result.stdout)]
+      .filter(Boolean)
+      .join("\n");
+
     throw new Error(
-      `${compiler} --version failed with exit code ${result.exitCode}${stderr ? `:\n${stderr}` : ""}`
+      `${compiler} --version failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
     );
   }
 
@@ -144,14 +136,12 @@ const environment = {
   platform: process.platform,
 };
 
-const method = `${WARMUPS} warmups, ${SAMPLES} measured runs per compiler, alternating run order. Each run executes the CLI package's --noEmit check without Turbo caching.`;
+const method = `${WARMUPS} warmups and ${SAMPLES} measured runs per compiler. Zero-based even indexes run tsgo first, and odd indexes run tsrs first, for both warmups and samples. Each run executes the CLI package's --noEmit check without Turbo caching.`;
 
-// The comparison is informational, not a gate. In CI, a compiler failure here
-// is reported as a warning so the job still reaches the base-versus-head lint
-// regression gate. The head build type checks with tsrs first, so a tsrs type
-// error fails that earlier step; this path covers tsgo-only failures (tsgo
-// rejecting code tsrs accepts) and compiler crashes. The failure report keeps
-// the artifact upload step from failing.
+// The comparison is informational, not a gate. In CI, compiler failures here
+// are reported as warnings so the diagnostic report can be uploaded. The
+// subsequent head build still checks the code with tsrs and remains
+// authoritative for whether the project builds.
 const reportFailure = (message: string): never => {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -274,7 +264,7 @@ const html = `<!doctype html>
 <body>
   <main>
     <h1>Type-check race</h1>
-    <p class="summary">Ultracite CLI · ${new Date(report.generatedAt).toLocaleDateString()}</p>
+    <p class="summary">Ultracite CLI · ${report.generatedAt.slice(0, 10)}</p>
     <section class="race" aria-label="Animated compiler speed comparison">
       <div class="finish" aria-hidden="true"></div>
       <div class="lane"><span class="label">TypeScript Go · ${beforeSeconds}s median</span><span class="ball tsgo" aria-label="tsgo">Go</span></div>
