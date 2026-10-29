@@ -3,6 +3,7 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
+import { combineProcessOutput } from "../packages/cli/scripts/typecheck-output";
 import { median } from "./stats";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
@@ -15,7 +16,7 @@ const integerAtLeastFromEnv = (
 ): number => {
   const raw = process.env[name];
 
-  if (raw === undefined) {
+  if (raw === undefined || raw.trim() === "") {
     return fallback;
   }
 
@@ -69,6 +70,16 @@ interface CompilerResult {
   version: string;
 }
 
+class CompilerFailureError extends Error {
+  compiler: Compiler;
+
+  constructor(compiler: Compiler, message: string) {
+    super(message);
+    this.name = "CompilerFailureError";
+    this.compiler = compiler;
+  }
+}
+
 const invoke = (compiler: Compiler, args: string[]): string => {
   const result = Bun.spawnSync(
     [process.execPath, COMPILER_BINARIES[compiler], ...args],
@@ -81,11 +92,10 @@ const invoke = (compiler: Compiler, args: string[]): string => {
   );
 
   if (result.exitCode !== 0) {
-    const diagnostics = [decode(result.stderr), decode(result.stdout)]
-      .filter(Boolean)
-      .join("\n");
+    const diagnostics = combineProcessOutput(result.stderr, result.stdout);
 
-    throw new Error(
+    throw new CompilerFailureError(
+      compiler,
       `${compiler} ${args.join(" ")} failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
     );
   }
@@ -140,29 +150,34 @@ const escapeHtml = (value: string): string =>
     .replaceAll(">", "&gt;");
 
 // The comparison is informational, not a gate. In CI, compiler failures here
-// are reported as warnings so the diagnostic report can be uploaded. The
-// subsequent head build still checks the code with tsrs and remains
-// authoritative for whether the project builds.
-const reportFailure = (message: string): never => {
+// are reported with the failing compiler so the diagnostic report can be
+// uploaded. The subsequent head build still checks the code with tsrs and
+// remains authoritative for whether the project builds.
+const reportFailure = (message: string, failedCompiler?: Compiler): never => {
+  const failureContext = failedCompiler
+    ? `The ${failedCompiler} comparison failed.`
+    : "The compiler comparison failed.";
+
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
   writeFileSync(
-    `${OUTPUT_DIR}/typecheck.json`,
-    `${JSON.stringify({ environment, error: message, generatedAt: new Date().toISOString(), method }, null, 2)}\n`
+    path.join(OUTPUT_DIR, "typecheck.json"),
+    `${JSON.stringify({ environment, error: message, failedCompiler, generatedAt: new Date().toISOString(), method }, null, 2)}\n`
   );
 
   writeFileSync(
-    `${OUTPUT_DIR}/typecheck.html`,
+    path.join(OUTPUT_DIR, "typecheck.html"),
     `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Ultracite type-check race</title>
+  <title>Ultracite type-check comparison</title>
 </head>
 <body>
   <main>
-    <h1>Type-check race</h1>
-    <p>The comparison did not complete because a compiler failed. See typecheck.json or the workflow log for the error.</p>
+    <h1>Type-check comparison failed</h1>
+    <p>${failureContext} No timings were recorded. See the details below.</p>
+    <pre>${escapeHtml(message)}</pre>
   </main>
 </body>
 </html>
@@ -171,13 +186,13 @@ const reportFailure = (message: string): never => {
 
   console.error(message);
   console.log(
-    "::warning title=Type-checker benchmark::A compiler failed, so the tsgo/tsrs comparison was skipped. See the step log for the error."
+    `::warning title=Type-checker benchmark::${failureContext} No comparison timings were recorded.`
   );
 
   if (process.env.GITHUB_STEP_SUMMARY) {
     appendFileSync(
       process.env.GITHUB_STEP_SUMMARY,
-      `\n## Type-checker benchmark\n\nThe comparison did not complete, so no timings were recorded:\n\n<pre>${escapeHtml(message)}</pre>\n`
+      `\n## Type-checker benchmark\n\n${failureContext} No comparison timings were recorded. The benchmark is informational, so CI continues to the authoritative build check.\n\n<pre>${escapeHtml(message)}</pre>\n`
     );
   }
 
@@ -192,9 +207,12 @@ const measureOrReport = (): CompilerResult[] => {
       throw error;
     }
 
-    return reportFailure(
-      error instanceof Error ? error.message : String(error)
-    );
+    const failedCompiler =
+      error instanceof CompilerFailureError ? error.compiler : undefined;
+
+    const message = error instanceof Error ? error.message : String(error);
+
+    return reportFailure(message, failedCompiler);
   }
 };
 
