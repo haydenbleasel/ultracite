@@ -18,14 +18,19 @@ interface CompilerResult {
 const median = (values: number[]): number => {
   const sorted = values.toSorted((left, right) => left - right);
   const middle = Math.floor(sorted.length / 2);
-  const lower = sorted[middle - 1];
   const upper = sorted[middle];
 
-  if (lower === undefined || upper === undefined) {
+  if (upper === undefined) {
     throw new Error("Cannot compute the median of an empty sample");
   }
 
-  return sorted.length % 2 === 0 ? (lower + upper) / 2 : upper;
+  if (sorted.length % 2 !== 0) {
+    return upper;
+  }
+
+  const lower = sorted[middle - 1] ?? upper;
+
+  return (lower + upper) / 2;
 };
 
 const run = (compiler: (typeof COMPILERS)[number]): number => {
@@ -116,7 +121,7 @@ const report = {
     platform: process.platform,
   },
   generatedAt: new Date().toISOString(),
-  method: `Two warmups, ${SAMPLES} measured runs per compiler, alternating run order. Each run executes the CLI package's --noEmit check without Turbo caching.`,
+  method: `${WARMUPS} warmups, ${SAMPLES} measured runs per compiler, alternating run order. Each run executes the CLI package's --noEmit check without Turbo caching.`,
   speedup,
 };
 
