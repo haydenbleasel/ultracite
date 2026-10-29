@@ -50,11 +50,11 @@
   "scripts": {
     "prebuild": "bun run scripts/generate-dts.ts",
     "prepack": "bun run scripts/copy-skill.ts",
-    "build": "tsgo --noEmit && bun run build.ts",
+    "build": "tsrs --noEmit && bun run build.ts",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "bench": "bun run benchmarks/cli.bench.ts",
-    "types": "tsgo --noEmit"
+    "types": "tsrs --noEmit"
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",

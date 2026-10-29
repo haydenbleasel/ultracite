@@ -47,7 +47,7 @@ tmp/                          Gitignored scratch area for hand-testing the CLI a
 
 - **Bun 1.4.x** is the package manager, test runner, script runner, and bundler. Never use npm/yarn/pnpm here. Lockfile is `bun.lock`.
 - **Turbo** fans out `build`, `test`, `types`, `dev` across workspaces.
-- **TypeScript** type checks run through `tsgo` (`@typescript/native-preview`), not `tsc`. `bun run types` at the root.
+- **TypeScript** type checks run through `tsrs` (Rust TypeScript compiler). `bun run types` at the root.
 - **The repo lints itself with Oxlint + Oxfmt** via `oxlint.config.ts` and `oxfmt.config.ts` at the root, which extend the shipped core, react, astro and anti-slop presets. Do not run Biome, ESLint or Prettier on repo source; those tools are dev dependencies only so the presets can be validated.
 - The published CLI must run on **Node 22.22.2+, Node 24.15+ and Bun**, on Linux and Windows (`engines` in `packages/cli/package.json`). That floor is what `eslint-plugin-jsdoc`, which every ESLint setup installs, declares; 22.18 is the first Node 22 that loads the `oxlint.config.ts` init writes. Check a new runtime dependency's `engines` against the floor. `dependencies.test.ts` checks the `engines` of every package `init` installs (with an allowlist for framework plugins that declare more), and CI starts the built CLI on each runtime, including the floor versions. It spawns the linters rather than bundling them, so keep new runtime dependencies to a minimum and avoid Bun-only APIs in `src/`. (Scripts, tests and `build.ts` may use Bun APIs.)
 

@@ -2,6 +2,12 @@
 
 Guards against performance regressions in `ultracite check` / `ultracite fix` across all three providers — **oxlint**, **biome**, and **eslint**. It exists because [#741](https://github.com/haydenbleasel/ultracite/issues/741) shipped a ~40x oxlint slowdown (JS plugins folded into the core preset) that no automated check caught.
 
+## Type-checker comparison
+
+`bun benchmark/typecheck.ts` compares `tsgo --noEmit` with `tsrs --noEmit` for `packages/cli`, alternating the run order after two warmups. It writes raw samples and compiler versions to `benchmark/results/typecheck.json`, and an animated race report to `benchmark/results/typecheck.html`. Timings include the Bun command launch and do not use Turbo's cache. Both compilers must be installed in the workspace; to reproduce a comparison after the migration, temporarily add the baseline compiler with `bun add --no-save @typescript/native-preview@7.0.0-dev.20260707.2`, then run the benchmark. Remove that temporary dependency afterward.
+
+Set `TYPECHECK_WARMUPS` and `TYPECHECK_SAMPLES` to adjust the run counts. The committed HTML and JSON are one machine's dated measurement, not a CI performance gate.
+
 ## How it works
 
 For each provider the harness builds a self-contained project in the OS temp directory (`ultracite-benchmark`, cleared at the start of each run), installs the provider's real tools, runs `ultracite init` to generate the actual config, and copies in a fixed fixture tree (`fixtures/`). It then times the real `ultracite check` / `ultracite fix` command many times and reports the median.
