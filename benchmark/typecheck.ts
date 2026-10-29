@@ -8,7 +8,7 @@ import { median } from "./stats";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUTPUT_DIR = path.join(ROOT, "benchmark", "results");
 
-const positiveIntegerFromEnv = (
+const integerAtLeastFromEnv = (
   name: string,
   fallback: number,
   minimum: number
@@ -36,8 +36,8 @@ const positiveIntegerFromEnv = (
   return value;
 };
 
-const WARMUPS = positiveIntegerFromEnv("TYPECHECK_WARMUPS", 2, 0);
-const SAMPLES = positiveIntegerFromEnv("TYPECHECK_SAMPLES", 7, 1);
+const WARMUPS = integerAtLeastFromEnv("TYPECHECK_WARMUPS", 2, 0);
+const SAMPLES = integerAtLeastFromEnv("TYPECHECK_SAMPLES", 7, 1);
 const COMPILERS = ["tsgo", "tsrs"] as const;
 
 type Compiler = (typeof COMPILERS)[number];
