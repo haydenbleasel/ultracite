@@ -3,10 +3,22 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["CI"]
+      "env": ["CI", "TSRS_BINARY"],
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "$TURBO_ROOT$/node_modules/tsrs/package.json",
+        "$TURBO_ROOT$/node_modules/@tsrs/*/package.json",
+        "$TURBO_ROOT$/node_modules/.bun/@tsrs+*/node_modules/@tsrs/*/package.json"
+      ]
     },
     "types": {
-      "env": ["CI"]
+      "env": ["CI", "TSRS_BINARY"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/node_modules/tsrs/package.json",
+        "$TURBO_ROOT$/node_modules/@tsrs/*/package.json",
+        "$TURBO_ROOT$/node_modules/.bun/@tsrs+*/node_modules/@tsrs/*/package.json"
+      ]
     }
   }
 }

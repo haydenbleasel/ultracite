@@ -42,6 +42,18 @@ const COMPILERS = ["tsgo", "tsrs"] as const;
 
 type Compiler = (typeof COMPILERS)[number];
 
+const COMPILER_BINARIES: Record<Compiler, string> = {
+  tsgo: path.join(
+    ROOT,
+    "node_modules",
+    "@typescript",
+    "native-preview",
+    "bin",
+    "tsgo"
+  ),
+  tsrs: path.join(ROOT, "node_modules", "tsrs", "bin", "tsrs"),
+};
+
 const decoder = new TextDecoder();
 
 const decode = (output: Uint8Array): string => decoder.decode(output).trim();
@@ -57,13 +69,11 @@ interface CompilerResult {
   version: string;
 }
 
-const run = (compiler: Compiler): number => {
-  const start = performance.now();
-
+const invoke = (compiler: Compiler, args: string[]): string => {
   const result = Bun.spawnSync(
-    ["bun", "run", "--cwd", "packages/cli", compiler, "--noEmit"],
+    [process.execPath, COMPILER_BINARIES[compiler], ...args],
     {
-      cwd: ROOT,
+      cwd: path.join(ROOT, "packages", "cli"),
       env: process.env,
       stderr: "pipe",
       stdout: "pipe",
@@ -76,36 +86,21 @@ const run = (compiler: Compiler): number => {
       .join("\n");
 
     throw new Error(
-      `${compiler} --noEmit failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
-    );
-  }
-
-  return performance.now() - start;
-};
-
-const version = (compiler: Compiler): string => {
-  const result = Bun.spawnSync(
-    ["bun", "run", "--cwd", "packages/cli", compiler, "--version"],
-    {
-      cwd: ROOT,
-      env: process.env,
-      stderr: "pipe",
-      stdout: "pipe",
-    }
-  );
-
-  if (result.exitCode !== 0) {
-    const diagnostics = [decode(result.stderr), decode(result.stdout)]
-      .filter(Boolean)
-      .join("\n");
-
-    throw new Error(
-      `${compiler} --version failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
+      `${compiler} ${args.join(" ")} failed with exit code ${result.exitCode}${diagnostics ? `:\n${diagnostics}` : ""}`
     );
   }
 
   return decode(result.stdout);
 };
+
+const run = (compiler: Compiler): number => {
+  const start = performance.now();
+  invoke(compiler, ["--noEmit"]);
+
+  return performance.now() - start;
+};
+
+const version = (compiler: Compiler): string => invoke(compiler, ["--version"]);
 
 const measure = (): CompilerResult[] => {
   for (let index = 0; index < WARMUPS; index += 1) {
@@ -136,7 +131,13 @@ const environment = {
   platform: process.platform,
 };
 
-const method = `${WARMUPS} warmups and ${SAMPLES} measured runs per compiler. Zero-based even indexes run tsgo first, and odd indexes run tsrs first, for both warmups and samples. Each run executes the CLI package's --noEmit check without Turbo caching.`;
+const method = `${WARMUPS} warmups and ${SAMPLES} measured runs per compiler. Zero-based even indexes run tsgo first, and odd indexes run tsrs first, for both warmups and samples. Each run invokes the compiler binary directly on the CLI package's --noEmit check without package-manager wrappers or Turbo caching.`;
+
+const escapeHtml = (value: string): string =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 
 // The comparison is informational, not a gate. In CI, compiler failures here
 // are reported as warnings so the diagnostic report can be uploaded. The
@@ -176,7 +177,7 @@ const reportFailure = (message: string): never => {
   if (process.env.GITHUB_STEP_SUMMARY) {
     appendFileSync(
       process.env.GITHUB_STEP_SUMMARY,
-      `\n## Type-checker benchmark\n\nThe comparison did not complete, so no timings were recorded:\n\n\`\`\`text\n${message}\n\`\`\`\n`
+      `\n## Type-checker benchmark\n\nThe comparison did not complete, so no timings were recorded:\n\n<pre>${escapeHtml(message)}</pre>\n`
     );
   }
 
@@ -275,7 +276,7 @@ const html = `<!doctype html>
       <div class="stat">tsrs median<strong>${afterSeconds}s</strong></div>
       <div class="stat">tsrs speed<strong>${speedup.toFixed(2)}×</strong></div>
     </section>
-    <p class="caption">${SAMPLES} measured runs per compiler after ${WARMUPS} warmups. The order alternates to reduce order effects. Timings include the Bun CLI launch and skip Turbo caching. See typecheck.json for raw samples, compiler versions, and the run date.</p>
+    <p class="caption">${SAMPLES} measured runs per compiler after ${WARMUPS} warmups. The order alternates to reduce order effects. Each run invokes the compiler binary directly and skips Turbo caching. See typecheck.json for raw samples, compiler versions, and the run date.</p>
   </main>
 </body>
 </html>
