@@ -4,7 +4,7 @@ Guards against performance regressions in `ultracite check` / `ultracite fix` ac
 
 ## Type-checker comparison
 
-`bun benchmark/typecheck.ts` compares `tsgo --noEmit` with `tsrs --noEmit` for `packages/cli`, alternating the run order after two warmups. It writes raw samples and compiler versions to `benchmark/results/typecheck.json`, and an animated race report to `benchmark/results/typecheck.html`. Timings include the Bun command launch and do not use Turbo's cache. Both compilers must be installed in the workspace; to reproduce a comparison after the migration, temporarily add the baseline compiler with `bun add --no-save @typescript/native-preview@7.0.0-dev.20260707.2`, then run the benchmark. Remove that temporary dependency afterward.
+`bun benchmark/typecheck.ts` compares `tsgo --noEmit` with `tsrs --noEmit` for `packages/cli`, alternating the run order after two warmups. It writes raw samples and compiler versions to `benchmark/results/typecheck.json`, and an animated race report to `benchmark/results/typecheck.html`. Timings include the Bun command launch and do not use Turbo's cache. Both compilers are installed with the workspace, so a frozen install is enough to run the comparison.
 
 The PR benchmark workflow runs this comparison on each pull request and uploads the HTML and JSON reports as the `typecheck-benchmark` artifact. It also adds the medians and speedup to the workflow summary. This is a compiler-to-compiler measurement on the PR's sources; the separate lint benchmark below remains the base-versus-head regression gate.
 

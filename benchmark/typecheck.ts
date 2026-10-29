@@ -1,11 +1,41 @@
 import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import { performance } from "node:perf_hooks";
 import process from "node:process";
 
-const ROOT = process.cwd();
-const OUTPUT_DIR = `${ROOT}/benchmark/results`;
-const WARMUPS = Number(process.env.TYPECHECK_WARMUPS ?? 2);
-const SAMPLES = Number(process.env.TYPECHECK_SAMPLES ?? 7);
+const ROOT = path.resolve(import.meta.dirname, "..");
+const OUTPUT_DIR = path.join(ROOT, "benchmark", "results");
+
+const positiveIntegerFromEnv = (
+  name: string,
+  fallback: number,
+  minimum: number
+): number => {
+  const raw = process.env[name];
+
+  if (raw === undefined) {
+    return fallback;
+  }
+
+  if (!/^\d+$/u.test(raw)) {
+    throw new Error(
+      `${name} must be an integer greater than or equal to ${minimum}`
+    );
+  }
+
+  const value = Number(raw);
+
+  if (!Number.isSafeInteger(value) || value < minimum) {
+    throw new Error(
+      `${name} must be an integer greater than or equal to ${minimum}`
+    );
+  }
+
+  return value;
+};
+
+const WARMUPS = positiveIntegerFromEnv("TYPECHECK_WARMUPS", 2, 0);
+const SAMPLES = positiveIntegerFromEnv("TYPECHECK_SAMPLES", 7, 1);
 const COMPILERS = ["tsgo", "tsrs"] as const;
 
 interface CompilerResult {
@@ -41,14 +71,16 @@ const run = (compiler: (typeof COMPILERS)[number]): number => {
     {
       cwd: ROOT,
       env: process.env,
-      stderr: "ignore",
-      stdout: "ignore",
+      stderr: "pipe",
+      stdout: "pipe",
     }
   );
 
   if (result.exitCode !== 0) {
+    const stderr = new TextDecoder().decode(result.stderr).trim();
+    const stdout = new TextDecoder().decode(result.stdout).trim();
     throw new Error(
-      `${compiler} --noEmit failed with exit code ${result.exitCode}`
+      `${compiler} --noEmit failed with exit code ${result.exitCode}${stderr || stdout ? `:\n${stderr || stdout}` : ""}`
     );
   }
 
@@ -58,8 +90,15 @@ const run = (compiler: (typeof COMPILERS)[number]): number => {
 const version = (compiler: (typeof COMPILERS)[number]): string => {
   const result = Bun.spawnSync(
     ["bun", "run", "--cwd", "packages/cli", compiler, "--version"],
-    { cwd: ROOT, stderr: "ignore", stdout: "pipe" }
+    { cwd: ROOT, stderr: "pipe", stdout: "pipe" }
   );
+
+  if (result.exitCode !== 0) {
+    const stderr = new TextDecoder().decode(result.stderr).trim();
+    throw new Error(
+      `${compiler} --version failed with exit code ${result.exitCode}${stderr ? `:\n${stderr}` : ""}`
+    );
+  }
 
   return new TextDecoder().decode(result.stdout).trim();
 };
