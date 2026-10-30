@@ -1,0 +1,628 @@
+{
+  "generated": "2026-10-30T13:43:54.078Z",
+  "note": "configs: lint configs at the pinned commit with their lines naming these rules (and `extends` lines); directives: disable comments in the measured files naming one of these rules.",
+  "repos": {
+    "zod": {
+      "configs": [
+        {
+          "file": "biome.jsonc",
+          "lines": [
+            {
+              "kind": "rule",
+              "line": 51,
+              "text": "\"useArrowFunction\": \"off\",",
+              "added": {
+                "date": "2025-05-19",
+                "sha": "85928549a7c2aff851d8625588ed7aa2e394831f",
+                "subject": "Zod 4 (#4074)"
+              },
+              "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/biome.jsonc#L51"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 78.3,
+        "declarationsUsedAboveDefinition": 104,
+        "orderDownShare": 16.7,
+        "ubdCandidates": 287
+      }
+    },
+    "hono": {
+      "configs": [],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 8.8,
+        "declarationsUsedAboveDefinition": 18,
+        "orderDownShare": 19.2,
+        "ubdCandidates": 96
+      }
+    },
+    "trpc": {
+      "configs": [
+        {
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 18,
+              "text": "extends: [",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L18"
+            },
+            {
+              "kind": "extends",
+              "line": 61,
+              "text": "'next-app-dir',",
+              "added": null,
+              "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/eslint.config.js#L61"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 80.5,
+        "declarationsUsedAboveDefinition": 45,
+        "orderDownShare": 12.7,
+        "ubdCandidates": 82
+      }
+    },
+    "vite": {
+      "configs": [
+        {
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 107,
+              "text": "{ allowInterfaces: 'with-single-extends' },",
+              "added": null,
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L107"
+            },
+            {
+              "kind": "extends",
+              "line": 305,
+              "text": "extends: [tseslint.configs.disableTypeChecked],",
+              "added": null,
+              "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/eslint.config.js#L305"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 79.9,
+        "declarationsUsedAboveDefinition": 301,
+        "orderDownShare": 51.9,
+        "ubdCandidates": 540
+      }
+    },
+    "astro": {
+      "configs": [
+        {
+          "file": "biome.jsonc",
+          "lines": []
+        },
+        {
+          "file": "eslint.config.js",
+          "lines": [
+            {
+              "kind": "rule",
+              "line": 139,
+              "text": "'arrow-body-style': ['error', 'never'],",
+              "added": {
+                "date": "2024-04-15",
+                "sha": "6ebd81dbc45d4acae6b099583916bb91236e668e",
+                "subject": "lint: upgrade eslint to version 9 (#10730)"
+              },
+              "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/eslint.config.js#L139"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 90.7,
+        "declarationsUsedAboveDefinition": 284,
+        "orderDownShare": 38.9,
+        "ubdCandidates": 472
+      }
+    },
+    "excalidraw": {
+      "configs": [
+        {
+          "file": ".eslintrc.json",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 2,
+              "text": "\"extends\": [\"@excalidraw/eslint-config\", \"react-app\"],",
+              "added": null,
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/.eslintrc.json#L2"
+            }
+          ]
+        },
+        {
+          "file": "packages/common/.eslintrc.json",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 2,
+              "text": "\"extends\": [\"../eslintrc.base.json\"]",
+              "added": null,
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/common/.eslintrc.json#L2"
+            }
+          ]
+        },
+        {
+          "file": "packages/element/.eslintrc.json",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 2,
+              "text": "\"extends\": [\"../eslintrc.base.json\"]",
+              "added": null,
+              "permalink": "https://github.com/excalidraw/excalidraw/blob/4c00f31ddcc20086bac1020428819fe0b9a30bce/packages/element/.eslintrc.json#L2"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 6.3,
+        "declarationsUsedAboveDefinition": 9,
+        "orderDownShare": 22.7,
+        "ubdCandidates": 460
+      }
+    },
+    "next.js": {
+      "configs": [
+        {
+          "file": "eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "rule",
+              "line": 109,
+              "text": "'no-func-assign': 'error',",
+              "added": {
+                "date": "2025-10-13",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9",
+                "subject": "Use ESLint Flat Config (#84800)"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L109"
+            },
+            {
+              "kind": "rule",
+              "line": 219,
+              "text": "'no-use-before-define': 'off',",
+              "added": {
+                "date": "2025-10-13",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9",
+                "subject": "Use ESLint Flat Config (#84800)"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L219"
+            },
+            {
+              "kind": "extends",
+              "line": 296,
+              "text": "extends: compat.extends('plugin:jest/recommended'),",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L296"
+            },
+            {
+              "kind": "extends",
+              "line": 331,
+              "text": "extends: [tseslint.configs.recommended, tseslint.configs.stylistic],",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L331"
+            },
+            {
+              "kind": "rule",
+              "line": 393,
+              "text": "'no-use-before-define': 'off',",
+              "added": {
+                "date": "2025-10-13",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9",
+                "subject": "Use ESLint Flat Config (#84800)"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L393"
+            },
+            {
+              "kind": "rule",
+              "line": 395,
+              "text": "'@typescript-eslint/no-use-before-define': 'off',",
+              "added": {
+                "date": "2025-10-13",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9",
+                "subject": "Use ESLint Flat Config (#84800)"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L395"
+            },
+            {
+              "kind": "rule",
+              "line": 466,
+              "text": "'@typescript-eslint/no-use-before-define': [ 'error', { functions: true, classes: true, variables: true, enums: true, typedefs: true, }, ],",
+              "added": {
+                "date": "2025-10-13",
+                "sha": "3b4e4478d45ed4cc46b2882a6d7ef84a80a9bad9",
+                "subject": "Use ESLint Flat Config (#84800)"
+              },
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L466"
+            },
+            {
+              "kind": "extends",
+              "line": 544,
+              "text": "extends: compat.extends('plugin:eslint-plugin/recommended'),",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L544"
+            },
+            {
+              "kind": "extends",
+              "line": 578,
+              "text": "extends: compat.extends('plugin:mdx/recommended'),",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L578"
+            },
+            {
+              "kind": "extends",
+              "line": 591,
+              "text": "extends: [reactHooks.configs.flat['recommended']],",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/eslint.config.mjs#L591"
+            }
+          ]
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat-with-other-compat/eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 14,
+              "text": "extends: ['next/core-web-vitals', 'next/typescript'],",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat-with-other-compat/eslint.config.mjs#L14"
+            },
+            {
+              "kind": "extends",
+              "line": 17,
+              "text": "extends: ['foo', 'bar'],",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat-with-other-compat/eslint.config.mjs#L17"
+            },
+            {
+              "kind": "extends",
+              "line": 25,
+              "text": "'next-env.d.ts',",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat-with-other-compat/eslint.config.mjs#L25"
+            }
+          ]
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat/eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 13,
+              "text": "...compat.extends('next/core-web-vitals', 'next/typescript'),",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat/eslint.config.mjs#L13"
+            },
+            {
+              "kind": "extends",
+              "line": 20,
+              "text": "'next-env.d.ts',",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config-flat-compat/eslint.config.mjs#L20"
+            }
+          ]
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config/eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 14,
+              "text": "'next-env.d.ts',",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/flat-config/eslint.config.mjs#L14"
+            }
+          ]
+        },
+        {
+          "file": "packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 4,
+              "text": "\"extends\": [",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L4"
+            },
+            {
+              "kind": "extends",
+              "line": 5,
+              "text": "\"next/core-web-vitals\",",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L5"
+            },
+            {
+              "kind": "extends",
+              "line": 6,
+              "text": "\"next\",",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L6"
+            },
+            {
+              "kind": "extends",
+              "line": 7,
+              "text": "\"next/typescript\",",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L7"
+            },
+            {
+              "kind": "extends",
+              "line": 9,
+              "text": "\"prettier\",",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L9"
+            },
+            {
+              "kind": "extends",
+              "line": 10,
+              "text": "\"plugin:tailwindcss/recommended\"",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L10"
+            },
+            {
+              "kind": "extends",
+              "line": 24,
+              "text": "\"next\": {",
+              "added": null,
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next-codemod/transforms/__testfixtures__/next-lint-to-eslint-cli/legacy-config/.eslintrc.json#L24"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 86.9,
+        "declarationsUsedAboveDefinition": 704,
+        "orderDownShare": 30.9,
+        "ubdCandidates": 1404
+      }
+    },
+    "vscode": {
+      "configs": [
+        {
+          "file": "eslint.config.js",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 92.7,
+        "declarationsUsedAboveDefinition": 166,
+        "orderDownShare": 39.8,
+        "ubdCandidates": 691
+      }
+    },
+    "shadcn": {
+      "configs": [
+        {
+          "file": ".eslintrc.json",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 4,
+              "text": "\"extends\": [",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L4"
+            },
+            {
+              "kind": "extends",
+              "line": 5,
+              "text": "\"next/core-web-vitals\",",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L5"
+            },
+            {
+              "kind": "extends",
+              "line": 7,
+              "text": "\"prettier\",",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L7"
+            },
+            {
+              "kind": "extends",
+              "line": 8,
+              "text": "\"plugin:tailwindcss/recommended\"",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L8"
+            },
+            {
+              "kind": "extends",
+              "line": 22,
+              "text": "\"next\": {",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/.eslintrc.json#L22"
+            }
+          ]
+        },
+        {
+          "file": "apps/v4/eslint.config.mjs",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 19,
+              "text": "\"next-env.d.ts\",",
+              "added": null,
+              "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/eslint.config.mjs#L19"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 98.9,
+        "declarationsUsedAboveDefinition": 8,
+        "orderDownShare": 20.4,
+        "ubdCandidates": 12
+      }
+    },
+    "radix": {
+      "configs": [
+        {
+          "file": ".oxlintrc.json",
+          "lines": [
+            {
+              "kind": "rule",
+              "line": 47,
+              "text": "\"no-func-assign\": \"warn\",",
+              "added": null,
+              "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L47"
+            },
+            {
+              "kind": "rule",
+              "line": 150,
+              "text": "\"no-use-before-define\": [\"warn\", { \"functions\": false, \"classes\": false, \"variables\": false }],",
+              "added": null,
+              "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L150"
+            },
+            {
+              "kind": "rule",
+              "line": 211,
+              "text": "\"no-use-before-define\": [ \"warn\", { \"functions\": false, \"classes\": false, \"variables\": false, \"typedefs\": false } ],",
+              "added": null,
+              "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.oxlintrc.json#L211"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 67.1,
+        "declarationsUsedAboveDefinition": 145,
+        "orderDownShare": 64.2,
+        "ubdCandidates": 406
+      }
+    },
+    "react-aria": {
+      "configs": [
+        {
+          "file": ".oxlintrc.json",
+          "lines": [
+            {
+              "kind": "rule",
+              "line": 99,
+              "text": "\"no-func-assign\": \"error\",",
+              "added": null,
+              "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/.oxlintrc.json#L99"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 91.9,
+        "declarationsUsedAboveDefinition": 52,
+        "orderDownShare": 57.5,
+        "ubdCandidates": 115
+      }
+    },
+    "supabase": {
+      "configs": [
+        {
+          "file": "apps/design-system/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/design-system/registry/.eslintrc.json",
+          "lines": []
+        },
+        {
+          "file": "apps/learn/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/studio/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/ui-library/eslint.config.cjs",
+          "lines": []
+        },
+        {
+          "file": "apps/www/eslint.config.cjs",
+          "lines": []
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 24,
+        "declarationsUsedAboveDefinition": 242,
+        "orderDownShare": 25,
+        "ubdCandidates": 863
+      }
+    },
+    "ultracite": {
+      "configs": [
+        {
+          "file": "oxlint.config.ts",
+          "lines": [
+            {
+              "kind": "extends",
+              "line": 11,
+              "text": "extends: [core, react, astro, antislop],",
+              "added": null,
+              "permalink": "https://github.com/haydenbleasel/ultracite/blob/7bf1b7beb7e385790aaddbb482ade81c183fe217/oxlint.config.ts#L11"
+            }
+          ]
+        }
+      ],
+      "directives": [],
+      "directivesByRule": {},
+      "shape": {
+        "declarationShare": 0,
+        "declarationsUsedAboveDefinition": 0,
+        "orderDownShare": 0,
+        "ubdCandidates": 0
+      }
+    }
+  },
+  "rules": [
+    "func-style",
+    "no-use-before-define",
+    "func-names",
+    "func-name-matching",
+    "prefer-arrow-callback",
+    "arrow-body-style",
+    "consistent-function-scoping",
+    "no-inner-declarations",
+    "no-func-assign",
+    "function-component-definition",
+    "prefer-arrow-functions",
+    "prefer-arrow",
+    "useArrowFunction",
+    "noInvalidUseBeforeDeclaration",
+    "useConsistentArrowReturn",
+    "useConsistentFunctionStyle",
+    "useReactFunctionComponentDefinition",
+    "noInnerDeclarations",
+    "noFunctionAssign"
+  ]
+}

@@ -1,0 +1,1719 @@
+{
+  "generated": "2026-10-30T15:53:54.588Z",
+  "note": "See the header of func-style-examples.cjs. stripFields: the header fields that name a rule or the expected answer; strip them before an agent sees a subject.",
+  "stripFields": [
+    "Rules it hits",
+    "Why it converts cleanly",
+    "Why it needs reordering",
+    "Why it's a trap",
+    "What the project did",
+    "Behaviour to preserve",
+    "Expected response",
+    "Tempting responses",
+    "Gaming moves"
+  ],
+  "subjects": {
+    "a": {
+      "file": "func-style-a-next-duration-to-string.ts",
+      "lint": {
+        "biome": {
+          "byRule": {
+            "style/noUselessElse": 7
+          },
+          "topic": []
+        },
+        "eslint": {
+          "byRule": {
+            "unicorn/name-replacements": 1,
+            "no-inline-comments": 6,
+            "func-style": 5,
+            "unicorn/no-useless-else": 2,
+            "no-else-return": 2
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 86,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 110,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 131,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 143,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 154,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "no-inline-comments": 6,
+            "func-style": 5,
+            "no-else-return": 2
+          },
+          "topic": [
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 86,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 110,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 131,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 143,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 154,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "calls": 865,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "durationToString",
+              "function"
+            ],
+            [
+              "hrtimeBigIntDurationToString",
+              "function"
+            ],
+            [
+              "hrtimeDurationToString",
+              "function"
+            ],
+            [
+              "hrtimeToSeconds",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "origin": {
+        "from": 1,
+        "path": "packages/next/src/build/duration-to-string.ts",
+        "repo": "next.js",
+        "to": 99,
+        "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/duration-to-string.ts#L1-L99",
+        "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
+      },
+      "order": [
+        {
+          "lines": 11,
+          "line": 86,
+          "name": "durationToString"
+        },
+        {
+          "lines": 14,
+          "line": 110,
+          "name": "durationToStringWithNanoseconds"
+        },
+        {
+          "lines": 4,
+          "line": 131,
+          "name": "hrtimeToSeconds"
+        },
+        {
+          "lines": 3,
+          "line": 143,
+          "name": "hrtimeBigIntDurationToString"
+        },
+        {
+          "lines": 3,
+          "line": 154,
+          "name": "hrtimeDurationToString"
+        }
+      ],
+      "stubs": null,
+      "tsc": [],
+      "verbatim": {
+        "lines": 99,
+        "ok": true
+      },
+      "variants": {
+        "a01 convert (block bodies)": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 2
+            },
+            "eslint": {
+              "unicorn/consistent-arrow-return-style": 3,
+              "arrow-body-style": 3
+            },
+            "oxlint": {
+              "arrow-body-style": 3
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0,
+          "text": "// Time thresholds in seconds\nconst SECONDS_IN_MINUTE = 60\nconst MINUTES_THRESHOLD_SECONDS = 120 // 2 minutes\nconst SECONDS_THRESHOLD_HIGH = 40\nconst SECONDS_THRESHOLD_LOW = 2\nconst MILLISECONDS_PER_SECOND = 1000\n\n// Time thresholds and conversion factors for nanoseconds\nconst NANOSECONDS_PER_SECOND = 1_000_000_000\nconst NANOSECONDS_PER_MILLISECOND = 1_000_000\nconst NANOSECONDS_IN_MINUTE = 60_000_000_000 // 60 * 1_000_000_000\nconst MINUTES_THRESHOLD_NANOSECONDS = 120_000_000_000 // 2 minutes in nanoseconds\nconst SECONDS_THRESHOLD_HIGH_NANOSECONDS = 40_000_000_000 // 40 seconds in nanoseconds\nconst SECONDS_THRESHOLD_LOW_NANOSECONDS = 2_000_000_000 // 2 seconds in nanoseconds\nconst MILLISECONDS_THRESHOLD_NANOSECONDS = 2_000_000 // 2 milliseconds in nanoseconds\n\n/**\n * Converts a duration in seconds to a human-readable string format.\n * Formats duration based on magnitude for optimal readability:\n * - >= 2 minutes: show in minutes with 1 decimal place (e.g., \"2.5min\")\n * - >= 40 seconds: show in whole seconds (e.g., \"45s\")\n * - >= 2 seconds: show in seconds with 1 decimal place (e.g., \"3.2s\")\n * - < 2 seconds: show in whole milliseconds (e.g., \"1500ms\")\n *\n * @deprecated Use hrtimeBigIntDurationToString instead, collect time in nanoseconds using process.hrtime.bigint().\n * @param compilerDuration - Duration in seconds as a number\n * @returns Formatted duration string with appropriate unit and precision\n */\nexport const durationToString = (compilerDuration: number) => {\n  if (compilerDuration > MINUTES_THRESHOLD_SECONDS) {\n    return `${(compilerDuration / SECONDS_IN_MINUTE).toFixed(1)}min`\n  } else if (compilerDuration > SECONDS_THRESHOLD_HIGH) {\n    return `${compilerDuration.toFixed(0)}s`\n  } else if (compilerDuration > SECONDS_THRESHOLD_LOW) {\n    return `${compilerDuration.toFixed(1)}s`\n  } else {\n    return `${(compilerDuration * MILLISECONDS_PER_SECOND).toFixed(0)}ms`\n  }\n};\n\n/**\n * Converts a nanosecond duration to a human-readable string format.\n * Formats duration based on magnitude for optimal readability:\n * - >= 2 minutes: show in minutes with 1 decimal place (e.g., \"2.5min\")\n * - >= 40 seconds: show in whole seconds (e.g., \"45s\")\n * - >= 2 seconds: show in seconds with 1 decimal place (e.g., \"3.2s\")\n * - >= 2 milliseconds: show in whole milliseconds (e.g., \"250ms\")\n * - < 2 milliseconds: show in milliseconds with 1 decimal place (e.g., \"0.5ms\")\n *\n * @param durationBigInt - Duration in nanoseconds as a BigInt\n * @returns Formatted duration string with appropriate unit and precision\n */\nconst durationToStringWithNanoseconds = (durationBigInt: bigint): string => {\n  const duration = Number(durationBigInt)\n  if (duration >= MINUTES_THRESHOLD_NANOSECONDS) {\n    return `${(duration / NANOSECONDS_IN_MINUTE).toFixed(1)}min`\n  } else if (duration >= SECONDS_THRESHOLD_HIGH_NANOSECONDS) {\n    return `${(duration / NANOSECONDS_PER_SECOND).toFixed(0)}s`\n  } else if (duration >= SECONDS_THRESHOLD_LOW_NANOSECONDS) {\n    return `${(duration / NANOSECONDS_PER_SECOND).toFixed(1)}s`\n  } else if (duration >= MILLISECONDS_THRESHOLD_NANOSECONDS) {\n    return `${(duration / NANOSECONDS_PER_MILLISECOND).toFixed(0)}ms`\n  } else {\n    return `${(duration / NANOSECONDS_PER_MILLISECOND).toFixed(1)}ms`\n  }\n};\n\n/**\n * Converts a high-resolution time tuple to seconds.\n *\n * @param hrtime - High-resolution time tuple of [seconds, nanoseconds]\n * @returns Duration in seconds as a floating-point number\n */\nexport const hrtimeToSeconds = (hrtime: [number, number]): number => {\n  // hrtime is a tuple of [seconds, nanoseconds]\n  return hrtime[0] + hrtime[1] / NANOSECONDS_PER_SECOND\n};\n\n/**\n * Converts a BigInt nanosecond duration to a human-readable string format.\n * This is the preferred method for formatting high-precision durations.\n *\n * @param hrtime - Duration in nanoseconds as a BigInt (typically from process.hrtime.bigint())\n * @returns Formatted duration string with appropriate unit and precision\n */\nexport const hrtimeBigIntDurationToString = (hrtime: bigint) => {\n  return durationToStringWithNanoseconds(hrtime)\n};\n\n/**\n * Converts a high-resolution time tuple to a human-readable string format.\n *\n * @deprecated Use hrtimeBigIntDurationToString with process.hrtime.bigint() for better precision.\n * @param hrtime - High-resolution time tuple of [seconds, nanoseconds]\n * @returns Formatted duration string with appropriate unit and precision\n */\nexport const hrtimeDurationToString = (hrtime: [number, number]): string => {\n  return durationToString(hrtimeToSeconds(hrtime))\n};\n"
+        },
+        "a02 convert, concise bodies (arrow-body-style's fix)": {
+          "added": {
+            "biome": {},
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "right",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "a03 nested ternary in durationToString": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 3,
+              "style/noNestedTernary": 2
+            },
+            "eslint": {
+              "arrow-body-style": 4,
+              "no-nested-ternary": 2,
+              "sonarjs/no-nested-conditional": 2,
+              "unicorn/consistent-arrow-return-style": 3
+            },
+            "oxlint": {
+              "arrow-body-style": 4,
+              "no-nested-ternary": 2
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "a04 a comparison slips to >= while rewriting": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 2
+            },
+            "eslint": {
+              "unicorn/consistent-arrow-return-style": 3,
+              "arrow-body-style": 3
+            },
+            "oxlint": {
+              "arrow-body-style": 3
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "detail": {
+              "after": {
+                "name": "durationToString",
+                "result": "2.0s"
+              },
+              "before": {
+                "name": "durationToString",
+                "result": "2000ms"
+              },
+              "index": 6
+            },
+            "differing": 2,
+            "verdict": "changed"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "a05 suppression comments": {
+          "added": {
+            "biome": {},
+            "eslint": {
+              "inline-config-ignored": 5
+            },
+            "oxlint": {}
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 5,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "a06 function expressions": {
+          "added": {
+            "biome": {},
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "a07 methods of an object, re-exported": {
+          "added": {
+            "biome": {
+              "style/useDestructuring": 4
+            },
+            "eslint": {
+              "unicorn/prefer-short-arrow-method": 3,
+              "sort-keys": 1,
+              "prefer-destructuring": 4
+            },
+            "oxlint": {
+              "sort-keys": 1,
+              "prefer-destructuring": 4
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "a08 var": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 2,
+              "suspicious/noVar": 5
+            },
+            "eslint": {
+              "import-x/no-mutable-exports": 4,
+              "no-var": 5,
+              "unicorn/consistent-arrow-return-style": 3,
+              "arrow-body-style": 3
+            },
+            "oxlint": {
+              "import/no-mutable-exports": 4,
+              "no-var": 5,
+              "arrow-body-style": 3
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 865,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        }
+      }
+    },
+    "b": {
+      "file": "func-style-b-supabase-config-drift-utils.ts",
+      "lint": {
+        "biome": {
+          "byRule": {
+            "style/useConsistentTypeDefinitions": 1,
+            "style/noNonNullAssertion": 1,
+            "style/useBlockStatements": 3
+          },
+          "topic": []
+        },
+        "eslint": {
+          "byRule": {
+            "unicorn/name-replacements": 7,
+            "unicorn/no-manually-wrapped-comments": 3,
+            "import-x/consistent-type-specifier-style": 4,
+            "sort-keys": 6,
+            "@typescript-eslint/consistent-type-definitions": 1,
+            "func-style": 8,
+            "unicorn/consistent-arrow-return-style": 2,
+            "@typescript-eslint/no-use-before-define": 8,
+            "@typescript-eslint/no-non-null-assertion": 1,
+            "unicorn/prefer-includes-over-repeated-comparisons": 1,
+            "curly": 3
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 90,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 97,
+              "message": "'getConfigFieldLabel' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 99,
+              "message": "'createConfigurationDriftValueDiff' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 103,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 106,
+              "message": "'groupConfigFieldsBySection' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 109,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 112,
+              "message": "'groupConfigFieldsBySection' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 115,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 125,
+              "message": "'getConfigFieldLabel' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 126,
+              "message": "'formatConfigFieldValue' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 138,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 147,
+              "message": "'formatScalarValue' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 150,
+              "message": "'formatScalarValue' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 153,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 167,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 172,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "import/consistent-type-specifier-style": 4,
+            "sort-keys": 4,
+            "typescript/consistent-type-definitions": 1,
+            "func-style": 8,
+            "no-use-before-define": 8,
+            "typescript/no-non-null-assertion": 1,
+            "curly": 3
+          },
+          "topic": [
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 90,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 97,
+              "message": "'getConfigFieldLabel' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 99,
+              "message": "'createConfigurationDriftValueDiff' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 103,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 106,
+              "message": "'groupConfigFieldsBySection' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 109,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 112,
+              "message": "'groupConfigFieldsBySection' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 115,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 125,
+              "message": "'getConfigFieldLabel' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 126,
+              "message": "'formatConfigFieldValue' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 138,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 147,
+              "message": "'formatScalarValue' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 150,
+              "message": "'formatScalarValue' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 153,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 167,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 172,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "calls": 300,
+        "hooks": 219,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "createConfigurationDriftRows",
+              "function"
+            ],
+            [
+              "groupMatchedConfigFields",
+              "function"
+            ],
+            [
+              "groupUnmanagedConfigFields",
+              "function"
+            ]
+          ]
+        },
+        "throws": 35
+      },
+      "origin": {
+        "from": 14,
+        "path": "apps/studio/components/interfaces/ConfigDrift/ConfigurationDriftPage.utils.ts",
+        "repo": "supabase",
+        "to": 137,
+        "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConfigDrift/ConfigurationDriftPage.utils.ts#L14-L137",
+        "sha": "09f80f528ec47569841408a81668dff90525c48a"
+      },
+      "order": [
+        {
+          "lines": 12,
+          "line": 90,
+          "name": "createConfigurationDriftRows"
+        },
+        {
+          "lines": 5,
+          "line": 103,
+          "name": "groupUnmanagedConfigFields"
+        },
+        {
+          "lines": 5,
+          "line": 109,
+          "name": "groupMatchedConfigFields"
+        },
+        {
+          "lines": 22,
+          "line": 115,
+          "name": "groupConfigFieldsBySection"
+        },
+        {
+          "lines": 14,
+          "line": 138,
+          "name": "formatConfigFieldValue"
+        },
+        {
+          "lines": 9,
+          "line": 153,
+          "name": "createConfigurationDriftValueDiff"
+        },
+        {
+          "lines": 4,
+          "line": 167,
+          "name": "getConfigFieldLabel"
+        },
+        {
+          "lines": 6,
+          "line": 172,
+          "name": "formatScalarValue"
+        }
+      ],
+      "stubs": "func-style-b-stubs.ts",
+      "tsc": [],
+      "verbatim": {
+        "lines": 124,
+        "ok": true
+      },
+      "variants": {
+        "b01 convert and reorder (helpers above their callers)": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "eslint": {
+              "unicorn/consistent-arrow-return-style": 2,
+              "arrow-body-style": 4
+            },
+            "oxlint": {
+              "arrow-body-style": 4
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "calls": 300,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "groupConfigFieldsBySection",
+              "createConfigurationDriftRows"
+            ],
+            "lines": 58
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0,
+          "text": "const CONFIG_SECTION_LABELS: Record<ConfigSection, string> = {\n  api: 'API',\n  auth: 'Auth',\n  db: 'Database',\n  storage: 'Storage',\n  compute: 'Compute',\n  experimental: 'Experimental',\n}\n\ninterface ConfigurationIssueRowMeta {\n  settingLabel: string\n  settingHref: string\n  valueDiff: ConfigurationDriftValueDiff\n}\n\nexport type ConfigurationDriftRow = Omit<GitHubConfigDriftField, 'settingHref'> &\n  ConfigurationIssueRowMeta & { status: 'drifted' }\n\ntype ConfigurationDriftValueDiff = {\n  kind: 'scalar'\n  dashboardValue: string\n  configValue: string\n}\n\ninterface UnmanagedConfigRow {\n  configPath: string\n  label: string\n  value: string\n}\n\nexport interface ConfigSectionGroup {\n  section: ConfigSection\n  sectionLabel: string\n  rows: UnmanagedConfigRow[]\n}\n\n/**\n * Prefers the registry's hand-written label, and otherwise title-cases the last path segment —\n * never the whole path, which would leave the dots in.\n */\nconst getConfigFieldLabel = (configPath: string): string => {\n  const label = getFieldDefinition(configPath)?.label\n  return label ?? startCase(configPath.split('.').at(-1) ?? configPath)\n};\n\nconst formatScalarValue = (value: unknown): string => {\n  if (typeof value === 'string') return value || 'Not set'\n  if (typeof value === 'boolean') return value ? 'true' : 'false'\n  if (typeof value === 'number') return String(value)\n  return JSON.stringify(value, null, 2) ?? 'Not set'\n};\n\nconst formatConfigFieldValue = (value: unknown): string => {\n  const normalizedValue = value\n\n  if (normalizedValue === undefined || normalizedValue === null || normalizedValue === '') {\n    return 'Not set'\n  }\n  if (Array.isArray(normalizedValue)) {\n    return normalizedValue.length === 0\n      ? 'Not set'\n      : normalizedValue.map((item) => formatScalarValue(item)).join('\\n')\n  }\n\n  return formatScalarValue(normalizedValue)\n};\n\nconst groupConfigFieldsBySection = <T extends { section: ConfigSection; configPath: string }>(\n  fields: readonly T[],\n  getValue: (field: T) => unknown\n): ConfigSectionGroup[] => {\n  const bySection = new Map<ConfigSection, UnmanagedConfigRow[]>()\n\n  for (const field of fields) {\n    const rows = bySection.get(field.section) ?? []\n    rows.push({\n      configPath: field.configPath,\n      label: getConfigFieldLabel(field.configPath),\n      value: formatConfigFieldValue(getValue(field)),\n    })\n    bySection.set(field.section, rows)\n  }\n\n  return CONFIG_SECTIONS.filter((section) => bySection.has(section)).map((section) => ({\n    section,\n    sectionLabel: CONFIG_SECTION_LABELS[section],\n    rows: bySection.get(section)!,\n  }))\n};\n\nexport const groupUnmanagedConfigFields = (\n  fields: readonly UnmanagedConfigField[]\n): ConfigSectionGroup[] => {\n  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue)\n};\n\nexport const groupMatchedConfigFields = (\n  fields: readonly MatchedConfigField[]\n): ConfigSectionGroup[] => {\n  return groupConfigFieldsBySection(fields, (field) => field.value)\n};\n\nconst createConfigurationDriftValueDiff = (\n  field: GitHubConfigDriftField\n): ConfigurationDriftValueDiff => {\n  return {\n    kind: 'scalar',\n    dashboardValue: formatConfigFieldValue(field.dashboardValue),\n    configValue: formatConfigFieldValue(field.githubValue),\n  }\n};\n\nexport const createConfigurationDriftRows = (\n  fields: GitHubConfigDriftField[],\n  projectRef: string\n): ConfigurationDriftRow[] => {\n  return fields.map((field) => ({\n    ...field,\n    status: 'drifted' as const,\n    settingLabel: getConfigFieldLabel(field.configPath),\n    settingHref: field.settingHref(projectRef),\n    valueDiff: createConfigurationDriftValueDiff(field),\n  }))\n};\n"
+        },
+        "b02 convert, the exports moved to the end": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "eslint": {
+              "unicorn/consistent-arrow-return-style": 2,
+              "arrow-body-style": 4
+            },
+            "oxlint": {
+              "arrow-body-style": 4
+            }
+          },
+          "kind": "right",
+          "oracle": {
+            "calls": 300,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "groupConfigFieldsBySection",
+              "createConfigurationDriftValueDiff"
+            ],
+            "lines": 55
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "b03 convert in place": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "eslint": {
+              "arrow-body-style": 4,
+              "unicorn/consistent-arrow-return-style": 2
+            },
+            "oxlint": {
+              "arrow-body-style": 4
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "calls": 300,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            }
+          },
+          "tsc": 0
+        },
+        "b04 function expressions in place": {
+          "added": {
+            "biome": {},
+            "eslint": {
+              "unicorn/name-replacements": 2
+            },
+            "oxlint": {}
+          },
+          "kind": "tempting",
+          "oracle": {
+            "calls": 300,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            }
+          },
+          "tsc": 0
+        },
+        "b05 convert and reorder, || becomes ??": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "eslint": {
+              "unicorn/consistent-arrow-return-style": 2,
+              "arrow-body-style": 4
+            },
+            "oxlint": {
+              "arrow-body-style": 4
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "detail": {
+              "after": {
+                "name": "createConfigurationDriftRows",
+                "result": [
+                  {
+                    "section": "api",
+                    "configPath": "api.extraSearchPath",
+                    "dashboardValue": true,
+                    "githubValue": [
+                      ""
+                    ],
+                    "settingHref": "/project/ref13/f/782",
+                    "status": "drifted",
+                    "settingLabel": "Extra Search Path",
+                    "valueDiff": {
+                      "kind": "scalar",
+                      "dashboardValue": "true",
+                      "configValue": ""
+                    }
+                  }
+                ]
+              },
+              "before": {
+                "name": "createConfigurationDriftRows",
+                "result": [
+                  {
+                    "section": "api",
+                    "configPath": "api.extraSearchPath",
+                    "dashboardValue": true,
+                    "githubValue": [
+                      ""
+                    ],
+                    "settingHref": "/project/ref13/f/782",
+                    "status": "drifted",
+                    "settingLabel": "Extra Search Path",
+                    "valueDiff": {
+                      "kind": "scalar",
+                      "dashboardValue": "true",
+                      "configValue": "Not set"
+                    }
+                  }
+                ]
+              },
+              "index": 13
+            },
+            "differing": 34,
+            "verdict": "changed"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "groupConfigFieldsBySection",
+              "createConfigurationDriftRows"
+            ],
+            "lines": 58
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "b06 convert in place, suppression comment": {
+          "added": {
+            "biome": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "eslint": {
+              "inline-config-ignored": 1,
+              "arrow-body-style": 4,
+              "unicorn/consistent-arrow-return-style": 2
+            },
+            "oxlint": {
+              "arrow-body-style": 4
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 300,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "b07 var in place": {
+          "added": {
+            "biome": {
+              "style/useVarsOnTop": 8,
+              "style/useConsistentArrowReturn": 4,
+              "suspicious/noVar": 8
+            },
+            "eslint": {
+              "vars-on-top": 8,
+              "import-x/no-mutable-exports": 3,
+              "no-var": 8,
+              "arrow-body-style": 4,
+              "unicorn/consistent-arrow-return-style": 2,
+              "sonarjs/no-variable-usage-before-declaration": 5
+            },
+            "oxlint": {
+              "import/no-mutable-exports": 3,
+              "no-var": 8,
+              "vars-on-top": 8,
+              "arrow-body-style": 4
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 300,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 8
+            }
+          },
+          "tsc": 0
+        }
+      }
+    },
+    "c": {
+      "file": "func-style-c-astro-serialize.ts",
+      "lint": {
+        "biome": {
+          "byRule": {
+            "suspicious/noExplicitAny": 18,
+            "style/useConsistentArrowReturn": 2
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 133,
+              "message": "The body of this arrow function contains a single return statement.",
+              "rule": "style/useConsistentArrowReturn"
+            },
+            {
+              "help": null,
+              "line": 152,
+              "message": "The body of this arrow function contains a single return statement.",
+              "rule": "style/useConsistentArrowReturn"
+            }
+          ]
+        },
+        "eslint": {
+          "byRule": {
+            "unicorn/name-replacements": 3,
+            "sort-keys": 5,
+            "no-inline-comments": 1,
+            "func-style": 4,
+            "@typescript-eslint/no-explicit-any": 18,
+            "unicorn/consistent-arrow-return-style": 2,
+            "arrow-body-style": 2,
+            "@typescript-eslint/no-use-before-define": 2,
+            "unicorn/prefer-spread": 5,
+            "unicorn/prefer-url-href": 1,
+            "unicorn/prefer-global-number-constants": 2,
+            "sonarjs/prefer-immediate-return": 1
+          },
+          "topic": [
+            {
+              "help": null,
+              "line": 122,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 133,
+              "message": "Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "rule": "arrow-body-style"
+            },
+            {
+              "help": null,
+              "line": 134,
+              "message": "'convertToSerializedForm' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 140,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 152,
+              "message": "Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "rule": "arrow-body-style"
+            },
+            {
+              "help": null,
+              "line": 153,
+              "message": "'convertToSerializedForm' was used before it was defined.",
+              "rule": "@typescript-eslint/no-use-before-define"
+            },
+            {
+              "help": null,
+              "line": 160,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": null,
+              "line": 215,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            }
+          ]
+        },
+        "oxlint": {
+          "byRule": {
+            "no-inline-comments": 1,
+            "sort-keys": 1,
+            "func-style": 4,
+            "typescript/no-explicit-any": 18,
+            "arrow-body-style": 2,
+            "no-use-before-define": 2,
+            "unicorn/prefer-spread": 5
+          },
+          "topic": [
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 122,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the returned value to be immediately after the `=>`.",
+              "line": 133,
+              "message": "Unexpected block statement surrounding arrow body.",
+              "rule": "arrow-body-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 134,
+              "message": "'convertToSerializedForm' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 140,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Move the returned value to be immediately after the `=>`.",
+              "line": 152,
+              "message": "Unexpected block statement surrounding arrow body.",
+              "rule": "arrow-body-style"
+            },
+            {
+              "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+              "line": 153,
+              "message": "'convertToSerializedForm' was used before it was defined.",
+              "rule": "no-use-before-define"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 160,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            },
+            {
+              "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+              "line": 215,
+              "message": "Expected a function expression.",
+              "rule": "func-style"
+            }
+          ]
+        }
+      },
+      "oracle": {
+        "calls": 318,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "serializeProps",
+              "function"
+            ]
+          ]
+        },
+        "throws": 13
+      },
+      "origin": {
+        "from": 4,
+        "path": "packages/astro/src/runtime/server/serialize.ts",
+        "repo": "astro",
+        "to": 115,
+        "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/serialize.ts#L4-L115",
+        "sha": "9050e3819c51b0383cced278c278bc6f45c63468"
+      },
+      "order": [
+        {
+          "lines": 17,
+          "line": 122,
+          "name": "serializeArray"
+        },
+        {
+          "lines": 19,
+          "line": 140,
+          "name": "serializeObject"
+        },
+        {
+          "lines": 54,
+          "line": 160,
+          "name": "convertToSerializedForm"
+        },
+        {
+          "lines": 4,
+          "line": 215,
+          "name": "serializeProps"
+        }
+      ],
+      "stubs": "func-style-c-stubs.ts",
+      "tsc": [],
+      "verbatim": {
+        "lines": 112,
+        "ok": true
+      },
+      "variants": {
+        "c01 convert, the best order (two reports left for review)": {
+          "added": {
+            "biome": {},
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "right",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            }
+          },
+          "tsc": 0,
+          "text": "const PROP_TYPE = {\n\tValue: 0,\n\tJSON: 1, // Actually means Array\n\tRegExp: 2,\n\tDate: 3,\n\tMap: 4,\n\tSet: 5,\n\tBigInt: 6,\n\tURL: 7,\n\tUint8Array: 8,\n\tUint16Array: 9,\n\tUint32Array: 10,\n\tInfinity: 11,\n};\n\nconst serializeArray = (\n\tvalue: any[],\n\tmetadata: AstroComponentMetadata | Record<string, any> = {},\n\tparents = new WeakSet<any>(),\n): any[] => {\n\tif (parents.has(value)) {\n\t\tthrow new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!\n\nCyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference.`);\n\t}\n\tparents.add(value);\n\tconst serialized = value.map((v) => {\n\t\treturn convertToSerializedForm(v, metadata, parents);\n\t});\n\tparents.delete(value);\n\treturn serialized;\n};\n\nconst serializeObject = (\n\tvalue: Record<any, any>,\n\tmetadata: AstroComponentMetadata | Record<string, any> = {},\n\tparents = new WeakSet<any>(),\n): Record<any, any> => {\n\tif (parents.has(value)) {\n\t\tthrow new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!\n\nCyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference.`);\n\t}\n\tparents.add(value);\n\tconst serialized = Object.fromEntries(\n\t\tObject.entries(value).map(([k, v]) => {\n\t\t\treturn [k, convertToSerializedForm(v, metadata, parents)];\n\t\t}),\n\t);\n\tparents.delete(value);\n\treturn serialized;\n};\n\nconst convertToSerializedForm = (\n\tvalue: any,\n\tmetadata: AstroComponentMetadata | Record<string, any> = {},\n\tparents = new WeakSet<any>(),\n): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] => {\n\tconst tag = Object.prototype.toString.call(value);\n\tswitch (tag) {\n\t\tcase '[object Date]': {\n\t\t\treturn [PROP_TYPE.Date, (value as Date).toISOString()];\n\t\t}\n\t\tcase '[object RegExp]': {\n\t\t\treturn [PROP_TYPE.RegExp, (value as RegExp).source];\n\t\t}\n\t\tcase '[object Map]': {\n\t\t\treturn [PROP_TYPE.Map, serializeArray(Array.from(value as Map<any, any>), metadata, parents)];\n\t\t}\n\t\tcase '[object Set]': {\n\t\t\treturn [PROP_TYPE.Set, serializeArray(Array.from(value as Set<any>), metadata, parents)];\n\t\t}\n\t\tcase '[object BigInt]': {\n\t\t\treturn [PROP_TYPE.BigInt, (value as bigint).toString()];\n\t\t}\n\t\tcase '[object URL]': {\n\t\t\treturn [PROP_TYPE.URL, (value as URL).toString()];\n\t\t}\n\t\tcase '[object Array]': {\n\t\t\treturn [PROP_TYPE.JSON, serializeArray(value, metadata, parents)];\n\t\t}\n\t\tcase '[object Uint8Array]': {\n\t\t\treturn [PROP_TYPE.Uint8Array, Array.from(value as Uint8Array)];\n\t\t}\n\t\tcase '[object Uint16Array]': {\n\t\t\treturn [PROP_TYPE.Uint16Array, Array.from(value as Uint16Array)];\n\t\t}\n\t\tcase '[object Uint32Array]': {\n\t\t\treturn [PROP_TYPE.Uint32Array, Array.from(value as Uint32Array)];\n\t\t}\n\t\tdefault: {\n\t\t\tif (value !== null && typeof value === 'object') {\n\t\t\t\treturn [PROP_TYPE.Value, serializeObject(value, metadata, parents)];\n\t\t\t}\n\t\t\tif (value === Number.POSITIVE_INFINITY) {\n\t\t\t\treturn [PROP_TYPE.Infinity, 1];\n\t\t\t}\n\t\t\tif (value === Number.NEGATIVE_INFINITY) {\n\t\t\t\treturn [PROP_TYPE.Infinity, -1];\n\t\t\t}\n\t\t\tif (value === undefined) {\n\t\t\t\treturn [PROP_TYPE.Value];\n\t\t\t}\n\t\t\treturn [PROP_TYPE.Value, value];\n\t\t}\n\t}\n};\n\nexport const serializeProps = (props: any, metadata?: AstroComponentMetadata) => {\n\tconst serialized = JSON.stringify(serializeObject(props, metadata));\n\treturn serialized;\n};\n"
+        },
+        "c02 convert serializeProps only": {
+          "added": {
+            "biome": {},
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "right",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 3,
+              "no-use-before-define": 2
+            },
+            "oxlint": {
+              "func-style": 3,
+              "no-use-before-define": 2
+            }
+          },
+          "tsc": 0
+        },
+        "c03 convert in place": {
+          "added": {
+            "biome": {},
+            "eslint": {},
+            "oxlint": {}
+          },
+          "kind": "tempting",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            }
+          },
+          "tsc": 0
+        },
+        "c04 function expressions": {
+          "added": {
+            "biome": {},
+            "eslint": {
+              "unicorn/name-replacements": 1
+            },
+            "oxlint": {}
+          },
+          "kind": "tempting",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            }
+          },
+          "tsc": 0
+        },
+        "c05 convert, suppression comments": {
+          "added": {
+            "biome": {},
+            "eslint": {
+              "inline-config-ignored": 2
+            },
+            "oxlint": {}
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "c06 methods of an object": {
+          "added": {
+            "biome": {},
+            "eslint": {
+              "sort-keys": 1
+            },
+            "oxlint": {
+              "sort-keys": 1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "c07 helpers nested inside convertToSerializedForm": {
+          "added": {
+            "biome": {
+              "suspicious/noShadow": 6
+            },
+            "eslint": {
+              "@typescript-eslint/no-shadow": 6,
+              "unicorn/no-unnecessary-parameters": 2
+            },
+            "oxlint": {
+              "no-shadow": 6,
+              "unicorn/consistent-function-scoping": 2
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "detail": {
+              "after": {
+                "name": "serializeProps",
+                "threw": "Error: Cyclic reference detected while serializing props for <undefined client:undefined>!\n\t\n\tCyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference."
+              },
+              "before": {
+                "name": "serializeProps",
+                "threw": "Error: Cyclic reference detected while serializing props for <undefined client:undefined>!\n\nCyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference."
+              },
+              "index": 300
+            },
+            "differing": 11,
+            "verdict": "changed"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "c08 the recursive call passed in as a parameter": {
+          "added": {
+            "biome": {
+              "suspicious/noExplicitAny": 4
+            },
+            "eslint": {
+              "@typescript-eslint/no-explicit-any": 4,
+              "unicorn/no-unnecessary-parameters": 2
+            },
+            "oxlint": {
+              "typescript/no-explicit-any": 4
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 0
+            }
+          },
+          "tsc": 0
+        },
+        "c09 var": {
+          "added": {
+            "biome": {
+              "suspicious/noVar": 4
+            },
+            "eslint": {
+              "no-var": 4,
+              "sonarjs/no-variable-usage-before-declaration": 1,
+              "import-x/no-mutable-exports": 1
+            },
+            "oxlint": {
+              "no-var": 4,
+              "import/no-mutable-exports": 1
+            }
+          },
+          "kind": "gaming",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [],
+            "lines": 0
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            },
+            "oxlint": {
+              "func-style": 0,
+              "no-use-before-define": 2
+            }
+          },
+          "tsc": 0
+        },
+        "c10 declarations kept, convertToSerializedForm moved first": {
+          "added": {
+            "biome": {},
+            "eslint": {
+              "@typescript-eslint/no-use-before-define": 2
+            },
+            "oxlint": {
+              "no-use-before-define": 2
+            }
+          },
+          "kind": "tempting",
+          "oracle": {
+            "calls": 318,
+            "verdict": "same"
+          },
+          "parses": true,
+          "structure": {
+            "functions": [
+              "convertToSerializedForm"
+            ],
+            "lines": 54
+          },
+          "topic": {
+            "biome": {
+              "noInvalidUseBeforeDeclaration": 0
+            },
+            "eslint": {
+              "func-style": 4,
+              "no-use-before-define": 4
+            },
+            "oxlint": {
+              "func-style": 4,
+              "no-use-before-define": 4
+            }
+          },
+          "tsc": 0
+        }
+      }
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/typescript-estree": "8.72.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.3",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.0",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.74.0"
+  }
+}

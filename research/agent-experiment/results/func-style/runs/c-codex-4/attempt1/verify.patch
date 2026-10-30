@@ -1,0 +1,14 @@
+--- a/serialize.ts
++++ b/serialize.ts
+@@ -202,7 +202,10 @@
+   }
+ };
+ 
+-export const serializeProps = (props: any, metadata?: AstroComponentMetadata) => {
++export const serializeProps = (
++  props: any,
++  metadata?: AstroComponentMetadata
++) => {
+   const serialized = JSON.stringify(
+     serializeObject(props, convertToSerializedForm, metadata)
+   );

@@ -1,0 +1,225 @@
+{
+  "linter": "oxlint",
+  "adapter": "linters.ts runOxlintPass: oxlint --fix ., oxfmt --write ., oxlint -f json .",
+  "config": "what `ultracite init --linter oxlint` writes (oxlint.config.ts: env, extends [core], ignorePatterns; oxfmt.config.ts: ...ultracite), unchanged, passed with -c and importing the preset by absolute URL",
+  "filter": "func-style and no-use-before-define, plus any other diagnostic not among the prepared project's own (rule and message, file by file, as diff.ts matches them): a project that lints clean apart from these two rules. Every re-lint uses the same filter.",
+  "diagnosticsReported": 26,
+  "diagnosticsHandedOver": 6,
+  "leftOutByFilter": {
+    "no-inline-comments": 1,
+    "typescript/no-explicit-any": 19
+  },
+  "leftOutByFilterByFile": {
+    "serialize.ts": 19,
+    "stubs.ts": 1
+  },
+  "mirroredSlicesSha256": {
+    "linters.ts runPiped": "71d55a9308a32d1ca5387fadbc54704c72ff9214a02e346a53b3efae2f8f704a",
+    "linters.ts oxlint": "63367b0ccedd24c57879ad1205742a240b208fd9752eb65c3a49a254441651ec",
+    "linters.ts biome": "78ca3a052954ce6bfe9e124fdeea0639b28ddba63bba2fe2016ee136379feb53",
+    "linters.ts eslint": "a23c0f082fa4af9a97404a85adcb6e1b37e36bf8bc8ae24fba4109df59269c15",
+    "linter-args.ts toStylelintTargets": "e8f3d1f4ce2e05f2355e1b0508fd07abead391bd44e589ec81529749ff4c4c86",
+    "linter-args.ts eslintIgnoredFileArgs": "d88aff616f3629e83096f53f82663083cde34e33766d3e309a9d1de125c37932",
+    "index.ts fixFileGroup": "5ef37d0abc8632451d8d82651fcf14b622330b9019749aea450d53169694468b",
+    "index.ts MAX_AGENT_ATTEMPTS": "781710c5106a2adea80aa43611aa7dc9d682b663fd70a82856fdf7822f0dfcb6",
+    "run-agent.ts": "da583d8571a407f166c2a45d25e11dba88cf599da4bd47f661ae8041cea12738",
+    "diff.ts": "c164c9834c95764158f9511790b1cfbd2f0944023f06c8af609c54391e40f8c9"
+  },
+  "fixPassChanged": [],
+  "diagnostics": [
+    {
+      "column": 1,
+      "fatal": false,
+      "file": "serialize.ts",
+      "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+      "line": 92,
+      "message": "Expected a function expression.",
+      "raw": {
+        "message": "Expected a function expression.",
+        "code": "eslint(func-style)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "filename": "serialize.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 4983,
+              "length": 578,
+              "line": 92,
+              "column": 1
+            }
+          }
+        ]
+      },
+      "rule": "func-style",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+    },
+    {
+      "column": 5,
+      "fatal": false,
+      "file": "serialize.ts",
+      "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+      "line": 104,
+      "message": "'convertToSerializedForm' was used before it was defined.",
+      "raw": {
+        "message": "'convertToSerializedForm' was used before it was defined.",
+        "code": "eslint(no-use-before-define)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "filename": "serialize.ts",
+        "labels": [
+          {
+            "label": "used here",
+            "span": {
+              "offset": 5463,
+              "length": 23,
+              "line": 104,
+              "column": 5
+            }
+          },
+          {
+            "label": "defined here",
+            "span": {
+              "offset": 6241,
+              "length": 23,
+              "line": 131,
+              "column": 10
+            }
+          }
+        ]
+      },
+      "rule": "no-use-before-define",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+    },
+    {
+      "column": 1,
+      "fatal": false,
+      "file": "serialize.ts",
+      "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+      "line": 110,
+      "message": "Expected a function expression.",
+      "raw": {
+        "message": "Expected a function expression.",
+        "code": "eslint(func-style)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "filename": "serialize.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 5563,
+              "length": 667,
+              "line": 110,
+              "column": 1
+            }
+          }
+        ]
+      },
+      "rule": "func-style",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+    },
+    {
+      "column": 7,
+      "fatal": false,
+      "file": "serialize.ts",
+      "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+      "line": 124,
+      "message": "'convertToSerializedForm' was used before it was defined.",
+      "raw": {
+        "message": "'convertToSerializedForm' was used before it was defined.",
+        "code": "eslint(no-use-before-define)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "filename": "serialize.ts",
+        "labels": [
+          {
+            "label": "used here",
+            "span": {
+              "offset": 6124,
+              "length": 23,
+              "line": 124,
+              "column": 7
+            }
+          },
+          {
+            "label": "defined here",
+            "span": {
+              "offset": 6241,
+              "length": 23,
+              "line": 131,
+              "column": 10
+            }
+          }
+        ]
+      },
+      "rule": "no-use-before-define",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+    },
+    {
+      "column": 1,
+      "fatal": false,
+      "file": "serialize.ts",
+      "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+      "line": 131,
+      "message": "Expected a function expression.",
+      "raw": {
+        "message": "Expected a function expression.",
+        "code": "eslint(func-style)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "filename": "serialize.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 6232,
+              "length": 1867,
+              "line": 131,
+              "column": 1
+            }
+          }
+        ]
+      },
+      "rule": "func-style",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+    },
+    {
+      "column": 8,
+      "fatal": false,
+      "file": "serialize.ts",
+      "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+      "line": 192,
+      "message": "Expected a function expression.",
+      "raw": {
+        "message": "Expected a function expression.",
+        "code": "eslint(func-style)",
+        "severity": "error",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "filename": "serialize.ts",
+        "labels": [
+          {
+            "span": {
+              "offset": 8108,
+              "length": 166,
+              "line": 192,
+              "column": 8
+            }
+          }
+        ]
+      },
+      "rule": "func-style",
+      "severity": "error",
+      "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+    }
+  ]
+}

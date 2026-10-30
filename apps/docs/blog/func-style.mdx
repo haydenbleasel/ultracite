@@ -1,0 +1,299 @@
+---
+title: Arrow functions, hoisting and the order of a file
+description: Why JavaScript hoists function declarations, what func-style and no-use-before-define ask for together, what converting 10,134 declarations in twelve codebases would break, and what coding agents did with three functions that call each other.
+date: 2026-10-30
+author: hayden
+next:
+  - label: Change how a rule counts in your project
+    href: /docs/configuration#overriding-rules
+  - label: Tell agents when a loop of calls is fine
+    href: /docs/ai/rules#customization
+results:
+  - corpus
+  - agent-experiment
+rules:
+  - func-style
+  - no-use-before-define
+  - "@typescript-eslint/no-use-before-define"
+  - noInvalidUseBeforeDeclaration
+  - useConsistentFunctionStyle
+---
+
+JavaScript has two common ways to write a named function, and they behave differently. `function format() {}` is a declaration. It's hoisted: it exists from the start of its scope, so code above it can call it. `const format = () => {}` is a variable holding an arrow function, and it can't be read until its line has run. ESLint's `func-style` makes a codebase pick one of the two. `no-use-before-define` reports any name used above the line that defines it. Ultracite turns both on and asks for the `const` style.
+
+We chose `const` functions for three reasons. An arrow can drop its braces when all it does is return a value. A function is easier to type early, through its variable, than as a declaration. And we didn't much like hoisting: it seemed to make up for functions written in the wrong order. But honestly, it was a personal preference.
+
+So we tested the three reasons, and the two rules behind them. We read where hoisting and both rules came from, and what TypeScript and the research on reading order say. We counted how 52,834 functions in twelve codebases are written and ordered, then converted every declaration the rule reports, on copies, to see what would break. Finally we handed three real files to Claude Code and Codex through Ultracite's agent fix: one that converts cleanly, one written top-down, and one whose functions call each other.
+
+## Hoisted for mutual recursion
+
+The first edition of the language standard, in 1997, set up every function declaration before running any statement of a script: "Process SourceElements for function declarations." Brendan Eich, who designed JavaScript, gave the reason in a 2011 [reply](https://twitter.com/BrendanEich/status/33403701100154880): "function declaration hoisting is for mutual recursion", and "generally to avoid painful bottom-up ML-like order". Functions could call each other, and a file could put them in any order. Hoisting `var` was the accident. In a 2014 [reply](https://twitter.com/BrendanEich/status/522395336615428097), Eich called it an "unintended consequence of function hoisting,".
+
+`let` and `const` arrived in 2015 with a temporal dead zone. The binding exists from the start of its scope, but reading it before its line has run throws a `ReferenceError`. The committee had considered a stricter, textual rule, where any reference written above the definition is an error, and turned it down. Waldemar Horwat, who laid out the options in a 2008 [message](http://web.archive.org/web/20131103/https://mail.mozilla.org/pipermail/es-discuss/2008-October/007807.html), said the dead zone "allows mutually recursive lambdas." Allen Wirfs-Brock and Eich's [history of the language](https://doi.org/10.1145/3386327) gives the other half: the textual rule "prevents these declaration forms" "from being used to define mutually recursive functions."
+
+So two `const` functions can call each other. A reference inside a function body is checked when the function runs, not where it's written:
+
+```ts title="parity.ts"
+export const isEven = (n: number): boolean => (n === 0 ? true : isOdd(n - 1));
+export const isOdd = (n: number): boolean => (n === 0 ? false : isEven(n - 1));
+```
+
+This runs. `no-use-before-define` at its defaults reports the first line anyway: "'isOdd' was used before it was defined." Swap the two lines and it reports `isEven` instead. The rule enforces something close to the textual rule the language rejected.
+
+Arrows came from somewhere else. "The primary motivation for arrow functions was the frequent need" "to code verbose function expressions as call-back arguments", in the history's words, and they take `this` from the code around them. They can't do everything a `function` can: an arrow has no `arguments` and no `prototype`, can't be called with `new` and can't be a generator. Since 2015, though, a `const` arrow isn't anonymous. The [spec](https://tc39.es/ecma262/) names it after its variable, and stack traces print that name.
+
+## Two tastes and a frozen rule
+
+`func-style` came to ESLint in its first release of 2014. The [issue](https://github.com/eslint/eslint/issues/460) that proposed it, by Ilya Volodin, was about two people: Nicholas Zakas "prefers FunctionDeclaration, and my personal preference is FunctionExpression," and Volodin kept forgetting to switch styles before sending a pull request. The rule enforces whichever style a team picks. Its [docs](https://eslint.org/docs/latest/rules/func-style) still say so: "There is really no correct or incorrect choice here, it is just a preference."
+
+Each option added since covers something the chosen style couldn't express: arrows that use `this`, `export default function`, TypeScript overloads (which have to be declarations), and a `const` with a function type. None was added because one style prevented bugs. When a user argued in 2016 that the rule's real benefit was preventing hoisting, Zakas disagreed: "This rule is just about style". If order was the concern, another rule was the place for it.
+
+No linter has a fix for it. ESLint froze its stylistic rules in 2020, and when someone asked for an autofix in 2024, a maintainer [explained](https://github.com/eslint/eslint/issues/18478) that "in some cases replacing a function declaration with a function expression" "or vice-versa is not guaranteed to preserve the original semantics." A `const` can't be called above its line, and an arrow has no `prototype` or `this` of its own.
+
+The configs that enforce a style mostly chose declarations. Node.js [required them](https://github.com/nodejs/node/pull/12711) in 2017, after counting its own code ("77 instances of expressions to 2344 instances of" declarations) and noting that reviewers kept asking contributors to switch "to avoid potential confusion over the Temporal Dead Zone". ESLint's own code, webpack and Deno's style guide require declarations too. Airbnb's guide asks for named function expressions, but its config has left `func-style` off since 2016, and Google's [TypeScript guide](https://google.github.io/styleguide/tsguide.html#function-declarations) prefers declarations for named functions. We found no other widely used config that holds code to `const` functions.
+
+## An ordering rule that ignores hoisting
+
+`no-use-before-define` is older than `func-style`. ESLint's version, from 2013, kept JSLint's message, `'{a}' was used before it was defined.` JSLint expected "that a function will be declared before it is used." JSHint added a way to exempt functions the same year, because some people put their declarations at the bottom on purpose: "I often write function declarations at the bottom of my IIFE". ESLint [followed](https://eslint.org/docs/latest/rules/no-use-before-define) in 2014 with a setting that skips functions, and in 2017 added `variables: false`, which stops reporting a variable that's read from inside a function, as long as it's defined in an outer scope. Those reads happen when the function runs, which is usually after the module has loaded.
+
+The defaults check all of it, and ESLint's maintainers have said that's the point. Asked in 2014 to allow mutual recursion, Zakas [replied](https://github.com/eslint/eslint/issues/1015): "IMHO, part of the goal of the rule is to prevent things like this." When the request came back in [2019](https://github.com/eslint/eslint/issues/12473), Kevin Partington, another maintainer, explained: "This rule is intentionally designed to be a little more opinionated" "than most of our rules." "It ignores hoisting and ensures that all of your references to a variable" "occur strictly after the declaration." The person asking had argued: "Functions calling each other is pretty fundamental."
+
+So it's an ordering rule, not a crash detector, and it doesn't catch every crash either. A callback that runs during a variable's own initializer can read that variable before it exists, and an open [issue](https://github.com/eslint/eslint/issues/20014) shows the rule passing it: "No lint error. Will error at runtime." Biome took the opposite approach. Its `noInvalidUseBeforeDeclaration` reports only reads in the same scope, the ones that throw where they're written, and its [pull request](https://github.com/biomejs/biome/pull/1258) says what that gives up: "It cannot report cases where a function that uses a variable" "is called before the declaration of the variable."
+
+TypeScript checks some of this itself. It reports a block-scoped variable used before its declaration (TS2448) when the use runs right away. We wrote 44 small calibration cases and ran each through the linters, `tsc` and Node. Eight of them crash in Node:
+
+| Check | Crashes reported, of 8 | Cases that run fine but are reported |
+| --- | --: | --: |
+| `no-use-before-define`, defaults (Oxlint and ESLint) | 8 | 7 |
+| `tsc` | 6 | 1 |
+| Biome's `noInvalidUseBeforeDeclaration` | 2 | 1 |
+
+`tsc` missed a read inside a `map` callback that runs while the module loads, and a read inside a function that's called while it loads. The seven safe cases `no-use-before-define` reported include mutual recursion and a TanStack route file, whose `Route` and component refer to each other. typescript-eslint took its version of the rule out of its recommended set in 2020, [saying](https://github.com/typescript-eslint/typescript-eslint/issues/1423) "The errors caught by this rule are generally caught by typescript." That's true for the direct case.
+
+## What TypeScript lets each one say
+
+Our second reason was types. A function type on a variable types every parameter at once, through what TypeScript calls [contextual typing](https://www.typescriptlang.org/docs/handbook/type-inference.html#contextual-typing): in `const onSubmit: SubmitHandler<FormValues> = async (values) => {…}`, `values` needs no annotation. A declaration can't take a function type. The request to allow it has been [open](https://github.com/microsoft/TypeScript/issues/22063) since 2018, with 125 thumbs-up, and puts it plainly: "TypeScript is basically forcing the use of expressions, due to the issues described above."
+
+The other direction has its own list. Overloads have to be declarations. An [assertion function](https://github.com/microsoft/TypeScript/pull/32695) written as a `const` stops narrowing at its call sites unless the variable has an explicit type, with error TS2775: "Assertions require every name in the call target" "to be declared with an explicit type annotation." The same is true of a helper that returns `never`. An arrow can't declare a `this` parameter. And a generic arrow in a `.tsx` file has to be written `<T,>`, because `<T>` reads as JSX. ESLint's answer, in 2025, was to let the declaration style allow a `const` that has a type annotation, rather than to flip the default.
+
+## Callers first, or callees first
+
+Our third reason was order. Douglas Crockford made the same argument in 2008. Hoisting, in [_JavaScript: The Good Parts_](http://web.archive.org/web/20221126165548/https://www.oreilly.com/library/view/javascript-the-good/9780596517748/apbs09.html), "relaxes the requirement that functions should be declared before used," "which I think leads to sloppiness." Crockford's [code conventions](https://www.crockford.com/code.html) still say: "All functions should be declared before they are used."
+
+The best-known convention goes the other way. _Clean Code_'s stepdown rule puts callers first: "a function that is called should be below a function that does the calling", as Yorai Geffen and Shahar Maoz [quote it](https://www.cs.tau.ac.il/~maozs/papers/methodsorder-icpc16.pdf). In JavaScript that needs hoisting, or functions that aren't called until the module has loaded. Pascal had required the opposite, defining a name before using it, so a compiler could get through the source in one pass. Kotlin's style guide declines to choose: "Choose an order (either higher-level stuff first, or vice versa)" "and stick to it."
+
+Geffen and Maoz's 2016 study is the only experiment we found that varied the order of methods with everything else held fixed. In 100,600 Java classes, callers-first was the most common order. In their experiment, 60 engineers answered questions about classes shown in five orders. They found that order "has no clear effect on the correctness of comprehension", although it "does seem to have an effect on the time engineers spent", and only beginners were sensitive to it. They had "too few samples to consider statistical significance", and no condition put callees first. An [eye-tracking study](https://doi.org/10.1145/3387904.3389279) by Norman Peitek, Janet Siegmund and Sven Apel found that how far a function sits from its call shapes the order people read code in, more than their experience does. Their measure counts the distance, not whether the function is above or below.
+
+Under both rules, every function has to be defined above the code that calls it, so a file reads callees first: the reverse of the stepdown rule. The research doesn't say that's worse, or better.
+
+## No study counts hoisting bugs
+
+We found no study of JavaScript bugs with a category for hoisting or the temporal dead zone. The closest is `this`, which an arrow handles differently. [BugsJS](https://bugsjs.github.io/paper/ICST19.pdf), a benchmark of 453 bugs from ten JavaScript projects, found "Incorrect this bounding" in none of them.
+
+The crashes on record come from moving code between the two styles. In a Next.js [issue](https://github.com/vercel/next.js/issues/58778), two components exported as `const` arrows imported each other through an index file, and the page threw "ReferenceError: Cannot access 'x' before initialization". Another user found that "after converting to a function declaration the error goes away." Declarations are ready as soon as a module is linked, before any code runs, which is why they survive a cycle like that. When Deno's standard library converted its top-level arrows to declarations in 2023, a reviewer [found](https://github.com/denoland/std/pull/3687) that the change broke a re-export in `std/crypto`, problems that "aren't caught by the test suite."
+
+At runtime the difference between the styles is small. We found no engine team that measured a speed or memory difference between them. V8 can add a dead-zone check to a call through a `const`, which a call to a declaration doesn't need. And esbuild [rewrites](https://github.com/evanw/esbuild/blob/v0.28.2/CHANGELOG-2020.md) top-level `const` as `var` when bundling, so in a bundle a call that comes too early fails with a different error than it does in tests.
+
+## Ten thousand reports, no fix
+
+To see what the rules do to real code, we used the same twelve codebases as the [length limits post](/research/length-limits). Eight are TypeScript projects (zod, Hono, tRPC, Vite, Astro, Excalidraw, Next.js and VS Code), and four are React codebases (shadcn/ui, Radix, React Aria and Supabase), each at a pinned commit. Their source has 52,834 functions in 6,488 files.
+
+Of their named functions, 10,418 are declarations and 8,657 are bound to a variable, nearly all as `const` arrows. Declarations are 54.6% overall, but each codebase has mostly picked a side: 92.7% in VS Code and 86.9% in Next.js, 24% in Supabase and 6.3% in Excalidraw. None of the twelve configures `func-style`, and none has a disable comment for either rule.
+
+| Rule | Reports | Per 10,000 lines |
+| --- | --: | --: |
+| `func-style`, expression style | 10,134 | 88.6 |
+| `no-use-before-define`, defaults | 5,428 | 47.5 |
+| `no-use-before-define`, functions, classes and variables off | 36 | 0.3 |
+
+With Ultracite's presets as they were in October 2026, `func-style` was the second most frequent of all the rules that reported on this code, and `no-use-before-define` the fourth. Oxlint and ESLint agree on all but eight reports: Oxlint skips a declaration that shares its name with a type, and ESLint flagged one name in a type. Biome's rule reported nothing anywhere, because none of this code reads a name before it's defined in a way that throws. The 36 reports that are left with everything but same-scope reads turned off are harmless too, mostly namespace members. Radix is the only codebase that checks order in its source, and it sets the rule that way.
+
+## Three reasons, counted
+
+We checked each of our reasons against the twelve codebases.
+
+**Dropping braces.** 3,051 declarations, 29.3%, are a single `return`, so as arrows they could drop their braces and the `return`. In a hand-checked sample, a concise body was possible for about a third.
+
+**Typing through the variable.** 699 of 8,631 `const` functions, 8.1%, take their type from the variable, mostly named types such as `NextPageWithLayout` (185), `SubmitHandler` (79) and `React.FC` (68). Most `const` functions type their parameters inline, the way declarations do.
+
+**Hoisting and order.** 2,078 declarations, 19.9%, are referenced above their line. But of 11,041 references between functions at the top level of a module, 70% point up, to a function defined above the caller. Even in files written entirely with declarations, only a third point down. 770 files read bottom-up and 250 top-down. Radix was the most top-down, with 64.2% of references pointing down.
+
+So the codebases mostly don't lean on hoisting. They're written in the order the two rules want, with or without declarations.
+
+## What hoisting is holding up
+
+The 3,344 places that use a declaration above its line, outside type annotations, are all harmless today. 3,284 sit inside functions that run later. 60 run straight away, 19 of them while the module loads. We read a sample of 80 reports by hand, and a second rater checked 30 of them: all 80 were harmless.
+
+Then we converted every reported declaration, on copies. 10,094 became arrows. 40 needed a `function` expression instead, because they use `this` or `arguments` or are generators. Default exports and overloads aren't reported, so they stayed. After conversion:
+
+- **19 references in 14 files throw at import.** The example below is one.
+- **41 references in 25 files throw when their function runs.** These are nested declarations called above their line, like Hono's `dispatch`.
+- **TypeScript reports 340 new errors** in the eight corpus repos. 82 are TS2775, where an assertion function no longer narrows, and others come from `never` helpers that no longer end a branch. Moving code can't fix those. They need a function type on the variable.
+- **787 files need reordering.** Where a valid order exists, reaching it moves 2,234 statements, 47,828 lines in all. 111 files have none: in 47 places, functions call each other in a loop, and in 72 they depend on code with side effects that can't move.
+- **2 of 31 runtime import cycles** are safe only because a hoisted declaration is called while the module loads. Both are in Next.js, and both become load-order hazards.
+
+Next.js's `links.ts` creates its shared observer while the module loads, with a handler defined 128 lines further down:
+
+{/* prettier-ignore */}
+```ts title="links.ts (Next.js)"
+// A single IntersectionObserver instance shared by all <Link> components.
+const observer: IntersectionObserver | null =
+  typeof IntersectionObserver === 'function'
+    ? new IntersectionObserver(handleIntersect, {
+        rootMargin: '200px',
+      })
+    : null
+
+// ...
+
+function handleIntersect(entries: Array<IntersectionObserverEntry>) {
+```
+
+As a declaration, `handleIntersect` exists before the first line runs. As a `const`, it throws in any browser that has `IntersectionObserver`.
+
+Every reference to a converted function was already reported before the conversion. `no-use-before-define` at its defaults doesn't distinguish the 60 that would crash from the 3,284 that wouldn't.
+
+The history agrees. Across three years of commits in eight of the codebases, 182 matched words such as hoisting, the dead zone, "Cannot access" or the rules' names, and we read them all. None was a hoisting bug, and three fixed a dead-zone crash caused by evaluation order. One zod commit backed out part of its own change, which, in the message's words, "traded a hoisted function re-export for a TDZ-bound const and fixed nothing." The commit lists Claude as a co-author. Functions written either way needed bug fixes at about the same rate, once we accounted for each codebase's style and how much each function changed.
+
+## Agents put helpers first
+
+Our earlier experiments give a first look at what agents do with these rules. In 240 committed runs, Claude Code and Codex added 105 functions, and every helper that had a caller went above it, 98 of 98. No run added a `no-use-before-define` report. But the agents often wrote declarations: Claude Code in 32 of the 53 functions it added, Codex in 21 of 52. In the length limits experiment, `func-style` came up in 19 of the 21 retries, each time for new helpers written as declarations.
+
+That's not surprising given what agents are shown. React's and Next.js's docs write components as declarations. Vercel's React [agent skill](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/AGENTS.md) has 149 lines declaring functions and 19 with `const` arrows. GitHub's example instructions for Copilot say "Use arrow functions for callbacks and short functions" next to an example written as a declaration.
+
+## Three files from Next.js, Supabase and Astro
+
+In October 2026 we set up a project the way Ultracite's setup leaves it for Oxlint. Both rules are on there already, so the user changes nothing. Then we picked three real files that need different responses:
+
+- **A, converts cleanly.** Next.js's [`duration-to-string.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/duration-to-string.ts) has five small functions that format build times. Each is defined above its first use, and three are a single `return`. The right response converts each to a `const` arrow and keeps the types and comments. Nothing moves.
+- **B, written top-down.** Supabase Studio's [`ConfigurationDriftPage.utils.ts`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConfigDrift/ConfigurationDriftPage.utils.ts#L14-L137) has three exports first and five helpers below them. As `const` functions, every helper is used before its line. The right response converts and moves the helpers up, or the exports down.
+- **C, functions that call each other.** Astro's [`serialize.ts`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/serialize.ts#L4-L115) turns a component's props into data the browser can rebuild. `serializeArray` and `serializeObject` call `convertToSerializedForm`, which calls both of them back. As `const` functions, no order satisfies `no-use-before-define`, and the report that's left can't crash. The right response converts what it can, says that no order works, and leaves that report for review, which Ultracite's prompt allows. Restructuring working code to satisfy an ordering rule is the wrong response.
+
+Each file went through Ultracite's agent fix as it ran in October 2026: the prompt, up to three attempts, and the same report a user sees. We ran each four times with Claude Code and four times with Codex, 24 runs in all, and filtered the handoff to the two rules plus anything an edit added. A behavior check called each file's exports with every input the corpus work built, 865 calls for A, 300 field lists for B and 318 props objects for C, after importing the module, so a crash at load counts too.
+
+## Sixteen clean conversions
+
+All 24 final files behaved like the originals, in every scenario and every intermediate attempt. No run added a suppression, a type error or a config change, or touched another file.
+
+On A, all eight converted every declaration in place and kept every type and comment. Claude Code used arrows each time. Codex used arrows twice and named `function` expressions twice. On B, all eight converted and moved the five helpers above the exports, 57 to 71 lines each. Claude said why each time: "The order now matters, because a `const` can't be used before its line runs the way a `function` declaration could." Codex said less and checked more: in nine of its twelve runs, it compared its version's output with the original's.
+
+Our reasons didn't show up much in what the agents wrote.
+
+- **Braces.** 42 of the 56 single-return bodies ended up concise, but the agents wrote 19 of them. Oxlint's `arrow-body-style` fix wrote the other 23 after the agent finished. One Codex run on B switched to `function` expressions on purpose, "so I switched to named function expressions to keep the original bodies intact".
+- **Types.** None of the 133 converted functions took its type from the variable. Every one kept its inline annotations.
+- **Order.** 23 of the 24 final files read bottom-up, and the other has no calls between top-level functions. B's eight were reordered correctly.
+
+We put the 24 final files and the originals in a blind packet and asked two raters whether a developer new to the code would find each final file easier to follow, about the same, or harder. Rater 1 had run the experiment. Rater 2 was a separate model that saw only the packet. Both are Claude models.
+
+| Subject | Rater 1: easier / same / harder | Rater 2: easier / same / harder |
+| ------- | ------------------------------- | ------------------------------- |
+| A       | 0 / 8 / 0                       | 0 / 8 / 0                       |
+| B       | 0 / 8 / 0                       | 0 / 6 / 2                       |
+| C       | 0 / 1 / 7                       | 0 / 1 / 7                       |
+
+They agreed on 22 of 24. Neither found any file easier to follow, including B's new order. Rater 1 wrote of one: "definitions precede uses, but a reader meets formatScalarValue before learning what the module is for." Rater 2 rated B's two `function`-expression versions harder, for their doubled names.
+
+## Every loop broken, none left for review
+
+All eight runs on C changed the code's structure. Seven passed `convertToSerializedForm` into the other two as a parameter, so they no longer name it. One made the three functions methods of a single object. The behavior check found no difference in any of the 318 scenarios. One Codex run's version of the first helper:
+
+{/* prettier-ignore */}
+```ts title="serialize.ts, one Codex run"
+const serializeArray = (
+  serialize: typeof convertToSerializedForm,
+  value: any[],
+  metadata: AstroComponentMetadata | Record<string, any> = {},
+  parents = new WeakSet<any>()
+): any[] => {
+```
+
+The `typeof convertToSerializedForm` still names the function above its definition, but in a type, which the rule ignores. Every caller now has to pass the converter in, and a reader has to follow it back through each call to see the recursion.
+
+The agents knew what they were doing. All eight named the loop, and seven said that no order would satisfy the rule. One Claude run explained: "With `const` functions, no ordering of the three avoids a call to one that hasn't been defined yet, so I broke the loop". None of them used the `Left for review:` line. One Claude run's summary said "(nothing left for review)". A Codex run's final message read in full: "Fixed all six reported issues in `serialize.ts`. Only that file changed." For all 24 runs, Ultracite reported every issue fixed and exited cleanly. On C it printed "Fixed 6 of 6 issues with Codex." or the same with Claude Code. The agents' explanations weren't shown to the user, because Ultracite prints an agent's message only when something is left for review.
+
+They were pushed that way. The prompt says a diagnostic that still fires is a failed fix, and Oxlint's help for the rule says: "Move the declaration before any references to it, or remove the reference if it is not needed." Passing the function in as a parameter removes the reference.
+
+Three of Claude's runs on C were retried. Each had added a function type that used `any`, which Ultracite reports. Ultracite matches a new diagnostic to an old one by rule and message, and every `any` report reads the same, so the retry prompt pointed at the last `any`s in the file, which were in the original code. All three agents then narrowed the exported `serializeProps(props: any)` to `Record<string, unknown>`, a change to the public type that the behavior check can't see. One said so: "values typed as an `interface` with no index signature will no longer be accepted as `props`." The `any`s they'd added stayed.
+
+Without an agent, nothing converts. `ultracite fix` and `ultracite fix --unsafe` changed no function's form or order in any of the 36 cases we ran with Oxlint, ESLint and Biome. Claude Code's runs cost $8.27 in all, with a median of 49 cents a run. Codex used a median of 35,800 tokens a run.
+
+## Reports that can't crash
+
+**Most of `no-use-before-define`'s reports can't crash.** At its defaults it reported 5,428 places in the twelve codebases, and none of them was a crash. Every reference it reported in our experiment ran inside a function, after loading, and those references were what forced B's reorder and C's restructuring. With `{ variables: false }`, B and C converted in place report nothing in Oxlint or ESLint, and a call at load time above its definition is still reported. With that setting, the rule misses reads inside a callback or a function that runs while the module loads, as `tsc` does.
+
+**It also misses crashes.** The rule doesn't follow a callback that runs during an initializer. `tsc` doesn't follow calls or imports. Biome's rule sees only same-scope reads. A load-time crash through an import cycle passes all three.
+
+**`func-style` can't express everything.** Overloads have to be declarations, generators have to be `function` expressions, and assertion functions need an explicit type on the variable. The `const` style also makes declarations' guarantees disappear: a function that worked above its line, in a load-time call or across an import cycle, stops working when it's converted, and no rule reports the difference between that and a harmless reference.
+
+**The case for either style is weak.** The rule's docs, its authors and our own reasons all call it a preference. No study compares the two styles for errors or reading, no bug study counts hoisting, and the one experiment on method order found no effect on correctness.
+
+**Our experiment was small.** It had four runs per subject and agent, a handoff filtered to two rules, and two raters from the same model family. C has one shape of loop, three functions in one file, and installed copies of A's and C's projects were on the machine, though no run read them. Six Codex runs listed the system's temp folder and saw the name of a locked folder the experiment used; the two that tried to open it were denied.
+
+## Report the read that runs too early
+
+**Choose the style for the code, not the rule.** Arrows suit callbacks and small functions that return a value. A typed variable suits a function that has a named type, such as a handler or a page component. Declarations suit overloads, assertion functions, generators, and functions called while the module loads. A rule with exceptions, like the ones ESLint added for typed variables and overloads, fits real code better than either style on its own.
+
+**If you want definitions above their use, report what crashes.** `no-use-before-define` with `variables: false` keeps the same-scope reads that throw where they're written, and stops reporting references from inside functions, which run later. Pair it with `tsc`, which catches the direct cases, and with the rules against import cycles. You can [change a rule's options](/docs/configuration#overriding-rules) in your own config.
+
+**Leave a loop of calls alone.** No order satisfies an ordering rule for functions that call each other. Keep them as declarations, or disable the rule on that line and say why. Don't trade a clear recursion for a function passed in as a parameter.
+
+**Tell agents the same.** Our agents saw the loop, said so, and restructured it anyway, because the prompt and the help both pushed toward removing the report. A line in `AGENTS.md`, such as "If functions call each other and no order satisfies no-use-before-define, leave the report for review and explain why," gives them the option the help text doesn't. We didn't test that line.
+
+**Convert with a check, not by hand.** If you move a codebase from one style to the other, look for the cases that break: a read while the module loads, a nested function used above its line, an assertion or `never` helper, a declaration that keeps an import cycle working. Run `tsc` and import every module afterwards. Deno's tests didn't catch its conversion bug.
+
+Hoisting was designed so functions could call each other in any order. `func-style` and `no-use-before-define` together take that away, on purpose, and most code is already written as if it didn't exist. In our experiment, agents converted and reordered without breaking anything. But on the one file where no order works, all eight runs bent the code to fit the rule, and every one was reported as fixed.
+
+<NextSteps />
+
+## References
+
+**The language**
+
+- Ecma International. [ECMA-262, 1st edition](https://www.ecma-international.org/wp-content/uploads/ECMA-262_1st_edition_june_1997.pdf). June 1997, and the current [ECMAScript specification](https://tc39.es/ecma262/).
+- Brendan Eich. [On function declaration hoisting](https://twitter.com/BrendanEich/status/33403701100154880), 2011, and [on var hoisting](https://twitter.com/BrendanEich/status/522395336615428097), 2014.
+- Waldemar Horwat. [return when desugaring to closures](http://web.archive.org/web/20131103/https://mail.mozilla.org/pipermail/es-discuss/2008-October/007807.html). es-discuss, 13 October 2008.
+- Allen Wirfs-Brock and Brendan Eich. [JavaScript: the first 20 years](https://doi.org/10.1145/3386327). _Proc. ACM Program. Lang._ 4 (HOPL), 2020.
+
+**The rules**
+
+- ESLint. [`func-style`](https://eslint.org/docs/latest/rules/func-style) and [`no-use-before-define`](https://eslint.org/docs/latest/rules/no-use-before-define) rule documentation.
+- Ilya Volodin. [Rule: function-style](https://github.com/eslint/eslint/issues/460). eslint/eslint #460, 2013.
+- ESLint issues on `func-style`: [#5183](https://github.com/eslint/eslint/issues/5183) (2016) and [#18478](https://github.com/eslint/eslint/issues/18478) (2024).
+- ESLint issues on `no-use-before-define`: [#1015](https://github.com/eslint/eslint/issues/1015) (2014), [#12473](https://github.com/eslint/eslint/issues/12473) (2019) and [#20014](https://github.com/eslint/eslint/issues/20014) (2025).
+- Conaclos. [feat(lint/noInvalidUseBeforeDeclaration): add rule](https://github.com/biomejs/biome/pull/1258). biomejs/biome #1258, 2023.
+- typescript-eslint. [Changes to the `recommended` sets for 3.0.0](https://github.com/typescript-eslint/typescript-eslint/issues/1423). typescript-eslint #1423, 2020.
+
+**TypeScript**
+
+- TypeScript. [Type Inference: Contextual Typing](https://www.typescriptlang.org/docs/handbook/type-inference.html#contextual-typing).
+- mbrowne. [Suggestion: Type annotations and interfaces for function declarations](https://github.com/microsoft/TypeScript/issues/22063). microsoft/TypeScript #22063, 2018.
+- Anders Hejlsberg. [Assertions in control flow analysis](https://github.com/microsoft/TypeScript/pull/32695). microsoft/TypeScript #32695, 2019.
+
+**Style guides and configs**
+
+- Rich Trott. [tools: require function declarations](https://github.com/nodejs/node/pull/12711). nodejs/node #12711, 2017.
+- Google. [TypeScript Style Guide: Function declarations](https://google.github.io/styleguide/tsguide.html#function-declarations).
+- Douglas Crockford. [_JavaScript: The Good Parts_](http://web.archive.org/web/20221126165548/https://www.oreilly.com/library/view/javascript-the-good/9780596517748/apbs09.html), Appendix B. O'Reilly, 2008, and [Code Conventions for the JavaScript Programming Language](https://www.crockford.com/code.html).
+
+**Reading order**
+
+- Yorai Geffen and Shahar Maoz. [On method ordering](https://doi.org/10.1109/ICPC.2016.7503711). ICPC 2016 ([author copy](https://www.cs.tau.ac.il/~maozs/papers/methodsorder-icpc16.pdf)).
+- Norman Peitek, Janet Siegmund and Sven Apel. [What drives the reading order of programmers? An eye tracking study](https://doi.org/10.1145/3387904.3389279). ICPC 2020.
+
+**Bugs and runtime**
+
+- Péter Gyimesi, Béla Vancsics, Andrea Stocco, Davood Mazinanian, Árpád Beszédes, Rudolf Ferenc and Ali Mesbah. [BugsJS: a benchmark of JavaScript bugs](https://bugsjs.github.io/paper/ICST19.pdf). ICST 2019.
+- Next.js. [Regular exported arrow function client components throw "cannot access before initialization" error message](https://github.com/vercel/next.js/issues/58778). vercel/next.js #58778, 2023.
+- Asher Gomez. [refactor: remove top-level arrow syntax use](https://github.com/denoland/std/pull/3687). denoland/std #3687, 2023.
+- esbuild. [Changelog for 2020](https://github.com/evanw/esbuild/blob/v0.28.2/CHANGELOG-2020.md).
+
+**Agents**
+
+- Vercel. [React best practices agent skill](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices/AGENTS.md).
+
+**The subjects**
+
+- Next.js. [`duration-to-string.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/duration-to-string.ts) and [`links.ts`](https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/links.ts#L121-L127).
+- Supabase. [`ConfigurationDriftPage.utils.ts`](https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/ConfigDrift/ConfigurationDriftPage.utils.ts#L14-L137).
+- Astro. [`serialize.ts`](https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/serialize.ts#L4-L115).
+- zod. [fix: surface @deprecated on re-exported compat aliases](https://github.com/colinhacks/zod/commit/faf33a2880f21910ef72e3f93636e4fc561fdea4). colinhacks/zod #6072, 2026.

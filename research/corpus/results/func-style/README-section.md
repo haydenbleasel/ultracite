@@ -1,0 +1,43 @@
+### Function style and order (twelfth post)
+
+The func-style scripts are prefixed `func-style-` and share `func-style-lib.cjs`. It holds the topic's paths, the inventory (one ESLint `Linter` pass per file with the TypeScript parser and its scope analysis: every function's form, scope, body, types and what converting it would need; every reference between module-level functions; every reference above its binding's definition, with what happens at runtime), and the real ESLint rules under local aliases for option variants, so their reports join to the inventory exactly.
+
+The rules: `func-style` (Oxlint core and ESLint core, `["error", "expression", { allowArrowFunctions: true }]`), `no-use-before-define` (Oxlint core at its defaults; in ESLint the base rule on JS files and `@typescript-eslint/no-use-before-define` on TS files, both at their defaults; off for route files in the TanStack presets), and for context `func-names`, `prefer-arrow-callback`, `arrow-body-style`, `unicorn/consistent-function-scoping` and `react/function-component-definition`. Biome's preset has `useArrowFunction`, `noInvalidUseBeforeDeclaration` and `useConsistentArrowReturn`, and no function-style rule; its nursery `useConsistentFunctionStyle` is measured too.
+
+The eight corpus repos are measured as in every topic, the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set, and Ultracite's CLI apart. Source and tests are kept apart (`length-lib.cjs`'s test collection). History uses the TODO post's history clones.
+
+| Script | What it does |
+| --- | --- |
+| `func-style-rules.cjs` | The rules per linter and preset: every Oxlint preset and `oxlint --rules` (fix kinds), ESLint resolved with `calculateConfigForFile` for `.ts`, `.js`, `.tsx`, `.jsx`, a test file and a TanStack route file, each rule's meta, every Biome preset with `biome explain`, the agent prompt's lines and the AGENTS.md template's, and the preset inconsistencies found. |
+| `func-style-census.cjs` | The inventory for every file of every repo: function forms (declarations, exported and default-exported; `const`/`let`/`var` arrows and function expressions, named or not; methods, class fields, object properties, callbacks, IIFEs), scope, components, concise and single-return bodies, `this`/`arguments`/`new.target`/`super`, generators, overloads, assertion and never-returning signatures, `new`/`instanceof`/`.prototype` in the file and by importers, types written inline or through the variable; file order (each reference between module-level functions up or down; top-down, bottom-up or mixed files; mutual recursion as strongly connected components); every use-before-define candidate and its runtime class. |
+| `func-style-linters.cjs` | Oxlint and Biome with each rule alone (three passes of option variants), on a mirror with disable directives neutralised and one as written, plus the census's ESLint reports; every diagnostic joined to its function or candidate, and every item the implementations disagree on given a reason. |
+| `func-style-calibration.cjs` | `calibration/func-style/` (44 cases) through Oxlint (each rule alone, and init's config), ESLint (the census pass and the core preset), Biome (each rule alone and the preset), `tsc` and Node (the case transpiled and imported in a fresh process), as written and converted; and what every linter's fix pass, and `ultracite fix` and `--unsafe` with the presets, do to each case. |
+| `func-style-convert.cjs` | Converts every reported declaration on copies (arrow, or a named function expression where an arrow would change behaviour; overloads, default exports and namespace merges left), reruns the analysis and Oxlint, reorders every statement list so each binding is defined above its references (only statements with no effects move; Kahn's algorithm, fewest moved lines), and type-checks each corpus repo before, converted and reordered (an overlay; nothing installed). |
+| `func-style-cycles.cjs` | The import-cycles topic's graph (`import-cycles-graph.cjs` `analyse`, unchanged): runtime cycles that are safe only because a function declaration is read at load time. |
+| `func-style-history.cjs` | `--keywords`: mainline commits whose messages mention TDZ, hoisting, "before initialization", cycles and the like, for the hand reading in `history-labels.json`. `--churn`: conversions between declarations and `const` functions, and moved definitions, in the three-year window. `--track`, `--analyse`: `length-history.cjs`'s tracking of every named function, and bug fixes by form with size controlled. Only `git log`/`git show`, with `GIT_NO_LAZY_FETCH=1`. |
+| `func-style-markers.cjs` | Each repo's lint configs at its pinned commit for these rules (with the commit that added each line), and disable comments naming them. |
+| `func-style-sample.cjs` | The hand classification: 82 declarations and 80 use-before-define reports (frozen in `sample.json`); `--worksheet`, `--print` (blind subsets of 30 and 30), `--compute` (both raters, weighted shares, κ, and rater 1 against the automatic labels). |
+| `func-style-agent-runs.cjs` | Functions agents added or rewrote in every committed agent-experiment run: form, whether it matches the file's style, helpers above or below their callers, func-style and no-use-before-define before and after, and the retry prompts these rules caused. |
+| `func-style-oracle.cjs` | The behaviour oracle for the three subjects: transpiles a subject and its stub, imports it in a fresh Node process (an import-time TDZ crash shows up here), runs seeded scenarios through its exports, and compares traces. |
+| `func-style-examples.cjs` | Checks the subjects' verbatim lines against their commits, lints them with Ultracite's Oxlint, ESLint and Biome presets, type-checks them, and runs the oracle and the order measure on 25 hand-made variants (right responses, tempting ones and gaming moves). |
+| `func-style-tables.cjs` | Generates `results/func-style/tables.md`. |
+| `func-style-run-all.cjs` | Runs all of the above in order, and the shared rule census. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+FUNC_STYLE_TMP=<scratch dir> node research/corpus/scripts/func-style-run-all.cjs   # about 12 min; --skip-history, --skip-census, --skip-typecheck
+```
+
+- **The inventory predicts the rules.** ESLint's `func-style` reports exactly the declarations the census predicts in every repo, and typescript-eslint's `no-use-before-define` exactly the non-type candidates. Every Oxlint and Biome report joins to an inventory item, and every disagreement between the three linters has a reason (`linters.json` `agreement`).
+- **Runtime classes are checked by hand.** Every candidate the analysis called a crash was read and turned out to be deferred; the refined analysis (own-context calls only) calls none in shipping code, and the hand classification of 80 reports agrees with it on all 80.
+- **Copies outside `out/`.** Mirrors, conversions, calibration, oracle and example runs live under `$FUNC_STYLE_TMP` (default: the system temp directory's `ultracite-research-func-style/`), because Ultracite's presets ignore `**/out`. Oxlint and Biome configs are written there too, never under `research/`. The shared rule census writes its Oxlint config under `out/rule-census/func-style/`, and `func-style-run-all.cjs` deletes it afterwards.
+- **The calibration runs code.** Its cases are this repo's own files, transpiled and imported in a fresh Node process. Nothing from a clone runs; the subjects' oracle runs this repo's copies with stubs.
+- **The hand labels are Claude models.** Rater 1 (the model that ran the measurements) labelled all 162 items from worksheets that show the automatic label; rater 2, a separate subagent working blind, 30 of each. `history-labels.json` has one rater.
+- **Hand inputs:** `history-labels.json`, and the rater labels (`out/func-style/labels-rater{1,2}.json`, kept in `classifications.json`).
+- **Two shared scripts changed, both backwards-compatible:**
+  - `import-cycles-graph.cjs` exports `analyse` and runs `main` only when it's the script being run. Run as before, it does the same thing; its runtime cycle counts through `analyse` equal `results/import-cycles/graph.json` in all eight repos.
+  - `length-history.cjs` exports `track` (with an optional list of functions to track instead of its own census rows), `logistic` and its constants. With no list, `track` reads the same rows as before.
+  - Neither topic's results were regenerated here.
+
+The method, findings and caveats are in `corpus/results/func-style/REPORT.md`.

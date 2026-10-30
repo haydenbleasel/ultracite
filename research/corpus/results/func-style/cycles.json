@@ -1,0 +1,219 @@
+{
+  "generated": "2026-10-30T09:39:48.071Z",
+  "note": "See the header of func-style-cycles.cjs. A cycle `flips` when it's late-use today (no TDZ-prone top-level read) and has at least one top-level or indirect read of a function declaration, which becomes TDZ-prone after conversion. Reads are the graph's (at most 3 per edge are listed, which is enough to decide).",
+  "repos": {
+    "astro": {
+      "cycles": 10,
+      "byRisk": {
+        "late-use": 9,
+        "top-level-use": 1
+      },
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 77,
+      "rows": [],
+      "seconds": 5,
+      "sha": "9050e3819c51b0383cced278c278bc6f45c63468"
+    },
+    "excalidraw": {
+      "cycles": 5,
+      "byRisk": {
+        "top-level-use": 2,
+        "late-use": 3
+      },
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 505,
+      "rows": [],
+      "seconds": 1193,
+      "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce"
+    },
+    "hono": {
+      "cycles": 4,
+      "byRisk": {
+        "late-use": 4
+      },
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 13,
+      "rows": [],
+      "seconds": 1,
+      "sha": "f78a245abc393368583085e19c7f5b28b460bf51"
+    },
+    "next.js": {
+      "cycles": 9,
+      "byRisk": {
+        "late-use": 9
+      },
+      "flips": 2,
+      "hoistedReads": 8,
+      "oxlintNoCycle": 87,
+      "rows": [
+        {
+          "files": 15,
+          "flips": true,
+          "hoisted": [
+            {
+              "from": "packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts",
+              "kind": "top-level",
+              "line": 19,
+              "name": "getStaleTimeMs",
+              "text": "getStaleTimeMs(\n  Number(process.env.__NEXT_CLIENT_ROUTER_STATIC_STALETIME)\n)",
+              "to": "packages/next/src/client/components/segment-cache/cache.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/router-reducer/reducers/navigate-reducer.ts#L19"
+            },
+            {
+              "from": "packages/next/src/client/components/segment-cache/bfcache.ts",
+              "kind": "top-level",
+              "line": 64,
+              "name": "createCacheMap",
+              "text": "createCacheMap()",
+              "to": "packages/next/src/client/components/segment-cache/cache-map.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/bfcache.ts#L64"
+            },
+            {
+              "from": "packages/next/src/client/components/segment-cache/cache.ts",
+              "kind": "top-level",
+              "line": 426,
+              "name": "createCacheMap",
+              "text": "createCacheMap()",
+              "to": "packages/next/src/client/components/segment-cache/cache-map.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/cache.ts#L426"
+            },
+            {
+              "from": "packages/next/src/client/components/segment-cache/cache.ts",
+              "kind": "top-level",
+              "line": 451,
+              "name": "createCacheMap",
+              "text": "createCacheMap()",
+              "to": "packages/next/src/client/components/segment-cache/cache-map.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/cache.ts#L451"
+            }
+          ],
+          "hoistedReads": 4,
+          "id": "next.js-r03",
+          "risk": "late-use"
+        },
+        {
+          "files": 4,
+          "flips": true,
+          "hoisted": [
+            {
+              "from": "packages/next/src/client/components/app-router-instance.ts",
+              "kind": "top-level",
+              "line": 328,
+              "name": "replace",
+              "text": "replace: replace",
+              "to": "packages/next/src/client/components/navigator.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L328"
+            },
+            {
+              "from": "packages/next/src/client/components/app-router-instance.ts",
+              "kind": "top-level",
+              "line": 329,
+              "name": "push",
+              "text": "push: push",
+              "to": "packages/next/src/client/components/navigator.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L329"
+            },
+            {
+              "from": "packages/next/src/client/components/app-router-instance.ts",
+              "kind": "top-level",
+              "line": 330,
+              "name": "refresh",
+              "text": "refresh: refresh",
+              "to": "packages/next/src/client/components/navigator.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L330"
+            },
+            {
+              "from": "packages/next/src/client/components/app-router-instance.ts",
+              "kind": "top-level",
+              "line": 327,
+              "name": "prefetchRoute",
+              "text": "prefetch: prefetchRoute",
+              "to": "packages/next/src/client/components/prefetch.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L327"
+            }
+          ],
+          "hoistedReads": 4,
+          "id": "next.js-r04",
+          "risk": "late-use"
+        }
+      ],
+      "seconds": 922,
+      "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
+    },
+    "trpc": {
+      "cycles": 0,
+      "byRisk": {},
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 0,
+      "rows": [],
+      "seconds": 1,
+      "sha": "796700d8653b3832409fff997e6f5789519b9ea7"
+    },
+    "vite": {
+      "cycles": 2,
+      "byRisk": {
+        "late-use": 1,
+        "top-level-use": 1
+      },
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 166,
+      "rows": [],
+      "seconds": 932,
+      "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6"
+    },
+    "vscode": {
+      "cycles": 0,
+      "byRisk": {},
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 146,
+      "rows": [],
+      "seconds": 2,
+      "sha": "959031245ebb1fe077e0d512e1397c0ae82006e4"
+    },
+    "zod": {
+      "cycles": 1,
+      "byRisk": {
+        "late-use": 1
+      },
+      "flips": 0,
+      "hoistedReads": 0,
+      "oxlintNoCycle": 2,
+      "rows": [],
+      "seconds": 1,
+      "sha": "284243fb0d6532665afdc9239188773bb624f73c"
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/typescript-estree": "8.72.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.3",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.0",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.74.0"
+  },
+  "pooled": {
+    "cycles": 31,
+    "flips": 2,
+    "hoistedReads": 8,
+    "lateUse": 27,
+    "topLevelUse": 4
+  }
+}

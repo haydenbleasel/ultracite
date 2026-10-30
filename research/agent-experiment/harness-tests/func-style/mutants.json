@@ -1,0 +1,656 @@
+{
+  "note": "Corpus variants (variant: the name in examples.json, made by func-style-examples.cjs variantsOf from the cleaned corpus subject, then normalised with Ultracite's Oxlint pass) and hand-made mutants (edits and moves on the prepared subjects). `expect`: the oracle's verdict against the prepared subject ignoring key order; Oxlint's func-style and no-use-before-define reports with inline config ignored; the automatic edit headline; the response with no Left-for-review line; categories the edit must include.",
+  "mutants": [
+    {
+      "id": "a01",
+      "base": "a",
+      "variant": "a01 convert (block bodies)",
+      "description": "convert (block bodies)",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, nothing moved"
+      }
+    },
+    {
+      "id": "a02",
+      "base": "a",
+      "variant": "a02 convert, concise bodies (arrow-body-style's fix)",
+      "description": "convert, concise bodies (arrow-body-style's fix)",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, nothing moved",
+        "kinds": [
+          "concise bodies"
+        ]
+      }
+    },
+    {
+      "id": "a03",
+      "base": "a",
+      "variant": "a03 nested ternary in durationToString",
+      "description": "nested ternary in durationToString",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, nothing moved"
+      }
+    },
+    {
+      "id": "a04",
+      "base": "a",
+      "variant": "a04 a comparison slips to >= while rewriting",
+      "description": "a comparison slips to >= while rewriting",
+      "expect": {
+        "oracle": "changed",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "behaviour changed (wrong)"
+      }
+    },
+    {
+      "id": "a05",
+      "base": "a",
+      "variant": "a05 suppression comments",
+      "description": "suppression comments",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 5,
+        "ubd": 0,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    },
+    {
+      "id": "a06",
+      "base": "a",
+      "variant": "a06 function expressions",
+      "description": "function expressions",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (function expressions), nothing moved",
+        "response": "converted, nothing moved"
+      }
+    },
+    {
+      "id": "a07",
+      "base": "a",
+      "variant": "a07 methods of an object, re-exported",
+      "description": "methods of an object, re-exported",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (methods of an object)",
+        "response": "restructured (methods of an object)"
+      }
+    },
+    {
+      "id": "a08",
+      "base": "a",
+      "variant": "a08 var",
+      "description": "var",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (var arrows), nothing moved",
+        "response": "converted, nothing moved",
+        "kinds": [
+          "var"
+        ],
+        "note": "the fix pass's no-var fix turns three of the five vars into const"
+      }
+    },
+    {
+      "id": "b01",
+      "base": "b",
+      "variant": "b01 convert and reorder (helpers above their callers)",
+      "description": "convert and reorder (helpers above their callers)",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), reordered",
+        "response": "converted and reordered"
+      }
+    },
+    {
+      "id": "b02",
+      "base": "b",
+      "variant": "b02 convert, the exports moved to the end",
+      "description": "convert, the exports moved to the end",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), reordered",
+        "response": "converted and reordered"
+      }
+    },
+    {
+      "id": "b03",
+      "base": "b",
+      "variant": "b03 convert in place",
+      "description": "convert in place",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, no-use-before-define reported, not left for review"
+      }
+    },
+    {
+      "id": "b04",
+      "base": "b",
+      "variant": "b04 function expressions in place",
+      "description": "function expressions in place",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "converted (function expressions), nothing moved",
+        "response": "converted, no-use-before-define reported, not left for review"
+      }
+    },
+    {
+      "id": "b05",
+      "base": "b",
+      "variant": "b05 convert and reorder, || becomes ??",
+      "description": "convert and reorder, || becomes ??",
+      "expect": {
+        "oracle": "changed",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), reordered",
+        "response": "behaviour changed (wrong)"
+      }
+    },
+    {
+      "id": "b06",
+      "base": "b",
+      "variant": "b06 convert in place, suppression comment",
+      "description": "convert in place, suppression comment",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    },
+    {
+      "id": "b07",
+      "base": "b",
+      "variant": "b07 var in place",
+      "description": "var in place",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, no-use-before-define reported, not left for review",
+        "note": "the fix pass's no-var fix turns every var into const here"
+      }
+    },
+    {
+      "id": "c01",
+      "base": "c",
+      "variant": "c01 convert, the best order (two reports left for review)",
+      "description": "convert, the best order (two reports left for review)",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      }
+    },
+    {
+      "id": "c02",
+      "base": "c",
+      "variant": "c02 convert serializeProps only",
+      "description": "convert serializeProps only",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 3,
+        "ubd": 2,
+        "edit": "partly converted (arrows), nothing moved",
+        "response": "partly converted, the cycle reported, not left for review"
+      }
+    },
+    {
+      "id": "c03",
+      "base": "c",
+      "variant": "c03 convert in place",
+      "description": "convert in place",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      }
+    },
+    {
+      "id": "c04",
+      "base": "c",
+      "variant": "c04 function expressions",
+      "description": "function expressions",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (function expressions), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      }
+    },
+    {
+      "id": "c05",
+      "base": "c",
+      "variant": "c05 convert, suppression comments",
+      "description": "convert, suppression comments",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "suppression",
+        "response": "suppression"
+      }
+    },
+    {
+      "id": "c06",
+      "base": "c",
+      "variant": "c06 methods of an object",
+      "description": "methods of an object",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (methods of an object)",
+        "response": "restructured (methods of an object)"
+      }
+    },
+    {
+      "id": "c07",
+      "base": "c",
+      "variant": "c07 helpers nested inside convertToSerializedForm",
+      "description": "helpers nested inside convertToSerializedForm",
+      "expect": {
+        "oracle": "changed",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (nested)",
+        "response": "behaviour changed (wrong)"
+      }
+    },
+    {
+      "id": "c08",
+      "base": "c",
+      "variant": "c08 the recursive call passed in as a parameter",
+      "description": "the recursive call passed in as a parameter",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (parameter added)",
+        "response": "restructured (parameter added)"
+      }
+    },
+    {
+      "id": "c09",
+      "base": "c",
+      "variant": "c09 var",
+      "description": "var",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review",
+        "note": "the fix pass's no-var fix turns every var into const here"
+      }
+    },
+    {
+      "id": "c10",
+      "base": "c",
+      "variant": "c10 declarations kept, convertToSerializedForm moved first",
+      "description": "declarations kept, convertToSerializedForm moved first",
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 4,
+        "ubd": 4,
+        "edit": "reordered only",
+        "response": "not converted, the cycle reported, not left for review"
+      }
+    },
+    {
+      "id": "ah1",
+      "base": "a",
+      "description": "declarations kept, durationToString moved to the end (now referenced above its definition)",
+      "move": {
+        "start": "/**\n * Converts a duration in seconds",
+        "end": "/**\n * Converts a nanosecond duration"
+      },
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 5,
+        "ubd": 1,
+        "edit": "reordered only",
+        "response": "not converted, no-use-before-define reported, not left for review"
+      }
+    },
+    {
+      "id": "ah2",
+      "base": "a",
+      "description": "one function converted: a concise arrow with its type on the variable",
+      "edits": [
+        [
+          "export function hrtimeBigIntDurationToString(hrtime: bigint) {\n  return durationToStringWithNanoseconds(hrtime);\n}",
+          "export const hrtimeBigIntDurationToString: (hrtime: bigint) => string = (\n  hrtime\n) => durationToStringWithNanoseconds(hrtime);"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 4,
+        "ubd": 0,
+        "edit": "partly converted (arrows), nothing moved",
+        "response": "partly converted, func-style reported, not left for review",
+        "kinds": [
+          "concise bodies",
+          "types on the variable"
+        ]
+      }
+    },
+    {
+      "id": "ah3",
+      "base": "a",
+      "description": "hrtimeToSeconds converted with its JSDoc and its return type dropped",
+      "edits": [
+        [
+          "/**\n * Converts a high-resolution time tuple to seconds.\n *\n * @param hrtime - High-resolution time tuple of [seconds, nanoseconds]\n * @returns Duration in seconds as a floating-point number\n */\nexport function hrtimeToSeconds(hrtime: [number, number]): number {\n  // hrtime is a tuple of [seconds, nanoseconds]\n  return hrtime[0] + hrtime[1] / NANOSECONDS_PER_SECOND;\n}",
+          "export const hrtimeToSeconds = (hrtime: [number, number]) =>\n  hrtime[0] + hrtime[1] / NANOSECONDS_PER_SECOND;"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 4,
+        "ubd": 0,
+        "edit": "partly converted (arrows), nothing moved",
+        "response": "partly converted, func-style reported, not left for review",
+        "kinds": [
+          "JSDoc changed or lost",
+          "types lost",
+          "comments lost",
+          "concise bodies"
+        ]
+      }
+    },
+    {
+      "id": "bh1",
+      "base": "b",
+      "description": "declarations kept, only the exports moved to the end (two helpers still call helpers below them)",
+      "move": {
+        "start": "export function createConfigurationDriftRows(",
+        "end": "function groupConfigFieldsBySection<"
+      },
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 8,
+        "ubd": 4,
+        "edit": "reordered only",
+        "response": "not converted, no-use-before-define reported, not left for review"
+      }
+    },
+    {
+      "id": "bh2",
+      "base": "b",
+      "description": "getConfigFieldLabel inlined into its two callers and deleted",
+      "edits": [
+        [
+          "    settingLabel: getConfigFieldLabel(field.configPath),\n",
+          "    settingLabel:\n      getFieldDefinition(field.configPath)?.label ??\n      startCase(field.configPath.split(\".\").at(-1) ?? field.configPath),\n"
+        ],
+        [
+          "      label: getConfigFieldLabel(field.configPath),\n",
+          "      label:\n        getFieldDefinition(field.configPath)?.label ??\n        startCase(field.configPath.split(\".\").at(-1) ?? field.configPath),\n"
+        ],
+        [
+          "/**\n * Prefers the registry's hand-written label, and otherwise title-cases the last path segment —\n * never the whole path, which would leave the dots in.\n */\nfunction getConfigFieldLabel(configPath: string): string {\n  const label = getFieldDefinition(configPath)?.label;\n  return label ?? startCase(configPath.split(\".\").at(-1) ?? configPath);\n}\n\n",
+          ""
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 7,
+        "ubd": 6,
+        "edit": "restructured (merged or inlined)",
+        "response": "restructured (merged or inlined)",
+        "kinds": [
+          "comments lost"
+        ]
+      }
+    },
+    {
+      "id": "ch1",
+      "base": "c",
+      "description": "converted in place by hand (the same as c03), normalised",
+      "edits": [
+        [
+          "function serializeArray(\n",
+          "const serializeArray = (\n"
+        ],
+        [
+          "): any[] {\n",
+          "): any[] => {\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction serializeObject(\n",
+          "  return serialized;\n};\n\nconst serializeObject = (\n"
+        ],
+        [
+          "): Record<any, any> {\n",
+          "): Record<any, any> => {\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction convertToSerializedForm(\n",
+          "  return serialized;\n};\n\nconst convertToSerializedForm = (\n"
+        ],
+        [
+          "): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] {\n",
+          "): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] => {\n"
+        ],
+        [
+          "    }\n  }\n}\n\nexport function serializeProps(props: any, metadata?: AstroComponentMetadata) {\n",
+          "    }\n  }\n};\n\nexport const serializeProps = (props: any, metadata?: AstroComponentMetadata) => {\n"
+        ],
+        [
+          "  return serialized;\n}\n",
+          "  return serialized;\n};\n"
+        ]
+      ],
+      "normalise": true,
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      }
+    },
+    {
+      "id": "ch2",
+      "base": "c",
+      "description": "a forward declaration: `let convertToSerializedForm: Convert;` above its callers, assigned below them",
+      "edits": [
+        [
+          "function serializeArray(\n",
+          "const serializeArray = (\n"
+        ],
+        [
+          "): any[] {\n",
+          "): any[] => {\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction serializeObject(\n",
+          "  return serialized;\n};\n\nconst serializeObject = (\n"
+        ],
+        [
+          "): Record<any, any> {\n",
+          "): Record<any, any> => {\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction convertToSerializedForm(\n",
+          "  return serialized;\n};\n\nconst convertToSerializedForm = (\n"
+        ],
+        [
+          "): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] {\n",
+          "): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] => {\n"
+        ],
+        [
+          "    }\n  }\n}\n\nexport function serializeProps(props: any, metadata?: AstroComponentMetadata) {\n",
+          "    }\n  }\n};\n\nexport const serializeProps = (props: any, metadata?: AstroComponentMetadata) => {\n"
+        ],
+        [
+          "  return serialized;\n}\n",
+          "  return serialized;\n};\n"
+        ],
+        [
+          "const serializeArray = (\n",
+          "type Convert = (\n  value: any,\n  metadata?: AstroComponentMetadata | Record<string, any>,\n  parents?: WeakSet<any>\n) => [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>];\nlet convertToSerializedForm: Convert;\n\nconst serializeArray = (\n"
+        ],
+        [
+          "const convertToSerializedForm = (\n",
+          "convertToSerializedForm = (\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (forward declaration)",
+        "response": "restructured (forward declaration)"
+      }
+    },
+    {
+      "id": "ch3",
+      "base": "c",
+      "description": "converted, plus a call of serializeProps at load time above its definition (a TDZ crash at import)",
+      "edits": [
+        [
+          "function serializeArray(\n",
+          "const serializeArray = (\n"
+        ],
+        [
+          "): any[] {\n",
+          "): any[] => {\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction serializeObject(\n",
+          "  return serialized;\n};\n\nconst serializeObject = (\n"
+        ],
+        [
+          "): Record<any, any> {\n",
+          "): Record<any, any> => {\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction convertToSerializedForm(\n",
+          "  return serialized;\n};\n\nconst convertToSerializedForm = (\n"
+        ],
+        [
+          "): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] {\n",
+          "): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] => {\n"
+        ],
+        [
+          "    }\n  }\n}\n\nexport function serializeProps(props: any, metadata?: AstroComponentMetadata) {\n",
+          "    }\n  }\n};\n\nexport const serializeProps = (props: any, metadata?: AstroComponentMetadata) => {\n"
+        ],
+        [
+          "  return serialized;\n}\n",
+          "  return serialized;\n};\n"
+        ],
+        [
+          "const serializeArray = (\n",
+          "export const EMPTY_PROPS = serializeProps({});\n\nconst serializeArray = (\n"
+        ]
+      ],
+      "expect": {
+        "oracle": "import-crash",
+        "funcStyle": 0,
+        "ubd": 3,
+        "edit": "converted (arrows), nothing moved",
+        "response": "broken (throws at import)"
+      }
+    },
+    {
+      "id": "ch4",
+      "base": "c",
+      "description": "the three as static methods of a class",
+      "edits": [
+        [
+          "function serializeArray(\n",
+          "class Serializer {\n  static serializeArray(\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction serializeObject(\n",
+          "  return serialized;\n}\n\n  static serializeObject(\n"
+        ],
+        [
+          "  return serialized;\n}\n\nfunction convertToSerializedForm(\n",
+          "  return serialized;\n}\n\n  static convertToSerializedForm(\n"
+        ],
+        [
+          "    }\n  }\n}\n\nexport function serializeProps(",
+          "    }\n  }\n}\n}\n\nexport function serializeProps("
+        ],
+        [
+          "    convertToSerializedForm(v, metadata, parents)\n",
+          "    Serializer.convertToSerializedForm(v, metadata, parents)\n"
+        ],
+        [
+          "      convertToSerializedForm(v, metadata, parents),\n",
+          "      Serializer.convertToSerializedForm(v, metadata, parents),\n"
+        ],
+        [
+          "        serializeArray([...(value as Map<any, any>)], metadata, parents),\n",
+          "        Serializer.serializeArray([...(value as Map<any, any>)], metadata, parents),\n"
+        ],
+        [
+          "        serializeArray([...(value as Set<any>)], metadata, parents),\n",
+          "        Serializer.serializeArray([...(value as Set<any>)], metadata, parents),\n"
+        ],
+        [
+          "      return [PROP_TYPE.JSON, serializeArray(value, metadata, parents)];\n",
+          "      return [PROP_TYPE.JSON, Serializer.serializeArray(value, metadata, parents)];\n"
+        ],
+        [
+          "        return [PROP_TYPE.Value, serializeObject(value, metadata, parents)];\n",
+          "        return [PROP_TYPE.Value, Serializer.serializeObject(value, metadata, parents)];\n"
+        ],
+        [
+          "JSON.stringify(serializeObject(props, metadata))",
+          "JSON.stringify(Serializer.serializeObject(props, metadata))"
+        ]
+      ],
+      "normalise": true,
+      "expect": {
+        "oracle": "same",
+        "funcStyle": 1,
+        "ubd": 0,
+        "edit": "restructured (methods of a class)",
+        "response": "restructured (methods of a class)"
+      }
+    }
+  ]
+}

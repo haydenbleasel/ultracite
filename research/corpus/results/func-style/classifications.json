@@ -1,0 +1,1489 @@
+{
+  "codebook": "See the header of func-style-sample.cjs.",
+  "generated": "2026-10-30T15:48:07.259Z",
+  "raters": {
+    "rater1": "the Claude model that ran the measurements, with the worksheets (which show the automatic label)",
+    "rater2": "a separate Claude subagent, blind: the worksheet blocks without any automatic label, and the codebook"
+  },
+  "rater1": {
+    "F01": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "no reference above; ten-line helper",
+      "reads": "same"
+    },
+    "F02": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "single ternary return",
+      "reads": "same"
+    },
+    "F03": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F04": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "try/catch body",
+      "reads": "same"
+    },
+    "F05": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "one-line return",
+      "reads": "same"
+    },
+    "F06": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "single return of new",
+      "reads": "same"
+    },
+    "F07": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "used three times inside the exported middleware above it; a 21-line helper would move above the file's main export",
+      "reads": "worse"
+    },
+    "F08": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "used inside the middleware above; five lines",
+      "reads": "same"
+    },
+    "F09": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F10": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F11": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "returns an async handler; the outer braces could go",
+      "reads": "same"
+    },
+    "F12": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F13": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "type predicate works on an arrow",
+      "reads": "same"
+    },
+    "F14": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "nested; called above its line in the same function body, so the converted const throws when the transform runs unless moved up",
+      "reads": "same"
+    },
+    "F15": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F16": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "generic in a .ts file",
+      "reads": "same"
+    },
+    "F17": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "two statements",
+      "reads": "same"
+    },
+    "F18": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "single return of createRecursiveProxy",
+      "reads": "same"
+    },
+    "F19": {
+      "concise": "yes",
+      "conversion": "reorder",
+      "note": "called inside a function above; three lines",
+      "reads": "same"
+    },
+    "F20": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F21": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "called inside the plugin function above",
+      "reads": "same"
+    },
+    "F22": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "a 103-line helper called by the function above it; the file reads top-down",
+      "reads": "worse"
+    },
+    "F23": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F24": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "21-line factory called by the exported function above",
+      "reads": "worse"
+    },
+    "F25": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "called by the handler above",
+      "reads": "same"
+    },
+    "F26": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F27": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "two statements",
+      "reads": "same"
+    },
+    "F28": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F29": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F30": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F31": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F32": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F33": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "returns an object literal; needs parentheses",
+      "reads": "same"
+    },
+    "F34": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F35": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F36": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F37": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "single expression statement, not a return",
+      "reads": "same"
+    },
+    "F38": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F39": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F40": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "single return",
+      "reads": "same"
+    },
+    "F41": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F42": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F43": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F44": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "a 79-line exported function called from the class above; it would move above the class",
+      "reads": "worse"
+    },
+    "F45": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F46": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F47": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "nested helper, defined before use",
+      "reads": "same"
+    },
+    "F48": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F49": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "component returning JSX",
+      "reads": "same"
+    },
+    "F50": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "component returning JSX",
+      "reads": "same"
+    },
+    "F51": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "two statements",
+      "reads": "same"
+    },
+    "F52": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "component returning JSX",
+      "reads": "same"
+    },
+    "F53": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "component returning JSX",
+      "reads": "same"
+    },
+    "F54": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F55": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "nested in an effect; defined before use",
+      "reads": "same"
+    },
+    "F56": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "a util at the bottom of the file used by three components above; Radix keeps helpers in a section at the end",
+      "reads": "worse"
+    },
+    "F57": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F58": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F59": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "util in the bottom section, called from a component above",
+      "reads": "worse"
+    },
+    "F60": {
+      "concise": "yes",
+      "conversion": "reorder",
+      "note": "three-line util in the bottom section, used by two components above",
+      "reads": "worse"
+    },
+    "F61": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "called from an effect in the component above",
+      "reads": "same"
+    },
+    "F62": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "a 259-line component rendered by the one above it",
+      "reads": "worse"
+    },
+    "F63": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F64": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F65": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F66": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F67": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F68": {
+      "concise": "yes",
+      "conversion": "reorder",
+      "note": "called in JSX of the component above",
+      "reads": "same"
+    },
+    "F69": {
+      "concise": "yes",
+      "conversion": "reorder",
+      "note": "called in a useMemo above",
+      "reads": "same"
+    },
+    "F70": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "single chained return",
+      "reads": "same"
+    },
+    "F71": {
+      "concise": "yes",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F72": {
+      "concise": "no",
+      "conversion": "clean",
+      "note": "",
+      "reads": "same"
+    },
+    "F73": {
+      "concise": "no",
+      "conversion": "blocked",
+      "note": "public never-returning API; a const arrow loses the call-site narrowing unless the variable gets an explicit function type",
+      "reads": "worse"
+    },
+    "F74": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "never-returning, but its two callers don't rely on narrowing; must move above build",
+      "reads": "same"
+    },
+    "F75": {
+      "concise": "no",
+      "conversion": "function-expression",
+      "note": "nested, uses this (this parameter)",
+      "reads": "same"
+    },
+    "F76": {
+      "concise": "no",
+      "conversion": "function-expression",
+      "note": "async generator",
+      "reads": "same"
+    },
+    "F77": {
+      "concise": "no",
+      "conversion": "function-expression",
+      "note": "webpack loader that uses this",
+      "reads": "same"
+    },
+    "F78": {
+      "concise": "no",
+      "conversion": "function-expression",
+      "note": "this parameter; called as a method",
+      "reads": "same"
+    },
+    "F79": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "passed to a call at module evaluation above its line; a naive conversion throws at import",
+      "reads": "same"
+    },
+    "F80": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "passed to a call at module evaluation above its line; a naive conversion throws at import",
+      "reads": "same"
+    },
+    "F81": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "wrapped by cache() on the line above at module evaluation; a naive conversion throws at import",
+      "reads": "same"
+    },
+    "F82": {
+      "concise": "no",
+      "conversion": "reorder",
+      "note": "called at module evaluation to build two exports above it; a naive conversion throws at import",
+      "reads": "same"
+    },
+    "U01": {
+      "note": "class constructed in a method of the class above it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U02": {
+      "note": "class constructed in a factory function above it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U03": {
+      "note": "class constructed inside a method",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U04": {
+      "note": "subclass constructed in a method of the class above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U05": {
+      "note": "static member read inside a function",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U06": {
+      "note": "class constructed in a method",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U07": {
+      "note": "class constructed in a static method of the class above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U08": {
+      "note": "class constructed in a method",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U09": {
+      "note": "enum read in a static arrow that runs when create() is called",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U10": {
+      "note": "const enum member, inlined by the compiler; read inside a function",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U11": {
+      "note": "namespace read in a method",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U12": {
+      "note": "const enum member read inside a function",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U13": {
+      "note": "const enum member read in a method",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U14": {
+      "note": "namespace read in a method",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U15": {
+      "note": "read in getSnapshot, which useSyncExternalStore calls later; the store factory runs at load but doesn't call it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U16": {
+      "note": "component rendered in JSX of a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U17": {
+      "note": "component rendered in JSX of a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U18": {
+      "note": "memoised component rendered by a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U19": {
+      "note": "component rendered in a layout's JSX",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U20": {
+      "note": "context provider from a destructured createContext, rendered by a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U21": {
+      "note": "cached function called inside an async function that runs at render",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U22": {
+      "note": "error helper called while rendering",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U23": {
+      "note": "context read while rendering",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U24": {
+      "note": "component rendered by a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U25": {
+      "note": "component rendered by a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U26": {
+      "note": "component rendered by a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U27": {
+      "note": "component rendered while rendering a table",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U28": {
+      "note": "component rendered by a component above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U29": {
+      "note": "predicate called inside a function above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U30": {
+      "note": "helper called inside an arrow above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U31": {
+      "note": "constant returned from a function above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U32": {
+      "note": "state setter called in a callback that runs after the hook's body",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U33": {
+      "note": "API route handler calls a const arrow below it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U34": {
+      "note": "helper called in the error map above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U35": {
+      "note": "helper called in a reduce callback inside a function above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U36": {
+      "note": "API route handler calls a const arrow below it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U37": {
+      "note": "helper called in the error map above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U38": {
+      "note": "exported helper called in an async function above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U39": {
+      "note": "helper called in a function above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U40": {
+      "note": "API route handler calls a const arrow below it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U41": {
+      "note": "component rendered in JSX above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U42": {
+      "note": "schema constructor used inside a function",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U43": {
+      "note": "closure defined above the const it reads, called only after it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U44": {
+      "note": "event handler reads state declared below it in the component",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U45": {
+      "note": "component rendered in JSX above",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U46": {
+      "note": "API route handler calls a const arrow below it",
+      "order": "top-down",
+      "runtime": "harmless-deferred"
+    },
+    "U47": {
+      "note": "function declaration called inside a function above",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U48": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U49": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U50": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U51": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U52": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U53": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U54": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U55": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U56": {
+      "note": "component declaration rendered above",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U57": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U58": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U59": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U60": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U61": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U62": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U63": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U64": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U65": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U66": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U67": {
+      "note": "",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U68": {
+      "note": "called at module evaluation on the line above its declaration; works only because it's hoisted",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U69": {
+      "note": "nested declaration called above it in the same function",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U70": {
+      "note": "passed to cache() at module evaluation on the line above",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U71": {
+      "note": "nested declaration after the return that uses it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U72": {
+      "note": "nested declaration called above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U73": {
+      "note": "passed to a call at module evaluation above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U74": {
+      "note": "nested declaration called above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U75": {
+      "note": "read at module evaluation by an exported let above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U76": {
+      "note": "nested declaration called above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U77": {
+      "note": "nested declaration passed to catch above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U78": {
+      "note": "nested declaration passed to catch above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U79": {
+      "note": "nested declaration put in an object above it",
+      "order": "top-down",
+      "runtime": "harmless-hoisted"
+    },
+    "U80": {
+      "note": "export list above the const it names",
+      "order": "n/a",
+      "runtime": "harmless-export-list"
+    }
+  },
+  "rater2": {
+    "F02": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Private helper in a bottom-up file; only used below (in input()). Calls outSide, which is declared above it."
+    },
+    "F04": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Used only below (lines 543, 917). try/catch body, so it keeps its braces."
+    },
+    "F06": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Re-exported by `export { _lazy as lazy }` right after it and used at 1984, both below. Generic arrow is fine in a .ts file."
+    },
+    "F07": {
+      "conversion": "reorder",
+      "reads": "worse",
+      "concise": "no",
+      "note": "All three references are inside the returned middleware (deferred), but the helper has to move above `export const jwt`, which puts a private helper ahead of the documented public entry point the file opens with."
+    },
+    "F15": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "No value references above it (line 138 is a comment). Mutates key before returning, so it keeps its braces."
+    },
+    "F16": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Used below at 148/150 as a map callback. Generic arrow with a multi-line constraint works in .ts."
+    },
+    "F20": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "One-line predicate returning boolean (not a type guard), no references above."
+    },
+    "F22": {
+      "conversion": "reorder",
+      "reads": "worse",
+      "concise": "no",
+      "note": "Called inside walk() (line 565, deferred), so this 103-line predicate has to move above walk, breaking the file's top-down order of ssrTransform, then walk, then helpers."
+    },
+    "F24": {
+      "conversion": "reorder",
+      "reads": "same",
+      "concise": "no",
+      "note": "Referenced inside shouldExternalize (deferred). Moving it above line 22 (with createIsConfiguredAsExternal ahead of it if that converts too) gives a consistent bottom-up file; the current order is already mixed."
+    },
+    "F25": {
+      "conversion": "reorder",
+      "reads": "worse",
+      "concise": "no",
+      "note": "Called inside the handler returned by getFormServerHandler (deferred). The file reads top-down (defineAction, getFormServerHandler, parseFormInput, getJsonServerHandler), and moving it up breaks that."
+    },
+    "F26": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "specialQueriesRE is defined just above it, and nothing references it above."
+    },
+    "F27": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Single return expression, used only below (line 24)."
+    },
+    "F33": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Returns an asserted object literal, so the concise form needs `({...}) as Ellipse<Point>`. Generic in .ts."
+    },
+    "F35": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Single ternary return, no references above."
+    },
+    "F36": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Long body that already holds an inner const arrow. Used only below (line 282)."
+    },
+    "F37": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Body is one void call statement, not a `return`, so by the codebook it isn't concise (a void expression body would compile). writeCookieValue is declared above."
+    },
+    "F43": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Loop body, used only below (321, 345)."
+    },
+    "F44": {
+      "conversion": "reorder",
+      "reads": "worse",
+      "concise": "no",
+      "note": "Called from getEditOperations in the class above (deferred). The 79-line exported function would have to move above TrimTrailingWhitespaceCommand, the class the file is named after."
+    },
+    "F46": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Default parameter carries over unchanged. All uses are below it."
+    },
+    "F50": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "React component that returns JSX, with `data` defined above. Neutral style change."
+    },
+    "F51": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Computes Comp before returning. The export list at line 68 comes after it."
+    },
+    "F53": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Single return of JSX. Exported through the export list at the bottom."
+    },
+    "F54": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Large component full of hooks. The only mention above it is inside an error string (line 39)."
+    },
+    "F55": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "no",
+      "note": "Nested in an if block inside useEffect. It's only referenced after its definition (the addEventListener/removeEventListener calls), so a block-scoped const works."
+    },
+    "F60": {
+      "conversion": "reorder",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Used inside the TabsTrigger and TabsContent render functions (deferred). It moves up from radix's bottom helper section. A 3-line id helper near the top constants reads about as well."
+    },
+    "F62": {
+      "conversion": "reorder",
+      "reads": "worse",
+      "concise": "no",
+      "note": "Used in a JSX render callback inside Tree (deferred). The 259-line inner component would move above the public Tree export, and as a generic arrow in .tsx it needs the `<T,>` form."
+    },
+    "F66": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Generic `<T extends object>` arrow parses fine in .tsx. Single JSX return."
+    },
+    "F69": {
+      "conversion": "reorder",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Called in a useMemo callback in the component (deferred). Moves above AuthorizeRequesterDetails, and it can sit right after PERMISSION_GROUPS, the data it maps."
+    },
+    "F71": {
+      "conversion": "clean",
+      "reads": "same",
+      "concise": "yes",
+      "note": "Single filter return, no references above."
+    },
+    "F81": {
+      "conversion": "reorder",
+      "reads": "same",
+      "concise": "no",
+      "note": "`const getResolvedMetadata = cache(getResolvedMetadataImpl)` runs during module evaluation, so it would be a TDZ crash unless the impl moves above the cache line. Impl followed by its cached wrapper reads naturally."
+    },
+    "U02": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "`new FetchableDevEnvironment` sits inside the exported createFetchableDevEnvironment factory, which only runs when called after the module loads."
+    },
+    "U03": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the combineTextEditInfos function body. LengthMapping is a helper class declared below it."
+    },
+    "U04": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the static factory ListAstNode.create23. The subclass has to follow the base class because of extends, so no reordering removes this report."
+    },
+    "U07": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the StringEdit.replace static method. StringReplacement is declared later, and the two classes refer to each other."
+    },
+    "U08": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the BaseStringReplacement.toEdit method body. Cycle: StringEdit's type parameters use the replacement classes, and the base class's method builds a StringEdit."
+    },
+    "U09": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the body of the static create arrow, which runs only when called. The module-level `X.create` aliases (5046+) are after the enum. Read early, the enum would be undefined."
+    },
+    "U10": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside CursorMove.parse, a function that runs after the namespace has evaluated. It's a const enum, so tsc inlines the value anyway."
+    },
+    "U11": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside a static method of CursorMoveCommands. CursorMove.Direction is a const enum in the namespace declared below."
+    },
+    "U12": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Same as line 889: inside CursorMove.parse, a const enum reference."
+    },
+    "U15": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "createSegmentTreeStore() runs at module load (line 56), but it only builds closures. getServerSnapshot reads trie later, when useSyncExternalStore calls it."
+    },
+    "U23": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "JSX inside the Toast forwardRef render function, which runs at render time."
+    },
+    "U25": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "JSX inside the CalendarGrid render function. The forwardRef wrapper is created further down at module scope."
+    },
+    "U26": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "JSX inside the Modal forwardRef render function."
+    },
+    "U27": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "A `let` binding read in JSX inside TableBody's render callback, which runs at render time, not when createBranchComponent is called."
+    },
+    "U37": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the errorMap arrow, which runs only when zod reports an issue. prefix is a const arrow helper below it."
+    },
+    "U38": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside the catch block of the async subsetToBase64 arrow."
+    },
+    "U42": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "Inside a map callback in partial(), which runs only when called. No module-level call to partial before line 1502."
+    },
+    "U45": {
+      "runtime": "harmless-deferred",
+      "order": "top-down",
+      "note": "JSX inside the UserOverview component. RowAction is a const arrow component below it."
+    },
+    "U47": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "addRouteBase is a function declaration, called from the paginate function above it."
+    },
+    "U49": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "Function declaration, called from an async function above it."
+    },
+    "U54": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "The const arrow handler dispatches to the handlePost function declaration below it, and it's also deferred."
+    },
+    "U59": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "The default-exported handler dispatches to the handlePost declaration below it."
+    },
+    "U62": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "Function declaration, called from the compile switch above it."
+    },
+    "U63": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "Function declaration (tryReadFile), called from an exported function above it."
+    },
+    "U64": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "Type-guard function declaration, called in the Progress render above it. As a const it would also lose nothing at runtime, since it's deferred."
+    },
+    "U69": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "Nested function declaration called earlier in the same component body. If converted to a const without moving it, every render would throw (crash-when-called)."
+    },
+    "U73": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "The module-level initializer of warnForSyncAccess passes the function during evaluation. That's fine for a declaration, but as a const it would be a TDZ crash at evaluation unless moved."
+    },
+    "U74": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "Nested function declaration called in the loop just above it in the same function body. As a const it would crash when called unless moved up."
+    },
+    "U76": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "createCanvas() runs synchronously at the start of init, before the nested declaration's line. As a const it would crash when called unless moved up."
+    },
+    "U77": {
+      "runtime": "harmless-hoisted",
+      "order": "top-down",
+      "note": "The nested handleCancellation declaration is passed to .catch earlier in the same body. As a const it would be in its TDZ when that line runs, unless moved."
+    }
+  },
+  "subset": {
+    "F": [
+      "F02",
+      "F04",
+      "F06",
+      "F07",
+      "F15",
+      "F16",
+      "F20",
+      "F22",
+      "F24",
+      "F25",
+      "F26",
+      "F27",
+      "F33",
+      "F35",
+      "F36",
+      "F37",
+      "F43",
+      "F44",
+      "F46",
+      "F50",
+      "F51",
+      "F53",
+      "F54",
+      "F55",
+      "F60",
+      "F62",
+      "F66",
+      "F69",
+      "F71",
+      "F81"
+    ],
+    "U": [
+      "U02",
+      "U03",
+      "U04",
+      "U07",
+      "U08",
+      "U09",
+      "U10",
+      "U11",
+      "U12",
+      "U15",
+      "U23",
+      "U25",
+      "U26",
+      "U27",
+      "U37",
+      "U38",
+      "U42",
+      "U45",
+      "U47",
+      "U49",
+      "U54",
+      "U59",
+      "U62",
+      "U63",
+      "U64",
+      "U69",
+      "U73",
+      "U74",
+      "U76",
+      "U77"
+    ]
+  },
+  "shares": {
+    "F": {
+      "conversion": {
+        "clean": 84.6,
+        "reorder": 15.4
+      },
+      "reads": {
+        "same": 95.4,
+        "worse": 4.6
+      },
+      "concise": {
+        "no": 66.3,
+        "yes": 33.7
+      },
+      "conversionUnweighted": {
+        "clean": 77.8,
+        "reorder": 22.2
+      },
+      "byStratum": {
+        "random": {
+          "conversion": {
+            "clean": 77.8,
+            "reorder": 22.2
+          },
+          "n": 72,
+          "reads": {
+            "same": 88.9,
+            "worse": 11.1
+          }
+        },
+        "assertion-or-never": {
+          "conversion": {
+            "blocked": 50,
+            "reorder": 50
+          },
+          "n": 2,
+          "reads": {
+            "worse": 50,
+            "same": 50
+          }
+        },
+        "function-expression": {
+          "conversion": {
+            "function-expression": 100
+          },
+          "n": 4,
+          "reads": {
+            "same": 100
+          }
+        },
+        "used-at-evaluation": {
+          "conversion": {
+            "reorder": 100
+          },
+          "n": 4,
+          "reads": {
+            "same": 100
+          }
+        }
+      }
+    },
+    "U": {
+      "byStratum": {
+        "deferred-class": {
+          "n": 8,
+          "order": {
+            "top-down": 100
+          },
+          "runtime": {
+            "harmless-deferred": 100
+          }
+        },
+        "deferred-enum-namespace": {
+          "n": 6,
+          "order": {
+            "top-down": 100
+          },
+          "runtime": {
+            "harmless-deferred": 100
+          }
+        },
+        "deferred-maybe-module-evaluation": {
+          "n": 14,
+          "order": {
+            "top-down": 100
+          },
+          "runtime": {
+            "harmless-deferred": 100
+          }
+        },
+        "deferred-variable": {
+          "n": 18,
+          "order": {
+            "top-down": 100
+          },
+          "runtime": {
+            "harmless-deferred": 100
+          }
+        },
+        "hoisted-function-deferred": {
+          "n": 21,
+          "order": {
+            "top-down": 100
+          },
+          "runtime": {
+            "harmless-hoisted": 100
+          }
+        },
+        "hoisted-function-same-context": {
+          "n": 12,
+          "order": {
+            "top-down": 100
+          },
+          "runtime": {
+            "harmless-hoisted": 100
+          }
+        },
+        "other": {
+          "n": 1,
+          "order": {
+            "n/a": 100
+          },
+          "runtime": {
+            "harmless-export-list": 100
+          }
+        }
+      },
+      "runtime": {
+        "harmless-hoisted": 61.6,
+        "harmless-deferred": 38.4,
+        "harmless-export-list": 0
+      },
+      "order": {
+        "top-down": 100,
+        "n/a": 0
+      }
+    }
+  },
+  "agreement": {
+    "F": {
+      "concise": {
+        "kappa": 0.93,
+        "n": 30,
+        "same": 29
+      },
+      "conversion": {
+        "kappa": 1,
+        "n": 30,
+        "same": 30
+      },
+      "reads": {
+        "kappa": 0.67,
+        "n": 30,
+        "same": 27
+      }
+    },
+    "U": {
+      "order": {
+        "kappa": 1,
+        "n": 30,
+        "same": 30
+      },
+      "runtime": {
+        "kappa": 1,
+        "n": 30,
+        "same": 30
+      }
+    }
+  },
+  "automatic": {
+    "F": {
+      "kappa": 0.88,
+      "n": 82,
+      "same": 81
+    },
+    "U": {
+      "kappa": 1,
+      "n": 80,
+      "same": 80
+    },
+    "disagreementsU": [],
+    "disagreementsF": [
+      {
+        "auto": "clean-or-reorder",
+        "id": "F73",
+        "rater1": "blocked"
+      }
+    ]
+  }
+}

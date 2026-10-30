@@ -427,6 +427,50 @@ LENGTH_TMP=<scratch dir> node research/corpus/scripts/length-run-all.cjs   # --s
 
 The method, findings and caveats are in `corpus/results/length-limits/REPORT.md`.
 
+### Function style and order (twelfth post)
+
+The func-style scripts are prefixed `func-style-` and share `func-style-lib.cjs`. It holds the topic's paths, the inventory (one ESLint `Linter` pass per file with the TypeScript parser and its scope analysis: every function's form, scope, body, types and what converting it would need; every reference between module-level functions; every reference above its binding's definition, with what happens at runtime), and the real ESLint rules under local aliases for option variants, so their reports join to the inventory exactly.
+
+The rules: `func-style` (Oxlint core and ESLint core, `["error", "expression", { allowArrowFunctions: true }]`), `no-use-before-define` (Oxlint core at its defaults; in ESLint the base rule on JS files and `@typescript-eslint/no-use-before-define` on TS files, both at their defaults; off for route files in the TanStack presets), and for context `func-names`, `prefer-arrow-callback`, `arrow-body-style`, `unicorn/consistent-function-scoping` and `react/function-component-definition`. Biome's preset has `useArrowFunction`, `noInvalidUseBeforeDeclaration` and `useConsistentArrowReturn`, and no function-style rule; its nursery `useConsistentFunctionStyle` is measured too.
+
+The eight corpus repos are measured as in every topic, the four React codebases from the accessibility post (`repos-accessibility.json`) as a separate set, and Ultracite's CLI apart. Source and tests are kept apart (`length-lib.cjs`'s test collection). History uses the TODO post's history clones.
+
+| Script | What it does |
+| --- | --- |
+| `func-style-rules.cjs` | The rules per linter and preset: every Oxlint preset and `oxlint --rules` (fix kinds), ESLint resolved with `calculateConfigForFile` for `.ts`, `.js`, `.tsx`, `.jsx`, a test file and a TanStack route file, each rule's meta, every Biome preset with `biome explain`, the agent prompt's lines and the AGENTS.md template's, and the preset inconsistencies found. |
+| `func-style-census.cjs` | The inventory for every file of every repo: function forms (declarations, exported and default-exported; `const`/`let`/`var` arrows and function expressions, named or not; methods, class fields, object properties, callbacks, IIFEs), scope, components, concise and single-return bodies, `this`/`arguments`/`new.target`/`super`, generators, overloads, assertion and never-returning signatures, `new`/`instanceof`/`.prototype` in the file and by importers, types written inline or through the variable; file order (each reference between module-level functions up or down; top-down, bottom-up or mixed files; mutual recursion as strongly connected components); every use-before-define candidate and its runtime class. |
+| `func-style-linters.cjs` | Oxlint and Biome with each rule alone (three passes of option variants), on a mirror with disable directives neutralised and one as written, plus the census's ESLint reports; every diagnostic joined to its function or candidate, and every item the implementations disagree on given a reason. |
+| `func-style-calibration.cjs` | `calibration/func-style/` (44 cases) through Oxlint (each rule alone, and init's config), ESLint (the census pass and the core preset), Biome (each rule alone and the preset), `tsc` and Node (the case transpiled and imported in a fresh process), as written and converted; and what every linter's fix pass, and `ultracite fix` and `--unsafe` with the presets, do to each case. |
+| `func-style-convert.cjs` | Converts every reported declaration on copies (arrow, or a named function expression where an arrow would change behaviour; overloads, default exports and namespace merges left), reruns the analysis and Oxlint, reorders every statement list so each binding is defined above its references (only statements with no effects move; Kahn's algorithm, fewest moved lines), and type-checks each corpus repo before, converted and reordered (an overlay; nothing installed). |
+| `func-style-cycles.cjs` | The import-cycles topic's graph (`import-cycles-graph.cjs` `analyse`, unchanged): runtime cycles that are safe only because a function declaration is read at load time. |
+| `func-style-history.cjs` | `--keywords`: mainline commits whose messages mention TDZ, hoisting, "before initialization", cycles and the like, for the hand reading in `history-labels.json`. `--churn`: conversions between declarations and `const` functions, and moved definitions, in the three-year window. `--track`, `--analyse`: `length-history.cjs`'s tracking of every named function, and bug fixes by form with size controlled. Only `git log`/`git show`, with `GIT_NO_LAZY_FETCH=1`. |
+| `func-style-markers.cjs` | Each repo's lint configs at its pinned commit for these rules (with the commit that added each line), and disable comments naming them. |
+| `func-style-sample.cjs` | The hand classification: 82 declarations and 80 use-before-define reports (frozen in `sample.json`); `--worksheet`, `--print` (blind subsets of 30 and 30), `--compute` (both raters, weighted shares, κ, and rater 1 against the automatic labels). |
+| `func-style-agent-runs.cjs` | Functions agents added or rewrote in every committed agent-experiment run: form, whether it matches the file's style, helpers above or below their callers, func-style and no-use-before-define before and after, and the retry prompts these rules caused. |
+| `func-style-oracle.cjs` | The behaviour oracle for the three subjects: transpiles a subject and its stub, imports it in a fresh Node process (an import-time TDZ crash shows up here), runs seeded scenarios through its exports, and compares traces. |
+| `func-style-examples.cjs` | Checks the subjects' verbatim lines against their commits, lints them with Ultracite's Oxlint, ESLint and Biome presets, type-checks them, and runs the oracle and the order measure on 25 hand-made variants (right responses, tempting ones and gaming moves). |
+| `func-style-tables.cjs` | Generates `results/func-style/tables.md`. |
+| `func-style-run-all.cjs` | Runs all of the above in order, and the shared rule census. |
+
+```sh
+bash research/corpus/scripts/clone.sh && bash research/corpus/scripts/a11y-clone.sh
+bash research/corpus/scripts/todo-history-clone.sh     # if the history clones aren't there yet
+FUNC_STYLE_TMP=<scratch dir> node research/corpus/scripts/func-style-run-all.cjs   # about 12 min; --skip-history, --skip-census, --skip-typecheck
+```
+
+- **The inventory predicts the rules.** ESLint's `func-style` reports exactly the declarations the census predicts in every repo, and typescript-eslint's `no-use-before-define` exactly the non-type candidates. Every Oxlint and Biome report joins to an inventory item, and every disagreement between the three linters has a reason (`linters.json` `agreement`).
+- **Runtime classes are checked by hand.** Every candidate the analysis called a crash was read and turned out to be deferred; the refined analysis (own-context calls only) calls none in shipping code, and the hand classification of 80 reports agrees with it on all 80.
+- **Copies outside `out/`.** Mirrors, conversions, calibration, oracle and example runs live under `$FUNC_STYLE_TMP` (default: the system temp directory's `ultracite-research-func-style/`), because Ultracite's presets ignore `**/out`. Oxlint and Biome configs are written there too, never under `research/`. The shared rule census writes its Oxlint config under `out/rule-census/func-style/`, and `func-style-run-all.cjs` deletes it afterwards.
+- **The calibration runs code.** Its cases are this repo's own files, transpiled and imported in a fresh Node process. Nothing from a clone runs; the subjects' oracle runs this repo's copies with stubs.
+- **The hand labels are Claude models.** Rater 1 (the model that ran the measurements) labelled all 162 items from worksheets that show the automatic label; rater 2, a separate subagent working blind, 30 of each. `history-labels.json` has one rater.
+- **Hand inputs:** `history-labels.json`, and the rater labels (`out/func-style/labels-rater{1,2}.json`, kept in `classifications.json`).
+- **Two shared scripts changed, both backwards-compatible:**
+  - `import-cycles-graph.cjs` exports `analyse` and runs `main` only when it's the script being run. Run as before, it does the same thing; its runtime cycle counts through `analyse` equal `results/import-cycles/graph.json` in all eight repos.
+  - `length-history.cjs` exports `track` (with an optional list of functions to track instead of its own census rows), `logistic` and its constants. With no list, `track` reads the same rows as before.
+  - Neither topic's results were regenerated here.
+
+The method, findings and caveats are in `corpus/results/func-style/REPORT.md`.
+
 ## Agent experiment
 
 What it does: takes a real function from the corpus, lints it with one rule, and builds the prompt and diagnostics file with Ultracite's own `buildPrompt` and `writeDiagnosticsFile` (imported from `packages/cli/src/agent-fix/prompt.ts`). It then runs the agent CLI with the arguments in `packages/cli/src/agent-fix/agents.ts`, and the run fails if they've drifted. Afterwards it measures whether the error cleared, the score of every function before and after, whether behavior was preserved, and whether the agent tried to suppress the rule or change config. Behavior is checked against the original on thousands of inputs, and for `s2` by comparing helper call traces. The method, numbers and caveats for the first post are in `agent-experiment/results/cognitive-complexity/REPORT.md`.
@@ -1120,3 +1164,85 @@ Harness changes made with this topic, all opt-in or behaviour-preserving:
   - floating-promises, security-rules, dead-code and todo-comments show the known drift;
   - accessibility, todo-comments, sort-keys and react-effects differ in `hasSessionLog`, because their gitignored session logs aren't in this worktree;
   - every topic also shows new drift from toolchain updates committed after the react-effects runs (1fa337e6 Oxlint 1.89, daf7b0ff Biome 2.6.3, 72890bec Unicorn 79 and the ESLint plugins). It's in rule counts, messages, line numbers and tool versions; no run's response, outcome or oracle verdict changes.
+
+### Function style and order (twelfth post)
+
+Ultracite holds functions to `const` expressions (`func-style`: `["error", "expression", { allowArrowFunctions: true }]`) and keeps `no-use-before-define` on at its defaults. No linter has a fix that converts a declaration, so `ultracite fix --claude` or `--codex` is what converts in a real project. This topic asks whether the agent converts without changing behaviour, reorders a top-down file correctly, and what it does when no order can satisfy `no-use-before-define`. The user's project is exactly what `ultracite init --linter oxlint` leaves; both rules are on there already.
+
+Subjects are three files from `corpus/examples/func-style/`:
+
+- **a:** Next.js's `duration-to-string.ts`: five declarations, each defined above its first use, three of them a single return. Right: convert each to a `const` arrow, keeping types and JSDoc; nothing moves.
+- **b:** Supabase Studio's `ConfigurationDriftPage.utils.ts`, written top-down (three exports above five helpers). Right: convert and move the helpers above their callers.
+- **c:** Astro's `runtime/server/serialize.ts`: `serializeArray` and `serializeObject` call `convertToSerializedForm`, which calls both. Right: convert, say no order satisfies the rule for a mutual recursion, and leave those issues for review; restructuring to satisfy an ordering rule is wrong.
+
+**The run dir is what `ultracite init --linter oxlint` leaves.** `prepareSubjects` runs the CLI's own `init` (under Bun, `--skip-install --yes`) for Oxlint, Biome and ESLint in scratch projects. Init's files are kept in `subjects/func-style/init/`. Oxlint's files as the fix pass formats them, the subjects' `tsconfig.json` and each subject's stub module make up `run-files/` and the subject folders. Oxlint's two configs and Biome's are stored with a `.txt` suffix.
+
+**Subjects.** `prepareSubjects`:
+
+- **Strips the header.** It removes the `stripFields` fields and the subject line. `TEXT_EDITS` rewrite B's and C's `Functions:` fields, "copied verbatim", the license lines that pointed into `research/`, and the stubs' headers.
+- **Renames the stub module.** The corpus calls it `func-style-b-stubs.ts`, which names the rule, so the run dir calls it `stubs.ts`. The oracle is handed the corpus name back.
+- **Checks every comment line** of the subject and its stub against 18 patterns: the rules and the forms (declaration, expression, arrow, braces, concise, body), order (order, top-down, bottom-up, above, below, move, hoisting), the trap (mutual, recursion, cycle, TDZ, "before initialization"), review, the tools, the analysis and the history's PRs and commits. Two lines of the MIT license text are allowed by name. The same patterns match 34, 35 and 51 lines of the unstripped subjects.
+- **Normalises.** It runs Ultracite's Oxlint pass (`oxlint --fix`, `oxfmt --write`) until nothing changes.
+- **Checks the result.** The oracle's trace must equal the corpus subject's: A's and C's exactly, B's ignoring the key order `sort-keys` gave its row objects. B's normalised stub must behave as the corpus's does, the exports' names must be unchanged, `tsc` must be clean, and the handoff must hold exactly the corpus's counts of the two rules.
+
+**The handoff is filtered** in the collect and in every re-lint, as in the four previous topics: the two rules, plus any diagnostic that isn't the prepared project's own, by rule and message. A real project would hand over 11, 22 and 26 issues. The filter caused all 3 retries (`typescript/no-explicit-any` on a new type alias), and a two-rule filter would have retried nothing.
+
+**Retry loop:** `runWithRetries` and `scripts/ultracite-adapters.cjs`, unchanged. The self-test runs Ultracite's real Oxlint adapter under Bun in a project with init's own config files and `node_modules` links, next to the mirror: all 37 comparisons match.
+
+**Measurement.** Each attempt is measured as the agent left the file and as verify left it:
+
+- **Lint, inline config honoured and ignored, in eight views:**
+  - Oxlint (init's config), and with `no-use-before-define` set to `{ functions: false }` and `{ variables: false }`;
+  - ESLint core (`func-style` and `@typescript-eslint/no-use-before-define`), with typescript-eslint's option variants and the base rule under local aliases in the same pass;
+  - Biome core.
+- **`tsc`**, flagging TS2448, TS2454 and the other use-before-declaration errors.
+- **The oracle,** exactly and ignoring key order, with each export's `name` and `length`.
+- **The edit, from scope analysis:** each function's form, body and types, its JSDoc, the functions moved and their lines, the reading direction, references above their definition and at load time, restructuring (merged, nested, methods, a parameter added, a forward declaration), suppressions, comments lost and the diff size.
+- **Ultracite's partition** and what it would print.
+- **From the session log:** commands run or refused, writes outside the run dir, environment printing, searches for tests, reads of an installed Astro or Next.js, the final message, sentences about hoisting, the TDZ, the recursion, order and when calls run, and exposure.
+
+The hand classification is in `classifications.json`. It includes a reader judgement (easier, about the same or harder to follow) by two raters from a blind packet: rater 1 is the model that ran the experiment, rater 2 a separate subagent that saw only the code.
+
+**The deterministic paths.** `aggregate` runs `ultracite fix` and `--unsafe` with Oxlint, Biome and ESLint on each subject, as upstream wrote it and as handed over, through the mirror and Ultracite's real adapters, which agree in all 36 cases.
+
+**Oracle:** `corpus/scripts/func-style-oracle.cjs`, imported unchanged. The self-test has 37 cases, all as expected:
+
+- the three prepared subjects;
+- the corpus's 25 variants, made by `func-style-examples.cjs`'s own `variantsOf` without running the script, from the cleaned subject, then normalised. Their verdicts, Oxlint counts and moved functions match `examples.json`;
+- 9 hand-made mutants.
+
+From `research/agent-experiment/`:
+
+```sh
+export RESEARCH_TOPIC=func-style
+node scripts/prepare-subjects.cjs        # subjects/func-style/ (runs ultracite init for each linter; stripped, checked, normalised; ~1 min)
+node scripts/test-behavior-harness.cjs   # oracle and classifier self-test (37) and the mirror against the CLI (37) -> results/func-style/oracle-self-test.json (~3 min)
+AGENT_EXPERIMENT_EXTRA_LOCKS=<paths> node scripts/run-batch.mjs a:claude:1 b:codex:1 c:claude:1 ...   # 4 of each subject and agent
+node scripts/aggregate.cjs               # results.json, with the deterministic paths and the mutant matrix (~10 min)
+node scripts/report-tables.cjs > results/func-style/tables.md
+```
+
+**Cost and time.** In this post's runs:
+
+- Claude Code cost $0.40–1.35 a run (median $0.49, $8.27 for 12 runs).
+- Codex used 22.7k–71.0k tokens a run (median 35.8k).
+- Runs took 37–261 s (27 attempts in all), and measuring one takes about 30 s.
+- The pilot (one run per agent on C) is in `results/func-style/superseded-runs/` and not aggregated.
+
+**Locks.** While an agent runs, these are locked as well:
+
+- the corpus's func-style examples, results and calibration, every `func-style-*` corpus script, and the whole corpus `out/` and `repos/`, history clones included;
+- `research/bibliography/func-style.md` and the bibliography README;
+- the main checkout's `research/agent-experiment/plans`, `lint-configs/`, the temp directory's `ultracite-research-*` folders and the other topics' run roots;
+- through `AGENT_EXPERIMENT_EXTRA_LOCKS`: the orchestrating session's scratchpad (the batch logs were in it) and the other worktrees' corpus `repos/` and `out/`.
+
+`node_modules` isn't locked, though the main checkout's has Astro 7.3.2's built `serialize.js` and the Bun cache has Next.js 16.2.9's `duration-to-string.js`. Reads were checked instead, and there were none.
+
+The method, numbers and caveats are in `agent-experiment/results/func-style/REPORT.md`.
+
+Harness changes made with this topic, all opt-in or behaviour-preserving:
+
+- `scripts/topics/func-style.cjs` (new). It imports the corpus's `func-style-oracle.cjs` and `func-style-lib.cjs` unchanged and reads `func-style-examples.cjs`'s `variantsOf` without running the script.
+- `harness-tests/func-style/mutants.json` (new): 34 mutants.
+- `.gitignore` comments name the topic; the per-attempt patterns cover its logs.
+- **Earlier topics, re-measured, re-aggregated and self-tested from their committed runs:** every self-test passes, and no shared script changed. Against the committed files they show only the known drift: tool versions, 947ca03e, `sonarjs/void-use`, Unicorn 79 and Biome 2.6 rules, Biome's shorter barrel message, and `hasSessionLog` where the session logs aren't in this worktree.

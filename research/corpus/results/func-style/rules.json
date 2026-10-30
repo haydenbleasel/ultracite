@@ -1,0 +1,901 @@
+{
+  "generated": "2026-10-30T08:31:46.760Z",
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/typescript-estree": "8.72.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.3",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.0",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.74.0"
+  },
+  "oxlint": {
+    "core": {
+      "func-style": [
+        "error",
+        "expression",
+        {
+          "allowArrowFunctions": true
+        }
+      ],
+      "no-use-before-define": "error",
+      "func-names": "error",
+      "func-name-matching": "error",
+      "prefer-arrow-callback": "error",
+      "arrow-body-style": [
+        "error",
+        "as-needed"
+      ],
+      "no-inner-declarations": "error",
+      "no-func-assign": "error",
+      "no-loop-func": "error",
+      "unicorn/consistent-function-scoping": "error",
+      "typescript/prefer-function-type": "error",
+      "typescript/explicit-function-return-type": "off",
+      "typescript/explicit-module-boundary-types": "off",
+      "import/exports-last": "off",
+      "import/group-exports": "off"
+    },
+    "react": {
+      "react/function-component-definition": [
+        "error",
+        {
+          "namedComponents": "arrow-function"
+        }
+      ]
+    },
+    "tanstack": {
+      "no-use-before-define (override [\"**/routes/**/*.{js,jsx,svelte,ts,tsx}\"])": "off"
+    }
+  },
+  "oxlintRules": [
+    {
+      "category": "style",
+      "fix": "fixable_fix",
+      "rule": "eslint/arrow-body-style",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "eslint/func-name-matching",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "conditional_safe_fix_or_suggestion",
+      "rule": "eslint/func-names",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "pending",
+      "rule": "eslint/func-style",
+      "typeAware": false
+    },
+    {
+      "category": "correctness",
+      "fix": "none",
+      "rule": "eslint/no-func-assign",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/no-inner-declarations",
+      "typeAware": false
+    },
+    {
+      "category": "pedantic",
+      "fix": "none",
+      "rule": "eslint/no-loop-func",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "fix": "none",
+      "rule": "eslint/no-use-before-define",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "fixable_fix",
+      "rule": "eslint/prefer-arrow-callback",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "import/exports-last",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "none",
+      "rule": "import/group-exports",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "conditional_suggestion",
+      "rule": "react/function-component-definition",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "fix": "none",
+      "rule": "typescript/explicit-function-return-type",
+      "typeAware": false
+    },
+    {
+      "category": "restriction",
+      "fix": "none",
+      "rule": "typescript/explicit-module-boundary-types",
+      "typeAware": false
+    },
+    {
+      "category": "style",
+      "fix": "conditional_fix",
+      "rule": "typescript/prefer-function-type",
+      "typeAware": false
+    },
+    {
+      "category": "suspicious",
+      "fix": "pending",
+      "rule": "unicorn/consistent-function-scoping",
+      "typeAware": false
+    }
+  ],
+  "eslint": {
+    "core: src/example.ts": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": "(not configured)",
+      "@typescript-eslint/no-use-before-define": [
+        2
+      ],
+      "@typescript-eslint/prefer-function-type": [
+        2
+      ],
+      "@typescript-eslint/explicit-function-return-type": [
+        0
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": [
+        0
+      ],
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    },
+    "core: src/example.js": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        2,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": "(not configured)",
+      "@typescript-eslint/no-use-before-define": "(not configured)",
+      "@typescript-eslint/prefer-function-type": "(not configured)",
+      "@typescript-eslint/explicit-function-return-type": "(not configured)",
+      "@typescript-eslint/explicit-module-boundary-types": "(not configured)",
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    },
+    "core: src/example.test.ts": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": "(not configured)",
+      "@typescript-eslint/no-use-before-define": [
+        2
+      ],
+      "@typescript-eslint/prefer-function-type": [
+        2
+      ],
+      "@typescript-eslint/explicit-function-return-type": [
+        0
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": [
+        0
+      ],
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    },
+    "core+react: src/example.tsx": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": [
+        2,
+        {
+          "namedComponents": "arrow-function"
+        }
+      ],
+      "@typescript-eslint/no-use-before-define": [
+        2
+      ],
+      "@typescript-eslint/prefer-function-type": [
+        2
+      ],
+      "@typescript-eslint/explicit-function-return-type": [
+        0
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": [
+        0
+      ],
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    },
+    "core+react: src/example.jsx": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        2,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": [
+        2,
+        {
+          "namedComponents": "arrow-function"
+        }
+      ],
+      "@typescript-eslint/no-use-before-define": "(not configured)",
+      "@typescript-eslint/prefer-function-type": "(not configured)",
+      "@typescript-eslint/explicit-function-return-type": "(not configured)",
+      "@typescript-eslint/explicit-module-boundary-types": "(not configured)",
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    },
+    "core+react+tanstack: src/routes/posts.$id.tsx": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": [
+        2,
+        {
+          "namedComponents": "arrow-function"
+        }
+      ],
+      "@typescript-eslint/no-use-before-define": [
+        0
+      ],
+      "@typescript-eslint/prefer-function-type": [
+        2
+      ],
+      "@typescript-eslint/explicit-function-return-type": [
+        0
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": [
+        0
+      ],
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    },
+    "core+react+tanstack: src/example.tsx": {
+      "func-style": [
+        2,
+        "expression",
+        {
+          "allowArrowFunctions": true,
+          "allowTypeAnnotation": false,
+          "overrides": {}
+        }
+      ],
+      "no-use-before-define": [
+        0,
+        {
+          "classes": true,
+          "functions": true,
+          "variables": true,
+          "allowNamedExports": false,
+          "enums": true,
+          "typedefs": true,
+          "ignoreTypeReferences": true
+        }
+      ],
+      "func-names": [
+        2,
+        "always",
+        {}
+      ],
+      "func-name-matching": [
+        2,
+        "always"
+      ],
+      "prefer-arrow-callback": [
+        2,
+        {
+          "allowNamedFunctions": false,
+          "allowUnboundThis": true
+        }
+      ],
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
+      "no-inner-declarations": [
+        2,
+        "functions",
+        {
+          "blockScopedFunctions": "allow"
+        }
+      ],
+      "no-func-assign": [
+        2
+      ],
+      "no-loop-func": [
+        2
+      ],
+      "unicorn/consistent-function-scoping": [
+        2,
+        {
+          "checkArrowFunctions": true
+        }
+      ],
+      "react/function-component-definition": [
+        2,
+        {
+          "namedComponents": "arrow-function"
+        }
+      ],
+      "@typescript-eslint/no-use-before-define": [
+        2
+      ],
+      "@typescript-eslint/prefer-function-type": [
+        2
+      ],
+      "@typescript-eslint/explicit-function-return-type": [
+        0
+      ],
+      "@typescript-eslint/explicit-module-boundary-types": [
+        0
+      ],
+      "import-x/exports-last": [
+        0
+      ],
+      "import-x/group-exports": [
+        0
+      ]
+    }
+  },
+  "eslintMeta": {
+    "@typescript-eslint/no-use-before-define": {
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "noUseBeforeDefine": "'{{name}}' was used before it was defined."
+      }
+    },
+    "arrow-body-style": {
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "unexpectedOtherBlock": "Unexpected block statement surrounding arrow body.",
+        "unexpectedEmptyBlock": "Unexpected block statement surrounding arrow body; put a value of `undefined` immediately after the `=>`.",
+        "unexpectedObjectBlock": "Unexpected block statement surrounding arrow body; parenthesize the returned value and move it immediately after the `=>`.",
+        "unexpectedSingleBlock": "Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+        "expectedBlock": "Expected block statement surrounding arrow body."
+      }
+    },
+    "func-names": {
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "unnamed": "Unexpected unnamed {{name}}.",
+        "named": "Unexpected named {{name}}."
+      }
+    },
+    "func-style": {
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "expression": "Expected a function expression.",
+        "declaration": "Expected a function declaration."
+      }
+    },
+    "no-use-before-define": {
+      "fixable": null,
+      "hasSuggestions": false,
+      "messages": {
+        "usedBeforeDefined": "'{{name}}' was used before it was defined."
+      }
+    },
+    "prefer-arrow-callback": {
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "preferArrowCallback": "Unexpected function expression."
+      }
+    },
+    "react/function-component-definition": {
+      "fixable": "code",
+      "hasSuggestions": false,
+      "messages": {
+        "function-declaration": "Function component is not a function declaration",
+        "function-expression": "Function component is not a function expression",
+        "arrow-function": "Function component is not an arrow function"
+      }
+    }
+  },
+  "biome": {
+    "core": {
+      "complexity/useArrowFunction": "error",
+      "correctness/noInvalidUseBeforeDeclaration": "error",
+      "correctness/noInnerDeclarations": "error",
+      "style/useConsistentArrowReturn": "error",
+      "style/useExportsLast": "off",
+      "suspicious/noFunctionAssign": "error"
+    }
+  },
+  "biomeExplain": {
+    "useArrowFunction": {
+      "category": "lint/complexity/useArrowFunction",
+      "defaultSeverity": "warn",
+      "fix": "safe",
+      "recommended": true,
+      "since": "1.0.0"
+    },
+    "noInvalidUseBeforeDeclaration": {
+      "category": "lint/correctness/noInvalidUseBeforeDeclaration",
+      "defaultSeverity": "error",
+      "fix": "none",
+      "recommended": true,
+      "since": "1.5.0"
+    },
+    "noInnerDeclarations": {
+      "category": "lint/correctness/noInnerDeclarations",
+      "defaultSeverity": "error",
+      "fix": "none",
+      "recommended": true,
+      "since": "1.0.0"
+    },
+    "useConsistentFunctionStyle": {
+      "category": "lint/nursery/useConsistentFunctionStyle",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "2.5.14"
+    },
+    "useReactFunctionComponentDefinition": {
+      "category": "lint/nursery/useReactFunctionComponentDefinition",
+      "defaultSeverity": "info",
+      "fix": "unsafe",
+      "recommended": false,
+      "since": "2.5.0"
+    },
+    "useNamedFunction": {
+      "category": "lint/nursery/useNamedFunction",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "2.6.0"
+    },
+    "useMatchingFunctionName": {
+      "category": "lint/nursery/useMatchingFunctionName",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "2.6.0"
+    },
+    "useConsistentArrowReturn": {
+      "category": "lint/style/useConsistentArrowReturn",
+      "defaultSeverity": "info",
+      "fix": "safe",
+      "recommended": false,
+      "since": "2.2.3"
+    },
+    "useExportsLast": {
+      "category": "lint/style/useExportsLast",
+      "defaultSeverity": "info",
+      "fix": "none",
+      "recommended": false,
+      "since": "2.0.0"
+    },
+    "noFunctionAssign": {
+      "category": "lint/suspicious/noFunctionAssign",
+      "defaultSeverity": "error",
+      "fix": "none",
+      "recommended": true,
+      "since": "1.0.0"
+    }
+  },
+  "prompt": [
+    "`Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: ${jsonPath}`,",
+    "- Edit only the file above. Do not create, delete, or modify any other file.",
+    "- Make the minimal change that resolves each issue while preserving runtime behavior.",
+    "- Fix the underlying problem — the file is re-linted after your edit, and a diagnostic that still fires is a failed fix. Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it; rework the code so the rule genuinely no longer applies.",
+    "- Follow the rule's help text from the JSON file where provided.",
+    "- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.",
+    "`- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. If an issue needs a person's decision, leave it, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like \\`${LEFT_FOR_REVIEW_LABEL}: 2, 3\\`.`,"
+  ],
+  "agentRulesTemplate": [
+    "- Use explicit types for function parameters and return values when they enhance clarity",
+    "- Leverage TypeScript's type narrowing instead of type assertions",
+    "- Use arrow functions for callbacks and short functions",
+    "- Always \\`await\\` promises in async functions - don't forget to use the return value",
+    "- Don't use async functions as Promise executors",
+    "- Use function components over class components",
+    "- Keep functions focused and under reasonable cognitive complexity limits"
+  ],
+  "notes": [
+    "Biome: Ultracite's Biome preset has no function-style rule. Biome 2.5.14 added nursery/useConsistentFunctionStyle (style \"expression\" by default), which reports the same 10,134 corpus declarations as ESLint's func-style (linters.json); nursery rules aren't enabled (biome/core comment, issue #457), so Biome users get no func-style.",
+    "Oxlint's func-style doesn't report a declaration that shares its name with a type alias, an interface or a namespace (7 corpus declarations; calibration c32, c33). ESLint and Biome report them.",
+    "react/function-component-definition (namedComponents: \"arrow-function\", both presets) rewrites component declarations as const arrows: an autofix in ESLint (`ultracite fix`) and a suggestion in Oxlint (`ultracite fix --unsafe`). It doesn't check order. A TanStack route file, where the tanstack preset turns no-use-before-define off, then throws at import (\"Cannot access 'RouteComponent' before initialization\"; calibration c23, presetFixes).",
+    "Oxlint's react/function-component-definition reports an unnamed component in memo()/forwardRef() as \"not a function expression\" (unnamedComponents defaults to \"function-expression\"); its suggestion rewrites the arrow as a function expression, and prefer-arrow-callback's safe fix rewrites it back, so `ultracite fix --unsafe` and `ultracite fix` undo each other.",
+    "no-use-before-define at its defaults (functions: true) already reports every reference to a function declaration above its definition, so the presets ask for bottom-up order before any conversion; converting declarations adds no reports, it changes which ones would crash.",
+    "The TanStack presets' comment says tsc still catches real temporal dead zone crashes (TS2448). It catches direct reads in the same scope (calibration c15, c16, c18, c20, c21, c36) but not a read inside a callback that runs at load time (c28) or inside a function called at load time (c29).",
+    "Biome's noInvalidUseBeforeDeclaration, the only use-before-define rule in the Biome preset, reports no corpus line and misses the load-time crashes in calibration c18 (decorator), c20 (extends), c28 (Array#map callback), c29 (a call at load time) and c36 (IIFE)."
+  ]
+}

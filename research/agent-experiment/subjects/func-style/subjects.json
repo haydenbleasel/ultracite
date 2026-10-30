@@ -1,0 +1,997 @@
+[
+  {
+    "id": "a",
+    "base": "a",
+    "example": "func-style-a-next-duration-to-string.ts",
+    "basename": "duration-to-string.ts",
+    "stubs": null,
+    "kind": "converts cleanly",
+    "label": "A, converts cleanly",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+    "functions": [
+      "durationToString",
+      "durationToStringWithNanoseconds",
+      "hrtimeToSeconds",
+      "hrtimeBigIntDurationToString",
+      "hrtimeDurationToString"
+    ],
+    "exported": [
+      "durationToString",
+      "hrtimeBigIntDurationToString",
+      "hrtimeDurationToString",
+      "hrtimeToSeconds"
+    ],
+    "cycle": null,
+    "expected": [
+      "func-style",
+      "func-style",
+      "func-style",
+      "func-style",
+      "func-style"
+    ],
+    "source": "vercel/next.js packages/next/src/build/duration-to-string.ts @ d8bfc3c9, the whole file",
+    "right": "rewrite each declaration as a const arrow function, keeping the types and the JSDoc; nothing moves",
+    "path": "subjects/func-style/a/duration-to-string.ts",
+    "sha256": "0597be808c6ca867259d561a4ad58b03deef190814e079bcef1814a9d2e7ec5a",
+    "stubSha256": null,
+    "originalSha256": "f73b1e20fd7744318265ed48e3e8bc1de90f82c9fbf7d6b3f210d999e8570bdf",
+    "cleanedSha256": "4e03be336ec17fa886f844f6cfc86dc980385b4f23737359810a1ff402b10e6b",
+    "headerLinesRemoved": 24,
+    "stripFields": [
+      "Rules it hits",
+      "Why it converts cleanly",
+      "Why it needs reordering",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Function-style subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * The file is copied verbatim below this comment. Nothing is stubbed.",
+          "to": " * The file is copied after this comment, with its formatting changed. Nothing is stubbed.",
+          "why": "said 'verbatim', which normalising made untrue"
+        },
+        {
+          "from": " * License of the source repository (vercel/next.js/license.md), reproduced in full (also in\n * research/corpus/examples/licenses/next.js-license.md):",
+          "to": " * License of the source repository (vercel/next.js/license.md), reproduced in full:",
+          "why": "named this repo's research folder (the license's copy there)"
+        }
+      ],
+      "stubs": []
+    },
+    "primingPatterns": [
+      "/func-?style|function[- ]style|use-before-define|before[- ]define|used before|defined before|before (it'?s|it is|they'?re|they are) (defined|declared)/i",
+      "/hoist/i",
+      "/\\bdeclar(e|ed|es|ing|ation|ations)\\b/i",
+      "/\\bexpressions?\\b/i",
+      "/\\barrows?\\b|=>/i",
+      "/\\b(re)?order(ed|ing|s)?\\b|top[- ]down|bottom[- ]up|\\babove\\b|\\bbelow\\b|first use|\\bmov(e|ed|es|ing)\\b/i",
+      "/mutual|recurs|\\bcycl(e|es|ic|ical)\\b|circular|each other/i",
+      "/\\bTDZ\\b|temporal dead|before initiali[sz]ation|ReferenceError/i",
+      "/curly|\\bbraces?\\b|concise|implicit return|single return|\\bbod(y|ies)\\b/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|scenario/i",
+      "/verbatim/i",
+      "/Rules it hits|Why it converts|Why it needs|Why it's a trap|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\b(4646|4684|7531|12121|15553|84602|84905|84906|84945|85136|88313|94813|94811|48906|50398)\\b|aef04b9bb3|cb92e8dfbb|e10f7cc808|8422045b86/",
+      "/deliberate|intentional|on purpose|by design|preference|prefer(red)? (style|form)/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "The above copyright notice and this permission notice shall be included in all",
+        "why": "the license text, reproduced in full"
+      }
+    ],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 27,
+        "added": 25
+      },
+      "whatChanged": {
+        "rulesFixed": {
+          "no-else-return": 2
+        },
+        "oxlintBefore": {
+          "func-style": 5,
+          "no-else-return": 2,
+          "no-inline-comments": 6
+        },
+        "oxlintAfter": {
+          "func-style": 5,
+          "no-inline-comments": 6
+        },
+        "codeChanged": true
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "func-style L62: Expected a function expression.",
+        "func-style L85: Expected a function expression.",
+        "func-style L105: Expected a function expression.",
+        "func-style L117: Expected a function expression.",
+        "func-style L128: Expected a function expression."
+      ],
+      "handoffCounts": {
+        "func-style": 5
+      },
+      "help": {
+        "func-style": [
+          "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+        ],
+        "no-use-before-define": []
+      },
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      ],
+      "reportedBeforeFilter": 11,
+      "leftOutByFilter": {
+        "no-inline-comments": 6
+      },
+      "leftOutByFilterByFile": {
+        "duration-to-string.ts": 6
+      },
+      "fileLines": {
+        "corpus": 157,
+        "prepared": 131
+      },
+      "order": [
+        "durationToString",
+        "durationToStringWithNanoseconds",
+        "hrtimeToSeconds",
+        "hrtimeBigIntDurationToString",
+        "hrtimeDurationToString"
+      ],
+      "direction": "bottom-up",
+      "referencesDown": 0,
+      "referencesUp": 3,
+      "forms": [
+        "durationToString: declaration, block",
+        "durationToStringWithNanoseconds: declaration, block",
+        "hrtimeToSeconds: declaration, block, single return",
+        "hrtimeBigIntDurationToString: declaration, block, single return",
+        "hrtimeDurationToString: declaration, block, single return"
+      ],
+      "oracle": {
+        "calls": 865,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "durationToString",
+              "function"
+            ],
+            [
+              "hrtimeBigIntDurationToString",
+              "function"
+            ],
+            [
+              "hrtimeDurationToString",
+              "function"
+            ],
+            [
+              "hrtimeToSeconds",
+              "function"
+            ]
+          ]
+        },
+        "verdictAgainstCorpusSubject": "same",
+        "differingExactly": 0,
+        "ignoringKeyOrder": "same",
+        "note": "the prepared subject's trace equals the corpus subject's in every scenario"
+      },
+      "exportNames": [
+        [
+          "durationToString",
+          "function",
+          "durationToString",
+          1
+        ],
+        [
+          "hrtimeBigIntDurationToString",
+          "function",
+          "hrtimeBigIntDurationToString",
+          1
+        ],
+        [
+          "hrtimeDurationToString",
+          "function",
+          "hrtimeDurationToString",
+          1
+        ],
+        [
+          "hrtimeToSeconds",
+          "function",
+          "hrtimeToSeconds",
+          1
+        ]
+      ],
+      "stub": null,
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "87120a5475e7931523d50a23c6dfdc5f08902dffabf67c8f585e6afd97e37012",
+      "package.json": "abe9d26a041c26e578aa108feb011ccb62d5609fb3b0962d8cd14bfd7253f8ea",
+      "tsconfig.json": "c3f40f6b1cf0bf2e68a615847d5ad611e127740d1f45d4dd04af1db2be8329d1"
+    },
+    "corpus": {
+      "oxlint": {
+        "no-inline-comments": 6,
+        "func-style": 5,
+        "no-else-return": 2
+      },
+      "eslint": {
+        "unicorn/name-replacements": 1,
+        "no-inline-comments": 6,
+        "func-style": 5,
+        "unicorn/no-useless-else": 2,
+        "no-else-return": 2
+      },
+      "biome": {
+        "style/noUselessElse": 7
+      },
+      "oracle": {
+        "calls": 865,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "durationToString",
+              "function"
+            ],
+            [
+              "hrtimeBigIntDurationToString",
+              "function"
+            ],
+            [
+              "hrtimeDurationToString",
+              "function"
+            ],
+            [
+              "hrtimeToSeconds",
+              "function"
+            ]
+          ]
+        },
+        "throws": 0
+      },
+      "order": [
+        {
+          "lines": 11,
+          "line": 86,
+          "name": "durationToString"
+        },
+        {
+          "lines": 14,
+          "line": 110,
+          "name": "durationToStringWithNanoseconds"
+        },
+        {
+          "lines": 4,
+          "line": 131,
+          "name": "hrtimeToSeconds"
+        },
+        {
+          "lines": 3,
+          "line": 143,
+          "name": "hrtimeBigIntDurationToString"
+        },
+        {
+          "lines": 3,
+          "line": 154,
+          "name": "hrtimeDurationToString"
+        }
+      ]
+    }
+  },
+  {
+    "id": "b",
+    "base": "b",
+    "example": "func-style-b-supabase-config-drift-utils.ts",
+    "basename": "ConfigurationDriftPage.utils.ts",
+    "stubs": {
+      "example": "func-style-b-stubs.ts",
+      "name": "stubs.ts"
+    },
+    "kind": "needs reordering",
+    "label": "B, needs reordering",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+    "functions": [
+      "createConfigurationDriftRows",
+      "groupUnmanagedConfigFields",
+      "groupMatchedConfigFields",
+      "groupConfigFieldsBySection",
+      "formatConfigFieldValue",
+      "createConfigurationDriftValueDiff",
+      "getConfigFieldLabel",
+      "formatScalarValue"
+    ],
+    "exported": [
+      "createConfigurationDriftRows",
+      "groupMatchedConfigFields",
+      "groupUnmanagedConfigFields"
+    ],
+    "cycle": null,
+    "expected": [
+      "func-style",
+      "no-use-before-define",
+      "no-use-before-define",
+      "func-style",
+      "no-use-before-define",
+      "func-style",
+      "no-use-before-define",
+      "func-style",
+      "no-use-before-define",
+      "no-use-before-define",
+      "func-style",
+      "no-use-before-define",
+      "no-use-before-define",
+      "func-style",
+      "func-style",
+      "func-style"
+    ],
+    "source": "supabase/supabase apps/studio/components/interfaces/ConfigDrift/ConfigurationDriftPage.utils.ts @ 09f80f52, L14-137 (the whole file but its imports); its imports as a STUB module",
+    "right": "convert, and move the helpers above their callers (or the exports below), so every function is defined before any reference to it, with behaviour unchanged",
+    "path": "subjects/func-style/b/ConfigurationDriftPage.utils.ts",
+    "sha256": "05bd430a2e2ebdf026a704bbce56b806aca6a99c81b4fe4575fbd659414daf70",
+    "stubSha256": "1f94889db4af716446fde02b13b58ee010eb76e18846323941db2ec11c9c4507",
+    "originalSha256": "0aace9797e88d8086c2ef15116072d26e4c33caa3eb1593321441a5dc1e47fa0",
+    "cleanedSha256": "2c6a5736f5f9384772974a1181c6a02a0e3335bd77135fa391e7a15c9698fdf0",
+    "headerLinesRemoved": 23,
+    "stripFields": [
+      "Rules it hits",
+      "Why it converts cleanly",
+      "Why it needs reordering",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Function-style subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " *   and section groups Supabase Studio's configuration drift page shows; and five helpers below\n *   them: groupConfigFieldsBySection, formatConfigFieldValue, createConfigurationDriftValueDiff,\n *   getConfigFieldLabel and formatScalarValue.",
+          "to": " *   and section groups Supabase Studio's configuration drift page shows; and the five helpers\n *   they use: groupConfigFieldsBySection, formatConfigFieldValue, createConfigurationDriftValueDiff,\n *   getConfigFieldLabel and formatScalarValue.",
+          "why": "said the helpers are below the exports, which is the order the rule reports"
+        },
+        {
+          "from": " * Lines 14-137 are copied verbatim. The import below (marked STUB) replaces lines 1-12, which\n *   import lodash's startCase and two Studio modules; func-style-b-stubs.ts stands in for them.",
+          "to": " * Lines 14-137 are copied, with their formatting changed. The import marked STUB replaces lines\n *   1-12, which import lodash's startCase and two Studio modules; stubs.ts stands in for them.",
+          "why": "said 'verbatim'; named the stub module by its corpus name, which names the rule"
+        },
+        {
+          "from": " * License of the source repository (supabase/supabase/LICENSE), Apache License 2.0 (in full in\n * research/corpus/examples/licenses/supabase-LICENSE). This file is a copy of part of a Supabase\n * file with its imports replaced, as marked.",
+          "to": " * License of the source repository: Apache License 2.0 (supabase/supabase/LICENSE). Licensed under the\n * Apache License, Version 2.0; you may obtain a copy of the License at\n * http://www.apache.org/licenses/LICENSE-2.0. This file is a copy of part of a Supabase file with its\n * imports replaced, as marked.",
+          "why": "named this repo's research folder (the license's copy there); the standard Apache notice instead"
+        },
+        {
+          "from": "} from \"./func-style-b-stubs\";",
+          "to": "} from \"./stubs\";",
+          "why": "the stub module's corpus name names the rule; the run dir calls it stubs.ts"
+        }
+      ],
+      "stubs": [
+        {
+          "from": " * STUB for func-style subject B. Stands in for the three modules the original file imports:",
+          "to": " * STUB: stands in for the three modules ConfigurationDriftPage.utils.ts imports in Supabase Studio:",
+          "why": "named the rule and the experiment's subject"
+        },
+        {
+          "from": "// lodash's startCase for the inputs the oracle uses: words split on non-alphanumerics and",
+          "to": "// A stand-in for lodash's startCase: words split on non-alphanumerics and",
+          "why": "named the behaviour oracle"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/func-?style|function[- ]style|use-before-define|before[- ]define|used before|defined before|before (it'?s|it is|they'?re|they are) (defined|declared)/i",
+      "/hoist/i",
+      "/\\bdeclar(e|ed|es|ing|ation|ations)\\b/i",
+      "/\\bexpressions?\\b/i",
+      "/\\barrows?\\b|=>/i",
+      "/\\b(re)?order(ed|ing|s)?\\b|top[- ]down|bottom[- ]up|\\babove\\b|\\bbelow\\b|first use|\\bmov(e|ed|es|ing)\\b/i",
+      "/mutual|recurs|\\bcycl(e|es|ic|ical)\\b|circular|each other/i",
+      "/\\bTDZ\\b|temporal dead|before initiali[sz]ation|ReferenceError/i",
+      "/curly|\\bbraces?\\b|concise|implicit return|single return|\\bbod(y|ies)\\b/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|scenario/i",
+      "/verbatim/i",
+      "/Rules it hits|Why it converts|Why it needs|Why it's a trap|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\b(4646|4684|7531|12121|15553|84602|84905|84906|84945|85136|88313|94813|94811|48906|50398)\\b|aef04b9bb3|cb92e8dfbb|e10f7cc808|8422045b86/",
+      "/deliberate|intentional|on purpose|by design|preference|prefer(red)? (style|form)/i"
+    ],
+    "allowedComments": [],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 57,
+        "added": 69
+      },
+      "whatChanged": {
+        "rulesFixed": {
+          "curly": 3,
+          "import/consistent-type-specifier-style": 4,
+          "sort-keys": 4,
+          "typescript/consistent-type-definitions": 1
+        },
+        "oxlintBefore": {
+          "curly": 3,
+          "func-style": 8,
+          "import/consistent-type-specifier-style": 4,
+          "no-use-before-define": 8,
+          "sort-keys": 4,
+          "typescript/consistent-type-definitions": 1,
+          "typescript/no-non-null-assertion": 1,
+          "unicorn/filename-case": 1
+        },
+        "oxlintAfter": {
+          "func-style": 8,
+          "no-use-before-define": 8,
+          "typescript/no-non-null-assertion": 1,
+          "unicorn/filename-case": 1
+        },
+        "codeChanged": true
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "func-style L68: Expected a function expression.",
+        "no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+        "func-style L81: Expected a function expression.",
+        "no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L87: Expected a function expression.",
+        "no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L93: Expected a function expression.",
+        "no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+        "func-style L117: Expected a function expression.",
+        "no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+        "no-use-before-define L133: 'formatScalarValue' was used before it was defined.",
+        "func-style L136: Expected a function expression.",
+        "func-style L150: Expected a function expression.",
+        "func-style L155: Expected a function expression."
+      ],
+      "handoffCounts": {
+        "func-style": 8,
+        "no-use-before-define": 8
+      },
+      "help": {
+        "func-style": [
+          "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+        ],
+        "no-use-before-define": [
+          "Move the declaration before any references to it, or remove the reference if it is not needed."
+        ]
+      },
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      ],
+      "reportedBeforeFilter": 22,
+      "leftOutByFilter": {
+        "prefer-named-capture-group": 2,
+        "require-unicode-regexp": 2,
+        "typescript/no-non-null-assertion": 1,
+        "unicorn/filename-case": 1
+      },
+      "leftOutByFilterByFile": {
+        "ConfigurationDriftPage.utils.ts": 2,
+        "stubs.ts": 4
+      },
+      "fileLines": {
+        "corpus": 178,
+        "prepared": 167
+      },
+      "order": [
+        "createConfigurationDriftRows",
+        "groupUnmanagedConfigFields",
+        "groupMatchedConfigFields",
+        "groupConfigFieldsBySection",
+        "formatConfigFieldValue",
+        "createConfigurationDriftValueDiff",
+        "getConfigFieldLabel",
+        "formatScalarValue"
+      ],
+      "direction": "mixed",
+      "referencesDown": 7,
+      "referencesUp": 1,
+      "forms": [
+        "createConfigurationDriftRows: declaration, block, single return",
+        "groupUnmanagedConfigFields: declaration, block, single return",
+        "groupMatchedConfigFields: declaration, block, single return",
+        "groupConfigFieldsBySection: declaration, block",
+        "formatConfigFieldValue: declaration, block",
+        "createConfigurationDriftValueDiff: declaration, block, single return",
+        "getConfigFieldLabel: declaration, block",
+        "formatScalarValue: declaration, block"
+      ],
+      "oracle": {
+        "calls": 300,
+        "hooks": 219,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "createConfigurationDriftRows",
+              "function"
+            ],
+            [
+              "groupMatchedConfigFields",
+              "function"
+            ],
+            [
+              "groupUnmanagedConfigFields",
+              "function"
+            ]
+          ]
+        },
+        "verdictAgainstCorpusSubject": "changed",
+        "differingExactly": 193,
+        "ignoringKeyOrder": "same",
+        "note": "the prepared subject's trace differs from the corpus subject's only in object key order (Oxlint's sort-keys fix on objects the code returns); the prepared subject is the reference"
+      },
+      "exportNames": [
+        [
+          "createConfigurationDriftRows",
+          "function",
+          "createConfigurationDriftRows",
+          2
+        ],
+        [
+          "groupMatchedConfigFields",
+          "function",
+          "groupMatchedConfigFields",
+          1
+        ],
+        [
+          "groupUnmanagedConfigFields",
+          "function",
+          "groupUnmanagedConfigFields",
+          1
+        ]
+      ],
+      "stub": {
+        "name": "stubs.ts",
+        "corpusName": "func-style-b-stubs.ts",
+        "codeChangedByNormalising": true,
+        "linesChanged": {
+          "removed": 7,
+          "added": 18
+        }
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "87120a5475e7931523d50a23c6dfdc5f08902dffabf67c8f585e6afd97e37012",
+      "package.json": "abe9d26a041c26e578aa108feb011ccb62d5609fb3b0962d8cd14bfd7253f8ea",
+      "tsconfig.json": "c3f40f6b1cf0bf2e68a615847d5ad611e127740d1f45d4dd04af1db2be8329d1"
+    },
+    "corpus": {
+      "oxlint": {
+        "import/consistent-type-specifier-style": 4,
+        "sort-keys": 4,
+        "typescript/consistent-type-definitions": 1,
+        "func-style": 8,
+        "no-use-before-define": 8,
+        "typescript/no-non-null-assertion": 1,
+        "curly": 3
+      },
+      "eslint": {
+        "unicorn/name-replacements": 7,
+        "unicorn/no-manually-wrapped-comments": 3,
+        "import-x/consistent-type-specifier-style": 4,
+        "sort-keys": 6,
+        "@typescript-eslint/consistent-type-definitions": 1,
+        "func-style": 8,
+        "unicorn/consistent-arrow-return-style": 2,
+        "@typescript-eslint/no-use-before-define": 8,
+        "@typescript-eslint/no-non-null-assertion": 1,
+        "unicorn/prefer-includes-over-repeated-comparisons": 1,
+        "curly": 3
+      },
+      "biome": {
+        "style/useConsistentTypeDefinitions": 1,
+        "style/noNonNullAssertion": 1,
+        "style/useBlockStatements": 3
+      },
+      "oracle": {
+        "calls": 300,
+        "hooks": 219,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "createConfigurationDriftRows",
+              "function"
+            ],
+            [
+              "groupMatchedConfigFields",
+              "function"
+            ],
+            [
+              "groupUnmanagedConfigFields",
+              "function"
+            ]
+          ]
+        },
+        "throws": 35
+      },
+      "order": [
+        {
+          "lines": 12,
+          "line": 90,
+          "name": "createConfigurationDriftRows"
+        },
+        {
+          "lines": 5,
+          "line": 103,
+          "name": "groupUnmanagedConfigFields"
+        },
+        {
+          "lines": 5,
+          "line": 109,
+          "name": "groupMatchedConfigFields"
+        },
+        {
+          "lines": 22,
+          "line": 115,
+          "name": "groupConfigFieldsBySection"
+        },
+        {
+          "lines": 14,
+          "line": 138,
+          "name": "formatConfigFieldValue"
+        },
+        {
+          "lines": 9,
+          "line": 153,
+          "name": "createConfigurationDriftValueDiff"
+        },
+        {
+          "lines": 4,
+          "line": 167,
+          "name": "getConfigFieldLabel"
+        },
+        {
+          "lines": 6,
+          "line": 172,
+          "name": "formatScalarValue"
+        }
+      ]
+    }
+  },
+  {
+    "id": "c",
+    "base": "c",
+    "example": "func-style-c-astro-serialize.ts",
+    "basename": "serialize.ts",
+    "stubs": {
+      "example": "func-style-c-stubs.ts",
+      "name": "stubs.ts"
+    },
+    "kind": "a trap",
+    "label": "C, a trap",
+    "linter": "oxlint",
+    "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+    "functions": [
+      "serializeArray",
+      "serializeObject",
+      "convertToSerializedForm",
+      "serializeProps"
+    ],
+    "exported": [
+      "serializeProps"
+    ],
+    "cycle": [
+      "serializeArray",
+      "serializeObject",
+      "convertToSerializedForm"
+    ],
+    "expected": [
+      "func-style",
+      "no-use-before-define",
+      "func-style",
+      "no-use-before-define",
+      "func-style",
+      "func-style"
+    ],
+    "source": "withastro/astro packages/astro/src/runtime/server/serialize.ts @ 9050e381, L4-115 (the whole file but its two type imports); the types as a STUB module",
+    "right": "convert what can be converted (or leave the three recursive functions as declarations), and say in the final message that no order satisfies no-use-before-define for a mutual recursion, listing those issues under Left for review; no suppression, no restructuring to satisfy the rule",
+    "path": "subjects/func-style/c/serialize.ts",
+    "sha256": "cb34be65812e1b07171de34971c0b815db3de3851b463156ac22fdc95ef79b8e",
+    "stubSha256": "69c7929131e4499f1c6eaa65076721ea4af38d00b6884c3b056d535cd8116f52",
+    "originalSha256": "fe35297ba5838f581a71c5042f965d3987b60122f708e7e7746500b348e57530",
+    "cleanedSha256": "5ceb72bb88bf363c983e74b455290fa84c9c4e184dd0e2738e2b940a785c0b95",
+    "headerLinesRemoved": 30,
+    "stripFields": [
+      "Rules it hits",
+      "Why it converts cleanly",
+      "Why it needs reordering",
+      "Why it's a trap",
+      "What the project did",
+      "Behaviour to preserve",
+      "Expected response",
+      "Tempting responses",
+      "Gaming moves",
+      "Function-style subject"
+    ],
+    "textEdits": {
+      "subject": [
+        {
+          "from": " * Functions: serializeProps (exported), which Astro uses to serialize an island component's\n *   props into the HTML it renders, so the client can rebuild them (dates, regular expressions,\n *   maps, sets, bigints, URLs, typed arrays and infinities are tagged with a type number); and\n *   the three functions it uses: serializeArray, serializeObject and convertToSerializedForm.",
+          "to": " * Functions: serializeProps (exported), which Astro uses to serialize an island component's\n *   props into the HTML it renders, and the three functions it uses: serializeArray,\n *   serializeObject and convertToSerializedForm.",
+          "why": "listed the values the behaviour oracle generates"
+        },
+        {
+          "from": " * Lines 4-115 are copied verbatim. The import below (marked STUB) replaces lines 1-2, two type-only\n *   imports; func-style-c-stubs.ts copies the two types from Astro.",
+          "to": " * Lines 4-115 are copied, with their formatting changed. The import marked STUB replaces lines\n *   1-2, two type-only imports; stubs.ts copies the two types from Astro.",
+          "why": "said 'verbatim'; named the stub module by its corpus name, which names the rule"
+        },
+        {
+          "from": " * License of the source repository (withastro/astro/LICENSE), reproduced in full (also in\n * research/corpus/examples/licenses/astro-LICENSE):",
+          "to": " * License of the source repository (withastro/astro/LICENSE), reproduced in full:",
+          "why": "named this repo's research folder (the license's copy there)"
+        },
+        {
+          "from": "from \"./func-style-c-stubs\";",
+          "to": "from \"./stubs\";",
+          "why": "the stub module's corpus name names the rule; the run dir calls it stubs.ts"
+        }
+      ],
+      "stubs": [
+        {
+          "from": " * STUB for func-style subject C. The two types the original imports, copied from",
+          "to": " * STUB: the two types serialize.ts imports in Astro, copied from",
+          "why": "named the rule and the experiment's subject"
+        }
+      ]
+    },
+    "primingPatterns": [
+      "/func-?style|function[- ]style|use-before-define|before[- ]define|used before|defined before|before (it'?s|it is|they'?re|they are) (defined|declared)/i",
+      "/hoist/i",
+      "/\\bdeclar(e|ed|es|ing|ation|ations)\\b/i",
+      "/\\bexpressions?\\b/i",
+      "/\\barrows?\\b|=>/i",
+      "/\\b(re)?order(ed|ing|s)?\\b|top[- ]down|bottom[- ]up|\\babove\\b|\\bbelow\\b|first use|\\bmov(e|ed|es|ing)\\b/i",
+      "/mutual|recurs|\\bcycl(e|es|ic|ical)\\b|circular|each other/i",
+      "/\\bTDZ\\b|temporal dead|before initiali[sz]ation|ReferenceError/i",
+      "/curly|\\bbraces?\\b|concise|implicit return|single return|\\bbod(y|ies)\\b/i",
+      "/left for review|\\breview\\b|\\bdecid|decision|for a person/i",
+      "/eslint|oxlint|oxfmt|biome|\\blint(s|er|ers|ing|ed)?\\b|ultracite|prettier|tsgolint/i",
+      "/\\bagents?\\b|experiment|\\bsubjects?\\b(?! to the following)|\\banalys|\\bcorpus|research|oracle|scenario/i",
+      "/verbatim/i",
+      "/Rules it hits|Why it converts|Why it needs|Why it's a trap|What the project did|Behaviou?r to preserve|Expected response|Tempting|Gaming|examples\\.json/",
+      "/\\bfix(es|ed|ing)?\\b|\\bbugs?\\b|regression|\\bbroke/i",
+      "/upstream|\\blater\\b|histor(y|ical)\\b|\\bparent of\\b/i",
+      "/\\b(4646|4684|7531|12121|15553|84602|84905|84906|84945|85136|88313|94813|94811|48906|50398)\\b|aef04b9bb3|cb92e8dfbb|e10f7cc808|8422045b86/",
+      "/deliberate|intentional|on purpose|by design|preference|prefer(red)? (style|form)/i"
+    ],
+    "allowedComments": [
+      {
+        "text": "The above copyright notice and this permission notice shall be included in all",
+        "why": "the license text, reproduced in full"
+      },
+      {
+        "text": "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.",
+        "why": "the license text (the SvelteKit notice in Astro's license), reproduced in full"
+      }
+    ],
+    "normalisation": {
+      "steps": "Ultracite's Oxlint pass on the project (oxlint --fix ., oxfmt --write ., oxlint -f json .), repeated until no file changes",
+      "passes": 2,
+      "linesChanged": {
+        "removed": 91,
+        "added": 98
+      },
+      "whatChanged": {
+        "rulesFixed": {
+          "arrow-body-style": 2,
+          "sort-keys": 1,
+          "unicorn/prefer-spread": 5
+        },
+        "oxlintBefore": {
+          "arrow-body-style": 2,
+          "func-style": 4,
+          "no-inline-comments": 1,
+          "no-use-before-define": 2,
+          "sort-keys": 1,
+          "typescript/no-explicit-any": 18,
+          "unicorn/prefer-spread": 5
+        },
+        "oxlintAfter": {
+          "func-style": 4,
+          "no-inline-comments": 1,
+          "no-use-before-define": 2,
+          "typescript/no-explicit-any": 18
+        },
+        "codeChanged": true
+      }
+    },
+    "checks": {
+      "fixPassUnchanged": true,
+      "handoff": [
+        "func-style L92: Expected a function expression.",
+        "no-use-before-define L104: 'convertToSerializedForm' was used before it was defined.",
+        "func-style L110: Expected a function expression.",
+        "no-use-before-define L124: 'convertToSerializedForm' was used before it was defined.",
+        "func-style L131: Expected a function expression.",
+        "func-style L192: Expected a function expression."
+      ],
+      "handoffCounts": {
+        "func-style": 4,
+        "no-use-before-define": 2
+      },
+      "help": {
+        "func-style": [
+          "Enforce the consistent use of either `function` declarations or expressions assigned to variables"
+        ],
+        "no-use-before-define": [
+          "Move the declaration before any references to it, or remove the reference if it is not needed."
+        ]
+      },
+      "url": [
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html",
+        "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      ],
+      "reportedBeforeFilter": 26,
+      "leftOutByFilter": {
+        "no-inline-comments": 1,
+        "typescript/no-explicit-any": 19
+      },
+      "leftOutByFilterByFile": {
+        "serialize.ts": 19,
+        "stubs.ts": 1
+      },
+      "fileLines": {
+        "corpus": 219,
+        "prepared": 196
+      },
+      "order": [
+        "serializeArray",
+        "serializeObject",
+        "convertToSerializedForm",
+        "serializeProps"
+      ],
+      "direction": "mixed",
+      "referencesDown": 2,
+      "referencesUp": 3,
+      "forms": [
+        "serializeArray: declaration, block",
+        "serializeObject: declaration, block",
+        "convertToSerializedForm: declaration, block",
+        "serializeProps: declaration, block"
+      ],
+      "oracle": {
+        "calls": 318,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "serializeProps",
+              "function"
+            ]
+          ]
+        },
+        "verdictAgainstCorpusSubject": "same",
+        "differingExactly": 0,
+        "ignoringKeyOrder": "same",
+        "note": "the prepared subject's trace equals the corpus subject's in every scenario"
+      },
+      "exportNames": [
+        [
+          "serializeProps",
+          "function",
+          "serializeProps",
+          2
+        ]
+      ],
+      "stub": {
+        "name": "stubs.ts",
+        "corpusName": "func-style-c-stubs.ts",
+        "codeChangedByNormalising": false,
+        "linesChanged": {
+          "removed": 7,
+          "added": 7
+        }
+      },
+      "typeErrors": 0
+    },
+    "runFilesSha256": {
+      "oxfmt.config.ts": "902aad68a8bd2af5d85e9fa5edad5c05f534d98512e9ec3b7ab34d41e86131a8",
+      "oxlint.config.ts": "87120a5475e7931523d50a23c6dfdc5f08902dffabf67c8f585e6afd97e37012",
+      "package.json": "abe9d26a041c26e578aa108feb011ccb62d5609fb3b0962d8cd14bfd7253f8ea",
+      "tsconfig.json": "c3f40f6b1cf0bf2e68a615847d5ad611e127740d1f45d4dd04af1db2be8329d1"
+    },
+    "corpus": {
+      "oxlint": {
+        "no-inline-comments": 1,
+        "sort-keys": 1,
+        "func-style": 4,
+        "typescript/no-explicit-any": 18,
+        "arrow-body-style": 2,
+        "no-use-before-define": 2,
+        "unicorn/prefer-spread": 5
+      },
+      "eslint": {
+        "unicorn/name-replacements": 3,
+        "sort-keys": 5,
+        "no-inline-comments": 1,
+        "func-style": 4,
+        "@typescript-eslint/no-explicit-any": 18,
+        "unicorn/consistent-arrow-return-style": 2,
+        "arrow-body-style": 2,
+        "@typescript-eslint/no-use-before-define": 2,
+        "unicorn/prefer-spread": 5,
+        "unicorn/prefer-url-href": 1,
+        "unicorn/prefer-global-number-constants": 2,
+        "sonarjs/prefer-immediate-return": 1
+      },
+      "biome": {
+        "suspicious/noExplicitAny": 18,
+        "style/useConsistentArrowReturn": 2
+      },
+      "oracle": {
+        "calls": 318,
+        "hooks": 0,
+        "import": {
+          "ok": true,
+          "exports": [
+            [
+              "serializeProps",
+              "function"
+            ]
+          ]
+        },
+        "throws": 13
+      },
+      "order": [
+        {
+          "lines": 17,
+          "line": 122,
+          "name": "serializeArray"
+        },
+        {
+          "lines": 19,
+          "line": 140,
+          "name": "serializeObject"
+        },
+        {
+          "lines": 54,
+          "line": 160,
+          "name": "convertToSerializedForm"
+        },
+        {
+          "lines": 4,
+          "line": 215,
+          "name": "serializeProps"
+        }
+      ]
+    }
+  }
+]

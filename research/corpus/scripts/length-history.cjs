@@ -163,7 +163,9 @@ const innermost = (fns, line) => {
   return best;
 };
 
-const track = (name) =>
+// `rowsOverride`: another topic's functions to track ({ id, file, embedStartLine, endLine }),
+// instead of this topic's census rows (func-style-history.cjs).
+const track = (name, rowsOverride = null) =>
   new Promise((resolveTrack, reject) => {
     const sha = lib.PINNED[name];
     const git = (argv) =>
@@ -176,9 +178,11 @@ const track = (name) =>
       git(["log", "-1", "--format=%ct", sha]).stdout.trim()
     );
     const since = pinnedTime - WINDOW_DAYS * 86_400;
-    const rows = lib
-      .readJsonl(join(CENSUS, `${name}.functions.jsonl`))
-      .filter((f) => !f.test);
+    const rows =
+      rowsOverride ??
+      lib
+        .readJsonl(join(CENSUS, `${name}.functions.jsonl`))
+        .filter((f) => !f.test);
     const tracked = new Map();
     for (const f of rows) {
       const fn = {
@@ -856,7 +860,16 @@ const main = async () => {
   lib.writeJson(join(lib.RESULTS_DIR, "history.json"), result);
 };
 
-module.exports = { isBugFix, mapLine };
+module.exports = {
+  isBugFix,
+  logistic,
+  mapLine,
+  MASS_FILES,
+  MIN_EXPOSURE_DAYS,
+  SCOPES,
+  track,
+  WINDOW_DAYS,
+};
 
 if (require.main === module) {
   main().catch((e) => {

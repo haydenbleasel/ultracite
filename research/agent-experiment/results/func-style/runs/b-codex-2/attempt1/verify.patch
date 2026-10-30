@@ -1,0 +1,76 @@
+--- a/ConfigurationDriftPage.utils.ts
++++ b/ConfigurationDriftPage.utils.ts
+@@ -78,7 +78,9 @@
+   return JSON.stringify(value, null, 2) ?? "Not set";
+ };
+ 
+-const formatConfigFieldValue = function formatConfigFieldValue(value: unknown): string {
++const formatConfigFieldValue = function formatConfigFieldValue(
++  value: unknown
++): string {
+   const normalizedValue = value;
+ 
+   if (
+@@ -97,37 +99,41 @@
+   return formatScalarValue(normalizedValue);
+ };
+ 
+-const createConfigurationDriftValueDiff = function createConfigurationDriftValueDiff(
+-  field: GitHubConfigDriftField
+-): ConfigurationDriftValueDiff {
+-  return {
+-    configValue: formatConfigFieldValue(field.githubValue),
+-    dashboardValue: formatConfigFieldValue(field.dashboardValue),
+-    kind: "scalar",
++const createConfigurationDriftValueDiff =
++  function createConfigurationDriftValueDiff(
++    field: GitHubConfigDriftField
++  ): ConfigurationDriftValueDiff {
++    return {
++      configValue: formatConfigFieldValue(field.githubValue),
++      dashboardValue: formatConfigFieldValue(field.dashboardValue),
++      kind: "scalar",
++    };
+   };
+-};
+ 
+ /**
+  * Prefers the registry's hand-written label, and otherwise title-cases the last path segment —
+  * never the whole path, which would leave the dots in.
+  */
+-const getConfigFieldLabel = function getConfigFieldLabel(configPath: string): string {
++const getConfigFieldLabel = function getConfigFieldLabel(
++  configPath: string
++): string {
+   const label = getFieldDefinition(configPath)?.label;
+   return label ?? startCase(configPath.split(".").at(-1) ?? configPath);
+ };
+ 
+-export const createConfigurationDriftRows = function createConfigurationDriftRows(
+-  fields: GitHubConfigDriftField[],
+-  projectRef: string
+-): ConfigurationDriftRow[] {
+-  return fields.map((field) => ({
+-    ...field,
+-    settingHref: field.settingHref(projectRef),
+-    settingLabel: getConfigFieldLabel(field.configPath),
+-    status: "drifted" as const,
+-    valueDiff: createConfigurationDriftValueDiff(field),
+-  }));
+-};
++export const createConfigurationDriftRows =
++  function createConfigurationDriftRows(
++    fields: GitHubConfigDriftField[],
++    projectRef: string
++  ): ConfigurationDriftRow[] {
++    return fields.map((field) => ({
++      ...field,
++      settingHref: field.settingHref(projectRef),
++      settingLabel: getConfigFieldLabel(field.configPath),
++      status: "drifted" as const,
++      valueDiff: createConfigurationDriftValueDiff(field),
++    }));
++  };
+ 
+ const groupConfigFieldsBySection = function groupConfigFieldsBySection<
+   T extends { section: ConfigSection; configPath: string },

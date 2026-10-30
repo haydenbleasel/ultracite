@@ -1952,4 +1952,9 @@ const main = () => {
   ic.writeJson(path, result);
 };
 
-main();
+// Run as a script; func-style-cycles.cjs requires `analyse` without running main.
+if (require.main === module) {
+  main();
+}
+
+module.exports = { analyse };

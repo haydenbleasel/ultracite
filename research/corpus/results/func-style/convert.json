@@ -1,0 +1,2928 @@
+{
+  "generated": "2026-10-30T08:38:17.489Z",
+  "note": "See the header of func-style-convert.cjs. Source files only. newReferences are use-before-define candidates (func-style-lib.cjs) that appear after conversion and point at a converted binding; crashAtImport counts module-level tdz-module-evaluation, tdz-indirect and tdz-callback; crashWhenCalled counts tdz-same-scope (a nested declaration used above it in the same function). reorder counts statement lists with a reference above its binding after conversion (including references that were already reported before).",
+  "repos": {
+    "zod": {
+      "convertedFiles": 91,
+      "decisions": {
+        "arrow": 674,
+        "not-reported:overloads": 27,
+        "function-expression:this-arguments-new": 5,
+        "not-reported:export-default": 63
+      },
+      "newReferences": {
+        "total": 153,
+        "byClass": {
+          "deferred": 152,
+          "deferred-maybe-module-evaluation": 1
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 152,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 1
+        },
+        "alreadyCandidates": 153,
+        "crashAtImport": 0,
+        "crashWhenCalled": 0,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 0,
+        "examples": []
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 674,
+          "ubd": 287,
+          "ubdFiles": 15
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 287,
+          "ubdFiles": 15
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 178,
+          "ubdFiles": 9
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 14,
+        "filesUnsolvable": 7,
+        "filesSolvable": 7,
+        "lists": 14,
+        "listsByKind": {
+          "module": 11,
+          "function-body": 2,
+          "TSModuleBlock": 1
+        },
+        "unsolvableLists": 7,
+        "unsolvableByReason": {
+          "evaluation-order": 4,
+          "mutual-recursion": 3
+        },
+        "movedStatements": 31,
+        "movedLines": 331,
+        "movedStatementsBestEffort": 202,
+        "movedLinesBestEffort": 2530,
+        "residualReferences": 39,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/zod/src/v3/types.ts",
+            "line": 1,
+            "names": [
+              "ZodType",
+              "ZodArray",
+              "ZodUnion",
+              "ZodIntersection",
+              "ZodPromise",
+              "ZodEffects"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v3/types.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/zod/src/v4/classic/from-json-schema.ts",
+            "line": 1,
+            "names": [
+              "getTupleRest",
+              "convertBaseSchema",
+              "convertSchema"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/classic/from-json-schema.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/zod/src/v4/classic/schemas.ts",
+            "line": 1,
+            "names": [
+              "ZodType",
+              "_ZodString",
+              "_ZodString",
+              "ZodString",
+              "ZodString",
+              "string"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/classic/schemas.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/zod/src/v4/core/compile.ts",
+            "line": 1,
+            "names": [
+              "compileFn",
+              "compileChild",
+              "generateChecks",
+              "generatePropertiesChecks",
+              "generatePropertyCheck",
+              "CustomCheck"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/compile.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/zod/src/v4/core/core.ts",
+            "line": 57,
+            "names": [
+              "Internals",
+              "ExpressionStatement",
+              "init",
+              "Parent",
+              "Definition",
+              "_"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/core.ts#L57",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/zod/src/v4/core/to-json-schema.ts",
+            "line": 1,
+            "names": [
+              "finalize",
+              "createStandardJSONSchemaMethod"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/to-json-schema.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/zod/src/v4/core/visit.ts",
+            "line": 28,
+            "names": [
+              "run",
+              "mapInner"
+            ],
+            "permalink": "https://github.com/colinhacks/zod/blob/284243fb0d6532665afdc9239188773bb624f73c/packages/zod/src/v4/core/visit.ts#L28",
+            "reason": "mutual-recursion"
+          }
+        ]
+      },
+      "typecheck": {
+        "before": 0,
+        "beforeUnresolved": 0,
+        "converted": {
+          "added": 2,
+          "byCode": {
+            "2366": 1,
+            "2454": 1
+          },
+          "examples": [
+            {
+              "code": 2454,
+              "file": "packages/zod/src/v3/locales/en.ts",
+              "line": 121,
+              "message": "Variable 'message' is used before being assigned."
+            },
+            {
+              "code": 2366,
+              "file": "packages/zod/src/v3/types.ts",
+              "line": 4322,
+              "message": "Function lacks ending return statement and return type does not include 'undefined'."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 2,
+          "byCode": {
+            "2366": 1,
+            "2454": 1
+          },
+          "examples": [
+            {
+              "code": 2454,
+              "file": "packages/zod/src/v3/locales/en.ts",
+              "line": 121,
+              "message": "Variable 'message' is used before being assigned."
+            },
+            {
+              "code": 2366,
+              "file": "packages/zod/src/v3/types.ts",
+              "line": 3771,
+              "message": "Function lacks ending return statement and return type does not include 'undefined'."
+            }
+          ],
+          "removed": 0
+        },
+        "seconds": 7,
+        "tsconfig": "tsconfig.json"
+      },
+      "seconds": 12
+    },
+    "hono": {
+      "convertedFiles": 21,
+      "decisions": {
+        "arrow": 44,
+        "function-expression:generator": 1,
+        "not-reported:overloads": 1,
+        "function-expression:this-arguments-new": 1
+      },
+      "newReferences": {
+        "total": 27,
+        "byClass": {
+          "deferred": 26,
+          "tdz-same-scope": 1
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 26,
+          "hoisted-function-same-context -> tdz-same-scope": 1
+        },
+        "alreadyCandidates": 27,
+        "crashAtImport": 0,
+        "crashWhenCalled": 1,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 1,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "src/compose.ts",
+            "line": 23,
+            "moduleBinding": false,
+            "name": "dispatch",
+            "sameContext": true,
+            "permalink": "https://github.com/honojs/hono/blob/f78a245abc393368583085e19c7f5b28b460bf51/src/compose.ts#L23"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 46,
+          "ubd": 44,
+          "ubdFiles": 10
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 44,
+          "ubdFiles": 10
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 0,
+          "ubdFiles": 0
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 10,
+        "filesUnsolvable": 0,
+        "filesSolvable": 10,
+        "lists": 10,
+        "listsByKind": {
+          "module": 9,
+          "function-body": 1
+        },
+        "unsolvableLists": 0,
+        "unsolvableByReason": {},
+        "movedStatements": 25,
+        "movedLines": 486,
+        "movedStatementsBestEffort": 0,
+        "movedLinesBestEffort": 0,
+        "residualReferences": 0,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": []
+      },
+      "typecheck": {
+        "before": 17,
+        "beforeUnresolved": 0,
+        "converted": {
+          "added": 2,
+          "byCode": {
+            "2448": 1,
+            "2454": 1
+          },
+          "examples": [
+            {
+              "code": 2448,
+              "file": "src/compose.ts",
+              "line": 23,
+              "message": "Block-scoped variable 'dispatch' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "src/compose.ts",
+              "line": 23,
+              "message": "Variable 'dispatch' is used before being assigned."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 0,
+          "byCode": {},
+          "examples": [],
+          "removed": 0
+        },
+        "seconds": 4,
+        "tsconfig": "tsconfig.json"
+      },
+      "seconds": 5
+    },
+    "trpc": {
+      "convertedFiles": 108,
+      "decisions": {
+        "arrow": 393,
+        "function-expression:generator": 6,
+        "not-reported:export-default": 2
+      },
+      "newReferences": {
+        "total": 61,
+        "byClass": {
+          "deferred": 57,
+          "tdz-same-scope": 4
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 57,
+          "hoisted-function-same-context -> tdz-same-scope": 4
+        },
+        "alreadyCandidates": 61,
+        "crashAtImport": 0,
+        "crashWhenCalled": 4,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 3,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/client/src/links/retryLink.ts",
+            "line": 54,
+            "moduleBinding": false,
+            "name": "attempt",
+            "sameContext": true,
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/links/retryLink.ts#L54"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/server/src/unstable-core-do-not-import/utils.ts",
+            "line": 106,
+            "moduleBinding": false,
+            "name": "trigger",
+            "sameContext": true,
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/utils.ts#L106"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/server/src/unstable-core-do-not-import/utils.ts",
+            "line": 103,
+            "moduleBinding": false,
+            "name": "trigger",
+            "sameContext": true,
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/utils.ts#L103"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/upgrade/src/transforms/hooksToOptions.ts",
+            "line": 90,
+            "moduleBinding": false,
+            "name": "updateTRPCImport",
+            "sameContext": true,
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/upgrade/src/transforms/hooksToOptions.ts#L90"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 399,
+          "ubd": 82,
+          "ubdFiles": 20
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 82,
+          "ubdFiles": 20
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 37,
+          "ubdFiles": 11
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 20,
+        "filesUnsolvable": 11,
+        "filesSolvable": 9,
+        "lists": 28,
+        "listsByKind": {
+          "function-body": 14,
+          "module": 13,
+          "BlockStatement": 1
+        },
+        "unsolvableLists": 14,
+        "unsolvableByReason": {
+          "mutual-recursion": 10,
+          "evaluation-order": 4
+        },
+        "movedStatements": 23,
+        "movedLines": 313,
+        "movedStatementsBestEffort": 14,
+        "movedLinesBestEffort": 461,
+        "residualReferences": 25,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/client/src/TRPCClientError.ts",
+            "line": 1,
+            "names": [
+              "isTRPCClientError",
+              "TRPCClientError"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/client/src/TRPCClientError.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/openapi/src/generate.ts",
+            "line": 1,
+            "names": [
+              "typeToJsonSchema",
+              "convertUnionType",
+              "convertIntersectionType",
+              "convertWellKnownType",
+              "convertArrayType",
+              "convertTupleType"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/openapi/src/generate.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/react-query/src/shared/hooks/createHooksInternal.tsx",
+            "line": 378,
+            "names": [
+              "updateState",
+              "reset",
+              "ExpressionStatement",
+              "resultRef",
+              "VariableDeclaration"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/react-query/src/shared/hooks/createHooksInternal.tsx#L378",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/server/src/adapters/node-http/incomingMessageToRequest.ts",
+            "line": 36,
+            "names": [
+              "onData",
+              "onEnd"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/node-http/incomingMessageToRequest.ts#L36",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/server/src/adapters/node-http/writeResponse.ts",
+            "line": 13,
+            "names": [
+              "onError",
+              "onDrain",
+              "cleanup"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/adapters/node-http/writeResponse.ts#L13",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/server/src/observable/observable.ts",
+            "line": 95,
+            "names": [
+              "onDone",
+              "obs$"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/observable/observable.ts#L95",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/server/src/unstable-core-do-not-import/http/resolveResponse.ts",
+            "line": 359,
+            "names": [
+              "cleanup",
+              "timer"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/http/resolveResponse.ts#L359",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/server/src/unstable-core-do-not-import/procedureBuilder.ts",
+            "line": 1,
+            "names": [
+              "createNewBuilder",
+              "createBuilder",
+              "createResolver"
+            ],
+            "permalink": "https://github.com/trpc/trpc/blob/796700d8653b3832409fff997e6f5789519b9ea7/packages/server/src/unstable-core-do-not-import/procedureBuilder.ts#L1",
+            "reason": "mutual-recursion"
+          }
+        ]
+      },
+      "typecheck": {
+        "before": 188,
+        "beforeUnresolved": 80,
+        "converted": {
+          "added": 23,
+          "byCode": {
+            "2339": 7,
+            "2448": 4,
+            "2454": 4,
+            "2775": 8
+          },
+          "examples": [
+            {
+              "code": 2448,
+              "file": "packages/client/src/links/retryLink.ts",
+              "line": 54,
+              "message": "Block-scoped variable 'attempt' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/client/src/links/retryLink.ts",
+              "line": 54,
+              "message": "Variable 'attempt' is used before being assigned."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/middleware.ts",
+              "line": 254,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 54,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'id' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'jsonrpc' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'method' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'params' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 57,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 58,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 67,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 68,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 15,
+          "byCode": {
+            "2339": 7,
+            "2775": 8
+          },
+          "examples": [
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/middleware.ts",
+              "line": 254,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 54,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'id' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'jsonrpc' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'method' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 56,
+              "message": "Property 'params' does not exist on type 'unknown'."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 57,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 58,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 67,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 68,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 71,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/server/src/unstable-core-do-not-import/rpc/parseTRPCMessage.ts",
+              "line": 73,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            }
+          ],
+          "removed": 0
+        },
+        "seconds": 3,
+        "tsconfig": "tsconfig.json"
+      },
+      "seconds": 5
+    },
+    "vite": {
+      "convertedFiles": 105,
+      "decisions": {
+        "arrow": 781,
+        "function-expression:this-arguments-new": 1,
+        "not-reported:overloads": 3
+      },
+      "newReferences": {
+        "total": 469,
+        "byClass": {
+          "deferred": 455,
+          "deferred-maybe-module-evaluation": 8,
+          "tdz-same-scope": 4,
+          "tdz-module-evaluation": 2
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 455,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 8,
+          "hoisted-function-same-context -> tdz-same-scope": 4,
+          "hoisted-function-same-context -> tdz-module-evaluation": 2
+        },
+        "alreadyCandidates": 469,
+        "crashAtImport": 2,
+        "crashWhenCalled": 4,
+        "crashAtImportFiles": 2,
+        "crashWhenCalledFiles": 1,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/vite/src/client/client.ts",
+            "line": 187,
+            "moduleBinding": true,
+            "name": "handleMessage",
+            "sameContext": true,
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/client/client.ts#L187"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/vite/src/node/optimizer/optimizer.ts",
+            "line": 60,
+            "moduleBinding": false,
+            "name": "init",
+            "sameContext": true,
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L60"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/vite/src/node/optimizer/optimizer.ts",
+            "line": 63,
+            "moduleBinding": false,
+            "name": "registerMissingImport",
+            "sameContext": true,
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L63"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/vite/src/node/optimizer/optimizer.ts",
+            "line": 69,
+            "moduleBinding": false,
+            "name": "close",
+            "sameContext": true,
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L69"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/vite/src/node/optimizer/optimizer.ts",
+            "line": 773,
+            "moduleBinding": false,
+            "name": "init",
+            "sameContext": true,
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L773"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/vite/src/node/utils.ts",
+            "line": 730,
+            "moduleBinding": true,
+            "name": "windowsSafeRealPathSync",
+            "sameContext": true,
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/utils.ts#L730"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 782,
+          "ubd": 539,
+          "ubdFiles": 65
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 539,
+          "ubdFiles": 65
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 42,
+          "ubdFiles": 8
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 65,
+        "filesUnsolvable": 8,
+        "filesSolvable": 57,
+        "lists": 73,
+        "listsByKind": {
+          "module": 61,
+          "function-body": 12
+        },
+        "unsolvableLists": 10,
+        "unsolvableByReason": {
+          "mutual-recursion": 8,
+          "evaluation-order": 2
+        },
+        "movedStatements": 312,
+        "movedLines": 8574,
+        "movedStatementsBestEffort": 77,
+        "movedLinesBestEffort": 1380,
+        "residualReferences": 28,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/vite/src/client/client.ts",
+            "line": 483,
+            "names": [
+              "onOpen",
+              "onError",
+              "close"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/client/client.ts#L483",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/vite/src/node/http.ts",
+            "line": 228,
+            "names": [
+              "onError",
+              "onListening"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/http.ts#L228",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/vite/src/node/optimizer/optimizer.ts",
+            "line": 42,
+            "names": [
+              "depsOptimizer",
+              "depOptimizationProcessing",
+              "close",
+              "init",
+              "startNextDiscoveredBatch",
+              "prepareKnownDeps"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L42",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/vite/src/node/optimizer/optimizer.ts",
+            "line": 759,
+            "names": [
+              "depsOptimizer",
+              "init"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/optimizer/optimizer.ts#L759",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/vite/src/node/plugins/html.ts",
+            "line": 1,
+            "names": [
+              "serializeTag",
+              "serializeTags"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/html.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/vite/src/node/plugins/resolve.ts",
+            "line": 1,
+            "names": [
+              "tryFsResolve",
+              "tryCleanFsResolve",
+              "resolvePackageEntry"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/plugins/resolve.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/vite/src/node/preview.ts",
+            "line": 133,
+            "names": [
+              "closeServer",
+              "server",
+              "closeServerAndExit"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/preview.ts#L133",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/vite/src/node/server/index.ts",
+            "line": 1,
+            "names": [
+              "_createServer",
+              "restartServer"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/index.ts#L1",
+            "reason": "mutual-recursion"
+          }
+        ]
+      },
+      "typecheck": {
+        "before": 894,
+        "beforeUnresolved": 292,
+        "converted": {
+          "added": 30,
+          "byCode": {
+            "2345": 3,
+            "2448": 6,
+            "2454": 6,
+            "2775": 10,
+            "18048": 5
+          },
+          "examples": [
+            {
+              "code": 2448,
+              "file": "packages/vite/src/client/client.ts",
+              "line": 187,
+              "message": "Block-scoped variable 'handleMessage' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/vite/src/client/client.ts",
+              "line": 187,
+              "message": "Variable 'handleMessage' is used before being assigned."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/build.ts",
+              "line": 468,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/build.ts",
+              "line": 524,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1275,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1468,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1470,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1472,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1475,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1999,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2448,
+              "file": "packages/vite/src/node/optimizer/optimizer.ts",
+              "line": 60,
+              "message": "Block-scoped variable 'init' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/vite/src/node/optimizer/optimizer.ts",
+              "line": 60,
+              "message": "Variable 'init' is used before being assigned."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 18,
+          "byCode": {
+            "2345": 3,
+            "2775": 10,
+            "18048": 5
+          },
+          "examples": [
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/build.ts",
+              "line": 1761,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/build.ts",
+              "line": 1817,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 1253,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 2145,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 2147,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 2149,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 2152,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/vite/src/node/config.ts",
+              "line": 2676,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2345,
+              "file": "packages/vite/src/node/plugins/importAnalysis.ts",
+              "line": 601,
+              "message": "Argument of type 'EnvironmentModuleNode | undefined' is not assignable to parameter of type 'EnvironmentModuleNode'.   Type 'undefined' is not assignable to type 'EnvironmentModuleNode'."
+            },
+            {
+              "code": 18048,
+              "file": "packages/vite/src/node/plugins/importAnalysis.ts",
+              "line": 649,
+              "message": "'importerModule' is possibly 'undefined'."
+            },
+            {
+              "code": 18048,
+              "file": "packages/vite/src/node/plugins/importAnalysis.ts",
+              "line": 669,
+              "message": "'importerModule' is possibly 'undefined'."
+            },
+            {
+              "code": 2345,
+              "file": "packages/vite/src/node/plugins/importAnalysis.ts",
+              "line": 670,
+              "message": "Argument of type 'EnvironmentModuleNode | undefined' is not assignable to parameter of type 'EnvironmentModuleNode'.   Type 'undefined' is not assignable to type 'EnvironmentModuleNode'."
+            }
+          ],
+          "removed": 0
+        },
+        "seconds": 6,
+        "tsconfig": "packages/vite/tsconfig.base.json"
+      },
+      "seconds": 11
+    },
+    "astro": {
+      "convertedFiles": 420,
+      "decisions": {
+        "arrow": 1431,
+        "not-reported:export-default": 36,
+        "not-reported:overloads": 3,
+        "function-expression:this-arguments-new": 3,
+        "function-expression:generator": 10
+      },
+      "newReferences": {
+        "total": 410,
+        "byClass": {
+          "deferred": 383,
+          "tdz-same-scope": 24,
+          "tdz-module-evaluation": 2,
+          "deferred-maybe-module-evaluation": 1
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 383,
+          "hoisted-function-same-context -> tdz-same-scope": 24,
+          "hoisted-function-same-context -> tdz-module-evaluation": 2,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 1
+        },
+        "alreadyCandidates": 410,
+        "crashAtImport": 2,
+        "crashWhenCalled": 24,
+        "crashAtImportFiles": 2,
+        "crashWhenCalledFiles": 13,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/assets/build/generate.ts",
+            "line": 116,
+            "moduleBinding": false,
+            "name": "generateImage",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/assets/build/generate.ts#L116"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/astro/src/content/utils.ts",
+            "line": 486,
+            "moduleBinding": true,
+            "name": "contentObservable",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/content/utils.ts#L486"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/core/build/plugins/plugin-component-entry.ts",
+            "line": 15,
+            "moduleBinding": false,
+            "name": "mergeComponentExportNames",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-component-entry.ts#L15"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/core/build/plugins/plugin-component-entry.ts",
+            "line": 16,
+            "moduleBinding": false,
+            "name": "mergeComponentExportNames",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/build/plugins/plugin-component-entry.ts#L16"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/core/middleware/sequence.ts",
+            "line": 33,
+            "moduleBinding": false,
+            "name": "applyHandle",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/middleware/sequence.ts#L33"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/events/error.ts",
+            "line": 91,
+            "moduleBinding": false,
+            "name": "extractStringFromFunction",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/events/error.ts#L91"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/preferences/index.ts",
+            "line": 120,
+            "moduleBinding": false,
+            "name": "mapFrom",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/preferences/index.ts#L120"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/astro/src/prefetch/index.ts",
+            "line": 89,
+            "moduleBinding": false,
+            "name": "handleHoverOut",
+            "sameContext": true,
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/prefetch/index.ts#L89"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 1444,
+          "ubd": 442,
+          "ubdFiles": 120
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 442,
+          "ubdFiles": 120
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 16,
+          "ubdFiles": 9
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 120,
+        "filesUnsolvable": 9,
+        "filesSolvable": 111,
+        "lists": 131,
+        "listsByKind": {
+          "module": 112,
+          "function-body": 17,
+          "BlockStatement": 2
+        },
+        "unsolvableLists": 9,
+        "unsolvableByReason": {
+          "mutual-recursion": 7,
+          "evaluation-order": 2
+        },
+        "movedStatements": 347,
+        "movedLines": 6722,
+        "movedStatementsBestEffort": 9,
+        "movedLinesBestEffort": 150,
+        "residualReferences": 14,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/astro/src/actions/runtime/client.ts",
+            "line": 1,
+            "names": [
+              "ActionError",
+              "ActionInputError"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/actions/runtime/client.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/astro/src/core/app/node.ts",
+            "line": 216,
+            "names": [
+              "removeSocketListener",
+              "cleanup",
+              "onSocketClose"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/app/node.ts#L216",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/astro/src/core/dev/restart.ts",
+            "line": 153,
+            "names": [
+              "handleChangeRestart",
+              "setupContainer"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/dev/restart.ts#L153",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/astro/src/core/sync/index.ts",
+            "line": 1,
+            "names": [
+              "ExportDefaultDeclaration",
+              "syncInternal",
+              "CLIENT_TYPES_REFERENCE",
+              "writeInjectedTypes"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/core/sync/index.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/astro/src/runtime/client/dev-toolbar/entrypoint.ts",
+            "line": 10,
+            "names": [
+              "astroMoreApp",
+              "apps"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/client/dev-toolbar/entrypoint.ts#L10",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/astro/src/runtime/server/escape.ts",
+            "line": 1,
+            "names": [
+              "unescapeChunksAsync",
+              "unescapeChunks",
+              "unescapeHTML"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/escape.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/astro/src/runtime/server/jsx.ts",
+            "line": 1,
+            "names": [
+              "renderJSX",
+              "renderJSXVNode",
+              "renderElement"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/jsx.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/astro/src/runtime/server/render/any.ts",
+            "line": 1,
+            "names": [
+              "renderChild",
+              "renderArray",
+              "renderIterable",
+              "renderAsyncIterable"
+            ],
+            "permalink": "https://github.com/withastro/astro/blob/9050e3819c51b0383cced278c278bc6f45c63468/packages/astro/src/runtime/server/render/any.ts#L1",
+            "reason": "mutual-recursion"
+          }
+        ]
+      },
+      "typecheck": {
+        "before": 1823,
+        "beforeUnresolved": 417,
+        "converted": {
+          "added": 52,
+          "byCode": {
+            "2448": 26,
+            "2454": 26
+          },
+          "examples": [
+            {
+              "code": 2448,
+              "file": "packages/astro/src/assets/build/generate.ts",
+              "line": 116,
+              "message": "Block-scoped variable 'generateImage' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/astro/src/assets/build/generate.ts",
+              "line": 116,
+              "message": "Variable 'generateImage' is used before being assigned."
+            },
+            {
+              "code": 2448,
+              "file": "packages/astro/src/content/utils.ts",
+              "line": 486,
+              "message": "Block-scoped variable 'contentObservable' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/astro/src/content/utils.ts",
+              "line": 486,
+              "message": "Variable 'contentObservable' is used before being assigned."
+            },
+            {
+              "code": 2448,
+              "file": "packages/astro/src/core/build/plugins/plugin-component-entry.ts",
+              "line": 15,
+              "message": "Block-scoped variable 'mergeComponentExportNames' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/astro/src/core/build/plugins/plugin-component-entry.ts",
+              "line": 15,
+              "message": "Variable 'mergeComponentExportNames' is used before being assigned."
+            },
+            {
+              "code": 2448,
+              "file": "packages/astro/src/core/build/plugins/plugin-component-entry.ts",
+              "line": 16,
+              "message": "Block-scoped variable 'mergeComponentExportNames' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/astro/src/core/build/plugins/plugin-component-entry.ts",
+              "line": 16,
+              "message": "Variable 'mergeComponentExportNames' is used before being assigned."
+            },
+            {
+              "code": 2448,
+              "file": "packages/astro/src/core/middleware/sequence.ts",
+              "line": 33,
+              "message": "Block-scoped variable 'applyHandle' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/astro/src/core/middleware/sequence.ts",
+              "line": 33,
+              "message": "Variable 'applyHandle' is used before being assigned."
+            },
+            {
+              "code": 2448,
+              "file": "packages/astro/src/events/error.ts",
+              "line": 91,
+              "message": "Block-scoped variable 'extractStringFromFunction' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/astro/src/events/error.ts",
+              "line": 91,
+              "message": "Variable 'extractStringFromFunction' is used before being assigned."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 0,
+          "byCode": {},
+          "examples": [],
+          "removed": 0
+        },
+        "seconds": 7,
+        "tsconfig": "packages/astro/tsconfig.json"
+      },
+      "seconds": 14
+    },
+    "excalidraw": {
+      "convertedFiles": 35,
+      "decisions": {
+        "arrow": 114,
+        "not-reported:overloads": 7,
+        "function-expression:generator": 2,
+        "not-reported:export-default": 1
+      },
+      "newReferences": {
+        "total": 11,
+        "byClass": {
+          "deferred": 10,
+          "deferred-maybe-module-evaluation": 1
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 10,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 1
+        },
+        "alreadyCandidates": 11,
+        "crashAtImport": 0,
+        "crashWhenCalled": 0,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 0,
+        "examples": []
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 116,
+          "ubd": 56,
+          "ubdFiles": 15
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 56,
+          "ubdFiles": 15
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 0,
+          "ubdFiles": 0
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 16,
+        "filesUnsolvable": 0,
+        "filesSolvable": 16,
+        "lists": 16,
+        "listsByKind": {
+          "module": 16
+        },
+        "unsolvableLists": 0,
+        "unsolvableByReason": {},
+        "movedStatements": 64,
+        "movedLines": 1608,
+        "movedStatementsBestEffort": 0,
+        "movedLinesBestEffort": 0,
+        "residualReferences": 0,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": []
+      },
+      "typecheck": {
+        "before": 5498,
+        "beforeUnresolved": 769,
+        "converted": {
+          "added": 145,
+          "byCode": {
+            "2322": 5,
+            "2339": 10,
+            "2345": 22,
+            "2366": 2,
+            "2488": 1,
+            "2531": 2,
+            "2775": 64,
+            "7006": 2,
+            "18047": 30,
+            "18048": 7
+          },
+          "examples": [
+            {
+              "code": 2775,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 441,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 450,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 461,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 462,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 472,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 477,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 489,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 492,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 2775,
+              "file": "packages/element/src/binding.ts",
+              "line": 277,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/element/src/binding.ts",
+              "line": 281,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2488,
+              "file": "packages/element/src/binding.ts",
+              "line": 286,
+              "message": "Type '[number, { point: LocalPoint; isDragging?: boolean | undefined; }] | undefined' must have a '[Symbol.iterator]()' method that returns an iterator."
+            },
+            {
+              "code": 2366,
+              "file": "packages/element/src/binding.ts",
+              "line": 331,
+              "message": "Function lacks ending return statement and return type does not include 'undefined'."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 145,
+          "byCode": {
+            "2322": 5,
+            "2339": 10,
+            "2345": 22,
+            "2366": 2,
+            "2488": 1,
+            "2531": 2,
+            "2775": 64,
+            "7006": 2,
+            "18047": 30,
+            "18048": 7
+          },
+          "examples": [
+            {
+              "code": 2775,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 441,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 450,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 461,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 462,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 472,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 477,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 489,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/element/src/arrows/focus.ts",
+              "line": 492,
+              "message": "'arrow' is possibly 'null'."
+            },
+            {
+              "code": 2775,
+              "file": "packages/element/src/binding.ts",
+              "line": 277,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2775,
+              "file": "packages/element/src/binding.ts",
+              "line": 281,
+              "message": "Assertions require every name in the call target to be declared with an explicit type annotation."
+            },
+            {
+              "code": 2488,
+              "file": "packages/element/src/binding.ts",
+              "line": 286,
+              "message": "Type '[number, { point: LocalPoint; isDragging?: boolean | undefined; }] | undefined' must have a '[Symbol.iterator]()' method that returns an iterator."
+            },
+            {
+              "code": 2366,
+              "file": "packages/element/src/binding.ts",
+              "line": 331,
+              "message": "Function lacks ending return statement and return type does not include 'undefined'."
+            }
+          ],
+          "removed": 0
+        },
+        "seconds": 13,
+        "tsconfig": "tsconfig.json"
+      },
+      "seconds": 16
+    },
+    "next.js": {
+      "convertedFiles": 1003,
+      "decisions": {
+        "arrow": 3982,
+        "not-reported:export-default": 66,
+        "function-expression:this-arguments-new": 8,
+        "function-expression:generator": 3,
+        "not-reported:overloads": 20
+      },
+      "newReferences": {
+        "total": 1216,
+        "byClass": {
+          "deferred": 1187,
+          "tdz-module-evaluation": 14,
+          "deferred-maybe-module-evaluation": 12,
+          "tdz-same-scope": 3
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 1187,
+          "hoisted-function-same-context -> tdz-module-evaluation": 14,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 12,
+          "hoisted-function-same-context -> tdz-same-scope": 3
+        },
+        "alreadyCandidates": 1216,
+        "crashAtImport": 14,
+        "crashWhenCalled": 3,
+        "crashAtImportFiles": 9,
+        "crashWhenCalledFiles": 2,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "packages/next/src/build/swc/index.ts",
+            "line": 1154,
+            "moduleBinding": false,
+            "name": "serializeConfigItem",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/swc/index.ts#L1154"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/client/components/links.ts",
+            "line": 124,
+            "moduleBinding": true,
+            "name": "handleIntersect",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/links.ts#L124"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+            "line": 179,
+            "moduleBinding": true,
+            "name": "getResolvedParallelMetadataImpl",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata-parallel.tsx#L179"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+            "line": 222,
+            "moduleBinding": true,
+            "name": "resolveMetadataResolutionImpl",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata-parallel.tsx#L222"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/lib/metadata/metadata.tsx",
+            "line": 174,
+            "moduleBinding": true,
+            "name": "getResolvedMetadataImpl",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata.tsx#L174"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/lib/metadata/metadata.tsx",
+            "line": 194,
+            "moduleBinding": true,
+            "name": "getNotFoundMetadataImpl",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata.tsx#L194"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/lib/metadata/metadata.tsx",
+            "line": 213,
+            "moduleBinding": true,
+            "name": "getResolvedViewportImpl",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata.tsx#L213"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/next/src/lib/metadata/metadata.tsx",
+            "line": 224,
+            "moduleBinding": true,
+            "name": "getNotFoundViewportImpl",
+            "sameContext": true,
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata.tsx#L224"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 3993,
+          "ubd": 1396,
+          "ubdFiles": 205
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 1396,
+          "ubdFiles": 205
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 63,
+          "ubdFiles": 26
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 208,
+        "filesUnsolvable": 26,
+        "filesSolvable": 182,
+        "lists": 224,
+        "listsByKind": {
+          "module": 196,
+          "function-body": 26,
+          "BlockStatement": 2
+        },
+        "unsolvableLists": 27,
+        "unsolvableByReason": {
+          "mutual-recursion": 15,
+          "evaluation-order": 12
+        },
+        "movedStatements": 627,
+        "movedLines": 16248,
+        "movedStatementsBestEffort": 195,
+        "movedLinesBestEffort": 9762,
+        "residualReferences": 49,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/next/src/build/webpack/plugins/slow-module-detection-plugin.ts",
+            "line": 156,
+            "names": [
+              "formatModuleNode",
+              "formatChildModules"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/build/webpack/plugins/slow-module-detection-plugin.ts#L156",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/next/src/client/app-dir/link.tsx",
+            "line": 1,
+            "names": [
+              "ExportDefaultDeclaration",
+              "LinkStatusContext"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/app-dir/link.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/next/src/client/components/app-router-instance.ts",
+            "line": 1,
+            "names": [
+              "runRemainingActions",
+              "runAction"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/next/src/client/components/segment-cache/cache-map.ts",
+            "line": 1,
+            "names": [
+              "setMapEntryValue",
+              "deleteMapEntry"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/cache-map.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/next/src/client/components/segment-cache/cache.ts",
+            "line": 1,
+            "names": [
+              "fetchAndWritePerSegmentPrefetchResponse",
+              "retryUpgradeableFallbackPrefetch"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/cache.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/next/src/client/components/segment-cache/scheduler.ts",
+            "line": 1,
+            "names": [
+              "pingPrefetchScheduler",
+              "spawnPrefetchSubtask",
+              "onPrefetchConnectionClosed",
+              "processQueueInMicrotask",
+              "pingRoute",
+              "pingRootRouteTree"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/segment-cache/scheduler.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/next/src/client/index.tsx",
+            "line": 1,
+            "names": [
+              "AppContainer",
+              "wrapApp",
+              "renderError",
+              "doRender"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/index.tsx#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+            "line": 1,
+            "names": [
+              "getResolvedParallelMetadata",
+              "getResolvedParallelMetadataImpl",
+              "getMetadataResolution",
+              "getMetadataForBranch"
+            ],
+            "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/lib/metadata/metadata-parallel.tsx#L1",
+            "reason": "evaluation-order"
+          }
+        ]
+      },
+      "typecheck": {
+        "before": 3550,
+        "beforeUnresolved": 923,
+        "converted": {
+          "added": 86,
+          "byCode": {
+            "1360": 4,
+            "2322": 2,
+            "2339": 2,
+            "2345": 4,
+            "2366": 10,
+            "2448": 17,
+            "2454": 18,
+            "2722": 2,
+            "18046": 1,
+            "18047": 1,
+            "18048": 25
+          },
+          "examples": [
+            {
+              "code": 2448,
+              "file": "packages/next/src/build/swc/index.ts",
+              "line": 1154,
+              "message": "Block-scoped variable 'serializeConfigItem' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/next/src/build/swc/index.ts",
+              "line": 1154,
+              "message": "Variable 'serializeConfigItem' is used before being assigned."
+            },
+            {
+              "code": 2454,
+              "file": "packages/next/src/build/swc/index.ts",
+              "line": 1266,
+              "message": "Variable 'route' is used before being assigned."
+            },
+            {
+              "code": 18046,
+              "file": "packages/next/src/cli/next-request-insights.ts",
+              "line": 67,
+              "message": "'data' is of type 'unknown'."
+            },
+            {
+              "code": 2448,
+              "file": "packages/next/src/client/components/links.ts",
+              "line": 124,
+              "message": "Block-scoped variable 'handleIntersect' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/next/src/client/components/links.ts",
+              "line": 124,
+              "message": "Variable 'handleIntersect' is used before being assigned."
+            },
+            {
+              "code": 2339,
+              "file": "packages/next/src/export/helpers/get-params.ts",
+              "line": 24,
+              "message": "Property 'page' does not exist on type 'never'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/next/src/export/helpers/get-params.ts",
+              "line": 25,
+              "message": "Property 'matcher' does not exist on type 'never'."
+            },
+            {
+              "code": 2448,
+              "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+              "line": 179,
+              "message": "Block-scoped variable 'getResolvedParallelMetadataImpl' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+              "line": 179,
+              "message": "Variable 'getResolvedParallelMetadataImpl' is used before being assigned."
+            },
+            {
+              "code": 2448,
+              "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+              "line": 222,
+              "message": "Block-scoped variable 'resolveMetadataResolutionImpl' used before its declaration."
+            },
+            {
+              "code": 2454,
+              "file": "packages/next/src/lib/metadata/metadata-parallel.tsx",
+              "line": 222,
+              "message": "Variable 'resolveMetadataResolutionImpl' is used before being assigned."
+            }
+          ],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 54,
+          "byCode": {
+            "1360": 4,
+            "2322": 2,
+            "2339": 2,
+            "2345": 4,
+            "2366": 10,
+            "2391": 1,
+            "2454": 1,
+            "2722": 2,
+            "18046": 1,
+            "18047": 1,
+            "18048": 26
+          },
+          "examples": [
+            {
+              "code": 2454,
+              "file": "packages/next/src/build/swc/index.ts",
+              "line": 901,
+              "message": "Variable 'route' is used before being assigned."
+            },
+            {
+              "code": 18046,
+              "file": "packages/next/src/cli/next-request-insights.ts",
+              "line": 179,
+              "message": "'data' is of type 'unknown'."
+            },
+            {
+              "code": 18048,
+              "file": "packages/next/src/client/components/app-router.tsx",
+              "line": 247,
+              "message": "'runtimeStyleChanged' is possibly 'undefined'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/next/src/export/helpers/get-params.ts",
+              "line": 24,
+              "message": "Property 'page' does not exist on type 'never'."
+            },
+            {
+              "code": 2339,
+              "file": "packages/next/src/export/helpers/get-params.ts",
+              "line": 25,
+              "message": "Property 'matcher' does not exist on type 'never'."
+            },
+            {
+              "code": 18047,
+              "file": "packages/next/src/lib/verify-typescript-setup.ts",
+              "line": 223,
+              "message": "'typeScriptPackage' is possibly 'null'."
+            },
+            {
+              "code": 2322,
+              "file": "packages/next/src/lib/verify-typescript-setup.ts",
+              "line": 267,
+              "message": "Type 'string | undefined' is not assignable to type 'string'.   Type 'undefined' is not assignable to type 'string'."
+            },
+            {
+              "code": 2345,
+              "file": "packages/next/src/lib/verify-typescript-setup.ts",
+              "line": 280,
+              "message": "Argument of type 'string | undefined' is not assignable to parameter of type 'string'.   Type 'undefined' is not assignable to type 'string'."
+            },
+            {
+              "code": 2722,
+              "file": "packages/next/src/server/after/after-context.ts",
+              "line": 96,
+              "message": "Cannot invoke an object which is possibly 'undefined'."
+            },
+            {
+              "code": 2722,
+              "file": "packages/next/src/server/after/after-context.ts",
+              "line": 130,
+              "message": "Cannot invoke an object which is possibly 'undefined'."
+            },
+            {
+              "code": 18048,
+              "file": "packages/next/src/server/app-render/dynamic-rendering-client.ts",
+              "line": 93,
+              "message": "'workUnitStore' is possibly 'undefined'."
+            },
+            {
+              "code": 1360,
+              "file": "packages/next/src/server/app-render/dynamic-rendering-client.ts",
+              "line": 137,
+              "message": "Type 'WorkUnitStore | undefined' does not satisfy the expected type 'never'.   Type 'undefined' is not assignable to type 'never'."
+            }
+          ],
+          "removed": 0
+        },
+        "seconds": 615,
+        "tsconfig": "packages/next/tsconfig.json"
+      },
+      "seconds": 636
+    },
+    "vscode": {
+      "convertedFiles": 100,
+      "decisions": {
+        "arrow": 416,
+        "not-reported:overloads": 3
+      },
+      "newReferences": {
+        "total": 326,
+        "byClass": {
+          "deferred": 326
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 326
+        },
+        "alreadyCandidates": 326,
+        "crashAtImport": 0,
+        "crashWhenCalled": 0,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 0,
+        "examples": []
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 416,
+          "ubd": 628,
+          "ubdFiles": 72
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 628,
+          "ubdFiles": 72
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 27,
+          "ubdFiles": 7
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 72,
+        "filesUnsolvable": 7,
+        "filesSolvable": 65,
+        "lists": 74,
+        "listsByKind": {
+          "module": 72,
+          "TSModuleBlock": 1,
+          "function-body": 1
+        },
+        "unsolvableLists": 7,
+        "unsolvableByReason": {
+          "evaluation-order": 4,
+          "mutual-recursion": 3
+        },
+        "movedStatements": 292,
+        "movedLines": 6440,
+        "movedStatementsBestEffort": 26,
+        "movedLinesBestEffort": 789,
+        "residualReferences": 12,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "src/vs/editor/common/core/edits/lineEdit.ts",
+            "line": 1,
+            "names": [
+              "LineEdit",
+              "LineReplacement"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/lineEdit.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "src/vs/editor/common/core/edits/stringEdit.ts",
+            "line": 1,
+            "names": [
+              "BaseStringEdit",
+              "BaseStringReplacement",
+              "StringEdit",
+              "ISerializedStringEdit",
+              "ISerializedStringReplacement",
+              "StringReplacement"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/stringEdit.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "src/vs/editor/common/core/edits/textEdit.ts",
+            "line": 1,
+            "names": [
+              "TextEdit",
+              "TextReplacement"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/core/edits/textEdit.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "src/vs/editor/common/languages/supports/tokenization.ts",
+            "line": 1,
+            "names": [
+              "resolveParsedTokenThemeRules",
+              "TokenTheme"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/languages/supports/tokenization.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "src/vs/editor/common/model/pieceTreeTextBuffer/rbTreeBase.ts",
+            "line": 1,
+            "names": [
+              "TreeNode",
+              "SENTINEL",
+              "leftest",
+              "righttest"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/pieceTreeTextBuffer/rbTreeBase.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "src/vs/editor/common/tokens/lineTokens.ts",
+            "line": 1,
+            "names": [
+              "LineTokens",
+              "TokenArray",
+              "TokenArrayBuilder"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/tokens/lineTokens.ts#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "src/vs/editor/common/viewModel/modelLineProjection.ts",
+            "line": 1,
+            "names": [
+              "IdentityModelLineProjection",
+              "HiddenModelLineProjection"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/viewModel/modelLineProjection.ts#L1",
+            "reason": "evaluation-order"
+          }
+        ]
+      },
+      "typecheck": {
+        "before": 771,
+        "beforeUnresolved": 452,
+        "converted": {
+          "added": 0,
+          "byCode": {},
+          "examples": [],
+          "removed": 0
+        },
+        "reordered": {
+          "added": 0,
+          "byCode": {},
+          "examples": [],
+          "removed": 0
+        },
+        "seconds": 905,
+        "tsconfig": "src/tsconfig.base.json"
+      },
+      "seconds": 1980
+    },
+    "shadcn": {
+      "convertedFiles": 135,
+      "decisions": {
+        "arrow": 412,
+        "not-reported:export-default": 27
+      },
+      "newReferences": {
+        "total": 10,
+        "byClass": {
+          "deferred": 10
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 10
+        },
+        "alreadyCandidates": 10,
+        "crashAtImport": 0,
+        "crashWhenCalled": 0,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 0,
+        "examples": []
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 412,
+          "ubd": 12,
+          "ubdFiles": 8
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 12,
+          "ubdFiles": 8
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 1,
+          "ubdFiles": 1
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 8,
+        "filesUnsolvable": 1,
+        "filesSolvable": 7,
+        "lists": 8,
+        "listsByKind": {
+          "module": 8
+        },
+        "unsolvableLists": 1,
+        "unsolvableByReason": {
+          "evaluation-order": 1
+        },
+        "movedStatements": 10,
+        "movedLines": 227,
+        "movedStatementsBestEffort": 0,
+        "movedLinesBestEffort": 0,
+        "residualReferences": 0,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "apps/v4/registry/new-york-v4/blocks/dashboard-01/components/data-table.tsx",
+            "line": 1,
+            "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/dashboard-01/components/data-table.tsx#L1",
+            "reason": "evaluation-order"
+          }
+        ]
+      },
+      "typecheck": null,
+      "seconds": 2
+    },
+    "radix": {
+      "convertedFiles": 52,
+      "decisions": {
+        "arrow": 218,
+        "not-reported:overloads": 4
+      },
+      "newReferences": {
+        "total": 273,
+        "byClass": {
+          "deferred": 153,
+          "deferred-maybe-module-evaluation": 119,
+          "tdz-module-evaluation": 1
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 153,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 119,
+          "hoisted-function-same-context -> tdz-module-evaluation": 1
+        },
+        "alreadyCandidates": 273,
+        "crashAtImport": 1,
+        "crashWhenCalled": 0,
+        "crashAtImportFiles": 1,
+        "crashWhenCalledFiles": 0,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-module-evaluation",
+            "file": "packages/react/focus-scope/src/focus-scope.tsx",
+            "line": 442,
+            "moduleBinding": true,
+            "name": "createFocusScopesStack",
+            "sameContext": true,
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/focus-scope/src/focus-scope.tsx#L442"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 218,
+          "ubd": 400,
+          "ubdFiles": 37
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 400,
+          "ubdFiles": 37
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 126,
+          "ubdFiles": 22
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 37,
+        "filesUnsolvable": 20,
+        "filesSolvable": 17,
+        "lists": 43,
+        "listsByKind": {
+          "module": 37,
+          "function-body": 6
+        },
+        "unsolvableLists": 22,
+        "unsolvableByReason": {
+          "evaluation-order": 22
+        },
+        "movedStatements": 89,
+        "movedLines": 810,
+        "movedStatementsBestEffort": 190,
+        "movedLinesBestEffort": 1294,
+        "residualReferences": 78,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/react/accordion/src/accordion.tsx",
+            "line": 1,
+            "names": [
+              "Accordion",
+              "AccordionValueContextValue",
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "AccordionImplSingleElement",
+              "AccordionImplSingleProps"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/accordion/src/accordion.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/checkbox/src/checkbox.tsx",
+            "line": 1,
+            "names": [
+              "Checkbox",
+              "CheckboxIndicatorElement",
+              "PrimitiveSpanProps",
+              "CheckboxIndicatorProps",
+              "CheckboxIndicator",
+              "InputProps"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/checkbox/src/checkbox.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/collapsible/src/collapsible.tsx",
+            "line": 1,
+            "names": [
+              "CollapsibleContent",
+              "CollapsibleContentImplElement",
+              "CollapsibleContentImplProps",
+              "CollapsibleContentImpl"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/collapsible/src/collapsible.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/dialog/src/dialog.tsx",
+            "line": 1,
+            "names": [
+              "DialogOverlay",
+              "DialogOverlayImplElement",
+              "PrimitiveDivProps",
+              "DialogOverlayImplProps",
+              "Slot",
+              "DialogOverlayImpl"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/dialog/src/dialog.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/focus-scope/src/focus-scope.tsx",
+            "line": 1,
+            "names": [
+              "FocusScope",
+              "FocusScopeBranchRegistry",
+              "FocusScopeBranchContext",
+              "FocusScopeBranchProviderProps",
+              "FocusScopeAPI",
+              "focusScopesStack"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/focus-scope/src/focus-scope.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/form/src/form.tsx",
+            "line": 1,
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/form/src/form.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/form/src/form.tsx",
+            "line": 58,
+            "names": [
+              "handleFieldValiditionClear",
+              "VariableDeclaration",
+              "getFieldCustomMatcherEntries",
+              "handleFieldCustomMatcherAdd",
+              "handleFieldCustomMatcherRemove",
+              "VariableDeclaration"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/form/src/form.tsx#L58",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react/hover-card/src/hover-card.tsx",
+            "line": 1,
+            "names": [
+              "HoverCardContent",
+              "HoverCardContentImplElement",
+              "DismissableLayerProps",
+              "PopperContentProps",
+              "HoverCardContentImplProps",
+              "HoverCardContentImpl"
+            ],
+            "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/hover-card/src/hover-card.tsx#L1",
+            "reason": "evaluation-order"
+          }
+        ]
+      },
+      "typecheck": null,
+      "seconds": 8
+    },
+    "react-aria": {
+      "convertedFiles": 30,
+      "decisions": {
+        "arrow": 102
+      },
+      "newReferences": {
+        "total": 67,
+        "byClass": {
+          "deferred": 44,
+          "deferred-maybe-module-evaluation": 23
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 44,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 23
+        },
+        "alreadyCandidates": 67,
+        "crashAtImport": 0,
+        "crashWhenCalled": 0,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 0,
+        "examples": []
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 102,
+          "ubd": 102,
+          "ubdFiles": 21
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 102,
+          "ubdFiles": 21
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 49,
+          "ubdFiles": 11
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 21,
+        "filesUnsolvable": 11,
+        "filesSolvable": 10,
+        "lists": 21,
+        "listsByKind": {
+          "module": 21
+        },
+        "unsolvableLists": 11,
+        "unsolvableByReason": {
+          "evaluation-order": 11
+        },
+        "movedStatements": 45,
+        "movedLines": 799,
+        "movedStatementsBestEffort": 20,
+        "movedLinesBestEffort": 1144,
+        "residualReferences": 37,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "packages/react-aria-components/src/Calendar.tsx",
+            "line": 1,
+            "names": [
+              "CalendarGrid",
+              "CalendarGridHeaderProps",
+              "CalendarGridHeaderForwardRef",
+              "CalendarHeaderCellProps",
+              "CalendarHeaderCellForwardRef",
+              "CalendarGridBodyProps"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Calendar.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/Checkbox.tsx",
+            "line": 1,
+            "names": [
+              "Checkbox",
+              "CheckboxButton"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Checkbox.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/ComboBox.tsx",
+            "line": 1,
+            "names": [
+              "ComboBox",
+              "ComboBoxInnerProps",
+              "ComboBoxInner",
+              "ComboBoxValueRenderProps",
+              "ComboBoxValueProps",
+              "ComboBoxValueContext"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ComboBox.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/GridList.tsx",
+            "line": 1,
+            "names": [
+              "GridList",
+              "GridListInnerProps",
+              "GridListInner",
+              "GridListItemRenderProps",
+              "GridListItemProps",
+              "GridListItem"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/GridList.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/ListBox.tsx",
+            "line": 1,
+            "names": [
+              "ListBox",
+              "StandaloneListBox",
+              "ListBoxInnerProps",
+              "ListBoxInner",
+              "ListBoxSectionProps",
+              "ListBoxSection"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/ListBox.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/Menu.tsx",
+            "line": 1,
+            "names": [
+              "SubmenuTrigger",
+              "MenuRenderProps",
+              "MenuProps",
+              "Menu",
+              "MenuInnerProps",
+              "MenuInner"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Menu.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/Modal.tsx",
+            "line": 1,
+            "names": [
+              "Modal",
+              "ModalOverlayInnerProps",
+              "ModalOverlay"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Modal.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "packages/react-aria-components/src/Select.tsx",
+            "line": 1,
+            "names": [
+              "Select",
+              "SelectInnerProps",
+              "SelectInner",
+              "SelectValueRenderProps",
+              "SelectValueProps",
+              "SelectValueContext"
+            ],
+            "permalink": "https://github.com/adobe/react-spectrum/blob/8e76acfbc6aef833bfb8495a29dc93b6ac7c7b6c/packages/react-aria-components/src/Select.tsx#L1",
+            "reason": "evaluation-order"
+          }
+        ]
+      },
+      "typecheck": null,
+      "seconds": 5
+    },
+    "supabase": {
+      "convertedFiles": 728,
+      "decisions": {
+        "arrow": 1527,
+        "not-reported:export-default": 21
+      },
+      "newReferences": {
+        "total": 305,
+        "byClass": {
+          "deferred": 293,
+          "deferred-maybe-module-evaluation": 7,
+          "tdz-same-scope": 5
+        },
+        "byBeforeAndAfter": {
+          "hoisted-function-deferred -> deferred": 293,
+          "hoisted-function-deferred -> deferred-maybe-module-evaluation": 7,
+          "hoisted-function-same-context -> tdz-same-scope": 5
+        },
+        "alreadyCandidates": 305,
+        "crashAtImport": 0,
+        "crashWhenCalled": 5,
+        "crashAtImportFiles": 0,
+        "crashWhenCalledFiles": 5,
+        "examples": [
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "apps/studio/components/interfaces/Organization/BillingSettings/Subscription/UpgradeModal.tsx",
+            "line": 38,
+            "moduleBinding": false,
+            "name": "reducer",
+            "sameContext": true,
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/BillingSettings/Subscription/UpgradeModal.tsx#L38"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "apps/studio/components/interfaces/Settings/Logs/LogsPreviewer.tsx",
+            "line": 74,
+            "moduleBinding": false,
+            "name": "getDefaultDatePickerValue",
+            "sameContext": true,
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/LogsPreviewer.tsx#L74"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "apps/studio/components/ui/DataTable/DataTableColumn/DataTableColumnStatusCode.tsx",
+            "line": 13,
+            "moduleBinding": false,
+            "name": "getStatusColor",
+            "sameContext": true,
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/DataTableColumn/DataTableColumnStatusCode.tsx#L13"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "apps/studio/components/ui/DataTable/LiveButton.tsx",
+            "line": 22,
+            "moduleBinding": false,
+            "name": "handleClick",
+            "sameContext": true,
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/LiveButton.tsx#L22"
+          },
+          {
+            "before": "hoisted-function-same-context",
+            "cls": "tdz-same-scope",
+            "file": "apps/studio/pages/project/[ref]/observability/connections.tsx",
+            "line": 33,
+            "moduleBinding": false,
+            "name": "handleToggleLive",
+            "sameContext": true,
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/pages/project/[ref]/observability/connections.tsx#L33"
+          }
+        ]
+      },
+      "oxlint": {
+        "original": {
+          "funcStyle": 1525,
+          "ubd": 512,
+          "ubdFiles": 196
+        },
+        "converted": {
+          "funcStyle": 0,
+          "ubd": 512,
+          "ubdFiles": 196
+        },
+        "reordered": {
+          "funcStyle": 0,
+          "ubd": 25,
+          "ubdFiles": 11
+        },
+        "filesWhereUbdRose": 0
+      },
+      "parseFailures": [],
+      "reorder": {
+        "filesWithReports": 196,
+        "filesUnsolvable": 11,
+        "filesSolvable": 185,
+        "lists": 197,
+        "listsByKind": {
+          "module": 179,
+          "function-body": 18
+        },
+        "unsolvableLists": 11,
+        "unsolvableByReason": {
+          "evaluation-order": 10,
+          "mutual-recursion": 1
+        },
+        "movedStatements": 369,
+        "movedLines": 5270,
+        "movedStatementsBestEffort": 10,
+        "movedLinesBestEffort": 129,
+        "residualReferences": 20,
+        "remainingTdzAfterReorder": 0,
+        "unsolvableExamples": [
+          {
+            "file": "apps/studio/components/interfaces/Auth/Users/Users.utils.tsx",
+            "line": 1,
+            "names": [
+              "FormattedUserRow",
+              "formatUsersData",
+              "providerIconMap",
+              "socialProviders",
+              "phoneProviders"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Users/Users.utils.tsx#L1",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/interfaces/Explorer/NotebookPdf/NotebookPdfMarkdown.tsx",
+            "line": 1,
+            "names": [
+              "mapListItem",
+              "mapBlock"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Explorer/NotebookPdf/NotebookPdfMarkdown.tsx#L1",
+            "reason": "mutual-recursion"
+          },
+          {
+            "file": "apps/studio/components/interfaces/Organization/NewOrg/NewOrgForm.tsx",
+            "line": 99,
+            "names": [
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "onOrganizationCreated",
+              "stripeOptionsConfirm",
+              "submittedTier"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/NewOrg/NewOrgForm.tsx#L99",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/interfaces/Organization/PrivateApps/Apps/AppsList/AppsList.tsx",
+            "line": 25,
+            "names": [
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "VariableDeclaration"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Organization/PrivateApps/Apps/AppsList/AppsList.tsx#L25",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/interfaces/Settings/General/DeleteProjectPanel/DeleteProjectModal.tsx",
+            "line": 32,
+            "names": [
+              "VariableDeclaration",
+              "VariableDeclaration"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/General/DeleteProjectPanel/DeleteProjectModal.tsx#L32",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/interfaces/Settings/Logs/Logs.DatePickers.tsx",
+            "line": 73,
+            "names": [
+              "ExpressionStatement",
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "VariableDeclaration",
+              "VariableDeclaration"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Settings/Logs/Logs.DatePickers.tsx#L73",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/interfaces/Storage/FilesBuckets/PublicBucketWarning.tsx",
+            "line": 49,
+            "names": [
+              "VariableDeclaration",
+              "VariableDeclaration"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Storage/FilesBuckets/PublicBucketWarning.tsx#L49",
+            "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/ui/DataTable/primitives/Sortable.tsx",
+            "line": 1,
+            "names": [
+              "SortableOverlay",
+              "ExpressionStatement",
+              "SortableItemContextProps",
+              "SortableItemContext",
+              "SortableItemProps",
+              "SortableItem"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/primitives/Sortable.tsx#L1",
+            "reason": "evaluation-order"
+          }
+        ]
+      },
+      "typecheck": null,
+      "seconds": 996
+    }
+  },
+  "tools": {
+    "node": "v24.14.1",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "eslint": "10.13.0",
+    "@eslint/js": "10.0.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/typescript-estree": "8.72.0",
+    "eslint-plugin-sonarjs (ESLint)": "4.2.2",
+    "eslint-plugin-sonarjs (Oxlint JS plugin)": "4.2.2",
+    "eslint-plugin-unicorn": "79.0.0",
+    "eslint-plugin-unused-imports": "4.4.1",
+    "eslint-plugin-import-x": "4.17.1",
+    "@biomejs/biome": "2.6.3",
+    "typescript": "6.0.3",
+    "@typescript-eslint/typescript-estree (inventory parser)": "8.72.0",
+    "git": "2.54.0 (Apple Git-157)",
+    "eslint-plugin-sonarjs (ESLint, packages/cli)": "4.2.2",
+    "oxfmt": "0.74.0"
+  }
+}

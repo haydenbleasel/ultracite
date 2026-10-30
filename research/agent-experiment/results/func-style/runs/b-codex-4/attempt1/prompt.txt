@@ -1,0 +1,32 @@
+Fix the lint issues below in a single file. They were reported by Ultracite and could not be fixed automatically.
+
+File: <run-root>/b-codex-4/ConfigurationDriftPage.utils.ts
+
+Issues:
+1. line 68, col 8 — func-style: Expected a function expression.
+2. line 75, col 19 — no-use-before-define: 'getConfigFieldLabel' was used before it was defined.
+3. line 77, col 16 — no-use-before-define: 'createConfigurationDriftValueDiff' was used before it was defined.
+4. line 81, col 8 — func-style: Expected a function expression.
+5. line 84, col 10 — no-use-before-define: 'groupConfigFieldsBySection' was used before it was defined.
+6. line 87, col 8 — func-style: Expected a function expression.
+7. line 90, col 10 — no-use-before-define: 'groupConfigFieldsBySection' was used before it was defined.
+8. line 93, col 1 — func-style: Expected a function expression.
+9. line 102, col 14 — no-use-before-define: 'getConfigFieldLabel' was used before it was defined.
+10. line 103, col 14 — no-use-before-define: 'formatConfigFieldValue' was used before it was defined.
+11. line 117, col 1 — func-style: Expected a function expression.
+12. line 130, col 39 — no-use-before-define: 'formatScalarValue' was used before it was defined.
+13. line 133, col 10 — no-use-before-define: 'formatScalarValue' was used before it was defined.
+14. line 136, col 1 — func-style: Expected a function expression.
+15. line 150, col 1 — func-style: Expected a function expression.
+16. line 155, col 1 — func-style: Expected a function expression.
+
+Full diagnostics (JSON, including rule help text, documentation URLs, and source spans) are at: <run-root>/b-codex-4/ConfigurationDriftPage.utils.ts.83222f3f.json
+
+Rules:
+- Edit only the file above. Do not create, delete, or modify any other file.
+- Make the minimal change that resolves each issue while preserving runtime behavior.
+- Fix the underlying problem — the file is re-linted after your edit, and a diagnostic that still fires is a failed fix. Restyling the flagged code (renaming, re-spelling escapes, equivalent syntax) will not clear it; rework the code so the rule genuinely no longer applies.
+- Follow the rule's help text from the JSON file where provided.
+- Do not add suppression comments (// oxlint-disable, // eslint-disable, // biome-ignore) or change lint configuration.
+- Do not reformat unrelated code.
+- This run is non-interactive: nobody can answer a question or approve a step. Don't ask for input or wait for a reply. If an issue needs a person's decision, leave it, explain why in your final message, and end the message with a line listing the numbers of the issues you left, like `Left for review: 2, 3`.

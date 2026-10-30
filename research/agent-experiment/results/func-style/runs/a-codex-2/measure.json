@@ -1,0 +1,1491 @@
+{
+  "runId": "a-codex-2",
+  "topic": "func-style",
+  "subject": "a",
+  "base": "a",
+  "label": "A, converts cleanly",
+  "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.164.0",
+  "wallSeconds": 50,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 11,
+    "leftOutByFilter": {
+      "no-inline-comments": 6
+    },
+    "given": [
+      {
+        "rule": "func-style",
+        "line": 62,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 85,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 105,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 117,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 128,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "0597be808c6ca867259d561a4ad58b03deef190814e079bcef1814a9d2e7ec5a",
+    "parseError": false,
+    "views": {
+      "oxlint": {
+        "topicHonor": {
+          "func-style": 5
+        },
+        "topicIgnore": {
+          "func-style": 5
+        },
+        "topicHits": [
+          "func-style L62: Expected a function expression.",
+          "func-style L85: Expected a function expression.",
+          "func-style L105: Expected a function expression.",
+          "func-style L117: Expected a function expression.",
+          "func-style L128: Expected a function expression."
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 5,
+          "no-inline-comments": 6
+        }
+      },
+      "oxlint ubd functions:false": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "oxlint ubd variables:false": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "eslint": {
+        "topicHonor": {
+          "func-style": 5
+        },
+        "topicIgnore": {
+          "func-style": 5
+        },
+        "topicHits": [
+          "func-style L62: Expected a function expression.",
+          "func-style L85: Expected a function expression.",
+          "func-style L105: Expected a function expression.",
+          "func-style L117: Expected a function expression.",
+          "func-style L128: Expected a function expression."
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 5,
+          "no-inline-comments": 6,
+          "unicorn/no-useless-else": 2
+        }
+      },
+      "eslint ubd functions:false": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "eslint ubd variables:false": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "eslint base ubd": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "biome": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {
+          "style/noUselessElse": 5
+        }
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "func-style L62: Expected a function expression.",
+        "func-style L85: Expected a function expression.",
+        "func-style L105: Expected a function expression.",
+        "func-style L117: Expected a function expression.",
+        "func-style L128: Expected a function expression."
+      ],
+      "ignore": [
+        "func-style L62: Expected a function expression.",
+        "func-style L85: Expected a function expression.",
+        "func-style L105: Expected a function expression.",
+        "func-style L117: Expected a function expression.",
+        "func-style L128: Expected a function expression."
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "funcStyleLeft": 5,
+    "ubdLeft": 0,
+    "fileLines": 131,
+    "typeErrors": [],
+    "tdzTypeErrors": [],
+    "oracle": {
+      "verdict": "same",
+      "calls": 865,
+      "differing": null,
+      "detail": null,
+      "ignoringKeyOrder": "same",
+      "differingIgnoringKeyOrder": null,
+      "importOk": true,
+      "importError": null,
+      "exportNames": [
+        [
+          "durationToString",
+          "function",
+          "durationToString",
+          1
+        ],
+        [
+          "hrtimeBigIntDurationToString",
+          "function",
+          "hrtimeBigIntDurationToString",
+          1
+        ],
+        [
+          "hrtimeDurationToString",
+          "function",
+          "hrtimeDurationToString",
+          1
+        ],
+        [
+          "hrtimeToSeconds",
+          "function",
+          "hrtimeToSeconds",
+          1
+        ]
+      ],
+      "exportNamesSame": true
+    },
+    "facts": {
+      "order": [
+        "durationToString",
+        "durationToStringWithNanoseconds",
+        "hrtimeToSeconds",
+        "hrtimeBigIntDurationToString",
+        "hrtimeDurationToString"
+      ],
+      "forms": [
+        "durationToString: declaration, block",
+        "durationToStringWithNanoseconds: declaration, block",
+        "hrtimeToSeconds: declaration, block, single return",
+        "hrtimeBigIntDurationToString: declaration, block, single return",
+        "hrtimeDurationToString: declaration, block, single return"
+      ],
+      "direction": "bottom-up",
+      "referencesDown": 0,
+      "referencesUp": 3,
+      "referencesBeforeDefinition": 0,
+      "namesUsedBeforeDefinition": [],
+      "loadTimeBeforeDefinition": 0,
+      "holders": [],
+      "nested": []
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": []
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "func-style L62: Expected a function expression.",
+        "func-style L85: Expected a function expression.",
+        "func-style L105: Expected a function expression.",
+        "func-style L117: Expected a function expression.",
+        "func-style L128: Expected a function expression."
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 50,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "converted (arrows), nothing moved",
+        "kinds": [
+          "converted",
+          "const arrows"
+        ],
+        "restructured": [],
+        "conversion": {
+          "arrows": 5,
+          "functionExpressions": 0,
+          "declarations": 0,
+          "methods": 0,
+          "nested": 0,
+          "gone": 0,
+          "forward": 0,
+          "var": 0,
+          "let": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "perFunction": [
+          {
+            "name": "durationToString",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block",
+            "body": "block",
+            "madeConcise": null,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "none",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "kept",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 10
+          },
+          {
+            "name": "durationToStringWithNanoseconds",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block",
+            "body": "block",
+            "madeConcise": null,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "kept",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": false,
+            "exported": false,
+            "linesNow": 13
+          },
+          {
+            "name": "hrtimeToSeconds",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "kept",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 4
+          },
+          {
+            "name": "hrtimeBigIntDurationToString",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "none",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "kept",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 3
+          },
+          {
+            "name": "hrtimeDurationToString",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "kept",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 3
+          }
+        ],
+        "diff": {
+          "removed": 10,
+          "added": 10
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "343ae744ab62e04b12aacd16794e536be2d0989d672ffe0153bc6d1c03a70fad",
+        "parseError": false,
+        "views": {
+          "oxlint": {
+            "topicHonor": {
+              "arrow-body-style": 3
+            },
+            "topicIgnore": {
+              "arrow-body-style": 3
+            },
+            "topicHits": [
+              "arrow-body-style L105: Unexpected block statement surrounding arrow body.",
+              "arrow-body-style L117: Unexpected block statement surrounding arrow body.",
+              "arrow-body-style L128: Unexpected block statement surrounding arrow body."
+            ],
+            "parseError": false,
+            "all": {
+              "arrow-body-style": 3,
+              "no-inline-comments": 6
+            }
+          },
+          "oxlint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "oxlint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint": {
+            "topicHonor": {
+              "arrow-body-style": 3,
+              "unicorn/consistent-arrow-return-style": 3
+            },
+            "topicIgnore": {
+              "arrow-body-style": 3,
+              "unicorn/consistent-arrow-return-style": 3
+            },
+            "topicHits": [
+              "arrow-body-style L105: Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "unicorn/consistent-arrow-return-style L105: Use an implicit return for a single-line return expression.",
+              "arrow-body-style L117: Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "unicorn/consistent-arrow-return-style L117: Use an implicit return for a single-line return expression.",
+              "arrow-body-style L128: Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "unicorn/consistent-arrow-return-style L128: Use an implicit return for a single-line return expression."
+            ],
+            "parseError": false,
+            "all": {
+              "arrow-body-style": 3,
+              "no-inline-comments": 6,
+              "unicorn/consistent-arrow-return-style": 3,
+              "unicorn/no-useless-else": 2
+            }
+          },
+          "eslint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint base ubd": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "biome": {
+            "topicHonor": {
+              "style/useConsistentArrowReturn": 2
+            },
+            "topicIgnore": {
+              "style/useConsistentArrowReturn": 2
+            },
+            "topicHits": [
+              "style/useConsistentArrowReturn L117: The body of this arrow function contains a single return statement.",
+              "style/useConsistentArrowReturn L128: The body of this arrow function contains a single return statement."
+            ],
+            "parseError": false,
+            "all": {
+              "style/noUselessElse": 5,
+              "style/useConsistentArrowReturn": 2
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "funcStyleLeft": 0,
+        "ubdLeft": 0,
+        "fileLines": 131,
+        "typeErrors": [],
+        "tdzTypeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "calls": 865,
+          "differing": null,
+          "detail": null,
+          "ignoringKeyOrder": "same",
+          "differingIgnoringKeyOrder": null,
+          "importOk": true,
+          "importError": null,
+          "exportNames": [
+            [
+              "durationToString",
+              "function",
+              "durationToString",
+              1
+            ],
+            [
+              "hrtimeBigIntDurationToString",
+              "function",
+              "hrtimeBigIntDurationToString",
+              1
+            ],
+            [
+              "hrtimeDurationToString",
+              "function",
+              "hrtimeDurationToString",
+              1
+            ],
+            [
+              "hrtimeToSeconds",
+              "function",
+              "hrtimeToSeconds",
+              1
+            ]
+          ],
+          "exportNamesSame": true
+        },
+        "facts": {
+          "order": [
+            "durationToString",
+            "durationToStringWithNanoseconds",
+            "hrtimeToSeconds",
+            "hrtimeBigIntDurationToString",
+            "hrtimeDurationToString"
+          ],
+          "forms": [
+            "durationToString: const arrow, block",
+            "durationToStringWithNanoseconds: const arrow, block",
+            "hrtimeToSeconds: const arrow, block, single return",
+            "hrtimeBigIntDurationToString: const arrow, block, single return",
+            "hrtimeDurationToString: const arrow, block, single return"
+          ],
+          "direction": "bottom-up",
+          "referencesDown": 0,
+          "referencesUp": 3,
+          "referencesBeforeDefinition": 0,
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "nested": []
+        },
+        "edit": {
+          "edit": "converted (arrows), nothing moved",
+          "kinds": [
+            "converted",
+            "const arrows"
+          ],
+          "restructured": [],
+          "conversion": {
+            "arrows": 5,
+            "functionExpressions": 0,
+            "declarations": 0,
+            "methods": 0,
+            "nested": 0,
+            "gone": 0,
+            "forward": 0,
+            "var": 0,
+            "let": 0
+          },
+          "perFunction": [
+            {
+              "name": "durationToString",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "none",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 10
+            },
+            {
+              "name": "durationToStringWithNanoseconds",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 13
+            },
+            {
+              "name": "hrtimeToSeconds",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 4
+            },
+            {
+              "name": "hrtimeBigIntDurationToString",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "none",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 3
+            },
+            {
+              "name": "hrtimeDurationToString",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 3
+            }
+          ],
+          "added": [],
+          "moved": {
+            "functions": [],
+            "lines": 0
+          },
+          "order": {
+            "given": [
+              "durationToString",
+              "durationToStringWithNanoseconds",
+              "hrtimeToSeconds",
+              "hrtimeBigIntDurationToString",
+              "hrtimeDurationToString"
+            ],
+            "now": [
+              "durationToString",
+              "durationToStringWithNanoseconds",
+              "hrtimeToSeconds",
+              "hrtimeBigIntDurationToString",
+              "hrtimeDurationToString"
+            ]
+          },
+          "direction": {
+            "given": "bottom-up",
+            "now": "bottom-up",
+            "down": 0,
+            "up": 3
+          },
+          "referencesBeforeDefinition": {
+            "given": 0,
+            "now": 0
+          },
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "newHolders": [],
+          "nestedNow": [],
+          "forwardDeclarations": [],
+          "lostComments": [],
+          "jsdocBlocks": {
+            "given": 5,
+            "now": 5
+          },
+          "diff": {
+            "removed": 10,
+            "added": 10
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint": {
+            "arrow-body-style": 3
+          },
+          "oxlint ubd functions:false": {},
+          "oxlint ubd variables:false": {},
+          "eslint": {
+            "arrow-body-style": 3,
+            "unicorn/consistent-arrow-return-style": 3
+          },
+          "eslint ubd functions:false": {},
+          "eslint ubd variables:false": {},
+          "eslint base ubd": {},
+          "biome": {
+            "style/useConsistentArrowReturn": 2
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "converted (arrows), nothing moved"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "07c02079021cb1fcc87d1982322c967847c7459f61aaac7dda6439889a5c859d",
+        "parseError": false,
+        "views": {
+          "oxlint": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {
+              "no-inline-comments": 6
+            }
+          },
+          "oxlint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "oxlint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {
+              "no-inline-comments": 6,
+              "unicorn/no-useless-else": 2
+            }
+          },
+          "eslint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint base ubd": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "biome": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {
+              "style/noUselessElse": 5
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "funcStyleLeft": 0,
+        "ubdLeft": 0,
+        "fileLines": 128,
+        "typeErrors": [],
+        "tdzTypeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "calls": 865,
+          "differing": null,
+          "detail": null,
+          "ignoringKeyOrder": "same",
+          "differingIgnoringKeyOrder": null,
+          "importOk": true,
+          "importError": null,
+          "exportNames": [
+            [
+              "durationToString",
+              "function",
+              "durationToString",
+              1
+            ],
+            [
+              "hrtimeBigIntDurationToString",
+              "function",
+              "hrtimeBigIntDurationToString",
+              1
+            ],
+            [
+              "hrtimeDurationToString",
+              "function",
+              "hrtimeDurationToString",
+              1
+            ],
+            [
+              "hrtimeToSeconds",
+              "function",
+              "hrtimeToSeconds",
+              1
+            ]
+          ],
+          "exportNamesSame": true
+        },
+        "facts": {
+          "order": [
+            "durationToString",
+            "durationToStringWithNanoseconds",
+            "hrtimeToSeconds",
+            "hrtimeBigIntDurationToString",
+            "hrtimeDurationToString"
+          ],
+          "forms": [
+            "durationToString: const arrow, block",
+            "durationToStringWithNanoseconds: const arrow, block",
+            "hrtimeToSeconds: const arrow, concise",
+            "hrtimeBigIntDurationToString: const arrow, concise",
+            "hrtimeDurationToString: const arrow, concise"
+          ],
+          "direction": "bottom-up",
+          "referencesDown": 0,
+          "referencesUp": 3,
+          "referencesBeforeDefinition": 0,
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "nested": []
+        },
+        "edit": {
+          "edit": "converted (arrows), nothing moved",
+          "kinds": [
+            "converted",
+            "const arrows",
+            "concise bodies"
+          ],
+          "restructured": [],
+          "conversion": {
+            "arrows": 5,
+            "functionExpressions": 0,
+            "declarations": 0,
+            "methods": 0,
+            "nested": 0,
+            "gone": 0,
+            "forward": 0,
+            "var": 0,
+            "let": 0
+          },
+          "perFunction": [
+            {
+              "name": "durationToString",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "none",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 10
+            },
+            {
+              "name": "durationToStringWithNanoseconds",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 13
+            },
+            {
+              "name": "hrtimeToSeconds",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 3
+            },
+            {
+              "name": "hrtimeBigIntDurationToString",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "none",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 2
+            },
+            {
+              "name": "hrtimeDurationToString",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 2
+            }
+          ],
+          "added": [],
+          "moved": {
+            "functions": [],
+            "lines": 0
+          },
+          "order": {
+            "given": [
+              "durationToString",
+              "durationToStringWithNanoseconds",
+              "hrtimeToSeconds",
+              "hrtimeBigIntDurationToString",
+              "hrtimeDurationToString"
+            ],
+            "now": [
+              "durationToString",
+              "durationToStringWithNanoseconds",
+              "hrtimeToSeconds",
+              "hrtimeBigIntDurationToString",
+              "hrtimeDurationToString"
+            ]
+          },
+          "direction": {
+            "given": "bottom-up",
+            "now": "bottom-up",
+            "down": 0,
+            "up": 3
+          },
+          "referencesBeforeDefinition": {
+            "given": 0,
+            "now": 0
+          },
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "newHolders": [],
+          "nestedNow": [],
+          "forwardDeclarations": [],
+          "lostComments": [],
+          "jsdocBlocks": {
+            "given": 5,
+            "now": 5
+          },
+          "diff": {
+            "removed": 13,
+            "added": 10
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint": {},
+          "oxlint ubd functions:false": {},
+          "oxlint ubd variables:false": {},
+          "eslint": {},
+          "eslint ubd functions:false": {},
+          "eslint ubd variables:false": {},
+          "eslint base ubd": {},
+          "biome": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "converted (arrows), nothing moved"
+      },
+      "verifyChangedTheFile": true,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingTopicRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 9,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 296814,
+          "cached_input_tokens": 273024,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2049,
+          "reasoning_output_tokens": 529,
+          "total_tokens": 298863
+        },
+        "tokensUsedReportedOnStderr": 25839,
+        "thinkingBlocks": 7,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g package.json -g '*lock*' -g '*config*' -g 'duration-to-string*' -g '!node_modules' -g '!\\\\.git'\",\"",
+          "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/a-codex-2/duration-to-string.ts\\n@@\\n-export function durationToString(compilerDuration: number) {\\n+export const durationToS",
+          "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"NODE_PATH=~/GitHub/ultracite/node_modules ~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts duration-to-string.t",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help\",\"max_output_tokens\":4500}));\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') duration-to-st",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --version\\n~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"fun",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --format json "
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g package.json -g '*lock*' -g '*config*' -g 'duration-to-string*' -g '!node_modules' -g '!\\\\.git'\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"cat duration-to-string.ts; cat duration-to-str",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$di",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"NODE_PATH=~/GitHub/ultracite/node_modules ~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts duration-to-string.ts\",\"max_output_tokens\":3000}),\ntools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --modu",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help\",\"max_output_tokens\":4500}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') duration-to-string.ts\",\"max_output_tokens\":3000}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --version\\n~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --print-config\\nsed -n '58,140p' duration-to-string.ts\",\"ma",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --format json duration-to-string.ts\",\"max_output_tokens\":1500}));\n",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"NODE_PATH=~/GitHub/ultracite/node_modules ~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts duration-to-string.ts\",\"max_output_tokens\":3000}),\ntools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --modu",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help\",\"max_output_tokens\":4500}));\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') duration-to-string.ts\",\"max_output_tokens\":3000}));\n",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --version\\n~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --print-config\\nsed -n '58,140p' duration-to-string.ts\",\"ma",
+          "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --format json duration-to-string.ts\",\"max_output_tokens\":1500}));\n"
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "writesOutsideRunDir": [],
+        "printedEnvironment": [],
+        "ownBehaviourChecks": [],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-export function durationToString(compilerDuration: number) {\n+export const durationToString = (compilerDuration: number) => {\n-  return `${(compilerDuration * MILLISECONDS_PER_SECOND).toFixed(0)}ms`;\n-}\n+  return `${(compilerDuration * MILLISECONDS_PER_SECOND).toFixed(0)}ms`;\n+};\n-function durationToStringWithNanoseconds(durationBigInt: bigint): string {\n+const durationToStringWithNanoseconds = (durationBigInt: bigint): string => {\n-  return `${(duration / NANOSECONDS_PER_MILLISECOND).toFixed(1)}ms`;\n-}\n+  return `${(duration / NANOSECONDS_PER_MILLISECOND).toFixed(1)}ms`;\n+};\n-export function hrtimeToSeconds(hrtime: [number, number]): number {\n+export const hrtimeToSeconds = (hrtime: [number, number]): number => {\n-  return hrtime[0] + hrtime[1] / NANOSECONDS_PER_SECOND;\n-}\n+  return hrti"
+        ],
+        "finalMessage": "Fixed all five issues in `duration-to-string.ts` by converting the declarations to const-assigned arrow functions. Function bodies and unrelated code are unchanged.\n\nVerified: Oxlint’s `func-style` check and TypeScript both pass.",
+        "understood": {
+          "hoisting": [],
+          "tdz": [],
+          "mutualRecursion": [],
+          "noOrderWorks": [],
+          "loadTime": [],
+          "thisArguments": [],
+          "whyOrder": [],
+          "types": [],
+          "concise": [],
+          "jsdoc": [],
+          "preserveBehaviour": [],
+          "review": [],
+          "suppression": [],
+          "restructure": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "mainCheckout": 28,
+          "webAccess": 26,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "mainCheckout": 9,
+          "webAccess": 11
+        },
+        "exposureInToolInputs": {
+          "mainCheckout": 8
+        },
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\ncat package.json oxlint.config.ts tsconfig.json\\ngit status --short\\nls node_modules/.bin\",\"max_output_tokens\":6000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"NODE_PATH=~/GitHub/ultracite/node_modules ~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts duration-to-string.ts\",\"max_output_tokens\":3000}),\ntools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler duration-to-string.ts\",\"max_output_tokens\":3000})\n]); results.forEach((r,i)=>text({i,result:r}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help\",\"max_output_tokens\":4500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') duration-to-string.ts\",\"max_output_tokens\":3000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --version\\n~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --print-config\\nsed -n '58,140p' duration-to-string.ts\",\"max_output_tokens\":3000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --format json duration-to-string.ts\",\"max_output_tokens\":1500}));\n"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "converted (arrows), nothing moved",
+    "response": "converted, nothing moved",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false,
+    "stubChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 5,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "outro": "Fixed 5 of 5 issues with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 25839,
+    "totalTokens": 298863
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "mainCheckout": 28,
+      "webAccess": 26,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {
+      "mainCheckout": 9,
+      "webAccess": 11
+    },
+    "exposureInToolInputs": {
+      "mainCheckout": 8
+    },
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"for dir in \\\"$PWD\\\" \\\"$(dirname \\\"$PWD\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\" \\\"$(dirname \\\"$(dirname \\\"$(dirname \\\"$PWD\\\")\\\")\\\")\\\" <tmp> <os-tmp-root> <os-tmp-root> /private/var/folders /private/var /private /; do if [ -f \\\"$dir/AGENTS.md\\\" ]; then cat \\\"$dir/AGENTS.md\\\"; fi; done\\ncat package.json oxlint.config.ts tsconfig.json\\ngit status --short\\nls node_modules/.bin\",\"max_output_tokens\":6000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"NODE_PATH=~/GitHub/ultracite/node_modules ~/GitHub/ultracite/node_modules/.bin/oxlint --config oxlint.config.ts duration-to-string.ts\",\"max_output_tokens\":3000}),\ntools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler duration-to-string.ts\",\"max_output_tokens\":3000})\n]); results.forEach((r,i)=>text({i,result:r}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --help\",\"max_output_tokens\":4500}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') duration-to-string.ts\",\"max_output_tokens\":3000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --version\\n~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --print-config\\nsed -n '58,140p' duration-to-string.ts\",\"max_output_tokens\":3000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/GitHub/ultracite/node_modules/.bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"]}}') --format json duration-to-string.ts\",\"max_output_tokens\":1500}));\n"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "<run-root>/.staging/a-codex-2/handoff",
+      "../corpus/examples/func-style",
+      "../corpus/results/func-style",
+      "../corpus/calibration/func-style",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/func-style-agent-runs.cjs",
+      "../corpus/scripts/func-style-calibration.cjs",
+      "../corpus/scripts/func-style-census.cjs",
+      "../corpus/scripts/func-style-convert.cjs",
+      "../corpus/scripts/func-style-cycles.cjs",
+      "../corpus/scripts/func-style-examples.cjs",
+      "../corpus/scripts/func-style-history.cjs",
+      "../corpus/scripts/func-style-lib.cjs",
+      "../corpus/scripts/func-style-linters.cjs",
+      "../corpus/scripts/func-style-markers.cjs",
+      "../corpus/scripts/func-style-oracle.cjs",
+      "../corpus/scripts/func-style-rules.cjs",
+      "../corpus/scripts/func-style-run-all.cjs",
+      "../corpus/scripts/func-style-sample.cjs",
+      "../corpus/scripts/func-style-tables.cjs",
+      "../bibliography/func-style.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-func-style",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<outside-repo>/plans",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/a-codex-1",
+      "<run-root>/b-claude-1",
+      "<run-root>/b-claude-2",
+      "<run-root>/b-codex-1",
+      "<run-root>/c-claude-1",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-1",
+      "<run-root>/c-codex-2",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/a-codex-1",
+      "<run-root>/.staging/b-claude-1",
+      "<run-root>/.staging/b-claude-2",
+      "<run-root>/.staging/b-codex-1",
+      "<run-root>/.staging/c-claude-1",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-1",
+      "<run-root>/.staging/c-codex-2",
+      "<run-root>/.staging/c-codex-pilot"
+    ]
+  }
+}

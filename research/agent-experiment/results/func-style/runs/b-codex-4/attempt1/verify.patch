@@ -1,0 +1,61 @@
+--- a/ConfigurationDriftPage.utils.ts
++++ b/ConfigurationDriftPage.utils.ts
+@@ -108,30 +108,30 @@
+ 
+ const createConfigurationDriftValueDiff = (
+   field: GitHubConfigDriftField
+-): ConfigurationDriftValueDiff => {
+-  return {
+-    configValue: formatConfigFieldValue(field.githubValue),
+-    dashboardValue: formatConfigFieldValue(field.dashboardValue),
+-    kind: "scalar",
+-  };
+-};
++): ConfigurationDriftValueDiff => ({
++  configValue: formatConfigFieldValue(field.githubValue),
++  dashboardValue: formatConfigFieldValue(field.dashboardValue),
++  kind: "scalar",
++});
+ 
+ export const createConfigurationDriftRows = (
+   fields: GitHubConfigDriftField[],
+   projectRef: string
+-): ConfigurationDriftRow[] => {
+-  return fields.map((field) => ({
++): ConfigurationDriftRow[] =>
++  fields.map((field) => ({
+     ...field,
+     settingHref: field.settingHref(projectRef),
+     settingLabel: getConfigFieldLabel(field.configPath),
+     status: "drifted" as const,
+     valueDiff: createConfigurationDriftValueDiff(field),
+   }));
+-};
+ 
+ const groupConfigFieldsBySection = <
+   T extends { section: ConfigSection; configPath: string },
+->(fields: readonly T[], getValue: (field: T) => unknown): ConfigSectionGroup[] => {
++>(
++  fields: readonly T[],
++  getValue: (field: T) => unknown
++): ConfigSectionGroup[] => {
+   const bySection = new Map<ConfigSection, UnmanagedConfigRow[]>();
+ 
+   for (const field of fields) {
+@@ -155,12 +155,10 @@
+ 
+ export const groupUnmanagedConfigFields = (
+   fields: readonly UnmanagedConfigField[]
+-): ConfigSectionGroup[] => {
+-  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue);
+-};
++): ConfigSectionGroup[] =>
++  groupConfigFieldsBySection(fields, (field) => field.dashboardValue);
+ 
+ export const groupMatchedConfigFields = (
+   fields: readonly MatchedConfigField[]
+-): ConfigSectionGroup[] => {
+-  return groupConfigFieldsBySection(fields, (field) => field.value);
+-};
++): ConfigSectionGroup[] =>
++  groupConfigFieldsBySection(fields, (field) => field.value);

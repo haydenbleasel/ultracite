@@ -1,0 +1,134 @@
+--- a/serialize.ts
++++ b/serialize.ts
+@@ -89,29 +89,29 @@
+   Value: 0,
+ };
+ 
+-function serializeArray(
++const serializeArray = (
+   value: any[],
++  serialize: typeof convertToSerializedForm,
+   metadata: AstroComponentMetadata | Record<string, any> = {},
+   parents = new WeakSet<any>()
+-): any[] {
++): any[] => {
+   if (parents.has(value)) {
+     throw new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!
+ 
+ Cyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference.`);
+   }
+   parents.add(value);
+-  const serialized = value.map((v) =>
+-    convertToSerializedForm(v, metadata, parents)
+-  );
++  const serialized = value.map((v) => serialize(v, metadata, parents));
+   parents.delete(value);
+   return serialized;
+-}
++};
+ 
+-function serializeObject(
++const serializeObject = (
+   value: Record<any, any>,
++  serialize: typeof convertToSerializedForm,
+   metadata: AstroComponentMetadata | Record<string, any> = {},
+   parents = new WeakSet<any>()
+-): Record<any, any> {
++): Record<any, any> => {
+   if (parents.has(value)) {
+     throw new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!
+ 
+@@ -119,20 +119,17 @@
+   }
+   parents.add(value);
+   const serialized = Object.fromEntries(
+-    Object.entries(value).map(([k, v]) => [
+-      k,
+-      convertToSerializedForm(v, metadata, parents),
+-    ])
++    Object.entries(value).map(([k, v]) => [k, serialize(v, metadata, parents)])
+   );
+   parents.delete(value);
+   return serialized;
+-}
++};
+ 
+-function convertToSerializedForm(
++const convertToSerializedForm = (
+   value: any,
+   metadata: AstroComponentMetadata | Record<string, any> = {},
+   parents = new WeakSet<any>()
+-): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] {
++): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] => {
+   const tag = Object.prototype.toString.call(value);
+   switch (tag) {
+     case "[object Date]": {
+@@ -144,13 +141,23 @@
+     case "[object Map]": {
+       return [
+         PROP_TYPE.Map,
+-        serializeArray([...(value as Map<any, any>)], metadata, parents),
++        serializeArray(
++          [...(value as Map<any, any>)],
++          convertToSerializedForm,
++          metadata,
++          parents
++        ),
+       ];
+     }
+     case "[object Set]": {
+       return [
+         PROP_TYPE.Set,
+-        serializeArray([...(value as Set<any>)], metadata, parents),
++        serializeArray(
++          [...(value as Set<any>)],
++          convertToSerializedForm,
++          metadata,
++          parents
++        ),
+       ];
+     }
+     case "[object BigInt]": {
+@@ -160,7 +167,10 @@
+       return [PROP_TYPE.URL, (value as URL).toString()];
+     }
+     case "[object Array]": {
+-      return [PROP_TYPE.JSON, serializeArray(value, metadata, parents)];
++      return [
++        PROP_TYPE.JSON,
++        serializeArray(value, convertToSerializedForm, metadata, parents),
++      ];
+     }
+     case "[object Uint8Array]": {
+       return [PROP_TYPE.Uint8Array, [...(value as Uint8Array)]];
+@@ -173,7 +183,10 @@
+     }
+     default: {
+       if (value !== null && typeof value === "object") {
+-        return [PROP_TYPE.Value, serializeObject(value, metadata, parents)];
++        return [
++          PROP_TYPE.Value,
++          serializeObject(value, convertToSerializedForm, metadata, parents),
++        ];
+       }
+       if (value === Number.POSITIVE_INFINITY) {
+         return [PROP_TYPE.Infinity, 1];
+@@ -187,9 +200,14 @@
+       return [PROP_TYPE.Value, value];
+     }
+   }
+-}
++};
+ 
+-export function serializeProps(props: any, metadata?: AstroComponentMetadata) {
+-  const serialized = JSON.stringify(serializeObject(props, metadata));
++export const serializeProps = (
++  props: any,
++  metadata?: AstroComponentMetadata
++) => {
++  const serialized = JSON.stringify(
++    serializeObject(props, convertToSerializedForm, metadata)
++  );
+   return serialized;
+-}
++};

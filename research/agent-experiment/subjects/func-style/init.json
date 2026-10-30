@@ -1,0 +1,32 @@
+{
+  "command": "bun <repo>/packages/cli/src/index.ts init --linter <linter> --pm bun --skip-install --yes --quiet",
+  "startingProject": {
+    "package.json": {
+      "name": "app",
+      "private": true,
+      "type": "module",
+      "devDependencies": {
+        "typescript": "^6.0.3"
+      }
+    },
+    "tsconfig.json": "the corpus examples' tsconfig.json"
+  },
+  "wrote": {
+    "oxlint": [
+      "oxfmt.config.ts",
+      "oxlint.config.ts",
+      "package.json"
+    ],
+    "biome": [
+      ".gitignore",
+      "biome.jsonc",
+      "package.json"
+    ],
+    "eslint": [
+      "eslint.config.mjs",
+      "package.json",
+      "prettier.config.mjs",
+      "stylelint.config.mjs"
+    ]
+  }
+}

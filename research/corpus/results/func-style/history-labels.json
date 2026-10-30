@@ -1,0 +1,2017 @@
+[
+ {
+  "repo": "zod",
+  "sha": "ad32d7512ce4fe4d4b3cfc0d1f3ce93b2e553519",
+  "date": "2026-09-12",
+  "matched": [
+   "circular"
+  ],
+  "subject": "perf: reduce validation and schema allocation overhead (#6588)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "zod",
+  "sha": "764ac59f1afc1a46e7ecc2d5e8e86c57b7d66164",
+  "date": "2026-09-01",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "perf(v4): settle z.validate on the first failure in parse order (#6544)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "zod",
+  "sha": "81ded9918fe39d51b232be72f23ba0d5fb6a837e",
+  "date": "2026-08-31",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "perf: answer z.validate from the compiled fast path on invalid input (#6538)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "zod",
+  "sha": "773a48676ede1a2144d4f2e60892e6c0cd6625a7",
+  "date": "2026-08-28",
+  "matched": [
+   "circular",
+   "hoist"
+  ],
+  "subject": "refactor(v4): declare a trait's members on $constructor (#6478)",
+  "label": "relies-on-hoisting",
+  "note": "A new import closes a module cycle; the message relies on the imported binding being a hoisted function declaration called only at construction time."
+ },
+ {
+  "repo": "zod",
+  "sha": "d85472c46e88cebfef454f681b8261b6853a9b4f",
+  "date": "2026-08-24",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "feat(v4): support declared symbol keys in z.object() (#6448)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "zod",
+  "sha": "d6ca12ae3e28b40392ec49323edc31a56a05ff3b",
+  "date": "2026-08-19",
+  "matched": [
+   "circular",
+   "tdz",
+   "referenceerror",
+   "cannot access",
+   "before initialization"
+  ],
+  "subject": "fix(v4): infer recursive getter options in discriminatedUnion (#6422)",
+  "label": "tdz-runtime",
+  "note": "Mostly a type-level circularity (ts7022); the message also explains that reading the shape eagerly would hit a TDZ ReferenceError for mutually recursive getter schemas."
+ },
+ {
+  "repo": "zod",
+  "sha": "3c9ca1d9bdc3c08939f2aa099158ee552c70ef80",
+  "date": "2026-08-17",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "feat(json-schema): emit a root $ref when the root schema has an id (#6029)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "zod",
+  "sha": "79cfedea29912cb40d7373f6643fad57480df966",
+  "date": "2026-08-16",
+  "matched": [
+   "circular"
+  ],
+  "subject": "feat(v4): expose the owning schema on check-originated issues (#6420)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "zod",
+  "sha": "faf33a2880f21910ef72e3f93636e4fc561fdea4",
+  "date": "2026-08-13",
+  "matched": [
+   "hoist",
+   "tdz"
+  ],
+  "subject": "fix: surface @deprecated on re-exported compat aliases (#6072)",
+  "label": "declaration-vs-const",
+  "note": "A change that converted a hoisted function re-export to a const was reverted in the same PR: the message says the change \"traded a hoisted function re-export for a TDZ-bound const and fixed nothing\"."
+ },
+ {
+  "repo": "zod",
+  "sha": "e75ca0fc693f6b48386ccfa355aca91e3c1142fc",
+  "date": "2026-05-04",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Use existing madge check:circular for cycle regression",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "zod",
+  "sha": "dfd8766bf44943eb0dc136bb87b53f6bde008995",
+  "date": "2026-05-04",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(v4): break circular import between classic schemas and iso (#5275) (#5926)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "zod",
+  "sha": "b6066b3e4730fc8b966d13974b4abae8dce25df4",
+  "date": "2026-04-29",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(v4): align object and tuple optionality handling (#5661)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "zod",
+  "sha": "518f15ddada3b5d959f4ff32b094789e2d85349a",
+  "date": "2026-04-27",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Preprocess is not deprecated (#5721)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "zod",
+  "sha": "3de2b6389a57a093f11ecf1820f31e5b4452c7e9",
+  "date": "2025-08-04",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix: remove redundant Required<> from input and output type definitions (#5033)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "zod",
+  "sha": "d43cf19d5cafd505f2f8e76f13e18564470f0696",
+  "date": "2025-08-04",
+  "matched": [
+   "referenceerror"
+  ],
+  "subject": "Fix recursive object initialization errors with check() and other methods (#5018)",
+  "label": "tdz-runtime",
+  "note": "Object spread ran getters of a recursive schema while it was still being initialised, throwing a ReferenceError (TDZ) in users code; fixed by cloning property descriptors."
+ },
+ {
+  "repo": "zod",
+  "sha": "7d40ba58931130ec965be9d65d14e0665ee9c379",
+  "date": "2023-02-26",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "feat(#2059): z.string.ip() - add support for IP address (#2066)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "zod",
+  "sha": "f1dfabb6e16d769740c7e2458b8730b938d7b5b0",
+  "date": "2022-09-06",
+  "matched": [
+   "circular"
+  ],
+  "subject": "3.19.0 (#1383)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "zod",
+  "sha": "44916fe7dee9413216ee0b24001cfbf835cda584",
+  "date": "2022-05-22",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Remove circular dependency",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "hono",
+  "sha": "6cadf7537385c6e3df9cbd6d05c9b84c82ae0361",
+  "date": "2026-09-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(lambda-edge): fail with a descriptive error on a malformed event (#5358)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "hono",
+  "sha": "82b321b5b0e7a57cdaab45f2f90671ec0737795b",
+  "date": "2026-07-03",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix: avoid circular dependency between body.ts and request.ts (#5071)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "hono",
+  "sha": "bfba97ca7ea3d4541a3419f1749e5a1a3e8f1727",
+  "date": "2026-05-01",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(jsx): normalize SVG attributes on the <svg> root element (#4893)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "hono",
+  "sha": "8217d9ece6f4d302e446b8dc353d1b3cbf51d92e",
+  "date": "2026-03-07",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(jsx): align link hoisting and dedupe with React 19 (#4792)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "hono",
+  "sha": "fc3597d7424e1ad4e0744ed35a6a16a923193ece",
+  "date": "2024-03-31",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "fix(cache): not enabled if `caches` is not defined (#2443)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "hono",
+  "sha": "4b3cd3c6e16c16e4d9b22b872d5ebc9e38c3272a",
+  "date": "2024-02-25",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(jsx/dom): import from correct file for avoiding circular dependency (#2268)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "hono",
+  "sha": "f44c7055e077c457b309bf037922d932f7ea380c",
+  "date": "2024-02-03",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(html): Remove circular dependencies in `hono/html` (#2143)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "vite",
+  "sha": "4a261f242831bef92afd2f1aacfb81eab9dec371",
+  "date": "2026-08-19",
+  "matched": [
+   "circular"
+  ],
+  "subject": "test(module-runner): add TLA circular import case (#23299)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "3dbddefaafc091a879b06f9279296f776691e455",
+  "date": "2026-08-18",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(bundled-dev): hot update through circular imports instead of reloading (#23259)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "e1376018cd516d6970534fce495e24f9ee683ce3",
+  "date": "2026-04-09",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): class property keys hoisting matching imports (#22199)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "17a8f9edfcd3b9344668120a84e3328aeada3c97",
+  "date": "2026-04-07",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(optimize-deps): hoist CJS interop assignment (#22156)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "235140b2d519e866fc28f88fe8155a5091630daf",
+  "date": "2026-02-16",
+  "matched": [
+   "circular"
+  ],
+  "subject": "perf(ssr): skip circular import check for already-evaluated modules (#21632)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "80a91ff82426a4c88d54b9f5ec9a4205cb13899b",
+  "date": "2025-04-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): fix live binding of default export declaration and hoist exports getter (#19842)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "d4ee5e8655a85f4d6bebc695b063d69406ab53ac",
+  "date": "2025-04-16",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(hmr): avoid infinite loop happening with `hot.invalidate` in circular deps (#19870)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "8c04c69a52c7b66d551d384ac34bb10ab1522f68",
+  "date": "2025-03-26",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): hoist export to handle cyclic import better (#18983)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "8e382a6a1fed2cd41051b81f9cd9c94b484352a5",
+  "date": "2024-10-24",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): preserve source maps for hoisted imports (fix #16355) (#16356)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "a577828d826805c5693d773eea4c4179e21f1a16",
+  "date": "2024-09-30",
+  "matched": [
+   "circular"
+  ],
+  "subject": "refactor: break circular dependencies to fix test-unit (#18237)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "vite",
+  "sha": "687c38be8695481d905abe678e00e24a6fb011f5",
+  "date": "2024-06-06",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(ssr): resolve interlocking circular dependency issues (#15395)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "8cd846cdbf5cc3214e6a32accf31a187726a23cd",
+  "date": "2024-03-13",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(ssr): crash on circular import (#14441)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "eef9da13d0028161eacc0ea699988814f29a56e4",
+  "date": "2024-03-06",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(worker): throw error when circular worker import is detected and support self referencing worker (#16103)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "e6ebc7bad710e1c9d86bf8ca9e994640a86e88fe",
+  "date": "2024-01-15",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "feat(build): set `hoistTransitiveImports` to false in library builds (#15595)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "6ace32b41dbad2ea0ee10f97e7cc662dd03f81e1",
+  "date": "2024-01-08",
+  "matched": [
+   "circular"
+  ],
+  "subject": "feat(hmr): reload for circular imports only if error (#15118)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "5f2cdec5d61b847352b3412725fcc957dca010d4",
+  "date": "2023-12-04",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(hmr): don't consider CSS dep as a circular dep (#15229)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "41e437fd6ff566a158efeabcaf781a9a24803381",
+  "date": "2023-11-21",
+  "matched": [
+   "circular"
+  ],
+  "subject": "perf(hmr): skip traversed modules when checking circular imports (#15034)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "b47905577a9b4f78544c80c93fb005dabce8f02a",
+  "date": "2023-11-08",
+  "matched": [
+   "circular"
+  ],
+  "subject": "feat(hmr): improve circular import updates (#14867)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "fdd466946c2a7fe4ff1a6d1b5950820b310c61f9",
+  "date": "2023-09-25",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "test(ssr): proper test coverage of SSR shebang import hoisting (#14448)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "91d7b678ce6a397d01cd1351ce29de2f50f9d775",
+  "date": "2023-05-05",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "fix: location is not defined error in cleanScssBugUrl (#13100)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "07bd6d14e545d05c6a29cf341f117fcfe9536ba4",
+  "date": "2023-04-24",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): hoist statements after hashbang (#12985)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "45549e4dc8d9a3a23c42e3e13e92d35d8386710d",
+  "date": "2023-03-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): hoist re-exports with imports (#12530)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "33baff5e26b316460812d29c541034a576fa3994",
+  "date": "2023-03-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(ssr): hoist import statements to the top (#12274)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "5280908972219392a0d8daa2a33553868ca7072b",
+  "date": "2022-05-06",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(css): hoist external @import for non-split css (#8022)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "e48827f58bac0af2a564cacd8213195a9015f8a3",
+  "date": "2022-04-27",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(css): clean comments before hoist at rules (#7924)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "88581807cce75bbb104ef4c1cb3dd483b748d3fd",
+  "date": "2022-04-12",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "perf(css): hoist at rules with regex (#7691)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "29e622cc7c9843a51508136df856c419a99e8d73",
+  "date": "2022-04-11",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(css): hoist charset (#7678)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "00d8c9b7ffcfa2a3f888ef5752f57682cdea91b2",
+  "date": "2021-11-25",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix: circular dependency hmr causes refresh crash (#4589)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "ff50c22f9c71ac968f0fc4503e892452ccdf5ef5",
+  "date": "2021-08-24",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "fix: __DEFINES__ is not defined is env (#4694)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "f3184161fde7df614b584520ddef5d7f049a5ff0",
+  "date": "2021-08-14",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix: support dangling comma and throw on circular dependency in tsconfig (#4590)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "69f91a1c03a129ab324c20fddfd2a07e729add96",
+  "date": "2021-08-02",
+  "matched": [
+   "circular"
+  ],
+  "subject": "feat(ssr): tolerate circular imports (#3950)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "000ee62ef41e4964d1002ab7862303cec0419c47",
+  "date": "2021-02-03",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(css): hoist external @import in concatenated css",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vite",
+  "sha": "ca8442c19e51526e2fa75f0c4976941a2b9089e6",
+  "date": "2021-01-19",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(hmr): fix hmr invalidation on circular deps",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "613c6bb6d6f978d07ede482e3372d87767210c07",
+  "date": "2021-01-18",
+  "matched": [
+   "circular"
+  ],
+  "subject": "wip: handle circular deps in ssr invalidation",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "bb631bcb1dbfee807641fc7ec387f8e9dff01be3",
+  "date": "2021-01-18",
+  "matched": [
+   "circular"
+  ],
+  "subject": "wip: ssr circular deps",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "vite",
+  "sha": "b31e56a42bc8d230dc5067a956b1bf75183a39e6",
+  "date": "2020-06-23",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(hmr): bail on circular imports when walking import chain",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "astro",
+  "sha": "6661fbe54a2bd5e784110d89b31bc682b8ff7f21",
+  "date": "2026-08-21",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(dev): break circular import in virtual:astro:routes by importing from astro/app/manifest (#17787)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "astro",
+  "sha": "0089f836320ec2aefdb6c448af31e56754115c5c",
+  "date": "2026-08-02",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix Content Layer build crash when neotraverse 0.6.x is hoisted by another dependency (#17573)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "cebc40495cd09e8036af34c2f668fc2965e089b0",
+  "date": "2026-07-08",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Don't merge inline CSS chunks containing `@import` rules during build (#17325)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "a7352fda1218bf48d8483a9893c6f7ed9bdf2060",
+  "date": "2026-06-30",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix: background dev server fails to start in hoisted monorepos (#17193)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "5bcd03c1852cb7a7e165017089cc39c111599530",
+  "date": "2026-04-08",
+  "matched": [
+   "tdz",
+   "circular",
+   "referenceerror"
+  ],
+  "subject": "fix(assets): resolve Picture TDZ error when combined with content render() (#16171)",
+  "label": "tdz-module-cycle",
+  "note": "A circular initialisation dependency between bundled modules caused a TDZ ReferenceError in prerendered pages; fixed by importing from a narrower virtual module."
+ },
+ {
+  "repo": "astro",
+  "sha": "5bc2b2c2f4a9928efa16452b64729586dc79a0c7",
+  "date": "2026-02-26",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix(assets): prevent circular dependency deadlock with SVG in content collections (#15603)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "astro",
+  "sha": "6f6f8f8c0c3ccf346d741a8625bbfbe1329e472e",
+  "date": "2026-01-08",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(assets): hoist ?? inside JSON.stringify in virtual module codegen (#15140)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "dfbca06dda674c64c7010db2f4de951496a1e631",
+  "date": "2024-07-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Exclude hoisted scripts and styles from raw imports (#11509)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "9637014b1495a5a41cb384c7de4de410348f4cc0",
+  "date": "2024-05-17",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix hoisted scripts propagation (#11084)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "698c2d9bb51e20b38de405b6076fd6488ddb5c2b",
+  "date": "2024-05-08",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(page-data): add key to allPages (#10625)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "4d905ccef663f728fc981181f5bb9f1d157184ff",
+  "date": "2024-05-06",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Preserve content modules properly in cache (#10889)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "1539e04a8e5865027b3a8718c6f142885e7c8d88",
+  "date": "2024-01-17",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Simplify HMR for circular imports and CSS (#9706)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "astro",
+  "sha": "354a62c86e9187af5d05540ed321bdc889384d97",
+  "date": "2023-12-19",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix: handle external hoisted scripts correctly (#9437)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "5b1e39ef6ec6dcebea96584f95d9530bd9aa715d",
+  "date": "2023-08-10",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Move hoisted script analysis optimization as experimental (#8011)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "3a6e42e190421c2e172d5c408c0a7592653fccef",
+  "date": "2023-07-20",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Determine hoisted scripts via AST analysis (#7707)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "1efaef6be0265c68eac706623778e8ad23b33247",
+  "date": "2023-05-24",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Markdoc - Shiki (#7187)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "ba0636240996f9f082d122a8414240196881cb96",
+  "date": "2023-05-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(hoisted scripts): consider script's dependents (#7144)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "c6d7ebefdd554a9ef29cfeb426ac55cab80d6473",
+  "date": "2023-05-17",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Data collections and references (#6850)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "b6154d2d57bfb77767a3ccf9e91c1ae4051c81bc",
+  "date": "2023-04-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix hoisted scripts path for linked package Astro components (#6872)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "1c678f7ebff6b8ea843bf4b49ab73ca942a2a755",
+  "date": "2023-02-15",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Fix hydration path for circular imports (#6244)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "astro",
+  "sha": "2189170be523f74f244e84ccab22c655219773ce",
+  "date": "2023-02-06",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix hoisted script propagation in content collection pages (#6119)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "b4432cd6b65bad685a99fe15867710b0663c13b2",
+  "date": "2023-01-30",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[Content collections] Load MDX hoisted scripts in dev (#6035)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "116d8835ca9e78f8b5e477ee5a3d737b69f80706",
+  "date": "2023-01-04",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix for hoisted scripts in project with spaces in the file path (#5756)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "fe316be86f4dfecff78effbecdc10f7348406d27",
+  "date": "2023-01-03",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix(astro/core): Do not add base to hoisted script body (#5720)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "812658ad2ab3732a99e35c4fd903e302e723db46",
+  "date": "2022-09-28",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Remove shamefully-hoist (#4842)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "87a7cf48e7198ab94aa6310e58e9f30fd234c429",
+  "date": "2022-09-28",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Hoist hydration script out of slot templates (#4891)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "9490f0e2235a61984bc0bba7e2383d2383085cf2",
+  "date": "2022-08-25",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Include styles imported by hoisted scripts (#4457)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "fbef6a7f720d12697362d3f74c8c026c726d2ba3",
+  "date": "2022-07-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "New handling for `define:vars` scripts and styles (#3976)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "3acb9ec264de6ca6eecf49313c0f4d02c3908afa",
+  "date": "2022-07-18",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Hoist Astro.globbed hoisted scripts in dev (#3930)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "9a813268db2e3a7ed5644739b7a12e83e5d239b2",
+  "date": "2022-06-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Allow TypeScript in hoisted scripts (#3665)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "aeab890971e5f425f877545c674d1cb532cee754",
+  "date": "2022-06-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Inline small hoisted scripts (#3658)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "f5afaf24984ee7d4d6e908a7eeed17f5ca18c61e",
+  "date": "2022-06-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Support re-exporting astro components containing client components (#3625)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "0e2314d8e5b01f7b2184a243c6d7e53e14b0cd0f",
+  "date": "2022-06-14",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix inlined hoisted scripts and SSR (#3593)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "10b2589093f23d5f92e0509f9d3eebfaae2d46a7",
+  "date": "2022-05-31",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fixing HMR for hoisted scripts (#3427)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "4ca60e9344f882ee1a216ec66fb409c88c740641",
+  "date": "2022-05-24",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Ensure hoisted scripts are deduplicated in build (#3433)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "b463ddb3ce43641536dee4413ac5bb8ebcbdf608",
+  "date": "2022-05-12",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Resolve components by module ID during compilation (#3300)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "ccea6a0a1ae55ab057d94f60014e2183013b5f60",
+  "date": "2022-05-11",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "HMR hoisted scripts (#3336)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "72c2c86e9d7c9b2ce6be13ddb273d4b0b11a5723",
+  "date": "2022-03-09",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "merge `next` into `main` (#2705)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "d08ddaf5b933033564e1312df49ace8364033f79",
+  "date": "2022-03-08",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Move from yarn to pnpm (#2455)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "ec6f148fc8623c6549885af70512839c08905fdb",
+  "date": "2022-02-15",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Resolve relative imports from hoisted scripts (static build) (#2581)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "6bd165f84cd3a1550b29fec539af814360c87f54",
+  "date": "2022-01-29",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Handle project folders containing a space in the static build (#2486)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "f2b8372c0cd7988246db3c7087fb7d7ebcff0340",
+  "date": "2022-01-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Supports hoisted scripts in the static build (#2414)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "8cb779594e585ac9241a6c0c7cc311c850cc5691",
+  "date": "2021-11-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Bring back building of non-hoisted scripts (#1977)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "65d17857ce5908f0fcb8adc443def7077e5ab8fc",
+  "date": "2021-11-11",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Uncomment hoisted scripts (#1743)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "d84bfe719a546ad855640338d5ed49ad3aa4ccb4",
+  "date": "2021-10-29",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "🚀 Astro Next (0.21.0) (#1406)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "290f203279eecd590371412aad637a5a673ce604",
+  "date": "2021-08-27",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix knownEntrypoint warning for Fix __astro_hoisted_scripts.js (#1251)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "788c769d78874e0315b9981eb16fbb3fbfb070e5",
+  "date": "2021-08-27",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Implementation of hoisted scripts (#1178)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "astro",
+  "sha": "643c880f280c3f571a022b6f4d40b6d5a0e911b5",
+  "date": "2021-05-26",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Renderer plugins (#231)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "excalidraw",
+  "sha": "d87620b23907cef9a119c758124569b5f44991a4",
+  "date": "2025-12-21",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix: Circular reference (#10544)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "excalidraw",
+  "sha": "c141960ada4869ee6a3bb8a665e75c0c18ad7f19",
+  "date": "2025-11-25",
+  "matched": [
+   "circular"
+  ],
+  "subject": "feat: Non-elbow arrow snapping and behavior changes (#9670)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "excalidraw",
+  "sha": "06c5ea94d331b9c42f922ea7ea6c40f22a9cfa8c",
+  "date": "2025-09-23",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix: Race conditions when adding many library items (#10013)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "excalidraw",
+  "sha": "3bc18f6aed040fe9edf2fed206071458a967f978",
+  "date": "2021-02-21",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "feat: expose variable window.EXCALIDRAW_ASSET_PATH to allow host define the path for excalidraw assets (#3068)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "excalidraw",
+  "sha": "81f8039ec70c520e9022735de7d396b6c0116d01",
+  "date": "2020-12-20",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "fix: Don't break zoom when zooming in on UI (#2638)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "e489aae4a78e5dfec6e309bf3c0ec8bcf0cad5e2",
+  "date": "2026-10-09",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Reland experimental custom webpack support (#99234)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "2ebafcbcc7da4188c90bc82e15a8d8f890f8d0ca",
+  "date": "2026-09-25",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Hoist resolved pathname into app page route match (#99259)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "0556c918bf7c4365f539f44f2dbc8b77df781da8",
+  "date": "2026-09-24",
+  "matched": [
+   "cannot access"
+  ],
+  "subject": "[PPF] Instant validation for `ensureStatic = \"shell\" | \"prefetch\"` (#98249)",
+  "label": "unrelated",
+  "note": "\"cannot access\" in prose about what a shell or request can read."
+ },
+ {
+  "repo": "next.js",
+  "sha": "7d42c9dcdd11b01716eb5a8eb473f493ea5b23c6",
+  "date": "2026-09-17",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Keep metadata rendering stable across streaming modes (#97440)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "a84bc8de2a8c84cd027ff4d70aaff8273a36e1f2",
+  "date": "2026-08-28",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Turbopack: mangle exported names for smaller bundle sizes (#97672)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "53276537c1e46c3f5493485632642c9cb763903c",
+  "date": "2026-08-11",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[turbopack] Do the CJS analysis needed for scope hoisting (#95826)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "3a48dd6a6cf525bb455d343eff19c6adb9bf305d",
+  "date": "2026-07-24",
+  "matched": [
+   "referenceerror",
+   "is not defined"
+  ],
+  "subject": "Optimize app page entry analysis (#96058)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "eeb59c12aaf1c82082c6104cc193c8c94771844e",
+  "date": "2026-07-09",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Make the agent-rules block verifiable and self-upgrading (#95467)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "c131314bcf0cf21c5d5624b2cf8c6dbf07375abd",
+  "date": "2026-07-01",
+  "matched": [
+   "cannot access"
+  ],
+  "subject": "[PP] Validate Shell prefetches (except gSP) (#95151)",
+  "label": "unrelated",
+  "note": "\"cannot access\" in prose about what a shell or request can read."
+ },
+ {
+  "repo": "next.js",
+  "sha": "ceff72681ece1e29ff71e4f538dfe7d9959f95a6",
+  "date": "2026-05-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Turbopack: don't crash the dev server when node_modules/next is briefly unresolvable (#93877)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "56d95137fd6d84f4bc1e5ef2bb31e0136d5fad9c",
+  "date": "2026-05-12",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "bfcacheId: Opt out of state preservation (#93633)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "f4b40dcd536ccb2fe03d743ba4a5cd337fbdec69",
+  "date": "2026-04-14",
+  "matched": [
+   "circular"
+  ],
+  "subject": "refactor: remove ClientFileLogger, consolidate file logging into handleLog (#92329)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "next.js",
+  "sha": "108fe00fbdd84f497f3da9fac3855f492fa2c465",
+  "date": "2026-04-08",
+  "matched": [
+   "circular"
+  ],
+  "subject": "fix: replace docs/canary links with stable docs paths in error messages (#92528)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "9662feb629fd9c1d402e558a7783bb12d5300313",
+  "date": "2026-02-14",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[fragment-scroll] Ensure hoisted elements don't break scroll-to-top on page navigations (#83108)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "b067991e591f4965b873d4eef9a18ea1f321ca9b",
+  "date": "2026-02-11",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Add support for with `type: \"text\"` under a new experimental flag, following what webpack did (#89560)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "f4f0c449968facd4e9a4f3fc5cbfcacd5a3972e7",
+  "date": "2025-07-07",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Turbopack: make stats.json useable (#81318)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "17c05b67bdea952b1d39b0eb46d87920f40b38df",
+  "date": "2025-07-07",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "Always consider `captureOwnerStack` optional (#81370)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "824f853747a63702526803aea373895a8177ed7e",
+  "date": "2025-06-30",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[devtools]: move RestartServerButton to panel footer (#81082)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "e91660d1f474656fe5b602b38dea83641b656481",
+  "date": "2025-06-24",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Turbopack: scope hoisting (#79459)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "f1f88e349c7d47e9f118c3df426ab42745137714",
+  "date": "2025-06-19",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Apply normalizers for init URL used for handlers (#80694)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "61729da4e7721566b9a53f28463e9ec7332de428",
+  "date": "2025-06-04",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[metadata] fix nonce prop for hoist script (#80174)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "5e8119da9f6e468e4ffff6e2ebe5daf2ff82b6f0",
+  "date": "2025-03-15",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[metadata] remove the default segement check for metadata rendering (#77119)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "bedbbb73958fa0100b13094c0ab86a5d690e9fb0",
+  "date": "2025-02-19",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[dev-overlay] font style backward compat with react 18 (#76225)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "91cfa647ddf3c182e3623242f159c9dc46fe4e43",
+  "date": "2025-01-10",
+  "matched": [
+   "circular"
+  ],
+  "subject": "[DevTools] create error state for indicator (#74717)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "00c875f58d9274b1984761438cafba9c9eea25cb",
+  "date": "2024-11-27",
+  "matched": [
+   "circular"
+  ],
+  "subject": "refactor: remove indirection in metadata image resolution (#73225)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "next.js",
+  "sha": "701b11c3c4742bb5bc000ef9235b95cb398a5e0c",
+  "date": "2024-10-14",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "[after] after is not dynamic anymore (#71231)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "f63f0125b9c405d9a470db619710cc415aad1450",
+  "date": "2024-08-13",
+  "matched": [
+   "circular"
+  ],
+  "subject": "remove circular ExportError import from SSG worker (#68858)",
+  "label": "module-cycle",
+  "note": "Breaks or works around an import cycle; no function-order or TDZ problem named in the message."
+ },
+ {
+  "repo": "next.js",
+  "sha": "7f677d1e35ad25d08cd2ce29637ab2fcb62699c4",
+  "date": "2024-07-26",
+  "matched": [
+   "referenceerror",
+   "is not defined"
+  ],
+  "subject": "Revert \"[image, link] fix ref merging for callback refs that return a cleanup function\" (#68176)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "312eb61d24beef63cddf955a1324f2f6523100fa",
+  "date": "2024-06-03",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "add layerAssets property to FlightDataPath (#66354)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "34c2a05da2a3b45ae0529a632ca8b81aee5e81e2",
+  "date": "2024-06-01",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Warn metadataBase missing in standalone mode or non vercel deployment (#66296)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "ddf2af59c60a3cf9b23b291f4ca5b200fa62afbd",
+  "date": "2024-04-17",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix incorrect refresh request when basePath is set (#64589)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "ce422240e3c9203dbc5e9a3e864a3b1cc30f372f",
+  "date": "2024-02-29",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "feat: display text diff for text mismatch hydration errors (#62684)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "53a0a0fb879258718bb427d9c99506cf793aac6f",
+  "date": "2024-01-19",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "chore: replace micromatch w/ picomatch (#60699)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "ef3c6490fe6eabcbf9a1bd51244f4d14473e1c64",
+  "date": "2023-11-29",
+  "matched": [
+   "is not defined",
+   "hoist"
+  ],
+  "subject": "start performance profiling after node.js version is checked (#59028)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "9471fb854f65126590091b397e390978032d2297",
+  "date": "2023-11-21",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Improve Server Actions compiler (#58391)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "68e74b44bcb1c1ab4da4322e6b4b8e4299bfb061",
+  "date": "2023-11-17",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Lift subtree data out of React tree (#58569)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "5d2c503eacfa45243dfe82125a6c029d34c59586",
+  "date": "2023-10-10",
+  "matched": [
+   "referenceerror",
+   "is not defined"
+  ],
+  "subject": "remove unnecessary structuredClone (#56570)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "260ea16467c87a95fe6391e6478f3917d0243f53",
+  "date": "2023-10-09",
+  "matched": [
+   "cannot access"
+  ],
+  "subject": "Improve error handling of Server Actions with skewed deployment (#56618)",
+  "label": "unrelated",
+  "note": "\"cannot access\" in prose about what a shell or request can read."
+ },
+ {
+  "repo": "next.js",
+  "sha": "9834ab7e158e3a8f96ea0a637e339b1392e4ba85",
+  "date": "2023-08-23",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix not found css not being preloaded while navigation (#53906)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "a035224dc3c1232d75d18d2d40645cc2d56c9ddc",
+  "date": "2023-06-08",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Pick esm main fields and condition names first for RSC server layer (#50548)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "89a62ac4c81d39eef8ab12671fc0b9c67def3b6a",
+  "date": "2023-06-02",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Remove `cssFiles` field (#50610)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "a56066c5aba08e1f6dcfedca299345e97f8eb5e7",
+  "date": "2023-05-26",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Pages Route Module (#50070)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "e54e38a5a675f5fa498b43066e89cc9eb650c220",
+  "date": "2023-05-03",
+  "matched": [
+   "referenceerror",
+   "is not defined"
+  ],
+  "subject": "Fix edge runtime detection from layouts (#49126)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "4cd8b23032895ab18878d443625e671b291c87d6",
+  "date": "2022-08-15",
+  "matched": [
+   "no-use-before-define"
+  ],
+  "subject": "Enable @typescript-eslint/no-use-before-define for functions (#39602)",
+  "label": "lint-policy",
+  "note": "Enables @typescript-eslint/no-use-before-define for functions in Next.js core files (functions: false to true)."
+ },
+ {
+  "repo": "next.js",
+  "sha": "db9040b0b85b6e111543de516961e0249faaf0e8",
+  "date": "2022-08-11",
+  "matched": [
+   "no-use-before-define"
+  ],
+  "subject": "Enable @typescript-eslint/no-use-before-define variables,enums,typedefs for  core files (#39511)",
+  "label": "lint-policy",
+  "note": "Enables @typescript-eslint/no-use-before-define for variables, enums and typedefs in Next.js core files, moving code to satisfy it."
+ },
+ {
+  "repo": "next.js",
+  "sha": "d88fd14a280928d46e18a8186ed83a8d1f609289",
+  "date": "2022-08-05",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Hoist styles for Route Announcer 📢 (#39331)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "8a5c59b7f1538e7c039a84f5fc914d602f91ee7d",
+  "date": "2022-06-29",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Ensure @swc/helpers do not rely on hoisting (#38174)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "c4dc081e701a26a79ae1ed982efbdab0afff9dbf",
+  "date": "2022-06-22",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Fix styled-jsx types when package is not hoisted (#37902)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "ce6e8b562250f10d4fa9a7dea6e229e363e3baa7",
+  "date": "2022-05-03",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "fix: react root enabled properly in custom server (#36664)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "7a09f88d146665d8651c9acb2c7f4d5dc204846e",
+  "date": "2022-04-30",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Reexports styled-jsx JSXStyle in nextjs (#36585)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "cd7419e9c8b65c775cd2c02b9c762fb87a6ccab9",
+  "date": "2022-04-28",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Hoist the desired ReactDOM import expression (#36552)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "62b1704e41fa58a21f558653c4fb9f2e10defccf",
+  "date": "2022-02-15",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "Add support for \"type\": \"module\" in package.json (#33637)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "abf9f758215c36bf5c6488cab3e372757213c5c7",
+  "date": "2022-02-10",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Fix bug with \"Circular Structure\" error (#23905)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "3bac02e032792b07726ba795e5b07b502185667a",
+  "date": "2022-01-31",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Enable jest hoist transform when using next/jest (#33731)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "552aa9df1ae670d9c8ee872880af980d72eebc2d",
+  "date": "2021-01-11",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Prevent unpredictable dependency hosting by explicitly resolve module path on webpack.ProvidePlugin (#20971)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "8340e6d34562ad575293b5699023144fc47831d2",
+  "date": "2020-12-10",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "[Image Component] image sizes property becomes 100vw by default (#20067)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "76e86e0fba5968db7fcc32398f58ed2100b640dc",
+  "date": "2020-09-12",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Remove false positive in circular structure detection (#16380)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "dd97c984b2627be87a0bb37aab88fbcd037621fc",
+  "date": "2020-07-02",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Convert link to function component (#14633)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "955ea42288cc5e7cfd56330bd122242da0cbb204",
+  "date": "2019-10-03",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Monkey patch `next-sass` and `next-less` (#8944)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "9770d192f224c585e6f968d43f53f07b4c50ce23",
+  "date": "2019-09-14",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Prevents externalizing non-hoisted packages (#8739)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "eb28d4cdcff48fb9d2d1f3f7e8ab93e5f9d334ce",
+  "date": "2019-03-23",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Remove hoist-non-react-statics from with-router (#6765)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "11a161f2964fd1a25d07ff1deda4f2a3efa465bd",
+  "date": "2019-03-17",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "Add possible explanation for webpack resolve error (#6682)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "b3045cc7a92f15fdb6f0082fe60b41360f207d3a",
+  "date": "2019-01-27",
+  "matched": [
+   "circular"
+  ],
+  "subject": "Implement circular JSON err.sh link (#6149)",
+  "label": "unrelated",
+  "note": "\"circular\" refers to circular data structures, HMR or bundler handling of circular imports in user code, a test, or a type, not a cycle in the measured code."
+ },
+ {
+  "repo": "next.js",
+  "sha": "7ecf675834d392e8aeb90824a9f2db8a0a948b12",
+  "date": "2019-01-25",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Remove resolve rule (#6133)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "next.js",
+  "sha": "15bb1c5e7963361c9c592923ef28cd819092e49a",
+  "date": "2018-11-28",
+  "matched": [
+   "hoist"
+  ],
+  "subject": "Use Typescript to transpile Next.js core files instead of Babel (#5747)",
+  "label": "unrelated",
+  "note": "\"hoist\" means something else: hoisted scripts or styles (Astro), CSS @import/@charset or SSR import hoisting (Vite), package-manager hoisting, scope hoisting in a bundler, or lifting state/data."
+ },
+ {
+  "repo": "vscode",
+  "sha": "50ca83fad5ea13b7fc6a5bff700602d1d561aa91",
+  "date": "2025-07-16",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "Render complex HTML in screen reader content (#249356)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "vscode",
+  "sha": "91eec7195551d6978f7c4abda653d5bf839a9c5a",
+  "date": "2025-04-14",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "Optimized: Allowing to define variable line heights (#241218)",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ },
+ {
+  "repo": "vscode",
+  "sha": "db25f1e2864b9d47591be9b43a5f2b9aba38fa5f",
+  "date": "2022-03-18",
+  "matched": [
+   "is not defined"
+  ],
+  "subject": "Fixing #145072 by reporting tokenization as incomplete when tokenization state store is not defined.",
+  "label": "unrelated",
+  "note": "A global or environment value not defined at runtime (window, self, navigator, structuredClone, caches, a bundler-injected binding), not an evaluation-order problem in the measured code."
+ }
+]

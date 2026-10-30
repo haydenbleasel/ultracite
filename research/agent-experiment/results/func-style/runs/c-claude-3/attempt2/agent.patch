@@ -1,0 +1,29 @@
+--- a/serialize.ts
++++ b/serialize.ts
+@@ -155,7 +155,7 @@
+         PROP_TYPE.Map,
+         serializeArray(
+           convertToSerializedForm,
+-          [...(value as Map<any, any>)],
++          [...(value as Map<unknown, unknown>)],
+           metadata,
+           parents
+         ),
+@@ -166,7 +166,7 @@
+         PROP_TYPE.Set,
+         serializeArray(
+           convertToSerializedForm,
+-          [...(value as Set<any>)],
++          [...(value as Set<unknown>)],
+           metadata,
+           parents
+         ),
+@@ -215,7 +215,7 @@
+ };
+ 
+ export const serializeProps = (
+-  props: any,
++  props: Record<string, unknown>,
+   metadata?: AstroComponentMetadata
+ ) => {
+   const serialized = JSON.stringify(

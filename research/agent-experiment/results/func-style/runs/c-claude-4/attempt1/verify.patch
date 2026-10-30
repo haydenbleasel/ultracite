@@ -1,0 +1,25 @@
+--- a/serialize.ts
++++ b/serialize.ts
+@@ -118,7 +118,11 @@
+       case "[object Set]": {
+         return [
+           PROP_TYPE.Set,
+-          serializer.serializeArray([...(value as Set<any>)], metadata, parents),
++          serializer.serializeArray(
++            [...(value as Set<any>)],
++            metadata,
++            parents
++          ),
+         ];
+       }
+       case "[object BigInt]": {
+@@ -207,6 +211,8 @@
+   props: any,
+   metadata?: AstroComponentMetadata
+ ) => {
+-  const serialized = JSON.stringify(serializer.serializeObject(props, metadata));
++  const serialized = JSON.stringify(
++    serializer.serializeObject(props, metadata)
++  );
+   return serialized;
+ };

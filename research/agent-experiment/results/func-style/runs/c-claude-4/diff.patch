@@ -1,0 +1,229 @@
+--- a/serialize.ts
++++ b/serialize.ts
+@@ -89,107 +89,130 @@
+   Value: 0,
+ };
+ 
+-function serializeArray(
+-  value: any[],
+-  metadata: AstroComponentMetadata | Record<string, any> = {},
+-  parents = new WeakSet<any>()
+-): any[] {
+-  if (parents.has(value)) {
+-    throw new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!
++// The three serializers are mutually recursive, so they live on one object and
++// call each other through it rather than referencing bindings declared later.
++const serializer = {
++  convertToSerializedForm(
++    value: any,
++    metadata: AstroComponentMetadata | Record<string, any> = {},
++    parents = new WeakSet<any>()
++  ): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] {
++    const tag = Object.prototype.toString.call(value);
++    switch (tag) {
++      case "[object Date]": {
++        return [PROP_TYPE.Date, (value as Date).toISOString()];
++      }
++      case "[object RegExp]": {
++        return [PROP_TYPE.RegExp, (value as RegExp).source];
++      }
++      case "[object Map]": {
++        return [
++          PROP_TYPE.Map,
++          serializer.serializeArray(
++            [...(value as Map<any, any>)],
++            metadata,
++            parents
++          ),
++        ];
++      }
++      case "[object Set]": {
++        return [
++          PROP_TYPE.Set,
++          serializer.serializeArray(
++            [...(value as Set<any>)],
++            metadata,
++            parents
++          ),
++        ];
++      }
++      case "[object BigInt]": {
++        return [PROP_TYPE.BigInt, (value as bigint).toString()];
++      }
++      case "[object URL]": {
++        return [PROP_TYPE.URL, (value as URL).toString()];
++      }
++      case "[object Array]": {
++        return [
++          PROP_TYPE.JSON,
++          serializer.serializeArray(value, metadata, parents),
++        ];
++      }
++      case "[object Uint8Array]": {
++        return [PROP_TYPE.Uint8Array, [...(value as Uint8Array)]];
++      }
++      case "[object Uint16Array]": {
++        return [PROP_TYPE.Uint16Array, [...(value as Uint16Array)]];
++      }
++      case "[object Uint32Array]": {
++        return [PROP_TYPE.Uint32Array, [...(value as Uint32Array)]];
++      }
++      default: {
++        if (value !== null && typeof value === "object") {
++          return [
++            PROP_TYPE.Value,
++            serializer.serializeObject(value, metadata, parents),
++          ];
++        }
++        if (value === Number.POSITIVE_INFINITY) {
++          return [PROP_TYPE.Infinity, 1];
++        }
++        if (value === Number.NEGATIVE_INFINITY) {
++          return [PROP_TYPE.Infinity, -1];
++        }
++        if (value === undefined) {
++          return [PROP_TYPE.Value];
++        }
++        return [PROP_TYPE.Value, value];
++      }
++    }
++  },
+ 
++  serializeArray(
++    value: any[],
++    metadata: AstroComponentMetadata | Record<string, any> = {},
++    parents = new WeakSet<any>()
++  ): any[] {
++    if (parents.has(value)) {
++      throw new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!
++
+ Cyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference.`);
+-  }
+-  parents.add(value);
+-  const serialized = value.map((v) =>
+-    convertToSerializedForm(v, metadata, parents)
+-  );
+-  parents.delete(value);
+-  return serialized;
+-}
++    }
++    parents.add(value);
++    const serialized = value.map((v) =>
++      serializer.convertToSerializedForm(v, metadata, parents)
++    );
++    parents.delete(value);
++    return serialized;
++  },
+ 
+-function serializeObject(
+-  value: Record<any, any>,
+-  metadata: AstroComponentMetadata | Record<string, any> = {},
+-  parents = new WeakSet<any>()
+-): Record<any, any> {
+-  if (parents.has(value)) {
+-    throw new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!
++  serializeObject(
++    value: Record<any, any>,
++    metadata: AstroComponentMetadata | Record<string, any> = {},
++    parents = new WeakSet<any>()
++  ): Record<any, any> {
++    if (parents.has(value)) {
++      throw new Error(`Cyclic reference detected while serializing props for <${metadata.displayName} client:${metadata.hydrate}>!
+ 
+ Cyclic references cannot be safely serialized for client-side usage. Please remove the cyclic reference.`);
+-  }
+-  parents.add(value);
+-  const serialized = Object.fromEntries(
+-    Object.entries(value).map(([k, v]) => [
+-      k,
+-      convertToSerializedForm(v, metadata, parents),
+-    ])
+-  );
+-  parents.delete(value);
+-  return serialized;
+-}
+-
+-function convertToSerializedForm(
+-  value: any,
+-  metadata: AstroComponentMetadata | Record<string, any> = {},
+-  parents = new WeakSet<any>()
+-): [ValueOf<typeof PROP_TYPE>, any] | [ValueOf<typeof PROP_TYPE>] {
+-  const tag = Object.prototype.toString.call(value);
+-  switch (tag) {
+-    case "[object Date]": {
+-      return [PROP_TYPE.Date, (value as Date).toISOString()];
+     }
+-    case "[object RegExp]": {
+-      return [PROP_TYPE.RegExp, (value as RegExp).source];
+-    }
+-    case "[object Map]": {
+-      return [
+-        PROP_TYPE.Map,
+-        serializeArray([...(value as Map<any, any>)], metadata, parents),
+-      ];
+-    }
+-    case "[object Set]": {
+-      return [
+-        PROP_TYPE.Set,
+-        serializeArray([...(value as Set<any>)], metadata, parents),
+-      ];
+-    }
+-    case "[object BigInt]": {
+-      return [PROP_TYPE.BigInt, (value as bigint).toString()];
+-    }
+-    case "[object URL]": {
+-      return [PROP_TYPE.URL, (value as URL).toString()];
+-    }
+-    case "[object Array]": {
+-      return [PROP_TYPE.JSON, serializeArray(value, metadata, parents)];
+-    }
+-    case "[object Uint8Array]": {
+-      return [PROP_TYPE.Uint8Array, [...(value as Uint8Array)]];
+-    }
+-    case "[object Uint16Array]": {
+-      return [PROP_TYPE.Uint16Array, [...(value as Uint16Array)]];
+-    }
+-    case "[object Uint32Array]": {
+-      return [PROP_TYPE.Uint32Array, [...(value as Uint32Array)]];
+-    }
+-    default: {
+-      if (value !== null && typeof value === "object") {
+-        return [PROP_TYPE.Value, serializeObject(value, metadata, parents)];
+-      }
+-      if (value === Number.POSITIVE_INFINITY) {
+-        return [PROP_TYPE.Infinity, 1];
+-      }
+-      if (value === Number.NEGATIVE_INFINITY) {
+-        return [PROP_TYPE.Infinity, -1];
+-      }
+-      if (value === undefined) {
+-        return [PROP_TYPE.Value];
+-      }
+-      return [PROP_TYPE.Value, value];
+-    }
+-  }
+-}
++    parents.add(value);
++    const serialized = Object.fromEntries(
++      Object.entries(value).map(([k, v]) => [
++        k,
++        serializer.convertToSerializedForm(v, metadata, parents),
++      ])
++    );
++    parents.delete(value);
++    return serialized;
++  },
++};
+ 
+-export function serializeProps(props: any, metadata?: AstroComponentMetadata) {
+-  const serialized = JSON.stringify(serializeObject(props, metadata));
++export const serializeProps = (
++  props: any,
++  metadata?: AstroComponentMetadata
++) => {
++  const serialized = JSON.stringify(
++    serializer.serializeObject(props, metadata)
++  );
+   return serialized;
+-}
++};

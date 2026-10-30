@@ -1,0 +1,160 @@
+--- a/ConfigurationDriftPage.utils.ts
++++ b/ConfigurationDriftPage.utils.ts
+@@ -65,10 +65,61 @@
+   rows: UnmanagedConfigRow[];
+ }
+ 
+-export function createConfigurationDriftRows(
++/**
++ * Prefers the registry's hand-written label, and otherwise title-cases the last path segment —
++ * never the whole path, which would leave the dots in.
++ */
++const getConfigFieldLabel = (configPath: string): string => {
++  const label = getFieldDefinition(configPath)?.label;
++  return label ?? startCase(configPath.split(".").at(-1) ?? configPath);
++};
++
++const formatScalarValue = (value: unknown): string => {
++  if (typeof value === "string") {
++    return value || "Not set";
++  }
++  if (typeof value === "boolean") {
++    return value ? "true" : "false";
++  }
++  if (typeof value === "number") {
++    return String(value);
++  }
++  return JSON.stringify(value, null, 2) ?? "Not set";
++};
++
++const formatConfigFieldValue = (value: unknown): string => {
++  const normalizedValue = value;
++
++  if (
++    normalizedValue === undefined ||
++    normalizedValue === null ||
++    normalizedValue === ""
++  ) {
++    return "Not set";
++  }
++  if (Array.isArray(normalizedValue)) {
++    return normalizedValue.length === 0
++      ? "Not set"
++      : normalizedValue.map((item) => formatScalarValue(item)).join("\n");
++  }
++
++  return formatScalarValue(normalizedValue);
++};
++
++const createConfigurationDriftValueDiff = (
++  field: GitHubConfigDriftField
++): ConfigurationDriftValueDiff => {
++  return {
++    configValue: formatConfigFieldValue(field.githubValue),
++    dashboardValue: formatConfigFieldValue(field.dashboardValue),
++    kind: "scalar",
++  };
++};
++
++export const createConfigurationDriftRows = (
+   fields: GitHubConfigDriftField[],
+   projectRef: string
+-): ConfigurationDriftRow[] {
++): ConfigurationDriftRow[] => {
+   return fields.map((field) => ({
+     ...field,
+     settingHref: field.settingHref(projectRef),
+@@ -76,23 +127,11 @@
+     status: "drifted" as const,
+     valueDiff: createConfigurationDriftValueDiff(field),
+   }));
+-}
++};
+ 
+-export function groupUnmanagedConfigFields(
+-  fields: readonly UnmanagedConfigField[]
+-): ConfigSectionGroup[] {
+-  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue);
+-}
+-
+-export function groupMatchedConfigFields(
+-  fields: readonly MatchedConfigField[]
+-): ConfigSectionGroup[] {
+-  return groupConfigFieldsBySection(fields, (field) => field.value);
+-}
+-
+-function groupConfigFieldsBySection<
++const groupConfigFieldsBySection = <
+   T extends { section: ConfigSection; configPath: string },
+->(fields: readonly T[], getValue: (field: T) => unknown): ConfigSectionGroup[] {
++>(fields: readonly T[], getValue: (field: T) => unknown): ConfigSectionGroup[] => {
+   const bySection = new Map<ConfigSection, UnmanagedConfigRow[]>();
+ 
+   for (const field of fields) {
+@@ -112,55 +151,16 @@
+       sectionLabel: CONFIG_SECTION_LABELS[section],
+     })
+   );
+-}
++};
+ 
+-function formatConfigFieldValue(value: unknown): string {
+-  const normalizedValue = value;
++export const groupUnmanagedConfigFields = (
++  fields: readonly UnmanagedConfigField[]
++): ConfigSectionGroup[] => {
++  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue);
++};
+ 
+-  if (
+-    normalizedValue === undefined ||
+-    normalizedValue === null ||
+-    normalizedValue === ""
+-  ) {
+-    return "Not set";
+-  }
+-  if (Array.isArray(normalizedValue)) {
+-    return normalizedValue.length === 0
+-      ? "Not set"
+-      : normalizedValue.map((item) => formatScalarValue(item)).join("\n");
+-  }
+-
+-  return formatScalarValue(normalizedValue);
+-}
+-
+-function createConfigurationDriftValueDiff(
+-  field: GitHubConfigDriftField
+-): ConfigurationDriftValueDiff {
+-  return {
+-    configValue: formatConfigFieldValue(field.githubValue),
+-    dashboardValue: formatConfigFieldValue(field.dashboardValue),
+-    kind: "scalar",
+-  };
+-}
+-
+-/**
+- * Prefers the registry's hand-written label, and otherwise title-cases the last path segment —
+- * never the whole path, which would leave the dots in.
+- */
+-function getConfigFieldLabel(configPath: string): string {
+-  const label = getFieldDefinition(configPath)?.label;
+-  return label ?? startCase(configPath.split(".").at(-1) ?? configPath);
+-}
+-
+-function formatScalarValue(value: unknown): string {
+-  if (typeof value === "string") {
+-    return value || "Not set";
+-  }
+-  if (typeof value === "boolean") {
+-    return value ? "true" : "false";
+-  }
+-  if (typeof value === "number") {
+-    return String(value);
+-  }
+-  return JSON.stringify(value, null, 2) ?? "Not set";
+-}
++export const groupMatchedConfigFields = (
++  fields: readonly MatchedConfigField[]
++): ConfigSectionGroup[] => {
++  return groupConfigFieldsBySection(fields, (field) => field.value);
++};

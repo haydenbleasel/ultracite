@@ -1,0 +1,36 @@
+--- a/duration-to-string.ts
++++ b/duration-to-string.ts
+@@ -102,10 +102,9 @@
+  * @param hrtime - High-resolution time tuple of [seconds, nanoseconds]
+  * @returns Duration in seconds as a floating-point number
+  */
+-export const hrtimeToSeconds = (hrtime: [number, number]): number => {
++export const hrtimeToSeconds = (hrtime: [number, number]): number =>
+   // hrtime is a tuple of [seconds, nanoseconds]
+-  return hrtime[0] + hrtime[1] / NANOSECONDS_PER_SECOND;
+-};
++  hrtime[0] + hrtime[1] / NANOSECONDS_PER_SECOND;
+ 
+ /**
+  * Converts a BigInt nanosecond duration to a human-readable string format.
+@@ -114,9 +113,8 @@
+  * @param hrtime - Duration in nanoseconds as a BigInt (typically from process.hrtime.bigint())
+  * @returns Formatted duration string with appropriate unit and precision
+  */
+-export const hrtimeBigIntDurationToString = (hrtime: bigint) => {
+-  return durationToStringWithNanoseconds(hrtime);
+-};
++export const hrtimeBigIntDurationToString = (hrtime: bigint) =>
++  durationToStringWithNanoseconds(hrtime);
+ 
+ /**
+  * Converts a high-resolution time tuple to a human-readable string format.
+@@ -125,6 +123,5 @@
+  * @param hrtime - High-resolution time tuple of [seconds, nanoseconds]
+  * @returns Formatted duration string with appropriate unit and precision
+  */
+-export const hrtimeDurationToString = (hrtime: [number, number]): string => {
+-  return durationToString(hrtimeToSeconds(hrtime));
+-};
++export const hrtimeDurationToString = (hrtime: [number, number]): string =>
++  durationToString(hrtimeToSeconds(hrtime));

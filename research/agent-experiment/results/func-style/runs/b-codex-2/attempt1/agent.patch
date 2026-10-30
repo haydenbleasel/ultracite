@@ -1,0 +1,160 @@
+--- a/ConfigurationDriftPage.utils.ts
++++ b/ConfigurationDriftPage.utils.ts
+@@ -65,56 +65,20 @@
+   rows: UnmanagedConfigRow[];
+ }
+ 
+-export function createConfigurationDriftRows(
+-  fields: GitHubConfigDriftField[],
+-  projectRef: string
+-): ConfigurationDriftRow[] {
+-  return fields.map((field) => ({
+-    ...field,
+-    settingHref: field.settingHref(projectRef),
+-    settingLabel: getConfigFieldLabel(field.configPath),
+-    status: "drifted" as const,
+-    valueDiff: createConfigurationDriftValueDiff(field),
+-  }));
+-}
+-
+-export function groupUnmanagedConfigFields(
+-  fields: readonly UnmanagedConfigField[]
+-): ConfigSectionGroup[] {
+-  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue);
+-}
+-
+-export function groupMatchedConfigFields(
+-  fields: readonly MatchedConfigField[]
+-): ConfigSectionGroup[] {
+-  return groupConfigFieldsBySection(fields, (field) => field.value);
+-}
+-
+-function groupConfigFieldsBySection<
+-  T extends { section: ConfigSection; configPath: string },
+->(fields: readonly T[], getValue: (field: T) => unknown): ConfigSectionGroup[] {
+-  const bySection = new Map<ConfigSection, UnmanagedConfigRow[]>();
+-
+-  for (const field of fields) {
+-    const rows = bySection.get(field.section) ?? [];
+-    rows.push({
+-      configPath: field.configPath,
+-      label: getConfigFieldLabel(field.configPath),
+-      value: formatConfigFieldValue(getValue(field)),
+-    });
+-    bySection.set(field.section, rows);
++const formatScalarValue = function formatScalarValue(value: unknown): string {
++  if (typeof value === "string") {
++    return value || "Not set";
+   }
++  if (typeof value === "boolean") {
++    return value ? "true" : "false";
++  }
++  if (typeof value === "number") {
++    return String(value);
++  }
++  return JSON.stringify(value, null, 2) ?? "Not set";
++};
+ 
+-  return CONFIG_SECTIONS.filter((section) => bySection.has(section)).map(
+-    (section) => ({
+-      rows: bySection.get(section)!,
+-      section,
+-      sectionLabel: CONFIG_SECTION_LABELS[section],
+-    })
+-  );
+-}
+-
+-function formatConfigFieldValue(value: unknown): string {
++const formatConfigFieldValue = function formatConfigFieldValue(value: unknown): string {
+   const normalizedValue = value;
+ 
+   if (
+@@ -131,9 +95,9 @@
+   }
+ 
+   return formatScalarValue(normalizedValue);
+-}
++};
+ 
+-function createConfigurationDriftValueDiff(
++const createConfigurationDriftValueDiff = function createConfigurationDriftValueDiff(
+   field: GitHubConfigDriftField
+ ): ConfigurationDriftValueDiff {
+   return {
+@@ -141,26 +105,62 @@
+     dashboardValue: formatConfigFieldValue(field.dashboardValue),
+     kind: "scalar",
+   };
+-}
++};
+ 
+ /**
+  * Prefers the registry's hand-written label, and otherwise title-cases the last path segment —
+  * never the whole path, which would leave the dots in.
+  */
+-function getConfigFieldLabel(configPath: string): string {
++const getConfigFieldLabel = function getConfigFieldLabel(configPath: string): string {
+   const label = getFieldDefinition(configPath)?.label;
+   return label ?? startCase(configPath.split(".").at(-1) ?? configPath);
+-}
++};
+ 
+-function formatScalarValue(value: unknown): string {
+-  if (typeof value === "string") {
+-    return value || "Not set";
++export const createConfigurationDriftRows = function createConfigurationDriftRows(
++  fields: GitHubConfigDriftField[],
++  projectRef: string
++): ConfigurationDriftRow[] {
++  return fields.map((field) => ({
++    ...field,
++    settingHref: field.settingHref(projectRef),
++    settingLabel: getConfigFieldLabel(field.configPath),
++    status: "drifted" as const,
++    valueDiff: createConfigurationDriftValueDiff(field),
++  }));
++};
++
++const groupConfigFieldsBySection = function groupConfigFieldsBySection<
++  T extends { section: ConfigSection; configPath: string },
++>(fields: readonly T[], getValue: (field: T) => unknown): ConfigSectionGroup[] {
++  const bySection = new Map<ConfigSection, UnmanagedConfigRow[]>();
++
++  for (const field of fields) {
++    const rows = bySection.get(field.section) ?? [];
++    rows.push({
++      configPath: field.configPath,
++      label: getConfigFieldLabel(field.configPath),
++      value: formatConfigFieldValue(getValue(field)),
++    });
++    bySection.set(field.section, rows);
+   }
+-  if (typeof value === "boolean") {
+-    return value ? "true" : "false";
+-  }
+-  if (typeof value === "number") {
+-    return String(value);
+-  }
+-  return JSON.stringify(value, null, 2) ?? "Not set";
+-}
++
++  return CONFIG_SECTIONS.filter((section) => bySection.has(section)).map(
++    (section) => ({
++      rows: bySection.get(section)!,
++      section,
++      sectionLabel: CONFIG_SECTION_LABELS[section],
++    })
++  );
++};
++
++export const groupUnmanagedConfigFields = function groupUnmanagedConfigFields(
++  fields: readonly UnmanagedConfigField[]
++): ConfigSectionGroup[] {
++  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue);
++};
++
++export const groupMatchedConfigFields = function groupMatchedConfigFields(
++  fields: readonly MatchedConfigField[]
++): ConfigSectionGroup[] {
++  return groupConfigFieldsBySection(fields, (field) => field.value);
++};

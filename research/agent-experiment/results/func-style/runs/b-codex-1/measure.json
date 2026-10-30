@@ -1,0 +1,2006 @@
+{
+  "runId": "b-codex-1",
+  "topic": "func-style",
+  "subject": "b",
+  "base": "b",
+  "label": "B, needs reordering",
+  "config": "what `ultracite init --linter oxlint` writes (oxlint core), unchanged",
+  "agent": "codex",
+  "cliVersion": "codex-cli 0.164.0",
+  "wallSeconds": 85.8,
+  "attemptCount": 1,
+  "stoppedBecause": "no diagnostics left",
+  "retryLoop": {
+    "maxAttempts": 3,
+    "timeoutMs": 300000,
+    "killGraceMs": 10000,
+    "outputCap": 8192,
+    "source": "packages/cli/src/agent-fix/index.ts MAX_AGENT_ATTEMPTS and run-agent.ts AGENT_TIMEOUT_MS / KILL_GRACE_MS"
+  },
+  "handoff": {
+    "fixPassChanged": [],
+    "reportedBeforeFilter": 22,
+    "leftOutByFilter": {
+      "prefer-named-capture-group": 2,
+      "require-unicode-regexp": 2,
+      "typescript/no-non-null-assertion": 1,
+      "unicorn/filename-case": 1
+    },
+    "given": [
+      {
+        "rule": "func-style",
+        "line": 68,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 75,
+        "message": "'getConfigFieldLabel' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 77,
+        "message": "'createConfigurationDriftValueDiff' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 81,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 84,
+        "message": "'groupConfigFieldsBySection' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 87,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 90,
+        "message": "'groupConfigFieldsBySection' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 93,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 102,
+        "message": "'getConfigFieldLabel' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 103,
+        "message": "'formatConfigFieldValue' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 117,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 130,
+        "message": "'formatScalarValue' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "no-use-before-define",
+        "line": 133,
+        "message": "'formatScalarValue' was used before it was defined.",
+        "help": "Move the declaration before any references to it, or remove the reference if it is not needed.",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-use-before-define.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 136,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 150,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      },
+      {
+        "rule": "func-style",
+        "line": 155,
+        "message": "Expected a function expression.",
+        "help": "Enforce the consistent use of either `function` declarations or expressions assigned to variables",
+        "url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/func-style.html"
+      }
+    ],
+    "beforeMatchesPristine": true
+  },
+  "before": {
+    "exists": true,
+    "sha256": "05bd430a2e2ebdf026a704bbce56b806aca6a99c81b4fe4575fbd659414daf70",
+    "parseError": false,
+    "views": {
+      "oxlint": {
+        "topicHonor": {
+          "func-style": 8,
+          "no-use-before-define": 8
+        },
+        "topicIgnore": {
+          "func-style": 8,
+          "no-use-before-define": 8
+        },
+        "topicHits": [
+          "func-style L68: Expected a function expression.",
+          "no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+          "no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+          "func-style L81: Expected a function expression.",
+          "no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+          "func-style L87: Expected a function expression.",
+          "no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+          "func-style L93: Expected a function expression.",
+          "no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+          "no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+          "func-style L117: Expected a function expression.",
+          "no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+          "no-use-before-define L133: 'formatScalarValue' was used before it was defined.",
+          "func-style L136: Expected a function expression.",
+          "func-style L150: Expected a function expression.",
+          "func-style L155: Expected a function expression."
+        ],
+        "parseError": false,
+        "all": {
+          "func-style": 8,
+          "no-use-before-define": 8,
+          "typescript/no-non-null-assertion": 1,
+          "unicorn/filename-case": 1
+        }
+      },
+      "oxlint ubd functions:false": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "oxlint ubd variables:false": {
+        "topicHonor": {
+          "no-use-before-define": 8
+        },
+        "topicIgnore": {
+          "no-use-before-define": 8
+        },
+        "topicHits": [
+          "no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+          "no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+          "no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+          "no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+          "no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+          "no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+          "no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+          "no-use-before-define L133: 'formatScalarValue' was used before it was defined."
+        ],
+        "parseError": false,
+        "all": {
+          "no-use-before-define": 8
+        }
+      },
+      "eslint": {
+        "topicHonor": {
+          "@typescript-eslint/no-use-before-define": 8,
+          "func-style": 8,
+          "unicorn/consistent-arrow-return-style": 2
+        },
+        "topicIgnore": {
+          "@typescript-eslint/no-use-before-define": 8,
+          "func-style": 8,
+          "unicorn/consistent-arrow-return-style": 2
+        },
+        "topicHits": [
+          "func-style L68: Expected a function expression.",
+          "unicorn/consistent-arrow-return-style L72: Use an explicit return for a multiline arrow function body.",
+          "@typescript-eslint/no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+          "@typescript-eslint/no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+          "func-style L81: Expected a function expression.",
+          "@typescript-eslint/no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+          "func-style L87: Expected a function expression.",
+          "@typescript-eslint/no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+          "func-style L93: Expected a function expression.",
+          "@typescript-eslint/no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+          "@typescript-eslint/no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+          "unicorn/consistent-arrow-return-style L109: Use an explicit return for a multiline arrow function body.",
+          "func-style L117: Expected a function expression.",
+          "@typescript-eslint/no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+          "@typescript-eslint/no-use-before-define L133: 'formatScalarValue' was used before it was defined.",
+          "func-style L136: Expected a function expression.",
+          "func-style L150: Expected a function expression.",
+          "func-style L155: Expected a function expression."
+        ],
+        "parseError": false,
+        "all": {
+          "@typescript-eslint/no-non-null-assertion": 1,
+          "@typescript-eslint/no-use-before-define": 8,
+          "func-style": 8,
+          "github/filenames-match-regex": 1,
+          "unicorn/consistent-arrow-return-style": 2,
+          "unicorn/name-replacements": 7,
+          "unicorn/no-manually-wrapped-comments": 2,
+          "unicorn/prefer-includes-over-repeated-comparisons": 1
+        }
+      },
+      "eslint ubd functions:false": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {}
+      },
+      "eslint ubd variables:false": {
+        "topicHonor": {
+          "alt/ts-ubd-variables-false": 8
+        },
+        "topicIgnore": {
+          "alt/ts-ubd-variables-false": 8
+        },
+        "topicHits": [
+          "alt/ts-ubd-variables-false L75: 'getConfigFieldLabel' was used before it was defined.",
+          "alt/ts-ubd-variables-false L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+          "alt/ts-ubd-variables-false L84: 'groupConfigFieldsBySection' was used before it was defined.",
+          "alt/ts-ubd-variables-false L90: 'groupConfigFieldsBySection' was used before it was defined.",
+          "alt/ts-ubd-variables-false L102: 'getConfigFieldLabel' was used before it was defined.",
+          "alt/ts-ubd-variables-false L103: 'formatConfigFieldValue' was used before it was defined.",
+          "alt/ts-ubd-variables-false L130: 'formatScalarValue' was used before it was defined.",
+          "alt/ts-ubd-variables-false L133: 'formatScalarValue' was used before it was defined."
+        ],
+        "parseError": false,
+        "all": {
+          "alt/ts-ubd-variables-false": 8
+        }
+      },
+      "eslint base ubd": {
+        "topicHonor": {
+          "alt/base-ubd": 8
+        },
+        "topicIgnore": {
+          "alt/base-ubd": 8
+        },
+        "topicHits": [
+          "alt/base-ubd L75: 'getConfigFieldLabel' was used before it was defined.",
+          "alt/base-ubd L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+          "alt/base-ubd L84: 'groupConfigFieldsBySection' was used before it was defined.",
+          "alt/base-ubd L90: 'groupConfigFieldsBySection' was used before it was defined.",
+          "alt/base-ubd L102: 'getConfigFieldLabel' was used before it was defined.",
+          "alt/base-ubd L103: 'formatConfigFieldValue' was used before it was defined.",
+          "alt/base-ubd L130: 'formatScalarValue' was used before it was defined.",
+          "alt/base-ubd L133: 'formatScalarValue' was used before it was defined."
+        ],
+        "parseError": false,
+        "all": {
+          "alt/base-ubd": 8
+        }
+      },
+      "biome": {
+        "topicHonor": {},
+        "topicIgnore": {},
+        "topicHits": [],
+        "parseError": false,
+        "all": {
+          "assist/source/organizeImports": 1,
+          "assist/source/useSortedInterfaceMembers": 3,
+          "style/noNonNullAssertion": 1,
+          "style/useFilenamingConvention": 1,
+          "suspicious/noUnnecessaryConditions": 1
+        }
+      }
+    },
+    "armLeft": {
+      "honor": [
+        "func-style L68: Expected a function expression.",
+        "no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+        "func-style L81: Expected a function expression.",
+        "no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L87: Expected a function expression.",
+        "no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L93: Expected a function expression.",
+        "no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+        "func-style L117: Expected a function expression.",
+        "no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+        "no-use-before-define L133: 'formatScalarValue' was used before it was defined.",
+        "func-style L136: Expected a function expression.",
+        "func-style L150: Expected a function expression.",
+        "func-style L155: Expected a function expression."
+      ],
+      "ignore": [
+        "func-style L68: Expected a function expression.",
+        "no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+        "func-style L81: Expected a function expression.",
+        "no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L87: Expected a function expression.",
+        "no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L93: Expected a function expression.",
+        "no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+        "func-style L117: Expected a function expression.",
+        "no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+        "no-use-before-define L133: 'formatScalarValue' was used before it was defined.",
+        "func-style L136: Expected a function expression.",
+        "func-style L150: Expected a function expression.",
+        "func-style L155: Expected a function expression."
+      ]
+    },
+    "armCleared": {
+      "honor": false,
+      "ignore": false
+    },
+    "funcStyleLeft": 8,
+    "ubdLeft": 8,
+    "fileLines": 167,
+    "typeErrors": [],
+    "tdzTypeErrors": [],
+    "oracle": {
+      "verdict": "same",
+      "calls": 300,
+      "differing": null,
+      "detail": null,
+      "ignoringKeyOrder": "same",
+      "differingIgnoringKeyOrder": null,
+      "importOk": true,
+      "importError": null,
+      "exportNames": [
+        [
+          "createConfigurationDriftRows",
+          "function",
+          "createConfigurationDriftRows",
+          2
+        ],
+        [
+          "groupMatchedConfigFields",
+          "function",
+          "groupMatchedConfigFields",
+          1
+        ],
+        [
+          "groupUnmanagedConfigFields",
+          "function",
+          "groupUnmanagedConfigFields",
+          1
+        ]
+      ],
+      "exportNamesSame": true
+    },
+    "facts": {
+      "order": [
+        "createConfigurationDriftRows",
+        "groupUnmanagedConfigFields",
+        "groupMatchedConfigFields",
+        "groupConfigFieldsBySection",
+        "formatConfigFieldValue",
+        "createConfigurationDriftValueDiff",
+        "getConfigFieldLabel",
+        "formatScalarValue"
+      ],
+      "forms": [
+        "createConfigurationDriftRows: declaration, block, single return",
+        "groupUnmanagedConfigFields: declaration, block, single return",
+        "groupMatchedConfigFields: declaration, block, single return",
+        "groupConfigFieldsBySection: declaration, block",
+        "formatConfigFieldValue: declaration, block",
+        "createConfigurationDriftValueDiff: declaration, block, single return",
+        "getConfigFieldLabel: declaration, block",
+        "formatScalarValue: declaration, block"
+      ],
+      "direction": "mixed",
+      "referencesDown": 7,
+      "referencesUp": 1,
+      "referencesBeforeDefinition": 8,
+      "namesUsedBeforeDefinition": [
+        "createConfigurationDriftValueDiff",
+        "formatConfigFieldValue",
+        "formatScalarValue",
+        "getConfigFieldLabel",
+        "groupConfigFieldsBySection"
+      ],
+      "loadTimeBeforeDefinition": 0,
+      "holders": [],
+      "nested": []
+    },
+    "edit": {
+      "edit": "unchanged",
+      "kinds": []
+    },
+    "suppressions": {
+      "eslint-disable": 0,
+      "eslint inline config": 0,
+      "oxlint-disable": 0,
+      "biome-ignore": 0,
+      "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "buildPrompt",
+      "promptKind": "first",
+      "given": [
+        "func-style L68: Expected a function expression.",
+        "no-use-before-define L75: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L77: 'createConfigurationDriftValueDiff' was used before it was defined.",
+        "func-style L81: Expected a function expression.",
+        "no-use-before-define L84: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L87: Expected a function expression.",
+        "no-use-before-define L90: 'groupConfigFieldsBySection' was used before it was defined.",
+        "func-style L93: Expected a function expression.",
+        "no-use-before-define L102: 'getConfigFieldLabel' was used before it was defined.",
+        "no-use-before-define L103: 'formatConfigFieldValue' was used before it was defined.",
+        "func-style L117: Expected a function expression.",
+        "no-use-before-define L130: 'formatScalarValue' was used before it was defined.",
+        "no-use-before-define L133: 'formatScalarValue' was used before it was defined.",
+        "func-style L136: Expected a function expression.",
+        "func-style L150: Expected a function expression.",
+        "func-style L155: Expected a function expression."
+      ],
+      "retryIssues": null,
+      "leftForReview": null,
+      "leftForReviewShare": "none",
+      "wallSeconds": 85.8,
+      "exitCode": 0,
+      "timedOut": false,
+      "ok": true,
+      "unchanged": false,
+      "ownEdit": {
+        "edit": "converted (arrows), reordered",
+        "kinds": [
+          "converted",
+          "const arrows",
+          "reordered"
+        ],
+        "restructured": [],
+        "conversion": {
+          "arrows": 8,
+          "functionExpressions": 0,
+          "declarations": 0,
+          "methods": 0,
+          "nested": 0,
+          "gone": 0,
+          "forward": 0,
+          "var": 0,
+          "let": 0
+        },
+        "moved": {
+          "functions": [
+            "getConfigFieldLabel",
+            "formatScalarValue",
+            "formatConfigFieldValue",
+            "createConfigurationDriftValueDiff",
+            "groupConfigFieldsBySection"
+          ],
+          "lines": 66
+        },
+        "perFunction": [
+          {
+            "name": "createConfigurationDriftRows",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "2/2 (was 2/2)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 12
+          },
+          {
+            "name": "groupUnmanagedConfigFields",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 5
+          },
+          {
+            "name": "groupMatchedConfigFields",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": true,
+            "exported": true,
+            "linesNow": 5
+          },
+          {
+            "name": "groupConfigFieldsBySection",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block",
+            "body": "block",
+            "madeConcise": null,
+            "types": {
+              "how": "inline annotations",
+              "params": "2/2 (was 2/2)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": true
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": false,
+            "exported": false,
+            "linesNow": 23
+          },
+          {
+            "name": "formatConfigFieldValue",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block",
+            "body": "block",
+            "madeConcise": null,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": false,
+            "exported": false,
+            "linesNow": 18
+          },
+          {
+            "name": "createConfigurationDriftValueDiff",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block, single return",
+            "body": "block, single return",
+            "madeConcise": false,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": false,
+            "exported": false,
+            "linesNow": 9
+          },
+          {
+            "name": "getConfigFieldLabel",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block",
+            "body": "block",
+            "madeConcise": null,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "kept",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": false,
+            "exported": false,
+            "linesNow": 4
+          },
+          {
+            "name": "formatScalarValue",
+            "was": "declaration",
+            "place": "module level",
+            "form": "const arrow",
+            "bodyWas": "block",
+            "body": "block",
+            "madeConcise": null,
+            "types": {
+              "how": "inline annotations",
+              "params": "1/1 (was 1/1)",
+              "returnType": "kept",
+              "varType": null,
+              "typeParamsKept": null
+            },
+            "jsdoc": "none",
+            "paramsChanged": false,
+            "paramsAdded": 0,
+            "exportedWas": false,
+            "exported": false,
+            "linesNow": 12
+          }
+        ],
+        "diff": {
+          "removed": 67,
+          "added": 67
+        }
+      },
+      "agent": {
+        "exists": true,
+        "sha256": "7cfb887501ffc5882f83952fd35880c53f019511be455ddc7fbb34f05750b9de",
+        "parseError": false,
+        "views": {
+          "oxlint": {
+            "topicHonor": {
+              "arrow-body-style": 4
+            },
+            "topicIgnore": {
+              "arrow-body-style": 4
+            },
+            "topicHits": [
+              "arrow-body-style L111: Unexpected block statement surrounding arrow body.",
+              "arrow-body-style L122: Unexpected block statement surrounding arrow body.",
+              "arrow-body-style L158: Unexpected block statement surrounding arrow body.",
+              "arrow-body-style L164: Unexpected block statement surrounding arrow body."
+            ],
+            "parseError": false,
+            "all": {
+              "arrow-body-style": 4,
+              "typescript/no-non-null-assertion": 1,
+              "unicorn/filename-case": 1
+            }
+          },
+          "oxlint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "oxlint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint": {
+            "topicHonor": {
+              "arrow-body-style": 4,
+              "unicorn/consistent-arrow-return-style": 4
+            },
+            "topicIgnore": {
+              "arrow-body-style": 4,
+              "unicorn/consistent-arrow-return-style": 4
+            },
+            "topicHits": [
+              "arrow-body-style L111: Unexpected block statement surrounding arrow body; parenthesize the returned value and move it immediately after the `=>`.",
+              "arrow-body-style L122: Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "unicorn/consistent-arrow-return-style L123: Use an explicit return for a multiline arrow function body.",
+              "unicorn/consistent-arrow-return-style L148: Use an explicit return for a multiline arrow function body.",
+              "unicorn/consistent-arrow-return-style L156: Use an implicit return for a single-line return expression.",
+              "arrow-body-style L158: Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`.",
+              "unicorn/consistent-arrow-return-style L162: Use an implicit return for a single-line return expression.",
+              "arrow-body-style L164: Unexpected block statement surrounding arrow body; move the returned value immediately after the `=>`."
+            ],
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-non-null-assertion": 1,
+              "arrow-body-style": 4,
+              "github/filenames-match-regex": 1,
+              "unicorn/consistent-arrow-return-style": 4,
+              "unicorn/name-replacements": 7,
+              "unicorn/no-manually-wrapped-comments": 2,
+              "unicorn/prefer-includes-over-repeated-comparisons": 1
+            }
+          },
+          "eslint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint base ubd": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "biome": {
+            "topicHonor": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "topicIgnore": {
+              "style/useConsistentArrowReturn": 4
+            },
+            "topicHits": [
+              "style/useConsistentArrowReturn L109: The body of this arrow function contains a single return statement.",
+              "style/useConsistentArrowReturn L119: The body of this arrow function contains a single return statement.",
+              "style/useConsistentArrowReturn L156: The body of this arrow function contains a single return statement.",
+              "style/useConsistentArrowReturn L162: The body of this arrow function contains a single return statement."
+            ],
+            "parseError": false,
+            "all": {
+              "assist/source/organizeImports": 1,
+              "assist/source/useSortedInterfaceMembers": 3,
+              "format": 1,
+              "style/noNonNullAssertion": 1,
+              "style/useConsistentArrowReturn": 4,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noUnnecessaryConditions": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "funcStyleLeft": 0,
+        "ubdLeft": 0,
+        "fileLines": 167,
+        "typeErrors": [],
+        "tdzTypeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "calls": 300,
+          "differing": null,
+          "detail": null,
+          "ignoringKeyOrder": "same",
+          "differingIgnoringKeyOrder": null,
+          "importOk": true,
+          "importError": null,
+          "exportNames": [
+            [
+              "createConfigurationDriftRows",
+              "function",
+              "createConfigurationDriftRows",
+              2
+            ],
+            [
+              "groupMatchedConfigFields",
+              "function",
+              "groupMatchedConfigFields",
+              1
+            ],
+            [
+              "groupUnmanagedConfigFields",
+              "function",
+              "groupUnmanagedConfigFields",
+              1
+            ]
+          ],
+          "exportNamesSame": true
+        },
+        "facts": {
+          "order": [
+            "getConfigFieldLabel",
+            "formatScalarValue",
+            "formatConfigFieldValue",
+            "createConfigurationDriftValueDiff",
+            "createConfigurationDriftRows",
+            "groupConfigFieldsBySection",
+            "groupUnmanagedConfigFields",
+            "groupMatchedConfigFields"
+          ],
+          "forms": [
+            "getConfigFieldLabel: const arrow, block",
+            "formatScalarValue: const arrow, block",
+            "formatConfigFieldValue: const arrow, block",
+            "createConfigurationDriftValueDiff: const arrow, block, single return",
+            "createConfigurationDriftRows: const arrow, block, single return",
+            "groupConfigFieldsBySection: const arrow, block",
+            "groupUnmanagedConfigFields: const arrow, block, single return",
+            "groupMatchedConfigFields: const arrow, block, single return"
+          ],
+          "direction": "bottom-up",
+          "referencesDown": 0,
+          "referencesUp": 8,
+          "referencesBeforeDefinition": 0,
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "nested": []
+        },
+        "edit": {
+          "edit": "converted (arrows), reordered",
+          "kinds": [
+            "converted",
+            "const arrows",
+            "reordered"
+          ],
+          "restructured": [],
+          "conversion": {
+            "arrows": 8,
+            "functionExpressions": 0,
+            "declarations": 0,
+            "methods": 0,
+            "nested": 0,
+            "gone": 0,
+            "forward": 0,
+            "var": 0,
+            "let": 0
+          },
+          "perFunction": [
+            {
+              "name": "createConfigurationDriftRows",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "2/2 (was 2/2)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 12
+            },
+            {
+              "name": "groupUnmanagedConfigFields",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 5
+            },
+            {
+              "name": "groupMatchedConfigFields",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 5
+            },
+            {
+              "name": "groupConfigFieldsBySection",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "2/2 (was 2/2)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": true
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 23
+            },
+            {
+              "name": "formatConfigFieldValue",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 18
+            },
+            {
+              "name": "createConfigurationDriftValueDiff",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "block, single return",
+              "madeConcise": false,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 9
+            },
+            {
+              "name": "getConfigFieldLabel",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 4
+            },
+            {
+              "name": "formatScalarValue",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 12
+            }
+          ],
+          "added": [],
+          "moved": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "createConfigurationDriftValueDiff",
+              "groupConfigFieldsBySection"
+            ],
+            "lines": 66
+          },
+          "order": {
+            "given": [
+              "createConfigurationDriftRows",
+              "groupUnmanagedConfigFields",
+              "groupMatchedConfigFields",
+              "groupConfigFieldsBySection",
+              "formatConfigFieldValue",
+              "createConfigurationDriftValueDiff",
+              "getConfigFieldLabel",
+              "formatScalarValue"
+            ],
+            "now": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "createConfigurationDriftValueDiff",
+              "createConfigurationDriftRows",
+              "groupConfigFieldsBySection",
+              "groupUnmanagedConfigFields",
+              "groupMatchedConfigFields"
+            ]
+          },
+          "direction": {
+            "given": "mixed",
+            "now": "bottom-up",
+            "down": 0,
+            "up": 8
+          },
+          "referencesBeforeDefinition": {
+            "given": 8,
+            "now": 0
+          },
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "newHolders": [],
+          "nestedNow": [],
+          "forwardDeclarations": [],
+          "lostComments": [],
+          "jsdocBlocks": {
+            "given": 1,
+            "now": 1
+          },
+          "diff": {
+            "removed": 67,
+            "added": 67
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint": {
+            "arrow-body-style": 4
+          },
+          "oxlint ubd functions:false": {},
+          "oxlint ubd variables:false": {},
+          "eslint": {
+            "arrow-body-style": 4,
+            "unicorn/consistent-arrow-return-style": 2
+          },
+          "eslint ubd functions:false": {},
+          "eslint ubd variables:false": {},
+          "eslint base ubd": {},
+          "biome": {
+            "format": 1,
+            "style/useConsistentArrowReturn": 4
+          }
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "converted (arrows), reordered"
+      },
+      "verified": {
+        "exists": true,
+        "sha256": "dd87558be4485d8c1d6bf869d74240774b4b3d4d786115d13ca7db2e1c96dc7f",
+        "parseError": false,
+        "views": {
+          "oxlint": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {
+              "typescript/no-non-null-assertion": 1,
+              "unicorn/filename-case": 1
+            }
+          },
+          "oxlint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "oxlint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint": {
+            "topicHonor": {
+              "unicorn/consistent-arrow-return-style": 4
+            },
+            "topicIgnore": {
+              "unicorn/consistent-arrow-return-style": 4
+            },
+            "topicHits": [
+              "unicorn/consistent-arrow-return-style L109: Use an explicit return for a multiline arrow function body.",
+              "unicorn/consistent-arrow-return-style L117: Use an explicit return for a multiline arrow function body.",
+              "unicorn/consistent-arrow-return-style L121: Use an explicit return for a multiline arrow function body.",
+              "unicorn/consistent-arrow-return-style L148: Use an explicit return for a multiline arrow function body."
+            ],
+            "parseError": false,
+            "all": {
+              "@typescript-eslint/no-non-null-assertion": 1,
+              "github/filenames-match-regex": 1,
+              "unicorn/consistent-arrow-return-style": 4,
+              "unicorn/name-replacements": 7,
+              "unicorn/no-manually-wrapped-comments": 2,
+              "unicorn/prefer-includes-over-repeated-comparisons": 1
+            }
+          },
+          "eslint ubd functions:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint ubd variables:false": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "eslint base ubd": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {}
+          },
+          "biome": {
+            "topicHonor": {},
+            "topicIgnore": {},
+            "topicHits": [],
+            "parseError": false,
+            "all": {
+              "assist/source/organizeImports": 1,
+              "assist/source/useSortedInterfaceMembers": 3,
+              "style/noNonNullAssertion": 1,
+              "style/useFilenamingConvention": 1,
+              "suspicious/noUnnecessaryConditions": 1
+            }
+          }
+        },
+        "armLeft": {
+          "honor": [],
+          "ignore": []
+        },
+        "armCleared": {
+          "honor": true,
+          "ignore": true
+        },
+        "funcStyleLeft": 0,
+        "ubdLeft": 0,
+        "fileLines": 165,
+        "typeErrors": [],
+        "tdzTypeErrors": [],
+        "oracle": {
+          "verdict": "same",
+          "calls": 300,
+          "differing": null,
+          "detail": null,
+          "ignoringKeyOrder": "same",
+          "differingIgnoringKeyOrder": null,
+          "importOk": true,
+          "importError": null,
+          "exportNames": [
+            [
+              "createConfigurationDriftRows",
+              "function",
+              "createConfigurationDriftRows",
+              2
+            ],
+            [
+              "groupMatchedConfigFields",
+              "function",
+              "groupMatchedConfigFields",
+              1
+            ],
+            [
+              "groupUnmanagedConfigFields",
+              "function",
+              "groupUnmanagedConfigFields",
+              1
+            ]
+          ],
+          "exportNamesSame": true
+        },
+        "facts": {
+          "order": [
+            "getConfigFieldLabel",
+            "formatScalarValue",
+            "formatConfigFieldValue",
+            "createConfigurationDriftValueDiff",
+            "createConfigurationDriftRows",
+            "groupConfigFieldsBySection",
+            "groupUnmanagedConfigFields",
+            "groupMatchedConfigFields"
+          ],
+          "forms": [
+            "getConfigFieldLabel: const arrow, block",
+            "formatScalarValue: const arrow, block",
+            "formatConfigFieldValue: const arrow, block",
+            "createConfigurationDriftValueDiff: const arrow, concise",
+            "createConfigurationDriftRows: const arrow, concise",
+            "groupConfigFieldsBySection: const arrow, block",
+            "groupUnmanagedConfigFields: const arrow, concise",
+            "groupMatchedConfigFields: const arrow, concise"
+          ],
+          "direction": "bottom-up",
+          "referencesDown": 0,
+          "referencesUp": 8,
+          "referencesBeforeDefinition": 0,
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "nested": []
+        },
+        "edit": {
+          "edit": "converted (arrows), reordered",
+          "kinds": [
+            "converted",
+            "const arrows",
+            "reordered",
+            "concise bodies"
+          ],
+          "restructured": [],
+          "conversion": {
+            "arrows": 8,
+            "functionExpressions": 0,
+            "declarations": 0,
+            "methods": 0,
+            "nested": 0,
+            "gone": 0,
+            "forward": 0,
+            "var": 0,
+            "let": 0
+          },
+          "perFunction": [
+            {
+              "name": "createConfigurationDriftRows",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "2/2 (was 2/2)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 11
+            },
+            {
+              "name": "groupUnmanagedConfigFields",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 4
+            },
+            {
+              "name": "groupMatchedConfigFields",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": true,
+              "exported": true,
+              "linesNow": 4
+            },
+            {
+              "name": "groupConfigFieldsBySection",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "2/2 (was 2/2)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": true
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 26
+            },
+            {
+              "name": "formatConfigFieldValue",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 18
+            },
+            {
+              "name": "createConfigurationDriftValueDiff",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block, single return",
+              "body": "concise",
+              "madeConcise": true,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 7
+            },
+            {
+              "name": "getConfigFieldLabel",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "kept",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 4
+            },
+            {
+              "name": "formatScalarValue",
+              "was": "declaration",
+              "place": "module level",
+              "form": "const arrow",
+              "bodyWas": "block",
+              "body": "block",
+              "madeConcise": null,
+              "types": {
+                "how": "inline annotations",
+                "params": "1/1 (was 1/1)",
+                "returnType": "kept",
+                "varType": null,
+                "typeParamsKept": null
+              },
+              "jsdoc": "none",
+              "paramsChanged": false,
+              "paramsAdded": 0,
+              "exportedWas": false,
+              "exported": false,
+              "linesNow": 12
+            }
+          ],
+          "added": [],
+          "moved": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "createConfigurationDriftValueDiff",
+              "groupConfigFieldsBySection"
+            ],
+            "lines": 67
+          },
+          "order": {
+            "given": [
+              "createConfigurationDriftRows",
+              "groupUnmanagedConfigFields",
+              "groupMatchedConfigFields",
+              "groupConfigFieldsBySection",
+              "formatConfigFieldValue",
+              "createConfigurationDriftValueDiff",
+              "getConfigFieldLabel",
+              "formatScalarValue"
+            ],
+            "now": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "createConfigurationDriftValueDiff",
+              "createConfigurationDriftRows",
+              "groupConfigFieldsBySection",
+              "groupUnmanagedConfigFields",
+              "groupMatchedConfigFields"
+            ]
+          },
+          "direction": {
+            "given": "mixed",
+            "now": "bottom-up",
+            "down": 0,
+            "up": 8
+          },
+          "referencesBeforeDefinition": {
+            "given": 8,
+            "now": 0
+          },
+          "namesUsedBeforeDefinition": [],
+          "loadTimeBeforeDefinition": 0,
+          "holders": [],
+          "newHolders": [],
+          "nestedNow": [],
+          "forwardDeclarations": [],
+          "lostComments": [],
+          "jsdocBlocks": {
+            "given": 1,
+            "now": 1
+          },
+          "diff": {
+            "removed": 68,
+            "added": 66
+          },
+          "suppressions": {
+            "eslint-disable": 0,
+            "eslint inline config": 0,
+            "oxlint-disable": 0,
+            "biome-ignore": 0,
+            "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+          }
+        },
+        "suppressions": {
+          "eslint-disable": 0,
+          "eslint inline config": 0,
+          "oxlint-disable": 0,
+          "biome-ignore": 0,
+          "@ts-ignore/@ts-expect-error/@ts-nocheck": 0
+        },
+        "newRules": {
+          "oxlint": {},
+          "oxlint ubd functions:false": {},
+          "oxlint ubd variables:false": {},
+          "eslint": {
+            "unicorn/consistent-arrow-return-style": 2
+          },
+          "eslint ubd functions:false": {},
+          "eslint ubd variables:false": {},
+          "eslint base ubd": {},
+          "biome": {}
+        },
+        "newTypeErrors": 0,
+        "suppressionAdded": false,
+        "outcome": "converted (arrows), reordered"
+      },
+      "verifyChangedTheFile": true,
+      "ultraciteVerify": {
+        "error": null,
+        "remaining": [],
+        "remainingDetail": [],
+        "remainingTopicRulesOnly": [],
+        "vsThisAttempt": {
+          "cleared": [
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'getConfigFieldLabel' was used before it was defined.",
+            "no-use-before-define: 'createConfigurationDriftValueDiff' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'groupConfigFieldsBySection' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'groupConfigFieldsBySection' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'getConfigFieldLabel' was used before it was defined.",
+            "no-use-before-define: 'formatConfigFieldValue' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'formatScalarValue' was used before it was defined.",
+            "no-use-before-define: 'formatScalarValue' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "vsHandoff": {
+          "cleared": [
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'getConfigFieldLabel' was used before it was defined.",
+            "no-use-before-define: 'createConfigurationDriftValueDiff' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'groupConfigFieldsBySection' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'groupConfigFieldsBySection' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'getConfigFieldLabel' was used before it was defined.",
+            "no-use-before-define: 'formatConfigFieldValue' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "no-use-before-define: 'formatScalarValue' was used before it was defined.",
+            "no-use-before-define: 'formatScalarValue' was used before it was defined.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression.",
+            "func-style: Expected a function expression."
+          ],
+          "still": [],
+          "introduced": []
+        },
+        "retried": false
+      },
+      "reverify": {
+        "fileMatches": true,
+        "diagnosticsMatch": true
+      },
+      "fileChecks": {
+        "subjectDeleted": false,
+        "otherFileChanges": [],
+        "diagnosticsJsonUnchanged": true,
+        "newRunsEntries": [],
+        "newExperimentRootEntries": [],
+        "pristineSubjectsUnchanged": true,
+        "configFilesNearRun": []
+      },
+      "session": {
+        "hasSessionLog": true,
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": [
+          "xhigh"
+        ],
+        "modelCalls": 10,
+        "costUSD": null,
+        "tokens": {
+          "input_tokens": 411329,
+          "cached_input_tokens": 378368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3822,
+          "reasoning_output_tokens": 740,
+          "total_tokens": 415151
+        },
+        "tokensUsedReportedOnStderr": 36783,
+        "thinkingBlocks": 8,
+        "toolCalls": [
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec",
+          "exec"
+        ],
+        "toolNames": [
+          "exec"
+        ],
+        "toolCallTargets": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g package.json -g '*lock*' -g '*config*' -g 'ConfigurationDriftPage.utils.ts*' -g '!node_modules' -g",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts tsconfig.json\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for task_dir in / /private",
+          "text(await tools.apply_patch(\"*** Begin Patch\\n*** Update File: <run-root>/b-codex-1/ConfigurationDriftPage.utils.ts\\n@@\\n-export function createConfigurationDriftRows(\\n-  fields: GitHubConfigDriftFi",
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler ConfigurationDriftPage.utils.ts stubs.ts\",\"max_ou",
+          "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.npm/_npx';\\nfor (const dir of fs.readdirSync(base)) {\\n  const modules = `${base}/${dir}/node_modu",
+          "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.bun/install/cache';\\nfor (const dir of fs.readdirSync(base)) {\\n  if (/^(oxlint@1\\\\.89\\\\.|ultracit",
+          "text(await tools.exec_command({cmd:\"~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --version\",\"max_output_tokens\":2000}));\n",
+          "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config /dev/stdin ConfigurationDriftPage.utils.ts <<'JSON'\\n{\\\"rules\\\":{\\\"func",
+          "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\""
+        ],
+        "toolErrors": [],
+        "commands": [
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"pwd; rg --files -g AGENTS.md -g package.json -g '*lock*' -g '*config*' -g 'ConfigurationDriftPage.utils.ts*' -g '!node_modules' -g '!\\\\.git'\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"cat ConfigurationDriftPage.utils.",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts tsconfig.json\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for task_dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experimen",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler ConfigurationDriftPage.utils.ts stubs.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"for task_base in ~/.bun/install/cache ~/.npm/_npx; d",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.npm/_npx';\\nfor (const dir of fs.readdirSync(base)) {\\n  const modules = `${base}/${dir}/node_modules`;\\n  for (const name of ['oxlint', 'ultracite']) {\\n    const file = `${modules}/${name}/package",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.bun/install/cache';\\nfor (const dir of fs.readdirSync(base)) {\\n  if (/^(oxlint@1\\\\.89\\\\.|ultracite@8\\\\.1\\\\.|@oxlint\\\\/darwin|@oxlint\\\\+darwin)/.test(dir)) console.log(`${base}/${dir}`);\\n}\\nNODE\\n~",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --version\",\"max_output_tokens\":2000}));\n",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config /dev/stdin ConfigurationDriftPage.utils.ts <<'JSON'\\n{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}\\nJSON\",\"max_output_tokens\":",
+            "refused": false,
+            "refusal": null
+          },
+          {
+            "command": "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}') --format json ConfigurationDriftPage.utils.ts\",\"max_output_toke",
+            "refused": false,
+            "refusal": null
+          }
+        ],
+        "ranLinterOrTests": [
+          "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler ConfigurationDriftPage.utils.ts stubs.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"for task_base in ~/.bun/install/cache ~/.npm/_npx; d",
+          "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.npm/_npx';\\nfor (const dir of fs.readdirSync(base)) {\\n  const modules = `${base}/${dir}/node_modules`;\\n  for (const name of ['oxlint', 'ultracite']) {\\n    const file = `${modules}/${name}/package",
+          "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.bun/install/cache';\\nfor (const dir of fs.readdirSync(base)) {\\n  if (/^(oxlint@1\\\\.89\\\\.|ultracite@8\\\\.1\\\\.|@oxlint\\\\/darwin|@oxlint\\\\+darwin)/.test(dir)) console.log(`${base}/${dir}`);\\n}\\nNODE\\n~",
+          "text(await tools.exec_command({cmd:\"~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --version\",\"max_output_tokens\":2000}));\n",
+          "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config /dev/stdin ConfigurationDriftPage.utils.ts <<'JSON'\\n{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}\\nJSON\",\"max_output_tokens\":",
+          "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}') --format json ConfigurationDriftPage.utils.ts\",\"max_output_toke"
+        ],
+        "refusedCommands": [],
+        "triedToRunLinterOrTests": true,
+        "searchedForTests": [],
+        "readInstalledCopies": [],
+        "webAccess": [],
+        "writesOutsideRunDir": [],
+        "printedEnvironment": [],
+        "ownBehaviourChecks": [
+          "{\"tool\":\"exec\",\"input\":\"text(await tools.apply_patch(\\\"*** Begin Patch\\\\n*** Update File: <run-root>/b-codex-1/ConfigurationDriftPage.utils.ts\\\\n@@\\\\n-export function createConfigurationDriftRows(\\\\n-"
+        ],
+        "projectInstructionsLoaded": [],
+        "edits": [
+          "-export function createConfigurationDriftRows(\n-  fields: GitHubConfigDriftField[],\n-  projectRef: string\n-): ConfigurationDriftRow[] {\n-  return fields.map((field) => ({\n-    ...field,\n-    settingHref: field.settingHref(projectRef),\n-    settingLabel: getConfigFieldLabel(field.configPath),\n-    status: \"drifted\" as const,\n-    valueDiff: createConfigurationDriftValueDiff(field),\n-  }));\n-}\n-\n-export function groupUnmanagedConfigFields(\n-  fields: readonly UnmanagedConfigField[]\n-): ConfigSectionGroup[] {\n-  return groupConfigFieldsBySection(fields, (field) => field.dashboardValue);\n-}\n-\n-export function groupMatchedConfigFields(\n-  fields: readonly MatchedConfigField[]\n-): ConfigSectionGroup[] {\n-  return groupConfigFieldsBySection(fields, (field) => field.value);\n-}\n-\n-function groupCon"
+        ],
+        "finalMessage": "Fixed all 16 issues in `ConfigurationDriftPage.utils.ts`: converted declarations to arrow expressions and moved helpers before use, preserving function bodies.\n\nTargeted lint and TypeScript checks pass. Only the requested file was modified.",
+        "understood": {
+          "hoisting": [],
+          "tdz": [],
+          "mutualRecursion": [],
+          "noOrderWorks": [],
+          "loadTime": [],
+          "thisArguments": [],
+          "whyOrder": [
+            "Fixed all 16 issues in `ConfigurationDriftPage.utils.ts`: converted declarations to arrow expressions and moved helpers before use, preserving function bodies.",
+            "I’ll read the file and rule guidance, convert the functions to expressions, and order helpers before their uses.",
+            "The functions are now expressions, with helpers defined before use."
+          ],
+          "types": [],
+          "concise": [],
+          "jsdoc": [],
+          "preserveBehaviour": [],
+          "review": [],
+          "suppression": [],
+          "restructure": [],
+          "tests": [],
+          "upstream": []
+        },
+        "upstreamMentions": [],
+        "exposure": {
+          "corpusNotes": 2,
+          "mainCheckout": 2,
+          "installedSupabase": 4,
+          "webAccess": 74,
+          "sessionLogs": 16
+        },
+        "exposureInToolCalls": {
+          "corpusNotes": 1,
+          "installedSupabase": 2,
+          "webAccess": 35
+        },
+        "exposureInToolInputs": {},
+        "outsideRunDir": [
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts tsconfig.json\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for task_dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <os-tmp-root>"
+          },
+          {
+            "tool": "exec",
+            "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler ConfigurationDriftPage.utils.ts stubs.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"for task_base in ~/.bun/install/cache ~/.npm/_npx; do if [ -d \\\"$task_base\\\" ]; then rg --files --hidden --no-ignore \\\"$task_base\\\" -g 'oxlint' -g 'oxlint.js' -g 'oxlint.cjs' -g 'core.js' -g 'core.mjs' -g 'core.ts' -g 'oxfmt' -g 'oxfmt.js' | rg '/(oxlint|oxfmt|ultracite)[^/]*/' | head -40; fi; done\",\"max_output_tokens\":4000}),"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.npm/_npx';\\nfor (const dir of fs.readdirSync(base)) {\\n  const modules = `${base}/${dir}/node_modules`;\\n  for (const name of ['oxlint', 'ultracite']) {\\n    const file = `${modules}/${name}/package.json`;\\n    if (fs.existsSync(file)) {\\n      const pkg = JSON.parse(fs.readFileSync(file, 'utf8'));\\n      console.log(name, pkg.version, `${modules}/${name}`);\\n    }\\n  }\\n}\\nNODE\",\"max_output_tokens\":2000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.bun/install/cache';\\nfor (const dir of fs.readdirSync(base)) {\\n  if (/^(oxlint@1\\\\.89\\\\.|ultracite@8\\\\.1\\\\.|@oxlint\\\\/darwin|@oxlint\\\\+darwin)/.test(dir)) console.log(`${base}/${dir}`);\\n}\\nNODE\\n~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --help\",\"max_output_tokens\":5500}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --version\",\"max_output_tokens\":2000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config /dev/stdin ConfigurationDriftPage.utils.ts <<'JSON'\\n{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}\\nJSON\",\"max_output_tokens\":2000}));\n"
+          },
+          {
+            "tool": "exec",
+            "target": "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}') --format json ConfigurationDriftPage.utils.ts\",\"max_output_tokens\":2000}));\n"
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "outcome": "converted (arrows), reordered",
+    "response": "converted and reordered",
+    "leftForReview": "none",
+    "otherFilesTouched": false,
+    "configChanged": false,
+    "stubChanged": false
+  },
+  "finalMatchesLastVerified": true,
+  "ultraciteOutcome": {
+    "fixed": 16,
+    "remaining": 0,
+    "notes": [],
+    "issueFixed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "outro": "Fixed 16 of 16 issues with Codex.",
+    "exitCode": 0
+  },
+  "cost": {
+    "costUSD": null,
+    "tokensUsedReportedOnStderr": 36783,
+    "totalTokens": 415151
+  },
+  "cheating": {
+    "otherFileChanges": [],
+    "configFiles": [],
+    "diagnosticsJsonUnchanged": true,
+    "pristineSubjectsUnchanged": true,
+    "newRunsEntries": [],
+    "newExperimentRootEntries": [],
+    "exposureInSessionLog": {
+      "corpusNotes": 2,
+      "mainCheckout": 2,
+      "installedSupabase": 4,
+      "webAccess": 74,
+      "sessionLogs": 16
+    },
+    "exposureInToolCalls": {
+      "corpusNotes": 1,
+      "installedSupabase": 2,
+      "webAccess": 35
+    },
+    "exposureInToolInputs": {},
+    "toolCallsOutsideRunDir": [
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat package.json oxlint.config.ts tsconfig.json\",\"max_output_tokens\":5000}),\n  tools.exec_command({cmd:\"for task_dir in / /private /private/var /private/var/folders <os-tmp-root> <os-tmp-root> <tmp> <tmp>/ultracite-agent-experiment <run-root> <os-tmp-root>"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"tsc --noEmit --strict --target es2023 --module esnext --moduleResolution bundler ConfigurationDriftPage.utils.ts stubs.ts\",\"max_output_tokens\":3000}),\n  tools.exec_command({cmd:\"for task_base in ~/.bun/install/cache ~/.npm/_npx; do if [ -d \\\"$task_base\\\" ]; then rg --files --hidden --no-ignore \\\"$task_base\\\" -g 'oxlint' -g 'oxlint.js' -g 'oxlint.cjs' -g 'core.js' -g 'core.mjs' -g 'core.ts' -g 'oxfmt' -g 'oxfmt.js' | rg '/(oxlint|oxfmt|ultracite)[^/]*/' | head -40; fi; done\",\"max_output_tokens\":4000}),"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.npm/_npx';\\nfor (const dir of fs.readdirSync(base)) {\\n  const modules = `${base}/${dir}/node_modules`;\\n  for (const name of ['oxlint', 'ultracite']) {\\n    const file = `${modules}/${name}/package.json`;\\n    if (fs.existsSync(file)) {\\n      const pkg = JSON.parse(fs.readFileSync(file, 'utf8'));\\n      console.log(name, pkg.version, `${modules}/${name}`);\\n    }\\n  }\\n}\\nNODE\",\"max_output_tokens\":2000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"node - <<'NODE'\\nconst fs = require('node:fs');\\nconst base = '~/.bun/install/cache';\\nfor (const dir of fs.readdirSync(base)) {\\n  if (/^(oxlint@1\\\\.89\\\\.|ultracite@8\\\\.1\\\\.|@oxlint\\\\/darwin|@oxlint\\\\+darwin)/.test(dir)) console.log(`${base}/${dir}`);\\n}\\nNODE\\n~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --help\",\"max_output_tokens\":5500}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/.bun/install/cache/oxlint@1.89.0@@@1/bin/oxlint --version\",\"max_output_tokens\":2000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config /dev/stdin ConfigurationDriftPage.utils.ts <<'JSON'\\n{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}\\nJSON\",\"max_output_tokens\":2000}));\n"
+      },
+      {
+        "attempt": 1,
+        "tool": "exec",
+        "target": "text(await tools.exec_command({cmd:\"~/.npm/_npx/f8b0e1f574a8cd1b/node_modules/oxlint/bin/oxlint --disable-nested-config --config <(printf '%s' '{\\\"rules\\\":{\\\"func-style\\\":[\\\"error\\\",\\\"expression\\\"],\\\"no-use-before-define\\\":\\\"error\\\"}}') --format json ConfigurationDriftPage.utils.ts\",\"max_output_tokens\":2000}));\n"
+      }
+    ],
+    "lockedDuringRun": [
+      "scripts",
+      "subjects",
+      "harness-tests",
+      "biome-config",
+      "results",
+      "<run-root>/.staging/b-codex-1/handoff",
+      "../corpus/examples/func-style",
+      "../corpus/results/func-style",
+      "../corpus/calibration/func-style",
+      "../corpus/out",
+      "../corpus/repos",
+      "../corpus/scripts/func-style-agent-runs.cjs",
+      "../corpus/scripts/func-style-calibration.cjs",
+      "../corpus/scripts/func-style-census.cjs",
+      "../corpus/scripts/func-style-convert.cjs",
+      "../corpus/scripts/func-style-cycles.cjs",
+      "../corpus/scripts/func-style-examples.cjs",
+      "../corpus/scripts/func-style-history.cjs",
+      "../corpus/scripts/func-style-lib.cjs",
+      "../corpus/scripts/func-style-linters.cjs",
+      "../corpus/scripts/func-style-markers.cjs",
+      "../corpus/scripts/func-style-oracle.cjs",
+      "../corpus/scripts/func-style-rules.cjs",
+      "../corpus/scripts/func-style-run-all.cjs",
+      "../corpus/scripts/func-style-sample.cjs",
+      "../corpus/scripts/func-style-tables.cjs",
+      "../bibliography/func-style.md",
+      "../bibliography/README.md",
+      "plans",
+      "lint-configs",
+      "<outside-repo>/ultracite-research-func-style",
+      "<outside-repo>/scratchpad",
+      "<outside-repo>/repos",
+      "<outside-repo>/out",
+      "<outside-repo>/plans",
+      "<run-root>/.measure",
+      "<run-root>/a-claude-1",
+      "<run-root>/c-claude-pilot",
+      "<run-root>/c-codex-pilot",
+      "<run-root>/.staging/a-claude-1",
+      "<run-root>/.staging/c-claude-pilot",
+      "<run-root>/.staging/c-codex-pilot"
+    ]
+  }
+}

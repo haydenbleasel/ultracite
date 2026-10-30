@@ -1,0 +1,2242 @@
+{
+  "runtime": "node v24.14.1",
+  "oracle": "research/corpus/scripts/func-style-oracle.cjs (shared with the corpus), with this topic's export-name check",
+  "cases": [
+    {
+      "name": "a as prepared",
+      "oracle": "same",
+      "funcStyle": 5,
+      "ubd": 0,
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b as prepared",
+      "oracle": "same",
+      "funcStyle": 8,
+      "ubd": 8,
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c as prepared",
+      "oracle": "same",
+      "funcStyle": 4,
+      "ubd": 2,
+      "outcome": "unchanged",
+      "response": "not fixed, not left for review, unchanged",
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a01: convert (block bodies)",
+      "mutant": "a01",
+      "variant": "a01 convert (block bodies)",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, nothing moved",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, nothing moved"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a02: convert, concise bodies (arrow-body-style's fix)",
+      "mutant": "a02",
+      "variant": "a02 convert, concise bodies (arrow-body-style's fix)",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, nothing moved",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, nothing moved",
+        "kinds": [
+          "concise bodies"
+        ]
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a03: nested ternary in durationToString",
+      "mutant": "a03",
+      "variant": "a03 nested ternary in durationToString",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, nothing moved",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, nothing moved"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a04: a comparison slips to >= while rewriting",
+      "mutant": "a04",
+      "variant": "a04 a comparison slips to >= while rewriting",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "behaviour changed (wrong)",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), nothing moved",
+        "response": "behaviour changed (wrong)"
+      },
+      "corpus": {
+        "oracle": "changed",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a05: suppression comments",
+      "mutant": "a05",
+      "variant": "a05 suppression comments",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 5,
+      "ubd": 0,
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "declarations left",
+        "JSDoc changed or lost",
+        "suppression"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 5,
+        "ubd": 0,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a06: function expressions",
+      "mutant": "a06",
+      "variant": "a06 function expressions",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (function expressions), nothing moved",
+      "response": "converted, nothing moved",
+      "kinds": [
+        "converted",
+        "function expressions"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (function expressions), nothing moved",
+        "response": "converted, nothing moved"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a07: methods of an object, re-exported",
+      "mutant": "a07",
+      "variant": "a07 methods of an object, re-exported",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "restructured (methods of an object)",
+      "response": "restructured (methods of an object)",
+      "kinds": [
+        "methods of an object",
+        "JSDoc changed or lost"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "none",
+        "down": 0,
+        "up": 0
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (methods of an object)",
+        "response": "restructured (methods of an object)"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "a08: var",
+      "mutant": "a08",
+      "variant": "a08 var",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (var arrows), nothing moved",
+      "response": "converted, nothing moved",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "var",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (var arrows), nothing moved",
+        "response": "converted, nothing moved",
+        "kinds": [
+          "var"
+        ],
+        "note": "the fix pass's no-var fix turns three of the five vars into const"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b01: convert and reorder (helpers above their callers)",
+      "mutant": "b01",
+      "variant": "b01 convert and reorder (helpers above their callers)",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), reordered",
+      "response": "converted and reordered",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "reordered",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [
+          "getConfigFieldLabel",
+          "formatScalarValue",
+          "formatConfigFieldValue",
+          "groupConfigFieldsBySection",
+          "createConfigurationDriftRows"
+        ],
+        "lines": 71
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 8
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), reordered",
+        "response": "converted and reordered"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [
+            "getConfigFieldLabel",
+            "formatScalarValue",
+            "formatConfigFieldValue",
+            "groupConfigFieldsBySection",
+            "createConfigurationDriftRows"
+          ],
+          "lines": 58
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "groupConfigFieldsBySection",
+              "createConfigurationDriftRows"
+            ],
+            "lines": 71
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b02: convert, the exports moved to the end",
+      "mutant": "b02",
+      "variant": "b02 convert, the exports moved to the end",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), reordered",
+      "response": "converted and reordered",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "reordered",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [
+          "getConfigFieldLabel",
+          "formatScalarValue",
+          "formatConfigFieldValue",
+          "groupConfigFieldsBySection",
+          "createConfigurationDriftValueDiff"
+        ],
+        "lines": 67
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 8
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), reordered",
+        "response": "converted and reordered"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [
+            "getConfigFieldLabel",
+            "formatScalarValue",
+            "formatConfigFieldValue",
+            "groupConfigFieldsBySection",
+            "createConfigurationDriftValueDiff"
+          ],
+          "lines": 55
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "groupConfigFieldsBySection",
+              "createConfigurationDriftValueDiff"
+            ],
+            "lines": 67
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b03: convert in place",
+      "mutant": "b03",
+      "variant": "b03 convert in place",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 8,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, no-use-before-define reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 7,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, no-use-before-define reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 8
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 8
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b04: function expressions in place",
+      "mutant": "b04",
+      "variant": "b04 function expressions in place",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 8,
+      "outcome": "converted (function expressions), nothing moved",
+      "response": "converted, no-use-before-define reported, not left for review",
+      "kinds": [
+        "converted",
+        "function expressions"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 7,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "converted (function expressions), nothing moved",
+        "response": "converted, no-use-before-define reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 8
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 8
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b05: convert and reorder, || becomes ??",
+      "mutant": "b05",
+      "variant": "b05 convert and reorder, || becomes ??",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "converted (arrows), reordered",
+      "response": "behaviour changed (wrong)",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "reordered",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [
+          "getConfigFieldLabel",
+          "formatScalarValue",
+          "formatConfigFieldValue",
+          "groupConfigFieldsBySection",
+          "createConfigurationDriftRows"
+        ],
+        "lines": 71
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 8
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "converted (arrows), reordered",
+        "response": "behaviour changed (wrong)"
+      },
+      "corpus": {
+        "oracle": "changed",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [
+            "getConfigFieldLabel",
+            "formatScalarValue",
+            "formatConfigFieldValue",
+            "groupConfigFieldsBySection",
+            "createConfigurationDriftRows"
+          ],
+          "lines": 58
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [
+              "getConfigFieldLabel",
+              "formatScalarValue",
+              "formatConfigFieldValue",
+              "groupConfigFieldsBySection",
+              "createConfigurationDriftRows"
+            ],
+            "lines": 71
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b06: convert in place, suppression comment",
+      "mutant": "b06",
+      "variant": "b06 convert in place, suppression comment",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 8,
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies",
+        "suppression"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 7,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "b07: var in place",
+      "mutant": "b07",
+      "variant": "b07 var in place",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 8,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, no-use-before-define reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "concise bodies"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 7,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 8,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, no-use-before-define reported, not left for review",
+        "note": "the fix pass's no-var fix turns every var into const here"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 8
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 8
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c01: convert, the best order (two reports left for review)",
+      "mutant": "c01",
+      "variant": "c01 convert, the best order (two reports left for review)",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 2,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, the cycle reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 2
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 2
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c02: convert serializeProps only",
+      "mutant": "c02",
+      "variant": "c02 convert serializeProps only",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 3,
+      "ubd": 2,
+      "outcome": "partly converted (arrows), nothing moved",
+      "response": "partly converted, the cycle reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "declarations left"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 3,
+        "ubd": 2,
+        "edit": "partly converted (arrows), nothing moved",
+        "response": "partly converted, the cycle reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 3,
+          "no-use-before-define": 2
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 3,
+            "no-use-before-define": 2
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c03: convert in place",
+      "mutant": "c03",
+      "variant": "c03 convert in place",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 2,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, the cycle reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 2
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 2
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c04: function expressions",
+      "mutant": "c04",
+      "variant": "c04 function expressions",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 2,
+      "outcome": "converted (function expressions), nothing moved",
+      "response": "converted, the cycle reported, not left for review",
+      "kinds": [
+        "converted",
+        "function expressions"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (function expressions), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 2
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 2
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c05: convert, suppression comments",
+      "mutant": "c05",
+      "variant": "c05 convert, suppression comments",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 2,
+      "outcome": "suppression",
+      "response": "suppression",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "suppression"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "suppression",
+        "response": "suppression"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c06: methods of an object",
+      "mutant": "c06",
+      "variant": "c06 methods of an object",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "restructured (methods of an object)",
+      "response": "restructured (methods of an object)",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "methods of an object"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "none",
+        "down": 0,
+        "up": 0
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (methods of an object)",
+        "response": "restructured (methods of an object)"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c07: helpers nested inside convertToSerializedForm",
+      "mutant": "c07",
+      "variant": "c07 helpers nested inside convertToSerializedForm",
+      "oracle": "changed",
+      "oracleExact": "changed",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "restructured (nested)",
+      "response": "behaviour changed (wrong)",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "nested"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "changed",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (nested)",
+        "response": "behaviour changed (wrong)"
+      },
+      "corpus": {
+        "oracle": "changed",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c08: the recursive call passed in as a parameter",
+      "mutant": "c08",
+      "variant": "c08 the recursive call passed in as a parameter",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "restructured (parameter added)",
+      "response": "restructured (parameter added)",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "parameter added",
+        "functions added"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 6
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (parameter added)",
+        "response": "restructured (parameter added)"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 0
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 0
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c09: var",
+      "mutant": "c09",
+      "variant": "c09 var",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 2,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, the cycle reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review",
+        "note": "the fix pass's no-var fix turns every var into const here"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 0,
+          "no-use-before-define": 2
+        },
+        "moved": {
+          "functions": [],
+          "lines": 0
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 0,
+            "no-use-before-define": 2
+          },
+          "moved": {
+            "functions": [],
+            "lines": 0
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "c10: declarations kept, convertToSerializedForm moved first",
+      "mutant": "c10",
+      "variant": "c10 declarations kept, convertToSerializedForm moved first",
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 4,
+      "ubd": 4,
+      "outcome": "reordered only",
+      "response": "not converted, the cycle reported, not left for review",
+      "kinds": [
+        "declarations left",
+        "reordered"
+      ],
+      "moved": {
+        "functions": [
+          "convertToSerializedForm"
+        ],
+        "lines": 60
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 4,
+        "ubd": 4,
+        "edit": "reordered only",
+        "response": "not converted, the cycle reported, not left for review"
+      },
+      "corpus": {
+        "oracle": "same",
+        "oxlint": {
+          "func-style": 4,
+          "no-use-before-define": 4
+        },
+        "moved": {
+          "functions": [
+            "convertToSerializedForm"
+          ],
+          "lines": 54
+        },
+        "ours": {
+          "oxlint": {
+            "func-style": 4,
+            "no-use-before-define": 4
+          },
+          "moved": {
+            "functions": [
+              "convertToSerializedForm"
+            ],
+            "lines": 60
+          }
+        }
+      },
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah1: declarations kept, durationToString moved to the end (now referenced above its definition)",
+      "mutant": "ah1",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 5,
+      "ubd": 1,
+      "outcome": "reordered only",
+      "response": "not converted, no-use-before-define reported, not left for review",
+      "kinds": [
+        "declarations left",
+        "reordered"
+      ],
+      "moved": {
+        "functions": [
+          "durationToString"
+        ],
+        "lines": 10
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "mixed",
+        "down": 1,
+        "up": 2
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 5,
+        "ubd": 1,
+        "edit": "reordered only",
+        "response": "not converted, no-use-before-define reported, not left for review"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah2: one function converted: a concise arrow with its type on the variable",
+      "mutant": "ah2",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 4,
+      "ubd": 0,
+      "outcome": "partly converted (arrows), nothing moved",
+      "response": "partly converted, func-style reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "declarations left",
+        "concise bodies",
+        "types on the variable"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 4,
+        "ubd": 0,
+        "edit": "partly converted (arrows), nothing moved",
+        "response": "partly converted, func-style reported, not left for review",
+        "kinds": [
+          "concise bodies",
+          "types on the variable"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ah3: hrtimeToSeconds converted with its JSDoc and its return type dropped",
+      "mutant": "ah3",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 4,
+      "ubd": 0,
+      "outcome": "partly converted (arrows), nothing moved",
+      "response": "partly converted, func-style reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "declarations left",
+        "concise bodies",
+        "types lost",
+        "JSDoc changed or lost",
+        "comments lost"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "bottom-up",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 4,
+        "ubd": 0,
+        "edit": "partly converted (arrows), nothing moved",
+        "response": "partly converted, func-style reported, not left for review",
+        "kinds": [
+          "JSDoc changed or lost",
+          "types lost",
+          "comments lost",
+          "concise bodies"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "bh1: declarations kept, only the exports moved to the end (two helpers still call helpers below them)",
+      "mutant": "bh1",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 8,
+      "ubd": 4,
+      "outcome": "reordered only",
+      "response": "not converted, no-use-before-define reported, not left for review",
+      "kinds": [
+        "declarations left",
+        "reordered"
+      ],
+      "moved": {
+        "functions": [
+          "createConfigurationDriftRows",
+          "groupUnmanagedConfigFields",
+          "groupMatchedConfigFields"
+        ],
+        "lines": 22
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 3,
+        "up": 5
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 8,
+        "ubd": 4,
+        "edit": "reordered only",
+        "response": "not converted, no-use-before-define reported, not left for review"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "bh2: getConfigFieldLabel inlined into its two callers and deleted",
+      "mutant": "bh2",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 7,
+      "ubd": 6,
+      "outcome": "restructured (merged or inlined)",
+      "response": "restructured (merged or inlined)",
+      "kinds": [
+        "declarations left",
+        "merged or inlined",
+        "JSDoc changed or lost",
+        "comments lost"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 5,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 7,
+        "ubd": 6,
+        "edit": "restructured (merged or inlined)",
+        "response": "restructured (merged or inlined)",
+        "kinds": [
+          "comments lost"
+        ]
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch1: converted in place by hand (the same as c03), normalised",
+      "mutant": "ch1",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 2,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "converted, the cycle reported, not left for review",
+      "kinds": [
+        "converted",
+        "const arrows"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 2,
+        "edit": "converted (arrows), nothing moved",
+        "response": "converted, the cycle reported, not left for review"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch2: a forward declaration: `let convertToSerializedForm: Convert;` above its callers, assigned below them",
+      "mutant": "ch2",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 0,
+      "ubd": 0,
+      "outcome": "restructured (forward declaration)",
+      "response": "restructured (forward declaration)",
+      "kinds": [
+        "converted",
+        "const arrows",
+        "forward declaration"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "bottom-up",
+        "down": 0,
+        "up": 1
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 0,
+        "ubd": 0,
+        "edit": "restructured (forward declaration)",
+        "response": "restructured (forward declaration)"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch3: converted, plus a call of serializeProps at load time above its definition (a TDZ crash at import)",
+      "mutant": "ch3",
+      "variant": null,
+      "oracle": "import-crash",
+      "oracleExact": "import-crash",
+      "funcStyle": 0,
+      "ubd": 3,
+      "outcome": "converted (arrows), nothing moved",
+      "response": "broken (throws at import)",
+      "kinds": [
+        "converted",
+        "const arrows"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "mixed",
+        "down": 2,
+        "up": 3
+      },
+      "typeErrors": [
+        "serialize.ts: TS2448 Block-scoped variable 'serializeProps' used before its declaration.",
+        "serialize.ts: TS2454 Variable 'serializeProps' is used before being assigned."
+      ],
+      "expected": {
+        "oracle": "import-crash",
+        "funcStyle": 0,
+        "ubd": 3,
+        "edit": "converted (arrows), nothing moved",
+        "response": "broken (throws at import)"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    },
+    {
+      "name": "ch4: the three as static methods of a class",
+      "mutant": "ch4",
+      "variant": null,
+      "oracle": "same",
+      "oracleExact": "same",
+      "funcStyle": 1,
+      "ubd": 0,
+      "outcome": "restructured (methods of a class)",
+      "response": "restructured (methods of a class)",
+      "kinds": [
+        "declarations left",
+        "methods of a class"
+      ],
+      "moved": {
+        "functions": [],
+        "lines": 0
+      },
+      "direction": {
+        "given": "mixed",
+        "now": "none",
+        "down": 0,
+        "up": 0
+      },
+      "typeErrors": [],
+      "expected": {
+        "oracle": "same",
+        "funcStyle": 1,
+        "ubd": 0,
+        "edit": "restructured (methods of a class)",
+        "response": "restructured (methods of a class)"
+      },
+      "corpus": null,
+      "pass": true,
+      "why": []
+    }
+  ],
+  "primingCheck": {
+    "note": "lines of the unstripped corpus subjects' and stubs' comments that the PRIMING patterns match; each must be above 0",
+    "hits": {
+      "a": {
+        "subject": 34,
+        "stubs": null
+      },
+      "b": {
+        "subject": 35,
+        "stubs": 3
+      },
+      "c": {
+        "subject": 51,
+        "stubs": 2
+      }
+    },
+    "pass": true
+  },
+  "mirrorCheck": {
+    "note": "Ultracite's own linters.ts Oxlint adapter (fixAndCollect and verify, run under Bun in a project with init's oxlint.config.ts and oxfmt.config.ts, which import `ultracite/...`, and node_modules links to this repo's packages) against the harness's mirror (scripts/ultracite-adapters.cjs, configs passed with -c), on the same files: every diagnostic (every field but `raw`, before the handoff filter) and the subject, its stub module, package.json and tsconfig.json each pass leaves must match.",
+    "cases": [
+      {
+        "name": "a as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 11,
+        "topicRules": 5,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 18,
+        "topicRules": 16,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c as prepared",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 25,
+        "topicRules": 6,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 8,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 6,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "a08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 8,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 8,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 2,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "b07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 8,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c01",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 21,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c02",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 24,
+        "topicRules": 5,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c03",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 21,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c04",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 21,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c05",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 19,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c06",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 19,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c07",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 27,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c08",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 23,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c09",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 21,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "c10",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 27,
+        "topicRules": 8,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah1",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 12,
+        "topicRules": 6,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah2",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 4,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ah3",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 10,
+        "topicRules": 4,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "bh1",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 14,
+        "topicRules": 12,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "bh2",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 15,
+        "topicRules": 13,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch1",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 21,
+        "topicRules": 2,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch2",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 24,
+        "topicRules": 0,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch3",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "topicRules": 3,
+        "realError": null,
+        "pass": true
+      },
+      {
+        "name": "ch4",
+        "collectMatches": true,
+        "verifyMatches": true,
+        "diagnostics": 22,
+        "topicRules": 1,
+        "realError": null,
+        "pass": true
+      }
+    ]
+  },
+  "failures": 0
+}
