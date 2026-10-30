@@ -284,13 +284,15 @@ const nameOf = (node) => {
   }
   return null;
 };
+// `map` for `map(…)` and `xs.map(…)`; null for a computed member (`handlers[map](…)` names a
+// variable, not the method).
 const calleeName = (callee) => {
-  let c = callee;
-  while (c?.type === "MemberExpression") {
-    c = c.property.type === "Identifier" ? c.property : c.object;
-    break;
+  if (callee?.type === "MemberExpression") {
+    return !callee.computed && callee.property.type === "Identifier"
+      ? callee.property.name
+      : null;
   }
-  return c?.type === "Identifier" ? c.name : null;
+  return callee?.type === "Identifier" ? callee.name : null;
 };
 const COMPONENT_WRAPPERS = new Set(["memo", "forwardRef", "observer"]);
 const typeText = (node, text, max = 80) => {

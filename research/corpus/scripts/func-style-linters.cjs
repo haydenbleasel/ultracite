@@ -246,7 +246,7 @@ const joinRepo = (name, files, diags) => {
   const eslint = lib.readJsonl(join(CENSUS, `${name}.eslint.jsonl`));
   const fnsByFile = new Map();
   for (const f of fns) {
-    fnsByFile.set(f.file, [...(fnsByFile.get(f.file) ?? []), f]);
+    (fnsByFile.get(f.file) ?? fnsByFile.set(f.file, []).get(f.file)).push(f);
   }
   const ubdByKey = new Map(
     ubd.map((u) => [`${u.file}:${u.line}:${u.column}`, u])
