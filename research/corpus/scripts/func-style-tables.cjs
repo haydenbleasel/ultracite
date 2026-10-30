@@ -756,7 +756,7 @@ const main = () => {
   out.push(
     "## 10. Module cycles",
     "",
-    `Runtime import cycles (import-cycles-graph.cjs, unchanged) in the eight corpus repos: ${cycles.pooled.cycles} (${cycles.pooled.topLevelUse} already TDZ-prone, ${cycles.pooled.lateUse} late-use). ${cycles.pooled.flips} late-use cycles are safe only because a function declaration is read at load time (${cycles.pooled.hoistedReads} such reads); converting those declarations makes them TDZ-prone.`,
+    `Runtime import cycles (import-cycles-graph.cjs, with every read on each edge) in the eight corpus repos: ${cycles.pooled.cycles} (${cycles.pooled.topLevelUse} already TDZ-prone, ${cycles.pooled.lateUse} late-use). ${cycles.pooled.flips} late-use cycles are safe only because a function declaration is read at load time (${cycles.pooled.hoistedReads} such reads); converting those declarations makes them TDZ-prone.`,
     ""
   );
   for (const [n, r] of Object.entries(cycles.repos)) {

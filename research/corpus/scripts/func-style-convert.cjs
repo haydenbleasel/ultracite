@@ -21,10 +21,12 @@
 // to it, which is what no-use-before-define's defaults ask. Only statements with no effects when
 // they run may move: function bindings, declarations whose initializers are literals, functions,
 // pure object/array literals, identifiers or member reads, side-effect-free classes and enums,
-// and `export { … }` lists. Everything else keeps its relative order. Kahn's algorithm, smallest
-// original index first; a cycle means no valid order (mutual recursion among the movable
-// functions, or a dependency through statements that can't move). Moved statements are those
-// outside the longest increasing subsequence of the new order.
+// and `export { … }` lists, unless they read, while they run, a binding that's assigned somewhere
+// (moved across the assignment, or a call that makes it, the read would see another value).
+// Everything else keeps its relative order. Kahn's algorithm, smallest original index first; a
+// cycle means no valid order (mutual recursion among the movable functions, or a dependency
+// through statements that can't move). Moved statements are those outside the longest increasing
+// subsequence of the new order.
 //
 // Type checks: each corpus repo's own tsconfig, before, converted and converted + reordered (an
 // overlay through the compiler host; nothing installed). Only zod and hono resolve every import.
@@ -135,7 +137,8 @@ const findDeclarations = (ast, keys) => {
 };
 // The text edits that turn one declaration into a variable-bound function. Two edits: the head
 // (`async function* name<T>(…): R ` up to the body) and a `;` after the body, so nested
-// declarations' edits never overlap.
+// declarations' edits never overlap. The head edit's `keep` says where the parameters, copied as
+// written, land in its text (for mapping positions with mapOffset).
 const convertEdits = (fn, text, rel, mode, declKind) => {
   const name = fn.id.name;
   const head = text.slice(fn.range[0], fn.body.range[0]);
@@ -146,7 +149,7 @@ const convertEdits = (fn, text, rel, mode, declKind) => {
   const ret = fn.returnType ? text.slice(...fn.returnType.range) : "";
   let tps = fn.typeParameters ? text.slice(...fn.typeParameters.range) : "";
   const asyncKw = fn.async ? "async " : "";
-  let replacement;
+  let prefix;
   if (mode === "arrow") {
     if (
       /\.[jt]sx$/.test(rel) &&
@@ -155,13 +158,19 @@ const convertEdits = (fn, text, rel, mode, declKind) => {
     ) {
       tps = tps.replace(/>$/, ",>");
     }
-    replacement = `${declKind} ${name} = ${asyncKw}${tps}${params}${ret} => `;
+    prefix = `${declKind} ${name} = ${asyncKw}${tps}`;
   } else {
-    replacement = `${declKind} ${name} = ${asyncKw}function${fn.generator ? "*" : ""} ${name}${tps}${params}${ret} `;
+    prefix = `${declKind} ${name} = ${asyncKw}function${fn.generator ? "*" : ""} ${name}${tps}`;
   }
+  const replacement = `${prefix}${params}${ret}${mode === "arrow" ? " => " : " "}`;
   void head;
   return [
-    { end: fn.body.range[0], start: fn.range[0], text: replacement },
+    {
+      end: fn.body.range[0],
+      keep: { at: prefix.length, from: open, to: open + params.length },
+      start: fn.range[0],
+      text: replacement,
+    },
     { end: fn.range[1], start: fn.range[1], text: ";" },
   ];
 };
@@ -172,6 +181,30 @@ const applyEdits = (text, edits) => {
     out = out.slice(0, e.start) + e.text + out.slice(e.end);
   }
   return out;
+};
+// Where a position in the original text is after applyEdits, or null if its text was replaced
+// (anything in a converted head but the parameters).
+const mapOffset = (edits, pos) => {
+  let shift = 0;
+  for (const e of edits) {
+    if (e.end <= pos) {
+      shift += e.text.length - (e.end - e.start);
+    } else if (e.start <= pos) {
+      if (!e.keep || pos < e.keep.from || pos >= e.keep.to) {
+        return null;
+      }
+      shift += e.start + e.keep.at - e.keep.from;
+    }
+  }
+  return pos + shift;
+};
+// Offset of each line's start, with ESLint's line breaks (the inventory's `line`s are 1-based).
+const lineStarts = (text) => {
+  const starts = [0];
+  for (const m of text.matchAll(/\r\n|[\r\n\u2028\u2029]/g)) {
+    starts.push(m.index + m[0].length);
+  }
+  return starts;
 };
 
 // ── reordering ─────────────────────────────────────────────────────────
@@ -389,7 +422,47 @@ const solveList = (list, sm, text) => {
   if (reported === 0) {
     return null;
   }
-  const mov = stmts.map(movable);
+  // statements that read, while they run, a binding assigned anywhere (`b = 2`, `b++`, in this
+  // list or not): only statements that can't move assign or call, so these keep their place
+  // among them. Reads inside functions and instance fields run later; `export { b }` reads nothing.
+  const listScope = sm.acquire(list, true) ?? sm.acquire(owner, true);
+  const runsWithList = (r) => {
+    for (let s = r.from; s; s = s.upper) {
+      if (s === listScope) {
+        return true;
+      }
+      if (
+        s.type === "function" ||
+        (s.type === "class-field-initializer" && !s.block.parent?.static)
+      ) {
+        return false;
+      }
+    }
+    return false;
+  };
+  const readsReassigned = new Set();
+  for (const s of sm.scopes) {
+    if (s.block.range[1] < list.range[0] || s.block.range[0] > list.range[1]) {
+      continue;
+    }
+    for (const r of s.references) {
+      if (
+        !r.resolved ||
+        !r.isRead() ||
+        (r.isTypeReference && !r.isValueReference) ||
+        r.identifier.parent?.type === "ExportSpecifier" ||
+        !r.resolved.references.some((w) => w.isWrite() && !w.init) ||
+        !runsWithList(r)
+      ) {
+        continue;
+      }
+      const k = idxOfPos(r.identifier.range[0]);
+      if (k !== -1) {
+        readsReassigned.add(k);
+      }
+    }
+  }
+  const mov = stmts.map((s, i) => movable(s) && !readsReassigned.has(i));
   const n = stmts.length;
   // overload signatures and their implementation move as one: every member points at the group's
   // first statement, and the group is expanded again in the output
@@ -515,7 +588,7 @@ const solveList = (list, sm, text) => {
     }
     const members = new Map();
     for (const v of reps) {
-      members.set(comp[v], [...(members.get(comp[v]) ?? []), v]);
+      (members.get(comp[v]) ?? members.set(comp[v], []).get(comp[v])).push(v);
     }
     const cyclic = [...members.values()].filter((m) => m.length > 1);
     const reasons = cyclic.map((m) =>
@@ -795,7 +868,7 @@ const convertRepo = (name) => {
     .filter((f) => !f.test && f.type === "FunctionDeclaration");
   const byFile = new Map();
   for (const f of fns) {
-    byFile.set(f.file, [...(byFile.get(f.file) ?? []), f]);
+    (byFile.get(f.file) ?? byFile.set(f.file, []).get(f.file)).push(f);
   }
   const srcFiles = lib.collect(name).files;
   const dirs = {
@@ -867,13 +940,20 @@ const convertRepo = (name) => {
         file: rel,
       });
     }
-    // new use-before-define candidates that point at a converted binding
-    const keyOf = (u) => `${u.line}:${u.column}`;
-    const beforeByKey = new Map(
-      (before.ubd ?? [])
-        .filter((u) => u.cls !== "type-only")
-        .map((u) => [keyOf(u), u])
-    );
+    // new use-before-define candidates that point at a converted binding, matched to the original
+    // candidates by position in the converted text (the head edits shift columns on their line)
+    const startsBefore = lineStarts(text);
+    const startsAfter = lineStarts(out);
+    const beforeByPos = new Map();
+    for (const u of before.ubd ?? []) {
+      if (u.cls === "type-only") {
+        continue;
+      }
+      const pos = mapOffset(edits, startsBefore[u.line - 1] + u.column);
+      if (pos !== null) {
+        beforeByPos.set(pos, u);
+      }
+    }
     for (const u of after.ubd ?? []) {
       if (u.cls === "type-only" || u.cls === "export-specifier") {
         continue;
@@ -882,7 +962,8 @@ const convertRepo = (name) => {
         continue;
       }
       newRefs.push({
-        before: beforeByKey.get(keyOf(u))?.cls ?? null,
+        before:
+          beforeByPos.get(startsAfter[u.line - 1] + u.column)?.cls ?? null,
         cls: u.cls,
         file: rel,
         line: u.line,
@@ -1127,6 +1208,8 @@ const main = () => {
 module.exports = {
   convertEdits,
   applyEdits,
+  lineStarts,
+  mapOffset,
   parse,
   reorderText,
   solveList,

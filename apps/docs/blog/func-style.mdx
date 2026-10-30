@@ -19,7 +19,7 @@ rules:
   - useConsistentFunctionStyle
 ---
 
-JavaScript has two common ways to write a named function, and they behave differently. `function format() {}` is a declaration. It's hoisted: it exists from the start of its scope, so code above it can call it. `const format = () => {}` is a variable holding an arrow function, and it can't be read until its line has run. ESLint's `func-style` makes a codebase pick one of the two. `no-use-before-define` reports any name used above the line that defines it. Ultracite turns both on and asks for the `const` style.
+JavaScript has two common ways to write a named function, and they behave differently. `function format() {}` is a declaration. It's hoisted: it exists from the start of its scope, so code above it can call it. `const format = () => {}` is a variable holding an arrow function, and it can't be read until its line has run. ESLint's `func-style` makes a codebase pick one of the two. `no-use-before-define` reports any name used above the line that defines it. Ultracite turns both on.
 
 We chose `const` functions for three reasons. An arrow can drop its braces when all it does is return a value. A function is easier to type early, through its variable, than as a declaration. And we didn't much like hoisting: it seemed to make up for functions written in the wrong order. But honestly, it was a personal preference.
 
@@ -215,7 +215,7 @@ They were pushed that way. The prompt says a diagnostic that still fires is a fa
 
 Three of Claude's runs on C were retried. Each had added a function type that used `any`, which Ultracite reports. Ultracite matches a new diagnostic to an old one by rule and message, and every `any` report reads the same, so the retry prompt pointed at the last `any`s in the file, which were in the original code. All three agents then narrowed the exported `serializeProps(props: any)` to `Record<string, unknown>`, a change to the public type that the behavior check can't see. One said so: "values typed as an `interface` with no index signature will no longer be accepted as `props`." The `any`s they'd added stayed.
 
-Without an agent, nothing converts. `ultracite fix` and `ultracite fix --unsafe` changed no function's form or order in any of the 36 cases we ran with Oxlint, ESLint and Biome. Claude Code's runs cost $8.27 in all, with a median of 49 cents a run. Codex used a median of 35,800 tokens a run.
+Without an agent, nothing converts. Ultracite's own fix, with unsafe fixes or without, changed no function's form or order in any of the 36 cases we ran with Oxlint, ESLint and Biome. Claude Code's runs cost $8.27 in all, with a median of 49 cents a run. Codex used a median of 35,800 tokens a run.
 
 ## Reports that can't crash
 

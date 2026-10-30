@@ -3,9 +3,10 @@
 // module is instantiated, so calling it then works (unless its body reads module state that isn't
 // ready); a `const` isn't initialised until its line runs, so the same read throws.
 //
-// This reuses the import-cycles topic's graph unchanged (import-cycles-graph.cjs `analyse`: one
-// TypeScript program per repo, runtime edges, and every top-level read of an imported binding
-// along a runtime cycle, with the binding's kind and whether the read is TDZ-prone). For each
+// This reuses the import-cycles topic's graph (import-cycles-graph.cjs `analyse`: one TypeScript
+// program per repo, runtime edges, and every top-level read of an imported binding along a
+// runtime cycle, with the binding's kind and whether the read is TDZ-prone), with every read
+// listed rather than the first 3 per edge the import-cycles output keeps. For each
 // runtime cycle it counts the top-level reads that are safe today only because the binding is a
 // function declaration that reads no module state (`binding: "function", risky: false`), and the
 // indirect reads through local callables whose imported bindings are all such functions. Those
@@ -27,13 +28,13 @@ const main = () => {
   lib.checkPinned(names);
   const result = {
     generated: new Date().toISOString(),
-    note: "See the header of func-style-cycles.cjs. A cycle `flips` when it's late-use today (no TDZ-prone top-level read) and has at least one top-level or indirect read of a function declaration, which becomes TDZ-prone after conversion. Reads are the graph's (at most 3 per edge are listed, which is enough to decide).",
+    note: "See the header of func-style-cycles.cjs. A cycle `flips` when it's late-use today (no TDZ-prone top-level read) and has at least one top-level or indirect read of a function declaration, which becomes TDZ-prone after conversion. Reads are the graph's, every one of them (the import-cycles output lists at most 3 per edge); each row shows the first 6.",
     repos: {},
     tools: lib.toolVersions(),
   };
   for (const name of names) {
     const t0 = Date.now();
-    const { detail, summary } = analyse(name);
+    const { detail, summary } = analyse(name, { usageLimit: Infinity });
     const cycles = detail.cycles ?? [];
     const rows = [];
     for (const c of cycles) {
@@ -79,10 +80,10 @@ const main = () => {
     }
     result.repos[name] = {
       cycles: rows.length,
-      byRisk: rows.reduce(
-        (o, r) => ({ ...o, [r.risk]: (o[r.risk] ?? 0) + 1 }),
-        {}
-      ),
+      byRisk: rows.reduce((o, r) => {
+        o[r.risk] = (o[r.risk] ?? 0) + 1;
+        return o;
+      }, {}),
       flips: rows.filter((r) => r.flips).length,
       hoistedReads: rows.reduce((s, r) => s + r.hoistedReads, 0),
       oxlintNoCycle: summary.oxlint?.noCycle ?? null,

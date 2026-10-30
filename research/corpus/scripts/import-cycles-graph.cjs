@@ -316,7 +316,9 @@ const inModel = {
 const MODELS = Object.keys(inModel);
 
 // ── main analysis ──────────────────────────────────────────────────────
-const analyse = (name) => {
+// `usageLimit`: how many top-level and indirect reads each runtime edge lists (func-style-cycles.cjs
+// counts them all).
+const analyse = (name, { usageLimit = 3 } = {}) => {
   const { repo, files: measuredRel } = ic.collect(name);
   const root = resolve(repo.root);
   const sha = ic.gitHead(root);
@@ -1135,11 +1137,11 @@ const analyse = (name) => {
     if (inModel.runtime(s)) {
       const u = usage(from, s);
       row.usage = {
-        indirect: u.indirect.slice(0, 3),
+        indirect: u.indirect.slice(0, usageLimit),
         late: u.late,
         reexport: Boolean(u.reexport),
         sideEffect: Boolean(u.sideEffect),
-        topLevel: u.topLevel.slice(0, 3),
+        topLevel: u.topLevel.slice(0, usageLimit),
         type: u.type,
       };
     }
