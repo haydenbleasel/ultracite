@@ -2,15 +2,15 @@
 import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
-// A snapshot of Oxlint 1.87.0's catalog (`oxlint --rules --format=json`) and
-// the rules ultracite/oxlint/core sets to "error" in Ultracite 8.0.0. The
-// categories count rules in the eight plugins core enables (546 of the 871);
+// A snapshot of Oxlint 1.90.0's catalog (`oxlint --rules --format=json`) and
+// the rules ultracite/oxlint/core sets to "error" in Ultracite 8.1.1. The
+// categories count rules in the eight plugins core enables (547 of the 872);
 // the other plugins (react, jsx-a11y, nextjs, vue, jest, vitest) belong to the
 // framework presets. Re-derive both when either version moves.
-const catalogSize = 871;
+const catalogSize = 872;
 const defaultCount = 111;
-const coreCount = 474;
-const typeAwareCount = 56;
+const coreCount = 476;
+const typeAwareCount = 57;
 
 const categories: CoverageRow[] = [
   {
@@ -21,10 +21,10 @@ const categories: CoverageRow[] = [
     name: "Correctness",
   },
   {
-    available: 50,
+    available: 51,
     defaults: 0,
     description: "Code that’s most likely wrong",
-    enabled: 47,
+    enabled: 49,
     name: "Suspicious",
   },
   {
@@ -45,14 +45,14 @@ const categories: CoverageRow[] = [
     available: 156,
     defaults: 0,
     description: "Code with a more idiomatic form",
-    enabled: 131,
+    enabled: 130,
     name: "Style",
   },
   {
     available: 80,
     defaults: 0,
     description: "Bans on language and library features",
-    enabled: 59,
+    enabled: 60,
     name: "Restriction",
   },
   {
@@ -67,17 +67,17 @@ const categories: CoverageRow[] = [
 const plugins = [
   { label: "eslint", value: "166" },
   { label: "unicorn", value: "127" },
-  { label: "typescript", value: "102" },
+  { label: "typescript", value: "103" },
   { label: "oxc", value: "23" },
   { label: "jsdoc", value: "19" },
   { label: "import", value: "16" },
-  { label: "promise", value: "13" },
+  { label: "promise", value: "14" },
   { label: "node", value: "8" },
 ];
 ---
 
 <Coverage
-  caption="Oxlint 1.87.0 and Ultracite 8.0.0. Categories count the 546 rules in the eight plugins the core preset enables, drawn to one scale; the React, Next.js, Vue, Jest and Vitest presets turn on rules from the other plugins."
+  caption="Oxlint 1.90.0 and Ultracite 8.1.1. Categories count the 547 rules in the eight plugins the core preset enables, drawn to one scale; the React, Next.js, Vue, Jest and Vitest presets turn on rules from the other plugins."
   id="ox-rules"
   notes={[
     {
@@ -91,7 +91,7 @@ const plugins = [
   ]}
   rows={categories}
   stats={[
-    { label: "Rules in Oxlint 1.87", value: String(catalogSize) },
+    { label: "Rules in Oxlint 1.90", value: String(catalogSize) },
     {
       label: "On by default, all of them correctness rules",
       value: String(defaultCount),

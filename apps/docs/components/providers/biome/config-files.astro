@@ -2,8 +2,8 @@
 // The biome.jsonc `ultracite init --linter biome` writes for a React and
 // Next.js app (rendered by lib/providers.ts, as on the homepage), with the
 // rules each preset turns on, and what the core preset sets besides rules.
-// Counts are from `biome rage --linter` with Biome 2.6.3 and Ultracite
-// 8.1.0: core alone, then each preset added (React sets 20 rules, 3 of which
+// Counts are from `biome rage --linter` with Biome 2.6.4 and Ultracite
+// 8.1.1: core alone, then each preset added (React sets 20 rules, 3 of which
 // core already has on).
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
@@ -74,8 +74,10 @@ const settings = [
       </dl>
     </div>
   </AnnotatedCode>
-  {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.5.15 printed
-      it: one diagnostic in full, the other by its header, then the summary. */}
+  {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.6.4 printed
+      it with `react` declared in package.json, as an app would: one diagnostic
+      with its message, frame and first note, the other by its header, then
+      the summary. */}
   <Terminal class="lg:col-span-5">
     <p class="text-panel-foreground mb-3 truncate">
       <span class="text-signal">$</span> npx ultracite fix
@@ -84,16 +86,19 @@ const settings = [
       src/component.tsx:42:27 lint/performance/noJsxPropsBind
     </p>
     <p class="mt-1 text-pretty">
-      <span class="text-signal">×</span> This function will be recreated on
-      every render. Pass stable function references as props to avoid
-      unnecessary rerenders.
+      <span class="text-signal">×</span> JSX props should not use arrow
+      functions
     </p>
     <pre class="mt-2 overflow-hidden font-mono text-[13px]/[1.55]"><span class="text-signal">&gt;</span> 42 │   onChange={"{"}() =&gt; onToggle(task.id){"}"}
      │             <span class="text-signal">^^^^^^^^^^^^^^^^^^^^^^^</span></pre>
+    <p class="mt-2 text-pretty">
+      i This function will be recreated on every render, which can cause
+      unnecessary rerenders.
+    </p>
     <p class="text-panel-foreground mt-3 truncate">
       src/utils.ts:62:14 lint/performance/noAwaitInLoops
     </p>
-    <p class="mt-3">Checked 7 files in 7ms. Fixed 6 files.</p>
+    <p class="mt-3">Checked 7 files in 6ms. Fixed 6 files.</p>
     <p>Found 2 errors.</p>
   </Terminal>
 </div>

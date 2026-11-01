@@ -19,26 +19,26 @@ import {
 import { providerLogos } from "../../lib/logos";
 import type { ProviderId } from "../../lib/providers";
 
-const lastModified = "2026-10-10";
+const lastModified = "2026-11-01";
 
 const breadcrumbs: Crumb[] = [{ href: "/providers", name: "Providers" }];
 
 const hrefFor = (id: ProviderId): string => `/providers/${id}`;
 
-// Rules on in each core preset (Ultracite 8.0.0; Biome's rechecked for 8.1.0
-// with Biome 2.6.3): Oxlint's set to "error",
-// Biome's from `biome rage --linter`, and ESLint's from `eslint
-// --print-config` on a TypeScript file. Rules that read types: Oxlint's
-// type-aware rules in core; Biome's type-aware preset; for ESLint, the 100
-// rules ultracite/eslint/type-aware adds plus the 32 SonarJS rules in core
-// that use types when there are some. Times are from lib/benchmarks.
+// Rules on in each core preset (Ultracite 8.1.1, with Oxlint 1.90.0, Biome
+// 2.6.4 and ESLint 10.14.0): Oxlint's set to "error", Biome's from `biome
+// rage --linter`, and ESLint's from `eslint --print-config` on a TypeScript
+// file. Rules that read types: Oxlint's type-aware rules in core; Biome's
+// type-aware preset; for ESLint, the 101 rules ultracite/eslint/type-aware
+// adds plus the 32 SonarJS rules in core that use types when there are some.
+// Times are from lib/benchmarks.
 const small = runFor(42);
 const large = runFor(420);
 
 const engines = [
   {
     check420: formatMs(large.ms.oxlint),
-    coreRules: 474,
+    coreRules: 476,
     id: "oxlint",
     name: "Oxlint + Oxfmt",
     recommended: true,
@@ -56,7 +56,7 @@ const engines = [
   },
   {
     check420: formatMs(large.ms.eslint),
-    coreRules: 918,
+    coreRules: 919,
     id: "eslint",
     name: "ESLint + Prettier + Stylelint",
     recommended: false,
@@ -77,7 +77,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
     label: "Runs on",
     values: ["Native Rust binaries", "One native Rust binary", "Node.js"],
   },
-  { label: "Rules on in the core preset", values: ["474", "351", "918"] },
+  { label: "Rules on in the core preset", values: ["476", "351", "919"] },
   {
     label: "`ultracite check`, 42 files",
     values: [
@@ -97,9 +97,9 @@ const rows: { label: string; values: [string, string, string] }[] = [
   {
     label: "Rules that read types",
     values: [
-      "56, opt-in at setup",
-      "7 project-wide rules, opt-in at setup",
-      "132, opt-in at setup",
+      "57, opt-in at setup",
+      "6 project-wide rules, opt-in at setup",
+      "133, opt-in at setup",
     ],
   },
   {
@@ -131,7 +131,7 @@ const rows: { label: string; values: [string, string, string] }[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "Start with Oxlint. It’s what `init` recommends: native speed, 474 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want one tool and one config file that lints, formats and sorts. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted.",
+      "Start with Oxlint. It’s what `init` recommends: native speed, 476 rules in the core preset, ESLint’s rule names and type-aware rules on typescript-go. Pick Biome if you want one tool and one config file that lints, formats and sorts. Pick ESLint if you depend on an ESLint or Prettier plugin, or need Vue and Svelte templates linted.",
     question: "Which engine should I pick?",
   },
   {
@@ -145,7 +145,7 @@ const faqs: FaqItem[] = [
     question: "Do all three enforce the same rules?",
   },
   {
-    answer: `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files Oxlint was slightly ahead, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
+    answer: `On a small project, yes: Biome checked 42 files in ${formatMs(small.ms.biome)} and Oxlint with Oxfmt in ${formatMs(small.ms.oxlint)}, because Biome lints and formats in one process while \`ultracite check\` on Oxlint runs Oxlint and then Oxfmt. At 420 files the two were level, ${formatMs(large.ms.biome)} to Oxlint’s ${formatMs(large.ms.oxlint)}. The ESLint toolchain went from ${formatMs(small.ms.eslint)} to ${formatMs(large.ms.eslint)}.`,
     question: "Is Biome faster than Oxlint?",
   },
 ];
@@ -291,10 +291,10 @@ const faqs: FaqItem[] = [
         </table>
       </div>
       <p class="border-border text-muted-foreground border-t px-4 py-5 text-sm/6 text-pretty sm:px-6 lg:px-10">
-        Ultracite 8.0.0. Times are medians of five runs of{" "}
+        Ultracite 8.1.1. Times are medians of five runs of{" "}
         <code class="font-mono text-[13px]">ultracite check</code> on{" "}
-        {benchmarkMachine} over the repo’s benchmark fixture, with
-        {toolchainVersions.oxlint}; {toolchainVersions.biome}; and
+        {benchmarkMachine} over the repo’s benchmark fixture, with{" "}
+        {toolchainVersions.oxlint}; {toolchainVersions.biome}; and{" "}
         {toolchainVersions.eslint}. They include starting Node and the CLI.
       </p>
     </div>

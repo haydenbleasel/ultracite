@@ -2,30 +2,30 @@
 import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
-// ESLint 10.12.0 and the plugins ultracite/eslint/core loads, against
-// Ultracite 8.0.0. `available` counts each one's rules that aren't
+// ESLint 10.14.0 and the plugins ultracite/eslint/core loads, against
+// Ultracite 8.1.1. `available` counts each one's rules that aren't
 // deprecated; `defaults` counts the rules in its own recommended config
 // (typescript-eslint's `recommended`) that core keeps on; `enabled` counts the
 // rules `eslint --print-config` reports on for a TypeScript file. Not drawn:
 // unused-imports and compat, one rule each. Re-derive when a version moves.
 //
 // Type information: ultracite/eslint/type-aware turns on 62 typescript-eslint
-// rules (replacing five of ESLint's) and the 37 SonarJS rules and one Unicorn
-// rule that register no listeners without a TypeScript program. It also gives
+// rules (replacing five of ESLint's) and the 37 SonarJS rules and two Unicorn
+// rules that register no listeners without a TypeScript program. It also gives
 // that program to the 32 SonarJS rules in core that use types when there are
 // some (all marked `requiresTypeChecking` by their plugins).
-const catalogSize = 1190;
+const catalogSize = 1192;
 const recommendedCount = 726;
-const coreCount = 918;
-const typedPresetCount = 100;
+const coreCount = 919;
+const typedPresetCount = 101;
 const typedCoreCount = 32;
 
 const plugins: CoverageRow[] = [
   {
-    available: 374,
-    defaults: 320,
+    available: 376,
+    defaults: 319,
     description: "Modern, idiomatic JavaScript",
-    enabled: 346,
+    enabled: 347,
     mono: true,
     name: "unicorn",
   },
@@ -79,17 +79,17 @@ const plugins: CoverageRow[] = [
   },
   {
     available: 24,
-    defaults: 4,
+    defaults: 3,
     description: "GitHub’s own conventions",
-    enabled: 21,
+    enabled: 20,
     mono: true,
     name: "github",
   },
   {
     available: 17,
-    defaults: 8,
+    defaults: 10,
     description: "Promises",
-    enabled: 14,
+    enabled: 15,
     mono: true,
     name: "promise",
   },
@@ -97,7 +97,7 @@ const plugins: CoverageRow[] = [
 ---
 
 <Coverage
-  caption="ESLint 10.12.0 and Ultracite 8.0.0, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
+  caption="ESLint 10.14.0 and Ultracite 8.1.1, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
   defaultsLabel="In the plugin’s recommended config"
   id="es-rules"
   notes={[

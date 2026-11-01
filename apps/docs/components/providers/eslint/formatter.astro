@@ -3,11 +3,13 @@ import Terminal from "../../landing/terminal.astro";
 import BeforeAfter from "../before-after.astro";
 
 // The component from the Oxlint and Biome pages, and what `ultracite fix`
-// made of it with ESLint 10.12.0 and Prettier 3.9.10 under
-// ultracite/eslint/core and Ultracite 8.0.0, in a project with React and Radix
-// (run for real; regenerate when the configs change). `problems` is what fix
-// left. Adding ultracite/eslint/type-aware also left
-// `@typescript-eslint/strict-boolean-expressions` on `asChild`.
+// made of it with ESLint 10.14.0 and Prettier 3.9.10 under
+// ultracite/eslint/core and Ultracite 8.1.1, in a project with React and Radix
+// and a tsconfig `@/*` path to lib/utils.ts (run for real; regenerate when the
+// configs change). `problems` is what fix left. Adding
+// ultracite/eslint/type-aware also left
+// `@typescript-eslint/strict-boolean-expressions` on `asChild` and
+// `sonarjs/prefer-read-only-props` on the props.
 const before = `import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
 import type { ReactNode } from 'react'
@@ -66,7 +68,7 @@ const items = [
   },
   {
     description:
-      "Opt-in rules that read your types. With it, `strict-boolean-expressions` also flags the optional `asChild` in the condition.",
+      "Opt-in rules that read your types. With it, `strict-boolean-expressions` also flags the optional `asChild` in the condition, and SonarJS asks for read-only props.",
     name: "ultracite/eslint/type-aware",
   },
 ];
@@ -98,6 +100,6 @@ const items = [
       </p>
     ))}
     <p class="mt-1">✖ 1 problem (1 error, 0 warnings)</p>
-    <p class="mt-1 truncate">components/button.tsx 58ms</p>
+    <p class="mt-1 truncate">components/button.tsx 59ms</p>
   </Terminal>
 </BeforeAfter>

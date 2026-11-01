@@ -2,7 +2,7 @@
 import BeforeAfter from "../before-after.astro";
 
 // The component from the Oxlint page, and what `ultracite fix` made of it
-// with Biome 2.6.3 under ultracite/biome/core (run for real; regenerate when
+// with Biome 2.6.4 under ultracite/biome/core and Ultracite 8.1.1 (run for real; regenerate when
 // the config changes). Biome 2.6 sorts Tailwind classes in Tailwind CSS v4's
 // order, which gives this component the same order as Oxfmt.
 const before = `import { cn } from '@/lib/utils'
@@ -46,7 +46,7 @@ const items = [
   {
     description:
       "Tailwind classes sorted in `class`, `className` and `cn`, `clsx`, `cva`, `tw`, `twMerge`, `twJoin` and `tv` calls, in Tailwind CSS v4’s order.",
-    name: "useSortedClasses",
+    name: "useTailwindSortedClasses",
   },
   {
     description:
@@ -71,7 +71,7 @@ const items = [
   title="Formatting and sorting from the same binary"
 >
   Biome’s formatter is built to match Prettier’s output, and its assist actions
-  sort code instead of just reporting it. Ultracite turns on nine of them, so
+  sort code instead of just reporting it. Ultracite turns on twelve of them, so
   the import order, class order and key order an agent writes never come up in
   review.
 </BeforeAfter>
