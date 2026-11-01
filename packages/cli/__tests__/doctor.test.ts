@@ -1265,4 +1265,51 @@ describe("doctor", () => {
       status: "fail",
     });
   });
+
+  test("fails React Doctor plugins that don't have the presets' rules", () => {
+    mockInstalledVersions({
+      eslint: "10.9.1",
+      "eslint-plugin-react-doctor": "0.9.18",
+      "oxlint-plugin-react-doctor": "0.9.18",
+      prettier: "3.8.1",
+    });
+
+    expect(versionCheck("eslint", "eslint-plugin-react-doctor")).toMatchObject({
+      message: expect.stringContaining(
+        "eslint-plugin-react-doctor 0.9.18 is older"
+      ),
+      status: "fail",
+    });
+    expect(versionCheck("oxlint", "oxlint-plugin-react-doctor")).toMatchObject({
+      message: expect.stringContaining(
+        "oxlint-plugin-react-doctor 0.9.18 is older"
+      ),
+      status: "fail",
+    });
+  });
+
+  test("passes React Doctor plugins that have the presets' rules", () => {
+    mockInstalledVersions({
+      "eslint-plugin-react-doctor": "0.9.21",
+      "oxlint-plugin-react-doctor": "0.9.21",
+    });
+
+    expect(versionCheck("eslint", "eslint-plugin-react-doctor")).toMatchObject({
+      status: "pass",
+    });
+    expect(versionCheck("oxlint", "oxlint-plugin-react-doctor")).toMatchObject({
+      status: "pass",
+    });
+  });
+
+  test("skips the React Doctor plugin version check when it isn't installed", () => {
+    mockInstalledVersions({ eslint: "10.9.1", oxlint: "1.90.0" });
+
+    expect(
+      versionCheck("eslint", "eslint-plugin-react-doctor")
+    ).toBeUndefined();
+    expect(
+      versionCheck("oxlint", "oxlint-plugin-react-doctor")
+    ).toBeUndefined();
+  });
 });
