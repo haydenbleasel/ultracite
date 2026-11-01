@@ -437,6 +437,7 @@ export default defineConfig({
     "typescript/no-unsafe-assignment": "error",
     "typescript/no-unsafe-call": "error",
     "typescript/no-unsafe-declaration-merging": "error",
+    "typescript/no-unsafe-enum-assignment": "error",
     "typescript/no-unsafe-enum-comparison": "error",
     "typescript/no-unsafe-function-type": "error",
     "typescript/no-unsafe-member-access": "error",
