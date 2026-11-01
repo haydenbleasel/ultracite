@@ -519,6 +519,7 @@ const config = defineConfig({
     "react-doctor/client-passive-event-listeners": "error",
     "react-doctor/dialog-has-accessible-name": "error",
     "react-doctor/effect-needs-cleanup": "error",
+    "react-doctor/forwarded-set-state-in-effect": "error",
     "react-doctor/hooks-no-nan-in-deps": "error",
     "react-doctor/html-no-invalid-paragraph-child": "error",
     "react-doctor/html-no-invalid-table-nesting": "error",

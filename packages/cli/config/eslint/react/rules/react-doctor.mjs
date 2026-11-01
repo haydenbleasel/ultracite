@@ -18,6 +18,7 @@ const config = {
   "react-doctor/effect-observer-needs-disconnect": "error",
   "react-doctor/effect-raf-loop-needs-cancel": "error",
   "react-doctor/effect-remove-listener-inline-handler": "error",
+  "react-doctor/forwarded-set-state-in-effect": "error",
   "react-doctor/hook-import-rename-loses-use-prefix": "error",
   "react-doctor/hooks-no-nan-in-deps": "error",
   "react-doctor/html-label-has-single-control": "error",
