@@ -594,7 +594,13 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           fn: () => checkToolVersion("stylelint", false),
           name: "Stylelint version",
         },
-        { fn: checkStylelintConfig, name: STYLELINT_CHECK }
+        { fn: checkStylelintConfig, name: STYLELINT_CHECK },
+        // The React, Next.js and TanStack presets name React Doctor rules, so
+        // an older plugin fails to load them.
+        {
+          fn: () => checkToolVersion("eslint-plugin-react-doctor", false),
+          name: "React Doctor plugin version",
+        }
       );
       break;
     }
@@ -618,7 +624,13 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           fn: () => checkToolVersion("oxfmt", true),
           name: "oxfmt version",
         },
-        { fn: checkOxfmtConfig, name: OXFMT_CHECK }
+        { fn: checkOxfmtConfig, name: OXFMT_CHECK },
+        // The js-plugins presets name React Doctor rules, so an older plugin
+        // fails to load them.
+        {
+          fn: () => checkToolVersion("oxlint-plugin-react-doctor", false),
+          name: "React Doctor plugin version",
+        }
       );
       break;
     }

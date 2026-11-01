@@ -130,7 +130,7 @@ The `doctor` command checks your setup for issues and provides recommendations. 
 npx ultracite doctor
 ```
 
-Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt. A tool that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash). A tool that is newer than the supported range only warns.
+Alongside the config checks, `doctor` compares the linter and formatter installed in your project against the versions this Ultracite release was verified with — Biome, ESLint, Prettier and Stylelint, or Oxlint and Oxfmt — and the React Doctor plugin when it's installed. A tool that is too old fails the check, because the presets reference rules it doesn't know about yet (the `Found an unknown key` crash). A tool that is newer than the supported range only warns.
 
 For Oxlint projects, `doctor` also fails when two Oxlint or two Oxfmt configs sit in the same directory (for example, `.oxlintrc.json` next to `oxlint.config.ts`), since the tools refuse to load either, and when an `oxlint.config.ts` or `oxfmt.config.ts` is in a `"type": "commonjs"` package, where Node can't load it. Re-running `npx ultracite init` fixes both. Under Yarn Plug'n'Play, where packages aren't in `node_modules`, `doctor` warns instead of failing when it can't confirm Ultracite is installed or read a tool's version.
 
