@@ -235,7 +235,7 @@ const churn = (name) =>
       const rec = { hunk, kind: d ? "decl" : "expr", text: body.trim() };
       const map = sign === "+" ? file.added : file.removed;
       const n = (d ?? e)[1];
-      map.set(n, [...(map.get(n) ?? []), rec]);
+      (map.get(n) ?? map.set(n, []).get(n)).push(rec);
     });
     rl.on("close", () => {
       finishCommit();
@@ -347,11 +347,18 @@ const analyse = (repos) => {
       continue;
     }
     const rows = new Map(trackRows(name).map((f) => [f.id, f]));
-    // own lines: the function's lines minus those of tracked functions nested in it
+    // own lines: the function's lines minus those of tracked functions nested in it at any depth
+    // (through callbacks too), since `track` gives their lines' changes to them; only the
+    // outermost of those, so nothing is subtracted twice
     const byFile = new Map();
     for (const f of rows.values()) {
-      byFile.set(f.file, [...(byFile.get(f.file) ?? []), f]);
+      (byFile.get(f.file) ?? byFile.set(f.file, []).get(f.file)).push(f);
     }
+    const inside = (g, f) =>
+      g !== f &&
+      g.stmtLine >= f.stmtLine &&
+      g.stmtEndLine <= f.stmtEndLine &&
+      g.depth > f.depth;
     for (const h of lib.readJsonl(join(OUT, `${name}.jsonl`))) {
       const f = rows.get(h.id);
       if (!f) {
@@ -363,14 +370,11 @@ const analyse = (repos) => {
         continue;
       }
       const lines = f.stmtEndLine - f.stmtLine + 1;
-      const nested = (byFile.get(f.file) ?? [])
-        .filter(
-          (g) =>
-            g !== f &&
-            g.stmtLine >= f.stmtLine &&
-            g.stmtEndLine <= f.stmtEndLine &&
-            g.depth === f.depth + 1
-        )
+      const descendants = (byFile.get(f.file) ?? []).filter((g) =>
+        inside(g, f)
+      );
+      const nested = descendants
+        .filter((g) => !descendants.some((d) => inside(g, d)))
         .reduce((s, g) => s + (g.stmtEndLine - g.stmtLine + 1), 0);
       units.push({
         component: f.component,

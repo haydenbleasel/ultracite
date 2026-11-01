@@ -160,9 +160,11 @@ const measureRepo = (name) => {
     const target = resolveSpec(im.file, im.source, fileSet);
     const key = `${target}|${im.imported}`;
     if (target) {
-      byTarget.set(key, [...(byTarget.get(key) ?? []), im]);
+      (byTarget.get(key) ?? byTarget.set(key, []).get(key)).push(im);
     }
-    byName.set(im.imported, [...(byName.get(im.imported) ?? []), im]);
+    (
+      byName.get(im.imported) ?? byName.set(im.imported, []).get(im.imported)
+    ).push(im);
   }
   for (const f of fnRows) {
     if (f.type !== "FunctionDeclaration" || !f.exported || !f.name) {
