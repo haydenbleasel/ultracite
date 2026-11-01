@@ -676,10 +676,10 @@
     }
   },
   "markdown": {
-    // Biome 2.6's Markdown formatter drops the space before some inline code
-    // spans ("`--unsafe`. `--corpus`" becomes "`--unsafe`.`--corpus`"), which
-    // changes the rendered text, so .md files stay unformatted as they were
-    // before 2.6. The linter stays on.
+    // Biome 2.6's Markdown formatter changes the rendered text: it rewrites a
+    // literal "[ ]" in prose to "[]" (still in 2.6.4), and before 2.6.4 it
+    // dropped the space before some inline code spans. So .md files stay
+    // unformatted as they were before 2.6. The linter stays on.
     "formatter": {
       "enabled": false
     },
