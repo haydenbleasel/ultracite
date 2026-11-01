@@ -8,8 +8,12 @@ export const COMMANDS = ["check", "fix"] as const;
 
 export type Command = (typeof COMMANDS)[number];
 
-const intFromEnv = (name: string, fallback: number): number => {
-  const raw = process.env[name];
+export const intFromEnv = (
+  name: string,
+  fallback: number,
+  minimum = 1
+): number => {
+  const raw = process.env[name]?.trim();
 
   if (!raw) {
     return fallback;
@@ -17,7 +21,7 @@ const intFromEnv = (name: string, fallback: number): number => {
 
   const parsed = Math.trunc(Number(raw));
 
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  return Number.isSafeInteger(parsed) && parsed >= minimum ? parsed : fallback;
 };
 
 const floatFromEnv = (name: string, fallback: number): number => {

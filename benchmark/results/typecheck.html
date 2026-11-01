@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ultracite type-check race</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #10151b;
+        color: #f3f5f7;
+      }
+      main {
+        max-width: 860px;
+        margin: auto;
+      }
+      h1 {
+        margin-bottom: 8px;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        letter-spacing: -0.05em;
+      }
+      .summary {
+        color: #a9b4bf;
+        margin: 0 0 36px;
+      }
+      .race {
+        position: relative;
+        display: grid;
+        gap: 28px;
+        padding: 24px;
+        border: 1px solid #303b46;
+        border-radius: 18px;
+        background: #171e26;
+        overflow: hidden;
+      }
+      .lane {
+        position: relative;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        border-bottom: 2px dashed #364451;
+      }
+      .label {
+        position: absolute;
+        left: 0;
+        top: -14px;
+        color: #bdc7d1;
+        font-size: 13px;
+      }
+      .ball {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 800;
+        box-shadow: 0 6px 20px #0008;
+        animation-name: race;
+        animation-timing-function: cubic-bezier(0.12, 0.72, 0.17, 1);
+        animation-fill-mode: both;
+      }
+      .tsgo {
+        background: #3178c6;
+        color: white;
+        animation-delay: 0.2s;
+        animation-duration: 6.91s;
+      }
+      .tsrs {
+        background: #df6a38;
+        color: white;
+        animation-delay: 0.2s;
+        animation-duration: 3.2s;
+      }
+      .finish {
+        position: absolute;
+        top: 20px;
+        bottom: 20px;
+        right: 46px;
+        border-left: 3px solid #e8edf2;
+        opacity: 0.75;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .stat {
+        padding: 18px;
+        border-radius: 14px;
+        background: #171e26;
+        border: 1px solid #303b46;
+      }
+      .stat strong {
+        display: block;
+        margin-top: 5px;
+        font-size: 1.45rem;
+      }
+      .caption {
+        color: #a9b4bf;
+        font-size: 13px;
+        margin-top: 24px;
+        line-height: 1.6;
+      }
+      @keyframes race {
+        from {
+          left: 0;
+          transform: rotate(0);
+        }
+        to {
+          left: calc(100% - 64px);
+          transform: rotate(900deg);
+        }
+      }
+      @media (max-width: 560px) {
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        body {
+          padding: 28px 14px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ball {
+          animation-duration: 0.01ms;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Type-check race</h1>
+      <p class="summary">Ultracite CLI · 2026-10-29</p>
+      <section class="race" aria-label="Animated compiler speed comparison">
+        <div class="finish" aria-hidden="true"></div>
+        <div class="lane">
+          <span class="label">TypeScript Go · 0.74s median</span
+          ><span class="ball tsgo" aria-label="tsgo">Go</span>
+        </div>
+        <div class="lane">
+          <span class="label">tsrs · 0.34s median</span
+          ><span class="ball tsrs" aria-label="tsrs">rs</span>
+        </div>
+      </section>
+      <section class="stats" aria-label="Benchmark results">
+        <div class="stat">tsgo median<strong>0.74s</strong></div>
+        <div class="stat">tsrs median<strong>0.34s</strong></div>
+        <div class="stat">tsrs speed<strong>2.16×</strong></div>
+      </section>
+      <p class="caption">
+        7 measured runs per compiler after 2 warmups. The order alternates to
+        reduce order effects. Each run invokes the compiler binary directly and
+        skips Turbo caching. See typecheck.json for raw samples, compiler
+        versions, and the run date.
+      </p>
+    </main>
+  </body>
+</html>
