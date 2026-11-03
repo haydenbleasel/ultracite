@@ -1,6 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
 import { oxlint } from "../src/linters/oxlint";
+import { restoreFileSystemMock } from "./mock-fs";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -822,15 +823,24 @@ export default defineConfig({
         readFileSync: mock(() => "{}"),
       }));
 
-      // `ultracite fix` sorts the imports, which must not change the order
-      // in which the presets are extended (#863).
-      await oxlint.update({ jsPlugins: ["anti-slop"] });
-      await oxlint.update();
+      try {
+        // `ultracite fix` sorts the imports, which must not change the order
+        // in which the presets are extended (#863).
+        await oxlint.update({ jsPlugins: ["anti-slop"] });
+        await oxlint.update();
 
-      expect(mockWriteFile).toHaveBeenCalledTimes(2);
+        expect(mockWriteFile).toHaveBeenCalledTimes(2);
 
-      for (const [, content] of mockWriteFile.mock.calls) {
-        expect(content).toContain("extends: [core, astro, antiSlop],");
+        for (const [, content] of mockWriteFile.mock.calls) {
+          expect(content).toContain("extends: [core, astro, antiSlop],");
+        }
+      } finally {
+        restoreFileSystemMock();
+        mock.module("node:fs/promises", () => ({
+          access: mock(() => Promise.reject(new Error("ENOENT"))),
+          readFile: mock(() => Promise.resolve("")),
+          writeFile: mock(() => Promise.resolve()),
+        }));
       }
     });
 
