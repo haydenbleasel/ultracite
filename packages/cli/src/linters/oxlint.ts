@@ -185,12 +185,27 @@ const generateConfigContent = (
   const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
 
-  // When plugins are selected, the base js-plugins preset is imported and
-  // wrapped as selectedJsPlugins below — drop it from the plain extends so
-  // the import isn't declared twice (e.g. on update of an existing config).
-  const resolvedExtends = extendsList.filter(
-    (ext) => !(hasJsPlugins && ext === getOxlintConfigPath("js-plugins"))
-  );
+  const corePath = getOxlintConfigPath("core");
+  const antiSlopPath = getOxlintConfigPath(antiSlopPreset);
+  const jsPluginsPath = getOxlintConfigPath("js-plugins");
+
+  // The presets of an existing config arrive in import order, which
+  // `ultracite fix` sorts, so core always goes first for the other presets
+  // to override it, and anti-slop is added back last below. When plugins
+  // are selected, the base js-plugins preset is imported and wrapped as
+  // selectedJsPlugins below — drop it from the plain extends so the import
+  // isn't declared twice (e.g. on update of an existing config).
+  const resolvedExtends = [
+    corePath,
+    ...new Set(
+      extendsList.filter(
+        (ext) =>
+          ext !== corePath &&
+          ext !== antiSlopPath &&
+          !(hasJsPlugins && ext === jsPluginsPath)
+      )
+    ),
+  ];
 
   // Framework-specific react-doctor rules live in per-framework add-on
   // presets; wire them up when the framework preset is present.
@@ -214,22 +229,16 @@ const generateConfigContent = (
     resolvedExtends.push(getOxlintConfigPath(shadcnPreset));
   }
 
-  // Last among the plain extends so its core-rule overrides win, including
-  // when an existing config lists it earlier.
-  const antiSlopPath = getOxlintConfigPath(antiSlopPreset);
-  const antiSlopIndex = resolvedExtends.indexOf(antiSlopPath);
-
-  if (antiSlopIndex !== -1) {
-    resolvedExtends.splice(antiSlopIndex, 1);
-  }
-
-  if (jsPlugins.includes(antiSlopPreset) || antiSlopIndex !== -1) {
+  // Last among the plain extends so its core-rule overrides win.
+  if (
+    jsPlugins.includes(antiSlopPreset) ||
+    extendsList.includes(antiSlopPath)
+  ) {
     resolvedExtends.push(antiSlopPath);
   }
 
   // The full js-plugins preset (every plugin, no selection) stays a plain
   // extend — e.g. a hand-written config being updated.
-  const jsPluginsPath = getOxlintConfigPath("js-plugins");
   const hasFullJsPluginsPreset = resolvedExtends.includes(jsPluginsPath);
 
   // oxlint does not merge `settings` from extended configs, so react-doctor's
@@ -916,14 +925,9 @@ export const oxlint = {
 
     const { existing } = current;
     const unmigrated = rc ? mergeRcConfig(rc.config, existing) : [];
-    // Presets are read in import order, which `ultracite fix` sorts, so core
-    // goes back first for the other presets to override it.
-    const corePreset = getOxlintConfigPath("core");
-
-    const newExtends = [
-      corePreset,
-      ...new Set(existing.presets.filter((preset) => preset !== corePreset)),
-    ];
+    // generateConfigContent puts core first and anti-slop last, whatever
+    // order the presets were imported in.
+    const newExtends = [...new Set(existing.presets)];
 
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
