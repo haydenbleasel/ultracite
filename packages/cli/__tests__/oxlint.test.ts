@@ -1,6 +1,7 @@
 import { describe, expect, mock, test } from "bun:test";
 
 import { oxlint } from "../src/linters/oxlint";
+import { restoreFileSystemMock } from "./mock-fs";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -792,6 +793,64 @@ export default defineConfig({
       const antiSlopExtends = content.match(/antiSlop/gu);
       // One import identifier plus one extends entry.
       expect(antiSlopExtends?.length).toBe(2);
+    });
+
+    test("keeps core first and anti-slop last when the imports are sorted", async () => {
+      // `ultracite fix` sorts the imports, which must not change the order
+      // in which the presets are extended (#863).
+      let currentConfig = `import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import astro from "ultracite/oxlint/astro";
+import core from "ultracite/oxlint/core";
+import next from "ultracite/oxlint/next";
+import react from "ultracite/oxlint/react";
+
+export default defineConfig({
+  extends: [core, astro, next, react, antiSlop],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      // Each update reads what the previous one wrote.
+      const mockWriteFile = mock((_path: string, content: string) => {
+        currentConfig = content;
+
+        return Promise.resolve();
+      });
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(currentConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(onlyOxlintConfig),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      try {
+        await oxlint.update({ jsPlugins: ["anti-slop"] });
+        await oxlint.update();
+
+        expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+        const [[, firstWrite], [, secondWrite]] = mockWriteFile.mock.calls;
+
+        expect(firstWrite).toContain(
+          "extends: [core, astro, next, react, antiSlop],"
+        );
+        // Re-running init on its own output changes nothing.
+        expect(secondWrite).toBe(firstWrite);
+      } finally {
+        restoreFileSystemMock();
+        mock.module("node:fs/promises", () => ({
+          access: mock(() => Promise.reject(new Error("ENOENT"))),
+          readFile: mock(() => Promise.resolve("")),
+          writeFile: mock(() => Promise.resolve()),
+        }));
+      }
     });
 
     test("preserves a legacy inline js-plugins selection during update", async () => {
