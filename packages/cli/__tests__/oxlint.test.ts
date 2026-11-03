@@ -794,6 +794,46 @@ export default defineConfig({
       expect(antiSlopExtends?.length).toBe(2);
     });
 
+    test("keeps core first and anti-slop last when the imports are sorted", async () => {
+      const mockWriteFile = mock((_path: string, _content: string) =>
+        Promise.resolve()
+      );
+
+      const existingConfig = `import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import astro from "ultracite/oxlint/astro";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core, astro, antiSlop],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+      mock.module("node:fs/promises", () => ({
+        access: mock(() => Promise.resolve()),
+        readFile: mock(() => Promise.resolve(existingConfig)),
+        writeFile: mockWriteFile,
+      }));
+
+      mock.module("node:fs", () => ({
+        accessSync: mock(onlyOxlintConfig),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
+      // `ultracite fix` sorts the imports, which must not change the order
+      // in which the presets are extended (#863).
+      await oxlint.update({ jsPlugins: ["anti-slop"] });
+      await oxlint.update();
+
+      expect(mockWriteFile).toHaveBeenCalledTimes(2);
+
+      for (const [, content] of mockWriteFile.mock.calls) {
+        expect(content).toContain("extends: [core, astro, antiSlop],");
+      }
+    });
+
     test("preserves a legacy inline js-plugins selection during update", async () => {
       const mockWriteFile = mock((_path: string, _content: string) =>
         Promise.resolve()

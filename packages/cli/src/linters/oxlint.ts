@@ -214,12 +214,17 @@ const generateConfigContent = (
     resolvedExtends.push(getOxlintConfigPath(shadcnPreset));
   }
 
-  // Last among the plain extends so its core-rule overrides win.
-  if (
-    jsPlugins.includes(antiSlopPreset) &&
-    !resolvedExtends.includes(getOxlintConfigPath(antiSlopPreset))
-  ) {
-    resolvedExtends.push(getOxlintConfigPath(antiSlopPreset));
+  // Last among the plain extends so its core-rule overrides win, including
+  // when an existing config lists it earlier.
+  const antiSlopPath = getOxlintConfigPath(antiSlopPreset);
+  const antiSlopIndex = resolvedExtends.indexOf(antiSlopPath);
+
+  if (antiSlopIndex !== -1) {
+    resolvedExtends.splice(antiSlopIndex, 1);
+  }
+
+  if (jsPlugins.includes(antiSlopPreset) || antiSlopIndex !== -1) {
+    resolvedExtends.push(antiSlopPath);
   }
 
   // The full js-plugins preset (every plugin, no selection) stays a plain
@@ -911,16 +916,18 @@ export const oxlint = {
 
     const { existing } = current;
     const unmigrated = rc ? mergeRcConfig(rc.config, existing) : [];
-    const newExtends = [...new Set(existing.presets)];
+    // Presets are read in import order, which `ultracite fix` sorts, so core
+    // goes back first for the other presets to override it.
+    const corePreset = getOxlintConfigPath("core");
+
+    const newExtends = [
+      corePreset,
+      ...new Set(existing.presets.filter((preset) => preset !== corePreset)),
+    ];
 
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
       newExtends.includes(getOxlintConfigPath(name));
-
-    // Add core config if not present
-    if (!hasConfig("core")) {
-      newExtends.unshift(getOxlintConfigPath("core"));
-    }
 
     // Add framework-specific configs if provided
     for (const framework of opts?.frameworks ?? []) {
