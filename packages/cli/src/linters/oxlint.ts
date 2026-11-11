@@ -128,8 +128,10 @@ const jsPluginsPath = getOxlintConfigPath("js-plugins");
 const shadcnPath = getOxlintConfigPath(shadcnPreset);
 
 // The js-plugins selection is bound to a `jsPlugins` const, mirroring the
-// full preset's default-import identifier.
+// full preset's default-import identifier, or to `ultraciteJsPlugins` when
+// the project already uses that name (see uniqueIdentifier).
 const selectionIdentifier = getOxlintConfigIdentifier(jsPluginsPath);
+const GENERATED_SELECTION_RE = /^(?:jsPlugins|ultraciteJsPlugins\d*)$/u;
 
 // Stands in presetOrder for every preset it doesn't name, such as gdp.
 const otherPresets = "*";
@@ -167,11 +169,11 @@ const resolvePresets = (
 ): string[] => {
   const resolved = new Set([corePath, ...presets]);
 
-  // When plugins are selected, the base js-plugins preset is imported and
-  // wrapped as the selection instead, so it isn't a plain extend as well
-  // (e.g. on update of a config that extended the full preset).
+  // The js-plugins slot holds the full preset or, when plugins are selected,
+  // the selection that replaces it, so the selection sits where the full
+  // preset would and anti-slop still comes last.
   if (jsPlugins.some(isSelectableJsPlugin)) {
-    resolved.delete(jsPluginsPath);
+    resolved.add(jsPluginsPath);
   }
 
   // Framework-specific react-doctor rules live in per-framework add-on
@@ -208,6 +210,8 @@ type OverridableProperty = "env" | "ignorePatterns" | "jsPlugins" | "settings";
 // What the regenerated config provides, for overrides that extend it rather
 // than replace it (e.g. .oxlintrc.json ignorePatterns on top of core's).
 interface GeneratedProperties {
+  // The name core is imported under.
+  coreIdentifier: string;
   hasJsPluginSettings: boolean;
   hoistedJsPlugins: string[];
 }
@@ -216,13 +220,10 @@ type PropertyOverride =
   | { build: (generated: GeneratedProperties) => RenderedEntry }
   | { entry: RenderedEntry };
 
-// Where the js-plugins selection sits in `extends`, for UserExtends.after.
-const selectionAnchor = "selection";
-
 // A project's own extends entries, kept where they sat among the presets:
 // before the first one (so the presets override them), right after a given
-// preset or the js-plugins selection, or after the last one (so they
-// override the presets).
+// preset (the js-plugins one standing for the selection too), or after the
+// last one (so they override the presets).
 interface UserExtends {
   after: Map<string, RenderedEntry[]>;
   leading: RenderedEntry[];
@@ -242,6 +243,9 @@ interface OxlintExtras {
   // project's own references to it still resolve.
   presetIdentifiers: Map<string, string>;
   properties: RenderedEntry[];
+  // The names the project's own imports and declarations bind, which a
+  // generated import must not take.
+  reservedIdentifiers: Set<string>;
   statements: string[];
 }
 
@@ -253,11 +257,102 @@ const emptyExtras = (): OxlintExtras => ({
   oxlintSpecifiers: [],
   presetIdentifiers: new Map(),
   properties: [],
+  reservedIdentifiers: new Set(),
   statements: [],
 });
 
 const presetIdentifier = (extras: OxlintExtras, preset: string): string =>
   extras.presetIdentifiers.get(preset) ?? getOxlintConfigIdentifier(preset);
+
+// The names the generated config binds besides the presets.
+const generatedBindings = [
+  "defineConfig",
+  "jsPluginSettings",
+  "selectJsPlugins",
+];
+
+// `base`, or `ultraciteBase` (then `ultraciteBase2`, ...) when it's taken.
+const uniqueIdentifier = (base: string, taken: Set<string>): string => {
+  const prefixed = `ultracite${base.charAt(0).toUpperCase()}${base.slice(1)}`;
+  let candidate = taken.has(base) ? prefixed : base;
+
+  for (let suffix = 2; taken.has(candidate); suffix += 1) {
+    candidate = `${prefixed}${suffix}`;
+  }
+
+  taken.add(candidate);
+
+  return candidate;
+};
+
+interface PresetBindings {
+  // Presets the project imports without extending them (for their rules,
+  // say), by the name they're imported under; their imports stay.
+  importedOnly: Map<string, string>;
+  // The name each extended preset is written as. The js-plugins slot is the
+  // selection's const when plugins are selected.
+  names: Map<string, string>;
+  presets: string[];
+}
+
+/**
+ * The presets a config extends and the names it binds them to: the
+ * project's own name for a preset it already imports, otherwise the usual
+ * one unless the project's code binds that name already.
+ */
+const bindPresets = (
+  extendsList: string[],
+  jsPlugins: OxlintJsPlugin[],
+  extras: OxlintExtras
+): PresetBindings => {
+  const presets = resolvePresets(extendsList, jsPlugins);
+  const hasSelection = jsPlugins.some(isSelectableJsPlugin);
+
+  // Whether a preset is written as an extended import under its own name;
+  // with a selection, the js-plugins slot is the selection's const instead.
+  const isExtendedImport = (preset: string) =>
+    presets.includes(preset) && !(hasSelection && preset === jsPluginsPath);
+
+  // A full js-plugins preset the config extended is replaced by a selection,
+  // so only one it never extended keeps its import.
+  const importedOnly = new Map(
+    [...extras.presetIdentifiers].filter(
+      ([preset]) => !(extendsList.includes(preset) || isExtendedImport(preset))
+    )
+  );
+
+  const kept = [...extras.presetIdentifiers].filter(([preset]) =>
+    isExtendedImport(preset)
+  );
+
+  const taken = new Set([
+    ...generatedBindings,
+    ...extras.reservedIdentifiers,
+    ...importedOnly.values(),
+    ...kept.map(([, identifier]) => identifier),
+  ]);
+
+  const names = new Map<string, string>();
+
+  for (const preset of presets) {
+    const own = isExtendedImport(preset)
+      ? extras.presetIdentifiers.get(preset)
+      : undefined;
+
+    names.set(
+      preset,
+      own ??
+        uniqueIdentifier(
+          hasSelection && preset === jsPluginsPath
+            ? selectionIdentifier
+            : getOxlintConfigIdentifier(preset),
+          taken
+        )
+    );
+  }
+
+  return { importedOnly, names, presets };
+};
 
 const renderOverride = (
   override: PropertyOverride | undefined,
@@ -280,12 +375,20 @@ const generateConfigContent = (
   // extends instead of selectJsPlugins entries.
   const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
-  const resolvedExtends = resolvePresets(extendsList, jsPlugins);
-  const identifierOf = (preset: string) => presetIdentifier(extras, preset);
+
+  const {
+    importedOnly,
+    names,
+    presets: resolvedExtends,
+  } = bindPresets(extendsList, jsPlugins, extras);
+
+  const identifierOf = (preset: string) =>
+    names.get(preset) ?? getOxlintConfigIdentifier(preset);
 
   // The full js-plugins preset (every plugin, no selection) stays a plain
   // extend — e.g. a hand-written config being updated.
-  const hasFullJsPluginsPreset = resolvedExtends.includes(jsPluginsPath);
+  const hasFullJsPluginsPreset =
+    !hasJsPlugins && resolvedExtends.includes(jsPluginsPath);
 
   // oxlint does not merge `settings` from extended configs, so react-doctor's
   // settings (curated ported-rule mode, #771) must be applied on the root
@@ -301,32 +404,34 @@ const generateConfigContent = (
     jsPluginImports.unshift("jsPluginSettings");
   }
 
-  // A preset the project imports without extending it (for its rules, say)
-  // keeps its import. The full js-plugins preset is the exception once a
-  // selection replaces it.
-  const importedOnlyPresets = [...extras.presetIdentifiers].filter(
-    ([preset]) =>
-      !resolvedExtends.includes(preset) &&
-      !(hasJsPlugins && preset === jsPluginsPath)
-  );
+  const presetImport = (preset: string): string => {
+    if (preset !== jsPluginsPath) {
+      return `import ${identifierOf(preset)} from "${preset}";`;
+    }
+
+    // The selection's helpers, alongside a full preset the project imports
+    // without extending it.
+    if (hasJsPlugins) {
+      return renderImport(
+        preset,
+        jsPluginImports,
+        importedOnly.get(preset) ?? null
+      );
+    }
+
+    return `import ${identifierOf(preset)}, { jsPluginSettings } from "${preset}";`;
+  };
 
   const imports = [
     renderImport("oxlint", ["defineConfig", ...extras.oxlintSpecifiers]),
-    ...resolvedExtends.map((preset) =>
-      preset === jsPluginsPath
-        ? `import ${identifierOf(preset)}, { jsPluginSettings } from "${preset}";`
-        : `import ${identifierOf(preset)} from "${preset}";`
+    ...resolvedExtends.map(presetImport),
+    ...[...importedOnly].flatMap(([preset, identifier]) =>
+      resolvedExtends.includes(preset)
+        ? []
+        : [`import ${identifier} from "${preset}";`]
     ),
-    ...importedOnlyPresets.map(
-      ([preset, identifier]) => `import ${identifier} from "${preset}";`
-    ),
-    hasJsPlugins
-      ? `import { ${jsPluginImports.join(", ")} } from "${jsPluginsPath}";`
-      : "",
     ...extras.imports,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  ].join("\n");
 
   const pluginNames = npmJsPlugins
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
@@ -335,31 +440,23 @@ const generateConfigContent = (
   // The selection is bound to a const so it can be both extended and
   // hoisted onto the root config below.
   const selectionBlock = hasJsPlugins
-    ? `\nconst ${selectionIdentifier} = selectJsPlugins([${pluginNames}]);\n`
+    ? `\nconst ${identifierOf(jsPluginsPath)} = selectJsPlugins([${pluginNames}]);\n`
     : "";
 
-  const anchors = [
-    ...resolvedExtends,
-    ...(hasJsPlugins ? [selectionAnchor] : []),
-  ];
-
-  const anchorIdentifier = (anchor: string) =>
-    anchor === selectionAnchor ? selectionIdentifier : identifierOf(anchor);
-
-  const extendsEntries = anchors.map(anchorIdentifier);
+  const extendsEntries = resolvedExtends.map(identifierOf);
   const userExtends = extras.extendsEntries;
 
-  // Entries that followed a preset init no longer extends (the full
-  // js-plugins preset once a selection replaces it) go last.
+  // Entries that followed a preset init no longer extends (the js-plugins
+  // selection once it's dropped) go last.
   const orphanedExtends = [...userExtends.after]
-    .filter(([anchor]) => !anchors.includes(anchor))
+    .filter(([preset]) => !resolvedExtends.includes(preset))
     .flatMap(([, entries]) => entries);
 
   const allExtends: RenderedEntry[] = [
     ...userExtends.leading,
-    ...anchors.flatMap((anchor) => [
-      { comment: null, text: anchorIdentifier(anchor) },
-      ...(userExtends.after.get(anchor) ?? []),
+    ...resolvedExtends.flatMap((preset) => [
+      { comment: null, text: identifierOf(preset) },
+      ...(userExtends.after.get(preset) ?? []),
     ]),
     ...orphanedExtends,
     ...userExtends.trailing,
@@ -372,11 +469,9 @@ const generateConfigContent = (
   // The shadcn preset declares its own plugin package, so it is hoisted the
   // same way (spread together with the js-plugins selection when both are
   // present).
-  const hoistedJsPluginIdentifiers = [
-    ...(hasJsPlugins ? [selectionIdentifier] : []),
-    ...(hasFullJsPluginsPreset ? [identifierOf(jsPluginsPath)] : []),
-    ...(resolvedExtends.includes(shadcnPath) ? [identifierOf(shadcnPath)] : []),
-  ];
+  const hoistedJsPluginIdentifiers = [jsPluginsPath, shadcnPath].flatMap(
+    (preset) => (resolvedExtends.includes(preset) ? [identifierOf(preset)] : [])
+  );
 
   let jsPluginsValue: string | null = null;
 
@@ -398,7 +493,10 @@ const generateConfigContent = (
       ? singleLineExtends
       : `  extends: [\n${renderEntries(allExtends, [], "    ")}\n  ],`;
 
+  const coreIdentifier = identifierOf(corePath);
+
   const generated: GeneratedProperties = {
+    coreIdentifier,
     hasJsPluginSettings,
     hoistedJsPlugins: hoistedJsPluginIdentifiers,
   };
@@ -414,7 +512,6 @@ const generateConfigContent = (
   // browser globals core declares are unknown, so rules such as
   // no-implied-eval never see `setTimeout("…")` as the global. It goes
   // before `extends` to keep the keys sorted.
-  const coreIdentifier = identifierOf(corePath);
   const envProperty = generatedProperty("env", `${coreIdentifier}.env`);
 
   const properties = [
@@ -572,7 +669,7 @@ const readExtends = (
       element.identifier &&
       selectionIdentifiers.has(element.identifier)
     ) {
-      settle(selectionAnchor);
+      settle(jsPluginsPath);
     } else {
       pending.push(toRendered(element));
     }
@@ -596,7 +693,17 @@ const readExistingConfig = (
   const extras = emptyExtras();
   const presets: string[] = [];
   const presetsByIdentifier = new Map<string, string>();
-  const selectionIdentifiers = new Set(legacySelectionConsts);
+  // The consts a generated js-plugins selection is declared as, found
+  // below; a binding of the project's own is never one, whatever its name.
+  const selectionIdentifiers = new Set<string>();
+
+  const reserve = (...names: (string | null)[]) => {
+    for (const name of names) {
+      if (name) {
+        extras.reservedIdentifiers.add(name);
+      }
+    }
+  };
 
   for (const moduleImport of config.imports) {
     const preset = toUltracitePreset(moduleImport.source);
@@ -606,15 +713,23 @@ const readExistingConfig = (
       (!preset && moduleImport.source !== "oxlint")
     ) {
       extras.imports.push(moduleImport.text);
+      reserve(
+        moduleImport.defaultLocal,
+        moduleImport.namespaceLocal,
+        ...moduleImport.namedSpecifiers.map((specifier) => specifier.local)
+      );
       continue;
     }
 
     if (moduleImport.source === "oxlint") {
-      extras.oxlintSpecifiers.push(
-        ...moduleImport.namedSpecifiers
-          .filter((specifier) => specifier.local !== "defineConfig")
-          .map((specifier) => specifier.text)
+      const oxlintSpecifiers = moduleImport.namedSpecifiers.filter(
+        (specifier) => specifier.local !== "defineConfig"
       );
+
+      extras.oxlintSpecifiers.push(
+        ...oxlintSpecifiers.map((specifier) => specifier.text)
+      );
+      reserve(...oxlintSpecifiers.map((specifier) => specifier.local));
       continue;
     }
 
@@ -639,6 +754,7 @@ const readExistingConfig = (
           userSpecifiers.map((specifier) => specifier.text)
         )
       );
+      reserve(...userSpecifiers.map((specifier) => specifier.local));
     }
   }
 
@@ -648,7 +764,8 @@ const readExistingConfig = (
       statement.declaredNames.every(
         (name) =>
           legacySelectionConsts.has(name) ||
-          (name === "jsPlugins" && statement.initCallee === "selectJsPlugins")
+          (GENERATED_SELECTION_RE.test(name) &&
+            statement.initCallee === "selectJsPlugins")
       );
 
     if (isGenerated) {
@@ -657,6 +774,7 @@ const readExistingConfig = (
       }
     } else {
       extras.statements.push(statement.text);
+      reserve(...statement.declaredNames);
     }
   }
 
@@ -799,7 +917,8 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
     } else if (key === "ignorePatterns" && isJsonArray(value)) {
       if (!extras.overrides.ignorePatterns && value.length > 0) {
         extras.overrides.ignorePatterns = {
-          entry: renderSpreadArray(key, ["core.ignorePatterns"], value),
+          build: ({ coreIdentifier }) =>
+            renderSpreadArray(key, [`${coreIdentifier}.ignorePatterns`], value),
         };
       }
     } else if (key === "jsPlugins" && isJsonArray(value)) {
@@ -813,7 +932,8 @@ const mergeRcConfig = (rc: JsonObject, existing: ExistingConfig): string[] => {
       };
     } else if (key === "env" && isJsonObject(value)) {
       extras.overrides.env ??= {
-        entry: renderSpreadObject(key, ["core.env"], value),
+        build: ({ coreIdentifier }) =>
+          renderSpreadObject(key, [`${coreIdentifier}.env`], value),
       };
     } else if (key === "settings" && isJsonObject(value)) {
       extras.overrides.settings ??= {
@@ -1156,7 +1276,8 @@ export const oxlint = {
 
     // Say so when the presets the config already extended moved, since that
     // changes which preset's setting wins for a rule.
-    const resolvedPresets = resolvePresets(newExtends, jsPlugins);
+    const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
+    const resolvedPresets = bindings.presets;
 
     const previousOrder = [...new Set(existing.presets)].filter((preset) =>
       resolvedPresets.includes(preset)
@@ -1167,8 +1288,8 @@ export const oxlint = {
     );
 
     if (!current.replaced && newOrder.join(",") !== previousOrder.join(",")) {
-      const identifiers = resolvedPresets.map((preset) =>
-        presetIdentifier(existing.extras, preset)
+      const identifiers = resolvedPresets.map(
+        (preset) => bindings.names.get(preset) ?? preset
       );
 
       log.info(

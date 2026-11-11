@@ -149,8 +149,9 @@ describe("oxlint linter", () => {
       expect(content).toContain(
         'const jsPlugins = selectJsPlugins(["react-doctor"]);'
       );
+      // The selection takes the full preset's place, ahead of the add-ons.
       expect(content).toMatch(
-        /extends: \[[\s\S]*nextJsPlugins,[\s\S]*tanstackJsPlugins,\s*jsPlugins,?\s*\]/u
+        /extends: \[[\s\S]*jsPlugins,\s*nextJsPlugins,\s*tanstackJsPlugins,?\s*\]/u
       );
     });
 
@@ -369,10 +370,10 @@ describe("oxlint linter", () => {
       );
       expect(content).toContain('selectJsPlugins(["github"])');
       expect(content).not.toContain('selectJsPlugins(["shadcn"');
-      // shadcn sits before anti-slop so anti-slop's core-rule overrides
-      // stay last; the js-plugins selection follows the plain extends.
+      // The js-plugins selection takes the full preset's place and anti-slop
+      // comes last, so its core-rule overrides win.
       expect(content).toContain(
-        "extends: [core, shadcn, antiSlop, jsPlugins],"
+        "extends: [core, jsPlugins, shadcn, antiSlop],"
       );
       expect(content).toContain(
         "jsPlugins: [...jsPlugins.jsPlugins, ...shadcn.jsPlugins],"
@@ -1448,6 +1449,159 @@ export default defineConfig({
     expect(project.writeFile).not.toHaveBeenCalled();
     expect(project.warn.mock.calls[0]?.[0]).toContain("import * as core");
   });
+
+  test("migrates .oxlintrc.json onto the name core is imported under", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json":
+        '{ "env": { "node": true }, "ignorePatterns": ["dist/**"] }',
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import ultraciteCore from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: ultraciteCore.env,
+  extends: [ultraciteCore],
+  ignorePatterns: ultraciteCore.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("...ultraciteCore.env,");
+    expect(content).toContain("...ultraciteCore.ignorePatterns,");
+    expect(content).not.toMatch(/\bcore\./u);
+  });
+
+  test("keeps an imported full js-plugins preset next to a new selection", async () => {
+    const githubRules = `// The full preset's github rules, without extending the whole preset.
+const githubRules = Object.fromEntries(
+  Object.entries(jsPlugins.rules ?? {}).filter(([rule]) =>
+    rule.startsWith("github/")
+  )
+);`;
+
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+${githubRules}
+
+export default defineConfig({
+  env: core.env,
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  rules: githubRules,
+});
+`,
+    });
+
+    await oxlint.update({ jsPlugins: ["eslint-plugin-github"] });
+
+    const [[configPath, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import jsPlugins, { selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).toContain(githubRules);
+    // The project's binding keeps `jsPlugins`, so the selection takes
+    // another name.
+    expect(content).toContain(
+      'const ultraciteJsPlugins = selectJsPlugins(["github"]);'
+    );
+    expect(content).toContain("extends: [core, ultraciteJsPlugins],");
+    expect(content).toContain("jsPlugins: ultraciteJsPlugins.jsPlugins,");
+
+    const rerun = mockProject({ [configPath]: content });
+
+    await oxlint.update();
+
+    const [[, rerunContent]] = rerun.writeFile.mock.calls;
+    expect(rerunContent).toBe(content);
+  });
+
+  test("gives a preset another name when the project's code uses its own", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import react from "./oxlint.react.ts";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, react],
+  ignorePatterns: core.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update({ frameworks: ["react"] });
+
+    const [[configPath, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import ultraciteReact from "ultracite/oxlint/react";'
+    );
+    expect(content).toContain('import react from "./oxlint.react.ts";');
+    expect(content).toContain(
+      "  extends: [\n    core,\n    ultraciteReact,\n    react,\n  ],"
+    );
+
+    const rerun = mockProject({ [configPath]: content });
+
+    await oxlint.update({ frameworks: ["react"] });
+
+    const [[, rerunContent]] = rerun.writeFile.mock.calls;
+    expect(rerunContent).toBe(content);
+  });
+
+  test("doesn't reuse the name another preset is imported under", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import react from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: react.env,
+  extends: [react],
+  ignorePatterns: react.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update({ frameworks: ["react"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('import react from "ultracite/oxlint/core";');
+    expect(content).toContain(
+      'import ultraciteReact from "ultracite/oxlint/react";'
+    );
+    expect(content).toContain("extends: [react, ultraciteReact],");
+  });
+
+  test("keeps the project's own extend named like a legacy selection", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import selectedJsPlugins from "./oxlint.plugins.ts";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, selectedJsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import selectedJsPlugins from "./oxlint.plugins.ts";'
+    );
+    expect(content).toContain(
+      "  extends: [\n    core,\n    selectedJsPlugins,\n  ],"
+    );
+  });
 });
 
 const importSource = (line: string) => line.slice(line.lastIndexOf(" from "));
@@ -1567,6 +1721,30 @@ export default defineConfig({
     antiSlop,
     local,
   ],`);
+  });
+
+  test("puts the js-plugins selection ahead of anti-slop", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+const jsPlugins = selectJsPlugins(["github"]);
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, antiSlop, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("extends: [core, jsPlugins, antiSlop],");
   });
 });
 
