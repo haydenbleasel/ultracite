@@ -45,9 +45,11 @@ const tanstack = [
     rules: {
       // File routes are mutually recursive: `Route` references the component
       // via `component`, and the component calls `Route.useParams()` etc.
-      // No declaration order satisfies the rule, and `tsc` still catches
-      // real temporal dead zone crashes (TS2448). Mirrors the oxlint tanstack
-      // preset.
+      // With `func-style` making the component a `const`, no declaration
+      // order satisfies the rule. `tsc` reports a direct read above the
+      // declaration (TS2448) in TypeScript route files only, and misses a
+      // crash through a helper, a callback or an import cycle. Mirrors the
+      // oxlint tanstack preset.
       "@typescript-eslint/no-use-before-define": "off",
       "no-use-before-define": "off",
       // File-based routes encode the URL in the filename (`__root.tsx`,

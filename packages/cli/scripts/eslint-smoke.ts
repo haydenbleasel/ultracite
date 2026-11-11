@@ -16,7 +16,6 @@ import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
-// biome-ignore lint/performance/noNamespaceImport: Required for ESLint parser compatibility
 import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
 import { ESLint, Linter } from "eslint";
 import type { Rule } from "eslint";

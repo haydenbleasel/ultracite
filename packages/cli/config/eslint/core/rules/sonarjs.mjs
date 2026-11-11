@@ -29,7 +29,8 @@ const overrideRules = {
   // The preset disables max-lines everywhere.
   "sonarjs/max-lines": "off",
   "sonarjs/max-lines-per-function": "off",
-  // Duplicate of max-depth, which is off.
+  // Overlaps max-depth, which is off. Not a duplicate: it defaults to 3
+  // levels rather than 4, and carries nesting across nested functions.
   "sonarjs/nested-control-flow": "off",
   // No dependency-manifest resolution in oxlint's JS plugin bridge, so this
   // flags builtin (bun:test) and workspace imports as missing dependencies.

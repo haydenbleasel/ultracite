@@ -23,8 +23,9 @@ const overrideRules = {
       style: { allowNoLang: true, lang: ["less", "scss"] },
     },
   ],
-  // Defaults to a single prop per component, which no real component library
-  // meets; the core presets leave max-params off for the same reason.
+  // Off to match the oxlint vue preset, where it defaults to a single prop per
+  // component. In eslint-plugin-vue it has no default, so it reports nothing
+  // without options.
   "vue/max-props": "off",
 };
 

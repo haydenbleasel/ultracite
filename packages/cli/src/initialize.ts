@@ -667,7 +667,6 @@ export const upsertEditorConfig = async (
   // share one (VS Code and its forks) write it in turn, and each installs its
   // extension when init created the file, as the first one does.
   existedBefore?: boolean
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Editor configuration requires multiple conditional paths
 ) => {
   const editor = editors.find((e) => e.id === editorId);
 

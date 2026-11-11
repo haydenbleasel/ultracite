@@ -61,10 +61,7 @@ export default defineConfig({
   ],
   overrides: [
     {
-      files: [
-        "packages/cli/src/oxlint.ts",
-        "packages/cli/config/oxlint/**/*.mjs",
-      ],
+      files: ["packages/cli/config/oxlint/**/*.mjs"],
       rules: {
         "sort-keys": "off",
       },
@@ -72,6 +69,5 @@ export default defineConfig({
   ],
   rules: {
     complexity: "off",
-    "max-statements": "off",
   },
 });

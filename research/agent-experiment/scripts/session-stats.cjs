@@ -46,7 +46,7 @@ function claudeStats(path) {
           const text = Array.isArray(c.content)
             ? c.content.map((x) => x.text ?? "").join(" ")
             : String(c.content ?? "");
-          toolErrors.push(text.slice(0, 300));
+          toolErrors.push(lib.redact(text).slice(0, 300));
         }
       }
     }
@@ -108,7 +108,7 @@ function codexStats(path, stderrText) {
         if (typeof target !== "string") target = JSON.stringify(target);
         toolCalls.push({
           tool: p.name ?? p.type,
-          target: String(target).slice(0, 600),
+          target: lib.redact(String(target)).slice(0, 600),
         });
       }
     }

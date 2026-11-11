@@ -264,7 +264,7 @@ Oxfmt also needs to know which whitespace Astro keeps, or the line breaks it add
 
 ### Adding Third-Party Plugins (Oxlint)
 
-Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. You can close this gap with a third-party plugin like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
+Oxlint supports community plugins for additional rules beyond the built-in set. For example, Ultracite's Biome preset includes cognitive complexity checking via `noExcessiveCognitiveComplexity`, but Oxlint only has the standard cyclomatic `complexity` rule built in. Ultracite's opt-in `js-plugins` preset (`init --js-plugins`) covers it with `sonarjs/cognitive-complexity`. If you'd rather not load that preset, a third-party plugin does the same job, like [oxlint-plugin-complexity](https://www.npmjs.com/package/oxlint-plugin-complexity):
 
 ```package-install
 npm install -D oxlint-plugin-complexity

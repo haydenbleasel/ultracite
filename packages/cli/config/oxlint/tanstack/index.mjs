@@ -9,8 +9,10 @@ export default defineConfig({
       rules: {
         // File routes are mutually recursive: `Route` references the component
         // via `component`, and the component calls `Route.useParams()` etc.
-        // No declaration order satisfies the rule, and `tsc` still catches
-        // real temporal dead zone crashes (TS2448).
+        // With `func-style` making the component a `const`, no declaration
+        // order satisfies the rule. `tsc` reports a direct read above the
+        // declaration (TS2448) in TypeScript route files only, and misses a
+        // crash through a helper, a callback or an import cycle.
         "no-use-before-define": "off",
         "unicorn/filename-case": "off",
       },
@@ -35,8 +37,11 @@ export default defineConfig({
     // `head`/`component` lose `loaderData`, and `onError`/`onSettled` see
     // the `onMutate` context as `{}`. Query and mutation options are declared
     // anywhere (hooks, components, colocated files), so a path-scoped
-    // exemption cannot cover them. The TanStack ESLint plugins'
-    // `*-property-order` rules enforce the inference-safe order instead.
+    // exemption cannot cover them. Only the ESLint preset has replacements,
+    // the TanStack plugins' `*-property-order` rules. Here,
+    // `ultracite/oxlint/tanstack/js-plugins` adds
+    // `react-doctor/tanstack-start-route-property-order` and nothing checks
+    // the order of query or mutation options.
     "sort-keys": "off",
   },
 });

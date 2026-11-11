@@ -1,5 +1,3 @@
-/* biome-ignore-all lint/style/useNamingConvention: "Editor configs use various naming conventions" */
-
 import deepmerge from "deepmerge";
 
 import type { ProviderId } from "./providers";

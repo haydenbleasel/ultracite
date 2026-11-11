@@ -339,7 +339,8 @@ const config = defineConfig({
     "sonarjs/max-union-size": "error",
     "sonarjs/memoize-cache-key": "error",
     "sonarjs/misplaced-loop-counter": "error",
-    // Duplicate of max-depth, which is off.
+    // Overlaps max-depth, which is off. Not a duplicate: it defaults to 3
+    // levels rather than 4, and carries nesting across nested functions.
     "sonarjs/nested-control-flow": "off",
     "sonarjs/no-all-duplicated-branches": "error",
     "sonarjs/no-angular-bypass-sanitization": "error",
