@@ -15,15 +15,15 @@ You may need to disable VS Code's built-in Format On Save if another formatter i
 
 ## "Found an unknown key `...`" / "Biome exited because the configuration resulted in errors."
 
-Your linter is older than the Ultracite release you're on. Each Ultracite release enables rules from a specific linter version, and Biome, ESLint and Oxlint all reject a config that names a rule they don't have yet — so bumping `ultracite` without bumping the linter fails on the next `check` or `fix`. ESLint reports this as `Definition for rule '...' was not found` or a plugin load error; Oxlint as an unknown rule or plugin.
+Your linter, or a plugin the presets load, is older than the Ultracite release you're on. Each Ultracite release enables rules from specific linter and plugin versions, and Biome, ESLint and Oxlint all reject a config that names a rule they don't have yet — so bumping `ultracite` without bumping the linter and its plugins fails on the next `check` or `fix`. ESLint reports this as `Could not find "..." in plugin "..."`, `Definition for rule '...' was not found` or a plugin load error; Oxlint as `Rule '...' not found in plugin '...'` or another unknown rule or plugin error.
 
-Run the upgrade command, which installs the linter versions the current release was verified with:
+Run the upgrade command, which installs the linter and plugin versions the current release was verified with:
 
 ```bash title="Terminal"
 npx ultracite upgrade
 ```
 
-`npx ultracite doctor` reports the same mismatch (as a failed version check) without changing anything. Ultracite also declares these versions as optional peer dependencies, so your package manager warns on install when they drift.
+`npx ultracite doctor` reports the same mismatch (as a failed version check) without changing anything. Ultracite also declares the linter and formatter versions as optional peer dependencies, so your package manager warns on install when they drift.
 
 If the versions already line up, the stale rule usually comes from your own overrides — check your `biome.jsonc` (or ESLint/Oxlint config) for a rule that was renamed or moved between linter releases.
 

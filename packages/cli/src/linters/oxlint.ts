@@ -842,6 +842,52 @@ const findPresetReferences = (contents: string): string[] => {
   );
 };
 
+/**
+ * The npm JS plugins a config loads: a selectJsPlugins selection, the full
+ * js-plugins preset, the React Doctor framework add-ons, the shadcn preset,
+ * or a plugin package the config names itself. anti-slop is vendored inside
+ * Ultracite, so it never appears here.
+ */
+export const findLoadedJsPlugins = (
+  contents: string
+): Exclude<OxlintJsPlugin, typeof antiSlopPreset>[] => {
+  const presets = findPresetReferences(contents);
+  const selection = parseExistingJsPlugins(contents);
+  const loaded = new Set<OxlintJsPlugin>(selection);
+
+  if (
+    selection.length === 0 &&
+    presets.includes(getOxlintConfigPath("js-plugins"))
+  ) {
+    for (const plugin of fullPresetJsPlugins) {
+      loaded.add(plugin);
+    }
+  }
+
+  if (
+    reactDoctorFrameworkAddOns.some((framework) =>
+      presets.includes(getOxlintConfigPath(`${framework}/js-plugins`))
+    )
+  ) {
+    loaded.add("oxlint-plugin-react-doctor");
+  }
+
+  if (presets.includes(getOxlintConfigPath(shadcnPreset))) {
+    loaded.add(shadcnPlugin);
+  }
+
+  for (const plugin of oxlintJsPluginNames) {
+    if (contents.includes(`"${plugin}"`) || contents.includes(`'${plugin}'`)) {
+      loaded.add(plugin);
+    }
+  }
+
+  return [...loaded].filter(
+    (plugin): plugin is Exclude<OxlintJsPlugin, typeof antiSlopPreset> =>
+      plugin !== antiSlopPreset
+  );
+};
+
 const rcSchema = z.record(z.string(), z.json());
 
 const JSON_ARRAY_INDENT = "    ";

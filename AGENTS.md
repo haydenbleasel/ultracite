@@ -143,6 +143,8 @@ Presets: `core` plus framework variants (`angular`, `astro`, `cypress`, `drizzle
 1. Raise the matching peer range to the new minimum.
 2. State the new minimum on its own line in the changeset (e.g. `Requires oxlint >= 1.82.0`).
 
+Lint plugins have no peer ranges. `doctor` checks each plugin the project's config loads against its devDependency range (the one `init` and `upgrade` install), so bumping a plugin raises the floor doctor enforces. `src/configured-plugins.ts` decides which plugins a config loads, and `upgrade` reinstalls the same set, so anything doctor flags is something upgrade can fix. Keep the two reading from it.
+
 `bun run bump-tools` updates the linter/formatter packages; `bun run bump-deps` updates everything else. Upgrading oxfmt has needed a clean reinstall (`rm -rf node_modules && bun install`) and a regenerated `patches/oxfmt@*.patch` in the past.
 
 ## Tests
