@@ -7,7 +7,7 @@ const baseRules = { ...plugin.configs.all.rules };
 // which is the benchmark for rule decisions across linters.
 const overrideRules = {
   "capitalized-comments": "off",
-  "func-style": ["error", "expression", { allowArrowFunctions: true }],
+  "func-style": ["error", "expression"],
   "id-length": "off",
   "init-declarations": "off",
   "max-depth": "off",

@@ -18,6 +18,10 @@ const baseRules = Object.fromEntries(
 // Overrides mirror the oxlint core config (config/oxlint/core/index.mjs),
 // which is the benchmark for rule decisions across linters.
 const overrideRules = {
+  // Conflicts with arrow-body-style: a multi-line arrow that only returns is
+  // reported by this rule as a concise body and by arrow-body-style as a
+  // block, and the two fixes undo each other.
+  "unicorn/consistent-arrow-return-style": "off",
   // Renamed from unicorn/prefer-dom-node-dataset in v65.
   "unicorn/dom-node-dataset": "off",
   "unicorn/explicit-length-check": "off",
