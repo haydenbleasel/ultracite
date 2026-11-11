@@ -5,6 +5,7 @@ import {
 } from "node:fs";
 
 import { spawnSync as _realSpawnSync } from "../src/spawn-sync";
+import { defaultFileSystemMock } from "./mock-fs";
 
 // Load the real nypm before any test file mocks it. Several suites mock nypm
 // with only the functions they use; when nypm is already loaded Bun patches
@@ -43,23 +44,7 @@ mock.module("find-workspaces", () => ({
   findWorkspaces: mock(() => []),
 }));
 
-// Mock node:fs to provide accessSync (used by the sync exists() helper)
-// Individual tests can override this by calling mock.module("node:fs", ...) themselves
-// readdirSync passes through to the real implementation because
-// oxlint-config.test.ts needs it to read real config files from disk.
-mock.module("node:fs", () => ({
-  accessSync: mock(() => {
-    throw new Error("ENOENT");
-  }),
-  existsSync: mock(() => false),
-  lstatSync: mock(() => ({
-    isSymbolicLink: () => false,
-  })),
-  mkdirSync: mock(() => {}),
-  mkdtempSync: mock((prefix: string) => `${prefix}mock`),
-  readFileSync: mock(() => "{}"),
-  readdirSync: _realReaddirSync,
-  realpathSync: mock((path: string) => path),
-  rmSync: mock(() => {}),
-  writeFileSync: mock(() => {}),
-}));
+// Mock node:fs to provide accessSync (used by the sync exists() helper).
+// Individual tests can override this by calling mock.module("node:fs", ...)
+// themselves, and put it back with restoreFileSystemMock.
+mock.module("node:fs", defaultFileSystemMock);
