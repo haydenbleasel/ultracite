@@ -8,7 +8,7 @@ import type { FixAgent } from "../linter-args";
 import { LinterExitError } from "../run-command";
 import type { Linter } from "../utils";
 import { agentAdapters, assertAgentAvailable } from "./agents";
-import { partitionByRemaining } from "./diff";
+import { partitionByRemaining, recordSourceLines } from "./diff";
 import { getLinterAdapter } from "./linters";
 import {
   buildPrompt,
@@ -84,10 +84,13 @@ const verifySafely = (
 
     // Single-file verify runs can still surface diagnostics for other files
     // (e.g. project-level rules); only this file's results matter here.
-    return {
-      error: null,
-      remaining: allRemaining.filter((diagnostic) => diagnostic.file === file),
-    };
+    const remaining = allRemaining.filter(
+      (diagnostic) => diagnostic.file === file
+    );
+
+    recordSourceLines(remaining);
+
+    return { error: null, remaining };
   } catch (error) {
     return {
       error: error instanceof Error ? error.message : String(error),
@@ -388,6 +391,8 @@ export const runAgentFix = async ({
 
     return;
   }
+
+  recordSourceLines(diagnostics);
 
   const groups = groupByFile(diagnostics);
   autofixSpinner.stop(

@@ -2,13 +2,14 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 import path from "node:path";
 
 import { agentAdapters, assertAgentAvailable } from "../src/agent-fix/agents";
-import { partitionByRemaining } from "../src/agent-fix/diff";
+import { partitionByRemaining, recordSourceLines } from "../src/agent-fix/diff";
 import {
   buildPrompt,
   buildRetryPrompt,
   parseLeftForReview,
 } from "../src/agent-fix/prompt";
 import type { Diagnostic } from "../src/agent-fix/types";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 const diagnostic = (overrides: Partial<Diagnostic> = {}): Diagnostic => ({
   column: 5,
@@ -255,5 +256,87 @@ describe("diagnostic diffing", () => {
     expect(result.cleared).toHaveLength(1);
     expect(result.still).toHaveLength(0);
     expect(result.introduced).toEqual([brandNew]);
+  });
+
+  test("matches a limit's report when only its count changed", () => {
+    const tooLong = diagnostic({
+      message:
+        "The function `run` has too many lines (88). Maximum allowed is 50.",
+      rule: "max-lines-per-function",
+    });
+
+    const shorter = diagnostic({
+      message:
+        "The function `run` has too many lines (55). Maximum allowed is 50.",
+      rule: "max-lines-per-function",
+    });
+
+    const result = partitionByRemaining([tooLong], [shorter]);
+
+    expect(result.still).toEqual([tooLong]);
+    expect(result.stillReported).toEqual([shorter]);
+    expect(result.cleared).toEqual([]);
+    expect(result.introduced).toEqual([]);
+  });
+
+  test("keeps numbers inside names when matching messages", () => {
+    const original = diagnostic({ message: "'value1' is never used." });
+    const other = diagnostic({ message: "'value2' is never used." });
+
+    const result = partitionByRemaining([original], [other]);
+
+    expect(result.cleared).toEqual([original]);
+    expect(result.introduced).toEqual([other]);
+  });
+
+  test("pairs identical messages by the line they were reported on", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 2 });
+
+    mockFileSystem({
+      "src/foo.ts": "const a = 1;\nconst cache = new Map<any, any>();\n",
+    });
+
+    recordSourceLines([original]);
+
+    // The edit adds an `any` above the original, which moves down a line.
+    const added = diagnostic({ ...any, line: 1 });
+    const moved = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "const helper = (value: any) => value;\nconst a = 1;\n  const cache = new Map<any, any>();\n",
+    });
+
+    recordSourceLines([added, moved]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [added, moved]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.stillReported).toEqual([moved]);
+    expect(result.introduced).toEqual([added]);
+  });
+
+  test("falls back to file order when a reported line was rewritten", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const first = diagnostic({ ...any, line: 1 });
+    const second = diagnostic({ ...any, line: 2 });
+
+    mockFileSystem({ "src/foo.ts": "let a: any;\nlet b: any;\n" });
+    recordSourceLines([first, second]);
+
+    const rewritten = diagnostic({ ...any, line: 1 });
+    const kept = diagnostic({ ...any, line: 2 });
+
+    mockFileSystem({ "src/foo.ts": "let renamed: any;\nlet b: any;\n" });
+    recordSourceLines([rewritten, kept]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([first, second], [rewritten, kept]);
+
+    expect(result.still).toEqual([first, second]);
+    expect(result.introduced).toEqual([]);
+    expect(result.cleared).toEqual([]);
   });
 });
