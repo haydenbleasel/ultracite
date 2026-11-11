@@ -203,6 +203,27 @@ export default defineConfig({
     );
   });
 
+  test("leaves out react-doctor add-ons for a root selectJsPlugins of the project's own", async () => {
+    const written = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import { selectJsPlugins } from "./lint.ts";
+
+const plugins = selectJsPlugins(["react-doctor"]);
+
+export default defineConfig({ extends: [core, plugins] });
+`,
+      "package.json": '{ "type": "module" }',
+    });
+
+    await oxlint.createWorkspace({ dir: "apps/web", frameworks: ["next"] });
+
+    expect(written.get("./apps/web/oxlint.config.ts")).not.toContain(
+      "next/js-plugins"
+    );
+  });
+
   test("leaves out react-doctor add-ons when the root only imports js-plugins", async () => {
     const written = mockProject({
       "./oxlint.config.ts": `import { defineConfig } from "oxlint";

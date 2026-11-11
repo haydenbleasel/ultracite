@@ -1784,6 +1784,62 @@ export default defineConfig({
       "declares its own `selectJsPlugins`"
     );
   });
+
+  test("keeps the env of a `core` that isn't the core preset", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+
+import shared from "./oxlint.shared.ts";
+
+const core = shared.core;
+
+export default defineConfig({
+  env: core.env,
+  extends: [shared],
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import ultraciteCore from "ultracite/oxlint/core";'
+    );
+    expect(content).toContain("env: core.env,");
+    expect(content).not.toContain("ultraciteCore.env");
+  });
+
+  test("keeps the js-plugins helpers the project's own code uses", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  settings: { ...jsPluginSettings },
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[configPath, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).toContain("settings: { ...jsPluginSettings },");
+
+    const rerun = mockProject({ [configPath]: content });
+
+    await oxlint.update();
+
+    const [[, rerunContent]] = rerun.writeFile.mock.calls;
+    expect(rerunContent).toBe(content);
+  });
 });
 
 const importSource = (line: string) => line.slice(line.lastIndexOf(" from "));
@@ -2150,6 +2206,20 @@ describe("findLoadedJsPlugins", () => {
         )
       )
     ).toEqual(["eslint-plugin-sonarjs"]);
+  });
+
+  test("ignores a selectJsPlugins of the project's own", () => {
+    expect(
+      findLoadedJsPlugins(`import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import { selectJsPlugins } from "./lint.ts";
+
+const plugins = selectJsPlugins(["react-doctor"]);
+
+export default defineConfig({ extends: [core, plugins] });
+`)
+    ).toEqual([]);
   });
 
   test("never reports the vendored anti-slop plugin", () => {
