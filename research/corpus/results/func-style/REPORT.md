@@ -54,16 +54,16 @@ Terms:
   - **Crashes:** 19 references in 14 files throw at import (Next.js's `new IntersectionObserver(handleIntersect, …)`), and 41 in 25 files throw when their function runs.
   - **Type errors:** TypeScript adds 340 errors in the eight corpus repos: assertion functions lose narrowing (TS2775 ×82), `never` functions too, plus the TDZ reads.
   - **Reordering:**
-    - **Lists affected:** 839 statement lists in 787 files have a reference above its binding after conversion.
-    - **Fixable:** 720 lists have a valid order; reaching it moves 2,234 statements (47,828 lines).
-    - **No valid order:** 119 lists in 111 files (47 mutual recursion, 72 depending on code that can't move).
-    - **Result:** Oxlint's `no-use-before-define` drops from 4,500 to 564 in the converted files.
+    - **Lists affected:** 834 statement lists in 783 files have a reference above its binding after conversion.
+    - **Fixable:** 718 lists have a valid order; reaching it moves 2,275 statements (52,792 lines).
+    - **No valid order:** 116 lists in 108 files (45 mutual recursion, 71 depending on code that can't move).
+    - **Result:** Oxlint's `no-use-before-define` drops from 4,500 to 540 in the converted files.
   - **Already reported before:** with `functions: true`, all 3,328 references to converted functions were reported before the conversion.
 - **Module cycles:** 2 of 31 runtime import cycles are safe only because a hoisted declaration is called at load (Next.js). As consts they become load-order hazards.
 - **History** (eight repos, three years, 12,762 mainline commits):
   - **Bugs:** of 182 keyword commits, none is a hoisting bug. 3 are TDZ crashes from evaluation order. zod reverted a change that, in its message's words, "traded a hoisted function re-export for a TDZ-bound const and fixed nothing".
   - **Churn:** form changes are rare (36 commits to declarations, 11 to expressions).
-  - **Bug fixes, size controlled:** declarations' odds ratio is 0.75 [0.60, 0.92], 0.81 [0.63, 1.03] with scope, 0.87 [0.71, 1.08] with churn. Declarations used above their line: 0.97 [0.83, 1.14]. No robust difference.
+  - **Bug fixes, size controlled:** declarations' odds ratio is 0.75 [0.60, 0.93], 0.81 [0.64, 1.03] with scope, 0.87 [0.71, 1.08] with churn. Declarations used above their line: 0.97 [0.83, 1.14]. No robust difference.
 - **Policy:**
   - **func-style:** no repo configures it.
   - **Radix** reports only same-scope reads and is the most top-down codebase (64.2% of references point down).
@@ -175,17 +175,18 @@ One ESLint `Linter` pass per file, with the TypeScript parser and its scope mana
   - **Lint:** Oxlint's two rules run on the original, converted and reordered copies.
 - **Reordering:** within every statement list, statements move so each binding is defined above its value references.
   - **What may move:** only statements with no effects: function bindings, pure declarations, side-effect-free classes and enums, and export lists. Overload groups move together.
+  - **What they read must not change:** a statement that reads a binding another statement of the list assigns stays on the same side of that statement. One that reads a binding assigned inside a function, an import whose export is reassigned in its module, or an object's contents keeps its place among the statements that can't move. Built-ins, enums, `import.meta` and fresh local objects that only effect-free statements read are exempt. Type references and `typeof` in a type read nothing.
   - **Algorithm:** Kahn's algorithm, taking the smallest original index first. Moved statements are those outside the heaviest increasing subsequence, weighted by lines.
   - **No valid order:** the deferred references inside the cycle are dropped (they stay reported), and the best order is still applied.
 - **Type checks:** each corpus repo's own tsconfig, with the copies overlaid; added diagnostics are counted by file and code. Only zod and hono resolve every import. The React set wasn't type-checked.
 
 ### 3.5–3.11
 
-- **Module cycles** (`func-style-cycles.cjs`): uses `import-cycles-graph.cjs` `analyse`, unchanged. A late-use cycle with a top-level read of a function declaration "flips" once declarations are converted. Its runtime cycle counts equal `results/import-cycles/graph.json` in all eight repos.
+- **Module cycles** (`func-style-cycles.cjs`): uses `import-cycles-graph.cjs` `analyse`, listing every read on each edge rather than the first 3. Both topics decide a cycle's risk from every read. A late-use cycle with a top-level read of a function declaration "flips" once declarations are converted. Its runtime cycle counts equal `results/import-cycles/graph.json` in all eight repos.
 - **History** (`func-style-history.cjs`):
   - **Keywords:** the whole mainline history of each clone, searched for TDZ, hoisting, "before initiali[sz]ation", "Cannot access", "is not defined", `ReferenceError`, cycles and the rule names. Every commit was read (`history-labels.json`, one rater).
   - **Churn:** form changes and moved definitions, by a line heuristic. The two largest conversion commits were read: both are refactors.
-  - **Bug fixes:** `length-history.cjs`'s `track`, unchanged, followed by logistic regressions on form, log own lines, log exposure and repo effects, with errors clustered by file. The bug-fix heuristic is 73.7% precise and misses 15.5% of other commits (the length topic's hand check).
+  - **Bug fixes:** `length-history.cjs`'s `track`, unchanged, followed by logistic regressions on form, log own lines, log exposure and repo effects, with errors clustered by file. A function's own lines are those `track` gives its changes to: the lines whose innermost tracked function it is. The bug-fix heuristic is 73.7% precise and misses 15.5% of other commits (the length topic's hand check).
 - **Policy** (`func-style-markers.cjs`): lint configs at each pinned commit, with the commit that added each setting, and disable comments.
 - **Hand classification** (`func-style-sample.cjs`, seed 20261029):
   - **Declarations:** 6 per repo at random, plus 10 oversampled (function expressions, assertion or never-returning, used at load).
@@ -304,12 +305,12 @@ Oxlint reports every non-type candidate. 61.6% of its reports point at declarati
   - **Throw at import** (19 in 14 files): for example Next.js `links.ts` (`new IntersectionObserver(handleIntersect, …)`), `metadata.tsx` (`cache(getResolvedMetadataImpl)` above the implementation), `request/headers.ts` and its siblings, Vite `client.ts` (`transport.connect!(createHMRHandler(handleMessage))`), and Radix `focus-scope.tsx` (`createFocusScopesStack()` one line above the declaration).
   - **Throw when called** (41 in 25 files): nested declarations called above their line, such as hono's `dispatch` and tRPC's `trigger`.
 - **Reordering:**
-  - **Lists affected:** 839 lists in 787 files.
-  - **Valid order:** 720 lists; reaching it moves 2,234 statements (47,828 lines).
-  - **No valid order:** 119 lists in 111 files: 47 mutual recursion, 72 depending on code with effects. The best order there moves 743 statements and leaves 302 references reported.
+  - **Lists affected:** 834 lists in 783 files.
+  - **Valid order:** 718 lists; reaching it moves 2,275 statements (52,792 lines).
+  - **No valid order:** 116 lists in 108 files: 45 mutual recursion, 71 depending on code with effects. The best order there moves 681 statements and leaves 301 references reported.
 - **Lint and parsing:**
   - **func-style:** 10,134 reports drop to 0.
-  - **no-use-before-define:** 4,500 before and after conversion, 564 after reordering.
+  - **no-use-before-define:** 4,500 before and after conversion, 540 after reordering.
   - **Parsing:** every converted and reordered file parses.
 
 | Repo | tsc before | Unresolved | Added (converted) | Added (reordered) | What |
@@ -330,7 +331,7 @@ TypeScript catches direct reads before the line. The assertion and `never` error
 There are 31 runtime cycles: 27 late-use, 4 already TDZ-prone. Two Next.js cycles flip:
 
 - **`next.js-r03`** (15 files): `getStaleTimeMs(…)` and `createCacheMap()` are called at load.
-- **`next.js-r04`** (4 files): `push` and `replace` are read at load.
+- **`next.js-r04`** (4 files): `push`, `replace`, `refresh`, `hmrRefresh` and `prefetchRoute` are read at load.
 
 These are the import-cycles post's footnoted cases.
 
@@ -348,16 +349,16 @@ These are the import-cycles post's footnoted cases.
 
 | | Changed | By a fix | Fixes per 100 line-years | Median own lines |
 | --- | ---: | ---: | ---: | ---: |
-| declarations (7,759) | 52.8% | 25.0% | 0.881 | 14 |
-| variable-bound (3,456) | 52.2% | 28.8% | 0.905 | 14 |
+| declarations (7,759) | 52.8% | 25.0% | 0.894 | 14 |
+| variable-bound (3,456) | 52.2% | 28.8% | 0.919 | 14 |
 
 | Model | Declaration odds ratio |
 | --- | --- |
-| all | 0.745 [0.601, 0.922] |
-| + module level | 0.808 [0.634, 1.029] |
-| changed functions, + log changes | 0.872 [0.705, 1.079] |
-| six repos with both forms | 0.716 [0.574, 0.893] |
-| declarations only: used above their line | 0.973 [0.830, 1.139] |
+| all | 0.747 [0.603, 0.925] |
+| + module level | 0.809 [0.635, 1.031] |
+| changed functions, + log changes | 0.873 [0.705, 1.079] |
+| six repos with both forms | 0.719 [0.576, 0.897] |
+| declarations only: used above their line | 0.969 [0.827, 1.135] |
 
 Form is mostly decided per repo, and the effect fades as scope and churn are controlled.
 
@@ -421,7 +422,7 @@ Form is mostly decided per repo, and the effect fades as scope and churn are con
 - **Snapshot and mix:** HEADs from 2026-10. Next.js and Supabase dominate their sets.
 - **Measured without the rules:** only Radix (same-scope order) and Next.js's examples enforce any order.
 - **Static analysis:** member calls at load and unusual synchronous callees are missed, and the "maybe" class over-counts. The 23 earlier crash candidates were read by hand.
-- **The reorderer** finds one valid order, not necessarily the one a person would pick. It split one overload group in Next.js.
+- **The reorderer** finds one valid order, not necessarily the one a person would pick. It split one overload group in Next.js. It's conservative about what a call might change: a statement that reads a global's or an imported object's contents keeps its place, so a few lists have no valid order only for that reason (Vite's `client.ts` reads `'document' in globalThis`). Getters, `toString` and `valueOf` are assumed to have no effects.
 - **Type checks:** unresolved imports are `any` outside zod and hono, so lost narrowing is under-counted. The React set wasn't type-checked.
 - **History:** one rater for the keywords; the churn count is a heuristic; the bug-fix heuristic is 73.7% precise. These are associations, not effects.
 - **Raters are Claude models.** Rater 1 saw the automatic labels. Rater 2 ran a one-line `node -e` to check its labels file parsed, which its brief didn't allow.

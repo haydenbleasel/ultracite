@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-30T09:39:48.071Z",
-  "note": "See the header of func-style-cycles.cjs. A cycle `flips` when it's late-use today (no TDZ-prone top-level read) and has at least one top-level or indirect read of a function declaration, which becomes TDZ-prone after conversion. Reads are the graph's (at most 3 per edge are listed, which is enough to decide).",
+  "generated": "2026-11-11T20:12:41.061Z",
+  "note": "See the header of func-style-cycles.cjs. A cycle `flips` when it's late-use today (no TDZ-prone top-level read) and has at least one top-level or indirect read of a function declaration, which becomes TDZ-prone after conversion. Reads are the graph's, every one of them (the import-cycles output lists at most 3 per edge); each row shows the first 6.",
   "repos": {
     "astro": {
       "cycles": 10,
@@ -12,7 +12,7 @@
       "hoistedReads": 0,
       "oxlintNoCycle": 77,
       "rows": [],
-      "seconds": 5,
+      "seconds": 3,
       "sha": "9050e3819c51b0383cced278c278bc6f45c63468"
     },
     "excalidraw": {
@@ -25,7 +25,7 @@
       "hoistedReads": 0,
       "oxlintNoCycle": 505,
       "rows": [],
-      "seconds": 1193,
+      "seconds": 9,
       "sha": "4c00f31ddcc20086bac1020428819fe0b9a30bce"
     },
     "hono": {
@@ -46,7 +46,7 @@
         "late-use": 9
       },
       "flips": 2,
-      "hoistedReads": 8,
+      "hoistedReads": 9,
       "oxlintNoCycle": 87,
       "rows": [
         {
@@ -128,6 +128,15 @@
             {
               "from": "packages/next/src/client/components/app-router-instance.ts",
               "kind": "top-level",
+              "line": 331,
+              "name": "hmrRefresh",
+              "text": "hmrRefresh: hmrRefresh",
+              "to": "packages/next/src/client/components/navigator.ts",
+              "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L331"
+            },
+            {
+              "from": "packages/next/src/client/components/app-router-instance.ts",
+              "kind": "top-level",
               "line": 327,
               "name": "prefetchRoute",
               "text": "prefetch: prefetchRoute",
@@ -135,12 +144,12 @@
               "permalink": "https://github.com/vercel/next.js/blob/d8bfc3c994670c367e6e31853b78f42e8b7fba85/packages/next/src/client/components/app-router-instance.ts#L327"
             }
           ],
-          "hoistedReads": 4,
+          "hoistedReads": 5,
           "id": "next.js-r04",
           "risk": "late-use"
         }
       ],
-      "seconds": 922,
+      "seconds": 8,
       "sha": "d8bfc3c994670c367e6e31853b78f42e8b7fba85"
     },
     "trpc": {
@@ -163,7 +172,7 @@
       "hoistedReads": 0,
       "oxlintNoCycle": 166,
       "rows": [],
-      "seconds": 932,
+      "seconds": 3,
       "sha": "3b72997d42e7dd2b31898d0e68461e3025e836b6"
     },
     "vscode": {
@@ -212,7 +221,7 @@
   "pooled": {
     "cycles": 31,
     "flips": 2,
-    "hoistedReads": 8,
+    "hoistedReads": 9,
     "lateUse": 27,
     "topLevelUse": 4
   }

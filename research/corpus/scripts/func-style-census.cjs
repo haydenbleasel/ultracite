@@ -111,6 +111,8 @@ const measureRepo = (name) => {
       file: rel,
       form: fileForm(r.moduleFns),
       lines: r.lines,
+      ...(r.liveExports ? { liveExports: r.liveExports } : {}),
+      ...(r.reexports ? { reexports: r.reexports } : {}),
       moduleDeclarations: r.moduleFns.filter((m) => m.kind === "declaration")
         .length,
       moduleExpressions: r.moduleFns.filter((m) => m.kind === "expression")
@@ -160,9 +162,11 @@ const measureRepo = (name) => {
     const target = resolveSpec(im.file, im.source, fileSet);
     const key = `${target}|${im.imported}`;
     if (target) {
-      byTarget.set(key, [...(byTarget.get(key) ?? []), im]);
+      (byTarget.get(key) ?? byTarget.set(key, []).get(key)).push(im);
     }
-    byName.set(im.imported, [...(byName.get(im.imported) ?? []), im]);
+    (
+      byName.get(im.imported) ?? byName.set(im.imported, []).get(im.imported)
+    ).push(im);
   }
   for (const f of fnRows) {
     if (f.type !== "FunctionDeclaration" || !f.exported || !f.name) {
