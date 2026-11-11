@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -13,6 +12,10 @@ import {
   UltraciteSetupError,
 } from "../config-resolution";
 import type { InstalledPackage } from "../config-resolution";
+import {
+  getConfiguredEslintFrameworks,
+  getConfiguredOxlintJsPlugins,
+} from "../configured-plugins";
 import {
   biomeVersion,
   eslintCoreDevDependencies,
@@ -34,13 +37,7 @@ import { spawnSync } from "../spawn-sync";
 import { migrateWithAgent } from "../upgrade-agent";
 import { findPendingGuides } from "../upgrade-guides";
 import type { UpgradeGuide } from "../upgrade-guides";
-import {
-  addEslintPeerOverrides,
-  detectLinter,
-  eslintConfigNames,
-  exists,
-  findNearestFile,
-} from "../utils";
+import { addEslintPeerOverrides, detectLinter, exists } from "../utils";
 import type { Linter } from "../utils";
 import { DOCTOR_FAILED, reportDiagnostics, runDiagnostics } from "./doctor";
 
@@ -151,33 +148,6 @@ const collectProjectDependencyNames = async (): Promise<Set<string>> => {
     ...Object.keys(pkg?.dependencies ?? {}),
     ...Object.keys(pkg?.devDependencies ?? {}),
   ]);
-};
-
-const ESLINT_PRESET_RE = /ultracite\/eslint\/(?<preset>[a-z-]+)/gu;
-
-/**
- * The framework presets the project's ESLint config imports. Their plugins are
- * reinstalled even when package.json lacks them, so a preset that gained a
- * plugin in a newer release (e.g. nestjs) gets it on upgrade.
- */
-export const getConfiguredEslintFrameworks = (): Set<string> => {
-  const found = findNearestFile(eslintConfigNames);
-
-  if (!found) {
-    return new Set();
-  }
-
-  try {
-    const content = readFileSync(found.path, "utf-8");
-
-    return new Set(
-      [...content.matchAll(ESLINT_PRESET_RE)].map(
-        (match) => match.groups?.preset ?? ""
-      )
-    );
-  } catch {
-    return new Set();
-  }
 };
 
 /**
@@ -379,9 +349,20 @@ const syncToolchain = async (
   installOptions: InstallOptions,
   packageManager: PackageManager
 ): Promise<void> => {
+  // A JS plugin the Oxlint config loads counts as used even when package.json
+  // doesn't list it (another package or a monorepo root brought it in), so
+  // upgrade reinstalls every plugin doctor checks.
+  const projectDependencies = await collectProjectDependencyNames();
+
+  if (linter === "oxlint") {
+    for (const plugin of getConfiguredOxlintJsPlugins()) {
+      projectDependencies.add(plugin);
+    }
+  }
+
   const packages = getToolchainPackages(
     linter,
-    await collectProjectDependencyNames(),
+    projectDependencies,
     linter === "eslint" ? getConfiguredEslintFrameworks() : new Set()
   );
 

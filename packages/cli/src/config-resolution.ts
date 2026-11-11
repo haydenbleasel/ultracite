@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -30,11 +30,20 @@ const linterSpecifiers = {
 export interface ConfigFileSystem {
   exists: (filePath: string) => boolean;
   readFile: (filePath: string) => string;
+  /** Resolves symbolic links; a layout without any can leave it out. */
+  realpath?: (filePath: string) => string;
 }
 
 const nodeFileSystem: ConfigFileSystem = {
   exists,
   readFile: (filePath) => readFileSync(filePath, "utf-8"),
+  realpath: (filePath) => {
+    try {
+      return realpathSync(filePath);
+    } catch {
+      return filePath;
+    }
+  },
 };
 
 const walkUp = <T>(
@@ -127,6 +136,19 @@ export const findInstalledPackage = (
     return null;
   }
 };
+
+/**
+ * Locate one of an installed package's dependencies the way Node resolves it
+ * from inside that package: from the package's real directory (pnpm and Bun
+ * link packages out of a store, next to their own dependencies), then up
+ * through each node_modules.
+ */
+export const findPackageDependency = (
+  name: string,
+  parent: InstalledPackage,
+  fs: ConfigFileSystem = nodeFileSystem
+): InstalledPackage | null =>
+  findInstalledPackage(name, fs.realpath?.(parent.dir) ?? parent.dir, fs);
 
 /**
  * Resolve a package specifier the way Biome/ESLint/Oxlint do: through the

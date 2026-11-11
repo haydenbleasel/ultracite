@@ -2,8 +2,17 @@ import { describe, expect, mock, spyOn, test } from "bun:test";
 import nodePath from "node:path";
 import process from "node:process";
 
+import { minVersion } from "semver";
+
+import { version as runningVersion } from "../package.json";
 import { doctor, runDiagnostics } from "../src/commands/doctor";
+import type { DiagnosticCheck } from "../src/commands/doctor";
+import {
+  eslintCoreDevDependencies,
+  eslintFrameworkDevDependencies,
+} from "../src/dependencies";
 import type { SpawnSyncOptions } from "../src/spawn-sync";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 mock.module("../src/spawn-sync", () => ({
   spawnSync: mock(() => ({ status: 0, stdout: "v1.0.0" })),
@@ -98,6 +107,95 @@ const mockInstalledVersions = (versions: Record<string, string>) => {
 
 const versionCheck = (linter: "biome" | "eslint" | "oxlint", name: string) =>
   runDiagnostics(linter).find((check) => check.name === `${name} version`);
+
+const cwdPath = (...segments: string[]): string =>
+  nodePath.join(process.cwd(), ...segments);
+
+const manifest = (name: string, version: string): string =>
+  JSON.stringify({ name, version });
+
+// Every package in a dependency table, at the lowest version its range
+// allows.
+const pinnedPlugins = (
+  dependencies: Record<string, string>
+): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(dependencies).map(([name, range]) => [
+      name,
+      minVersion(range)?.version ?? range,
+    ])
+  );
+
+const eslintConfig = (...presets: string[]): [string, string] => [
+  "eslint.config.mjs",
+  presets
+    .map((preset) => `import ${preset} from "ultracite/eslint/${preset}";`)
+    .join("\n"),
+];
+
+// "full" extends the whole js-plugins preset, a selectJsPlugins(...) call
+// selects some of it, and leaving it out extends core alone.
+const oxlintConfig = (jsPlugins?: string): [string, string] => [
+  "oxlint.config.ts",
+  [
+    'import core from "ultracite/oxlint/core";',
+    ...(jsPlugins === "full"
+      ? ['import jsPlugins from "ultracite/oxlint/js-plugins";']
+      : []),
+    ...(jsPlugins && jsPlugins !== "full"
+      ? [
+          'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";',
+          `const jsPlugins = ${jsPlugins};`,
+        ]
+      : []),
+  ].join("\n"),
+];
+
+// A project with the given linter config and node_modules holding Ultracite
+// plus `installed` (package name -> version).
+const pluginProject = (
+  [configFile, config]: [string, string],
+  installed: Record<string, string>
+) => ({
+  [cwdPath(configFile)]: config,
+  [cwdPath("package.json")]: '{"devDependencies": {"ultracite": "1.0.0"}}',
+  [cwdPath("node_modules", "ultracite", "package.json")]:
+    ULTRACITE_PACKAGE_JSON,
+  ...Object.fromEntries(
+    Object.entries(installed).map(([name, version]) => [
+      cwdPath("node_modules", name, "package.json"),
+      manifest(name, version),
+    ])
+  ),
+});
+
+const toolVersionChecks = new Set(
+  ["eslint", "oxfmt", "oxlint", "prettier", "stylelint"].map(
+    (tool) => `${tool} version`
+  )
+);
+
+// The plugin results among the diagnostics for a project laid out as `files`.
+const pluginChecks = (
+  linter: "eslint" | "oxlint",
+  files: Record<string, string>,
+  links: Record<string, string> = {}
+): DiagnosticCheck[] => {
+  mockFileSystem(files, links);
+
+  try {
+    return runDiagnostics(linter).filter(
+      ({ name }) =>
+        name === "Plugin versions" ||
+        (name.endsWith(" version") && !toolVersionChecks.has(name))
+    );
+  } finally {
+    restoreFileSystemMock();
+  }
+};
+
+const findCheck = (checks: DiagnosticCheck[], name: string) =>
+  checks.find((check) => check.name === name);
 
 describe("doctor", () => {
   // ---------------------------------------------------------------------------
@@ -1264,5 +1362,163 @@ describe("doctor", () => {
       message: expect.stringContaining("oxlint 1.89.0 is older"),
       status: "fail",
     });
+  });
+
+  test("fails a plugin the config loads that's older than the version Ultracite installs", () => {
+    const checks = pluginChecks(
+      "eslint",
+      pluginProject(eslintConfig("core", "react"), {
+        ...pinnedPlugins(eslintCoreDevDependencies),
+        ...pinnedPlugins(eslintFrameworkDevDependencies.react),
+        "eslint-plugin-react-doctor": "0.9.18",
+      })
+    );
+
+    expect(findCheck(checks, "eslint-plugin-react-doctor version")).toEqual({
+      message: `eslint-plugin-react-doctor 0.9.18 is older than Ultracite ${runningVersion} requires (${eslintFrameworkDevDependencies.react["eslint-plugin-react-doctor"]}) — run \`ultracite upgrade\``,
+      name: "eslint-plugin-react-doctor version",
+      status: "fail",
+    });
+    // Every other plugin the core and React presets load is checked too.
+    expect(findCheck(checks, "Plugin versions")).toMatchObject({
+      message: expect.stringContaining("lint plugins the config loads satisfy"),
+      status: "pass",
+    });
+    expect(checks.filter((check) => check.status === "fail")).toHaveLength(1);
+  });
+
+  test("ignores plugins the config doesn't load, wherever they came from", () => {
+    // The react-doctor CLI pins oxlint-plugin-react-doctor exactly, and a
+    // React app in a monorepo can hoist an old ESLint plugin to the root.
+    const installed = {
+      ...pinnedPlugins(eslintCoreDevDependencies),
+      "eslint-plugin-react-doctor": "0.9.18",
+      "oxlint-plugin-react-doctor": "0.9.18",
+    };
+
+    const eslintChecks = pluginChecks(
+      "eslint",
+      pluginProject(eslintConfig("core", "vue"), {
+        ...installed,
+        ...pinnedPlugins(eslintFrameworkDevDependencies.vue),
+      })
+    );
+
+    const oxlintChecks = pluginChecks(
+      "oxlint",
+      pluginProject(oxlintConfig(), installed)
+    );
+
+    expect(
+      findCheck(eslintChecks, "eslint-plugin-react-doctor version")
+    ).toBeUndefined();
+    expect(eslintChecks.filter((check) => check.status === "fail")).toEqual([]);
+    expect(oxlintChecks).toEqual([]);
+  });
+
+  test("fails a plugin the config loads that isn't installed", () => {
+    const { "eslint-plugin-react-doctor": _, ...installed } = {
+      ...pinnedPlugins(eslintCoreDevDependencies),
+      ...pinnedPlugins(eslintFrameworkDevDependencies.react),
+    };
+
+    const checks = pluginChecks(
+      "eslint",
+      pluginProject(eslintConfig("core", "react"), installed)
+    );
+
+    expect(findCheck(checks, "eslint-plugin-react-doctor version")).toEqual({
+      message:
+        "eslint-plugin-react-doctor isn't installed, but the config loads it — run `ultracite upgrade`",
+      name: "eslint-plugin-react-doctor version",
+      status: "fail",
+    });
+  });
+
+  test("warns about a plugin release newer than the range Ultracite installs", () => {
+    const checks = pluginChecks(
+      "oxlint",
+      pluginProject(oxlintConfig('selectJsPlugins(["react-doctor"])'), {
+        "oxlint-plugin-react-doctor": "0.10.0",
+      })
+    );
+
+    expect(
+      findCheck(checks, "oxlint-plugin-react-doctor version")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        "oxlint-plugin-react-doctor 0.10.0 is newer than"
+      ),
+      status: "warn",
+    });
+  });
+
+  test("checks only the JS plugins the Oxlint config selects", () => {
+    const checks = pluginChecks(
+      "oxlint",
+      pluginProject(oxlintConfig('selectJsPlugins(["react-doctor"])'), {
+        "eslint-plugin-github": "1.0.0",
+        "oxlint-plugin-react-doctor": "0.9.18",
+      })
+    );
+
+    expect(
+      findCheck(checks, "oxlint-plugin-react-doctor version")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        "oxlint-plugin-react-doctor 0.9.18 is older"
+      ),
+      status: "fail",
+    });
+    expect(findCheck(checks, "eslint-plugin-github version")).toBeUndefined();
+  });
+
+  test("checks the package a wrapper plugin takes its rules from", () => {
+    // pnpm links each package out of its store, next to its own
+    // dependencies, so the wrapper's copy isn't in the project's node_modules.
+    const store = cwdPath(
+      "node_modules",
+      ".pnpm",
+      "eslint-plugin-react-doctor@0.9.21",
+      "node_modules"
+    );
+
+    const files = pluginProject(eslintConfig("core", "react"), {
+      ...pinnedPlugins(eslintCoreDevDependencies),
+      ...pinnedPlugins(eslintFrameworkDevDependencies.react),
+    });
+
+    files[nodePath.join(store, "oxlint-plugin-react-doctor", "package.json")] =
+      manifest("oxlint-plugin-react-doctor", "0.9.18");
+
+    const checks = pluginChecks("eslint", files, {
+      [cwdPath("node_modules", "eslint-plugin-react-doctor")]: nodePath.join(
+        store,
+        "eslint-plugin-react-doctor"
+      ),
+    });
+
+    expect(
+      findCheck(checks, "oxlint-plugin-react-doctor version")
+    ).toMatchObject({
+      message: expect.stringContaining(
+        "loads its rules from oxlint-plugin-react-doctor 0.9.18"
+      ),
+      status: "fail",
+    });
+  });
+
+  test("only warns about plugin versions it can't read under Yarn Plug'n'Play", () => {
+    const files = pluginProject(oxlintConfig("full"), {});
+
+    files[cwdPath(".pnp.cjs")] = "";
+
+    const checks = pluginChecks("oxlint", files);
+
+    expect(findCheck(checks, "Plugin versions")).toMatchObject({
+      message: expect.stringContaining("Yarn Plug'n'Play"),
+      status: "warn",
+    });
+    expect(checks.filter((check) => check.status === "fail")).toEqual([]);
   });
 });

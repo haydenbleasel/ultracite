@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 
-import { oxlint } from "../src/linters/oxlint";
+import { findLoadedJsPlugins, oxlint } from "../src/linters/oxlint";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
@@ -1513,5 +1513,71 @@ export default defineConfig({
     );
     expect(content).not.toContain("typeAware");
     expect(project.warn).toHaveBeenCalled();
+  });
+});
+
+// An oxlint.config.ts that extends core plus the given lines.
+const coreConfigWith = (...lines: string[]): string =>
+  ['import core from "ultracite/oxlint/core";', ...lines].join("\n");
+
+describe("findLoadedJsPlugins", () => {
+  test("finds nothing in a config that extends core alone", () => {
+    expect(findLoadedJsPlugins(coreConfigWith())).toEqual([]);
+  });
+
+  test("reads a selectJsPlugins selection", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith(
+          'import { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";',
+          'const jsPlugins = selectJsPlugins(["react-doctor", "tsdoc"]);'
+        )
+      )
+    ).toEqual(["oxlint-plugin-react-doctor", "eslint-plugin-tsdoc"]);
+  });
+
+  test("expands the full js-plugins preset", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith(
+          'import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";'
+        )
+      )
+    ).toEqual([
+      "eslint-plugin-github",
+      "eslint-plugin-sonarjs",
+      "oxlint-plugin-react-doctor",
+    ]);
+  });
+
+  test("counts the React Doctor add-ons and the shadcn preset", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith(
+          'import nextJsPlugins from "ultracite/oxlint/next/js-plugins";',
+          'import shadcn from "ultracite/oxlint/shadcn";'
+        )
+      )
+    ).toEqual(["oxlint-plugin-react-doctor", "@shadcn/lint"]);
+  });
+
+  test("finds plugin packages a config names itself", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith(
+          "export default {",
+          "  jsPlugins: [{ name: 'sonarjs', specifier: 'eslint-plugin-sonarjs' }],",
+          "};"
+        )
+      )
+    ).toEqual(["eslint-plugin-sonarjs"]);
+  });
+
+  test("never reports the vendored anti-slop plugin", () => {
+    expect(
+      findLoadedJsPlugins(
+        coreConfigWith('import antiSlop from "ultracite/oxlint/anti-slop";')
+      )
+    ).toEqual([]);
   });
 });
