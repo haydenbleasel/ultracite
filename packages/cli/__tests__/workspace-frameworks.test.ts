@@ -203,6 +203,34 @@ export default defineConfig({
     );
   });
 
+  test("leaves out react-doctor add-ons when the root only imports js-plugins", async () => {
+    const written = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+// The full preset's github rules, without extending the whole preset.
+const githubRules = Object.fromEntries(
+  Object.entries(jsPlugins.rules ?? {}).filter(([rule]) =>
+    rule.startsWith("github/")
+  )
+);
+
+export default defineConfig({
+  extends: [core],
+  rules: githubRules,
+});
+`,
+      "package.json": '{ "type": "module" }',
+    });
+
+    await oxlint.createWorkspace({ dir: "apps/web", frameworks: ["next"] });
+
+    expect(written.get("./apps/web/oxlint.config.ts")).not.toContain(
+      "next/js-plugins"
+    );
+  });
+
   test("adds react-doctor add-ons when the root config selects it", async () => {
     const written = mockProject({
       "./oxlint.config.ts":

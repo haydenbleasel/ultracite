@@ -389,6 +389,27 @@ const bindPresets = (
   return { importedOnly, names, presets };
 };
 
+// oxlint does not merge `settings` from extended configs, so react-doctor's
+// settings (curated ported-rule mode, #771) must be applied on the root
+// config rather than ride along inside the js-plugins preset. The full
+// preset always includes react-doctor.
+const needsJsPluginSettings = (
+  presets: string[],
+  jsPlugins: OxlintJsPlugin[]
+): boolean =>
+  jsPlugins.includes("oxlint-plugin-react-doctor") ||
+  (!jsPlugins.some(isSelectableJsPlugin) && presets.includes(jsPluginsPath));
+
+// The names the generated config binds besides its preset imports.
+const generatedHelpers = (
+  presets: string[],
+  jsPlugins: OxlintJsPlugin[]
+): string[] => [
+  "defineConfig",
+  ...(jsPlugins.some(isSelectableJsPlugin) ? ["selectJsPlugins"] : []),
+  ...(needsJsPluginSettings(presets, jsPlugins) ? ["jsPluginSettings"] : []),
+];
+
 const renderOverride = (
   override: PropertyOverride | undefined,
   generated: GeneratedProperties
@@ -404,34 +425,20 @@ const generateConfigContent = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[] = [],
   extras: OxlintExtras = emptyExtras(),
-  typeAware = false
+  typeAware = false,
+  bindings: PresetBindings = bindPresets(extendsList, jsPlugins, extras)
 ) => {
   // anti-slop and @shadcn/lint have their own presets, so they become plain
   // extends instead of selectJsPlugins entries.
   const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
 
-  const {
-    importedOnly,
-    names,
-    presets: resolvedExtends,
-  } = bindPresets(extendsList, jsPlugins, extras);
+  const { importedOnly, names, presets: resolvedExtends } = bindings;
 
   const identifierOf = (preset: string) =>
     names.get(preset) ?? getOxlintConfigIdentifier(preset);
 
-  // The full js-plugins preset (every plugin, no selection) stays a plain
-  // extend — e.g. a hand-written config being updated.
-  const hasFullJsPluginsPreset =
-    !hasJsPlugins && resolvedExtends.includes(jsPluginsPath);
-
-  // oxlint does not merge `settings` from extended configs, so react-doctor's
-  // settings (curated ported-rule mode, #771) must be applied on the root
-  // config rather than ride along inside the js-plugins preset. The full
-  // preset always includes react-doctor.
-  const hasJsPluginSettings =
-    npmJsPlugins.includes("oxlint-plugin-react-doctor") ||
-    hasFullJsPluginsPreset;
+  const hasJsPluginSettings = needsJsPluginSettings(resolvedExtends, jsPlugins);
 
   const jsPluginImports = ["selectJsPlugins"];
 
@@ -592,9 +599,14 @@ const jsPluginsByConfigName = new Map(
  * enable plugins the user never opted into. Supports both the current
  * selectJsPlugins([...]) form and the legacy inlined-filtering form.
  */
-const parseExistingJsPlugins = (contents: string): OxlintJsPlugin[] => {
+const parseExistingJsPlugins = (
+  contents: string,
+  // The project binds `selectJsPlugins` itself, so its calls aren't
+  // Ultracite's selection.
+  ownSelectJsPlugins = false
+): OxlintJsPlugin[] => {
   const match =
-    SELECT_JS_PLUGINS_RE.exec(contents) ??
+    (ownSelectJsPlugins ? null : SELECT_JS_PLUGINS_RE.exec(contents)) ??
     SELECTED_JS_PLUGIN_NAMES_RE.exec(contents);
 
   if (!match?.groups?.names) {
@@ -647,11 +659,15 @@ const toRendered = (entry: ConfigEntry): RenderedEntry => ({
 
 interface ExistingConfig {
   extras: OxlintExtras;
+  // The presets and the js-plugins selection (as the js-plugins preset) in
+  // the order the config's own `extends` has them, for the reorder notice.
+  order: string[];
   // The Ultracite presets the config extends, in the order it extends them.
   presets: string[];
 }
 
 interface ReadExtends {
+  order: string[];
   presets: string[];
   userExtends: UserExtends;
 }
@@ -671,12 +687,15 @@ const readExtends = (
     trailing: [],
   };
 
+  const order: string[] = [];
   let anchor: string | null = null;
   let pending: RenderedEntry[] = [];
 
   // The entries since the previous preset belong after it (or before every
   // preset, when there was none).
   const settle = (next: string) => {
+    order.push(next);
+
     if (anchor === null) {
       userExtends.leading.push(...pending);
     } else {
@@ -712,7 +731,7 @@ const readExtends = (
 
   userExtends.trailing.push(...pending);
 
-  return { presets, userExtends };
+  return { order, presets, userExtends };
 };
 
 // Split an existing oxlint.config.ts into the Ultracite presets it extends
@@ -727,6 +746,7 @@ const readExistingConfig = (
 
   const extras = emptyExtras();
   const presets: string[] = [];
+  let order: string[] = [];
   const presetsByIdentifier = new Map<string, string>();
   // The consts a generated js-plugins selection is declared as, found
   // below; a binding of the project's own is never one, whatever its name.
@@ -771,12 +791,18 @@ const readExistingConfig = (
       continue;
     }
 
+    // A second default import of a preset already imported under another
+    // name is kept as written for the project's code that uses that name.
+    let ownDefault: string | null = null;
+
     // Whether the preset is extended is up to the `extends` array; an
     // import alone keeps the import.
     if (moduleImport.defaultLocal && preset) {
       presetsByIdentifier.set(moduleImport.defaultLocal, preset);
 
-      if (!extras.presetIdentifiers.has(preset)) {
+      if (extras.presetIdentifiers.has(preset)) {
+        ownDefault = moduleImport.defaultLocal;
+      } else {
         extras.presetIdentifiers.set(preset, moduleImport.defaultLocal);
       }
     }
@@ -794,23 +820,36 @@ const readExistingConfig = (
       (specifier) => !generatedNamedImports.has(specifier.local)
     );
 
-    if (userSpecifiers.length > 0) {
+    if (userSpecifiers.length > 0 || ownDefault) {
       extras.imports.push(
         renderImport(
           moduleImport.source,
-          userSpecifiers.map((specifier) => specifier.text)
+          userSpecifiers.map((specifier) => specifier.text),
+          ownDefault
         )
       );
-      reserve(...userSpecifiers.map((specifier) => specifier.local));
+      reserve(
+        ownDefault,
+        ...userSpecifiers.map((specifier) => specifier.local)
+      );
     }
   }
+
+  // Older releases declared their selection consts together, starting with
+  // `selectedJsPluginNames = new Set([...])`; without that, a const with one
+  // of their names is the project's own.
+  const hasLegacySelection = config.statements.some(
+    (statement) =>
+      statement.declaredNames.includes("selectedJsPluginNames") &&
+      SELECTED_JS_PLUGIN_NAMES_RE.test(statement.text)
+  );
 
   for (const statement of config.statements) {
     const isGenerated =
       statement.declaredNames.length > 0 &&
       statement.declaredNames.every(
         (name) =>
-          legacySelectionConsts.has(name) ||
+          (hasLegacySelection && legacySelectionConsts.has(name)) ||
           (GENERATED_SELECTION_RE.test(name) &&
             importsSelectJsPlugins &&
             statement.initCallee === "selectJsPlugins")
@@ -843,6 +882,7 @@ const readExistingConfig = (
       );
 
       presets.push(...read.presets);
+      ({ order } = read);
       extras.extendsEntries = read.userExtends;
     } else if (entry.key === "env") {
       if (compact(entry.valueText) !== `${coreIdentifier}.env`) {
@@ -867,7 +907,7 @@ const readExistingConfig = (
 
   extras.danglingComments.push(...config.danglingComments);
 
-  return { extras, presets };
+  return { extras, order, presets };
 };
 
 // The pre-parser way of finding presets, for a file init can't restructure:
@@ -890,6 +930,19 @@ const findPresetReferences = (contents: string): string[] => {
   );
 };
 
+// The presets a config extends: from its `extends` when init can read the
+// file, otherwise from its imports.
+const extendedPresets = (contents: string): string[] => {
+  const parsed = parseConfigModule(contents);
+
+  const existing =
+    parsed.kind === "module"
+      ? readExistingConfig(contents, parsed.module)
+      : null;
+
+  return existing?.presets ?? findPresetReferences(contents);
+};
+
 /**
  * The npm JS plugins a config loads: a selectJsPlugins selection, the full
  * js-plugins preset, the React Doctor framework add-ons, the shadcn preset,
@@ -899,7 +952,7 @@ const findPresetReferences = (contents: string): string[] => {
 export const findLoadedJsPlugins = (
   contents: string
 ): Exclude<OxlintJsPlugin, typeof antiSlopPreset>[] => {
-  const presets = findPresetReferences(contents);
+  const presets = extendedPresets(contents);
   const selection = parseExistingJsPlugins(contents);
   const loaded = new Set<OxlintJsPlugin>(selection);
 
@@ -1067,22 +1120,15 @@ const readOxlintRc = async (): Promise<OxlintRc> => {
 const readExistingOxlintConfig = async (
   configPath: string | null
 ): Promise<
-  | {
-      existing: ExistingConfig;
-      jsPlugins: OxlintJsPlugin[];
-      kind: "config";
-      // The config couldn't be restructured, so it is rewritten from scratch.
-      replaced: boolean;
-    }
+  | { existing: ExistingConfig; jsPlugins: OxlintJsPlugin[]; kind: "config" }
   | { kind: "namespace"; local: string; source: string }
   | { kind: "unparseable" }
 > => {
   if (!configPath) {
     return {
-      existing: { extras: emptyExtras(), presets: [] },
+      existing: { extras: emptyExtras(), order: [], presets: [] },
       jsPlugins: [],
       kind: "config",
-      replaced: false,
     };
   }
 
@@ -1125,13 +1171,17 @@ const readExistingOxlintConfig = async (
   }
 
   return {
+    // A config that's replaced has no order of its own to keep.
     existing: existing ?? {
       extras: emptyExtras(),
+      order: [],
       presets: findPresetReferences(contents),
     },
-    jsPlugins: parseExistingJsPlugins(contents),
+    jsPlugins: parseExistingJsPlugins(
+      contents,
+      existing?.extras.reservedIdentifiers.has("selectJsPlugins")
+    ),
     kind: "config",
-    replaced: !existing,
   };
 };
 
@@ -1233,9 +1283,7 @@ export const oxlint = {
       parseExistingJsPlugins(rootContents).includes(
         "oxlint-plugin-react-doctor"
       ) ||
-      findPresetReferences(rootContents).includes(
-        getOxlintConfigPath("js-plugins")
-      );
+      extendedPresets(rootContents).includes(getOxlintConfigPath("js-plugins"));
 
     if (hasReactDoctor) {
       for (const framework of reactDoctorFrameworkAddOns) {
@@ -1357,6 +1405,21 @@ export const oxlint = {
     );
 
     const addTypeAware = Boolean(opts?.typeAware) && !existingOptions;
+    const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
+
+    // The generated config declares these itself, so a binding of the
+    // project's own with the same name would be declared twice.
+    const clash = generatedHelpers(bindings.presets, jsPlugins).find((name) =>
+      existing.extras.reservedIdentifiers.has(name)
+    );
+
+    if (clash) {
+      log.warn(
+        `${configFile} declares its own \`${clash}\`, which the Ultracite config also declares, so it was left unchanged. Rename it and re-run \`ultracite init\`.`
+      );
+
+      return;
+    }
 
     await writeProjectFile(
       paths.target,
@@ -1364,16 +1427,16 @@ export const oxlint = {
         newExtends,
         jsPlugins,
         existing.extras,
-        addTypeAware
+        addTypeAware,
+        bindings
       )
     );
 
-    // Say so when the presets the config already extended moved, since that
+    // Say so when what the config already extended moved, since that
     // changes which preset's setting wins for a rule.
-    const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
     const resolvedPresets = bindings.presets;
 
-    const previousOrder = [...new Set(existing.presets)].filter((preset) =>
+    const previousOrder = [...new Set(existing.order)].filter((preset) =>
       resolvedPresets.includes(preset)
     );
 
@@ -1381,7 +1444,7 @@ export const oxlint = {
       previousOrder.includes(preset)
     );
 
-    if (!current.replaced && newOrder.join(",") !== previousOrder.join(",")) {
+    if (newOrder.join(",") !== previousOrder.join(",")) {
       const identifiers = resolvedPresets.map(
         (preset) => bindings.names.get(preset) ?? preset
       );

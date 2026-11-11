@@ -1690,6 +1690,100 @@ export default defineConfig({
       "  extends: [\n    core,\n    selectedJsPlugins,\n  ],"
     );
   });
+
+  test("keeps a const of the project's own named like a legacy selection", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import shared from "./oxlint.shared.ts";
+
+const selectedJsPlugins = shared.plugins;
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, selectedJsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("const selectedJsPlugins = shared.plugins;");
+    expect(content).toContain(
+      "  extends: [\n    core,\n    selectedJsPlugins,\n  ],"
+    );
+  });
+
+  test("keeps a second import of a preset under its own name", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import base from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  rules: { ...base.rules },
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain('import core from "ultracite/oxlint/core";');
+    expect(content).toContain('import base from "ultracite/oxlint/core";');
+    expect(content).toContain("extends: [core],");
+    expect(content).toContain("rules: { ...base.rules },");
+  });
+
+  // A selectJsPlugins helper of the project's own, not Ultracite's.
+  const ownSelectJsPluginsConfig = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import { selectJsPlugins } from "./oxlint.helpers.ts";
+
+const jsPlugins = selectJsPlugins(["github"]);
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+  test("doesn't read a selectJsPlugins of the project's own as a selection", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": ownSelectJsPluginsConfig,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import { selectJsPlugins } from "./oxlint.helpers.ts";'
+    );
+    expect(content).toContain('const jsPlugins = selectJsPlugins(["github"]);');
+    expect(content).toContain("  extends: [\n    core,\n    jsPlugins,\n  ],");
+    expect(content).not.toContain("ultracite/oxlint/js-plugins");
+  });
+
+  test("leaves a config unchanged when it declares a name the Ultracite config needs", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": ownSelectJsPluginsConfig,
+    });
+
+    await oxlint.update({ jsPlugins: ["eslint-plugin-github"] });
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn.mock.calls[0]?.[0]).toContain(
+      "declares its own `selectJsPlugins`"
+    );
+  });
 });
 
 const importSource = (line: string) => line.slice(line.lastIndexOf(" from "));
@@ -1833,6 +1927,25 @@ export default defineConfig({
 
     const [[, content]] = project.writeFile.mock.calls;
     expect(content).toContain("extends: [core, jsPlugins, antiSlop],");
+    expect(project.info.mock.calls[0]?.[0]).toContain(
+      "to [core, jsPlugins, antiSlop]"
+    );
+  });
+
+  test("doesn't count .oxlintrc.json presets as part of the config's order", async () => {
+    const project = mockProject({
+      "./.oxlintrc.json":
+        '{ "extends": ["./node_modules/ultracite/config/oxlint/react/.oxlintrc.json"] }',
+      "./oxlint.config.ts": sortedConfig,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("extends: [core, react, astro, antiSlop],");
+    expect(
+      project.info.mock.calls.some(([message]) => message.includes("Reordered"))
+    ).toBe(false);
   });
 });
 
