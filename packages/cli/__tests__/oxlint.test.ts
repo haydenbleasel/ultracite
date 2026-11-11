@@ -1,16 +1,27 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterEach, describe, expect, mock, test } from "bun:test";
 
 import { oxlint } from "../src/linters/oxlint";
-import { restoreFileSystemMock } from "./mock-fs";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 // Helper to generate the expected oxlint config path
 const getOxlintConfigPath = (name: string) => `ultracite/oxlint/${name}`;
 
-mock.module("node:fs/promises", () => ({
+// The node:fs/promises every test starts from: no config exists yet.
+const defaultFsPromisesMock = () => ({
   access: mock(() => Promise.reject(new Error("ENOENT"))),
   readFile: mock(() => Promise.resolve("")),
+  rm: mock(() => Promise.resolve()),
   writeFile: mock(() => Promise.resolve()),
-}));
+});
+
+mock.module("node:fs/promises", defaultFsPromisesMock);
+
+// mock.module is global and never undone, so each test's file system mocks
+// are put back before the next test (or the next test file) runs.
+afterEach(() => {
+  restoreFileSystemMock();
+  mock.module("node:fs/promises", defaultFsPromisesMock);
+});
 
 // Every path exists except an .oxlintrc.json, which init would migrate, and
 // an oxlint.config.mts, which would sit next to the oxlint.config.ts.
@@ -736,6 +747,12 @@ export default defineConfig({
         writeFile: mockWriteFile,
       }));
 
+      mock.module("node:fs", () => ({
+        accessSync: mock(onlyOxlintConfig),
+        existsSync: mock(() => false),
+        readFileSync: mock(() => "{}"),
+      }));
+
       // No explicit selection: the previously enabled preset must survive.
       await oxlint.update({ frameworks: ["react"] });
 
@@ -746,7 +763,7 @@ export default defineConfig({
         content.match(/import shadcn from "ultracite\/oxlint\/shadcn";/gu)
           ?.length
       ).toBe(1);
-      expect(content).toContain("extends: [core, shadcn, react],");
+      expect(content).toContain("extends: [core, react, shadcn],");
       expect(content).toContain("jsPlugins: shadcn.jsPlugins,");
     });
 
@@ -793,64 +810,9 @@ export default defineConfig({
       const antiSlopExtends = content.match(/antiSlop/gu);
       // One import identifier plus one extends entry.
       expect(antiSlopExtends?.length).toBe(2);
-    });
-
-    test("keeps core first and anti-slop last when the imports are sorted", async () => {
-      // `ultracite fix` sorts the imports, which must not change the order
-      // in which the presets are extended (#863).
-      let currentConfig = `import { defineConfig } from "oxlint";
-import antiSlop from "ultracite/oxlint/anti-slop";
-import astro from "ultracite/oxlint/astro";
-import core from "ultracite/oxlint/core";
-import next from "ultracite/oxlint/next";
-import react from "ultracite/oxlint/react";
-
-export default defineConfig({
-  extends: [core, astro, next, react, antiSlop],
-  ignorePatterns: core.ignorePatterns,
-});
-`;
-
-      // Each update reads what the previous one wrote.
-      const mockWriteFile = mock((_path: string, content: string) => {
-        currentConfig = content;
-
-        return Promise.resolve();
-      });
-
-      mock.module("node:fs/promises", () => ({
-        access: mock(() => Promise.resolve()),
-        readFile: mock(() => Promise.resolve(currentConfig)),
-        writeFile: mockWriteFile,
-      }));
-
-      mock.module("node:fs", () => ({
-        accessSync: mock(onlyOxlintConfig),
-        existsSync: mock(() => false),
-        readFileSync: mock(() => "{}"),
-      }));
-
-      try {
-        await oxlint.update({ jsPlugins: ["anti-slop"] });
-        await oxlint.update();
-
-        expect(mockWriteFile).toHaveBeenCalledTimes(2);
-
-        const [[, firstWrite], [, secondWrite]] = mockWriteFile.mock.calls;
-
-        expect(firstWrite).toContain(
-          "extends: [core, astro, next, react, antiSlop],"
-        );
-        // Re-running init on its own output changes nothing.
-        expect(secondWrite).toBe(firstWrite);
-      } finally {
-        restoreFileSystemMock();
-        mock.module("node:fs/promises", () => ({
-          access: mock(() => Promise.reject(new Error("ENOENT"))),
-          readFile: mock(() => Promise.resolve("")),
-          writeFile: mock(() => Promise.resolve()),
-        }));
-      }
+      // The fixture's imports are sorted, as `ultracite fix` leaves them;
+      // anti-slop still comes after core (#863).
+      expect(content).toContain("extends: [core, antiSlop],");
     });
 
     test("preserves a legacy inline js-plugins selection during update", async () => {
@@ -1239,18 +1201,7 @@ const mockProject = (files: Record<string, string>) => {
     rm,
     writeFile,
   }));
-  mock.module("node:fs", () => ({
-    accessSync: mock((filePath: string) => {
-      if (!has(filePath)) {
-        throw new Error("ENOENT");
-      }
-    }),
-    existsSync: mock(() => false),
-    // package.json, read synchronously to pick the config's file name.
-    readFileSync: mock((filePath: string) =>
-      has(filePath) ? files[String(filePath)] : "{}"
-    ),
-  }));
+  mockFileSystem(files);
   mock.module("@clack/prompts", () => ({
     log: { error: mock(), info, success: mock(), warn },
   }));
@@ -1426,6 +1377,196 @@ export default defineConfig({
     expect(project.writeFile).not.toHaveBeenCalled();
     expect(project.rm).not.toHaveBeenCalled();
     expect(project.warn.mock.calls[0]?.[0]).toContain(".oxlintrc.json");
+  });
+
+  test("keeps the name a preset is imported under", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import ultraciteCore from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: ultraciteCore.env,
+  extends: [ultraciteCore],
+  ignorePatterns: [...ultraciteCore.ignorePatterns, "generated/**"],
+});
+`,
+    });
+
+    await oxlint.update({ frameworks: ["react"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import ultraciteCore from "ultracite/oxlint/core";'
+    );
+    expect(content).not.toContain("import core from");
+    expect(content).toContain("env: ultraciteCore.env,");
+    expect(content).toContain("extends: [ultraciteCore, react],");
+    expect(content).toContain(
+      'ignorePatterns: [...ultraciteCore.ignorePatterns, "generated/**"],'
+    );
+  });
+
+  test("leaves a preset that is imported but not extended out of extends", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core],
+  ignorePatterns: core.ignorePatterns,
+  rules: { ...antiSlop.rules },
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import antiSlop from "ultracite/oxlint/anti-slop";'
+    );
+    expect(content).toContain("extends: [core],");
+    expect(content).toContain("rules: { ...antiSlop.rules },");
+  });
+
+  test("leaves a config that imports a preset as a namespace unchanged", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import * as core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  extends: [core.default],
+  ignorePatterns: core.default.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update();
+
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn.mock.calls[0]?.[0]).toContain("import * as core");
+  });
+});
+
+const importSource = (line: string) => line.slice(line.lastIndexOf(" from "));
+
+// What `ultracite fix` does to a config's imports: sorts them by source.
+const sortImports = (content: string): string => {
+  const lines = content.split("\n");
+  const importCount = lines.findIndex((line) => !line.startsWith("import "));
+
+  const sorted = lines
+    .slice(0, importCount)
+    .toSorted((left, right) =>
+      importSource(left).localeCompare(importSource(right))
+    );
+
+  return [...sorted, ...lines.slice(importCount)].join("\n");
+};
+
+describe("oxlint preset order", () => {
+  // A config init wrote, once `ultracite fix` has sorted its imports.
+  const sortedConfig = `import { defineConfig } from "oxlint";
+import antiSlop from "ultracite/oxlint/anti-slop";
+import astro from "ultracite/oxlint/astro";
+import core from "ultracite/oxlint/core";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, astro, antiSlop],
+  ignorePatterns: core.ignorePatterns,
+});
+`;
+
+  test("follows extends rather than the sorted imports on update (#863)", async () => {
+    const project = mockProject({ "./oxlint.config.ts": sortedConfig });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("extends: [core, astro, antiSlop],");
+    expect(project.info).not.toHaveBeenCalled();
+  });
+
+  test("keeps anti-slop last when it is selected again", async () => {
+    const project = mockProject({ "./oxlint.config.ts": sortedConfig });
+
+    await oxlint.update({ jsPlugins: ["anti-slop"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("extends: [core, astro, antiSlop],");
+    expect(project.info).not.toHaveBeenCalled();
+  });
+
+  test("puts presets that are out of order back in order, and says so", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": sortedConfig.replace(
+        "extends: [core, astro, antiSlop],",
+        "extends: [antiSlop, astro, core],"
+      ),
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain("extends: [core, astro, antiSlop],");
+    expect(project.info.mock.calls[0]?.[0]).toContain(
+      "to [core, astro, antiSlop]"
+    );
+  });
+
+  test("leaves its own config unchanged once the imports are sorted", async () => {
+    const created = mockProject({});
+
+    await oxlint.create({
+      frameworks: ["react", "next"],
+      jsPlugins: ["oxlint-plugin-react-doctor", "anti-slop"],
+    });
+
+    const [[configPath, content]] = created.writeFile.mock.calls;
+    const project = mockProject({ [configPath]: sortImports(content) });
+
+    await oxlint.update();
+
+    const [[, updated]] = project.writeFile.mock.calls;
+    expect(updated).toBe(content);
+    expect(project.info).not.toHaveBeenCalled();
+  });
+
+  test("keeps the project's own extends entries where they were", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import effect from "@effect/tsgo/oxlint";
+import core from "ultracite/oxlint/core";
+import react from "ultracite/oxlint/react";
+
+import base from "./oxlint.base.ts";
+import local from "./oxlint.local.ts";
+
+export default defineConfig({
+  env: core.env,
+  extends: [base, core, effect, react, local],
+  ignorePatterns: core.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update({ frameworks: ["next"], jsPlugins: ["anti-slop"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    // base stays under the presets and local over them; effect stays right
+    // after core.
+    expect(content).toContain(`  extends: [
+    base,
+    core,
+    effect,
+    react,
+    next,
+    antiSlop,
+    local,
+  ],`);
   });
 });
 

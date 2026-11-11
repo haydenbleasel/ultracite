@@ -21,6 +21,8 @@ export interface ImportSpecifierText {
 export interface ModuleImport {
   defaultLocal: string | null;
   namedSpecifiers: ImportSpecifierText[];
+  // The local name of an `import * as name` binding.
+  namespaceLocal: string | null;
   source: string;
   text: string;
   typeOnly: boolean;
@@ -281,11 +283,14 @@ const readImport = (
   next: ASTNode | undefined
 ): ModuleImport => {
   let defaultLocal: string | null = null;
+  let namespaceLocal: string | null = null;
   const namedSpecifiers: ImportSpecifierText[] = [];
 
   for (const specifier of node.specifiers) {
     if (specifier.type === "ImportDefaultSpecifier") {
       defaultLocal = specifier.local.name;
+    } else if (specifier.type === "ImportNamespaceSpecifier") {
+      namespaceLocal = specifier.local.name;
     } else if (specifier.type === "ImportSpecifier") {
       namedSpecifiers.push({
         imported:
@@ -301,6 +306,7 @@ const readImport = (
   return {
     defaultLocal,
     namedSpecifiers,
+    namespaceLocal,
     source: node.source.value,
     text: statementText(source, node, afterLine, next),
     typeOnly: node.importKind === "type",

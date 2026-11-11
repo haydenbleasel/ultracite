@@ -8,10 +8,6 @@ import { mock } from "bun:test";
  * puts back the defaults the test preload installs, keeping the blast radius
  * to the test that opted in.
  */
-// The real readdirSync captured (and typed via `declare global`) by the test
-// preload before it installs the default node:fs mock.
-const realReaddirSync = globalThis.__realReaddirSync;
-
 /**
  * `links` maps a path to the path its symbolic link points at: reads and
  * existence checks follow it, `lstatSync` reports it as a link, and
@@ -44,23 +40,34 @@ export const mockFileSystem = (
 
       return content;
     }),
-    readdirSync: realReaddirSync,
+    // The real readdirSync, captured (and typed via `declare global`) by the
+    // test preload before it installs the default node:fs mock.
+    readdirSync: globalThis.__realReaddirSync,
     realpathSync: mock(resolve),
     writeFileSync: mock(() => {}),
   }));
 };
 
+/**
+ * The node:fs mock the test preload installs: every path is missing and
+ * writes do nothing. readdirSync stays real because oxlint-config.test.ts
+ * reads the real config files.
+ */
+export const defaultFileSystemMock = () => ({
+  accessSync: mock(() => {
+    throw new Error("ENOENT");
+  }),
+  existsSync: mock(() => false),
+  lstatSync: mock(() => ({ isSymbolicLink: () => false })),
+  mkdirSync: mock(() => {}),
+  mkdtempSync: mock((prefix: string) => `${prefix}mock`),
+  readFileSync: mock(() => "{}"),
+  readdirSync: globalThis.__realReaddirSync,
+  realpathSync: mock((filePath: string) => filePath),
+  rmSync: mock(() => {}),
+  writeFileSync: mock(() => {}),
+});
+
 export const restoreFileSystemMock = (): void => {
-  mock.module("node:fs", () => ({
-    accessSync: mock(() => {
-      throw new Error("ENOENT");
-    }),
-    existsSync: mock(() => false),
-    lstatSync: mock(() => ({ isSymbolicLink: () => false })),
-    mkdirSync: mock(() => {}),
-    readFileSync: mock(() => "{}"),
-    readdirSync: realReaddirSync,
-    realpathSync: mock((filePath: string) => filePath),
-    writeFileSync: mock(() => {}),
-  }));
+  mock.module("node:fs", defaultFileSystemMock);
 };

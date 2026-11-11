@@ -3,7 +3,7 @@ import { readFile, rm } from "node:fs/promises";
 import { log } from "@clack/prompts";
 import { z } from "zod";
 
-import type { options } from "../data/options";
+import { options } from "../data/options";
 import type { JsonObject, JsonValue } from "../data/types";
 import { parseJsoncStrict, readPackageJsonSync } from "../schemas";
 import {
@@ -122,6 +122,81 @@ const getOxlintConfigIdentifier = (configPath: string) => {
   );
 };
 
+const corePath = getOxlintConfigPath("core");
+const antiSlopPath = getOxlintConfigPath(antiSlopPreset);
+const jsPluginsPath = getOxlintConfigPath("js-plugins");
+const shadcnPath = getOxlintConfigPath(shadcnPreset);
+
+// The js-plugins selection is bound to a `jsPlugins` const, mirroring the
+// full preset's default-import identifier.
+const selectionIdentifier = getOxlintConfigIdentifier(jsPluginsPath);
+
+// Stands in presetOrder for every preset it doesn't name, such as gdp.
+const otherPresets = "*";
+
+// The order presets are extended in. Each preset overrides the ones before
+// it, so core goes first and anti-slop, which turns off core rules that pinch
+// against its own, goes last. The order is fixed here rather than read from
+// a config's imports, which `ultracite fix` sorts (#863).
+const presetOrder = [
+  corePath,
+  ...options.frameworks.map(getOxlintConfigPath),
+  otherPresets,
+  jsPluginsPath,
+  ...reactDoctorFrameworkAddOns.map((framework) =>
+    getOxlintConfigPath(`${framework}/js-plugins`)
+  ),
+  shadcnPath,
+  antiSlopPath,
+];
+
+const presetRank = (preset: string): number => {
+  const rank = presetOrder.indexOf(preset);
+
+  return rank === -1 ? presetOrder.indexOf(otherPresets) : rank;
+};
+
+/**
+ * The presets a config extends, in presetOrder: core, the given presets (a
+ * new config's frameworks, or what an existing config extends) and the ones
+ * the js-plugins selection adds.
+ */
+const resolvePresets = (
+  presets: string[],
+  jsPlugins: OxlintJsPlugin[]
+): string[] => {
+  const resolved = new Set([corePath, ...presets]);
+
+  // When plugins are selected, the base js-plugins preset is imported and
+  // wrapped as the selection instead, so it isn't a plain extend as well
+  // (e.g. on update of a config that extended the full preset).
+  if (jsPlugins.some(isSelectableJsPlugin)) {
+    resolved.delete(jsPluginsPath);
+  }
+
+  // Framework-specific react-doctor rules live in per-framework add-on
+  // presets; wire them up when the framework preset is present.
+  if (jsPlugins.includes("oxlint-plugin-react-doctor")) {
+    for (const framework of reactDoctorFrameworkAddOns) {
+      if (resolved.has(getOxlintConfigPath(framework))) {
+        resolved.add(getOxlintConfigPath(`${framework}/js-plugins`));
+      }
+    }
+  }
+
+  if (jsPlugins.includes(shadcnPlugin)) {
+    resolved.add(shadcnPath);
+  }
+
+  if (jsPlugins.includes(antiSlopPreset)) {
+    resolved.add(antiSlopPath);
+  }
+
+  return [...resolved].toSorted(
+    (left, right) => presetRank(left) - presetRank(right)
+  );
+};
+
 // oxfmt's print width; the generated extends array switches to one entry per
 // line beyond this so the file is emitted already formatted.
 const generatedLineWidth = 80;
@@ -141,27 +216,48 @@ type PropertyOverride =
   | { build: (generated: GeneratedProperties) => RenderedEntry }
   | { entry: RenderedEntry };
 
+// Where the js-plugins selection sits in `extends`, for UserExtends.after.
+const selectionAnchor = "selection";
+
+// A project's own extends entries, kept where they sat among the presets:
+// before the first one (so the presets override them), right after a given
+// preset or the js-plugins selection, or after the last one (so they
+// override the presets).
+interface UserExtends {
+  after: Map<string, RenderedEntry[]>;
+  leading: RenderedEntry[];
+  trailing: RenderedEntry[];
+}
+
 // Everything in an existing config that isn't Ultracite's: carried over into
 // the regenerated file as written.
 interface OxlintExtras {
   danglingComments: string[];
-  extendsEntries: RenderedEntry[];
+  extendsEntries: UserExtends;
   imports: string[];
   overrides: Partial<Record<OverridableProperty, PropertyOverride>>;
   oxlintSpecifiers: string[];
+  // The name each imported preset is bound to, which the regenerated file
+  // keeps (`import ultraciteCore from "ultracite/oxlint/core"`) so the
+  // project's own references to it still resolve.
+  presetIdentifiers: Map<string, string>;
   properties: RenderedEntry[];
   statements: string[];
 }
 
 const emptyExtras = (): OxlintExtras => ({
   danglingComments: [],
-  extendsEntries: [],
+  extendsEntries: { after: new Map(), leading: [], trailing: [] },
   imports: [],
   overrides: {},
   oxlintSpecifiers: [],
+  presetIdentifiers: new Map(),
   properties: [],
   statements: [],
 });
+
+const presetIdentifier = (extras: OxlintExtras, preset: string): string =>
+  extras.presetIdentifiers.get(preset) ?? getOxlintConfigIdentifier(preset);
 
 const renderOverride = (
   override: PropertyOverride | undefined,
@@ -181,61 +277,11 @@ const generateConfigContent = (
   typeAware = false
 ) => {
   // anti-slop and @shadcn/lint have their own presets, so they become plain
-  // extends below instead of selectJsPlugins entries.
+  // extends instead of selectJsPlugins entries.
   const npmJsPlugins = jsPlugins.filter(isSelectableJsPlugin);
   const hasJsPlugins = npmJsPlugins.length > 0;
-
-  const corePath = getOxlintConfigPath("core");
-  const antiSlopPath = getOxlintConfigPath(antiSlopPreset);
-  const jsPluginsPath = getOxlintConfigPath("js-plugins");
-
-  // The presets of an existing config arrive in import order, which
-  // `ultracite fix` sorts, so core always goes first for the other presets
-  // to override it, and anti-slop is added back last below. When plugins
-  // are selected, the base js-plugins preset is imported and wrapped as
-  // selectedJsPlugins below — drop it from the plain extends so the import
-  // isn't declared twice (e.g. on update of an existing config).
-  const resolvedExtends = [
-    corePath,
-    ...new Set(
-      extendsList.filter(
-        (ext) =>
-          ext !== corePath &&
-          ext !== antiSlopPath &&
-          !(hasJsPlugins && ext === jsPluginsPath)
-      )
-    ),
-  ];
-
-  // Framework-specific react-doctor rules live in per-framework add-on
-  // presets; wire them up when the framework preset is present.
-  if (npmJsPlugins.includes("oxlint-plugin-react-doctor")) {
-    for (const framework of reactDoctorFrameworkAddOns) {
-      const addOn = getOxlintConfigPath(`${framework}/js-plugins`);
-
-      if (
-        resolvedExtends.includes(getOxlintConfigPath(framework)) &&
-        !resolvedExtends.includes(addOn)
-      ) {
-        resolvedExtends.push(addOn);
-      }
-    }
-  }
-
-  if (
-    jsPlugins.includes(shadcnPlugin) &&
-    !resolvedExtends.includes(getOxlintConfigPath(shadcnPreset))
-  ) {
-    resolvedExtends.push(getOxlintConfigPath(shadcnPreset));
-  }
-
-  // Last among the plain extends so its core-rule overrides win.
-  if (
-    jsPlugins.includes(antiSlopPreset) ||
-    extendsList.includes(antiSlopPath)
-  ) {
-    resolvedExtends.push(antiSlopPath);
-  }
+  const resolvedExtends = resolvePresets(extendsList, jsPlugins);
+  const identifierOf = (preset: string) => presetIdentifier(extras, preset);
 
   // The full js-plugins preset (every plugin, no selection) stays a plain
   // extend — e.g. a hand-written config being updated.
@@ -255,15 +301,27 @@ const generateConfigContent = (
     jsPluginImports.unshift("jsPluginSettings");
   }
 
+  // A preset the project imports without extending it (for its rules, say)
+  // keeps its import. The full js-plugins preset is the exception once a
+  // selection replaces it.
+  const importedOnlyPresets = [...extras.presetIdentifiers].filter(
+    ([preset]) =>
+      !resolvedExtends.includes(preset) &&
+      !(hasJsPlugins && preset === jsPluginsPath)
+  );
+
   const imports = [
     renderImport("oxlint", ["defineConfig", ...extras.oxlintSpecifiers]),
-    ...resolvedExtends.map((ext) =>
-      ext === jsPluginsPath
-        ? `import ${getOxlintConfigIdentifier(ext)}, { jsPluginSettings } from "${ext}";`
-        : `import ${getOxlintConfigIdentifier(ext)} from "${ext}";`
+    ...resolvedExtends.map((preset) =>
+      preset === jsPluginsPath
+        ? `import ${identifierOf(preset)}, { jsPluginSettings } from "${preset}";`
+        : `import ${identifierOf(preset)} from "${preset}";`
+    ),
+    ...importedOnlyPresets.map(
+      ([preset, identifier]) => `import ${identifier} from "${preset}";`
     ),
     hasJsPlugins
-      ? `import { ${jsPluginImports.join(", ")} } from "ultracite/oxlint/js-plugins";`
+      ? `import { ${jsPluginImports.join(", ")} } from "${jsPluginsPath}";`
       : "",
     ...extras.imports,
   ]
@@ -274,20 +332,37 @@ const generateConfigContent = (
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
     .join(", ");
 
-  // The selection is bound to a `jsPlugins` const (mirroring the full
-  // preset's default-import identifier) so it can be both extended and
+  // The selection is bound to a const so it can be both extended and
   // hoisted onto the root config below.
-  const jsPluginsIdentifier = getOxlintConfigIdentifier(
-    getOxlintConfigPath("js-plugins")
-  );
-
   const selectionBlock = hasJsPlugins
-    ? `\nconst ${jsPluginsIdentifier} = selectJsPlugins([${pluginNames}]);\n`
+    ? `\nconst ${selectionIdentifier} = selectJsPlugins([${pluginNames}]);\n`
     : "";
 
-  const extendsEntries = [
-    ...resolvedExtends.map((ext) => getOxlintConfigIdentifier(ext)),
-    ...(hasJsPlugins ? [jsPluginsIdentifier] : []),
+  const anchors = [
+    ...resolvedExtends,
+    ...(hasJsPlugins ? [selectionAnchor] : []),
+  ];
+
+  const anchorIdentifier = (anchor: string) =>
+    anchor === selectionAnchor ? selectionIdentifier : identifierOf(anchor);
+
+  const extendsEntries = anchors.map(anchorIdentifier);
+  const userExtends = extras.extendsEntries;
+
+  // Entries that followed a preset init no longer extends (the full
+  // js-plugins preset once a selection replaces it) go last.
+  const orphanedExtends = [...userExtends.after]
+    .filter(([anchor]) => !anchors.includes(anchor))
+    .flatMap(([, entries]) => entries);
+
+  const allExtends: RenderedEntry[] = [
+    ...userExtends.leading,
+    ...anchors.flatMap((anchor) => [
+      { comment: null, text: anchorIdentifier(anchor) },
+      ...(userExtends.after.get(anchor) ?? []),
+    ]),
+    ...orphanedExtends,
+    ...userExtends.trailing,
   ];
 
   // Dependency analyzers such as Knip only read `jsPlugins` off the root
@@ -298,10 +373,9 @@ const generateConfigContent = (
   // same way (spread together with the js-plugins selection when both are
   // present).
   const hoistedJsPluginIdentifiers = [
-    ...(hasJsPlugins || hasFullJsPluginsPreset ? [jsPluginsIdentifier] : []),
-    ...(resolvedExtends.includes(getOxlintConfigPath(shadcnPreset))
-      ? [getOxlintConfigIdentifier(getOxlintConfigPath(shadcnPreset))]
-      : []),
+    ...(hasJsPlugins ? [selectionIdentifier] : []),
+    ...(hasFullJsPluginsPreset ? [identifierOf(jsPluginsPath)] : []),
+    ...(resolvedExtends.includes(shadcnPath) ? [identifierOf(shadcnPath)] : []),
   ];
 
   let jsPluginsValue: string | null = null;
@@ -320,16 +394,9 @@ const generateConfigContent = (
 
   const extendsBlock =
     singleLineExtends.length <= generatedLineWidth &&
-    extras.extendsEntries.length === 0
+    allExtends.length === extendsEntries.length
       ? singleLineExtends
-      : `  extends: [\n${renderEntries(
-          [
-            ...extendsEntries.map((text) => ({ comment: null, text })),
-            ...extras.extendsEntries,
-          ],
-          [],
-          "    "
-        )}\n  ],`;
+      : `  extends: [\n${renderEntries(allExtends, [], "    ")}\n  ],`;
 
   const generated: GeneratedProperties = {
     hasJsPluginSettings,
@@ -347,10 +414,11 @@ const generateConfigContent = (
   // browser globals core declares are unknown, so rules such as
   // no-implied-eval never see `setTimeout("…")` as the global. It goes
   // before `extends` to keep the keys sorted.
-  const envProperty = generatedProperty("env", "core.env");
+  const coreIdentifier = identifierOf(corePath);
+  const envProperty = generatedProperty("env", `${coreIdentifier}.env`);
 
   const properties = [
-    generatedProperty("ignorePatterns", "core.ignorePatterns"),
+    generatedProperty("ignorePatterns", `${coreIdentifier}.ignorePatterns`),
     generatedProperty("jsPlugins", jsPluginsValue),
     typeAware ? { comment: null, text: `options: ${typeAwareOptions}` } : null,
     generatedProperty(
@@ -447,8 +515,73 @@ const toRendered = (entry: ConfigEntry): RenderedEntry => ({
 
 interface ExistingConfig {
   extras: OxlintExtras;
+  // The Ultracite presets the config extends, in the order it extends them.
   presets: string[];
 }
+
+interface ReadExtends {
+  presets: string[];
+  userExtends: UserExtends;
+}
+
+// The presets an `extends` array names, in its order, and the project's own
+// entries by where they sat among them.
+const readExtends = (
+  elements: ConfigEntry[],
+  presetsByIdentifier: Map<string, string>,
+  selectionIdentifiers: Set<string>
+): ReadExtends => {
+  const presets: string[] = [];
+
+  const userExtends: UserExtends = {
+    after: new Map(),
+    leading: [],
+    trailing: [],
+  };
+
+  let anchor: string | null = null;
+  let pending: RenderedEntry[] = [];
+
+  // The entries since the previous preset belong after it (or before every
+  // preset, when there was none).
+  const settle = (next: string) => {
+    if (anchor === null) {
+      userExtends.leading.push(...pending);
+    } else {
+      userExtends.after.set(anchor, [
+        ...(userExtends.after.get(anchor) ?? []),
+        ...pending,
+      ]);
+    }
+
+    pending = [];
+    anchor = next;
+  };
+
+  for (const element of elements) {
+    // A legacy string extend names its preset by path.
+    const preset =
+      element.identifier === null
+        ? toUltracitePreset(element.text)
+        : presetsByIdentifier.get(element.identifier);
+
+    if (preset) {
+      presets.push(preset);
+      settle(preset);
+    } else if (
+      element.identifier &&
+      selectionIdentifiers.has(element.identifier)
+    ) {
+      settle(selectionAnchor);
+    } else {
+      pending.push(toRendered(element));
+    }
+  }
+
+  userExtends.trailing.push(...pending);
+
+  return { presets, userExtends };
+};
 
 // Split an existing oxlint.config.ts into the Ultracite presets it extends
 // and everything else, which is carried over as written.
@@ -462,7 +595,8 @@ const readExistingConfig = (
 
   const extras = emptyExtras();
   const presets: string[] = [];
-  const ownedIdentifiers = new Set(legacySelectionConsts);
+  const presetsByIdentifier = new Map<string, string>();
+  const selectionIdentifiers = new Set(legacySelectionConsts);
 
   for (const moduleImport of config.imports) {
     const preset = toUltracitePreset(moduleImport.source);
@@ -484,9 +618,14 @@ const readExistingConfig = (
       continue;
     }
 
+    // Whether the preset is extended is up to the `extends` array; an
+    // import alone keeps the import.
     if (moduleImport.defaultLocal && preset) {
-      ownedIdentifiers.add(moduleImport.defaultLocal);
-      presets.push(preset);
+      presetsByIdentifier.set(moduleImport.defaultLocal, preset);
+
+      if (!extras.presetIdentifiers.has(preset)) {
+        extras.presetIdentifiers.set(preset, moduleImport.defaultLocal);
+      }
     }
 
     const userSpecifiers = moduleImport.namedSpecifiers.filter(
@@ -514,12 +653,14 @@ const readExistingConfig = (
 
     if (isGenerated) {
       for (const name of statement.declaredNames) {
-        ownedIdentifiers.add(name);
+        selectionIdentifiers.add(name);
       }
     } else {
       extras.statements.push(statement.text);
     }
   }
+
+  const coreIdentifier = presetIdentifier(extras, corePath);
 
   for (const entry of config.entries) {
     if (entry.key === "extends") {
@@ -529,24 +670,20 @@ const readExistingConfig = (
         return null;
       }
 
-      for (const element of elements) {
-        const legacyPreset =
-          element.identifier === null ? toUltracitePreset(element.text) : null;
+      const read = readExtends(
+        elements,
+        presetsByIdentifier,
+        selectionIdentifiers
+      );
 
-        if (legacyPreset) {
-          presets.push(legacyPreset);
-        } else if (
-          !(element.identifier && ownedIdentifiers.has(element.identifier))
-        ) {
-          extras.extendsEntries.push(toRendered(element));
-        }
-      }
+      presets.push(...read.presets);
+      extras.extendsEntries = read.userExtends;
     } else if (entry.key === "env") {
-      if (compact(entry.valueText) !== "core.env") {
+      if (compact(entry.valueText) !== `${coreIdentifier}.env`) {
         extras.overrides.env = { entry: toRendered(entry) };
       }
     } else if (entry.key === "ignorePatterns") {
-      if (compact(entry.valueText) !== "core.ignorePatterns") {
+      if (compact(entry.valueText) !== `${coreIdentifier}.ignorePatterns`) {
         extras.overrides.ignorePatterns = { entry: toRendered(entry) };
       }
     } else if (entry.key === "jsPlugins") {
@@ -716,7 +853,14 @@ const readOxlintRc = async (): Promise<OxlintRc> => {
 const readExistingOxlintConfig = async (
   configPath: string | null
 ): Promise<
-  | { existing: ExistingConfig; jsPlugins: OxlintJsPlugin[]; kind: "config" }
+  | {
+      existing: ExistingConfig;
+      jsPlugins: OxlintJsPlugin[];
+      kind: "config";
+      // The config couldn't be restructured, so it is rewritten from scratch.
+      replaced: boolean;
+    }
+  | { kind: "namespace"; local: string; source: string }
   | { kind: "unparseable" }
 > => {
   if (!configPath) {
@@ -724,6 +868,7 @@ const readExistingOxlintConfig = async (
       existing: { extras: emptyExtras(), presets: [] },
       jsPlugins: [],
       kind: "config",
+      replaced: false,
     };
   }
 
@@ -732,6 +877,26 @@ const readExistingOxlintConfig = async (
 
   if (parsed.kind === "unparseable") {
     return { kind: "unparseable" };
+  }
+
+  // `import * as core` reaches the preset as `core.default`, which the
+  // regenerated default import would leave undefined.
+  const namespaceImport =
+    parsed.kind === "module"
+      ? parsed.module.imports.find(
+          (moduleImport) =>
+            !moduleImport.typeOnly &&
+            moduleImport.namespaceLocal !== null &&
+            toUltracitePreset(moduleImport.source) !== null
+        )
+      : undefined;
+
+  if (namespaceImport?.namespaceLocal) {
+    return {
+      kind: "namespace",
+      local: namespaceImport.namespaceLocal,
+      source: namespaceImport.source,
+    };
   }
 
   const existing =
@@ -752,6 +917,7 @@ const readExistingOxlintConfig = async (
     },
     jsPlugins: parseExistingJsPlugins(contents),
     kind: "config",
+    replaced: !existing,
   };
 };
 
@@ -923,11 +1089,20 @@ export const oxlint = {
       return;
     }
 
+    if (current.kind === "namespace") {
+      const { local, source } = current;
+
+      log.warn(
+        `${fileName(paths.existing ?? paths.target)} imports ${source} with \`import * as ${local}\`, which init can't carry over, so it was left unchanged. Change it to \`import ${local} from "${source}"\`, write \`${local}\` where it says \`${local}.default\`, and re-run \`ultracite init\`.`
+      );
+
+      return;
+    }
+
     const { existing } = current;
     const unmigrated = rc ? mergeRcConfig(rc.config, existing) : [];
-    // generateConfigContent puts core first and anti-slop last, whatever
-    // order the presets were imported in.
-    const newExtends = [...new Set(existing.presets)];
+    // generateConfigContent adds core and puts the presets in presetOrder.
+    const newExtends = [...existing.presets];
 
     // Helper to check if a config is already present
     const hasConfig = (name: string) =>
@@ -978,6 +1153,28 @@ export const oxlint = {
         addTypeAware
       )
     );
+
+    // Say so when the presets the config already extended moved, since that
+    // changes which preset's setting wins for a rule.
+    const resolvedPresets = resolvePresets(newExtends, jsPlugins);
+
+    const previousOrder = [...new Set(existing.presets)].filter((preset) =>
+      resolvedPresets.includes(preset)
+    );
+
+    const newOrder = resolvedPresets.filter((preset) =>
+      previousOrder.includes(preset)
+    );
+
+    if (!current.replaced && newOrder.join(",") !== previousOrder.join(",")) {
+      const identifiers = resolvedPresets.map((preset) =>
+        presetIdentifier(existing.extras, preset)
+      );
+
+      log.info(
+        `Reordered the Ultracite presets in the \`extends\` of ${configFile} to [${identifiers.join(", ")}], the order they're built to override each other in. To change a rule a preset sets, set it under \`rules\` rather than moving the preset.`
+      );
+    }
 
     if (
       opts?.typeAware &&
