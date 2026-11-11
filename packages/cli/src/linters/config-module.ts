@@ -224,6 +224,7 @@ const patternNames = (node: ASTNode | null | undefined): string[] => {
     case "Identifier": {
       return [node.name];
     }
+
     case "ObjectPattern": {
       return node.properties.flatMap((property) =>
         patternNames(
@@ -231,18 +232,23 @@ const patternNames = (node: ASTNode | null | undefined): string[] => {
         )
       );
     }
+
     case "ArrayPattern": {
       return node.elements.flatMap(patternNames);
     }
+
     case "AssignmentPattern": {
       return patternNames(node.left);
     }
+
     case "RestElement": {
       return patternNames(node.argument);
     }
+
     case "TSParameterProperty": {
       return patternNames(node.parameter);
     }
+
     default: {
       return [];
     }
@@ -289,6 +295,7 @@ const scopeNames = (node: ASTNode): string[] => {
     case "ObjectMethod": {
       return node.params.flatMap(patternNames);
     }
+
     case "FunctionDeclaration":
     case "FunctionExpression": {
       return [
@@ -296,30 +303,37 @@ const scopeNames = (node: ASTNode): string[] => {
         ...(node.id ? [node.id.name] : []),
       ];
     }
+
     case "ClassDeclaration":
     case "ClassExpression": {
       return node.id ? [node.id.name] : [];
     }
+
     case "CatchClause": {
       return patternNames(node.param);
     }
+
     case "BlockStatement":
     case "Program":
     case "StaticBlock": {
       return declaredIn(node.body);
     }
+
     case "SwitchStatement": {
       return declaredIn(
         node.cases.flatMap((switchCase) => switchCase.consequent)
       );
     }
+
     case "ForStatement": {
       return node.init ? declaredIn([node.init]) : [];
     }
+
     case "ForInStatement":
     case "ForOfStatement": {
       return declaredIn([node.left]);
     }
+
     default: {
       return [];
     }
@@ -345,6 +359,7 @@ const patternParts = (node: ASTNode): PatternParts | null => {
     case "Identifier": {
       return { patterns: [], reads: annotation };
     }
+
     case "ObjectPattern": {
       return {
         patterns: node.properties.map((property) =>
@@ -360,6 +375,7 @@ const patternParts = (node: ASTNode): PatternParts | null => {
         ],
       };
     }
+
     case "ArrayPattern": {
       return {
         patterns: node.elements.flatMap((element) =>
@@ -368,15 +384,19 @@ const patternParts = (node: ASTNode): PatternParts | null => {
         reads: annotation,
       };
     }
+
     case "AssignmentPattern": {
       return { patterns: [node.left], reads: [node.right, ...annotation] };
     }
+
     case "RestElement": {
       return { patterns: [node.argument], reads: annotation };
     }
+
     case "TSParameterProperty": {
       return { patterns: [node.parameter], reads: [] };
     }
+
     default: {
       return null;
     }
