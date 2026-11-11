@@ -31,6 +31,11 @@ export interface ModuleImport {
 export interface ModuleStatement {
   declaredNames: string[];
   initCallee: string | null;
+  // The names its code reads (see readNames).
+  names: string[];
+  // The names each const it declares takes its value from (see
+  // valueSources).
+  sources: Map<string, string[]>;
   text: string;
 }
 
@@ -38,6 +43,10 @@ export interface ConfigEntry {
   comment: string | null;
   identifier: string | null;
   key: string | null;
+  // The names its code reads (see readNames).
+  names: string[];
+  // The names it takes its value from (see valueSources).
+  sources: string[];
   spreadOf: string | null;
   text: string;
   value: ASTNode | null;
@@ -144,6 +153,329 @@ const propertyKey = (node: ASTNode): string | null => {
   return node.key.type === "StringLiteral" ? node.key.value : null;
 };
 
+// The children of a node that name something rather than read a name: a
+// property (`config.name`, `{ name: value }`, unless it's computed), a
+// label, or a declaration's own name.
+const nameKeys: Partial<Record<ASTNode["type"], readonly string[]>> = {
+  BreakStatement: ["label"],
+  ClassAccessorProperty: ["key"],
+  ClassDeclaration: ["id"],
+  ClassExpression: ["id"],
+  ClassMethod: ["key"],
+  ClassPrivateMethod: ["key"],
+  ClassPrivateProperty: ["key"],
+  ClassProperty: ["key"],
+  ContinueStatement: ["label"],
+  ExportSpecifier: ["exported"],
+  FunctionDeclaration: ["id"],
+  FunctionExpression: ["id"],
+  LabeledStatement: ["label"],
+  MemberExpression: ["property"],
+  MetaProperty: ["meta", "property"],
+  ObjectMethod: ["key"],
+  ObjectProperty: ["key"],
+  OptionalMemberExpression: ["property"],
+  PrivateName: ["id"],
+  TSDeclareFunction: ["id"],
+  TSDeclareMethod: ["key"],
+  TSEnumDeclaration: ["id"],
+  TSEnumMember: ["id"],
+  TSInterfaceDeclaration: ["id"],
+  TSMethodSignature: ["key"],
+  TSModuleDeclaration: ["id"],
+  TSPropertySignature: ["key"],
+  TSQualifiedName: ["right"],
+  TSTypeAliasDeclaration: ["id"],
+};
+
+// The children of a node that declare names: parameters, a const's
+// pattern, a caught error.
+const bindingKeys: Partial<Record<ASTNode["type"], readonly string[]>> = {
+  ArrowFunctionExpression: ["params"],
+  CatchClause: ["param"],
+  ClassMethod: ["params"],
+  ClassPrivateMethod: ["params"],
+  FunctionDeclaration: ["params"],
+  FunctionExpression: ["params"],
+  ObjectMethod: ["params"],
+  TSDeclareFunction: ["params"],
+  TSDeclareMethod: ["params"],
+  VariableDeclarator: ["id"],
+};
+
+// Comments and source positions hang off nodes too, but aren't code.
+const nonCodeKeys = new Set([
+  "comments",
+  "innerComments",
+  "leadingComments",
+  "loc",
+  "trailingComments",
+]);
+
+const isNode = (value: unknown): value is ASTNode =>
+  value !== null &&
+  typeof value === "object" &&
+  "type" in value &&
+  typeof value.type === "string";
+
+// The names a declaration's pattern binds: `a`, `{ a, b: [c] }`, `...rest`.
+const patternNames = (node: ASTNode | null | undefined): string[] => {
+  switch (node?.type) {
+    case "Identifier": {
+      return [node.name];
+    }
+    case "ObjectPattern": {
+      return node.properties.flatMap((property) =>
+        patternNames(
+          property.type === "RestElement" ? property.argument : property.value
+        )
+      );
+    }
+    case "ArrayPattern": {
+      return node.elements.flatMap(patternNames);
+    }
+    case "AssignmentPattern": {
+      return patternNames(node.left);
+    }
+    case "RestElement": {
+      return patternNames(node.argument);
+    }
+    case "TSParameterProperty": {
+      return patternNames(node.parameter);
+    }
+    default: {
+      return [];
+    }
+  }
+};
+
+// The names a list of statements declares for the block they're in.
+const declaredIn = (statements: ASTNode[]): string[] =>
+  statements.flatMap((statement) => {
+    const declaration =
+      statement.type === "ExportNamedDeclaration" ||
+      statement.type === "ExportDefaultDeclaration"
+        ? statement.declaration
+        : statement;
+
+    if (declaration?.type === "VariableDeclaration") {
+      return declaration.declarations.flatMap((declarator) =>
+        patternNames(declarator.id)
+      );
+    }
+
+    if (
+      (declaration?.type === "FunctionDeclaration" ||
+        declaration?.type === "ClassDeclaration" ||
+        declaration?.type === "TSEnumDeclaration") &&
+      declaration.id
+    ) {
+      return [declaration.id.name];
+    }
+
+    return [];
+  });
+
+/**
+ * The names a node declares for the code inside it. A `var` counts only in
+ * the block it's written in, so a name is never taken for a local one that
+ * isn't; at worst one is taken for an outer name.
+ */
+const scopeNames = (node: ASTNode): string[] => {
+  switch (node.type) {
+    case "ArrowFunctionExpression":
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+    case "ObjectMethod": {
+      return node.params.flatMap(patternNames);
+    }
+    case "FunctionDeclaration":
+    case "FunctionExpression": {
+      return [
+        ...node.params.flatMap(patternNames),
+        ...(node.id ? [node.id.name] : []),
+      ];
+    }
+    case "ClassDeclaration":
+    case "ClassExpression": {
+      return node.id ? [node.id.name] : [];
+    }
+    case "CatchClause": {
+      return patternNames(node.param);
+    }
+    case "BlockStatement":
+    case "Program":
+    case "StaticBlock": {
+      return declaredIn(node.body);
+    }
+    case "SwitchStatement": {
+      return declaredIn(
+        node.cases.flatMap((switchCase) => switchCase.consequent)
+      );
+    }
+    case "ForStatement": {
+      return node.init ? declaredIn([node.init]) : [];
+    }
+    case "ForInStatement":
+    case "ForOfStatement": {
+      return declaredIn([node.left]);
+    }
+    default: {
+      return [];
+    }
+  }
+};
+
+interface PatternParts {
+  // The patterns nested in it, which bind names too.
+  patterns: ASTNode[];
+  // What it reads: defaults, computed keys and types.
+  reads: ASTNode[];
+}
+
+// The parts of a declaration's pattern, or null for a node that isn't one,
+// such as `a.b` in `for (a.b of list)`.
+const patternParts = (node: ASTNode): PatternParts | null => {
+  const annotation =
+    "typeAnnotation" in node && isNode(node.typeAnnotation)
+      ? [node.typeAnnotation]
+      : [];
+
+  switch (node.type) {
+    case "Identifier": {
+      return { patterns: [], reads: annotation };
+    }
+    case "ObjectPattern": {
+      return {
+        patterns: node.properties.map((property) =>
+          property.type === "RestElement" ? property.argument : property.value
+        ),
+        reads: [
+          ...node.properties.flatMap((property) =>
+            property.type === "ObjectProperty" && property.computed
+              ? [property.key]
+              : []
+          ),
+          ...annotation,
+        ],
+      };
+    }
+    case "ArrayPattern": {
+      return {
+        patterns: node.elements.flatMap((element) =>
+          element ? [element] : []
+        ),
+        reads: annotation,
+      };
+    }
+    case "AssignmentPattern": {
+      return { patterns: [node.left], reads: [node.right, ...annotation] };
+    }
+    case "RestElement": {
+      return { patterns: [node.argument], reads: annotation };
+    }
+    case "TSParameterProperty": {
+      return { patterns: [node.parameter], reads: [] };
+    }
+    default: {
+      return null;
+    }
+  }
+};
+
+/**
+ * The names a node's code reads from outside it: not property keys or the
+ * properties it reads off an object (`{ jsPlugins: [...fullPlugins.rules] }`
+ * reads `fullPlugins` alone), not the names it declares itself (a const, a
+ * parameter, and the uses of those), and not names in comments or strings.
+ */
+const readNames = (root: ASTNode): string[] => {
+  const names = new Set<string>();
+
+  const visit = (
+    node: ASTNode,
+    outer: ReadonlySet<string>,
+    // A declaration's pattern, which binds names rather than reading them.
+    binding = false
+  ): void => {
+    const parts = binding ? patternParts(node) : null;
+
+    if (parts) {
+      for (const pattern of parts.patterns) {
+        visit(pattern, outer, true);
+      }
+
+      for (const read of parts.reads) {
+        visit(read, outer);
+      }
+
+      return;
+    }
+
+    const declared = scopeNames(node);
+
+    const local =
+      declared.length > 0 ? new Set([...outer, ...declared]) : outer;
+
+    if (node.type === "Identifier" && !local.has(node.name)) {
+      names.add(node.name);
+    }
+
+    const skipped =
+      "computed" in node && node.computed ? [] : (nameKeys[node.type] ?? []);
+
+    const bindings = bindingKeys[node.type] ?? [];
+
+    for (const [key, value] of Object.entries(node)) {
+      if (nonCodeKeys.has(key) || skipped.includes(key)) {
+        continue;
+      }
+
+      for (const child of Array.isArray(value) ? value : [value]) {
+        if (isNode(child)) {
+          visit(child, local, bindings.includes(key));
+        }
+      }
+    }
+  };
+
+  visit(root, new Set());
+
+  return [...names];
+};
+
+/**
+ * The names whose whole value an expression takes: a name (`plugins`), a
+ * namespace import's default export (`jp.default`), or what an object
+ * literal spreads (`{ ...jsPlugins, rules }`). Reading a property off one,
+ * as `{ rules: jsPlugins.rules }` does, doesn't take its value.
+ */
+const valueSources = (node: ASTNode | null | undefined): string[] => {
+  const unwrapped = node ? unwrapExpression(node) : null;
+
+  if (unwrapped?.type === "Identifier") {
+    return [unwrapped.name];
+  }
+
+  if (unwrapped?.type === "ObjectExpression") {
+    return unwrapped.properties.flatMap((property) =>
+      property.type === "SpreadElement" ? valueSources(property.argument) : []
+    );
+  }
+
+  if (
+    unwrapped?.type === "MemberExpression" &&
+    !unwrapped.computed &&
+    unwrapped.object.type === "Identifier" &&
+    unwrapped.property.type === "Identifier" &&
+    unwrapped.property.name === "default"
+  ) {
+    return [`${unwrapped.object.name}.default`];
+  }
+
+  return [];
+};
+
 const readEntry = (
   source: string,
   node: ASTNode,
@@ -157,6 +489,8 @@ const readEntry = (
     comment: sameLineComment(source, node, next),
     identifier: unwrapped.type === "Identifier" ? unwrapped.name : null,
     key: propertyKey(node),
+    names: readNames(node),
+    sources: valueSources(node),
     spreadOf:
       node.type === "SpreadElement" && node.argument.type === "Identifier"
         ? node.argument.name
@@ -338,6 +672,14 @@ const readStatement = (
       init.callee.type === "Identifier"
         ? init.callee.name
         : null,
+    names: readNames(node),
+    sources: new Map(
+      declarations.flatMap((declarator): [string, string[]][] =>
+        declarator.id.type === "Identifier"
+          ? [[declarator.id.name, valueSources(declarator.init)]]
+          : []
+      )
+    ),
     text: statementText(source, node, afterLine, next),
   };
 };

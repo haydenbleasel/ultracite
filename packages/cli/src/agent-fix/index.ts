@@ -8,7 +8,11 @@ import type { FixAgent } from "../linter-args";
 import { LinterExitError } from "../run-command";
 import type { Linter } from "../utils";
 import { agentAdapters, assertAgentAvailable } from "./agents";
-import { partitionByRemaining, recordSourceLines } from "./diff";
+import {
+  partitionByRemaining,
+  recordSourceLines,
+  releaseSourceLines,
+} from "./diff";
 import { getLinterAdapter } from "./linters";
 import {
   buildPrompt,
@@ -392,8 +396,6 @@ export const runAgentFix = async ({
     return;
   }
 
-  recordSourceLines(diagnostics);
-
   const groups = groupByFile(diagnostics);
   autofixSpinner.stop(
     `Autofix complete. ${diagnostics.length} issue${diagnostics.length === 1 ? "" : "s"} in ${groups.length} file${groups.length === 1 ? "" : "s"} left for ${agentAdapter.label}.`
@@ -421,10 +423,16 @@ export const runAgentFix = async ({
       return;
     }
 
+    // A file is read for matching only while it's being fixed, so the run
+    // holds one file's lines at a time. Each agent is told to edit only its
+    // own file, so this one is still as the first lint read it.
+    recordSourceLines(group.issues);
+
     const result = first
       ? await fixFileGroup(context, group)
       : await refreshAndFixFileGroup(context, group);
 
+    releaseSourceLines(group.file);
     totals.fixed += result.fixed;
     totals.remaining += result.remaining;
     await fixQueue(rest, false);

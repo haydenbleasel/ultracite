@@ -246,7 +246,14 @@ interface OxlintExtras {
   // The names the project's own imports and declarations bind, which a
   // generated import must not take.
   reservedIdentifiers: Set<string>;
+  // Presets an older release's generated selection consts spread
+  // (`...jsPlugins`), so a regenerated selection replaces them the way it
+  // replaces an extend.
+  selectionPresets: Set<string>;
   statements: string[];
+  // The names the code carried over reads, such as a preset's in
+  // `...fullPlugins.rules`. Property keys, comments and strings don't count.
+  usedNames: Set<string>;
 }
 
 const emptyExtras = (): OxlintExtras => ({
@@ -258,7 +265,9 @@ const emptyExtras = (): OxlintExtras => ({
   presetIdentifiers: new Map(),
   properties: [],
   reservedIdentifiers: new Set(),
+  selectionPresets: new Set(),
   statements: [],
+  usedNames: new Set(),
 });
 
 // The names the generated config binds besides the presets.
@@ -293,35 +302,6 @@ interface PresetBindings {
   presets: string[];
 }
 
-// A name code reads, as opposed to a property it reads off one
-// (`config.name`); a spread (`...name`) still counts.
-const IDENTIFIER_RE = /(?<![\w$]|[^.]\.)[A-Za-z_$][\w$]*/gu;
-
-/**
- * The names the code carried over from an existing config uses, such as a
- * preset's in `...fullPlugins.rules`. Comments and strings are read as code
- * too, which at worst keeps an import that's no longer needed.
- */
-const carriedOverNames = (extras: OxlintExtras): Set<string> => {
-  const { after, leading, trailing } = extras.extendsEntries;
-
-  const entries = [
-    ...extras.properties,
-    ...leading,
-    ...[...after.values()].flat(),
-    ...trailing,
-    ...Object.values(extras.overrides).flatMap((override) =>
-      override && "entry" in override ? [override.entry] : []
-    ),
-  ];
-
-  return new Set(
-    [...extras.statements, ...entries.map((entry) => entry.text)].flatMap(
-      (text) => text.match(IDENTIFIER_RE) ?? []
-    )
-  );
-};
-
 /**
  * The presets a config extends and the names it binds them to: the
  * project's own name for a preset it already imports, otherwise the usual
@@ -340,16 +320,18 @@ const bindPresets = (
   const isExtendedImport = (preset: string) =>
     presets.includes(preset) && !(hasSelection && preset === jsPluginsPath);
 
-  // A full js-plugins preset the config extended is replaced by a selection,
-  // so it keeps its import only when the project's own code still uses it
-  // (or it was never extended).
-  const usedNames = carriedOverNames(extras);
+  // A full js-plugins preset the config extended, itself or through an
+  // older release's selection consts, is replaced by a selection, so it
+  // keeps its import only when the project's own code still uses it (or it
+  // was never extended).
+  const wasExtended = (preset: string) =>
+    extendsList.includes(preset) || extras.selectionPresets.has(preset);
 
   const importedOnly = new Map(
     [...extras.presetIdentifiers].filter(
       ([preset, identifier]) =>
         !isExtendedImport(preset) &&
-        (!extendsList.includes(preset) || usedNames.has(identifier))
+        (!wasExtended(preset) || extras.usedNames.has(identifier))
     )
   );
 
@@ -440,7 +422,6 @@ const generateConfigContent = (
 
   const hasJsPluginSettings = needsJsPluginSettings(resolvedExtends, jsPlugins);
   const helpers = generatedHelpers(resolvedExtends, jsPlugins);
-  const usedNames = carriedOverNames(extras);
 
   // The js-plugins helpers the generated config uses, plus any the
   // project's own carried-over code still uses from the preset (say,
@@ -448,7 +429,7 @@ const generateConfigContent = (
   const jsPluginsNamed = jsPluginsHelpers.filter(
     (helper) =>
       helpers.includes(helper) ||
-      (usedNames.has(helper) && !extras.reservedIdentifiers.has(helper))
+      (extras.usedNames.has(helper) && !extras.reservedIdentifiers.has(helper))
   );
 
   // The full preset's default import when it's extended, or the one the
@@ -668,11 +649,19 @@ interface ExistingConfig {
   order: string[];
   // The Ultracite presets the config extends, in the order it extends them.
   presets: string[];
+  // The ones it extends through a name of its own instead: a const that is
+  // or spreads one (`{ ...jsPlugins, rules }`), or `jp.default` for
+  // `import * as jp`. Reading a property off one (`jsPlugins.rules`) doesn't
+  // count. init carries those entries over as written; doctor and workspace
+  // configs count them.
+  reached: string[];
 }
 
 interface ReadExtends {
   order: string[];
   presets: string[];
+  // The project's own entries.
+  own: ConfigEntry[];
   userExtends: UserExtends;
 }
 
@@ -692,6 +681,7 @@ const readExtends = (
   };
 
   const order: string[] = [];
+  const own: ConfigEntry[] = [];
   let anchor: string | null = null;
   let pending: RenderedEntry[] = [];
 
@@ -730,12 +720,13 @@ const readExtends = (
       settle(jsPluginsPath);
     } else {
       pending.push(toRendered(element));
+      own.push(element);
     }
   }
 
   userExtends.trailing.push(...pending);
 
-  return { order, presets, userExtends };
+  return { order, own, presets, userExtends };
 };
 
 // Split an existing oxlint.config.ts into the Ultracite presets it extends
@@ -752,9 +743,16 @@ const readExistingConfig = (
   const presets: string[] = [];
   let order: string[] = [];
   const presetsByIdentifier = new Map<string, string>();
+  // The preset each import binds, by how code takes the whole preset:
+  // `core` for a default import, `jp.default` for `import * as jp`.
+  const presetBindings = new Map<string, string>();
   // The consts a generated js-plugins selection is declared as, found
   // below; a binding of the project's own is never one, whatever its name.
   const selectionIdentifiers = new Set<string>();
+  // What each const of the project's own takes its value from.
+  const ownConsts = new Map<string, string[]>();
+  // What the project's own extends entries take their values from.
+  let extendsSources: string[] = [];
   // Whether `selectJsPlugins` is the js-plugins preset's helper; one the
   // project imports from its own module declares the project's own consts.
   let importsSelectJsPlugins = false;
@@ -765,6 +763,15 @@ const readExistingConfig = (
         extras.reservedIdentifiers.add(name);
       }
     }
+  };
+
+  // Carries an entry over as written, noting the names it reads.
+  const carry = (entry: ConfigEntry): RenderedEntry => {
+    for (const name of entry.names) {
+      extras.usedNames.add(name);
+    }
+
+    return toRendered(entry);
   };
 
   for (const moduleImport of config.imports) {
@@ -793,6 +800,14 @@ const readExistingConfig = (
       );
       reserve(...oxlintSpecifiers.map((specifier) => specifier.local));
       continue;
+    }
+
+    if (moduleImport.defaultLocal && preset) {
+      presetBindings.set(moduleImport.defaultLocal, preset);
+    }
+
+    if (moduleImport.namespaceLocal && preset) {
+      presetBindings.set(`${moduleImport.namespaceLocal}.default`, preset);
     }
 
     // A second default import of a preset already imported under another
@@ -863,9 +878,26 @@ const readExistingConfig = (
       for (const name of statement.declaredNames) {
         selectionIdentifiers.add(name);
       }
+
+      // The full preset an older release's selection spread.
+      for (const name of statement.names) {
+        const preset = presetsByIdentifier.get(name);
+
+        if (preset) {
+          extras.selectionPresets.add(preset);
+        }
+      }
     } else {
       extras.statements.push(statement.text);
       reserve(...statement.declaredNames);
+
+      for (const name of statement.names) {
+        extras.usedNames.add(name);
+      }
+
+      for (const [name, sources] of statement.sources) {
+        ownConsts.set(name, sources);
+      }
     }
   }
 
@@ -894,30 +926,50 @@ const readExistingConfig = (
       presets.push(...read.presets);
       ({ order } = read);
       extras.extendsEntries = read.userExtends;
+      extendsSources = read.own.flatMap((element) => element.sources);
+
+      for (const name of read.own.flatMap((element) => element.names)) {
+        extras.usedNames.add(name);
+      }
     } else if (entry.key === "env") {
       if (!isGeneratedCoreValue(entry, "env")) {
-        extras.overrides.env = { entry: toRendered(entry) };
+        extras.overrides.env = { entry: carry(entry) };
       }
     } else if (entry.key === "ignorePatterns") {
       if (!isGeneratedCoreValue(entry, "ignorePatterns")) {
-        extras.overrides.ignorePatterns = { entry: toRendered(entry) };
+        extras.overrides.ignorePatterns = { entry: carry(entry) };
       }
     } else if (entry.key === "jsPlugins") {
       if (!GENERATED_JS_PLUGINS_RE.test(compact(entry.valueText))) {
-        extras.overrides.jsPlugins = { entry: toRendered(entry) };
+        extras.overrides.jsPlugins = { entry: carry(entry) };
       }
     } else if (entry.key === "settings") {
       if (identifierName(entry.value) !== "jsPluginSettings") {
-        extras.overrides.settings = { entry: toRendered(entry) };
+        extras.overrides.settings = { entry: carry(entry) };
       }
     } else {
-      extras.properties.push(toRendered(entry));
+      extras.properties.push(carry(entry));
     }
   }
 
   extras.danglingComments.push(...config.danglingComments);
 
-  return { extras, order, presets };
+  // A preset an entry takes whole, itself or through the project's consts.
+  const seen = new Set<string>();
+
+  const reach = (names: string[]): string[] =>
+    names.flatMap((name) => {
+      if (seen.has(name)) {
+        return [];
+      }
+
+      seen.add(name);
+      const preset = presetBindings.get(name);
+
+      return preset ? [preset] : reach(ownConsts.get(name) ?? []);
+    });
+
+  return { extras, order, presets, reached: reach(extendsSources) };
 };
 
 // The pre-parser way of finding presets, for a file init can't restructure:
@@ -947,7 +999,8 @@ interface LoadedPresets {
 }
 
 // What a config extends, read the way init reads it: from its `extends` when
-// init can read the file (otherwise from its imports), and with a
+// init can read the file (otherwise from its imports), including the presets
+// its own entries extend through a const or an `import * as`, and with a
 // `selectJsPlugins` of the project's own not counted as a selection.
 const readLoadedPresets = (contents: string): LoadedPresets => {
   const parsed = parseConfigModule(contents);
@@ -962,7 +1015,9 @@ const readLoadedPresets = (contents: string): LoadedPresets => {
       contents,
       existing?.extras.reservedIdentifiers.has("selectJsPlugins")
     ),
-    presets: existing?.presets ?? findPresetReferences(contents),
+    presets: existing
+      ? [...existing.presets, ...existing.reached]
+      : findPresetReferences(contents),
   };
 };
 
@@ -1148,7 +1203,7 @@ const readExistingOxlintConfig = async (
 > => {
   if (!configPath) {
     return {
-      existing: { extras: emptyExtras(), order: [], presets: [] },
+      existing: { extras: emptyExtras(), order: [], presets: [], reached: [] },
       jsPlugins: [],
       kind: "config",
     };
@@ -1198,6 +1253,7 @@ const readExistingOxlintConfig = async (
       extras: emptyExtras(),
       order: [],
       presets: findPresetReferences(contents),
+      reached: [],
     },
     jsPlugins: parseExistingJsPlugins(
       contents,
