@@ -129,7 +129,7 @@ Then we converted every reported declaration, on copies. 10,094 became arrows. 4
 - **19 references in 14 files throw at import.** The example below is one.
 - **41 references in 25 files throw when their function runs.** These are nested declarations called above their line, like Hono's `dispatch`.
 - **TypeScript reports 340 new errors** in the eight corpus repos. 82 are TS2775, where an assertion function no longer narrows, and others come from `never` helpers that no longer end a branch. Moving code can't fix those. They need a function type on the variable.
-- **787 files need reordering.** Where a valid order exists, reaching it moves 2,234 statements, 47,828 lines in all. 111 files have none: in 47 places, functions call each other in a loop, and in 72 they depend on code with side effects that can't move.
+- **783 files need reordering.** Where a valid order exists, reaching it moves 2,275 statements, 52,792 lines in all. 108 files have none: in 45 places, functions call each other in a loop, and in 71 they depend on code with side effects that can't move.
 - **2 of 31 runtime import cycles** are safe only because a hoisted declaration is called while the module loads. Both are in Next.js, and both become load-order hazards.
 
 Next.js's `links.ts` creates its shared observer while the module loads, with a handler defined 128 lines further down:

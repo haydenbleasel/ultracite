@@ -317,7 +317,7 @@ const MODELS = Object.keys(inModel);
 
 // ── main analysis ──────────────────────────────────────────────────────
 // `usageLimit`: how many top-level and indirect reads each runtime edge lists (func-style-cycles.cjs
-// counts them all).
+// counts them all). Risk is decided from every read either way.
 const analyse = (name, { usageLimit = 3 } = {}) => {
   const { repo, files: measuredRel } = ic.collect(name);
   const root = resolve(repo.root);
@@ -1123,6 +1123,7 @@ const analyse = (name, { usageLimit = 3 } = {}) => {
     }
     return u;
   };
+  const fullUsage = new Map(); // edge row -> its usage, uncut
   const edgeRow = (from, s) => {
     const row = {
       from: rel(root, from),
@@ -1136,6 +1137,7 @@ const analyse = (name, { usageLimit = 3 } = {}) => {
     };
     if (inModel.runtime(s)) {
       const u = usage(from, s);
+      fullUsage.set(row, u);
       row.usage = {
         indirect: u.indirect.slice(0, usageLimit),
         late: u.late,
@@ -1149,7 +1151,9 @@ const analyse = (name, { usageLimit = 3 } = {}) => {
   };
   const riskyUse = (u) =>
     u.topLevel.some((t) => t.risky) || u.indirect.some((t) => t.risky);
-  const hasTopLevel = (row) => Boolean(row.usage && riskyUse(row.usage));
+  // decided from every read on the edge, not the first `usageLimit` the row lists
+  const hasTopLevel = (row) =>
+    fullUsage.has(row) && riskyUse(fullUsage.get(row));
   const touchesMeasured = (comp) => comp.some((f) => measured.has(f));
 
   // Runtime cycles: one row per runtime component.
@@ -1174,7 +1178,7 @@ const analyse = (name, { usageLimit = 3 } = {}) => {
     const risk = topLevel ? "top-level-use" : "late-use";
     cycles.push({
       barrelFiles: comp.filter((f) => isBarrel(f)).map((f) => rel(root, f)),
-      directTopLevel: edges.some((e) => e.usage?.topLevel.length > 0),
+      directTopLevel: edges.some((e) => fullUsage.get(e)?.topLevel.length > 0),
       edges,
       files: comp.map((f) => rel(root, f)),
       id: `${name}-r${String(cycles.length + 1).padStart(2, "0")}`,

@@ -347,18 +347,29 @@ const analyse = (repos) => {
       continue;
     }
     const rows = new Map(trackRows(name).map((f) => [f.id, f]));
-    // own lines: the function's lines minus those of tracked functions nested in it at any depth
-    // (through callbacks too), since `track` gives their lines' changes to them; only the
-    // outermost of those, so nothing is subtracted twice
+    // own lines: the lines `track` attributes to the function, those whose innermost tracked
+    // function it is (the shortest line range holding the line, the first listed on a tie; see
+    // length-history.cjs `innermost`). Nested functions at any depth, through callbacks too, and
+    // functions sharing its lines take theirs, and each line counts once.
+    const ownLines = new Map();
     const byFile = new Map();
     for (const f of rows.values()) {
       (byFile.get(f.file) ?? byFile.set(f.file, []).get(f.file)).push(f);
     }
-    const inside = (g, f) =>
-      g !== f &&
-      g.stmtLine >= f.stmtLine &&
-      g.stmtEndLine <= f.stmtEndLine &&
-      g.depth > f.depth;
+    for (const fns of byFile.values()) {
+      const owner = new Map(); // line -> function
+      for (const f of fns) {
+        for (let l = f.stmtLine; l <= f.stmtEndLine; l++) {
+          const o = owner.get(l);
+          if (!o || f.stmtEndLine - f.stmtLine < o.stmtEndLine - o.stmtLine) {
+            owner.set(l, f);
+          }
+        }
+      }
+      for (const f of owner.values()) {
+        ownLines.set(f, (ownLines.get(f) ?? 0) + 1);
+      }
+    }
     for (const h of lib.readJsonl(join(OUT, `${name}.jsonl`))) {
       const f = rows.get(h.id);
       if (!f) {
@@ -369,13 +380,6 @@ const analyse = (repos) => {
       if (days < lh.MIN_EXPOSURE_DAYS) {
         continue;
       }
-      const lines = f.stmtEndLine - f.stmtLine + 1;
-      const descendants = (byFile.get(f.file) ?? []).filter((g) =>
-        inside(g, f)
-      );
-      const nested = descendants
-        .filter((g) => !descendants.some((d) => inside(g, d)))
-        .reduce((s, g) => s + (g.stmtEndLine - g.stmtLine + 1), 0);
       units.push({
         component: f.component,
         declaration: f.type === "FunctionDeclaration" ? 1 : 0,
@@ -384,7 +388,7 @@ const analyse = (repos) => {
         fixed: h.fixes > 0 ? 1 : 0,
         fixes: h.fixes,
         moduleLevel: f.scope === "module" ? 1 : 0,
-        ownLines: Math.max(1, lines - nested),
+        ownLines: Math.max(1, ownLines.get(f) ?? 0),
         repo: name,
         touched: h.touches > 0 ? 1 : 0,
         touches: h.touches,

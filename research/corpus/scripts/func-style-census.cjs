@@ -111,6 +111,8 @@ const measureRepo = (name) => {
       file: rel,
       form: fileForm(r.moduleFns),
       lines: r.lines,
+      ...(r.liveExports ? { liveExports: r.liveExports } : {}),
+      ...(r.reexports ? { reexports: r.reexports } : {}),
       moduleDeclarations: r.moduleFns.filter((m) => m.kind === "declaration")
         .length,
       moduleExpressions: r.moduleFns.filter((m) => m.kind === "expression")

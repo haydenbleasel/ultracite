@@ -137,11 +137,11 @@ const findDeclarations = (ast, keys) => {
 };
 // The text edits that turn one declaration into a variable-bound function. Two edits: the head
 // (`async function* name<T>(…): R ` up to the body) and a `;` after the body, so nested
-// declarations' edits never overlap. The head edit's `keep` says where the parameters, copied as
-// written, land in its text (for mapping positions with mapOffset).
+// declarations' edits never overlap. The head edit's `keep` lists the spans of the original text
+// it copies as written (the binding's name and the parameters) and where each lands in its text,
+// for mapping positions with mapOffset.
 const convertEdits = (fn, text, rel, mode, declKind) => {
   const name = fn.id.name;
-  const head = text.slice(fn.range[0], fn.body.range[0]);
   const after = fn.typeParameters?.range[1] ?? fn.id.range[1];
   const open = text.indexOf("(", after);
   const paramsEnd = fn.returnType ? fn.returnType.range[0] : fn.body.range[0];
@@ -163,11 +163,13 @@ const convertEdits = (fn, text, rel, mode, declKind) => {
     prefix = `${declKind} ${name} = ${asyncKw}function${fn.generator ? "*" : ""} ${name}${tps}`;
   }
   const replacement = `${prefix}${params}${ret}${mode === "arrow" ? " => " : " "}`;
-  void head;
   return [
     {
       end: fn.body.range[0],
-      keep: { at: prefix.length, from: open, to: open + params.length },
+      keep: [
+        { at: declKind.length + 1, from: fn.id.range[0], to: fn.id.range[1] },
+        { at: prefix.length, from: open, to: open + params.length },
+      ],
       start: fn.range[0],
       text: replacement,
     },
@@ -183,28 +185,21 @@ const applyEdits = (text, edits) => {
   return out;
 };
 // Where a position in the original text is after applyEdits, or null if its text was replaced
-// (anything in a converted head but the parameters).
+// (anything in a converted head but the name and the parameters).
 const mapOffset = (edits, pos) => {
   let shift = 0;
   for (const e of edits) {
     if (e.end <= pos) {
       shift += e.text.length - (e.end - e.start);
     } else if (e.start <= pos) {
-      if (!e.keep || pos < e.keep.from || pos >= e.keep.to) {
+      const k = (e.keep ?? []).find((s) => s.from <= pos && pos < s.to);
+      if (!k) {
         return null;
       }
-      shift += e.start + e.keep.at - e.keep.from;
+      shift += e.start + k.at - k.from;
     }
   }
   return pos + shift;
-};
-// Offset of each line's start, with ESLint's line breaks (the inventory's `line`s are 1-based).
-const lineStarts = (text) => {
-  const starts = [0];
-  for (const m of text.matchAll(/\r\n|[\r\n\u2028\u2029]/g)) {
-    starts.push(m.index + m[0].length);
-  }
-  return starts;
 };
 
 // ── reordering ─────────────────────────────────────────────────────────
@@ -275,9 +270,18 @@ const isPure = (n) => {
           : c.type === "MemberExpression" && !c.computed
             ? `${c.object.name ?? ""}.${c.property.name}`
             : "";
+      if (name === "Object.freeze") {
+        // freezing changes its argument, so only a fresh literal (nothing else can see it)
+        const arg = unwrap(x.arguments[0]);
+        return (
+          x.arguments.length === 1 &&
+          (arg?.type === "ObjectExpression" ||
+            arg?.type === "ArrayExpression") &&
+          isPure(arg)
+        );
+      }
       return (
-        ["Symbol", "Symbol.for", "Object.freeze"].includes(name) &&
-        x.arguments.every(isPure)
+        ["Symbol", "Symbol.for"].includes(name) && x.arguments.every(isPure)
       );
     }
     default:
@@ -354,8 +358,254 @@ const statementLists = (ast, keys) => {
   visit(ast);
   return lists;
 };
+// ── what a statement that can move reads while it runs ─────────────────
+// Built-in namespaces nothing reassigns or changes; any other global's contents can change.
+const STABLE_GLOBALS = new Set([
+  "Array",
+  "BigInt",
+  "Boolean",
+  "Date",
+  "Error",
+  "Infinity",
+  "Intl",
+  "JSON",
+  "Map",
+  "Math",
+  "NaN",
+  "Number",
+  "Object",
+  "Promise",
+  "Reflect",
+  "RegExp",
+  "Set",
+  "String",
+  "Symbol",
+  "WeakMap",
+  "WeakSet",
+  "undefined",
+]);
+const ITERATES_ARGS = new Set(["Map", "Set", "WeakMap", "WeakSet"]);
+const FRESH = new Set([
+  "ArrayExpression",
+  "Literal",
+  "ObjectExpression",
+  "TemplateLiteral",
+]);
+// Per parse: every reference by its identifier and in source order, and each variable's writes
+// that aren't its own initialisation (`b = 2`, `b++`, a second `var b = …`), computed once.
+const contextOf = (sm, liveImport) => {
+  const refOf = new Map();
+  const refs = [];
+  for (const s of sm.scopes) {
+    for (const r of s.references) {
+      refOf.set(r.identifier, r);
+      refs.push(r);
+    }
+  }
+  refs.sort((a, b) => a.identifier.range[0] - b.identifier.range[0]);
+  const writes = new Map();
+  const writesOf = (v) => {
+    let w = writes.get(v);
+    if (!w) {
+      // the first value definition's initializer isn't one (a `type X` can share the name)
+      const first = v.defs.find((d) => d.type !== "Type");
+      w = v.references.filter(
+        (x) => x.isWrite() && !(x.init && x.identifier === first?.name)
+      );
+      writes.set(v, w);
+    }
+    return w;
+  };
+  const refsIn = (from, to) => {
+    let lo = 0;
+    let hi = refs.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (refs[mid].identifier.range[0] < from) {
+        lo = mid + 1;
+      } else {
+        hi = mid;
+      }
+    }
+    const out = [];
+    for (let i = lo; i < refs.length && refs[i].identifier.range[0] < to; i++) {
+      out.push(refs[i]);
+    }
+    return out;
+  };
+  return { liveImport, refOf, refsIn, sm, writesOf };
+};
+// The name an import binding reads in its module (`*` for a namespace import).
+const importedName = (def) =>
+  def.node.type === "ImportSpecifier"
+    ? (def.node.imported.name ?? def.node.imported.value)
+    : def.node.type === "ImportDefaultSpecifier"
+      ? "default"
+      : "*";
+// The expressions whose contents a statement reads while it runs (nothing inside functions or
+// instance members): a member read's object, what's spread, destructured or `in`/`instanceof`'s
+// right side, and what `new Map(…)`/`new Set(…)` iterate. Fresh literals are left out.
+const stateReads = (stmt) => {
+  const out = [];
+  const add = (e) => {
+    const x = unwrap(e);
+    if (x && !FRESH.has(x.type)) {
+      out.push(x);
+    }
+  };
+  const visit = (n) => {
+    if (!n || typeof n.type !== "string" || lib.FUNCTION_TYPES.has(n.type)) {
+      return;
+    }
+    if (lib.WRAPPERS.has(n.type)) {
+      visit(n.expression);
+      return;
+    }
+    switch (n.type) {
+      case "MemberExpression":
+        add(n.object);
+        visit(n.object);
+        if (n.computed) {
+          visit(n.property);
+        }
+        return;
+      case "VariableDeclarator":
+        if (n.id.type !== "Identifier") {
+          add(n.init);
+        }
+        visit(n.id);
+        visit(n.init);
+        return;
+      case "SpreadElement":
+      case "RestElement":
+        if (n.type === "SpreadElement") {
+          add(n.argument);
+        }
+        visit(n.argument);
+        return;
+      case "BinaryExpression":
+        if (n.operator === "in" || n.operator === "instanceof") {
+          add(n.right);
+        }
+        break;
+      case "NewExpression":
+        if (
+          n.callee.type === "Identifier" &&
+          ITERATES_ARGS.has(n.callee.name)
+        ) {
+          n.arguments.forEach(add);
+        }
+        break;
+      case "MethodDefinition":
+      case "TSAbstractMethodDefinition":
+        if (n.computed) {
+          visit(n.key);
+        }
+        return;
+      case "PropertyDefinition":
+      case "AccessorProperty":
+        if (n.computed) {
+          visit(n.key);
+        }
+        if (n.static) {
+          visit(n.value);
+        }
+        return;
+      default:
+        if (n.type.startsWith("TS") && n.type !== "TSEnumDeclaration") {
+          return; // types
+        }
+    }
+    for (const [k, v] of Object.entries(n)) {
+      if (k === "parent" || k === "typeAnnotation" || k === "returnType") {
+        continue;
+      }
+      if (Array.isArray(v)) {
+        v.forEach(visit);
+      } else if (v && typeof v.type === "string") {
+        visit(v);
+      }
+    }
+  };
+  visit(stmt);
+  return out;
+};
+// Is a member chain from `id` only read as an operand (compared, combined, tested, interpolated),
+// so neither the object nor anything in it is stored, spread, called or assigned through it?
+const readAsOperand = (id) => {
+  let top = id;
+  while (
+    (top.parent.type === "MemberExpression" && top.parent.object === top) ||
+    lib.WRAPPERS.has(top.parent.type)
+  ) {
+    top = top.parent;
+  }
+  if (top === id) {
+    return false;
+  }
+  const consumed = (x) => {
+    const p = x.parent;
+    switch (p.type) {
+      case "BinaryExpression":
+      case "UnaryExpression":
+      case "TemplateLiteral":
+        return true;
+      case "MemberExpression":
+        return p.computed && p.property === x;
+      case "ConditionalExpression":
+        return p.test === x || consumed(p);
+      case "LogicalExpression":
+        return consumed(p);
+      default:
+        return lib.WRAPPERS.has(p.type) && consumed(p);
+    }
+  };
+  return consumed(top);
+};
+// Can the contents of `e` change while the list runs? Not for what's reached from built-in
+// namespaces, enums and `import.meta`, nor for a namespace import's export that's never
+// reassigned (`ns.x`), nor for a fresh local object (`fixedLocal`). Any other object might be
+// changed by a statement that can't move, or by a function one of them calls.
+const contentsMayChange = (e, ctx, fixedLocal) => {
+  let base = e;
+  while (base.type === "MemberExpression") {
+    base = unwrap(base.object);
+  }
+  if (base.type === "MetaProperty") {
+    return false;
+  }
+  if (base.type !== "Identifier") {
+    return true;
+  }
+  const v = ctx.refOf.get(base)?.resolved;
+  // a global, or one of TypeScript's lib globals, which the scope manager declares without a
+  // definition
+  if (!v || (v.defs.length === 0 && v.scope.type === "global")) {
+    return !STABLE_GLOBALS.has(base.name);
+  }
+  const def = v.defs[0];
+  if (def?.type === "TSEnumName") {
+    return false;
+  }
+  if (
+    def?.type === "ImportBinding" &&
+    importedName(def) === "*" &&
+    e === base
+  ) {
+    const m = base.parent;
+    return !(
+      m?.type === "MemberExpression" &&
+      m.object === base &&
+      !m.computed &&
+      !ctx.liveImport(m.property.name)
+    );
+  }
+  return !fixedLocal(v);
+};
+
 // Order one statement list. Returns null when nothing needs to move.
-const solveList = (list, sm, text) => {
+const solveList = (list, ctx, text) => {
+  const { sm } = ctx;
   const stmts = list.body;
   if (stmts.length < 2) {
     return null;
@@ -402,7 +652,8 @@ const solveList = (list, sm, text) => {
         continue;
       }
       for (const r of v.references) {
-        if (r.init || (r.isTypeReference && !r.isValueReference)) {
+        // type references and `typeof x` in a type read nothing at runtime
+        if (r.init || lib.isTypeRef(r)) {
           continue;
         }
         const k = idxOfPos(r.identifier.range[0]);
@@ -422,9 +673,20 @@ const solveList = (list, sm, text) => {
   if (reported === 0) {
     return null;
   }
-  // statements that read, while they run, a binding assigned anywhere (`b = 2`, `b++`, in this
-  // list or not): only statements that can't move assign or call, so these keep their place
-  // among them. Reads inside functions and instance fields run later; `export { b }` reads nothing.
+  // What a statement that can move reads while it runs must have the same value where it lands.
+  // Only statements that can't move assign or call, so:
+  //   - a binding assigned by a statement of this list (`b = 2`, `if (…) b++`, a second
+  //     `var b = …`): the read stays on the same side of each such statement (`sameSide`);
+  //   - a binding assigned anywhere else that can run meanwhile (inside a function, which a call
+  //     may run), or an import whose export is reassigned in its module (imports are live): the
+  //     statement keeps its place among the statements that can't move (`pinned`);
+  //   - an object's contents (`obj.x`, `{ ...obj }`, `const { x } = obj`, `new Set(xs)`): any
+  //     statement that can't move, or a function it calls, might change them, so pinned too,
+  //     unless contentsMayChange says they can't.
+  // Assignments elsewhere in the same function or module, outside this list, run before or after
+  // it, never during. Reads inside functions and instance fields run later, type references not
+  // at all, and `export { b }` reads nothing. Getters, `toString` and `valueOf` are assumed to
+  // have no effects.
   const listScope = sm.acquire(list, true) ?? sm.acquire(owner, true);
   const runsWithList = (r) => {
     for (let s = r.from; s; s = s.upper) {
@@ -440,29 +702,88 @@ const solveList = (list, sm, text) => {
     }
     return false;
   };
-  const readsReassigned = new Set();
-  for (const s of sm.scopes) {
-    if (s.block.range[1] < list.range[0] || s.block.range[0] > list.range[1]) {
+  const inList = (r) =>
+    r.identifier.range[0] >= list.range[0] &&
+    r.identifier.range[1] <= list.range[1];
+  const mov = stmts.map(movable);
+  const pinned = new Set();
+  const sameSide = [];
+  for (let i = 0; i < stmts.length; i++) {
+    if (!mov[i]) {
       continue;
     }
-    for (const r of s.references) {
+    for (const r of ctx.refsIn(stmts[i].range[0], stmts[i].range[1])) {
+      const v = r.resolved;
       if (
-        !r.resolved ||
+        !v ||
         !r.isRead() ||
-        (r.isTypeReference && !r.isValueReference) ||
+        lib.isTypeRef(r) ||
         r.identifier.parent?.type === "ExportSpecifier" ||
-        !r.resolved.references.some((w) => w.isWrite() && !w.init) ||
         !runsWithList(r)
       ) {
         continue;
       }
-      const k = idxOfPos(r.identifier.range[0]);
-      if (k !== -1) {
-        readsReassigned.add(k);
+      if (v.defs[0]?.type === "ImportBinding") {
+        const name = importedName(v.defs[0]);
+        // a namespace import's members are checked as contents
+        if (name !== "*" && ctx.liveImport(name)) {
+          pinned.add(i);
+        }
+        continue;
+      }
+      for (const w of ctx.writesOf(v)) {
+        const m = inList(w) ? idxOfPos(w.identifier.range[0]) : -1;
+        if (m !== -1 && runsWithList(w)) {
+          if (m !== i) {
+            sameSide.push(m < i ? [m, i] : [i, m]);
+          }
+        } else if (
+          m !== -1 ||
+          w.from.variableScope !== listScope.variableScope
+        ) {
+          pinned.add(i);
+        }
       }
     }
+    // a local object made by a literal or `new` here, not exported, whose every other reference
+    // is an operand read in a statement of this list that can move: nothing can change it
+    const fixedLocal = (v) => {
+      const def = v.defs[0];
+      const init = def?.type === "Variable" ? unwrap(def.node.init) : null;
+      if (
+        v.defs.length !== 1 ||
+        !["ArrayExpression", "NewExpression", "ObjectExpression"].includes(
+          init?.type
+        ) ||
+        def.parent?.parent?.type === "ExportNamedDeclaration"
+      ) {
+        return false;
+      }
+      return v.references.every((q) => {
+        const pos = q.identifier.range[0];
+        if (
+          (q.init && q.identifier === def.name) ||
+          lib.isTypeRef(q) ||
+          (pos >= stmts[i].range[0] && pos < stmts[i].range[1])
+        ) {
+          return true;
+        }
+        const m = inList(q) ? idxOfPos(pos) : -1;
+        return (
+          m !== -1 && mov[m] && runsWithList(q) && readAsOperand(q.identifier)
+        );
+      });
+    };
+    if (
+      stateReads(stmts[i]).some((e) => contentsMayChange(e, ctx, fixedLocal))
+    ) {
+      pinned.add(i);
+    }
   }
-  const mov = stmts.map((s, i) => movable(s) && !readsReassigned.has(i));
+  const byKind = [...mov]; // movable by kind, before pinning
+  for (const i of pinned) {
+    mov[i] = false;
+  }
   const n = stmts.length;
   // overload signatures and their implementation move as one: every member points at the group's
   // first statement, and the group is expanded again in the output
@@ -504,6 +825,11 @@ const solveList = (list, sm, text) => {
       if (rep(j) !== rep(k)) {
         depEdges.push([rep(j), rep(k), hard.has(`${j}>${k}`)]);
       }
+    }
+  }
+  for (const [a, b] of sameSide) {
+    if (rep(a) !== rep(b)) {
+      chainEdges.push([rep(a), rep(b)]);
     }
   }
   const reps = [...Array(n).keys()].filter((i) => rep(i) === i);
@@ -591,8 +917,10 @@ const solveList = (list, sm, text) => {
       (members.get(comp[v]) ?? members.set(comp[v], []).get(comp[v])).push(v);
     }
     const cyclic = [...members.values()].filter((m) => m.length > 1);
+    // by kind: a loop of functions (or classes) referring to each other stays mutual recursion
+    // when one of them is pinned
     const reasons = cyclic.map((m) =>
-      m.every((v) => mov[v]) ? "mutual-recursion" : "evaluation-order"
+      m.every((v) => byKind[v]) ? "mutual-recursion" : "evaluation-order"
     );
     // best effort: drop the deferred references inside each component (they stay reported;
     // nothing reads them while the module or block runs) and order the rest. A cycle of
@@ -716,7 +1044,9 @@ const rebuildList = (list, stmts, order, text) => {
   return order.map((i) => chunks[i]).join("\n\n");
 };
 // Reorder every list that needs it (outermost first; inner lists are rebuilt within).
-const reorderText = (text, rel) => {
+// `liveImport(name)`: whether an export of that name may be reassigned in its module (the
+// corpus's, from the census); without it, no import is.
+const reorderText = (text, rel, { liveImport = () => false } = {}) => {
   let current = text;
   const results = [];
   for (let pass = 0; pass < 6; pass++) {
@@ -731,11 +1061,12 @@ const reorderText = (text, rel) => {
       };
     }
     const lists = statementLists(p.ast, p.keys);
+    const ctx = contextOf(p.scopeManager, liveImport);
     let changed = false;
     // innermost lists first, then apply one non-overlapping set per pass
     const solved = [];
     for (const list of lists) {
-      const r = solveList(list, p.scopeManager, current);
+      const r = solveList(list, ctx, current);
       if (r) {
         r.kind =
           list.type === "Program"
@@ -870,6 +1201,26 @@ const convertRepo = (name) => {
   for (const f of fns) {
     (byFile.get(f.file) ?? byFile.set(f.file, []).get(f.file)).push(f);
   }
+  // export names that may be reassigned in their module, under any name they're re-exported as
+  // (by name across the repo, since the census doesn't resolve every specifier)
+  const liveNames = new Set();
+  const renames = [];
+  for (const row of lib.readJsonl(join(CENSUS, `${name}.files.jsonl`))) {
+    for (const x of row.liveExports ?? []) {
+      liveNames.add(x);
+    }
+    renames.push(...(row.reexports ?? []));
+  }
+  for (let grew = liveNames.size > 0; grew;) {
+    grew = false;
+    for (const { from, to } of renames) {
+      if (liveNames.has(from) && !liveNames.has(to)) {
+        liveNames.add(to);
+        grew = true;
+      }
+    }
+  }
+  const liveImport = (x) => liveNames.has(x);
   const srcFiles = lib.collect(name).files;
   const dirs = {
     converted: join(WORK, "converted", name),
@@ -906,7 +1257,7 @@ const convertRepo = (name) => {
     const p = parse(text, rel);
     const decls = findDeclarations(p.ast, p.keys);
     const edits = [];
-    const converted = new Set();
+    const convertedAt = []; // each converted binding's name, as an offset in the original
     for (const f of todo) {
       const node = decls.find(
         (d) => d.loc.start.line === f.line && d.loc.start.column === f.column
@@ -924,9 +1275,12 @@ const convertRepo = (name) => {
           (f.reassigned ?? 0) > 0 ? "let" : "const"
         )
       );
-      converted.add(`${node.id.name}@${node.id.loc.start.line}`);
+      convertedAt.push(node.id.range[0]);
     }
     const out = applyEdits(text, edits);
+    // the inventory's offsets are ESLint's, which drops a BOM; ours keep it
+    const bom = text.charCodeAt(0) === 0xfe_ff ? 1 : 0;
+    const converted = new Set(convertedAt.map((pos) => mapOffset(edits, pos)));
     writeFileSync(join(dirs.converted, rel), out);
     overlayConverted.set(rel, out);
     // parse checks
@@ -941,15 +1295,13 @@ const convertRepo = (name) => {
       });
     }
     // new use-before-define candidates that point at a converted binding, matched to the original
-    // candidates by position in the converted text (the head edits shift columns on their line)
-    const startsBefore = lineStarts(text);
-    const startsAfter = lineStarts(out);
+    // candidates by where they are in the converted text (the edits shift what follows them)
     const beforeByPos = new Map();
     for (const u of before.ubd ?? []) {
       if (u.cls === "type-only") {
         continue;
       }
-      const pos = mapOffset(edits, startsBefore[u.line - 1] + u.column);
+      const pos = mapOffset(edits, u.offset + bom);
       if (pos !== null) {
         beforeByPos.set(pos, u);
       }
@@ -958,12 +1310,11 @@ const convertRepo = (name) => {
       if (u.cls === "type-only" || u.cls === "export-specifier") {
         continue;
       }
-      if (!converted.has(`${u.name}@${u.defLine}`)) {
+      if (!converted.has(u.defOffset + bom)) {
         continue;
       }
       newRefs.push({
-        before:
-          beforeByPos.get(startsAfter[u.line - 1] + u.column)?.cls ?? null,
+        before: beforeByPos.get(u.offset + bom)?.cls ?? null,
         cls: u.cls,
         file: rel,
         line: u.line,
@@ -974,7 +1325,7 @@ const convertRepo = (name) => {
       });
     }
     // reorder
-    const r = reorderText(out, rel);
+    const r = reorderText(out, rel, { liveImport });
     writeFileSync(join(dirs.reordered, rel), r.text);
     overlayReordered.set(rel, r.text);
     const afterReorder = r.error
@@ -1208,7 +1559,6 @@ const main = () => {
 module.exports = {
   convertEdits,
   applyEdits,
-  lineStarts,
   mapOffset,
   parse,
   reorderText,

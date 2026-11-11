@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-30T08:38:17.489Z",
+  "generated": "2026-11-11T20:10:11.731Z",
   "note": "See the header of func-style-convert.cjs. Source files only. newReferences are use-before-define candidates (func-style-lib.cjs) that appear after conversion and point at a converted binding; crashAtImport counts module-level tdz-module-evaluation, tdz-indirect and tdz-callback; crashWhenCalled counts tdz-same-scope (a nested declaration used above it in the same function). reorder counts statement lists with a reference above its binding after conversion (including references that were already reported before).",
   "repos": {
     "zod": {
@@ -207,7 +207,7 @@
         "seconds": 7,
         "tsconfig": "tsconfig.json"
       },
-      "seconds": 12
+      "seconds": 14
     },
     "hono": {
       "convertedFiles": 21,
@@ -397,7 +397,7 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 37,
+          "ubd": 36,
           "ubdFiles": 11
         },
         "filesWhereUbdRose": 0
@@ -407,22 +407,22 @@
         "filesWithReports": 20,
         "filesUnsolvable": 11,
         "filesSolvable": 9,
-        "lists": 28,
+        "lists": 27,
         "listsByKind": {
-          "function-body": 14,
           "module": 13,
+          "function-body": 13,
           "BlockStatement": 1
         },
-        "unsolvableLists": 14,
+        "unsolvableLists": 13,
         "unsolvableByReason": {
-          "mutual-recursion": 10,
+          "mutual-recursion": 9,
           "evaluation-order": 4
         },
         "movedStatements": 23,
         "movedLines": 313,
-        "movedStatementsBestEffort": 14,
-        "movedLinesBestEffort": 461,
-        "residualReferences": 25,
+        "movedStatementsBestEffort": 13,
+        "movedLinesBestEffort": 457,
+        "residualReferences": 24,
         "remainingTdzAfterReorder": 0,
         "unsolvableExamples": [
           {
@@ -685,10 +685,10 @@
           ],
           "removed": 0
         },
-        "seconds": 3,
+        "seconds": 4,
         "tsconfig": "tsconfig.json"
       },
-      "seconds": 5
+      "seconds": 6
     },
     "vite": {
       "convertedFiles": 105,
@@ -792,7 +792,7 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 42,
+          "ubd": 46,
           "ubdFiles": 8
         },
         "filesWhereUbdRose": 0
@@ -807,18 +807,31 @@
           "module": 61,
           "function-body": 12
         },
-        "unsolvableLists": 10,
+        "unsolvableLists": 11,
         "unsolvableByReason": {
           "mutual-recursion": 8,
-          "evaluation-order": 2
+          "evaluation-order": 3
         },
-        "movedStatements": 312,
-        "movedLines": 8574,
-        "movedStatementsBestEffort": 77,
-        "movedLinesBestEffort": 1380,
-        "residualReferences": 28,
+        "movedStatements": 302,
+        "movedLines": 8393,
+        "movedStatementsBestEffort": 86,
+        "movedLinesBestEffort": 1560,
+        "residualReferences": 30,
         "remainingTdzAfterReorder": 0,
         "unsolvableExamples": [
+          {
+            "file": "packages/vite/src/client/client.ts",
+            "line": 1,
+            "names": [
+              "ExpressionStatement",
+              "ExpressionStatement",
+              "clearOverlayOrReloadOnFirstUpdate",
+              "handleMessage",
+              "hasDocument"
+            ],
+            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/client/client.ts#L1",
+            "reason": "evaluation-order"
+          },
           {
             "file": "packages/vite/src/client/client.ts",
             "line": 483,
@@ -894,16 +907,6 @@
               "closeServerAndExit"
             ],
             "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/preview.ts#L133",
-            "reason": "mutual-recursion"
-          },
-          {
-            "file": "packages/vite/src/node/server/index.ts",
-            "line": 1,
-            "names": [
-              "_createServer",
-              "restartServer"
-            ],
-            "permalink": "https://github.com/vitejs/vite/blob/3b72997d42e7dd2b31898d0e68461e3025e836b6/packages/vite/src/node/server/index.ts#L1",
             "reason": "mutual-recursion"
           }
         ]
@@ -1079,10 +1082,10 @@
           ],
           "removed": 0
         },
-        "seconds": 6,
+        "seconds": 7,
         "tsconfig": "packages/vite/tsconfig.base.json"
       },
-      "seconds": 11
+      "seconds": 12
     },
     "astro": {
       "convertedFiles": 420,
@@ -1229,8 +1232,8 @@
           "mutual-recursion": 7,
           "evaluation-order": 2
         },
-        "movedStatements": 347,
-        "movedLines": 6722,
+        "movedStatements": 343,
+        "movedLines": 6688,
         "movedStatementsBestEffort": 9,
         "movedLinesBestEffort": 150,
         "residualReferences": 14,
@@ -1416,10 +1419,10 @@
           "examples": [],
           "removed": 0
         },
-        "seconds": 7,
+        "seconds": 8,
         "tsconfig": "packages/astro/tsconfig.json"
       },
-      "seconds": 14
+      "seconds": 16
     },
     "excalidraw": {
       "convertedFiles": 35,
@@ -1466,17 +1469,17 @@
       },
       "parseFailures": [],
       "reorder": {
-        "filesWithReports": 16,
+        "filesWithReports": 15,
         "filesUnsolvable": 0,
-        "filesSolvable": 16,
-        "lists": 16,
+        "filesSolvable": 15,
+        "lists": 15,
         "listsByKind": {
-          "module": 16
+          "module": 15
         },
         "unsolvableLists": 0,
         "unsolvableByReason": {},
-        "movedStatements": 64,
-        "movedLines": 1608,
+        "movedStatements": 62,
+        "movedLines": 1592,
         "movedStatementsBestEffort": 0,
         "movedLinesBestEffort": 0,
         "residualReferences": 0,
@@ -1666,7 +1669,7 @@
           ],
           "removed": 0
         },
-        "seconds": 13,
+        "seconds": 14,
         "tsconfig": "tsconfig.json"
       },
       "seconds": 16
@@ -1795,32 +1798,32 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 63,
-          "ubdFiles": 26
+          "ubd": 58,
+          "ubdFiles": 24
         },
         "filesWhereUbdRose": 0
       },
       "parseFailures": [],
       "reorder": {
-        "filesWithReports": 208,
-        "filesUnsolvable": 26,
-        "filesSolvable": 182,
-        "lists": 224,
+        "filesWithReports": 205,
+        "filesUnsolvable": 24,
+        "filesSolvable": 181,
+        "lists": 221,
         "listsByKind": {
-          "module": 196,
+          "module": 193,
           "function-body": 26,
           "BlockStatement": 2
         },
-        "unsolvableLists": 27,
+        "unsolvableLists": 25,
         "unsolvableByReason": {
-          "mutual-recursion": 15,
-          "evaluation-order": 12
+          "mutual-recursion": 14,
+          "evaluation-order": 11
         },
-        "movedStatements": 627,
-        "movedLines": 16248,
-        "movedStatementsBestEffort": 195,
-        "movedLinesBestEffort": 9762,
-        "residualReferences": 49,
+        "movedStatements": 696,
+        "movedLines": 21775,
+        "movedStatementsBestEffort": 93,
+        "movedLinesBestEffort": 3726,
+        "residualReferences": 45,
         "remainingTdzAfterReorder": 0,
         "unsolvableExamples": [
           {
@@ -2098,10 +2101,10 @@
           ],
           "removed": 0
         },
-        "seconds": 615,
+        "seconds": 20,
         "tsconfig": "packages/next/tsconfig.json"
       },
-      "seconds": 636
+      "seconds": 42
     },
     "vscode": {
       "convertedFiles": 100,
@@ -2137,32 +2140,32 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 27,
-          "ubdFiles": 7
+          "ubd": 29,
+          "ubdFiles": 8
         },
         "filesWhereUbdRose": 0
       },
       "parseFailures": [],
       "reorder": {
         "filesWithReports": 72,
-        "filesUnsolvable": 7,
-        "filesSolvable": 65,
+        "filesUnsolvable": 8,
+        "filesSolvable": 64,
         "lists": 74,
         "listsByKind": {
           "module": 72,
           "TSModuleBlock": 1,
           "function-body": 1
         },
-        "unsolvableLists": 7,
+        "unsolvableLists": 8,
         "unsolvableByReason": {
-          "evaluation-order": 4,
+          "evaluation-order": 5,
           "mutual-recursion": 3
         },
-        "movedStatements": 292,
-        "movedLines": 6440,
-        "movedStatementsBestEffort": 26,
-        "movedLinesBestEffort": 789,
-        "residualReferences": 12,
+        "movedStatements": 275,
+        "movedLines": 5856,
+        "movedStatementsBestEffort": 42,
+        "movedLinesBestEffort": 1364,
+        "residualReferences": 13,
         "remainingTdzAfterReorder": 0,
         "unsolvableExamples": [
           {
@@ -2222,6 +2225,18 @@
             "reason": "evaluation-order"
           },
           {
+            "file": "src/vs/editor/common/model/textModel.ts",
+            "line": 1,
+            "names": [
+              "TextModel",
+              "IDecorationsTreesHost",
+              "ExpressionStatement",
+              "TRACKED_RANGE_OPTIONS"
+            ],
+            "permalink": "https://github.com/microsoft/vscode/blob/959031245ebb1fe077e0d512e1397c0ae82006e4/src/vs/editor/common/model/textModel.ts#L1",
+            "reason": "evaluation-order"
+          },
+          {
             "file": "src/vs/editor/common/tokens/lineTokens.ts",
             "line": 1,
             "names": [
@@ -2259,10 +2274,10 @@
           "examples": [],
           "removed": 0
         },
-        "seconds": 905,
+        "seconds": 6,
         "tsconfig": "src/tsconfig.base.json"
       },
-      "seconds": 1980
+      "seconds": 12
     },
     "shadcn": {
       "convertedFiles": 135,
@@ -2298,38 +2313,29 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 1,
-          "ubdFiles": 1
+          "ubd": 0,
+          "ubdFiles": 0
         },
         "filesWhereUbdRose": 0
       },
       "parseFailures": [],
       "reorder": {
         "filesWithReports": 8,
-        "filesUnsolvable": 1,
-        "filesSolvable": 7,
+        "filesUnsolvable": 0,
+        "filesSolvable": 8,
         "lists": 8,
         "listsByKind": {
           "module": 8
         },
-        "unsolvableLists": 1,
-        "unsolvableByReason": {
-          "evaluation-order": 1
-        },
-        "movedStatements": 10,
-        "movedLines": 227,
+        "unsolvableLists": 0,
+        "unsolvableByReason": {},
+        "movedStatements": 14,
+        "movedLines": 431,
         "movedStatementsBestEffort": 0,
         "movedLinesBestEffort": 0,
         "residualReferences": 0,
         "remainingTdzAfterReorder": 0,
-        "unsolvableExamples": [
-          {
-            "file": "apps/v4/registry/new-york-v4/blocks/dashboard-01/components/data-table.tsx",
-            "line": 1,
-            "permalink": "https://github.com/shadcn-ui/ui/blob/c2477f311c19982ef6e246085438e6cfec3e35ea/apps/v4/registry/new-york-v4/blocks/dashboard-01/components/data-table.tsx#L1",
-            "reason": "evaluation-order"
-          }
-        ]
+        "unsolvableExamples": []
       },
       "typecheck": null,
       "seconds": 2
@@ -2383,7 +2389,7 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 126,
+          "ubd": 107,
           "ubdFiles": 22
         },
         "filesWhereUbdRose": 0
@@ -2404,9 +2410,9 @@
         },
         "movedStatements": 89,
         "movedLines": 810,
-        "movedStatementsBestEffort": 190,
-        "movedLinesBestEffort": 1294,
-        "residualReferences": 78,
+        "movedStatementsBestEffort": 211,
+        "movedLinesBestEffort": 1403,
+        "residualReferences": 82,
         "remainingTdzAfterReorder": 0,
         "unsolvableExamples": [
           {
@@ -2480,6 +2486,14 @@
           {
             "file": "packages/react/form/src/form.tsx",
             "line": 1,
+            "names": [
+              "FormMessage",
+              "FormBuiltInMessageElement",
+              "FormBuiltInMessageProps",
+              "FormBuiltInMessage",
+              "FormCustomMessageElement",
+              "FormCustomMessageProps"
+            ],
             "permalink": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/form/src/form.tsx#L1",
             "reason": "evaluation-order"
           },
@@ -2514,7 +2528,7 @@
         ]
       },
       "typecheck": null,
-      "seconds": 8
+      "seconds": 3
     },
     "react-aria": {
       "convertedFiles": 30,
@@ -2684,7 +2698,7 @@
         ]
       },
       "typecheck": null,
-      "seconds": 5
+      "seconds": 2
     },
     "supabase": {
       "convertedFiles": 728,
@@ -2775,46 +2789,33 @@
         },
         "reordered": {
           "funcStyle": 0,
-          "ubd": 25,
-          "ubdFiles": 11
+          "ubd": 21,
+          "ubdFiles": 10
         },
         "filesWhereUbdRose": 0
       },
       "parseFailures": [],
       "reorder": {
         "filesWithReports": 196,
-        "filesUnsolvable": 11,
-        "filesSolvable": 185,
+        "filesUnsolvable": 10,
+        "filesSolvable": 186,
         "lists": 197,
         "listsByKind": {
           "module": 179,
           "function-body": 18
         },
-        "unsolvableLists": 11,
+        "unsolvableLists": 10,
         "unsolvableByReason": {
-          "evaluation-order": 10,
+          "evaluation-order": 9,
           "mutual-recursion": 1
         },
-        "movedStatements": 369,
-        "movedLines": 5270,
-        "movedStatementsBestEffort": 10,
-        "movedLinesBestEffort": 129,
-        "residualReferences": 20,
+        "movedStatements": 370,
+        "movedLines": 5318,
+        "movedStatementsBestEffort": 5,
+        "movedLinesBestEffort": 65,
+        "residualReferences": 17,
         "remainingTdzAfterReorder": 0,
         "unsolvableExamples": [
-          {
-            "file": "apps/studio/components/interfaces/Auth/Users/Users.utils.tsx",
-            "line": 1,
-            "names": [
-              "FormattedUserRow",
-              "formatUsersData",
-              "providerIconMap",
-              "socialProviders",
-              "phoneProviders"
-            ],
-            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/interfaces/Auth/Users/Users.utils.tsx#L1",
-            "reason": "evaluation-order"
-          },
           {
             "file": "apps/studio/components/interfaces/Explorer/NotebookPdf/NotebookPdfMarkdown.tsx",
             "line": 1,
@@ -2898,11 +2899,24 @@
             ],
             "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DataTable/primitives/Sortable.tsx#L1",
             "reason": "evaluation-order"
+          },
+          {
+            "file": "apps/studio/components/ui/DateRangePicker.tsx",
+            "line": 53,
+            "names": [
+              "ExpressionStatement",
+              "startOfMonth",
+              "nextMonth",
+              "today",
+              "handleChange"
+            ],
+            "permalink": "https://github.com/supabase/supabase/blob/09f80f528ec47569841408a81668dff90525c48a/apps/studio/components/ui/DateRangePicker.tsx#L53",
+            "reason": "evaluation-order"
           }
         ]
       },
       "typecheck": null,
-      "seconds": 996
+      "seconds": 13
     }
   },
   "tools": {

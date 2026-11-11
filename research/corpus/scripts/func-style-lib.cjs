@@ -284,15 +284,17 @@ const nameOf = (node) => {
   }
   return null;
 };
-// `map` for `map(…)` and `xs.map(…)`; null for a computed member (`handlers[map](…)` names a
-// variable, not the method).
+// `map` for `map(…)`, `xs.map(…)` and `xs["map"](…)`; null for any other computed member
+// (`handlers[map](…)` names a variable, not the method).
 const calleeName = (callee) => {
-  if (callee?.type === "MemberExpression") {
-    return !callee.computed && callee.property.type === "Identifier"
-      ? callee.property.name
-      : null;
+  if (callee?.type !== "MemberExpression") {
+    return callee?.type === "Identifier" ? callee.name : null;
   }
-  return callee?.type === "Identifier" ? callee.name : null;
+  const p = callee.property;
+  if (!callee.computed) {
+    return p.type === "Identifier" ? p.name : null;
+  }
+  return p.type === "Literal" && typeof p.value === "string" ? p.value : null;
 };
 const COMPONENT_WRAPPERS = new Set(["memo", "forwardRef", "observer"]);
 const typeText = (node, text, max = 80) => {
@@ -1305,12 +1307,15 @@ const analyse = (sc, program, rel) => {
         column: r.identifier.loc.start.column,
         defKind,
         defLine: def.name.loc.start.line,
+        // offsets in ESLint's text, which has no BOM
+        defOffset: def.name.range[0],
         defType: def.type,
         exportSpecifier,
         initForm,
         line: r.identifier.loc.start.line,
         moduleBinding,
         name: r.identifier.name,
+        offset: r.identifier.range[0],
         ownInit,
         sameContext,
         scopeType: v.scope.type,
@@ -1337,6 +1342,71 @@ const analyse = (sc, program, rel) => {
     }
   }
 
+  // ── exports that can change after the module has loaded ───────────────
+  // An import is a live view of the exporting module's binding, so a module-level `let`, `var`,
+  // function or class that's exported and assigned again (`x = …`, a second `var x = …`) can
+  // change under its importers. `reexports` are the renames an importer may see it under.
+  const liveExports = [];
+  const reexports = [];
+  const nameOfSpec = (n) => n.name ?? n.value;
+  // any write but the first value definition's initializer (a `type X` can share the name)
+  const reassigned = (v) => {
+    const first = v.defs.find((d) => d.type !== "Type");
+    return v.references.some(
+      (w) => w.isWrite() && !(w.init && w.identifier === first?.name)
+    );
+  };
+  for (const v of topScope.variables) {
+    const def = v.defs[0];
+    if (!def) {
+      continue;
+    }
+    const names = [];
+    const declStmt =
+      def.type === "Variable" ? def.parent?.parent : def.node?.parent;
+    if (declStmt?.type === "ExportNamedDeclaration") {
+      names.push(v.name);
+    } else if (declStmt?.type === "ExportDefaultDeclaration") {
+      names.push("default");
+    }
+    for (const r of v.references) {
+      const p = r.identifier.parent;
+      if (p?.type === "ExportSpecifier" && p.local === r.identifier) {
+        names.push(nameOfSpec(p.exported));
+      }
+    }
+    if (names.length === 0) {
+      continue;
+    }
+    if (def.type === "ImportBinding") {
+      const spec = def.node;
+      const from =
+        spec.type === "ImportSpecifier"
+          ? nameOfSpec(spec.imported)
+          : spec.type === "ImportDefaultSpecifier"
+            ? "default"
+            : null;
+      for (const to of names) {
+        if (from && from !== to) {
+          reexports.push({ from, to });
+        }
+      }
+    } else if (def.type !== "TSEnumName" && reassigned(v)) {
+      liveExports.push(...names);
+    }
+  }
+  for (const s of program.body) {
+    if (s.type === "ExportNamedDeclaration" && s.source) {
+      for (const spec of s.specifiers) {
+        const from = nameOfSpec(spec.local);
+        const to = nameOfSpec(spec.exported);
+        if (from !== to) {
+          reexports.push({ from, to });
+        }
+      }
+    }
+  }
+
   // file-level summaries
   const lines = sc.lines.length;
   return {
@@ -1345,6 +1415,8 @@ const analyse = (sc, program, rel) => {
     fns,
     imports,
     lines,
+    ...(liveExports.length ? { liveExports } : {}),
+    ...(reexports.length ? { reexports } : {}),
     moduleFns: moduleFns.map((m) => ({
       fn: m.fn,
       kind: m.kind,
@@ -1501,6 +1573,7 @@ module.exports = {
   inventory,
   isFromSeparateExecutionContext,
   isTsFile,
+  isTypeRef,
   isVarBound,
   outerOf,
   readText,
