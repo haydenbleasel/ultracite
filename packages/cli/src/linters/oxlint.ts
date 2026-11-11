@@ -287,13 +287,43 @@ const uniqueIdentifier = (base: string, taken: Set<string>): string => {
 
 interface PresetBindings {
   // Presets the project imports without extending them (for their rules,
-  // say), by the name they're imported under; their imports stay.
+  // say), or whose extend a selection replaces while its code still uses
+  // them, by the name they're imported under; their imports stay.
   importedOnly: Map<string, string>;
   // The name each extended preset is written as. The js-plugins slot is the
   // selection's const when plugins are selected.
   names: Map<string, string>;
   presets: string[];
 }
+
+// A name code reads, as opposed to a property it reads off one
+// (`config.name`); a spread (`...name`) still counts.
+const IDENTIFIER_RE = /(?<![\w$]|[^.]\.)[A-Za-z_$][\w$]*/gu;
+
+/**
+ * The names the code carried over from an existing config uses, such as a
+ * preset's in `...fullPlugins.rules`. Comments and strings are read as code
+ * too, which at worst keeps an import that's no longer needed.
+ */
+const carriedOverNames = (extras: OxlintExtras): Set<string> => {
+  const { after, leading, trailing } = extras.extendsEntries;
+
+  const entries = [
+    ...extras.properties,
+    ...leading,
+    ...[...after.values()].flat(),
+    ...trailing,
+    ...Object.values(extras.overrides).flatMap((override) =>
+      override && "entry" in override ? [override.entry] : []
+    ),
+  ];
+
+  return new Set(
+    [...extras.statements, ...entries.map((entry) => entry.text)].flatMap(
+      (text) => text.match(IDENTIFIER_RE) ?? []
+    )
+  );
+};
 
 /**
  * The presets a config extends and the names it binds them to: the
@@ -314,10 +344,15 @@ const bindPresets = (
     presets.includes(preset) && !(hasSelection && preset === jsPluginsPath);
 
   // A full js-plugins preset the config extended is replaced by a selection,
-  // so only one it never extended keeps its import.
+  // so it keeps its import only when the project's own code still uses it
+  // (or it was never extended).
+  const usedNames = carriedOverNames(extras);
+
   const importedOnly = new Map(
     [...extras.presetIdentifiers].filter(
-      ([preset]) => !(extendsList.includes(preset) || isExtendedImport(preset))
+      ([preset, identifier]) =>
+        !isExtendedImport(preset) &&
+        (!extendsList.includes(preset) || usedNames.has(identifier))
     )
   );
 
@@ -696,6 +731,9 @@ const readExistingConfig = (
   // The consts a generated js-plugins selection is declared as, found
   // below; a binding of the project's own is never one, whatever its name.
   const selectionIdentifiers = new Set<string>();
+  // Whether `selectJsPlugins` is the js-plugins preset's helper; one the
+  // project imports from its own module declares the project's own consts.
+  let importsSelectJsPlugins = false;
 
   const reserve = (...names: (string | null)[]) => {
     for (const name of names) {
@@ -743,6 +781,15 @@ const readExistingConfig = (
       }
     }
 
+    if (
+      preset === jsPluginsPath &&
+      moduleImport.namedSpecifiers.some(
+        (specifier) => specifier.local === "selectJsPlugins"
+      )
+    ) {
+      importsSelectJsPlugins = true;
+    }
+
     const userSpecifiers = moduleImport.namedSpecifiers.filter(
       (specifier) => !generatedNamedImports.has(specifier.local)
     );
@@ -765,6 +812,7 @@ const readExistingConfig = (
         (name) =>
           legacySelectionConsts.has(name) ||
           (GENERATED_SELECTION_RE.test(name) &&
+            importsSelectJsPlugins &&
             statement.initCallee === "selectJsPlugins")
       );
 

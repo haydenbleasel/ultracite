@@ -1520,6 +1520,94 @@ export default defineConfig({
     expect(rerunContent).toBe(content);
   });
 
+  test("keeps an extended full js-plugins preset the project's code uses", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import fullPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, fullPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: fullPlugins.jsPlugins,
+  rules: { ...fullPlugins.rules },
+  settings: jsPluginSettings,
+});
+`,
+    });
+
+    await oxlint.update({ jsPlugins: ["eslint-plugin-jsdoc"] });
+
+    const [[configPath, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import fullPlugins, { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).toContain("const jsPlugins = selectJsPlugins([");
+    expect(content).toContain("extends: [core, jsPlugins],");
+    expect(content).toContain("rules: { ...fullPlugins.rules },");
+
+    const rerun = mockProject({ [configPath]: content });
+
+    await oxlint.update();
+
+    const [[, rerunContent]] = rerun.writeFile.mock.calls;
+    expect(rerunContent).toBe(content);
+  });
+
+  test("drops an extended full js-plugins preset a new selection replaces", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import fullPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, fullPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: fullPlugins.jsPlugins,
+  settings: jsPluginSettings,
+});
+`,
+    });
+
+    await oxlint.update({ jsPlugins: ["eslint-plugin-jsdoc"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).not.toContain("fullPlugins");
+  });
+
+  test("keeps a jsPlugins const the project's own selectJsPlugins declares", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import { selectJsPlugins } from "./oxlint.plugins.ts";
+
+const jsPlugins = selectJsPlugins(["custom"]);
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import { selectJsPlugins } from "./oxlint.plugins.ts";'
+    );
+    expect(content).toContain('const jsPlugins = selectJsPlugins(["custom"]);');
+    expect(content).toContain("  extends: [\n    core,\n    jsPlugins,\n  ],");
+    expect(content).not.toContain("ultracite/oxlint/js-plugins");
+  });
+
   test("gives a preset another name when the project's code uses its own", async () => {
     const project = mockProject({
       "./oxlint.config.ts": `import { defineConfig } from "oxlint";

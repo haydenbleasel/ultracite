@@ -6,7 +6,7 @@
 
 Updating an existing `oxlint.config.ts` also keeps more of what you wrote:
 
-- Which presets are extended now comes from `extends` rather than the imports, so a preset you import without extending (to reuse its `rules`, say) keeps its import and is no longer added to `extends`.
+- Which presets are extended now comes from `extends` rather than the imports, so a preset you import without extending (to reuse its `rules`, say) keeps its import and is no longer added to `extends`. A full js-plugins preset that a new selection replaces in `extends` keeps its import too when your own code still uses it.
 - A preset imported under another name, such as `import ultraciteCore from "ultracite/oxlint/core"`, keeps that name, including in the settings `init` moves over from `.oxlintrc.json`. A preset `init` adds takes an `ultracite`-prefixed name, such as `ultraciteReact`, when the config already uses the usual one.
-- Your own `extends` entries stay where they were among the presets: an entry before `core` stays first, one right after a preset stays after it, and one after the last preset stays last. An entry is no longer dropped because its name matches a constant older Ultracite releases generated, such as `selectedJsPlugins`.
+- Your own `extends` entries stay where they were among the presets: an entry before `core` stays first, one right after a preset stays after it, and one after the last preset stays last. An entry is no longer dropped because its name matches a constant older Ultracite releases generated, such as `selectedJsPlugins`, or because it's a `jsPlugins` const declared with a `selectJsPlugins` of your own.
 - A config that imports a preset with `import * as` is left unchanged with a warning that says how to fix it, instead of being rewritten into one that extends `undefined`.
