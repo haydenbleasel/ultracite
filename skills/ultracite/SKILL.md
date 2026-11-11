@@ -139,7 +139,7 @@ Formatting is handled by the project's configured linter/formatter. Respect the 
 
 Run `bunx ultracite doctor` to diagnose. It checks:
 
-1. Linter and formatter installation (Biome; or ESLint + Prettier + Stylelint; or Oxlint + oxfmt)
+1. Linter and formatter installation and versions (Biome; or ESLint + Prettier + Stylelint; or Oxlint + oxfmt), plus the versions of the lint plugins the config loads
 2. Config validity (extends the ultracite presets correctly)
 3. Ultracite in package.json dependencies
 4. Conflicting tools when not using the ESLint backend (legacy `.eslintrc.*` files, `.prettierrc.*`/`prettier.config.*`)

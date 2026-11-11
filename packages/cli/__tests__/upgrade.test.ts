@@ -10,6 +10,7 @@ import * as configResolution from "../src/config-resolution";
 import type { InstalledPackage } from "../src/config-resolution";
 import {
   biomeVersion,
+  OXLINT_JS_PLUGIN_DEV_DEPENDENCIES,
   OXLINT_TOOLCHAIN_DEV_DEPENDENCIES,
 } from "../src/dependencies";
 import * as schemas from "../src/schemas";
@@ -273,24 +274,6 @@ describe("getToolchainPackages", () => {
     );
   });
 
-  test("reads the framework presets the ESLint config imports", async () => {
-    const { getConfiguredEslintFrameworks } = await loadUpgrade();
-    mockFileSystem({
-      [path.join(process.cwd(), "eslint.config.mjs")]: [
-        'import core from "ultracite/eslint/core";',
-        'import nestjs from "ultracite/eslint/nestjs";',
-        "",
-        "export default [...core, ...nestjs];",
-      ].join("\n"),
-    });
-
-    try {
-      expect([...getConfiguredEslintFrameworks()]).toEqual(["core", "nestjs"]);
-    } finally {
-      restoreFileSystemMock();
-    }
-  });
-
   test("oxlint tracks latest and bumps opted-in extras only", async () => {
     const { getToolchainPackages } = await loadUpgrade();
 
@@ -400,6 +383,46 @@ describe("upgrade", () => {
     expect(harness.steps[1]).toBe("install ultracite@latest");
     expect(harness.steps[2]).toBe("overrides eslint-plugin-react");
     expect(harness.steps[3]).toStartWith("install ");
+  });
+
+  test("reinstalls the JS plugins the Oxlint config loads, even when package.json doesn't list them", async () => {
+    // The react-doctor CLI brings in its own oxlint-plugin-react-doctor, so
+    // the project's package.json doesn't name it.
+    const harness = setup({
+      linter: "oxlint",
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+
+    mockFileSystem({
+      [path.join(process.cwd(), "oxlint.config.ts")]: [
+        'import core from "ultracite/oxlint/core";',
+        'import jsPlugins from "ultracite/oxlint/js-plugins";',
+      ].join("\n"),
+    });
+
+    try {
+      const { upgrade } = await loadUpgrade();
+
+      await expect(upgrade({ pm: "pnpm" })).resolves.toBe(0);
+    } finally {
+      restoreFileSystemMock();
+    }
+
+    const [, [toolchainPackages]] = harness.addDevDependency.mock.calls;
+
+    expect(toolchainPackages).toEqual(
+      expect.arrayContaining([
+        `oxlint-plugin-react-doctor@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["oxlint-plugin-react-doctor"]}`,
+        `eslint-plugin-github@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["eslint-plugin-github"]}`,
+        `eslint-plugin-sonarjs@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["eslint-plugin-sonarjs"]}`,
+      ])
+    );
+    // The documentation plugins aren't part of the full preset.
+    expect(
+      toolchainPackages.some((pkg: string) =>
+        pkg.startsWith("eslint-plugin-jsdoc@")
+      )
+    ).toBe(false);
   });
 
   test("leaves overrides alone on package managers that only warn about peers", async () => {

@@ -6,6 +6,7 @@ import {
   canResolveUltracite,
   findEffectiveBiomeConfig,
   findInstalledPackage,
+  findPackageDependency,
   findUnresolvableBiomeConfig,
   isYarnPnp,
 } from "../src/config-resolution";
@@ -262,6 +263,42 @@ describe("config-resolution", () => {
 
       writeFile("node_modules/oxlint/package.json", "not json");
       expect(findInstalledPackage("oxlint", PROJECT, fileSystem)).toBeNull();
+    });
+  });
+
+  describe("findPackageDependency", () => {
+    test("resolves a dependency from the package's real directory", () => {
+      // pnpm links the package out of its store, where its own dependencies
+      // sit next to it; the project's node_modules has another release.
+      const store = "node_modules/.pnpm/wrapper@1.0.0/node_modules";
+
+      const parent = {
+        dir: path.join(PROJECT, "node_modules/wrapper"),
+        manifest: { version: "1.0.0" },
+      };
+
+      writeFile(
+        `${store}/inner/package.json`,
+        JSON.stringify({ name: "inner", version: "1.0.0" })
+      );
+      writeFile(
+        "node_modules/inner/package.json",
+        JSON.stringify({ name: "inner", version: "2.0.0" })
+      );
+
+      expect(
+        findPackageDependency("inner", parent, {
+          ...fileSystem,
+          realpath: (filePath) =>
+            filePath === parent.dir
+              ? path.join(PROJECT, store, "wrapper")
+              : filePath,
+        })?.manifest.version
+      ).toBe("1.0.0");
+      // Without links, it's whatever the project's node_modules holds.
+      expect(
+        findPackageDependency("inner", parent, fileSystem)?.manifest.version
+      ).toBe("2.0.0");
     });
   });
 });

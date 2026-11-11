@@ -10,8 +10,11 @@ import packageJson from "../../package.json" with { type: "json" };
 import {
   canResolveUltracite,
   findInstalledPackage,
+  findPackageDependency,
   isYarnPnp,
 } from "../config-resolution";
+import type { InstalledPackage } from "../config-resolution";
+import { getConfiguredPlugins, pluginRuleSources } from "../configured-plugins";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
 import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
@@ -44,6 +47,7 @@ const OXLINT_CHECK = "Oxlint configuration";
 const OXFMT_CHECK = "oxfmt configuration";
 const ULTRACITE_DEP_CHECK = "Ultracite dependency";
 const CONFLICTING_TOOLS_CHECK = "Conflicting tools";
+const PLUGIN_VERSIONS_CHECK = "Plugin versions";
 const DOCTOR_COMPLETE = "Doctor complete";
 export const DOCTOR_FAILED = "Doctor checks failed";
 
@@ -73,35 +77,17 @@ const checkToolInstallation = (
 };
 
 /**
- * Compare the tool installed in the project against the range this Ultracite
- * release was verified with (its optional peer dependency). Presets reference
- * rule keys by name, so a tool that's too old rejects the config outright —
- * the "Found an unknown key" crash — which is exactly what this catches before
- * `check`/`fix` run into it.
+ * Compare an installed version against the range this Ultracite release was
+ * verified with. Presets reference rule keys by name, so a tool or plugin
+ * that's too old rejects the config outright — the "Found an unknown key"
+ * crash — which is exactly what this catches before `check`/`fix` run into it.
  */
-const checkToolVersion = (
-  packageName: ToolchainPackageName,
-  required: boolean
-): DiagnosticCheck | null => {
-  const range = toolchainPeerRanges[packageName];
+const checkVersion = (
+  packageName: string,
+  version: string,
+  range: string
+): DiagnosticCheck => {
   const name = `${packageName} version`;
-  const version = findInstalledPackage(packageName)?.manifest.version;
-
-  if (!version) {
-    // Optional tools that aren't installed are already reported by the
-    // installation check; there's no version to compare.
-    if (!required) {
-      return null;
-    }
-
-    return {
-      message: isYarnPnp()
-        ? `Could not determine the installed ${packageName} version — Yarn Plug'n'Play keeps packages out of node_modules, where doctor looks. Check that it satisfies ${range} with \`yarn why ${packageName}\``
-        : `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
-      name,
-      status: "warn",
-    };
-  }
 
   if (!valid(version)) {
     return {
@@ -132,6 +118,141 @@ const checkToolVersion = (
     name,
     status: "fail",
   };
+};
+
+/**
+ * Compare the tool installed in the project against its optional peer
+ * dependency range.
+ */
+const checkToolVersion = (
+  packageName: ToolchainPackageName,
+  required: boolean
+): DiagnosticCheck | null => {
+  const range = toolchainPeerRanges[packageName];
+  const name = `${packageName} version`;
+  const version = findInstalledPackage(packageName)?.manifest.version;
+
+  if (!version) {
+    // Optional tools that aren't installed are already reported by the
+    // installation check; there's no version to compare.
+    if (!required) {
+      return null;
+    }
+
+    return {
+      message: isYarnPnp()
+        ? `Could not determine the installed ${packageName} version — Yarn Plug'n'Play keeps packages out of node_modules, where doctor looks. Check that it satisfies ${range} with \`yarn why ${packageName}\``
+        : `Could not determine the installed ${packageName} version — install it in this project so Ultracite can verify it satisfies ${range}`,
+      name,
+      status: "warn",
+    };
+  }
+
+  return checkVersion(packageName, version, range);
+};
+
+/**
+ * A plugin that takes its rules from another package (see pluginRuleSources)
+ * is only as current as that package. Returns null when they agree.
+ */
+const checkPluginRuleSource = (
+  installed: InstalledPackage,
+  packageName: string,
+  version: string,
+  range: string
+): DiagnosticCheck | null => {
+  const source = pluginRuleSources.get(packageName);
+
+  const sourceVersion = source
+    ? findPackageDependency(source, installed)?.manifest.version
+    : undefined;
+
+  if (!(source && sourceVersion)) {
+    return null;
+  }
+
+  const check = checkVersion(source, sourceVersion, range);
+
+  if (check.status === "pass") {
+    return null;
+  }
+
+  return {
+    ...check,
+    message: `${packageName} ${version} loads its rules from ${source} ${sourceVersion}, which doesn't satisfy ${range} — remove the override or resolution that pins ${source}`,
+  };
+};
+
+/**
+ * Check every rule plugin the config loads against the range this release
+ * installs it at. A missing plugin fails like an old one, since the linter
+ * can't load the config without it. `ultracite upgrade` reinstalls each of
+ * these, so it fixes whatever fails here.
+ */
+const checkPluginVersions = (linter: Linter): DiagnosticCheck[] | null => {
+  const plugins = getConfiguredPlugins(linter);
+
+  if (plugins.size === 0) {
+    return null;
+  }
+
+  const problems: DiagnosticCheck[] = [];
+  const unverifiable: string[] = [];
+  let passed = 0;
+
+  for (const [packageName, range] of plugins) {
+    const installed = findInstalledPackage(packageName);
+    const version = installed?.manifest.version;
+
+    if (!(installed && version)) {
+      if (isYarnPnp()) {
+        unverifiable.push(`${packageName} (${range})`);
+      } else {
+        problems.push({
+          message: `${packageName} isn't installed, but the config loads it — run \`ultracite upgrade\``,
+          name: `${packageName} version`,
+          status: "fail",
+        });
+      }
+
+      continue;
+    }
+
+    const versionCheck = checkVersion(packageName, version, range);
+
+    const check =
+      versionCheck.status === "pass"
+        ? checkPluginRuleSource(installed, packageName, version, range)
+        : versionCheck;
+
+    if (check) {
+      problems.push(check);
+    } else {
+      passed += 1;
+    }
+  }
+
+  return [
+    ...(passed > 0
+      ? [
+          {
+            message: `${passed} lint ${passed === 1 ? "plugin" : "plugins"} the config loads ${passed === 1 ? "satisfies" : "satisfy"} the versions Ultracite ${packageJson.version} installs`,
+            name: PLUGIN_VERSIONS_CHECK,
+            status: "pass" as const,
+          },
+        ]
+      : []),
+    ...problems,
+    ...(unverifiable.length > 0
+      ? [
+          {
+            message: `Could not determine the installed versions of ${unverifiable.join(", ")} — Yarn Plug'n'Play keeps packages out of node_modules, where doctor looks. Check them with \`yarn why\``,
+            name: PLUGIN_VERSIONS_CHECK,
+            status: "warn" as const,
+          },
+        ]
+      : []),
+  ];
 };
 
 // ---------------------------------------------------------------------------
@@ -542,8 +663,9 @@ const checkConflictingTools = (linter: Linter): DiagnosticCheck => {
 // ---------------------------------------------------------------------------
 
 interface CheckEntry {
-  // null means the check doesn't apply to this project and is skipped.
-  fn: () => DiagnosticCheck | null;
+  // null means the check doesn't apply to this project and is skipped; a
+  // check covering several packages can report one result for each.
+  fn: () => DiagnosticCheck | DiagnosticCheck[] | null;
   name: string;
 }
 
@@ -595,11 +717,9 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           name: "Stylelint version",
         },
         { fn: checkStylelintConfig, name: STYLELINT_CHECK },
-        // The React, Next.js and TanStack presets name React Doctor rules, so
-        // an older plugin fails to load them.
         {
-          fn: () => checkToolVersion("eslint-plugin-react-doctor", false),
-          name: "React Doctor plugin version",
+          fn: () => checkPluginVersions(linter),
+          name: PLUGIN_VERSIONS_CHECK,
         }
       );
       break;
@@ -625,11 +745,9 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           name: "oxfmt version",
         },
         { fn: checkOxfmtConfig, name: OXFMT_CHECK },
-        // The js-plugins presets name React Doctor rules, so an older plugin
-        // fails to load them.
         {
-          fn: () => checkToolVersion("oxlint-plugin-react-doctor", false),
-          name: "React Doctor plugin version",
+          fn: () => checkPluginVersions(linter),
+          name: PLUGIN_VERSIONS_CHECK,
         }
       );
       break;
@@ -668,7 +786,7 @@ export const runDiagnostics = (linter: Linter): DiagnosticCheck[] => {
     const check = fn();
 
     if (check) {
-      checks.push(check);
+      checks.push(...[check].flat());
     }
   }
 
