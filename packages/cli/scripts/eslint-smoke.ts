@@ -37,6 +37,8 @@ interface Preset {
    * add-on (ultracite/eslint/<name>/type-aware), adding these files.
    */
   typeAware?: Record<string, FixtureFile>;
+  /** Config objects the project's own config adds after the presets. */
+  userConfig?: Linter.Config[];
   /** Lint without a tsconfig.json, as core must work without type information. */
   withoutTsconfig?: boolean;
 }
@@ -89,14 +91,53 @@ export class App {
 `,
         expect: ["@angular-eslint/component-class-suffix"],
       },
+      "public/Welcome_Email.html": {
+        // A whole page that starts with an XML declaration. It's linted as a
+        // template, after the `{` in its text, without the rules that only fit
+        // one, and its own name is checked.
+        content: `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <body style="margin: 0">
+    <p>Reply with {yes} or {no}.</p>
+    <my-signature></my-signature>
+    <img src="https://example.com/logo.png" style="display: block" />
+  </body>
+</html>
+`,
+        expect: [
+          "@angular-eslint/template/alt-text",
+          "github/filenames-match-regex",
+        ],
+        forbid: [
+          "@angular-eslint/template/no-inline-styles",
+          "@angular-eslint/template/prefer-ngsrc",
+          "@angular-eslint/template/prefer-self-closing-tags",
+        ],
+      },
+      "src/banner.html": {
+        // A fragment with an inline script: a template and a scripts block.
+        content: `<div (click)="close()">Saved</div>
+<script>
+  var legacy = 1;
+  console.log(legacy);
+</script>
+`,
+        expect: [
+          "@angular-eslint/template/click-events-have-key-events",
+          "no-var",
+        ],
+        forbid: ["github/filenames-match-regex"],
+      },
       "src/index.html": {
-        // Not a template, but linted as one. Its inline script is still
-        // linted by core, and core's rules stay off the template itself:
-        // some of them throw on the tree the template parser builds.
+        // A whole page, linted as a template and for its inline script. The
+        // `{` in the code sample is text, so the image after it is still
+        // checked, but the rules that only fit a template stay quiet.
         content: `<!doctype html>
 <html lang="en">
   <body>
     <app-root></app-root>
+    <noscript><pre>if (ready) { start(); }</pre></noscript>
     <img src="/logo.png" />
     <script>
       var legacy = 1;
@@ -106,6 +147,25 @@ export class App {
 </html>
 `,
         expect: ["@angular-eslint/template/alt-text", "no-var"],
+        forbid: [
+          "@angular-eslint/template/prefer-ngsrc",
+          "github/filenames-match-regex",
+        ],
+      },
+      "src/receipt.html": {
+        // A component's template that is a whole page, such as an email
+        // rendered on the server, still gets the template rules.
+        content: `<!DOCTYPE html>
+<html lang="en">
+  <body>
+    @if (order().status == "paid") {
+      <p>Thanks, {{ order().name }}.</p>
+    }
+  </body>
+</html>
+`,
+        expect: ["@angular-eslint/template/eqeqeq"],
+        forbid: ["github/filenames-match-regex"],
       },
       "src/user-card.component.ts": {
         // An inline template: the same rules, reported in the TypeScript
@@ -134,10 +194,13 @@ export class UserCard {
           "@angular-eslint/template/interactive-supports-focus",
           "no-var",
         ],
+        // The inline template's name is ESLint's, which the filename rule
+        // mustn't check.
         forbid: [
           "@angular-eslint/template/i18n",
           "@angular-eslint/template/no-autofocus",
           "@angular-eslint/template/no-call-expression",
+          "github/filenames-match-regex",
         ],
       },
       "src/user-list.html": {
@@ -170,6 +233,65 @@ export class UserCard {
     },
     presets: ["angular"],
     typeAware: {},
+  },
+  "angular-user-rules": {
+    // A rule the project's config turns on without `files` runs on templates
+    // too. The jsdoc rules read every node's range, so they throw on each
+    // template unless the preset's parser gives its nodes one. A filename
+    // pattern of the project's own still checks only real files' names, not
+    // the names ESLint gives inline scripts and templates, which it rejects.
+    files: {
+      "src/banner.html": {
+        content: `<div (click)="close()">Saved</div>
+<script>
+  console.log("saved");
+</script>
+`,
+        expect: ["@angular-eslint/template/click-events-have-key-events"],
+        forbid: ["github/filenames-match-regex"],
+      },
+      "src/user_menu.html": {
+        content: `<button type="button">Menu</button>
+`,
+        expect: ["github/filenames-match-regex"],
+      },
+      "src/user-card.component.ts": {
+        content: `import { Component } from "@angular/core";
+
+@Component({
+  selector: "app-user-card",
+  template: \`<img [src]="avatar" />\`,
+})
+export class UserCardComponent {
+  public avatar = "";
+}
+`,
+        expect: ["@angular-eslint/template/alt-text"],
+        forbid: ["github/filenames-match-regex"],
+      },
+      "src/user-list.html": {
+        content: `<!-- The list of users -->
+<ul>
+  @for (user of users(); track user.id) {
+    <li><img [src]="user.avatar" /></li>
+  }
+</ul>
+`,
+        expect: ["@angular-eslint/template/alt-text"],
+      },
+    },
+    presets: ["angular"],
+    userConfig: [
+      {
+        rules: {
+          "github/filenames-match-regex": [
+            "error",
+            String.raw`^[a-z0-9-]+(\.[a-z0-9-]+)?$`,
+          ],
+          "jsdoc/check-tag-names": ["error", { definedTags: ["internal"] }],
+        },
+      },
+    ],
   },
   astro: {
     files: {
@@ -948,6 +1070,7 @@ const runsOf = (name: string, preset: Preset): [string, Preset][] => {
   }
 
   const typeAwareRun: Preset = {
+    ...preset,
     files: { ...preset.files, ...preset.typeAware },
     presets: [
       "type-aware",
@@ -1004,7 +1127,7 @@ const checkPreset = async (
   await writeFixture(root, preset);
 
   const loaded = await Promise.all(["core", ...preset.presets].map(loadPreset));
-  const configs = loaded.flat();
+  const configs = [...loaded.flat(), ...(preset.userConfig ?? [])];
 
   const eslint = new ESLint({
     cwd: root,

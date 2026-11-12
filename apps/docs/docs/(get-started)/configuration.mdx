@@ -178,7 +178,9 @@ overrides: [
 
 ### Scoping Rules Away from Angular Templates (ESLint)
 
-The `angular` preset lints `.html` files and inline templates with Angular's template parser, and turns the core rules off for them, because rules written for JavaScript can throw on a template's syntax tree. A rule you set without `files` applies to templates again. For a few rules, mostly `jsdoc/*`, that makes ESLint throw on every template. Give such an entry a `files` pattern that leaves templates out:
+The `angular` preset lints `.html` files and inline templates with Angular's template parser. It turns the core rules off for them, apart from `github/filenames-match-regex`, because rules written for JavaScript can't read a template's syntax tree. A whole page, such as `src/index.html`, is linted as a template too, but without the three rules that only fit a template Angular compiles: `prefer-ngsrc`, `no-inline-styles` and `prefer-self-closing-tags`.
+
+A rule you set without `files` applies to templates again. Some such rules report there: `jsdoc/require-file-overview`, for example, reports every template as missing `@file`. Others throw on Angular syntax that shares a name with JavaScript's: `github/js-class-name`, `github/unescaped-html-literal` and `sonarjs/code-eval` throw on a template literal in a template. Give such an entry, or any rule meant for your TypeScript, a `files` pattern that leaves templates out:
 
 ```js title="eslint.config.mjs"
 import angular from "ultracite/eslint/angular";
@@ -195,6 +197,8 @@ export default [
   },
 ];
 ```
+
+In the same way, `files: ["**/*.html"]` now names templates, so it no longer reaches the inline scripts of an HTML file. They're linted as a block of their own: settings for them, such as extra browser globals, need `files: ["**/*.html/*.htm"]`.
 
 ### Sorting Object Keys
 
