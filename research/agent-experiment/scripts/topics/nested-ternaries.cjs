@@ -3082,6 +3082,15 @@ const withSnapshot = (diagnostics, text) =>
     ? diagnostics
     : mirror.recordSourceLinesV3(diagnostics, null, () => text);
 
+/** The prompt an attempt was given: the first, or a retry by what its issues were. */
+const promptKindOf = (a) => {
+  if (a.prompt === "buildPrompt") return "first";
+  if (!a.retryIssues) return "retry";
+  if (a.retryIssues.introduced.length === 0) return "retry: still reported";
+  if (a.retryIssues.still.length === 0) return "retry: new since the edit";
+  return "retry: still reported and new";
+};
+
 async function measure(runId) {
   const runDir = join(lib.RUNS_DIR, runId);
   const meta = JSON.parse(readFileSync(join(runDir, "meta.json"), "utf8"));
@@ -3184,16 +3193,7 @@ async function measure(runId) {
     attempts.push({
       attempt: a.attempt,
       prompt: a.prompt,
-      promptKind:
-        a.prompt === "buildPrompt"
-          ? "first"
-          : !a.retryIssues
-            ? "retry"
-            : a.retryIssues.introduced.length === 0
-              ? "retry: still reported"
-              : a.retryIssues.still.length === 0
-                ? "retry: new since the edit"
-                : "retry: still reported and new",
+      promptKind: promptKindOf(a),
       given: givenJson.map((d) => `${d.rule} L${d.line}: ${d.message}`),
       retryIssues: a.retryIssues ?? null,
       leftForReview: a.leftForReview ?? null,
