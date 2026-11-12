@@ -3,6 +3,7 @@ import path from "node:path";
 
 import { agentAdapters, assertAgentAvailable } from "../src/agent-fix/agents";
 import {
+  fingerprintSources,
   partitionByRemaining,
   recordSourceLines,
   releaseSourceLines,
@@ -343,6 +344,73 @@ describe("diagnostic diffing", () => {
     expect(result.introduced).toEqual([added]);
   });
 
+  test("matches a report whose number changed when it's on the same line of code", () => {
+    const cycle = { rule: "import/no-cycle" };
+
+    const original = diagnostic({
+      ...cycle,
+      line: 1,
+      message: "Dependency cycle via ./b:3",
+    });
+
+    mockFileSystem({
+      "src/foo.ts": "import { b } from './b';\nexport const a = b;\n",
+    });
+    recordSourceLines([original]);
+
+    const moved = diagnostic({
+      ...cycle,
+      line: 2,
+      message: "Dependency cycle via ./b:4",
+    });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import { c } from './c';\nimport { b } from './b';\nexport const a = b + c;\n",
+    });
+    recordSourceLines([moved]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [moved]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.stillReported).toEqual([moved]);
+    expect(result.introduced).toEqual([]);
+  });
+
+  test("keeps a report whose number changed apart when it's elsewhere", () => {
+    const magic = { rule: "no-magic-numbers" };
+
+    const fixed = diagnostic({
+      ...magic,
+      line: 1,
+      message: "No magic number: 42.",
+    });
+
+    mockFileSystem({
+      "src/foo.ts": "const area = r * 42;\nconst b = 1;\nexport { area, b };\n",
+    });
+    recordSourceLines([fixed]);
+
+    const added = diagnostic({
+      ...magic,
+      line: 3,
+      message: "No magic number: 100.",
+    });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "const area = r * RATIO;\nconst b = 1;\nconst c = b * 100;\nexport { area, b, c };\n",
+    });
+    recordSourceLines([added]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([fixed], [added]);
+
+    expect(result.cleared).toEqual([fixed]);
+    expect(result.introduced).toEqual([added]);
+  });
+
   test.each([
     [
       "no-shadow",
@@ -561,5 +629,104 @@ describe("diagnostic diffing", () => {
 
     expect(result.still).toEqual([original]);
     expect(result.introduced).toEqual([]);
+  });
+
+  test("reads a fingerprinted file later as it was when it's unchanged", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 1 });
+    const before = "let a: any;\nlet b = 1;\nexport { a, b };\n";
+
+    mockFileSystem({ "src/foo.ts": before });
+    fingerprintSources([original]);
+    recordSourceLines([original]);
+
+    // The edit types `a`, and adds an `any` further down.
+    const added = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "let a: string;\nlet b = 1;\nconst f = (v: any) => v;\nexport { a, b, f };\n",
+    });
+    recordSourceLines([added]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [added]);
+
+    expect(result.cleared).toEqual([original]);
+    expect(result.introduced).toEqual([added]);
+  });
+
+  test("matches in file order when a report's line can't be found again", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 2 });
+
+    mockFileSystem({
+      "src/foo.ts": "import x from 'x';\nlet a: any;\nconst c = x;\n",
+    });
+    fingerprintSources([original]);
+
+    // An earlier file's agent drops the import before this file's turn, so
+    // line 2 now reads `const c = x;`, and `let a: any;` has other lines
+    // around it.
+    mockFileSystem({ "src/foo.ts": "let a: any;\nconst c = x;\n" });
+    recordSourceLines([original]);
+
+    const refreshed = diagnostic({ ...any, line: 1 });
+    recordSourceLines([refreshed]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [refreshed]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.stillReported).toEqual([refreshed]);
+    expect(result.cleared).toEqual([]);
+  });
+
+  test("finds a report's line again when an earlier edit moved it", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import x from 'x';\nconst a = 1;\nlet b: any;\nconst c = x;\n",
+    });
+    fingerprintSources([original]);
+
+    // An earlier file's agent adds a function with its own `any` at the top.
+    mockFileSystem({
+      "src/foo.ts":
+        "const f = (v: any) => v;\nimport x from 'x';\nconst a = 1;\nlet b: any;\nconst c = x;\n",
+    });
+    recordSourceLines([original]);
+
+    const added = diagnostic({ ...any, line: 1 });
+    const moved = diagnostic({ ...any, line: 4 });
+    recordSourceLines([added, moved]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [added, moved]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.stillReported).toEqual([moved]);
+    expect(result.introduced).toEqual([added]);
+  });
+
+  test("doesn't take a line that reads the same elsewhere for the original's place", () => {
+    const rule = { rule: "example/branches" };
+    const original = diagnostic({ ...rule, line: 3, message: "Has 3 paths." });
+    const source = "function a() {\n  run();\n}\nfunction b() {\n  go();\n}\n";
+
+    mockFileSystem({ "src/foo.ts": source });
+    recordSourceLines([original]);
+
+    // Another `}`, with another number.
+    const elsewhere = diagnostic({ ...rule, line: 6, message: "Has 4 paths." });
+    recordSourceLines([elsewhere]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [elsewhere]);
+
+    expect(result.cleared).toEqual([original]);
+    expect(result.introduced).toEqual([elsewhere]);
   });
 });

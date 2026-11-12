@@ -973,28 +973,72 @@ const readExistingConfig = (
   return { extras, order, presets, reached: reach(extendsSources) };
 };
 
+// `import * as core` reaches the preset as `core.default`, which the
+// default import update regenerates would leave undefined, so update leaves
+// such a config unchanged.
+const findNamespacePresetImport = (config: ConfigModule) =>
+  config.imports.find(
+    (moduleImport) =>
+      !moduleImport.typeOnly &&
+      moduleImport.namespaceLocal !== null &&
+      toUltracitePreset(moduleImport.source) !== null
+  );
+
 /**
- * Whether a root config extends the core preset without declaring `env`.
- * Oxlint doesn't carry `env` through `extends` (oxc-project/oxc#20087), so
- * such a config runs `no-implied-eval` and `no-eval` without the browser and
- * Node globals they need, and they miss string timers and `window.eval`.
- * Configs init wrote before it declared `env` look like this.
+ * What a root config that extends the core preset does about `env`.
+ * `declared` when it sets `env` itself. `upgradable` when it lists core in
+ * `extends` without `env`, which update adds. `missing` when it lacks `env`
+ * and update can't add it: it takes core through a name of its own (`const
+ * base = { ...core }`), or imports a preset with `import * as`. `unclear`
+ * when it sets no `env` key but spreads in an object (`...shared`), or has a
+ * computed key, that may set it; update would move the spread among the
+ * properties it writes, so it leaves such a config alone. Null when it
+ * doesn't extend core, or when the file can't be read that far: it doesn't
+ * parse, or isn't an object init can read.
  */
-export const lacksCoreEnv = (contents: string): boolean => {
+export type CoreEnv = "declared" | "missing" | "unclear" | "upgradable";
+
+/**
+ * Oxlint doesn't carry `env` through `extends` (oxc-project/oxc#20087), so
+ * a config that extends core without its own runs `no-implied-eval` and
+ * `no-eval` without the browser and Node globals they need, and they miss
+ * string timers and `window.eval`. Configs init wrote before it declared
+ * `env` look like this.
+ */
+export const readCoreEnv = (contents: string): CoreEnv | null => {
   const parsed = parseConfigModule(contents);
 
   if (parsed.kind !== "module") {
-    return false;
+    return null;
   }
 
   const existing = readExistingConfig(contents, parsed.module);
+  const { entries } = parsed.module;
 
-  return (
-    existing !== null &&
-    existing.presets.includes(corePath) &&
-    !parsed.module.entries.some((entry) => entry.key === "env")
-  );
+  if (
+    !existing ||
+    ![...existing.presets, ...existing.reached].includes(corePath)
+  ) {
+    return null;
+  }
+
+  if (entries.some((entry) => entry.key === "env")) {
+    return "declared";
+  }
+
+  if (entries.some((entry) => entry.key === null)) {
+    return "unclear";
+  }
+
+  return existing.presets.includes(corePath) &&
+    !findNamespacePresetImport(parsed.module)
+    ? "upgradable"
+    : "missing";
 };
+
+/** Whether a root config lacks the `env` core needs, and update can add it. */
+export const lacksCoreEnv = (contents: string): boolean =>
+  readCoreEnv(contents) === "upgradable";
 
 // The pre-parser way of finding presets, for a file init can't restructure:
 // default imports of Ultracite presets, then legacy string extends.
@@ -1241,16 +1285,9 @@ const readExistingOxlintConfig = async (
     return { kind: "unparseable" };
   }
 
-  // `import * as core` reaches the preset as `core.default`, which the
-  // regenerated default import would leave undefined.
   const namespaceImport =
     parsed.kind === "module"
-      ? parsed.module.imports.find(
-          (moduleImport) =>
-            !moduleImport.typeOnly &&
-            moduleImport.namespaceLocal !== null &&
-            toUltracitePreset(moduleImport.source) !== null
-        )
+      ? findNamespacePresetImport(parsed.module)
       : undefined;
 
   if (namespaceImport?.namespaceLocal) {
@@ -1418,8 +1455,9 @@ export const oxlint = {
     workspaceConfigNames
       .map((name) => `${dir}/${name}`)
       .find((configPath) => exists(`./${configPath}`)) ?? null,
+  // Resolves false when it left the config unchanged, having warned why.
   // oxlint-disable-next-line complexity -- refactor when next touched: a guard per config init can't update, then the js-plugins, type-aware, rename and migration cases
-  update: async (opts?: OxlintOptions) => {
+  update: async (opts?: OxlintOptions): Promise<boolean> => {
     const paths = resolveOxlintConfigPath();
     const configFile = fileName(paths.target);
 
@@ -1428,7 +1466,7 @@ export const oxlint = {
         `Both ${fileName(oxlintTsConfigPath)} and ${fileName(oxlintMtsConfigPath)} exist, and Oxlint won't load either, so they were left unchanged. Delete one and re-run \`ultracite init\`.`
       );
 
-      return;
+      return false;
     }
 
     const rc = await readOxlintRc();
@@ -1440,7 +1478,7 @@ export const oxlint = {
         `Could not parse ${oxlintRcFile}, so the Oxlint config was left unchanged. Oxlint won't run with both ${oxlintRcFile} and ${configFile}; fix its syntax and re-run \`ultracite init\` to migrate it.`
       );
 
-      return;
+      return false;
     }
 
     const current = await readExistingOxlintConfig(paths.existing);
@@ -1452,7 +1490,7 @@ export const oxlint = {
         `Could not parse ${fileName(paths.existing ?? paths.target)}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
       );
 
-      return;
+      return false;
     }
 
     if (current.kind === "namespace") {
@@ -1462,7 +1500,7 @@ export const oxlint = {
         `${fileName(paths.existing ?? paths.target)} imports ${source} with \`import * as ${local}\`, which init can't carry over, so it was left unchanged. Change it to \`import ${local} from "${source}"\`, write \`${local}\` where it says \`${local}.default\`, and re-run \`ultracite init\`.`
       );
 
-      return;
+      return false;
     }
 
     const { existing } = current;
@@ -1522,7 +1560,7 @@ export const oxlint = {
         `${configFile} declares its own \`${clash}\`, which the Ultracite config also declares, so it was left unchanged. Rename it and re-run \`ultracite init\`.`
       );
 
-      return;
+      return false;
     }
 
     await writeProjectFile(
@@ -1588,6 +1626,8 @@ export const oxlint = {
         `${oxlintRcFile} extended ${unmigrated.join(", ")}, which ${configFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
       );
     }
+
+    return true;
   },
 };
 
@@ -1614,7 +1654,7 @@ export const addMissingOxlintEnv = async (): Promise<string | null> => {
     return null;
   }
 
-  await oxlint.update();
-
-  return fileName(paths.target);
+  // update leaves a config it can't carry over (one that declares a name the
+  // Ultracite config also declares, say) unchanged, and warns why.
+  return (await oxlint.update()) ? fileName(paths.target) : null;
 };

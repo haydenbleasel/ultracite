@@ -5,6 +5,7 @@ import {
   findLoadedJsPlugins,
   lacksCoreEnv,
   oxlint,
+  readCoreEnv,
 } from "../src/linters/oxlint";
 import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
@@ -2323,6 +2324,45 @@ export default defineConfig({ rules: {} });
 `)
     ).toBe(false);
     expect(lacksCoreEnv("export default defineConfig({")).toBe(false);
+    expect(readCoreEnv("export default defineConfig({")).toBeNull();
+    expect(
+      readCoreEnv(
+        'import core from "ultracite/oxlint/core";\nexport default [core];'
+      )
+    ).toBeNull();
+  });
+
+  test("a config that spreads in another object may set env through it", () => {
+    const spread = configWithoutEnv.replace(
+      "extends:",
+      "...shared,\n  extends:"
+    );
+
+    expect(readCoreEnv(spread)).toBe("unclear");
+    expect(lacksCoreEnv(spread)).toBe(false);
+    expect(
+      readCoreEnv(spread.replace("...shared,", "...shared,\n  env: core.env,"))
+    ).toBe("declared");
+  });
+
+  test("a config update can't rewrite lacks env that upgrade can't add", () => {
+    // Core through a const of the project's own.
+    const throughConst = configWithoutEnv
+      .replace("export default", "const base = { ...core };\n\nexport default")
+      .replace("extends: [core, react]", "extends: [base, react]");
+
+    // An `import * as` of a preset.
+    const namespaceImport = configWithoutEnv
+      .replace(
+        'import react from "ultracite/oxlint/react";',
+        'import * as react from "ultracite/oxlint/react";'
+      )
+      .replace("[core, react]", "[core, react.default]");
+
+    for (const config of [throughConst, namespaceImport]) {
+      expect(readCoreEnv(config)).toBe("missing");
+      expect(lacksCoreEnv(config)).toBe(false);
+    }
   });
 
   test("adds env and keeps everything else in the config", async () => {
@@ -2361,6 +2401,39 @@ export default defineConfig({ rules: {} });
     await expect(addMissingOxlintEnv()).resolves.toBeNull();
     expect(project.writeFile).not.toHaveBeenCalled();
     expect(project.rm).not.toHaveBeenCalled();
+  });
+
+  test("reports nothing added when update leaves the config unchanged", async () => {
+    // The project's own `jsPluginSettings` clashes with the generated one.
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const jsPluginSettings = {};
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  settings: jsPluginSettings,
+});
+`,
+    });
+
+    await expect(addMissingOxlintEnv()).resolves.toBeNull();
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn).toHaveBeenCalled();
+  });
+
+  test("writes nothing for a config that spreads in another object", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": configWithoutEnv.replace(
+        "extends:",
+        "...shared,\n  extends:"
+      ),
+    });
+
+    await expect(addMissingOxlintEnv()).resolves.toBeNull();
+    expect(project.writeFile).not.toHaveBeenCalled();
   });
 });
 

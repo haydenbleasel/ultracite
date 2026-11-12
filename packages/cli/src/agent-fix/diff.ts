@@ -36,6 +36,23 @@ const snapshots = new WeakMap<Diagnostic, Snapshot>();
 // Every snapshot taken of a file, so they can be let go once it's fixed.
 const snapshotsByFile = new Map<string, Snapshot[]>();
 
+/**
+ * A report's line with the lines either side, as its file read when the
+ * linter ran.
+ */
+type Fingerprint = readonly [string, string, string];
+
+/**
+ * Where each report whose file is read later was (see fingerprintSources).
+ */
+const fingerprints = new WeakMap<Diagnostic, Fingerprint>();
+
+/**
+ * The line a recorded report is on, by index, when an edit since the linter
+ * ran moved it from the line the report names.
+ */
+const movedLines = new WeakMap<Diagnostic, number>();
+
 const readLines = (file: string): string[] => {
   try {
     return readFileSync(file, "utf-8")
@@ -46,29 +63,98 @@ const readLines = (file: string): string[] => {
   }
 };
 
+const fingerprintAt = (lines: string[], index: number): Fingerprint => [
+  lines[index - 1] ?? "",
+  lines[index] ?? "",
+  lines[index + 1] ?? "",
+];
+
+const matchesAt = (
+  lines: string[],
+  index: number,
+  [before, line, after]: Fingerprint
+): boolean =>
+  (lines[index] ?? "") === line &&
+  (lines[index - 1] ?? "") === before &&
+  (lines[index + 1] ?? "") === after;
+
+/**
+ * Where a fingerprinted report's line is in its file now: the line it names,
+ * if that still reads the same with the same lines around it, otherwise the
+ * one place in the file that does. Undefined when there's no such place, or
+ * more than one.
+ */
+const findLine = (
+  lines: string[],
+  index: number,
+  fingerprint: Fingerprint
+): number | undefined => {
+  if (matchesAt(lines, index, fingerprint)) {
+    return index;
+  }
+
+  const matches = lines.flatMap((_, position) =>
+    matchesAt(lines, position, fingerprint) ? [position] : []
+  );
+
+  return matches.length === 1 ? matches[0] : undefined;
+};
+
+/**
+ * Notes the line each report is on, and the lines either side, for reports
+ * whose file is read later than the linter ran: an earlier file's agent may
+ * have edited it by then. recordSourceLines then finds each report's line
+ * in the file as it is, and a report whose line it can't find is matched as
+ * if its file couldn't be read. Call it on one file's reports at a time, so
+ * only that file's lines are held.
+ */
+export const fingerprintSources = (diagnostics: Diagnostic[]): void => {
+  const files = new Map<string, string[]>();
+
+  for (const diagnostic of diagnostics) {
+    const lines = files.get(diagnostic.file) ?? readLines(diagnostic.file);
+
+    files.set(diagnostic.file, lines);
+    fingerprints.set(diagnostic, fingerprintAt(lines, diagnostic.line - 1));
+  }
+};
+
 /**
  * Remembers the file behind each diagnostic. Call it on a linter's report
  * before the file changes again: the text of a report's line, and the lines
  * around it, are what tell one report of a rule from another once an edit
- * has moved them.
+ * has moved them. A report fingerprintSources saw is given the file only
+ * where its line can still be found.
  */
 export const recordSourceLines = (diagnostics: Diagnostic[]): void => {
   const files = new Map<string, Snapshot>();
 
   for (const diagnostic of diagnostics) {
-    const snapshot = files.get(diagnostic.file) ?? {
-      lines: readLines(diagnostic.file),
-    };
+    let snapshot = files.get(diagnostic.file);
 
-    if (!files.has(diagnostic.file)) {
+    if (!snapshot) {
+      snapshot = { lines: readLines(diagnostic.file) };
       files.set(diagnostic.file, snapshot);
-      snapshotsByFile.set(diagnostic.file, [
-        ...(snapshotsByFile.get(diagnostic.file) ?? []),
-        snapshot,
-      ]);
+
+      const taken = snapshotsByFile.get(diagnostic.file) ?? [];
+      taken.push(snapshot);
+      snapshotsByFile.set(diagnostic.file, taken);
     }
 
-    snapshots.set(diagnostic, snapshot);
+    const fingerprint = fingerprints.get(diagnostic);
+    const index = diagnostic.line - 1;
+
+    const line = fingerprint
+      ? findLine(snapshot.lines, index, fingerprint)
+      : index;
+
+    if (line !== undefined) {
+      snapshots.set(diagnostic, snapshot);
+    }
+
+    if (line !== undefined && line !== index) {
+      movedLines.set(diagnostic, line);
+    }
   }
 };
 
@@ -86,9 +172,13 @@ export const releaseSourceLines = (file: string): void => {
   snapshotsByFile.delete(file);
 };
 
+// The index of the line a diagnostic is on in its snapshot.
+const lineIndex = (diagnostic: Diagnostic): number =>
+  movedLines.get(diagnostic) ?? diagnostic.line - 1;
+
 // The text of the line a diagnostic was reported on, unless it's blank.
 const sourceLine = (diagnostic: Diagnostic): string | undefined =>
-  snapshots.get(diagnostic)?.lines[diagnostic.line - 1] || undefined;
+  snapshots.get(diagnostic)?.lines[lineIndex(diagnostic)] || undefined;
 
 /**
  * Line and column spans shift as soon as the agent edits the file, so a
@@ -108,6 +198,10 @@ const diagnosticKey = (diagnostic: Diagnostic): string => {
   return `${diagnostic.rule}${KEY_SEPARATOR}${message}`;
 };
 
+// The rule and message with every number left out (see partitionByRemaining).
+const looseKey = (diagnostic: Diagnostic): string =>
+  `${diagnostic.rule}${KEY_SEPARATOR}${diagnostic.message.replaceAll(NUMBER_RE, "#")}`;
+
 export interface DiagnosticPartition {
   cleared: Diagnostic[];
   /** Diagnostics reported after the fix that match none of the originals. */
@@ -117,11 +211,14 @@ export interface DiagnosticPartition {
   stillReported: Diagnostic[];
 }
 
-const groupByKey = (diagnostics: Diagnostic[]): Map<string, Diagnostic[]> => {
+const groupByKey = (
+  diagnostics: Diagnostic[],
+  keyOf: (diagnostic: Diagnostic) => string
+): Map<string, Diagnostic[]> => {
   const groups = new Map<string, Diagnostic[]>();
 
   for (const diagnostic of diagnostics) {
-    const key = diagnosticKey(diagnostic);
+    const key = keyOf(diagnostic);
     const group = groups.get(key);
 
     if (group) {
@@ -194,7 +291,7 @@ const lineWindow = (
   anchors: Map<Snapshot, (number | undefined)[]>
 ): LineWindow | null => {
   const before = snapshots.get(original);
-  const index = original.line - 1;
+  const index = lineIndex(original);
 
   if (
     !before ||
@@ -236,11 +333,14 @@ const lineWindow = (
  * line went is that original, rewritten. An original whose line's
  * surroundings are still there with no report among them was fixed where it
  * stood, so a report the edit added elsewhere stays new. The rest, whose
- * place can't be told, are paired in file order.
+ * place can't be told, are paired in file order. With `placeOnly`, only a
+ * report where an original's line went is paired with it: a line that reads
+ * the same, such as `}`, can be anywhere in the file.
  */
 const pairGroup = (
   originals: Diagnostic[],
-  fresh: Diagnostic[]
+  fresh: Diagnostic[],
+  placeOnly: boolean
 ): Map<Diagnostic, Diagnostic> => {
   const pairs = new Map<Diagnostic, Diagnostic>();
   const matched = new Set<Diagnostic>();
@@ -250,7 +350,7 @@ const pairGroup = (
     matched.add(original);
   };
 
-  for (const report of fresh) {
+  for (const report of placeOnly ? [] : fresh) {
     const text = sourceLine(report);
 
     const match =
@@ -282,8 +382,8 @@ const pairGroup = (
   const isInside = (report: Diagnostic, window: LineWindow | null) =>
     window !== null &&
     snapshots.get(report) === after &&
-    window.lower < report.line - 1 &&
-    report.line - 1 < window.upper;
+    window.lower < lineIndex(report) &&
+    lineIndex(report) < window.upper;
 
   // Every original but the ones fixed where they stood.
   const open = windows.filter(
@@ -299,6 +399,10 @@ const pairGroup = (
     if (report) {
       pair(report, original);
     }
+  }
+
+  if (placeOnly) {
+    return pairs;
   }
 
   const rest = open.filter(([original]) => !matched.has(original));
@@ -317,19 +421,54 @@ const pairGroup = (
   return pairs;
 };
 
-export const partitionByRemaining = (
+// Pairs the fresh reports with the originals that have the same key.
+const pairByKey = (
   original: Diagnostic[],
-  remaining: Diagnostic[]
-): DiagnosticPartition => {
-  const originalGroups = groupByKey(original);
+  remaining: Diagnostic[],
+  keyOf: (diagnostic: Diagnostic) => string,
+  placeOnly: boolean
+): Map<Diagnostic, Diagnostic> => {
+  const originalGroups = groupByKey(original, keyOf);
   const pairs = new Map<Diagnostic, Diagnostic>();
 
-  for (const [key, fresh] of groupByKey(remaining)) {
-    const group = pairGroup(originalGroups.get(key) ?? [], fresh);
+  for (const [key, fresh] of groupByKey(remaining, keyOf)) {
+    const group = pairGroup(originalGroups.get(key) ?? [], fresh, placeOnly);
 
     for (const [report, match] of group) {
       pairs.set(report, match);
     }
+  }
+
+  return pairs;
+};
+
+/**
+ * Matches the fresh reports to the originals by rule and message. A number
+ * diagnosticKey keeps can still change without the issue changing: the line
+ * in another file a cycle runs through (`Dependency cycle via ./b:3`), or a
+ * count of something the edit touched. So a report left over that differs
+ * from a leftover original only in its numbers is that original when it's
+ * at the original's place: where the edit left the original's line, between
+ * the nearest unchanged lines around it. Without a place to go by they stay
+ * apart, so a `no-magic-numbers` report for `100` the edit added elsewhere
+ * isn't taken for the `42` it fixed.
+ */
+export const partitionByRemaining = (
+  original: Diagnostic[],
+  remaining: Diagnostic[]
+): DiagnosticPartition => {
+  const pairs = pairByKey(original, remaining, diagnosticKey, false);
+  const paired = new Set(pairs.values());
+
+  const loosePairs = pairByKey(
+    original.filter((diagnostic) => !paired.has(diagnostic)),
+    remaining.filter((diagnostic) => !pairs.has(diagnostic)),
+    looseKey,
+    true
+  );
+
+  for (const [report, match] of loosePairs) {
+    pairs.set(report, match);
   }
 
   const matched = new Set(pairs.values());

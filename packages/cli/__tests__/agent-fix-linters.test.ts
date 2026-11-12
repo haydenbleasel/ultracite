@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import path from "node:path";
+import process from "node:process";
 
 import { getLinterAdapter } from "../src/agent-fix/linters";
+import { mockFileSystem, restoreFileSystemMock } from "./mock-fs";
 
 const oxlintJson = JSON.stringify({
   diagnostics: [
@@ -209,6 +212,56 @@ describe("agent-fix linter adapters", () => {
     expect(unknownRule.help).toBeUndefined();
     expect(unknownRule.url).toBeUndefined();
     expect(otherPlugin.help).toBeUndefined();
+  });
+
+  test("oxlint adapter loads JS plugins from the config that lints the file", () => {
+    // Oxlint resolves `jsPlugins` from the config file. This one sits where
+    // the plugin isn't installed, so the workspace's own copy doesn't count.
+    const elsewhere = path.join(
+      path.parse(process.cwd()).root,
+      "ultracite-without-plugins"
+    );
+
+    const todo = {
+      code: "sonarjs(todo-tag)",
+      message: 'Complete the task associated to this "TODO" comment.',
+    };
+
+    const stdout = JSON.stringify({
+      diagnostics: [
+        { ...todo, filename: path.join(elsewhere, "src", "a.ts") },
+        { ...todo, filename: "src/a.ts" },
+      ],
+    });
+
+    mock.module("../src/spawn-sync", () => ({
+      spawnSync: mock((cmd: string) => ({
+        status: 1,
+        stdout: cmd === "oxlint" ? stdout : "",
+      })),
+    }));
+    mockFileSystem({
+      [path.join(elsewhere, "oxlint.config.ts")]: "",
+      [path.join(process.cwd(), "oxlint.config.ts")]: "",
+    });
+
+    try {
+      const [far, near] = getLinterAdapter("oxlint").fixAndCollect([], []);
+
+      expect(far.help).toBeUndefined();
+      expect(near.help).toBe('Track uses of "TODO" tags');
+
+      // `-c` makes Oxlint lint every file with that config.
+      const [farNamed, nearNamed] = getLinterAdapter("oxlint").fixAndCollect(
+        [],
+        ["-c", path.join(elsewhere, "oxlint.config.ts")]
+      );
+
+      expect(farNamed.help).toBeUndefined();
+      expect(nearNamed.help).toBeUndefined();
+    } finally {
+      restoreFileSystemMock();
+    }
   });
 
   test("oxlint adapter maps --unsafe to --fix-dangerously", () => {

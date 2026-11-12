@@ -728,6 +728,95 @@ describe("doctor", () => {
     ).toBeUndefined();
   });
 
+  test("doesn't pass an oxlint config it can't read", () => {
+    // It doesn't parse, or exports an array.
+    for (const contents of [
+      'import core from "ultracite/oxlint/core";\nexport default defineConfig({',
+      'import core from "ultracite/oxlint/core";\nexport default [core];',
+    ]) {
+      expect(checkOxlintEnv(contents)).toBeUndefined();
+    }
+  });
+
+  test("warns that it can't tell about an oxlint config that spreads in an object", () => {
+    const unclear = checkOxlintEnv(oxlintConfigWithEnv("\n  ...shared,"));
+
+    expect(unclear).toMatchObject({ status: "warn" });
+    expect(unclear?.message).toContain("can't tell whether the object");
+    expect(unclear?.message).not.toContain("Run `ultracite upgrade`");
+    expect(
+      checkOxlintEnv(oxlintConfigWithEnv("\n  ...shared,\n  env: core.env,"))
+    ).toMatchObject({ status: "pass" });
+  });
+
+  test("leaves the env of an oxlint config Oxlint can't load to the configuration check", () => {
+    // Next to an oxlint.config.mts, or a .ts one in a CommonJS package:
+    // upgrade can't add env to either until it's sorted out.
+    for (const [mtsExists, type] of [
+      [true, "module"],
+      [false, "commonjs"],
+    ] as const) {
+      mock.module("node:fs", () => ({
+        accessSync: mock(() => {}),
+        existsSync: mock((filePath: string) => {
+          const name = nodePath.basename(String(filePath));
+
+          return (
+            name === "oxlint.config.ts" ||
+            name === "package.json" ||
+            (mtsExists && name === "oxlint.config.mts")
+          );
+        }),
+        readFileSync: mock((filePath: string) =>
+          String(filePath).endsWith("package.json")
+            ? JSON.stringify({ type })
+            : oxlintConfigWithEnv("")
+        ),
+      }));
+
+      expect(
+        runDiagnostics("oxlint").find(
+          (result) => result.name === "Oxlint environment"
+        )
+      ).toBeUndefined();
+    }
+  });
+
+  test("warns about a config that reaches core through a const, without suggesting upgrade", () => {
+    const missing = checkOxlintEnv(
+      oxlintConfigWithEnv("")
+        .replace(
+          "export default",
+          "const base = { ...core };\n\nexport default"
+        )
+        .replace("extends: [core]", "extends: [base]")
+    );
+
+    expect(missing).toMatchObject({ status: "warn" });
+    expect(missing?.message).toContain("sets no `env`");
+    expect(missing?.message).toContain("`ultracite upgrade` can't");
+  });
+
+  test("says where to run upgrade for an oxlint config in a parent directory", () => {
+    const parentConfig = nodePath.join(
+      nodePath.dirname(process.cwd()),
+      "oxlint.config.ts"
+    );
+
+    mock.module("node:fs", () => ({
+      accessSync: mock(() => {}),
+      existsSync: mock((filePath: string) => String(filePath) === parentConfig),
+      readFileSync: mock(() => oxlintConfigWithEnv("")),
+    }));
+
+    const missing = runDiagnostics("oxlint").find(
+      (result) => result.name === "Oxlint environment"
+    );
+
+    expect(missing).toMatchObject({ status: "warn" });
+    expect(missing?.message).toContain("`ultracite init` from .. to add it");
+  });
+
   test("finds .mts configs", () => {
     mock.module("node:fs", () => ({
       accessSync: mock(() => {}),
