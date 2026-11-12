@@ -23,7 +23,9 @@ const reactPrettierOverrides = Object.fromEntries(
 
 const react = [
   {
-    files: ["**/*.jsx", "**/*.tsx"],
+    // Hooks live in plain .ts and .js modules too, and JSX can sit in a .js
+    // file; oxlint and Biome check both.
+    files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {

@@ -16,7 +16,7 @@ import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
-import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
+import * as typescriptParser from "@typescript-eslint/parser";
 import { ESLint, Linter } from "eslint";
 import type { Rule } from "eslint";
 
@@ -581,17 +581,31 @@ export const usePost = (id: string) =>
 `,
         expect: ["@tanstack/query/exhaustive-deps"],
       },
+      // Route first: `component` reads the component before its declaration
+      // runs, which throws at import. Core's no-use-before-define stays on in
+      // route files to catch it.
+      "src/routes/index.tsx": {
+        content: `import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/")({
+  component: HomePage,
+});
+
+const HomePage = () => <p>home</p>;
+`,
+        expect: ["@typescript-eslint/no-use-before-define"],
+      },
+      // Component first: it only reads `Route` inside its body, which
+      // `variables: false` allows.
       "src/routes/posts.$postId.tsx": {
         content: `import { createFileRoute } from "@tanstack/react-router";
+
+const PostPage = () => <p>{Route.useLoaderData().title}</p>;
 
 export const Route = createFileRoute("/posts/$postId")({
   loader: () => ({ title: "post" }),
   component: PostPage,
 });
-
-function PostPage() {
-  return <p>{Route.useLoaderData().title}</p>;
-}
 `,
         expect: [],
         forbid: [
@@ -998,6 +1012,36 @@ const checkTypeInformation = async (tempRoot: string): Promise<string[]> => {
   return failures;
 };
 
+/**
+ * Core turns the base no-use-before-define off on TypeScript files, because
+ * the typescript-eslint extension runs there instead, and the preset drops
+ * deprecated typescript-eslint rules. typescript-eslint plans to deprecate
+ * the extension in favour of the base rule (typescript-eslint#11014); when it
+ * does, TypeScript files would lose the rule without any error.
+ */
+const checkUseBeforeDefineExtension = async (): Promise<string[]> => {
+  const core = await loadPreset("core");
+
+  const typescriptConfig = core.find(
+    (config) => config.plugins?.["@typescript-eslint"]
+  );
+
+  const rule =
+    typescriptConfig?.plugins?.["@typescript-eslint"]?.rules?.[
+      "no-use-before-define"
+    ];
+
+  // SAFETY: the preset registers typescript-eslint, whose rules are rule
+  // modules; the looser plugin type also admits other languages' rules.
+  const deprecated = (rule as Rule.RuleModule | undefined)?.meta?.deprecated;
+
+  return rule && !deprecated
+    ? []
+    : [
+        "@typescript-eslint/no-use-before-define is deprecated or gone, so the preset no longer runs it: turn the base no-use-before-define back on for TypeScript files in config/eslint/core/rules/eslint-typescript.mjs",
+      ];
+};
+
 const main = async () => {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), "ultracite-eslint-"));
   const failures: string[] = [];
@@ -1034,6 +1078,12 @@ const main = async () => {
       `${typeFailures.length === 0 ? "✓" : "✗"} rules that need type information are only in eslint/type-aware`
     );
     failures.push(...typeFailures);
+
+    const extensionFailures = await checkUseBeforeDefineExtension();
+    console.log(
+      `${extensionFailures.length === 0 ? "✓" : "✗"} @typescript-eslint/no-use-before-define still covers TypeScript files`
+    );
+    failures.push(...extensionFailures);
   } finally {
     process.chdir(previousCwd);
     await rm(tempRoot, { force: true, recursive: true });

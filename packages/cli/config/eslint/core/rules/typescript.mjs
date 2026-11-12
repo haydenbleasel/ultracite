@@ -35,6 +35,23 @@ const overrideRules = {
   ],
   "@typescript-eslint/no-magic-numbers": "off",
   "@typescript-eslint/no-require-imports": "off",
+  // The oxlint convention for "unused on purpose": a leading underscore, a
+  // rest sibling, a `using` declaration.
+  "@typescript-eslint/no-unused-vars": [
+    "error",
+    {
+      argsIgnorePattern: "^_",
+      caughtErrorsIgnorePattern: "^_",
+      destructuredArrayIgnorePattern: "^_",
+      ignoreRestSiblings: true,
+      ignoreUsingDeclarations: true,
+      varsIgnorePattern: "^_",
+    },
+  ],
+  // `variables: false` skips a reference from inside a function to a variable
+  // declared later in an outer scope; functions that call each other have no
+  // order that satisfies the default. Matches oxlint.
+  "@typescript-eslint/no-use-before-define": ["error", { variables: false }],
   "@typescript-eslint/prefer-readonly-parameter-types": "off",
   // Kept on even though oxlint sets typescript/require-await off. oxlint runs
   // the base require-await rule on TS files instead, and that isn't

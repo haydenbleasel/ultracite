@@ -1,6 +1,6 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
+import * as typescriptParser from "@typescript-eslint/parser";
 import eslintPrettier from "eslint-config-prettier";
 import vuePlugin from "eslint-plugin-vue";
 

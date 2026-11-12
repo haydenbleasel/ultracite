@@ -81,9 +81,12 @@
         "organizeImports": "on",
         // Enforce attribute sorting in JSX elements.
         "useSortedAttributes": "on",
-        // Enforce ordering of a JS object properties. Matches sort-keys in
-        // the oxlint/ESLint configs.
-        "useSortedKeys": "on",
+        // Sort the keys of JS objects and JSON. Off, like sort-keys in the
+        // oxlint and ESLint configs: the action is applied by `fix`, and key
+        // order can be observable (serialised output, iteration order,
+        // `exports` maps, option objects TypeScript infers from in source
+        // order). https://www.ultracite.ai/research/sort-keys
+        "useSortedKeys": "off",
         // Sort the members of string-valued TypeScript enums. Off because
         // member order is observable through Object.keys and Object.values.
         "useSortedEnumMembers": "off",
@@ -95,8 +98,9 @@
         "useSortedProperties": "on",
         // Sort the fields of GraphQL type definitions by name.
         "useSortedTypeFields": "on",
-        // Enforce alphabetical ordering of GraphQL selection sets.
-        "useSortedSelectionSet": "on",
+        // Sort GraphQL selection sets. Off because the order of a selection
+        // set is the key order of the response.
+        "useSortedSelectionSet": "off",
         // Sort the named definitions of a GraphQL document (types,
         // directives, fragments, operations).
         "useGraphqlSortedDefinitions": "on",
@@ -166,6 +170,9 @@
         "useValidAutocomplete": "error",
         "useValidLang": "error",
 
+        // Off on purpose: autofocus is a deliberate UX choice (a waitlist or
+        // search field that's ready to type into), and the rule can't tell
+        // that from a harmful use.
         "noAutofocus": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
@@ -220,7 +227,10 @@
         "noUselessTypeConstraint": "error",
         "noUselessUndefined": "error",
         "noUselessUndefinedInitialization": "error",
-        "noVoid": "error",
+        // Off: `void promise;` marks a promise that's deliberately not
+        // awaited (#618), and the rule has no option to allow `void` as a
+        // statement, as no-void does in the oxlint and ESLint configs.
+        "noVoid": "off",
         "useArrayFind": "error",
         "useArraySome": "error",
         "useArrowFunction": "error",
@@ -283,7 +293,13 @@
         "noUnreachableSuper": "error",
         "noUnsafeFinally": "error",
         "noUnsafeOptionalChaining": "error",
-        "noUnusedFunctionParameters": "error",
+        // Underscore-prefixed names are always ignored. Rest siblings are
+        // spelled out to match no-unused-vars in the oxlint and ESLint
+        // configs.
+        "noUnusedFunctionParameters": {
+          "level": "error",
+          "options": { "ignoreRestSiblings": true }
+        },
         "noUnusedImports": {
           "fix": "safe",
           "level": "error"
@@ -291,7 +307,10 @@
         "noUnusedInstantiation": "error",
         "noUnusedLabels": "error",
         "noUnusedPrivateClassMembers": "error",
-        "noUnusedVariables": "error",
+        "noUnusedVariables": {
+          "level": "error",
+          "options": { "ignoreRestSiblings": true }
+        },
         "noVoidElementsWithChildren": "error",
         "noVoidTypeReturn": "error",
         "useGraphqlNamedOperations": "error",
@@ -342,11 +361,17 @@
 
         "noAccumulatingSpread": "error",
         "noAwaitInLoops": "error",
-        "noBarrelFile": "error",
+        // Off: it reports any file with a value re-export, which is what a
+        // package's entry point has to be. The oxlint config keeps
+        // oxc/no-barrel-file, which only reports very large barrels.
+        "noBarrelFile": "off",
         "noDelete": "error",
         "noDynamicNamespaceImportAccess": "error",
         "noJsxPropsBind": "error",
-        "noNamespaceImport": "error",
+        // Off, like import/no-namespace in the oxlint config: libraries such
+        // as Zod and Radix document `import * as` as their API, and bundlers
+        // tree-shake member access on a namespace.
+        "noNamespaceImport": "off",
         "noSyncScripts": "error",
         "noUnwantedPolyfillio": "error",
         "useDomNodeTextContent": "error",
@@ -371,6 +396,9 @@
         /** ------------------------ JavaScript Rules ------------------------ **/
 
         "noEnum": "error",
+        // One class per file, matching max-classes-per-file in the
+        // oxlint/ESLint configs.
+        "noExcessiveClassesPerFile": "error",
         "noExportedImports": "error",
         // Matches no-plusplus in the oxlint/ESLint configs.
         "noIncrementDecrement": "error",
@@ -466,7 +494,6 @@
         "noCommonJs": "off",
         "noContinue": "off",
         "noDefaultExport": "off",
-        "noExcessiveClassesPerFile": "off",
         "noExcessiveLinesPerFile": "off",
         "noHexColors": "off",
         "noImplicitBoolean": "off",
@@ -542,6 +569,10 @@
         "noGlobalIsNan": "error",
         "noImplicitAnyLet": "error",
         "noImportAssign": "error",
+        // A project rule, in core like import/no-cycle in the oxlint/ESLint
+        // configs. No measurable cost: core force-ignores node_modules, so the
+        // scanner never indexes dependencies (#843).
+        "noImportCycles": "error",
         "noIrregularWhitespace": "error",
         "noLabelVar": "error",
         "noLoopFunc": "error",
@@ -597,7 +628,6 @@
 
         /** ------ Project/Scanner rules. Use ultracite/biome/type-aware to enable. ------ **/
         "noDeprecatedImports": "off",
-        "noImportCycles": "off",
 
         /** ------------------------ CSS Rules ------------------------ **/
         "noDuplicateAtImportRules": "error",
@@ -713,9 +743,6 @@
         "rules": {
           "complexity": {
             "noExcessiveCognitiveComplexity": "off"
-          },
-          "suspicious": {
-            "noExplicitAny": "off"
           }
         }
       }
@@ -771,12 +798,7 @@
       // Package.json and similar JSON config files
       "includes": ["**/package.json", ".github/**/*.json"],
       "assist": {
-        "enabled": true,
-        "actions": {
-          "source": {
-            "useSortedKeys": "off"
-          }
-        }
+        "enabled": true
       },
       "json": {
         "parser": {

@@ -1,5 +1,5 @@
 import typescript from "@typescript-eslint/eslint-plugin";
-import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
+import * as typescriptParser from "@typescript-eslint/parser";
 import eslintPrettier from "eslint-config-prettier";
 import compat from "eslint-plugin-compat";
 import github from "eslint-plugin-github";

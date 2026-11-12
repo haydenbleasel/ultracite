@@ -194,8 +194,29 @@ export default defineConfig({
     "no-unused-expressions": "error",
     "no-unused-labels": "error",
     "no-unused-private-class-members": "error",
-    "no-unused-vars": "error",
-    "no-use-before-define": "error",
+    // One convention for "unused on purpose" in every linter: a leading
+    // underscore, for parameters, variables, caught errors and destructured
+    // array elements. A property left out through a rest sibling
+    // (`const { secret, ...rest } = obj`) and a `using` declaration held only
+    // for its disposal aren't unused either.
+    "no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+        ignoreUsingDeclarations: true,
+        varsIgnorePattern: "^_",
+      },
+    ],
+    // `variables: false` skips a reference from inside a function to a
+    // variable declared later in an outer scope, which can't run before the
+    // declaration does unless the function is called during load. Functions
+    // that call each other have no order that satisfies the default. A use in
+    // the same scope, and a function or class used before it, still report.
+    // https://www.ultracite.ai/research/func-style
+    "no-use-before-define": ["error", { variables: false }],
     "no-useless-backreference": "error",
     "no-useless-call": "error",
     "no-useless-catch": "error",
@@ -208,7 +229,13 @@ export default defineConfig({
     "no-var": "error",
     // Avoid conflict with typescript/no-floating-promises
     "no-void": ["error", { allowAsStatement: true }],
-    "no-warning-comments": "error",
+    // The default terms, plus JSDoc's `@todo` tag. The `*` decoration finds a
+    // term behind the leading asterisks of a block comment, as in
+    // `/** @todo */` and `/* ** TODO */`.
+    "no-warning-comments": [
+      "error",
+      { decoration: ["*"], terms: ["todo", "fixme", "xxx", "@todo"] },
+    ],
     "no-with": "error",
     "object-shorthand": "error",
     "one-var": ["error", "never"],
@@ -233,7 +260,11 @@ export default defineConfig({
     "require-yield": "error",
     // Rely on oxfmt `sortImports` instead
     "sort-imports": "off",
-    "sort-keys": "error",
+    // Off: its fix is classed as safe, so `fix` would reorder every object,
+    // and key order can be observable (serialised output, iteration order,
+    // `exports` maps, option objects TypeScript infers from in source order).
+    // https://www.ultracite.ai/research/sort-keys
+    "sort-keys": "off",
     "sort-vars": "error",
     "symbol-description": "error",
     "unicode-bom": "error",
@@ -266,6 +297,8 @@ export default defineConfig({
     "import/no-named-as-default-member": "error",
     "import/no-named-default": "error",
     "import/no-named-export": "off",
+    // Libraries such as Zod and Radix document `import * as` as their API,
+    // and bundlers tree-shake member access on a namespace.
     "import/no-namespace": "off",
     "import/no-nodejs-modules": "off",
     "import/no-relative-parent-imports": "off",
@@ -581,7 +614,13 @@ export default defineConfig({
     "unicorn/prefer-dom-node-remove": "error",
     "unicorn/prefer-dom-node-text-content": "error",
     "unicorn/prefer-event-target": "error",
-    "unicorn/prefer-export-from": "error",
+    // Off until oxlint's fix is corrected: its suggestion, which
+    // `--fix-suggestions` and `--fix-dangerously` apply, rewrites
+    // `import { a } from "./x"; import { b } from "./y"; export { a, b };`
+    // to `export { a } from "./x";` and drops the export of `b`
+    // (https://github.com/oxc-project/oxc/issues/29318). The ESLint preset
+    // keeps the rule, whose fix is correct.
+    "unicorn/prefer-export-from": "off",
     "unicorn/prefer-global-this": "off",
     "unicorn/prefer-import-meta-properties": "error",
     "unicorn/prefer-includes": "error",

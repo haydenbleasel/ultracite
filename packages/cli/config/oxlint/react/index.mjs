@@ -39,6 +39,9 @@ export default defineConfig({
     "jsx-a11y/mouse-events-have-key-events": "error",
     "jsx-a11y/no-access-key": "error",
     "jsx-a11y/no-aria-hidden-on-focusable": "error",
+    // Off on purpose: autofocus is a deliberate UX choice (a waitlist or
+    // search field that's ready to type into), and the rule can't tell that
+    // from a harmful use.
     "jsx-a11y/no-autofocus": "off",
     "jsx-a11y/no-distracting-elements": "error",
     "jsx-a11y/no-interactive-element-to-noninteractive-role": "error",
@@ -64,6 +67,8 @@ export default defineConfig({
     "react/checked-requires-onchange-or-readonly": "error",
     "react/display-name": "error",
     "react/error-boundaries": "error",
+    // An error by policy, though React's own config warns: the report is
+    // usually right about the array.
     "react/exhaustive-deps": "error",
     "react/exhaustive-effect-dependencies": "error",
     "react/forbid-component-props": "off",
@@ -72,12 +77,12 @@ export default defineConfig({
     // forwardRef is deprecated in React 19; react-doctor/no-react19-deprecated-apis
     // (opt-in js-plugins preset) covers it.
     "react/forward-ref-uses-ref": "off",
-    "react/function-component-definition": [
-      "error",
-      {
-        namedComponents: "arrow-function",
-      },
-    ],
+    // Off: its fix turns a hoisted `function` component into a `const`, which
+    // throws when something above it reads the component at load (a route
+    // object, say), and its fix for an unnamed component produces code the
+    // rule reports again. Core's func-style already asks for expressions and
+    // has no fix; it leaves `export default function Page()` alone.
+    "react/function-component-definition": "off",
     "react/globals": "error",
     "react/hook-use-state": "error",
     "react/hooks": "error",

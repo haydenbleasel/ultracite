@@ -23,7 +23,9 @@ export default defineConfig({
   ],
   rules: {
     "react-doctor/query-destructure-result": "error",
+    "react-doctor/query-floating-mutate-async": "error",
     "react-doctor/query-mutation-missing-invalidation": "error",
+    "react-doctor/query-no-mutation-in-effect-as-read": "error",
     "react-doctor/query-no-query-in-effect": "error",
     "react-doctor/query-no-rest-destructuring": "error",
     "react-doctor/query-no-usequery-for-mutation": "error",
@@ -32,6 +34,7 @@ export default defineConfig({
     "react-doctor/tanstack-start-get-mutation": "error",
     "react-doctor/tanstack-start-loader-parallel-fetch": "error",
     "react-doctor/tanstack-start-missing-head-content": "error",
+    "react-doctor/tanstack-start-missing-scripts": "error",
     "react-doctor/tanstack-start-no-anchor-element": "error",
     "react-doctor/tanstack-start-no-direct-fetch-in-loader": "error",
     "react-doctor/tanstack-start-no-dynamic-server-fn-import": "error",

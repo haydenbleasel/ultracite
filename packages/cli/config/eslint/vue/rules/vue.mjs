@@ -23,10 +23,14 @@ const overrideRules = {
       style: { allowNoLang: true, lang: ["less", "scss"] },
     },
   ],
+  // Reports nothing without a limit in its options, and the size limits are
+  // off across the presets. Likewise vue/max-template-depth below.
+  "vue/max-lines-per-block": "off",
   // Off to match the oxlint vue preset, where it defaults to a single prop per
   // component. In eslint-plugin-vue it has no default, so it reports nothing
   // without options.
   "vue/max-props": "off",
+  "vue/max-template-depth": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

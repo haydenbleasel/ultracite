@@ -1,14 +1,10 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
-import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
+import * as typescriptParser from "@typescript-eslint/parser";
 import sveltePlugin from "eslint-plugin-svelte";
 
 import componentScripts from "../core/component-scripts.mjs";
-import { scriptConfig } from "../core/eslint.config.mjs";
 import svelteRules from "./rules/svelte.mjs";
-
-const [nameReplacementsLevel, nameReplacementsOptions] =
-  scriptConfig.rules["unicorn/name-replacements"];
 
 const svelte = [
   // The plugin's base config registers svelte-eslint-parser (from the
@@ -36,18 +32,6 @@ const svelte = [
       // global scope.
       "prefer-const": "off",
       "sonarjs/declarations-in-global-scope": "off",
-      // SvelteKit generates the PageProps and LayoutProps types in ./$types.
-      "unicorn/name-replacements": [
-        nameReplacementsLevel,
-        {
-          ...nameReplacementsOptions,
-          allowList: {
-            ...nameReplacementsOptions.allowList,
-            LayoutProps: true,
-            PageProps: true,
-          },
-        },
-      ],
       "unicorn/no-top-level-assignment-in-function": "off",
     },
   },

@@ -32,6 +32,7 @@ When you include the `core` preset, you're pulling in Ultracite's base configura
 - **TypeScript strictness**: Enables strict checks and lint rules requiring robust typing. Discourages use of `any`, requires handling of `null/undefined`, and prefers explicit types where needed.
 - **Best practices**: Common rules like no unused vars, no explicit eval, no prototype pollution, etc.
 - **Accessibility**: Biome's core preset enables its a11y rules (ARIA attributes, semantic HTML, keyboard navigation and more) for every project. On Oxlint and ESLint, the JSX a11y rules come with the `react` preset, and ESLint's `astro` and `svelte` presets check those templates too. ESLint's core preset adds a few that apply to every file, such as `eslint-plugin-github`'s `a11y-*` rules.
+- **TODO comments**: Oxlint and ESLint report `TODO`, `FIXME`, `XXX` and `@todo` comments through `no-warning-comments`. Biome has no rule for them.
 - **Formatting conventions**: 2-space indentation, 80-character line width, semicolons, trailing commas, and double quotes.
 
 All these defaults aim to enforce consistent style and prevent common errors without manual configuration.
@@ -57,7 +58,7 @@ Some framework plugins have type-aware rules of their own, which live in an add-
 
 ### Biome
 
-The `type-aware` preset enables project-graph and type-aware rules: `noPrivateImports`, `noUnresolvedImports`, `noImportCycles`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`. These rules require Biome's scanner, so they're slower and shipped as a separate layer:
+The `type-aware` preset enables project-graph and type-aware rules: `noPrivateImports`, `noUnresolvedImports`, `noDeprecatedImports`, `useJsonImportAttributes`, and `useArraySortCompare`. These rules have Biome's scanner read more of the project, so they're shipped as a separate layer. Two project rules, `noImportCycles` and `noUndeclaredDependencies`, are in the core preset: core skips `node_modules`, so they add no measurable time ([#843](https://github.com/haydenbleasel/ultracite/issues/843)).
 
 ```jsonc title="biome.jsonc"
 {
@@ -174,6 +175,15 @@ overrides: [
   },
 ],
 ```
+
+### Sorting Object Keys
+
+Ultracite doesn't sort object keys. The sorting rules fix what they find, so `ultracite fix` would reorder every object, and key order can change what code does: the bytes `JSON.stringify` writes, the order a loop visits keys, which entry of an `exports` map wins, and what TypeScript infers for an options object. [The research post](/research/sort-keys) has the cases we measured.
+
+To sort keys anyway, turn the rule on in your own config:
+
+- **Oxlint and ESLint:** `"sort-keys": "error"`.
+- **Biome:** `"useSortedKeys": "on"` under `assist.actions.source`.
 
 ### Restricting Imports, Globals and Types
 

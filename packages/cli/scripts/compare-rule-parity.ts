@@ -27,12 +27,24 @@ const here = import.meta.dirname;
  */
 const allowlist = new Map<string, string>([
   [
+    "jsx-a11y/prefer-tag-over-role",
+    "off in eslint until eslint-plugin-jsx-a11y stops throwing on an object-valued role prop, which aborts the whole run (jsx-eslint/eslint-plugin-jsx-a11y#1102); oxlint's port doesn't crash",
+  ],
+  [
+    "react-doctor/no-spread-accumulator-in-reduce",
+    "eslint-only: oxlint core already reports it through the native oxc/no-accumulating-spread, so listing it in js-plugins would report twice",
+  ],
+  [
     "require-await",
     "oxlint keeps the base rule on TS files; the ESLint type-aware preset swaps it for @typescript-eslint/require-await, which allows an async function that returns a promise",
   ],
   [
     "typescript/require-await",
     "off in oxlint so type-aware runs don't report a function twice; see require-await",
+  ],
+  [
+    "unicorn/prefer-export-from",
+    "off in oxlint until its suggestion fix stops dropping exports when one export statement re-exports from two modules; eslint-plugin-unicorn's fix is correct",
   ],
 ]);
 
@@ -226,6 +238,18 @@ const surfaces: Surface[] = [
     oxlintConfigs: ["core", "js-plugins", "react", "next", "next/js-plugins"],
   },
   {
+    eslintConfigs: ["core", "type-aware", "react", "tanstack"],
+    file: "src/component.tsx",
+    name: "tanstack (TSX)",
+    oxlintConfigs: [
+      "core",
+      "js-plugins",
+      "react",
+      "tanstack",
+      "tanstack/js-plugins",
+    ],
+  },
+  {
     eslintConfigs: ["core", "type-aware", "gdp"],
     file: "src/example.ts",
     name: "gdp (TypeScript)",
@@ -239,9 +263,11 @@ const nativeRules = getNativeOxlintRules();
 // have can run there, so a rule ESLint enables and oxlint doesn't list is a
 // gap in the preset, not a missing implementation. The exception is a rule
 // that needs type information, which the bridge doesn't provide.
-// react-doctor isn't checked yet: the ESLint react preset enables far more of
-// its rules than the curated list in the js-plugins preset.
-const bridgedPrefixes = ["github/", "sonarjs/"];
+const bridgedPrefixes = ["github/", "sonarjs/", "react-doctor/"];
+
+// Neither preset turns on every React Doctor rule, so its lists are compared
+// in both directions: a rule one linter lists and the other doesn't is drift.
+const listedInBothPrefix = "react-doctor/";
 
 // SAFETY: the ESLint preset's sonarjs module exports its type-checked rules
 // as a rule map keyed by prefixed rule name.
@@ -365,6 +391,12 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     violations.push(`[${surface.name}] ${rule}: ${message}`);
   };
 
+  // Only a surface whose ESLint side loads React Doctor (the react preset)
+  // has a list to compare with.
+  const eslintListsBoth = [...eslintState.keys()].some((name) =>
+    name.startsWith(listedInBothPrefix)
+  );
+
   // Direction 1: rules the oxlint presets enable must be enabled in the
   // ESLint preset when an ESLint implementation exists.
   for (const [name, state] of oxlintState) {
@@ -373,14 +405,19 @@ for (const { eslintRules, oxlintRules, surface } of surfaceData) {
     }
 
     // oxlint-only implementations
-    if (name.startsWith("oxc/") || name.startsWith("react-doctor/")) {
+    if (name.startsWith("oxc/")) {
       continue;
     }
 
-    // No ESLint counterpart configured (e.g. legacy aliases)
     const eslintEntry = eslintState.get(name);
 
     if (!eslintEntry) {
+      // No ESLint counterpart configured (e.g. legacy aliases), except where
+      // both presets list their rules by hand.
+      if (name.startsWith(listedInBothPrefix) && eslintListsBoth) {
+        report(name, "enabled in oxlint, missing in eslint");
+      }
+
       continue;
     }
 

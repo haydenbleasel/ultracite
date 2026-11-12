@@ -12,6 +12,9 @@ const baseRules = Object.fromEntries(
 // which is the benchmark for rule decisions across linters.
 const overrideRules = {
   "import-x/consistent-type-specifier-style": ["error", "prefer-top-level"],
+  // Asks for a webpack magic comment on every dynamic import(), which means
+  // nothing to any other bundler. oxlint has no version of it.
+  "import-x/dynamic-import-chunkname": "off",
   "import-x/exports-last": "off",
   "import-x/extensions": "off",
   "import-x/group-exports": "off",

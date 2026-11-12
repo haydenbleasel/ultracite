@@ -24,25 +24,24 @@ const overrideRules = {
   "unicorn/consistent-arrow-return-style": "off",
   // Renamed from unicorn/prefer-dom-node-dataset in v65.
   "unicorn/dom-node-dataset": "off",
+  // Reports nothing at its defaults: date checking is off upstream, and
+  // no-warning-comments already reports every TODO, with or without a
+  // condition.
+  "unicorn/expiring-todo-comments": "off",
   "unicorn/explicit-length-check": "off",
   "unicorn/max-nested-calls": "off",
-  // Renamed from unicorn/prevent-abbreviations in v68; same allowList option.
-  "unicorn/name-replacements": [
-    "error",
-    {
-      allowList: {
-        generateStaticParams: true,
-        getInitialProps: true,
-        getServerSideProps: true,
-        getStaticPaths: true,
-        getStaticProps: true,
-      },
-    },
-  ],
+  // Renamed from unicorn/prevent-abbreviations in v68. Off: its autofix
+  // renames identifiers across a file (`req` to `request`, `env` to
+  // `environment`), and naming is left to people. oxlint has no port.
+  "unicorn/name-replacements": "off",
   "unicorn/no-array-callback-reference": "off",
   // Strips the leading `*` from JSDoc lines, fighting the conventional
   // documentation-comment style that the formatter preserves.
   "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
+  // Reports every file that only re-exports, which is what a package's
+  // entry point has to be. oxc/no-barrel-file, on in the oxlint preset, has
+  // no ESLint version.
+  "unicorn/no-barrel-files": "off",
   "unicorn/no-keyword-prefix": "off",
   // Its fixer wraps the inner ternary in parentheses that Prettier strips,
   // so every `fix` run ping-pongs. eslint-config-prettier turns it off for

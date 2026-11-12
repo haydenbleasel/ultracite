@@ -30,11 +30,40 @@ const overrideRules = {
     "error",
     { checkConditionalExpressions: true },
   ],
+  // The oxlint convention for "unused on purpose": a leading underscore, a
+  // rest sibling, a `using` declaration. JavaScript files only;
+  // @typescript-eslint/no-unused-vars takes the same options on TypeScript.
+  "no-unused-vars": [
+    "error",
+    {
+      argsIgnorePattern: "^_",
+      caughtErrorsIgnorePattern: "^_",
+      destructuredArrayIgnorePattern: "^_",
+      ignoreRestSiblings: true,
+      ignoreUsingDeclarations: true,
+      varsIgnorePattern: "^_",
+    },
+  ],
+  // `variables: false` skips a reference from inside a function to a variable
+  // declared later in an outer scope; functions that call each other have no
+  // order that satisfies the default. Matches oxlint.
+  "no-use-before-define": ["error", { variables: false }],
   // Avoid conflict with @typescript-eslint/no-floating-promises
   "no-void": ["error", { allowAsStatement: true }],
+  // The default terms, plus JSDoc's `@todo` tag. The `*` decoration finds a
+  // term behind the leading asterisks of a block comment. Matches oxlint.
+  "no-warning-comments": [
+    "error",
+    { decoration: ["*"], terms: ["todo", "fixme", "xxx", "@todo"] },
+  ],
   "one-var": ["error", "never"],
   // https://github.com/eslint/eslint/issues/11542
   "sort-imports": "off",
+  // Off, as in oxlint: sorting can change behavior where key order is
+  // observable (serialised output, iteration order, `exports` maps, option
+  // objects TypeScript infers from in source order).
+  // https://www.ultracite.ai/research/sort-keys
+  "sort-keys": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

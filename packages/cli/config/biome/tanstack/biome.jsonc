@@ -1,21 +1,6 @@
 {
 	"root": false,
 	"$schema": "../../../node_modules/@biomejs/biome/configuration_schema.json",
-	"assist": {
-		"actions": {
-			"source": {
-				// TanStack option objects are order-sensitive. TypeScript infers
-				// the generic parameters of `createFileRoute`, `useMutation`,
-				// `mutationOptions`, `useInfiniteQuery` etc. from context-sensitive
-				// callbacks in source order, so alphabetical sorting breaks
-				// inference: `head`/`component` lose `loaderData`, and
-				// `onError`/`onSettled` see the `onMutate` context as `{}`. Query
-				// and mutation options are declared anywhere (hooks, components,
-				// colocated files), so a path-scoped exemption cannot cover them.
-				"useSortedKeys": "off"
-			}
-		}
-	},
 	"overrides": [
 		{
 			"includes": ["**/routes/**/*.{js,jsx,ts,tsx}"],

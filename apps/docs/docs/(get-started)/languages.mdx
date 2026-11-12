@@ -89,6 +89,10 @@ Prettier ships the widest built-in language coverage of any tool here, including
 
 Stylelint natively handles CSS. Other CSS-adjacent syntaxes — SCSS, Less, CSS-in-JS, `<style>` blocks inside HTML or framework files — work through PostCSS custom-syntax plugins (`postcss-scss`, `postcss-less`, `postcss-html`, and so on). It does not lint JavaScript, TypeScript, JSON, or other non-style formats. Ultracite's Stylelint preset lints `.css`, `.scss`, and `.less` files (`init` installs `postcss-scss` and `postcss-less`); indented Sass (`.sass`) isn't linted.
 
+### Accessibility
+
+Accessibility linting depends on the linter and the framework. Biome's core preset checks every project. Oxlint checks JSX in React projects only. ESLint checks React JSX, Astro templates and Svelte templates, and doesn't yet check Vue or Angular templates or Solid and Qwik JSX.
+
 ## Choosing a toolchain
 
 Three quick rules of thumb:

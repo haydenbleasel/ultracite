@@ -26,6 +26,10 @@ const overrideRules = {
   // Fires on any file whose name differs from an exported class, which is
   // noise for config and module files that export objects, not classes.
   "sonarjs/file-name-differ-from-class": "off",
+  // Duplicates no-warning-comments on every FIXME, with a message that says
+  // the opposite ("take the required action" against "remove or rephrase"),
+  // so one comment needed two suppressions.
+  "sonarjs/fixme-tag": "off",
   // The preset disables max-lines everywhere.
   "sonarjs/max-lines": "off",
   "sonarjs/max-lines-per-function": "off",
@@ -38,8 +42,15 @@ const overrideRules = {
   "sonarjs/no-implicit-dependencies": "off",
   // sonarjs 4.2.1 raised the default threshold to 5; keep the stricter 4.
   "sonarjs/no-nested-functions": ["error", { threshold: 4 }],
-  // Conflicts with sort-keys.
-  "sonarjs/shorthand-property-grouping": "off",
+  // Duplicates no-unused-vars and has no options, so it reports the
+  // underscore-prefixed names that rule's convention allows.
+  "sonarjs/no-unused-vars": "off",
+  // Libraries such as Zod and Radix document `import * as` as their API, and
+  // bundlers tree-shake member access on a namespace. Matches
+  // import/no-namespace being off in oxlint.
+  "sonarjs/no-wildcard-import": "off",
+  // Duplicates no-warning-comments; see sonarjs/fixme-tag.
+  "sonarjs/todo-tag": "off",
 };
 
 const config = Object.assign(baseRules, overrideRules);

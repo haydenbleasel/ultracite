@@ -1,15 +1,11 @@
 /* eslint-disable n/no-unpublished-import, n/no-extraneous-import, import-x/no-extraneous-dependencies, id-length */
 
 import typescript from "@typescript-eslint/eslint-plugin";
-import * as typescriptParser from "@typescript-eslint/parser"; // oxlint-disable-line sonarjs/no-wildcard-import -- required for ESLint parser compatibility
+import * as typescriptParser from "@typescript-eslint/parser";
 import { configs } from "eslint-plugin-astro";
 
 import componentScripts from "../core/component-scripts.mjs";
-import { scriptConfig } from "../core/eslint.config.mjs";
 import astroRules from "./rules/astro.mjs";
-
-const [nameReplacementsLevel, nameReplacementsOptions] =
-  scriptConfig.rules["unicorn/name-replacements"];
 
 const astro = [
   // The plugin's base config registers astro-eslint-parser (from the
@@ -33,17 +29,7 @@ const astro = [
         parser: typescriptParser,
       },
     },
-    rules: {
-      ...astroRules,
-      // Astro types a component's props through an interface named Props.
-      "unicorn/name-replacements": [
-        nameReplacementsLevel,
-        {
-          ...nameReplacementsOptions,
-          allowList: { ...nameReplacementsOptions.allowList, Props: true },
-        },
-      ],
-    },
+    rules: astroRules,
   },
   {
     // Client-side <script> tags are linted as virtual files such as

@@ -1,3 +1,13 @@
+// React Doctor's recommended rules, minus its ports of rules another plugin
+// in this preset already runs. Left out on purpose:
+// - jsx-no-jsx-as-prop, jsx-no-new-array-as-prop, jsx-no-new-function-as-prop
+//   and jsx-no-new-object-as-prop: ports of the react-perf rules the oxlint
+//   react preset turns off, because inline props are idiomatic modern React.
+// - no-ref-callback-cleanup-before-react-19: the plugin doesn't apply its own
+//   React-version gate, so it reports valid code under React 19, which this
+//   preset targets.
+// The oxlint js-plugins presets list the same rules; compare-rule-parity.ts
+// fails when the two drift.
 const config = {
   "react-doctor/activity-wraps-effect-heavy-subtree": "error",
   "react-doctor/advanced-event-handler-refs": "error",
@@ -62,10 +72,6 @@ const config = {
   "react-doctor/js-min-max-loop": "error",
   "react-doctor/js-set-map-lookups": "error",
   "react-doctor/js-tosorted-immutable": "error",
-  "react-doctor/jsx-no-jsx-as-prop": "error",
-  "react-doctor/jsx-no-new-array-as-prop": "error",
-  "react-doctor/jsx-no-new-function-as-prop": "error",
-  "react-doctor/jsx-no-new-object-as-prop": "error",
   "react-doctor/jsx-numeric-and-leaked-render": "error",
   "react-doctor/mobx-no-make-auto-observable-in-inheritance": "error",
   "react-doctor/mobx-no-observer-wrapped-memo": "error",
@@ -91,7 +97,9 @@ const config = {
   "react-doctor/no-async-effect-callback": "error",
   "react-doctor/no-async-event-handler-without-reentry-guard": "error",
   "react-doctor/no-autoplay-without-muted": "error",
-  "react-doctor/no-barrel-import": "error",
+  // React Doctor made this opt-in upstream, as unmeasured performance
+  // advice, and the barrel rules that stay on are core's.
+  "react-doctor/no-barrel-import": "off",
   "react-doctor/no-blocked-paste": "error",
   "react-doctor/no-boolean-toggle-without-functional-update": "error",
   "react-doctor/no-broken-image-source": "error",
@@ -192,7 +200,6 @@ const config = {
   "react-doctor/no-random-key": "error",
   "react-doctor/no-react-dom-deprecated-apis": "error",
   "react-doctor/no-react19-deprecated-apis": "error",
-  "react-doctor/no-ref-callback-cleanup-before-react-19": "error",
   "react-doctor/no-ref-current-in-render": "error",
   "react-doctor/no-render-in-render": "error",
   "react-doctor/no-render-prop-children": "error",

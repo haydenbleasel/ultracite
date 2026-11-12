@@ -27,33 +27,17 @@ const tanstack = [
       ...routerRules,
       ...startRules,
       ...reactDoctorRules,
-      // TanStack option objects are order-sensitive. TypeScript infers the
-      // generic parameters of `createFileRoute`, `useMutation`,
-      // `mutationOptions`, `useInfiniteQuery` etc. from context-sensitive
-      // callbacks in source order, so alphabetical sorting breaks inference:
-      // `head`/`component` lose `loaderData`, and `onError`/`onSettled` see
-      // the `onMutate` context as `{}`. Query and mutation options are
-      // declared anywhere (hooks, components, colocated files), so a
-      // path-scoped exemption cannot cover them. The `*-property-order` rules
-      // above enforce the inference-safe order instead. Mirrors the oxlint
-      // tanstack preset.
-      "sort-keys": "off",
     },
   },
   {
     files: [ROUTE_FILE_GLOB],
     rules: {
-      // File routes are mutually recursive: `Route` references the component
-      // via `component`, and the component calls `Route.useParams()` etc.
-      // With `func-style` making the component a `const`, no declaration
-      // order satisfies the rule. `tsc` reports a direct read above the
-      // declaration (TS2448) in TypeScript route files only, and misses a
-      // crash through a helper, a callback or an import cycle. Mirrors the
-      // oxlint tanstack preset.
-      "@typescript-eslint/no-use-before-define": "off",
-      "no-use-before-define": "off",
       // File-based routes encode the URL in the filename (`__root.tsx`,
-      // `$.tsx`, `posts.$postId.tsx`, `{-$slug}.tsx`).
+      // `$.tsx`, `posts.$postId.tsx`, `{-$slug}.tsx`). no-use-before-define
+      // stays on here with core's `variables: false`: a route whose
+      // `component` is declared below it passes when the component only reads
+      // `Route` inside its body, and a route that reads the component before
+      // its declaration is reported. Mirrors the oxlint tanstack preset.
       "unicorn/filename-case": "off",
     },
   },

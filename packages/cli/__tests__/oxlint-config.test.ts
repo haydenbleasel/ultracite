@@ -648,7 +648,8 @@ describe("oxlint tanstack config", () => {
     expect(routeOverride?.rules?.["unicorn/filename-case"]).toBe("off");
   });
 
-  test("disables no-use-before-define for TanStack route files", async () => {
+  test("leaves no-use-before-define to core in TanStack route files", async () => {
+    const core = await readOxlintConfig("core");
     const config = await readOxlintConfig("tanstack");
 
     const routeOverride = config.overrides?.find(
@@ -656,13 +657,21 @@ describe("oxlint tanstack config", () => {
         override.files?.includes("**/routes/**/*.{js,jsx,svelte,ts,tsx}")
     );
 
-    expect(routeOverride?.rules?.["no-use-before-define"]).toBe("off");
+    // Core's `variables: false` lets a component read `Route` inside its
+    // body, so the route override no longer turns the rule off.
+    expect(core.rules?.["no-use-before-define"]).toEqual([
+      "error",
+      { variables: false },
+    ]);
+    expect(routeOverride?.rules?.["no-use-before-define"]).toBeUndefined();
   });
 
-  test("disables sort-keys for all files", async () => {
+  test("leaves sort-keys off, as core has it", async () => {
+    const core = await readOxlintConfig("core");
     const config = await readOxlintConfig("tanstack");
 
-    expect(config.rules?.["sort-keys"]).toBe("off");
+    expect(core.rules?.["sort-keys"]).toBe("off");
+    expect(config.rules?.["sort-keys"]).toBeUndefined();
   });
 
   test("keeps routeTree.gen.ts filename-case override", async () => {

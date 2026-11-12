@@ -246,4 +246,4 @@ import gdp from "ultracite/eslint/gdp";
 export default [...core, ...gdp];
 ```
 
-It matches the Oxlint preset: upstream's strict mode stops proofs being forged with type assertions or minted outside `proofs/`, and empty proof interfaces (`interface X<P> extends Proof<"X", [P]> {}`) are allowed inside `proofs/`. It also sets `@typescript-eslint/no-unused-vars` to ignore `_`-prefixed arguments, as Oxlint does by default, because sensitive functions take proofs they never read at runtime (`_proof: UserIsProjectAdmin<U, P>`).
+It matches the Oxlint preset: upstream's strict mode stops proofs being forged with type assertions or minted outside `proofs/`, and empty proof interfaces (`interface X<P> extends Proof<"X", [P]> {}`) are allowed inside `proofs/`. Sensitive functions take proofs they never read at runtime (`_proof: UserIsProjectAdmin<U, P>`); the core presets already ignore `_`-prefixed arguments in `no-unused-vars`, so those need no setting of their own.

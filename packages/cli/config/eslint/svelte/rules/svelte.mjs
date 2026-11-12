@@ -28,6 +28,9 @@ const overrideRules = {
     "error",
     { script: [null, "ts"], style: [null, "less", "scss"] },
   ],
+  // Reports nothing without a limit in its options, and the size limits are
+  // off across the presets.
+  "svelte/max-lines-per-block": "off",
   // Requires a user-supplied list of elements to restrict; its schema
   // rejects a bare "error" with no options.
   "svelte/no-restricted-html-elements": "off",

@@ -23,10 +23,12 @@ export default defineConfig({
   ],
   rules: {
     "react-doctor/nextjs-async-client-component": "error",
+    "react-doctor/nextjs-async-dynamic-api-not-awaited": "error",
     "react-doctor/nextjs-error-boundary-missing-use-client": "error",
     "react-doctor/nextjs-global-error-missing-html-body": "error",
     "react-doctor/nextjs-image-missing-sizes": "error",
     "react-doctor/nextjs-inline-script-missing-id": "error",
+    "react-doctor/nextjs-metadata-url-consistency": "error",
     "react-doctor/nextjs-missing-metadata": "error",
     "react-doctor/nextjs-no-a-element": "error",
     "react-doctor/nextjs-no-client-fetch-for-server-data": "error",

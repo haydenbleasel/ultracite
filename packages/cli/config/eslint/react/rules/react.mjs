@@ -16,12 +16,12 @@ const overrideRules = {
   // forwardRef is deprecated in React 19 and
   // react-doctor/no-react19-deprecated-apis covers it.
   "react/forward-ref-uses-ref": "off",
-  "react/function-component-definition": [
-    "error",
-    {
-      namedComponents: "arrow-function",
-    },
-  ],
+  // Off: its fix turns a hoisted `function` component into a `const`, which
+  // throws when something above it reads the component at load (a route
+  // object, say), and its fix for an unnamed component produces code the rule
+  // reports again. Core's func-style already asks for expressions and has no
+  // fix; it leaves `export default function Page()` alone.
+  "react/function-component-definition": "off",
   "react/jsx-boolean-value": "off",
   // Off in the oxlint react config, and its implementation uses the
   // removed context.getFilename() under ESLint 10.

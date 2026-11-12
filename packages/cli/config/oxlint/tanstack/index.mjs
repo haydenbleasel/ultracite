@@ -7,13 +7,12 @@ export default defineConfig({
     {
       files: [ROUTE_FILE_GLOB],
       rules: {
-        // File routes are mutually recursive: `Route` references the component
-        // via `component`, and the component calls `Route.useParams()` etc.
-        // With `func-style` making the component a `const`, no declaration
-        // order satisfies the rule. `tsc` reports a direct read above the
-        // declaration (TS2448) in TypeScript route files only, and misses a
-        // crash through a helper, a callback or an import cycle.
-        "no-use-before-define": "off",
+        // File-based routes encode the URL in the filename (`__root.tsx`,
+        // `$.tsx`, `posts.$postId.tsx`, `{-$slug}.tsx`). no-use-before-define
+        // stays on here with core's `variables: false`: a route whose
+        // `component` is declared below it passes when the component only
+        // reads `Route` inside its body, and a route that reads the component
+        // before its declaration is reported.
         "unicorn/filename-case": "off",
       },
     },
@@ -29,19 +28,4 @@ export default defineConfig({
       },
     },
   ],
-  rules: {
-    // TanStack option objects are order-sensitive. TypeScript infers the
-    // generic parameters of `createFileRoute`, `useMutation`,
-    // `mutationOptions`, `useInfiniteQuery` etc. from context-sensitive
-    // callbacks in source order, so alphabetical sorting breaks inference:
-    // `head`/`component` lose `loaderData`, and `onError`/`onSettled` see
-    // the `onMutate` context as `{}`. Query and mutation options are declared
-    // anywhere (hooks, components, colocated files), so a path-scoped
-    // exemption cannot cover them. Only the ESLint preset has replacements,
-    // the TanStack plugins' `*-property-order` rules. Here,
-    // `ultracite/oxlint/tanstack/js-plugins` adds
-    // `react-doctor/tanstack-start-route-property-order` and nothing checks
-    // the order of query or mutation options.
-    "sort-keys": "off",
-  },
 });
