@@ -8,9 +8,12 @@ import { htmlConfig, scriptConfig } from "../core/eslint.config.mjs";
 import inlineScripts, { inlineScriptsFiles } from "./inline-scripts.mjs";
 import angularTemplateRules from "./rules/angular-template.mjs";
 import angularRules from "./rules/angular.mjs";
+import withRanges from "./template-parser.mjs";
 
 // Core's rules read a JavaScript syntax tree, and some of them throw on the
-// tree Angular's template parser builds.
+// tree Angular's template parser builds. `withRanges` gives its nodes the
+// `range` the jsdoc rules read, for when a project's config turns one back on
+// for every file.
 const coreRulesOff = Object.fromEntries(
   Object.keys(scriptConfig.rules).map((rule) => [rule, "off"])
 );
@@ -33,11 +36,11 @@ const angular = [
   {
     // Every HTML file, not only `*.component.html`: current Angular doesn't
     // name templates that way (51 of the 298 templates in angular.dev's
-    // source do). A page that isn't a template, such as `src/index.html`,
-    // is read as plain HTML and gets few reports.
+    // source do). A whole page, such as `src/index.html`, isn't a template:
+    // the processor lints only its inline scripts.
     files: ["**/*.html"],
     languageOptions: {
-      parser: angularTemplateParser,
+      parser: withRanges(angularTemplateParser),
     },
     plugins: {
       "@angular-eslint/template": angularTemplatePlugin,

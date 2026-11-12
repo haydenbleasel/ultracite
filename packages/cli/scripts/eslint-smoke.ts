@@ -37,6 +37,8 @@ interface Preset {
    * add-on (ultracite/eslint/<name>/type-aware), adding these files.
    */
   typeAware?: Record<string, FixtureFile>;
+  /** Config objects the project's own config adds after the presets. */
+  userConfig?: Linter.Config[];
   /** Lint without a tsconfig.json, as core must work without type information. */
   withoutTsconfig?: boolean;
 }
@@ -90,14 +92,17 @@ export class App {
         expect: ["@angular-eslint/component-class-suffix"],
       },
       "src/index.html": {
-        // Not a template, but linted as one. Its inline script is still
-        // linted by core, and core's rules stay off the template itself:
-        // some of them throw on the tree the template parser builds.
+        // A whole page, not a template: only its inline script is linted, by
+        // core. The template rules would report its plain HTML, and Angular's
+        // parser would fail on the `{` in the code sample. The script is
+        // linted as `index.html/0_inline-scripts.htm`, which the filename
+        // rule must accept.
         content: `<!doctype html>
 <html lang="en">
   <body>
     <app-root></app-root>
     <img src="/logo.png" />
+    <noscript><pre>if (ready) { start(); }</pre></noscript>
     <script>
       var legacy = 1;
       console.log(legacy);
@@ -105,7 +110,8 @@ export class App {
   </body>
 </html>
 `,
-        expect: ["@angular-eslint/template/alt-text", "no-var"],
+        expect: ["no-var"],
+        forbid: ["@angular-eslint/template/", "github/filenames-match-regex"],
       },
       "src/user-card.component.ts": {
         // An inline template: the same rules, reported in the TypeScript
@@ -170,6 +176,44 @@ export class UserCard {
     },
     presets: ["angular"],
     typeAware: {},
+  },
+  "angular-user-rules": {
+    // A rule the project's config turns on without `files` runs on templates
+    // too. The jsdoc rules read every node's range, so they throw on each
+    // template unless the preset's parser gives its nodes one.
+    files: {
+      "src/user-card.component.ts": {
+        content: `import { Component } from "@angular/core";
+
+@Component({
+  selector: "app-user-card",
+  template: \`<img [src]="avatar" />\`,
+})
+export class UserCardComponent {
+  public avatar = "";
+}
+`,
+        expect: ["@angular-eslint/template/alt-text"],
+      },
+      "src/user-list.html": {
+        content: `<!-- The list of users -->
+<ul>
+  @for (user of users(); track user.id) {
+    <li><img [src]="user.avatar" /></li>
+  }
+</ul>
+`,
+        expect: ["@angular-eslint/template/alt-text"],
+      },
+    },
+    presets: ["angular"],
+    userConfig: [
+      {
+        rules: {
+          "jsdoc/check-tag-names": ["error", { definedTags: ["internal"] }],
+        },
+      },
+    ],
   },
   astro: {
     files: {
@@ -1004,7 +1048,7 @@ const checkPreset = async (
   await writeFixture(root, preset);
 
   const loaded = await Promise.all(["core", ...preset.presets].map(loadPreset));
-  const configs = loaded.flat();
+  const configs = [...loaded.flat(), ...(preset.userConfig ?? [])];
 
   const eslint = new ESLint({
     cwd: root,
