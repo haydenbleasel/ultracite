@@ -922,10 +922,21 @@ const mockAgentEnvironment = ({
     AGENT_TIMEOUT_MS: 600_000,
     runAgent: mockRunAgent,
   }));
+  // The summary goes through @clack/prompts, which other test files replace
+  // for the whole run, so it's captured here instead of read from stdout.
+  const outro = mock((_message: string) => {});
+
+  mock.module("@clack/prompts", () => ({
+    intro: mock(),
+    log,
+    outro,
+    spinner: () => ({ start: mock(), stop: mock() }),
+  }));
+
   // Verification checks the file still exists before re-linting it.
   mockFileSystem(Object.fromEntries(files.map((file) => [file, ""])));
 
-  return { mockRunAgent, mockSpawn };
+  return { mockRunAgent, mockSpawn, outro };
 };
 
 describe("fix with an agent", () => {
@@ -1124,7 +1135,7 @@ describe("fix with an agent", () => {
   test("doesn't retry an issue the agent left for a person and shows why", async () => {
     const write = spyOn(process.stdout, "write").mockImplementation(() => true);
 
-    const { mockRunAgent } = mockAgentEnvironment({
+    const { mockRunAgent, outro } = mockAgentEnvironment({
       agentOutputs: [
         "The caller's heading would end up inside the button.\n\nLeft for review: 1",
       ],
@@ -1143,7 +1154,7 @@ describe("fix with an agent", () => {
     );
     // The explanation is printed once, and the total says who it's waiting on.
     expect(output).not.toContain("Claude Code said:");
-    expect(output).toContain(
+    expect(outro).toHaveBeenCalledWith(
       "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide."
     );
   });
@@ -1156,7 +1167,7 @@ describe("fix with an agent", () => {
       (_, index) => `Point ${index + 1}.`
     );
 
-    mockAgentEnvironment({
+    const { outro } = mockAgentEnvironment({
       agentOutputs: [
         `Removed the eval.\n\n${lines.join("\n")}\n\nThis looks like a real bug upstream.`,
       ],
@@ -1171,8 +1182,7 @@ describe("fix with an agent", () => {
     expect(output).toContain("… Point 6.");
     expect(output).not.toContain("Point 5.");
     expect(output).not.toContain("Removed the eval.");
-    expect(output).toContain("Fixed 1 of 1 issue with Claude Code.");
-    expect(output).not.toContain("left for you to decide");
+    expect(outro).toHaveBeenCalledWith("Fixed 1 of 1 issue with Claude Code.");
   });
 
   test("retries only the issues the agent didn't leave for a person", async () => {
