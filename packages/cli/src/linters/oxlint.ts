@@ -413,7 +413,7 @@ const renderOverride = (
 // type checks) without oxlint installed. Anything else the project imports
 // from oxlint stays on its own import.
 const renderDefineConfigImports = (
-  bun: boolean,
+  bun: boolean | undefined,
   oxlintSpecifiers: string[] = []
 ): string[] => {
   if (!bun) {
@@ -431,7 +431,7 @@ const generateConfigContent = (
   jsPlugins: OxlintJsPlugin[] = [],
   extras: OxlintExtras = emptyExtras(),
   typeAware = false,
-  bun = false,
+  bun?: boolean,
   bindings: PresetBindings = bindPresets(extendsList, jsPlugins, extras)
 ) => {
   // anti-slop and @shadcn/lint have their own presets, so they become plain

@@ -87,6 +87,7 @@ for (const [index, line] of settings.split("\n").entries()) {
 // How each toolchain runs here, read from what `init` writes.
 const toolchainRows = isZed ? zedToolchains() : vscodeToolchains();
 const countWords = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
+
 const toolchainCount =
   countWords[toolchainRows.length] ?? String(toolchainRows.length);
 

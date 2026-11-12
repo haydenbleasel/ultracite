@@ -61,7 +61,11 @@ const diagnostics = [
   cards={[
     {
       body: "Bun has no language server, so the Oxc extension lints and formats on save with Oxlint and Oxfmt, reading the same two configs. `init` installs both packages when it sets up an editor.",
-      code: { lang: "jsonc", path: ".vscode/settings.json", text: vscodeSettings },
+      code: {
+        lang: "jsonc",
+        path: ".vscode/settings.json",
+        text: vscodeSettings,
+      },
       eyebrow: "VS Code, Cursor, Devin Desktop",
       title: "Your editor runs Oxlint",
     },
@@ -80,21 +84,18 @@ const diagnostics = [
   id="bn-everywhere"
   title="Bun on the command line, Oxlint in the editor"
 >
-  The CLI runs Bun’s tools and your editor runs Oxlint’s, on the same two
-  files. <code class="font-mono text-base">ultracite/bun</code> leaves out
-  the same rules for both, so they check for the same things.
+  The CLI runs Bun’s tools and your editor runs Oxlint’s, on the same two files.{" "}
+  <code class="font-mono text-base">ultracite/bun</code> leaves out the same
+  rules for both, so they check for the same things.
   <Fragment slot="terminal">
-    <p class="mb-1 truncate text-panel-foreground">
+    <p class="text-panel-foreground mb-1 truncate">
       <span class="text-signal">$</span> bunx ultracite check
     </p>
-    {
-      diagnostics.map((line) => (
-        <p class="truncate">
-          {line.location}: <span class="text-signal">error</span>{" "}
-          <span class="text-panel-foreground">{line.rule}</span>:{" "}
-          {line.message}
-        </p>
-      ))
-    }
+    {diagnostics.map((line) => (
+      <p class="truncate">
+        {line.location}: <span class="text-signal">error</span>{" "}
+        <span class="text-panel-foreground">{line.rule}</span>: {line.message}
+      </p>
+    ))}
   </Fragment>
 </Everywhere>

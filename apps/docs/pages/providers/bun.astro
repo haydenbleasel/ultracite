@@ -1,9 +1,13 @@
 ---
+import { MIN_BUN_VERSION } from "../../../../packages/cli/src/dependencies";
 import Cta from "../../components/home/cta.astro";
 import Faq from "../../components/landing/faq.astro";
 import LandingHero from "../../components/landing/landing-hero.astro";
 import LandingLayout from "../../components/landing/landing-layout.astro";
-import type { Crumb, Faq as FaqItem } from "../../components/landing/landing-layout.astro";
+import type {
+  Crumb,
+  Faq as FaqItem,
+} from "../../components/landing/landing-layout.astro";
 import NextSteps from "../../components/landing/next-steps.astro";
 import type { NextStep } from "../../components/landing/next-steps.astro";
 import ConfigFiles from "../../components/providers/bun/config-files.astro";
@@ -13,7 +17,6 @@ import Limits from "../../components/providers/bun/limits.astro";
 import Rules from "../../components/providers/bun/rules.astro";
 import Speed from "../../components/providers/bun/speed.astro";
 import TypeAware from "../../components/providers/bun/type-aware.astro";
-import { MIN_BUN_VERSION } from "../../../../packages/cli/src/dependencies";
 import { bunParity, formatMs, runFor, typeAware } from "../../lib/benchmarks";
 import { providerLogos } from "../../lib/logos";
 
@@ -33,8 +36,7 @@ const breadcrumbs: Crumb[] = [
 
 const faqs: FaqItem[] = [
   {
-    answer:
-      `Almost. \`bun lint\` reimplements Oxlint’s rules under the same names and reads \`oxlint.config.ts\`, so the Bun provider extends Ultracite’s Oxlint presets as they are. Bun has no \`jsdoc\` or \`vue\` rules, so \`ultracite/bun\` leaves those out: core runs 455 of its 474 rules on Bun, and the Vue preset none. On the benchmark project’s 420 files, Oxlint and Bun reported the same ${bunParity.lintProblems} problems.`,
+    answer: `Almost. \`bun lint\` reimplements Oxlint’s rules under the same names and reads \`oxlint.config.ts\`, so the Bun provider extends Ultracite’s Oxlint presets as they are. Bun has no \`jsdoc\` or \`vue\` rules, so \`ultracite/bun\` leaves those out: core runs 455 of its 474 rules on Bun, and the Vue preset none. On the benchmark project’s 420 files, Oxlint and Bun reported the same ${bunParity.lintProblems} problems.`,
     question: "Does Bun run the same rules as Oxlint?",
   },
   {
@@ -43,8 +45,7 @@ const faqs: FaqItem[] = [
     question: "Do I need oxlint or oxfmt installed?",
   },
   {
-    answer:
-      `Bun ${MIN_BUN_VERSION} or later, the first with \`bun lint\` and \`bun fmt\`. On an older Bun, \`ultracite check\` stops and says so, and \`ultracite doctor\` reports the Bun it finds. Run \`bun upgrade\`, and raise \`bun-version\` in CI if you pin it.`,
+    answer: `Bun ${MIN_BUN_VERSION} or later, the first with \`bun lint\` and \`bun fmt\`. On an older Bun, \`ultracite check\` stops and says so, and \`ultracite doctor\` reports the Bun it finds. Run \`bun upgrade\`, and raise \`bun-version\` in CI if you pin it.`,
     question: "Which Bun do I need?",
   },
   {
@@ -63,8 +64,7 @@ const faqs: FaqItem[] = [
     question: "How do I switch an existing project to Bun?",
   },
   {
-    answer:
-      `Yes. \`init --type-aware\` sets \`typeAware\` in \`oxlint.config.ts\` and installs nothing, because \`bun lint\` gets types from \`bun check\`, Bun’s type checker. On the 420-file benchmark project that check took ${formatMs(typeAware.ms.bun)}, where Oxlint with \`oxlint-tsgolint\` took ${formatMs(typeAware.ms.oxlint)}, for the same ${typeAware.problems.toLocaleString("en-US")} problems.`,
+    answer: `Yes. \`init --type-aware\` sets \`typeAware\` in \`oxlint.config.ts\` and installs nothing, because \`bun lint\` gets types from \`bun check\`, Bun’s type checker. On the 420-file benchmark project that check took ${formatMs(typeAware.ms.bun)}, where Oxlint with \`oxlint-tsgolint\` took ${formatMs(typeAware.ms.oxlint)}, for the same ${typeAware.problems.toLocaleString("en-US")} problems.`,
     question: "Does it support type-aware rules?",
   },
   {
@@ -74,7 +74,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Set it in `rules` in `oxlint.config.ts`, after the presets in `extends`: `rules: { \"no-console\": \"off\" }`. Bun would also read a `[lint.rules]` table in `bunfig.toml`, but your editor’s Oxc extension doesn’t, so the two would disagree. For a single line, `// oxlint-disable-next-line no-console` works in both.",
+      'Set it in `rules` in `oxlint.config.ts`, after the presets in `extends`: `rules: { "no-console": "off" }`. Bun would also read a `[lint.rules]` table in `bunfig.toml`, but your editor’s Oxc extension doesn’t, so the two would disagree. For a single line, `// oxlint-disable-next-line no-console` works in both.',
     question: "How do I turn off a rule?",
   },
 ];
@@ -88,19 +88,22 @@ const nextSteps: NextStep[] = [
     title: "Bun’s config files",
   },
   {
-    description: "Turn on the 56 rules that read your types, with types from `bun check`.",
+    description:
+      "Turn on the 56 rules that read your types, with types from `bun check`.",
     href: "/docs/usage#bun",
     label: "Guide",
     title: "Type-aware linting",
   },
   {
-    description: "Old Bun versions, `lint` scripts and `bunfig.toml`, and how to fix each.",
+    description:
+      "Old Bun versions, `lint` scripts and `bunfig.toml`, and how to fix each.",
     href: "/docs/troubleshooting",
     label: "Help",
     title: "Troubleshooting",
   },
   {
-    description: "Bun, Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
+    description:
+      "Bun, Oxlint, Biome and ESLint side by side: rules, speed, tradeoffs.",
     href: "/providers",
     label: "Providers",
     title: "Compare the engines",
@@ -122,16 +125,31 @@ const nextSteps: NextStep[] = [
     name="Bun"
     title="The strict config for bun lint and bun fmt"
   >
-    From {MIN_BUN_VERSION}, Bun has a linter and a formatter that
-    reimplement Oxlint and Oxfmt. Ultracite points them at its own Oxlint and Oxfmt
-    presets, so you get 455 rules, all errors, and Prettier-style formatting
-    with nothing to install but{" "}
-    <code class="font-mono text-base text-foreground">ultracite</code>.
+    From {MIN_BUN_VERSION}, Bun has a linter and a formatter that reimplement
+    Oxlint and Oxfmt. Ultracite points them at its own Oxlint and Oxfmt presets,
+    so you get 455 rules, all errors, and Prettier-style formatting with nothing
+    to install but{" "}
+    <code class="text-foreground font-mono text-base">ultracite</code>.
     <Fragment slot="note">
       <span>Also on</span>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/oxlint">Oxlint</a>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/biome">Biome</a>
-      <a class="underline underline-offset-2 hover:text-foreground" href="/providers/eslint">ESLint</a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/oxlint"
+      >
+        Oxlint
+      </a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/biome"
+      >
+        Biome
+      </a>
+      <a
+        class="hover:text-foreground underline underline-offset-2"
+        href="/providers/eslint"
+      >
+        ESLint
+      </a>
       <span aria-hidden="true">·</span>
       <span>Checked against Bun 1.4.4-canary.1</span>
     </Fragment>
