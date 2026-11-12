@@ -853,10 +853,15 @@ export const upsertOxlintConfig = async (
       s.message("Oxlint configuration found, updating...");
     }
 
-    await oxlint.update({ frameworks, jsPlugins, typeAware });
+    // update warns why when it leaves the config unchanged.
+    const updated = await oxlint.update({ frameworks, jsPlugins, typeAware });
 
     if (!quiet) {
-      s.stop("Oxlint configuration updated.");
+      s.stop(
+        updated
+          ? "Oxlint configuration updated."
+          : "Oxlint configuration left unchanged."
+      );
     }
 
     return;

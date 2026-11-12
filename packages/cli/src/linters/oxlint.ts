@@ -984,61 +984,44 @@ const findNamespacePresetImport = (config: ConfigModule) =>
       toUltracitePreset(moduleImport.source) !== null
   );
 
-/**
- * What a root config that extends the core preset does about `env`.
- * `declared` when it sets `env` itself. `upgradable` when it lists core in
- * `extends` without `env`, which update adds. `missing` when it lacks `env`
- * and update can't add it: it takes core through a name of its own (`const
- * base = { ...core }`), or imports a preset with `import * as`. `unclear`
- * when it sets no `env` key but spreads in an object (`...shared`), or has a
- * computed key, that may set it; update would move the spread among the
- * properties it writes, so it leaves such a config alone. Null when it
- * doesn't extend core, or when the file can't be read that far: it doesn't
- * parse, or isn't an object init can read.
- */
-export type CoreEnv = "declared" | "missing" | "unclear" | "upgradable";
+// The properties update writes in places of its own, ahead of everything it
+// carries over as written.
+const hoistedKeys = new Set([
+  "env",
+  "extends",
+  "ignorePatterns",
+  "jsPlugins",
+  "settings",
+]);
+
+interface SpreadAhead {
+  // The first property update writes that the spread comes before.
+  key: string;
+  // The name it spreads in, when it's a spread of one (`...shared`).
+  spreadOf: string | null;
+}
 
 /**
- * Oxlint doesn't carry `env` through `extends` (oxc-project/oxc#20087), so
- * a config that extends core without its own runs `no-implied-eval` and
- * `no-eval` without the browser and Node globals they need, and they miss
- * string timers and `window.eval`. Configs init wrote before it declared
- * `env` look like this.
+ * A spread (`...shared`) or computed key ahead of a property update writes
+ * in a place of its own. update writes those ahead of everything it carries
+ * over, so the spread would end up after the property and override it, and
+ * update leaves such a config unchanged. A spread after them stays after
+ * them, and a property update adds goes ahead of it, so whatever the spread
+ * sets still wins.
  */
-export const readCoreEnv = (contents: string): CoreEnv | null => {
-  const parsed = parseConfigModule(contents);
+const findSpreadAhead = (entries: ConfigEntry[]): SpreadAhead | null => {
+  const first = entries.findIndex((entry) => entry.key === null);
 
-  if (parsed.kind !== "module") {
+  if (first === -1) {
     return null;
   }
 
-  const existing = readExistingConfig(contents, parsed.module);
-  const { entries } = parsed.module;
+  const key = entries
+    .slice(first + 1)
+    .find((entry) => entry.key !== null && hoistedKeys.has(entry.key))?.key;
 
-  if (
-    !existing ||
-    ![...existing.presets, ...existing.reached].includes(corePath)
-  ) {
-    return null;
-  }
-
-  if (entries.some((entry) => entry.key === "env")) {
-    return "declared";
-  }
-
-  if (entries.some((entry) => entry.key === null)) {
-    return "unclear";
-  }
-
-  return existing.presets.includes(corePath) &&
-    !findNamespacePresetImport(parsed.module)
-    ? "upgradable"
-    : "missing";
+  return key ? { key, spreadOf: entries[first]?.spreadOf ?? null } : null;
 };
-
-/** Whether a root config lacks the `env` core needs, and update can add it. */
-export const lacksCoreEnv = (contents: string): boolean =>
-  readCoreEnv(contents) === "upgradable";
 
 // The pre-parser way of finding presets, for a file init can't restructure:
 // default imports of Ultracite presets, then legacy string extends.
@@ -1263,32 +1246,48 @@ const readOxlintRc = async (): Promise<OxlintRc> => {
   return config ? { config, kind: "config" } : { kind: "invalid" };
 };
 
-const readExistingOxlintConfig = async (
-  configPath: string | null
-): Promise<
-  | { existing: ExistingConfig; jsPlugins: OxlintJsPlugin[]; kind: "config" }
+/**
+ * Why update leaves a config's contents unchanged: they don't parse, they
+ * import a preset with `import * as` (see findNamespacePresetImport), they
+ * spread in an object ahead of a property update writes (see
+ * findSpreadAhead), or they declare a name the generated config declares
+ * too, which would then be declared twice.
+ */
+type UpdateRefusal =
+  | { kind: "clash"; name: string }
   | { kind: "namespace"; local: string; source: string }
-  | { kind: "unparseable" }
-> => {
-  if (!configPath) {
+  | ({ kind: "spread" } & SpreadAhead)
+  | { kind: "unparseable" };
+
+interface CarriedConfig {
+  existing: ExistingConfig;
+  jsPlugins: OxlintJsPlugin[];
+  kind: "config";
+  // Not an object init can read, so it's replaced rather than carried over.
+  replaced: boolean;
+}
+
+/** A config's contents as update carries them over, or why it can't. */
+const readCurrentConfig = (
+  contents: string | null
+): CarriedConfig | Exclude<UpdateRefusal, { kind: "clash" }> => {
+  if (contents === null) {
     return {
       existing: { extras: emptyExtras(), order: [], presets: [], reached: [] },
       jsPlugins: [],
       kind: "config",
+      replaced: false,
     };
   }
 
-  const contents = await readFile(configPath, "utf-8");
   const parsed = parseConfigModule(contents);
 
   if (parsed.kind === "unparseable") {
     return { kind: "unparseable" };
   }
 
-  const namespaceImport =
-    parsed.kind === "module"
-      ? findNamespacePresetImport(parsed.module)
-      : undefined;
+  const config = parsed.kind === "module" ? parsed.module : null;
+  const namespaceImport = config ? findNamespacePresetImport(config) : null;
 
   if (namespaceImport?.namespaceLocal) {
     return {
@@ -1298,15 +1297,13 @@ const readExistingOxlintConfig = async (
     };
   }
 
-  const existing =
-    parsed.kind === "module"
-      ? readExistingConfig(contents, parsed.module)
-      : null;
+  const existing = config ? readExistingConfig(contents, config) : null;
 
-  if (!existing) {
-    log.warn(
-      `${fileName(configPath)} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
-    );
+  const spreadAhead =
+    config && existing ? findSpreadAhead(config.entries) : null;
+
+  if (spreadAhead) {
+    return { kind: "spread", ...spreadAhead };
   }
 
   return {
@@ -1322,7 +1319,199 @@ const readExistingOxlintConfig = async (
       existing?.extras.reservedIdentifiers.has("selectJsPlugins")
     ),
     kind: "config",
+    replaced: !existing,
   };
+};
+
+interface UpdatePlan {
+  addTypeAware: boolean;
+  bindings: PresetBindings;
+  existing: ExistingConfig;
+  // An `options` object of the project's own, kept as written.
+  existingOptions: RenderedEntry | undefined;
+  jsPlugins: OxlintJsPlugin[];
+  kind: "plan";
+  newExtends: string[];
+  replaced: boolean;
+  // The .oxlintrc.json extends that can't be carried over.
+  unmigrated: string[];
+}
+
+/**
+ * What update writes for a config it carries over, with the .oxlintrc.json
+ * settings it migrates, or the name that would be declared twice.
+ */
+const planUpdate = (
+  { existing, jsPlugins: currentJsPlugins, replaced }: CarriedConfig,
+  rc: JsonObject | null,
+  opts?: OxlintOptions
+): UpdatePlan | Extract<UpdateRefusal, { kind: "clash" }> => {
+  const unmigrated = rc ? mergeRcConfig(rc, existing) : [];
+  // generateConfigContent adds core and puts the presets in presetOrder.
+  const newExtends = [...existing.presets];
+
+  // Helper to check if a config is already present
+  const hasConfig = (name: string) =>
+    newExtends.includes(getOxlintConfigPath(name));
+
+  // Add framework-specific configs if provided
+  for (const framework of opts?.frameworks ?? []) {
+    const name = validateFrameworkName(framework);
+
+    if (!hasConfig(name)) {
+      newExtends.push(getOxlintConfigPath(name));
+    }
+  }
+
+  // Without an explicit new selection, keep the plugins the existing
+  // config had selected.
+  const requestedJsPlugins = opts?.jsPlugins ?? [];
+  let jsPlugins = currentJsPlugins;
+
+  if (requestedJsPlugins.length > 0) {
+    // The full js-plugins preset already enables its plugins, so a
+    // selection made on top of it (e.g. adding the documentation plugins)
+    // keeps them rather than replacing the preset with just the new ones.
+    const extendsFullJsPluginsPreset =
+      currentJsPlugins.length === 0 && hasConfig("js-plugins");
+
+    jsPlugins =
+      extendsFullJsPluginsPreset &&
+      requestedJsPlugins.some(isSelectableJsPlugin)
+        ? [...new Set([...fullPresetJsPlugins, ...requestedJsPlugins])]
+        : requestedJsPlugins;
+  }
+
+  // An `options` object of the project's own is kept as written, so
+  // type-aware linting is only added to a config that has none.
+  const existingOptions = existing.extras.properties.find((property) =>
+    OPTIONS_PROPERTY_RE.test(property.text)
+  );
+
+  const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
+
+  // The generated config declares these itself, so a binding of the
+  // project's own with the same name would be declared twice.
+  const clash = generatedHelpers(bindings.presets, jsPlugins).find((name) =>
+    existing.extras.reservedIdentifiers.has(name)
+  );
+
+  if (clash) {
+    return { kind: "clash", name: clash };
+  }
+
+  return {
+    addTypeAware: Boolean(opts?.typeAware) && !existingOptions,
+    bindings,
+    existing,
+    existingOptions,
+    jsPlugins,
+    kind: "plan",
+    newExtends,
+    replaced,
+    unmigrated,
+  };
+};
+
+// What update warns when it leaves a config unchanged.
+const describeRefusal = (refusal: UpdateRefusal, file: string): string => {
+  switch (refusal.kind) {
+    case "clash": {
+      return `${file} declares its own \`${refusal.name}\`, which the Ultracite config also declares, so it was left unchanged. Rename it and re-run \`ultracite init\`.`;
+    }
+
+    case "namespace": {
+      const { local, source } = refusal;
+
+      return `${file} imports ${source} with \`import * as ${local}\`, which init can't carry over, so it was left unchanged. Change it to \`import ${local} from "${source}"\`, write \`${local}\` where it says \`${local}.default\`, and re-run \`ultracite init\`.`;
+    }
+
+    case "spread": {
+      const { key, spreadOf } = refusal;
+
+      const spread = spreadOf
+        ? `\`...${spreadOf}\``
+        : "a spread or computed key";
+
+      return `${file} has ${spread} ahead of \`${key}\`. init writes \`${key}\` ahead of everything it carries over, which would put the spread after it and let the spread override it, so ${file} was left unchanged. Move the spread below \`env\`, \`extends\`, \`ignorePatterns\`, \`jsPlugins\` and \`settings\`, taking out of the object it spreads in any of those it shouldn't override, and re-run \`ultracite init\`.`;
+    }
+
+    default: {
+      return `Could not parse ${file}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`;
+    }
+  }
+};
+
+/**
+ * What stops upgrade adding `env` to a config that extends core without it:
+ * update would leave the config unchanged, or the config takes core through
+ * a name of its own (`const base = { ...core }`), which update would add
+ * core to `extends` beside.
+ */
+export type EnvBlocker = UpdateRefusal | { kind: "reached" };
+
+/**
+ * What a root config that extends the core preset does about `env`.
+ * `declared` when it sets `env` itself. Otherwise `missing`, with what stops
+ * upgrade adding it (null when nothing does), and whether the config spreads
+ * in an object, or has a computed key, that may set it. Null when it doesn't
+ * extend core, or when the file can't be read that far: it doesn't parse, or
+ * isn't an object init can read.
+ */
+export type CoreEnv =
+  | { kind: "declared" }
+  | { blocker: EnvBlocker | null; kind: "missing"; spreads: boolean };
+
+// Why update, run the way upgrade runs it, would leave a config unchanged.
+const findUpdateRefusal = (contents: string): UpdateRefusal | null => {
+  const current = readCurrentConfig(contents);
+  const plan = current.kind === "config" ? planUpdate(current, null) : current;
+
+  return plan.kind === "plan" ? null : plan;
+};
+
+/**
+ * Oxlint doesn't carry `env` through `extends` (oxc-project/oxc#20087), so
+ * a config that extends core without its own runs `no-implied-eval` and
+ * `no-eval` without the browser and Node globals they need, and they miss
+ * string timers and `window.eval`. Configs init wrote before it declared
+ * `env` look like this.
+ */
+export const readCoreEnv = (contents: string): CoreEnv | null => {
+  const parsed = parseConfigModule(contents);
+
+  if (parsed.kind !== "module") {
+    return null;
+  }
+
+  const existing = readExistingConfig(contents, parsed.module);
+  const { entries } = parsed.module;
+
+  if (
+    !existing ||
+    ![...existing.presets, ...existing.reached].includes(corePath)
+  ) {
+    return null;
+  }
+
+  if (entries.some((entry) => entry.key === "env")) {
+    return { kind: "declared" };
+  }
+
+  return {
+    blocker: existing.presets.includes(corePath)
+      ? findUpdateRefusal(contents)
+      : { kind: "reached" },
+    kind: "missing",
+    spreads: entries.some((entry) => entry.key === null),
+  };
+};
+
+/** Whether a root config lacks the `env` core needs, and upgrade can add it. */
+export const lacksCoreEnv = (contents: string): boolean => {
+  const env = readCoreEnv(contents);
+
+  return env?.kind === "missing" && env.blocker === null;
 };
 
 // The identifier a workspace config imports the root config as.
@@ -1456,10 +1645,10 @@ export const oxlint = {
       .map((name) => `${dir}/${name}`)
       .find((configPath) => exists(`./${configPath}`)) ?? null,
   // Resolves false when it left the config unchanged, having warned why.
-  // oxlint-disable-next-line complexity -- refactor when next touched: a guard per config init can't update, then the js-plugins, type-aware, rename and migration cases
   update: async (opts?: OxlintOptions): Promise<boolean> => {
     const paths = resolveOxlintConfigPath();
     const configFile = fileName(paths.target);
+    const existingFile = fileName(paths.existing ?? paths.target);
 
     if (paths.conflict) {
       log.warn(
@@ -1481,92 +1670,37 @@ export const oxlint = {
       return false;
     }
 
-    const current = await readExistingOxlintConfig(paths.existing);
-
-    // A config that doesn't parse can't be carried over, and Oxlint can't
-    // load it either; leave it for the user to fix rather than discard it.
-    if (current.kind === "unparseable") {
-      log.warn(
-        `Could not parse ${fileName(paths.existing ?? paths.target)}, so it was left unchanged. Fix its syntax and re-run \`ultracite init\`.`
-      );
-
-      return false;
-    }
-
-    if (current.kind === "namespace") {
-      const { local, source } = current;
-
-      log.warn(
-        `${fileName(paths.existing ?? paths.target)} imports ${source} with \`import * as ${local}\`, which init can't carry over, so it was left unchanged. Change it to \`import ${local} from "${source}"\`, write \`${local}\` where it says \`${local}.default\`, and re-run \`ultracite init\`.`
-      );
-
-      return false;
-    }
-
-    const { existing } = current;
-    const unmigrated = rc ? mergeRcConfig(rc.config, existing) : [];
-    // generateConfigContent adds core and puts the presets in presetOrder.
-    const newExtends = [...existing.presets];
-
-    // Helper to check if a config is already present
-    const hasConfig = (name: string) =>
-      newExtends.includes(getOxlintConfigPath(name));
-
-    // Add framework-specific configs if provided
-    for (const framework of opts?.frameworks ?? []) {
-      const name = validateFrameworkName(framework);
-
-      if (!hasConfig(name)) {
-        newExtends.push(getOxlintConfigPath(name));
-      }
-    }
-
-    // Without an explicit new selection, keep the plugins the existing
-    // config had selected.
-    const requestedJsPlugins = opts?.jsPlugins ?? [];
-    let { jsPlugins } = current;
-
-    if (requestedJsPlugins.length > 0) {
-      // The full js-plugins preset already enables its plugins, so a
-      // selection made on top of it (e.g. adding the documentation plugins)
-      // keeps them rather than replacing the preset with just the new ones.
-      const extendsFullJsPluginsPreset =
-        current.jsPlugins.length === 0 && hasConfig("js-plugins");
-
-      jsPlugins =
-        extendsFullJsPluginsPreset &&
-        requestedJsPlugins.some(isSelectableJsPlugin)
-          ? [...new Set([...fullPresetJsPlugins, ...requestedJsPlugins])]
-          : requestedJsPlugins;
-    }
-
-    // An `options` object of the project's own is kept as written, so
-    // type-aware linting is only added to a config that has none.
-    const existingOptions = existing.extras.properties.find((property) =>
-      OPTIONS_PROPERTY_RE.test(property.text)
+    const current = readCurrentConfig(
+      paths.existing ? await readFile(paths.existing, "utf-8") : null
     );
 
-    const addTypeAware = Boolean(opts?.typeAware) && !existingOptions;
-    const bindings = bindPresets(newExtends, jsPlugins, existing.extras);
+    const plan =
+      current.kind === "config"
+        ? planUpdate(current, rc?.config ?? null, opts)
+        : current;
 
-    // The generated config declares these itself, so a binding of the
-    // project's own with the same name would be declared twice.
-    const clash = generatedHelpers(bindings.presets, jsPlugins).find((name) =>
-      existing.extras.reservedIdentifiers.has(name)
-    );
-
-    if (clash) {
-      log.warn(
-        `${configFile} declares its own \`${clash}\`, which the Ultracite config also declares, so it was left unchanged. Rename it and re-run \`ultracite init\`.`
-      );
+    // A config update can't carry over as written (one that doesn't parse,
+    // say, which Oxlint can't load either) is left for the user to fix
+    // rather than discarded.
+    if (plan.kind !== "plan") {
+      log.warn(describeRefusal(plan, existingFile));
 
       return false;
+    }
+
+    const { addTypeAware, bindings, existing, existingOptions, jsPlugins } =
+      plan;
+
+    if (plan.replaced) {
+      log.warn(
+        `${existingFile} doesn't export a config object init can update, so it was replaced with the Ultracite config. Its previous contents were not carried over; recover anything you need from version control.`
+      );
     }
 
     await writeProjectFile(
       paths.target,
       generateConfigContent(
-        newExtends,
+        plan.newExtends,
         jsPlugins,
         existing.extras,
         addTypeAware,
@@ -1621,9 +1755,9 @@ export const oxlint = {
       );
     }
 
-    if (unmigrated.length > 0) {
+    if (plan.unmigrated.length > 0) {
       log.warn(
-        `${oxlintRcFile} extended ${unmigrated.join(", ")}, which ${configFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
+        `${oxlintRcFile} extended ${plan.unmigrated.join(", ")}, which ${configFile} can't reference by path. Import those configs and add them to its \`extends\` yourself.`
       );
     }
 
@@ -1650,11 +1784,11 @@ export const addMissingOxlintEnv = async (): Promise<string | null> => {
     return null;
   }
 
+  // lacksCoreEnv reads the config the way update does, so a config update
+  // would leave unchanged gets doctor's advice instead of update's warning.
   if (!lacksCoreEnv(await readFile(paths.existing, "utf-8"))) {
     return null;
   }
 
-  // update leaves a config it can't carry over (one that declares a name the
-  // Ultracite config also declares, say) unchanged, and warns why.
   return (await oxlint.update()) ? fileName(paths.target) : null;
 };

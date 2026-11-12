@@ -215,7 +215,11 @@ const loadJsPlugin = (packageName: string, base: string): JsPlugin | null => {
  * comes from a JS plugin, so the agent would get the one-line message alone.
  * The plugin's own rule metadata fills them in, as ESLint's report does.
  */
-const jsPluginRuleDocs = (ruleName: string, base: string): JsPluginRuleDocs => {
+const jsPluginRuleDocs = (
+  ruleName: string,
+  file: string,
+  passthrough: string[]
+): JsPluginRuleDocs => {
   const separator = ruleName.indexOf("/");
   const packageName = JS_PLUGIN_PACKAGES.get(ruleName.slice(0, separator));
 
@@ -223,9 +227,8 @@ const jsPluginRuleDocs = (ruleName: string, base: string): JsPluginRuleDocs => {
     return {};
   }
 
-  const rule = loadJsPlugin(packageName, base)?.rules?.[
-    ruleName.slice(separator + 1)
-  ];
+  const plugin = loadJsPlugin(packageName, pluginBase(file, passthrough));
+  const rule = plugin?.rules?.[ruleName.slice(separator + 1)];
 
   return {
     help: rule?.meta?.docs?.description ?? rule?.recommendation,
@@ -270,7 +273,7 @@ const parseOxlintDiagnostics = (
     const docs =
       diagnostic.help || diagnostic.url
         ? {}
-        : jsPluginRuleDocs(rule, pluginBase(diagnostic.filename, passthrough));
+        : jsPluginRuleDocs(rule, diagnostic.filename, passthrough);
 
     diagnostics.push({
       column: span?.column ?? 1,

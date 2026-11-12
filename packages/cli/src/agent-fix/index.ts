@@ -91,11 +91,9 @@ const verifySafely = (
 
     // Single-file verify runs can still surface diagnostics for other files
     // (e.g. project-level rules); only this file's results matter here.
-    const remaining = allRemaining.filter(
-      (diagnostic) => diagnostic.file === file
+    const remaining = recordSourceLines(
+      allRemaining.filter((diagnostic) => diagnostic.file === file)
     );
-
-    recordSourceLines(remaining);
 
     return { error: null, remaining };
   } catch (error) {
@@ -456,8 +454,8 @@ export const runAgentFix = async ({
 
   const groups = groupByFile(diagnostics);
 
-  // Each report's line and the lines either side are kept until its file is
-  // fixed, to find it again if an earlier file's agent edits that file (see
+  // Each report's line and the lines either side are kept until its file's
+  // turn, to find it again if an earlier file's agent edits that file (see
   // fixQueue). The first file is fixed before any agent runs.
   for (const group of groups.slice(1)) {
     fingerprintSources(group.issues);
@@ -492,15 +490,18 @@ export const runAgentFix = async ({
     // A file is read for matching only while it's being fixed, so the run
     // holds one file's lines at a time. Each agent is told to edit only its
     // own file, but one can edit this one anyway (running a formatter, say).
-    // So each report's line, with the lines either side, is looked for where
-    // the first lint put it, then anywhere in the file. A report whose line
-    // is neither there nor in exactly one other place is matched as if the
-    // file couldn't be read.
-    recordSourceLines(group.issues);
+    // So each report's line is looked for again in the file as it is now
+    // (see recordSourceLines), and a report an edit moved is handed over on
+    // the line it's on now. One whose line can't be found is matched as if
+    // the file couldn't be read.
+    const current = {
+      file: group.file,
+      issues: recordSourceLines(group.issues),
+    };
 
     const result = first
-      ? await fixFileGroup(context, group)
-      : await refreshAndFixFileGroup(context, group);
+      ? await fixFileGroup(context, current)
+      : await refreshAndFixFileGroup(context, current);
 
     releaseSourceLines(group.file);
     totals.fixed += result.fixed;

@@ -18,7 +18,7 @@ import { getConfiguredPlugins, pluginRuleSources } from "../configured-plugins";
 import { toolchainPeerRanges } from "../dependencies";
 import type { ToolchainPackageName } from "../dependencies";
 import { readCoreEnv } from "../linters/oxlint";
-import type { CoreEnv } from "../linters/oxlint";
+import type { CoreEnv, EnvBlocker } from "../linters/oxlint";
 import { biomeConfigSchema, readPackageJsonSync } from "../schemas";
 import { spawnSync } from "../spawn-sync";
 import {
@@ -548,41 +548,61 @@ const TS_CONFIG_RE = /\.m?ts$/u;
 
 type FoundFile = NonNullable<ReturnType<typeof findNearestFile>>;
 
-// Oxlint can't load a config with another one beside it, or a .ts one in a
-// CommonJS package, and upgrade leaves both for init or the user to sort
-// out. The Oxlint configuration check fails on them and says how.
-const isBlockedOxlintConfig = (found: FoundFile): boolean =>
-  findConflictingConfigs(found.dir, oxlintConfigNames).length > 1 ||
-  (found.fileName === "oxlint.config.ts" &&
-    readPackageJsonSync(path.join(found.dir, "package.json"))?.type ===
-      "commonjs");
+// Why `ultracite upgrade` can't add `env`, as the end of a sentence.
+const describeEnvBlocker = (blocker: EnvBlocker): string => {
+  switch (blocker.kind) {
+    case "clash": {
+      return `declares its own \`${blocker.name}\`, which the Ultracite config also declares`;
+    }
+
+    case "namespace": {
+      return `imports ${blocker.source} with \`import * as ${blocker.local}\``;
+    }
+
+    case "reached": {
+      return "takes the core preset through a name of its own";
+    }
+
+    case "spread": {
+      const spread = blocker.spreadOf
+        ? `\`...${blocker.spreadOf}\``
+        : "a spread or computed key";
+
+      return `has ${spread} ahead of \`${blocker.key}\`, and upgrade would move the spread after it`;
+    }
+
+    default: {
+      return "doesn't parse";
+    }
+  }
+};
 
 // What to do about a config that sets no `env` of its own.
 const missingEnvAdvice = (
-  env: Exclude<CoreEnv, "declared">,
+  { blocker, spreads }: Extract<CoreEnv, { kind: "missing" }>,
   found: FoundFile
 ): string => {
-  if (env === "upgradable") {
+  const unclear = spreads
+    ? "Doctor can't tell whether an object it spreads in, or a computed key, sets one. "
+    : "";
+
+  if (blocker === null) {
     // upgrade only updates the config in the directory it runs in.
     const configDir = path.relative(process.cwd(), found.dir);
     const from = configDir ? ` from ${configDir}` : "";
 
-    return `Run \`ultracite upgrade\` or \`ultracite init\`${from} to add it`;
+    return `${unclear}Run \`ultracite upgrade\` or \`ultracite init\`${from} to add it`;
   }
 
-  if (env === "unclear") {
-    return "Doctor can't tell whether the object it spreads in (or a computed key) sets one. If not, add an `env`, such as the core preset's own `env`; `ultracite upgrade` doesn't rewrite a config that spreads in another object";
-  }
-
-  return "Add an `env` to the config it exports, such as the core preset's own `env`. `ultracite upgrade` can't, since the config takes a preset through a name of its own or an `import * as`";
+  return `${unclear}Add an \`env\` to the config it exports, such as the core preset's own \`env\`. \`ultracite upgrade\` can't, since the config ${describeEnvBlocker(blocker)}`;
 };
 
 /**
  * Oxlint doesn't inherit `env` through `extends` (oxc-project/oxc#20087), so
  * a config that extends core has to declare it. Configs init wrote before it
  * did so lint without the browser and Node globals, which two security rules
- * depend on. Skipped for a config that doesn't extend core, one it can't
- * read, and one Oxlint can't load until the configuration check passes.
+ * depend on. Skipped for a config that doesn't extend core and one it can't
+ * read.
  */
 const checkOxlintEnv = (): DiagnosticCheck | null => {
   const found = findNearestFile(oxlintConfigNames);
@@ -594,10 +614,7 @@ const checkOxlintEnv = (): DiagnosticCheck | null => {
   try {
     const contents = readFileSync(found.path, "utf-8");
 
-    if (
-      !contents.includes("ultracite/oxlint/core") ||
-      isBlockedOxlintConfig(found)
-    ) {
+    if (!contents.includes("ultracite/oxlint/core")) {
       return null;
     }
 
@@ -607,7 +624,7 @@ const checkOxlintEnv = (): DiagnosticCheck | null => {
       return null;
     }
 
-    if (env !== "declared") {
+    if (env.kind === "missing") {
       return {
         message: `${found.fileName} extends the core preset but sets no \`env\` of its own, which Oxlint doesn't inherit through \`extends\`. Without it \`no-implied-eval\` misses \`setTimeout("code")\` and \`no-eval\` misses \`window.eval\`. ${missingEnvAdvice(env, found)}`,
         name: OXLINT_ENV_CHECK,
@@ -623,6 +640,17 @@ const checkOxlintEnv = (): DiagnosticCheck | null => {
   } catch {
     return null;
   }
+};
+
+// The env check only runs on a config Oxlint can load. The configuration
+// check fails on one it can't (beside another Oxlint config, say, or a .ts
+// one in a CommonJS package) and says how to fix it, and upgrade leaves
+// those for init.
+const checkOxlintConfigAndEnv = (): DiagnosticCheck[] => {
+  const config = checkOxlintConfig();
+  const env = config.status === "fail" ? null : checkOxlintEnv();
+
+  return env ? [config, env] : [config];
 };
 
 const checkOxfmtConfig = (): DiagnosticCheck =>
@@ -819,8 +847,7 @@ const getChecksForLinter = (linter: Linter): CheckEntry[] => {
           fn: () => checkToolVersion("oxlint", true),
           name: "Oxlint version",
         },
-        { fn: checkOxlintConfig, name: OXLINT_CHECK },
-        { fn: checkOxlintEnv, name: OXLINT_ENV_CHECK },
+        { fn: checkOxlintConfigAndEnv, name: OXLINT_CHECK },
         {
           fn: () => checkToolInstallation("oxfmt", true),
           name: "oxfmt installation",

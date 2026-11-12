@@ -1913,6 +1913,29 @@ export default defineConfig({
     );
   });
 
+  test("leaves a config unchanged when it spreads in an object ahead of what it writes", async () => {
+    // init writes `extends` ahead of what it carries over, so the spread
+    // would come after it and override it.
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+
+import shared from "./oxlint.shared.ts";
+
+export default defineConfig({
+  ...shared,
+  extends: [core],
+});
+`,
+    });
+
+    await expect(oxlint.update({ frameworks: ["react"] })).resolves.toBe(false);
+    expect(project.writeFile).not.toHaveBeenCalled();
+    expect(project.warn.mock.calls[0]?.[0]).toContain(
+      "has `...shared` ahead of `extends`"
+    );
+  });
+
   test("keeps the env of a `core` that isn't the core preset", async () => {
     const project = mockProject({
       "./oxlint.config.ts": `import { defineConfig } from "oxlint";
@@ -2295,6 +2318,19 @@ export default defineConfig({
 });
 `;
 
+// The project's own `jsPluginSettings` clashes with the generated one.
+const clashingJsPluginSettings = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const jsPluginSettings = {};
+
+export default defineConfig({
+  extends: [core, jsPlugins],
+  settings: jsPluginSettings,
+});
+`;
+
 describe("oxlint env", () => {
   test("a config that extends core without env lacks it", () => {
     expect(lacksCoreEnv(configWithoutEnv)).toBe(true);
@@ -2333,16 +2369,31 @@ export default defineConfig({ rules: {} });
   });
 
   test("a config that spreads in another object may set env through it", () => {
-    const spread = configWithoutEnv.replace(
+    const ahead = configWithoutEnv.replace(
       "extends:",
       "...shared,\n  extends:"
     );
 
-    expect(readCoreEnv(spread)).toBe("unclear");
-    expect(lacksCoreEnv(spread)).toBe(false);
+    // update would move the spread after `extends`, so upgrade can't.
+    expect(readCoreEnv(ahead)).toEqual({
+      blocker: { key: "extends", kind: "spread", spreadOf: "shared" },
+      kind: "missing",
+      spreads: true,
+    });
+    expect(lacksCoreEnv(ahead)).toBe(false);
     expect(
-      readCoreEnv(spread.replace("...shared,", "...shared,\n  env: core.env,"))
-    ).toBe("declared");
+      readCoreEnv(ahead.replace("...shared,", "...shared,\n  env: core.env,"))
+    ).toEqual({ kind: "declared" });
+
+    // After everything update writes, the spread stays where it is.
+    const after = configWithoutEnv.replace("rules:", "...shared,\n  rules:");
+
+    expect(readCoreEnv(after)).toEqual({
+      blocker: null,
+      kind: "missing",
+      spreads: true,
+    });
+    expect(lacksCoreEnv(after)).toBe(true);
   });
 
   test("a config update can't rewrite lacks env that upgrade can't add", () => {
@@ -2359,8 +2410,23 @@ export default defineConfig({ rules: {} });
       )
       .replace("[core, react]", "[core, react.default]");
 
-    for (const config of [throughConst, namespaceImport]) {
-      expect(readCoreEnv(config)).toBe("missing");
+    for (const [config, blocker] of [
+      [throughConst, { kind: "reached" }],
+      [
+        namespaceImport,
+        {
+          kind: "namespace",
+          local: "react",
+          source: "ultracite/oxlint/react",
+        },
+      ],
+      [clashingJsPluginSettings, { kind: "clash", name: "jsPluginSettings" }],
+    ] as const) {
+      expect(readCoreEnv(config)).toEqual({
+        blocker,
+        kind: "missing",
+        spreads: false,
+      });
       expect(lacksCoreEnv(config)).toBe(false);
     }
   });
@@ -2403,37 +2469,37 @@ export default defineConfig({ rules: {} });
     expect(project.rm).not.toHaveBeenCalled();
   });
 
-  test("reports nothing added when update leaves the config unchanged", async () => {
-    // The project's own `jsPluginSettings` clashes with the generated one.
-    const project = mockProject({
-      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
-import core from "ultracite/oxlint/core";
-import jsPlugins from "ultracite/oxlint/js-plugins";
-
-const jsPluginSettings = {};
-
-export default defineConfig({
-  extends: [core, jsPlugins],
-  settings: jsPluginSettings,
-});
-`,
-    });
+  test.each([
+    ["declares a name the Ultracite config declares", clashingJsPluginSettings],
+    [
+      "spreads in an object ahead of what update writes",
+      configWithoutEnv.replace("extends:", "...shared,\n  extends:"),
+    ],
+  ])("leaves a config that %s to doctor's advice", async (_, config) => {
+    const project = mockProject({ "./oxlint.config.ts": config });
 
     await expect(addMissingOxlintEnv()).resolves.toBeNull();
     expect(project.writeFile).not.toHaveBeenCalled();
-    expect(project.warn).toHaveBeenCalled();
+    expect(project.warn).not.toHaveBeenCalled();
   });
 
-  test("writes nothing for a config that spreads in another object", async () => {
+  test("adds env ahead of a spread that comes after what update writes", async () => {
     const project = mockProject({
       "./oxlint.config.ts": configWithoutEnv.replace(
-        "extends:",
-        "...shared,\n  extends:"
+        "rules:",
+        "...shared,\n  rules:"
       ),
     });
 
-    await expect(addMissingOxlintEnv()).resolves.toBeNull();
-    expect(project.writeFile).not.toHaveBeenCalled();
+    await expect(addMissingOxlintEnv()).resolves.toBe("oxlint.config.ts");
+
+    const [[, content]] = project.writeFile.mock.calls;
+    const spread = content.indexOf("...shared,");
+
+    // So whatever the spread sets still wins.
+    expect(content.indexOf("env: core.env,")).toBeLessThan(spread);
+    expect(content.indexOf("ignorePatterns:")).toBeLessThan(spread);
+    expect(content.indexOf("rules:")).toBeGreaterThan(spread);
   });
 });
 

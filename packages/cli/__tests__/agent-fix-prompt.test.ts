@@ -411,6 +411,41 @@ describe("diagnostic diffing", () => {
     expect(result.introduced).toEqual([added]);
   });
 
+  test("keeps a report whose number changed apart when the edit added it beside the original", () => {
+    const magic = { rule: "no-magic-numbers" };
+
+    const fixed = diagnostic({
+      ...magic,
+      line: 2,
+      message: "No magic number: 42.",
+    });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "export const area = (r: number) => {\n  return r * 42;\n};\n",
+    });
+    recordSourceLines([fixed]);
+
+    // The edit names the 42 and adds a 100 in the same function.
+    const added = diagnostic({
+      ...magic,
+      line: 3,
+      message: "No magic number: 100.",
+    });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "export const area = (r: number) => {\n  const RATIO = 42;\n  setTimeout(() => {}, 100);\n  return r * RATIO;\n};\n",
+    });
+    recordSourceLines([added]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([fixed], [added]);
+
+    expect(result.cleared).toEqual([fixed]);
+    expect(result.introduced).toEqual([added]);
+  });
+
   test.each([
     [
       "no-shadow",
@@ -665,11 +700,10 @@ describe("diagnostic diffing", () => {
     });
     fingerprintSources([original]);
 
-    // An earlier file's agent drops the import before this file's turn, so
-    // line 2 now reads `const c = x;`, and `let a: any;` has other lines
-    // around it.
-    mockFileSystem({ "src/foo.ts": "let a: any;\nconst c = x;\n" });
-    recordSourceLines([original]);
+    // An earlier file's agent drops the import and rewrites the line before
+    // this file's turn, so it reads differently and sits elsewhere.
+    mockFileSystem({ "src/foo.ts": "let a: any = x;\nconst c = x;\n" });
+    const [current] = recordSourceLines([original]);
 
     const refreshed = diagnostic({ ...any, line: 1 });
     recordSourceLines([refreshed]);
@@ -677,6 +711,7 @@ describe("diagnostic diffing", () => {
 
     const result = partitionByRemaining([original], [refreshed]);
 
+    expect(current).toBe(original);
     expect(result.still).toEqual([original]);
     expect(result.stillReported).toEqual([refreshed]);
     expect(result.cleared).toEqual([]);
@@ -697,18 +732,52 @@ describe("diagnostic diffing", () => {
       "src/foo.ts":
         "const f = (v: any) => v;\nimport x from 'x';\nconst a = 1;\nlet b: any;\nconst c = x;\n",
     });
-    recordSourceLines([original]);
+    const [current] = recordSourceLines([original]);
 
     const added = diagnostic({ ...any, line: 1 });
     const moved = diagnostic({ ...any, line: 4 });
     recordSourceLines([added, moved]);
     restoreFileSystemMock();
 
-    const result = partitionByRemaining([original], [added, moved]);
+    const result = partitionByRemaining(current ? [current] : [], [
+      added,
+      moved,
+    ]);
 
-    expect(result.still).toEqual([original]);
+    // Handed over on the line it's on now, should the refresh lint fail.
+    expect(current).toEqual({ ...original, line: 4 });
+    expect(result.still).toEqual([current]);
     expect(result.stillReported).toEqual([moved]);
     expect(result.introduced).toEqual([added]);
+  });
+
+  test("finds a report's line again when an earlier edit changed the line beside it", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const first = diagnostic({ ...any, line: 2 });
+    const second = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import x from 'x';\nlet a: any;\nlet b: any;\nexport { a, b, x };\n",
+    });
+    fingerprintSources([first, second]);
+
+    // An earlier file's agent types `a` before this file's turn.
+    mockFileSystem({
+      "src/foo.ts":
+        "import x from 'x';\nlet a: string;\nlet b: any;\nexport { a, b, x };\n",
+    });
+    const current = recordSourceLines([first, second]);
+
+    const refreshed = diagnostic({ ...any, line: 3 });
+    recordSourceLines([refreshed]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining(current, [refreshed]);
+
+    expect(result.cleared).toEqual([first]);
+    expect(result.still).toEqual([second]);
+    expect(result.stillReported).toEqual([refreshed]);
   });
 
   test("doesn't take a line that reads the same elsewhere for the original's place", () => {
