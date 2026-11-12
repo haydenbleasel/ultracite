@@ -6,7 +6,9 @@ import RichText from "../../landing/rich-text.astro";
 
 // Exercised against OpenCode 1.18.35 with `write`, `edit` and `apply_patch`
 // edits (see session.astro); re-run that check when OpenCode's plugin API
-// changes.
+// changes. The "third of a second" in the notes is `ultracite fix
+// src/parse.ts` on that session's file, end to end on an M1 Pro: median 324 ms
+// over 20 runs (317 to 341) with oxlint 1.90.0 and oxfmt 0.75.0 on 2026-11-11.
 const plugin = `import type { Plugin } from "@opencode-ai/plugin";
 
 // The tools that write files: \`write\` and \`edit\` take a \`filePath\`; GPT

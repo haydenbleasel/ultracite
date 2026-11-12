@@ -4,15 +4,15 @@ import { NEW_TAB_HINT_ID } from "blume/core/new-tab.ts";
 import SectionHeading from "../../home/section-heading.astro";
 
 // Rules set to "error" per preset (packages/cli/config/oxlint), Ultracite
-// 8.1.1 (jest and vitest set theirs in test-file overrides). Native presets run in Oxlint's Rust engine; the rest load ESLint
+// 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases; jest and vitest set theirs in test-file overrides). Native presets run in Oxlint's Rust engine; the rest load ESLint
 // plugins through Oxlint's JS plugin API.
 const native = [
   {
-    count: 476,
+    count: 474,
     description: "ESLint, TypeScript, Unicorn, imports, promises",
     name: "core",
   },
-  { count: 107, description: "React, hooks and jsx-a11y", name: "react" },
+  { count: 106, description: "React, hooks and jsx-a11y", name: "react" },
   { count: 63, description: "Vitest test files", name: "vitest" },
   { count: 56, description: "Jest test files", name: "jest" },
   { count: 45, description: "Vue script blocks", name: "vue" },
@@ -20,8 +20,8 @@ const native = [
 ];
 
 const jsPlugins = [
-  { count: 234, description: "eslint-plugin-sonarjs", name: "js-plugins" },
-  { count: 150, description: "oxlint-plugin-react-doctor", name: "js-plugins" },
+  { count: 231, description: "eslint-plugin-sonarjs", name: "js-plugins" },
+  { count: 411, description: "oxlint-plugin-react-doctor", name: "js-plugins" },
   { count: 20, description: "eslint-plugin-github", name: "js-plugins" },
   {
     count: 18,

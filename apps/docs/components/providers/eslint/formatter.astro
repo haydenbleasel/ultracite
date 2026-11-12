@@ -9,7 +9,8 @@ import BeforeAfter from "../before-after.astro";
 // configs change). `problems` is what fix left. Adding
 // ultracite/eslint/type-aware also left
 // `@typescript-eslint/strict-boolean-expressions` on `asChild` and
-// `sonarjs/prefer-read-only-props` on the props.
+// `sonarjs/prefer-read-only-props` on the props. Re-run 2026-11-11 on Ultracite
+// 8.2.0: unchanged (Prettier's time for the file varies by a few ms a run).
 const before = `import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
 import type { ReactNode } from 'react'

@@ -394,7 +394,7 @@
 - 94722fa: The `eslint.config.mjs` that `ultracite init` writes no longer fails its own lint. Every ESLint preset exported a default named `config`, so `import core from "ultracite/eslint/core"` (and each framework import) tripped `import-x/no-rename-default` twice per preset. Each preset's default export is now named after the identifier the generated config imports it as (`core`, `react`, `tanstack`, …).
 - d9803a6: Fix ESLint presets that crashed the whole run or never reached the files they target.
   
-  - **TanStack:** `@tanstack/start/no-async-client-component` and `@tanstack/start/no-client-code-in-server-component` need type information and aborted ESLint ("You have used a rule which requires type information") on the first `.jsx` or `.tsx` file. They now run only on TypeScript files. The Query, Router and Start rules also apply to plain `.ts`/`.js` modules, where query and mutation options are usually declared, instead of only to `.jsx` and `.tsx`. `sort-keys` is off, and `no-use-before-define` and `unicorn/filename-case` are off in `routes/` directories, matching the Oxlint and Biome TanStack presets (alphabetical option keys break TanStack's type inference, and file routes are mutually recursive and encode the URL in the filename).
+  - **TanStack:** `@tanstack/start/no-async-client-component` and `@tanstack/start/no-client-code-in-server-component` need type information and aborted ESLint ("You have used a rule which requires type information") on the first `.jsx` or `.tsx` file. They now run only on TypeScript files. The Query, Router and Start rules also apply to plain `.ts`/`.js` modules, where query and mutation options are usually declared, instead of only to `.jsx` and `.tsx`. `sort-keys` is off, and `no-use-before-define` and `unicorn/filename-case` are off in `routes/` directories, matching the Oxlint TanStack preset (alphabetical option keys break TanStack's type inference, and file routes are mutually recursive and encode the URL in the filename). The Biome TanStack preset already had key sorting off, and its filename rule off in `routes/`.
   - **Qwik:** `qwik/valid-lexical-scope` needs type information and crashed ESLint on `.jsx` files. It now runs only on `.tsx` files.
   - **Jest:** `jest/no-deprecated-functions` threw "Unable to detect Jest version" and crashed ESLint when the `jest` package was not resolvable from the plugin, for example in bun:test projects. The preset now reads the Jest version from the project and falls back to the latest major.
   - **Cypress:** the block used `globals.cypress`, which does not exist in the `globals` package, so `cy`, `Cypress`, `describe` and `it` were reported by `no-undef`. It now uses `eslint-plugin-cypress`'s own globals config. It also matched only `*.cy.js`, and now covers `*.cy.*` for every JS and TS extension plus files under `cypress/`.
@@ -431,7 +431,7 @@
   - **Prettier:** `prettier/prettier` is now enabled. The preset loaded `stylelint-prettier` but never turned its rule on.
   - `ultracite check` and `ultracite fix` now escape glob characters in directory arguments before passing them to Stylelint. A directory such as `app/(marketing)` previously matched no files.
 - 89989df: Test-file overrides in every preset now match `.mts`, `.cts`, `.mjs` and `.cjs` test files as well as `.ts`, `.tsx`, `.js` and `.jsx`. The globs were `**/*.{test,spec,test-d,spec-d}.{ts,tsx,js,jsx}` and `**/__tests__/**/*.{ts,tsx,js,jsx}`, so a `sum.test.mts` file got none of the test-file relaxations and none of the Jest or Vitest rules. For example, `test.only` in a `.test.mts` file was not reported by `vitest/no-focused-tests` or `jest/no-focused-tests`. This covers the Oxlint `core`, `js-plugins`, `jest` and `vitest` presets, the Biome `core` preset, and the ESLint `core`, `jest` and `vitest` presets.
-- 4d28cf9: The Oxlint `vue` preset now lists every non-nursery Vue rule Oxlint implements, like the other framework presets. It previously enabled 18 of them. Among the 27 newly enabled rules are `vue/valid-define-props`, `vue/valid-define-emits`, `vue/no-export-in-script-setup`, `vue/no-lifecycle-after-await`, `vue/no-arrow-functions-in-watch`, `vue/no-side-effects-in-computed-properties`, `vue/require-typed-ref`, `vue/define-props-destructuring` and the `vue/no-deprecated-*` rules. `vue/max-props` is off in both the Oxlint and ESLint presets, because its default allows a single prop per component.
+- 4d28cf9: The Oxlint `vue` preset now lists every non-nursery Vue rule Oxlint implements, like the other framework presets. It previously enabled 18 of them. Among the 27 newly enabled rules are `vue/valid-define-props`, `vue/valid-define-emits`, `vue/no-export-in-script-setup`, `vue/no-lifecycle-after-await`, `vue/no-arrow-functions-in-watch`, `vue/no-side-effects-in-computed-properties`, `vue/require-typed-ref`, `vue/define-props-destructuring` and the `vue/no-deprecated-*` rules. `vue/max-props` is off in both the Oxlint and ESLint presets. In Oxlint its default allows a single prop per component; in ESLint it does nothing without options, and it's off there to match.
   
   The Oxlint `vitest` preset now enables `vitest/consistent-test-it`, the one Vitest rule it was missing (the ESLint preset already had it).
   
@@ -1828,7 +1828,7 @@
 - Run formatter
 - Rename the `eslint-cleanup`/`prettier-cleanup` test and source files to `eslint`/`prettier` to match the CLI module layout, and consolidate the per-editor rules tests into a single location
 - Enable `noBarrelFile` in `biome.jsonc` (was previously set to `off`) (#233)
-- Disable `noImplicitCoercions` (e.g. `!!value`, `+string`) in `biome.jsonc`, and annotate the existing `noExcessiveLinesPerFunction: off` with a reference to the upstream TypeScript issue (microsoft/TypeScript#16655) that motivates it (#247)
+- Disable `noImplicitCoercions` (e.g. `!!value`, `+string`) in `biome.jsonc`. The rule's replacement, `Boolean(value)`, doesn't narrow types the way `!!value` does (microsoft/TypeScript#16655) (#247)
 
 ## 5.1.8
 
@@ -1847,7 +1847,7 @@
 
 ### Patch Changes
 
-- Disable `noExcessiveLinesPerFunction` and `noSolidDestructuredProps` in `biome.jsonc` — both produced too many false positives across general TS codebases (#246)
+- Disable `noSolidDestructuredProps` in `biome.jsonc`, which was being reported in React projects (#246). `noExcessiveLinesPerFunction` is turned off in the same change.
 
 ## 5.1.5
 

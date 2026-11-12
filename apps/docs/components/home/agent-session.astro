@@ -1,16 +1,18 @@
 ---
 // A replay of a real agent session: the agent writes a component, Claude
-// Code's PostToolUse hook runs `ultracite fix --hook`, the 10 problems it
+// Code's PostToolUse hook runs `ultracite fix --hook`, the 9 problems it
 // can't fix go back to the agent, and the next run is clean. The diagnostics
 // and timings are what Ultracite's Oxlint core + React presets report for this
-// component (checked with oxlint 1.86 on an M1 Pro). The markup is the
-// finished session, so the page reads complete without JavaScript; the script
-// replays it from the top.
+// component on an M1 Pro (diagnostics and timings rechecked with oxlint 1.90.0
+// and oxfmt 0.75.0 on 2026-11-11: `ultracite fix --hook` with a Write payload
+// on stdin, medians over 20 runs of 331 ms on the file as written (326 to 342)
+// and 329 ms on the fixed one (323 to 339), within noise of the figures shown).
+// The markup is the finished session, so the page reads complete without
+// JavaScript; the script replays it from the top.
 const hookCommand = "bunx ultracite fix --hook";
 
 const problems = [
   { at: "3:8", rule: "func-style" },
-  { at: "3:8", rule: "function-component-definition" },
   { at: "4:38", rule: "no-explicit-any" },
   { at: "7:5", rule: "catch-or-return" },
   { at: "7:25", rule: "exhaustive-deps" },
@@ -118,7 +120,7 @@ const diff = [
                 class="hp-spinner text-panel-muted"
               ></span>
               <span class="hp-hook-result text-signal">
-                ✕ 10 problems in user-list.tsx{" "}
+                ✕ 9 problems in user-list.tsx{" "}
                 <span class="text-panel-muted whitespace-nowrap">· 333 ms</span>
               </span>
             </p>
@@ -129,7 +131,7 @@ const diff = [
             ●
           </span>
           <p class="text-panel-foreground/90 font-sans text-[15px]/6 text-pretty">
-            Fixing all 10: typing the users, reporting fetch errors, adding{" "}
+            Fixing all 9: typing the users, reporting fetch errors, adding{" "}
             <code class="font-mono text-[13px]">teamId</code> to the effect
             dependencies, adding alt text, and replacing the loose comparisons
             and nested ternary with a lookup.

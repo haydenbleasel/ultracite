@@ -2,7 +2,7 @@
 // The three files `ultracite init --linter eslint` writes for a React and
 // Next.js app (rendered by lib/providers.ts, as on the homepage). Counts are
 // rules `eslint --print-config` reports on with ESLint 10.14.0 and Ultracite
-// 8.1.1: core on a TypeScript file, then the rules each framework preset
+// 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases): core on a TypeScript file, then the rules each framework preset
 // turns on.
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
@@ -10,9 +10,9 @@ import AnnotatedCode from "../../landing/annotated-code.astro";
 const PRESETS = ["core", "react", "next"];
 
 const ruleCounts = new Map([
-  ["core", 919],
+  ["core", 910],
   ["next", 47],
-  ["react", 550],
+  ["react", 542],
 ]);
 
 let totalRules = 0;

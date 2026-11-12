@@ -6,6 +6,7 @@ import Everywhere from "../everywhere.astro";
 // (packages/cli/src/data/editors.ts), and the diagnostic headers Biome 2.6.4
 // printed for `ultracite check` on the repo's benchmark fixture (with `react`
 // declared in package.json, as an app would), without their code frames.
+// Re-run 2026-11-11 on Ultracite 8.2.0, which no longer sorts object keys.
 const vscodeSettings = `{
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -40,8 +41,8 @@ const diagnostics = [
   },
   {
     fixable: true,
-    location: "src/utils.ts:5:56",
-    rule: "assist/source/useSortedKeys",
+    location: "src/data.ts:5:8",
+    rule: "assist/source/useSortedInterfaceMembers",
   },
 ];
 ---
@@ -87,6 +88,6 @@ const diagnostics = [
       </p>
     ))}
     <p>…</p>
-    <p>Found 10 errors.</p>
+    <p>Found 9 errors.</p>
   </Fragment>
 </Everywhere>

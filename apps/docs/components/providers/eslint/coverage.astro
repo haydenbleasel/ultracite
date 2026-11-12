@@ -3,7 +3,7 @@ import Coverage from "../coverage.astro";
 import type { CoverageRow } from "../coverage.astro";
 
 // ESLint 10.14.0 and the plugins ultracite/eslint/core loads, against
-// Ultracite 8.1.1. `available` counts each one's rules that aren't
+// Ultracite 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases). `available` counts each one's rules that aren't
 // deprecated; `defaults` counts the rules in its own recommended config
 // (typescript-eslint's `recommended`) that core keeps on; `enabled` counts the
 // rules `eslint --print-config` reports on for a TypeScript file. Not drawn:
@@ -16,24 +16,24 @@ import type { CoverageRow } from "../coverage.astro";
 // some (all marked `requiresTypeChecking` by their plugins).
 const catalogSize = 1192;
 const recommendedCount = 726;
-const coreCount = 919;
+const coreCount = 910;
 const typedPresetCount = 101;
 const typedCoreCount = 32;
 
 const plugins: CoverageRow[] = [
   {
     available: 376,
-    defaults: 319,
+    defaults: 317,
     description: "Modern, idiomatic JavaScript",
-    enabled: 347,
+    enabled: 343,
     mono: true,
     name: "unicorn",
   },
   {
     available: 282,
-    defaults: 200,
+    defaults: 197,
     description: "Bugs and code smells, from SonarQube",
-    enabled: 234,
+    enabled: 231,
     mono: true,
     name: "sonarjs",
   },
@@ -41,7 +41,7 @@ const plugins: CoverageRow[] = [
     available: 199,
     defaults: 59,
     description: "ESLint’s own rules",
-    enabled: 164,
+    enabled: 163,
     mono: true,
     name: "eslint",
   },
@@ -65,7 +65,7 @@ const plugins: CoverageRow[] = [
     available: 46,
     defaults: 7,
     description: "Imports and exports",
-    enabled: 28,
+    enabled: 27,
     mono: true,
     name: "import-x",
   },
@@ -97,7 +97,7 @@ const plugins: CoverageRow[] = [
 ---
 
 <Coverage
-  caption="ESLint 10.14.0 and Ultracite 8.1.1, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
+  caption="ESLint 10.14.0 and Ultracite 8.2.0, counted with `eslint --print-config` on a TypeScript file. Plugins are drawn to one scale. Not drawn: `unused-imports/no-unused-imports` and `compat/compat`, one rule each."
   defaultsLabel="In the plugin’s recommended config"
   id="es-rules"
   notes={[

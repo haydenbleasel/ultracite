@@ -3,7 +3,8 @@ import SectionHeading from "../../home/section-heading.astro";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
 
-// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.1.1;
+// Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.2.0,
+// recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases;
 // counted by importing each preset; for Vue, Svelte and Astro, only their
 // plugin's rules, as those presets also run core's rules on component scripts,
 // and for Playwright only its plugin's, not the no-empty-pattern option it
@@ -19,21 +20,21 @@ const presets: {
   typeAware?: number;
 }[] = [
   {
-    count: 550,
+    count: 542,
     name: "react",
     plugins: "React, hooks, jsx-a11y, React Doctor",
   },
-  { count: 211, name: "vue", plugins: "eslint-plugin-vue", templates: true },
+  { count: 209, name: "vue", plugins: "eslint-plugin-vue", templates: true },
   { count: 70, name: "vitest", plugins: "@vitest/eslint-plugin", typeAware: 1 },
   {
-    count: 69,
+    count: 68,
     name: "svelte",
     plugins: "eslint-plugin-svelte",
     templates: true,
   },
   { count: 64, name: "playwright", plugins: "eslint-plugin-playwright" },
   { count: 63, name: "jest", plugins: "eslint-plugin-jest", typeAware: 4 },
-  { count: 53, name: "astro", plugins: "eslint-plugin-astro", templates: true },
+  { count: 52, name: "astro", plugins: "eslint-plugin-astro", templates: true },
   {
     count: 47,
     name: "next",
@@ -71,7 +72,8 @@ const width = (count: number): string => `${(count / scale) * 100}%`;
 // A component written for the example, and what `ultracite check` printed
 // for it under ultracite/eslint/core and ultracite/eslint/vue with ESLint
 // 10.14.0 and Ultracite 8.1.1 (run for real; Prettier's "Checking
-// formatting..." line and ESLint's file header line left out).
+// formatting..." line and ESLint's file header line left out). Re-run
+// 2026-11-11 on Ultracite 8.2.0: unchanged.
 const component = `<script setup lang="ts">
 defineProps<{ tasks: { id: string; title: string; notes: string }[] }>();
 </script>

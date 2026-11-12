@@ -23,8 +23,11 @@ import { providerLogos } from "../../lib/logos";
 // example (with Oxfmt 0.71.0, which 8.0.0 installs) and the timings.
 // Rechecked on this date for Oxlint 1.90.0, Oxfmt 0.75.0 and Ultracite 8.1.1
 // (packed from main at 3572b864): the rule counts, the Oxfmt example, the
-// agent output and the timings.
-const lastModified = "2026-11-01";
+// agent output and the timings. Rechecked on this date for the same tool
+// versions and Ultracite 8.2.0 (packed from main at 2bd7aaad plus the preset
+// changes it releases, before it was published): the rule counts, the Oxfmt
+// example, the agent output and the timings.
+const lastModified = "2026-11-11";
 const small = runFor(42);
 const large = runFor(420);
 const command = "npx ultracite@latest init --linter oxlint";
@@ -42,7 +45,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "Oxlint enables 111 correctness rules by default. Ultracite’s core preset turns on 476 across eight plugins, every one set to `error`, and framework presets add more: 107 for React, 21 for Next.js, 45 for Vue, 56 for Jest and 63 for Vitest. `init` also writes a matching Oxfmt config, editor settings for VS Code and Zed, rules files for coding agents, and optional post-edit hooks.",
+      "Oxlint enables 111 correctness rules by default. Ultracite’s core preset turns on 474 across eight plugins, every one set to `error`, and framework presets add more: 106 for React, 21 for Next.js, 45 for Vue, 56 for Jest and 63 for Vitest. `init` also writes a matching Oxfmt config, editor settings for VS Code and Zed, rules files for coding agents, and optional post-edit hooks.",
     question: "What does Ultracite add on top of Oxlint’s defaults?",
   },
   {
@@ -56,7 +59,7 @@ const faqs: FaqItem[] = [
     question: "Do I still need Prettier?",
   },
   {
-    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and at 420 files the two were level, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (476 core rules to Biome’s 351), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
+    answer: `Both are native and fast. In our benchmark, Biome checked 42 files in ${formatMs(small.ms.biome)} to Oxlint’s ${formatMs(small.ms.oxlint)}, and at 420 files the two were level, ${formatMs(large.ms.oxlint)} to Biome’s ${formatMs(large.ms.biome)}. Pick Oxlint for the larger rule set (474 core rules to Biome’s 350), ESLint rule names and plugins, and type-aware rules built on typescript-go. Pick Biome if you’d rather have one tool and one config file.`,
     question: "Should I use Oxlint or Biome?",
   },
   {
@@ -110,7 +113,7 @@ const nextSteps: NextStep[] = [
 
 <LandingLayout
   breadcrumbs={breadcrumbs}
-  description={`Ultracite turns on 476 of Oxlint’s 872 rules (the default is 111), sets up Oxfmt, VS Code, Zed and your coding agents, and checks 420 files in ${formatMs(large.ms.oxlint)}.`}
+  description={`Ultracite turns on 474 of Oxlint’s 872 rules (the default is 111), sets up Oxfmt, VS Code, Zed and your coding agents, and checks 420 files in ${formatMs(large.ms.oxlint)}.`}
   faqs={faqs}
   lastModified={lastModified}
   title="Ultracite for Oxlint — Strict Oxlint and Oxfmt Config"
@@ -122,7 +125,7 @@ const nextSteps: NextStep[] = [
     name="Oxlint"
     title="The strict Oxlint config, set up in one command"
   >
-    Oxlint ships 872 rules and turns on 111. Ultracite turns on 476 across eight
+    Oxlint ships 872 rules and turns on 111. Ultracite turns on 474 across eight
     plugins, sets up Oxfmt to match, and wires both into your editor and coding
     agents. Nothing to maintain but one line of{" "}
     <code class="text-foreground font-mono text-base">extends</code>.

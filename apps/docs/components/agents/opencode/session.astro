@@ -5,7 +5,11 @@ import RichText from "../../landing/rich-text.astro";
 // A real `opencode run` transcript (OpenCode 1.18.35, Oxlint 1.87.0) with the
 // plugin from plugin.astro installed. The model was a local stand-in scripted
 // to make the two edits; the lines below are as OpenCode and Ultracite printed
-// them, with the edit's diff trimmed to its hunk.
+// them, with the edit's diff trimmed to its hunk. The Ultracite lines were
+// re-run on their own (`ultracite fix src/parse.ts`, without OpenCode) with
+// oxlint 1.90.0 and oxfmt 0.75.0 on 2026-11-11: the diagnostic is unchanged,
+// and the linter's own time is its median over 20 runs on an M1 Pro (21 to
+// 24ms; the 1.87.0 transcript printed 31ms).
 const steps = [
   {
     body: "It writes `var` and `any`, without semicolons.",
@@ -52,7 +56,7 @@ const steps = [
             </span>
           </p>
           <p class="text-panel-muted">
-            Finished in 31ms on 1 files using 10 threads.
+            Finished in 22ms on 1 files using 10 threads.
           </p>
         </div>
         <p class="mt-4">

@@ -4,9 +4,10 @@ import Everywhere from "../everywhere.astro";
 
 // Excerpts of what `ultracite init` writes for Oxlint
 // (packages/cli/src/data/editors.ts and data/agents.ts), and lines from a real
-// `ultracite check` run under a coding agent with Oxlint 1.90.0, where Oxlint
-// prints its compact agent format (on the benchmark fixture; each line's
-// trailing `help:` text left out).
+// `ultracite check` run under a coding agent with Oxlint 1.90.0 and Ultracite
+// 8.2.0 (re-run 2026-11-11), where Oxlint prints its compact agent format (on
+// the benchmark fixture; each line's trailing `help:` text left out). The run
+// reports four rules, so one of them appears twice.
 const vscodeSettings = `{
   "[typescriptreact]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
@@ -29,6 +30,12 @@ const zedSettings = `"oxlint": {
 
 const diagnostics = [
   {
+    location: "src/component.tsx:3:48",
+    message:
+      "Prefer using a top-level type-only import instead of inline type specifiers.",
+    rule: "import(consistent-type-specifier-style)",
+  },
+  {
     location: "src/data.ts:20:14",
     message: "Use `Array#toSorted()` instead of `Array#sort()`.",
     rule: "unicorn(no-array-sort)",
@@ -38,11 +45,6 @@ const diagnostics = [
     message:
       "Prefer using a top-level type-only import instead of inline type specifiers.",
     rule: "import(consistent-type-specifier-style)",
-  },
-  {
-    location: "src/utils.ts:5:54",
-    message: "Object keys should be sorted",
-    rule: "eslint(sort-keys)",
   },
   {
     location: "src/utils.ts:59:14",

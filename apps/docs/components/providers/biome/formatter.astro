@@ -3,7 +3,9 @@ import BeforeAfter from "../before-after.astro";
 
 // The component from the Oxlint page, and what `ultracite fix` made of it
 // with Biome 2.6.4 under ultracite/biome/core and Ultracite 8.1.1 (run for real; regenerate when
-// the config changes). Biome 2.6 sorts Tailwind classes in Tailwind CSS v4's
+// the config changes; re-run 2026-11-11 on Ultracite 8.2.0: unchanged). `items`
+// names settings in packages/cli/config/biome/core: ten of its assist actions
+// are on, and sorting object keys is not one of them. Biome 2.6 sorts Tailwind classes in Tailwind CSS v4's
 // order, which gives this component the same order as Oxfmt.
 const before = `import { cn } from '@/lib/utils'
 import { Slot } from '@radix-ui/react-slot'
@@ -50,8 +52,8 @@ const items = [
   },
   {
     description:
-      "Object keys in order. JSX attributes, interface members, CSS properties and package.json fields each have a sorting action of their own. `check` fails on any that aren’t sorted.",
-    name: "useSortedKeys",
+      "JSX attributes in order. Interface members, CSS properties and package.json fields each have a sorting action of their own. `check` fails on any that aren’t sorted.",
+    name: "useSortedAttributes",
   },
   {
     description:
@@ -71,7 +73,7 @@ const items = [
   title="Formatting and sorting from the same binary"
 >
   Biome’s formatter is built to match Prettier’s output, and its assist actions
-  sort code instead of just reporting it. Ultracite turns on twelve of them, so
-  the import order, class order and key order an agent writes never come up in
+  sort code instead of just reporting it. Ultracite turns on ten of them, so the
+  import order, class order and attribute order an agent writes never come up in
   review.
 </BeforeAfter>

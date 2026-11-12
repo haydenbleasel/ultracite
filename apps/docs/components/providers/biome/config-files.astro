@@ -3,8 +3,9 @@
 // Next.js app (rendered by lib/providers.ts, as on the homepage), with the
 // rules each preset turns on, and what the core preset sets besides rules.
 // Counts are from `biome rage --linter` with Biome 2.6.4 and Ultracite
-// 8.1.1: core alone, then each preset added (React sets 20 rules, 3 of which
-// core already has on).
+// 8.2.0 (recounted 2026-11-11 from main at 2bd7aaad plus the preset changes
+// it releases): core alone, then each preset added (React sets 20 rules, 3 of
+// which core already has on).
 import { providers } from "../../../lib/providers";
 import AnnotatedCode from "../../landing/annotated-code.astro";
 import Terminal from "../../landing/terminal.astro";
@@ -12,7 +13,7 @@ import Terminal from "../../landing/terminal.astro";
 const PRESETS = ["core", "react", "next"];
 
 const ruleCounts = new Map([
-  ["core", 351],
+  ["core", 350],
   ["next", 7],
   ["react", 17],
 ]);
@@ -77,7 +78,7 @@ const settings = [
   {/* `ultracite fix` on the repo's benchmark fixture, as Biome 2.6.4 printed
       it with `react` declared in package.json, as an app would: one diagnostic
       with its message, frame and first note, the other by its header, then
-      the summary. */}
+      the summary. Re-run 2026-11-11 on Ultracite 8.2.0: unchanged. */}
   <Terminal class="lg:col-span-5">
     <p class="text-panel-foreground mb-3 truncate">
       <span class="text-signal">$</span> npx ultracite fix
