@@ -5,25 +5,28 @@ import SectionHeading from "../../home/section-heading.astro";
 // Rules set to "error" per Oxlint preset (packages/cli/config/oxlint, counted
 // with overrides for jest and vitest, which scope theirs to test files), and
 // the same count once ultracite/bun's defineConfig has passed the preset on.
-// Ultracite 8.0.1 with the Bun provider. `bun lint --print-config` on a
-// TypeScript file under core alone reports the same 455.
+// Recounted 2026-11-11 for the Ultracite 8.2.0 presets with the Bun provider.
+// `bun lint --print-config` (Bun 1.4.4-canary.1+f33631841) on a TypeScript
+// file under core alone reports the same 455.
 const native = [
   { bun: 455, missing: "19 jsdoc", name: "core", oxlint: 474 },
-  { bun: 107, name: "react", oxlint: 107 },
+  { bun: 106, name: "react", oxlint: 106 },
   { bun: 63, name: "vitest", oxlint: 63 },
   { bun: 56, name: "jest", oxlint: 56 },
   { bun: 0, missing: "all 45", name: "vue", oxlint: 45 },
+  { bun: 34, name: "solid", oxlint: 34 },
+  { bun: 34, name: "qwik", oxlint: 34 },
   { bun: 21, name: "next", oxlint: 21 },
 ];
 
 // Presets whose rules come from JS plugins, which Bun loads from
 // node_modules and runs in JavaScript, so ultracite/bun passes them on whole
-// (js-plugins: 234 SonarJS, 149 React Doctor and 21 GitHub rules). The
+// (js-plugins: 231 SonarJS, 411 React Doctor and 20 GitHub rules). The
 // anti-slop, gdp and shadcn fixtures in packages/cli/__tests__/fixtures gave
 // the same diagnostics on Oxlint 1.86.0 and Bun 1.4.4-canary.1.
 const jsPlugins = [
   {
-    count: 404,
+    count: 662,
     description: "SonarJS, React Doctor, GitHub",
     name: "js-plugins",
   },
@@ -172,7 +175,7 @@ const width = (count: number): string => `${(count / scale) * 100}%`;
         {bunParity.lintProblems} problems, line for line, through the same{" "}
         <code class="font-mono text-sm">oxlint.config.ts</code>, and Oxfmt and{" "}
         <code class="font-mono text-sm">bun fmt</code> flagged the same{" "}
-        {bunParity.unformattedFiles} files. The core preset’s 56 type-aware
+        {bunParity.unformattedFiles} files. The core preset’s 57 type-aware
         rules are among the 455, and run once{" "}
         <code class="font-mono text-sm whitespace-nowrap">
           init --type-aware
