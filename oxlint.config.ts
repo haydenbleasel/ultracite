@@ -52,6 +52,10 @@ export default defineConfig({
     // Deliberately leaves a promise chain unhandled so the test can assert
     // catch-or-return fires once prefer-await-to-then is off.
     "packages/cli/__tests__/fixtures/promise-chains",
+    // Deliberately leave an image without alt text and put click handlers on
+    // divs so the Solid and Qwik tests can assert the jsx-a11y rules fire.
+    "packages/cli/__tests__/fixtures/solid-a11y",
+    "packages/cli/__tests__/fixtures/qwik-a11y",
     // Blog research harnesses (see research/README.md). The fixtures are
     // third-party code, deliberately complex cases and agent output, and the
     // results are generated. The scripts aren't shipped, and lint autofixes

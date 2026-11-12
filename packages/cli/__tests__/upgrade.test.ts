@@ -288,6 +288,66 @@ describe("getToolchainPackages", () => {
     );
   });
 
+  test("eslint adds the Vue accessibility plugin to a project that imports the vue preset", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    // The project has eslint-plugin-vue from an earlier release, and not the
+    // accessibility plugin the vue preset loads now.
+    const packages = getToolchainPackages(
+      "eslint",
+      new Set(["eslint-plugin-vue"]),
+      new Set(["vue"])
+    );
+
+    expect(
+      packages.some((pkg) =>
+        pkg.startsWith("eslint-plugin-vuejs-accessibility@")
+      )
+    ).toBe(true);
+  });
+
+  test("eslint adds the Angular template plugin and parser to a project that imports the angular preset", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    // The project has @angular-eslint/eslint-plugin from an earlier release,
+    // and neither package the angular preset loads for templates now.
+    const packages = getToolchainPackages(
+      "eslint",
+      new Set(["@angular-eslint/eslint-plugin"]),
+      new Set(["angular"])
+    );
+
+    expect(
+      packages.some((pkg) =>
+        pkg.startsWith("@angular-eslint/eslint-plugin-template@")
+      )
+    ).toBe(true);
+    expect(
+      packages.some((pkg) => pkg.startsWith("@angular-eslint/template-parser@"))
+    ).toBe(true);
+  });
+
+  test("eslint adds the JSX accessibility plugin to a project that imports the solid or qwik preset", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    // The project has its framework's plugin from an earlier release, and
+    // not eslint-plugin-jsx-a11y, which the solid and qwik presets load now.
+    for (const [framework, plugin] of [
+      ["solid", "eslint-plugin-solid"],
+      ["qwik", "eslint-plugin-qwik"],
+    ]) {
+      const packages = getToolchainPackages(
+        "eslint",
+        new Set([plugin]),
+        new Set([framework])
+      );
+
+      expect(
+        packages.some((pkg) => pkg.startsWith("eslint-plugin-jsx-a11y@"))
+      ).toBe(true);
+    }
+  });
+
   test("oxlint tracks latest and bumps opted-in extras only", async () => {
     const { getToolchainPackages } = await loadUpgrade();
 

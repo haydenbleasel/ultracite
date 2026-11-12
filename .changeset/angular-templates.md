@@ -1,0 +1,19 @@
+---
+"ultracite": minor
+---
+
+The ESLint `angular` preset now lints Angular templates, accessibility included, with [`@angular-eslint/eslint-plugin-template`](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin-template). Until now the preset only linted component classes, so a template got no checks on ESLint.
+
+Angular projects on ESLint will see new errors in templates. The preset covers every `.html` file and the inline `template` of each component in a `.ts` file, where errors are reported at their place in the TypeScript file and `ultracite fix` fixes them there. Thirty-nine rules are on at `error`. The accessibility rules cover missing `alt` text, labels with no control, click and mouse handlers with no keyboard equivalent, handlers on elements that can't take focus, empty headings, links and buttons, and invalid ARIA roles and attributes. The rest are Angular's general template rules, such as `@angular-eslint/template/prefer-control-flow`, `@angular-eslint/template/eqeqeq`, `@angular-eslint/template/button-has-type` and `@angular-eslint/template/no-duplicate-attributes`. Measured on three open-source Angular apps, the two rules that report most are `@angular-eslint/template/attributes-order` and `@angular-eslint/template/prefer-self-closing-tags`, and `ultracite fix` fixes both.
+
+- `@angular-eslint/template/no-autofocus` is off, as `jsx-a11y/no-autofocus` is in the React presets. Autofocus is a deliberate UX choice (a waitlist or search field that's ready to type into), and the rule can't tell that from a harmful use.
+- `@angular-eslint/template/i18n` is off. It only applies to apps translated with Angular's own i18n, and wants an `i18n` attribute on every element with text and beside attributes such as `rel` and `data-testid`.
+- `@angular-eslint/template/no-call-expression` is off. It reports every signal read (`count()`), which is how a template reads a signal.
+- `@angular-eslint/template/cyclomatic-complexity` allows 20 control-flow blocks in a template, as core's `complexity` allows a function, in place of the plugin's 5.
+- `@angular-eslint/template/no-duplicate-attributes` accepts a static `class` or `style` beside a binding to the same attribute, which Angular merges.
+- `@angular-eslint/template/no-inline-styles` accepts a style bound to a computed value (`[style.width.%]="progress()"`), which can't be a class. A static `style` attribute is still reported.
+- The rules can't see what a directive or component adds. A button whose label comes from a directive (`<button appIconButton></button>`) is reported as empty by `@angular-eslint/template/elements-content`. List those attributes in the rule's `allowList` option in your own config.
+
+Every `.html` file is linted as a template, because Angular no longer names templates `*.component.html`. That includes files that aren't templates, such as `src/index.html`. The rules read plain HTML without trouble and report little there, and the inline scripts of an HTML file are still linted by core's rules. To change a template rule, set it in a config object with `files: ["**/*.html"]`, which also matches inline templates. Core's JavaScript rules are off for templates, since they can't read a template's syntax tree and some of them throw on it, so a rule your config turns on for every file should have `files` that leave out `**/*.html`.
+
+`ultracite init` installs `@angular-eslint/eslint-plugin-template` and `@angular-eslint/template-parser` for Angular projects that choose ESLint. Existing projects get both from `ultracite upgrade`, which installs every package the presets in your ESLint config load, and `ultracite doctor` reports the plugin as missing until then. Oxlint doesn't parse Angular templates, and Biome's accessibility rules already run on `.html` files from its core preset, so neither changes.

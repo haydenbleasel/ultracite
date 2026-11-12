@@ -89,6 +89,84 @@ export class App {
 `,
         expect: ["@angular-eslint/component-class-suffix"],
       },
+      "src/index.html": {
+        // Not a template, but linted as one. Its inline script is still
+        // linted by core, and core's rules stay off the template itself:
+        // some of them throw on the tree the template parser builds.
+        content: `<!doctype html>
+<html lang="en">
+  <body>
+    <app-root></app-root>
+    <img src="/logo.png" />
+    <script>
+      var legacy = 1;
+      console.log(legacy);
+    </script>
+  </body>
+</html>
+`,
+        expect: ["@angular-eslint/template/alt-text", "no-var"],
+      },
+      "src/user-card.component.ts": {
+        // An inline template: the same rules, reported in the TypeScript
+        // file, beside core's and the Angular plugin's rules for the class.
+        content: `import { Component } from "@angular/core";
+
+${legacyVar}
+@Component({
+  selector: "app-user-card",
+  template: \`
+    <div (click)="open()">
+      <img [src]="avatar" />
+      <input type="text" autofocus />
+      <p>{{ count() }}</p>
+    </div>
+  \`,
+})
+export class UserCard {
+  public avatar = legacy;
+}
+`,
+        expect: [
+          "@angular-eslint/component-class-suffix",
+          "@angular-eslint/template/alt-text",
+          "@angular-eslint/template/click-events-have-key-events",
+          "@angular-eslint/template/interactive-supports-focus",
+          "no-var",
+        ],
+        forbid: [
+          "@angular-eslint/template/i18n",
+          "@angular-eslint/template/no-autofocus",
+          "@angular-eslint/template/no-call-expression",
+        ],
+      },
+      "src/user-list.html": {
+        // An external template: accessibility rules and general template
+        // rules. The field takes focus on purpose, a signal is read by
+        // calling it, and a static class merges with a bound one, so none of
+        // those may report.
+        content: `<div (click)="open()">
+  <img [src]="avatar" />
+  <input type="text" autofocus />
+  <span class="name" [class]="state()" *ngIf="a == b">{{ name() }}</span>
+  <app-user-card></app-user-card>
+</div>
+`,
+        expect: [
+          "@angular-eslint/template/alt-text",
+          "@angular-eslint/template/click-events-have-key-events",
+          "@angular-eslint/template/eqeqeq",
+          "@angular-eslint/template/interactive-supports-focus",
+          "@angular-eslint/template/prefer-control-flow",
+          "@angular-eslint/template/prefer-self-closing-tags",
+        ],
+        forbid: [
+          "@angular-eslint/template/i18n",
+          "@angular-eslint/template/no-autofocus",
+          "@angular-eslint/template/no-call-expression",
+          "@angular-eslint/template/no-duplicate-attributes",
+        ],
+      },
     },
     presets: ["angular"],
     typeAware: {},
@@ -441,6 +519,54 @@ export const Legacy = component$(() => {
 `,
         expect: ["qwik/no-use-visible-task"],
       },
+      "src/labelled-field.tsx": {
+        // Qwik writes a label's target as `for`, which the preset's
+        // jsx-a11y settings accept, and the field takes focus on purpose, so
+        // neither may report.
+        content: `import { component$ } from "@builder.io/qwik";
+
+export const EmailField = component$(() => (
+  <div>
+    <label for="email">Email</label>
+    <input id="email" type="email" autoFocus />
+  </div>
+));
+`,
+        expect: [],
+        forbid: [
+          "jsx-a11y/label-has-associated-control",
+          "jsx-a11y/no-autofocus",
+        ],
+      },
+      "src/signup-form.tsx": {
+        // The accessibility rules: an image with no alt text, a label with no
+        // control, an anchor with no href and a click handler on a div. The
+        // rules don't know Qwik's `onClick$`, so the div isn't reported.
+        content: `import { $, component$ } from "@builder.io/qwik";
+
+export const SignupForm = component$(() => {
+  const submit = $(() => undefined);
+
+  return (
+    <form>
+      <img height={32} src="/logo.png" width={32} />
+      <label>Name</label>
+      <a onClick$={submit}>Help</a>
+      <div onClick$={submit}>Send</div>
+    </form>
+  );
+});
+`,
+        expect: [
+          "jsx-a11y/alt-text",
+          "jsx-a11y/anchor-is-valid",
+          "jsx-a11y/label-has-associated-control",
+        ],
+        forbid: [
+          "jsx-a11y/click-events-have-key-events",
+          "jsx-a11y/no-static-element-interactions",
+        ],
+      },
     },
     presets: ["qwik"],
     typeAware: {},
@@ -515,6 +641,41 @@ export const foo: unknown = Foo;
         content: `export const Greeting = ({ name }) => <p>{name}</p>;
 `,
         expect: ["solid/no-destructure"],
+      },
+      "src/labelled-field.tsx": {
+        // Solid writes a label's target as `for`, which the preset's
+        // jsx-a11y settings accept, and the field takes focus on purpose, so
+        // neither may report.
+        content: `export const EmailField = () => (
+  <div>
+    <label for="email">Email</label>
+    <input autofocus id="email" type="email" />
+  </div>
+);
+`,
+        expect: [],
+        forbid: [
+          "jsx-a11y/label-has-associated-control",
+          "jsx-a11y/no-autofocus",
+        ],
+      },
+      "src/signup-form.tsx": {
+        // The accessibility rules: an image with no alt text, a label with no
+        // control and a click handler on a div.
+        content: `export const SignupForm = (props: { readonly submit: () => void }) => (
+  <form>
+    <img src="/logo.png" />
+    <label>Name</label>
+    <div onClick={() => props.submit()}>Send</div>
+  </form>
+);
+`,
+        expect: [
+          "jsx-a11y/alt-text",
+          "jsx-a11y/click-events-have-key-events",
+          "jsx-a11y/label-has-associated-control",
+          "jsx-a11y/no-static-element-interactions",
+        ],
       },
     },
     presets: ["solid"],
@@ -744,6 +905,35 @@ const title: string = "Home";
 `,
         expect: [],
         forbid: ["vue/multi-word-component-names"],
+      },
+      "src/components/user-avatar.vue": {
+        // The accessibility plugin's rules: an image with no alt text, a
+        // click handler on a div, and an input nothing labels. The label
+        // wraps its control without a `for`, and the field takes focus on
+        // purpose, so neither may report.
+        content: `<script setup lang="ts">
+const source: string = "/avatar.png";
+const open = (): void => {};
+</script>
+
+<template>
+  <div @click="open">
+    <img :src="source" />
+    <input type="text" />
+    <label>Name <input type="text" autofocus /></label>
+  </div>
+</template>
+`,
+        expect: [
+          "vuejs-accessibility/alt-text",
+          "vuejs-accessibility/click-events-have-key-events",
+          "vuejs-accessibility/form-control-has-label",
+          "vuejs-accessibility/no-static-element-interactions",
+        ],
+        forbid: [
+          "vuejs-accessibility/label-has-for",
+          "vuejs-accessibility/no-autofocus",
+        ],
       },
     },
     presets: ["vue"],

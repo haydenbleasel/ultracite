@@ -106,6 +106,23 @@ describe("getConfiguredPlugins", () => {
     expect(plugins.has("eslint-plugin-vue")).toBe(false);
   });
 
+  test("checks the Angular template parser alongside its plugin", () => {
+    const plugins = withConfig(
+      "eslint.config.mjs",
+      eslintImports("core", "angular"),
+      () => getConfiguredPlugins("eslint")
+    );
+
+    expect(plugins.get("@angular-eslint/eslint-plugin-template")).toBe(
+      eslintFrameworkDevDependencies.angular[
+        "@angular-eslint/eslint-plugin-template"
+      ]
+    );
+    expect(plugins.get("@angular-eslint/template-parser")).toBe(
+      eslintFrameworkDevDependencies.angular["@angular-eslint/template-parser"]
+    );
+  });
+
   test("lists the JS plugins the Oxlint config loads", () => {
     const plugins = withConfig(
       "oxlint.config.ts",

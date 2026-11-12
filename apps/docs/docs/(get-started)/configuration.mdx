@@ -31,7 +31,7 @@ When you include the `core` preset, you're pulling in Ultracite's base configura
 
 - **TypeScript strictness**: Enables strict checks and lint rules requiring robust typing. Discourages use of `any`, requires handling of `null/undefined`, and prefers explicit types where needed.
 - **Best practices**: Common rules like no unused vars, no explicit eval, no prototype pollution, etc.
-- **Accessibility**: Biome's core preset enables its a11y rules (ARIA attributes, semantic HTML, keyboard navigation and more) for every project. On Oxlint and ESLint, the JSX a11y rules come with the `react` preset, and ESLint's `astro` and `svelte` presets check those templates too. ESLint's core preset adds a few that apply to every file, such as `eslint-plugin-github`'s `a11y-*` rules.
+- **Accessibility**: Biome's core preset enables its a11y rules (ARIA attributes, semantic HTML, keyboard navigation and more) for every project. On Oxlint and ESLint, the JSX a11y rules come with the `react`, `solid` and `qwik` presets, and ESLint's `astro`, `svelte`, `vue` and `angular` presets check those templates too. In Qwik projects the rules that look at event handlers don't yet recognise handlers ending in `$` (`onClick$`), so they report nothing for them. ESLint's core preset adds a few that apply to every file, such as `eslint-plugin-github`'s `a11y-*` rules.
 - **TODO comments**: Oxlint and ESLint report `TODO`, `FIXME`, `XXX` and `@todo` comments through `no-warning-comments`. Biome has no rule for them.
 - **Formatting conventions**: 2-space indentation, 80-character line width, semicolons, trailing commas, and double quotes.
 
@@ -174,6 +174,26 @@ overrides: [
     },
   },
 ],
+```
+
+### Scoping Rules Away from Angular Templates (ESLint)
+
+The `angular` preset lints `.html` files and inline templates with Angular's template parser, and turns the core rules off for them, because rules written for JavaScript can throw on a template's syntax tree. A rule you set without `files` applies to templates again. For a few rules, mostly `jsdoc/*`, that makes ESLint throw on every template. Give such an entry a `files` pattern that leaves templates out:
+
+```js title="eslint.config.mjs"
+import angular from "ultracite/eslint/angular";
+import core from "ultracite/eslint/core";
+
+export default [
+  ...core,
+  ...angular,
+  {
+    files: ["**/*.ts"],
+    rules: {
+      "jsdoc/check-tag-names": ["error", { definedTags: ["internal"] }],
+    },
+  },
+];
 ```
 
 ### Sorting Object Keys

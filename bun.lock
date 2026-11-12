@@ -66,6 +66,8 @@
       },
       "devDependencies": {
         "@angular-eslint/eslint-plugin": "^22.6.0",
+        "@angular-eslint/eslint-plugin-template": "^22.6.0",
+        "@angular-eslint/template-parser": "^22.6.0",
         "@astrojs/compiler-rs": "^0.5.2",
         "@biomejs/biome": "2.6.4",
         "@darraghor/eslint-plugin-nestjs-typed": "^7.5.8",
@@ -115,6 +117,7 @@
         "eslint-plugin-unicorn": "^79.0.0",
         "eslint-plugin-unused-imports": "^4.4.1",
         "eslint-plugin-vue": "^10.12.0",
+        "eslint-plugin-vuejs-accessibility": "^2.6.3",
         "globals": "^17.14.0",
         "oxfmt": "^0.75.0",
         "oxlint": "^1.90.0",
@@ -171,6 +174,10 @@
     "@angular-eslint/bundled-angular-compiler": ["@angular-eslint/bundled-angular-compiler@22.6.0", "", {}, "sha512-OOoWbFG3JOsdY9/qiY2YdXJFZNVg3jPb09OTHQvBir0CLIdEnudKePVs0JxlKL1Yl05ibvwolo+/Ewfmp5Gqvg=="],
 
     "@angular-eslint/eslint-plugin": ["@angular-eslint/eslint-plugin@22.6.0", "", { "dependencies": { "@angular-eslint/bundled-angular-compiler": "22.6.0", "@angular-eslint/utils": "22.6.0", "ts-api-utils": "^2.1.0" }, "peerDependencies": { "@typescript-eslint/utils": "^8.0.0", "eslint": "^9.0.0 || ^10.0.0", "typescript": "*" } }, "sha512-zLQSfwNiOaWYp1IRQh4TlgBbUmaGm0OWNEO98E2U9DstHJTPTghRwG4wZX4Ly/YOYsb3WU06pD1/cCRUYHRgmw=="],
+
+    "@angular-eslint/eslint-plugin-template": ["@angular-eslint/eslint-plugin-template@22.6.0", "", { "dependencies": { "@angular-eslint/bundled-angular-compiler": "22.6.0", "@angular-eslint/utils": "22.6.0", "aria-query": "5.3.2", "axobject-query": "4.1.0" }, "peerDependencies": { "@angular-eslint/template-parser": "22.6.0", "@typescript-eslint/types": "^8.0.0", "@typescript-eslint/utils": "^8.0.0", "eslint": "^9.0.0 || ^10.0.0", "typescript": "*" } }, "sha512-e3ueYzr1ARovQtoBaiAeYtLR3MLIeJNKA46LBwKbRhVl1S8L1FiwYsWJvx0lRvcgdFWFt+WrSXeTxuc0ITW9eA=="],
+
+    "@angular-eslint/template-parser": ["@angular-eslint/template-parser@22.6.0", "", { "dependencies": { "@angular-eslint/bundled-angular-compiler": "22.6.0", "eslint-scope": "9.1.2" }, "peerDependencies": { "eslint": "^9.0.0 || ^10.0.0", "typescript": "*" } }, "sha512-QmrW5T9Sb8ve2cgEGtkhDujp7ENRnXkqT+nCxLK0rZkbPXET+i1svLxuc4tzyVJpceYo772EzMyQuJbNqiH/cA=="],
 
     "@angular-eslint/utils": ["@angular-eslint/utils@22.6.0", "", { "dependencies": { "@angular-eslint/bundled-angular-compiler": "22.6.0" }, "peerDependencies": { "@typescript-eslint/utils": "^8.0.0", "eslint": "^9.0.0 || ^10.0.0", "typescript": "*" } }, "sha512-Nd5pZGgkBTvcCNMBt88iG6r/Tzk1XTWHpQQccwYUWYhz4PMim0yyXAEvqAabxag8S9iLPUEufpaOw20OOxNJ3w=="],
 
@@ -1791,6 +1798,8 @@
     "eslint-plugin-unused-imports": ["eslint-plugin-unused-imports@4.4.1", "", { "peerDependencies": { "@typescript-eslint/eslint-plugin": "^8.0.0-0 || ^7.0.0 || ^6.0.0 || ^5.0.0", "eslint": "^10.0.0 || ^9.0.0 || ^8.0.0" }, "optionalPeers": ["@typescript-eslint/eslint-plugin"] }, "sha512-oZGYUz1X3sRMGUB+0cZyK2VcvRX5lm/vB56PgNNcU+7ficUCKm66oZWKUubXWnOuPjQ8PvmXtCViXBMONPe7tQ=="],
 
     "eslint-plugin-vue": ["eslint-plugin-vue@10.12.0", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.9.1", "natural-compare": "^1.4.0", "nth-check": "^2.1.1", "postcss-selector-parser": "^7.1.4", "semver": "^7.8.5", "xml-name-validator": "^5.0.0" }, "peerDependencies": { "@stylistic/eslint-plugin": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0", "@typescript-eslint/parser": "^7.0.0 || ^8.0.0", "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0", "vue-eslint-parser": "^10.3.0" }, "optionalPeers": ["@stylistic/eslint-plugin", "@typescript-eslint/parser"] }, "sha512-YsrHHtMaxjWqmxr/Kv9yXUfakUlbTCWtIBvr9eounzj6ZsGJdz1I4UuTIHkhzKHes793Cwo3PGTcvsoBqNyzCA=="],
+
+    "eslint-plugin-vuejs-accessibility": ["eslint-plugin-vuejs-accessibility@2.6.3", "", { "dependencies": { "aria-query": "^5.3.0", "vue-eslint-parser": "^9.0.0 || ^10.0.0" }, "peerDependencies": { "eslint": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0", "globals": ">= 13.12.1" } }, "sha512-nNdV+Pw80eR3YYqYPYoiSiVNdLtvXEHXAJQ505NZqVfp9iSJ+Zvd/JsJ/cMFzz+05RBmVkruHiYWcuFTq88tRg=="],
 
     "eslint-rule-documentation": ["eslint-rule-documentation@1.0.23", "", {}, "sha512-pWReu3fkohwyvztx/oQWWgld2iad25TfUdi6wvhhaDPIQjHU/pyvlKgXFw1kX31SQK2Nq9MH+vRDWB0ZLy8fYw=="],
 

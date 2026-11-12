@@ -132,6 +132,12 @@ export const eslintFrameworkDevDependencies = {
   angular: {
     "@angular-eslint/eslint-plugin":
       packageJson.devDependencies["@angular-eslint/eslint-plugin"],
+    // The rules for Angular templates, and the parser that reads them. The
+    // plugin's peer range pins the parser to its own version.
+    "@angular-eslint/eslint-plugin-template":
+      packageJson.devDependencies["@angular-eslint/eslint-plugin-template"],
+    "@angular-eslint/template-parser":
+      packageJson.devDependencies["@angular-eslint/template-parser"],
   },
   astro: {
     "eslint-plugin-astro": packageJson.devDependencies["eslint-plugin-astro"],
@@ -168,6 +174,10 @@ export const eslintFrameworkDevDependencies = {
       packageJson.devDependencies["eslint-plugin-playwright"],
   },
   qwik: {
+    // Qwik components are JSX, so the preset loads the JSX accessibility
+    // rules too.
+    "eslint-plugin-jsx-a11y":
+      packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "eslint-plugin-qwik": packageJson.devDependencies["eslint-plugin-qwik"],
   },
   react: {
@@ -192,6 +202,10 @@ export const eslintFrameworkDevDependencies = {
     "eslint-plugin-remix": packageJson.devDependencies["eslint-plugin-remix"],
   },
   solid: {
+    // Solid components are JSX, so the preset loads the JSX accessibility
+    // rules too.
+    "eslint-plugin-jsx-a11y":
+      packageJson.devDependencies["eslint-plugin-jsx-a11y"],
     "eslint-plugin-solid": packageJson.devDependencies["eslint-plugin-solid"],
   },
   storybook: {
@@ -222,6 +236,9 @@ export const eslintFrameworkDevDependencies = {
   },
   vue: {
     "eslint-plugin-vue": packageJson.devDependencies["eslint-plugin-vue"],
+    // Accessibility rules for Vue templates, which eslint-plugin-vue lacks.
+    "eslint-plugin-vuejs-accessibility":
+      packageJson.devDependencies["eslint-plugin-vuejs-accessibility"],
   },
 } satisfies Record<Frameworks, Record<string, string>>;
 

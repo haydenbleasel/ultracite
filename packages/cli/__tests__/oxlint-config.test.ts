@@ -1354,6 +1354,85 @@ describe("oxlint react config", () => {
   });
 });
 
+describe("oxlint solid and qwik configs", () => {
+  const LABEL_RULE = "jsx-a11y/label-has-associated-control";
+
+  for (const framework of ["solid", "qwik"]) {
+    test(`${framework} enables jsx-a11y and only contains its rules`, async () => {
+      const config = await readOxlintConfig(framework);
+
+      expect(config.plugins).toEqual(["jsx-a11y"]);
+      expect(
+        Object.keys(config.rules ?? {}).filter(
+          (rule) => !rule.startsWith("jsx-a11y/")
+        )
+      ).toEqual([]);
+    });
+
+    test(`${framework} contains all non-nursery jsx-a11y rules`, async () => {
+      const expectedRules = getOxlintRulesForPlugins(["jsx-a11y"]);
+      const config = await readOxlintConfig(framework);
+      const configRules = new Set(Object.keys(config.rules ?? {}));
+
+      expect(expectedRules.filter((rule) => !configRules.has(rule))).toEqual(
+        []
+      );
+    });
+
+    test(`${framework} matches the react preset's jsx-a11y decisions, apart from the label rule`, async () => {
+      const config = await readOxlintConfig(framework);
+      const react = await readOxlintConfig("react");
+
+      const reactRules = Object.fromEntries(
+        Object.entries(react.rules ?? {}).filter(([rule]) =>
+          rule.startsWith("jsx-a11y/")
+        )
+      );
+
+      expect(config.rules).toEqual({ ...reactRules, [LABEL_RULE]: "off" });
+      expect(reactRules[LABEL_RULE]).not.toBe("off");
+    });
+
+    test(`${framework} reports accessibility problems and accepts a label's \`for\``, () => {
+      const { flaggedBy } = lintFixture(`${framework}-a11y`);
+
+      expect(flaggedBy("jsx-a11y(alt-text)")).toEqual(["signup-form.tsx"]);
+
+      // The label rule is off: Oxlint only accepts `for` through a setting it
+      // doesn't read from a preset, so it would report this labelled field.
+      expect(flaggedBy("jsx-a11y(label-has-associated-control)")).toEqual([]);
+      expect(flaggedBy("jsx-a11y(no-autofocus)")).toEqual([]);
+    });
+  }
+
+  test("solid reports a click handler with no keyboard equivalent", () => {
+    const { flaggedBy } = lintFixture("solid-a11y");
+
+    for (const rule of [
+      "jsx-a11y(click-events-have-key-events)",
+      "jsx-a11y(no-static-element-interactions)",
+    ]) {
+      expect(flaggedBy(rule)).toEqual(["signup-form.tsx"]);
+    }
+  });
+
+  // The handler rules don't know Qwik's `onClick$`, so they're silent on it.
+  // When this fails, Oxlint has learned the `$` names: update the Qwik
+  // preset's comment, the docs and the "Rules waiting on a release" table.
+  test("qwik handlers ending in $ are not seen by the handler rules", () => {
+    const { flaggedBy } = lintFixture("qwik-a11y");
+
+    expect(flaggedBy("jsx-a11y(anchor-is-valid)")).toEqual(["signup-form.tsx"]);
+
+    for (const rule of [
+      "jsx-a11y(click-events-have-key-events)",
+      "jsx-a11y(no-static-element-interactions)",
+    ]) {
+      expect(flaggedBy(rule)).toEqual([]);
+    }
+  });
+});
+
 describe("oxlint vue config", () => {
   test("contains all non-nursery vue rules", async () => {
     const expectedRules = getOxlintRulesForPlugins(["vue"]);

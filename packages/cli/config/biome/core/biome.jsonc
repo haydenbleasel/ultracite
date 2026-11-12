@@ -165,7 +165,12 @@
         "useSemanticElements": "error",
         "useValidAnchor": "error",
         "useValidAriaProps": "error",
-        "useValidAriaRole": "error",
+        // A `role` prop on a component isn't an ARIA role
+        // (`<Message role="assistant">`), so only DOM elements are checked.
+        "useValidAriaRole": {
+          "level": "error",
+          "options": { "ignoreNonDom": true }
+        },
         "useValidAriaValues": "error",
         "useValidAutocomplete": "error",
         "useValidLang": "error",

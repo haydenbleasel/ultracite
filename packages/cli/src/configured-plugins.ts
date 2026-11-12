@@ -60,6 +60,10 @@ export const getConfiguredOxlintJsPlugins = (): Set<
 // which don't define the rules the presets name.
 const ESLINT_PLUGIN_RE = /(?:^|\/)eslint-plugin(?:-|$)/u;
 
+// The one parser that's checked like a plugin: the Angular template plugin
+// only loads with the template parser of exactly its own version.
+const VERSIONED_WITH_PLUGIN = new Set(["@angular-eslint/template-parser"]);
+
 /**
  * The rule plugins the project's config loads, each mapped to the range this
  * release installs it at. The presets name their rules, so a plugin older
@@ -83,7 +87,7 @@ export const getConfiguredPlugins = (linter: Linter): Map<string, string> => {
     for (const [name, range] of dependencies.flatMap((entries) =>
       Object.entries(entries)
     )) {
-      if (ESLINT_PLUGIN_RE.test(name)) {
+      if (ESLINT_PLUGIN_RE.test(name) || VERSIONED_WITH_PLUGIN.has(name)) {
         plugins.set(name, range);
       }
     }

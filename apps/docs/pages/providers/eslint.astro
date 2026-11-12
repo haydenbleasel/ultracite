@@ -41,7 +41,7 @@ const breadcrumbs: Crumb[] = [
 const faqs: FaqItem[] = [
   {
     answer:
-      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 910 across ESLint and ten plugins, among them typescript-eslint, Unicorn, SonarJS and import-x. Framework presets add more: 542 rules for React, 47 for Next.js and 209 for Vue. The opt-in type-aware preset adds 101 rules that read your types. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
+      "ESLint runs no rules until you configure it. Ultracite’s core preset turns on 910 across ESLint and ten plugins, among them typescript-eslint, Unicorn, SonarJS and import-x. Framework presets add more: 542 rules for React, 47 for Next.js and 230 for Vue. The opt-in type-aware preset adds 101 rules that read your types. `init` also writes Prettier and Stylelint configs, editor settings for VS Code and Zed, `AGENTS.md` for coding agents, and optional post-edit hooks.",
     question: "What does Ultracite add on top of ESLint?",
   },
   {
@@ -55,7 +55,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "When you depend on something only ESLint has: a plugin with no native port, a Prettier plugin, or template linting for Vue, Svelte and Astro through each framework’s own parser. Otherwise start with Oxlint, which keeps ESLint’s rule names and runs ESLint plugins through its JS plugin API.",
+      "When you depend on something only ESLint has: a plugin with no native port, a Prettier plugin, or template linting for Vue, Svelte, Astro and Angular through each framework’s own parser. Otherwise start with Oxlint, which keeps ESLint’s rule names and runs ESLint plugins through its JS plugin API.",
     question: "When should I pick ESLint over Oxlint or Biome?",
   },
   {
@@ -65,7 +65,7 @@ const faqs: FaqItem[] = [
   },
   {
     answer:
-      "ESLint lints JavaScript and TypeScript modules (`.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts`, `.cts`) and inline scripts in HTML files, and the Vue, Svelte and Astro presets add their components. It doesn’t lint JSON, which Prettier formats. Stylelint lints `.css`, `.scss` and `.less`, extending `stylelint-config-standard` and `stylelint-config-idiomatic-order`, reads SCSS and Less through the `postcss-scss` and `postcss-less` syntaxes `init` installs, and accepts Tailwind v4’s at-rules, functions and theme variables.",
+      "ESLint lints JavaScript and TypeScript modules (`.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.mts`, `.cts`) and inline scripts in HTML files, and the Vue, Svelte and Astro presets add their components. The Angular preset lints HTML files, and the inline templates of components, as Angular templates. It doesn’t lint JSON, which Prettier formats. Stylelint lints `.css`, `.scss` and `.less`, extending `stylelint-config-standard` and `stylelint-config-idiomatic-order`, reads SCSS and Less through the `postcss-scss` and `postcss-less` syntaxes `init` installs, and accepts Tailwind v4’s at-rules, functions and theme variables.",
     question: "Which files does it lint?",
   },
   {

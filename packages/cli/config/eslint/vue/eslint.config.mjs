@@ -3,9 +3,11 @@
 import * as typescriptParser from "@typescript-eslint/parser";
 import eslintPrettier from "eslint-config-prettier";
 import vuePlugin from "eslint-plugin-vue";
+import vuejsAccessibility from "eslint-plugin-vuejs-accessibility";
 
 import componentScripts from "../core/component-scripts.mjs";
 import vueRules from "./rules/vue.mjs";
+import vuejsAccessibilityRules from "./rules/vuejs-accessibility.mjs";
 
 // Only the vue/ entries — the all-on vue rules would otherwise re-enable
 
@@ -30,8 +32,14 @@ const vue = [
         parser: typescriptParser,
       },
     },
+    plugins: {
+      // Accessibility rules for the <template> block, which eslint-plugin-vue
+      // doesn't have.
+      "vuejs-accessibility": vuejsAccessibility,
+    },
     rules: {
       ...vueRules,
+      ...vuejsAccessibilityRules,
       ...vuePrettierOverrides,
     },
   },

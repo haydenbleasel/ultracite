@@ -91,7 +91,9 @@ Stylelint natively handles CSS. Other CSS-adjacent syntaxes — SCSS, Less, CSS-
 
 ### Accessibility
 
-Accessibility linting depends on the linter and the framework. Biome's core preset checks every project. Oxlint checks JSX in React projects only. ESLint checks React JSX, Astro templates and Svelte templates, and doesn't yet check Vue or Angular templates or Solid and Qwik JSX.
+Accessibility linting depends on the linter and the framework. Biome's core preset checks every project. Oxlint checks JSX in React, Solid and Qwik projects. ESLint checks React, Solid and Qwik JSX and Astro, Svelte, Vue and Angular templates (Vue through `eslint-plugin-vuejs-accessibility`, Angular through `@angular-eslint/eslint-plugin-template`).
+
+Solid and Qwik get the same `jsx-a11y` rules as React, with two limits. The rules that look at event handlers only know React's handler names, so they don't see Qwik's `onClick$` or Solid's `on:click` (or, on Oxlint, lowercase `onclick`): a `<div onClick$={…}>` with no keyboard handler isn't reported in a Qwik project. And on Oxlint, `jsx-a11y/label-has-associated-control` is off for both, because Oxlint can't yet be told from a preset that a label's target is written `for`.
 
 ## Choosing a toolchain
 

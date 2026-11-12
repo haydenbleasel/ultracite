@@ -5,13 +5,13 @@ import Terminal from "../../landing/terminal.astro";
 
 // Rules each ultracite/eslint/<framework> preset turns on (Ultracite 8.2.0,
 // recounted 2026-11-11 from main at 2bd7aaad plus the preset changes it releases;
-// counted by importing each preset; for Vue, Svelte and Astro, only their
-// plugin's rules, as those presets also run core's rules on component scripts,
-// and for Playwright only its plugin's, not the no-empty-pattern option it
-// sets). `typeAware` counts the rules in the preset's
-// ultracite/eslint/<framework>/type-aware add-on. Vue, Svelte and Astro
-// register their plugin's template parser, so ESLint reads the markup as well
-// as the script.
+// counted by importing each preset; for Vue, Svelte, Astro and Angular, only
+// their plugins' rules, as those presets also run core's rules on component
+// scripts (Angular: on the inline scripts of HTML files), and for Playwright
+// only its plugin's, not the no-empty-pattern option it sets). `typeAware`
+// counts the rules in the preset's ultracite/eslint/<framework>/type-aware
+// add-on. Vue, Svelte, Astro and Angular register their plugin's template
+// parser, so ESLint reads the markup as well as the script.
 const presets: {
   count: number;
   name: string;
@@ -24,7 +24,21 @@ const presets: {
     name: "react",
     plugins: "React, hooks, jsx-a11y, React Doctor",
   },
-  { count: 209, name: "vue", plugins: "eslint-plugin-vue", templates: true },
+  // 209 from eslint-plugin-vue and 21 from eslint-plugin-vuejs-accessibility.
+  {
+    count: 230,
+    name: "vue",
+    plugins: "eslint-plugin-vue, vuejs-accessibility",
+    templates: true,
+  },
+  // 45 from @angular-eslint/eslint-plugin and 39 from its template plugin.
+  {
+    count: 84,
+    name: "angular",
+    plugins: "@angular-eslint, its template plugin",
+    templates: true,
+    typeAware: 6,
+  },
   { count: 70, name: "vitest", plugins: "@vitest/eslint-plugin", typeAware: 1 },
   {
     count: 68,
@@ -32,6 +46,8 @@ const presets: {
     plugins: "eslint-plugin-svelte",
     templates: true,
   },
+  // 34 from eslint-plugin-solid and 34 from eslint-plugin-jsx-a11y.
+  { count: 68, name: "solid", plugins: "eslint-plugin-solid, jsx-a11y" },
   { count: 64, name: "playwright", plugins: "eslint-plugin-playwright" },
   { count: 63, name: "jest", plugins: "eslint-plugin-jest", typeAware: 4 },
   { count: 52, name: "astro", plugins: "eslint-plugin-astro", templates: true },
@@ -40,8 +56,13 @@ const presets: {
     name: "next",
     plugins: "@next/eslint-plugin-next, React Doctor",
   },
-  { count: 45, name: "angular", plugins: "@angular-eslint", typeAware: 6 },
-  { count: 34, name: "solid", plugins: "eslint-plugin-solid" },
+  // 11 from eslint-plugin-qwik and 34 from eslint-plugin-jsx-a11y.
+  {
+    count: 45,
+    name: "qwik",
+    plugins: "eslint-plugin-qwik, jsx-a11y",
+    typeAware: 1,
+  },
   {
     count: 34,
     name: "tanstack",
@@ -56,7 +77,6 @@ const presets: {
   },
   { count: 16, name: "storybook", plugins: "eslint-plugin-storybook" },
   { count: 12, name: "cypress", plugins: "eslint-plugin-cypress" },
-  { count: 11, name: "qwik", plugins: "eslint-plugin-qwik", typeAware: 1 },
   {
     count: 9,
     name: "react-native",
@@ -112,10 +132,10 @@ const problems = [
       id="es-frameworks"
       title="Eighteen framework presets, templates included"
     >
-      Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte and
-      Astro that includes its parser, so ESLint checks the markup, not just the
-      script block. Six also have a type-aware add-on for their plugin’s rules
-      that read types.
+      Each preset sets up the framework’s own ESLint plugin. For Vue, Svelte,
+      Astro and Angular that includes its parser, so ESLint checks the markup,
+      not just the script. Six also have a type-aware add-on for their plugin’s
+      rules that read types.
     </SectionHeading>
     <div class="border-border bg-border grid gap-px border-t bg-clip-padding lg:grid-cols-2">
       <div class="bg-background flex flex-col">

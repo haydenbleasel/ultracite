@@ -119,6 +119,19 @@ export const typescriptConfig = {
   },
 };
 
+// eslint-plugin-html lints the inline scripts of an HTML file with the rules
+// above. Exported so the Angular preset, which lints HTML files as templates,
+// can still lint their scripts.
+export const htmlConfig = {
+  files: ["**/*.html"],
+  plugins: {
+    html,
+  },
+  settings: {
+    "html/javascript-tag-names": ["script", "Script"],
+  },
+};
+
 // Route and page filenames the kebab-case regex can't express. Exported so
 // the component presets can re-apply them after their own rules.
 export const routeFileConfigs = [
@@ -150,15 +163,7 @@ const core = [
   },
   scriptConfig,
   typescriptConfig,
-  {
-    files: ["**/*.html"],
-    plugins: {
-      html,
-    },
-    settings: {
-      "html/javascript-tag-names": ["script", "Script"],
-    },
-  },
+  htmlConfig,
   {
     // Repeated string literals (test titles, expected values) are normal and
     // idiomatic in test files. Mirrors the oxlint core test override.

@@ -11,6 +11,9 @@ const baseRules = Object.fromEntries(
 );
 
 const overrideRules = {
+  // A `role` prop on a component isn't an ARIA role
+  // (`<Message role="assistant">`), so only DOM elements are checked.
+  "jsx-a11y/aria-role": ["error", { ignoreNonDOM: true }],
   // The options eslint-plugin-jsx-a11y ships for this rule in its own
   // configs. Without them it reports every input, including one its label
   // wraps, which label-has-associated-control already checks.
