@@ -93,7 +93,9 @@ export const getConfiguredPlugins = (linter: Linter): Map<string, string> => {
     }
   }
 
-  if (linter === "oxlint") {
+  // Bun runs the same oxlint.config.ts, loading its JS plugins from
+  // node_modules like Oxlint does.
+  if (linter === "oxlint" || linter === "bun") {
     for (const name of getConfiguredOxlintJsPlugins()) {
       plugins.set(name, OXLINT_JS_PLUGIN_DEV_DEPENDENCIES[name]);
     }
