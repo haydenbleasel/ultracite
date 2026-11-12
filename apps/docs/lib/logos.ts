@@ -35,8 +35,11 @@ export const editorLogos = logoMap([
   "zed",
 ]);
 
+// bun.svg is Bun's own mark (docs/logo/logo.svg in oven-sh/bun, the file
+// bun.com serves as /logo.svg) on a tile of its bun colour, #fbf0df.
 export const providerLogos = {
   biome: logo("biome"),
+  bun: logo("bun"),
   eslint: logo("eslint"),
   oxlint: logo("oxlint"),
 } satisfies Record<ProviderId, string>;

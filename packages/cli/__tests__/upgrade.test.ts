@@ -401,6 +401,24 @@ describe("getToolchainPackages", () => {
       false
     );
   });
+
+  // Bun isn't an npm package, and oxlint and oxfmt are only there for the
+  // editor extensions, so nothing is added that the project doesn't have.
+  test("bun refreshes only the packages the project already has", async () => {
+    const { getToolchainPackages } = await loadUpgrade();
+
+    expect(getToolchainPackages("bun", new Set())).toEqual([]);
+    expect(
+      getToolchainPackages(
+        "bun",
+        new Set(["eslint-plugin-sonarjs", "oxfmt", "oxlint"])
+      )
+    ).toEqual([
+      `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`,
+      `oxlint@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxlint}`,
+      expect.stringMatching(/^eslint-plugin-sonarjs@/u),
+    ]);
+  });
 });
 
 describe("upgrade", () => {
@@ -515,6 +533,36 @@ describe("upgrade", () => {
         pkg.startsWith("eslint-plugin-jsdoc@")
       )
     ).toBe(false);
+  });
+
+  test("reinstalls the JS plugins a Bun config loads, even when package.json doesn't list them", async () => {
+    const harness = setup({
+      linter: "bun",
+      versions: [installed(runningVersion), installed(runningVersion)],
+    });
+
+    mockFileSystem({
+      [path.join(process.cwd(), "oxlint.config.ts")]: [
+        'import { defineConfig } from "ultracite/bun";',
+        'import core from "ultracite/oxlint/core";',
+        'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";',
+        'const jsPlugins = selectJsPlugins(["react-doctor"]);',
+      ].join("\n"),
+    });
+
+    try {
+      const { upgrade } = await loadUpgrade();
+
+      await expect(upgrade({ pm: "pnpm" })).resolves.toBe(0);
+    } finally {
+      restoreFileSystemMock();
+    }
+
+    const [, [toolchainPackages]] = harness.addDevDependency.mock.calls;
+
+    expect(toolchainPackages).toEqual([
+      `oxlint-plugin-react-doctor@${OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["oxlint-plugin-react-doctor"]}`,
+    ]);
   });
 
   test("leaves overrides alone on package managers that only warn about peers", async () => {

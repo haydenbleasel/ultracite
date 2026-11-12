@@ -1,6 +1,8 @@
 import process from "node:process";
 
-export const PROVIDERS = ["oxlint", "biome", "eslint"] as const;
+// Bun runs only where the Bun on PATH has `bun lint` and every build under
+// test accepts `--linter bun`; elsewhere the harness skips it (see bun.ts).
+export const PROVIDERS = ["oxlint", "biome", "eslint", "bun"] as const;
 
 export type Provider = (typeof PROVIDERS)[number];
 

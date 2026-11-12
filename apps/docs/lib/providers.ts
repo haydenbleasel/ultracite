@@ -2,7 +2,7 @@
 // `ultracite init` generates today (packages/cli/src/linters/*.ts). Keep them
 // in step when a generator's output changes.
 
-export type ProviderId = "eslint" | "biome" | "oxlint";
+export type ProviderId = "eslint" | "biome" | "bun" | "oxlint";
 
 export interface ConfigFile {
   code: (presets: string[]) => string;
@@ -30,6 +30,37 @@ const oxlintExtends = (presets: string[]): string => {
   return `  extends: [\n${presets.map((preset) => `    ${preset},`).join("\n")}\n  ],`;
 };
 
+// The Oxlint and oxfmt configs, which the Oxlint and Bun providers both
+// write. They differ only in where defineConfig comes from: the tools' own
+// packages, or ultracite/bun (packages/cli/config/bun).
+const oxcConfigFiles = (
+  lintModule: string,
+  formatModule: string
+): ConfigFile[] => [
+  {
+    code: (presets: string[]) => `import { defineConfig } from "${lintModule}";
+${presets.map((preset) => `import ${preset} from "ultracite/oxlint/${preset}";`).join("\n")}
+
+export default defineConfig({
+  env: core.env,
+${oxlintExtends(presets)}
+  ignorePatterns: core.ignorePatterns,
+});`,
+    lang: "typescript",
+    name: "oxlint.config.ts",
+  },
+  {
+    code: () => `import { defineConfig } from "${formatModule}";
+import ultracite from "ultracite/oxfmt";
+
+export default defineConfig({
+  ...ultracite,
+});`,
+    lang: "typescript",
+    name: "oxfmt.config.ts",
+  },
+];
+
 export const providers: Provider[] = [
   {
     configFiles: [
@@ -50,6 +81,12 @@ export const providers: Provider[] = [
     ],
     id: "biome",
     name: "Biome",
+  },
+  {
+    // Bun reads the same two files; only defineConfig comes from Ultracite.
+    configFiles: oxcConfigFiles("ultracite/bun", "ultracite/bun"),
+    id: "bun",
+    name: "Bun",
   },
   {
     configFiles: [
@@ -86,29 +123,7 @@ export default {
     name: "ESLint + Prettier + Stylelint",
   },
   {
-    configFiles: [
-      {
-        code: (presets: string[]) => `import { defineConfig } from "oxlint";
-${presets.map((preset) => `import ${preset} from "ultracite/oxlint/${preset}";`).join("\n")}
-
-export default defineConfig({
-${oxlintExtends(presets)}
-  ignorePatterns: core.ignorePatterns,
-});`,
-        lang: "typescript",
-        name: "oxlint.config.ts",
-      },
-      {
-        code: () => `import { defineConfig } from "oxfmt";
-import ultracite from "ultracite/oxfmt";
-
-export default defineConfig({
-  ...ultracite,
-});`,
-        lang: "typescript",
-        name: "oxfmt.config.ts",
-      },
-    ],
+    configFiles: oxcConfigFiles("oxlint", "oxfmt"),
     id: "oxlint",
     name: "Oxlint + Oxfmt",
   },

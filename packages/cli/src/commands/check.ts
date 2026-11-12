@@ -12,6 +12,11 @@ import {
   toStylelintTargets,
 } from "../linter-args";
 import {
+  assertBunCanLint,
+  bunFileSelectionArgs,
+  spawnBun,
+} from "../linters/bun";
+import {
   exitOnCommandFailure,
   NO_LINTER_CONFIG_MESSAGE,
   runSteps,
@@ -132,6 +137,35 @@ const runOxfmtCheck = (files: string[], passthrough: string[]): void => {
   exitOnCommandFailure("oxfmt", result);
 };
 
+// Bun reads the Oxlint and oxfmt configs and takes their flags, so its
+// steps are Oxlint's and oxfmt's with `bun lint` and `bun fmt` swapped in.
+const runBunLintCheck = (files: string[], passthrough: string[]): void => {
+  const targets = toOxlintTargets(files);
+
+  if (targets.length === 0) {
+    return;
+  }
+
+  const result = spawnBun("lint", [...passthrough, ...targets], {
+    stdio: "inherit",
+  });
+
+  exitOnCommandFailure("bun lint", result);
+};
+
+const runBunFmtCheck = (files: string[], passthrough: string[]): void => {
+  const args = [
+    "--check",
+    "--no-error-on-unmatched-pattern",
+    ...passthrough,
+    ...(files.length > 0 ? files : ["."]),
+  ];
+
+  const result = spawnBun("fmt", args, { stdio: "inherit" });
+
+  exitOnCommandFailure("bun fmt", result);
+};
+
 export const check = (
   files: string[] = [],
   passthrough: string[] = []
@@ -161,8 +195,23 @@ export const check = (
       break;
     }
 
-    default: {
+    case "bun": {
+      assertBunCanLint();
+      runSteps([
+        () =>
+          runBunFmtCheck(normalizedFiles, bunFileSelectionArgs(passthrough)),
+        () => runBunLintCheck(normalizedFiles, passthrough),
+      ]);
+      break;
+    }
+
+    case "biome": {
       runBiomeCheck(normalizedFiles, passthrough);
+      break;
+    }
+
+    default: {
+      throw new Error(`Unknown linter: ${String(linter satisfies never)}`);
     }
   }
 };

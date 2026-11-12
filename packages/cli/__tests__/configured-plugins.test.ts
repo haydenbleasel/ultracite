@@ -142,6 +142,26 @@ describe("getConfiguredPlugins", () => {
     ]);
   });
 
+  test("lists the JS plugins a Bun config loads", () => {
+    const plugins = withConfig(
+      "oxlint.config.ts",
+      [
+        'import { defineConfig } from "ultracite/bun";',
+        'import core from "ultracite/oxlint/core";',
+        'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";',
+        'const jsPlugins = selectJsPlugins(["sonarjs"]);',
+      ].join("\n"),
+      () => getConfiguredPlugins("bun")
+    );
+
+    expect([...plugins]).toEqual([
+      [
+        "eslint-plugin-sonarjs",
+        OXLINT_JS_PLUGIN_DEV_DEPENDENCIES["eslint-plugin-sonarjs"],
+      ],
+    ]);
+  });
+
   test("has nothing to check for Biome", () => {
     expect(getConfiguredPlugins("biome").size).toBe(0);
   });

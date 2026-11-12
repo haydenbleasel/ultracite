@@ -14,6 +14,7 @@ import {
 } from "../utils";
 import { pathToRoot, readWorkspacePackageJson } from "../workspace-frameworks";
 import type { WorkspaceFrameworks } from "../workspace-frameworks";
+import { BUN_CONFIG_MODULE } from "./bun";
 import {
   arrayEntries,
   identifierName,
@@ -82,9 +83,14 @@ const fullPresetJsPlugins = [
 ] as const satisfies readonly OxlintSelectableJsPlugin[];
 
 interface OxlintOptions {
+  /** Write the config for the Bun provider (see config/bun/index.mjs). */
+  bun?: boolean;
   frameworks?: (typeof options.frameworks)[number][];
   jsPlugins?: OxlintJsPlugin[];
-  /** Run the type-aware rules (needs oxlint-tsgolint installed). */
+  /**
+   * Run the type-aware rules (Oxlint needs oxlint-tsgolint installed; Bun
+   * gets types from `bun check`).
+   */
   typeAware?: boolean;
 }
 
@@ -403,11 +409,29 @@ const renderOverride = (
   return "entry" in override ? override.entry : override.build(generated);
 };
 
+// A Bun config imports defineConfig from ultracite/bun, so it loads (and
+// type checks) without oxlint installed. Anything else the project imports
+// from oxlint stays on its own import.
+const renderDefineConfigImports = (
+  bun: boolean | undefined,
+  oxlintSpecifiers: string[] = []
+): string[] => {
+  if (!bun) {
+    return [renderImport("oxlint", ["defineConfig", ...oxlintSpecifiers])];
+  }
+
+  return [
+    oxlintSpecifiers.length > 0 ? renderImport("oxlint", oxlintSpecifiers) : "",
+    renderImport(BUN_CONFIG_MODULE, ["defineConfig"]),
+  ];
+};
+
 const generateConfigContent = (
   extendsList: string[],
   jsPlugins: OxlintJsPlugin[] = [],
   extras: OxlintExtras = emptyExtras(),
   typeAware = false,
+  bun?: boolean,
   bindings: PresetBindings = bindPresets(extendsList, jsPlugins, extras)
 ) => {
   // anti-slop and @shadcn/lint have their own presets, so they become plain
@@ -445,7 +469,7 @@ const generateConfigContent = (
       : [];
 
   const imports = [
-    renderImport("oxlint", ["defineConfig", ...extras.oxlintSpecifiers]),
+    ...renderDefineConfigImports(bun, extras.oxlintSpecifiers),
     ...resolvedExtends.flatMap((preset) =>
       preset === jsPluginsPath
         ? jsPluginsImport
@@ -458,7 +482,9 @@ const generateConfigContent = (
     ),
     ...(resolvedExtends.includes(jsPluginsPath) ? [] : jsPluginsImport),
     ...extras.imports,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const pluginNames = npmJsPlugins
     .map((jsPlugin) => `"${oxlintJsPluginConfig[jsPlugin].name}"`)
@@ -777,6 +803,12 @@ const readExistingConfig = (
 
   for (const moduleImport of config.imports) {
     const preset = toUltracitePreset(moduleImport.source);
+
+    // The Bun provider's defineConfig, regenerated for whichever provider
+    // init is writing for.
+    if (!moduleImport.typeOnly && moduleImport.source === BUN_CONFIG_MODULE) {
+      continue;
+    }
 
     if (
       moduleImport.typeOnly ||
@@ -1293,15 +1325,18 @@ const rootConfigIdentifier = "root";
 
 const generateWorkspaceConfigContent = (
   rootConfigImport: string,
-  presets: string[]
+  presets: string[],
+  bun: boolean
 ): string => {
   const imports = [
-    renderImport("oxlint", ["defineConfig"]),
+    ...renderDefineConfigImports(bun),
     ...presets.map(
       (preset) =>
         `import ${getOxlintConfigIdentifier(preset)} from "${preset}";`
     ),
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const extendsEntries = [
     rootConfigIdentifier,
@@ -1358,16 +1393,17 @@ export const oxlint = {
         extendsList,
         opts?.jsPlugins,
         emptyExtras(),
-        opts?.typeAware
+        opts?.typeAware,
+        opts?.bun
       )
     );
   },
   // Oxlint doesn't merge a nested config with the root one, so a workspace
   // config extends the root config and adds the workspace's presets.
-  createWorkspace: async ({
-    dir,
-    frameworks,
-  }: WorkspaceFrameworks): Promise<string> => {
+  createWorkspace: async (
+    { dir, frameworks }: WorkspaceFrameworks,
+    { bun = false }: Pick<OxlintOptions, "bun"> = {}
+  ): Promise<string> => {
     const root = resolveOxlintConfigPath();
     const rootConfigPath = root.existing ?? root.target;
 
@@ -1404,7 +1440,8 @@ export const oxlint = {
       `./${configPath}`,
       generateWorkspaceConfigContent(
         `${pathToRoot(dir)}/${fileName(rootConfigPath)}`,
-        presets
+        presets,
+        bun
       )
     );
 
@@ -1418,6 +1455,60 @@ export const oxlint = {
     workspaceConfigNames
       .map((name) => `${dir}/${name}`)
       .find((configPath) => exists(`./${configPath}`)) ?? null,
+  /**
+   * Point an existing workspace config's `defineConfig` import at the
+   * provider init is writing for, leaving the rest of the file as written.
+   * The Oxlint and Bun providers share config files, so a workspace config
+   * kept on a switch would otherwise still be detected as the other one.
+   * Returns whether the file changed.
+   */
+  retargetWorkspaceConfig: async (
+    configPath: string,
+    { bun = false }: Pick<OxlintOptions, "bun"> = {}
+  ): Promise<boolean> => {
+    const target = `./${configPath}`;
+
+    if (configPath.endsWith(oxlintRcFile) || !exists(target)) {
+      return false;
+    }
+
+    const contents = await readFile(target, "utf-8");
+    const parsed = parseConfigModule(contents);
+
+    if (parsed.kind !== "module") {
+      return false;
+    }
+
+    const from = bun ? "oxlint" : BUN_CONFIG_MODULE;
+
+    const defineConfigImport = parsed.module.imports.find(
+      (moduleImport) =>
+        !moduleImport.typeOnly &&
+        moduleImport.source === from &&
+        moduleImport.namedSpecifiers.some(
+          (specifier) => specifier.local === "defineConfig"
+        )
+    );
+
+    if (!defineConfigImport) {
+      return false;
+    }
+
+    const otherSpecifiers = defineConfigImport.namedSpecifiers
+      .filter((specifier) => specifier.local !== "defineConfig")
+      .map((specifier) => specifier.text);
+
+    const replacement = renderDefineConfigImports(bun, otherSpecifiers)
+      .filter(Boolean)
+      .join("\n");
+
+    await writeProjectFile(
+      target,
+      contents.replace(defineConfigImport.text, replacement)
+    );
+
+    return true;
+  },
   // oxlint-disable-next-line complexity -- refactor when next touched: a guard per config init can't update, then the js-plugins, type-aware, rename and migration cases
   update: async (opts?: OxlintOptions) => {
     const paths = resolveOxlintConfigPath();
@@ -1532,6 +1623,7 @@ export const oxlint = {
         jsPlugins,
         existing.extras,
         addTypeAware,
+        opts?.bun,
         bindings
       )
     );

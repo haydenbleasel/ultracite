@@ -36,13 +36,13 @@ Common `init` flags for non-interactive / CI use:
 
 | Flag | Description |
 | --- | --- |
-| `--linter <linter>` | Toolchain to configure (Biome, ESLint, or Oxlint). |
+| `--linter <linter>` | Toolchain to configure (Biome, Bun, ESLint, or Oxlint). |
 | `--pm <pm>` | Package manager to use. |
 | `--editors <editors...>` | Editors to configure (use `universal` for `.vscode/settings.json`). |
 | `--agents <agents...>` | AI agents to enable (use `universal` for `AGENTS.md`). |
 | `--frameworks <frameworks...>` | Frameworks in use, for framework-aware rules. |
 | `--workspace-framework <path=framework...>` | Frameworks for one workspace of a monorepo (e.g. `apps/web=react`). |
-| `--js-plugins <plugins...>` | Optional Oxlint JS plugins to enable (`@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc`, `oxlint-plugin-react-doctor`). |
+| `--js-plugins <plugins...>` | Optional Oxlint JS plugins to enable, with Oxlint or Bun (`@shadcn/lint`, `anti-slop`, `eslint-plugin-github`, `eslint-plugin-jsdoc`, `eslint-plugin-sonarjs`, `eslint-plugin-tsdoc`, `oxlint-plugin-react-doctor`). |
 | `--type-aware` | Enable type-aware linting, and the `strictNullChecks` it needs. |
 | `--install-skill` | Install the reusable Ultracite skill after setup. |
 | `--skip-install` | Configure without installing dependencies. |
@@ -54,6 +54,7 @@ See the [CLI reference](https://ultracite.ai/) for the full, current list of opt
 ## Supported Tools
 
 - **Biome** — All-in-one formatting and linting in a single fast binary.
+- **Bun** — `bun lint` and `bun fmt`, built into Bun, running the Oxlint and Oxfmt presets with nothing else to install.
 - **ESLint + Prettier + Stylelint** — The most mature ecosystem with the largest plugin support.
 - **Oxlint + Oxfmt** — Rust-based tooling that runs dramatically faster than ESLint, part of the Oxc ecosystem.
 

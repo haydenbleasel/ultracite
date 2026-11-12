@@ -17,6 +17,11 @@ import {
 } from "../linter-args";
 import type { FixAgent } from "../linter-args";
 import {
+  assertBunCanLint,
+  bunFileSelectionArgs,
+  spawnBun,
+} from "../linters/bun";
+import {
   exitOnCommandFailure,
   LinterExitError,
   NO_LINTER_CONFIG_MESSAGE,
@@ -24,7 +29,11 @@ import {
   STYLELINT_MISSING_MESSAGE,
 } from "../run-command";
 import { spawnSync } from "../spawn-sync";
-import type { SpawnSyncOptions, StdoutToStderr } from "../spawn-sync";
+import type {
+  SpawnSyncOptions,
+  SpawnSyncResult,
+  StdoutToStderr,
+} from "../spawn-sync";
 import { detectLinter } from "../utils";
 
 const UNSAFE_FLAG = "--unsafe";
@@ -47,8 +56,7 @@ interface FixIo {
   stdio: FixStdio;
 }
 
-const runTool = (command: string, args: string[], io: FixIo) => {
-  const result = spawnSync(command, args, { stdio: io.stdio });
+const collectOutput = (result: SpawnSyncResult, io: FixIo) => {
   io.collected?.push(
     ...[result.stdout, result.stderr].filter(
       (text): text is string => text !== undefined && text.trim() !== ""
@@ -57,6 +65,12 @@ const runTool = (command: string, args: string[], io: FixIo) => {
 
   return result;
 };
+
+const runTool = (command: string, args: string[], io: FixIo) =>
+  collectOutput(spawnSync(command, args, { stdio: io.stdio }), io);
+
+const runBunTool = (tool: "fmt" | "lint", args: string[], io: FixIo) =>
+  collectOutput(spawnBun(tool, args, { stdio: io.stdio }), io);
 
 // ESLint has no unsafe tier of fixes and rejects an unknown --unsafe flag, so
 // it's dropped rather than failing the whole run.
@@ -199,6 +213,46 @@ const runOxfmtFix = (
   exitOnCommandFailure("oxfmt", result);
 };
 
+// Bun reads the Oxlint and oxfmt configs and takes their flags, so its
+// steps are Oxlint's and oxfmt's with `bun lint` and `bun fmt` swapped in.
+const runBunLintFix = (
+  files: string[],
+  passthrough: string[],
+  io: FixIo
+): void => {
+  const targets = toOxlintTargets(files);
+
+  if (targets.length === 0) {
+    return;
+  }
+
+  const hasUnsafe = passthrough.includes(UNSAFE_FLAG);
+  const filteredPassthrough = passthrough.filter((arg) => arg !== UNSAFE_FLAG);
+
+  const args = [
+    hasUnsafe ? "--fix-dangerously" : "--fix",
+    ...filteredPassthrough,
+    ...targets,
+  ];
+
+  exitOnCommandFailure("bun lint", runBunTool("lint", args, io));
+};
+
+const runBunFmtFix = (
+  files: string[],
+  passthrough: string[],
+  io: FixIo
+): void => {
+  const args = [
+    "--write",
+    "--no-error-on-unmatched-pattern",
+    ...passthrough,
+    ...(files.length > 0 ? files : ["."]),
+  ];
+
+  exitOnCommandFailure("bun fmt", runBunTool("fmt", args, io));
+};
+
 interface FixOptions {
   agent?: FixAgent | null;
   /** Running from an agent's post-edit hook (`--hook`). */
@@ -249,8 +303,22 @@ const runLinterFixes = (
       break;
     }
 
-    default: {
+    case "bun": {
+      assertBunCanLint();
+      runSteps([
+        () => runBunLintFix(files, passthrough, io),
+        () => runBunFmtFix(files, bunFileSelectionArgs(passthrough), io),
+      ]);
+      break;
+    }
+
+    case "biome": {
       runBiomeFix(files, passthrough, io);
+      break;
+    }
+
+    default: {
+      throw new Error(`Unknown linter: ${String(linter satisfies never)}`);
     }
   }
 };

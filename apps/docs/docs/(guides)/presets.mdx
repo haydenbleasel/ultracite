@@ -5,6 +5,8 @@ description: Opt-in Ultracite presets for ESLint parity, TSDoc, anti-slop rules,
 
 Ultracite's core and framework presets are on when you run `init`. The presets on this page are opt-in: each adds rules that suit some projects and not others, and most run through Oxlint's JS plugin API, which is slower than Oxlint's native rules. The JS plugin, TSDoc, anti-slop and `@shadcn/lint` presets are for Oxlint; the gdp-ts preset works with Oxlint and ESLint.
 
+Bun runs all of them too: `bun lint` loads the JS plugins an Oxlint config names and runs them in JavaScript. On Bun, pass `--linter bun` where the commands below say `--linter oxlint`, and import `defineConfig` from `ultracite/bun` instead of `oxlint` in the configs.
+
 ## ESLint Parity
 
 The core preset — and the `react`, `next`, and `tanstack` framework presets — run entirely on Oxlint's native, Rust-powered rules for maximum speed. If you want to close the remaining gap with the ESLint preset, Ultracite ships an opt-in `js-plugins` preset that runs [`eslint-plugin-github`](https://github.com/github/eslint-plugin-github), [`eslint-plugin-sonarjs`](https://github.com/SonarSource/eslint-plugin-sonarjs), and [`oxlint-plugin-react-doctor`](https://www.npmjs.com/package/oxlint-plugin-react-doctor) through Oxlint's JS plugin support. TSDoc syntax and public API documentation checks are available as separate, explicitly selected plugins below; they are not added to the full preset, so existing users do not gain new dependencies when upgrading.
@@ -77,7 +79,7 @@ Two more JS plugins check the documentation in TypeScript files (`.ts`, `.tsx`, 
 - `eslint-plugin-tsdoc`, registered as `tsdoc`, validates [TSDoc](https://tsdoc.org) syntax.
 - `eslint-plugin-jsdoc`, registered as `jsdoc-js` because Oxlint reserves `jsdoc` for its native plugin, requires a doc comment on every exported function, class, interface, type alias, and enum. It also covers the public methods and getters of exported classes, and exports that wrap a function, such as `export const Button = forwardRef(...)`.
 
-Selecting `eslint-plugin-jsdoc` also turns on Oxlint's native `jsdoc/require-param` and `jsdoc/require-returns`, so every JSDoc comment on a function, exported or not, must describe its parameters and return value. Parameter and return types stay off, so TypeScript types aren't repeated in comments.
+Selecting `eslint-plugin-jsdoc` also turns on Oxlint's native `jsdoc/require-param` and `jsdoc/require-returns`, so every JSDoc comment on a function, exported or not, must describe its parameters and return value. Parameter and return types stay off, so TypeScript types aren't repeated in comments. Bun has no native `jsdoc/*` rules, so on Bun those two are left out and only the plugin's `jsdoc-js/*` rules run.
 
 Selecting `eslint-plugin-tsdoc` adjusts core's native `jsdoc/*` rules to fit TSDoc: tags such as `@remarks` and `@typeParam` are allowed, and generators don't need `@yields`. With both plugins selected, a destructured parameter is documented by its own name (`@param props - ...`) rather than property by property. TSDoc has no `{Type}` syntax, so write the type on a `@throws` tag as a link: `@throws {@link RangeError} When the input is empty.`
 

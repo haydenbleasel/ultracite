@@ -50,6 +50,29 @@ export default defineConfig({
 
 Oxlint uses the config nearest each file instead of merging it with the root one. Extending the root config brings in its presets, rules and JS plugins, but not its `env`, `ignorePatterns` or `settings`, so the workspace config repeats them. In a workspace whose `package.json` doesn't set `"type": "module"`, the file is `oxlint.config.mts`.
 
+### Bun
+
+Bun reads the same nested configs, so a Bun workspace config is the Oxlint one with `defineConfig` imported from `ultracite/bun`:
+
+```ts title="apps/web/oxlint.config.ts"
+import { defineConfig } from "ultracite/bun";
+import react from "ultracite/oxlint/react";
+import tanstack from "ultracite/oxlint/tanstack";
+
+import root from "../../oxlint.config.ts";
+
+// Oxlint lints each file with its nearest config alone, so this extends the
+// root config and repeats the properties that extends doesn't carry over.
+export default defineConfig({
+  env: root.env,
+  extends: [root, react, tanstack],
+  ignorePatterns: root.ignorePatterns,
+  settings: root.settings,
+});
+```
+
+Switching the repository between `--linter oxlint` and `--linter bun` rewrites that import in the workspace configs too.
+
 ### Biome
 
 ```jsonc title="apps/web/biome.jsonc"
@@ -86,7 +109,7 @@ ESLint also uses the config nearest each file, so the workspace config spreads t
 
 ## Adding scripts
 
-Because Ultracite's underlying tools are fast (especially the Rust-based Biome and Oxlint), you can run a single root script rather than creating separate scripts in each package.
+Because Ultracite's underlying tools are fast (especially the native Biome, Oxlint and Bun), you can run a single root script rather than creating separate scripts in each package.
 
 `ultracite init` adds `check` and `fix` scripts to your root `package.json`. If you set Ultracite up by hand, add them yourself:
 

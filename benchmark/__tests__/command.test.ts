@@ -61,6 +61,36 @@ describe("assertRunnable", () => {
       "All matched files may have been excluded by ignore rules.",
       "stderr",
     ],
+    [
+      "Bun unsupported rule",
+      "error: 1 rule in oxlint.config.ts is not supported: jsdoc/require-param",
+      "stderr",
+    ],
+    [
+      "Bun unsupported rules",
+      "error: 2 rules in oxlint.config.ts are not supported: no-consle, no-fooo",
+      "stderr",
+    ],
+    [
+      "Bun config error",
+      "error: Cannot use the configuration file /bench/.oxlintrc.json:",
+      "stdout",
+    ],
+    [
+      "Bun config load error",
+      "error: Cannot load the configuration file /bench/oxlint.config.ts:",
+      "stdout",
+    ],
+    [
+      "Ultracite's Bun setup error",
+      "The Bun provider runs `bun lint` and `bun fmt`, which need Bun 1.4.5 or later.",
+      "stdout",
+    ],
+    [
+      "Bun no-files output",
+      'error: No files matching the pattern "src" were found.',
+      "stderr",
+    ],
   ])("rejects %s diagnostics from %s", (_name, message, stream) => {
     const outcome: RunOutcome = {
       durationMs: 1,
