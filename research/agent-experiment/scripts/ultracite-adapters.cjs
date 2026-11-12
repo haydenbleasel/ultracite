@@ -193,12 +193,12 @@ const EXPECTED_V3 = {
     "826f76ae5436e14076375b0f2c6c04711adbd804e75a454634094a8ca0c42428",
   "diff.ts": "d8a0c826f8142f686440655c7f460a44aad87546b7107217383244fb0484a51a",
 };
-const expectedHashes = () =>
-  revision() === "v3"
-    ? EXPECTED_V3
-    : revision() === "v2"
-      ? EXPECTED_V2
-      : EXPECTED;
+// Any other revision (v1, or none set) checks against EXPECTED.
+const EXPECTED_BY_REVISION = new Map([
+  ["v2", EXPECTED_V2],
+  ["v3", EXPECTED_V3],
+]);
+const expectedHashes = () => EXPECTED_BY_REVISION.get(revision()) ?? EXPECTED;
 
 /**
  * Hashes every mirrored slice. `strict` (a new run) throws when one differs from EXPECTED;
@@ -207,9 +207,9 @@ const expectedHashes = () =>
 function checkSources({ strict = true } = {}) {
   const hashes = {};
   const drift = [];
+  const expected = expectedHashes();
   for (const [name, slice] of Object.entries(SLICES)) {
     hashes[name] = sha256(slice());
-    const expected = expectedHashes();
     if (hashes[name] !== expected[name]) {
       drift.push(name);
     }
@@ -709,36 +709,6 @@ function groupByFile(diagnostics) {
     .toSorted((a, b) => a.file.localeCompare(b.file));
 }
 
-/**
- * index.ts verifySafely: a missing file is a failed verification; otherwise the adapter's verify
- * pass, keeping only this file's diagnostics. `verify(file)` is the topic's adapter pass; `cwd` is
- * the project root a relative path resolves from (ESLint's paths are absolute, and resolve to
- * themselves; added with the sort-keys topic, the same as join for a relative path).
- */
-function verifySafely(verify, file, cwd) {
-  if (!existsSync(resolve(cwd, file))) {
-    return { error: "the file no longer exists.", remaining: null };
-  }
-  try {
-    const allRemaining = verify(file);
-    const ownFile = allRemaining.filter(
-      (diagnostic) => diagnostic.file === file
-    );
-    // v3: what recordSourceLines returns is what's matched and handed over.
-    const remaining =
-      revision() === "v3" ? recordSourceLinesV3(ownFile, cwd) : ownFile;
-    if (revision() === "v2") {
-      recordSourceLines(remaining, cwd);
-    }
-    return { error: null, remaining };
-  } catch (error) {
-    return {
-      error: error instanceof Error ? error.message : String(error),
-      remaining: null,
-    };
-  }
-}
-
 /** diff.ts: diagnostics are matched by rule and message only (spans shift with any edit). */
 const diagnosticKey = (diagnostic) =>
   `${diagnostic.rule}\u0000${diagnostic.message}`;
@@ -891,7 +861,7 @@ const readLinesV3 = (file, cwd) => {
     return [];
   }
 };
-function uniqueLines(snapshot) {
+const uniqueLines = (snapshot) => {
   if (snapshot.unique) return snapshot.unique;
   const unique = new Map();
   const seen = new Set();
@@ -905,36 +875,36 @@ function uniqueLines(snapshot) {
   }
   snapshot.unique = unique;
   return unique;
-}
+};
 const linesAround = (lines, index) =>
   [lines[index - 1] ?? "", lines[index] ?? "", lines[index + 1] ?? ""].join(
     KEY_SEPARATOR
   );
-function fingerprintAt(lines, index) {
+const fingerprintAt = (lines, index) => {
   const around = linesAround(lines, index);
   const start = (lines[index - 1] ?? "").length + KEY_SEPARATOR.length;
   return {
     around,
     line: around.slice(start, start + (lines[index] ?? "").length),
   };
-}
-function placeLines(lines) {
+};
+const placeLines = (lines) => {
   const places = new Map();
   for (const index of lines.keys()) {
     const around = linesAround(lines, index);
     places.set(around, places.has(around) ? undefined : index);
   }
   return places;
-}
-function findLine(snapshot, index, { around, line }, places) {
+};
+const findLine = (snapshot, index, { around, line }, places) => {
   if (linesAround(snapshot.lines, index) === around) return index;
   const moved = places().get(around);
   if (moved !== undefined) return moved;
   if ((snapshot.lines[index] ?? "") === line) return index;
   return uniqueLines(snapshot).get(line);
-}
+};
 /** diff.ts fingerprintSources: for reports whose file is read later than the linter ran. */
-function fingerprintSources(diagnostics, cwd) {
+const fingerprintSources = (diagnostics, cwd) => {
   const files = new Map();
   for (const diagnostic of diagnostics) {
     const lines =
@@ -942,14 +912,14 @@ function fingerprintSources(diagnostics, cwd) {
     files.set(diagnostic.file, lines);
     fingerprintsV3.set(diagnostic, fingerprintAt(lines, diagnostic.line - 1));
   }
-}
+};
 /**
  * diff.ts recordSourceLines: remembers the file behind each diagnostic and returns the diagnostics
  * to match and hand over (a fingerprinted report an edit moved comes back as a copy on the line
  * it's on now). `textOf(file)`, when given, supplies a file's text instead of reading it (the
  * harness's re-measurement, from the committed copy of the file as that linter run read it).
  */
-function recordSourceLinesV3(diagnostics, cwd, textOf = null) {
+const recordSourceLinesV3 = (diagnostics, cwd, textOf = null) => {
   const files = new Map();
   const places = new Map();
   const snapshotOf = (file) => {
@@ -987,27 +957,27 @@ function recordSourceLinesV3(diagnostics, cwd, textOf = null) {
     snapshotsV3.set(current, snapshot);
     return current;
   });
-}
+};
 /** diff.ts releaseSourceLines: lets go of every snapshot of a file. */
-function releaseSourceLines(file) {
+const releaseSourceLines = (file) => {
   for (const snapshot of snapshotsByFileV3.get(file) ?? []) {
     snapshot.lines = [];
     snapshot.unique = undefined;
   }
   snapshotsByFileV3.delete(file);
-}
+};
 const sourceLineV3 = (diagnostic) =>
   snapshotsV3.get(diagnostic)?.lines[diagnostic.line - 1] || undefined;
-function diagnosticKeyV3(diagnostic) {
+const diagnosticKeyV3 = (diagnostic) => {
   const message = diagnostic.message.replaceAll(
     LIMIT_RULE_RE.test(diagnostic.rule) ? NUMBER_RE : POSITION_RE,
     "#"
   );
   return `${diagnostic.rule}${KEY_SEPARATOR}${message}`;
-}
+};
 const looseKeyV3 = (diagnostic) =>
   `${diagnostic.rule}${KEY_SEPARATOR}${diagnostic.message.replaceAll(NUMBER_RE, "#")}`;
-function groupByKeyV3(diagnostics, keyOf) {
+const groupByKeyV3 = (diagnostics, keyOf) => {
   const groups = new Map();
   for (const diagnostic of diagnostics) {
     const key = keyOf(diagnostic);
@@ -1019,15 +989,15 @@ function groupByKeyV3(diagnostics, keyOf) {
     groups.set(key, [diagnostic]);
   }
   return groups;
-}
-function anchorPositions(before, after) {
+};
+const anchorPositions = (before, after) => {
   const beforeLines = uniqueLines(before);
   const afterLines = uniqueLines(after);
   return before.lines.map((line) =>
     beforeLines.has(line) ? afterLines.get(line) : undefined
   );
-}
-function lineWindow(original, after, anchors) {
+};
+const lineWindow = (original, after, anchors) => {
   const before = snapshotsV3.get(original);
   const index = original.line - 1;
   if (
@@ -1051,8 +1021,8 @@ function lineWindow(original, after, anchors) {
     (line, position) => position > lower && position < upper && line !== ""
   );
   return hasCode ? { lower, upper } : null;
-}
-function placeOriginals(originals, reports) {
+};
+const placeOriginals = (originals, reports) => {
   const [firstReport] = reports;
   const after = firstReport ? snapshotsV3.get(firstReport) : undefined;
   const anchors = new Map();
@@ -1066,8 +1036,8 @@ function placeOriginals(originals, reports) {
         report.line - 1 < window.upper);
     return [original, place];
   });
-}
-function pairGroupV3(originals, fresh) {
+};
+const pairGroupV3 = (originals, fresh) => {
   const pairs = new Map();
   const matched = new Set();
   const pair = (report, original) => {
@@ -1104,8 +1074,8 @@ function pairGroupV3(originals, fresh) {
     pair(report, original);
   }
   return pairs;
-}
-function pairOnSameLine(originals, fresh) {
+};
+const pairOnSameLine = (originals, fresh) => {
   const pairs = new Map();
   for (const [original, place] of placeOriginals(originals, fresh)) {
     const text = sourceLineV3(original);
@@ -1121,17 +1091,17 @@ function pairOnSameLine(originals, fresh) {
     if (report) pairs.set(report, original);
   }
   return pairs;
-}
-function pairByKey(original, remaining, keyOf, pairing) {
+};
+const pairByKey = (original, remaining, keyOf, pairing) => {
   const originalGroups = groupByKeyV3(original, keyOf);
   const pairs = new Map();
   for (const [key, fresh] of groupByKeyV3(remaining, keyOf))
     for (const [report, match] of pairing(originalGroups.get(key) ?? [], fresh))
       pairs.set(report, match);
   return pairs;
-}
+};
 /** diff.ts partitionByRemaining (v3). */
-function partitionByRemainingV3(original, remaining) {
+const partitionByRemainingV3 = (original, remaining) => {
   const pairs = pairByKey(original, remaining, diagnosticKeyV3, pairGroupV3);
   const paired = new Set(pairs.values());
   const loosePairs = pairByKey(
@@ -1148,14 +1118,57 @@ function partitionByRemainingV3(original, remaining) {
     still: original.filter((diagnostic) => matched.has(diagnostic)),
     stillReported: remaining.filter((diagnostic) => pairs.has(diagnostic)),
   };
-}
-
-const partitionByRemaining = (original, remaining) => {
-  if (revision() === "v3") return partitionByRemainingV3(original, remaining);
-  return revision() === "v2"
-    ? partitionByRemainingV2(original, remaining)
-    : partitionByRemainingV1(original, remaining);
 };
+
+// Any other revision (v1, or none set) pairs by rule and message alone.
+const PARTITION_BY_REVISION = new Map([
+  ["v2", partitionByRemainingV2],
+  ["v3", partitionByRemainingV3],
+]);
+const partitionByRemaining = (original, remaining) =>
+  (PARTITION_BY_REVISION.get(revision()) ?? partitionByRemainingV1)(
+    original,
+    remaining
+  );
+
+// What verifySafely does with the file's diagnostics: v2 records each one's line and hands them
+// over as they are; v3 hands over what recordSourceLines returns. v1 records nothing.
+const RECORD_BY_REVISION = new Map([
+  [
+    "v2",
+    (diagnostics, cwd) => {
+      recordSourceLines(diagnostics, cwd);
+      return diagnostics;
+    },
+  ],
+  ["v3", recordSourceLinesV3],
+]);
+
+/**
+ * index.ts verifySafely: a missing file is a failed verification; otherwise the adapter's verify
+ * pass, keeping only this file's diagnostics. `verify(file)` is the topic's adapter pass; `cwd` is
+ * the project root a relative path resolves from (ESLint's paths are absolute, and resolve to
+ * themselves; added with the sort-keys topic, the same as join for a relative path).
+ */
+function verifySafely(verify, file, cwd) {
+  if (!existsSync(resolve(cwd, file))) {
+    return { error: "the file no longer exists.", remaining: null };
+  }
+  try {
+    const allRemaining = verify(file);
+    const ownFile = allRemaining.filter(
+      (diagnostic) => diagnostic.file === file
+    );
+    const record = RECORD_BY_REVISION.get(revision());
+    const remaining = record ? record(ownFile, cwd) : ownFile;
+    return { error: null, remaining };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : String(error),
+      remaining: null,
+    };
+  }
+}
 
 /**
  * index.ts toRetryIssues: what's still reported against what the previous attempt was given. A
