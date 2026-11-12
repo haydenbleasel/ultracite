@@ -2530,6 +2530,24 @@ describe("helper functions", () => {
       installedPackages.length = 0;
       await installDependencies(npmPm, "oxlint", true, true, false, ["react"]);
       expect(installedPackages).not.toContain(compiler);
+
+      // `bun fmt` doesn't format .astro files, so a Bun project doesn't turn
+      // on Oxfmt's Astro formatting, even with editors set up.
+      installedPackages.length = 0;
+      await installDependencies(
+        npmPm,
+        "bun",
+        true,
+        true,
+        false,
+        ["astro"],
+        [],
+        true
+      );
+      expect(installedPackages).toContain(
+        `oxfmt@${OXLINT_TOOLCHAIN_DEV_DEPENDENCIES.oxfmt}`
+      );
+      expect(installedPackages).not.toContain(compiler);
     });
 
     // Bun lints and formats with its own tools, so it needs oxlint and oxfmt
