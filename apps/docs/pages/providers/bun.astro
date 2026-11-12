@@ -24,8 +24,9 @@ import { providerLogos } from "../../lib/logos";
 // Oxlint 1.88.0, Oxfmt 0.71.0 and Ultracite 8.0.1 with the Bun provider, ahead
 // of its release, on this date. Bun's linter and formatter aren't in a stable
 // Bun release yet: recheck the rule counts, the version floor and the
-// limitations when they are.
-const lastModified = "2026-10-16";
+// limitations when they are. The rule counts were rechecked on this date for
+// the Ultracite 8.2.0 presets, on Bun 1.4.4-canary.1+f33631841.
+const lastModified = "2026-11-11";
 const large = runFor(420);
 const command = "bunx ultracite@latest init --linter bun";
 
@@ -89,7 +90,7 @@ const nextSteps: NextStep[] = [
   },
   {
     description:
-      "Turn on the 56 rules that read your types, with types from `bun check`.",
+      "Turn on the 57 rules that read your types, with types from `bun check`.",
     href: "/docs/usage#bun",
     label: "Guide",
     title: "Type-aware linting",
