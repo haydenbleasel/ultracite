@@ -4,7 +4,9 @@ import { execa } from "execa";
 
 import type { AgentAdapter } from "./agents";
 
-export const AGENT_TIMEOUT_MS = 5 * 60 * 1000;
+// Long enough for the slow, correct fixes: in the research runs the hard files
+// took five to six minutes, and a killed agent leaves a half-made edit.
+export const AGENT_TIMEOUT_MS = 10 * 60 * 1000;
 
 // Grace period after SIGTERM before escalating to SIGKILL — an agent CLI that
 // traps or ignores SIGTERM would otherwise hang the run forever.

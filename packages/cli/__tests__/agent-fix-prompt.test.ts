@@ -52,6 +52,24 @@ describe("agent-fix prompt", () => {
     expect(prompt).toContain("`Left for review: 2, 3`");
   });
 
+  test("tells the agent when leaving an issue is the right result", () => {
+    const prompt = buildPrompt(
+      "src/foo.ts",
+      [diagnostic()],
+      "/tmp/ultracite-x/foo.ts.json"
+    );
+
+    // A rule that reports a bug is asking for the behavior to change.
+    expect(prompt).toContain("fixing that behavior is the point");
+    expect(prompt).not.toContain("while preserving runtime behavior");
+    // Hiding code from a rule clears many rules, so it's named, not denied.
+    expect(prompt).toContain("is not a fix, even if the linter goes quiet");
+    expect(prompt).not.toContain("will not clear it");
+    expect(prompt).toContain("the minimal change can be no change");
+    expect(prompt).toContain("needs changes outside this file");
+    expect(prompt).toContain("Don't run the linter or other commands");
+  });
+
   test("retry prompt calls out the failed previous attempt", () => {
     const prompt = buildRetryPrompt(
       "src/foo.ts",

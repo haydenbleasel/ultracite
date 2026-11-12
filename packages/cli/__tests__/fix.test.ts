@@ -919,7 +919,7 @@ const mockAgentEnvironment = ({
     detectLinter: mock(() => "oxlint"),
   }));
   mock.module("../src/agent-fix/run-agent", () => ({
-    AGENT_TIMEOUT_MS: 300_000,
+    AGENT_TIMEOUT_MS: 600_000,
     runAgent: mockRunAgent,
   }));
   // Verification checks the file still exists before re-linting it.
@@ -1141,6 +1141,38 @@ describe("fix with an agent", () => {
     expect(output).toContain(
       "The caller's heading would end up inside the button."
     );
+    // The explanation is printed once, and the total says who it's waiting on.
+    expect(output).not.toContain("Claude Code said:");
+    expect(output).toContain(
+      "Fixed 0 of 1 issue with Claude Code. 1 left for you to decide."
+    );
+  });
+
+  test("shows the end of the agent's final message under the file", async () => {
+    const write = spyOn(process.stdout, "write").mockImplementation(() => true);
+
+    const lines = Array.from(
+      { length: 12 },
+      (_, index) => `Point ${index + 1}.`
+    );
+
+    mockAgentEnvironment({
+      agentOutputs: [
+        `Removed the eval.\n\n${lines.join("\n")}\n\nThis looks like a real bug upstream.`,
+      ],
+      oxlintOutputs: [oxlintDiagnostics, '{"diagnostics":[]}'],
+    });
+
+    await fix([], [], { agent: "claude" });
+
+    const output = write.mock.calls.map((call) => String(call[0])).join("");
+    expect(output).toContain("Claude Code said:");
+    expect(output).toContain("This looks like a real bug upstream.");
+    expect(output).toContain("… Point 6.");
+    expect(output).not.toContain("Point 5.");
+    expect(output).not.toContain("Removed the eval.");
+    expect(output).toContain("Fixed 1 of 1 issue with Claude Code.");
+    expect(output).not.toContain("left for you to decide");
   });
 
   test("retries only the issues the agent didn't leave for a person", async () => {
@@ -1264,7 +1296,7 @@ describe("fix with an agent", () => {
       detectLinter: mock(() => "biome"),
     }));
     mock.module("../src/agent-fix/run-agent", () => ({
-      AGENT_TIMEOUT_MS: 300_000,
+      AGENT_TIMEOUT_MS: 600_000,
       runAgent: mockRunAgent,
     }));
     mockFileSystem({ "src/bad.ts": "" });

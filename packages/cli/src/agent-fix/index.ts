@@ -26,6 +26,8 @@ import type { Diagnostic, LinterAdapter } from "./types";
 const MS_PER_MINUTE = 60_000;
 const STDERR_NOTE_LENGTH = 200;
 const MAX_AGENT_ATTEMPTS = 3;
+const AGENT_MESSAGE_MAX_LINES = 8;
+const AGENT_MESSAGE_MAX_LENGTH = 800;
 
 export interface AgentFixOptions {
   agent: FixAgent;
@@ -110,6 +112,11 @@ interface FileFixContext {
 interface FileFixAttemptResult {
   agentResult: Awaited<ReturnType<typeof runAgent>>;
   attempts: number;
+  /**
+   * The last attempt's final message, unless it left issues for a person:
+   * that one is in `leftForReview` already.
+   */
+  finalMessage: string;
   /** What the agent left for a person, one entry per attempt that left any. */
   leftForReview: LeftForReview[];
   verified: ReturnType<typeof verifySafely>;
@@ -178,7 +185,14 @@ const attemptFileFix = async (
   // Verify even after an agent failure — a timed-out agent may still have
   // fixed some issues, and the re-lint is what the icons must reflect.
   const verified = verifySafely(linterAdapter, group.file, passthrough);
-  const result = { agentResult, attempts: attempt, leftForReview, verified };
+
+  const result = {
+    agentResult,
+    attempts: attempt,
+    finalMessage: left ? "" : agentResult.output.trim(),
+    leftForReview,
+    verified,
+  };
 
   if (
     verified.remaining === null ||
@@ -216,6 +230,31 @@ const describeLeftForReview = (
   return explanation ? `${summary}:\n${explanation}` : `${summary}.`;
 };
 
+/**
+ * The agent's final message is where it says what it changed and what it
+ * noticed: a likely bug it left alone, a behavior its edit changes. Only the
+ * end is shown, so a long message can't bury the results of the files around
+ * it. Agents put their caveats last, after the account of the edit.
+ */
+const describeFinalMessage = (agentLabel: string, message: string): string => {
+  const lines = message.split("\n").filter((line) => line.trim().length > 0);
+  const kept = lines.slice(-AGENT_MESSAGE_MAX_LINES).join("\n");
+  const capped = kept.slice(-AGENT_MESSAGE_MAX_LENGTH).trimStart();
+
+  const cut =
+    lines.length > AGENT_MESSAGE_MAX_LINES ||
+    kept.length > AGENT_MESSAGE_MAX_LENGTH;
+
+  return `${agentLabel} said:\n${cut ? "… " : ""}${capped}`;
+};
+
+interface FileFixResult {
+  fixed: number;
+  /** Still reported, and left by the agent for a person to decide. */
+  left: number;
+  remaining: number;
+}
+
 interface FileFixInput {
   /** Issues an earlier file's fix already cleared, shown as fixed. */
   clearedEarlier: Diagnostic[];
@@ -227,14 +266,14 @@ const fixFileGroup = async (
   context: FileFixContext,
   group: FileGroup,
   input?: FileFixInput
-): Promise<{ fixed: number; remaining: number }> => {
+): Promise<FileFixResult> => {
   const { renderer } = context;
   const clearedEarlier = input?.clearedEarlier ?? [];
   const issues = input?.issues ?? group.issues;
 
   renderer.startFile(group.file);
 
-  const { agentResult, attempts, leftForReview, verified } =
+  const { agentResult, attempts, finalMessage, leftForReview, verified } =
     await attemptFileFix(context, group, {
       attempt: 1,
       issues,
@@ -264,6 +303,9 @@ const fixFileGroup = async (
       ...leftForReview.map((entry) =>
         describeLeftForReview(context.agentAdapter.label, entry)
       ),
+      finalMessage
+        ? describeFinalMessage(context.agentAdapter.label, finalMessage)
+        : "",
     ]
       .filter((part) => part.length > 0)
       .join("\n");
@@ -282,7 +324,11 @@ const fixFileGroup = async (
     notes.push(`Verification failed: ${verified.error}`);
     settle(() => false);
 
-    return { fixed: clearedEarlier.length, remaining: issues.length };
+    return {
+      fixed: clearedEarlier.length,
+      left: 0,
+      remaining: issues.length,
+    };
   }
 
   // No rule runs on a file that doesn't parse, so its issues vanish from the
@@ -297,6 +343,7 @@ const fixFileGroup = async (
 
     return {
       fixed: clearedEarlier.length,
+      left: 0,
       remaining: Math.max(issues.length, verified.remaining.length),
     };
   }
@@ -314,8 +361,14 @@ const fixFileGroup = async (
 
   settle((issue) => cleared.includes(issue));
 
+  const { stillReported: left } = partitionByRemaining(
+    leftForReview.flatMap((entry) => entry.issues),
+    verified.remaining
+  );
+
   return {
     fixed: clearedEarlier.length + cleared.length,
+    left: left.length,
     remaining: still.length + introduced.length,
   };
 };
@@ -329,7 +382,7 @@ const fixFileGroup = async (
 const refreshAndFixFileGroup = (
   context: FileFixContext,
   group: FileGroup
-): Promise<{ fixed: number; remaining: number }> => {
+): Promise<FileFixResult> => {
   const refreshed = verifySafely(
     context.linterAdapter,
     group.file,
@@ -349,7 +402,11 @@ const refreshAndFixFileGroup = (
       `Cleared by an earlier file's fix; ${context.agentAdapter.label} didn't run.`
     );
 
-    return Promise.resolve({ fixed: group.issues.length, remaining: 0 });
+    return Promise.resolve({
+      fixed: group.issues.length,
+      left: 0,
+      remaining: 0,
+    });
   }
 
   const { cleared } = partitionByRemaining(group.issues, refreshed.remaining);
@@ -410,7 +467,7 @@ export const runAgentFix = async ({
     tempDir,
   };
 
-  const totals = { fixed: 0, remaining: 0 };
+  const totals = { fixed: 0, left: 0, remaining: 0 };
 
   // Files are fixed strictly one at a time — concurrent agents could race on
   // shared context — hence recursion over the queue instead of Promise.all.
@@ -426,6 +483,7 @@ export const runAgentFix = async ({
       : await refreshAndFixFileGroup(context, group);
 
     totals.fixed += result.fixed;
+    totals.left += result.left;
     totals.remaining += result.remaining;
     await fixQueue(rest, false);
   };
@@ -437,8 +495,13 @@ export const runAgentFix = async ({
     rmSync(tempDir, { force: true, recursive: true });
   }
 
+  // The command still fails on these: they're reported until a person fixes
+  // or suppresses them. The count says the agent chose to leave them.
+  const leftNote =
+    totals.left > 0 ? ` ${totals.left} left for you to decide.` : "";
+
   outro(
-    `Fixed ${totals.fixed} of ${diagnostics.length} issue${diagnostics.length === 1 ? "" : "s"} with ${agentAdapter.label}.`
+    `Fixed ${totals.fixed} of ${diagnostics.length} issue${diagnostics.length === 1 ? "" : "s"} with ${agentAdapter.label}.${leftNote}`
   );
 
   if (totals.remaining > 0) {

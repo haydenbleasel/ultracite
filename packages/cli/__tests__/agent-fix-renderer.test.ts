@@ -63,7 +63,7 @@ describe("agent-fix renderer", () => {
     renderer.settleFile(
       "src/bar.ts",
       [{ fixed: true, issue: issue({ file: "src/bar.ts" }) }],
-      "Claude Code timed out after 5 minutes."
+      "Claude Code timed out after 10 minutes."
     );
     renderer.stop();
 
@@ -76,7 +76,7 @@ describe("agent-fix renderer", () => {
     expect(output).toContain(
       "✗ src/foo.ts:20:5  no-unused-vars — unused variable"
     );
-    expect(output).toContain("Claude Code timed out after 5 minutes.");
+    expect(output).toContain("Claude Code timed out after 10 minutes.");
     expect(output).not.toContain("\u001B[");
   });
 

@@ -1,3 +1,7 @@
+import { createRequire } from "node:module";
+import path from "node:path";
+import process from "node:process";
+
 import {
   buildUnresolvableBiomeConfigMessage,
   findUnresolvableBiomeConfig,
@@ -101,6 +105,87 @@ const toOxlintRuleName = (code: string): string => {
   return plugin === "eslint" ? rule : `${plugin}/${rule}`;
 };
 
+// The plugins the js-plugins preset bridges, by the name their rules carry.
+const JS_PLUGIN_PACKAGES = new Map([
+  ["github", "eslint-plugin-github"],
+  ["react-doctor", "oxlint-plugin-react-doctor"],
+  ["sonarjs", "eslint-plugin-sonarjs"],
+]);
+
+interface JsPluginRule {
+  meta?: { docs?: { description?: string; url?: string } };
+  /** React Doctor describes the fix here and has no `meta.docs`. */
+  recommendation?: string;
+}
+
+interface JsPlugin {
+  rules?: Record<string, JsPluginRule | undefined>;
+}
+
+interface JsPluginRuleDocs {
+  help?: string;
+  url?: string;
+}
+
+const jsPlugins = new Map<string, JsPlugin | null>();
+
+/**
+ * Loads a plugin from the project being linted, which is where Oxlint loads
+ * it from. Best effort and cached: a plugin that can't be loaded just leaves
+ * its rules without help text.
+ */
+const loadJsPlugin = (packageName: string): JsPlugin | null => {
+  const cached = jsPlugins.get(packageName);
+
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  let plugin: JsPlugin | null = null;
+
+  try {
+    const projectRequire = createRequire(
+      path.join(process.cwd(), "package.json")
+    );
+
+    // SAFETY: every field of JsPlugin is optional and read through optional
+    // chaining, so a module of another shape yields no docs instead of failing.
+    const loaded = projectRequire(packageName) as JsPlugin & {
+      default?: JsPlugin;
+    };
+
+    plugin = loaded.rules ? loaded : (loaded.default ?? null);
+  } catch {
+    plugin = null;
+  }
+
+  jsPlugins.set(packageName, plugin);
+
+  return plugin;
+};
+
+/**
+ * Oxlint's JSON report has no help text or documentation URL for a rule that
+ * comes from a JS plugin, so the agent would get the one-line message alone.
+ * The plugin's own rule metadata fills them in, as ESLint's report does.
+ */
+const jsPluginRuleDocs = (ruleName: string): JsPluginRuleDocs => {
+  const separator = ruleName.indexOf("/");
+  const packageName = JS_PLUGIN_PACKAGES.get(ruleName.slice(0, separator));
+
+  if (separator === -1 || !packageName) {
+    return {};
+  }
+
+  const rule =
+    loadJsPlugin(packageName)?.rules?.[ruleName.slice(separator + 1)];
+
+  return {
+    help: rule?.meta?.docs?.description ?? rule?.recommendation,
+    url: rule?.meta?.docs?.url,
+  };
+};
+
 // Rule diagnostics carry a code. Of those that don't, everything but an
 // unused disable directive is a parse or semantic error.
 const UNUSED_DIRECTIVE_RE = /^Unused (?:oxlint|eslint)-(?:disable|enable)/u;
@@ -130,18 +215,22 @@ const parseOxlintDiagnostics = (stdout: string): Diagnostic[] => {
     }
 
     const span = diagnostic.labels?.[0]?.span;
+    const rule = diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint";
+
+    const docs =
+      diagnostic.help || diagnostic.url ? {} : jsPluginRuleDocs(rule);
 
     diagnostics.push({
       column: span?.column ?? 1,
       fatal: isOxlintFatal(diagnostic),
       file: diagnostic.filename,
-      help: diagnostic.help,
+      help: diagnostic.help ?? docs.help,
       line: span?.line ?? 1,
       message: diagnostic.message ?? "",
       raw: diagnostic,
-      rule: diagnostic.code ? toOxlintRuleName(diagnostic.code) : "oxlint",
+      rule,
       severity: diagnostic.severity ?? "error",
-      url: diagnostic.url,
+      url: diagnostic.url ?? docs.url,
     });
   }
 

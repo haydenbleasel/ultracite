@@ -163,6 +163,54 @@ describe("agent-fix linter adapters", () => {
     ]);
   });
 
+  test("oxlint adapter fills help and URL for JS-plugin rules from the plugin", () => {
+    // Oxlint's JSON has neither for a rule that comes from a JS plugin. The
+    // plugins are loaded for real, from the workspace's own node_modules.
+    const stdout = JSON.stringify({
+      diagnostics: [
+        {
+          code: "sonarjs(todo-tag)",
+          filename: "src/a.ts",
+          message: 'Complete the task associated to this "TODO" comment.',
+        },
+        {
+          code: "react-doctor(no-barrel-import)",
+          filename: "src/a.ts",
+          message: "Import from a barrel file",
+        },
+        {
+          code: "sonarjs(not-a-rule)",
+          filename: "src/a.ts",
+          message: "unknown rule",
+        },
+        {
+          code: "jsx-a11y(alt-text)",
+          filename: "src/a.ts",
+          message: "a plugin Ultracite doesn't load",
+        },
+      ],
+    });
+
+    const mockSpawn = mock((cmd: string) => ({
+      status: 1,
+      stdout: cmd === "oxlint" ? stdout : "",
+    }));
+
+    mock.module("../src/spawn-sync", () => ({ spawnSync: mockSpawn }));
+
+    const [todo, barrel, unknownRule, otherPlugin] = getLinterAdapter(
+      "oxlint"
+    ).fixAndCollect([], []);
+
+    expect(todo.help).toBe('Track uses of "TODO" tags');
+    expect(todo.url).toContain("sonarsource.github.io/rspec");
+    expect(barrel.help).toContain("Import from the direct path");
+    expect(barrel.url).toBeUndefined();
+    expect(unknownRule.help).toBeUndefined();
+    expect(unknownRule.url).toBeUndefined();
+    expect(otherPlugin.help).toBeUndefined();
+  });
+
   test("oxlint adapter maps --unsafe to --fix-dangerously", () => {
     const mockSpawn = mock((cmd: string, _args: string[]) => ({
       status: 0,
