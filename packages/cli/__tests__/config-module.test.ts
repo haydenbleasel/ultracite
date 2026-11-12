@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  arrayEntries,
   parseConfigModule,
   renderEntries,
   renderImport,
@@ -53,6 +54,8 @@ describe("parseConfigModule", () => {
       {
         declaredNames: ["jsPlugins"],
         initCallee: "selectJsPlugins",
+        names: ["selectJsPlugins"],
+        sources: new Map([["jsPlugins", []]]),
         text: 'const jsPlugins = selectJsPlugins(["github"]);',
       },
     ]);
@@ -99,6 +102,88 @@ describe("parseConfigModule", () => {
   test("tells syntax errors apart from configs without a default export", () => {
     expect(parseConfigModule("export default {").kind).toBe("unparseable");
     expect(parseConfigModule("module.exports = {};").kind).toBe("unrecognized");
+  });
+
+  test("reads the names code uses, not property keys, comments or strings", () => {
+    const parsed =
+      parseConfigModule(`const local = { ...shared, rules: base.rules };
+
+export default defineConfig({
+  // Not selectJsPlugins.
+  jsPlugins: ["jsPluginSettings"],
+  rules: { ...local, [key]: \`\${level}\` },
+  settings,
+});
+`);
+
+    if (parsed.kind !== "module") {
+      throw new Error(`expected a module, got ${parsed.kind}`);
+    }
+
+    expect(parsed.module.statements.map((item) => item.names)).toEqual([
+      ["shared", "base"],
+    ]);
+    expect(parsed.module.entries.map((entry) => entry.names)).toEqual([
+      [],
+      ["local", "key", "level"],
+      ["settings"],
+    ]);
+  });
+
+  test("doesn't read the names code declares or the keys of types and classes", () => {
+    const parsed =
+      parseConfigModule(`const pick = (list, { core } = defaults) =>
+  list.map((jsPlugins) => [jsPlugins, core, outer]);
+type Options = { fullPlugins(): void; rules: Linter.Rules };
+enum Level { jsPluginSettings }
+class Cache { #core = 1; read() { return this.#core; } }
+function wrap(config) { try { return config; } catch (error) { return error; } }
+
+export default {};
+`);
+
+    if (parsed.kind !== "module") {
+      throw new Error(`expected a module, got ${parsed.kind}`);
+    }
+
+    expect(parsed.module.statements.map((item) => item.names)).toEqual([
+      ["defaults", "outer"],
+      ["Linter"],
+      [],
+      [],
+      [],
+    ]);
+  });
+
+  test("reads what each const and entry takes its whole value from", () => {
+    const config = `const a = [], b = core, c = { ...jsPlugins, rules: react.rules };
+
+export default defineConfig({
+  extends: [b, jp.default, { ...c }, preset.rules],
+});
+`;
+
+    const parsed = parseConfigModule(config);
+
+    if (parsed.kind !== "module") {
+      throw new Error(`expected a module, got ${parsed.kind}`);
+    }
+
+    expect(parsed.module.statements[0]?.sources).toEqual(
+      new Map([
+        ["a", []],
+        ["b", ["core"]],
+        ["c", ["jsPlugins"]],
+      ])
+    );
+
+    const [extendsEntry] = parsed.module.entries;
+
+    expect(
+      arrayEntries(config, extendsEntry?.value ?? null)?.map(
+        (entry) => entry.sources
+      )
+    ).toEqual([["b"], ["jp.default"], ["c"], []]);
   });
 });
 

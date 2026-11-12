@@ -252,6 +252,26 @@ export default defineConfig({
     );
   });
 
+  test("adds react-doctor add-ons when the root extends js-plugins through a const", async () => {
+    const written = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const plugins = { ...jsPlugins, rules: { ...jsPlugins.rules } };
+
+export default defineConfig({ extends: [core, plugins] });
+`,
+      "package.json": '{ "type": "module" }',
+    });
+
+    await oxlint.createWorkspace({ dir: "apps/web", frameworks: ["next"] });
+
+    expect(written.get("./apps/web/oxlint.config.ts")).toContain(
+      'import nextJsPlugins from "ultracite/oxlint/next/js-plugins";'
+    );
+  });
+
   test("adds react-doctor add-ons when the root config selects it", async () => {
     const written = mockProject({
       "./oxlint.config.ts":

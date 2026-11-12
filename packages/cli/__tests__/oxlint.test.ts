@@ -865,6 +865,13 @@ export default defineConfig({
       expect(content).toContain('selectJsPlugins(["github", "sonarjs"])');
       expect(content).not.toContain("selectedJsPluginNames");
       expect(content).not.toContain("typeof");
+      // The full preset's import fed only the legacy consts, which are gone.
+      expect(content).toContain(
+        'import { selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+      );
+      expect(content).toContain(
+        'const jsPlugins = selectJsPlugins(["github", "sonarjs"]);'
+      );
     });
 
     test("hoists jsPlugins when the full js-plugins preset is extended", async () => {
@@ -1583,6 +1590,121 @@ export default defineConfig({
       'import { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";'
     );
     expect(content).not.toContain("fullPlugins");
+  });
+
+  test("doesn't count property keys, comments or strings as uses of a preset", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  // Loaded next to jsPlugins and selectJsPlugins.
+  jsPlugins: ["./local-plugin.js", "jsPlugins"],
+  settings: jsPluginSettings,
+});
+`,
+    });
+
+    await oxlint.update({ jsPlugins: ["eslint-plugin-jsdoc"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).toContain("const jsPlugins = selectJsPlugins([");
+    expect(content).toContain('jsPlugins: ["./local-plugin.js", "jsPlugins"],');
+    expect(content).not.toContain("ultraciteJsPlugins");
+  });
+
+  test("doesn't keep a replaced preset's import for a parameter with its name", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import fullPlugins, { jsPluginSettings } from "ultracite/oxlint/js-plugins";
+
+const off = (names) => Object.fromEntries(names.map((fullPlugins) => [fullPlugins, "off"]));
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, fullPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: fullPlugins.jsPlugins,
+  rules: off(["github/no-then"]),
+  settings: jsPluginSettings,
+});
+`,
+    });
+
+    await oxlint.update({ jsPlugins: ["eslint-plugin-jsdoc"] });
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import { jsPluginSettings, selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).not.toContain("import fullPlugins");
+  });
+
+  test("doesn't import a helper a comment names", async () => {
+    const config = `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import { selectJsPlugins } from "ultracite/oxlint/js-plugins";
+
+const jsPlugins = selectJsPlugins(["github"]);
+
+export default defineConfig({
+  env: core.env,
+  extends: [core, jsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  jsPlugins: jsPlugins.jsPlugins,
+  // No jsPluginSettings without react-doctor.
+  rules: { "github/no-then": "off" },
+});
+`;
+
+    const project = mockProject({ "./oxlint.config.ts": config });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toBe(config);
+  });
+
+  test("keeps the full preset an older release's selection spread when the project's code uses it", async () => {
+    const project = mockProject({
+      "./oxlint.config.ts": `import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+const selectedJsPluginNames = new Set(["github"]);
+
+const selectedJsPlugins = {
+  ...jsPlugins,
+  jsPlugins: jsPlugins.jsPlugins?.filter((plugin) =>
+    selectedJsPluginNames.has(typeof plugin === "string" ? plugin : plugin.name)
+  ),
+};
+
+export default defineConfig({
+  extends: [core, selectedJsPlugins],
+  ignorePatterns: core.ignorePatterns,
+  rules: { ...jsPlugins.rules },
+});
+`,
+    });
+
+    await oxlint.update();
+
+    const [[, content]] = project.writeFile.mock.calls;
+    expect(content).toContain(
+      'import jsPlugins, { selectJsPlugins } from "ultracite/oxlint/js-plugins";'
+    );
+    expect(content).toContain(
+      'const ultraciteJsPlugins = selectJsPlugins(["github"]);'
+    );
+    expect(content).toContain("rules: { ...jsPlugins.rules },");
   });
 
   test("keeps a jsPlugins const the project's own selectJsPlugins declares", async () => {
@@ -2305,6 +2427,75 @@ import { selectJsPlugins } from "./lint.ts";
 const plugins = selectJsPlugins(["react-doctor"]);
 
 export default defineConfig({ extends: [core, plugins] });
+`)
+    ).toEqual([]);
+  });
+
+  test("counts a preset extended through a const of the project's own", () => {
+    expect(
+      findLoadedJsPlugins(`import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const rules = { "sonarjs/todo-tag": "off" };
+const plugins = { ...jsPlugins, rules: { ...jsPlugins.rules, ...rules } };
+
+export default defineConfig({ extends: [core, plugins] });
+`)
+    ).toEqual([
+      "eslint-plugin-github",
+      "eslint-plugin-sonarjs",
+      "oxlint-plugin-react-doctor",
+    ]);
+  });
+
+  test("counts a preset extended through an `import * as`", () => {
+    expect(
+      findLoadedJsPlugins(`import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import * as nextPlugins from "ultracite/oxlint/next/js-plugins";
+
+export default defineConfig({ extends: [core, nextPlugins.default] });
+`)
+    ).toEqual(["oxlint-plugin-react-doctor"]);
+  });
+
+  test("doesn't count a preset only the project's other properties use", () => {
+    expect(
+      findLoadedJsPlugins(`import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const githubRules = { ...jsPlugins.rules };
+
+export default defineConfig({ extends: [core], rules: githubRules });
+`)
+    ).toEqual([]);
+  });
+
+  test("doesn't count a preset an extends entry only reads a property of", () => {
+    expect(
+      findLoadedJsPlugins(`import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const mine = { rules: { ...jsPlugins.rules } };
+
+export default defineConfig({ extends: [core, mine] });
+`)
+    ).toEqual([]);
+  });
+
+  test("follows only the const an extends entry names", () => {
+    expect(
+      findLoadedJsPlugins(`import { defineConfig } from "oxlint";
+import core from "ultracite/oxlint/core";
+import jsPlugins from "ultracite/oxlint/js-plugins";
+
+const mine = {}, other = jsPlugins;
+const rules = Object.fromEntries([other].map((jsPlugins) => [jsPlugins, 1]));
+
+export default defineConfig({ extends: [core, mine, { rules }] });
 `)
     ).toEqual([]);
   });

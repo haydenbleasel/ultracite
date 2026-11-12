@@ -2,7 +2,11 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 import path from "node:path";
 
 import { agentAdapters, assertAgentAvailable } from "../src/agent-fix/agents";
-import { partitionByRemaining, recordSourceLines } from "../src/agent-fix/diff";
+import {
+  partitionByRemaining,
+  recordSourceLines,
+  releaseSourceLines,
+} from "../src/agent-fix/diff";
 import {
   buildPrompt,
   buildRetryPrompt,
@@ -297,6 +301,74 @@ describe("diagnostic diffing", () => {
     expect(result.introduced).toEqual([]);
   });
 
+  test.each([
+    [
+      "@typescript-eslint/max-params",
+      "Function 'run' has too many parameters (#). Maximum allowed is 4.",
+    ],
+    [
+      "sonarjs/cognitive-complexity",
+      "Refactor this function to reduce its Cognitive Complexity from # to the 15 allowed.",
+    ],
+    [
+      "lint/complexity/noExcessiveCognitiveComplexity",
+      "Excessive complexity of # detected (max: 15).",
+    ],
+  ])("matches a %s report when only its count changed", (rule, message) => {
+    const before = diagnostic({ message: message.replace("#", "22"), rule });
+    const after = diagnostic({ message: message.replace("#", "18"), rule });
+
+    const result = partitionByRemaining([before], [after]);
+
+    expect(result.still).toEqual([before]);
+    expect(result.introduced).toEqual([]);
+  });
+
+  test("keeps the numbers in the message of a rule that isn't a limit", () => {
+    const fixed = diagnostic({
+      message: "No magic number: 42.",
+      rule: "no-magic-numbers",
+    });
+
+    const added = diagnostic({
+      line: 30,
+      message: "No magic number: 100.",
+      rule: "no-magic-numbers",
+    });
+
+    const result = partitionByRemaining([fixed], [added]);
+
+    expect(result.cleared).toEqual([fixed]);
+    expect(result.still).toEqual([]);
+    expect(result.introduced).toEqual([added]);
+  });
+
+  test.each([
+    [
+      "no-shadow",
+      "'x' is already declared in the upper scope on line # column 7.",
+    ],
+    [
+      "sonarjs/no-identical-functions",
+      "Update this function so that its implementation is not identical to the one on line #.",
+    ],
+    [
+      "sonarjs/no-duplicate-string",
+      "Define a constant instead of duplicating this literal # times.",
+    ],
+  ])(
+    "matches a %s report when only the line it points at or its count changed",
+    (rule, message) => {
+      const before = diagnostic({ message: message.replace("#", "3"), rule });
+      const after = diagnostic({ message: message.replace("#", "4"), rule });
+
+      const result = partitionByRemaining([before], [after]);
+
+      expect(result.still).toEqual([before]);
+      expect(result.introduced).toEqual([]);
+    }
+  );
+
   test("keeps numbers inside names when matching messages", () => {
     const original = diagnostic({ message: "'value1' is never used." });
     const other = diagnostic({ message: "'value2' is never used." });
@@ -336,7 +408,7 @@ describe("diagnostic diffing", () => {
     expect(result.introduced).toEqual([added]);
   });
 
-  test("falls back to file order when a reported line was rewritten", () => {
+  test("pairs a report on a rewritten line with the original that was there", () => {
     const any = { message: "Unexpected any.", rule: "no-explicit-any" };
     const first = diagnostic({ ...any, line: 1 });
     const second = diagnostic({ ...any, line: 2 });
@@ -356,5 +428,138 @@ describe("diagnostic diffing", () => {
     expect(result.still).toEqual([first, second]);
     expect(result.introduced).toEqual([]);
     expect(result.cleared).toEqual([]);
+  });
+
+  test("keeps a report the edit added elsewhere new when it fixed the original", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 1 });
+
+    mockFileSystem({
+      "src/foo.ts": "let a: any;\nlet b = 1;\nexport { a, b };\n",
+    });
+    recordSourceLines([original]);
+
+    // The edit types `a`, and adds an `any` further down.
+    const added = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "let a: string;\nlet b = 1;\nconst f = (v: any) => v;\nexport { a, b, f };\n",
+    });
+    recordSourceLines([added]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [added]);
+
+    expect(result.cleared).toEqual([original]);
+    expect(result.still).toEqual([]);
+    expect(result.introduced).toEqual([added]);
+  });
+
+  test("pairs a rewritten line's report wherever the edit moved it", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import { a } from './a';\n\nconst parse = (raw: any) => a(raw);\n\nexport { parse };\n",
+    });
+    recordSourceLines([original]);
+
+    // Two lines added above, and the flagged line rewritten in place.
+    const rewritten = diagnostic({ ...any, line: 5 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import { a } from './a';\nimport { b } from './b';\n\nconst LIMIT = 3;\nconst parse = (input: any) => b(a(input), LIMIT);\n\nexport { parse };\n",
+    });
+    recordSourceLines([rewritten]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [rewritten]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.stillReported).toEqual([rewritten]);
+    expect(result.introduced).toEqual([]);
+  });
+
+  test("pairs a report whose code the edit moved elsewhere", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import { a } from './a';\n\nconst parse = (raw: any) => a(raw);\n\nexport const run = () => 1;\n\nexport { parse };\n",
+    });
+    recordSourceLines([original]);
+
+    // `parse` moved below `run`, and its flagged line was rewritten.
+    const moved = diagnostic({ ...any, line: 5 });
+
+    mockFileSystem({
+      "src/foo.ts":
+        "import { a } from './a';\n\nexport const run = () => 1;\n\nconst parse = (input: any) => a(input);\n\nexport { parse };\n",
+    });
+    recordSourceLines([moved]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [moved]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.stillReported).toEqual([moved]);
+    expect(result.introduced).toEqual([]);
+  });
+
+  test("matches a limit rule reported where a count runs out, not on its code", () => {
+    const limit = { rule: "max-lines" };
+
+    const original = diagnostic({
+      ...limit,
+      line: 4,
+      message: "File has too many lines (6). Maximum allowed is 3.",
+    });
+
+    mockFileSystem({
+      "src/foo.ts": "b1();\nb2();\nb3();\nb4();\nb5();\nb6();",
+    });
+    recordSourceLines([original]);
+
+    // One line removed: the report stays on line 4, which now reads `b5();`.
+    const shorter = diagnostic({
+      ...limit,
+      line: 4,
+      message: "File has too many lines (5). Maximum allowed is 3.",
+    });
+
+    mockFileSystem({ "src/foo.ts": "b2();\nb3();\nb4();\nb5();\nb6();" });
+    recordSourceLines([shorter]);
+    restoreFileSystemMock();
+
+    const result = partitionByRemaining([original], [shorter]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.introduced).toEqual([]);
+  });
+
+  test("matches in file order once a file's snapshots are released", () => {
+    const any = { message: "Unexpected any.", rule: "no-explicit-any" };
+    const original = diagnostic({ ...any, line: 1 });
+
+    mockFileSystem({ "src/foo.ts": "let a: any;\nlet b = 1;\n" });
+    recordSourceLines([original]);
+
+    const added = diagnostic({ ...any, line: 3 });
+
+    mockFileSystem({
+      "src/foo.ts": "let a: string;\nlet b = 1;\nconst f = (v: any) => v;\n",
+    });
+    recordSourceLines([added]);
+    restoreFileSystemMock();
+    releaseSourceLines("src/foo.ts");
+
+    const result = partitionByRemaining([original], [added]);
+
+    expect(result.still).toEqual([original]);
+    expect(result.introduced).toEqual([]);
   });
 });
