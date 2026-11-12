@@ -22,7 +22,11 @@ const native = [
 // anti-slop, gdp and shadcn fixtures in packages/cli/__tests__/fixtures gave
 // the same diagnostics on Oxlint 1.86.0 and Bun 1.4.4-canary.1.
 const jsPlugins = [
-  { count: 404, description: "SonarJS, React Doctor, GitHub", name: "js-plugins" },
+  {
+    count: 404,
+    description: "SonarJS, React Doctor, GitHub",
+    name: "js-plugins",
+  },
   { count: 18, description: "anti-slop, vendored", name: "anti-slop" },
   { count: 6, description: "gdp-ts", name: "gdp" },
   { count: 6, description: "@shadcn/lint", name: "shadcn" },
@@ -35,7 +39,8 @@ const jsPlugins = [
 const stats = [
   { label: "Rules in bun lint, 94 of them Bun’s own", value: "1,021" },
   {
-    label: "On with no config, for a TypeScript file. 51 are warnings, which don’t fail a run",
+    label:
+      "On with no config, for a TypeScript file. 51 are warnings, which don’t fail a run",
     value: "75",
   },
   {
@@ -50,118 +55,129 @@ const width = (count: number): string => `${(count / scale) * 100}%`;
 ---
 
 <section aria-labelledby="bn-rules" class="border-border border-b">
-  <div class="hp-frame mx-auto max-w-7xl border-border border-x">
+  <div class="hp-frame border-border mx-auto max-w-7xl border-x">
     <SectionHeading id="bn-rules" title="Oxlint’s presets, run by Bun">
-      <code class="font-mono text-base">bun lint</code> reimplements
-      Oxlint’s rules under the same names and reads the same config, so the
-      Bun provider uses Ultracite’s Oxlint presets as they are. Two of
-      Oxlint’s plugins have no Bun version yet, and Ultracite leaves their
-      rules out.
+      <code class="font-mono text-base">bun lint</code> reimplements Oxlint’s
+      rules under the same names and reads the same config, so the Bun provider
+      uses Ultracite’s Oxlint presets as they are. Two of Oxlint’s plugins have
+      no Bun version yet, and Ultracite leaves their rules out.
     </SectionHeading>
-    <dl
-      class="grid gap-px border-border border-t bg-border bg-clip-padding sm:grid-cols-3"
-    >
-      {
-        stats.map((stat) => (
-          <div class="flex flex-col gap-3 bg-background px-4 py-8 sm:px-6 lg:px-10">
-            <dt class="text-pretty text-[15px]/6 text-muted-foreground">{stat.label}</dt>
-            <dd
-              class:list={[
-                "order-first font-medium text-5xl tracking-[-0.04em] tabular-nums",
-                stat.accent && "text-accent",
-              ]}
-            >
-              {stat.value}
-            </dd>
-          </div>
-        ))
-      }
+    <dl class="border-border bg-border grid gap-px border-t bg-clip-padding sm:grid-cols-3">
+      {stats.map((stat) => (
+        <div class="bg-background flex flex-col gap-3 px-4 py-8 sm:px-6 lg:px-10">
+          <dt class="text-muted-foreground text-[15px]/6 text-pretty">
+            {stat.label}
+          </dt>
+          <dd
+            class:list={[
+              "order-first text-5xl font-medium tracking-[-0.04em] tabular-nums",
+              stat.accent && "text-accent",
+            ]}
+          >
+            {stat.value}
+          </dd>
+        </div>
+      ))}
     </dl>
-    <div
-      class="grid gap-px border-border border-t bg-border bg-clip-padding lg:grid-cols-2"
-    >
-      <div class="flex flex-col bg-background">
-        <div class="flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
-          <h3 class="font-medium text-lg/7">Native, in Bun</h3>
-          <span class="flex items-center gap-4 font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">
+    <div class="border-border bg-border grid gap-px border-t bg-clip-padding lg:grid-cols-2">
+      <div class="bg-background flex flex-col">
+        <div class="border-border flex items-center justify-between gap-4 border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="text-lg/7 font-medium">Native, in Bun</h3>
+          <span class="text-muted-foreground flex items-center gap-4 font-mono text-xs/5 tracking-wider uppercase">
             <span class="flex items-center gap-1.5">
-              <span aria-hidden="true" class="size-2.5 rounded-[2px] bg-signal"></span>
+              <span
+                aria-hidden="true"
+                class="bg-signal size-2.5 rounded-[2px]"
+              ></span>
               Bun
             </span>
             <span class="flex items-center gap-1.5">
               <span
                 aria-hidden="true"
-                class="hatch size-2.5 rounded-[2px] ring-1 ring-foreground/15 ring-inset"
+                class="hatch ring-foreground/15 size-2.5 rounded-[2px] ring-1 ring-inset"
               ></span>
               Oxlint only
             </span>
           </span>
         </div>
         <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
-          {
-            native.map((preset) => (
-              <li class="flex flex-col gap-2">
-                <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
-                  <span>
-                    <code class="font-mono text-sm">{preset.name}</code>
-                    {preset.missing && (
-                      <span class="text-muted-foreground"> · {preset.missing} left out</span>
-                    )}
-                  </span>
-                  <span class="font-mono text-sm tabular-nums">
-                    {preset.bun}
-                    <span class="text-muted-foreground"> / {preset.oxlint}</span>
-                  </span>
-                </p>
-                <span
-                  class="flex h-2 overflow-hidden rounded-r-[2px]"
-                  style={{ width: width(preset.oxlint) }}
-                >
-                  <span class="h-full bg-signal" style={{ width: `${(preset.bun / preset.oxlint) * 100}%` }} />
-                  <span class="hatch h-full flex-1 ring-1 ring-foreground/15 ring-inset" />
-                </span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div class="flex flex-col bg-background">
-        <div class="hatch flex items-center justify-between gap-4 border-border border-b px-4 py-4 sm:px-6 lg:px-10">
-          <h3 class="font-medium text-lg/7">JS plugins, in JavaScript</h3>
-          <span class="font-mono text-muted-foreground text-xs/5 uppercase tracking-wider">Opt-in</span>
-        </div>
-        <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
-          {
-            jsPlugins.map((preset) => (
-              <li class="flex items-baseline justify-between gap-4 border-border border-b pb-5 text-[15px]/6 last:border-b-0 last:pb-0">
+          {native.map((preset) => (
+            <li class="flex flex-col gap-2">
+              <p class="flex items-baseline justify-between gap-4 text-[15px]/6">
                 <span>
                   <code class="font-mono text-sm">{preset.name}</code>
-                  <span class="text-muted-foreground"> · {preset.description}</span>
+                  {preset.missing && (
+                    <span class="text-muted-foreground">
+                      {" "}
+                      · {preset.missing} left out
+                    </span>
+                  )}
                 </span>
-                <span class="font-mono text-sm tabular-nums">{preset.count}</span>
-              </li>
-            ))
-          }
+                <span class="font-mono text-sm tabular-nums">
+                  {preset.bun}
+                  <span class="text-muted-foreground"> / {preset.oxlint}</span>
+                </span>
+              </p>
+              <span
+                class="flex h-2 overflow-hidden rounded-r-[2px]"
+                style={{ width: width(preset.oxlint) }}
+              >
+                <span
+                  class="bg-signal h-full"
+                  style={{ width: `${(preset.bun / preset.oxlint) * 100}%` }}
+                />
+                <span class="hatch ring-foreground/15 h-full flex-1 ring-1 ring-inset" />
+              </span>
+            </li>
+          ))}
         </ul>
-        <p class="mt-auto text-pretty border-border border-t px-4 py-5 text-[15px]/6 text-muted-foreground sm:px-6 lg:px-10">
-          Bun loads the plugins from <code class="font-mono text-sm">node_modules</code>{" "}
-          and runs them in JavaScript, as Oxlint does, so these presets pass
-          through untouched. On Ultracite’s test fixtures for anti-slop,
-          gdp-ts and @shadcn/lint, Bun and Oxlint reported the same problems.
+      </div>
+      <div class="bg-background flex flex-col">
+        <div class="hatch border-border flex items-center justify-between gap-4 border-b px-4 py-4 sm:px-6 lg:px-10">
+          <h3 class="text-lg/7 font-medium">JS plugins, in JavaScript</h3>
+          <span class="text-muted-foreground font-mono text-xs/5 tracking-wider uppercase">
+            Opt-in
+          </span>
+        </div>
+        <ul class="flex flex-col gap-5 px-4 py-8 sm:px-6 lg:px-10" role="list">
+          {jsPlugins.map((preset) => (
+            <li class="border-border flex items-baseline justify-between gap-4 border-b pb-5 text-[15px]/6 last:border-b-0 last:pb-0">
+              <span>
+                <code class="font-mono text-sm">{preset.name}</code>
+                <span class="text-muted-foreground">
+                  {" "}
+                  · {preset.description}
+                </span>
+              </span>
+              <span class="font-mono text-sm tabular-nums">{preset.count}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="border-border text-muted-foreground mt-auto border-t px-4 py-5 text-[15px]/6 text-pretty sm:px-6 lg:px-10">
+          Bun loads the plugins from{" "}
+          <code class="font-mono text-sm">node_modules</code> and runs them in
+          JavaScript, as Oxlint does, so these presets pass through untouched.
+          On Ultracite’s test fixtures for anti-slop, gdp-ts and @shadcn/lint,
+          Bun and Oxlint reported the same problems.
         </p>
       </div>
     </div>
     <div class="border-border border-t px-4 py-8 sm:px-6 lg:px-10">
-      <p class="max-w-[80ch] text-pretty text-base/7 text-muted-foreground">
-        <span class="font-medium text-foreground">Same rules, same report.</span>{" "}
+      <p class="text-muted-foreground max-w-[80ch] text-base/7 text-pretty">
+        <span class="text-foreground font-medium">
+          Same rules, same report.
+        </span>{" "}
         On the benchmark project’s 420 files, Oxlint 1.88 and{" "}
         <code class="font-mono text-sm">bun lint</code> reported the same{" "}
         {bunParity.lintProblems} problems, line for line, through the same{" "}
         <code class="font-mono text-sm">oxlint.config.ts</code>, and Oxfmt and{" "}
         <code class="font-mono text-sm">bun fmt</code> flagged the same{" "}
-        {bunParity.unformattedFiles} files. The core
-        preset’s 56 type-aware rules are among the 455, and run once{" "}
-        <code class="whitespace-nowrap font-mono text-sm">init --type-aware</code> turns them on.
+        {bunParity.unformattedFiles} files. The core preset’s 56 type-aware
+        rules are among the 455, and run once{" "}
+        <code class="font-mono text-sm whitespace-nowrap">
+          init --type-aware
+        </code>{" "}
+        turns them on.
       </p>
     </div>
   </div>

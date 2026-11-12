@@ -22,7 +22,8 @@ const large = runFor(420);
       value: String(Math.round(toolOnlyMs.bunFmt)),
     },
     {
-      label: "To start Node and Ultracite, which every engine’s check pays first",
+      label:
+        "To start Node and Ultracite, which every engine’s check pays first",
       unit: "ms",
       value: String(Math.round(toolOnlyMs.cliStartup)),
     },
@@ -31,15 +32,19 @@ const large = runFor(420);
   toolchains={["bun", "oxlint", "biome"]}
 >
   On Bun, <code class="font-mono text-base">ultracite check</code> runs{" "}
-  <code class="whitespace-nowrap font-mono text-base">bun fmt --check</code> and then{" "}
-  <code class="font-mono text-base">bun lint</code>. Both are quicker than
+  <code class="font-mono text-base whitespace-nowrap">bun fmt --check</code> and
+  then <code class="font-mono text-base">bun lint</code>. Both are quicker than
   Oxfmt and Oxlint on the same files, but they’re the smaller part of the{" "}
-  {formatMs(large.ms.bun)} a 420-file check takes. Most of the rest is
-  Node and the CLI starting up, which every engine pays.
+  {formatMs(large.ms.bun)} a 420-file check takes. Most of the rest is Node and
+  the CLI starting up, which every engine pays.
   <Fragment slot="caption">
     The figures under the chart time each tool on its own, in the same session.{" "}
-    <a class="underline underline-offset-2 hover:text-foreground" href="/providers"
-      >How ESLint compares</a
-    >.
+    <a
+      class="hover:text-foreground underline underline-offset-2"
+      href="/providers"
+    >
+      How ESLint compares
+    </a>
+    .
   </Fragment>
 </Speed>
